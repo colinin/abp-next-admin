@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.OssManagement
     [RemoteService(Name = OssManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("oss-management")]
     [Route("api/files/static")]
-    public class StaticFilesController : AbpController, IStaticFilesAppService
+    public class StaticFilesController : AbpControllerBase, IStaticFilesAppService
     {
         private readonly IOssObjectAppService _ossObjectAppService;
         private readonly IStaticFilesAppService _staticFilesAppServic;

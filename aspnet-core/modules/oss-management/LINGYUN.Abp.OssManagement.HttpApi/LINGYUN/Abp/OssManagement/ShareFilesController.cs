@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.OssManagement
     [Route("api/files/share")]
     [RemoteService(false)]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class ShareFilesController : AbpController, IShareFileAppService
+    public class ShareFilesController : AbpControllerBase, IShareFileAppService
     {
         private readonly IShareFileAppService _service;
 

@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Auditing.Permissions;
+﻿using Asp.Versioning;
+using LINGYUN.Abp.Auditing.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace LINGYUN.Abp.Auditing.Logging
     [ControllerName("logging")]
     [Route("api/auditing/logging")]
     [Authorize(AuditingPermissionNames.SystemLog.Default)]
-    public class LogController : AbpController, ILogAppService
+    public class LogController : AbpControllerBase, ILogAppService
     {
         private readonly ILogAppService _service;
 

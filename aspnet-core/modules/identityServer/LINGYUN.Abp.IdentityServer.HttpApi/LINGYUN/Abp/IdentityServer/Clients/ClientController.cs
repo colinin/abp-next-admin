@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.IdentityServer.Clients
     [RemoteService(Name = AbpIdentityServerConsts.RemoteServiceName)]
     [Area("identity-server")]
     [Route("api/identity-server/clients")]
-    public class ClientController : AbpController, IClientAppService
+    public class ClientController : AbpControllerBase, IClientAppService
     {
         protected IClientAppService ClientAppService { get; }
         public ClientController(IClientAppService clientAppService)

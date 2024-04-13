@@ -40,7 +40,7 @@
 		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="$(OpenTelemetryExporterZipkinPackageVersion)" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="$(OpenTelemetryInstrumentationAspNetCorePackageVersion)" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="$(OpenTelemetryInstrumentationHttpPackageVersion)" />
-		<PackageReference Include="OpenTelemetry.Contrib.Instrumentation.EntityFrameworkCore" Version="$(OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion)" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="$(OpenTelemetryInstrumentationEntityFrameworkCorePackageVersion)" />
 		<PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />
 		<PackageReference Include="Serilog.Enrichers.Environment" Version="$(SerilogEnrichersEnvironmentPackageVersion)" />
 		<PackageReference Include="Serilog.Enrichers.Assembly" Version="$(SerilogEnrichersAssemblyPackageVersion)" />

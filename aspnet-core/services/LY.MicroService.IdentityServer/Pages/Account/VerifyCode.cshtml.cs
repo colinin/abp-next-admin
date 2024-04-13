@@ -61,7 +61,7 @@ namespace LY.MicroService.IdentityServer.Pages.Account
             var result = await SignInManager.TwoFactorSignInAsync(Provider, Input.VerifyCode, RememberMe, Input.RememberBrowser);
             if (result.Succeeded)
             {
-                return RedirectSafely(ReturnUrl, ReturnUrlHash);
+                return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
             }
             if (result.IsLockedOut)
             {

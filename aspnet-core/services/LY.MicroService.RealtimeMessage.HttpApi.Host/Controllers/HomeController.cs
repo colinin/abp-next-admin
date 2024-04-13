@@ -3,7 +3,7 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace LY.MicroService.RealtimeMessage.Controllers;
 
-public class HomeController : AbpController
+public class HomeController : AbpControllerBase
 {
     public ActionResult Index()
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -12,7 +13,7 @@ namespace LINGYUN.Abp.Identity
     [Area("identity")]
     [ControllerName("Role")]
     [Route("api/identity/roles")]
-    public class IdentityRoleController : AbpController, IIdentityRoleAppService
+    public class IdentityRoleController : AbpControllerBase, IIdentityRoleAppService
     {
         protected IIdentityRoleAppService RoleAppService { get; }
         public IdentityRoleController(

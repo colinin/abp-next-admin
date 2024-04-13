@@ -288,8 +288,9 @@ public partial class MicroServiceApplicationsSingleModule
 
             //options.ApiVersionReader = new HeaderApiVersionReader("api-version"); //Supports header too
             //options.ApiVersionReader = new MediaTypeApiVersionReader(); //Supports accept header too
-
-            options.ConfigureAbp(preActions.Configure());
+        }, mvcOptions =>
+        {
+            mvcOptions.ConfigureAbp(preActions.Configure());
         });
 
         //services.AddApiVersioning(config =>

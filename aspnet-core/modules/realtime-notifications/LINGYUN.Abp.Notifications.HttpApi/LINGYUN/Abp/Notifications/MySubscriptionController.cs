@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.Notifications;
 [RemoteService(Name = AbpNotificationsRemoteServiceConsts.RemoteServiceName)]
 [Area(AbpNotificationsRemoteServiceConsts.ModuleName)]
 [Route("api/notifications/my-subscribes")]
-public class MySubscriptionController : AbpController, IMySubscriptionAppService
+public class MySubscriptionController : AbpControllerBase, IMySubscriptionAppService
 {
     private readonly IMySubscriptionAppService _subscriptionAppService;
 

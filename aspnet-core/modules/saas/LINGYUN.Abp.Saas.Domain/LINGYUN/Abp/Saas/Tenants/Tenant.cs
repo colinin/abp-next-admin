@@ -7,6 +7,7 @@ using System.Linq;
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Saas.Tenants;
 
@@ -15,6 +16,8 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
     protected const string DefaultConnectionStringName = Volo.Abp.Data.ConnectionStrings.DefaultConnectionStringName;
 
     public virtual string Name { get; protected set; }
+
+    public virtual string NormalizedName { get; protected set; }
 
     public virtual bool IsActive { get; set; }
 
@@ -35,10 +38,11 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
         ConnectionStrings = new Collection<TenantConnectionString>();
     }
 
-    protected internal Tenant(Guid id, [NotNull] string name)
+    protected internal Tenant(Guid id, [NotNull] string name, [CanBeNull] string normalizedName)
         : base(id)
     {
         SetName(name);
+        SetNormalizedName(normalizedName);
 
         ConnectionStrings = new Collection<TenantConnectionString>();
     }
@@ -102,5 +106,11 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
     protected internal virtual void SetName([NotNull] string name)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), TenantConsts.MaxNameLength);
+    }
+
+    protected internal virtual void SetNormalizedName([CanBeNull] string normalizedName)
+    {
+        NormalizedName = normalizedName;
+        AddLocalEvent(new TenantChangedEvent(Id, NormalizedName));
     }
 }

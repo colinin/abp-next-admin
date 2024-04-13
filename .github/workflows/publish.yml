@@ -2,7 +2,7 @@ name: "Publish"
 
 on:
   push:
-    branches: [ rel-8.0.3 ]
+    branches: [ rel-8.1.0 ]
 env:
   DOTNET_VERSION: "8.0.200"
 

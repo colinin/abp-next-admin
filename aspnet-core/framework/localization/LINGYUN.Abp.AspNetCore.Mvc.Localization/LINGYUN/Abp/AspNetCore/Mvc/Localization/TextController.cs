@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
     [Area("abp")]
     [RemoteService(Name = "abp")]
     [Route("api/abp/localization/texts")]
-    public class TextController : AbpController, ITextAppService
+    public class TextController : AbpControllerBase, ITextAppService
     {
         private readonly ITextAppService _service;
 

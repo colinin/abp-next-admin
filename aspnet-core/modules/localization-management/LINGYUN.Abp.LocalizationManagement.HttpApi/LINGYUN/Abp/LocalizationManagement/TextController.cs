@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.LocalizationManagement
     [RemoteService(Name = LocalizationRemoteServiceConsts.RemoteServiceName)]
     [Area("localization")]
     [Route("api/localization/texts")]
-    public class TextController : AbpController, ITextAppService
+    public class TextController : AbpControllerBase, ITextAppService
     {
         private readonly ITextAppService _service;
 

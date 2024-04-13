@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.WxPusher.SettingManagement
     [RemoteService(Name = AbpSettingManagementRemoteServiceConsts.RemoteServiceName)]
     [Area(AbpSettingManagementRemoteServiceConsts.ModuleName)]
     [Route($"api/{AbpSettingManagementRemoteServiceConsts.ModuleName}/wx-pusher")]
-    public class WxPusherSettingController : AbpController, IWxPusherSettingAppService
+    public class WxPusherSettingController : AbpControllerBase, IWxPusherSettingAppService
     {
         protected IWxPusherSettingAppService Service { get; }
 

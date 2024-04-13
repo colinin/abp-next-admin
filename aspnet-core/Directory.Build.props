@@ -1,11 +1,11 @@
 ﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>8.0.4</VoloAbpPackageVersion>
+		<VoloAbpPackageVersion>8.1.0</VoloAbpPackageVersion>
 		<VoloAbpLeptonXThemePackageVersion>3.0.0</VoloAbpLeptonXThemePackageVersion>
-		<LINGYUNAbpPackageVersion>8.0.4</LINGYUNAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>8.1.0</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.12.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
-		<DotNetCoreCAPPackageVersion>8.0.0</DotNetCoreCAPPackageVersion>
+		<DotNetCoreCAPPackageVersion>8.1.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
 		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
 		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>
@@ -15,11 +15,11 @@
 		<HangfireMSSQLStoragePackageVersion>1.8.6</HangfireMSSQLStoragePackageVersion>
 		<NESTPackageVersion>7.15.1</NESTPackageVersion>
 		<NewtonsoftJsonPackageVersion>13.0.1</NewtonsoftJsonPackageVersion>
-		<OpenTelemetryExtensionsHostingPackageVersion>1.0.0-rc8</OpenTelemetryExtensionsHostingPackageVersion>
-		<OpenTelemetryExporterZipkinPackageVersion>1.3.1</OpenTelemetryExporterZipkinPackageVersion>
-		<OpenTelemetryInstrumentationAspNetCorePackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationAspNetCorePackageVersion>
-		<OpenTelemetryInstrumentationHttpPackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationHttpPackageVersion>
-		<OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>1.0.0-beta2</OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>
+		<OpenTelemetryExtensionsHostingPackageVersion>1.8.0</OpenTelemetryExtensionsHostingPackageVersion>
+		<OpenTelemetryExporterZipkinPackageVersion>1.8.0</OpenTelemetryExporterZipkinPackageVersion>
+		<OpenTelemetryInstrumentationAspNetCorePackageVersion>1.8.1</OpenTelemetryInstrumentationAspNetCorePackageVersion>
+		<OpenTelemetryInstrumentationHttpPackageVersion>1.8.1</OpenTelemetryInstrumentationHttpPackageVersion>
+		<OpenTelemetryInstrumentationEntityFrameworkCorePackageVersion>1.0.0-beta.11</OpenTelemetryInstrumentationEntityFrameworkCorePackageVersion>
 		<QuartzNETPackageVersion>3.7.0</QuartzNETPackageVersion>
 		<StackExchangeRedisPackageVersion>2.7.4</StackExchangeRedisPackageVersion>
 		<SerilogPackageVersion>3.1.1</SerilogPackageVersion>

@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 {
     [RemoteService(Name = AbpMessageServiceConsts.RemoteServiceName)]
     [Route("api/im/my-friends")]
-    public class MyFriendController : AbpController, IMyFriendAppService
+    public class MyFriendController : AbpControllerBase, IMyFriendAppService
     {
         protected IMyFriendAppService MyFriendAppService { get; }
 

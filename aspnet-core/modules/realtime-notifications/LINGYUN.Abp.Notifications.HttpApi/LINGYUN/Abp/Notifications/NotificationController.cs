@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.Notifications;
 [RemoteService(Name = AbpNotificationsRemoteServiceConsts.RemoteServiceName)]
 [Area(AbpNotificationsRemoteServiceConsts.ModuleName)]
 [Route("api/notifications")]
-public class NotificationController : AbpController, INotificationAppService
+public class NotificationController : AbpControllerBase, INotificationAppService
 {
     protected INotificationAppService NotificationAppService { get; }
 

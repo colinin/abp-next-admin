@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.MessageService.Chat
 {
     [RemoteService(Name = AbpMessageServiceConsts.RemoteServiceName)]
     [Route("api/im/chat")]
-    public class ChatController : AbpController, IChatAppService
+    public class ChatController : AbpControllerBase, IChatAppService
     {
         private readonly IChatAppService _chatAppService;
 

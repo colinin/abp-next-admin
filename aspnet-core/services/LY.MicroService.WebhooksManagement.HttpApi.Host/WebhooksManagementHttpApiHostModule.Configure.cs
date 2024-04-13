@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Quartz;
@@ -212,24 +213,31 @@ public partial class WebhooksManagementHttpApiHostModule
         var openTelemetryEnabled = configuration["OpenTelemetry:IsEnabled"];
         if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
         {
-            services.AddOpenTelemetryTracing(cfg =>
-            {
-                cfg.AddSource(ApplicationName)
-                   .SetResourceBuilder(
-                        ResourceBuilder.CreateDefault().AddService(ApplicationName))
-                   .AddHttpClientInstrumentation()
-                   .AddAspNetCoreInstrumentation()
-                   .AddEntityFrameworkCoreInstrumentation()
-                   .AddCapInstrumentation()
-                   .AddZipkinExporter(zipKinOptions =>
-                   {
-                       var endpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-                       if (!endpoint.IsNullOrWhiteSpace())
-                       {
-                           zipKinOptions.Endpoint = new Uri(configuration["OpenTelemetry:ZipKin:Endpoint"]);
-                       }
-                   });
-            });
+            services.AddOpenTelemetry()
+                .ConfigureResource(builder =>
+                {
+                    builder.AddService(ApplicationName);
+                })
+                .WithTracing(builder =>
+                {
+                    builder.AddHttpClientInstrumentation();
+                    builder.AddAspNetCoreInstrumentation();
+                    builder.AddCapInstrumentation();
+                    builder.AddEntityFrameworkCoreInstrumentation();
+                    builder.AddZipkinExporter(zipKinOptions =>
+                    {
+                        var endpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
+                        if (!endpoint.IsNullOrWhiteSpace())
+                        {
+                            zipKinOptions.Endpoint = new Uri(configuration["OpenTelemetry:ZipKin:Endpoint"]);
+                        }
+                    });
+                })
+                .WithMetrics(builder =>
+                {
+                    builder.AddHttpClientInstrumentation();
+                    builder.AddAspNetCoreInstrumentation();
+                });
         }
     }
 

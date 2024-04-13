@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.SettingManagement;
 [RemoteService(Name = AbpSettingManagementRemoteServiceConsts.RemoteServiceName)]
 [Area("SettingManagement")]
 [Route("api/setting-management/settings")]
-public class UserSettingController : AbpController, IUserSettingAppService
+public class UserSettingController : AbpControllerBase, IUserSettingAppService
 {
     private readonly IUserSettingAppService _service;
 

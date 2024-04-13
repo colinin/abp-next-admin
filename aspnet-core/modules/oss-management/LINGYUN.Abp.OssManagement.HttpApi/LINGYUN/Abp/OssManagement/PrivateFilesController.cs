@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.OssManagement
     [RemoteService(Name = OssManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("oss-management")]
     [Route("api/files/private")]
-    public class PrivateFilesController : AbpController, IPrivateFileAppService
+    public class PrivateFilesController : AbpControllerBase, IPrivateFileAppService
     {
         private readonly IPrivateFileAppService _service;
 

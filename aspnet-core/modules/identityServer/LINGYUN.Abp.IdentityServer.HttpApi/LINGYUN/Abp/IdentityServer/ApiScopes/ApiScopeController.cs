@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.IdentityServer.ApiScopes
     [RemoteService(Name = AbpIdentityServerConsts.RemoteServiceName)]
     [Area("identity-server")]
     [Route("api/identity-server/api-scopes")]
-    public class ApiScopeController : AbpController, IApiScopeAppService
+    public class ApiScopeController : AbpControllerBase, IApiScopeAppService
     {
         protected IApiScopeAppService ApiScopeAppService { get; }
 

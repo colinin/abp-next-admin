@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
     [Area("abp")]
     [RemoteService(Name = "abp")]
     [Route("api/abp/localization/resources")]
-    public class ResourceController : AbpController, IResourceAppService
+    public class ResourceController : AbpControllerBase, IResourceAppService
     {
         private readonly IResourceAppService _service;
 

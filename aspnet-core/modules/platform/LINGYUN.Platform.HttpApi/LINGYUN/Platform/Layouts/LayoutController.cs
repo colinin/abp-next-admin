@@ -10,7 +10,7 @@ namespace LINGYUN.Platform.Layouts
     [RemoteService(Name = PlatformRemoteServiceConsts.RemoteServiceName)]
     [Area("platform")]
     [Route("api/platform/layouts")]
-    public class LayoutController : AbpController, ILayoutAppService
+    public class LayoutController : AbpControllerBase, ILayoutAppService
     {
         protected ILayoutAppService LayoutAppService { get; }
 

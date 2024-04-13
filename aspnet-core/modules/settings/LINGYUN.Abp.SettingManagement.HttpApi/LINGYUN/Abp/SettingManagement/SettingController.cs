@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.SettingManagement;
 [RemoteService(Name = AbpSettingManagementRemoteServiceConsts.RemoteServiceName)]
 [Area("SettingManagement")]
 [Route("api/setting-management/settings")]
-public class SettingController : AbpController, ISettingAppService, ISettingTestAppService
+public class SettingController : AbpControllerBase, ISettingAppService, ISettingTestAppService
 {
     private readonly ISettingAppService _settingAppService;
     private readonly ISettingTestAppService _settingTestAppService;
