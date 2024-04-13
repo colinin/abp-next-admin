@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.MessageService.Groups
 {
     [RemoteService(Name = AbpMessageServiceConsts.RemoteServiceName)]
     [Route("api/im/groups")]
-    public class GroupController : AbpController, IGroupAppService
+    public class GroupController : AbpControllerBase, IGroupAppService
     {
         private readonly IGroupAppService _service;
 

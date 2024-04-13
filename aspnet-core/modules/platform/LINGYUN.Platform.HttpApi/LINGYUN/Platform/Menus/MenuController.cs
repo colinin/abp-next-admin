@@ -11,7 +11,7 @@ namespace LINGYUN.Platform.Menus
     [RemoteService(Name = PlatformRemoteServiceConsts.RemoteServiceName)]
     [Area("platform")]
     [Route("api/platform/menus")]
-    public class MenuController : AbpController, IMenuAppService
+    public class MenuController : AbpControllerBase, IMenuAppService
     {
         protected IMenuAppService MenuAppService { get; }
         protected IUserRoleFinder UserRoleFinder { get; }

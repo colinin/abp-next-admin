@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Auditing.Permissions;
+﻿using Asp.Versioning;
+using LINGYUN.Abp.Auditing.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;

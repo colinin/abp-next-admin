@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace LINGYUN.Abp.Aliyun.SettingManagement
@@ -10,7 +9,7 @@ namespace LINGYUN.Abp.Aliyun.SettingManagement
     [RemoteService(Name = AbpSettingManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("settingManagement")]
     [Route("api/setting-management/aliyun")]
-    public class AliyunSettingController : AbpController, IAliyunSettingAppService
+    public class AliyunSettingController : AbpControllerBase, IAliyunSettingAppService
     {
         protected IAliyunSettingAppService AppService { get; }
 

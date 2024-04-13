@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources
     [RemoteService(Name = AbpIdentityServerConsts.RemoteServiceName)]
     [Area("identity-server")]
     [Route("api/identity-server/identity-resources")]
-    public class IdentityResourceController : AbpController, IIdentityResourceAppService
+    public class IdentityResourceController : AbpControllerBase, IIdentityResourceAppService
     {
         protected IIdentityResourceAppService IdentityResourceAppService { get; }
         public IdentityResourceController(

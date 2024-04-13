@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -16,6 +17,7 @@ public class TenantStore : ITenantStore, ITransientDependency
 {
     protected ICurrentTenant CurrentTenant { get; }
     protected ITenantAppService TenantAppService { get; }
+
     protected IDistributedCache<TenantCacheItem> Cache { get; }
 
     public TenantStore(
@@ -36,6 +38,33 @@ public class TenantStore : ITenantStore, ITransientDependency
     public async virtual Task<TenantConfiguration> FindAsync(Guid id)
     {
         return (await GetCacheItemAsync(id, null)).Value;
+    }
+
+    public async virtual Task<IReadOnlyList<TenantConfiguration>> GetListAsync(bool includeDetails = false)
+    {
+        var result = new List<TenantConfiguration>();
+        var dto = await TenantAppService.GetListAsync(new TenantGetListInput());
+        foreach (var item in dto.Items)
+        {
+            var tenantConfiguration = new TenantConfiguration(item.Id, item.Name, item.NormalizedName)
+            {
+                ConnectionStrings = new ConnectionStrings(),
+            };
+            if (includeDetails)
+            {
+                var connectionStringsResult = await TenantAppService.GetConnectionStringAsync(item.Id);
+
+                foreach (var connectionString in connectionStringsResult.Items)
+                {
+                    tenantConfiguration.ConnectionStrings.Add(
+                   connectionString.Name,
+                   connectionString.Value);
+                }
+            }
+            result.Add(tenantConfiguration);
+        }
+
+        return result;
     }
 
     [Obsolete("Use FindAsync method.")]
@@ -94,7 +123,7 @@ public class TenantStore : ITenantStore, ITransientDependency
         [CanBeNull] IReadOnlyList<TenantConnectionStringDto> connectionStrings)
     {
         var tenantConfiguration = tenant != null
-            ? new TenantConfiguration(tenant.Id, tenant.Name)
+            ? new TenantConfiguration(tenant.Id, tenant.Name, tenant.NormalizedName)
             {
                 IsActive = tenant.IsActive,
             }

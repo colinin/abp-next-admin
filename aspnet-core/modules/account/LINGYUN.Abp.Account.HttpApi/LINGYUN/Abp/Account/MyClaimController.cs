@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -8,9 +9,9 @@ namespace LINGYUN.Abp.Account
 {
     [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
     [Area("account")]
-    [ControllerName("Profile")]
+    [ControllerName("Claim")]
     [Route("/api/account/my-claim")]
-    public class MyClaimController : AbpController, IMyClaimAppService
+    public class MyClaimController : AbpControllerBase, IMyClaimAppService
     {
         private readonly IMyClaimAppService _service;
 

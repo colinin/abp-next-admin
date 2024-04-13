@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Auditing.Permissions;
+﻿using Asp.Versioning;
+using LINGYUN.Abp.Auditing.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,7 +15,7 @@ namespace LINGYUN.Abp.Auditing.SecurityLogs
     [ControllerName("security-log")]
     [Route("api/auditing/security-log")]
     [Authorize(AuditingPermissionNames.SecurityLog.Default)]
-    public class SecurityLogController : AbpController, ISecurityLogAppService
+    public class SecurityLogController : AbpControllerBase, ISecurityLogAppService
     {
         protected ISecurityLogAppService SecurityLogAppService { get; }
 

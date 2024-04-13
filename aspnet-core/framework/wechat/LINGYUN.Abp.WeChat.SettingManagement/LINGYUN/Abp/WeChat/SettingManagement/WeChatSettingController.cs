@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
     [RemoteService(Name = AbpSettingManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("settingManagement")]
     [Route("api/setting-management/wechat")]
-    public class WeChatSettingController : AbpController, IWeChatSettingAppService
+    public class WeChatSettingController : AbpControllerBase, IWeChatSettingAppService
     {
         protected IWeChatSettingAppService WeChatSettingAppService { get; }
 
