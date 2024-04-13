@@ -34,6 +34,7 @@ using LINGYUN.Abp.LocalizationManagement.Localization;
 using Microsoft.IdentityModel.Logging;
 using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
 using Microsoft.AspNetCore.HttpOverrides;
+using Volo.Abp.Security.Claims;
 
 namespace LY.MicroService.LocalizationManagement;
 
@@ -210,6 +211,14 @@ public partial class LocalizationManagementHttpApiHostModule
         });
     }
 
+    private void ConfigureIdentity()
+    {
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
+    }
+
     private void ConfigureSwagger(IServiceCollection services)
     {
         // Swagger
@@ -298,6 +307,7 @@ public partial class LocalizationManagementHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.MapInboundClaims = false;
             });
 
         if (isDevelopment)

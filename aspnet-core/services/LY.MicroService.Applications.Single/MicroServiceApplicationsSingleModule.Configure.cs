@@ -59,6 +59,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Quartz;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TextTemplating;
 using Volo.Abp.Threading;
@@ -615,6 +616,10 @@ public partial class MicroServiceApplicationsSingleModule
             {
                 identityConfiguration.Bind(options);
             }
+        });
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
         });
     }
 

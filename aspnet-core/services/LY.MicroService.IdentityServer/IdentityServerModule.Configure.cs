@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using IdentityModel;
 using LINGYUN.Abp.Account;
 using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
@@ -39,6 +40,7 @@ using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -205,6 +207,11 @@ public partial class IdentityServerModule
             {
                 identityConfiguration.Bind(options);
             }
+        });
+
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
         });
     }
     private void ConfigureVirtualFileSystem()

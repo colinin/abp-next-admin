@@ -38,6 +38,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict.Localization;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -272,6 +273,14 @@ public partial class AuthServerHttpApiHostModule
         }
     }
 
+    private void ConfigureIdentity()
+    {
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
+    }
+
     private void ConfigureSwagger(IServiceCollection services)
     {
         // Swagger
@@ -362,6 +371,7 @@ public partial class AuthServerHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.MapInboundClaims = false;
             });
 
         if (isDevelopment)

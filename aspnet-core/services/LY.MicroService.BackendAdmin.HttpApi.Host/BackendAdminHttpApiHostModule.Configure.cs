@@ -39,6 +39,10 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.AspNetCore.Identity;
+using Volo.Abp.Security.Claims;
+using Volo.Abp.SettingManagement;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer.DynamicClaims;
 
 namespace LY.MicroService.BackendAdmin;
 
@@ -141,9 +145,18 @@ public partial class BackendAdminHttpApiHostModule
     {
         Configure<PermissionManagementOptions>(options =>
         {
+            options.IsDynamicPermissionStoreEnabled = true;
             // Rename IdentityServer.Client.ManagePermissions
             // See https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo/Abp/PermissionManagement/IdentityServer/AbpPermissionManagementDomainIdentityServerModule.cs
             options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = "AbpIdentityServer.Clients.ManagePermissions";
+        });
+    }
+
+    private void ConfigureSettingManagement()
+    {
+        Configure<SettingManagementOptions>(options =>
+        {
+            options.IsDynamicSettingStoreEnabled = true;
         });
     }
 
@@ -232,6 +245,15 @@ public partial class BackendAdminHttpApiHostModule
                 }
             });
         }
+    }
+
+    private void ConfigureIdentity(IConfiguration configuration)
+    {
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+            options.RemoteRefreshUrl = configuration["AuthServerUrl"] + options.RemoteRefreshUrl;
+        });
     }
 
     private void ConfigureAuditing(IConfiguration configuration)
@@ -352,6 +374,7 @@ public partial class BackendAdminHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.MapInboundClaims = false;
             });
 
         if (isDevelopment)

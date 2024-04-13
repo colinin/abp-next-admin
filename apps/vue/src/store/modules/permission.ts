@@ -3,6 +3,8 @@ import type { AppRouteRecordRaw, Menu, RouteMeta } from '/@/router/types';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
+import { useLocalizationSerializer } from '/@/hooks/abp/useLocalizationSerializer';
 import { useUserStore } from './user';
 import { useAbpStoreWithOut } from './abp';
 import { useAppStoreWithOut } from './app';
@@ -223,11 +225,14 @@ export const usePermissionStore = defineStore({
       return routes;
     },
     filterDynamicRoutes(menus: RouteItem[]) {
+      const { deserialize } = useLocalizationSerializer();
+      const { Lr } = useLocalization();
       const routeList: AppRouteRecordRaw[] = [];
       menus.forEach((menu) => {
         if (!this.validationFeatures(menu.meta)) {
           return;
         }
+        const titleInfo = deserialize(menu.meta.title);
         const r: AppRouteRecordRaw = {
           path: menu.path,
           name: menu.name!,
@@ -235,7 +240,7 @@ export const usePermissionStore = defineStore({
           component: menu.component,
           meta: {
             affix: mapMetaBoolean('affix', menu.meta),
-            title: menu.meta.title,
+            title: Lr(titleInfo.resourceName, titleInfo.name),
             icon: menu.meta.icon,
             ignoreAuth: mapMetaBoolean('ignoreAuth', menu.meta),
             ignoreKeepAlive: mapMetaBoolean('ignoreKeepAlive', menu.meta),

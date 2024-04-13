@@ -92,7 +92,7 @@ namespace LINGYUN.Abp.OssManagement
             catch
             {
                 // 发生异常删除临时文件目录
-                Directory.Delete(tempFilePath, true);
+                DirectoryHelper.DeleteIfExists(tempFilePath, true);
                 throw;
             }
         }
