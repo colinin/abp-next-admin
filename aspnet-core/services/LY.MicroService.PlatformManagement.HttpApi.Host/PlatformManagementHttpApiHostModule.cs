@@ -111,6 +111,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureBlobStoring();
         ConfigureLocalization();

@@ -42,6 +42,7 @@ using LINGYUN.Abp.Notifications.Localization;
 using Microsoft.IdentityModel.Logging;
 using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
 using Microsoft.AspNetCore.HttpOverrides;
+using Volo.Abp.Security.Claims;
 
 namespace LY.MicroService.RealtimeMessage;
 
@@ -301,6 +302,14 @@ public partial class RealtimeMessageHttpApiHostModule
         }
     }
 
+    private void ConfigureIdentity()
+    {
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
+    }
+
     private void ConfigureSwagger(IServiceCollection services)
     {
         // Swagger
@@ -395,6 +404,7 @@ public partial class RealtimeMessageHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.MapInboundClaims = false;
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>

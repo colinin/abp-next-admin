@@ -74,6 +74,7 @@ namespace LY.MicroService.LocalizationManagement
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureIdentity();
             ConfigureDbContext();
             ConfigureLocalization();
             ConfigreExceptionHandling();

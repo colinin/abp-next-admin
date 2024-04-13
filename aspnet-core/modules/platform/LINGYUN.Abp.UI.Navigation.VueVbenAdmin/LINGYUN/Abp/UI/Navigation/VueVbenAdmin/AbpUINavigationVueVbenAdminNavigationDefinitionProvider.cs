@@ -214,12 +214,14 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
 
             var removedIdsVersion = false;
             var assembly = typeof(AbpUINavigationVueVbenAdminNavigationDefinitionProvider).Assembly;
-            var versionAttr = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            var versionAttr = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
             if (versionAttr != null)
             {
-                var version = new Version(versionAttr.InformationalVersion);
-                var version6 = new Version("6.0.0");
-                removedIdsVersion = version6 >= version;
+                if (Version.TryParse(versionAttr.Version, out var version))
+                {
+                    var version6 = new Version("6.0.0");
+                    removedIdsVersion = version6 >= version;
+                }
             }
 
             if (!removedIdsVersion)

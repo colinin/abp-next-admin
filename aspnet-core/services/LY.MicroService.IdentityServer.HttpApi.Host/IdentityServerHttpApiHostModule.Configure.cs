@@ -40,6 +40,10 @@ using Volo.Abp.IdentityServer.Localization;
 using Microsoft.IdentityModel.Logging;
 using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
 using Microsoft.AspNetCore.HttpOverrides;
+using Volo.Abp.Security.Claims;
+using System.Collections.Generic;
+using IdentityModel;
+using System.Security.Claims;
 
 namespace LY.MicroService.IdentityServer;
 
@@ -270,6 +274,14 @@ public partial class IdentityServerHttpApiHostModule
         }
     }
 
+    private void ConfigureIdentity()
+    {
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
+    }
+
     private void ConfigureSwagger(IServiceCollection services)
     {
         // Swagger
@@ -364,6 +376,7 @@ public partial class IdentityServerHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.MapInboundClaims = false;
             });
 
         if (isDevelopment)

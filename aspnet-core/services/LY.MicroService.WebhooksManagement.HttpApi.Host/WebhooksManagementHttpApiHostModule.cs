@@ -99,6 +99,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
+        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureExceptionHandling();
@@ -128,10 +129,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-        // IDS与JWT不匹配可能造成鉴权错误
-        // TODO: abp在某个更新版本建议移除此中间价
-        app.UseAbpClaimsMap();
-        app.UseJwtTokenMiddleware();
+        app.UseDynamicClaims();
         app.UseMultiTenancy();
         app.UseMapRequestLocalization();
         app.UseAuthorization();

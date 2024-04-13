@@ -75,7 +75,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(IdentityServerMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
-    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    //typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
@@ -145,12 +145,11 @@ public partial class IdentityServerModule : AbpModule
         app.UseStaticFiles();
         app.UseRouting();
         app.UseCors(DefaultCorsPolicyName);
-        app.UseWeChatSignature();
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
         app.UseMapRequestLocalization();
         app.UseIdentityServer();
+        app.UseDynamicClaims();
         app.UseAuthorization();
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();

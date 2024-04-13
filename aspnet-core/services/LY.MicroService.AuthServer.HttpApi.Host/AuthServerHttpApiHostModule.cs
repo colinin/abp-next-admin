@@ -80,6 +80,7 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigreExceptionHandling();
@@ -113,9 +114,7 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         // 认证
         app.UseAuthentication();
-        // IDS与JWT不匹配可能造成鉴权错误
-        // TODO: abp在某个更新版本建议移除此中间价
-        app.UseAbpClaimsMap();
+        app.UseDynamicClaims();
         // 多租户
         app.UseMultiTenancy();
         // 授权

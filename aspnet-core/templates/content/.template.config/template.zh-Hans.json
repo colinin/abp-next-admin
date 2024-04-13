@@ -1,0 +1,5 @@
+{
+  "description": "适用于abp框架的微服务模板项目",
+  "symbols/AuthenticationScheme/description": "认证服务体系, 可选项为: IdentityServer4、OpenIddict, 默认使用IdentityServer4.",
+  "symbols/DatabaseManagement/description": "数据库管理提供者, 可选项为: SqlServer、MySQL、Sqlite、Oracle、OracleDevart、PostgreSql, 默认使用MySQL."
+}
