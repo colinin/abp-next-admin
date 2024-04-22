@@ -136,6 +136,9 @@ const transform: AxiosTransform = {
     if ((config as Recordable)?.requestOptions?.withAcceptLanguage !== false) {
       const localeStore = useLocaleStoreWithOut();
       config.headers['Accept-Language'] = localeStore.getLocale;
+      if (config.headers['Accept-Language'] == 'zh_CN') {
+        config.headers['Accept-Language'] = 'zh-Hans';
+      }
     }
     return config;
   },
@@ -157,6 +160,13 @@ const transform: AxiosTransform = {
 
     if (axios.isCancel(error)) {
       return Promise.reject(error);
+    }
+    
+    if (error.code && ['ECONNABORTED', 'ETIMEDOUT'].includes(error.code)) {
+      const { t } = useI18n();
+      const timeout = t('sys.api.apiTimeoutMessage');
+      createMessage.error(timeout);
+      return Promise.reject(timeout);
     }
 
     const resMessage = checkResponse(error.response);

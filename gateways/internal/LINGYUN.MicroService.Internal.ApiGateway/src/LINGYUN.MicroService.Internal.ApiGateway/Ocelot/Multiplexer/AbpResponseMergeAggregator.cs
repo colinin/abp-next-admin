@@ -79,14 +79,26 @@ namespace Ocelot.Multiplexer
                     continue;
                 }
                 var content = await response.Content.ReadAsStringAsync();
-                var contentObject = JsonConvert.DeserializeObject(content);
-                if (responseObject == null)
+                try
                 {
-                    responseObject = JObject.FromObject(contentObject);
+                    var contentObject = JsonConvert.DeserializeObject(content);
+                    if (responseObject == null)
+                    {
+                        responseObject = JObject.FromObject(contentObject);
+                    }
+                    else
+                    {
+                        responseObject.Merge(contentObject, mergeSetting);
+                    }
                 }
-                else
+                catch (System.Exception ex)
                 {
-                    responseObject.Merge(contentObject, mergeSetting);
+                    Logger.LogError(ex, "An error occurred in the aggregate route request result.");
+                    return new DownstreamResponse(
+                        null,
+                        HttpStatusCode.InternalServerError,
+                        new List<KeyValuePair<string, IEnumerable<string>>>(),
+                        content);
                 }
             }
 

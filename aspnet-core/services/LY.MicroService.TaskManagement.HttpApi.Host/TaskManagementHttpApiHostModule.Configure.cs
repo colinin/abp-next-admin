@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
 using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -10,9 +11,11 @@ using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Quartz;
 using StackExchange.Redis;
@@ -31,6 +34,7 @@ using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Quartz;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
@@ -49,7 +53,17 @@ public partial class TaskManagementHttpApiHostModule
         });
     }
 
-    private void PreConfigureApp()
+    private void PreForwardedHeaders()
+    {
+        PreConfigure<AbpForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+    }
+
+    private void PreConfigureApp(IConfiguration configuration)
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
@@ -60,6 +74,11 @@ public partial class TaskManagementHttpApiHostModule
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });
+
+        if (configuration.GetValue<bool>("App:ShowPii"))
+        {
+            IdentityModelEventSource.ShowPII = true;
+        }
     }
 
     private void PreConfigureCAP(IConfiguration configuration)
@@ -100,7 +119,7 @@ public partial class TaskManagementHttpApiHostModule
                     config.UsePersistentStore(store =>
                     {
                         store.UseProperties = false;
-                        store.UseJsonSerializer();
+                        store.UseNewtonsoftJsonSerializer();
                     });
                 };
             }
@@ -245,13 +264,21 @@ public partial class TaskManagementHttpApiHostModule
         }
     }
 
+    private void ConfigureIdentity()
+    {
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
+    }
+
     private void ConfigureSwagger(IServiceCollection services)
     {
         // Swagger
         services.AddSwaggerGen(
             options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "WorkflowManagement API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "TaskManagement API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -309,6 +336,7 @@ public partial class TaskManagementHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.MapInboundClaims = false;
             });
 
         if (isDevelopment)

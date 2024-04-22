@@ -15,7 +15,7 @@
                   :loading="item.loading"
                   @change="handleChange(item, $event)"
                 />
-                <Button v-else-if="item.extra" class="extra" type="link" :loading="item.loading" :disbled="!item.enabled" @click="toggleCommand(item)">
+                <Button v-else-if="item.extra && item.enabled !== false" class="extra" type="link" :loading="item.loading" @click="toggleCommand(item)">
                   {{ item.extra }}
                 </Button>
               </template>
@@ -78,7 +78,7 @@
       case 'email':
         sendEmailConfirmLink({
           email: item.description,
-          appName: 'STS',
+          appName: 'VueVbenAdmin',
           returnUrl: window.location.href,
         }).finally(() => {
           item.loading = false;
@@ -95,6 +95,7 @@
           createMessage.success(L('Successful'));
         }).finally(() => {
           item.loading = false;
+          item.switch!.checked = false;
         });
         break;
     }

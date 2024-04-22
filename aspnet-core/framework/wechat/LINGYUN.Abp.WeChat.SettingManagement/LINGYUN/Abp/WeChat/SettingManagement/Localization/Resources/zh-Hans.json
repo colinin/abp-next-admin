@@ -1,0 +1,8 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:WeChat.Official": "公众平台",
+    "Permission:WeChat.MiniProgram": "小程序",
+    "Permission:WeChat.Work": "企业微信"
+  }
+}

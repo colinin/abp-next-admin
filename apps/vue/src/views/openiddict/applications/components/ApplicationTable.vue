@@ -2,11 +2,7 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <Button
-          v-auth="['AbpOpenIddict.Applications.Create']"
-          type="primary"
-          @click="handleAddNew"
-        >
+        <Button v-auth="['AbpOpenIddict.Applications.Create']" type="primary" @click="handleAddNew">
           {{ L('Applications:AddNew') }}
         </Button>
       </template>
@@ -33,7 +29,18 @@
               {
                 auth: 'AbpOpenIddict.Applications.ManagePermissions',
                 label: L('ManagePermissions'),
-                onClick: handlePermission.bind(null, record),
+                onClick: handleManagePermissions.bind(null, record),
+              },
+              {
+                auth: 'AbpOpenIddict.Applications.ManageFeatures',
+                label: L('ManageFeatures'),
+                onClick: handleManageFeatures.bind(null, record),
+              },
+              {
+                auth: 'AbpOpenIddict.Applications.ManageSecret',
+                label: L('GenerateSecret'),
+                ifShow: getShowSecret(record),
+                onClick: handleGenerateSecret.bind(null, record),
               },
             ]"
           />
@@ -41,26 +48,32 @@
       </template>
     </BasicTable>
     <ApplicationModal @register="registerModal" @change="reload" />
+    <ApplicationSecretModal @register="registerSecretModal" @change="reload" />
     <PermissionModal @register="registerPermissionModal" />
+    <FeatureModal @register="registerFeatureModal" />
   </div>
 </template>
 
 <script lang="ts" setup>
+  import { computed } from 'vue';
   import { Button } from 'ant-design-vue';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { getDataColumns } from '../datas/TableData';
-  import { getSearchFormProps } from '../datas/ModalData';
   import { useModal } from '/@/components/Modal';
+  import { FeatureModal } from '/@/components/Abp';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { GetListAsyncByInput, DeleteAsyncById } from '/@/api/openiddict/open-iddict-application';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import { PermissionModal } from '/@/components/Permission';
   import ApplicationModal from './ApplicationModal.vue';
+  import ApplicationSecretModal from './ApplicationSecretModal.vue';
 
-  const { L } = useLocalization(['AbpOpenIddict']);
+  const { L } = useLocalization(['AbpOpenIddict', 'AbpUi']);
   const { createConfirm, createMessage } = useMessage();
   const [registerModal, { openModal }] = useModal();
+  const [registerSecretModal, { openModal: openSecretModal }] = useModal();
+  const [registerFeatureModal, { openModal: openFeatureModal }] = useModal();
   const [registerPermissionModal, { openModal: openPermissionModal }] = useModal();
   const [registerTable, { reload }] = useTable({
     rowKey: 'id',
@@ -73,7 +86,17 @@
     useSearchForm: true,
     showIndexColumn: false,
     showTableSetting: true,
-    formConfig: getSearchFormProps(),
+    formConfig: {
+      labelWidth: 100,
+      schemas: [
+        {
+          field: 'filter',
+          component: 'Input',
+          label: L('Search'),
+          colProps: { span: 24 },
+        },
+      ],
+    },
     bordered: true,
     canResize: true,
     immediate: true,
@@ -82,6 +105,11 @@
       title: L('Actions'),
       dataIndex: 'action',
     },
+  });
+  const getShowSecret = computed(() => {
+    return (record) => {
+      return record.clientType === 'confidential';
+    };
   });
 
   function handleAddNew() {
@@ -92,12 +120,24 @@
     openModal(true, record);
   }
 
-  function handlePermission(record) {
+  function handleGenerateSecret(record) {
+    openSecretModal(true, record);
+  }
+
+  function handleManagePermissions(record) {
     const props = {
       providerName: 'C',
       providerKey: record.clientId,
     };
     openPermissionModal(true, props, true);
+  }
+
+  function handleManageFeatures(record) {
+    const props = {
+      providerName: 'C',
+      providerKey: record.clientId,
+    };
+    openFeatureModal(true, props, true);
   }
 
   function handleDelete(record) {
@@ -106,7 +146,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        return DeleteAsyncById(record.key).then(() => {
+        return DeleteAsyncById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });

@@ -202,9 +202,6 @@ export const deleteObject = (input: GetOssObjectRequest) => {
       url: Api.DeleteObject,
       params: input,
     },
-    {
-      joinParamsToUrl: true,
-    },
   );
 };
 

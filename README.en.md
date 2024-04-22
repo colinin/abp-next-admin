@@ -12,6 +12,18 @@ This is a [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) -based Abp 
 
 ## Quick Start
 
+### 0、Configurate hosts
+windows: modify C:\Windows\System32\drivers\etc\hosts ；
+linux: modify /etc/hosts；
+add config:
+```
+	127.0.0.1 host.docker.internal
+```
+In linux, execute restart network command:
+```shell
+	/etc/init.d/network restart
+```
+
 ### 1、Install cli
 
 ```shell

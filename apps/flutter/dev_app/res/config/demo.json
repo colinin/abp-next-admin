@@ -1,0 +1,64 @@
+{
+    "application": {
+        "name": "app-flutter"
+    },
+    "auth": {
+        "clientId": "abp-flutter",
+        "clientSecret": "1q2w3e*",
+        "authority": "http://127.0.0.1:30000"
+    },
+    "tenant": {
+        "tenantKey": "__tenant"
+    },
+    "localization": {
+        "useLocalResources": true,
+        "defaultLanguage": "zh-Hans",
+        "translationFiles": {
+            "zh-Hans": [
+                "zh-Hans.json"
+            ],
+            "zh_CN": [
+                "zh-Hans.json"
+            ],
+            "en": [
+                "en.json"
+            ],
+            "en_US": [
+                "en.json"
+            ]
+        },
+        "supportedLocales": [
+            {
+                "cultureName": "en",
+                "displayName": "English"
+            },
+            {
+                "cultureName": "zh-Hans",
+                "displayName": "简体中文"
+            }
+        ]
+    },
+    "remoteServices": {
+        "default": {
+            "url": "http://127.0.0.1:30000"
+        },
+        "avatar": {
+            "url": "http://127.0.0.1:30000/api/files/static/users/p/"
+        }
+    },
+    "remoteEnvironment": {
+        "url": "",
+        "strategy": "deepmerge"
+    },
+    "notifications": {
+        "serverUrl": "http://127.0.0.1:30000/signalr-hubs/notifications",
+        "android": {
+            "channelId": "abp-flutter",
+            "channelName": "abp-flutter",
+            "channelDescription": "适用于Android端的通知通道定义"
+        },
+        "linux": {
+            "defaultActionName": "Open notification"
+        }
+    }
+}

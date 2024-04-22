@@ -20,6 +20,9 @@ File-Management更名为Oss-Management
 * [LINGYUN.Abp.OssManagement.Aliyun](./LINGYUN.Abp.OssManagement.Aliyun)									Oss管理的阿里云实现，实现了部分阿里云Oss服务的容器与对象管理  
 * [LINGYUN.Abp.OssManagement.FileSystem](./LINGYUN.Abp.OssManagement.FileSystem)							Oss管理的本地文件系统实现，实现了部分本地文件系统的容器（目录）与对象（文件/目录）管理  
 * [LINGYUN.Abp.OssManagement.FileSystem.ImageSharp](./LINGYUN.Abp.OssManagement.FileSystem.ImageSharp)	Oss本地对象的ImageSharp扩展，当前端传递需求处理对象时，此模块用于实现基于图形文件流的处理   
+* [LINGYUN.Abp.OssManagement.FileSystem.Imaging](./LINGYUN.Abp.OssManagement.FileSystem.Imaging)	Oss本地对象的Volo.Abp.Imaging扩展  
+* [LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp](./LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp)	Oss本地对象的Volo.Abp.Imaging.ImageSharp扩展   
+* [LINGYUN.Abp.OssManagement.Nexus](./LINGYUN.Abp.OssManagement.Nexu	s)									Oss管理的Nexus实现，管理来自私有Nexus仓库的RAW存储类型 
 
 ### 权限定义
 
@@ -52,3 +55,5 @@ File-Management更名为Oss-Management
 *【2021-03-10】 变更FileManagement命名空间为OssManagement  
 *【2021-10-22】	增加PublicFilesController用于身份认证通过的用户上传/下载文件,所有操作限定在用户目录下  
 *【2021-12-13】	增加LINGYUN.Abp.BlobStoring.OssManagement用于实现Oss代理二进制文件存储  
+*【2023-09-04】	集成Volo.Abp.Imaging模块用于图形文件流处理  
+*【2023-10-11】	集成Nexus仓库实现基于Nexus Raw类型存储(**未完善**)  

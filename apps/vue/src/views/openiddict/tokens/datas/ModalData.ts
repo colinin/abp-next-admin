@@ -1,7 +1,9 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
+import { GetListAsyncByInput as getApplications } from '/@/api/openiddict/open-iddict-application';
+import { GetListAsyncByInput as getAuthorizations } from '/@/api/openiddict/open-iddict-authorization';
 
-const { L } = useLocalization(['AbpOpenIddict']);
+const { L } = useLocalization(['AbpOpenIddict', 'AbpUi']);
 
 export function getSearchFormProps(): Partial<FormProps> {
   return {
@@ -13,15 +15,35 @@ export function getSearchFormProps(): Partial<FormProps> {
     schemas: [
       {
         field: 'clientId',
-        component: 'Input',
+        component: 'ApiSelect',
         label: L('DisplayName:ClientId'),
         colProps: { span: 8 },
+        componentProps: {
+          api: getApplications,
+          params: {
+            skipCount: 0,
+            maxResultCount: 100,
+          },
+          resultField: 'items',
+          labelField: 'clientId',
+          valueField: 'id',
+        }
       },
       {
         field: 'authorizationId',
-        component: 'Input',
+        component: 'ApiSelect',
         label: L('DisplayName:AuthorizationId'),
         colProps: { span: 8 },
+        componentProps: {
+          api: getAuthorizations,
+          params: {
+            skipCount: 0,
+            maxResultCount: 100,
+          },
+          resultField: 'items',
+          labelField: 'subject',
+          valueField: 'id',
+        }
       },
       {
         field: 'subject',

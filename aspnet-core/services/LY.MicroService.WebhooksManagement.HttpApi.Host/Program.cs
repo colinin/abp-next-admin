@@ -18,6 +18,7 @@ public class Program
     {
         try
         {
+            Console.Title = "Web.Host";
             Log.Information("Starting web host.");
 
             var builder = WebApplication.CreateBuilder(args);

@@ -51,12 +51,12 @@ namespace LINGYUN.Abp.OssManagement.SettingManagement
                 var ossObjectSetting = ossSettingGroup.AddSetting(L["DisplayName:OssObject"], L["Description:OssObject"]);
 
                 ossObjectSetting.AddDetail(
-                    SettingDefinitionManager.Get(AbpOssManagementSettingNames.FileLimitLength),
+                    await SettingDefinitionManager.GetAsync(AbpOssManagementSettingNames.FileLimitLength),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(AbpOssManagementSettingNames.FileLimitLength, providerName, providerKey),
                     ValueType.Number);
                 ossObjectSetting.AddDetail(
-                    SettingDefinitionManager.Get(AbpOssManagementSettingNames.AllowFileExtensions),
+                    await SettingDefinitionManager.GetAsync(AbpOssManagementSettingNames.AllowFileExtensions),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(AbpOssManagementSettingNames.AllowFileExtensions, providerName, providerKey),
                     ValueType.String);

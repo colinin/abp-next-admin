@@ -4,10 +4,13 @@ using System;
 using System.Collections.Generic;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
-[DependsOn(typeof(AbpLocalizationModule))]
+[DependsOn(
+    typeof(AbpLocalizationModule),
+    typeof(AbpMultiTenancyAbstractionsModule))]
 public class AbpBackgroundTasksAbstractionsModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

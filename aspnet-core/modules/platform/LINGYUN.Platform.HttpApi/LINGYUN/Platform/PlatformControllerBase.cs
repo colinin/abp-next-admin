@@ -4,7 +4,7 @@ using Volo.Abp.Settings;
 
 namespace LINGYUN.Platform
 {
-    public abstract class PlatformControllerBase : AbpController
+    public abstract class PlatformControllerBase : AbpControllerBase
     {
         protected ISettingProvider SettingProvider => LazyServiceProvider.LazyGetRequiredService<ISettingProvider>();
 

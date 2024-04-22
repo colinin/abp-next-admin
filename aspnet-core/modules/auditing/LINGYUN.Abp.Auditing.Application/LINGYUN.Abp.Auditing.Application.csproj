@@ -1,22 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\configureawait.props" />
-    <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />
-    <PackageReference Include="Volo.Abp.Ddd.Application" Version="$(VoloAbpPackageVersion)" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\logging\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj" />
-    <ProjectReference Include="..\LINGYUN.Abp.Auditing.Application.Contracts\LINGYUN.Abp.Auditing.Application.Contracts.csproj" />
-    <ProjectReference Include="..\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj" />
+		<ProjectReference Include="..\..\..\framework\logging\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Auditing.Application.Contracts\LINGYUN.Abp.Auditing.Application.Contracts.csproj" />
+	</ItemGroup>
 
 </Project>

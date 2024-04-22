@@ -1,8 +1,7 @@
-﻿using Volo.Abp.Application.Dtos;
+﻿namespace LINGYUN.Abp.WebhooksManagement.Definitions;
 
-namespace LINGYUN.Abp.WebhooksManagement.Definitions;
-
-public class WebhookDefinitionGetListInput : PagedAndSortedResultRequestDto
+public class WebhookDefinitionGetListInput
 {
     public string Filter { get; set; }
+    public string GroupName { get; set; }
 }

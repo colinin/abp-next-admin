@@ -36,7 +36,7 @@ public class SingleDbMigratorHostedService : IHostedService
         await application
             .ServiceProvider
             .GetRequiredService<SingleDbMigrationService>()
-            .MigrateAsync();
+            .CheckAndApplyDatabaseMigrationsAsync();
 
         await application.ShutdownAsync();
 

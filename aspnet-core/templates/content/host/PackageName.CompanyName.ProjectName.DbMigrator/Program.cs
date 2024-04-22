@@ -20,8 +20,8 @@ public class Program
                 .MinimumLevel.Override("PackageName.CompanyName.ProjectName", LogEventLevel.Information)
 #endif
                 .Enrich.FromLogContext()
-            .WriteTo.Async(c => c.File("Logs/logs.txt"))
-            .WriteTo.Async(c => c.Console())
+            .WriteTo.File("Logs/logs.txt")
+            .WriteTo.Console()
             .CreateLogger();
 
         await CreateHostBuilder(args).RunConsoleAsync();

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,10 @@ public class InternalApiGatewayModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+        var showPii = configuration.GetValue<bool>("App:ShowPii");
+        IdentityModelEventSource.ShowPII = showPii;
+
 
         Configure<InternalApiGatewayOptions>(options =>
         {

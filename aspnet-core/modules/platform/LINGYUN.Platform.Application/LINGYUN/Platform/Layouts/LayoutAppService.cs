@@ -80,7 +80,7 @@ namespace LINGYUN.Platform.Layouts
 
             var layouts = await LayoutRepository.GetPagedListAsync(
                 input.Framework, input.Filter,
-                input.Sorting, input.Reverse, false,
+                input.Sorting, false,
                 input.SkipCount, input.MaxResultCount);
 
             return new PagedResultDto<LayoutDto>(count,

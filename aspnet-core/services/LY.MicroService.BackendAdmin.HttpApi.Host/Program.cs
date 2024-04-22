@@ -18,6 +18,7 @@ public class Program
     {
         try
         {
+            Console.Title = "BackendAdmin.Host";
             Log.Information("Starting BackendAdmin.Host.");
 
             var builder = WebApplication.CreateBuilder(args);

@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.OssManagement
     [RemoteService(Name = OssManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("oss-management")]
     [Route("api/oss-management/objects")]
-    public class OssObjectController : AbpController, IOssObjectAppService
+    public class OssObjectController : AbpControllerBase, IOssObjectAppService
     {
         protected IFileUploader FileUploader { get; }
         protected IOssObjectAppService OssObjectAppService { get; }

@@ -18,7 +18,7 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "7.0.1")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LINGYUN.Abp.MessageService.Chat.UserChatCard", b =>
@@ -39,6 +39,7 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -56,6 +57,7 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -114,6 +116,7 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -134,6 +137,7 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -210,6 +214,7 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -228,6 +233,7 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
                         .HasColumnName("CreatorId");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -374,6 +380,7 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -392,6 +399,7 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
                         .HasColumnName("CreatorId");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -465,6 +473,7 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -478,6 +487,7 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
                         .HasColumnName("CreatorId");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -540,8 +550,8 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
 
                     b.Property<string>("NotificationName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("NotificationTypeName")
                         .IsRequired()
@@ -588,8 +598,8 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -624,13 +634,13 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
 
                     b.Property<string>("GroupName")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("NotificationLifetime")
                         .HasColumnType("int");
@@ -641,6 +651,10 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
                     b.Property<string>("Providers")
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Template")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
 
                     b.HasKey("Id");
 
@@ -686,8 +700,8 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore.Migrations
 
                     b.Property<string>("NotificationName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("char(36)")

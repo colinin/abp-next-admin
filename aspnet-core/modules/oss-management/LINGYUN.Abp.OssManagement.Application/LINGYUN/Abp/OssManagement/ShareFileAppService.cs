@@ -1,8 +1,12 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using LINGYUN.Abp.OssManagement.Features;
+using Microsoft.Extensions.Caching.Distributed;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
+using Volo.Abp.Content;
+using Volo.Abp.Http;
 
 namespace LINGYUN.Abp.OssManagement
 {
@@ -22,13 +26,17 @@ namespace LINGYUN.Abp.OssManagement
             _ossContainerFactory = ossContainerFactory;
         }
 
-        public async virtual Task<GetFileShareDto> GetAsync(string url)
+        public async virtual Task<IRemoteStreamContent> GetAsync(string url)
         {
+            if (!await FeatureChecker.IsEnabledAsync(AbpOssManagementFeatureNames.OssObject.AllowSharedFile))
+            {
+                return new RemoteStreamContent(Stream.Null);
+            }
             var cacheKey = FileShareCacheItem.CalculateCacheKey(url);
             var cacheItem = await _shareCache.GetAsync(cacheKey);
             if (cacheItem == null)
             {
-                return new GetFileShareDto(url);
+                return new RemoteStreamContent(Stream.Null);
             }
 
             // 最大访问次数
@@ -41,7 +49,7 @@ namespace LINGYUN.Abp.OssManagement
             {
                 await _shareCache.RemoveAsync(cacheKey);
 
-                return new GetFileShareDto(url);
+                return new RemoteStreamContent(Stream.Null);
             }
 
             // 共享用户
@@ -49,7 +57,7 @@ namespace LINGYUN.Abp.OssManagement
             {
                 if (cacheItem.Users.Any((userName) => !userName.Equals(CurrentUser.UserName)))
                 {
-                    return new GetFileShareDto(url);
+                    return new RemoteStreamContent(Stream.Null);
                 }
             }
 
@@ -58,7 +66,7 @@ namespace LINGYUN.Abp.OssManagement
             {
                 if (cacheItem.Roles.Any((role) => !CurrentUser.Roles.Contains(role)))
                 {
-                    return new GetFileShareDto(url);
+                    return new RemoteStreamContent(Stream.Null);
                 }
             }
 
@@ -85,7 +93,7 @@ namespace LINGYUN.Abp.OssManagement
                 cacheItem,
                 cacheOptions);
 
-            return new GetFileShareDto(ossObject.Name, ossObject.Content);
+            return new RemoteStreamContent(ossObject.Content, ossObject.Name, MimeTypes.GetByExtension(ossObject.Name), ossObject.Size);
         }
 
         protected async virtual Task RefreshUserShareAsync(FileShareCacheItem shareCacheItem)

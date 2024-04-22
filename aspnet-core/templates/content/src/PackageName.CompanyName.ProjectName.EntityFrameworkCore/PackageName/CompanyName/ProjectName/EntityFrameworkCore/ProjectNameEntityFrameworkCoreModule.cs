@@ -45,14 +45,19 @@ public class ProjectNameEntityFrameworkCoreModule : AbpModule
         Configure<AbpDbContextOptions>(options =>
         {
 #if MySQL
+            options.UseMySQL();
             options.UseMySQL<ProjectNameDbContext>();
 #elif SqlServer
+            options.UseSqlServer();
             options.UseSqlServer<ProjectNameDbContext>();
 #elif Sqlite
+            options.UseSqlite();
             options.UseSqlite<ProjectNameDbContext>();
 #elif Oracle || OracleDevart
+            options.UseOracle();
             options.UseOracle<ProjectNameDbContext>();
 #elif PostgreSql
+            options.UseNpgsql();
             options.UseNpgsql<ProjectNameDbContext>();
 #endif
         });

@@ -7,6 +7,7 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.Authorizations;
 
 namespace LINGYUN.Abp.OpenIddict.Authorizations;
@@ -15,22 +16,25 @@ namespace LINGYUN.Abp.OpenIddict.Authorizations;
 public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBase, IOpenIddictAuthorizationAppService
 {
     private readonly IOpenIddictAuthorizationManager _authorizationManager;
+    private readonly AbpOpenIddictIdentifierConverter _identifierConverter;
     private readonly IRepository<OpenIddictAuthorization, Guid> _authorizationRepository;
 
     public OpenIddictAuthorizationAppService(
         IOpenIddictAuthorizationManager authorizationManager,
+        AbpOpenIddictIdentifierConverter identifierConverter,
         IRepository<OpenIddictAuthorization, Guid> authorizationRepository)
     {
         _authorizationManager = authorizationManager;
+        _identifierConverter = identifierConverter;
         _authorizationRepository = authorizationRepository;
     }
 
     [Authorize(AbpOpenIddictPermissions.Authorizations.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
-        var authorization = await _authorizationRepository.GetAsync(id);
+        var authorization = await _authorizationManager.FindByIdAsync(_identifierConverter.ToString(id));
 
-        await _authorizationManager.DeleteAsync(authorization.ToModel());
+        await _authorizationManager.DeleteAsync(authorization);
     }
 
     public async virtual Task<OpenIddictAuthorizationDto> GetAsync(Guid id)
@@ -53,7 +57,7 @@ public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBas
         }
         if (input.EndCreationTime.HasValue)
         {
-            queryable = queryable.Where(x => x.CreationTime <= input.BeginCreationTime);
+            queryable = queryable.Where(x => x.CreationTime <= input.EndCreationTime);
         }
         if (!input.Status.IsNullOrWhiteSpace())
         {
@@ -74,6 +78,8 @@ public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBas
                 x.Scopes.Contains(input.Filter) || x.Properties.Contains(input.Filter));
         }
 
+        var totalCount = await AsyncExecuter.CountAsync(queryable);
+
         var sorting = input.Sorting;
         if (sorting.IsNullOrWhiteSpace())
         {
@@ -82,8 +88,6 @@ public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBas
         queryable = queryable
             .OrderBy(sorting)
             .PageBy(input.SkipCount, input.MaxResultCount);
-
-        var totalCount = await AsyncExecuter.CountAsync(queryable);
         var entites = await AsyncExecuter.ToListAsync(queryable);
 
         return new PagedResultDto<OpenIddictAuthorizationDto>(totalCount,

@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Ocelot.Configuration.File;
-using Ocelot.Configuration.Repository;
 using Ocelot.Middleware;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Serilog;
@@ -27,7 +25,9 @@ namespace LINGYUN.MicroService.Internal.ApiGateway
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            PreConfigureApp();
+            var configuration = context.Services.GetConfiguration();
+
+            PreConfigureApp(configuration);
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)

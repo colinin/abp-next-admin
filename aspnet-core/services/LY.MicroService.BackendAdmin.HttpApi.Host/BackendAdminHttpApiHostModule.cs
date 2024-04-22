@@ -26,7 +26,6 @@ using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
-using LINGYUN.Abp.TextTemplating.Scriban;
 using LY.MicroService.BackendAdmin.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -96,7 +95,6 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
-    typeof(AbpTextTemplatingScribanModule),
     typeof(AbpAutofacModule)
     )]
 public partial class BackendAdminHttpApiHostModule : AbpModule
@@ -105,8 +103,8 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        PreConfigureApp();
         PreConfigureFeature();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
     }
 
@@ -120,8 +118,10 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureTextTemplating();
+        ConfigureSettingManagement();
         ConfigureFeatureManagement();
         ConfigurePermissionManagement();
+        ConfigureIdentity(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);
@@ -149,7 +149,7 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         // 认证
         app.UseAuthentication();
         // jwt
-        app.UseJwtTokenMiddleware();
+        app.UseDynamicClaims();
         // 多租户
         app.UseMultiTenancy();
         // 授权

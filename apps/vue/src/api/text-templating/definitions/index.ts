@@ -44,7 +44,7 @@ export const GetByNameAsyncByName = (name: string) => {
 };
 
 export const GetListAsyncByInput = (input: TextTemplateDefinitionGetListInput) => {
-  return defAbpHttp.request<PagedResultDto<TextTemplateDefinitionDto>>({
+  return defAbpHttp.request<ListResultDto<TextTemplateDefinitionDto>>({
     service: remoteServiceName,
     controller: controllerName,
     action: 'GetListAsync',

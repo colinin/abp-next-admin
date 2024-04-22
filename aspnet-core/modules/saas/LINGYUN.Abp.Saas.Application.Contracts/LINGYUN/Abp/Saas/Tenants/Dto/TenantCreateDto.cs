@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LINGYUN.Abp.Saas.Tenants;
 
@@ -22,4 +23,9 @@ public class TenantCreateDto : TenantCreateOrUpdateBase
     /// 默认数据库连接字符串
     /// </summary>
     public string DefaultConnectionString { get; set; }
+
+    /// <summary>
+    /// 其他数据库连接
+    /// </summary>
+    public Dictionary<string, string> ConnectionStrings { get; set; } = new Dictionary<string, string>();
 }

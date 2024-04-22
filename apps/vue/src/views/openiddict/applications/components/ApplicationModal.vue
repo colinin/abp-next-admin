@@ -18,11 +18,26 @@
       <Tabs v-model:active-key="state.activeTab" @change="handleTabChange">
         <!-- Basic -->
         <TabPane key="basic" :tab="L('BasicInfo')">
+          <FormItem name="applicationType" :label="L('DisplayName:ApplicationType')">
+            <Select
+              default-value="web"
+              :options="applicationTypes"
+              v-model:value="state.application.applicationType"
+            />
+          </FormItem>
           <FormItem name="clientId" :label="L('DisplayName:ClientId')">
             <Input :disabled="state.isEdit" v-model:value="state.application.clientId" />
           </FormItem>
-          <FormItem name="type" :label="L('DisplayName:Type')">
-            <Input v-model:value="state.application.type" />
+          <FormItem name="clientType" :label="L('DisplayName:ClientType')">
+            <Select
+              :disabled="state.isEdit"
+              default-value="public"
+              :options="clientTypes"
+              v-model:value="state.application.clientType"
+            />
+          </FormItem>
+          <FormItem v-if="getShowSecret" name="clientSecret" :label="L('DisplayName:ClientSecret')">
+            <Input v-model:value="state.application.clientSecret" />
           </FormItem>
           <FormItem name="clientUri" :label="L('DisplayName:ClientUri')">
             <Input v-model:value="state.application.clientUri" />
@@ -36,7 +51,11 @@
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 20 }"
           >
-            <Select :options="consentTypes" v-model:value="state.application.consentType" />
+            <Select
+              :options="consentTypes"
+              default-value="explicit"
+              v-model:value="state.application.consentType"
+            />
           </FormItem>
         </TabPane>
         <!-- DisplayName -->
@@ -60,14 +79,10 @@
               </span>
               <template #overlay>
                 <Menu @click="handleClickUrisMenu">
-                  <MenuItem
-                    key="redirectUris"
-                  >
+                  <MenuItem key="redirectUris">
                     {{ L('DisplayName:RedirectUris') }}
                   </MenuItem>
-                  <MenuItem
-                    key="postLogoutRedirectUris"
-                  >
+                  <MenuItem key="postLogoutRedirectUris">
                     {{ L('DisplayName:PostLogoutRedirectUris') }}
                   </MenuItem>
                 </Menu>
@@ -108,7 +123,11 @@
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 20 }"
           >
-            <Select :options="grantTypes" mode="tags" v-model:value="state.application.grantTypes" />
+            <Select
+              :options="grantTypes"
+              mode="tags"
+              v-model:value="state.application.grantTypes"
+            />
           </FormItem>
           <FormItem
             name="responseTypes"
@@ -116,7 +135,11 @@
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 20 }"
           >
-            <Select :options="responseTypes" mode="tags" v-model:value="state.application.responseTypes" />
+            <Select
+              :options="responseTypes"
+              mode="tags"
+              v-model:value="state.application.responseTypes"
+            />
           </FormItem>
         </TabPane>
         <!-- Propertites -->
@@ -143,7 +166,11 @@
   import { useValidation } from '/@/hooks/abp/useValidation';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { ApplicationState } from '../types/props';
-  import { GetAsyncById, CreateAsyncByInput, UpdateAsyncByIdAndInput } from '/@/api/openiddict/open-iddict-application';
+  import {
+    GetAsyncById,
+    CreateAsyncByInput,
+    UpdateAsyncByIdAndInput,
+  } from '/@/api/openiddict/open-iddict-application';
   import { OpenIddictApplicationDto } from '/@/api/openiddict/open-iddict-application/model';
   import { discovery } from '/@/api/identity-server/identityServer';
   import RedirectUri from './RedirectUri.vue';
@@ -157,12 +184,12 @@
   const MenuItem = Menu.Item;
 
   const emits = defineEmits(['register', 'change']);
-  const { L } = useLocalization(['AbpOpenIddict']);
+  const { L } = useLocalization(['AbpOpenIddict', 'AbpUi']);
   const { ruleCreator } = useValidation();
   const { createMessage, createConfirm } = useMessage();
   const componentsRef = shallowRef({
-    'redirectUris': RedirectUri,
-    'postLogoutRedirectUris': PostLogoutRedirectUri,
+    redirectUris: RedirectUri,
+    postLogoutRedirectUris: PostLogoutRedirectUri,
   });
   const formRef = ref<FormInstance>();
   const state = reactive<ApplicationState>({
@@ -173,6 +200,19 @@
     formRules: {
       clientId: ruleCreator.fieldRequired({
         name: 'ClientId',
+        prefix: 'DisplayName',
+        resourceName: 'AbpOpenIddict',
+        trigger: 'blur',
+      }),
+      clientSecret: ruleCreator.fieldRequired({
+        name: 'ClientSecret',
+        prefix: 'DisplayName',
+        resourceName: 'AbpOpenIddict',
+        trigger: 'blur',
+      }),
+      displayName: ruleCreator.fieldRequired({
+        name: 'DisplayName',
+        prefix: 'DisplayName',
         resourceName: 'AbpOpenIddict',
         trigger: 'blur',
       }),
@@ -191,6 +231,14 @@
       deep: true,
     },
   );
+  const clientTypes = reactive([
+    { label: 'public', value: 'public' },
+    { label: 'confidential', value: 'confidential' },
+  ]);
+  const applicationTypes = reactive([
+    { label: 'Web', value: 'web' },
+    { label: 'Native', value: 'native' },
+  ]);
   const consentTypes = reactive([
     { label: 'explicit', value: 'explicit' },
     { label: 'external', value: 'external' },
@@ -205,8 +253,11 @@
     { label: 'revocation', value: 'revocation' },
     { label: 'introspection', value: 'introspection' },
   ]);
+  const getShowSecret = computed(() => {
+    return !state.isEdit && state.application.clientType === 'confidential';
+  });
   const grantTypes = computed(() => {
-    if (!state.openIdConfiguration) return[];
+    if (!state.openIdConfiguration) return [];
     const types = state.openIdConfiguration.grant_types_supported;
     return types.map((type) => {
       return {
@@ -216,7 +267,7 @@
     });
   });
   const responseTypes = computed(() => {
-    if (!state.openIdConfiguration) return[];
+    if (!state.openIdConfiguration) return [];
     const types = state.openIdConfiguration.response_types_supported;
     return types.map((type) => {
       return {
@@ -255,15 +306,17 @@
       return;
     }
     changeLoading(true);
-    GetAsyncById(id).then((application) => {
-      state.application = application;
-      nextTick(() => {
-        state.isEdit = true;
-        state.entityChanged = false;
+    GetAsyncById(id)
+      .then((application) => {
+        state.application = application;
+        nextTick(() => {
+          state.isEdit = true;
+          state.entityChanged = false;
+        });
+      })
+      .finally(() => {
+        changeLoading(false);
       });
-    }).finally(() => {
-      changeLoading(false);
-    });
   }
 
   function handleTabChange(activeKey) {
@@ -272,7 +325,7 @@
       case 'endpoints':
         if (!state.endPoint.component) {
           state.endPoint = {
-            component : 'redirectUris',
+            component: 'redirectUris',
             uris: state.application?.redirectUris,
           };
         }
@@ -292,10 +345,10 @@
     if (!state.application || !state.application.postLogoutRedirectUris) {
       return;
     }
-    const index = state.application.postLogoutRedirectUris.findIndex(logoutUri => logoutUri === uri);
-    if (!index) {
-      state.application.postLogoutRedirectUris.splice(index);
-    }
+    const index = state.application.postLogoutRedirectUris.findIndex(
+      (logoutUri) => logoutUri === uri,
+    );
+    index && state.application.postLogoutRedirectUris.splice(index);
   }
 
   function handleNewRedirectUri(uri: string) {
@@ -310,10 +363,8 @@
     if (!state.application || !state.application.redirectUris) {
       return;
     }
-    const index = state.application.redirectUris.findIndex(redirectUri => redirectUri === uri);
-    if (!index) {
-      state.application.redirectUris.splice(index);
-    }
+    const index = state.application.redirectUris.findIndex((redirectUri) => redirectUri === uri);
+    index && state.application.redirectUris.splice(index);
   }
 
   function handleNewDisplayName(record) {
@@ -338,7 +389,7 @@
     state.application.properties ??= {};
     state.application.properties[record.key] = record.value;
   }
-  
+
   function handleDelProperty(record) {
     if (!state.application || !state.application.properties) {
       return;
@@ -363,16 +414,17 @@
 
   function handleClickUrisMenu(e) {
     state.endPoint = {
-      component : e.key,
+      component: e.key,
       uris: state.application[e.key],
     };
     state.activeTab = 'endpoints';
   }
 
   function handleBeforeClose(): Promise<boolean> {
-    console.log(state);
     return new Promise((resolve) => {
       if (!state.entityChanged) {
+        const form = unref(formRef);
+        form?.resetFields();
         return resolve(true);
       }
       createConfirm({
@@ -380,11 +432,13 @@
         title: L('AreYouSure'),
         content: L('AreYouSureYouWantToCancelEditingWarningMessage'),
         onOk: () => {
+          const form = unref(formRef);
+          form?.resetFields();
           resolve(true);
         },
         onCancel: () => {
           resolve(false);
-        }
+        },
       });
     });
   }
@@ -396,13 +450,15 @@
       const api = state.application.id
         ? UpdateAsyncByIdAndInput(state.application.id, cloneDeep(state.application))
         : CreateAsyncByInput(cloneDeep(state.application));
-      api.then((res) => {
-        createMessage.success(L('Successful'));
-        emits('change', res);
-        closeModal();
-      }).finally(() => {
-        changeOkLoading(false);
-      })
+      api
+        .then((res) => {
+          createMessage.success(L('Successful'));
+          emits('change', res);
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>

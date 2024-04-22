@@ -5,7 +5,7 @@
         <SearchInput
           :placeholder="L('TargetEmailAddress')"
           v-model:value="detail.value"
-          @search="handleSendTestEmail(detail.value)"
+          @search="handleSendTestEmail"
           :loading="sendingEmail"
         >
           <template #enterButton>
@@ -23,14 +23,14 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { SettingForm } from '/@/components/SettingManagement';
-  import { SettingGroup } from '/@/api/settings/model/settingModel';
+  import { SettingGroup } from '/@/api/settings-management/settings/model';
   import {
     getCurrentTenantSettings,
     getGlobalSettings,
     setGlobalSettings,
     setCurrentTenantSettings,
     sendTestEmail,
-  } from '/@/api/settings/settings';
+  } from '/@/api/settings-management/settings';
   import { isEmail } from '/@/utils/is';
 
   interface ISettingForm {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -20,18 +21,23 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
 {
     private readonly ILocalizableStringSerializer _localizableStringSerializer;
     private readonly IPermissionDefinitionManager _permissionDefinitionManager;
-
+    private readonly IStaticPermissionDefinitionStore _staticPermissionDefinitionStore;
+    private readonly IDynamicPermissionDefinitionStore _dynamicPermissionDefinitionStore;
     private readonly IPermissionGroupDefinitionRecordRepository _groupDefinitionRepository;
     private readonly IRepository<PermissionGroupDefinitionRecord, Guid> _groupDefinitionBasicRepository;
 
     public PermissionGroupDefinitionAppService(
         ILocalizableStringSerializer localizableStringSerializer, 
         IPermissionDefinitionManager permissionDefinitionManager, 
+        IStaticPermissionDefinitionStore staticPermissionDefinitionStore,
+        IDynamicPermissionDefinitionStore dynamicPermissionDefinitionStore,
         IPermissionGroupDefinitionRecordRepository groupDefinitionRepository, 
         IRepository<PermissionGroupDefinitionRecord, Guid> groupDefinitionBasicRepository)
     {
         _localizableStringSerializer = localizableStringSerializer;
         _permissionDefinitionManager = permissionDefinitionManager;
+        _staticPermissionDefinitionStore = staticPermissionDefinitionStore;
+        _dynamicPermissionDefinitionStore = dynamicPermissionDefinitionStore;
         _groupDefinitionRepository = groupDefinitionRepository;
         _groupDefinitionBasicRepository = groupDefinitionBasicRepository;
     }
@@ -45,7 +51,14 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
                 .WithData(nameof(PermissionGroupDefinitionRecord.Name), input.Name);
         }
 
-        var groupDefinitionRecord = new PermissionGroupDefinitionRecord(
+        var groupDefinitionRecord = await _groupDefinitionBasicRepository.FindAsync(x => x.Name == input.Name);
+        if (groupDefinitionRecord != null)
+        {
+            throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.AlreayNameExists)
+               .WithData(nameof(PermissionGroupDefinitionRecord.Name), input.Name);
+        }
+
+        groupDefinitionRecord = new PermissionGroupDefinitionRecord(
             GuidGenerator.Create(),
             input.Name,
             input.DisplayName);
@@ -55,13 +68,11 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
             groupDefinitionRecord.SetProperty(property.Key, property.Value);
         }
 
-        await _groupDefinitionRepository.InsertAsync(groupDefinitionRecord);
+        groupDefinitionRecord = await _groupDefinitionRepository.InsertAsync(groupDefinitionRecord);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        var dto = await GroupDefinitionRecordToDto(groupDefinitionRecord);
-
-        return dto;
+        return DefinitionRecordToDto(groupDefinitionRecord);
     }
 
     [Authorize(PermissionManagementPermissionNames.GroupDefinition.Delete)]
@@ -69,62 +80,66 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
     {
         var groupDefinitionRecord = await FindByNameAsync(name);
 
-        if (groupDefinitionRecord == null)
+        if (groupDefinitionRecord != null)
         {
-            return;
-        }
+            await _groupDefinitionRepository.DeleteAsync(groupDefinitionRecord);
 
-        await _groupDefinitionRepository.DeleteAsync(groupDefinitionRecord);
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
     }
 
     public async virtual Task<PermissionGroupDefinitionDto> GetAsync(string name)
     {
-        var groupDefinition = await _permissionDefinitionManager.GetGroupOrNullAsync(name);
+        var staticGroups = await _staticPermissionDefinitionStore.GetGroupsAsync();
+        var groupDefinition = staticGroups.FirstOrDefault(x => x.Name == name);
+        if (groupDefinition != null)
+        {
+            return DefinitionToDto(groupDefinition, true);
+        }
+
+        var dynamicGroups = await _dynamicPermissionDefinitionStore.GetGroupsAsync();
+
+        groupDefinition = dynamicGroups.FirstOrDefault(x => x.Name == name);
         if (groupDefinition == null)
         {
             throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.NameNotFount)
                 .WithData(nameof(PermissionGroupDefinitionRecord.Name), name);
         }
 
-        var dto = await GroupDefinitionToDto(groupDefinition);
-
-        return dto;
+        return DefinitionToDto(groupDefinition);
     }
 
-    public async virtual Task<PagedResultDto<PermissionGroupDefinitionDto>> GetListAsync(PermissionGroupDefinitionGetListInput input)
+    public async virtual Task<ListResultDto<PermissionGroupDefinitionDto>> GetListAsync(PermissionGroupDefinitionGetListInput input)
     {
-        var groups = new List<PermissionGroupDefinitionDto>();
+        var groupDtoList = new List<PermissionGroupDefinitionDto>();
 
-        var groupDefinitions = await _permissionDefinitionManager.GetGroupsAsync();
+        var staticGroups = await _staticPermissionDefinitionStore.GetGroupsAsync();
+        var staticGroupsNames = staticGroups
+           .Select(p => p.Name)
+           .ToImmutableHashSet();
+        groupDtoList.AddRange(staticGroups.Select(d => DefinitionToDto(d, true)));
 
-        var groupDefinitionFilter = groupDefinitions.AsQueryable()
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter));
+        var dynamicGroups = await _dynamicPermissionDefinitionStore.GetGroupsAsync();
+        groupDtoList.AddRange(dynamicGroups
+           .Where(d => !staticGroupsNames.Contains(d.Name))
+           .Select(d => DefinitionToDto(d)));
 
-        var sorting = input.Sorting;
-        if (sorting.IsNullOrWhiteSpace())
-        {
-            sorting = nameof(PermissionDefinitionRecord.Name);
-        }
-
-        var filterGroupDefinitionCount = groupDefinitionFilter.Count();
-        var filterGroupDefinitions = groupDefinitionFilter
-            .OrderBy(sorting)
-            .PageBy(input.SkipCount, input.MaxResultCount);
-
-        foreach (var groupDefinition in filterGroupDefinitions)
-        {
-            var groupDto = await GroupDefinitionToDto(groupDefinition);
-
-            groups.Add(groupDto);
-        }
-
-        return new PagedResultDto<PermissionGroupDefinitionDto>(filterGroupDefinitionCount, groups);
+        return new ListResultDto<PermissionGroupDefinitionDto>(
+            groupDtoList
+                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter))
+                .ToList());
     }
 
     [Authorize(PermissionManagementPermissionNames.GroupDefinition.Update)]
     public async virtual Task<PermissionGroupDefinitionDto> UpdateAsync(string name, PermissionGroupDefinitionUpdateDto input)
     {
         var groupDefinition = await _permissionDefinitionManager.GetGroupOrNullAsync(name);
+        if (groupDefinition != null)
+        {
+            throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
+              .WithData("Name", name);
+        }
+
         var groupDefinitionRecord = await FindByNameAsync(name);
 
         if (groupDefinitionRecord == null)
@@ -133,35 +148,20 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
                 GuidGenerator.Create(),
                 name,
                 input.DisplayName);
-
-            foreach (var property in input.ExtraProperties)
-            {
-                groupDefinitionRecord.SetProperty(property.Key, property.Value);
-            }
+            UpdateByInput(groupDefinitionRecord, input);
 
             groupDefinitionRecord = await _groupDefinitionBasicRepository.InsertAsync(groupDefinitionRecord);
         }
         else
         {
-            groupDefinitionRecord.ExtraProperties.Clear();
-            foreach (var property in input.ExtraProperties)
-            {
-                groupDefinitionRecord.SetProperty(property.Key, property.Value);
-            }
-
-            if (!string.Equals(groupDefinitionRecord.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
-            {
-                groupDefinitionRecord.DisplayName = input.DisplayName;
-            }
+            UpdateByInput(groupDefinitionRecord, input);
 
             groupDefinitionRecord = await _groupDefinitionBasicRepository.UpdateAsync(groupDefinitionRecord);
         }
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        var dto = await GroupDefinitionRecordToDto(groupDefinitionRecord);
-
-        return dto;
+        return DefinitionRecordToDto(groupDefinitionRecord);
     }
 
     protected async virtual Task<PermissionGroupDefinitionRecord> FindByNameAsync(string name)
@@ -174,16 +174,28 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
         return groupDefinitionRecord;
     }
 
-    protected async virtual Task<PermissionGroupDefinitionDto> GroupDefinitionRecordToDto(PermissionGroupDefinitionRecord groupDefinitionRecord)
+    protected virtual void UpdateByInput(PermissionGroupDefinitionRecord record, PermissionGroupDefinitionCreateOrUpdateDto input)
+    {
+        record.ExtraProperties.Clear();
+        foreach (var property in input.ExtraProperties)
+        {
+            record.SetProperty(property.Key, property.Value);
+        }
+        if (!string.Equals(record.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.DisplayName = input.DisplayName;
+        }
+    }
+
+    protected virtual PermissionGroupDefinitionDto DefinitionRecordToDto(PermissionGroupDefinitionRecord groupDefinitionRecord)
     {
         var groupDto = new PermissionGroupDefinitionDto
         {
+            IsStatic = false,
             Name = groupDefinitionRecord.Name,
-            FormatedDisplayName = groupDefinitionRecord.DisplayName,
+            DisplayName = groupDefinitionRecord.DisplayName,
+            ExtraProperties = new ExtraPropertyDictionary(),
         };
-
-        var displayName = _localizableStringSerializer.Deserialize(groupDefinitionRecord.DisplayName);
-        groupDto.DisplayName = await displayName.LocalizeAsync(StringLocalizerFactory);
 
         foreach (var property in groupDefinitionRecord.ExtraProperties)
         {
@@ -193,18 +205,15 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
         return groupDto;
     }
 
-    protected async virtual Task<PermissionGroupDefinitionDto> GroupDefinitionToDto(PermissionGroupDefinition groupDefinition)
+    protected virtual PermissionGroupDefinitionDto DefinitionToDto(PermissionGroupDefinition groupDefinition, bool isStatic = false)
     {
         var groupDto = new PermissionGroupDefinitionDto
         {
-            Name = groupDefinition.Name
+            IsStatic = isStatic,
+            Name = groupDefinition.Name,
+            DisplayName = _localizableStringSerializer.Serialize(groupDefinition.DisplayName),
+            ExtraProperties = new ExtraPropertyDictionary(),
         };
-
-        if (groupDefinition.DisplayName != null)
-        {
-            groupDto.DisplayName = await groupDefinition.DisplayName.LocalizeAsync(StringLocalizerFactory);
-            groupDto.FormatedDisplayName = _localizableStringSerializer.Serialize(groupDefinition.DisplayName);
-        }
 
         foreach (var property in groupDefinition.Properties)
         {

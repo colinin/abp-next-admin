@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\WeChat\Work\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\WeChat\Work\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.ExceptionHandling" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonPackageVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.Work.Common\LINGYUN.Abp.WeChat.Work.Common.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -97,6 +97,10 @@ export function checkResponse(response: any): string | undefined {
     return undefined;
   }
 
+  if (response.data.Enterprises) {
+    return response.data.Enterprises;
+  }
+
   let errorJson = response.data.error;
 
   // abp框架抛出异常信息

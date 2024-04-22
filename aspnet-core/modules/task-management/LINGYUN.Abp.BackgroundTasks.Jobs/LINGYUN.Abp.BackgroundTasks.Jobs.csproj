@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace />
 	</PropertyGroup>
 
@@ -23,8 +23,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj" />
-		<ProjectReference Include="..\..\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj" />
 	</ItemGroup>
 
 </Project>

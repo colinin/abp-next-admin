@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.OpenIddict.Applications;
 public class OpenIddictApplicationDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
     public string ClientId { get; set; }
-    public string ClientSecret { get; set; }
+    public string ClientType { get; set; }
     public string ConsentType { get; set; }
     public string DisplayName { get; set; }
     public Dictionary<string, string> DisplayNames { get; set; } = new Dictionary<string, string>();
@@ -21,8 +21,10 @@ public class OpenIddictApplicationDto : ExtensibleAuditedEntityDto<Guid>, IHasCo
     public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
     public List<string> RedirectUris { get; set; } = new List<string>();
     public List<string> Requirements { get; set; } = new List<string>();
-    public string Type { get; set; }
+    public string ApplicationType { get; set; }
     public string ClientUri { get; set; }
     public string LogoUri { get; set; }
+    public string Settings { get; set; }
+    public string JsonWebKeySet { get; set; }
     public string ConcurrencyStamp { get; set; }
 }

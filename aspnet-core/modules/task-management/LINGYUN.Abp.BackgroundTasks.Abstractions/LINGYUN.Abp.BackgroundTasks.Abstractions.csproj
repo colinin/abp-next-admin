@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.MultiTenancy.Abstractions" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 </Project>

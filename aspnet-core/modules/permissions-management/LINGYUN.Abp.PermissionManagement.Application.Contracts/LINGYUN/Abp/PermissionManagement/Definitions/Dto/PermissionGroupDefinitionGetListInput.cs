@@ -1,7 +1,5 @@
-﻿using Volo.Abp.Application.Dtos;
-
-namespace LINGYUN.Abp.PermissionManagement.Definitions;
-public class PermissionGroupDefinitionGetListInput : PagedAndSortedResultRequestDto
+﻿namespace LINGYUN.Abp.PermissionManagement.Definitions;
+public class PermissionGroupDefinitionGetListInput
 {
     public string Filter { get; set; }
 }

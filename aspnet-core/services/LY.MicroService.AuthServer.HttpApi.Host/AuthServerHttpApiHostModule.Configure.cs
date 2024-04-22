@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -10,10 +11,12 @@ using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
@@ -35,6 +38,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict.Localization;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -56,7 +60,17 @@ public partial class AuthServerHttpApiHostModule
         });
     }
 
-    private void PreConfigureApp()
+    private void PreForwardedHeaders()
+    {
+        PreConfigure<AbpForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+    }
+
+    private void PreConfigureApp(IConfiguration configuration)
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
@@ -67,6 +81,11 @@ public partial class AuthServerHttpApiHostModule
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });
+
+        if (configuration.GetValue<bool>("App:ShowPii"))
+        {
+            IdentityModelEventSource.ShowPII = true;
+        }
     }
 
     private void PreConfigureCAP(IConfiguration configuration)
@@ -181,8 +200,15 @@ public partial class AuthServerHttpApiHostModule
     {
         Configure<AppUrlOptions>(options =>
         {
-            options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            options.Applications["STS"].RootUrl = configuration["App:StsUrl"];
+            var applicationConfiguration = configuration.GetSection("App:Urls:Applications");
+            foreach (var appConfig in applicationConfiguration.GetChildren())
+            {
+                options.Applications[appConfig.Key].RootUrl = appConfig["RootUrl"];
+                foreach (var urlsConfig in appConfig.GetSection("Urls").GetChildren())
+                {
+                    options.Applications[appConfig.Key].Urls[urlsConfig.Key] = urlsConfig.Value;
+                }
+            }
         });
     }
 
@@ -245,6 +271,14 @@ public partial class AuthServerHttpApiHostModule
                 }
             });
         }
+    }
+
+    private void ConfigureIdentity()
+    {
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
     }
 
     private void ConfigureSwagger(IServiceCollection services)
@@ -337,6 +371,7 @@ public partial class AuthServerHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.MapInboundClaims = false;
             });
 
         if (isDevelopment)

@@ -116,8 +116,6 @@ public class SmsTokenExtensionGrant : ITokenExtensionGrant
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        (await userManager.UpdateSecurityStampAsync(currentUser)).CheckErrors();
-
         return await SetSuccessResultAsync(context, currentUser, logger);
     }
 
@@ -176,9 +174,9 @@ public class SmsTokenExtensionGrant : ITokenExtensionGrant
 
     protected async virtual Task SetClaimsDestinationsAsync(ExtensionGrantContext context, ClaimsPrincipal principal)
     {
-        var claimDestinationsManager = GetRequiredService<AbpOpenIddictClaimDestinationsManager>(context);
+        var openIddictClaimsPrincipalManager = GetRequiredService<AbpOpenIddictClaimsPrincipalManager>(context);
 
-        await claimDestinationsManager.SetAsync(principal);
+        await openIddictClaimsPrincipalManager.HandleAsync(context.Request, principal);
     }
 
     protected async virtual Task<IEnumerable<string>> GetResourcesAsync(ExtensionGrantContext context)

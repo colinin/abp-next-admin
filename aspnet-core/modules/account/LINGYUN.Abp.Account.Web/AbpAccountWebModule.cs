@@ -22,8 +22,7 @@ namespace LINGYUN.Abp.Account.Web
             context.Services
                .AddAuthorization(options =>
                {
-                   options
-                    .AddPolicy("TwoFactorEnabled", policy =>
+                   options.AddPolicy("TwoFactorEnabled", policy =>
                     {
                         policy.RequireClaim("amr", "mfa");
                     });

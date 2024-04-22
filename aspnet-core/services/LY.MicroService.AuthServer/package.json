@@ -1,8 +1,8 @@
 {
-  "version": "7.0.2",
+  "version": "7.3.2",
   "name": "my-app-auth-server",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.leptonxlite": "2.0.4"
+    "@abp/aspnetcore.mvc.ui.theme.leptonxlite": "2.3.3"
   }
 }

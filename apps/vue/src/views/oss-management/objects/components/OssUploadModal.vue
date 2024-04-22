@@ -60,6 +60,8 @@
   import { useUserStoreWithOut } from '/@/store/modules/user';
   import Uploader from 'simple-uploader.js';
 
+  const emits = defineEmits(['file:uploaded', 'register']);
+
   let uploader: any = null;
   const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
   const bucket = ref('');
@@ -140,6 +142,7 @@
     // uploader.on('fileSuccess', _fileSuccess);
     uploader.on('filesSubmitted', _filesSubmitted);
     uploader.on('fileError', _fileError);
+    uploader.on('fileSuccess', _fileSuccess);
     uploader.on('fileProgress', _fileProgress);
   });
 
@@ -147,6 +150,7 @@
     // uploader.off('fileSuccess', _fileSuccess);
     uploader.off('filesSubmitted', _filesSubmitted);
     uploader.off('fileError', _fileError);
+    uploader.off('fileSuccess', _fileSuccess);
     uploader.off('fileProgress', _fileProgress);
     uploader = null;
   });
@@ -178,6 +182,10 @@
       const formatedError = JSON.parse(message);
       file.errorMsg = formatedError.error?.message;
     }
+  }
+
+  function _fileSuccess(_, file) {
+    emits('file:uploaded', unref(bucket), unref(path), file.name);
   }
 
   function handleSelect() {

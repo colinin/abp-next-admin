@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{C5CAD011-DF84-4914-939C-0C029DCEF26F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "framework", "framework", "{C5CAD011-DF84-4914-939C-0C029DCEF26F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{672E1170-7B18-474B-85C7-1961BF2A48AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "settings", "settings", "{BA00B3F2-199B-40E2-B0EA-0AA4F51A1C52}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.SettingManagement.Application.Contracts", "modules\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj", "{77BDEF2B-1A30-4E64-BC35-0DFC21091327}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.SettingManagement.Application.Contracts", "framework\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj", "{77BDEF2B-1A30-4E64-BC35-0DFC21091327}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.SettingManagement.Application", "modules\settings\LINGYUN.Abp.SettingManagement.Application\LINGYUN.Abp.SettingManagement.Application.csproj", "{573B7B0E-3065-42DE-A391-EE026CE7A366}"
 EndProject
@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platform", "platform", "{E5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{8AC72641-30D3-4ACF-89FA-808FADC55C2E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EventBus.CAP", "modules\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj", "{AEC1E6D3-DC23-41BD-B456-3AAD26E34978}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EventBus.CAP", "framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj", "{AEC1E6D3-DC23-41BD-B456-3AAD26E34978}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.SmsValidator", "modules\identityServer\LINGYUN.Abp.IdentityServer.SmsValidator\LINGYUN.Abp.IdentityServer.SmsValidator.csproj", "{E6B11DE5-B5EC-4C25-BAF6-1AC9FD0409EB}"
 EndProject
@@ -43,41 +43,33 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Account.Applica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Account.HttpApi", "modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj", "{5A10C02B-D12C-479C-9E7F-9A7D9DDD753D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Aliyun", "modules\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj", "{FF1839EA-FB6B-4ED5-9804-E40427046D35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Aliyun", "framework\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj", "{FF1839EA-FB6B-4ED5-9804-E40427046D35}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location", "modules\common\LINGYUN.Abp.Location\LINGYUN.Abp.Location.csproj", "{9FE2A95F-D7A3-4305-9E12-E955EF74CF8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location", "framework\common\LINGYUN.Abp.Location\LINGYUN.Abp.Location.csproj", "{9FE2A95F-D7A3-4305-9E12-E955EF74CF8D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Baidu", "modules\common\LINGYUN.Abp.Location.Baidu\LINGYUN.Abp.Location.Baidu.csproj", "{6E4A0D87-C3CE-430F-A475-A6B68C116D96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Baidu", "framework\common\LINGYUN.Abp.Location.Baidu\LINGYUN.Abp.Location.Baidu.csproj", "{6E4A0D87-C3CE-430F-A475-A6B68C116D96}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "message", "message", "{3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realtime-message", "realtime-message", "{3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.Domain.Shared", "modules\message\LINGYUN.Abp.MessageService.Domain.Shared\LINGYUN.Abp.MessageService.Domain.Shared.csproj", "{A5851F0F-CB0D-4E29-A829-D1BDEADB807B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.Domain.Shared", "modules\realtime-message\LINGYUN.Abp.MessageService.Domain.Shared\LINGYUN.Abp.MessageService.Domain.Shared.csproj", "{A5851F0F-CB0D-4E29-A829-D1BDEADB807B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.Domain", "modules\message\LINGYUN.Abp.MessageService.Domain\LINGYUN.Abp.MessageService.Domain.csproj", "{FDEECE0D-6F66-4053-948E-9AC021B97C8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.Domain", "modules\realtime-message\LINGYUN.Abp.MessageService.Domain\LINGYUN.Abp.MessageService.Domain.csproj", "{FDEECE0D-6F66-4053-948E-9AC021B97C8D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IM.SignalR", "modules\common\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj", "{B9FA1A02-A2BF-480D-914E-0780DAE442FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RealTime", "framework\common\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj", "{4DFA9E60-E9CE-4FD3-A57F-F76EF3FF4873}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IM", "modules\common\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj", "{59619184-02E7-4C61-8F96-89320CD7A3AE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications", "modules\common\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj", "{865A2AE3-864B-4425-8FA6-AFD62F6466DB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.SignalR", "modules\common\LINGYUN.Abp.Notifications.SignalR\LINGYUN.Abp.Notifications.SignalR.csproj", "{81DF3392-38F4-41E9-8499-4F7EA8ADF4F2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.RealTime", "modules\common\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj", "{4DFA9E60-E9CE-4FD3-A57F-F76EF3FF4873}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.EntityFrameworkCore", "modules\message\LINGYUN.Abp.MessageService.EntityFrameworkCore\LINGYUN.Abp.MessageService.EntityFrameworkCore.csproj", "{371B293B-0CA9-4385-8EBB-5224332066D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.EntityFrameworkCore", "modules\realtime-message\LINGYUN.Abp.MessageService.EntityFrameworkCore\LINGYUN.Abp.MessageService.EntityFrameworkCore.csproj", "{371B293B-0CA9-4385-8EBB-5224332066D2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realtime-message", "realtime-message", "{608A3BD0-FC8D-48B0-B1C5-F3203A3BE99F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.HttpApi", "modules\message\LINGYUN.Abp.MessageService.HttpApi\LINGYUN.Abp.MessageService.HttpApi.csproj", "{9E12ADBF-713B-4FE7-B71F-52B5078A57CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.HttpApi", "modules\realtime-message\LINGYUN.Abp.MessageService.HttpApi\LINGYUN.Abp.MessageService.HttpApi.csproj", "{9E12ADBF-713B-4FE7-B71F-52B5078A57CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Storage.MySql", "modules\common\LINGYUN.Abp.Hangfire.MySqlStorage\LINGYUN.Abp.Hangfire.Storage.MySql.csproj", "{47CC8F7A-681D-42B9-AE04-78453782C1B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Storage.MySql", "framework\common\LINGYUN.Abp.Hangfire.MySqlStorage\LINGYUN.Abp.Hangfire.Storage.MySql.csproj", "{47CC8F7A-681D-42B9-AE04-78453782C1B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Storage.SqlServer", "modules\common\LINGYUN.Abp.Hangfire.Storage.SqlServer\LINGYUN.Abp.Hangfire.Storage.SqlServer.csproj", "{F595CB9F-B117-4D62-A1AE-48599927DB36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Storage.SqlServer", "framework\common\LINGYUN.Abp.Hangfire.Storage.SqlServer\LINGYUN.Abp.Hangfire.Storage.SqlServer.csproj", "{F595CB9F-B117-4D62-A1AE-48599927DB36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundJobs.Hangfire", "modules\common\LINGYUN.Abp.BackgroundJobs.Hangfire\LINGYUN.Abp.BackgroundJobs.Hangfire.csproj", "{5CF403B2-47C9-4E4E-8856-0294BDD64884}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundJobs.Hangfire", "framework\common\LINGYUN.Abp.BackgroundJobs.Hangfire\LINGYUN.Abp.BackgroundJobs.Hangfire.csproj", "{5CF403B2-47C9-4E4E-8856-0294BDD64884}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Aliyun", "modules\common\LINGYUN.Abp.BlobStoring.Aliyun\LINGYUN.Abp.BlobStoring.Aliyun.csproj", "{059473BA-FAF9-405F-9985-33DDCA2E9F0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Aliyun", "framework\common\LINGYUN.Abp.BlobStoring.Aliyun\LINGYUN.Abp.BlobStoring.Aliyun.csproj", "{059473BA-FAF9-405F-9985-33DDCA2E9F0D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}"
 EndProject
@@ -85,23 +77,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TestsBase", "te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Aliyun.Tests", "tests\LINGYUN.Abp.BlobStoring.Aliyun.Tests\LINGYUN.Abp.BlobStoring.Aliyun.Tests.csproj", "{C8A00439-5B8D-4923-8FAA-AB75E2A786ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.Application.Contracts", "modules\message\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj", "{31B03DCB-ED12-4412-867A-61E347D40D8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.Application.Contracts", "modules\realtime-message\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj", "{31B03DCB-ED12-4412-867A-61E347D40D8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.Application", "modules\message\LINGYUN.Abp.MessageService.Application\LINGYUN.Abp.MessageService.Application.csproj", "{AB984240-EF03-416F-A9B2-F5CF169E04B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.Application", "modules\realtime-message\LINGYUN.Abp.MessageService.Application\LINGYUN.Abp.MessageService.Application.csproj", "{AB984240-EF03-416F-A9B2-F5CF169E04B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.HttpApi.Client", "modules\message\LINGYUN.Abp.MessageService.HttpApi.Client\LINGYUN.Abp.MessageService.HttpApi.Client.csproj", "{EBBBBD00-74B5-49CB-8C24-4FD7C2ECC415}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MessageService.HttpApi.Client", "modules\realtime-message\LINGYUN.Abp.MessageService.HttpApi.Client\LINGYUN.Abp.MessageService.HttpApi.Client.csproj", "{EBBBBD00-74B5-49CB-8C24-4FD7C2ECC415}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling", "modules\common\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj", "{65DDA934-B76B-4018-A565-CF6CEF0D6BB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling", "framework\common\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj", "{65DDA934-B76B-4018-A565-CF6CEF0D6BB0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling.Notifications", "modules\common\LINGYUN.Abp.ExceptionHandling.Notifications\LINGYUN.Abp.ExceptionHandling.Notifications.csproj", "{0F14C850-7F4C-4791-9C6C-7E56F985C71D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling.Emailing", "modules\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj", "{376D8343-DF83-41D2-BF6E-2F5DC8DBF259}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling.Emailing", "framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj", "{376D8343-DF83-41D2-BF6E-2F5DC8DBF259}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling.Emailing.Tests", "tests\LINGYUN.Abp.ExceptionHandling.Emailing.Tests\LINGYUN.Abp.ExceptionHandling.Emailing.Tests.csproj", "{6259BCB9-A302-4CE7-AF48-9283A0DFD3CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MultiTenancy", "modules\tenants\LINGYUN.Abp.MultiTenancy\LINGYUN.Abp.MultiTenancy.csproj", "{A2B4ECAE-DABE-40F7-9335-496A79EDE671}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Tencent", "modules\common\LINGYUN.Abp.Location.Tencent\LINGYUN.Abp.Location.Tencent.csproj", "{1DA91161-8757-4A68-A0A1-8C94C36C9240}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Tencent", "framework\common\LINGYUN.Abp.Location.Tencent\LINGYUN.Abp.Location.Tencent.csproj", "{1DA91161-8757-4A68-A0A1-8C94C36C9240}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platform", "platform", "{F4923692-D343-4318-AECA-96F580B1A563}"
 EndProject
@@ -156,11 +144,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.Entity
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity-server", "identity-server", "{685188AC-A145-4A27-BF5F-9C970A59AA9C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Settings", "modules\common\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj", "{6AA0785D-9B6C-4EAE-AB83-0C4CF2B6B473}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation", "framework\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj", "{65DE28D5-DFEA-43E5-B820-BAF09A1FC4ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation", "modules\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj", "{65DE28D5-DFEA-43E5-B820-BAF09A1FC4ED}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Redis", "modules\common\LINGYUN.Abp.Features.LimitValidation.Redis\LINGYUN.Abp.Features.LimitValidation.Redis.csproj", "{D3E65610-4167-4235-9C9D-1E1FAD4C0CE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Redis", "framework\common\LINGYUN.Abp.Features.LimitValidation.Redis\LINGYUN.Abp.Features.LimitValidation.Redis.csproj", "{D3E65610-4167-4235-9C9D-1E1FAD4C0CE6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Redis.Tests", "tests\LINGYUN.Abp.Features.LimitValidation.Redis.Tests\LINGYUN.Abp.Features.LimitValidation.Redis.Tests.csproj", "{F12F4645-C0FE-4129-8C71-65B4039DC445}"
 EndProject
@@ -168,9 +154,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitV
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "features", "features", "{08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FeatureManagement.Client", "modules\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj", "{7071E78B-755B-410A-830B-AA05D7168944}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.FeatureManagement.Client", "framework\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj", "{7071E78B-755B-410A-830B-AA05D7168944}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Client", "modules\features\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj", "{87B65CBD-0FF4-4FB5-9ABC-161911A71179}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.Client", "framework\features\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj", "{87B65CBD-0FF4-4FB5-9ABC-161911A71179}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auditing", "auditing", "{67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}"
 EndProject
@@ -184,29 +170,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "permission-management", "pe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wechat", "wechat", "{DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat", "modules\wechat\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj", "{BAE74ABC-1096-495F-A624-BEBFBC1896F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat", "framework\wechat\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj", "{BAE74ABC-1096-495F-A624-BEBFBC1896F2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.Domain.Shared", "modules\identity\LINGYUN.Abp.Identity.Domain.Shared\LINGYUN.Abp.Identity.Domain.Shared.csproj", "{E92A1CAA-5758-41EF-B67E-C0D394E85417}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.MiniProgram", "modules\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj", "{F18DE651-A3E4-478F-A2B5-686429729EB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.MiniProgram", "framework\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj", "{F18DE651-A3E4-478F-A2B5-686429729EB8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Official", "modules\wechat\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj", "{42309C06-C0F2-490F-931B-CF41FA1970FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Official", "framework\wechat\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj", "{42309C06-C0F2-490F-931B-CF41FA1970FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.SettingManagement", "modules\wechat\LINGYUN.Abp.WeChat.SettingManagement\LINGYUN.Abp.WeChat.SettingManagement.csproj", "{EC19F867-E9EA-4B26-A1E7-87AAA3EB9296}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.SettingManagement", "framework\wechat\LINGYUN.Abp.WeChat.SettingManagement\LINGYUN.Abp.WeChat.SettingManagement.csproj", "{EC19F867-E9EA-4B26-A1E7-87AAA3EB9296}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.MiniProgram", "modules\wechat\LINGYUN.Abp.Notifications.WeChat.MiniProgram\LINGYUN.Abp.Notifications.WeChat.MiniProgram.csproj", "{DC15AE5F-D20E-47E4-92A4-DBBD1BD51E91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.MiniProgram", "modules\realtime-notifications\LINGYUN.Abp.Notifications.WeChat.MiniProgram\LINGYUN.Abp.Notifications.WeChat.MiniProgram.csproj", "{DC15AE5F-D20E-47E4-92A4-DBBD1BD51E91}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cloud-aliyun", "cloud-aliyun", "{14CDBAD1-10C8-464A-B445-1F727C988010}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cloud-tencent", "cloud-tencent", "{3B96F4D8-4993-419B-BCEB-AFE4ED39449F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun", "modules\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj", "{FCFAF1AF-B3F6-45F3-85AB-8249EB8432CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun", "framework\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj", "{FCFAF1AF-B3F6-45F3-85AB-8249EB8432CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent", "modules\cloud-tencent\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj", "{97B4A37E-B93E-48C9-95D5-689CB9495D8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent", "framework\cloud-tencent\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj", "{97B4A37E-B93E-48C9-95D5-689CB9495D8B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Sms", "modules\common\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj", "{8C3312E7-F51E-4780-A893-CE0E0B80B579}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun.SettingManagement", "modules\cloud-aliyun\LINGYUN.Abp.Aliyun.SettingManagement\LINGYUN.Abp.Aliyun.SettingManagement.csproj", "{FE0F0889-C4AF-43C5-B851-B8CCC873BA2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun.SettingManagement", "framework\cloud-aliyun\LINGYUN.Abp.Aliyun.SettingManagement\LINGYUN.Abp.Aliyun.SettingManagement.csproj", "{FE0F0889-C4AF-43C5-B851-B8CCC873BA2C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Aliyun.Tests", "tests\LINGYUN.Abp.Aliyun.Tests\LINGYUN.Abp.Aliyun.Tests.csproj", "{B86EBB6F-A27F-4277-8265-937951A9DCB0}"
 EndProject
@@ -218,94 +202,94 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.SettingManagement", "modules\oss-management\LINGYUN.Abp.OssManagement.SettingManagement\LINGYUN.Abp.OssManagement.SettingManagement.csproj", "{BD74BE00-54E4-4979-8797-E8027695F396}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Redis.Client", "modules\common\LINGYUN.Abp.Features.LimitValidation.Redis.Client\LINGYUN.Abp.Features.LimitValidation.Redis.Client.csproj", "{48DE251A-3482-4934-BC26-F99D2235AC9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Features.LimitValidation.Redis.Client", "framework\common\LINGYUN.Abp.Features.LimitValidation.Redis.Client\LINGYUN.Abp.Features.LimitValidation.Redis.Client.csproj", "{48DE251A-3482-4934-BC26-F99D2235AC9F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Tencent.Tests", "tests\LINGYUN.Abp.Location.Tencent.Tests\LINGYUN.Abp.Location.Tencent.Tests.csproj", "{94B47385-E47F-4FD7-A3A9-A7AA122EFC93}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Location.Baidu.Tests", "tests\LINGYUN.Abp.Location.Baidu.Tests\LINGYUN.Abp.Location.Baidu.Tests.csproj", "{C892CD81-50AE-49E5-BF44-A0C28A1614CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Client", "modules\common\LINGYUN.Abp.AspNetCore.Mvc.Client\LINGYUN.Abp.AspNetCore.Mvc.Client.csproj", "{EEF03CC6-1013-4AAF-BEED-BB4BA5021039}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Client", "framework\common\LINGYUN.Abp.AspNetCore.Mvc.Client\LINGYUN.Abp.AspNetCore.Mvc.Client.csproj", "{EEF03CC6-1013-4AAF-BEED-BB4BA5021039}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "localization", "localization", "{90E88EAC-4291-4406-8D88-EFDF61B11292}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Xml", "modules\localization\LINGYUN.Abp.Localization.Xml\LINGYUN.Abp.Localization.Xml.csproj", "{84868710-ECBB-4025-900A-EEB99EC49534}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Xml", "framework\localization\LINGYUN.Abp.Localization.Xml\LINGYUN.Abp.Localization.Xml.csproj", "{84868710-ECBB-4025-900A-EEB99EC49534}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Xml.Tests", "tests\LINGYUN.Abp.Localization.Xml.Tests\LINGYUN.Abp.Localization.Xml.Tests.csproj", "{A061D2B4-B650-4F7F-A6CB-5C8FFFD512ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "localization-management", "localization-management", "{D3BAA44E-8395-4E8A-AA96-6B463356C537}"
 	ProjectSection(SolutionItems) = preProject
-		modules\lt\README.md = modules\lt\README.md
+		modules\localization-management\README.md = modules\localization-management\README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.Domain.Shared", "modules\lt\LINGYUN.Abp.LocalizationManagement.Domain.Shared\LINGYUN.Abp.LocalizationManagement.Domain.Shared.csproj", "{5BE18D72-0D02-4854-966E-745CE5DAF77F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.Domain.Shared", "modules\localization-management\LINGYUN.Abp.LocalizationManagement.Domain.Shared\LINGYUN.Abp.LocalizationManagement.Domain.Shared.csproj", "{5BE18D72-0D02-4854-966E-745CE5DAF77F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.Domain", "modules\lt\LINGYUN.Abp.LocalizationManagement.Domain\LINGYUN.Abp.LocalizationManagement.Domain.csproj", "{73EAD4FE-B44F-44A7-904E-FFA5096D91BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.Domain", "modules\localization-management\LINGYUN.Abp.LocalizationManagement.Domain\LINGYUN.Abp.LocalizationManagement.Domain.csproj", "{73EAD4FE-B44F-44A7-904E-FFA5096D91BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.Application.Contracts", "modules\lt\LINGYUN.Abp.LocalizationManagement.Application.Contracts\LINGYUN.Abp.LocalizationManagement.Application.Contracts.csproj", "{06D34108-01BA-4C77-A704-4DD9E6F7E32C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.Application.Contracts", "modules\localization-management\LINGYUN.Abp.LocalizationManagement.Application.Contracts\LINGYUN.Abp.LocalizationManagement.Application.Contracts.csproj", "{06D34108-01BA-4C77-A704-4DD9E6F7E32C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.Application", "modules\lt\LINGYUN.Abp.LocalizationManagement.Application\LINGYUN.Abp.LocalizationManagement.Application.csproj", "{A98C939C-9F48-414A-A2D3-853BE4447397}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.Application", "modules\localization-management\LINGYUN.Abp.LocalizationManagement.Application\LINGYUN.Abp.LocalizationManagement.Application.csproj", "{A98C939C-9F48-414A-A2D3-853BE4447397}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore", "modules\lt\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj", "{A94BE05F-7DAB-461C-93E7-914CBDF4FA93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore", "modules\localization-management\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj", "{A94BE05F-7DAB-461C-93E7-914CBDF4FA93}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.HttpApi", "modules\lt\LINGYUN.Abp.LocalizationManagement.HttpApi\LINGYUN.Abp.LocalizationManagement.HttpApi.csproj", "{FBE91498-D83B-4873-A67E-0FB9D1C366F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.LocalizationManagement.HttpApi", "modules\localization-management\LINGYUN.Abp.LocalizationManagement.HttpApi\LINGYUN.Abp.LocalizationManagement.HttpApi.csproj", "{FBE91498-D83B-4873-A67E-0FB9D1C366F0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "localization", "localization", "{A2EA6B3F-AD1A-4FDA-B12E-F71B20A43A6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rules", "rules", "{6084D52D-775B-4A39-8CD5-AA2F362B5A61}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules", "modules\rules\LINGYUN.Abp.Rules\LINGYUN.Abp.Rules.csproj", "{D60EFB8E-F168-4EF2-8D8F-ED42EB6FB8CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules", "framework\rules\LINGYUN.Abp.Rules\LINGYUN.Abp.Rules.csproj", "{D60EFB8E-F168-4EF2-8D8F-ED42EB6FB8CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.NRules", "modules\rules\LINGYUN.Abp.Rules.NRules\LINGYUN.Abp.Rules.NRules.csproj", "{34BB9810-2983-4E55-A96A-132D32310145}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.NRules", "framework\rules\LINGYUN.Abp.Rules.NRules\LINGYUN.Abp.Rules.NRules.csproj", "{34BB9810-2983-4E55-A96A-132D32310145}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.RulesEngine", "modules\rules\LINGYUN.Abp.Rules.RulesEngine\LINGYUN.Abp.Rules.RulesEngine.csproj", "{4D83BDA7-2059-41C7-85AE-FEFAD5CD9498}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.RulesEngine", "framework\rules\LINGYUN.Abp.Rules.RulesEngine\LINGYUN.Abp.Rules.RulesEngine.csproj", "{4D83BDA7-2059-41C7-85AE-FEFAD5CD9498}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Rules.RulesEngine.Tests", "tests\LINGYUN.Abp.Rules.RulesEngine.Tests\LINGYUN.Abp.Rules.RulesEngine.Tests.csproj", "{8EF31071-3521-409D-9740-BBFBFC04C50E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.HttpOverrides", "modules\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj", "{13219C1C-23E1-4EBA-93FB-86830C93A800}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.HttpOverrides", "framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj", "{13219C1C-23E1-4EBA-93FB-86830C93A800}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundWorkers.Hangfire", "modules\common\LINGYUN.Abp.BackgroundWorkers.Hangfire\LINGYUN.Abp.BackgroundWorkers.Hangfire.csproj", "{60D0BEF2-FEAF-4066-8377-6C873CB24858}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundWorkers.Hangfire", "framework\common\LINGYUN.Abp.BackgroundWorkers.Hangfire\LINGYUN.Abp.BackgroundWorkers.Hangfire.csproj", "{60D0BEF2-FEAF-4066-8377-6C873CB24858}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Dashboard", "modules\common\LINGYUN.Abp.Hangfire.Dashboard\LINGYUN.Abp.Hangfire.Dashboard.csproj", "{340BE5AC-68EC-41A5-9D0D-266037C58F13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Hangfire.Dashboard", "framework\common\LINGYUN.Abp.Hangfire.Dashboard\LINGYUN.Abp.Hangfire.Dashboard.csproj", "{340BE5AC-68EC-41A5-9D0D-266037C58F13}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WeChat", "modules\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj", "{BC518F26-996E-4DF0-BB44-783EB1C275D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WeChat", "framework\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj", "{BC518F26-996E-4DF0-BB44-783EB1C275D2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "logging", "logging", "{6FC0578B-CDF1-43AD-9F7E-4AA7E4720A02}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "elasticsearch", "elasticsearch", "{B981DD7D-7083-4C7A-9A5F-B8CFAE7B670B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elasticsearch", "modules\elasticsearch\LINGYUN.Abp.Elasticsearch\LINGYUN.Abp.Elasticsearch.csproj", "{63D1DC91-C7C7-491A-8423-B0B89F39443F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elasticsearch", "framework\elasticsearch\LINGYUN.Abp.Elasticsearch\LINGYUN.Abp.Elasticsearch.csproj", "{63D1DC91-C7C7-491A-8423-B0B89F39443F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Logging", "modules\logging\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj", "{1E0E82D2-F53A-4326-9E39-D7D677590543}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Logging", "framework\logging\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj", "{1E0E82D2-F53A-4326-9E39-D7D677590543}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Logging.Serilog.Elasticsearch", "modules\logging\LINGYUN.Abp.Logging.Serilog.Elasticsearch\LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj", "{D82DB535-67FB-4712-B3EC-9A7A1EA6F7E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Logging.Serilog.Elasticsearch", "framework\logging\LINGYUN.Abp.Logging.Serilog.Elasticsearch\LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj", "{D82DB535-67FB-4712-B3EC-9A7A1EA6F7E9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging", "modules\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj", "{6C3D4C1C-4864-44A9-8649-9856ABF667FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging", "framework\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj", "{6C3D4C1C-4864-44A9-8649-9856ABF667FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.Elasticsearch", "modules\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj", "{AD3CC5B5-366B-4E34-8E80-EC5BB68B573A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.Elasticsearch", "framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj", "{AD3CC5B5-366B-4E34-8E80-EC5BB68B573A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.EntityFrameworkCore", "modules\auditing\LINGYUN.Abp.AuditLogging.EntityFrameworkCore\LINGYUN.Abp.AuditLogging.EntityFrameworkCore.csproj", "{F71A0D28-397D-4094-B1C2-7925E1310676}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.EntityFrameworkCore", "framework\auditing\LINGYUN.Abp.AuditLogging.EntityFrameworkCore\LINGYUN.Abp.AuditLogging.EntityFrameworkCore.csproj", "{F71A0D28-397D-4094-B1C2-7925E1310676}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.Application", "modules\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj", "{CEAF0044-28D3-4585-B69D-D65FF6D4745E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.Application", "framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj", "{CEAF0044-28D3-4585-B69D-D65FF6D4745E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Data.DbMigrator", "modules\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj", "{91D9F43A-BFD9-47CA-A6AD-430D1663EFF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Data.DbMigrator", "framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj", "{91D9F43A-BFD9-47CA-A6AD-430D1663EFF3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "navigation", "navigation", "{7D02D803-F9A9-492C-9B5E-454E4B258466}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.UI.Navigation", "modules\navigation\LINGYUN.Abp.UI.Navigation\LINGYUN.Abp.UI.Navigation.csproj", "{FD04A084-BB8A-4733-B9C5-FACF40342A8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.UI.Navigation", "framework\navigation\LINGYUN.Abp.UI.Navigation\LINGYUN.Abp.UI.Navigation.csproj", "{FD04A084-BB8A-4733-B9C5-FACF40342A8A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.UI.Navigation.VueVbenAdmin", "modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin\LINGYUN.Abp.UI.Navigation.VueVbenAdmin.csproj", "{67A76560-D39F-4D49-B858-B476E1DFE37B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{DC33925B-264D-421B-96CC-46F853CBCC70}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr", "modules\dapr\LINGYUN.Abp.Dapr\LINGYUN.Abp.Dapr.csproj", "{1B8FCBD9-8807-44E4-B91F-F4AB738CB26F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr", "framework\dapr\LINGYUN.Abp.Dapr\LINGYUN.Abp.Dapr.csproj", "{1B8FCBD9-8807-44E4-B91F-F4AB738CB26F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client", "modules\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj", "{93317D44-835C-4F5E-B85D-580D51D5FFF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client", "framework\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj", "{93317D44-835C-4F5E-B85D-580D51D5FFF4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors", "modules\dapr\LINGYUN.Abp.Dapr.Actors\LINGYUN.Abp.Dapr.Actors.csproj", "{DAF80936-FBEC-45AB-92DF-34966B0148FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors", "framework\dapr\LINGYUN.Abp.Dapr.Actors\LINGYUN.Abp.Dapr.Actors.csproj", "{DAF80936-FBEC-45AB-92DF-34966B0148FD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.AspNetCore", "modules\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore\LINGYUN.Abp.Dapr.Actors.AspNetCore.csproj", "{995756A1-A379-4797-89F0-87D219B5AF00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.AspNetCore", "framework\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore\LINGYUN.Abp.Dapr.Actors.AspNetCore.csproj", "{995756A1-A379-4797-89F0-87D219B5AF00}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.CultureMap", "modules\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj", "{EB73D2CC-B1BE-471A-B76E-35F288CD0E16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.CultureMap", "framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj", "{EB73D2CC-B1BE-471A-B76E-35F288CD0E16}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.BackendAdmin.HttpApi.Host", "services\LY.MicroService.BackendAdmin.HttpApi.Host\LY.MicroService.BackendAdmin.HttpApi.Host.csproj", "{3811B6AE-D86C-429D-AE37-B34AE31B7174}"
 EndProject
@@ -319,19 +303,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.PlatformMan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.RealtimeMessage.HttpApi.Host", "services\LY.MicroService.RealtimeMessage.HttpApi.Host\LY.MicroService.RealtimeMessage.HttpApi.Host.csproj", "{A17C9F1D-457A-48AC-B89C-722D8B3955DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client.Wrapper", "modules\dapr\LINGYUN.Abp.Dapr.Client.Wrapper\LINGYUN.Abp.Dapr.Client.Wrapper.csproj", "{842E19B3-8110-40FE-AAFF-D288BC928E55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Client.Wrapper", "framework\dapr\LINGYUN.Abp.Dapr.Client.Wrapper\LINGYUN.Abp.Dapr.Client.Wrapper.csproj", "{842E19B3-8110-40FE-AAFF-D288BC928E55}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mvc", "mvc", "{AEE7BFF0-D16C-49F6-B4E9-9FED2417894E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Wrapper", "modules\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj", "{C1319EC1-A489-482B-A343-38B52D8AB0B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Wrapper", "framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj", "{C1319EC1-A489-482B-A343-38B52D8AB0B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "open-api", "open-api", "{3C7A8246-DE82-4330-8697-24EF1B1C515D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi", "modules\open-api\LINGYUN.Abp.OpenApi\LINGYUN.Abp.OpenApi.csproj", "{4059F87E-9762-46C1-AEB1-B1128EA533AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi", "framework\open-api\LINGYUN.Abp.OpenApi\LINGYUN.Abp.OpenApi.csproj", "{4059F87E-9762-46C1-AEB1-B1128EA533AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi.Authorization", "modules\open-api\LINGYUN.Abp.OpenApi.Authorization\LINGYUN.Abp.OpenApi.Authorization.csproj", "{433AD1FB-2DE8-479F-B89E-A17217591538}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi.Authorization", "framework\open-api\LINGYUN.Abp.OpenApi.Authorization\LINGYUN.Abp.OpenApi.Authorization.csproj", "{433AD1FB-2DE8-479F-B89E-A17217591538}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Wrapper", "modules\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj", "{65311EC9-7A86-4E73-A587-F06A99474EDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Wrapper", "framework\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj", "{65311EC9-7A86-4E73-A587-F06A99474EDD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.OssManagement", "modules\oss-management\LINGYUN.Abp.BlobStoring.OssManagement\LINGYUN.Abp.BlobStoring.OssManagement.csproj", "{CD9081C6-7CA0-4A93-9318-33E54F3ED275}"
 EndProject
@@ -339,13 +321,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.H
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data-protection", "data-protection", "{529DF802-97C4-4BF2-BE7C-39663B3D9EA3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection", "modules\data-protection\LINGYUN.Abp.DataProtection\LINGYUN.Abp.DataProtection.csproj", "{BB840DEE-1F5F-45AA-A82F-4E7B7DC4F156}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection", "framework\data-protection\LINGYUN.Abp.DataProtection\LINGYUN.Abp.DataProtection.csproj", "{BB840DEE-1F5F-45AA-A82F-4E7B7DC4F156}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection.EntityFrameworkCore", "modules\data-protection\LINGYUN.Abp.DataProtection.EntityFrameworkCore\LINGYUN.Abp.DataProtection.EntityFrameworkCore.csproj", "{19B860CA-2E1E-45CC-A5E2-ED3F2BCEAB5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection.EntityFrameworkCore", "framework\data-protection\LINGYUN.Abp.DataProtection.EntityFrameworkCore\LINGYUN.Abp.DataProtection.EntityFrameworkCore.csproj", "{19B860CA-2E1E-45CC-A5E2-ED3F2BCEAB5D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdGenerator", "modules\common\LINGYUN.Abp.IdGenerator\LINGYUN.Abp.IdGenerator.csproj", "{440C9BD9-85EA-4473-AB1C-7C3562DF4915}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdGenerator", "framework\common\LINGYUN.Abp.IdGenerator\LINGYUN.Abp.IdGenerator.csproj", "{440C9BD9-85EA-4473-AB1C-7C3562DF4915}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.UniqueId", "modules\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj", "{23C3B247-523A-4FBF-B785-2F035E0089BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Serilog.Enrichers.UniqueId", "framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj", "{23C3B247-523A-4FBF-B785-2F035E0089BD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A76A4741-AF91-44EF-A7B6-8E7AF4961146}"
 	ProjectSection(SolutionItems) = preProject
@@ -353,21 +335,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		common.props = common.props
 		configureawait.props = configureawait.props
 		Directory.Build.props = Directory.Build.props
+		NuGet.Config = NuGet.Config
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.SettingManagement", "modules\cloud-tencent\LINGYUN.Abp.Tencent.SettingManagement\LINGYUN.Abp.Tencent.SettingManagement.csproj", "{C7CF4193-6397-4450-AF42-3BACD7CF292E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.SettingManagement", "framework\cloud-tencent\LINGYUN.Abp.Tencent.SettingManagement\LINGYUN.Abp.Tencent.SettingManagement.csproj", "{C7CF4193-6397-4450-AF42-3BACD7CF292E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Tencent", "modules\cloud-tencent\LINGYUN.Abp.Sms.Tencent\LINGYUN.Abp.Sms.Tencent.csproj", "{8FE2725C-6829-4778-93BA-A53260697AFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sms.Tencent", "framework\cloud-tencent\LINGYUN.Abp.Sms.Tencent\LINGYUN.Abp.Sms.Tencent.csproj", "{8FE2725C-6829-4778-93BA-A53260697AFB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Tencent", "modules\cloud-tencent\LINGYUN.Abp.BlobStoring.Tencent\LINGYUN.Abp.BlobStoring.Tencent.csproj", "{A4B972EC-9F0B-4405-9965-766FABC9B07E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Tencent", "framework\cloud-tencent\LINGYUN.Abp.BlobStoring.Tencent\LINGYUN.Abp.BlobStoring.Tencent.csproj", "{A4B972EC-9F0B-4405-9965-766FABC9B07E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Tencent", "modules\oss-management\LINGYUN.Abp.OssManagement.Tencent\LINGYUN.Abp.OssManagement.Tencent.csproj", "{31E60E23-FD98-4D5E-A137-2B3F2968BA09}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.LinkUser", "modules\identityServer\LINGYUN.Abp.IdentityServer.LinkUser\LINGYUN.Abp.IdentityServer.LinkUser.csproj", "{25378F9D-2A66-4568-AAC6-E9282ACA3DD3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.QQ", "modules\cloud-tencent\LINGYUN.Abp.Tencent.QQ\LINGYUN.Abp.Tencent.QQ.csproj", "{3FCB1BCD-34BC-4F66-968F-38DB28371D0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.QQ", "framework\cloud-tencent\LINGYUN.Abp.Tencent.QQ\LINGYUN.Abp.Tencent.QQ.csproj", "{3FCB1BCD-34BC-4F66-968F-38DB28371D0F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MultiTenancy.Editions", "modules\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj", "{A030CD8E-61F3-4C15-B28A-C301446DDBEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MultiTenancy.Editions", "framework\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj", "{A030CD8E-61F3-4C15-B28A-C301446DDBEC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "saas", "saas", "{D01D859E-4B72-478A-BABD-90F0981652D5}"
 EndProject
@@ -385,21 +368,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Saas.HttpApi", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Saas.HttpApi.Client", "modules\saas\LINGYUN.Abp.Saas.HttpApi.Client\LINGYUN.Abp.Saas.HttpApi.Client.csproj", "{96EF6CDD-CD29-4E7B-B86A-3EBEE6AC9FDC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MultiTenancy.Saas", "modules\tenants\LINGYUN.Abp.MultiTenancy.Saas\LINGYUN.Abp.MultiTenancy.Saas.csproj", "{F57594AA-10C2-4DFF-87F6-19F2548099EA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "webhooks", "webhooks", "{13ACF670-F109-404E-B252-2FA34A4EA061}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WebHooks", "modules\webhooks\LINGYUN.Abp.WebHooks\LINGYUN.Abp.WebHooks.csproj", "{91AE01B1-CC82-40E2-8290-B8A84C6E90D1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "authorization", "authorization", "{9EC33D45-CCC7-41DF-829E-6B89A640FE35}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Authorization.OrganizationUnits", "modules\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj", "{902D822A-52B6-481C-96C5-ECD891FF83FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Authorization.OrganizationUnits", "framework\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj", "{902D822A-52B6-481C-96C5-ECD891FF83FC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits", "modules\permissions-management\LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits\LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits.csproj", "{46244C99-3A0D-4D88-9F24-2B7B586ADBA4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.OrganizaztionUnits", "modules\authorization\LINGYUN.Abp.Identity.OrganizaztionUnits\LINGYUN.Abp.Identity.OrganizaztionUnits.csproj", "{76A5564E-033B-4AA6-A22B-78B6EB134CC6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Emailing", "modules\common\LINGYUN.Abp.Notifications.Emailing\LINGYUN.Abp.Notifications.Emailing.csproj", "{88502844-D83C-4541-96AC-A8291E261F63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.OrganizaztionUnits", "modules\identity\LINGYUN.Abp.Identity.OrganizaztionUnits\LINGYUN.Abp.Identity.OrganizaztionUnits.csproj", "{76A5564E-033B-4AA6-A22B-78B6EB134CC6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.Theme.VueVbenAdmin", "modules\platform\LINGYUN.Platform.Theme.VueVbenAdmin\LINGYUN.Platform.Theme.VueVbenAdmin.csproj", "{67DC7FA0-506A-4977-95F6-BC739B2BC4BA}"
 EndProject
@@ -421,53 +400,47 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.HttpApi.Client", "modules\text-templating\LINGYUN.Abp.TextTemplating.HttpApi.Client\LINGYUN.Abp.TextTemplating.HttpApi.Client.csproj", "{A53FE09E-6B1C-46C0-9422-C313D14AE9E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Common", "modules\common\LINGYUN.Abp.Notifications.Common\LINGYUN.Abp.Notifications.Common.csproj", "{0CE035CF-2D8A-4559-93EC-ADBEC4237C61}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Localization", "modules\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj", "{995DB1CE-A2FC-4468-A521-4207FD587EC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Localization", "framework\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj", "{995DB1CE-A2FC-4468-A521-4207FD587EC5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Account.Templates", "modules\account\LINGYUN.Abp.Account.Templates\LINGYUN.Abp.Account.Templates.csproj", "{AFFBE8EE-1B92-4CDF-8A4F-4000B78A0154}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "caching", "caching", "{63FCC71F-1CEF-44D3-B95B-23EE58DE8C95}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "caching-management", "caching-management", "{63FCC71F-1CEF-44D3-B95B-23EE58DE8C95}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.CachingManagement.Domain", "modules\caching\LINGYUN.Abp.CachingManagement.Domain\LINGYUN.Abp.CachingManagement.Domain.csproj", "{7D6AE2BB-7DBF-4FC8-A1F5-C004D139B278}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.CachingManagement.Domain", "modules\caching-management\LINGYUN.Abp.CachingManagement.Domain\LINGYUN.Abp.CachingManagement.Domain.csproj", "{7D6AE2BB-7DBF-4FC8-A1F5-C004D139B278}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.CachingManagement.StackExchangeRedis", "modules\caching\LINGYUN.Abp.CachingManagement.StackExchangeRedis\LINGYUN.Abp.CachingManagement.StackExchangeRedis.csproj", "{920867B4-4740-4074-9B49-14002B272A63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.CachingManagement.StackExchangeRedis", "modules\caching-management\LINGYUN.Abp.CachingManagement.StackExchangeRedis\LINGYUN.Abp.CachingManagement.StackExchangeRedis.csproj", "{920867B4-4740-4074-9B49-14002B272A63}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.CachingManagement.Application.Contracts", "modules\caching\LINGYUN.Abp.CachingManagement.Application.Contracts\LINGYUN.Abp.CachingManagement.Application.Contracts.csproj", "{3D422738-B111-4DEE-82E1-C3A90F1133B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.CachingManagement.Application.Contracts", "modules\caching-management\LINGYUN.Abp.CachingManagement.Application.Contracts\LINGYUN.Abp.CachingManagement.Application.Contracts.csproj", "{3D422738-B111-4DEE-82E1-C3A90F1133B1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.CachingManagement.Application", "modules\caching\LINGYUN.Abp.CachingManagement.Application\LINGYUN.Abp.CachingManagement.Application.csproj", "{08CC528E-98D7-41D9-957D-9F9064645788}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.CachingManagement.Application", "modules\caching-management\LINGYUN.Abp.CachingManagement.Application\LINGYUN.Abp.CachingManagement.Application.csproj", "{08CC528E-98D7-41D9-957D-9F9064645788}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.CachingManagement.HttpApi", "modules\caching\LINGYUN.Abp.CachingManagement.HttpApi\LINGYUN.Abp.CachingManagement.HttpApi.csproj", "{B507D18B-770E-4581-854B-15579AC7074F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.CachingManagement.HttpApi", "modules\caching-management\LINGYUN.Abp.CachingManagement.HttpApi\LINGYUN.Abp.CachingManagement.HttpApi.csproj", "{B507D18B-770E-4581-854B-15579AC7074F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DistributedLocking.Dapr", "modules\dapr\LINGYUN.Abp.DistributedLocking.Dapr\LINGYUN.Abp.DistributedLocking.Dapr.csproj", "{178AF3DE-1C24-41A9-8CA0-64A7D85DDFFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DistributedLocking.Dapr", "framework\dapr\LINGYUN.Abp.DistributedLocking.Dapr\LINGYUN.Abp.DistributedLocking.Dapr.csproj", "{178AF3DE-1C24-41A9-8CA0-64A7D85DDFFE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wx-pusher", "wx-pusher", "{53DF60C5-AE45-4FCE-9C9B-EE15F0E33BD4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WxPusher", "modules\wx-pusher\LINGYUN.Abp.WxPusher\LINGYUN.Abp.WxPusher.csproj", "{7C4C266C-DC2A-4A48-AB87-185E284B86E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WxPusher", "framework\wx-pusher\LINGYUN.Abp.WxPusher\LINGYUN.Abp.WxPusher.csproj", "{7C4C266C-DC2A-4A48-AB87-185E284B86E9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WxPusher", "modules\wx-pusher\LINGYUN.Abp.Notifications.WxPusher\LINGYUN.Abp.Notifications.WxPusher.csproj", "{0380623A-EC74-430B-AA59-A6D23BC5E108}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WxPusher", "modules\realtime-notifications\LINGYUN.Abp.Notifications.WxPusher\LINGYUN.Abp.Notifications.WxPusher.csproj", "{0380623A-EC74-430B-AA59-A6D23BC5E108}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WxPusher.SettingManagement", "modules\wx-pusher\LINGYUN.Abp.WxPusher.SettingManagement\LINGYUN.Abp.WxPusher.SettingManagement.csproj", "{C6BDAB62-0B82-4ED2-8455-2FEA1F1B1EAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WxPusher.SettingManagement", "framework\wx-pusher\LINGYUN.Abp.WxPusher.SettingManagement\LINGYUN.Abp.WxPusher.SettingManagement.csproj", "{C6BDAB62-0B82-4ED2-8455-2FEA1F1B1EAD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WxPusher", "modules\wx-pusher\LINGYUN.Abp.Identity.WxPusher\LINGYUN.Abp.Identity.WxPusher.csproj", "{C9BB4BB2-97B8-4CDE-B961-2F0A4CB5D7B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WxPusher", "framework\wx-pusher\LINGYUN.Abp.Identity.WxPusher\LINGYUN.Abp.Identity.WxPusher.csproj", "{C9BB4BB2-97B8-4CDE-B961-2F0A4CB5D7B1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pushplus", "pushplus", "{A8F1C9FA-4F16-43F9-8CC6-CCD124154440}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PushPlus", "modules\pushplus\LINGYUN.Abp.PushPlus\LINGYUN.Abp.PushPlus.csproj", "{82CB7E17-ED5A-4D26-B116-BA7B4226E43C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PushPlus", "framework\pushplus\LINGYUN.Abp.PushPlus\LINGYUN.Abp.PushPlus.csproj", "{82CB7E17-ED5A-4D26-B116-BA7B4226E43C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PushPlus.SettingManagement", "modules\pushplus\LINGYUN.Abp.PushPlus.SettingManagement\LINGYUN.Abp.PushPlus.SettingManagement.csproj", "{102C3711-135E-446D-9A35-AEFB79993CAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PushPlus.SettingManagement", "framework\pushplus\LINGYUN.Abp.PushPlus.SettingManagement\LINGYUN.Abp.PushPlus.SettingManagement.csproj", "{102C3711-135E-446D-9A35-AEFB79993CAA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.PushPlus", "modules\pushplus\LINGYUN.Abp.Notifications.PushPlus\LINGYUN.Abp.Notifications.PushPlus.csproj", "{2B7C1441-8801-4121-ABFB-03771E9DFE46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.PushPlus", "modules\realtime-notifications\LINGYUN.Abp.Notifications.PushPlus\LINGYUN.Abp.Notifications.PushPlus.csproj", "{2B7C1441-8801-4121-ABFB-03771E9DFE46}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realtime", "realtime", "{ECC8B9A9-9E92-4493-984D-2E350A49189D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Core", "modules\common\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{62971DAE-CE71-4E9C-B6F5-514C8E2B915C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Http.Client.Wrapper", "framework\common\LINGYUN.Abp.Http.Client.Wrapper\LINGYUN.Abp.Http.Client.Wrapper.csproj", "{942816E3-B270-40DC-9532-C1077FF59A32}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Jobs", "modules\common\LINGYUN.Abp.Notifications.Jobs\LINGYUN.Abp.Notifications.Jobs.csproj", "{3E9D07D8-963C-4A61-B720-BD47593BE752}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Http.Client.Wrapper", "modules\common\LINGYUN.Abp.Http.Client.Wrapper\LINGYUN.Abp.Http.Client.Wrapper.csproj", "{942816E3-B270-40DC-9532-C1077FF59A32}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper", "modules\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper\LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper.csproj", "{FBB50072-33BE-4B4A-8908-E98BC0C80B92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper", "framework\dapr\LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper\LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper.csproj", "{FBB50072-33BE-4B4A-8908-E98BC0C80B92}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "openiddict", "openiddict", "{83E698F6-F8CD-4604-AB80-01A203389501}"
 EndProject
@@ -483,9 +456,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenIddict.Dapr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "authentication", "authentication", "{E567A760-D19A-4CAC-BD6B-BAA0CE0BBC1B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Authentication.QQ", "modules\authentication\LINGYUN.Abp.Authentication.QQ\LINGYUN.Abp.Authentication.QQ.csproj", "{D3008465-B344-4243-B14A-A1430E2BEC48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Authentication.QQ", "framework\authentication\LINGYUN.Abp.Authentication.QQ\LINGYUN.Abp.Authentication.QQ.csproj", "{D3008465-B344-4243-B14A-A1430E2BEC48}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Authentication.WeChat", "modules\authentication\LINGYUN.Abp.Authentication.WeChat\LINGYUN.Abp.Authentication.WeChat.csproj", "{3CBA6005-B412-4D2A-8F1E-01D53D5C657E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Authentication.WeChat", "framework\authentication\LINGYUN.Abp.Authentication.WeChat\LINGYUN.Abp.Authentication.WeChat.csproj", "{3CBA6005-B412-4D2A-8F1E-01D53D5C657E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auth-server", "auth-server", "{9DEBD2BE-B7B6-49BF-8726-CD92C1163323}"
 EndProject
@@ -503,7 +476,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenIddict.WeCh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdGenerator.Tests", "tests\LINGYUN.Abp.IdGenerator.Tests\LINGYUN.Abp.IdGenerator.Tests.csproj", "{2BFFE9C3-E022-4B57-9E4D-0A0408424B1A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Official.Senparc", "modules\wechat\LINGYUN.Abp.WeChat.Official.Senparc\LINGYUN.Abp.WeChat.Official.Senparc.csproj", "{CA8D7141-9520-46AC-83FD-6E034AD6EBDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Official.Senparc", "framework\wechat\LINGYUN.Abp.WeChat.Official.Senparc\LINGYUN.Abp.WeChat.Official.Senparc.csproj", "{CA8D7141-9520-46AC-83FD-6E034AD6EBDD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Webhooks.Core", "modules\webhooks\LINGYUN.Abp.Webhooks.Core\LINGYUN.Abp.Webhooks.Core.csproj", "{42FD76A3-803A-4E07-8A90-4269204B7B87}"
 EndProject
@@ -533,27 +506,28 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.Platform.Db
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.RealtimeMessage.DbMigrator", "migrations\LY.MicroService.RealtimeMessage.DbMigrator\LY.MicroService.RealtimeMessage.DbMigrator.csproj", "{F51EFCF5-812A-4BBC-AC88-82372B3CF78D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "notifications", "notifications", "{1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realtime-notifications", "realtime-notifications", "{1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Domain.Shared", "modules\notifications\LINGYUN.Abp.Notifications.Domain.Shared\LINGYUN.Abp.Notifications.Domain.Shared.csproj", "{4CF6F78C-22BE-46C4-BC9B-824E8FEEF719}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Domain.Shared", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Domain.Shared\LINGYUN.Abp.Notifications.Domain.Shared.csproj", "{4CF6F78C-22BE-46C4-BC9B-824E8FEEF719}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Domain", "modules\notifications\LINGYUN.Abp.Notifications.Domain\LINGYUN.Abp.Notifications.Domain.csproj", "{CDD4CC0F-5493-40C2-B889-3670263888D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Domain", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Domain\LINGYUN.Abp.Notifications.Domain.csproj", "{CDD4CC0F-5493-40C2-B889-3670263888D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.EntityFrameworkCore", "modules\notifications\LINGYUN.Abp.Notifications.EntityFrameworkCore\LINGYUN.Abp.Notifications.EntityFrameworkCore.csproj", "{F74AAE01-7B87-44CA-85ED-9A6307D51504}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.EntityFrameworkCore", "modules\realtime-notifications\LINGYUN.Abp.Notifications.EntityFrameworkCore\LINGYUN.Abp.Notifications.EntityFrameworkCore.csproj", "{F74AAE01-7B87-44CA-85ED-9A6307D51504}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Application.Contracts", "modules\notifications\LINGYUN.Abp.Notifications.Application.Contracts\LINGYUN.Abp.Notifications.Application.Contracts.csproj", "{E3F010C7-6C96-4EEA-B5FA-BF80515E195F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Application.Contracts", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Application.Contracts\LINGYUN.Abp.Notifications.Application.Contracts.csproj", "{E3F010C7-6C96-4EEA-B5FA-BF80515E195F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Application", "modules\notifications\LINGYUN.Abp.Notifications.Application\LINGYUN.Abp.Notifications.Application.csproj", "{B153F98A-7DA9-4A12-A1D7-105BE9408FA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Application", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Application\LINGYUN.Abp.Notifications.Application.csproj", "{B153F98A-7DA9-4A12-A1D7-105BE9408FA1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.HttpApi", "modules\notifications\LINGYUN.Abp.Notifications.HttpApi\LINGYUN.Abp.Notifications.HttpApi.csproj", "{EFC5C34F-81A1-4EFC-966F-50B646C54FA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.HttpApi", "modules\realtime-notifications\LINGYUN.Abp.Notifications.HttpApi\LINGYUN.Abp.Notifications.HttpApi.csproj", "{EFC5C34F-81A1-4EFC-966F-50B646C54FA6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Persistence", "modules\localization\LINGYUN.Abp.Localization.Persistence\LINGYUN.Abp.Localization.Persistence.csproj", "{42A0FC3F-C38E-4FF4-B78A-5ED29DF144BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Localization.Persistence", "framework\localization\LINGYUN.Abp.Localization.Persistence\LINGYUN.Abp.Localization.Persistence.csproj", "{42A0FC3F-C38E-4FF4-B78A-5ED29DF144BF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{52E60F16-6304-4E37-A220-C94D8C5D27DC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F3E04039-7BEE-46F8-B33B-FE13E977DCCA}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
+		..\.github\workflows\publish.yml = ..\.github\workflows\publish.yml
 		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
 	EndProjectSection
 EndProject
@@ -568,10 +542,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.Platform.EntityFrameworkCore", "migrations\LY.MicroService.Platform.EntityFrameworkCore\LY.MicroService.Platform.EntityFrameworkCore.csproj", "{B9421FC5-47EB-428D-92C6-F688D02ABE06}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.RealtimeMessage.EntityFrameworkCore", "migrations\LY.MicroService.RealtimeMessage.EntityFrameworkCore\LY.MicroService.RealtimeMessage.EntityFrameworkCore.csproj", "{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.Scriban", "modules\text-templating\LINGYUN.Abp.TextTemplating.Scriban\LINGYUN.Abp.TextTemplating.Scriban.csproj", "{E2019836-1C67-47E4-B3AF-D62F4AFC7679}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.Razor", "modules\text-templating\LINGYUN.Abp.TextTemplating.Razor\LINGYUN.Abp.TextTemplating.Razor.csproj", "{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.PermissionManagement.Application.Contracts", "modules\permissions-management\LINGYUN.Abp.PermissionManagement.Application.Contracts\LINGYUN.Abp.PermissionManagement.Application.Contracts.csproj", "{35D17AF3-FDCD-4704-969C-E82DBCC0A232}"
 EndProject
@@ -632,6 +602,108 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Notifications", "modules\elsa\LINGYUN.Abp.Elsa.Notifications\LINGYUN.Abp.Elsa.Notifications.csproj", "{39DFEFCD-7C73-450F-9A2F-7426188A890B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Elsa.Server", "modules\elsa\LINGYUN.Abp.Elsa.Server\LINGYUN.Abp.Elsa.Server.csproj", "{C465BB41-9DB7-470F-BC7F-A59D2A7D6083}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "entity-change", "entity-change", "{DD1B10ED-73E2-41BE-928A-46501050FE2A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityChange.Application.Contracts", "framework\entity-change\LINGYUN.Abp.EntityChange.Application.Contracts\LINGYUN.Abp.EntityChange.Application.Contracts.csproj", "{7779D9BD-5928-49A2-965F-537967004238}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityChange.Application", "framework\entity-change\LINGYUN.Abp.EntityChange.Application\LINGYUN.Abp.EntityChange.Application.csproj", "{AC41F335-E240-47E0-B409-AFAD1400E626}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityChange.HttpApi", "framework\entity-change\LINGYUN.Abp.EntityChange.HttpApi\LINGYUN.Abp.EntityChange.HttpApi.csproj", "{1D420BA6-2155-4E0D-AAAF-EECC0330A38C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cli", "cli", "{59627844-A66A-46AC-B882-E8F302D0EC24}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Cli", "framework\cli\LINGYUN.Abp.Cli\LINGYUN.Abp.Cli.csproj", "{2F49E870-DAE2-4D89-98CA-46BBD91C68E2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.FileSystem.Imaging", "modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem.Imaging\LINGYUN.Abp.OssManagement.FileSystem.Imaging.csproj", "{6C8489F4-68B5-4CBC-8463-010C71C23245}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp", "modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp\LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp.csproj", "{5177C729-7666-4A6C-9D54-D7E5DEF0E857}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work", "framework\wechat\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj", "{E4CEED06-B8E9-41FA-82BF-5401AE101C4B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work.Tests", "tests\LINGYUN.Abp.WeChat.Work.Tests\LINGYUN.Abp.WeChat.Work.Tests.csproj", "{9BDE2F3E-6A95-47AC-9BBC-EC8570F2925A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work.Application.Contracts", "framework\wechat\LINGYUN.Abp.WeChat.Work.Application.Contracts\LINGYUN.Abp.WeChat.Work.Application.Contracts.csproj", "{B4C8056F-7325-4DB1-9F09-A6F37B052192}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work.Application", "framework\wechat\LINGYUN.Abp.WeChat.Work.Application\LINGYUN.Abp.WeChat.Work.Application.csproj", "{D5AEBB8E-713C-4DD2-BA18-7B0B48489901}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work.HttpApi", "framework\wechat\LINGYUN.Abp.WeChat.Work.HttpApi\LINGYUN.Abp.WeChat.Work.HttpApi.csproj", "{CC07A6C2-CD79-4A1E-BE65-C6444AC89C2C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IdentityServer.WeChat.Work", "modules\identityServer\LINGYUN.Abp.IdentityServer.WeChat.Work\LINGYUN.Abp.IdentityServer.WeChat.Work.csproj", "{DEDB69A9-657F-4B8B-81A7-4ADB19664F35}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenIddict.WeChat.Work", "modules\openIddict\LINGYUN.Abp.OpenIddict.WeChat.Work\LINGYUN.Abp.OpenIddict.WeChat.Work.csproj", "{2C86306D-D626-41F8-BA3C-5C9B4123CE7D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.WeChat.Work", "modules\realtime-notifications\LINGYUN.Abp.Notifications.WeChat.Work\LINGYUN.Abp.Notifications.WeChat.Work.csproj", "{2DC43D15-F20F-44EC-B3A3-47BD8BBB50CA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.WeChat.Work", "framework\wechat\LINGYUN.Abp.Identity.WeChat.Work\LINGYUN.Abp.Identity.WeChat.Work.csproj", "{3E32DBDA-1C63-42B4-85D1-E84BBD072D89}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nexus", "nexus", "{87CE2F0B-0469-4C76-B325-00EA7AB94B99}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Nexus", "framework\nexus\LINGYUN.Abp.BlobStoring.Nexus\LINGYUN.Abp.BlobStoring.Nexus.csproj", "{34987F45-8234-428C-AB41-783D42295C32}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BlobStoring.Nexus.Tests", "tests\LINGYUN.Abp.BlobStoring.Nexus.Tests\LINGYUN.Abp.BlobStoring.Nexus.Tests.csproj", "{227DA969-291B-4749-985C-7A83523B7F53}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Sonatype.Nexus", "framework\nexus\LINGYUN.Abp.Sonatype.Nexus\LINGYUN.Abp.Sonatype.Nexus.csproj", "{CDE35EAE-4B48-40D2-BF57-68EFC5B5A97C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Nexus.Tests", "tests\LINGYUN.Abp.OssManagement.Nexus.Tests\LINGYUN.Abp.OssManagement.Nexus.Tests.csproj", "{F197F8BB-87E3-43FC-92E7-DE8E60EB22E9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{D52D5A11-78EF-4154-8298-267738A6715B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "exception-handling", "exception-handling", "{11CDB632-9A54-439F-8B68-32B3C775BC3A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hangfire", "hangfire", "{C6D62079-B3F5-4006-AA49-3BF12C4805BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wrapper", "wrapper", "{848F6760-9B11-4C9A-9843-9D71DD66D9DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "location", "location", "{6255DBAD-A388-4418-A5EB-C79630786028}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Nexus", "modules\oss-management\LINGYUN.Abp.OssManagement.Nexus\LINGYUN.Abp.OssManagement.Nexus.csproj", "{A025B8D2-5D92-4023-82AB-97A672A5A132}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IM", "modules\realtime-message\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj", "{5D99743B-7044-4BE9-8F7A-E195F2A3E2EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.IM.SignalR", "modules\realtime-message\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj", "{E09E476C-9DF8-46AC-848E-4E7635369117}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Core", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj", "{E414F7BC-215C-46D0-99EC-CD78EB31FC3C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications", "modules\realtime-notifications\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj", "{8142FB8C-3D32-4062-BD95-B2F61A1A390A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Common", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Common\LINGYUN.Abp.Notifications.Common.csproj", "{4155336A-DC06-4885-878D-03AF5DFAF47D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Emailing", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Emailing\LINGYUN.Abp.Notifications.Emailing.csproj", "{ADAB35CB-A34E-448D-ACBB-FA054A3B90AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Jobs", "modules\task-management\LINGYUN.Abp.Notifications.Jobs\LINGYUN.Abp.Notifications.Jobs.csproj", "{1B112FAC-CB57-48B6-A3D5-95456477CB8D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.SignalR", "modules\realtime-notifications\LINGYUN.Abp.Notifications.SignalR\LINGYUN.Abp.Notifications.SignalR.csproj", "{B84E4D98-0B10-4189-8572-F6F7B4E384B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Notifications.Sms", "modules\realtime-notifications\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj", "{E81EC3E4-521F-4C52-8AA0-A783847E764E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MultiTenancy.Saas", "modules\saas\LINGYUN.Abp.MultiTenancy.Saas\LINGYUN.Abp.MultiTenancy.Saas.csproj", "{49EB2864-B715-47DD-AE47-C5243C656F47}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "settings", "settings", "{A057F430-AD93-49D9-8080-6E074AF05694}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.ExceptionHandling.Notifications", "modules\realtime-notifications\LINGYUN.Abp.ExceptionHandling.Notifications\LINGYUN.Abp.ExceptionHandling.Notifications.csproj", "{68538541-4280-46F5-BA08-99ACA8575615}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Settings", "framework\settings\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj", "{F6F93723-5BC3-4D25-A83E-25B41B6D956F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auditing", "auditing", "{6A3FF105-7E8B-4B4D-A736-1C2BAF86FDAA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "task-management", "task-management", "{77ED7922-BF30-4436-8A85-78F812583913}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.Abstractions", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj", "{109BF321-1BC6-4031-A59B-7B5375EBA8C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Common", "framework\wechat\LINGYUN.Abp.WeChat.Common\LINGYUN.Abp.WeChat.Common.csproj", "{08A78A69-913B-4C5E-BCE0-739585F82D1E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dynamic-queryable", "dynamic-queryable", "{4FAE314C-36CB-4E3F-85B7-41D0A428B37D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Linq.Dynamic.Queryable", "framework\dynamic-queryable\LINGYUN.Linq.Dynamic.Queryable\LINGYUN.Linq.Dynamic.Queryable.csproj", "{B6857FC4-97C2-4E20-B005-1FAABC574B88}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application.Contracts", "framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj", "{B6D4AADE-3ABA-45E6-9916-2F8798412549}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.Application", "framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj", "{86E85013-7C71-4770-9323-18897A64F5B2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Dynamic.Queryable.HttpApi", "framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj", "{014A9583-0EAA-48A4-ACBE-07DC88159E13}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection.Tests", "tests\LINGYUN.Abp.DataProtection.Tests\LINGYUN.Abp.DataProtection.Tests.csproj", "{AAC0C407-B4B9-4E90-99FC-2D793AC229D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -703,22 +775,6 @@ Global
 		{FDEECE0D-6F66-4053-948E-9AC021B97C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDEECE0D-6F66-4053-948E-9AC021B97C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDEECE0D-6F66-4053-948E-9AC021B97C8D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B9FA1A02-A2BF-480D-914E-0780DAE442FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B9FA1A02-A2BF-480D-914E-0780DAE442FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B9FA1A02-A2BF-480D-914E-0780DAE442FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B9FA1A02-A2BF-480D-914E-0780DAE442FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{59619184-02E7-4C61-8F96-89320CD7A3AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{59619184-02E7-4C61-8F96-89320CD7A3AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{59619184-02E7-4C61-8F96-89320CD7A3AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{59619184-02E7-4C61-8F96-89320CD7A3AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{865A2AE3-864B-4425-8FA6-AFD62F6466DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{865A2AE3-864B-4425-8FA6-AFD62F6466DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{865A2AE3-864B-4425-8FA6-AFD62F6466DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{865A2AE3-864B-4425-8FA6-AFD62F6466DB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{81DF3392-38F4-41E9-8499-4F7EA8ADF4F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{81DF3392-38F4-41E9-8499-4F7EA8ADF4F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{81DF3392-38F4-41E9-8499-4F7EA8ADF4F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{81DF3392-38F4-41E9-8499-4F7EA8ADF4F2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4DFA9E60-E9CE-4FD3-A57F-F76EF3FF4873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4DFA9E60-E9CE-4FD3-A57F-F76EF3FF4873}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DFA9E60-E9CE-4FD3-A57F-F76EF3FF4873}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -771,10 +827,6 @@ Global
 		{65DDA934-B76B-4018-A565-CF6CEF0D6BB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65DDA934-B76B-4018-A565-CF6CEF0D6BB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65DDA934-B76B-4018-A565-CF6CEF0D6BB0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F14C850-7F4C-4791-9C6C-7E56F985C71D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F14C850-7F4C-4791-9C6C-7E56F985C71D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F14C850-7F4C-4791-9C6C-7E56F985C71D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F14C850-7F4C-4791-9C6C-7E56F985C71D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{376D8343-DF83-41D2-BF6E-2F5DC8DBF259}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{376D8343-DF83-41D2-BF6E-2F5DC8DBF259}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{376D8343-DF83-41D2-BF6E-2F5DC8DBF259}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -783,10 +835,6 @@ Global
 		{6259BCB9-A302-4CE7-AF48-9283A0DFD3CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6259BCB9-A302-4CE7-AF48-9283A0DFD3CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6259BCB9-A302-4CE7-AF48-9283A0DFD3CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A2B4ECAE-DABE-40F7-9335-496A79EDE671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A2B4ECAE-DABE-40F7-9335-496A79EDE671}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A2B4ECAE-DABE-40F7-9335-496A79EDE671}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A2B4ECAE-DABE-40F7-9335-496A79EDE671}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1DA91161-8757-4A68-A0A1-8C94C36C9240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1DA91161-8757-4A68-A0A1-8C94C36C9240}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DA91161-8757-4A68-A0A1-8C94C36C9240}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -871,10 +919,6 @@ Global
 		{6FE7E243-2D99-4567-8786-6C9283D608EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FE7E243-2D99-4567-8786-6C9283D608EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FE7E243-2D99-4567-8786-6C9283D608EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6AA0785D-9B6C-4EAE-AB83-0C4CF2B6B473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6AA0785D-9B6C-4EAE-AB83-0C4CF2B6B473}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6AA0785D-9B6C-4EAE-AB83-0C4CF2B6B473}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6AA0785D-9B6C-4EAE-AB83-0C4CF2B6B473}.Release|Any CPU.Build.0 = Release|Any CPU
 		{65DE28D5-DFEA-43E5-B820-BAF09A1FC4ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{65DE28D5-DFEA-43E5-B820-BAF09A1FC4ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65DE28D5-DFEA-43E5-B820-BAF09A1FC4ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -943,10 +987,6 @@ Global
 		{97B4A37E-B93E-48C9-95D5-689CB9495D8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97B4A37E-B93E-48C9-95D5-689CB9495D8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97B4A37E-B93E-48C9-95D5-689CB9495D8B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C3312E7-F51E-4780-A893-CE0E0B80B579}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C3312E7-F51E-4780-A893-CE0E0B80B579}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C3312E7-F51E-4780-A893-CE0E0B80B579}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C3312E7-F51E-4780-A893-CE0E0B80B579}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE0F0889-C4AF-43C5-B851-B8CCC873BA2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE0F0889-C4AF-43C5-B851-B8CCC873BA2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE0F0889-C4AF-43C5-B851-B8CCC873BA2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1235,10 +1275,6 @@ Global
 		{96EF6CDD-CD29-4E7B-B86A-3EBEE6AC9FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96EF6CDD-CD29-4E7B-B86A-3EBEE6AC9FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96EF6CDD-CD29-4E7B-B86A-3EBEE6AC9FDC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F57594AA-10C2-4DFF-87F6-19F2548099EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F57594AA-10C2-4DFF-87F6-19F2548099EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F57594AA-10C2-4DFF-87F6-19F2548099EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F57594AA-10C2-4DFF-87F6-19F2548099EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{91AE01B1-CC82-40E2-8290-B8A84C6E90D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{91AE01B1-CC82-40E2-8290-B8A84C6E90D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91AE01B1-CC82-40E2-8290-B8A84C6E90D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1255,10 +1291,6 @@ Global
 		{76A5564E-033B-4AA6-A22B-78B6EB134CC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76A5564E-033B-4AA6-A22B-78B6EB134CC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76A5564E-033B-4AA6-A22B-78B6EB134CC6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88502844-D83C-4541-96AC-A8291E261F63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88502844-D83C-4541-96AC-A8291E261F63}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88502844-D83C-4541-96AC-A8291E261F63}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88502844-D83C-4541-96AC-A8291E261F63}.Release|Any CPU.Build.0 = Release|Any CPU
 		{67DC7FA0-506A-4977-95F6-BC739B2BC4BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{67DC7FA0-506A-4977-95F6-BC739B2BC4BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67DC7FA0-506A-4977-95F6-BC739B2BC4BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1295,10 +1327,6 @@ Global
 		{A53FE09E-6B1C-46C0-9422-C313D14AE9E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A53FE09E-6B1C-46C0-9422-C313D14AE9E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A53FE09E-6B1C-46C0-9422-C313D14AE9E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0CE035CF-2D8A-4559-93EC-ADBEC4237C61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0CE035CF-2D8A-4559-93EC-ADBEC4237C61}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0CE035CF-2D8A-4559-93EC-ADBEC4237C61}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0CE035CF-2D8A-4559-93EC-ADBEC4237C61}.Release|Any CPU.Build.0 = Release|Any CPU
 		{995DB1CE-A2FC-4468-A521-4207FD587EC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{995DB1CE-A2FC-4468-A521-4207FD587EC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{995DB1CE-A2FC-4468-A521-4207FD587EC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1359,14 +1387,6 @@ Global
 		{2B7C1441-8801-4121-ABFB-03771E9DFE46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B7C1441-8801-4121-ABFB-03771E9DFE46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B7C1441-8801-4121-ABFB-03771E9DFE46}.Release|Any CPU.Build.0 = Release|Any CPU
-		{62971DAE-CE71-4E9C-B6F5-514C8E2B915C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{62971DAE-CE71-4E9C-B6F5-514C8E2B915C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{62971DAE-CE71-4E9C-B6F5-514C8E2B915C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{62971DAE-CE71-4E9C-B6F5-514C8E2B915C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E9D07D8-963C-4A61-B720-BD47593BE752}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E9D07D8-963C-4A61-B720-BD47593BE752}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E9D07D8-963C-4A61-B720-BD47593BE752}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E9D07D8-963C-4A61-B720-BD47593BE752}.Release|Any CPU.Build.0 = Release|Any CPU
 		{942816E3-B270-40DC-9532-C1077FF59A32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{942816E3-B270-40DC-9532-C1077FF59A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{942816E3-B270-40DC-9532-C1077FF59A32}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1511,14 +1531,6 @@ Global
 		{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E2019836-1C67-47E4-B3AF-D62F4AFC7679}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2019836-1C67-47E4-B3AF-D62F4AFC7679}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2019836-1C67-47E4-B3AF-D62F4AFC7679}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2019836-1C67-47E4-B3AF-D62F4AFC7679}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{35D17AF3-FDCD-4704-969C-E82DBCC0A232}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{35D17AF3-FDCD-4704-969C-E82DBCC0A232}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35D17AF3-FDCD-4704-969C-E82DBCC0A232}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1623,17 +1635,173 @@ Global
 		{C465BB41-9DB7-470F-BC7F-A59D2A7D6083}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C465BB41-9DB7-470F-BC7F-A59D2A7D6083}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C465BB41-9DB7-470F-BC7F-A59D2A7D6083}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7779D9BD-5928-49A2-965F-537967004238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7779D9BD-5928-49A2-965F-537967004238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7779D9BD-5928-49A2-965F-537967004238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7779D9BD-5928-49A2-965F-537967004238}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC41F335-E240-47E0-B409-AFAD1400E626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC41F335-E240-47E0-B409-AFAD1400E626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC41F335-E240-47E0-B409-AFAD1400E626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC41F335-E240-47E0-B409-AFAD1400E626}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D420BA6-2155-4E0D-AAAF-EECC0330A38C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D420BA6-2155-4E0D-AAAF-EECC0330A38C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D420BA6-2155-4E0D-AAAF-EECC0330A38C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D420BA6-2155-4E0D-AAAF-EECC0330A38C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F49E870-DAE2-4D89-98CA-46BBD91C68E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F49E870-DAE2-4D89-98CA-46BBD91C68E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F49E870-DAE2-4D89-98CA-46BBD91C68E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F49E870-DAE2-4D89-98CA-46BBD91C68E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C8489F4-68B5-4CBC-8463-010C71C23245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C8489F4-68B5-4CBC-8463-010C71C23245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C8489F4-68B5-4CBC-8463-010C71C23245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C8489F4-68B5-4CBC-8463-010C71C23245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5177C729-7666-4A6C-9D54-D7E5DEF0E857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5177C729-7666-4A6C-9D54-D7E5DEF0E857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5177C729-7666-4A6C-9D54-D7E5DEF0E857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5177C729-7666-4A6C-9D54-D7E5DEF0E857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4CEED06-B8E9-41FA-82BF-5401AE101C4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4CEED06-B8E9-41FA-82BF-5401AE101C4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4CEED06-B8E9-41FA-82BF-5401AE101C4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4CEED06-B8E9-41FA-82BF-5401AE101C4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BDE2F3E-6A95-47AC-9BBC-EC8570F2925A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BDE2F3E-6A95-47AC-9BBC-EC8570F2925A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BDE2F3E-6A95-47AC-9BBC-EC8570F2925A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BDE2F3E-6A95-47AC-9BBC-EC8570F2925A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4C8056F-7325-4DB1-9F09-A6F37B052192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4C8056F-7325-4DB1-9F09-A6F37B052192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4C8056F-7325-4DB1-9F09-A6F37B052192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4C8056F-7325-4DB1-9F09-A6F37B052192}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5AEBB8E-713C-4DD2-BA18-7B0B48489901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5AEBB8E-713C-4DD2-BA18-7B0B48489901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5AEBB8E-713C-4DD2-BA18-7B0B48489901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5AEBB8E-713C-4DD2-BA18-7B0B48489901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC07A6C2-CD79-4A1E-BE65-C6444AC89C2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC07A6C2-CD79-4A1E-BE65-C6444AC89C2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC07A6C2-CD79-4A1E-BE65-C6444AC89C2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC07A6C2-CD79-4A1E-BE65-C6444AC89C2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEDB69A9-657F-4B8B-81A7-4ADB19664F35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEDB69A9-657F-4B8B-81A7-4ADB19664F35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEDB69A9-657F-4B8B-81A7-4ADB19664F35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEDB69A9-657F-4B8B-81A7-4ADB19664F35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C86306D-D626-41F8-BA3C-5C9B4123CE7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C86306D-D626-41F8-BA3C-5C9B4123CE7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C86306D-D626-41F8-BA3C-5C9B4123CE7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C86306D-D626-41F8-BA3C-5C9B4123CE7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DC43D15-F20F-44EC-B3A3-47BD8BBB50CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DC43D15-F20F-44EC-B3A3-47BD8BBB50CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DC43D15-F20F-44EC-B3A3-47BD8BBB50CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DC43D15-F20F-44EC-B3A3-47BD8BBB50CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E32DBDA-1C63-42B4-85D1-E84BBD072D89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E32DBDA-1C63-42B4-85D1-E84BBD072D89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E32DBDA-1C63-42B4-85D1-E84BBD072D89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E32DBDA-1C63-42B4-85D1-E84BBD072D89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34987F45-8234-428C-AB41-783D42295C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34987F45-8234-428C-AB41-783D42295C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34987F45-8234-428C-AB41-783D42295C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34987F45-8234-428C-AB41-783D42295C32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{227DA969-291B-4749-985C-7A83523B7F53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{227DA969-291B-4749-985C-7A83523B7F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{227DA969-291B-4749-985C-7A83523B7F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{227DA969-291B-4749-985C-7A83523B7F53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDE35EAE-4B48-40D2-BF57-68EFC5B5A97C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDE35EAE-4B48-40D2-BF57-68EFC5B5A97C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDE35EAE-4B48-40D2-BF57-68EFC5B5A97C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDE35EAE-4B48-40D2-BF57-68EFC5B5A97C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F197F8BB-87E3-43FC-92E7-DE8E60EB22E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F197F8BB-87E3-43FC-92E7-DE8E60EB22E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F197F8BB-87E3-43FC-92E7-DE8E60EB22E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F197F8BB-87E3-43FC-92E7-DE8E60EB22E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A025B8D2-5D92-4023-82AB-97A672A5A132}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A025B8D2-5D92-4023-82AB-97A672A5A132}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A025B8D2-5D92-4023-82AB-97A672A5A132}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A025B8D2-5D92-4023-82AB-97A672A5A132}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D99743B-7044-4BE9-8F7A-E195F2A3E2EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D99743B-7044-4BE9-8F7A-E195F2A3E2EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D99743B-7044-4BE9-8F7A-E195F2A3E2EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D99743B-7044-4BE9-8F7A-E195F2A3E2EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E09E476C-9DF8-46AC-848E-4E7635369117}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E09E476C-9DF8-46AC-848E-4E7635369117}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E09E476C-9DF8-46AC-848E-4E7635369117}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E09E476C-9DF8-46AC-848E-4E7635369117}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E414F7BC-215C-46D0-99EC-CD78EB31FC3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E414F7BC-215C-46D0-99EC-CD78EB31FC3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E414F7BC-215C-46D0-99EC-CD78EB31FC3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E414F7BC-215C-46D0-99EC-CD78EB31FC3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8142FB8C-3D32-4062-BD95-B2F61A1A390A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8142FB8C-3D32-4062-BD95-B2F61A1A390A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8142FB8C-3D32-4062-BD95-B2F61A1A390A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8142FB8C-3D32-4062-BD95-B2F61A1A390A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4155336A-DC06-4885-878D-03AF5DFAF47D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4155336A-DC06-4885-878D-03AF5DFAF47D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4155336A-DC06-4885-878D-03AF5DFAF47D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4155336A-DC06-4885-878D-03AF5DFAF47D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADAB35CB-A34E-448D-ACBB-FA054A3B90AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADAB35CB-A34E-448D-ACBB-FA054A3B90AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADAB35CB-A34E-448D-ACBB-FA054A3B90AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADAB35CB-A34E-448D-ACBB-FA054A3B90AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B112FAC-CB57-48B6-A3D5-95456477CB8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B112FAC-CB57-48B6-A3D5-95456477CB8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B112FAC-CB57-48B6-A3D5-95456477CB8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B112FAC-CB57-48B6-A3D5-95456477CB8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B84E4D98-0B10-4189-8572-F6F7B4E384B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B84E4D98-0B10-4189-8572-F6F7B4E384B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B84E4D98-0B10-4189-8572-F6F7B4E384B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B84E4D98-0B10-4189-8572-F6F7B4E384B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E81EC3E4-521F-4C52-8AA0-A783847E764E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E81EC3E4-521F-4C52-8AA0-A783847E764E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E81EC3E4-521F-4C52-8AA0-A783847E764E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E81EC3E4-521F-4C52-8AA0-A783847E764E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49EB2864-B715-47DD-AE47-C5243C656F47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49EB2864-B715-47DD-AE47-C5243C656F47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49EB2864-B715-47DD-AE47-C5243C656F47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49EB2864-B715-47DD-AE47-C5243C656F47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68538541-4280-46F5-BA08-99ACA8575615}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68538541-4280-46F5-BA08-99ACA8575615}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68538541-4280-46F5-BA08-99ACA8575615}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68538541-4280-46F5-BA08-99ACA8575615}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6F93723-5BC3-4D25-A83E-25B41B6D956F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6F93723-5BC3-4D25-A83E-25B41B6D956F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6F93723-5BC3-4D25-A83E-25B41B6D956F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6F93723-5BC3-4D25-A83E-25B41B6D956F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{109BF321-1BC6-4031-A59B-7B5375EBA8C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{109BF321-1BC6-4031-A59B-7B5375EBA8C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{109BF321-1BC6-4031-A59B-7B5375EBA8C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{109BF321-1BC6-4031-A59B-7B5375EBA8C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08A78A69-913B-4C5E-BCE0-739585F82D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08A78A69-913B-4C5E-BCE0-739585F82D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08A78A69-913B-4C5E-BCE0-739585F82D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08A78A69-913B-4C5E-BCE0-739585F82D1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6857FC4-97C2-4E20-B005-1FAABC574B88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6857FC4-97C2-4E20-B005-1FAABC574B88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6857FC4-97C2-4E20-B005-1FAABC574B88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6857FC4-97C2-4E20-B005-1FAABC574B88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6D4AADE-3ABA-45E6-9916-2F8798412549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6D4AADE-3ABA-45E6-9916-2F8798412549}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6D4AADE-3ABA-45E6-9916-2F8798412549}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6D4AADE-3ABA-45E6-9916-2F8798412549}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86E85013-7C71-4770-9323-18897A64F5B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86E85013-7C71-4770-9323-18897A64F5B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86E85013-7C71-4770-9323-18897A64F5B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86E85013-7C71-4770-9323-18897A64F5B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{014A9583-0EAA-48A4-ACBE-07DC88159E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{014A9583-0EAA-48A4-ACBE-07DC88159E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{014A9583-0EAA-48A4-ACBE-07DC88159E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{014A9583-0EAA-48A4-ACBE-07DC88159E13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAC0C407-B4B9-4E90-99FC-2D793AC229D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAC0C407-B4B9-4E90-99FC-2D793AC229D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAC0C407-B4B9-4E90-99FC-2D793AC229D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAC0C407-B4B9-4E90-99FC-2D793AC229D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{BA00B3F2-199B-40E2-B0EA-0AA4F51A1C52} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
-		{77BDEF2B-1A30-4E64-BC35-0DFC21091327} = {BA00B3F2-199B-40E2-B0EA-0AA4F51A1C52}
+		{BA00B3F2-199B-40E2-B0EA-0AA4F51A1C52} = {D52D5A11-78EF-4154-8298-267738A6715B}
+		{77BDEF2B-1A30-4E64-BC35-0DFC21091327} = {A057F430-AD93-49D9-8080-6E074AF05694}
 		{573B7B0E-3065-42DE-A391-EE026CE7A366} = {BA00B3F2-199B-40E2-B0EA-0AA4F51A1C52}
 		{FFD1E99C-49DA-4ADC-BC92-B14B51B45CAF} = {BA00B3F2-199B-40E2-B0EA-0AA4F51A1C52}
 		{E2408063-FB1F-4513-B4A7-1FE50667C6E8} = {672E1170-7B18-474B-85C7-1961BF2A48AE}
-		{0439B173-F41E-4CE0-A44A-CCB70328F272} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{0439B173-F41E-4CE0-A44A-CCB70328F272} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{3EE2D2F8-2B57-4EF7-88E8-5E4C851E66C2} = {0439B173-F41E-4CE0-A44A-CCB70328F272}
 		{A584D040-95AC-4422-93FF-7B80532213F0} = {0439B173-F41E-4CE0-A44A-CCB70328F272}
 		{76249548-4344-4CD0-A0AC-12AC54184B58} = {0439B173-F41E-4CE0-A44A-CCB70328F272}
@@ -1642,40 +1810,34 @@ Global
 		{8AC72641-30D3-4ACF-89FA-808FADC55C2E} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{AEC1E6D3-DC23-41BD-B456-3AAD26E34978} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 		{E6B11DE5-B5EC-4C25-BAF6-1AC9FD0409EB} = {0439B173-F41E-4CE0-A44A-CCB70328F272}
-		{9E72FEB9-A626-4312-892B-CDD043879758} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{9E72FEB9-A626-4312-892B-CDD043879758} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{8B09385A-719C-4B83-B61E-0ECD5D2734BD} = {9E72FEB9-A626-4312-892B-CDD043879758}
 		{8E569C1C-2637-4D89-804C-50FBC83948FB} = {9E72FEB9-A626-4312-892B-CDD043879758}
 		{5A10C02B-D12C-479C-9E7F-9A7D9DDD753D} = {9E72FEB9-A626-4312-892B-CDD043879758}
 		{FF1839EA-FB6B-4ED5-9804-E40427046D35} = {14CDBAD1-10C8-464A-B445-1F727C988010}
-		{9FE2A95F-D7A3-4305-9E12-E955EF74CF8D} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{6E4A0D87-C3CE-430F-A475-A6B68C116D96} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{9FE2A95F-D7A3-4305-9E12-E955EF74CF8D} = {6255DBAD-A388-4418-A5EB-C79630786028}
+		{6E4A0D87-C3CE-430F-A475-A6B68C116D96} = {6255DBAD-A388-4418-A5EB-C79630786028}
+		{3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{A5851F0F-CB0D-4E29-A829-D1BDEADB807B} = {3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D}
 		{FDEECE0D-6F66-4053-948E-9AC021B97C8D} = {3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D}
-		{B9FA1A02-A2BF-480D-914E-0780DAE442FC} = {ECC8B9A9-9E92-4493-984D-2E350A49189D}
-		{59619184-02E7-4C61-8F96-89320CD7A3AE} = {ECC8B9A9-9E92-4493-984D-2E350A49189D}
-		{865A2AE3-864B-4425-8FA6-AFD62F6466DB} = {ECC8B9A9-9E92-4493-984D-2E350A49189D}
-		{81DF3392-38F4-41E9-8499-4F7EA8ADF4F2} = {ECC8B9A9-9E92-4493-984D-2E350A49189D}
 		{4DFA9E60-E9CE-4FD3-A57F-F76EF3FF4873} = {ECC8B9A9-9E92-4493-984D-2E350A49189D}
 		{371B293B-0CA9-4385-8EBB-5224332066D2} = {3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D}
 		{608A3BD0-FC8D-48B0-B1C5-F3203A3BE99F} = {672E1170-7B18-474B-85C7-1961BF2A48AE}
 		{9E12ADBF-713B-4FE7-B71F-52B5078A57CE} = {3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D}
-		{47CC8F7A-681D-42B9-AE04-78453782C1B6} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{F595CB9F-B117-4D62-A1AE-48599927DB36} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{5CF403B2-47C9-4E4E-8856-0294BDD64884} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
+		{47CC8F7A-681D-42B9-AE04-78453782C1B6} = {C6D62079-B3F5-4006-AA49-3BF12C4805BB}
+		{F595CB9F-B117-4D62-A1AE-48599927DB36} = {C6D62079-B3F5-4006-AA49-3BF12C4805BB}
+		{5CF403B2-47C9-4E4E-8856-0294BDD64884} = {C6D62079-B3F5-4006-AA49-3BF12C4805BB}
 		{059473BA-FAF9-405F-9985-33DDCA2E9F0D} = {14CDBAD1-10C8-464A-B445-1F727C988010}
 		{B39B5FB6-E7B9-4A13-8FFA-FC7FEED4371B} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 		{C8A00439-5B8D-4923-8FAA-AB75E2A786ED} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 		{31B03DCB-ED12-4412-867A-61E347D40D8C} = {3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D}
 		{AB984240-EF03-416F-A9B2-F5CF169E04B7} = {3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D}
 		{EBBBBD00-74B5-49CB-8C24-4FD7C2ECC415} = {3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D}
-		{65DDA934-B76B-4018-A565-CF6CEF0D6BB0} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{0F14C850-7F4C-4791-9C6C-7E56F985C71D} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{376D8343-DF83-41D2-BF6E-2F5DC8DBF259} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
+		{65DDA934-B76B-4018-A565-CF6CEF0D6BB0} = {11CDB632-9A54-439F-8B68-32B3C775BC3A}
+		{376D8343-DF83-41D2-BF6E-2F5DC8DBF259} = {11CDB632-9A54-439F-8B68-32B3C775BC3A}
 		{6259BCB9-A302-4CE7-AF48-9283A0DFD3CB} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
-		{A2B4ECAE-DABE-40F7-9335-496A79EDE671} = {A5543E56-DA53-494D-A531-DA75091D46FF}
-		{1DA91161-8757-4A68-A0A1-8C94C36C9240} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{F4923692-D343-4318-AECA-96F580B1A563} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{1DA91161-8757-4A68-A0A1-8C94C36C9240} = {6255DBAD-A388-4418-A5EB-C79630786028}
+		{F4923692-D343-4318-AECA-96F580B1A563} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{F135B9E8-3FFE-44E9-835B-7B6A928F4823} = {F4923692-D343-4318-AECA-96F580B1A563}
 		{75A6D078-C19D-4030-88CC-C2A8608FF604} = {F4923692-D343-4318-AECA-96F580B1A563}
 		{2D895594-3FF5-4507-853A-CB65F2DB72ED} = {F4923692-D343-4318-AECA-96F580B1A563}
@@ -1684,12 +1846,12 @@ Global
 		{5FBBBA6A-D6EC-42E1-8164-15C411EC77BE} = {F4923692-D343-4318-AECA-96F580B1A563}
 		{F4615BCE-D5C1-407A-8681-8EEE92DEF9D0} = {672E1170-7B18-474B-85C7-1961BF2A48AE}
 		{F3D9B137-32DE-4018-8058-78AB17FCDF9C} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
-		{52B5D4F7-237B-4E0A-A167-68442164F70A} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{52B5D4F7-237B-4E0A-A167-68442164F70A} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{F19C8B0F-A332-4190-9ABE-95790E0AE864} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
 		{BB1B831F-4AC4-4DE5-A879-D5FC5B1CA9DA} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
 		{72DCA4CF-8B95-47C9-B02A-2671953B7987} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
 		{7DDEAEA9-E392-469C-ACB6-908C5BAD669E} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
-		{B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{F3D50E3E-34D2-48C1-AB0D-ADCF92DC07D0} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{86A67B8C-EFA0-4103-B60F-312F07C15A7A} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{854E1A42-FEA4-420E-9E83-0A39EE03F1ED} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
@@ -1700,19 +1862,18 @@ Global
 		{2BF7FB73-0C62-4ECF-99F0-0583855D2777} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
 		{6FE7E243-2D99-4567-8786-6C9283D608EF} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
 		{685188AC-A145-4A27-BF5F-9C970A59AA9C} = {672E1170-7B18-474B-85C7-1961BF2A48AE}
-		{6AA0785D-9B6C-4EAE-AB83-0C4CF2B6B473} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{65DE28D5-DFEA-43E5-B820-BAF09A1FC4ED} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{D3E65610-4167-4235-9C9D-1E1FAD4C0CE6} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
+		{65DE28D5-DFEA-43E5-B820-BAF09A1FC4ED} = {08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8}
+		{D3E65610-4167-4235-9C9D-1E1FAD4C0CE6} = {08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8}
 		{F12F4645-C0FE-4129-8C71-65B4039DC445} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 		{C457FA70-8732-44B8-A018-C96D14025D4B} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 		{08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{7071E78B-755B-410A-830B-AA05D7168944} = {08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8}
 		{87B65CBD-0FF4-4FB5-9ABC-161911A71179} = {08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8}
-		{67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{F40F88F1-CA90-4A79-B772-80E287E25982} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
 		{AC3C8985-73C2-472A-8E76-A0B8786FEC3F} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
 		{07E19CA8-671D-4D58-9FED-5FEE9AE01A2F} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
-		{CC362C67-6FC1-42B3-A130-8120AA8D790C} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{CC362C67-6FC1-42B3-A130-8120AA8D790C} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{BAE74ABC-1096-495F-A624-BEBFBC1896F2} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
 		{E92A1CAA-5758-41EF-B67E-C0D394E85417} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
@@ -1724,21 +1885,20 @@ Global
 		{3B96F4D8-4993-419B-BCEB-AFE4ED39449F} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{FCFAF1AF-B3F6-45F3-85AB-8249EB8432CC} = {14CDBAD1-10C8-464A-B445-1F727C988010}
 		{97B4A37E-B93E-48C9-95D5-689CB9495D8B} = {3B96F4D8-4993-419B-BCEB-AFE4ED39449F}
-		{8C3312E7-F51E-4780-A893-CE0E0B80B579} = {ECC8B9A9-9E92-4493-984D-2E350A49189D}
 		{FE0F0889-C4AF-43C5-B851-B8CCC873BA2C} = {14CDBAD1-10C8-464A-B445-1F727C988010}
 		{B86EBB6F-A27F-4277-8265-937951A9DCB0} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 		{35B17218-9FB6-439E-AF73-9A1454BC923C} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{D5036D3F-1C53-47EE-BA50-AD290AE062D7} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{3E5EBCEC-78C9-4A1A-BF04-A216AA6A921F} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{BD74BE00-54E4-4979-8797-E8027695F396} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
-		{48DE251A-3482-4934-BC26-F99D2235AC9F} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
+		{48DE251A-3482-4934-BC26-F99D2235AC9F} = {08BD73E6-72CE-4A8A-896D-2DFFF4D7D2F8}
 		{94B47385-E47F-4FD7-A3A9-A7AA122EFC93} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 		{C892CD81-50AE-49E5-BF44-A0C28A1614CC} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 		{EEF03CC6-1013-4AAF-BEED-BB4BA5021039} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 		{90E88EAC-4291-4406-8D88-EFDF61B11292} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{84868710-ECBB-4025-900A-EEB99EC49534} = {90E88EAC-4291-4406-8D88-EFDF61B11292}
 		{A061D2B4-B650-4F7F-A6CB-5C8FFFD512ED} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
-		{D3BAA44E-8395-4E8A-AA96-6B463356C537} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{D3BAA44E-8395-4E8A-AA96-6B463356C537} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{5BE18D72-0D02-4854-966E-745CE5DAF77F} = {D3BAA44E-8395-4E8A-AA96-6B463356C537}
 		{73EAD4FE-B44F-44A7-904E-FFA5096D91BD} = {D3BAA44E-8395-4E8A-AA96-6B463356C537}
 		{06D34108-01BA-4C77-A704-4DD9E6F7E32C} = {D3BAA44E-8395-4E8A-AA96-6B463356C537}
@@ -1752,17 +1912,17 @@ Global
 		{4D83BDA7-2059-41C7-85AE-FEFAD5CD9498} = {6084D52D-775B-4A39-8CD5-AA2F362B5A61}
 		{8EF31071-3521-409D-9740-BBFBFC04C50E} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 		{13219C1C-23E1-4EBA-93FB-86830C93A800} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{60D0BEF2-FEAF-4066-8377-6C873CB24858} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
-		{340BE5AC-68EC-41A5-9D0D-266037C58F13} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
+		{60D0BEF2-FEAF-4066-8377-6C873CB24858} = {C6D62079-B3F5-4006-AA49-3BF12C4805BB}
+		{340BE5AC-68EC-41A5-9D0D-266037C58F13} = {C6D62079-B3F5-4006-AA49-3BF12C4805BB}
 		{BC518F26-996E-4DF0-BB44-783EB1C275D2} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
 		{6FC0578B-CDF1-43AD-9F7E-4AA7E4720A02} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{B981DD7D-7083-4C7A-9A5F-B8CFAE7B670B} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{63D1DC91-C7C7-491A-8423-B0B89F39443F} = {B981DD7D-7083-4C7A-9A5F-B8CFAE7B670B}
 		{1E0E82D2-F53A-4326-9E39-D7D677590543} = {6FC0578B-CDF1-43AD-9F7E-4AA7E4720A02}
 		{D82DB535-67FB-4712-B3EC-9A7A1EA6F7E9} = {6FC0578B-CDF1-43AD-9F7E-4AA7E4720A02}
-		{6C3D4C1C-4864-44A9-8649-9856ABF667FA} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
-		{AD3CC5B5-366B-4E34-8E80-EC5BB68B573A} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
-		{F71A0D28-397D-4094-B1C2-7925E1310676} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
+		{6C3D4C1C-4864-44A9-8649-9856ABF667FA} = {6A3FF105-7E8B-4B4D-A736-1C2BAF86FDAA}
+		{AD3CC5B5-366B-4E34-8E80-EC5BB68B573A} = {6A3FF105-7E8B-4B4D-A736-1C2BAF86FDAA}
+		{F71A0D28-397D-4094-B1C2-7925E1310676} = {6A3FF105-7E8B-4B4D-A736-1C2BAF86FDAA}
 		{CEAF0044-28D3-4585-B69D-D65FF6D4745E} = {6FC0578B-CDF1-43AD-9F7E-4AA7E4720A02}
 		{91D9F43A-BFD9-47CA-A6AD-430D1663EFF3} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
 		{7D02D803-F9A9-492C-9B5E-454E4B258466} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
@@ -1781,12 +1941,11 @@ Global
 		{A200E783-CBA2-4F64-A6EC-49D5C6482DEB} = {E5D1B78A-1A8F-4D52-BF99-A4A863ADE898}
 		{A17C9F1D-457A-48AC-B89C-722D8B3955DA} = {608A3BD0-FC8D-48B0-B1C5-F3203A3BE99F}
 		{842E19B3-8110-40FE-AAFF-D288BC928E55} = {DC33925B-264D-421B-96CC-46F853CBCC70}
-		{AEE7BFF0-D16C-49F6-B4E9-9FED2417894E} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
-		{C1319EC1-A489-482B-A343-38B52D8AB0B0} = {AEE7BFF0-D16C-49F6-B4E9-9FED2417894E}
+		{C1319EC1-A489-482B-A343-38B52D8AB0B0} = {848F6760-9B11-4C9A-9843-9D71DD66D9DA}
 		{3C7A8246-DE82-4330-8697-24EF1B1C515D} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{4059F87E-9762-46C1-AEB1-B1128EA533AE} = {3C7A8246-DE82-4330-8697-24EF1B1C515D}
 		{433AD1FB-2DE8-479F-B89E-A17217591538} = {3C7A8246-DE82-4330-8697-24EF1B1C515D}
-		{65311EC9-7A86-4E73-A587-F06A99474EDD} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
+		{65311EC9-7A86-4E73-A587-F06A99474EDD} = {848F6760-9B11-4C9A-9843-9D71DD66D9DA}
 		{CD9081C6-7CA0-4A93-9318-33E54F3ED275} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{D262405E-1C72-4F14-A799-40471BAD48DC} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{529DF802-97C4-4BF2-BE7C-39663B3D9EA3} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
@@ -1801,7 +1960,7 @@ Global
 		{25378F9D-2A66-4568-AAC6-E9282ACA3DD3} = {0439B173-F41E-4CE0-A44A-CCB70328F272}
 		{3FCB1BCD-34BC-4F66-968F-38DB28371D0F} = {3B96F4D8-4993-419B-BCEB-AFE4ED39449F}
 		{A030CD8E-61F3-4C15-B28A-C301446DDBEC} = {A5543E56-DA53-494D-A531-DA75091D46FF}
-		{D01D859E-4B72-478A-BABD-90F0981652D5} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{D01D859E-4B72-478A-BABD-90F0981652D5} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{049E09BF-2E11-4E3B-926D-9DD6051A2DA4} = {D01D859E-4B72-478A-BABD-90F0981652D5}
 		{F1BE6113-3439-45BB-8B58-20ACA4056895} = {D01D859E-4B72-478A-BABD-90F0981652D5}
 		{77C2E24A-D143-44E7-86F9-AB6C5D444F63} = {D01D859E-4B72-478A-BABD-90F0981652D5}
@@ -1809,17 +1968,15 @@ Global
 		{B1DDC8AF-B0BE-46D1-A2FE-2D5219F847B5} = {D01D859E-4B72-478A-BABD-90F0981652D5}
 		{8DF50094-6791-4C7C-B07D-C3E995B69C49} = {D01D859E-4B72-478A-BABD-90F0981652D5}
 		{96EF6CDD-CD29-4E7B-B86A-3EBEE6AC9FDC} = {D01D859E-4B72-478A-BABD-90F0981652D5}
-		{F57594AA-10C2-4DFF-87F6-19F2548099EA} = {A5543E56-DA53-494D-A531-DA75091D46FF}
-		{13ACF670-F109-404E-B252-2FA34A4EA061} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{13ACF670-F109-404E-B252-2FA34A4EA061} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{91AE01B1-CC82-40E2-8290-B8A84C6E90D1} = {13ACF670-F109-404E-B252-2FA34A4EA061}
 		{9EC33D45-CCC7-41DF-829E-6B89A640FE35} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
 		{902D822A-52B6-481C-96C5-ECD891FF83FC} = {9EC33D45-CCC7-41DF-829E-6B89A640FE35}
 		{46244C99-3A0D-4D88-9F24-2B7B586ADBA4} = {CC362C67-6FC1-42B3-A130-8120AA8D790C}
-		{76A5564E-033B-4AA6-A22B-78B6EB134CC6} = {9EC33D45-CCC7-41DF-829E-6B89A640FE35}
-		{88502844-D83C-4541-96AC-A8291E261F63} = {ECC8B9A9-9E92-4493-984D-2E350A49189D}
+		{76A5564E-033B-4AA6-A22B-78B6EB134CC6} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
 		{67DC7FA0-506A-4977-95F6-BC739B2BC4BA} = {F4923692-D343-4318-AECA-96F580B1A563}
 		{8DF55DAB-4C1D-46F7-9324-0050F47B3BED} = {F4923692-D343-4318-AECA-96F580B1A563}
-		{ABD89F39-62D9-439E-8662-BE4F36BFA04F} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{ABD89F39-62D9-439E-8662-BE4F36BFA04F} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{D4B4800F-6238-4EA9-A9BB-298D668C26C4} = {ABD89F39-62D9-439E-8662-BE4F36BFA04F}
 		{F9AC4123-7987-47D3-85D6-CD13928F3683} = {ABD89F39-62D9-439E-8662-BE4F36BFA04F}
 		{22BDDF5C-F911-4978-B83F-981F3652BF45} = {ABD89F39-62D9-439E-8662-BE4F36BFA04F}
@@ -1827,10 +1984,9 @@ Global
 		{4711320B-F98D-4CB0-BFEB-B9685B6CBCB7} = {ABD89F39-62D9-439E-8662-BE4F36BFA04F}
 		{130F8ED1-A64F-48DE-BF43-18EAD19CAF63} = {ABD89F39-62D9-439E-8662-BE4F36BFA04F}
 		{A53FE09E-6B1C-46C0-9422-C313D14AE9E4} = {ABD89F39-62D9-439E-8662-BE4F36BFA04F}
-		{0CE035CF-2D8A-4559-93EC-ADBEC4237C61} = {ECC8B9A9-9E92-4493-984D-2E350A49189D}
 		{995DB1CE-A2FC-4468-A521-4207FD587EC5} = {90E88EAC-4291-4406-8D88-EFDF61B11292}
 		{AFFBE8EE-1B92-4CDF-8A4F-4000B78A0154} = {9E72FEB9-A626-4312-892B-CDD043879758}
-		{63FCC71F-1CEF-44D3-B95B-23EE58DE8C95} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{63FCC71F-1CEF-44D3-B95B-23EE58DE8C95} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{7D6AE2BB-7DBF-4FC8-A1F5-C004D139B278} = {63FCC71F-1CEF-44D3-B95B-23EE58DE8C95}
 		{920867B4-4740-4074-9B49-14002B272A63} = {63FCC71F-1CEF-44D3-B95B-23EE58DE8C95}
 		{3D422738-B111-4DEE-82E1-C3A90F1133B1} = {63FCC71F-1CEF-44D3-B95B-23EE58DE8C95}
@@ -1847,11 +2003,9 @@ Global
 		{102C3711-135E-446D-9A35-AEFB79993CAA} = {A8F1C9FA-4F16-43F9-8CC6-CCD124154440}
 		{2B7C1441-8801-4121-ABFB-03771E9DFE46} = {A8F1C9FA-4F16-43F9-8CC6-CCD124154440}
 		{ECC8B9A9-9E92-4493-984D-2E350A49189D} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
-		{62971DAE-CE71-4E9C-B6F5-514C8E2B915C} = {ECC8B9A9-9E92-4493-984D-2E350A49189D}
-		{3E9D07D8-963C-4A61-B720-BD47593BE752} = {ECC8B9A9-9E92-4493-984D-2E350A49189D}
-		{942816E3-B270-40DC-9532-C1077FF59A32} = {8AC72641-30D3-4ACF-89FA-808FADC55C2E}
+		{942816E3-B270-40DC-9532-C1077FF59A32} = {848F6760-9B11-4C9A-9843-9D71DD66D9DA}
 		{FBB50072-33BE-4B4A-8908-E98BC0C80B92} = {DC33925B-264D-421B-96CC-46F853CBCC70}
-		{83E698F6-F8CD-4604-AB80-01A203389501} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{83E698F6-F8CD-4604-AB80-01A203389501} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{D509011F-4690-4F21-BA30-E4C31799993F} = {83E698F6-F8CD-4604-AB80-01A203389501}
 		{257C64BC-BD16-4F6D-A0B9-E286A4161241} = {83E698F6-F8CD-4604-AB80-01A203389501}
 		{785251E2-6E77-40E3-90C2-4DFB63D0721B} = {83E698F6-F8CD-4604-AB80-01A203389501}
@@ -1882,7 +2036,7 @@ Global
 		{869C267D-D659-4DC6-AD64-6B466611FA61} = {B18CF0D3-3D01-4A64-A9C4-DC0C214BEE42}
 		{DB417421-B5E7-499B-A19A-C04830BFF75F} = {F260FB5F-C6C7-4948-B638-E4D6986D07ED}
 		{F51EFCF5-812A-4BBC-AC88-82372B3CF78D} = {B1AC656F-8F4C-43D5-B5A0-CCF5F119EA44}
-		{1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{4CF6F78C-22BE-46C4-BC9B-824E8FEEF719} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
 		{CDD4CC0F-5493-40C2-B889-3670263888D8} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
 		{F74AAE01-7B87-44CA-85ED-9A6307D51504} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
@@ -1897,16 +2051,14 @@ Global
 		{7DBC2821-22B2-497F-A594-18CF3EE79940} = {B18CF0D3-3D01-4A64-A9C4-DC0C214BEE42}
 		{B9421FC5-47EB-428D-92C6-F688D02ABE06} = {F260FB5F-C6C7-4948-B638-E4D6986D07ED}
 		{6AC6AC37-0163-4EF2-A49C-2E0B87F73AE9} = {B1AC656F-8F4C-43D5-B5A0-CCF5F119EA44}
-		{E2019836-1C67-47E4-B3AF-D62F4AFC7679} = {ABD89F39-62D9-439E-8662-BE4F36BFA04F}
-		{5F83F8D0-822B-4316-B7DD-85DAFDFAA0E2} = {ABD89F39-62D9-439E-8662-BE4F36BFA04F}
 		{35D17AF3-FDCD-4704-969C-E82DBCC0A232} = {CC362C67-6FC1-42B3-A130-8120AA8D790C}
 		{984F481B-79FF-4825-917B-944F151694BC} = {CC362C67-6FC1-42B3-A130-8120AA8D790C}
 		{B12BECC4-8A58-4DBD-A5CD-144A507972BB} = {CC362C67-6FC1-42B3-A130-8120AA8D790C}
-		{12896A3F-5F7E-4192-8A58-E1D2527109D1} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{12896A3F-5F7E-4192-8A58-E1D2527109D1} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{F7A8000A-D8DA-4A1F-B0B2-9A52183F2012} = {12896A3F-5F7E-4192-8A58-E1D2527109D1}
 		{4E8DA436-8FAF-4028-8A0C-E4EEB3615972} = {12896A3F-5F7E-4192-8A58-E1D2527109D1}
 		{405694F8-0051-4DAE-A991-919FAC36C7DA} = {12896A3F-5F7E-4192-8A58-E1D2527109D1}
-		{5F0BB690-0FBB-455A-AE9A-8BA914AA78F6} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{5F0BB690-0FBB-455A-AE9A-8BA914AA78F6} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{F7103498-8B5B-4698-AACE-9E949F732E77} = {5F0BB690-0FBB-455A-AE9A-8BA914AA78F6}
 		{2EAA690B-1395-4952-95A0-A52F929028C4} = {F7103498-8B5B-4698-AACE-9E949F732E77}
 		{722FE012-8F23-4558-9E8F-A37C02902058} = {F7103498-8B5B-4698-AACE-9E949F732E77}
@@ -1916,7 +2068,7 @@ Global
 		{97062425-3379-4F8D-BFA2-D445C56C0801} = {F7103498-8B5B-4698-AACE-9E949F732E77}
 		{5B20BA13-40FF-4743-AEEE-2E3F887F50C6} = {0439B173-F41E-4CE0-A44A-CCB70328F272}
 		{03EC70B8-912C-4FBE-94DD-6327F4F23021} = {83E698F6-F8CD-4604-AB80-01A203389501}
-		{0A00FAF9-A96B-4BF5-8D42-15C8678F70F3} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{0A00FAF9-A96B-4BF5-8D42-15C8678F70F3} = {D52D5A11-78EF-4154-8298-267738A6715B}
 		{C037F0CE-8223-4D4A-B15F-18B7D6AA447F} = {0A00FAF9-A96B-4BF5-8D42-15C8678F70F3}
 		{E293BB96-5054-497B-BCE5-64AF9B0457B1} = {0A00FAF9-A96B-4BF5-8D42-15C8678F70F3}
 		{FB7AF3F8-44CD-4732-8A25-A43902437B89} = {0A00FAF9-A96B-4BF5-8D42-15C8678F70F3}
@@ -1929,6 +2081,56 @@ Global
 		{10CF8240-4276-4199-B3D1-C45F16468EBD} = {0A00FAF9-A96B-4BF5-8D42-15C8678F70F3}
 		{39DFEFCD-7C73-450F-9A2F-7426188A890B} = {0A00FAF9-A96B-4BF5-8D42-15C8678F70F3}
 		{C465BB41-9DB7-470F-BC7F-A59D2A7D6083} = {0A00FAF9-A96B-4BF5-8D42-15C8678F70F3}
+		{DD1B10ED-73E2-41BE-928A-46501050FE2A} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{7779D9BD-5928-49A2-965F-537967004238} = {DD1B10ED-73E2-41BE-928A-46501050FE2A}
+		{AC41F335-E240-47E0-B409-AFAD1400E626} = {DD1B10ED-73E2-41BE-928A-46501050FE2A}
+		{1D420BA6-2155-4E0D-AAAF-EECC0330A38C} = {DD1B10ED-73E2-41BE-928A-46501050FE2A}
+		{59627844-A66A-46AC-B882-E8F302D0EC24} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{2F49E870-DAE2-4D89-98CA-46BBD91C68E2} = {59627844-A66A-46AC-B882-E8F302D0EC24}
+		{6C8489F4-68B5-4CBC-8463-010C71C23245} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{5177C729-7666-4A6C-9D54-D7E5DEF0E857} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{E4CEED06-B8E9-41FA-82BF-5401AE101C4B} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
+		{9BDE2F3E-6A95-47AC-9BBC-EC8570F2925A} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
+		{B4C8056F-7325-4DB1-9F09-A6F37B052192} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
+		{D5AEBB8E-713C-4DD2-BA18-7B0B48489901} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
+		{CC07A6C2-CD79-4A1E-BE65-C6444AC89C2C} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
+		{DEDB69A9-657F-4B8B-81A7-4ADB19664F35} = {0439B173-F41E-4CE0-A44A-CCB70328F272}
+		{2C86306D-D626-41F8-BA3C-5C9B4123CE7D} = {83E698F6-F8CD-4604-AB80-01A203389501}
+		{2DC43D15-F20F-44EC-B3A3-47BD8BBB50CA} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
+		{3E32DBDA-1C63-42B4-85D1-E84BBD072D89} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
+		{87CE2F0B-0469-4C76-B325-00EA7AB94B99} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{34987F45-8234-428C-AB41-783D42295C32} = {87CE2F0B-0469-4C76-B325-00EA7AB94B99}
+		{227DA969-291B-4749-985C-7A83523B7F53} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
+		{CDE35EAE-4B48-40D2-BF57-68EFC5B5A97C} = {87CE2F0B-0469-4C76-B325-00EA7AB94B99}
+		{F197F8BB-87E3-43FC-92E7-DE8E60EB22E9} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
+		{11CDB632-9A54-439F-8B68-32B3C775BC3A} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{C6D62079-B3F5-4006-AA49-3BF12C4805BB} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{848F6760-9B11-4C9A-9843-9D71DD66D9DA} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{6255DBAD-A388-4418-A5EB-C79630786028} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{A025B8D2-5D92-4023-82AB-97A672A5A132} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
+		{5D99743B-7044-4BE9-8F7A-E195F2A3E2EC} = {3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D}
+		{E09E476C-9DF8-46AC-848E-4E7635369117} = {3CDBA2A6-DC8A-48C5-8A6C-AF207394B43D}
+		{E414F7BC-215C-46D0-99EC-CD78EB31FC3C} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
+		{8142FB8C-3D32-4062-BD95-B2F61A1A390A} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
+		{4155336A-DC06-4885-878D-03AF5DFAF47D} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
+		{ADAB35CB-A34E-448D-ACBB-FA054A3B90AA} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
+		{1B112FAC-CB57-48B6-A3D5-95456477CB8D} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
+		{B84E4D98-0B10-4189-8572-F6F7B4E384B7} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
+		{E81EC3E4-521F-4C52-8AA0-A783847E764E} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
+		{49EB2864-B715-47DD-AE47-C5243C656F47} = {D01D859E-4B72-478A-BABD-90F0981652D5}
+		{A057F430-AD93-49D9-8080-6E074AF05694} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{68538541-4280-46F5-BA08-99ACA8575615} = {1A23BB7F-1839-4204-88C5-7E9A6C9FBF1E}
+		{F6F93723-5BC3-4D25-A83E-25B41B6D956F} = {A057F430-AD93-49D9-8080-6E074AF05694}
+		{6A3FF105-7E8B-4B4D-A736-1C2BAF86FDAA} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{77ED7922-BF30-4436-8A85-78F812583913} = {D52D5A11-78EF-4154-8298-267738A6715B}
+		{109BF321-1BC6-4031-A59B-7B5375EBA8C5} = {77ED7922-BF30-4436-8A85-78F812583913}
+		{08A78A69-913B-4C5E-BCE0-739585F82D1E} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
+		{4FAE314C-36CB-4E3F-85B7-41D0A428B37D} = {C5CAD011-DF84-4914-939C-0C029DCEF26F}
+		{B6857FC4-97C2-4E20-B005-1FAABC574B88} = {4FAE314C-36CB-4E3F-85B7-41D0A428B37D}
+		{B6D4AADE-3ABA-45E6-9916-2F8798412549} = {4FAE314C-36CB-4E3F-85B7-41D0A428B37D}
+		{86E85013-7C71-4770-9323-18897A64F5B2} = {4FAE314C-36CB-4E3F-85B7-41D0A428B37D}
+		{014A9583-0EAA-48A4-ACBE-07DC88159E13} = {4FAE314C-36CB-4E3F-85B7-41D0A428B37D}
+		{AAC0C407-B4B9-4E90-99FC-2D793AC229D9} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

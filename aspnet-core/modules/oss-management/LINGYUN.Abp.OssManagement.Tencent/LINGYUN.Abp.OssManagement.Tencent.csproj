@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\cloud-tencent\LINGYUN.Abp.BlobStoring.Tencent\LINGYUN.Abp.BlobStoring.Tencent.csproj" />
+		<ProjectReference Include="..\..\..\framework\cloud-tencent\LINGYUN.Abp.BlobStoring.Tencent\LINGYUN.Abp.BlobStoring.Tencent.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.OssManagement.Domain\LINGYUN.Abp.OssManagement.Domain.csproj" />
 	</ItemGroup>
 

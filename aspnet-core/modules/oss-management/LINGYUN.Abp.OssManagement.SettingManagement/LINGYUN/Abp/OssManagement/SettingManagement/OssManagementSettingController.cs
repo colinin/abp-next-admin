@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.OssManagement.SettingManagement
     [RemoteService(Name = OssManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("settingManagement")]
     [Route("api/setting-management/oss-management")]
-    public class OssManagementSettingController : AbpController, IOssManagementSettingAppService
+    public class OssManagementSettingController : AbpControllerBase, IOssManagementSettingAppService
     {
         protected IOssManagementSettingAppService WeChatSettingAppService { get; }
 

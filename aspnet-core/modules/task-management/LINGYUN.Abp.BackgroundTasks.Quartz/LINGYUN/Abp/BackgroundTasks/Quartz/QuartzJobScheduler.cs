@@ -45,6 +45,9 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
             {
                 await Scheduler.PauseTrigger(trigger.Key, cancellationToken);
             }
+
+            // 当暂停作业时, 需要停止已经在执行中的作业
+            await Scheduler.Interrupt(jobKey, cancellationToken);
         }
     }
 
@@ -114,6 +117,10 @@ public class QuartzJobScheduler : IJobScheduler, IJobPublisher, ISingletonDepend
         {
             await Scheduler.PauseTrigger(trigger.Key, cancellationToken);
         }
+
+        // 当删除作业时, 需要停止已经在执行中的作业
+        await Scheduler.Interrupt(jobKey, cancellationToken);
+
         await Scheduler.DeleteJob(jobKey, cancellationToken);
 
         return !await Scheduler.CheckExists(jobKey, cancellationToken);

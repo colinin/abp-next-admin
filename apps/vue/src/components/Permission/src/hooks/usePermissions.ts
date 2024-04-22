@@ -3,8 +3,8 @@ import type { PermissionProps, PermissionTree } from '../types/permission';
 
 import { computed, watch, unref, ref } from 'vue';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
-import { get, update } from '/@/api/permission-management/permission';
-import { PermissionProvider } from '/@/api/permission-management/model/permissionModel';
+import { get, update } from '/@/api/permission-management/permissions';
+import { PermissionProvider } from '/@/api/permission-management/permissions/model';
 import {
   generatePermissionTree,
   getGrantedPermissionKeys,

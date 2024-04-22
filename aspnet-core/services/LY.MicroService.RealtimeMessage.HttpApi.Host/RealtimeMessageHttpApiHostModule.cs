@@ -9,9 +9,11 @@ using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
+using LINGYUN.Abp.Features.LimitValidation.Redis;
 using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.WeChat;
+using LINGYUN.Abp.Identity.WeChat.Work;
 using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
@@ -22,10 +24,10 @@ using LINGYUN.Abp.Notifications.Common;
 using LINGYUN.Abp.Notifications.Emailing;
 using LINGYUN.Abp.Notifications.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications.Jobs;
-using LINGYUN.Abp.Notifications.PushPlus;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
+using LINGYUN.Abp.Notifications.WeChat.Work;
 using LINGYUN.Abp.Notifications.WxPusher;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -64,6 +66,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsApplicationModule),
     typeof(AbpNotificationsHttpApiModule),
     typeof(AbpIdentityWeChatModule),
+    typeof(AbpIdentityWeChatWorkModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
     typeof(AbpBackgroundTasksExceptionHandlingModule),
@@ -89,11 +92,12 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsEmailingModule),
     typeof(AbpNotificationsSignalRModule),
     typeof(AbpNotificationsWxPusherModule),
-    typeof(AbpNotificationsPushPlusModule),
     typeof(AbpNotificationsWeChatMiniProgramModule),
+    typeof(AbpNotificationsWeChatWorkModule),
     typeof(AbpNotificationsExceptionHandlingModule),
     typeof(AbpTextTemplatingScribanModule),
     typeof(AbpCAPEventBusModule),
+    typeof(AbpFeaturesValidationRedisModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
@@ -109,8 +113,9 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        PreConfigureApp();
         PreConfigureFeature();
+        PreForwardedHeaders();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
         PreConfigureSignalR(configuration);
@@ -121,6 +126,7 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureNotifications();
@@ -142,6 +148,7 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
+        app.UseForwardedHeaders();
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统

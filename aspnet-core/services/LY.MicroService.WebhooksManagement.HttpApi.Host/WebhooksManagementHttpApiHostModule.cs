@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -76,6 +77,7 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpDaprClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WebhooksManagementHttpApiHostModule : AbpModule
@@ -84,8 +86,9 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        PreConfigureApp();
         PreConfigureFeature();
+        PreForwardedHeaders();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
     }
@@ -96,6 +99,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
+        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureExceptionHandling();
@@ -119,12 +123,13 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
+        app.UseForwardedHeaders();
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
+        app.UseDynamicClaims();
         app.UseMultiTenancy();
         app.UseMapRequestLocalization();
         app.UseAuthorization();

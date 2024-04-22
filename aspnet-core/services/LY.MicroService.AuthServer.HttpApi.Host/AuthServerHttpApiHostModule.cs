@@ -68,8 +68,9 @@ public partial class AuthServerHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        PreConfigureApp();
         PreConfigureFeature();
+        PreForwardedHeaders();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureIdentity();
     }
@@ -79,6 +80,7 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigreExceptionHandling();
@@ -99,6 +101,7 @@ public partial class AuthServerHttpApiHostModule : AbpModule
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
+        app.UseForwardedHeaders();
         // 本地化
         app.UseMapRequestLocalization();
         // http调用链
@@ -111,6 +114,7 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         // 认证
         app.UseAuthentication();
+        app.UseDynamicClaims();
         // 多租户
         app.UseMultiTenancy();
         // 授权

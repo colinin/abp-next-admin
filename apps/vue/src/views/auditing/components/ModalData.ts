@@ -1,7 +1,17 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
 
-const { L } = useLocalization('AbpAuditLogging');
+const { L } = useLocalization(['AbpAuditLogging']);
+
+const httpMethodOptions = [
+  { value: 'GET', label: 'GET' },
+  { value: 'PUT', label: 'PUT' },
+  { value: 'POST', label: 'POST' },
+  { value: 'PATCH', label: 'PATCH' },
+  { value: 'DELETE', label: 'DELETE' },
+  { value: 'OPTIONS', label: 'OPTIONS' },
+  { value: 'HEAD', label: 'HEAD' },
+];
 
 const httpStatusCodeOptions = [
   { value: 100, label: '100 - Continue' },
@@ -52,8 +62,9 @@ const httpStatusCodeOptions = [
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
     labelWidth: 100,
+    alwaysShowLines: 3,
     fieldMapToTime: [
-      ['dateRange', ['startTime', 'endTime'], ['YYYY-MM-DDT00:00:00', 'YYYY-MM-DDT00:00:00']],
+      ['executionTime', ['startTime', 'endTime'], ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD HH:mm:ss']],
     ],
     schemas: [
       {
@@ -69,9 +80,15 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         colProps: { span: 6 },
       },
       {
-        field: 'httpMethod',
+        field: 'clientId',
         component: 'Input',
-        label: L('HttpMethod'),
+        label: L('ClientId'),
+        colProps: { span: 6 },
+      },
+      {
+        field: 'clientIpAddress',
+        component: 'Input',
+        label: L('ClientIpAddress'),
         colProps: { span: 6 },
       },
       {
@@ -84,10 +101,44 @@ export function getSearchFormSchemas(): Partial<FormProps> {
         },
       },
       {
+        field: 'httpMethod',
+        component: 'Select',
+        label: L('HttpMethod'),
+        colProps: { span: 6 },
+        componentProps: {
+          options: httpMethodOptions,
+        }
+      },
+      {
         field: 'url',
         component: 'Input',
         label: L('RequestUrl'),
         colProps: { span: 12 },
+      },
+      {
+        field: 'executionTime',
+        component: 'RangePicker',
+        label: L('ExecutionTime'),
+        colProps: { span: 8 },
+        componentProps: {
+          showTime: true,
+          style: {
+            width: '100%'
+          },
+        },
+      },
+      {
+        field: 'correlationId',
+        component: 'Input',
+        label: L('CorrelationId'),
+        colProps: { span: 10 },
+      },
+      {
+        field: 'hasException',
+        component: 'Checkbox',
+        label: L('HasException'),
+        colProps: { span: 6 },
+        renderComponentContent: L('HasException'),
       },
       {
         field: 'minExecutionDuration',
@@ -112,30 +163,6 @@ export function getSearchFormSchemas(): Partial<FormProps> {
             width: '100%',
           },
         },
-      },
-      {
-        field: 'correlationId',
-        component: 'Input',
-        label: L('CorrelationId'),
-        colProps: { span: 6 },
-      },
-      {
-        field: 'dateRange',
-        component: 'RangePicker',
-        label: L('StartTime'),
-        colProps: { span: 12 },
-        componentProps: {
-          style: {
-            width: '100%'
-          },
-        },
-      },
-      {
-        field: 'hasException',
-        component: 'Checkbox',
-        label: L('HasException'),
-        colProps: { span: 6 },
-        renderComponentContent: L('HasException'),
       },
     ],
   };

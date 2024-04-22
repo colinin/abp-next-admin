@@ -14,20 +14,12 @@ namespace LINGYUN.Abp.OssManagement.FileSystem.ImageSharp
 {
     public class ImageSharpProcesserContributor : IFileSystemOssObjectProcesserContributor
     {
-        protected static readonly string[] ImageTypes = new string[]
-        {
-            "6677",// bmp
-            "7173",// gif
-            "13780",// png
-            "255216"// jpg
-        };
-        
         public async virtual Task ProcessAsync(FileSystemOssObjectContext context)
         {
             var copyStream = context.OssObject.Content;
             var bytes = await copyStream.GetAllBytesAsync();
 
-            if (IsImage(bytes))
+            if (bytes.IsImage())
             {
                 var args = context.Process.Split(',');
                 if (DrawGraphics(bytes, args, out var content))
@@ -42,11 +34,11 @@ namespace LINGYUN.Abp.OssManagement.FileSystem.ImageSharp
 
         protected virtual bool DrawGraphics(byte[] fileBytes, string[] args, out Stream content)
         {
-            using var image = Image.Load(fileBytes, out var format);
+            using var image = Image.Load(fileBytes);
 
             // 大小
-            var width = GetInt32Prarm(args, "w_");
-            var height = GetInt32Prarm(args, "h_");
+            var width = args.GetInt32Prarm("w_");
+            var height = args.GetInt32Prarm("h_");
             if (!width.IsNullOrWhiteSpace() &&
                 !height.IsNullOrWhiteSpace())
             {
@@ -69,54 +61,11 @@ namespace LINGYUN.Abp.OssManagement.FileSystem.ImageSharp
             // TODO: 其他处理参数及现有的优化
 
             var imageStream = new MemoryStream();
-            var encoder = image.GetConfiguration().ImageFormatsManager.FindEncoder(format);
-            image.Save(imageStream, encoder);
+            image.Save(imageStream, image.Metadata.DecodedImageFormat);
             imageStream.Seek(0, SeekOrigin.Begin);
 
             content = imageStream;
             return true;
-        }
-
-        private static bool IsImage(byte[] fileBytes)
-        {
-            if (fileBytes.IsNullOrEmpty())
-            {
-                return false;
-            }
-
-            string fileclass = "";
-            for (int i = 0; i < 2; i++)
-            {
-                fileclass += fileBytes[i].ToString();
-            }
-
-            return ImageTypes.Any(type => type.Equals(fileclass));
-        }
-
-        private static string GetString(string[] args, string key)
-        {
-            if (!args.Any())
-            {
-                return null;
-            }
-
-            return args
-                .Where(arg => arg.StartsWith(key))
-                .Select(arg => arg.Substring(key.Length))
-                .FirstOrDefault();
-        }
-
-        private static string GetInt32Prarm(string[] args, string key)
-        {
-            if (!args.Any())
-            {
-                return null;
-            }
-
-            return args
-                .Where(arg => arg.StartsWith(key))
-                .Select(arg => arg.Substring(key.Length))
-                .FirstOrDefault(arg => int.TryParse(arg, out _));
         }
     }
 }

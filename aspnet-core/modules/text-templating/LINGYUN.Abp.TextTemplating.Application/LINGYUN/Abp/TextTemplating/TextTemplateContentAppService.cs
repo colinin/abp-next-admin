@@ -10,16 +10,16 @@ public class TextTemplateContentAppService : AbpTextTemplatingAppServiceBase, IT
 {
     protected ITextTemplateRepository TextTemplateRepository { get; }
     protected ITemplateContentProvider TemplateContentProvider { get; }
-    protected ITemplateDefinitionStore TemplateDefinitionStore { get; }
+    protected ITemplateDefinitionManager TemplateDefinitionManager { get; }
 
     public TextTemplateContentAppService(
         ITextTemplateRepository textTemplateRepository,
         ITemplateContentProvider templateContentProvider,
-        ITemplateDefinitionStore templateDefinitionStore)
+        ITemplateDefinitionManager templateDefinitionManager)
     {
         TextTemplateRepository = textTemplateRepository;
         TemplateContentProvider = templateContentProvider;
-        TemplateDefinitionStore = templateDefinitionStore;
+        TemplateDefinitionManager = templateDefinitionManager;
     }
 
     public async virtual Task<TextTemplateContentDto> GetAsync(TextTemplateContentGetInput input)
@@ -120,7 +120,7 @@ public class TextTemplateContentAppService : AbpTextTemplatingAppServiceBase, IT
 
     protected async virtual Task<TemplateDefinition> GetTemplateDefinition(string name)
     {
-        return await TemplateDefinitionStore.GetOrNullAsync(name)
+        return await TemplateDefinitionManager.GetOrNullAsync(name)
             ?? throw new BusinessException(AbpTextTemplatingErrorCodes.TextTemplateDefinition.TemplateNotFound)
                     .WithData(nameof(TextTemplateDefinition.Name), name);
     }

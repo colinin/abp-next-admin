@@ -4,6 +4,7 @@ using LINGYUN.Abp.WebhooksManagement.Definitions.Dto;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -19,106 +20,109 @@ public class WebhookDefinitionAppService : WebhooksManagementAppServiceBase, IWe
 {
     private readonly ILocalizableStringSerializer _localizableStringSerializer;
     private readonly IWebhookDefinitionManager _webhookDefinitionManager;
-
+    private readonly IStaticWebhookDefinitionStore _staticWebhookDefinitionStore;
     private readonly IWebhookDefinitionRecordRepository _webhookDefinitionRecordRepository;
 
     public WebhookDefinitionAppService(
         ILocalizableStringSerializer localizableStringSerializer,
         IWebhookDefinitionManager webhookDefinitionManager,
-        IWebhookDefinitionRecordRepository webhookDefinitionRecordRepository)
+        IWebhookDefinitionRecordRepository webhookDefinitionRecordRepository,
+        IStaticWebhookDefinitionStore staticWebhookDefinitionStore)
     {
         _localizableStringSerializer = localizableStringSerializer;
         _webhookDefinitionManager = webhookDefinitionManager;
         _webhookDefinitionRecordRepository = webhookDefinitionRecordRepository;
+        _staticWebhookDefinitionStore = staticWebhookDefinitionStore;
     }
 
     [Authorize(WebhooksManagementPermissions.WebhookDefinition.Create)]
     public async virtual Task<WebhookDefinitionDto> CreateAsync(WebhookDefinitionCreateDto input)
     {
+        if (await _staticWebhookDefinitionStore.GetGroupOrNullAsync(input.GroupName) != null)
+        {
+            throw new BusinessException(WebhooksManagementErrorCodes.WebhookGroupDefinition.StaticGroupNotAllowedChanged)
+                .WithData(nameof(WebhookDefinitionRecord.Name), input.GroupName);
+        }
+
         if (await _webhookDefinitionManager.GetOrNullAsync(input.Name) != null)
         {
             throw new BusinessException(WebhooksManagementErrorCodes.WebhookDefinition.AlreayNameExists)
                 .WithData(nameof(WebhookDefinitionRecord.Name), input.Name);
         }
 
-        var webhookDefinitionRecord = new WebhookDefinitionRecord(
+        var webhookDefinitionRecord = await _webhookDefinitionRecordRepository.FindByNameAsync(input.Name);
+        if (webhookDefinitionRecord != null)
+        {
+            throw new BusinessException(WebhooksManagementErrorCodes.WebhookDefinition.AlreayNameExists)
+               .WithData("Name", input.Name);
+        }
+
+        webhookDefinitionRecord = new WebhookDefinitionRecord(
             GuidGenerator.Create(),
             input.GroupName,
             input.Name,
-            input.DisplayName,
-            input.Description,
-            input.IsEnabled,
-            input.RequiredFeatures);
-
-        foreach (var property in input.ExtraProperties)
-        {
-            webhookDefinitionRecord.SetProperty(property.Key, property.Value);
-        }
+            input.DisplayName);
+        UpdateByInput(webhookDefinitionRecord, input);
 
         await _webhookDefinitionRecordRepository.InsertAsync(webhookDefinitionRecord);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        var dto = await WebhookDefinitionRecordToDto(webhookDefinitionRecord);
-
-        return dto;
+        return DefinitionRecordToDto(webhookDefinitionRecord);
     }
 
     [Authorize(WebhooksManagementPermissions.WebhookDefinition.Delete)]
     public async virtual Task DeleteAsync(string name)
     {
         var webhookDefinitionRecord = await _webhookDefinitionRecordRepository.FindByNameAsync(name);
-        if (webhookDefinitionRecord == null)
+        if (webhookDefinitionRecord != null)
         {
-            return;
-        }
+            await _webhookDefinitionRecordRepository.DeleteAsync(webhookDefinitionRecord);
 
-        await _webhookDefinitionRecordRepository.DeleteAsync(webhookDefinitionRecord);
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
     }
 
     public async virtual Task<WebhookDefinitionDto> GetAsync(string name)
     {
-        var webhookDefinition = await _webhookDefinitionManager.GetAsync(name);
-
-        var dto = await WebhookDefinitionToDto(webhookDefinition);
-
-        return dto;
+        var webhookDefinition = await _staticWebhookDefinitionStore.GetOrNullAsync(name);
+        if (webhookDefinition != null)
+        {
+            return DefinitionToDto(webhookDefinition, true);
+        }
+        var webhookDefinitionRecord = await _webhookDefinitionRecordRepository.GetByNameAsync(name);
+        return DefinitionRecordToDto(webhookDefinitionRecord);
     }
 
-    public async virtual Task<PagedResultDto<WebhookDefinitionDto>> GetListAsync(WebhookDefinitionGetListInput input)
+    public async virtual Task<ListResultDto<WebhookDefinitionDto>> GetListAsync(WebhookDefinitionGetListInput input)
     {
-        var webhooks = new List<WebhookDefinitionDto>();
+        var webhookDtoList = new List<WebhookDefinitionDto>();
+        var staticWebhooks = await _staticWebhookDefinitionStore.GetWebhooksAsync();
+        var staticWebhookNames = staticWebhooks
+            .Select(p => p.Name)
+            .ToImmutableHashSet();
+        webhookDtoList.AddRange(staticWebhooks.Select(d => DefinitionToDto(d, true, true)));
 
-        var webhookDefinitions = await _webhookDefinitionManager.GetWebhooksAsync();
+        var dynamicWebhooks = await _webhookDefinitionRecordRepository.GetListAsync();
+        webhookDtoList.AddRange(dynamicWebhooks
+            .Where(d => !staticWebhookNames.Contains(d.Name))
+            .Select(d => DefinitionRecordToDto(d)));
 
-        var webhookDefinitionFilter = webhookDefinitions.AsQueryable()
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x =>
-                x.Name.Contains(input.Filter) || x.GroupName.Contains(input.Filter));
-
-        var sorting = input.Sorting;
-        if (sorting.IsNullOrWhiteSpace())
-        {
-            sorting = nameof(WebhookDefinitionRecord.Name);
-        }
-
-        var filterDefinitionCount = webhookDefinitionFilter.Count();
-        var filterDefinitions = webhookDefinitionFilter
-            .OrderBy(sorting)
-            .PageBy(input.SkipCount, input.MaxResultCount);
-
-        foreach (var webhookDefinition in filterDefinitions)
-        {
-            var webhookDto = await WebhookDefinitionToDto(webhookDefinition);
-
-            webhooks.Add(webhookDto);
-        }
-
-        return new PagedResultDto<WebhookDefinitionDto>(filterDefinitionCount, webhooks);
+        return new ListResultDto<WebhookDefinitionDto>(webhookDtoList
+            .WhereIf(!input.GroupName.IsNullOrWhiteSpace(), x => x.GroupName.Equals(input.GroupName))
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter) || x.DisplayName.Contains(input.Filter))
+            .ToList());
     }
 
     [Authorize(WebhooksManagementPermissions.WebhookDefinition.Update)]
     public async virtual Task<WebhookDefinitionDto> UpdateAsync(string name, WebhookDefinitionUpdateDto input)
     {
+        if (await _staticWebhookDefinitionStore.GetOrNullAsync(name) != null)
+        {
+            throw new BusinessException(WebhooksManagementErrorCodes.WebhookDefinition.StaticWebhookNotAllowedChanged)
+              .WithData("Name", name);
+        }
+
         var webhookDefinition = await _webhookDefinitionManager.GetAsync(name);
         var webhookDefinitionRecord = await _webhookDefinitionRecordRepository.FindByNameAsync(name);
 
@@ -128,78 +132,69 @@ public class WebhookDefinitionAppService : WebhooksManagementAppServiceBase, IWe
                 GuidGenerator.Create(),
                 webhookDefinition.GroupName,
                 name,
-                input.DisplayName,
-                input.Description,
-                input.IsEnabled,
-                input.RequiredFeatures);
-
-            foreach (var property in input.ExtraProperties)
-            {
-                webhookDefinitionRecord.SetProperty(property.Key, property.Value);
-            }
+                input.DisplayName);
+            UpdateByInput(webhookDefinitionRecord, input);
 
             webhookDefinitionRecord = await _webhookDefinitionRecordRepository.InsertAsync(webhookDefinitionRecord);
         }
         else
         {
-            webhookDefinitionRecord.ExtraProperties.Clear();
-            foreach (var property in input.ExtraProperties)
-            {
-                webhookDefinitionRecord.SetProperty(property.Key, property.Value);
-            }
-
-            if (!string.Equals(webhookDefinitionRecord.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))
-            {
-                webhookDefinitionRecord.Description = input.Description;
-            }
-            if (!string.Equals(webhookDefinitionRecord.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
-            {
-                webhookDefinitionRecord.DisplayName = input.DisplayName;
-            }
-            if (!string.Equals(webhookDefinitionRecord.RequiredFeatures, input.RequiredFeatures, StringComparison.InvariantCultureIgnoreCase))
-            {
-                webhookDefinitionRecord.RequiredFeatures = input.RequiredFeatures;
-            }
-            webhookDefinitionRecord.IsEnabled = input.IsEnabled;
-
+            UpdateByInput(webhookDefinitionRecord, input);
             webhookDefinitionRecord = await _webhookDefinitionRecordRepository.UpdateAsync(webhookDefinitionRecord);
         }
         
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        var dto = await WebhookDefinitionRecordToDto(webhookDefinitionRecord);
-
-        if (webhookDefinition.Properties.TryGetValue("IsStatic", out var isStaticObj) &&
-            isStaticObj is bool isStatic)
-        {
-            dto.IsStatic = isStatic;
-        }
-
-        return dto;
+        return DefinitionRecordToDto(webhookDefinitionRecord);
     }
 
-    protected async virtual Task<WebhookDefinitionDto> WebhookDefinitionRecordToDto(WebhookDefinitionRecord webhookDefinitionRecord)
+    protected virtual void UpdateByInput(WebhookDefinitionRecord record, WebhookDefinitionCreateOrUpdateDto input)
+    {
+        record.IsEnabled = input.IsEnabled;
+        record.ExtraProperties.Clear();
+        foreach (var property in input.ExtraProperties)
+        {
+            record.SetProperty(property.Key, property.Value);
+        }
+
+        if (!string.Equals(record.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.Description = input.Description;
+        }
+        if (!string.Equals(record.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.DisplayName = input.DisplayName;
+        }
+
+        string requiredFeatures = null;
+        if (!input.RequiredFeatures.IsNullOrEmpty())
+        {
+            requiredFeatures = input.RequiredFeatures.JoinAsString(",");
+        }
+        if (!string.Equals(record.RequiredFeatures, requiredFeatures, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.RequiredFeatures = requiredFeatures;
+        }
+    }
+
+    protected virtual WebhookDefinitionDto DefinitionRecordToDto(WebhookDefinitionRecord record)
     {
         var webhookDto = new WebhookDefinitionDto
         {
-            FormatedDescription = webhookDefinitionRecord.Description,
-            FormatedDisplayName = webhookDefinitionRecord.DisplayName,
-            GroupName = webhookDefinitionRecord.GroupName,
-            IsEnabled = webhookDefinitionRecord.IsEnabled,
-            Name = webhookDefinitionRecord.Name,
-            RequiredFeatures = webhookDefinitionRecord.RequiredFeatures,
+            IsStatic = false,
+            Description = record.Description,
+            DisplayName = record.DisplayName,
+            GroupName = record.GroupName,
+            IsEnabled = record.IsEnabled,
+            Name = record.Name,
         };
 
-        var displayName = _localizableStringSerializer.Deserialize(webhookDefinitionRecord.DisplayName);
-        webhookDto.DisplayName = await displayName.LocalizeAsync(StringLocalizerFactory);
-
-        if (!webhookDefinitionRecord.Description.IsNullOrWhiteSpace())
+        if (!record.RequiredFeatures.IsNullOrWhiteSpace())
         {
-            var description = _localizableStringSerializer.Deserialize(webhookDefinitionRecord.Description);
-            webhookDto.Description = await description.LocalizeAsync(StringLocalizerFactory);
+            webhookDto.RequiredFeatures = record.RequiredFeatures.Split(',').ToList();
         }
 
-        foreach (var property in webhookDefinitionRecord.ExtraProperties)
+        foreach (var property in record.ExtraProperties)
         {
             webhookDto.SetProperty(property.Key, property.Value);
         }
@@ -207,45 +202,24 @@ public class WebhookDefinitionAppService : WebhooksManagementAppServiceBase, IWe
         return webhookDto;
     }
 
-    protected async virtual Task<WebhookDefinitionDto> WebhookDefinitionToDto(WebhookDefinition webhookDefinition)
+    protected virtual WebhookDefinitionDto DefinitionToDto(WebhookDefinition definition, bool isStatic = false, bool isEnabled = true)
     {
         var webhookDto = new WebhookDefinitionDto
         {
-            GroupName = webhookDefinition.GroupName,
-            Name = webhookDefinition.Name,
-            RequiredFeatures = webhookDefinition.RequiredFeatures.JoinAsString(";"),
+            GroupName = definition.GroupName,
+            Name = definition.Name,
+            IsStatic = isStatic,
+            IsEnabled = isEnabled,
+            RequiredFeatures = definition.RequiredFeatures,
+            DisplayName = _localizableStringSerializer.Serialize(definition.DisplayName),
         };
 
-        if (webhookDefinition.DisplayName != null)
+        if (definition.Description != null)
         {
-            webhookDto.DisplayName = await webhookDefinition.DisplayName.LocalizeAsync(StringLocalizerFactory);
-            webhookDto.FormatedDisplayName = _localizableStringSerializer.Serialize(webhookDefinition.DisplayName);
+            webhookDto.Description = _localizableStringSerializer.Serialize(definition.Description);
         }
 
-        if (webhookDefinition.Description != null)
-        {
-            webhookDto.Description = await webhookDefinition.Description.LocalizeAsync(StringLocalizerFactory);
-            webhookDto.FormatedDescription = _localizableStringSerializer.Serialize(webhookDefinition.Description);
-        }
-
-        if (webhookDefinition.Properties.TryGetValue(nameof(WebhookDefinitionRecord.IsEnabled), out var isEnabledObj) &&
-            isEnabledObj is bool isEnabled)
-        {
-            webhookDto.IsEnabled = isEnabled;
-        }
-
-        if (webhookDefinition.Properties.TryGetValue("IsStatic", out var isStaticObj) &&
-            isStaticObj is bool isStatic)
-        {
-            webhookDto.IsStatic = isStatic;
-        }
-
-        var ignoreFiledNames = new string[]
-        {
-            "IsStatic", nameof(WebhookDefinitionRecord.IsEnabled)
-        };
-
-        foreach (var property in webhookDefinition.Properties.Where(x => !ignoreFiledNames.Contains(x.Key)))
+        foreach (var property in definition.Properties)
         {
             webhookDto.SetProperty(property.Key, property.Value);
         }

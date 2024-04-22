@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.OssManagement
     [RemoteService(Name = OssManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("oss-management")]
     [Route("api/oss-management/containes")]
-    public class OssContainerController : AbpController, IOssContainerAppService
+    public class OssContainerController : AbpControllerBase, IOssContainerAppService
     {
         protected IOssContainerAppService OssContainerAppService { get; }
 

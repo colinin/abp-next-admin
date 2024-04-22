@@ -1,0 +1,29 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Delete": "Delete",
+    "DisplayName:Enable": "Enable",
+    "DisplayName:CreationTime": "Creation Time",
+    "DisplayName:LastModificationTime": "Modification Time",
+    "DisplayName:SaveAndNext": "Save & Next",
+    "Permissions:LocalizationManagement": "Localization",
+    "Permissions:Language": "Language",
+    "Permissions:Resource": "Resource",
+    "Permissions:Text": "Text",
+    "Permissions:Create": "Create",
+    "Permissions:Update": "Update",
+    "Permissions:Delete": "Delete",
+    "Edit": "Edit",
+    "EditByName": "Edit - {0}",
+    "Filter": "Filter",
+    "SaveAndNext": "Save & Next",
+    "SearchFilter": "Search",
+    "Text:AddNew": "New Text",
+    "Language:AddNew": "New Language",
+    "Resource:AddNew": "New Resource",
+    "Localization:001100": "Language {CultureName} already exists!",
+    "Localization:001400": "Language name {CultureName} not found or built-in language operation not allowed!",
+    "Localization:002100": "Resource {Name} already exists!",
+    "Localization:002400": "Resource Name {Name} not found or built-in resource operation not allowed!"
+  }
+}

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Scopes;
 
@@ -16,21 +17,23 @@ namespace LINGYUN.Abp.OpenIddict.Scopes;
 public class OpenIddictScopeAppService : OpenIddictApplicationServiceBase, IOpenIddictScopeAppService
 {
     private readonly IOpenIddictScopeManager _scopeManager;
-
     private readonly IOpenIddictScopeRepository _scoppeRepository;
+    private readonly AbpOpenIddictIdentifierConverter _identifierConverter;
 
     public OpenIddictScopeAppService(
         IOpenIddictScopeManager scopeManager,
-        IOpenIddictScopeRepository scopeRepository)
+        IOpenIddictScopeRepository scopeRepository,
+        AbpOpenIddictIdentifierConverter identifierConverter)
     {
         _scopeManager = scopeManager;
         _scoppeRepository = scopeRepository;
+        _identifierConverter = identifierConverter;
     }
 
     [Authorize(AbpOpenIddictPermissions.Scopes.Create)]
     public async virtual Task<OpenIddictScopeDto> CreateAsync(OpenIddictScopeCreateDto input)
     {
-        if (await _scoppeRepository.FindByNameAsync(input.Name) != null)
+        if (await _scopeManager.FindByNameAsync(input.Name) != null)
         {
             throw new BusinessException(OpenIddictApplicationErrorCodes.Scopes.NameExisted)
                 .WithData(nameof(OpenIddictScope.Name), input.Name);
@@ -40,9 +43,9 @@ public class OpenIddictScopeAppService : OpenIddictApplicationServiceBase, IOpen
 
         scope = input.ToEntity(scope, JsonSerializer);
 
-        scope = await _scoppeRepository.InsertAsync(scope);
+        await _scopeManager.CreateAsync(scope.ToModel());
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        scope = await _scoppeRepository.FindByIdAsync(scope.Id);
 
         return scope.ToDto(JsonSerializer);
     }
@@ -50,9 +53,9 @@ public class OpenIddictScopeAppService : OpenIddictApplicationServiceBase, IOpen
     [Authorize(AbpOpenIddictPermissions.Scopes.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
-        var scope = await _scoppeRepository.GetAsync(id);
+        var scope = await _scopeManager.FindByIdAsync(_identifierConverter.ToString(id));
 
-        await _scopeManager.DeleteAsync(scope.ToModel());
+        await _scopeManager.DeleteAsync(scope);
     }
 
     public async virtual Task<OpenIddictScopeDto> GetAsync(Guid id)
@@ -87,11 +90,9 @@ public class OpenIddictScopeAppService : OpenIddictApplicationServiceBase, IOpen
 
         scope = input.ToEntity(scope, JsonSerializer);
 
-        var cache = LazyServiceProvider.LazyGetRequiredService<IOpenIddictScopeCache<OpenIddictScopeModel>>();
+        await _scopeManager.UpdateAsync(scope.ToModel());
 
-        await cache.RemoveAsync(scope.ToModel(), GetCancellationToken());
-
-        await _scoppeRepository.UpdateAsync(scope);
+        scope = await _scoppeRepository.GetAsync(id);
 
         return scope.ToDto(JsonSerializer);
     }

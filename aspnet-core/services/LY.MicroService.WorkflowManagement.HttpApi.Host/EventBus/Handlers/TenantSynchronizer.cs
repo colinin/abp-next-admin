@@ -1,6 +1,4 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
-using LINGYUN.Abp.MultiTenancy;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -12,7 +10,7 @@ using Volo.Abp.Uow;
 namespace LY.MicroService.WorkflowManagement.EventBus.Handlers;
 
 public class TenantSynchronizer :
-        IDistributedEventHandler<CreateEventData>,
+        IDistributedEventHandler<TenantCreatedEto>,
         ITransientDependency
 {
     protected IDataSeeder DataSeeder { get; }
@@ -42,7 +40,7 @@ public class TenantSynchronizer :
     /// </summary>
     /// <param name="eventData"></param>
     /// <returns></returns>
-    public async virtual Task HandleEventAsync(CreateEventData eventData)
+    public async virtual Task HandleEventAsync(TenantCreatedEto eventData)
     {
         using (var unitOfWork = UnitOfWorkManager.Begin())
         {

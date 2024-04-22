@@ -76,6 +76,11 @@
     <Divider class="enter-x">{{ t('sys.login.otherSignIn') }}</Divider>
 
     <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
+      <GlobalOutlined
+        v-if="getLoginState !== LoginStateEnum.Portal"
+        :title="t('sys.login.portalSignInFormTitle')"
+        @click="setLoginState(LoginStateEnum.Portal)"
+      />
       <SvgIcon
         v-if="getLoginState !== LoginStateEnum.SSO"
         name="idsv4"
@@ -106,7 +111,7 @@
   import { reactive, ref, unref, computed } from 'vue';
 
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
-  import { MobileOutlined, WechatOutlined, UserOutlined } from '@ant-design/icons-vue';
+  import { MobileOutlined, WechatOutlined, UserOutlined, GlobalOutlined } from '@ant-design/icons-vue';
   import { SvgIcon } from '/@/components/Icon';
   import { Input as BInput } from '/@/components/Input';
   import { useModal } from '/@/components/Modal';

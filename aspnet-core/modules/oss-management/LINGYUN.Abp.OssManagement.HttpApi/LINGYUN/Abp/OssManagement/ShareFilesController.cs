@@ -1,12 +1,9 @@
 ﻿using LINGYUN.Abp.OssManagement.Localization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Http;
+using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.OssManagement
 {
@@ -14,7 +11,7 @@ namespace LINGYUN.Abp.OssManagement
     [Route("api/files/share")]
     [RemoteService(false)]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class ShareFilesController : AbpController
+    public class ShareFilesController : AbpControllerBase, IShareFileAppService
     {
         private readonly IShareFileAppService _service;
 
@@ -28,16 +25,9 @@ namespace LINGYUN.Abp.OssManagement
 
         [HttpGet]
         [Route("{url}")]
-        public async virtual Task<IActionResult> GetAsync(string url)
+        public virtual Task<IRemoteStreamContent> GetAsync(string url)
         {
-            var ossObject = await _service.GetAsync(url);
-
-            if (ossObject.Content.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
-
-            return File(ossObject.Content, MimeTypes.GetByExtension(Path.GetExtension(ossObject.Name)));
+            return _service.GetAsync(url);
         }
     }
 }

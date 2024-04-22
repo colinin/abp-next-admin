@@ -2,7 +2,7 @@ import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
 import { NotificationReadState } from '/@/api/messages/model/notificationsModel';
 
-const { L } = useLocalization(['AbpMessageService', 'AbpUi']);
+const { L } = useLocalization(['AbpMessageService', 'Notifications', 'AbpUi']);
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {

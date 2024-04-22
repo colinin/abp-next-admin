@@ -1,6 +1,0 @@
-﻿{
-  "culture": "en",
-  "texts": {
-    "Idempotent:010001": "Unable to submit multiple requests within the time limit, please try again later!"
-  }
-}

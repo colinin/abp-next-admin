@@ -114,9 +114,6 @@
   });
 
   function handleSubmit(input) {
-    if (!props.displayNames && !props.displayNames[input.culture]) {
-      return;
-    }
     emits('create', input);
     resetFields();
   }

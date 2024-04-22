@@ -18,6 +18,7 @@ public class Program
     {
         try
         {
+            Console.Title = "IdentityServer.HttpApi.Host";
             Log.Information("Starting IdentityServer.HttpApi.Host.");
 
             var builder = WebApplication.CreateBuilder(args);

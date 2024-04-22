@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -12,7 +13,7 @@ namespace LINGYUN.Abp.Identity
     [Area("identity")]
     [ControllerName("organization-units")]
     [Route("api/identity/organization-units")]
-    public class OrganizationUnitController : AbpController, IOrganizationUnitAppService
+    public class OrganizationUnitController : AbpControllerBase, IOrganizationUnitAppService
     {
         protected IOrganizationUnitAppService OrganizationUnitAppService { get; }
 

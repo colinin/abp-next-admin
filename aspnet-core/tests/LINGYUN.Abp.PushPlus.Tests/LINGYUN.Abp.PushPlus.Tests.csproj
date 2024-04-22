@@ -1,17 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace />
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\modules\pushplus\LINGYUN.Abp.PushPlus\LINGYUN.Abp.PushPlus.csproj" />
+		<ProjectReference Include="..\..\framework\pushplus\LINGYUN.Abp.PushPlus\LINGYUN.Abp.PushPlus.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
 	</ItemGroup>
 

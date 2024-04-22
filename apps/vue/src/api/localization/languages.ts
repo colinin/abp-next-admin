@@ -1,5 +1,5 @@
 import { defAbpHttp } from '/@/utils/http/abp';
-import { LanguageListResult, LanguageCreate, LanguageUpdate, Language } from './model/languagesModel';
+import { LanguageListResult, LanguageCreate, LanguageUpdate, Language, GetLanguageWithFilter } from './model/languagesModel';
 
 const remoteServiceName = 'LocalizationManagement';
 const controllerName = 'Language';
@@ -8,9 +8,10 @@ enum Api {
   GetList = '/api/abp/localization/languages',
 }
 
-export const getList = () => {
+export const getList = (input: GetLanguageWithFilter) => {
   return defAbpHttp.get<LanguageListResult>({
     url: Api.GetList,
+    params: input,
   });
 };
 
@@ -18,8 +19,8 @@ export const GetAsyncByName = (name: string) => {
   return defAbpHttp.request<Language>({
     service: remoteServiceName,
     controller: controllerName,
-    action: 'GetAsync',
-    uniqueName: 'GetAsyncByName',
+    action: 'GetByNameAsync',
+    uniqueName: 'GetByNameAsyncByName',
     params: {
       name: name,
     },

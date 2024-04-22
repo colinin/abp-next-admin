@@ -26,5 +26,9 @@
         /// 重复确认的邮件地址
         /// </summary>
         public const string DuplicateConfirmEmailAddress = "Volo.Abp.Identity:020010";
+        /// <summary>
+        /// 尝试在未绑定MFA设备时启用二次认证
+        /// </summary>
+        public const string ChangeTwoFactorWithMFANotBound = "Volo.Abp.Identity:020011";
     }
 }

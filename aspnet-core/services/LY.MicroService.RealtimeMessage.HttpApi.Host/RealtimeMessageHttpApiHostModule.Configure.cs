@@ -39,6 +39,10 @@ using Volo.Abp.Quartz;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using LINGYUN.Abp.Notifications.Localization;
+using Microsoft.IdentityModel.Logging;
+using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
+using Microsoft.AspNetCore.HttpOverrides;
+using Volo.Abp.Security.Claims;
 
 namespace LY.MicroService.RealtimeMessage;
 
@@ -56,7 +60,17 @@ public partial class RealtimeMessageHttpApiHostModule
         });
     }
 
-    private void PreConfigureApp()
+    private void PreForwardedHeaders()
+    {
+        PreConfigure<AbpForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+    }
+
+    private void PreConfigureApp(IConfiguration configuration)
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
@@ -67,6 +81,11 @@ public partial class RealtimeMessageHttpApiHostModule
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });
+
+        if (configuration.GetValue<bool>("App:ShowPii"))
+        {
+            IdentityModelEventSource.ShowPII = true;
+        }
     }
 
     private void PreConfigureCAP(IConfiguration configuration)
@@ -107,7 +126,7 @@ public partial class RealtimeMessageHttpApiHostModule
                     config.UsePersistentStore(store =>
                     {
                         store.UseProperties = false;
-                        store.UseJsonSerializer();
+                        store.UseNewtonsoftJsonSerializer();
                     });
                 };
             }
@@ -283,6 +302,14 @@ public partial class RealtimeMessageHttpApiHostModule
         }
     }
 
+    private void ConfigureIdentity()
+    {
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
+    }
+
     private void ConfigureSwagger(IServiceCollection services)
     {
         // Swagger
@@ -377,6 +404,7 @@ public partial class RealtimeMessageHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.MapInboundClaims = false;
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>

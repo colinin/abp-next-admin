@@ -43,7 +43,7 @@ public class WebhookGroupDefinitionController : WebhooksManagementControllerBase
     }
 
     [HttpGet]
-    public virtual Task<PagedResultDto<WebhookGroupDefinitionDto>> GetListAsync(WebhookGroupDefinitionGetListInput input)
+    public virtual Task<ListResultDto<WebhookGroupDefinitionDto>> GetListAsync(WebhookGroupDefinitionGetListInput input)
     {
         return _service.GetListAsync(input);
     }

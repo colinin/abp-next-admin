@@ -30,6 +30,16 @@ public static class JobRunnableContextExtensions
         return context.GetJobData(key).ToString();
     }
 
+    public static string GetOrDefaultString(this JobRunnableContext context, string key, string defaultValue = "")
+    {
+        if (context.TryGetString(key, out var value))
+        {
+            return value;
+        }
+
+        return defaultValue;
+    }
+
     public static bool TryGetString(this JobRunnableContext context, string key, out string value)
     {
         if (context.TryGetJobData(key, out var data) && data != null)
@@ -63,6 +73,16 @@ public static class JobRunnableContextExtensions
         var value = context.GetJobData(key);
 
         return value.To<T>();
+    }
+
+    public static T GetOrDefaultJobData<T>(this JobRunnableContext context, string key, T defaultValue) where T : struct
+    {
+        if (context.TryGetJobData<T>(key, out var value))
+        {
+            return value;
+        }
+
+        return defaultValue;
     }
 
     public static bool TryGetJobData<T>(this JobRunnableContext context, string key, out T value) where T : struct

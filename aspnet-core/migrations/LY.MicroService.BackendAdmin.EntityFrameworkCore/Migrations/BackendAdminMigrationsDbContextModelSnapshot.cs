@@ -18,7 +18,7 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LINGYUN.Abp.Saas.Editions.Edition", b =>
@@ -29,6 +29,7 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -58,6 +59,7 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -90,6 +92,7 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -123,6 +126,7 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -148,11 +152,17 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("varchar(64)");
 
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EditionId");
 
                     b.HasIndex("Name");
+
+                    b.HasIndex("NormalizedName");
 
                     b.ToTable("AbpTenants", (string)null);
                 });
@@ -240,6 +250,7 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -256,6 +267,7 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasColumnName("DisplayName");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
@@ -272,6 +284,11 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)")
                         .HasColumnName("Layout");
+
+                    b.Property<string>("LocalizationResourceName")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)")
+                        .HasColumnName("LocalizationResourceName");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -554,6 +571,55 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .IsUnique();
 
                     b.ToTable("AbpSettings", (string)null);
+                });
+
+            modelBuilder.Entity("Volo.Abp.SettingManagement.SettingDefinitionRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("DefaultValue")
+                        .HasMaxLength(2048)
+                        .HasColumnType("varchar(2048)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsEncrypted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsInherited")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsVisibleToClients")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("Providers")
+                        .HasMaxLength(1024)
+                        .HasColumnType("varchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("AbpSettingDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.Saas.Tenants.Tenant", b =>

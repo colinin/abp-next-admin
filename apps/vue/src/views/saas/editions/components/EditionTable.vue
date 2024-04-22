@@ -48,9 +48,9 @@
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useModal } from '/@/components/Modal';
+  import { FeatureModal } from '/@/components/Abp';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { useFeatureModal } from '../hooks/useFeatureModal';
-  import { FeatureModal } from '../../../feature';
   import { DeleteAsyncById, GetListAsyncByInput } from '/@/api/saas/edition';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas//ModalData';

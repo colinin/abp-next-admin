@@ -2,12 +2,22 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleAddNew">{{ L('Menu:AddNew') }}</a-button>
+        <a-button v-auth="['Platform.Menu.Create']" type="primary" @click="handleAddNew">{{ L('Menu:AddNew') }}</a-button>
       </template>
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'action'">
+        <template v-if="column.key === 'displayName'">
+          <Icon v-if="record.meta.icon" style="margin-right: 10px;" :icon="record.meta.icon" />
+          <span>{{ record.displayName }}</span>
+        </template>
+        <template v-else-if="column.key === 'action'">
           <TableAction
             :actions="[
+              {
+                auth: 'Platform.Menu.Create',
+                label: L('Menu:AddNew'),
+                icon: 'ant-design:plus-outlined',
+                onClick: handleAddNew.bind(null, record),
+              },
               {
                 auth: 'Platform.Menu.Update',
                 label: L('Edit'),
@@ -35,6 +45,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import { Icon } from '/@/components/Icon';
   import { useDrawer } from '/@/components/Drawer';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
@@ -70,7 +81,7 @@
     canResize: false,
     formConfig: getSearchFormSchemas(),
     actionColumn: {
-      width: 160,
+      width: 280,
       title: L('Actions'),
       dataIndex: 'action',
     },
@@ -78,8 +89,11 @@
 
   const [registerDrawer, { openDrawer }] = useDrawer();
   
-  function handleAddNew() {
-    openDrawer(true, {});
+  function handleAddNew(record?: Recordable) {
+    openDrawer(true, {
+      layoutId: record?.layoutId,
+      parentId: record?.id,
+    });
   }
 
   function handleEdit(record: Recordable) {

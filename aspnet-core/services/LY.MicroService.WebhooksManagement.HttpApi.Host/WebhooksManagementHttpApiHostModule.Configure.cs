@@ -1,7 +1,9 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
 using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Webhooks;
@@ -13,11 +15,14 @@ using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Quartz;
@@ -37,6 +42,7 @@ using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Quartz;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
@@ -55,7 +61,17 @@ public partial class WebhooksManagementHttpApiHostModule
         });
     }
 
-    private void PreConfigureApp()
+    private void PreForwardedHeaders()
+    {
+        PreConfigure<AbpForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+    }
+
+    private void PreConfigureApp(IConfiguration configuration)
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
@@ -66,6 +82,11 @@ public partial class WebhooksManagementHttpApiHostModule
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });
+
+        if (configuration.GetValue<bool>("App:ShowPii"))
+        {
+            IdentityModelEventSource.ShowPII = true;
+        }
     }
 
     private void PreConfigureCAP(IConfiguration configuration)
@@ -106,7 +127,7 @@ public partial class WebhooksManagementHttpApiHostModule
                     config.UsePersistentStore(store =>
                     {
                         store.UseProperties = false;
-                        store.UseJsonSerializer();
+                        store.UseNewtonsoftJsonSerializer();
                     });
                 };
             }
@@ -192,24 +213,31 @@ public partial class WebhooksManagementHttpApiHostModule
         var openTelemetryEnabled = configuration["OpenTelemetry:IsEnabled"];
         if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
         {
-            services.AddOpenTelemetryTracing(cfg =>
-            {
-                cfg.AddSource(ApplicationName)
-                   .SetResourceBuilder(
-                        ResourceBuilder.CreateDefault().AddService(ApplicationName))
-                   .AddHttpClientInstrumentation()
-                   .AddAspNetCoreInstrumentation()
-                   .AddEntityFrameworkCoreInstrumentation()
-                   .AddCapInstrumentation()
-                   .AddZipkinExporter(zipKinOptions =>
-                   {
-                       var endpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-                       if (!endpoint.IsNullOrWhiteSpace())
-                       {
-                           zipKinOptions.Endpoint = new Uri(configuration["OpenTelemetry:ZipKin:Endpoint"]);
-                       }
-                   });
-            });
+            services.AddOpenTelemetry()
+                .ConfigureResource(builder =>
+                {
+                    builder.AddService(ApplicationName);
+                })
+                .WithTracing(builder =>
+                {
+                    builder.AddHttpClientInstrumentation();
+                    builder.AddAspNetCoreInstrumentation();
+                    builder.AddCapInstrumentation();
+                    builder.AddEntityFrameworkCoreInstrumentation();
+                    builder.AddZipkinExporter(zipKinOptions =>
+                    {
+                        var endpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
+                        if (!endpoint.IsNullOrWhiteSpace())
+                        {
+                            zipKinOptions.Endpoint = new Uri(configuration["OpenTelemetry:ZipKin:Endpoint"]);
+                        }
+                    });
+                })
+                .WithMetrics(builder =>
+                {
+                    builder.AddHttpClientInstrumentation();
+                    builder.AddAspNetCoreInstrumentation();
+                });
         }
     }
 
@@ -296,6 +324,14 @@ public partial class WebhooksManagementHttpApiHostModule
         }
     }
 
+    private void ConfigureIdentity()
+    {
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
+    }
+
     private void ConfigureSwagger(IServiceCollection services)
     {
         // Swagger
@@ -358,6 +394,19 @@ public partial class WebhooksManagementHttpApiHostModule
 
             options.UsePersistence<WebhooksManagementResource>();
         });
+
+
+        Configure<AbpLocalizationCultureMapOptions>(options =>
+        {
+            var zhHansCultureMapInfo = new CultureMapInfo
+            {
+                TargetCulture = "zh-Hans",
+                SourceCultures = new string[] { "zh", "zh_CN", "zh-CN" }
+            };
+
+            options.CulturesMaps.Add(zhHansCultureMapInfo);
+            options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
     }
 
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
@@ -368,6 +417,7 @@ public partial class WebhooksManagementHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = false;
                 options.Audience = configuration["AuthServer:ApiName"];
+                options.MapInboundClaims = false;
             });
 
         if (isDevelopment)

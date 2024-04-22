@@ -165,14 +165,15 @@ namespace LINGYUN.Platform.Menus
         public async virtual Task<List<Menu>> GetAllAsync(
             string filter = "",
             string sorting = nameof(Menu.Code),
-            bool reverse = false,
             string framework = "",
             Guid? parentId = null,
             Guid? layoutId = null,
             CancellationToken cancellationToken = default)
         {
-            sorting ??= nameof(Menu.Code);
-            sorting = reverse ? sorting + " DESC" : sorting;
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(Menu.Code);
+            }
 
             return await (await GetDbSetAsync())
                 .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
@@ -207,7 +208,6 @@ namespace LINGYUN.Platform.Menus
         public async virtual Task<List<Menu>> GetListAsync(
             string filter = "",
             string sorting = nameof(Menu.Code),
-            bool reverse = false,
             string framework = "",
             Guid? parentId = null,
             Guid? layoutId = null,
@@ -215,8 +215,10 @@ namespace LINGYUN.Platform.Menus
             int maxResultCount = 10, 
             CancellationToken cancellationToken = default)
         {
-            sorting ??= nameof(Menu.Code);
-            sorting = reverse ? sorting + " DESC" : sorting;
+            if (sorting.IsNullOrWhiteSpace())
+            {
+                sorting = nameof(Menu.Code);
+            }
 
             return await (await GetDbSetAsync())
                 .WhereIf(parentId.HasValue, x => x.ParentId == parentId)

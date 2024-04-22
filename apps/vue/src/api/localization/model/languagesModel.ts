@@ -26,3 +26,7 @@ export interface LanguagePagedResult extends PagedResultDto<Language> {}
 export interface GetLanguagePagedRequest extends PagedAndSortedResultRequestDto {
   filter?: string;
 }
+
+export interface GetLanguageWithFilter {
+  filter?: string;
+}

@@ -88,9 +88,10 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
-
-        PreConfigureApp();
+        
         PreConfigureFeature();
+        PreConfigureForwardedHeaders();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
         PreConfigureElsa(context.Services, configuration);
@@ -101,6 +102,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureBackgroundTasks();
@@ -125,6 +127,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
+        app.UseForwardedHeaders();
         // 本地化
         app.UseMapRequestLocalization();
         app.UseCorrelationId();
@@ -133,7 +136,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         app.UseElsaFeatures();
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
+        app.UseDynamicClaims();
         app.UseMultiTenancy();
         app.UseAuthorization();
         app.UseSwagger();
@@ -144,7 +147,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
             var configuration = context.GetConfiguration();
             options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
             options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-            options.OAuthScopes("WorkflowManagement");
+            options.OAuthScopes(configuration["AuthServer:Scopes"]);
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();

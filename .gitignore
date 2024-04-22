@@ -7,11 +7,16 @@ obj
 bin
 Logs
 appsettings.Production.json
+appsettings.secrets.json
 tempkey.jwk
 .vs
 Publish
 LocalNuget
 pnpm-lock.yaml
+
+# .NET
+*.pubxml
+*.user
 
 /tests/e2e/videos/
 /tests/e2e/screenshots/

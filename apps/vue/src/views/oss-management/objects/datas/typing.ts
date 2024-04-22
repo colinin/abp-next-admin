@@ -3,5 +3,6 @@ export interface Folder {
   title: string,
   path?: string,
   name: string,
+  isLeaf?: boolean,
   children?: Folder[],
 }

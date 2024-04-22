@@ -47,7 +47,7 @@ public class PermissionDefinitionController : PermissionManagementControllerBase
     }
 
     [HttpGet]
-    public virtual Task<PagedResultDto<PermissionDefinitionDto>> GetListAsync(PermissionDefinitionGetListInput input)
+    public virtual Task<ListResultDto<PermissionDefinitionDto>> GetListAsync(PermissionDefinitionGetListInput input)
     {
         return _service.GetListAsync(input);
     }

@@ -2,43 +2,52 @@
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Saas.Tenants;
 
 public class TenantManager : DomainService, ITenantManager
 {
     protected ITenantRepository TenantRepository { get; }
+    protected ITenantNormalizer TenantNormalizer { get; }
 
-    public TenantManager(ITenantRepository tenantRepository)
+    public TenantManager(
+        ITenantRepository tenantRepository,
+        ITenantNormalizer tenantNormalizer)
     {
         TenantRepository = tenantRepository;
-
+        TenantNormalizer = tenantNormalizer;
     }
 
-    public async virtual Task<Tenant> CreateAsync(string name)
+    public virtual async Task<Tenant> CreateAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
-        await ValidateNameAsync(name);
-        return new Tenant(GuidGenerator.Create(), name);
+        var normalizedName = TenantNormalizer.NormalizeName(name);
+        await ValidateNameAsync(normalizedName);
+        return new Tenant(GuidGenerator.Create(), name, normalizedName);
     }
 
-    public async virtual Task ChangeNameAsync(Tenant tenant, string name)
+    public virtual async Task ChangeNameAsync(Tenant tenant, string name)
     {
         Check.NotNull(tenant, nameof(tenant));
         Check.NotNull(name, nameof(name));
 
-        await ValidateNameAsync(name, tenant.Id);
+        var normalizedName = TenantNormalizer.NormalizeName(name);
+
+        await ValidateNameAsync(normalizedName, tenant.Id);
         tenant.SetName(name);
+        tenant.SetNormalizedName(normalizedName);
+
     }
 
-    protected async virtual Task ValidateNameAsync(string name, Guid? expectedId = null)
+    protected virtual async Task ValidateNameAsync(string normalizeName, Guid? expectedId = null)
     {
-        var tenant = await TenantRepository.FindByNameAsync(name);
+        var tenant = await TenantRepository.FindByNameAsync(normalizeName);
         if (tenant != null && tenant.Id != expectedId)
         {
             throw new BusinessException(AbpSaasErrorCodes.DuplicateTenantName)
-                .WithData(nameof(Tenant.Name), name);
+                .WithData("Name", normalizeName);
         }
     }
 }

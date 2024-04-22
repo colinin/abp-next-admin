@@ -6,6 +6,7 @@ import {
   NotificationInfo,
   NotificationSeverity,
   NotificationReadState,
+  NotificationContentType,
 } from '/@/api/messages/model/notificationsModel';
 import { formatToDateTime } from '/@/utils/dateUtil';
 import { TabItem, ListItem as Notification } from './data';
@@ -79,6 +80,7 @@ export function useNotifications() {
       extra: description,
       datetime: formatToDateTime(notificationInfo.creationTime, 'YYYY-MM-DD HH:mm:ss'),
       type: String(notificationInfo.type),
+      contentType: notificationInfo.contentType,
     };
 
     if (notifer && notificationInfo.type !== NotificationType.ServiceCallback) {
@@ -95,6 +97,16 @@ export function useNotifications() {
 
   
   function _notification(notifier: Notification, severity: NotificationSeverity) {
+    let message = notifier.description;
+    switch (notifier.contentType) {
+      default:
+      case NotificationContentType.Text:
+        message = notifier.description;
+      case NotificationContentType.Html:
+      case NotificationContentType.Json:
+      case NotificationContentType.Markdown:
+        message = notifier.title;
+    }
     switch (severity) {
       case NotificationSeverity.Error:
       case NotificationSeverity.Fatal:
@@ -102,7 +114,7 @@ export function useNotifications() {
         notifier.avatar = errorAvatar;
         notification['error']({
           message: notifier.title,
-          description: notifier.description,
+          description: message,
         });
         break;
       case NotificationSeverity.Warn:
@@ -110,7 +122,7 @@ export function useNotifications() {
         notifier.avatar = warningAvatar;
         notification['warning']({
           message: notifier.title,
-          description: notifier.description,
+          description: message,
         });
         break;
       case NotificationSeverity.Info:
@@ -118,7 +130,7 @@ export function useNotifications() {
         notifier.avatar = infoAvatar;
         notification['info']({
           message: notifier.title,
-          description: notifier.description,
+          description: message,
         });
         break;
       case NotificationSeverity.Success:
@@ -126,7 +138,7 @@ export function useNotifications() {
         notifier.avatar = successAvatar;
         notification['success']({
           message: notifier.title,
-          description: notifier.description,
+          description: message,
         });
         break;
     }

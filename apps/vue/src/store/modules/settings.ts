@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { createLocalStorage } from '/@/utils/cache';
-import { SettingGroup } from '/@/api/settings/model/settingModel';
+import { SettingGroup } from '/@/api/settings-management/settings/model';
 
 const ls = createLocalStorage();
 const SETTING_ID = 'setting-management';
@@ -26,8 +26,9 @@ export const useSettingManagementStore = defineStore({
   actions: {
     initlize(settingKey: string, api: (...args) => Promise<ListResultDto<SettingGroup>>) {
       this.settingKey = settingKey;
-      if (this.settings.length === 0) {
-        ls.get(this.settingKey) || this.refreshSettings(api);
+      this.settings = ls.get(this.settingKey);
+      if (!this.settings || this.settings.length === 0) {
+        this.refreshSettings(api);
       }
     },
     refreshSettings(api: (...args) => Promise<ListResultDto<SettingGroup>>) {

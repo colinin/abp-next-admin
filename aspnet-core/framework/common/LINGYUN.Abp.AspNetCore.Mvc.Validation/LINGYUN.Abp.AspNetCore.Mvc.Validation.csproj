@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\AspNetCore\Mvc\Validation\Localization\MissingFields\en.json" />
+	  <None Remove="LINGYUN\Abp\AspNetCore\Mvc\Validation\Localization\MissingFields\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\AspNetCore\Mvc\Validation\Localization\MissingFields\en.json" />
+	  <EmbeddedResource Include="LINGYUN\Abp\AspNetCore\Mvc\Validation\Localization\MissingFields\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
+	</ItemGroup>
+
+</Project>

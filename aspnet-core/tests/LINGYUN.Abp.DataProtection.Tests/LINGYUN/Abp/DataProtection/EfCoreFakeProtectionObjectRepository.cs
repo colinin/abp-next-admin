@@ -1,14 +1,15 @@
 ﻿using LINGYUN.Abp.DataProtection.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.DataProtection
 {
     public class EfCoreFakeProtectionObjectRepository :
-        EfCoreDataProtectionRepositoryBase<FakeDataProtectedDbContext, FakeProtectionObject, int>,
+        EfCoreRepository<AbpDataProtectionDbContext, FakeProtectionObject, int>,
         IFakeProtectionObjectRepository
     {
         public EfCoreFakeProtectionObjectRepository(
-            IDbContextProvider<FakeDataProtectedDbContext> dbContextProvider) 
+            IDbContextProvider<AbpDataProtectionDbContext> dbContextProvider) 
             : base(dbContextProvider)
         {
         }

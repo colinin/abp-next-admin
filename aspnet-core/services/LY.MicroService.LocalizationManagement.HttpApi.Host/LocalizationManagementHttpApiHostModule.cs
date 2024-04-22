@@ -63,8 +63,9 @@ namespace LY.MicroService.LocalizationManagement
         {
             var configuration = context.Services.GetConfiguration();
 
-            PreConfigureApp();
             PreConfigureFeature();
+            PreForwardedHeaders();
+            PreConfigureApp(configuration);
             PreConfigureCAP(configuration);
         }
 
@@ -73,6 +74,7 @@ namespace LY.MicroService.LocalizationManagement
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureIdentity();
             ConfigureDbContext();
             ConfigureLocalization();
             ConfigreExceptionHandling();
@@ -94,6 +96,7 @@ namespace LY.MicroService.LocalizationManagement
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            app.UseForwardedHeaders();
             // http调用链
             app.UseCorrelationId();
             // 虚拟文件系统
@@ -104,6 +107,9 @@ namespace LY.MicroService.LocalizationManagement
             app.UseCors(DefaultCorsPolicyName);
             // 认证
             app.UseAuthentication();
+            // IDS与JWT不匹配可能造成鉴权错误
+            // TODO: abp在某个更新版本建议移除此中间价
+            app.UseAbpClaimsMap();
             // jwt
             app.UseJwtTokenMiddleware();
             // 本地化

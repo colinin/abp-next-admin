@@ -53,7 +53,7 @@
   const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization(['LocalizationManagement', 'AbpLocalization', 'AbpUi']);
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { setTableData, getForm }] = useTable({
+  const [registerTable, { setLoading, setTableData, getForm }] = useTable({
     rowKey: 'cultureName',
     title: L('Languages'),
     columns: getDataColumns(),
@@ -89,9 +89,13 @@
 
   function fetchLanguages() {
     const form = getForm();
-    return form.validate().then(() => {
-      return getList().then((res) => {
+    return form.validate().then((input) => {
+      setLoading(true);
+      setTableData([]);
+      return getList(input).then((res) => {
         setTableData(res.items);
+      }).finally(() => {
+        setLoading(false);
       });
     });
   }

@@ -35,6 +35,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.TaskManagem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.WorkflowManagement.HttpApi.Host", "services\LY.MicroService.WorkflowManagement.HttpApi.Host\LY.MicroService.WorkflowManagement.HttpApi.Host.csproj", "{48F376EC-B951-4123-AF33-54217AD00B96}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "webhook", "webhook", "{E38F0CBE-BCFF-4F75-AA19-1959B7B75EF6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.WebhooksManagement.HttpApi.Host", "services\LY.MicroService.WebhooksManagement.HttpApi.Host\LY.MicroService.WebhooksManagement.HttpApi.Host.csproj", "{CDA6B0F4-389E-48C5-99CF-E2F1DB1163C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gateway", "gateway", "{78413EF4-17A8-49DD-9E4C-D15BF547AEEB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.MicroService.Internal.ApiGateway", "..\gateways\internal\LINGYUN.MicroService.Internal.ApiGateway\src\LINGYUN.MicroService.Internal.ApiGateway\LINGYUN.MicroService.Internal.ApiGateway.csproj", "{068D6BBE-BB98-40FF-84E1-D34166263623}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.ApiGateway", "..\gateways\web\LY.MicroService.ApiGateway\LY.MicroService.ApiGateway.csproj", "{46BC00EE-3265-4B85-819E-0C28F16134C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "document", "document", "{D70EABBE-BDB5-4FDE-92DC-2EADE17E98D1}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\startup-readme.md = ..\docs\startup-readme.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +88,18 @@ Global
 		{48F376EC-B951-4123-AF33-54217AD00B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48F376EC-B951-4123-AF33-54217AD00B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48F376EC-B951-4123-AF33-54217AD00B96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDA6B0F4-389E-48C5-99CF-E2F1DB1163C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDA6B0F4-389E-48C5-99CF-E2F1DB1163C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDA6B0F4-389E-48C5-99CF-E2F1DB1163C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDA6B0F4-389E-48C5-99CF-E2F1DB1163C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{068D6BBE-BB98-40FF-84E1-D34166263623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{068D6BBE-BB98-40FF-84E1-D34166263623}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{068D6BBE-BB98-40FF-84E1-D34166263623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{068D6BBE-BB98-40FF-84E1-D34166263623}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46BC00EE-3265-4B85-819E-0C28F16134C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46BC00EE-3265-4B85-819E-0C28F16134C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46BC00EE-3265-4B85-819E-0C28F16134C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46BC00EE-3265-4B85-819E-0C28F16134C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +113,9 @@ Global
 		{03A07A13-D9F3-4E70-B4D2-57BA2CF1E8DB} = {099F0FD1-645D-4029-8149-46523AD34933}
 		{EDE83705-EFEA-46DC-A8EE-68A5D8159B84} = {3F453010-BA07-471D-87E5-B12346ED81EF}
 		{48F376EC-B951-4123-AF33-54217AD00B96} = {E47CDAF7-1046-4886-A0CB-ADF9650F8318}
+		{CDA6B0F4-389E-48C5-99CF-E2F1DB1163C2} = {E38F0CBE-BCFF-4F75-AA19-1959B7B75EF6}
+		{068D6BBE-BB98-40FF-84E1-D34166263623} = {78413EF4-17A8-49DD-9E4C-D15BF547AEEB}
+		{46BC00EE-3265-4B85-819E-0C28F16134C3} = {78413EF4-17A8-49DD-9E4C-D15BF547AEEB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A3905D9F-6EF7-4BFD-80B3-E0DD6AA82228}

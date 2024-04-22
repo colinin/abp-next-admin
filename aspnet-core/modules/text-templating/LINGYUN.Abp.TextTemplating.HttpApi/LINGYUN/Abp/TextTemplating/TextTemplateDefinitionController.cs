@@ -43,7 +43,7 @@ public class TextTemplateDefinitionController : AbpTextTemplatingControllerBase,
     }
 
     [HttpGet]
-    public virtual Task<PagedResultDto<TextTemplateDefinitionDto>> GetListAsync(TextTemplateDefinitionGetListInput input)
+    public virtual Task<ListResultDto<TextTemplateDefinitionDto>> GetListAsync(TextTemplateDefinitionGetListInput input)
     {
         return _service.GetListAsync(input);
     }

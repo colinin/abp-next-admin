@@ -36,7 +36,7 @@ public class IdentityServerDbMigratorHostedService : IHostedService
         await application
             .ServiceProvider
             .GetRequiredService<IdentityServerDbMigrationService>()
-            .MigrateAsync();
+            .CheckAndApplyDatabaseMigrationsAsync();
 
         await application.ShutdownAsync();
 

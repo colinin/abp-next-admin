@@ -71,6 +71,8 @@ export interface GetAuditLogPagedRequest extends PagedAndSortedResultRequestDto 
   url?: string;
   userName?: string;
   correlationId?: string;
+  clientId?: string;
+  clientIpAddress?: string;
   applicationName?: string;
   maxExecutionDuration?: number;
   minExecutionDuration?: number;
@@ -90,4 +92,9 @@ export interface EntityChangeGetByPagedRequest extends PagedAndSortedResultReque
 export interface EntityChangeGetWithUsernameInput {
   entityId?: string;
   entityTypeFullName?: string;
+}
+
+export interface RestoreEntityInput {
+  entityId: string;
+  entityChangeId?: string;
 }

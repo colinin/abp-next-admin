@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -12,7 +13,7 @@ namespace LINGYUN.Abp.Identity
     [Area("identity")]
     [ControllerName("ClaimType")]
     [Route("api/identity/claim-types")]
-    public class IdentityClaimTypeController : AbpController, IIdentityClaimTypeAppService
+    public class IdentityClaimTypeController : AbpControllerBase, IIdentityClaimTypeAppService
     {
         protected IIdentityClaimTypeAppService IdentityClaimTypeAppService { get; }
         public IdentityClaimTypeController(IIdentityClaimTypeAppService identityClaimTypeAppService)

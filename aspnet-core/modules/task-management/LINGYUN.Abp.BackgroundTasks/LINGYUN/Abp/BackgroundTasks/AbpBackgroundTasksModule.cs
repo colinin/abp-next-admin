@@ -1,10 +1,12 @@
 ﻿using LINGYUN.Abp.BackgroundTasks.Internal;
 using LINGYUN.Abp.BackgroundTasks.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Collections.Generic;
 using Volo.Abp.Auditing;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.Data;
 using Volo.Abp.Guids;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
@@ -23,10 +25,17 @@ public class AbpBackgroundTasksModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        var configuration = context.Services.GetConfiguration();
+
         context.Services.AddTransient(typeof(BackgroundJobAdapter<>));
         context.Services.AddSingleton(typeof(BackgroundWorkerAdapter<>));
 
-        context.Services.AddHostedService<DefaultBackgroundWorker>();
+        if (!context.Services.IsDataMigrationEnvironment())
+        {
+            context.Services.Replace(ServiceDescriptor.Transient(typeof(IBackgroundJobManager), typeof(BackgroundJobManager)));
+            context.Services.Replace(ServiceDescriptor.Transient(typeof(IBackgroundWorkerManager), typeof(BackgroundWorkerManager)));
+            context.Services.AddHostedService<DefaultBackgroundWorker>();
+        }
 
         Configure<AbpVirtualFileSystemOptions>(options =>
         {

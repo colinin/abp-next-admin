@@ -19,7 +19,7 @@ public class StaticTemplateDefinitionSaver : IStaticTemplateDefinitionSaver, ITr
     protected IAbpDistributedLock DistributedLock { get; }
     protected ITextTemplateDefinitionRepository TemplateDefinitionRepository { get; }
     protected AbpTextTemplatingCachingOptions TemplatingCachingOptions { get; }
-    protected ITemplateDefinitionManager TemplateDefinitionManager { get; }
+    protected IStaticTemplateDefinitionStore StaticTemplateDefinitionStore { get; }
     protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
 
     public StaticTemplateDefinitionSaver(
@@ -28,7 +28,7 @@ public class StaticTemplateDefinitionSaver : IStaticTemplateDefinitionSaver, ITr
         IGuidGenerator guidGenerator, 
         IAbpDistributedLock distributedLock,
         ITextTemplateDefinitionRepository templateDefinitionRepository,
-        ITemplateDefinitionManager templateDefinitionManager, 
+        IStaticTemplateDefinitionStore staticTemplateDefinitionStore, 
         ILocalizableStringSerializer localizableStringSerializer)
     {
         CacheOptions = cacheOptions.Value;
@@ -36,7 +36,7 @@ public class StaticTemplateDefinitionSaver : IStaticTemplateDefinitionSaver, ITr
         DistributedLock = distributedLock;
         TemplateDefinitionRepository = templateDefinitionRepository;
         TemplatingCachingOptions = templatingCachingOptions.Value;
-        TemplateDefinitionManager = templateDefinitionManager;
+        StaticTemplateDefinitionStore = staticTemplateDefinitionStore;
         LocalizableStringSerializer = localizableStringSerializer;
     }
 
@@ -53,7 +53,7 @@ public class StaticTemplateDefinitionSaver : IStaticTemplateDefinitionSaver, ITr
                 return;
             }
 
-            var templateDefinitions = TemplateDefinitionManager.GetAll();
+            var templateDefinitions = await StaticTemplateDefinitionStore.GetAllAsync();
 
             var saveNewTemplateDefinitionRecords = new List<TextTemplateDefinition>();
 

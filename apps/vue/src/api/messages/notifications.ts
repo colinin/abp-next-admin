@@ -10,7 +10,7 @@ import { format } from '/@/utils/strings';
 enum Api {
   GetById = '/api/notifications/my-notifilers/{id}',
   GetList = '/api/notifications/my-notifilers',
-  GetAssignableNotifiers = '/api/notifications/notifilers/assignables',
+  GetAssignableNotifiers = '/api/notifications/assignables',
   Read = '/api/notifications/my-notifilers/{id}/read',
   MarkReadState = '/api/notifications/my-notifilers/mark-read-state',
 }

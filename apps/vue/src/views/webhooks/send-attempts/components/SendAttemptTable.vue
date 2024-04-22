@@ -69,7 +69,13 @@
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
   import { httpStatusCodeMap, getHttpStatusColor } from '../../typing';
-  import { getList, deleteById, deleteMany, resend, resendMany } from '/@/api/webhooks/send-attempts';
+  import {
+    GetListAsyncByInput,
+    DeleteAsyncById,
+    DeleteManyAsyncByInput,
+    ResendAsyncById,
+    ResendManyAsyncByInput
+  } from '/@/api/webhooks/send-attempts';
   import SendAttemptModal from './SendAttemptModal.vue';
 
   const { createConfirm, createMessage } = useMessage();
@@ -79,7 +85,7 @@
     rowKey: 'id',
     title: L('SendAttempts'),
     columns: getDataColumns(),
-    api: getList,
+    api: GetListAsyncByInput,
     beforeFetch: formatPagedRequest,
     pagination: true,
     striped: false,
@@ -118,7 +124,9 @@
       onOk: () => {
         const selectKeys = getSelectRowKeys();
         setLoading(true);
-        return deleteMany(selectKeys).then(() => {
+        return DeleteManyAsyncByInput({
+          recordIds: selectKeys,
+        }).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           clearSelectedRowKeys();
           reload();
@@ -137,7 +145,7 @@
       okCancel: true,
       onOk: () => {
         setLoading(true);
-        return deleteById(record.id).then(() => {
+        return DeleteAsyncById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           clearSelectedRowKeys();
           reload();
@@ -156,7 +164,7 @@
       okCancel: true,
       onOk: () => {
         setLoading(true);
-        return resend(record.id).then(() => {
+        return ResendAsyncById(record.id).then(() => {
           createMessage.success(L('Successful'));
           clearSelectedRowKeys();
           reload();
@@ -176,7 +184,9 @@
       onOk: () => {
         const selectKeys = getSelectRowKeys();
         setLoading(true);
-        return resendMany(selectKeys).then(() => {
+        return ResendManyAsyncByInput({
+          recordIds: selectKeys,
+        }).then(() => {
           createMessage.success(L('Successful'));
           clearSelectedRowKeys();
           reload();

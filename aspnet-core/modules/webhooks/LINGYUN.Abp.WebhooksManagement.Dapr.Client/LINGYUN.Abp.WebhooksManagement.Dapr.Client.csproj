@@ -4,12 +4,12 @@
 	<Import Project="..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace />
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj" />
+		<ProjectReference Include="..\..\..\framework\dapr\LINGYUN.Abp.Dapr.Client\LINGYUN.Abp.Dapr.Client.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.WebhooksManagement.Application.Contracts\LINGYUN.Abp.WebhooksManagement.Application.Contracts.csproj" />
 	</ItemGroup>
 

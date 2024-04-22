@@ -95,6 +95,11 @@ namespace LINGYUN.Abp.OssManagement
         [Authorize]
         public async virtual Task<ListResultDto<MyFileShareDto>> GetShareListAsync()
         {
+            if (!await FeatureChecker.IsEnabledAsync(AbpOssManagementFeatureNames.OssObject.AllowSharedFile))
+            {
+                return new ListResultDto<MyFileShareDto>();
+            }
+
             var cacheKey = MyFileShareCacheItem.CalculateCacheKey(CurrentUser.GetId());
             var cacheItem = await _myShareCache.GetAsync(cacheKey);
             if (cacheItem == null)
@@ -126,6 +131,8 @@ namespace LINGYUN.Abp.OssManagement
         [Authorize]
         public async virtual Task<FileShareDto> ShareAsync(FileShareInput input)
         {
+            await FeatureChecker.CheckEnabledAsync(AbpOssManagementFeatureNames.OssObject.AllowSharedFile);
+
             var ossObjectRequest = new GetOssObjectRequest(
                 GetCurrentBucket(),
                 // 需要处理特殊字符

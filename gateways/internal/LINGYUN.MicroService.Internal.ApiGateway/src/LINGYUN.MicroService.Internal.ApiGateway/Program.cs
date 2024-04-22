@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -21,22 +20,19 @@ public class Program
             Log.Information("Starting Internal ApiGateway.");
 
             var builder = WebApplication.CreateBuilder(args);
-            builder.Host.AddAppSettingsSecretsJson()
-                .UseAutofac()
-                .ConfigureAppConfiguration((context, config) =>
-                {
-                        // 加入 ocelot配置文件
-                        config.AddJsonFile(
-                        $"ocelot.{context.HostingEnvironment.EnvironmentName ?? "Development"}.json",
-                        optional: true,
-                        reloadOnChange: true);
 
-                    var configuration = config.Build();
-                    if (configuration.GetSection("AgileConfig").Exists())
-                    {
-                        config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
-                    }
-                })
+            builder.Host.AddAppSettingsSecretsJson()
+               .UseAutofac()
+               .ConfigureAppConfiguration((context, config) =>
+               {
+                   var configuration = config.Build();
+                   var agileConfigEnabled = configuration["AgileConfig:IsEnabled"];
+                   if (agileConfigEnabled.IsNullOrEmpty() || bool.Parse(agileConfigEnabled))
+                   {
+                       config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
+                   }
+
+               })
                 .UseSerilog((context, provider, config) =>
                 {
                     config.ReadFrom.Configuration(context.Configuration);

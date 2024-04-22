@@ -51,7 +51,7 @@
       }).then(() => {
         createMessage.success(L('Successful'));
         closeModal();
-        emits('change', name);
+        emits('change', unref(bucket), unref(path), name);
       }).finally(() => {
         changeOkLoading(false);
       });

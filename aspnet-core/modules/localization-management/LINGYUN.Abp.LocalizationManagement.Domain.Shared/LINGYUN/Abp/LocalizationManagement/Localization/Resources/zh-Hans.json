@@ -1,0 +1,29 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Delete": "删除",
+    "DisplayName:Enable": "启用",
+    "DisplayName:CreationTime": "创建时间",
+    "DisplayName:LastModificationTime": "变更时间",
+    "DisplayName:SaveAndNext": "保存并下一步",
+    "Permissions:LocalizationManagement": "本地化管理",
+    "Permissions:Language": "语言管理",
+    "Permissions:Resource": "资源管理",
+    "Permissions:Text": "文档管理",
+    "Permissions:Create": "新增",
+    "Permissions:Update": "编辑",
+    "Permissions:Delete": "删除",
+    "Edit": "编辑",
+    "EditByName": "编辑 - {0}",
+    "Filter": "过滤字符",
+    "SaveAndNext": "保存并下一步",
+    "SearchFilter": "请输入过滤字符",
+    "Text:AddNew": "添加新文档",
+    "Language:AddNew": "添加新语言",
+    "Resource:AddNew": "添加新资源",
+    "Localization:001100": "语言 {CultureName} 已经存在!",
+    "Localization:001400": "没有找到名为 {CultureName} 的语言名称或内置语言不允许操作!",
+    "Localization:002100": "资源 {Name} 已经存在!",
+    "Localization:002400": "没有找到名为 {Name} 的资源名称或内置资源不允许操作!"
+  }
+}

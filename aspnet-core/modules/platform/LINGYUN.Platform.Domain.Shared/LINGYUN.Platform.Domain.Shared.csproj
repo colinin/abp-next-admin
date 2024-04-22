@@ -18,6 +18,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Validation" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.MultiTenancy.Abstractions" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 </Project>

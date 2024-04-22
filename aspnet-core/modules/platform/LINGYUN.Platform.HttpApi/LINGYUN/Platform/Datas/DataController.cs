@@ -10,7 +10,7 @@ namespace LINGYUN.Platform.Datas
     [RemoteService(Name = PlatformRemoteServiceConsts.RemoteServiceName)]
     [Area("platform")]
     [Route("api/platform/datas")]
-    public class DataController : AbpController, IDataAppService
+    public class DataController : AbpControllerBase, IDataAppService
     {
         protected IDataAppService DataAppService { get; }
 

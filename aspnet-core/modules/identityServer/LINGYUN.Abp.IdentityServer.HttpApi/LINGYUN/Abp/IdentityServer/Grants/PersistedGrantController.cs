@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.IdentityServer.Grants
     [RemoteService(Name = AbpIdentityServerConsts.RemoteServiceName)]
     [Area("identity-server")]
     [Route("api/identity-server/persisted-grants")]
-    public class PersistedGrantController : AbpController, IPersistedGrantAppService
+    public class PersistedGrantController : AbpControllerBase, IPersistedGrantAppService
     {
         protected IPersistedGrantAppService PersistedGrantAppService { get; }
 

@@ -146,7 +146,7 @@ public partial class ProjectNameHttpApiHostModule
                         ResourceBuilder.CreateDefault().AddService(ApplicationName))
                    .AddHttpClientInstrumentation()
                    .AddAspNetCoreInstrumentation()
-                   .AddEntityFrameworkCoreInstrumentation()
+                   //.AddEntityFrameworkCoreInstrumentation()
                    .AddCapInstrumentation()
                    .AddZipkinExporter(zipKinOptions =>
                    {

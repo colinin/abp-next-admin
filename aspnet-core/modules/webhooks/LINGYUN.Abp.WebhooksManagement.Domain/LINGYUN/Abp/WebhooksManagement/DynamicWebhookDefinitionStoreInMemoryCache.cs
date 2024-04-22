@@ -98,10 +98,15 @@ public class DynamicWebhookDefinitionStoreInMemoryCache :
         WebhookGroupDefinition webhookGroup,
         WebhookDefinitionRecord webhookRecord)
     {
+        ILocalizableString description = null;
+        if (!webhookRecord.Description.IsNullOrWhiteSpace())
+        {
+            description = LocalizableStringSerializer.Deserialize(webhookRecord.Description);
+        }
         var webhook = webhookGroup.AddWebhook(
             webhookRecord.Name,
             LocalizableStringSerializer.Deserialize(webhookRecord.DisplayName),
-            LocalizableStringSerializer.Deserialize(webhookRecord.Description)
+            description
         );
         
         WebhookDefinitions[webhook.Name] = webhook;
@@ -115,8 +120,5 @@ public class DynamicWebhookDefinitionStoreInMemoryCache :
         {
             webhook[property.Key] = property.Value;
         }
-
-        webhook.WithProperty(nameof(WebhookDefinitionRecord.IsEnabled), webhookRecord.IsEnabled);
-        webhook.WithProperty("IsStatic", false);
     }
 }

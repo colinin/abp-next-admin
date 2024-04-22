@@ -1,14 +1,15 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "colin.in@foxmail.com",
-  "classifications": [ "micro", "webapi", "cloud" ],
+  "classifications": ["micro", "webapi", "cloud"],
   "name": "LINGYUN.Abp.MicroService",
-  "identity": "LINGYUN.Abp.MicroService", //模板唯一标识
-  "groupIdentity": "LINGYUN.Abp.Application", 
+  "identity": "LINGYUN.Abp.MicroService",
+  "description": "Abp framework micro-service template",
+  "groupIdentity": "LINGYUN.Abp.Application",
   "shortName": "lam",
   "tags": {
-    "language": "C#", 
-    "type": "project" 
+    "language": "C#",
+    "type": "project"
   },
   "sourceName": "ProjectName",
   "preferNameDirectory": true,

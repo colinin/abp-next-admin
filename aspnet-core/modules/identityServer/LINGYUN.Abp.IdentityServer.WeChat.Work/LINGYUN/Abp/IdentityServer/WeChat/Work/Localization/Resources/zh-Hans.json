@@ -1,0 +1,8 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "InvalidGrant:GrantTypeInvalid": "不被允许的授权类型!",
+    "InvalidGrant:AgentIdOrCodeNotFound": "企业标识未找到或用户取消登录!",
+    "InvalidGrant:UserIdNotRegister": "企业用户未注册!"
+  }
+}

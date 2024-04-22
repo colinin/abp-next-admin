@@ -25,7 +25,7 @@ namespace LINGYUN.Platform.Datas
 
         Task<List<Data>> GetPagedListAsync(
             string filter = "",
-            string sotring = nameof(Data.Code),
+            string sorting = nameof(Data.Code),
             bool includeDetails = false,
             int skipCount = 0,
             int maxResultCount = 10,

@@ -17,8 +17,9 @@
     "DisplayName:DefaultCultureName": "Default Culture",
     "DisplayName:RenderEngine": "Render Engine",
     "DisplayName:IsStatic": "Static",
-    "TextTemplating:01100": "Text template {Name} already exists!",
-    "TextTemplating:01404": "No text template named {Name} found!",
+    "TextTemplating:001010": "The {Name} static template is not allowed to change!",
+    "TextTemplating:001100": "Text template {Name} already exists!",
+    "TextTemplating:001404": "No text template named {Name} found!",
     "TextTemplates": "Text Templates",
     "TextTemplates:AddNew": "New Template",
     "Contents": "Contents",
@@ -40,6 +41,8 @@
     "InlineContentDescription": "This template uses inline localization. You can use the <b>L<\/b> function to localize a text, like <b>{{L \"Hello\"}}<\/b>. If you still want to define a completely new template for a culture, use the \"Customize per culture\" button. <br /> To get more information about syntax and other details, please check the <a href=\"https://docs.abp.io/en/abp/latest/Text-Templating\" target=\"_blank\">Text Templates documentation<\/a>..",
     "RestoreTemplateToDefault": "Revert to the default template",
     "RestoreTemplateToDefaultMessage": "Are you sure? This is a built-in template. This operation restores the template to its default properties.",
-    "TemplateUpdated": "Template properties have been updated"
+    "TemplateUpdated": "Template properties have been updated",
+    "BasicInfo": "Basic",
+    "Properties": "Properties"
   }
 }

@@ -11,7 +11,7 @@ namespace LINGYUN.Platform.Menus
     [RemoteService(Name = PlatformRemoteServiceConsts.RemoteServiceName)]
     [Area("platform")]
     [Route("api/platform/menus")]
-    public class MenuController : AbpController, IMenuAppService
+    public class MenuController : AbpControllerBase, IMenuAppService
     {
         protected IMenuAppService MenuAppService { get; }
         protected IUserRoleFinder UserRoleFinder { get; }
@@ -96,7 +96,7 @@ namespace LINGYUN.Platform.Menus
         [Route("by-user/{userId}/{framework}")]
         public async virtual Task<ListResultDto<MenuDto>> GetUserMenuListAsync(Guid userId, string framework)
         {
-            var userRoles = await UserRoleFinder.GetRolesAsync(userId);
+            var userRoles = await UserRoleFinder.GetRoleNamesAsync(userId);
 
             var getMenuByUser = new MenuGetByUserInput
             {

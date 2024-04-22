@@ -118,23 +118,110 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                 // 此路由需要依赖审计日志特性
                 .SetProperty("requiredFeatures", "AbpAuditing.Logging.AuditLog"));
 
-            manage.AddItem(new ApplicationMenu(
-                   name: "Settings",
-                   displayName: "设置",
+            var settingManagement = manage.AddItem(new ApplicationMenu(
+                   name: "SettingManagement",
+                   displayName: "设置管理",
                    url: "/manage/settings",
-                   component: "/sys/settings/index",
-                   description: "设置")
+                   component: "LAYOUT",
+                   description: "设置管理",
+                   icon: "ant-design:setting-outlined",
+                   multiTenancySides: MultiTenancySides.Host)
                 // 此路由需要依赖设置管理特性
                 .SetProperty("requiredFeatures", "SettingManagement.Enable"));
+            settingManagement.AddItem(new ApplicationMenu(
+                   name: "SystemSettings",
+                   displayName: "系统设置",
+                   url: "/manage/settings/system-setting",
+                   component: "/settings-management/settings/index",
+                   description: "系统设置",
+                   multiTenancySides: MultiTenancySides.Host));
+            settingManagement.AddItem(new ApplicationMenu(
+                   name: "SettingDefinitions",
+                   displayName: "设置定义",
+                   url: "/manage/settings/definitions",
+                   component: "/settings-management/definitions/index",
+                   description: "设置定义",
+                   multiTenancySides: MultiTenancySides.Host));
+
+            var featureManagement = manage.AddItem(new ApplicationMenu(
+                   name: "FeaturesManagement",
+                   displayName: "功能管理",
+                   url: "/manage/feature-management",
+                   component: "LAYOUT",
+                   description: "功能管理",
+                   icon: "ant-design:gold-outlined",
+                   multiTenancySides: MultiTenancySides.Host));
+            featureManagement.AddItem(new ApplicationMenu(
+                   name: "FeaturesGroupDefinitions",
+                   displayName: "功能分组",
+                   url: "/manage/feature-management/definitions/groups",
+                   component: "/feature-management/definitions/groups/index",
+                   description: "功能分组",
+                   multiTenancySides: MultiTenancySides.Host));
+            featureManagement.AddItem(new ApplicationMenu(
+                   name: "FeaturesDefinitions",
+                   displayName: "功能定义",
+                   url: "/manage/feature-management/definitions/features",
+                   component: "/feature-management/definitions/features/index",
+                   description: "功能定义",
+                   multiTenancySides: MultiTenancySides.Host));
+
+            var permissionManagement = manage.AddItem(new ApplicationMenu(
+                  name: "PermissionsManagement",
+                  displayName: "权限管理",
+                  url: "/manage/permission-management",
+                  component: "LAYOUT",
+                  description: "权限管理",
+                  icon: "arcticons:permissionsmanager",
+                  multiTenancySides: MultiTenancySides.Host));
+            permissionManagement.AddItem(new ApplicationMenu(
+                   name: "PermissionsGroupDefinitions",
+                   displayName: "权限分组",
+                   url: "/manage/permission-management/definitions/groups",
+                   component: "/permission-management/definitions/groups/index",
+                   description: "权限分组",
+                   multiTenancySides: MultiTenancySides.Host));
+            permissionManagement.AddItem(new ApplicationMenu(
+                   name: "PermissionsDefinitions",
+                   displayName: "权限定义",
+                   url: "/manage/permission-management/definitions/permissions",
+                   component: "/permission-management/definitions/permissions/index",
+                   description: "权限定义",
+                   multiTenancySides: MultiTenancySides.Host));
+
+            var notificationManagement = manage.AddItem(new ApplicationMenu(
+                  name: "RealtimeNotifications",
+                  displayName: "通知管理",
+                  url: "/realtime/notifications",
+                  component: "LAYOUT",
+                  description: "通知管理",
+                  icon: "ant-design:notification-outlined",
+                  multiTenancySides: MultiTenancySides.Host));
+            notificationManagement.AddItem(new ApplicationMenu(
+                   name: "NotificationsGroupDefinitions",
+                   displayName: "通知分组",
+                   url: "/realtime/notifications/definitions/groups",
+                   component: "/realtime/notifications/definitions/groups/index",
+                   description: "通知分组",
+                   multiTenancySides: MultiTenancySides.Host));
+            notificationManagement.AddItem(new ApplicationMenu(
+                   name: "NotificationsDefinitions",
+                   displayName: "通知定义",
+                   url: "/realtime/notifications/definitions/notifications",
+                   component: "/realtime/notifications/definitions/notifications/index",
+                   description: "通知定义",
+                   multiTenancySides: MultiTenancySides.Host));
 
             var removedIdsVersion = false;
             var assembly = typeof(AbpUINavigationVueVbenAdminNavigationDefinitionProvider).Assembly;
-            var versionAttr = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            var versionAttr = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
             if (versionAttr != null)
             {
-                var version = new Version(versionAttr.InformationalVersion);
-                var version6 = new Version("6.0.0");
-                removedIdsVersion = version6 >= version;
+                if (Version.TryParse(versionAttr.Version, out var version))
+                {
+                    var version6 = new Version("6.0.0");
+                    removedIdsVersion = version6 >= version;
+                }
             }
 
             if (!removedIdsVersion)
@@ -495,6 +582,22 @@ namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin
                   url: "/webhooks/send-attempts",
                   component: "/webhooks/send-attempts/index",
                   description: "管理记录",
+                  multiTenancySides: MultiTenancySides.Host));
+            webhooks.AddItem(
+              new ApplicationMenu(
+                  name: "WebhooksGroupDefinitions",
+                  displayName: "Webhook 分组",
+                  url: "/webhooks/definitions/groups",
+                  component: "/webhooks/definitions/groups/index",
+                  description: "Webhook 分组",
+                  multiTenancySides: MultiTenancySides.Host));
+            webhooks.AddItem(
+              new ApplicationMenu(
+                  name: "WebhooksDefinitions",
+                  displayName: "Webhook 定义",
+                  url: "/webhooks/definitions/webhooks",
+                  component: "/webhooks/definitions/webhooks/index",
+                  description: "Webhook 定义",
                   multiTenancySides: MultiTenancySides.Host));
 
             return new NavigationDefinition(webhooks);

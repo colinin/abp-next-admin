@@ -105,6 +105,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { DefineParamter, DynamicLogic, DynamicComparison, DynamicQueryable, DynamicParamter } from '../types/advancedSearch';
+  import { isNullOrWhiteSpace } from '/@/utils/strings';
   import { isFunction } from '/@/utils/is';
   import { get } from 'lodash-es';
 
@@ -280,7 +281,9 @@
   });
 
   const filterOption = (input: string, option: any) => {
-    return option.description.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+    if (isNullOrWhiteSpace(option.label) && isNullOrWhiteSpace(option.value)) return false;
+    return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0 ||
+      option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0 ;
   };
 
   onMounted(fetch);
@@ -300,7 +303,6 @@
         const isArrayResult = Array.isArray(res);
         resultItems = isArrayResult ? res : get(res, listField || 'items');
       }
-      console.log(resultItems);
       defineParamsRef.value = resultItems;
     }).finally(() => {
       setLoading(false);

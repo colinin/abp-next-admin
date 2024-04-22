@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -10,7 +11,7 @@ namespace LINGYUN.Abp.Account
     [Area("account")]
     [ControllerName("Profile")]
     [Route("/api/account/my-profile")]
-    public class MyProfileController : AbpController, IMyProfileAppService
+    public class MyProfileController : AbpControllerBase, IMyProfileAppService
     {
         protected IMyProfileAppService MyProfileAppService { get; }
 

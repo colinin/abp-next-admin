@@ -9,13 +9,15 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('MachineName'),
       dataIndex: ['fields', 'machineName'],
+      key: 'machineName',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
       title: L('Application'),
-      dataIndex:  ['fields', 'application'],
+      dataIndex: ['fields', 'application'],
+      key: 'application',
       align: 'left',
       width: 150,
       sorter: true,
@@ -46,6 +48,7 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('Environment'),
       dataIndex: ['fields', 'environment'],
+      key: 'environment',
       align: 'left',
       width: 150,
       sorter: true,
@@ -53,6 +56,7 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('ProcessId'),
       dataIndex: ['fields', 'processId'],
+      key: 'processId',
       align: 'left',
       width: 150,
       sorter: true,
@@ -60,6 +64,7 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('ThreadId'),
       dataIndex: ['fields', 'threadId'],
+      key: 'threadId',
       align: 'left',
       width: 150,
       sorter: true,
@@ -67,6 +72,7 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('Context'),
       dataIndex: ['fields', 'context'],
+      key: 'context',
       align: 'left',
       width: 330,
       sorter: true,
@@ -74,6 +80,7 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('ConnectionId'),
       dataIndex: ['fields', 'connectionId'],
+      key: 'connectionId',
       align: 'left',
       width: 200,
       sorter: true,
@@ -81,6 +88,7 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('CorrelationId'),
       dataIndex: ['fields', 'correlationId'],
+      key: 'correlationId',
       align: 'left',
       width: 200,
       sorter: true,
@@ -88,6 +96,7 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('RequestId'),
       dataIndex: ['fields', 'requestId'],
+      key: 'requestId',
       align: 'left',
       width: 200,
       sorter: true,
@@ -95,6 +104,7 @@ export function getDataColumns(): BasicColumn[] {
     {
       title: L('RequestPath'),
       dataIndex: ['fields', 'requestPath'],
+      key: 'requestPath',
       align: 'left',
       width: 300,
       sorter: true,

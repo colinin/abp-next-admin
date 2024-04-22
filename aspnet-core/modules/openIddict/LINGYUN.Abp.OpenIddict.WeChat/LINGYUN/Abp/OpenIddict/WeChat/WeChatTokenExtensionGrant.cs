@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.WeChat;
+using LINGYUN.Abp.WeChat.Common;
+using LINGYUN.Abp.WeChat.Common.Security.Claims;
 using LINGYUN.Abp.WeChat.OpenId;
-using LINGYUN.Abp.WeChat.Security.Claims;
 using LINGYUN.Abp.WeChat.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -90,7 +91,7 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
             if (!await settingProvider.IsTrueAsync("Abp.Account.IsSelfRegistrationEnabled") ||
                 !await settingProvider.IsTrueAsync(WeChatSettingNames.EnabledQuickLogin))
             {
-                logger.LogWarning("Invalid grant type: wechat openid not register", wechatOpenId.OpenId);
+                logger.LogWarning("Invalid grant type: wechat openid {openid} not register", wechatOpenId.OpenId);
 
                 var properties = new AuthenticationProperties(new Dictionary<string, string>
                 {
@@ -131,9 +132,6 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
 
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
-
-        // 登录之后需要更新安全令牌
-        (await userManager.UpdateSecurityStampAsync(currentUser)).CheckErrors();
 
         return await SetSuccessResultAsync(context, currentUser, wechatOpenId, logger);
     }
@@ -213,9 +211,9 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
 
     protected async virtual Task SetClaimsDestinationsAsync(ExtensionGrantContext context, ClaimsPrincipal principal)
     {
-        var claimDestinationsManager = GetRequiredService<AbpOpenIddictClaimDestinationsManager>(context);
+        var openIddictClaimsPrincipalManager = GetRequiredService<AbpOpenIddictClaimsPrincipalManager>(context);
 
-        await claimDestinationsManager.SetAsync(principal);
+        await openIddictClaimsPrincipalManager.HandleAsync(context.Request, principal);
     }
 
     protected async virtual Task<IEnumerable<string>> GetResourcesAsync(ExtensionGrantContext context)

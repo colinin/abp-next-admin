@@ -19,6 +19,7 @@ using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
+using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
@@ -67,6 +68,8 @@ namespace LY.MicroService.PlatformManagement;
     typeof(PlatformApplicationModule),
     typeof(PlatformHttpApiModule),
     typeof(PlatformEntityFrameworkCoreModule),
+    typeof(AbpWeChatWorkApplicationModule),
+    typeof(AbpWeChatWorkHttpApiModule),
     typeof(AbpIdentityHttpApiClientModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
@@ -97,8 +100,9 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        PreConfigureApp();
+        PreForwardedHeaders();
         PreConfigureFeature();
+        PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
     }
 
@@ -107,6 +111,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureBlobStoring();
         ConfigureLocalization();
@@ -145,6 +150,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
+        app.UseForwardedHeaders();
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统
@@ -155,6 +161,9 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         // 认证
         app.UseAuthentication();
+        // IDS与JWT不匹配可能造成鉴权错误
+        // TODO: abp在某个更新版本建议移除此中间价
+        app.UseAbpClaimsMap();
         // jwt
         app.UseJwtTokenMiddleware();
         // 多租户

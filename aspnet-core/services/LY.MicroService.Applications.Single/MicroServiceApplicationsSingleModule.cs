@@ -2,6 +2,7 @@
 using LINGYUN.Abp.Account.Templates;
 using LINGYUN.Abp.Aliyun.SettingManagement;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Idempotent.Wrapper;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.Auditing;
@@ -36,8 +37,6 @@ using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Identity.WeChat;
-using LINGYUN.Abp.IdentityServer;
-using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.IdGenerator;
 using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -55,6 +54,11 @@ using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
 using LINGYUN.Abp.OpenApi.Authorization;
 using LINGYUN.Abp.OpenIddict;
+using LINGYUN.Abp.OpenIddict.AspNetCore;
+using LINGYUN.Abp.OpenIddict.Portal;
+using LINGYUN.Abp.OpenIddict.Sms;
+using LINGYUN.Abp.OpenIddict.WeChat;
+using LINGYUN.Abp.OpenIddict.WeChat.Work;
 using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.OssManagement.FileSystem.ImageSharp;
 using LINGYUN.Abp.OssManagement.SettingManagement;
@@ -84,6 +88,7 @@ using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using LINGYUN.Abp.WeChat.MiniProgram;
 using LINGYUN.Abp.WeChat.Official;
 using LINGYUN.Abp.WeChat.SettingManagement;
+using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
@@ -91,8 +96,10 @@ using LINGYUN.Platform.Settings.VueVbenAdmin;
 using LINGYUN.Platform.Theme.VueVbenAdmin;
 using LY.MicroService.Applications.Single.EntityFrameworkCore;
 using Volo.Abp;
+using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
@@ -101,7 +108,6 @@ using Volo.Abp.EventBus;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
@@ -114,6 +120,7 @@ namespace LY.MicroService.Applications.Single;
 [DependsOn(
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
+    typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAuditingApplicationModule),
     typeof(AbpAuditingHttpApiModule),
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
@@ -125,10 +132,10 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
-    typeof(AbpIdentityServerDomainModule),
-    typeof(AbpIdentityServerApplicationModule),
-    typeof(AbpIdentityServerHttpApiModule),
-    typeof(AbpIdentityServerEntityFrameworkCoreModule),
+    //typeof(AbpIdentityServerDomainModule),
+    //typeof(AbpIdentityServerApplicationModule),
+    //typeof(AbpIdentityServerHttpApiModule),
+    //typeof(AbpIdentityServerEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementDomainModule),
     typeof(AbpLocalizationManagementApplicationModule),
     typeof(AbpLocalizationManagementHttpApiModule),
@@ -144,10 +151,13 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsHttpApiModule),
     typeof(AbpNotificationsEntityFrameworkCoreModule),
     typeof(AbpOpenIddictAspNetCoreModule),
-    typeof(AbpOpenIddictDomainModule),
     typeof(AbpOpenIddictApplicationModule),
     typeof(AbpOpenIddictHttpApiModule),
     typeof(AbpOpenIddictEntityFrameworkCoreModule),
+    typeof(AbpOpenIddictSmsModule),
+    typeof(AbpOpenIddictPortalModule),
+    typeof(AbpOpenIddictWeChatModule),
+    typeof(AbpOpenIddictWeChatWorkModule),
     typeof(AbpOssManagementDomainModule),
     typeof(AbpOssManagementApplicationModule),
     typeof(AbpOssManagementHttpApiModule),
@@ -230,6 +240,11 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpWeChatMiniProgramModule),
     typeof(AbpWeChatOfficialModule),
+    typeof(AbpWeChatOfficialApplicationModule),
+    typeof(AbpWeChatOfficialHttpApiModule),
+    typeof(AbpWeChatWorkModule),
+    typeof(AbpWeChatWorkApplicationModule),
+    typeof(AbpWeChatWorkHttpApiModule),
     typeof(AbpWeChatSettingManagementModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpIdGeneratorModule),
@@ -246,7 +261,9 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreMvcIdempotentWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpEventBusModule),
     typeof(AbpAutofacModule)
     )]
@@ -257,8 +274,10 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-        PreConfigureApp();
         PreConfigureFeature();
+        PreConfigureIdentity();
+        PreConfigureForwardedHeaders();
+        PreConfigureApp(configuration);
         PreConfigureQuartz(configuration);
         PreConfigureAuthServer(configuration);
         PreConfigureElsa(context.Services, configuration);
@@ -270,29 +289,36 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureWeChat();
+        ConfigureWrapper();
         ConfigureAuditing();
         ConfigureDbContext();
+        ConfigureIdempotent();
         ConfigureMvcUiTheme();
         ConfigureDataSeeder();
-        ConfigureAuthServer();
         ConfigureBlobStoring();
         ConfigureLocalization();
         ConfigureKestrelServer();
-        ConfigureTextTemplating();
         ConfigureBackgroundTasks();
-        ConfigureFeatureManagement();
-        ConfigurePermissionManagement();
+        ConfigureExceptionHandling();
+        ConfigureVirtualFileSystem();
         ConfigureUrls(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
+        ConfigureAuthServer(configuration);
         ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
+        ConfigureTextTemplating(configuration);
+        ConfigureFeatureManagement(configuration);
+        ConfigureSettingManagement(configuration);
+        ConfigureWebhooksManagement(configuration);
+        ConfigurePermissionManagement(configuration);
+        ConfigureNotificationManagement(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
-        ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 

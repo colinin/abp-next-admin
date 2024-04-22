@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.OssManagement
     [RemoteService(Name = OssManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("oss-management")]
     [Route("api/files/private")]
-    public class PrivateFilesController : AbpController, IPrivateFileAppService
+    public class PrivateFilesController : AbpControllerBase, IPrivateFileAppService
     {
         private readonly IPrivateFileAppService _service;
 
@@ -57,7 +57,7 @@ namespace LINGYUN.Abp.OssManagement
         [Route("t/{TenantId}/p/{Path}/{Name}/{Process}")]
         public async virtual Task<IRemoteStreamContent> GetAsync([FromRoute] GetPublicFileInput input)
         {
-            using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
+            using (CurrentTenant.Change(input.GetTenantId(CurrentTenant)))
             {
                 return await _service.GetAsync(input);
             }

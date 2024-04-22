@@ -1,0 +1,380 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LINGYUN.Abp.EventBus.CAP</name>
+    </assembly>
+    <members>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector">
+            <summary>
+            消费者查找器
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.CapOptions">
+            <summary>
+            CAP配置
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.AbpDistributedEventBusOptions">
+            <summary>
+            Abp分布式事件配置
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.ServiceProvider">
+            <summary>
+            服务提供者
+            </summary>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.#ctor(System.IServiceProvider,Microsoft.Extensions.Options.IOptions{DotNetCore.CAP.CapOptions},Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions})">
+            <summary>
+            Creates a new <see cref="T:DotNetCore.CAP.Internal.ConsumerServiceSelector" />.
+            </summary>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.FindConsumersFromInterfaceTypes(System.IServiceProvider)">
+            <summary>
+            查找消费者集合
+            </summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPConsumerServiceSelector.GetHandlerDescription(System.Type,System.Type)">
+            <summary>
+            获取事件处理器集合
+            </summary>
+            <param name="eventType"></param>
+            <param name="typeInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusModule">
+            <summary>
+            AbpCAPEventBusModule
+            </summary>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusModule.ConfigureServices(Volo.Abp.Modularity.ServiceConfigurationContext)">
+            <summary>
+            ConfigureServices
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions">
+            <summary>
+            过期消息清理配置项
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPEventBusOptions.NotifyFailedCallback">
+            <summary>
+            发布消息处理失败通知
+            default: false
+            </summary>
+        </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException">
+            <summary>
+            AbpECAPExecutionFailedException
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.MessageType">
+            <summary>
+            MessageType
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.Origin">
+            <summary>
+            Message
+            </summary>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.#ctor(DotNetCore.CAP.Messages.MessageType,DotNetCore.CAP.Messages.Message)">
+            <summary>
+            constructor
+            </summary>
+            <param name="messageType"></param>
+            <param name="origin"></param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.#ctor(DotNetCore.CAP.Messages.MessageType,DotNetCore.CAP.Messages.Message,System.String)">
+            <summary>
+            constructor
+            </summary>
+            <param name="messageType"></param>
+            <param name="origin"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPExecutionFailedException.#ctor(DotNetCore.CAP.Messages.MessageType,DotNetCore.CAP.Messages.Message,System.String,System.Exception)">
+            <summary>
+            constructor
+            </summary>
+            <param name="messageType"></param>
+            <param name="origin"></param>
+            <param name="message"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPMessageExtensions">
+            <summary>
+            CAP消息扩展
+            </summary>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPMessageExtensions.TryGetTenantId(DotNetCore.CAP.Messages.Message,System.Nullable{System.Guid}@)">
+            <summary>
+            尝试获取消息标头中的租户标识
+            </summary>
+            <param name="message"></param>
+            <param name="tenantId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPMessageExtensions.GetTenantIdOrNull(DotNetCore.CAP.Messages.Message)">
+            <summary>
+            获取消息标头中的租户标识
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPSubscribeInvoker">
+            <summary>
+            重写 ISubscribeInvoker 实现 Abp 租户集成
+            </summary>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPSubscribeInvoker.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,System.IServiceProvider,DotNetCore.CAP.Serialization.ISerializer,Volo.Abp.MultiTenancy.ICurrentTenant)">
+            <summary>
+            AbpCAPSubscribeInvoker
+            </summary>
+            <param name="loggerFactory"></param>
+            <param name="serviceProvider"></param>
+            <param name="serializer"></param>
+            <param name="currentTenant"></param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPSubscribeInvoker.InvokeAsync(DotNetCore.CAP.Internal.ConsumerContext,System.Threading.CancellationToken)">
+            <summary>
+            调用订阅者方法
+            </summary>
+            <param name="context"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPSubscribeInvoker.GetCapProvidedParameter(DotNetCore.CAP.Internal.ParameterDescriptor,DotNetCore.CAP.Messages.Message,System.Threading.CancellationToken)">
+            <summary>
+            
+            </summary>
+            <param name="parameterDescriptor"></param>
+            <param name="message"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPSubscribeInvoker.GetInstance(System.IServiceProvider,DotNetCore.CAP.Internal.ConsumerContext)">
+            <summary>
+            获取事件处理类实例
+            </summary>
+            <param name="provider"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPSubscribeInvoker.ExecuteWithParameterAsync(LINGYUN.Abp.EventBus.CAP.Internal.ObjectMethodExecutor,System.Object,System.Object[])">
+            <summary>
+            通过给定的类型实例与参数调用订阅者方法
+            </summary>
+            <param name="executor"></param>
+            <param name="class"></param>
+            <param name="parameter"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus">
+            <summary>
+            CAP分布式事件总线
+            </summary>
+        </member>
+        <member name="F:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.CapPublisher">
+            <summary>
+            CAP消息发布接口
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.CustomDistributedEventSubscriber">
+            <summary>
+            自定义事件注册接口
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.HandlerFactories">
+            <summary>
+            本地事件处理器工厂对象集合
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.EventTypes">
+            <summary>
+            本地事件集合
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.CurrentUser">
+            <summary>
+            当前用户
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.CurrentClient">
+            <summary>
+            当前客户端
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.JsonSerializer">
+            <summary>
+            typeof <see cref="T:Volo.Abp.Json.IJsonSerializer"/>
+            </summary>
+        </member>
+        <member name="P:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.CancellationTokenProvider">
+            <summary>
+            取消令牌
+            </summary>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.#ctor(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory,Microsoft.Extensions.Options.IOptions{Volo.Abp.EventBus.Distributed.AbpDistributedEventBusOptions},DotNetCore.CAP.ICapPublisher,Volo.Abp.Users.ICurrentUser,Volo.Abp.Clients.ICurrentClient,Volo.Abp.MultiTenancy.ICurrentTenant,Volo.Abp.Json.IJsonSerializer,Volo.Abp.Uow.IUnitOfWorkManager,Volo.Abp.Guids.IGuidGenerator,Volo.Abp.Timing.IClock,Volo.Abp.Threading.ICancellationTokenProvider,LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber,Volo.Abp.EventBus.IEventHandlerInvoker,Volo.Abp.EventBus.Local.ILocalEventBus)">
+            <summary>
+            constructor
+            </summary>
+            <param name="serviceScopeFactory"></param>
+            <param name="distributedEventBusOptions"></param>
+            <param name="capPublisher"></param>
+            <param name="currentUser"></param>
+            <param name="currentClient"></param>
+            <param name="currentTenant"></param>
+            <param name="jsonSerializer"></param>
+            <param name="unitOfWorkManager"></param>
+            <param name="cancellationTokenProvider"></param>
+            <param name="guidGenerator"></param>
+            <param name="clock"></param>
+            <param name="customDistributedEventSubscriber"></param>
+            <param name="eventHandlerInvoker"></param>
+            <param name="localEventBus"></param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.Subscribe(System.Type,Volo.Abp.EventBus.IEventHandlerFactory)">
+            <summary>
+            订阅事件
+            </summary>
+            <param name="eventType"></param>
+            <param name="factory"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.Unsubscribe``1(System.Func{``0,System.Threading.Tasks.Task})">
+            <summary>
+            退订事件
+            </summary>
+            <typeparam name="TEvent">事件类型</typeparam>
+            <param name="action"></param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.Unsubscribe(System.Type,Volo.Abp.EventBus.IEventHandler)">
+            <summary>
+            退订事件
+            </summary>
+            <param name="eventType">事件类型</param>
+            <param name="handler">事件处理器</param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.Unsubscribe(System.Type,Volo.Abp.EventBus.IEventHandlerFactory)">
+            <summary>
+            退订事件
+            </summary>
+            <param name="eventType">事件类型</param>
+            <param name="factory">事件处理器工厂</param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.UnsubscribeAll(System.Type)">
+            <summary>
+            退订所有事件
+            </summary>
+            <param name="eventType">事件类型</param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.PublishToEventBusAsync(System.Type,System.Object)">
+            <summary>
+            发布事件
+            </summary>
+            <param name="eventType">事件类型</param>
+            <param name="eventData">事件数据对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.GetHandlerFactories(System.Type)">
+            <summary>
+            获取事件处理器工厂列表
+            </summary>
+            <param name="eventType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber">
+            <summary>
+            自定义事件订阅者
+            </summary>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber.Subscribe(System.Type,Volo.Abp.EventBus.IEventHandlerFactory)">
+            <summary>
+            订阅事件
+            </summary>
+            <param name="eventType"></param>
+            <param name="factory"></param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.ICustomDistributedEventSubscriber.UnSubscribe(System.Type,Volo.Abp.EventBus.IEventHandlerFactory)">
+            <summary>
+            取消订阅
+            </summary>
+            <param name="eventType"></param>
+            <param name="factory"></param>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.Internal.ObjectMethodExecutor.Execute(System.Object,System.Object[])">
+            <summary>
+            Executes the configured method on <paramref name="target" />. This can be used whether or not
+            the configured method is asynchronous.
+            </summary>
+            <remarks>
+            Even if the target method is asynchronous, it's desirable to invoke it using Execute rather than
+            ExecuteAsync if you know at compile time what the return type is, because then you can directly
+            "await" that value (via a cast), and then the generated code will be able to reference the
+            resulting awaitable as a value-typed variable. If you use ExecuteAsync instead, the generated
+            code will have to treat the resulting awaitable as a boxed object, because it doesn't know at
+            compile time what type it would be.
+            </remarks>
+            <param name="target">The object whose method is to be executed.</param>
+            <param name="parameters">Parameters to pass to the method.</param>
+            <returns>The method return value.</returns>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.Internal.ObjectMethodExecutor.ExecuteAsync(System.Object,System.Object[])">
+            <summary>
+            Executes the configured method on <paramref name="target" />. This can only be used if the configured
+            method is asynchronous.
+            </summary>
+            <remarks>
+            If you don't know at compile time the type of the method's returned awaitable, you can use ExecuteAsync,
+            which supplies an awaitable-of-object. This always works, but can incur several extra heap allocations
+            as compared with using Execute and then using "await" on the result value typecasted to the known
+            awaitable type. The possible extra heap allocations are for:
+            1. The custom awaitable (though usually there's a heap allocation for this anyway, since normally
+            it's a reference type, and you normally create a new instance per call).
+            2. The custom awaiter (whether or not it's a value type, since if it's not, you need a new instance
+            of it, and if it is, it will have to be boxed so the calling code can reference it as an object).
+            3. The async result value, if it's a value type (it has to be boxed as an object, since the calling
+            code doesn't know what type it's going to be).
+            </remarks>
+            <param name="target">The object whose method is to be executed.</param>
+            <param name="parameters">Parameters to pass to the method.</param>
+            <returns>An object that you can "await" to get the method return value.</returns>
+        </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.Internal.ObjectMethodExecutorAwaitable">
+            <summary>
+            Provides a common awaitable structure that <see cref="M:LINGYUN.Abp.EventBus.CAP.Internal.ObjectMethodExecutor.ExecuteAsync(System.Object,System.Object[])" /> can
+            return, regardless of whether the underlying value is a System.Task, an FSharpAsync, or an
+            application-defined custom awaitable.
+            </summary>
+        </member>
+        <member name="T:LINGYUN.Abp.EventBus.CAP.Internal.ObjectMethodExecutorFSharpSupport">
+            <summary>
+            Helper for detecting whether a given type is FSharpAsync`1, and if so, supplying
+            an <see cref="T:System.Linq.Expressions.Expression" /> for mapping instances of that type to a C# awaitable.
+            </summary>
+            <remarks>
+            The main design goal here is to avoid taking a compile-time dependency on
+            FSharp.Core.dll, because non-F# applications wouldn't use it. So all the references
+            to FSharp types have to be constructed dynamically at runtime.
+            </remarks>
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions">
+            <summary>
+            CAP ServiceCollectionExtensions
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddCAPEventBus(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{DotNetCore.CAP.CapOptions})">
+            <summary>
+            Adds and configures the consistence services for the consistency.
+            </summary>
+            <param name="services"></param>
+            <param name="capAction"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

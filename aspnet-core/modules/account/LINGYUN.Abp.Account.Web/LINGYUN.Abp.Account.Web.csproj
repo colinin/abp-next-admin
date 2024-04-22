@@ -1,21 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-	<TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>LINGYUN.Abp.Account.Web</AssemblyName>
-    <PackageId>LINGYUN.Abp.Account.Web</PackageId>
-    <IsPackable>true</IsPackable>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
-    <RootNamespace>LINGYUN.Abp.Account.Web</RootNamespace>
-    <OutputType>Library</OutputType>
-  
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.Account.Web</AssemblyName>
+		<PackageId>LINGYUN.Abp.Account.Web</PackageId>
+		<IsPackable>true</IsPackable>
+		<AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		<RootNamespace>LINGYUN.Abp.Account.Web</RootNamespace>
+		<OutputType>Library</OutputType>
+
+	</PropertyGroup>
 
 	<ItemGroup>
 		<EmbeddedResource Include="Pages\**\*.css" />
@@ -28,11 +29,11 @@
 		<Content Remove="Components\**\*.css" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Account.Web" Version="4.4.0" />
-	<PackageReference Include="Volo.Abp.Sms" Version="4.4.0" />
-	<PackageReference Include="Volo.Abp.Emailing" Version="4.4.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.8" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Account.Web" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Sms" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Emailing" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
+	</ItemGroup>
 
 </Project>

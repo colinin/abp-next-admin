@@ -3,7 +3,7 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace LY.MicroService.TaskManagement.Controllers;
 
-public class HomeController : AbpController
+public class HomeController : AbpControllerBase
 {
     public IActionResult Index()
     {

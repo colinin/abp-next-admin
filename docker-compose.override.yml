@@ -7,7 +7,6 @@ services:
     volumes:
       - /var/opt/abp/logs/ids-sts:/app/Logs
       - /var/opt/abp/data/ids-sts/Modules:/app/Modules
-    restart: always
     networks:
       - framework
 
@@ -19,7 +18,6 @@ services:
       - /var/opt/abp/data/ids-admin/Modules:/app/Modules
     depends_on:
       - sts-server
-    restart: always
     networks:
       - framework
 
@@ -31,7 +29,6 @@ services:
       - /var/opt/abp/data/backend-admin/Modules:/app/Modules
     depends_on:
       - sts-server
-    restart: always
     networks:
       - framework
 
@@ -41,7 +38,6 @@ services:
     volumes:
       - /var/opt/abp/logs/localization:/app/Logs
       - /var/opt/abp/data/localization/Modules:/app/Modules
-    restart: always
     depends_on:
       - sts-server
     networks:
@@ -56,7 +52,6 @@ services:
       - /var/opt/abp/data/platform:/app/file-blob-storing
     depends_on:
       - sts-server
-    restart: always
     networks:
       - framework
 
@@ -68,7 +63,6 @@ services:
       - /var/opt/abp/data/messages/Modules:/app/Modules
     depends_on:
       - sts-server
-    restart: always
     networks:
       - framework
 
@@ -80,7 +74,6 @@ services:
       - /var/opt/abp/data/task-management/Modules:/app/Modules
     depends_on:
       - sts-server
-    restart: always
     networks:
       - framework
 
@@ -92,7 +85,6 @@ services:
       - /var/opt/abp/data/webhooks/Modules:/app/Modules
     depends_on:
       - sts-server
-    restart: always
     networks:
       - framework
 
@@ -104,7 +96,6 @@ services:
       - /var/opt/abp/data/workflow/Modules:/app/Modules
     depends_on:
       - sts-server
-    restart: always
     networks:
       - framework
 
@@ -114,11 +105,10 @@ services:
     volumes:
       - /var/opt/abp/logs/internal-apigateway:/app/Logs
       - /var/opt/abp/data/internal-apigateway/Modules:/app/Modules
-    restart: always
     networks:
       - framework
 
 networks:
   framework:
-    external:
-      name: ly_app_net
+    name: linyun-abp
+    external: true

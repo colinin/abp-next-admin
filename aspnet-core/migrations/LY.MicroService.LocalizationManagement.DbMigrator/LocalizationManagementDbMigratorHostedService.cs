@@ -36,7 +36,7 @@ public class LocalizationManagementDbMigratorHostedService : IHostedService
         await application
             .ServiceProvider
             .GetRequiredService<LocalizationManagementDbMigrationService>()
-            .MigrateAsync();
+            .CheckAndApplyDatabaseMigrationsAsync();
 
         await application.ShutdownAsync();
 

@@ -7,6 +7,7 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.Tokens;
 
 namespace LINGYUN.Abp.OpenIddict.Tokens;
@@ -16,21 +17,24 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
 {
     private readonly IOpenIddictTokenManager _tokenManager;
     private readonly IRepository<OpenIddictToken, Guid> _tokenRepository;
+    private readonly AbpOpenIddictIdentifierConverter _identifierConverter;
 
     public OpenIddictTokenAppService(
         IOpenIddictTokenManager tokenManager,
-        IRepository<OpenIddictToken, Guid> tokenRepository)
+        IRepository<OpenIddictToken, Guid> tokenRepository,
+        AbpOpenIddictIdentifierConverter identifierConverter)
     {
         _tokenManager = tokenManager;
         _tokenRepository = tokenRepository;
+        _identifierConverter = identifierConverter;
     }
 
     [Authorize(AbpOpenIddictPermissions.Tokens.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
-        var token = await _tokenRepository.GetAsync(id);
+        var token = await _tokenManager.FindByIdAsync(_identifierConverter.ToString(id));
 
-        await _tokenManager.DeleteAsync(token.ToModel());
+        await _tokenManager.DeleteAsync(token);
     }
 
     public async virtual Task<OpenIddictTokenDto> GetAsync(Guid id)
@@ -53,15 +57,15 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
         }
         if (input.EndCreationTime.HasValue)
         {
-            queryable = queryable.Where(x => x.CreationTime <= input.BeginCreationTime);
+            queryable = queryable.Where(x => x.CreationTime <= input.EndCreationTime);
         }
         if (input.BeginExpirationDate.HasValue)
         {
-            queryable = queryable.Where(x => x.ExpirationDate >= input.BeginCreationTime);
+            queryable = queryable.Where(x => x.ExpirationDate >= input.BeginExpirationDate);
         }
         if (input.EndExpirationDate.HasValue)
         {
-            queryable = queryable.Where(x => x.ExpirationDate <= input.BeginCreationTime);
+            queryable = queryable.Where(x => x.ExpirationDate <= input.EndExpirationDate);
         }
         if (!input.Status.IsNullOrWhiteSpace())
         {
@@ -87,6 +91,8 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
                 x.ReferenceId.Contains(input.ReferenceId));
         }
 
+        var totalCount = await AsyncExecuter.CountAsync(queryable);
+
         var sorting = input.Sorting;
         if (sorting.IsNullOrWhiteSpace())
         {
@@ -96,8 +102,6 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
         queryable = queryable
             .OrderBy(sorting)
             .PageBy(input.SkipCount, input.MaxResultCount);
-
-        var totalCount = await AsyncExecuter.CountAsync(queryable);
         var entites = await AsyncExecuter.ToListAsync(queryable);
 
         return new PagedResultDto<OpenIddictTokenDto>(totalCount,

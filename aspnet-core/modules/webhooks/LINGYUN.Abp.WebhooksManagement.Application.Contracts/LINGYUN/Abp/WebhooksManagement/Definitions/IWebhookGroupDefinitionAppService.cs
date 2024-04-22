@@ -14,5 +14,5 @@ public interface IWebhookGroupDefinitionAppService : IApplicationService
 
     Task<WebhookGroupDefinitionDto> UpdateAsync(string name, WebhookGroupDefinitionUpdateDto input);
 
-    Task<PagedResultDto<WebhookGroupDefinitionDto>> GetListAsync(WebhookGroupDefinitionGetListInput input);
+    Task<ListResultDto<WebhookGroupDefinitionDto>> GetListAsync(WebhookGroupDefinitionGetListInput input);
 }

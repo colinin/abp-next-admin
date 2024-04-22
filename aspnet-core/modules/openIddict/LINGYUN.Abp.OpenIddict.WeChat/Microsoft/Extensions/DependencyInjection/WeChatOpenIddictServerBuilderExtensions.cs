@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.OpenIddict.WeChat;
-using LINGYUN.Abp.WeChat.Security.Claims;
+using LINGYUN.Abp.WeChat.Common.Security.Claims;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

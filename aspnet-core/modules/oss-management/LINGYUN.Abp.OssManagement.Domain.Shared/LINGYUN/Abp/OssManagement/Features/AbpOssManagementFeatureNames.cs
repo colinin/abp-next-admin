@@ -4,7 +4,7 @@
     {
         public const string GroupName = "AbpOssManagement";
         /// <summary>
-        /// 是否运行未经授权的用户访问公共目录
+        /// 是否允许未经授权的用户访问公共目录
         /// </summary>
         public const string PublicAccess = GroupName + ".PublicAccess";
 
@@ -13,6 +13,10 @@
             public const string Default = GroupName + ".OssObject";
 
             public const string Enable = Default + ".Enable";
+            /// <summary>
+            /// 允许用户分享文件
+            /// </summary>
+            public const string AllowSharedFile = Default + ".AllowSharedFile";
             /// <summary>
             /// 下载文件功能
             /// </summary>

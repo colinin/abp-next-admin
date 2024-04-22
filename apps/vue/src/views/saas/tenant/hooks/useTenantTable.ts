@@ -5,7 +5,7 @@ import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { TableActionType, useTable } from '/@/components/Table';
 import { getDataColumns } from '../datas/TableData';
-import { getSearchFormSchemas } from '../datas//ModalData';
+import { getSearchFormSchemas } from '../datas/ModalData';
 import { DeleteAsyncById, GetListAsyncByInput } from '/@/api/saas/tenant';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
 

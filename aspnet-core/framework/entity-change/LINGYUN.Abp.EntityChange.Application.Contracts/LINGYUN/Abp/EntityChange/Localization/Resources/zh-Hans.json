@@ -1,0 +1,12 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "DisplayName:EntityId": "实体标识",
+    "DisplayName:EntityChangeId": "版本标识",
+    "DisplayName:Entities": "实体列表",
+    "DisplayName:AuditLogId": "审计标识",
+    "DisplayName:StartTime": "起始时间",
+    "DisplayName:EndTime": "截止时间",
+    "DisplayName:ChangeType": "变更类型"
+  }
+}

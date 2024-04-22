@@ -7,7 +7,7 @@
           type="primary"
           @click="handleAddNew"
         >
-          {{ L('Language:AddNew') }}
+          {{ L('Resource:AddNew') }}
         </Button>
       </template>
       <template #bodyCell="{ column, record }">
@@ -48,11 +48,12 @@
   import { Resource } from '/@/api/localization/model/resourcesModel';
   import { getDataColumns } from './TableData';
   import ResourceModal from './ResourceModal.vue';
+ 
 
   const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization(['LocalizationManagement', 'AbpLocalization', 'AbpUi']);
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { setTableData, getForm }] = useTable({
+  const [registerTable, { setLoading, setTableData, getForm }] = useTable({
     rowKey: 'name',
     title: L('Resources'),
     columns: getDataColumns(),
@@ -72,7 +73,7 @@
           component: 'Input',
           label: L('Search'),
           colProps: { span: 24 },
-          defaultValue: '',
+          defaultValue: ''
         },
       ],
       submitFunc: fetchResources,
@@ -87,9 +88,13 @@
 
   function fetchResources() {
     const form = getForm();
-    return form.validate().then(() => {
-      return getList().then((res) => {
+    return form.validate().then((input) => {
+      setLoading(true);
+      setTableData([]);
+      return getList(input).then((res) => {
         setTableData(res.items);
+      }).finally(() => {
+        setLoading(false);
       });
     });
   }

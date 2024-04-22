@@ -1,8 +1,0 @@
-{
-  "version": "7.0.2",
-  "name": "my-app-identityserver",
-  "private": true,
-  "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.leptonxlite": "2.0.1"
-  }
-}

@@ -5,63 +5,57 @@
     @register="registerModal"
     :title="getIdentity"
     :width="800"
-    :min-height="600"
+    :min-height="400"
     :mask-closable="false"
+    :can-fullscreen="false"
     @ok="handleSubmit"
     @visible-change="handleVisibleChange"
   >
-    <Row ref="rowRef">
-      <Col :span="24" ref="preColRef">
-        <Checkbox
-          :checked="permissionTreeCheckState.checked"
-          :indeterminate="permissionTreeCheckState.indeterminate"
-          @change="handleGrantAllPermission"
-          >{{ L('SelectAllInAllTabs') }}</Checkbox
-        >
-      </Col>
-      <Divider />
-      <Col :span="24">
-        <Tabs v-model="activeKey" tab-position="left" type="card">
-          <TabPane
-            v-for="permission in permissionTree"
-            :key="permission.name"
-            :tab="permissionTab(permission)"
+    <Checkbox
+      :checked="permissionTreeCheckState.checked"
+      :indeterminate="permissionTreeCheckState.indeterminate"
+      @change="handleGrantAllPermission"
+      >{{ L('SelectAllInAllTabs') }}</Checkbox
+    >
+    <Divider />
+    <Tabs :class="`${prefixCls}__tabs`" v-model="activeKey" tab-position="left" type="card">
+      <TabPane
+        v-for="permission in permissionTree"
+        :key="permission.name"
+        :tab="permissionTab(permission)"
+      >
+        <Card :title="permission.displayName" :bordered="false">
+          <Checkbox
+            :checked="permissionTabCheckState(permission).checked"
+            :indeterminate="permissionTabCheckState(permission).indeterminate"
+            @change="(e) => handleGrantPermissions(permission, e)"
+            >{{ L('SelectAllInThisTab') }}</Checkbox
           >
-            <Card :title="permission.displayName" :bordered="false">
-              <Checkbox
-                :checked="permissionTabCheckState(permission).checked"
-                :indeterminate="permissionTabCheckState(permission).indeterminate"
-                @change="(e) => handleGrantPermissions(permission, e)"
-                >{{ L('SelectAllInThisTab') }}</Checkbox
-              >
-              <Divider />
-              <BasicTree
-                :checkable="true"
-                :checkStrictly="true"
-                :clickRowToExpand="true"
-                :disabled="permissionTreeDisabled"
-                :treeData="permission.children"
-                :fieldNames="{
-                  key: 'name',
-                  title: 'displayName',
-                  children: 'children',
-                }"
-                :value="permissionGrantKeys(permission)"
-                @check="
-                  (selectKeys, event) => handlePermissionGranted(permission, selectKeys, event)
-                "
-              />
-            </Card>
-          </TabPane>
-        </Tabs>
-      </Col>
-    </Row>
+          <Divider />
+          <BasicTree
+            :checkable="true"
+            :checkStrictly="true"
+            :clickRowToExpand="true"
+            :disabled="permissionTreeDisabled"
+            :treeData="permission.children"
+            :fieldNames="{
+              key: 'name',
+              title: 'displayName',
+              children: 'children',
+            }"
+            :value="permissionGrantKeys(permission)"
+            @check="(selectKeys, event) => handlePermissionGranted(permission, selectKeys, event)"
+          />
+        </Card>
+      </TabPane>
+    </Tabs>
   </BasicModal>
 </template>
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { Card, Checkbox, Col, Divider, Row, Tabs } from 'ant-design-vue';
+  import { Card, Checkbox, Divider, Tabs } from 'ant-design-vue';
+  import { useDesign } from '/@/hooks/web/useDesign';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -78,6 +72,7 @@
     identity: '',
   };
 
+  const { prefixCls } = useDesign('permission-modal');
   const { createMessage } = useMessage();
   const { L } = useLocalization('AbpPermissionManagement');
   const activeKey = ref('');
@@ -125,3 +120,18 @@
       });
   }
 </script>
+
+<style lang="less" scoped>
+  @prefix-cls: ~'@{namespace}-permission-modal';
+  
+  .@{prefix-cls} {
+    &__tabs {
+      height: 520px;
+
+      ::v-deep(.ant-tabs-content-holder) {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+    }
+  }
+</style>

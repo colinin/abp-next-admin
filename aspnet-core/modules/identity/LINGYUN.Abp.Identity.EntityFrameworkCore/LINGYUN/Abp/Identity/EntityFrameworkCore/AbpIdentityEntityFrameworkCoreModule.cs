@@ -17,6 +17,7 @@ namespace LINGYUN.Abp.Identity.EntityFrameworkCore
             {
                 options.AddRepository<IdentityRole, EfCoreIdentityRoleRepository>();
                 options.AddRepository<IdentityUser, EfCoreIdentityUserRepository>();
+                options.AddRepository<OrganizationUnit, EfCoreOrganizationUnitRepository>();
             });
         }
 

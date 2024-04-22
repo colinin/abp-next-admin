@@ -1,7 +1,6 @@
 export interface TextTemplateDefinitionDto {
   name: string;
   displayName: string;
-  formatedDisplayName?: string;
   defaultCultureName?: string;
   isInlineLocalized: boolean;
   isLayout: boolean;
@@ -27,6 +26,8 @@ export interface TextTemplateDefinitionCreateDto extends TextTemplateDefinitionC
 
 export interface TextTemplateDefinitionUpdateDto extends TextTemplateDefinitionCreateOrUpdateDto, IHasConcurrencyStamp { }
 
-export interface TextTemplateDefinitionGetListInput extends PagedAndSortedResultRequestDto {
+export interface TextTemplateDefinitionGetListInput {
   filter?: string;
+  isLayout?: boolean;
+  isStatic?: boolean;
 }

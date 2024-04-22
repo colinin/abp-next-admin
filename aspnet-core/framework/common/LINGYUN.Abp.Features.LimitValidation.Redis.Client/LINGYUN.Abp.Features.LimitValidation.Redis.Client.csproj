@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+		<Description>功能限制验证组件Redis客户端格式实现</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.Features.LimitValidation.Redis\LINGYUN.Abp.Features.LimitValidation.Redis.csproj" />
+	</ItemGroup>
+
+</Project>

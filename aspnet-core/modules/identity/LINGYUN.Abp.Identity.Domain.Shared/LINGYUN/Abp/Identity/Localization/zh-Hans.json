@@ -47,6 +47,7 @@
     "Volo.Abp.Identity:020008": "你不能修改你的手机绑定信息!",
     "Volo.Abp.Identity:020009": "你不能修改你的邮件绑定信息!",
     "Volo.Abp.Identity:020010": "邮件地址已绑定!",
+    "Volo.Abp.Identity:020011": "未绑定MFA设备时无法启用二次认证!",
     "Volo.Abp.Identity:DuplicatePhoneNumber": "手机号 '{0}' 已存在.",
     "DisplayName:Abp.Identity.User.SmsNewUserRegister": "新用户注册模板",
     "Description:Abp.Identity.User.SmsNewUserRegister": "新用户通过手机注册账号验证码模板",

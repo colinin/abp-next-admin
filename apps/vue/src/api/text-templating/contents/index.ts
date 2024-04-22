@@ -7,7 +7,7 @@ import {
 } from './model';
 
 const remoteServiceName = 'AbpTextTemplating';
-const controllerName = 'TextTemplate';
+const controllerName = 'TextTemplateContent';
 
 export const GetAsyncByInput = (input: TextTemplateContentGetInput) => {
   return defAbpHttp.request<TextTemplateContentDto>({
@@ -15,7 +15,9 @@ export const GetAsyncByInput = (input: TextTemplateContentGetInput) => {
     controller: controllerName,
     action: 'GetAsync',
     uniqueName: 'GetAsyncByInput',
-    params: input,
+    params: {
+      input: input,
+    },
   });
 };
 

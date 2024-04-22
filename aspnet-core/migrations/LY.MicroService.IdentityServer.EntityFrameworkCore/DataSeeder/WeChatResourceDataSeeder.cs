@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.WeChat;
-using LINGYUN.Abp.WeChat.Security.Claims;
+using LINGYUN.Abp.WeChat.Common.Security.Claims;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;

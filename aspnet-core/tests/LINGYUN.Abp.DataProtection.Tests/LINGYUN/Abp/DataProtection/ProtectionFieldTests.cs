@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
-using Volo.Abp.Security.Claims;
-using System.Security.Claims;
+﻿using Shouldly;
 using System;
-using Shouldly;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
+using Xunit;
 
 namespace LINGYUN.Abp.DataProtection
 {
@@ -71,74 +70,62 @@ namespace LINGYUN.Abp.DataProtection
 
             await WithUnitOfWorkAsync(async () =>
             {
-                var resource = new ProtectedResource
-                {
-                    Resource = typeof(FakeProtectionObject).FullName,
-                    Behavior = ProtectBehavior.All,
-                    Owner = "user1",
-                    Priority = 10,
-                    Visitor = "user1,role1"
-                };
+                var user1Rule = new DataAccessRule(
+                    typeof(FakeProtectionObject).FullName,
+                    DataAccessOperation.Write,
+                    DataAccessRole.User,
+                    "user1",
+                    [
+                        new(nameof(FakeProtectionObject.Num3)),
+                        new(nameof(FakeProtectionObject.Value2)),
+                    ]);
+                var user2Rule = new DataAccessRule(
+                    typeof(FakeProtectionObject).FullName,
+                    DataAccessOperation.Write,
+                    DataAccessRole.User,
+                    "user2",
+                    [
+                        new(nameof(FakeProtectionObject.Value1)),
+                    ]);
+                var role1Rule = new DataAccessRule(
+                    typeof(FakeProtectionObject).FullName,
+                    DataAccessOperation.Write,
+                    DataAccessRole.Role,
+                    "role1",
+                    [
+                        new(nameof(FakeProtectionObject.Protect1)),
+                    ]);
 
-                var fields = new List<ProtectedField>()
-                {
-                    new ProtectedField
-                    {
-                        Field = nameof(FakeProtectionObject.Num3),
-                        Owner = "user1",
-                        Resource = resource.Resource,
-                        Visitor = "",
-                    },
-                    new ProtectedField
-                    {
-                        Field = nameof(FakeProtectionObject.Value1),
-                        Owner = "user2",
-                        Resource = resource.Resource,
-                        Visitor = "",
-                    },
-                    new ProtectedField
-                    {
-                        Field = nameof(FakeProtectionObject.Value2),
-                        Owner = "user1",
-                        Resource = resource.Resource,
-                        Visitor = "",
-                    },
-                    new ProtectedField
-                    {
-                        Field = nameof(FakeProtectionObject.Protect1),
-                        Owner = "role1",
-                        Resource = resource.Resource,
-                        Visitor = "",
-                    },
-                };
+                var dataAccessRule = new DataAccessRuleInfo(
+                    [
+                        user1Rule,
+                        user2Rule,
+                        role1Rule,
+                    ]);
 
-                var rules = new List<ProtectedFieldRule>()
-                {
-                    new ProtectedFieldRule
-                    {
-                        Field = nameof(FakeProtectionObject.Protect1),
-                        Logic = PredicateOperator.And,
-                        Operator = ExpressionType.Equal,
-                        Resource = resource.Resource,
-                        Value = "test"
-                    },
-                    new ProtectedFieldRule
-                    {
-                        Field = nameof(FakeProtectionObject.Num3),
-                        Logic = PredicateOperator.Or,
-                        Operator = ExpressionType.LessThanOrEqual,
-                        Resource = resource.Resource,
-                        Value = 300
-                    },
-                };
+                //var rules = new List<ProtectedFieldRule>()
+                //{
+                //    new ProtectedFieldRule
+                //    {
+                //        Field = nameof(FakeProtectionObject.Protect1),
+                //        Logic = PredicateOperator.And,
+                //        Operator = ExpressionType.Equal,
+                //        Resource = resource.Resource,
+                //        Value = "test"
+                //    },
+                //    new ProtectedFieldRule
+                //    {
+                //        Field = nameof(FakeProtectionObject.Num3),
+                //        Logic = PredicateOperator.Or,
+                //        Operator = ExpressionType.LessThanOrEqual,
+                //        Resource = resource.Resource,
+                //        Value = 300
+                //    },
+                //};
 
                 var unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
-                unitOfWorkManager.Current.AddItem<ResourceGrantedResult>(
-                    "ResourceGranted",
-                    new ResourceGrantedResult(
-                        resource,
-                        fields.ToArray(),
-                        rules.ToArray()));
+
+                unitOfWorkManager.Current.SetAccessRuleInfo(dataAccessRule);
 
                 var identity = new ClaimsIdentity();
                 identity.AddClaim(new Claim(AbpClaimTypes.UserId, Guid.NewGuid().ToString()));
@@ -153,74 +140,61 @@ namespace LINGYUN.Abp.DataProtection
 
             await WithUnitOfWorkAsync(async () =>
             {
-                var resource = new ProtectedResource
-                {
-                    Resource = typeof(FakeProtectionObject).FullName,
-                    Behavior = ProtectBehavior.All,
-                    Owner = "user1",
-                    Priority = 10,
-                    Visitor = "user1,role1"
-                };
+                var user1Rule = new DataAccessRule(
+                    typeof(FakeProtectionObject).FullName,
+                    DataAccessOperation.Read,
+                    DataAccessRole.User,
+                    "user1",
+                    [
+                        new(nameof(FakeProtectionObject.Num3)),
+                        new(nameof(FakeProtectionObject.Value2)),
+                    ]);
+                var user2Rule = new DataAccessRule(
+                    typeof(FakeProtectionObject).FullName,
+                    DataAccessOperation.Write,
+                    DataAccessRole.User,
+                    "user2",
+                    [
+                        new(nameof(FakeProtectionObject.Value1)),
+                    ]);
+                var role1Rule = new DataAccessRule(
+                    typeof(FakeProtectionObject).FullName,
+                    DataAccessOperation.Write,
+                    DataAccessRole.Role,
+                    "role1",
+                    [
+                        new(nameof(FakeProtectionObject.Protect1)),
+                    ]);
 
-                var fields = new List<ProtectedField>()
-                {
-                    new ProtectedField
-                    {
-                        Field = nameof(FakeProtectionObject.Num3),
-                        Owner = "user1",
-                        Resource = resource.Resource,
-                        Visitor = "",
-                    },
-                    new ProtectedField
-                    {
-                        Field = nameof(FakeProtectionObject.Value1),
-                        Owner = "user2",
-                        Resource = resource.Resource,
-                        Visitor = "",
-                    },
-                    new ProtectedField
-                    {
-                        Field = nameof(FakeProtectionObject.Value2),
-                        Owner = "user1",
-                        Resource = resource.Resource,
-                        Visitor = "",
-                    },
-                    new ProtectedField
-                    {
-                        Field = nameof(FakeProtectionObject.Protect1),
-                        Owner = "role1",
-                        Resource = resource.Resource,
-                        Visitor = "",
-                    },
-                };
+                var dataAccessRule = new DataAccessRuleInfo(
+                    [
+                        user1Rule,
+                        user2Rule,
+                        role1Rule,
+                    ]);
 
-                var rules = new List<ProtectedFieldRule>()
-                {
-                    new ProtectedFieldRule
-                    {
-                        Field = nameof(FakeProtectionObject.Protect1),
-                        Logic = PredicateOperator.And,
-                        Operator = ExpressionType.Equal,
-                        Resource = resource.Resource,
-                        Value = "test"
-                    },
-                    new ProtectedFieldRule
-                    {
-                        Field = nameof(FakeProtectionObject.Num3),
-                        Logic = PredicateOperator.Or,
-                        Operator = ExpressionType.LessThanOrEqual,
-                        Resource = resource.Resource,
-                        Value = 300
-                    },
-                };
+                //var rules = new List<ProtectedFieldRule>()
+                //{
+                //    new ProtectedFieldRule
+                //    {
+                //        Field = nameof(FakeProtectionObject.Protect1),
+                //        Logic = PredicateOperator.And,
+                //        Operator = ExpressionType.Equal,
+                //        Resource = resource.Resource,
+                //        Value = "test"
+                //    },
+                //    new ProtectedFieldRule
+                //    {
+                //        Field = nameof(FakeProtectionObject.Num3),
+                //        Logic = PredicateOperator.Or,
+                //        Operator = ExpressionType.LessThanOrEqual,
+                //        Resource = resource.Resource,
+                //        Value = 300
+                //    },
+                //};
 
                 var unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
-                unitOfWorkManager.Current.AddItem<ResourceGrantedResult>(
-                    "ResourceGranted",
-                    new ResourceGrantedResult(
-                        resource,
-                        fields.ToArray(),
-                        rules.ToArray()));
+                unitOfWorkManager.Current.SetAccessRuleInfo(dataAccessRule);
 
                 var identity2 = new ClaimsIdentity();
                 identity2.AddClaim(new Claim(AbpClaimTypes.UserId, Guid.NewGuid().ToString()));
@@ -235,52 +209,23 @@ namespace LINGYUN.Abp.DataProtection
 
             await WithUnitOfWorkAsync(async () =>
             {
-                var resource = new ProtectedResource
-                {
-                    Resource = typeof(FakeProtectionObject).FullName,
-                    Behavior = ProtectBehavior.All,
-                    Priority = 10,
-                    Visitor = "user3"
-                };
+                var user1Rule = new DataAccessRule(
+                    typeof(FakeProtectionObject).FullName,
+                    DataAccessOperation.Read,
+                    DataAccessRole.User,
+                    "user3",
+                    [
+                        new(nameof(FakeProtectionObject.Num3)),
+                        new(nameof(FakeProtectionObject.Value2)),
+                    ]);
 
-                var fields = new List<ProtectedField>()
-                {
-                    new ProtectedField
-                    {
-                        Field = nameof(FakeProtectionObject.Num3),
-                        Owner = "user1",
-                        Resource = resource.Resource,
-                        Visitor = "",
-                    }
-                };
-
-                var rules = new List<ProtectedFieldRule>()
-                {
-                    new ProtectedFieldRule
-                    {
-                        Field = nameof(FakeProtectionObject.Protect1),
-                        Logic = PredicateOperator.And,
-                        Operator = ExpressionType.Equal,
-                        Resource = resource.Resource,
-                        Value = "test"
-                    },
-                    new ProtectedFieldRule
-                    {
-                        Field = nameof(FakeProtectionObject.Num3),
-                        Logic = PredicateOperator.Or,
-                        Operator = ExpressionType.LessThanOrEqual,
-                        Resource = resource.Resource,
-                        Value = 300
-                    },
-                };
+                var dataAccessRule = new DataAccessRuleInfo(
+                    [
+                        user1Rule,
+                    ]);
 
                 var unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
-                unitOfWorkManager.Current.AddItem<ResourceGrantedResult>(
-                    "ResourceGranted",
-                    new ResourceGrantedResult(
-                        resource,
-                        fields.ToArray(),
-                        rules.ToArray()));
+                unitOfWorkManager.Current.SetAccessRuleInfo(dataAccessRule);
 
                 var identity3 = new ClaimsIdentity();
                 identity3.AddClaim(new Claim(AbpClaimTypes.UserId, Guid.NewGuid().ToString()));
