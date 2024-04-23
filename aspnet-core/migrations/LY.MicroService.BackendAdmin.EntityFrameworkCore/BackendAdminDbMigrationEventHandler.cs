@@ -64,6 +64,8 @@ public class BackendAdminDbMigrationEventHandler : EfCoreDatabaseMigrationEventH
     {
         using (CurrentTenant.Change(tenantId))
         {
+
+
             Logger.LogInformation("Seeding the new tenant admin role permissions...");
             var definitionPermissions = await PermissionDefinitionManager.GetPermissionsAsync();
             var grantPermissions = definitionPermissions

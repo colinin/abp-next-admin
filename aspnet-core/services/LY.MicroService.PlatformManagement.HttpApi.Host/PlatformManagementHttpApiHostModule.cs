@@ -111,7 +111,6 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureBlobStoring();
         ConfigureLocalization();
@@ -120,6 +119,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
         ConfigureCaching(configuration);
+        ConfigureIdentity(configuration);
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
@@ -150,7 +150,10 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
+        
         app.UseForwardedHeaders();
+        // 本地化
+        app.UseMapRequestLocalization();
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统
@@ -161,15 +164,10 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         // 认证
         app.UseAuthentication();
-        // IDS与JWT不匹配可能造成鉴权错误
-        // TODO: abp在某个更新版本建议移除此中间价
-        app.UseAbpClaimsMap();
-        // jwt
-        app.UseJwtTokenMiddleware();
+        app.UseDynamicClaims();
         // 多租户
         app.UseMultiTenancy();
-        // 本地化
-        app.UseMapRequestLocalization();
+       
         // 授权
         app.UseAuthorization();
         // Swagger

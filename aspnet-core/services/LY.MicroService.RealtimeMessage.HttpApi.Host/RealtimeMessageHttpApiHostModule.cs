@@ -126,7 +126,6 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureNotifications();
@@ -136,6 +135,7 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         ConfigureFeatureManagement();
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
+        ConfigureIdentity(configuration);
         ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
@@ -149,6 +149,8 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
         app.UseForwardedHeaders();
+        // 本地化
+        app.UseMapRequestLocalization();
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统
@@ -159,13 +161,9 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         // 认证
         app.UseAuthentication();
-        app.UseAbpClaimsMap();
-        // jwt
-        app.UseJwtTokenMiddleware();
+        app.UseDynamicClaims();
         // 多租户
         app.UseMultiTenancy();
-        // 本地化
-        app.UseMapRequestLocalization();
         // 授权
         app.UseAuthorization();
         // Swagger

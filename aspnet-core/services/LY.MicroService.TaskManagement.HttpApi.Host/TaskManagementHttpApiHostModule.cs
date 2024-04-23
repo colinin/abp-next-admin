@@ -98,7 +98,6 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureBackgroundTasks();
@@ -107,6 +106,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         ConfigureFeatureManagement();
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
+        ConfigureIdentity(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureSwagger(context.Services);
         ConfigureJsonSerializer(configuration);

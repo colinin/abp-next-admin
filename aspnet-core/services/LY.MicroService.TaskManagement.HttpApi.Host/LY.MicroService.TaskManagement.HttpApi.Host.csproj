@@ -61,6 +61,7 @@
 		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
+		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Security\LINGYUN.Abp.Security.csproj" />
 		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj" />
 		<ProjectReference Include="..\..\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
 	</ItemGroup>
