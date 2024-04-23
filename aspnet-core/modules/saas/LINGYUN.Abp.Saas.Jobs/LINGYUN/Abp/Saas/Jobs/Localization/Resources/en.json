@@ -1,0 +1,8 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "TenantUsageMonitoringJob": "Tenant Usage Monitoring Job",
+    "Saas:AdminEmail": "Admin Email",
+    "Saas:TenantId": "Tenant Id"
+  }
+}

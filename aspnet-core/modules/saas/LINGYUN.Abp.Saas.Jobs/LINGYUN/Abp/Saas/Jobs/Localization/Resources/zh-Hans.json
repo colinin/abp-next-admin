@@ -1,0 +1,8 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "TenantUsageMonitoringJob": "租户使用情况监听作业",
+    "Saas:AdminEmail": "管理员邮件地址",
+    "Saas:TenantId": "租户标识"
+  }
+}

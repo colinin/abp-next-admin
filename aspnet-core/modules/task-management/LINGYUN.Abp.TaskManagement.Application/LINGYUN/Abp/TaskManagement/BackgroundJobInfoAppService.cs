@@ -45,6 +45,10 @@ public class BackgroundJobInfoAppService : DynamicQueryableAppService<Background
 
         foreach (var jobDefinition in JobDefinitionManager.GetAll())
         {
+            if (!jobDefinition.IsVisibleToClients)
+            {
+                continue;
+            }
             var job = new BackgroundJobDefinitionDto
             {
                 Name = jobDefinition.Name,

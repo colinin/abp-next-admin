@@ -153,6 +153,18 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         {
             return;
         }
+        var eto = new TenantDeletedEto
+        {
+            Id = tenant.Id,
+            Name = tenant.Name,
+            EntityVersion = tenant.EntityVersion,
+            DefaultConnectionString = tenant.FindDefaultConnectionString(),
+        };
+        CurrentUnitOfWork.OnCompleted(async () =>
+        {
+            await EventBus.PublishAsync(eto);
+        });
+
         await TenantRepository.DeleteAsync(tenant);
 
         await CurrentUnitOfWork.SaveChangesAsync();

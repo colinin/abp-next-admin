@@ -22,7 +22,7 @@ dotnet restore
 goto end
 
 :efu
-dotnet ef databse update
+dotnet ef database update
 goto end
 
 :end
