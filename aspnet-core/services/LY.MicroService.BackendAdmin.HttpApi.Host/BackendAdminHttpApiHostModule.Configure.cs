@@ -1,5 +1,4 @@
-﻿using Autofac.Core;
-using DotNetCore.CAP;
+﻿using DotNetCore.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -7,14 +6,15 @@ using LINGYUN.Abp.Saas;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TextTemplating;
-using Medallion.Threading.Redis;
 using Medallion.Threading;
+using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
@@ -36,13 +36,10 @@ using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.Threading;
-using Volo.Abp.VirtualFileSystem;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer.DynamicClaims;
+using Volo.Abp.Threading;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LY.MicroService.BackendAdmin;
 
@@ -62,6 +59,7 @@ public partial class BackendAdminHttpApiHostModule
 
     private void PreConfigureApp(IConfiguration configuration)
     {
+        JwtClaimTypesMapping.MapAbpClaimTypes();
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
@@ -252,7 +250,7 @@ public partial class BackendAdminHttpApiHostModule
         Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.IsDynamicClaimsEnabled = true;
-            options.RemoteRefreshUrl = configuration["AuthServerUrl"] + options.RemoteRefreshUrl;
+            options.RemoteRefreshUrl = configuration["App:RefreshClaimsUrl"] + options.RemoteRefreshUrl;
         });
     }
 

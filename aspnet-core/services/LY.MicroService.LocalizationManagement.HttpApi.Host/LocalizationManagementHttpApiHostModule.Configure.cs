@@ -1,17 +1,21 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement.Localization;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
-using Medallion.Threading.Redis;
 using Medallion.Threading;
+using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
@@ -28,13 +32,9 @@ using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
-using LINGYUN.Abp.LocalizationManagement.Localization;
-using Microsoft.IdentityModel.Logging;
-using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
-using Microsoft.AspNetCore.HttpOverrides;
-using Volo.Abp.Security.Claims;
 
 namespace LY.MicroService.LocalizationManagement;
 
@@ -64,6 +64,7 @@ public partial class LocalizationManagementHttpApiHostModule
 
     private void PreConfigureApp(IConfiguration configuration)
     {
+        JwtClaimTypesMapping.MapAbpClaimTypes();
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
@@ -211,11 +212,12 @@ public partial class LocalizationManagementHttpApiHostModule
         });
     }
 
-    private void ConfigureIdentity()
+    private void ConfigureIdentity(IConfiguration configuration)
     {
         Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.IsDynamicClaimsEnabled = true;
+            options.RemoteRefreshUrl = configuration["App:RefreshClaimsUrl"] + options.RemoteRefreshUrl;
         });
     }
 

@@ -99,7 +99,6 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
-        ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureExceptionHandling();
@@ -107,6 +106,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureFeatureManagement();
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
+        ConfigureIdentity(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureSwagger(context.Services);
         ConfigureWebhooks(context.Services);

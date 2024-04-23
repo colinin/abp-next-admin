@@ -22,7 +22,7 @@ File-Management更名为Oss-Management
 * [LINGYUN.Abp.OssManagement.FileSystem.ImageSharp](./LINGYUN.Abp.OssManagement.FileSystem.ImageSharp)	Oss本地对象的ImageSharp扩展，当前端传递需求处理对象时，此模块用于实现基于图形文件流的处理   
 * [LINGYUN.Abp.OssManagement.FileSystem.Imaging](./LINGYUN.Abp.OssManagement.FileSystem.Imaging)	Oss本地对象的Volo.Abp.Imaging扩展  
 * [LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp](./LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp)	Oss本地对象的Volo.Abp.Imaging.ImageSharp扩展   
-* [LINGYUN.Abp.OssManagement.Nexus](./LINGYUN.Abp.OssManagement.Nexu	s)									Oss管理的Nexus实现，管理来自私有Nexus仓库的RAW存储类型 
+* [LINGYUN.Abp.OssManagement.Nexus](./LINGYUN.Abp.OssManagement.Nexus)									Oss管理的Nexus实现，管理来自私有Nexus仓库的RAW存储类型 
 
 ### 权限定义
 

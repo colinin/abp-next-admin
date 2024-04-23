@@ -70,6 +70,7 @@ public partial class PlatformManagementHttpApiHostModule
 
     private void PreConfigureApp(IConfiguration configuration)
     {
+        JwtClaimTypesMapping.MapAbpClaimTypes();
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
@@ -261,11 +262,12 @@ public partial class PlatformManagementHttpApiHostModule
         }
     }
 
-    private void ConfigureIdentity()
+    private void ConfigureIdentity(IConfiguration configuration)
     {
         Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.IsDynamicClaimsEnabled = true;
+            options.RemoteRefreshUrl = configuration["App:RefreshClaimsUrl"] + options.RemoteRefreshUrl;
         });
     }
 

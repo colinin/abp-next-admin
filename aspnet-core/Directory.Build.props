@@ -1,7 +1,7 @@
 ﻿<Project>
 	<PropertyGroup>
 		<VoloAbpPackageVersion>8.1.0</VoloAbpPackageVersion>
-		<VoloAbpLeptonXThemePackageVersion>3.0.0</VoloAbpLeptonXThemePackageVersion>
+		<VoloAbpLeptonXThemePackageVersion>3.0.5</VoloAbpLeptonXThemePackageVersion>
 		<LINGYUNAbpPackageVersion>8.1.0</LINGYUNAbpPackageVersion>
 		<DaprPackageVersion>1.12.0</DaprPackageVersion>
 		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
@@ -13,6 +13,7 @@
 		<AgileConfigClientPackageVersion>1.6.9</AgileConfigClientPackageVersion>
 		<HangfireMySqlStoragePackageVersion>2.0.3</HangfireMySqlStoragePackageVersion>
 		<HangfireMSSQLStoragePackageVersion>1.8.6</HangfireMSSQLStoragePackageVersion>
+		<IdentityModelPackageVersion>6.2.0</IdentityModelPackageVersion>
 		<NESTPackageVersion>7.15.1</NESTPackageVersion>
 		<NewtonsoftJsonPackageVersion>13.0.1</NewtonsoftJsonPackageVersion>
 		<OpenTelemetryExtensionsHostingPackageVersion>1.8.0</OpenTelemetryExtensionsHostingPackageVersion>
