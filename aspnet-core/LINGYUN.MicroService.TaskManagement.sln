@@ -136,6 +136,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Http
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Security", "framework\security\LINGYUN.Abp.Security\LINGYUN.Abp.Security.csproj", "{BEE1B759-5B65-481B-928B-8BC6A89A7C13}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "oss-management", "oss-management", "{F36E71F7-B05F-4513-A923-81E2A7474EAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Domain.Shared", "modules\oss-management\LINGYUN.Abp.OssManagement.Domain.Shared\LINGYUN.Abp.OssManagement.Domain.Shared.csproj", "{94D1C512-09E4-4A68-8989-6DB49FEABA67}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Application.Contracts", "modules\oss-management\LINGYUN.Abp.OssManagement.Application.Contracts\LINGYUN.Abp.OssManagement.Application.Contracts.csproj", "{96B4D255-BB21-4BAF-902A-ADE3F25A44C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.HttpApi.Client", "modules\oss-management\LINGYUN.Abp.OssManagement.HttpApi.Client\LINGYUN.Abp.OssManagement.HttpApi.Client.csproj", "{44778F3C-7610-4F1C-A2B6-DF8925B1CBE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -354,6 +362,18 @@ Global
 		{BEE1B759-5B65-481B-928B-8BC6A89A7C13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEE1B759-5B65-481B-928B-8BC6A89A7C13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEE1B759-5B65-481B-928B-8BC6A89A7C13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94D1C512-09E4-4A68-8989-6DB49FEABA67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94D1C512-09E4-4A68-8989-6DB49FEABA67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94D1C512-09E4-4A68-8989-6DB49FEABA67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94D1C512-09E4-4A68-8989-6DB49FEABA67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96B4D255-BB21-4BAF-902A-ADE3F25A44C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96B4D255-BB21-4BAF-902A-ADE3F25A44C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96B4D255-BB21-4BAF-902A-ADE3F25A44C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96B4D255-BB21-4BAF-902A-ADE3F25A44C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44778F3C-7610-4F1C-A2B6-DF8925B1CBE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44778F3C-7610-4F1C-A2B6-DF8925B1CBE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44778F3C-7610-4F1C-A2B6-DF8925B1CBE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44778F3C-7610-4F1C-A2B6-DF8925B1CBE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -412,6 +432,9 @@ Global
 		{B3E81983-629A-4380-B4C2-50E247916F5E} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
 		{088064DD-D141-4E9A-B185-E332920A323A} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
 		{BEE1B759-5B65-481B-928B-8BC6A89A7C13} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{94D1C512-09E4-4A68-8989-6DB49FEABA67} = {F36E71F7-B05F-4513-A923-81E2A7474EAE}
+		{96B4D255-BB21-4BAF-902A-ADE3F25A44C2} = {F36E71F7-B05F-4513-A923-81E2A7474EAE}
+		{44778F3C-7610-4F1C-A2B6-DF8925B1CBE0} = {F36E71F7-B05F-4513-A923-81E2A7474EAE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}

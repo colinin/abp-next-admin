@@ -1,10 +1,13 @@
-﻿using LINGYUN.Abp.Dapr.Client.DynamicProxying;
+﻿using Castle.DynamicProxy.Internal;
+using LINGYUN.Abp.Dapr.Client.DynamicProxying;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Http.Client;
@@ -61,7 +64,18 @@ public class ServiceInvocationJob : IJobRunnable
         var type = context.GetString(PropertyService);
         var method = context.GetString(PropertyMethod);
         var serviceType = Type.GetType(type, true);
-        var serviceMethod = serviceType.GetMethod(method);
+        var serviceMethod = serviceType.GetMethod(method, BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+        if (serviceMethod == null)
+        {
+            foreach (var ifce in serviceType.GetAllInterfaces())
+            {
+                serviceMethod = ifce.GetMethod(method, BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+                if (serviceMethod != null)
+                {
+                    break;
+                }
+            }
+        }
         context.TryGetString(PropertyCulture, out var culture);
         context.TryGetString(PropertyProvider, out var provider);
         provider ??= "http";
@@ -83,10 +97,9 @@ public class ServiceInvocationJob : IJobRunnable
                 switch (provider)
                 {
                     case "http":
-                        await ExecuteWithHttpProxy(context, serviceType, serviceMethod);
-                        break;
                     case "dapr":
-                        await ExecuteWithDaprProxy(context, serviceType, serviceMethod);
+                        // 接口代理无差异
+                        await ExecuteProxy(context, serviceType, serviceMethod);
                         break;
                 }
             }
@@ -94,56 +107,41 @@ public class ServiceInvocationJob : IJobRunnable
     }
 
     #region HttpClient
-
-    protected readonly static string CallRequestMethod = nameof(DynamicHttpProxyInterceptorClientProxy<object>.CallRequestAsync);
-    protected readonly static MethodInfo ClientProxyMethod = typeof(DynamicHttpProxyInterceptorClientProxy<>)
-        .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-        .First(m => m.Name == CallRequestMethod && !m.IsGenericMethodDefinition);
-    protected readonly static MethodInfo CallRequestAsyncMethod = typeof(DynamicHttpProxyInterceptor<object>)
-        .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-        .First(m => m.Name == CallRequestMethod && m.IsGenericMethodDefinition);
-
-    protected async virtual Task ExecuteWithHttpProxy(
+    protected async virtual Task ExecuteProxy(
         JobRunnableContext context,
         Type serviceType,
         MethodInfo serviceMethod)
     {
-        // 反射所必须的参数
-        var clientProxyType = typeof(DynamicHttpProxyInterceptorClientProxy<>).MakeGenericType(serviceType);
-        var clientProxy = context.GetRequiredService(clientProxyType);
-
-        // 调用远程服务发现端点
-        var actionApiDescription = await GetActionApiDescriptionModel(context, serviceType, serviceMethod);
+        var clientProxy = context.GetRequiredService(serviceType);
 
         // 调用参数
-        var invokeParameters = new Dictionary<string, object>();
+        var methodParamters = serviceMethod.GetParameters();
+        var invokeParameters = new List<object>();
         if (context.TryGetString(PropertyData, out var data))
         {
-            var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
-            invokeParameters = jsonSerializer.Deserialize<Dictionary<string, object>>(data);
+            var json = JsonNode.Parse(data);
+            foreach ( var param in methodParamters)
+            {
+                var input = json[param.Name];
+                if (input != null)
+                {
+                    invokeParameters.Add(input.Deserialize(param.ParameterType));
+                }
+            }
         }
-
-        // 构造服务代理上下文
-        var clientProxyRequestContext = new ClientProxyRequestContext(
-           actionApiDescription,
-           invokeParameters,
-           serviceType);
 
         if (serviceMethod.ReturnType.GenericTypeArguments.IsNullOrEmpty())
         {
             // 直接调用
-            var taskProxy = (Task)ClientProxyMethod
-                .Invoke(clientProxy, new object[] { clientProxyRequestContext });
+            var taskProxy = (Task)serviceMethod.Invoke(clientProxy, invokeParameters.ToArray());
             await taskProxy;
         }
         else
         {
             // 有返回值的调用
             var returnType = serviceMethod.ReturnType.GenericTypeArguments[0];
-            var result = (Task)CallRequestAsyncMethod
-                .MakeGenericMethod(returnType)
-                .Invoke(this, new object[] { context });
-
+            var callResult = serviceMethod.Invoke(clientProxy, invokeParameters.ToArray());
+            var result = (Task)callResult;
             context.SetResult(await GetResultAsync(result, returnType));
         }
     }
