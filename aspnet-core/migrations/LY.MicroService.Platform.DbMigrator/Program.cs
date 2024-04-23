@@ -13,14 +13,14 @@ public class Program
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning)
+            .MinimumLevel.Override("Volo.Abp", LogEventLevel.Debug)
 #if DEBUG
-                .MinimumLevel.Override("LY.MicroService.Platform.DbMigrator", LogEventLevel.Debug)
+                .MinimumLevel.Override("LY.MicroService.Platform", LogEventLevel.Debug)
 #else
-                .MinimumLevel.Override("LY.MicroService.Platform.DbMigrator", LogEventLevel.Information)
+                .MinimumLevel.Override("LY.MicroService.Platform", LogEventLevel.Information)
 #endif
                 .Enrich.FromLogContext()
-            .WriteTo.Console()
+            .WriteTo.Console(outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] [{SourceContext}] [{ProcessId}] [{ThreadId}] - {Message:lj}{NewLine}{Exception}")
             .WriteTo.File("Logs/migrations.txt")
             .CreateLogger();
 
@@ -31,7 +31,6 @@ public class Program
     {
         return Host.CreateDefaultBuilder(args)
             .AddAppSettingsSecretsJson()
-            .ConfigureLogging((context, logging) => logging.ClearProviders())
             .ConfigureServices((hostContext, services) =>
             {
                 services.AddHostedService<PlatformDbMigratorHostedService>();

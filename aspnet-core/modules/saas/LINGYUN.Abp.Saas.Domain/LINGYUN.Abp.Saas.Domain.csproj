@@ -12,6 +12,7 @@
 		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
 		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -16,6 +16,11 @@ public class JobDefinition
     /// </summary>
     public Type JobType { get; }
     /// <summary>
+    /// 是否对客户端可见
+    /// Default: true.
+    /// </summary>
+    public bool IsVisibleToClients { get; set; }
+    /// <summary>
     /// 显示名称
     /// </summary>
     public ILocalizableString DisplayName { get; }
@@ -32,12 +37,14 @@ public class JobDefinition
         [NotNull] Type jobType,
         [NotNull] ILocalizableString displayName,
         [CanBeNull] IReadOnlyList<JobDefinitionParamter> paramters = null,
-        [CanBeNull] ILocalizableString description = null)
+        [CanBeNull] ILocalizableString description = null,
+        bool isVisibleToClients = true)
     {
         Name = name;
         JobType = jobType;
         DisplayName = displayName;
         Description = description;
         Paramters = paramters ?? new JobDefinitionParamter[0];
+        IsVisibleToClients = isVisibleToClients;
     }
 }

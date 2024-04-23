@@ -8,8 +8,7 @@ namespace LINGYUN.Abp.Notifications.EntityFrameworkCore;
 [DependsOn(
     typeof(AbpCachingModule),
     typeof(AbpAutoMapperModule),
-    typeof(AbpNotificationsModule),
-    typeof(AbpNotificationsDomainSharedModule))]
+    typeof(AbpNotificationsDomainModule))]
 public class AbpNotificationsEntityFrameworkCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
