@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
+using Volo.Abp.Linq;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using UserManager = Volo.Abp.Identity.IdentityUserManager;
@@ -16,10 +18,14 @@ public class OrganizationUnitPermissionManagementProvider : PermissionManagement
     public override string Name => OrganizationUnitPermissionValueProvider.ProviderName;
 
     protected UserManager UserManager { get; }
+    protected IAsyncQueryableExecuter AsyncQueryableExecuter { get; }
     protected IIdentityUserRepository IdentityUserRepository { get; }
     protected IIdentityRoleRepository IdentityRoleRepository { get; }
+    protected IRepository<PermissionGrant, Guid> PermissionGrantBasicRepository { get; }
 
     public OrganizationUnitPermissionManagementProvider(
+        IAsyncQueryableExecuter asyncQueryableExecuter,
+        IRepository<PermissionGrant, Guid> permissionGrantBasicRepository,
         IPermissionGrantRepository permissionGrantRepository,
         IIdentityUserRepository identityUserRepository,
         IIdentityRoleRepository identityRoleRepository,
@@ -32,8 +38,10 @@ public class OrganizationUnitPermissionManagementProvider : PermissionManagement
             currentTenant)
     {
         UserManager = userManager;
+        AsyncQueryableExecuter = asyncQueryableExecuter;
         IdentityUserRepository = identityUserRepository;
         IdentityRoleRepository = identityRoleRepository;
+        PermissionGrantBasicRepository = permissionGrantBasicRepository;
     }
 
     public override async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
@@ -51,29 +59,32 @@ public class OrganizationUnitPermissionManagementProvider : PermissionManagement
         if (providerName == Name)
         {
             permissionGrants.AddRange(await PermissionGrantRepository.GetListAsync(names, providerName, providerKey));
-
         }
 
         if (providerName == RolePermissionValueProvider.ProviderName)
         {
             var role = await IdentityRoleRepository.FindByNormalizedNameAsync(UserManager.NormalizeName(providerKey));
             var organizationUnits = await IdentityRoleRepository.GetOrganizationUnitsAsync(role.Id);
+            var roleOrganizationUnits = organizationUnits.Select(x => x.Id.ToString());
 
-            foreach (var organizationUnit in organizationUnits)
-            {
-                permissionGrants.AddRange(await PermissionGrantRepository.GetListAsync(names, Name, organizationUnit.Id.ToString()));
-            }
+            var quaryble = await PermissionGrantBasicRepository.GetQueryableAsync();
+            quaryble = quaryble.Where(x => x.ProviderName == Name && roleOrganizationUnits.Contains(x.ProviderKey) && names.Contains(x.Name));
+            var roleUnitGrants = await AsyncQueryableExecuter.ToListAsync(quaryble);
+
+            permissionGrants.AddRange(roleUnitGrants);
         }
 
         if (providerName == UserPermissionValueProvider.ProviderName)
         {
             var userId = Guid.Parse(providerKey);
             var organizationUnits = await IdentityUserRepository.GetOrganizationUnitsAsync(id: userId);
+            var userOrganizationUnits = organizationUnits.Select(x => x.Id.ToString());
 
-            foreach (var organizationUnit in organizationUnits)
-            {
-                permissionGrants.AddRange(await PermissionGrantRepository.GetListAsync(names, Name, organizationUnit.Id.ToString()));
-            }
+            var quaryble = await PermissionGrantBasicRepository.GetQueryableAsync();
+            quaryble = quaryble.Where(x => x.ProviderName == Name && userOrganizationUnits.Contains(x.ProviderKey) && names.Contains(x.Name));
+            var userOrganizationUnitGrants = await AsyncQueryableExecuter.ToListAsync(quaryble);
+
+            permissionGrants.AddRange(userOrganizationUnitGrants);
         }
 
         permissionGrants = permissionGrants.Distinct().ToList();
