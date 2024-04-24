@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Security" Version="$(VoloAbpPackageVersion)" />
+    <PackageReference Include="Volo.Abp.Security" />
   </ItemGroup>
 
 </Project>

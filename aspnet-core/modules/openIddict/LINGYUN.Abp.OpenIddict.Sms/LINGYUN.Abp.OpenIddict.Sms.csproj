@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\common.props" />
-	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -17,8 +17,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Sms" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.OpenIddict.AspNetCore" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Sms" />
+		<PackageReference Include="Volo.Abp.OpenIddict.AspNetCore" />
 	</ItemGroup>
 
 	<ItemGroup>

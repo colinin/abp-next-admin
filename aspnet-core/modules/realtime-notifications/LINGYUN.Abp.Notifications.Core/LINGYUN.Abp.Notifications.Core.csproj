@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\configureawait.props" />
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -9,10 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.EventBus.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.TextTemplating.Core" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.MultiTenancy.Abstractions" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.EventBus.Abstractions" />
+		<PackageReference Include="Volo.Abp.Localization" />
+		<PackageReference Include="Volo.Abp.TextTemplating.Core" />
+		<PackageReference Include="Volo.Abp.MultiTenancy.Abstractions" />
 	</ItemGroup>
 
 	<ItemGroup>

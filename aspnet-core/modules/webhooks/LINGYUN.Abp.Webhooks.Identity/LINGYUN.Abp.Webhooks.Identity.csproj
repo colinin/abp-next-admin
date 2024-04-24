@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\configureawait.props" />
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -17,10 +17,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Users.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" />
+		<PackageReference Include="Volo.Abp.EventBus" />
+		<PackageReference Include="Volo.Abp.Users.Abstractions" />
+		<PackageReference Include="Volo.Abp.Identity.Domain.Shared" />
 	</ItemGroup>
 
 	<ItemGroup>

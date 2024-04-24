@@ -1,4 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	
+	<Import Project="..\..\..\common.secrets.props" />
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -7,44 +9,44 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DistributedLock.Redis" Version="$(DistributedLockRedisPackageVersion)" />
-		<PackageReference Include="Elsa.Activities.Email" Version="$(ElsaPackageVersion)" />
-		<PackageReference Include="Elsa.Activities.Http" Version="$(ElsaPackageVersion)" />
-		<PackageReference Include="Elsa.Activities.UserTask" Version="$(ElsaPackageVersion)" />
-		<PackageReference Include="Elsa.Activities.Temporal.Quartz" Version="$(ElsaPackageVersion)" />
-		<!--<PackageReference Include="Elsa.Designer.Components.Web" Version="$(ElsaPackageVersion)" />-->
-		<PackageReference Include="Elsa.Webhooks.Api" Version="$(ElsaPackageVersion)" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
-		<PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />
-		<PackageReference Include="Serilog.Enrichers.Environment" Version="$(SerilogEnrichersEnvironmentPackageVersion)" />
-		<PackageReference Include="Serilog.Enrichers.Assembly" Version="$(SerilogEnrichersAssemblyPackageVersion)" />
-		<PackageReference Include="Serilog.Enrichers.Process" Version="$(SerilogEnrichersProcessPackageVersion)" />
-		<PackageReference Include="Serilog.Enrichers.Thread" Version="$(SerilogEnrichersThreadPackageVersion)" />
-		<PackageReference Include="Serilog.Settings.Configuration" Version="$(SerilogSettingsConfigurationPackageVersion)" />
-		<PackageReference Include="Serilog.Sinks.Elasticsearch" Version="$(SerilogSinksElasticsearchPackageVersion)" />
-		<PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFilePackageVersion)" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="$(SwashbuckleAspNetCorePackageVersion)" />
-		<PackageReference Include="Quartz.Serialization.Json" Version="$(QuartzNETPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Account.Web.OpenIddict" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.FeatureManagement.Application" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="$(VoloAbpPackageVersion)" />
-		<!--<PackageReference Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />-->
-		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="DistributedLock.Redis" />
+		<PackageReference Include="Elsa.Activities.Email" />
+		<PackageReference Include="Elsa.Activities.Http" />
+		<PackageReference Include="Elsa.Activities.UserTask" />
+		<PackageReference Include="Elsa.Activities.Temporal.Quartz" />
+		<!--<PackageReference Include="Elsa.Designer.Components.Web" />-->
+		<PackageReference Include="Elsa.Webhooks.Api" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
+		<PackageReference Include="Serilog.AspNetCore" />
+		<PackageReference Include="Serilog.Enrichers.Environment" />
+		<PackageReference Include="Serilog.Enrichers.Assembly" />
+		<PackageReference Include="Serilog.Enrichers.Process" />
+		<PackageReference Include="Serilog.Enrichers.Thread" />
+		<PackageReference Include="Serilog.Settings.Configuration" />
+		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
+		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Swashbuckle.AspNetCore" />
+		<PackageReference Include="Quartz.Serialization.Json" />
+		<PackageReference Include="Volo.Abp.Account.Web.OpenIddict" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" />
+		<PackageReference Include="Volo.Abp.Autofac" />
+		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" />
+		<PackageReference Include="Volo.Abp.FeatureManagement.Application" />
+		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.Application" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" />
+		<PackageReference Include="Volo.Abp.Identity.AspNetCore" />
+		<!--<PackageReference Include="Volo.Abp.IdentityServer.EntityFrameworkCore" />-->
+		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" />
 	</ItemGroup>
 
 	<ItemGroup>

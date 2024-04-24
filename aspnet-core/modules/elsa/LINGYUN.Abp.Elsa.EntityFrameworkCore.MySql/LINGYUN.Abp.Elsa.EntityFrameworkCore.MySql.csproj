@@ -1,14 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace />
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
-		<PackageReference Include="Elsa.WorkflowSettings.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" />
+		<PackageReference Include="Elsa.WorkflowSettings.Persistence.EntityFramework.MySql" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
 	</ItemGroup>
 
 	<ItemGroup>

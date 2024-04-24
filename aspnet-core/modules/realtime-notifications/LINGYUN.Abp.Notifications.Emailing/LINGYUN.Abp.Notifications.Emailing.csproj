@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\configureawait.props" />
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
@@ -9,8 +9,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Emailing" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Markdig" Version="$(MarkdigPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Emailing" />
+		<PackageReference Include="Markdig" />
 	</ItemGroup>
 
 	<ItemGroup>

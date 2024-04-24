@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -13,8 +14,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Authorization" Version="4.4.0" />
-		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="4.4.0" />
+		<PackageReference Include="Volo.Abp.Authorization" />
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" />
 	</ItemGroup>
 
 	<ItemGroup>

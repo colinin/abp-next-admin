@@ -304,9 +304,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Tencent.TTS", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B8DA7627-E691-400A-AE4D-0E151A6EA0F8}"
 	ProjectSection(SolutionItems) = preProject
-		common.props = common.props
-		configureawait.props = configureawait.props
-		Directory.Build.props = Directory.Build.props
+		..\common.props = ..\common.props
+		..\common.secrets.props = ..\common.secrets.props
+		..\configureawait.props = ..\configureawait.props
+		..\Directory.Build.props = ..\Directory.Build.props
+		..\Directory.Packages.props = ..\Directory.Packages.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Mvc.Idempotent", "framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Idempotent\LINGYUN.Abp.AspNetCore.Mvc.Idempotent.csproj", "{347413DD-1B30-46B5-87A0-828A11FAA87D}"
