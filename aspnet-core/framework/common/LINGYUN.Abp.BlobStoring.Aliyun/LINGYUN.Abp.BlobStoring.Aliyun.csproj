@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\configureawait.props" />
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -10,8 +10,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aliyun.OSS.SDK.NetCore" Version="$(AliyunOSSSDKPackageVersion)" />
-		<PackageReference Include="Volo.Abp.BlobStoring" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Aliyun.OSS.SDK.NetCore" />
+		<PackageReference Include="Volo.Abp.BlobStoring" />
 	</ItemGroup>
 
 	<ItemGroup>

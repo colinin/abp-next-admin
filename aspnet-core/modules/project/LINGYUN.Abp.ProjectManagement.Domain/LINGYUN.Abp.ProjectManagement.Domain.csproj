@@ -1,16 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>netstandard2.1</TargetFramework>
 		<RootNamespace />
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AutoMapper" Version="4.4.0" />
-		<PackageReference Include="Volo.Abp.Cli.Core" Version="4.4.0" />
-		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="4.4.0" />
+		<PackageReference Include="Volo.Abp.AutoMapper" />
+		<PackageReference Include="Volo.Abp.Cli.Core" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" />
 	</ItemGroup>
 
 	<ItemGroup>

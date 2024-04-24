@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
@@ -27,16 +27,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-		<PackageReference Include="NETStandard.Library" Version="2.0.3" />
-		<PackageReference Include="Serilog.Extensions.Logging" Version="$(SerilogExtensionsLoggingPackageVersion)" />
-		<PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFilePackageVersion)" />
-		<PackageReference Include="Serilog.Sinks.Console" Version="$(SerilogSinksConsolePackageVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(MicrosoftPackageVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="$(MicrosoftPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Cli.Core" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.TextTemplating.Scriban" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Microsoft.CSharp" />
+		<!--<PackageReference Include="NETStandard.Library" Version="2.0.3" />-->
+		<PackageReference Include="Serilog.Extensions.Logging" />
+		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Serilog.Sinks.Console" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+		<PackageReference Include="Volo.Abp.Autofac" />
+		<PackageReference Include="Volo.Abp.Cli.Core" />
+		<PackageReference Include="Volo.Abp.TextTemplating.Scriban" />
 	</ItemGroup>
 
 </Project>

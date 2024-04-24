@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\configureawait.props" />
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -17,10 +17,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonPackageVersion)" />
-		<PackageReference Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.BackgroundJobs.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.TextTemplating.Core" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="Volo.Abp.EventBus" />
+		<PackageReference Include="Volo.Abp.BackgroundJobs.Abstractions" />
+		<PackageReference Include="Volo.Abp.TextTemplating.Core" />
 	</ItemGroup>
 
 	<ItemGroup>

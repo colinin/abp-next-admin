@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\configureawait.props" />
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -9,8 +9,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Dapr.Actors.AspNetCore" Version="$(DaprPackageVersion)" />
-		<PackageReference Include="Volo.Abp.AspNetCore" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Dapr.Actors.AspNetCore" />
+		<PackageReference Include="Volo.Abp.AspNetCore" />
 	</ItemGroup>
 
 </Project>

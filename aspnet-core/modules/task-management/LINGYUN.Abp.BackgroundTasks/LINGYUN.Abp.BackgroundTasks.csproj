@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\configureawait.props" />
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -17,11 +17,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Auditing" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.BackgroundJobs.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.BackgroundWorkers" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Guids" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Auditing" />
+		<PackageReference Include="Volo.Abp.BackgroundJobs.Abstractions" />
+		<PackageReference Include="Volo.Abp.BackgroundWorkers" />
+		<PackageReference Include="Volo.Abp.Caching" />
+		<PackageReference Include="Volo.Abp.Guids" />
 	</ItemGroup>
 
 	<ItemGroup>

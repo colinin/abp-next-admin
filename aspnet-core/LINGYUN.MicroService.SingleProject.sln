@@ -419,9 +419,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.Application
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D1A85853-3504-45A8-A745-5091E9240682}"
 	ProjectSection(SolutionItems) = preProject
-		common.props = common.props
-		configureawait.props = configureawait.props
-		Directory.Build.props = Directory.Build.props
+		..\common.props = ..\common.props
+		..\common.secrets.props = ..\common.secrets.props
+		..\configureawait.props = ..\configureawait.props
+		..\Directory.Build.props = ..\Directory.Build.props
+		..\Directory.Packages.props = ..\Directory.Packages.props
+		..\NuGet.Config = ..\NuGet.Config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{FD9F5933-FDE5-4504-99BF-9050E0435C6D}"
@@ -510,7 +513,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AuditLogging.El
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.TaskManagement", "modules\task-management\LINGYUN.Abp.BackgroundTasks.TaskManagement\LINGYUN.Abp.BackgroundTasks.TaskManagement.csproj", "{A99F5406-37DC-4677-9166-9BDE90C26CA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Saas.Jobs", "modules\saas\LINGYUN.Abp.Saas.Jobs\LINGYUN.Abp.Saas.Jobs.csproj", "{8FA3ED81-19AB-4E0C-B36A-DF49131A2AB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Saas.Jobs", "modules\saas\LINGYUN.Abp.Saas.Jobs\LINGYUN.Abp.Saas.Jobs.csproj", "{8FA3ED81-19AB-4E0C-B36A-DF49131A2AB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\configureawait.props" />
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -18,12 +18,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Settings" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="TencentCloudSDK" Version="$(TencentCloudSDKPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Features" />
+		<PackageReference Include="Volo.Abp.Caching" />
+		<PackageReference Include="Volo.Abp.Localization" />
+		<PackageReference Include="Volo.Abp.Json" />
+		<PackageReference Include="Volo.Abp.Settings" />
+		<PackageReference Include="TencentCloudSDK" />
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\..\configureawait.props" />
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
@@ -10,13 +10,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Guids" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Timing" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Threading" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Elsa" Version="$(ElsaPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AutoMapper" />
+		<PackageReference Include="Volo.Abp.Features" />
+		<PackageReference Include="Volo.Abp.Guids" />
+		<PackageReference Include="Volo.Abp.Timing" />
+		<PackageReference Include="Volo.Abp.Threading" />
+		<PackageReference Include="Volo.Abp.Json" />
+		<PackageReference Include="Elsa" />
 	</ItemGroup>
 
 </Project>

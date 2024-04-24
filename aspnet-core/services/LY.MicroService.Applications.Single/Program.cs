@@ -33,6 +33,10 @@ builder.Host.AddAppSettingsSecretsJson()
 
 await builder.AddApplicationAsync<MicroServiceApplicationsSingleModule>(options =>
 {
+    // 从环境变量取用户机密配置, 适用于容器测试
+    options.Configuration.UserSecretsId = Environment.GetEnvironmentVariable("APPLICATION_USER_SECRETS_ID");
+    // 如果容器没有指定用户机密, 从项目读取
+    options.Configuration.UserSecretsAssembly = typeof(MicroServiceApplicationsSingleModule).Assembly;
     // 搜索 Modules 目录下所有文件作为插件
     // 取消显示引用所有其他项目的模块，改为通过插件的形式引用
     var pluginFolder = Path.Combine(
