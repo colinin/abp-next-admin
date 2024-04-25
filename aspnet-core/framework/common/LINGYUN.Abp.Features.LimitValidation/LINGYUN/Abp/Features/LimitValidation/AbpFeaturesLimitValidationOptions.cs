@@ -50,7 +50,7 @@ namespace LINGYUN.Abp.Features.LimitValidation
             MapEffectPolicy(LimitPolicy.Days, (now, tick) =>
             {
                 // 按天计算应取当天
-                return (long)(now.Date.AddDays(tick) - DateTime.UtcNow).TotalSeconds;
+                return (long)(now.Date.AddDays(tick) - now).TotalSeconds;
             });
 
             MapEffectPolicy(LimitPolicy.Weeks,(now, tick) =>
@@ -64,7 +64,7 @@ namespace LINGYUN.Abp.Features.LimitValidation
                 }
                 var utcOnceDayOfWeek = nowDate.AddDays(-dayOfWeek);
 
-                return (long)(utcOnceDayOfWeek.AddDays(tick * 7) - DateTime.UtcNow).TotalSeconds;
+                return (long)(utcOnceDayOfWeek.AddDays(tick * 7) - now).TotalSeconds;
             });
 
             MapEffectPolicy(LimitPolicy.Month, (now, tick) =>

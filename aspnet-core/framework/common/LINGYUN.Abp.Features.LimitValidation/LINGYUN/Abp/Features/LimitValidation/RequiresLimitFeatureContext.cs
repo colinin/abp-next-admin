@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp;
 
 namespace LINGYUN.Abp.Features.LimitValidation
 {
@@ -29,11 +30,11 @@ namespace LINGYUN.Abp.Features.LimitValidation
             int interval = 1,
             int limit = 1)
         {
-            Limit = limit;
             Policy = policy;
-            Interval = interval;
-            LimitFeature = limitFeature;
             Options = options;
+            LimitFeature = limitFeature;
+            Limit = Check.Positive(limit, nameof(limit));
+            Interval = Check.Positive(interval, nameof(interval));
         }
 
         /// <summary>
