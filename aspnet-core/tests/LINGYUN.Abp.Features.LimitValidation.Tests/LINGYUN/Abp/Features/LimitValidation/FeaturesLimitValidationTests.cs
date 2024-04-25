@@ -27,10 +27,7 @@ namespace LINGYUN.Abp.Features.LimitValidation
                 // it's ok
                 await TestValidationFeatureClass.Test1MinuteAsync();
                 await TestValidationFeatureClass.Test1MinuteAsync();
-                await Assert.ThrowsAsync<AbpFeatureLimitException>(async () =>
-                {
-                    await TestValidationFeatureClass.Test1MinuteAsync();
-                });
+                await Assert.ThrowsAsync<AbpFeatureLimitException>(TestValidationFeatureClass.Test1MinuteAsync);
 
                 Thread.Sleep(61000);
                 await TestValidationFeatureClass.Test1MinuteAsync();
