@@ -36,15 +36,12 @@ public class SendMessage
         MessageContentType contentType = MessageContentType.Text,
         string url = "")
     {
-        Check.NotNullOrWhiteSpace(appToken, nameof(appToken));
-        Check.NotNullOrWhiteSpace(content, nameof(content));
-        Check.Length(summary, nameof(summary), 100);
-
-        AppToken = appToken;
-        Content = content;
-        Summary = summary;
+        AppToken = Check.NotNullOrWhiteSpace(appToken, nameof(appToken));
+        // 单条消息的数据长度(字符数)限制是：content<40000;summary<20(微信的限制，大于20显示不完);url<400
+        Content = Check.NotNullOrWhiteSpace(content, nameof(content), 39999);
+        Summary = Check.Length(summary, nameof(summary), 19);
+        Url = Check.Length(url, nameof(url), 399);
         ContentType = contentType;
-        Url = url;
 
         TopicIds = new List<int>();
         Uids = new List<string>();
