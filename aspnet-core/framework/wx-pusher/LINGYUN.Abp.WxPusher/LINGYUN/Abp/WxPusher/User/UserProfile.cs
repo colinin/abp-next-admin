@@ -12,6 +12,11 @@ public class UserProfile
     [JsonProperty("uid")]
     public string Uid { get; set; }
     /// <summary>
+    /// 用户关注的应用或者主题id，根据type来区分
+    /// </summary>
+    [JsonProperty("appOrTopicId")]
+    public long? AppOrTopicId { get; set; }
+    /// <summary>
     /// 新用户微信不再返回 ，强制返回空
     /// </summary>
     [JsonProperty("headImg")]
@@ -48,4 +53,9 @@ public class UserProfile
     /// </summary>
     [JsonProperty("target")]
     public string Target { get; set; }
+    /// <summary>
+    /// 0表示用户不是付费用户，大于0表示用户付费订阅到期时间，毫秒级时间戳
+    /// </summary>
+    [JsonProperty("payEndTime")]
+    public long PayEndTime { get; set; }
 }
