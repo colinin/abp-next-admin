@@ -69,6 +69,7 @@ services:
       - "cluster.name=elasticsearch"
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms15g -Xmx15g"
+      - TZ=Asia/Shanghai
     volumes:
       - ./deploy/middleware/elasticsearch/plugins:/usr/share/elasticsearch/plugins
       - ./deploy/middleware/elasticsearch/data:/usr/share/elasticsearch/data
@@ -85,6 +86,7 @@ services:
       - abp-elasticsearch
     environment:
       - ELASTICSEARCH_URL=http://host.docker.internal:9200
+      - TZ=Asia/Shanghai
     ports:
       - 5601:5601
     networks:
@@ -96,6 +98,8 @@ services:
     image: logstash:7.16.3
     container_name: abp-logstash
     restart: always
+    environment:
+      - TZ=Asia/Shanghai
     depends_on:
       - abp-elasticsearch
     links:
