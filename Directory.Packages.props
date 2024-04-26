@@ -1,8 +1,8 @@
 <Project>
 	<PropertyGroup>
-		<DotNetCoreCAPPackageVersion>8.1.0</DotNetCoreCAPPackageVersion>
+		<DotNetCoreCAPPackageVersion>8.1.1</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
-		<VoloAbpPackageVersion>8.1.0</VoloAbpPackageVersion>
+		<VoloAbpPackageVersion>8.1.1</VoloAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>8.0.0</MicrosoftExtensionsPackageVersion>
 		<MicrosoftAspNetCorePackageVersion>8.0.0</MicrosoftAspNetCorePackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>8.0.0</MicrosoftEntityFrameworkCorePackageVersion>
@@ -229,7 +229,7 @@
 		<PackageVersion Include="Hangfire.MySqlStorage" Version="2.0.3" />
 		<PackageVersion Include="HangFire.SqlServer" Version="1.8.6" />
 		<PackageVersion Include="IdentityModel" Version="6.2.0" />
-		<PackageVersion Include="JetBrains.Annotations" Version="2022.1.0" />
+		<PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
 		<PackageVersion Include="Markdig" Version="0.34.0" />
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageVersion Include="NEST" Version="7.15.1" />

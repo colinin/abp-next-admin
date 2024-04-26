@@ -7,5 +7,6 @@ namespace LINGYUN.Abp.Saas.Tenants;
 [EventName("abp.saas.tenant.deleted")]
 public class TenantDeletedEto : TenantEto
 {
+    public RecycleStrategy Strategy { get; set; }
     public string DefaultConnectionString { get; set; }
 }
