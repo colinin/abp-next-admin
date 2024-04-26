@@ -12,10 +12,10 @@ namespace LY.MicroService.LocalizationManagement.EntityFrameworkCore;
 
 [DependsOn(
     typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule)
     )]
 public class LocalizationManagementMigrationsEntityFrameworkCoreModule : AbpModule

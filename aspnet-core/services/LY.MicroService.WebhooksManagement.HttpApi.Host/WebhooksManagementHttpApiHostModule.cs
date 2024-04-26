@@ -104,6 +104,8 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
+        ConfigureSettingManagement();
+        ConfigurePermissionManagement();
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);

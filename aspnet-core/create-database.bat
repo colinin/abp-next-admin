@@ -11,5 +11,3 @@ call .\migrate-db-cmd.bat LY.MicroService.TaskManagement.EntityFrameworkCore tas
 call .\migrate-db-cmd.bat LY.MicroService.WebhooksManagement.EntityFrameworkCore webhooks-management --ef-u
 
 taskkill /IM dotnet.exe /F
-
-pause

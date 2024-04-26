@@ -13,11 +13,11 @@ namespace LY.MicroService.WebhooksManagement.EntityFrameworkCore;
 
 [DependsOn(
     typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(WebhooksManagementEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(WebhooksManagementEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpDataDbMigratorModule)
     )]
 public class WebhooksManagementMigrationsEntityFrameworkCoreModule : AbpModule

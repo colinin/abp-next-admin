@@ -2,91 +2,176 @@ version: '3.4'
 
 services:
   admin-api:
+    hostname: admin
+    container_name: admin
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
     ports:
       - "30010:80"
+    networks:
+      - abp-next-admin
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
 
   sts-api:
+    hostname: auth-server-api
+    container_name: auth-server-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
     ports:
       - "30015:80"
+    networks:
+      - abp-next-admin
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
 
   localization-api:
+    hostname: localization
+    container_name: localization
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
     ports:
       - "30030:80"
+    networks:
+      - abp-next-admin
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
 
   platform-api:
+    hostname: platform
+    container_name: platform
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
     ports:
       - "30025:80"
+    networks:
+      - abp-next-admin
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
 
   messages-api:
+    hostname: messages
+    container_name: messages
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
     ports:
       - "30020:80"
+    networks:
+      - abp-next-admin
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
 
   task-api:
+    hostname: task
+    container_name: task
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
     ports:
       - "30040:80"
+    networks:
+      - abp-next-admin
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
 
   webhook-api:
+    hostname: webhook
+    container_name: webhook
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
     ports:
       - "30045:80"
+    networks:
+      - abp-next-admin
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
 
   workflow-api:
+    hostname: workflow
+    container_name: workflow
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
     ports:
       - "30050:80"
+    networks:
+      - abp-next-admin
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
 
   sts-server:
+    hostname: auth-server
+    container_name: auth-server
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
     ports:
       - "44385:80"
+    networks:
+      - abp-next-admin
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
 
   internal-apigateway:
+    hostname: apigateway
+    container_name: apigateway
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
     ports:
       - "30000:80"
+    networks:
+      - abp-next-admin
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
+      - "auth-server-api:host-gateway"
+      - "localization:host-gateway"
+      - "workflow:host-gateway"
+      - "webhook:host-gateway"
+      - "messages:host-gateway"
+      - "platform:host-gateway"
+      - "task:host-gateway"
+      - "admin:host-gateway"
+
+  ui:
+    restart: always
+    environment:
+      - VITE_GLOB_AUTHORITY=http://apigateway:44385
+    ports:
+      - "40080:80"
+    networks:
+      - abp-next-admin
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "apigateway:host-gateway"
+      - "auth-server:host-gateway"
+
+networks:
+  abp-next-admin:
+    driver: bridge

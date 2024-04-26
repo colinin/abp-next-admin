@@ -7,11 +7,10 @@ services:
     environment:
       - adminConsole=true
       - db:provider=mysql
-      - db:conn=Server=host.docker.internal;Database=agile;User Id=root;Password=123456;Character Set=utf8mb4
+      - db:conn=Server=abp-mysql;Database=agile;User Id=root;Password=123456;Character Set=utf8mb4
+      - TZ=Asia/Shanghai
     ports:
       - "5000:5000"
-    volumes:
-      - /etc/localtime:/etc/localtime
 
   sts-server:
     environment:
@@ -130,5 +129,6 @@ services:
       - AgileConfig__nodes=http://agile-config:5000
       - AgileConfig__name=ApiGateway
       - AgileConfig__tag=ApiGateway
+      - TZ=Asia/Shanghai
     depends_on:
       - agile-config

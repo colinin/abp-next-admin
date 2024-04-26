@@ -1,0 +1,110 @@
+version: '3.4'
+
+services:
+  abp-redis:
+    image: redis:6
+    hostname: abp-redis
+    container_name: abp-redis
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./deploy/middleware/redis/data:/data
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - abp-next-admin
+
+  abp-mysql:
+    image: mysql
+    hostname: abp-mysql
+    container_name: abp-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_ROOT_HOST=%
+      - TZ=Asia/Shanghai
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --lower_case_table_names=1
+      --max_connections=1024
+    volumes:
+      - ./deploy/middleware/mysql/data:/var/lib/mysql
+      - ./deploy/middleware/mysql/conf:/etc/mysql/conf.d
+      - ./deploy/middleware/mysql/logs:/logs
+      - ./deploy/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    restart: always
+    networks:
+      - abp-next-admin
+
+  abp-rabbitmq:
+    image: rabbitmq:management
+    hostname: abp-rabbitmq
+    container_name: abp-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "25672:25672"
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=8ue48g9FJQ87YV9Hfd8yhg==
+      - RABBITMQ_DEFAULT_VHOST=/
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=123456
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./deploy/middleware/rabbitmq/logs:/var/log/rabbitmq
+      - ./deploy/middleware/rabbitmq/data:/var/lib/rabbitmq
+    restart: always
+    networks:
+      - abp-next-admin
+
+  abp-elasticsearch:
+    image: elasticsearch:7.16.3
+    container_name: abp-elasticsearch
+    restart: always
+    environment:
+      - "cluster.name=elasticsearch"
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms15g -Xmx15g"
+    volumes:
+      - ./deploy/middleware/elasticsearch/plugins:/usr/share/elasticsearch/plugins
+      - ./deploy/middleware/elasticsearch/data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - abp-next-admin
+
+  abp-kibana:
+    image: kibana:7.16.3
+    container_name: abp-kibana
+    restart: always
+    depends_on:
+      - abp-elasticsearch
+    environment:
+      - ELASTICSEARCH_URL=http://host.docker.internal:9200
+    ports:
+      - 5601:5601
+    networks:
+      - abp-next-admin
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  abp-logstash:
+    image: logstash:7.16.3
+    container_name: abp-logstash
+    restart: always
+    depends_on:
+      - abp-elasticsearch
+    links:
+      - abp-elasticsearch:es
+    ports:
+      - 4560:4560
+    networks:
+      - abp-next-admin 
+
+networks:
+  abp-next-admin:
+    driver: bridge

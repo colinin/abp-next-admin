@@ -5,110 +5,100 @@ services:
     build:
       context: ./aspnet-core/services/Publish/identityserver
     volumes:
-      - /var/opt/abp/logs/ids-sts:/app/Logs
-      - /var/opt/abp/data/ids-sts/Modules:/app/Modules
-    networks:
-      - framework
+      - ./deploy/framework/ids-sts/logs:/app/Logs
+      - ./deploy/framework/ids-sts/modules:/app/Modules
+    restart: always
 
   sts-api:
     build:
       context: ./aspnet-core/services/Publish/identityserver4-admin
     volumes:
-      - /var/opt/abp/logs/ids-admin:/app/Logs
-      - /var/opt/abp/data/ids-admin/Modules:/app/Modules
+      - ./deploy/framework/ids-admin/logs:/app/Logs
+      - ./deploy/framework/ids-admin/modules:/app/Modules
+    restart: always
     depends_on:
       - sts-server
-    networks:
-      - framework
 
   admin-api:
     build:
       context: ./aspnet-core/services/Publish/admin
     volumes:
-      - /var/opt/abp/logs/backend-admin:/app/Logs
-      - /var/opt/abp/data/backend-admin/Modules:/app/Modules
+      - ./deploy/framework/ids-admin/logs:/app/Logs
+      - ./deploy/framework/ids-admin/modules:/app/Modules
+    restart: always
     depends_on:
       - sts-server
-    networks:
-      - framework
 
   localization-api:
     build:
       context: ./aspnet-core/services/Publish/localization
     volumes:
-      - /var/opt/abp/logs/localization:/app/Logs
-      - /var/opt/abp/data/localization/Modules:/app/Modules
+      - ./deploy/framework/localization/logs:/app/Logs
+      - ./deploy/framework/localization/modules:/app/Modules
+    restart: always
     depends_on:
       - sts-server
-    networks:
-      - framework
 
   platform-api:
     build:
       context: ./aspnet-core/services/Publish/platform
     volumes:
-      - /var/opt/abp/logs/platform:/app/Logs
-      - /var/opt/abp/data/platform/Modules:/app/Modules
-      - /var/opt/abp/data/platform:/app/file-blob-storing
+      - ./deploy/framework/platform/logs:/app/Logs
+      - ./deploy/framework/platform/modules:/app/Modules
+      - ./deploy/framework/platform/blobs:/app/file-blob-storing
+    restart: always
     depends_on:
       - sts-server
-    networks:
-      - framework
 
   messages-api:
     build:
       context: ./aspnet-core/services/Publish/messages
     volumes:
-      - /var/opt/abp/logs/messages:/app/Logs
-      - /var/opt/abp/data/messages/Modules:/app/Modules
+      - ./deploy/framework/messages/logs:/app/Logs
+      - ./deploy/framework/messages/modules:/app/Modules
+    restart: always
     depends_on:
       - sts-server
-    networks:
-      - framework
 
   task-api:
     build:
       context: ./aspnet-core/services/Publish/task-management
     volumes:
-      - /var/opt/abp/logs/task-management:/app/Logs
-      - /var/opt/abp/data/task-management/Modules:/app/Modules
+      - ./deploy/framework/task/logs:/app/Logs
+      - ./deploy/framework/task/modules:/app/Modules
+    restart: always
     depends_on:
       - sts-server
-    networks:
-      - framework
 
   webhook-api:
     build:
       context: ./aspnet-core/services/Publish/webhooks
     volumes:
-      - /var/opt/abp/logs/webhooks:/app/Logs
-      - /var/opt/abp/data/webhooks/Modules:/app/Modules
+      - ./deploy/framework/webhook/logs:/app/Logs
+      - ./deploy/framework/webhook/modules:/app/Modules
+    restart: always
     depends_on:
       - sts-server
-    networks:
-      - framework
 
   workflow-api:
     build:
       context: ./aspnet-core/services/Publish/workflow
     volumes:
-      - /var/opt/abp/logs/workflow:/app/Logs
-      - /var/opt/abp/data/workflow/Modules:/app/Modules
+      - ./deploy/framework/workflow/logs:/app/Logs
+      - ./deploy/framework/workflow/modules:/app/Modules
+    restart: always
     depends_on:
       - sts-server
-    networks:
-      - framework
 
   internal-apigateway:
     build:
       context: ./aspnet-core/services/Publish/internal-apigateway
     volumes:
-      - /var/opt/abp/logs/internal-apigateway:/app/Logs
-      - /var/opt/abp/data/internal-apigateway/Modules:/app/Modules
-    networks:
-      - framework
+      - ./deploy/framework/apigateway/logs:/app/Logs
+      - ./deploy/framework/apigateway/modules:/app/Modules
+    restart: always
 
-networks:
-  framework:
-    name: linyun-abp
-    external: true
+  ui:
+    build:
+      context: ./apps/vue
+    restart: always

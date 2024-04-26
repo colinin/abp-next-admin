@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -31,7 +32,11 @@ public class Program
                    {
                        config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
                    }
-
+                   config.AddJsonFile("ocelot.json", optional: true, reloadOnChange: true);
+                   if (!context.HostingEnvironment.EnvironmentName.IsNullOrWhiteSpace())
+                   {
+                       config.AddJsonFile($"ocelot.{context.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                   }
                })
                 .UseSerilog((context, provider, config) =>
                 {

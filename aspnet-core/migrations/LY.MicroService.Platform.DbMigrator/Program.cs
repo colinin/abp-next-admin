@@ -13,7 +13,7 @@ public class Program
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .MinimumLevel.Override("Volo.Abp", LogEventLevel.Debug)
+            .MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning)
 #if DEBUG
                 .MinimumLevel.Override("LY.MicroService.Platform", LogEventLevel.Debug)
 #else

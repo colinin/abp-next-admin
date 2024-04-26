@@ -36,7 +36,7 @@ public class WebhooksManagementDbMigratorHostedService : IHostedService
         await application
             .ServiceProvider
             .GetRequiredService<WebhooksManagementDbMigrationService>()
-            .MigrateAsync();
+            .CheckAndApplyDatabaseMigrationsAsync();
 
         await application.ShutdownAsync();
 

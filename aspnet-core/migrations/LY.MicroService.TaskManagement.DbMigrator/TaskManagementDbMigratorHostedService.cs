@@ -36,7 +36,7 @@ public class TaskManagementDbMigratorHostedService : IHostedService
         await application
             .ServiceProvider
             .GetRequiredService<TaskManagementDbMigrationService>()
-            .MigrateAsync();
+            .CheckAndApplyDatabaseMigrationsAsync();
 
         await application.ShutdownAsync();
 

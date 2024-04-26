@@ -20,7 +20,7 @@ public class Program
                 .MinimumLevel.Override("LY.MicroService.LocalizationManagement.DbMigrator", LogEventLevel.Information)
 #endif
                 .Enrich.FromLogContext()
-            .WriteTo.Console()
+            .WriteTo.Console(outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] [{SourceContext}] [{ProcessId}] [{ThreadId}] - {Message:lj}{NewLine}{Exception}")
             .WriteTo.File("Logs/migrations.txt")
             .CreateLogger();
 

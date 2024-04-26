@@ -41,8 +41,10 @@ using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.Quartz;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
@@ -371,6 +373,22 @@ public partial class WebhooksManagementHttpApiHostModule
         Configure<FeatureManagementOptions>(options =>
         {
             options.IsDynamicFeatureStoreEnabled = true;
+        });
+    }
+
+    private void ConfigurePermissionManagement()
+    {
+        Configure<PermissionManagementOptions>(options =>
+        {
+            options.IsDynamicPermissionStoreEnabled = true;
+        });
+    }
+
+    private void ConfigureSettingManagement()
+    {
+        Configure<SettingManagementOptions>(options =>
+        {
+            options.IsDynamicSettingStoreEnabled = true;
         });
     }
 
