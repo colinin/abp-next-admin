@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\common.secrets.props" />
-	
+
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net8.0</TargetFramework>
@@ -20,9 +20,6 @@
 		</PackageReference>
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
-		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
-		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
-		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -33,10 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.MessageService.EntityFrameworkCore\LINGYUN.Abp.MessageService.EntityFrameworkCore.csproj" />
-	  <ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.EntityFrameworkCore\LINGYUN.Abp.Notifications.EntityFrameworkCore.csproj" />
-	  <ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
-	  <ProjectReference Include="..\LY.MicroService.RealtimeMessage.EntityFrameworkCore\LY.MicroService.RealtimeMessage.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\LY.MicroService.RealtimeMessage.EntityFrameworkCore\LY.MicroService.RealtimeMessage.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
+using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
@@ -11,10 +12,11 @@ namespace LY.MicroService.Platform.EntityFrameworkCore;
 
 [DependsOn(
     typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(LINGYUN.Platform.EntityFrameworkCore.PlatformEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(LINGYUN.Platform.EntityFrameworkCore.PlatformEntityFrameworkCoreModule),
+    typeof(AbpUINavigationVueVbenAdminModule),
     typeof(AbpDataDbMigratorModule)
     )]
 public class PlatformMigrationsEntityFrameworkCoreModule : AbpModule

@@ -33,7 +33,7 @@ public class AuthServerDbMigratorHostedService : IHostedService
             options.Services.ReplaceConfiguration(_configuration);
             options.UseAutofac();
             options.Services.AddLogging(c => c.AddSerilog());
-            //options.AddDataMigrationEnvironment();
+            options.AddDataMigrationEnvironment();
         });
         await application.InitializeAsync();
 

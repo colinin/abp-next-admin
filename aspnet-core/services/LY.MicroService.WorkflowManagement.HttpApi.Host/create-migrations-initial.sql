@@ -1,5 +1,9 @@
 -- basic script
 
+CREATE DATABASE `Workflow-V70` CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci';
+
+USE `Workflow-V70`;
+
 CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
     `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
     `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,

@@ -2,6 +2,7 @@
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
+using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
@@ -13,11 +14,12 @@ namespace LY.MicroService.RealtimeMessage.EntityFrameworkCore;
 
 [DependsOn(
     typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpNotificationsEntityFrameworkCoreModule),
+    typeof(AbpMessageServiceEntityFrameworkCoreModule),
+    typeof(AbpTextTemplatingEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(AbpNotificationsEntityFrameworkCoreModule),
-    typeof(AbpMessageServiceEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule)
     )]
 public class RealtimeMessageMigrationsEntityFrameworkCoreModule : AbpModule

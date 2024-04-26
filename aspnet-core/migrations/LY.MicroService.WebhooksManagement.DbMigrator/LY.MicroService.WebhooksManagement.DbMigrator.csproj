@@ -20,9 +20,6 @@
 		</PackageReference>
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
-		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
-		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
-		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -33,8 +30,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
-	  <ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\LY.MicroService.WebhooksManagement.EntityFrameworkCore\LY.MicroService.WebhooksManagement.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 

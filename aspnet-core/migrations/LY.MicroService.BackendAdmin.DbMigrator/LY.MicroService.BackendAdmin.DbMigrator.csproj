@@ -13,12 +13,13 @@
 		<PackageReference Include="Serilog.Extensions.Logging" />
 		<PackageReference Include="Serilog.Sinks.File" />
 		<PackageReference Include="Serilog.Sinks.Console" />
-		<PackageReference Include="Microsoft.Extensions.Hosting"/>
+		<PackageReference Include="Microsoft.Extensions.Hosting" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Volo.Abp.Autofac" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.Application.Contracts" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -29,7 +30,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\LY.MicroService.BackendAdmin.EntityFrameworkCore\LY.MicroService.BackendAdmin.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.Application.Contracts\LINGYUN.Abp.WebhooksManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.Application.Contracts\LINGYUN.Abp.TaskManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.Application.Contracts\LINGYUN.Abp.Notifications.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Application.Contracts\LINGYUN.Platform.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Application.Contracts\LINGYUN.Abp.OssManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.Application.Contracts\LINGYUN.Abp.LocalizationManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.Application.Contracts\LINGYUN.Abp.IdentityServer.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\openiddict\LINGYUN.Abp.OpenIddict.Application.Contracts\LINGYUN.Abp.OpenIddict.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\framework\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.Auditing.Application.Contracts\LINGYUN.Abp.Auditing.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\caching-management\LINGYUN.Abp.CachingManagement.Application.Contracts\LINGYUN.Abp.CachingManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\feature-management\LINGYUN.Abp.FeatureManagement.Application.Contracts\LINGYUN.Abp.FeatureManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\text-templating\LINGYUN.Abp.TextTemplating.Application.Contracts\LINGYUN.Abp.TextTemplating.Application.Contracts.csproj" />
+		<ProjectReference Include="..\LY.MicroService.BackendAdmin.EntityFrameworkCore\LY.MicroService.BackendAdmin.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 </Project>

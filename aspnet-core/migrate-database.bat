@@ -10,5 +10,4 @@ call .\migrate-db-cmd.bat LY.MicroService.TaskManagement.DbMigrator task-managem
 call .\migrate-db-cmd.bat LY.MicroService.WebhooksManagement.DbMigrator webhooks-management --run
 call .\migrate-db-cmd.bat LY.MicroService.BackendAdmin.DbMigrator admin --run
 
-
-pause
+taskkill /IM dotnet.exe /F

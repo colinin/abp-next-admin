@@ -1,16 +1,17 @@
 version: '3.4'
 
 services:
-  vue-vben-client:
+  ui:
     build:
       context: .
     restart: always
+    environment:
+      - VITE_GLOB_AUTHORITY=http://127.0.0.1:44385
     ports:
       - "40080:80"
     networks:
-      - framework
+      - abp-next-admin
 
 networks:
-  framework:
-    external:
-      name: ly_app_net
+  abp-next-admin:
+    driver: bridge
