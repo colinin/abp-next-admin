@@ -68,8 +68,6 @@ namespace LY.MicroService.PlatformManagement;
     typeof(PlatformApplicationModule),
     typeof(PlatformHttpApiModule),
     typeof(PlatformEntityFrameworkCoreModule),
-    typeof(AbpWeChatWorkApplicationModule),
-    typeof(AbpWeChatWorkHttpApiModule),
     typeof(AbpIdentityHttpApiClientModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),

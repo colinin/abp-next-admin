@@ -2,5 +2,5 @@
 
 public static class AbpOrganizationUnitClaimTypes
 {
-    public static string OrganizationUnit { get; set; } = "organization_unit";
+    public static string OrganizationUnit { get; set; } = "ou_code";
 }

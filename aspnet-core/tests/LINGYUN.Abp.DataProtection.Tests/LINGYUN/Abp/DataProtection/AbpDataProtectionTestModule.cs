@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.DataProtection
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAbpDbContext<AbpDataProtectionDbContext>(options =>
+            context.Services.AddAbpDbContext<AbpDataProtectionTestDbContext>(options =>
             {
                 options.AddRepository<FakeProtectionObject, EfCoreFakeProtectionObjectRepository>();
             });

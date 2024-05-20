@@ -175,7 +175,7 @@ public class PortalGrantValidator : IExtensionGrantValidator
                     errorDescription = resourceOwnerContext.Result.ErrorDescription;
                 }
 
-                _logger.LogInformation("User authentication failed: ", errorDescription ?? resourceOwnerContext.Result.Error);
+                _logger.LogInformation("User authentication failed: {0}", errorDescription ?? resourceOwnerContext.Result.Error);
                 await RaiseFailedResourceOwnerAuthenticationEventAsync(userName, errorDescription, context.Request.Client.ClientId);
 
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, errorDescription, resourceOwnerContext.Result.CustomResponse);

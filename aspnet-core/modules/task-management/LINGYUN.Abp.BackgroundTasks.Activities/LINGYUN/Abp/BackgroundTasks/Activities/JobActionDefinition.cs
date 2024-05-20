@@ -31,6 +31,10 @@ public class JobActionDefinition
     /// 通知提供者
     /// </summary>
     public ITypeList<IJobExecutedProvider> Providers { get; }
+    /// <summary>
+    /// 额外属性
+    /// </summary>
+    public Dictionary<string, object> Properties { get; }
     public JobActionDefinition(
         [NotNull] string name,
         [NotNull] JobActionType type,
@@ -45,6 +49,7 @@ public class JobActionDefinition
         Description = description;
 
         Providers = new TypeList<IJobExecutedProvider>();
+        Properties = new Dictionary<string, object>();
     }
 
     public virtual JobActionDefinition WithProvider<TProvider>()
@@ -53,5 +58,16 @@ public class JobActionDefinition
         Providers.Add(typeof(TProvider));
 
         return this;
+    }
+
+    public virtual JobActionDefinition WithProperty(string key, object value)
+    {
+        Properties[key] = value;
+        return this;
+    }
+
+    public override string ToString()
+    {
+        return $"[{nameof(JobActionDefinition)} {Name}]";
     }
 }

@@ -1,8 +1,8 @@
-﻿using Volo.Abp.Domain.Entities;
+﻿using Volo.Abp.Domain.Entities.Auditing;
 
 namespace LINGYUN.Abp.DataProtection
 {
-    public class FakeProtectionObject : Entity<int>, IHasDataAccess
+    public class FakeProtectionObject : AuditedAggregateRoot<int>, IDataProtected
     {
         public virtual string Protect1 { get; set; }
         public virtual string Protect2 { get; set; }
@@ -11,6 +11,13 @@ namespace LINGYUN.Abp.DataProtection
         public virtual int ProtectNum1 { get; set; }
         public virtual int ProtectNum2 { get; set; }
         public virtual int Num3 { get; set; }
-        public DataAccessOwner Owner { get; set; }
+
+        public FakeProtectionObject()
+        {
+        }
+
+        public FakeProtectionObject(int id) : base(id)
+        {
+        }
     }
 }

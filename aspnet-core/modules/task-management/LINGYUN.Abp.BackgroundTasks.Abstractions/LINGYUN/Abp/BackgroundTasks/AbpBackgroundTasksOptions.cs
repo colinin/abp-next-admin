@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Collections;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
 public class AbpBackgroundTasksOptions
 {
+    /// <summary>
+    /// 作业异常类型转换
+    /// </summary>
+    public IDictionary<string, JobExceptionType> ErrorCodeToExceptionTypeMappings { get; }
     /// <summary>
     /// 任务监听类型列表
     /// </summary>
@@ -135,5 +140,10 @@ public class AbpBackgroundTasksOptions
         JobMonitors = new TypeList<IJobEvent>();
         DefinitionProviders = new TypeList<IJobDefinitionProvider>();
         JobDispatcherSelectors = new JobDispatcherSelectorList();
+        ErrorCodeToExceptionTypeMappings = new Dictionary<string, JobExceptionType>();
+    }
+    public void Map(string errorCode, JobExceptionType exceptionType)
+    {
+        ErrorCodeToExceptionTypeMappings[errorCode] = exceptionType;
     }
 }

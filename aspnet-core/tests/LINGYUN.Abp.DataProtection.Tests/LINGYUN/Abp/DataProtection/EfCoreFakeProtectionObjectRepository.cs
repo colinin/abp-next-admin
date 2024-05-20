@@ -1,17 +1,30 @@
-﻿using LINGYUN.Abp.DataProtection.EntityFrameworkCore;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+﻿using JetBrains.Annotations;
+using LINGYUN.Abp.DataProtection.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.DataProtection
 {
     public class EfCoreFakeProtectionObjectRepository :
-        EfCoreRepository<AbpDataProtectionDbContext, FakeProtectionObject, int>,
+        EfCoreDataProtectionRepository<AbpDataProtectionTestDbContext, FakeProtectionObject, int>,
         IFakeProtectionObjectRepository
     {
         public EfCoreFakeProtectionObjectRepository(
-            IDbContextProvider<AbpDataProtectionDbContext> dbContextProvider) 
-            : base(dbContextProvider)
+            [NotNull] IDbContextProvider<AbpDataProtectionTestDbContext> dbContextProvider, 
+            [NotNull] IDataAuthorizationService dataAuthorizationService, 
+            [NotNull] IEntityTypeFilterBuilder entityTypeFilterBuilder) 
+            : base(dbContextProvider, dataAuthorizationService, entityTypeFilterBuilder)
         {
+        }
+
+        [DisableDataProtected]
+        public async virtual Task<List<FakeProtectionObject>> GetAllListAsync()
+        {
+            return await (await GetQueryableAsync())
+                .ToListAsync();
         }
     }
 }

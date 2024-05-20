@@ -2,29 +2,20 @@
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Volo.Abp.Users;
 
 public static class CurrentUserOrganizationUnitsExtensions
 {
-    public static Guid[] FindOrganizationUnits([NotNull] this ICurrentUser currentUser)
+    public static string[] FindOrganizationUnits([NotNull] this ICurrentUser currentUser)
     {
         var organizationUnits = currentUser.FindClaims(AbpOrganizationUnitClaimTypes.OrganizationUnit);
         if (organizationUnits.IsNullOrEmpty())
         {
-            return new Guid[0];
+            return new string[0];
         }
 
-        var userOus = new List<Guid>();
-
-        foreach (var userOusClaim in organizationUnits)
-        {
-            if (Guid.TryParse(userOusClaim.Value, out var guid))
-            {
-                userOus.Add(guid);
-            }
-        }
-
-        return userOus.ToArray();
+        return organizationUnits.Select(x => x.Value).ToArray();
     }
 }

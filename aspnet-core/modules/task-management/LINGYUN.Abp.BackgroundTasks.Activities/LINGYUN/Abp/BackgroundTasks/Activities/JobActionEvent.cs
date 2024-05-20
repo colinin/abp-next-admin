@@ -69,6 +69,18 @@ public class JobActionEvent : JobEventBase<JobActionEvent>, ITransientDependency
                 {
                     if (actionDefinition.Type == JobActionType.Failed)
                     {
+                        var exceptionType = actionDefinition.GetExceptioinType();
+                        if (exceptionType != null)
+                        {
+                            // 应该由用户决定哪些异常才需要发送通知
+                            var exceptionTypeFinder = context.ServiceProvider.GetRequiredService<IJobExceptionTypeFinder>();
+                            var findExceptionType = exceptionTypeFinder.GetExceptionType(context, context.EventData.Exception);
+                            if (!exceptionType.Value.HasFlag(findExceptionType))
+                            {
+                                Logger.LogInformation($"It is not defined in the Acceptable Exception Range, no failed action will be triggered.");
+                                return;
+                            }
+                        }
                         await notifier.NotifyErrorAsync(notifierContext);
                         Logger.LogInformation($"Executed Failed action with {notifierType.Name} was Successed.");
                     }

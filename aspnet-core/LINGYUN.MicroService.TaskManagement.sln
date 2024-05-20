@@ -24,6 +24,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C99728F6-FB3C-4D26-8917-1D30725209B9}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		..\common.props = ..\common.props
+		..\common.secrets.props = ..\common.secrets.props
+		..\configureawait.props = ..\configureawait.props
+		..\Directory.Build.props = ..\Directory.Build.props
+		..\Directory.Packages.props = ..\Directory.Packages.props
+		..\NuGet.Config = ..\NuGet.Config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "provider", "provider", "{385578CC-C0F1-4377-A7A2-682B8F416234}"
@@ -143,6 +149,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Application.Contracts", "modules\oss-management\LINGYUN.Abp.OssManagement.Application.Contracts\LINGYUN.Abp.OssManagement.Application.Contracts.csproj", "{96B4D255-BB21-4BAF-902A-ADE3F25A44C2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.HttpApi.Client", "modules\oss-management\LINGYUN.Abp.OssManagement.HttpApi.Client\LINGYUN.Abp.OssManagement.HttpApi.Client.csproj", "{44778F3C-7610-4F1C-A2B6-DF8925B1CBE0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.Tests", "tests\LINGYUN.Abp.BackgroundTasks.Tests\LINGYUN.Abp.BackgroundTasks.Tests.csproj", "{A8EFC95D-6700-4840-A7FD-1F5BF4D0C71C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TestsBase", "tests\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj", "{6CC06BD8-FA30-45E0-BD3A-25FF39906EF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.BackgroundTasks.Activities.Tests", "tests\LINGYUN.Abp.BackgroundTasks.Activities.Tests\LINGYUN.Abp.BackgroundTasks.Activities.Tests.csproj", "{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -374,6 +386,18 @@ Global
 		{44778F3C-7610-4F1C-A2B6-DF8925B1CBE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44778F3C-7610-4F1C-A2B6-DF8925B1CBE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44778F3C-7610-4F1C-A2B6-DF8925B1CBE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8EFC95D-6700-4840-A7FD-1F5BF4D0C71C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8EFC95D-6700-4840-A7FD-1F5BF4D0C71C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8EFC95D-6700-4840-A7FD-1F5BF4D0C71C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8EFC95D-6700-4840-A7FD-1F5BF4D0C71C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CC06BD8-FA30-45E0-BD3A-25FF39906EF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CC06BD8-FA30-45E0-BD3A-25FF39906EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CC06BD8-FA30-45E0-BD3A-25FF39906EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CC06BD8-FA30-45E0-BD3A-25FF39906EF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -435,6 +459,9 @@ Global
 		{94D1C512-09E4-4A68-8989-6DB49FEABA67} = {F36E71F7-B05F-4513-A923-81E2A7474EAE}
 		{96B4D255-BB21-4BAF-902A-ADE3F25A44C2} = {F36E71F7-B05F-4513-A923-81E2A7474EAE}
 		{44778F3C-7610-4F1C-A2B6-DF8925B1CBE0} = {F36E71F7-B05F-4513-A923-81E2A7474EAE}
+		{A8EFC95D-6700-4840-A7FD-1F5BF4D0C71C} = {77341F31-F54C-436A-AF8D-F78D91303C45}
+		{6CC06BD8-FA30-45E0-BD3A-25FF39906EF5} = {77341F31-F54C-436A-AF8D-F78D91303C45}
+		{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07} = {77341F31-F54C-436A-AF8D-F78D91303C45}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}

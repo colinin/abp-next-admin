@@ -30,7 +30,7 @@
 		<PackageReference Include="Serilog.Settings.Configuration" />
 		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
 		<PackageReference Include="Serilog.Sinks.File" />
-		<PackageReference Include="Swashbuckle.AspNetCore"  />
+		<PackageReference Include="Swashbuckle.AspNetCore" />
 		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" />
@@ -74,6 +74,8 @@
 		<ProjectReference Include="..\..\modules\caching-management\LINGYUN.Abp.CachingManagement.Application\LINGYUN.Abp.CachingManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\caching-management\LINGYUN.Abp.CachingManagement.HttpApi\LINGYUN.Abp.CachingManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\caching-management\LINGYUN.Abp.CachingManagement.StackExchangeRedis\LINGYUN.Abp.CachingManagement.StackExchangeRedis.csproj" />
+		<ProjectReference Include="..\..\modules\data-protection\LINGYUN.Abp.DataProtectionManagement.Application\LINGYUN.Abp.DataProtectionManagement.Application.csproj" />
+		<ProjectReference Include="..\..\modules\data-protection\LINGYUN.Abp.DataProtectionManagement.HttpApi\LINGYUN.Abp.DataProtectionManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\feature-management\LINGYUN.Abp.FeatureManagement.Application\LINGYUN.Abp.FeatureManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\feature-management\LINGYUN.Abp.FeatureManagement.HttpApi\LINGYUN.Abp.FeatureManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />

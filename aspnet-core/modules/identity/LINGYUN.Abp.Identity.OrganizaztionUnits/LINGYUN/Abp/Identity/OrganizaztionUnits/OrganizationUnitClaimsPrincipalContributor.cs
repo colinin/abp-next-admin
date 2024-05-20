@@ -45,10 +45,9 @@ public class OrganizationUnitClaimsPrincipalContributor : IAbpClaimsPrincipalCon
 
         foreach (var userOu in userOus)
         {
-            var userOuId = userOu.Id.ToString();
-            if (!claimsIdentity.HasClaim(AbpOrganizationUnitClaimTypes.OrganizationUnit, userOuId))
+            if (!claimsIdentity.HasClaim(AbpOrganizationUnitClaimTypes.OrganizationUnit, userOu.Code))
             {
-                claimsIdentity.AddClaim(new Claim(AbpOrganizationUnitClaimTypes.OrganizationUnit, userOuId));
+                claimsIdentity.AddClaim(new Claim(AbpOrganizationUnitClaimTypes.OrganizationUnit, userOu.Code));
             }
         }
 
@@ -60,10 +59,9 @@ public class OrganizationUnitClaimsPrincipalContributor : IAbpClaimsPrincipalCon
         var roleOus = await _identityRoleRepository.GetOrganizationUnitsAsync(userRoles);
         foreach (var roleOu in roleOus)
         {
-            var roleOuId = roleOu.Id.ToString();
-            if (!claimsIdentity.HasClaim(AbpOrganizationUnitClaimTypes.OrganizationUnit, roleOuId))
+            if (!claimsIdentity.HasClaim(AbpOrganizationUnitClaimTypes.OrganizationUnit, roleOu.Code))
             {
-                claimsIdentity.AddClaim(new Claim(AbpOrganizationUnitClaimTypes.OrganizationUnit, roleOuId));
+                claimsIdentity.AddClaim(new Claim(AbpOrganizationUnitClaimTypes.OrganizationUnit, roleOu.Code));
             }
         }
 
