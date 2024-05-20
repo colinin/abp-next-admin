@@ -19,6 +19,7 @@ namespace LINGYUN.Abp.Account
         {
             var user = await GetCurrentUserAsync();
 
+            // TODO: Use AbpClaimTypes.Picture
             user.Claims.RemoveAll(x => x.ClaimType.Equals(IdentityConsts.ClaimType.Avatar.Name));
 
             user.AddClaim(GuidGenerator, new Claim(IdentityConsts.ClaimType.Avatar.Name, input.AvatarUrl));

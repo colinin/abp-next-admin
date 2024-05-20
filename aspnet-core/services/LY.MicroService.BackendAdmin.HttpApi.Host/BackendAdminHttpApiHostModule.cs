@@ -6,6 +6,7 @@ using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.CachingManagement;
 using LINGYUN.Abp.CachingManagement.StackExchangeRedis;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.DataProtectionManagement;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FeatureManagement;
@@ -49,6 +50,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 namespace LY.MicroService.BackendAdmin;
 
 [DependsOn(
+    typeof(AbpCAPEventBusModule),
     typeof(AbpSerilogEnrichersApplicationModule),
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAspNetCoreSerilogModule),
@@ -60,6 +62,8 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpSettingManagementHttpApiModule),
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpPermissionManagementHttpApiModule),
+    typeof(AbpDataProtectionManagementApplicationModule),
+    typeof(AbpDataProtectionManagementHttpApiModule),
     typeof(AbpFeatureManagementApplicationModule),
     typeof(AbpFeatureManagementHttpApiModule),
     typeof(AbpFeatureManagementClientModule),
@@ -88,7 +92,6 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),
-    typeof(AbpCAPEventBusModule),
     typeof(AbpAliyunSmsModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
@@ -121,6 +124,7 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         ConfigureSettingManagement();
         ConfigureFeatureManagement();
         ConfigurePermissionManagement();
+        ConfigureDataProtectedManagement();
         ConfigureIdentity(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);

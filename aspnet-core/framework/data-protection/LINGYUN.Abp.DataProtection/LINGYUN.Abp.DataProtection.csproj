@@ -14,6 +14,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.DataProtection.Abstractions\LINGYUN.Abp.DataProtection.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>

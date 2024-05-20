@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LINGYUN.Abp.Saas.Features;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 
@@ -153,10 +155,14 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         {
             return;
         }
+
+        // 租户删除时查询会失效, 在删除前确认
+        var strategy = await FeatureChecker.GetAsync(SaasFeatureNames.Tenant.RecycleStrategy, RecycleStrategy.Recycle);
         var eto = new TenantDeletedEto
         {
             Id = tenant.Id,
             Name = tenant.Name,
+            Strategy = strategy,
             EntityVersion = tenant.EntityVersion,
             DefaultConnectionString = tenant.FindDefaultConnectionString(),
         };

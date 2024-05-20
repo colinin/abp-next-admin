@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Saas.EntityFrameworkCore;
+﻿using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -27,5 +28,6 @@ public class BackendAdminMigrationsDbContext : AbpDbContext<BackendAdminMigratio
         modelBuilder.ConfigureFeatureManagement();
         modelBuilder.ConfigureSettingManagement();
         modelBuilder.ConfigurePermissionManagement();
+        modelBuilder.ConfigureDataProtectionManagement();
     }
 }

@@ -43,14 +43,14 @@ public class SaasFeatureDefinitionProvider : FeatureDefinitionProvider
             defaultValue: 15.ToString(),
             displayName: L("Features:ExpirationReminderDays"),
             description: L("Features:ExpirationReminderDaysDesc"),
-            valueType: new ToggleStringValueType(new NumericValueValidator(1, 30)),
+            valueType: new FreeTextStringValueType(new NumericValueValidator(1, 30)),
             isAvailableToHost: false);
         saas.AddFeature(
             name: SaasFeatureNames.Tenant.ExpiredRecoveryTime,
             defaultValue: 15.ToString(),
             displayName: L("Features:ExpiredRecoveryTime"),
             description: L("Features:ExpiredRecoveryTimeDesc"),
-            valueType: new ToggleStringValueType(new NumericValueValidator(1, 30)),
+            valueType: new FreeTextStringValueType(new NumericValueValidator(1, 30)),
             isAvailableToHost: false);
     }
 

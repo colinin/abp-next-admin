@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AutoMapper" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\framework\data-protection\LINGYUN.Abp.DataProtection\LINGYUN.Abp.DataProtection.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.DataProtectionManagement.Domain.Shared\LINGYUN.Abp.DataProtectionManagement.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

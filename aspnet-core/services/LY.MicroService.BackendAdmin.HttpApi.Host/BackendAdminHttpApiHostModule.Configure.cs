@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.DataProtectionManagement;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -18,6 +19,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -147,6 +149,26 @@ public partial class BackendAdminHttpApiHostModule
             // Rename IdentityServer.Client.ManagePermissions
             // See https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo/Abp/PermissionManagement/IdentityServer/AbpPermissionManagementDomainIdentityServerModule.cs
             options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = "AbpIdentityServer.Clients.ManagePermissions";
+        });
+    }
+
+    private void ConfigureDataProtectedManagement()
+    {
+        Configure<DataProtectionManagementOptions>(options =>
+        {
+            //options.AddEntities(typeof(IdentityResource), new Type[]
+            //{
+            //    typeof(IdentityUser),
+            //    typeof(IdentityRole),
+            //    typeof(OrganizationUnit),
+            //});
+
+            //options.AddEntities(typeof(IdentityResource), new Type[]
+            //{
+            //    typeof(IdentityUser),
+            //    typeof(IdentityRole),
+            //    typeof(OrganizationUnit),
+            //});
         });
     }
 
