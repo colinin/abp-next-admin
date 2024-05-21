@@ -11,21 +11,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Serilog.Extensions.Logging" Version="$(SerilogExtensionsLoggingPackageVersion)" />
-		<PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFilePackageVersion)" />
-		<PackageReference Include="Serilog.Sinks.Console" Version="$(SerilogSinksConsolePackageVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftPackageVersion)" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftEntityFrameworkCorePackageVersion)">
+		<PackageReference Include="Serilog.Extensions.Logging" />
+		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Serilog.Sinks.Console" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" Condition="'$(MySQL)'=='true'" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" Condition="'$(SqlServer)'=='true'" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="$(VoloAbpPackageVersion)" Condition="'$(Sqlite)'=='true'" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Oracle" Version="$(VoloAbpPackageVersion)" Condition="'$(Oracle)'=='true'" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Oracle.Devart" Version="$(VoloAbpPackageVersion)" Condition="'$(OracleDevart)'=='true'" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="$(VoloAbpPackageVersion)" Condition="'$(PostgreSql)'=='true'" />
+		<PackageReference Include="Volo.Abp.Autofac" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Condition="'$(MySQL)'=='true'" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Condition="'$(SqlServer)'=='true'" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Condition="'$(Sqlite)'=='true'" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Oracle" Condition="'$(Oracle)'=='true'" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Oracle.Devart" Condition="'$(OracleDevart)'=='true'" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Condition="'$(PostgreSql)'=='true'" />
 	</ItemGroup>
 
 	<ItemGroup>

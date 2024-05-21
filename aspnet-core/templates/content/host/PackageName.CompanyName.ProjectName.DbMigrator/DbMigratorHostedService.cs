@@ -34,7 +34,7 @@ public class DbMigratorHostedService : IHostedService
         await application
             .ServiceProvider
             .GetRequiredService<ProjectNameDbMigrationService>()
-            .MigrateAsync();
+            .CheckAndApplyDatabaseMigrationsAsync();
 
         await application.ShutdownAsync();
 

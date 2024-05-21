@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LINGYUN.Abp.DataProtection;
+using Microsoft.Extensions.DependencyInjection;
 using PackageName.CompanyName.ProjectName.ObjectExtending;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain.Entities.Events.Distributed;
@@ -10,6 +11,7 @@ namespace PackageName.CompanyName.ProjectName;
 
 [DependsOn(
     typeof(AbpAutoMapperModule),
+    typeof(AbpDataProtectionModule),
     typeof(ProjectNameDomainSharedModule))]
 public class ProjectNameDomainModule : AbpModule
 {

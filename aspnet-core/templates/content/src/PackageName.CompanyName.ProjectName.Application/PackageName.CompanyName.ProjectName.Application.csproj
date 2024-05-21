@@ -9,8 +9,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="LINGYUN.Abp.Dynamic.Queryable.Application" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Application" />
+		<PackageReference Include="LINGYUN.Abp.Dynamic.Queryable.Application" />
 	</ItemGroup>
 
 	<ItemGroup>

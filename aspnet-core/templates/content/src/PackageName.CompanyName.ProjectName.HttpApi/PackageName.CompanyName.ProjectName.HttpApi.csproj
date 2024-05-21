@@ -9,8 +9,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="LINGYUN.Abp.Dynamic.Queryable.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" />
+		<PackageReference Include="LINGYUN.Abp.Dynamic.Queryable.HttpApi" />
 	</ItemGroup>
 
 	<ItemGroup>

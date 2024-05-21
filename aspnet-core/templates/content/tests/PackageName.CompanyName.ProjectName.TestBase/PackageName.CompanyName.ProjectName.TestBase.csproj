@@ -7,17 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
-	  <PackageReference Include="NSubstitute" Version="$(NSubstitutePackageVersion)" />
-	  <PackageReference Include="Shouldly" Version="$(ShouldlyPackageVersion)" />
-	  <PackageReference Include="xunit" Version="$(XunitTestPackageVersion)" />
-	  <PackageReference Include="xunit.extensibility.execution" Version="$(XunitTestPackageVersion)" />
-	  <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitTestPackageVersion)" />
-	  <PackageReference Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
-	  <PackageReference Include="Volo.Abp.Authorization" Version="$(VoloAbpPackageVersion)" />
-	  <PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
-	  <PackageReference Include="Volo.Abp.MemoryDb" Version="$(VoloAbpPackageVersion)" />
-	  <PackageReference Include="Volo.Abp.TestBase" Version="$(VoloAbpPackageVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+	  <PackageReference Include="NSubstitute" />
+	  <PackageReference Include="Shouldly" />
+	  <PackageReference Include="xunit" />
+	  <PackageReference Include="xunit.extensibility.execution" />
+	  <PackageReference Include="xunit.runner.visualstudio" />
+	  <PackageReference Include="Volo.Abp.Autofac" />
+	  <PackageReference Include="Volo.Abp.Authorization" />
+	  <PackageReference Include="Volo.Abp.Features" />
+	  <PackageReference Include="Volo.Abp.MemoryDb" />
+	  <PackageReference Include="Volo.Abp.TestBase" />
   </ItemGroup>
 
 </Project>

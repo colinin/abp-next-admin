@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.DataProtection.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
@@ -22,7 +23,7 @@ namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 [DependsOn(
     typeof(ProjectNameDomainModule),
     typeof(AbpDataDbMigratorModule),
-    typeof(AbpEntityFrameworkCoreModule),
+    typeof(AbpDataProtectionEntityFrameworkCoreModule),
 #if MySQL
     typeof(AbpEntityFrameworkCoreMySQLModule),
 #elif SqlServer

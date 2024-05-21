@@ -1,6 +1,5 @@
-﻿namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore
+﻿namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
+
+public abstract class ProjectNameEntityFrameworkCoreTestBase : ProjectNameTestBase<ProjectNameEntityFrameworkCoreTestModule>
 {
-    public abstract class ProjectNameEntityFrameworkCoreTestBase : ProjectNameTestBase<ProjectNameEntityFrameworkCoreTestModule>
-    {
-    }
 }

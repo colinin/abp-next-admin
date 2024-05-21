@@ -9,10 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Authorization" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="LINGYUN.Abp.Dynamic.Queryable.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" />
+		<PackageReference Include="Volo.Abp.Authorization" />
+		<PackageReference Include="Volo.Abp.Features" />
+		<PackageReference Include="LINGYUN.Abp.Dynamic.Queryable.Application.Contracts" />
 	</ItemGroup>
 
 	<ItemGroup>

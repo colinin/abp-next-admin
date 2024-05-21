@@ -17,9 +17,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Auditing" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.Auditing" />
+		<PackageReference Include="Volo.Abp.EventBus" />
+		<PackageReference Include="Volo.Abp.Localization" />
 	</ItemGroup>
 
 </Project>
