@@ -31,11 +31,6 @@
 		<None Remove="Modules\**" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Content Include="**\*" Exclude="bin\**;obj\**;LocalNuget\**" />
-		<Compile Remove="**\*" />
-	</ItemGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<OutputPath>$(SolutionDir)LocalNuget</OutputPath>
 	</PropertyGroup>
