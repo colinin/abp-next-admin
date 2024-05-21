@@ -1,12 +1,11 @@
 using Volo.Abp.Modularity;
 
-namespace PackageName.CompanyName.ProjectName
+namespace PackageName.CompanyName.ProjectName;
+
+[DependsOn(
+    typeof(ProjectNameDomainTestModule),
+    typeof(ProjectNameApplicationModule)
+    )]
+public class ProjectNameApplicationTestModule : AbpModule
 {
-    [DependsOn(
-        typeof(ProjectNameDomainTestModule),
-        typeof(ProjectNameApplicationModule)
-        )]
-    public class ProjectNameApplicationTestModule : AbpModule
-    {
-    }
 }

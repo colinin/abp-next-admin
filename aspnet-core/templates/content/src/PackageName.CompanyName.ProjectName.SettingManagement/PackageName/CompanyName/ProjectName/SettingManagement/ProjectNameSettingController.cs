@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.SettingManagement;
+﻿using Asp.Versioning;
+using LINGYUN.Abp.SettingManagement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PackageName.CompanyName.ProjectName.Authorization;

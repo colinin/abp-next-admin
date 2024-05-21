@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using PackageName.CompanyName.ProjectName.Localization;
@@ -139,24 +140,31 @@ public partial class ProjectNameHttpApiHostModule
         var openTelemetryEnabled = configuration["OpenTelemetry:IsEnabled"];
         if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
         {
-            services.AddOpenTelemetryTracing(cfg =>
-            {
-                cfg.AddSource(ApplicationName)
-                   .SetResourceBuilder(
-                        ResourceBuilder.CreateDefault().AddService(ApplicationName))
-                   .AddHttpClientInstrumentation()
-                   .AddAspNetCoreInstrumentation()
-                   //.AddEntityFrameworkCoreInstrumentation()
-                   .AddCapInstrumentation()
-                   .AddZipkinExporter(zipKinOptions =>
-                   {
-                       var endpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-                       if (!endpoint.IsNullOrWhiteSpace())
-                       {
-                           zipKinOptions.Endpoint = new Uri(configuration["OpenTelemetry:ZipKin:Endpoint"]);
-                       }
-                   });
-            });
+            services.AddOpenTelemetry()
+                .ConfigureResource(builder =>
+                {
+                    builder.AddService(ApplicationName);
+                })
+                .WithTracing(builder =>
+                {
+                    builder.AddHttpClientInstrumentation();
+                    builder.AddAspNetCoreInstrumentation();
+                    builder.AddCapInstrumentation();
+                    builder.AddEntityFrameworkCoreInstrumentation();
+                    builder.AddZipkinExporter(zipKinOptions =>
+                    {
+                        var endpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
+                        if (!endpoint.IsNullOrWhiteSpace())
+                        {
+                            zipKinOptions.Endpoint = new Uri(configuration["OpenTelemetry:ZipKin:Endpoint"]);
+                        }
+                    });
+                })
+                .WithMetrics(builder =>
+                {
+                    builder.AddHttpClientInstrumentation();
+                    builder.AddAspNetCoreInstrumentation();
+                });
         }
     }
 
@@ -312,6 +320,7 @@ public partial class ProjectNameHttpApiHostModule
                 options.Authority = configuration["AuthServer:Authority"];
                 options.Audience = configuration["AuthServer:ApiName"];
                 options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
+                options.MapInboundClaims = Convert.ToBoolean(configuration["AuthServer:MapInboundClaims"]);
             });
 
         if (!isDevelopment)

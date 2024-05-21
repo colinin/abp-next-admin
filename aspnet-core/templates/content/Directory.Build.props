@@ -1,48 +1,13 @@
-<Project>
+﻿<Project>
 	<PropertyGroup>
-		<VoloAbpPackageVersion>8.0.3</VoloAbpPackageVersion>
-		<VoloAbpLeptonXThemePackageVersion>3.0.0</VoloAbpLeptonXThemePackageVersion>
-		<LINGYUNAbpPackageVersion>8.0.3</LINGYUNAbpPackageVersion>
-		<DaprPackageVersion>1.12.0</DaprPackageVersion>
-		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
-		<DotNetCoreCAPPackageVersion>8.0.0</DotNetCoreCAPPackageVersion>
-		<ElsaPackageVersion>2.11.0</ElsaPackageVersion>
-		<AliyunSDKPackageVersion>1.5.10</AliyunSDKPackageVersion>
-		<AliyunOSSSDKPackageVersion>2.13.0</AliyunOSSSDKPackageVersion>
-		<TencentCloudSDKPackageVersion>3.0.712</TencentCloudSDKPackageVersion>
-		<AgileConfigClientPackageVersion>1.6.9</AgileConfigClientPackageVersion>
-		<HangfireMySqlStoragePackageVersion>2.0.3</HangfireMySqlStoragePackageVersion>
-		<HangfireMSSQLStoragePackageVersion>1.8.6</HangfireMSSQLStoragePackageVersion>
-		<NESTPackageVersion>7.15.1</NESTPackageVersion>
-		<NewtonsoftJsonPackageVersion>13.0.1</NewtonsoftJsonPackageVersion>
-		<OpenTelemetryExtensionsHostingPackageVersion>1.0.0-rc8</OpenTelemetryExtensionsHostingPackageVersion>
-		<OpenTelemetryExporterZipkinPackageVersion>1.3.1</OpenTelemetryExporterZipkinPackageVersion>
-		<OpenTelemetryInstrumentationAspNetCorePackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationAspNetCorePackageVersion>
-		<OpenTelemetryInstrumentationHttpPackageVersion>1.0.0-rc8</OpenTelemetryInstrumentationHttpPackageVersion>
-		<OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>1.0.0-beta2</OpenTelemetryContribInstrumentationEntityFrameworkCorePackageVersion>
-		<QuartzNETPackageVersion>3.7.0</QuartzNETPackageVersion>
-		<StackExchangeRedisPackageVersion>2.7.4</StackExchangeRedisPackageVersion>
-		<SerilogPackageVersion>3.1.1</SerilogPackageVersion>
-		<SerilogAspNetCorePackageVersion>8.0.0</SerilogAspNetCorePackageVersion>
-		<SerilogEnrichersEnvironmentPackageVersion>2.3.0</SerilogEnrichersEnvironmentPackageVersion>
-		<SerilogEnrichersAssemblyPackageVersion>2.0.0</SerilogEnrichersAssemblyPackageVersion>
-		<SerilogEnrichersProcessPackageVersion>2.0.2</SerilogEnrichersProcessPackageVersion>
-		<SerilogEnrichersThreadPackageVersion>3.1.0</SerilogEnrichersThreadPackageVersion>
-		<SerilogExtensionsLoggingPackageVersion>8.0.0</SerilogExtensionsLoggingPackageVersion>
-		<SerilogSettingsConfigurationPackageVersion>8.0.0</SerilogSettingsConfigurationPackageVersion>
-		<SerilogSinksConsolePackageVersion>5.0.0</SerilogSinksConsolePackageVersion>
-		<SerilogSinksElasticsearchPackageVersion>9.0.3</SerilogSinksElasticsearchPackageVersion>
-		<SerilogSinksFilePackageVersion>5.0.0</SerilogSinksFilePackageVersion>
-		<SixLaborsImageSharpDrawingPackageVersion>2.0.1</SixLaborsImageSharpDrawingPackageVersion>
-		<SwashbuckleAspNetCorePackageVersion>6.5.0</SwashbuckleAspNetCorePackageVersion>
-		<PollyPackageVersion>8.2.0</PollyPackageVersion>
-		<MicrosoftPackageVersion>8.0.*</MicrosoftPackageVersion>
-		<MicrosoftEntityFrameworkCorePackageVersion>8.0.0</MicrosoftEntityFrameworkCorePackageVersion>
-		<XunitPackageVersion>2.6.1</XunitPackageVersion>
-		<XunitRunnerPackageVersion>2.5.5</XunitRunnerPackageVersion>
-		<ShouldlyPackageVersion>4.2.1</ShouldlyPackageVersion>
-		<NSubstitutePackageVersion>5.1.0</NSubstitutePackageVersion>
-		<MicrosoftNETTestSdkPackageVersion>17.8.0</MicrosoftNETTestSdkPackageVersion>
-		<CoverletCollectorPackageVersion>3.0.2</CoverletCollectorPackageVersion>
-</PropertyGroup>
+		<IsTestProject Condition="$(MSBuildProjectFullPath.Contains('test')) and ($(MSBuildProjectName.EndsWith('.Tests')) or $(MSBuildProjectName.EndsWith('.TestBase')))">true</IsTestProject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Condition="'$(IsTestProject)' == 'true'" Include="coverlet.collector">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
 </Project>

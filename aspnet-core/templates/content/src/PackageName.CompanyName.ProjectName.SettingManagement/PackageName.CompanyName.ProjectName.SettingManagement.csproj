@@ -9,13 +9,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="$(VoloAbpPackageVersion)" />
-		<PackageReference Include="LINGYUN.Abp.SettingManagement.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" />
+		<PackageReference Include="Volo.Abp.SettingManagement.Domain" />
+		<PackageReference Include="LINGYUN.Abp.SettingManagement.Application.Contracts" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\PackageName.CompanyName.ProjectName.Application.Contracts\PackageName.CompanyName.ProjectName.Application.Contracts.csproj" />
+	  <ProjectReference Include="..\PackageName.CompanyName.ProjectName.Domain\PackageName.CompanyName.ProjectName.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

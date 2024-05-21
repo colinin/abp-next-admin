@@ -1,6 +1,5 @@
-﻿namespace PackageName.CompanyName.ProjectName
+﻿namespace PackageName.CompanyName.ProjectName;
+
+public abstract class ProjectNameDomainTestBase : ProjectNameTestBase<ProjectNameDomainTestModule>
 {
-    public abstract class ProjectNameDomainTestBase : ProjectNameTestBase<ProjectNameDomainTestModule>
-    {
-    }
 }

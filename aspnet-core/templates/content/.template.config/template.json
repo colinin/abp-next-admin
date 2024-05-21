@@ -11,6 +11,15 @@
     "language": "C#",
     "type": "project"
   },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", "**/[Ll]ocalNuget/**" , ".template.config/**/*", ".vs/**/*"]
+        }
+      ]
+    }
+  ],
   "sourceName": "ProjectName",
   "preferNameDirectory": true,
   "symbols": {

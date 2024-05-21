@@ -109,6 +109,7 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
 #elif OpenIddict
         app.UseAbpOpenIddictValidation();
 #endif
+        app.UseDynamicClaims();
         app.UseMultiTenancy();
         app.UseAuthorization();
         app.UseSwagger();
