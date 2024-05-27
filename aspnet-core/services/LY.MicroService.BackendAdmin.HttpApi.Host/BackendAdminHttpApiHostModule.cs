@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
+﻿using LINGYUN.Abp.Aliyun.SettingManagement;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.Auditing;
@@ -16,6 +17,7 @@ using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
+using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Abp.PermissionManagement;
 using LINGYUN.Abp.PermissionManagement.HttpApi;
 using LINGYUN.Abp.PermissionManagement.OrganizationUnits;
@@ -25,8 +27,12 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun;
+using LINGYUN.Abp.Tencent.SettingManagement;
 using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
+using LINGYUN.Abp.TextTemplating.Scriban;
+using LINGYUN.Abp.WeChat.SettingManagement;
+using LINGYUN.Abp.WxPusher.SettingManagement;
 using LY.MicroService.BackendAdmin.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -58,6 +64,14 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpAspNetCoreMvcLocalizationModule),
+
+    // 设置管理
+    typeof(AbpAliyunSettingManagementModule),
+    typeof(AbpTencentCloudSettingManagementModule),
+    typeof(AbpWeChatSettingManagementModule),
+    typeof(AbpWxPusherSettingManagementModule),
+    typeof(AbpOssManagementSettingManagementModule),
+
     typeof(AbpSettingManagementApplicationModule),
     typeof(AbpSettingManagementHttpApiModule),
     typeof(AbpPermissionManagementApplicationModule),
@@ -88,6 +102,10 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
+
+    // 重写模板引擎支持外部本地化
+    typeof(AbpTextTemplatingScribanModule),
+
     typeof(BackendAdminMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
@@ -116,6 +134,7 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureMvc();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureExceptionHandling();

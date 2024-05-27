@@ -106,6 +106,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.HttpApi", "modules\platform\LINGYUN.Platform.HttpApi\LINGYUN.Platform.HttpApi.csproj", "{5FBBBA6A-D6EC-42E1-8164-15C411EC77BE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{F4615BCE-D5C1-407A-8681-8EEE92DEF9D0}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\upgrade\aspnet-core\services\LY.MicroService.BackendAdmin.HttpApi.Host\appsettings.Production.json = ..\..\upgrade\aspnet-core\services\LY.MicroService.BackendAdmin.HttpApi.Host\appsettings.Production.json
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.EntityFrameworkCore.Tests\LINGYUN.Abp.EntityFrameworkCore.Tests.csproj", "{F3D9B137-32DE-4018-8058-78AB17FCDF9C}"
 EndProject
@@ -728,13 +731,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtectionM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Wrapper", "framework\common\LINGYUN.Abp.AspNetCore.Wrapper\LINGYUN.Abp.AspNetCore.Wrapper.csproj", "{30FB6AD7-3CC5-4A8D-B170-BDA772E6BA3C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.DataProtectionManagement.Application.Contracts", "modules\data-protection\LINGYUN.Abp.DataProtectionManagement.Application.Contracts\LINGYUN.Abp.DataProtectionManagement.Application.Contracts.csproj", "{40D7A0A3-68BD-431E-A67A-E2A35508D55D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtectionManagement.Application.Contracts", "modules\data-protection\LINGYUN.Abp.DataProtectionManagement.Application.Contracts\LINGYUN.Abp.DataProtectionManagement.Application.Contracts.csproj", "{40D7A0A3-68BD-431E-A67A-E2A35508D55D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.DataProtectionManagement.Application", "modules\data-protection\LINGYUN.Abp.DataProtectionManagement.Application\LINGYUN.Abp.DataProtectionManagement.Application.csproj", "{8EA8C998-F81A-46E9-8C7E-C944D2503A0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtectionManagement.Application", "modules\data-protection\LINGYUN.Abp.DataProtectionManagement.Application\LINGYUN.Abp.DataProtectionManagement.Application.csproj", "{8EA8C998-F81A-46E9-8C7E-C944D2503A0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.DataProtection.Abstractions", "framework\data-protection\LINGYUN.Abp.DataProtection.Abstractions\LINGYUN.Abp.DataProtection.Abstractions.csproj", "{47550AB9-FA06-42D6-A4B8-7DD12FE66563}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtection.Abstractions", "framework\data-protection\LINGYUN.Abp.DataProtection.Abstractions\LINGYUN.Abp.DataProtection.Abstractions.csproj", "{47550AB9-FA06-42D6-A4B8-7DD12FE66563}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.DataProtectionManagement.HttpApi", "modules\data-protection\LINGYUN.Abp.DataProtectionManagement.HttpApi\LINGYUN.Abp.DataProtectionManagement.HttpApi.csproj", "{835E51CE-1E6B-4C8C-9736-8C5B61F5E08E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.DataProtectionManagement.HttpApi", "modules\data-protection\LINGYUN.Abp.DataProtectionManagement.HttpApi\LINGYUN.Abp.DataProtectionManagement.HttpApi.csproj", "{835E51CE-1E6B-4C8C-9736-8C5B61F5E08E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi.IdentityServer", "framework\open-api\LINGYUN.Abp.OpenApi.IdentityServer\LINGYUN.Abp.OpenApi.IdentityServer.csproj", "{FDAAAD2E-42A7-44EC-8971-B5277FD6D404}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi.OpenIddict", "framework\open-api\LINGYUN.Abp.OpenApi.OpenIddict\LINGYUN.Abp.OpenApi.OpenIddict.csproj", "{ED3DF100-C5DB-4334-A847-118922B28D95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.Scriban", "modules\text-templating\LINGYUN.Abp.TextTemplating.Scriban\LINGYUN.Abp.TextTemplating.Scriban.csproj", "{15482834-9242-4D20-9736-9DA571A9A83A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1874,6 +1883,18 @@ Global
 		{835E51CE-1E6B-4C8C-9736-8C5B61F5E08E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{835E51CE-1E6B-4C8C-9736-8C5B61F5E08E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{835E51CE-1E6B-4C8C-9736-8C5B61F5E08E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDAAAD2E-42A7-44EC-8971-B5277FD6D404}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDAAAD2E-42A7-44EC-8971-B5277FD6D404}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDAAAD2E-42A7-44EC-8971-B5277FD6D404}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDAAAD2E-42A7-44EC-8971-B5277FD6D404}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED3DF100-C5DB-4334-A847-118922B28D95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED3DF100-C5DB-4334-A847-118922B28D95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED3DF100-C5DB-4334-A847-118922B28D95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED3DF100-C5DB-4334-A847-118922B28D95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15482834-9242-4D20-9736-9DA571A9A83A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15482834-9242-4D20-9736-9DA571A9A83A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15482834-9242-4D20-9736-9DA571A9A83A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15482834-9242-4D20-9736-9DA571A9A83A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2229,6 +2250,9 @@ Global
 		{8EA8C998-F81A-46E9-8C7E-C944D2503A0A} = {F6A9D966-0022-440B-AE27-564A74CDED48}
 		{47550AB9-FA06-42D6-A4B8-7DD12FE66563} = {529DF802-97C4-4BF2-BE7C-39663B3D9EA3}
 		{835E51CE-1E6B-4C8C-9736-8C5B61F5E08E} = {F6A9D966-0022-440B-AE27-564A74CDED48}
+		{FDAAAD2E-42A7-44EC-8971-B5277FD6D404} = {3C7A8246-DE82-4330-8697-24EF1B1C515D}
+		{ED3DF100-C5DB-4334-A847-118922B28D95} = {3C7A8246-DE82-4330-8697-24EF1B1C515D}
+		{15482834-9242-4D20-9736-9DA571A9A83A} = {ABD89F39-62D9-439E-8662-BE4F36BFA04F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

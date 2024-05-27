@@ -2,8 +2,8 @@
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.1.1</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
-		<VoloAbpPackageVersion>8.1.1</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>8.1.1</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>8.1.2</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>8.1.2</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>8.0.0</MicrosoftExtensionsPackageVersion>
 		<MicrosoftAspNetCorePackageVersion>8.0.0</MicrosoftAspNetCorePackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>8.0.0</MicrosoftEntityFrameworkCorePackageVersion>
@@ -244,6 +244,7 @@
 		<PackageVersion Include="Polly" Version="8.2.0" />
 		<PackageVersion Include="Quartz.Serialization.Json" Version="3.7.0" />
 		<PackageVersion Include="RulesEngine" Version="4.0.0" />
+		<PackageVersion Include="Scriban" Version="5.9.0" />
 		<PackageVersion Include="Senparc.Weixin.MP" Version="16.18.9" />
 		<PackageVersion Include="SixLabors.ImageSharp" Version="3.0.2" />
 		<PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.0.1" />
@@ -252,6 +253,6 @@
 		<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
 		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
 		<PackageVersion Include="TencentCloudSDK" Version="3.0.712" />
-		<PackageVersion Include="Yarp.ReverseProxy" Version="1.1.1" />
+		<PackageVersion Include="Yarp.ReverseProxy" Version="2.1.0" />
 	</ItemGroup>
 </Project>

@@ -100,6 +100,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureMvc();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureBackgroundTasks();

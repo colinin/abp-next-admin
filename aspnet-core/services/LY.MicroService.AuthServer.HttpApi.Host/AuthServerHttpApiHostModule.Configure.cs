@@ -24,6 +24,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
@@ -158,7 +159,7 @@ public partial class AuthServerHttpApiHostModule
         });
     }
 
-    private void ConfigreExceptionHandling()
+    private void ConfigureExceptionHandling()
     {
         // 自定义需要处理的异常
         Configure<AbpExceptionHandlingOptions>(options =>
@@ -240,6 +241,14 @@ public partial class AuthServerHttpApiHostModule
             var redisConfig = ConfigurationOptions.Parse(options.Configuration);
             options.ConfigurationOptions = redisConfig;
             options.InstanceName = configuration["Redis:InstanceName"];
+        });
+    }
+
+    private void ConfigureMvc()
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ExposeIntegrationServices = true;
         });
     }
 

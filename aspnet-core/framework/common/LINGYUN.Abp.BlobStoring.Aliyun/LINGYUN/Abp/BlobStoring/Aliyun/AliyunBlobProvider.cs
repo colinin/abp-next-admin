@@ -1,13 +1,16 @@
 ﻿using Aliyun.OSS;
+using LINGYUN.Abp.Aliyun.Features;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.BlobStoring.Aliyun
 {
+    [RequiresFeature(AliyunFeatureNames.BlobStoring.Enable)]
     public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
     {
         protected IOssClientFactory OssClientFactory { get; }
@@ -92,8 +95,7 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
 
         protected async virtual Task<IOss> GetOssClientAsync(BlobProviderArgs args)
         {
-            var configuration = args.Configuration.GetAliyunConfiguration();
-            var ossClient = await OssClientFactory.CreateAsync(configuration);
+            var ossClient = await OssClientFactory.CreateAsync();
             return ossClient;
         }
 

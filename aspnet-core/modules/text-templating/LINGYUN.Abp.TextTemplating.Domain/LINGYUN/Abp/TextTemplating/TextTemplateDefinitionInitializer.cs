@@ -69,9 +69,11 @@ public class TextTemplateDefinitionInitializer : ITransientDependency
                 try
                 {
                     // ReSharper disable once AccessToDisposedClosure
-                    var saver = serviceScope.ServiceProvider.GetRequiredService<IStaticTemplateDefinitionSaver>();
+                    var saver = serviceScope.ServiceProvider.GetRequiredService<IStaticTemplateSaver>();
 
-                    await saver.SaveAsync();
+                    await saver.SaveDefinitionTemplateAsync();
+
+                    await saver.SaveTemplateContentAsync();
                 }
                 catch (Exception ex)
                 {

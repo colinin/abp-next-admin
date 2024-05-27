@@ -396,7 +396,7 @@ namespace LINGYUN.Abp.OssManagement.Aliyun
 
         protected async virtual Task<IOss> CreateClientAsync()
         {
-            return await OssClientFactory.CreateAsync<AbpOssManagementContainer>();
+            return await OssClientFactory.CreateAsync();
         }
     }
 }

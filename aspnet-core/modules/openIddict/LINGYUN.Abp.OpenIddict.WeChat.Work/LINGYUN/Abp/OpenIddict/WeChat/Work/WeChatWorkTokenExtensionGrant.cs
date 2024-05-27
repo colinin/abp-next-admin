@@ -77,7 +77,7 @@ public class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
                 if (!await settingProvider.IsTrueAsync("Abp.Account.IsSelfRegistrationEnabled") ||
                     !await settingProvider.IsTrueAsync(WeChatWorkSettingNames.EnabledQuickLogin))
                 {
-                    logger.LogWarning("Invalid grant type: wechat work user not register", userInfo.UserId);
+                    logger.LogWarning("Invalid grant type: wechat work user {userId} not register", userInfo.UserId);
 
                     var properties = new AuthenticationProperties(new Dictionary<string, string>
                     {

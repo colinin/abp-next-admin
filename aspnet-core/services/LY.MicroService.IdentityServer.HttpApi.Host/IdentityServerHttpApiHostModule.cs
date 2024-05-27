@@ -86,10 +86,11 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureMvc();
         ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
-        ConfigreExceptionHandling();
+        ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
         ConfigurePermissionManagement();

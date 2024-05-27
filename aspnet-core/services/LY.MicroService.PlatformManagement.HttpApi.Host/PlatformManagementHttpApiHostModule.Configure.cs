@@ -27,6 +27,7 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
@@ -162,7 +163,7 @@ public partial class PlatformManagementHttpApiHostModule
         });
     }
 
-    private void ConfigreExceptionHandling()
+    private void ConfigureExceptionHandling()
     {
         // 自定义需要处理的异常
         Configure<AbpExceptionHandlingOptions>(options =>
@@ -229,6 +230,14 @@ public partial class PlatformManagementHttpApiHostModule
             var redisConfig = ConfigurationOptions.Parse(options.Configuration);
             options.ConfigurationOptions = redisConfig;
             options.InstanceName = configuration["Redis:InstanceName"];
+        });
+    }
+
+    private void ConfigureMvc()
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ExposeIntegrationServices = true;
         });
     }
 

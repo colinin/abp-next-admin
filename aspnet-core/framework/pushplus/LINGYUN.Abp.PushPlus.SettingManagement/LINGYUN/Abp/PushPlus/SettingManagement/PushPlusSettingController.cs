@@ -9,11 +9,11 @@ namespace LINGYUN.Abp.PushPlus.SettingManagement
     [RemoteService(Name = AbpSettingManagementRemoteServiceConsts.RemoteServiceName)]
     [Area(AbpSettingManagementRemoteServiceConsts.ModuleName)]
     [Route($"api/{AbpSettingManagementRemoteServiceConsts.ModuleName}/push-plus")]
-    public class WxPusherSettingController : AbpControllerBase, IPushPlusSettingAppService
+    public class PushPlusSettingController : AbpControllerBase, IPushPlusSettingAppService
     {
         protected IPushPlusSettingAppService Service { get; }
 
-        public WxPusherSettingController(
+        public PushPlusSettingController(
             IPushPlusSettingAppService service)
         {
             Service = service;

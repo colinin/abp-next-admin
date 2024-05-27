@@ -23,7 +23,10 @@ public class TextTemplateContentContributor : ITemplateContentContributor, ITran
 
     public async virtual Task<string> GetOrNullAsync(TemplateContentContributorContext context)
     {
-        var cacheKey = TextTemplateContentCacheItem.CalculateCacheKey(context.TemplateDefinition.Name, context.Culture);
+        // 2024/05/27 fixed 内联本地化不需要多语言
+        var culture = context.TemplateDefinition.IsInlineLocalized ? null : context.Culture;
+
+        var cacheKey = TextTemplateContentCacheItem.CalculateCacheKey(context.TemplateDefinition.Name, culture);
 
         var cacheItem = await TextTemplateContentCache.GetOrAddAsync(cacheKey,
             () => CreateTemplateContentCache(context),
@@ -34,8 +37,10 @@ public class TextTemplateContentContributor : ITemplateContentContributor, ITran
 
     protected async virtual Task<TextTemplateContentCacheItem> CreateTemplateContentCache(TemplateContentContributorContext context)
     {
+        // 2024/05/27 fixed 内联本地化不需要多语言
+        var culture = context.TemplateDefinition.IsInlineLocalized ? null : context.Culture;
         var repository = context.ServiceProvider.GetRequiredService<ITextTemplateRepository>();
-        var template = await repository.FindByNameAsync(context.TemplateDefinition.Name, context.Culture);
+        var template = await repository.FindByNameAsync(context.TemplateDefinition.Name, culture);
 
         return new TextTemplateContentCacheItem(
             template?.Name,

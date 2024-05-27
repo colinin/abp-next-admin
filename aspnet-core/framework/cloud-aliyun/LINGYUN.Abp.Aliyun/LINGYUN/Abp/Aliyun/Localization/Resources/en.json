@@ -1,6 +1,17 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Features:AlibabaCloud": "Alibaba Cloud",
+    "Features:AlibabaCloud:IsEnabled": "Enabling Alibaba Cloud Services",
+    "Features:AlibabaCloud:IsEnabledDesc": "Enable the ability to enable applications to have Alibaba Cloud services.",
+    "Features:AlibabaCloud:Sms": "Alibaba Cloud Sms Service",
+    "Features:AlibabaCloud:SmsDesc": "Enable the ability to use Alibaba Cloud SMS services.",
+    "Features:AlibabaCloud:Sms.SendLimit": "Sending SMS restriction",
+    "Features:AlibabaCloud:Sms.SendLimitDesc": "Limit SMS service calls within a certain period of time",
+    "Features:AlibabaCloud:Sms.SendLimitInterval": "Limit the duration of sending text messages",
+    "Features:AlibabaCloud:Sms.SendLimitIntervalDesc": "Limit the duration of template SMS service call limit, with a cycle of months",
+    "Features:AlibabaCloud:Oss": "Alibaba Cloud Oss Service",
+    "Features:AlibabaCloud:OssDesc": "Enable the ability to use Alibaba Cloud Oss services.",
     "DisplayName:Aliyun.RAM": "RAM",
     "Description:Aliyun.RAM": "RAM",
     "DisplayName:Authorization": "Authorization",

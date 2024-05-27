@@ -22,9 +22,14 @@
 	<ItemGroup>
 		<PackageReference Include="aliyun-net-sdk-core" />
 		<PackageReference Include="Volo.Abp.Caching" />
+		<PackageReference Include="Volo.Abp.Features" />
 		<PackageReference Include="Volo.Abp.Localization" />
 		<PackageReference Include="Volo.Abp.Json" />
 		<PackageReference Include="Volo.Abp.Settings" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj" />
 	</ItemGroup>
 
 </Project>

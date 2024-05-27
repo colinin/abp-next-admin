@@ -1,8 +1,10 @@
 ﻿using System;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.TextTemplating;
 
 [Serializable]
+[IgnoreMultiTenancy]
 public class TextTemplateContentCacheItem
 {
     private const string CacheKeyFormat = "pn:template-content,n:{0},c:{1}";

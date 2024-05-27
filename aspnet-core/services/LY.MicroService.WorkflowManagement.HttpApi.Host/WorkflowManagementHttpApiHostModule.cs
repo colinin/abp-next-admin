@@ -102,6 +102,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureMvc();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureBackgroundTasks();

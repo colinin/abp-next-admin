@@ -21,6 +21,7 @@ public class OrganizationUnitDeletedEventHandler :
 
     public async Task HandleEventAsync(EntityDeletedEto<OrganizationUnitEto> eventData)
     {
+        await PermissionManager.DeleteAsync(OrganizationUnitPermissionValueProvider.ProviderName, eventData.Entity.Code);
         await PermissionManager.DeleteAsync(OrganizationUnitPermissionValueProvider.ProviderName, eventData.Entity.Id.ToString());
     }
 }
