@@ -1,13 +1,11 @@
 ﻿using System;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
-using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.TextTemplating;
 
-public class TextTemplate : AuditedEntity<Guid>, IMultiTenant
+public class TextTemplate : AuditedEntity<Guid>
 {
-    public virtual Guid? TenantId { get; protected set; }
     public virtual string Name { get; private set; }
     public virtual string DisplayName { get; private set; }
     public virtual string Content { get; private set; }

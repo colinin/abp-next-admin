@@ -34,6 +34,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
+using LINGYUN.Abp.TextTemplating.Scriban;
 using LY.MicroService.RealtimeMessage.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -50,7 +51,6 @@ using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TextTemplating.Scriban;
 
 namespace LY.MicroService.RealtimeMessage;
 
@@ -95,7 +95,10 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpNotificationsWeChatWorkModule),
     typeof(AbpNotificationsExceptionHandlingModule),
+
+    // 重写模板引擎支持外部本地化
     typeof(AbpTextTemplatingScribanModule),
+
     typeof(AbpCAPEventBusModule),
     typeof(AbpFeaturesValidationRedisModule),
     typeof(AbpCachingStackExchangeRedisModule),
@@ -126,11 +129,13 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureMvc();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureNotifications();
+        ConfigureTextTemplating();
         ConfigureBackgroundTasks();
-        ConfigreExceptionHandling();
+        ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
         ConfigureCaching(configuration);

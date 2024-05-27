@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,17 +26,23 @@ namespace LINGYUN.Abp.OpenApi.Authorization
         private readonly AbpOpenApiOptions _openApiOptions;
         private readonly ICurrentClient _currentClient;
         private readonly IWebClientInfoProvider _clientInfoProvider;
+        private readonly IClientChecker _clientChecker;
+        private readonly IIpAddressChecker _ipAddressChecker;
         private readonly AbpExceptionHandlingOptions _exceptionHandlingOptions;
 
         public OpenApiAuthorizationService(
             IAppKeyStore appKeyStore,
             ICurrentClient currentClient,
+            IClientChecker clientChecker,
+            IIpAddressChecker ipAddressChecker,
             IWebClientInfoProvider clientInfoProvider,
             IOptionsMonitor<AbpOpenApiOptions> options,
             IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions)
         {
             _appKeyStore = appKeyStore;
             _currentClient = currentClient;
+            _clientChecker = clientChecker;
+            _ipAddressChecker = ipAddressChecker;
             _clientInfoProvider = clientInfoProvider;
             _openApiOptions = options.CurrentValue;
             _exceptionHandlingOptions = exceptionHandlingOptions.Value;
@@ -50,37 +55,72 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                 return true;
             }
 
-            // TODO: 不够优雅，应该用接口来实现
-            //if (_currentClient.IsAuthenticated && 
-            //    _openApiOptions.HasWhiteClient(_currentClient.Id))
-            //{
-            //    return true;
-            //}
+            if (!await ValidateClient(httpContext))
+            {
+                return false;
+            }
 
-            //if (!string.IsNullOrWhiteSpace(_clientInfoProvider.ClientIpAddress) &&
-            //    _openApiOptions.HasWhiteIpAddress(_clientInfoProvider.ClientIpAddress))
-            //{
-            //    return true;
-            //}
+            if (!await ValidateQueryString(httpContext))
+            {
+                return false;
+            }
 
-            BusinessException exception;
+            if (!await ValidatAppDescriptor(httpContext))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected async virtual Task<bool> ValidateClient(HttpContext httpContext)
+        {
+            if (_currentClient.IsAuthenticated && !await _clientChecker.IsGrantAsync(_currentClient.Id, httpContext.RequestAborted))
+            {
+                var exception = new BusinessException(
+                    AbpOpenApiConsts.InvalidAccessWithClientId,
+                    $"Client Id {_currentClient.Id} Not Allowed",
+                    $"Client Id {_currentClient.Id} Not Allowed");
+                await Unauthorized(httpContext, exception);
+                return false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(_clientInfoProvider.ClientIpAddress) &&
+                !await _ipAddressChecker.IsGrantAsync(_clientInfoProvider.ClientIpAddress, httpContext.RequestAborted))
+            {
+                var exception = new BusinessException(
+                    AbpOpenApiConsts.InvalidAccessWithIpAddress,
+                    $"Client IpAddress {_clientInfoProvider.ClientIpAddress} Not Allowed",
+                    $"Client IpAddress {_clientInfoProvider.ClientIpAddress} Not Allowed");
+                await Unauthorized(httpContext, exception);
+                return false;
+            }
+            return true;
+        }
+
+        protected async virtual Task<bool> ValidateQueryString(HttpContext httpContext)
+        {
             if (!httpContext.Request.QueryString.HasValue)
             {
-                exception = new BusinessException(
+                var exception = new BusinessException(
                     AbpOpenApiConsts.InvalidAccessWithAppKeyNotFound,
                     $"{AbpOpenApiConsts.AppKeyFieldName} Not Found",
                     $"{AbpOpenApiConsts.AppKeyFieldName} Not Found");
                 await Unauthorized(httpContext, exception);
                 return false;
             }
+            return true;
+        }
 
+        protected async virtual Task<bool> ValidatAppDescriptor(HttpContext httpContext)
+        {
             httpContext.Request.Query.TryGetValue(AbpOpenApiConsts.AppKeyFieldName, out var appKey);
             httpContext.Request.Query.TryGetValue(AbpOpenApiConsts.SignatureFieldName, out var sign);
             httpContext.Request.Query.TryGetValue(AbpOpenApiConsts.TimeStampFieldName, out var timeStampString);
 
             if (StringValues.IsNullOrEmpty(appKey))
             {
-                exception = new BusinessException(
+                var exception = new BusinessException(
                     AbpOpenApiConsts.InvalidAccessWithAppKeyNotFound,
                     $"{AbpOpenApiConsts.AppKeyFieldName} Not Found",
                     $"{AbpOpenApiConsts.AppKeyFieldName} Not Found");
@@ -90,7 +130,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
 
             if (StringValues.IsNullOrEmpty(sign))
             {
-                exception = new BusinessException(
+                var exception = new BusinessException(
                     AbpOpenApiConsts.InvalidAccessWithSignNotFound,
                     $"{AbpOpenApiConsts.SignatureFieldName} Not Found",
                     $"{AbpOpenApiConsts.SignatureFieldName} Not Found");
@@ -101,7 +141,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
 
             if (StringValues.IsNullOrEmpty(timeStampString))
             {
-                exception = new BusinessException(
+                var exception = new BusinessException(
                     AbpOpenApiConsts.InvalidAccessWithTimestampNotFound,
                     $"{AbpOpenApiConsts.TimeStampFieldName} Not Found",
                     $"{AbpOpenApiConsts.TimeStampFieldName} Not Found");
@@ -112,7 +152,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
 
             if (!long.TryParse(timeStampString.ToString(), out long timeStamp))
             {
-                exception = new BusinessException(
+                var exception = new BusinessException(
                     AbpOpenApiConsts.InvalidAccessWithTimestamp,
                     "invalid timestamp",
                     "invalid timestamp");
@@ -121,10 +161,10 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                 return false;
             }
 
-            var appDescriptor = await _appKeyStore.FindAsync(appKey.ToString());
+            var appDescriptor = await _appKeyStore.FindAsync(appKey.ToString(), httpContext.RequestAborted);
             if (appDescriptor == null)
             {
-                exception = new BusinessException(
+                var exception = new BusinessException(
                     AbpOpenApiConsts.InvalidAccessWithAppKey,
                     "invalid appKey",
                     "invalid appKey")
@@ -148,7 +188,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             var requiredSign = CalculationSignature(httpContext.Request.Path.Value, queryDictionary);
             if (!string.Equals(requiredSign, sign.ToString()))
             {
-                exception = new BusinessException(
+                var exception = new BusinessException(
                     AbpOpenApiConsts.InvalidAccessWithSign,
                     "invalid signature",
                     "invalid signature");
@@ -163,7 +203,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
 
                 if ((now - timeStamp) / 1000 > appDescriptor.SignLifetime.Value)
                 {
-                    exception = new BusinessException(
+                    var exception = new BusinessException(
                       AbpOpenApiConsts.InvalidAccessWithTimestamp,
                       "session timed out or expired",
                       "session timed out or expired");

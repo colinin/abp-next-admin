@@ -2,7 +2,9 @@
 using Aliyun.Acs.Core.Exceptions;
 using Aliyun.Acs.Core.Http;
 using LINGYUN.Abp.Aliyun;
+using LINGYUN.Abp.Aliyun.Features;
 using LINGYUN.Abp.Aliyun.Settings;
+using LINGYUN.Abp.Features.LimitValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -10,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 using Volo.Abp.Json;
 using Volo.Abp.Settings;
 using Volo.Abp.Sms;
@@ -18,6 +21,7 @@ namespace LINGYUN.Abp.Sms.Aliyun
 {
     [Dependency(ServiceLifetime.Singleton)]
     [ExposeServices(typeof(ISmsSender), typeof(AliyunSmsSender))]
+    [RequiresFeature(AliyunFeatureNames.Sms.Enable)]
     public class AliyunSmsSender : ISmsSender
     {
         protected IJsonSerializer JsonSerializer { get; }
@@ -36,6 +40,12 @@ namespace LINGYUN.Abp.Sms.Aliyun
             AcsClientFactory = acsClientFactory;
         }
 
+        [RequiresLimitFeature(
+            AliyunFeatureNames.Sms.SendLimit,
+            AliyunFeatureNames.Sms.SendLimitInterval,
+            LimitPolicy.Month,
+            AliyunFeatureNames.Sms.DefaultSendLimit,
+            AliyunFeatureNames.Sms.DefaultSendLimitInterval)]
         public async virtual Task SendAsync(SmsMessage smsMessage)
         {
             var domain = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.Domain);

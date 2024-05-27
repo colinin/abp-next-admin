@@ -65,7 +65,7 @@ public class OrganizationUnitPermissionManagementProvider : PermissionManagement
         {
             var role = await IdentityRoleRepository.FindByNormalizedNameAsync(UserManager.NormalizeName(providerKey));
             var organizationUnits = await IdentityRoleRepository.GetOrganizationUnitsAsync(role.Id);
-            var roleOrganizationUnits = organizationUnits.Select(x => x.Id.ToString());
+            var roleOrganizationUnits = organizationUnits.Select(x => x.Code.ToString());
 
             var quaryble = await PermissionGrantBasicRepository.GetQueryableAsync();
             quaryble = quaryble.Where(x => x.ProviderName == Name && roleOrganizationUnits.Contains(x.ProviderKey) && names.Contains(x.Name));
@@ -78,7 +78,7 @@ public class OrganizationUnitPermissionManagementProvider : PermissionManagement
         {
             var userId = Guid.Parse(providerKey);
             var organizationUnits = await IdentityUserRepository.GetOrganizationUnitsAsync(id: userId);
-            var userOrganizationUnits = organizationUnits.Select(x => x.Id.ToString());
+            var userOrganizationUnits = organizationUnits.Select(x => x.Code.ToString());
 
             var quaryble = await PermissionGrantBasicRepository.GetQueryableAsync();
             quaryble = quaryble.Where(x => x.ProviderName == Name && userOrganizationUnits.Contains(x.ProviderKey) && names.Contains(x.Name));

@@ -10,31 +10,31 @@ public static class OrganizationUnitPermissionManagerExtensions
 {
     public static Task<PermissionWithGrantedProviders> GetForOrganizationUnitAsync(
         [NotNull] this IPermissionManager permissionManager,
-        Guid organizationUnitId,
+        string organizationUnitCode,
         string permissionName)
     {
         Check.NotNull(permissionManager, nameof(permissionManager));
 
-        return permissionManager.GetAsync(permissionName, OrganizationUnitPermissionValueProvider.ProviderName, organizationUnitId.ToString());
+        return permissionManager.GetAsync(permissionName, OrganizationUnitPermissionValueProvider.ProviderName, organizationUnitCode);
     }
 
     public static Task<List<PermissionWithGrantedProviders>> GetAllForOrganizationUnitAsync(
         [NotNull] this IPermissionManager permissionManager,
-        Guid organizationUnitId)
+        string organizationUnitCode)
     {
         Check.NotNull(permissionManager, nameof(permissionManager));
 
-        return permissionManager.GetAllAsync(OrganizationUnitPermissionValueProvider.ProviderName, organizationUnitId.ToString());
+        return permissionManager.GetAllAsync(OrganizationUnitPermissionValueProvider.ProviderName, organizationUnitCode);
     }
 
     public static Task SetForOrganizationUnitAsync(
         [NotNull] this IPermissionManager permissionManager,
-        Guid organizationUnitId,
+        string organizationUnitCode,
         [NotNull] string permissionName,
         bool isGranted)
     {
         Check.NotNull(permissionManager, nameof(permissionManager));
 
-        return permissionManager.SetAsync(permissionName, OrganizationUnitPermissionValueProvider.ProviderName, organizationUnitId.ToString(), isGranted);
+        return permissionManager.SetAsync(permissionName, OrganizationUnitPermissionValueProvider.ProviderName, organizationUnitCode, isGranted);
     }
 }

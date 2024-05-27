@@ -481,13 +481,9 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(100)")
                         .HasColumnName("Name");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("TenantId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId", "Name")
+                    b.HasIndex("Name")
                         .HasDatabaseName("IX_Tenant_Text_Template_Name");
 
                     b.ToTable("AbpTextTemplates", (string)null);

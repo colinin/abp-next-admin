@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.SettingManagement;
+using LINGYUN.Abp.WxPusher.Features;
 using LINGYUN.Abp.WxPusher.Localization;
 using LINGYUN.Abp.WxPusher.Settings;
 using System.Threading.Tasks;
@@ -42,7 +43,8 @@ namespace LINGYUN.Abp.WxPusher.SettingManagement
             var settingGroups = new SettingGroupResult();
             var wxPusherSettingGroup = new SettingGroupDto(L["DisplayName:WxPusher"], L["Description:WxPusher"]);
 
-            if (await PermissionChecker.IsGrantedAsync(WxPusherSettingPermissionNames.ManageSetting))
+            if (await FeatureChecker.IsEnabledAsync(WxPusherFeatureNames.Enable) &&
+                await PermissionChecker.IsGrantedAsync(WxPusherSettingPermissionNames.ManageSetting))
             {
                 var securitySetting = wxPusherSettingGroup.AddSetting(L["Security"], L["Security"]);
                 securitySetting.AddDetail(

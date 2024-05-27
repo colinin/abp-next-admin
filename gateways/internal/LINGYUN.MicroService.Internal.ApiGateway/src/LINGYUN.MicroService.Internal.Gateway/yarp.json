@@ -1,0 +1,156 @@
+﻿{
+  "ReverseProxy": {
+    "Routes": {
+      "abp-route": {
+        "ClusterId": "abpCluster",
+        "Match": {
+          "Path": "/api/abp/{**everything}"
+        }
+      },
+      "token-route": {
+        "ClusterId": "tokenCluster",
+        "Match": {
+          "Path": "/connect/{**everything}"
+        },
+        "Transforms": [
+          {
+            "RequestHeaderOriginalHost": "true"
+          }
+        ]
+      },
+      "account-route": {
+        "ClusterId": "accountCluster",
+        "Match": {
+          "Path": "/api/account/{**everything}"
+        }
+      },
+      "identity-route": {
+        "ClusterId": "identityCluster",
+        "Match": {
+          "Path": "/api/identity/{**everything}"
+        }
+      },
+      "identity-server-route": {
+        "ClusterId": "identityServerCluster",
+        "Match": {
+          "Path": "/api/identity-server/{**everything}"
+        }
+      },
+      "feature-management-route": {
+        "ClusterId": "feature-management-cluster",
+        "Match": {
+          "Path": "/api/feature-management/{**everything}"
+        }
+      },
+      "permission-management-route": {
+        "ClusterId": "permission-management-cluster",
+        "Match": {
+          "Path": "/api/permission-management/{**everything}"
+        }
+      },
+      "setting-management-route": {
+        "ClusterId": "setting-management-cluster",
+        "Match": {
+          "Path": "/api/setting-management/{**everything}"
+        }
+      },
+      "localization-management-route": {
+        "ClusterId": "localization-management-cluster",
+        "Match": {
+          "Path": "/api/localization/{**everything}"
+        }
+      },
+      "im-route": {
+        "ClusterId": "im-cluster",
+        "Match": {
+          "Path": "/api/im/{**everything}"
+        }
+      },
+      "notifications-route": {
+        "ClusterId": "notifications-cluster",
+        "Match": {
+          "Path": "/api/notifications/{**everything}"
+        }
+      }
+    },
+    "Clusters": {
+      "abpCluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://127.0.0.1:30010"
+          }
+        }
+      },
+      "tokenCluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://127.0.0.1:44385"
+          }
+        }
+      },
+      "accountCluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://127.0.0.1:30015"
+          }
+        }
+      },
+      "identityCluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://127.0.0.1:30015"
+          }
+        }
+      },
+      "identityServerCluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://127.0.0.1:30015"
+          }
+        }
+      },
+      "feature-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "https://127.0.0.1:30010"
+          }
+        }
+      },
+      "permission-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "https://127.0.0.1:30010"
+          }
+        }
+      },
+      "setting-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "https://127.0.0.1:30010"
+          }
+        }
+      },
+      "localization-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://127.0.0.1:30030"
+          }
+        }
+      },
+      "im-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://127.0.0.1:30020"
+          }
+        }
+      },
+      "nnotifications-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://127.0.0.1:30020"
+          }
+        }
+      }
+    }
+  }
+}

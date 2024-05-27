@@ -18,5 +18,8 @@
 
         public const string InvalidAccessWithTimestamp = KeyPrefix + ":9210";
         public const string InvalidAccessWithTimestampNotFound = KeyPrefix + ":9211";
+
+        public const string InvalidAccessWithClientId = KeyPrefix + ":9300";
+        public const string InvalidAccessWithIpAddress = KeyPrefix + ":9400";
     }
 }

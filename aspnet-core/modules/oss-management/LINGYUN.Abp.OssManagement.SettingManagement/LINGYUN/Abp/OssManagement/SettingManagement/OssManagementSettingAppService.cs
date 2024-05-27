@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.OssManagement.Localization;
+﻿using LINGYUN.Abp.OssManagement.Features;
+using LINGYUN.Abp.OssManagement.Localization;
 using LINGYUN.Abp.OssManagement.Permissions;
 using LINGYUN.Abp.OssManagement.Settings;
 using LINGYUN.Abp.SettingManagement;
@@ -44,7 +45,8 @@ namespace LINGYUN.Abp.OssManagement.SettingManagement
             var settingGroups = new SettingGroupResult();
 
             // 无权限返回空结果,直接报错的话,网关聚合会抛出异常
-            if (await PermissionChecker.IsGrantedAsync(AbpOssManagementPermissions.OssObject.Default))
+            if (await FeatureChecker.IsEnabledAsync(AbpOssManagementFeatureNames.OssObject.Enable) &&
+                await PermissionChecker.IsGrantedAsync(AbpOssManagementPermissions.OssObject.Default))
             {
                 var ossSettingGroup = new SettingGroupDto(L["DisplayName:OssManagement"], L["Description:OssManagement"]);
 

@@ -52,7 +52,7 @@ public class NotificationDefinitionInitializer : ITransientDependency
                     return;
                 }
 
-                await PreCacheDynamicNotificationsAsync(scope);
+                // await PreCacheDynamicNotificationsAsync(scope);
             }
         }
         catch (OperationCanceledException)

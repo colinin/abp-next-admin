@@ -325,6 +325,14 @@ public partial class WorkflowManagementHttpApiHostModule
         });
     }
 
+    private void ConfigureMvc()
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ExposeIntegrationServices = true;
+        });
+    }
+
     private void ConfigureVirtualFileSystem()
     {
         Configure<AbpVirtualFileSystemOptions>(options =>

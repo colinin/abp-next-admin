@@ -98,6 +98,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureMvc();
         ConfigureWrapper();
         ConfigureDbContext();
         ConfigureLocalization();

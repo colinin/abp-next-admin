@@ -37,7 +37,7 @@ public class InMemoryTemplateDefinitionStoreCache : ITemplateDefinitionStoreCach
         {
             var templateDefinition = new TemplateDefinition(
                 templateDefinitionRecord.Name,
-                typeof(NonTypedLocalizationResource),
+                templateDefinitionRecord.LocalizationResourceName,
                 LocalizableStringSerializer.Deserialize(templateDefinitionRecord.DisplayName),
                 templateDefinitionRecord.IsLayout,
                 templateDefinitionRecord.Layout,
