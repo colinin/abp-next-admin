@@ -1,8 +1,11 @@
 ﻿using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.WeChat.Localization;
+using LINGYUN.Abp.WeChat.MiniProgram.Features;
 using LINGYUN.Abp.WeChat.MiniProgram.Settings;
+using LINGYUN.Abp.WeChat.Official.Features;
 using LINGYUN.Abp.WeChat.Official.Settings;
 using LINGYUN.Abp.WeChat.Settings;
+using LINGYUN.Abp.WeChat.Work.Features;
 using LINGYUN.Abp.WeChat.Work.Settings;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
@@ -54,7 +57,8 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
                 providerName);
 
             // 无权限返回空结果,直接报错的话,网关聚合会抛出异常
-            if (await PermissionChecker.IsGrantedAsync(WeChatSettingPermissionNames.Official))
+            if (await FeatureChecker.IsEnabledAsync(WeChatOfficialFeatures.Enable) &&
+                await PermissionChecker.IsGrantedAsync(WeChatSettingPermissionNames.Official))
             {
                 #region 公众号
 
@@ -99,7 +103,8 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
                 #endregion
             }
 
-            if (await PermissionChecker.IsGrantedAsync(WeChatSettingPermissionNames.MiniProgram))
+            if (await FeatureChecker.IsEnabledAsync(WeChatMiniProgramFeatures.Enable) &&
+                await PermissionChecker.IsGrantedAsync(WeChatSettingPermissionNames.MiniProgram))
             {
                 #region 小程序
 
@@ -134,7 +139,8 @@ namespace LINGYUN.Abp.WeChat.SettingManagement
 
             settingGroups.AddGroup(wechatSettingGroup);
 
-            if (await PermissionChecker.IsGrantedAsync(WeChatSettingPermissionNames.Work))
+            if (await FeatureChecker.IsEnabledAsync(WeChatWorkFeatureNames.Enable) &&
+                await PermissionChecker.IsGrantedAsync(WeChatSettingPermissionNames.Work))
             {
                 #region 企业微信
                 var wechatWorkSettingGroup = new SettingGroupDto(L["DisplayName:WeChatWork"], L["Description:WeChatWork"]);

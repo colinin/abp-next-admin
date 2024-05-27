@@ -43,6 +43,8 @@ using Microsoft.IdentityModel.Logging;
 using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
 using Microsoft.AspNetCore.HttpOverrides;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.AspNetCore.Mvc;
+using LINGYUN.Abp.TextTemplating;
 
 namespace LY.MicroService.RealtimeMessage;
 
@@ -159,6 +161,14 @@ public partial class RealtimeMessageHttpApiHostModule
         });
     }
 
+    private void ConfigureTextTemplating()
+    {
+        Configure<AbpTextTemplatingCachingOptions>(options =>
+        {
+            options.IsDynamicTemplateDefinitionStoreEnabled = true;
+        });
+    }
+
     private void ConfigureFeatureManagement()
     {
         Configure<FeatureManagementOptions>(options =>
@@ -185,7 +195,7 @@ public partial class RealtimeMessageHttpApiHostModule
         });
     }
 
-    private void ConfigreExceptionHandling()
+    private void ConfigureExceptionHandling()
     {
         // 自定义需要处理的异常
         Configure<AbpExceptionHandlingOptions>(options =>
@@ -264,6 +274,14 @@ public partial class RealtimeMessageHttpApiHostModule
         });
     }
 
+    private void ConfigureMvc()
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ExposeIntegrationServices = true;
+        });
+    }
+
     private void ConfigureVirtualFileSystem()
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
@@ -278,6 +296,7 @@ public partial class RealtimeMessageHttpApiHostModule
         {
             // 宿主项目启用动态通知
             options.IsDynamicNotificationsStoreEnabled = true;
+            options.SaveStaticNotificationsToDatabase = false;
         });
     }
 

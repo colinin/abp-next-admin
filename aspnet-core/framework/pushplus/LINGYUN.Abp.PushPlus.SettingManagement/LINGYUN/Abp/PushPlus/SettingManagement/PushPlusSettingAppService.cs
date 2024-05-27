@@ -7,16 +7,17 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Settings;
+using LINGYUN.Abp.PushPlus.Features;
 
 namespace LINGYUN.Abp.PushPlus.SettingManagement
 {
-    public class WxPusherSettingAppService : ApplicationService, IPushPlusSettingAppService
+    public class PushPlusSettingAppService : ApplicationService, IPushPlusSettingAppService
     {
         protected ISettingManager SettingManager { get; }
         protected IPermissionChecker PermissionChecker { get; }
         protected ISettingDefinitionManager SettingDefinitionManager { get; }
 
-        public WxPusherSettingAppService(
+        public PushPlusSettingAppService(
             ISettingManager settingManager,
             IPermissionChecker permissionChecker,
             ISettingDefinitionManager settingDefinitionManager)
@@ -42,7 +43,8 @@ namespace LINGYUN.Abp.PushPlus.SettingManagement
             var settingGroups = new SettingGroupResult();
             var pushPlusSettingGroup = new SettingGroupDto(L["DisplayName:PushPlus"], L["Description:PushPlus"]);
 
-            if (await PermissionChecker.IsGrantedAsync(PushPlusSettingPermissionNames.ManageSetting))
+            if (await FeatureChecker.IsEnabledAsync(PushPlusFeatureNames.Message.Enable) &&
+                await PermissionChecker.IsGrantedAsync(PushPlusSettingPermissionNames.ManageSetting))
             {
                 var securitySetting = pushPlusSettingGroup.AddSetting(L["Security"], L["Security"]);
                 securitySetting.AddDetail(

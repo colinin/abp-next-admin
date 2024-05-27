@@ -39,10 +39,7 @@ public class TextTemplateCacheItemInvalidator :
             template.Culture
         );
 
-        using (CurrentTenant.Change(template.TenantId))
-        {
-            await Cache.RemoveAsync(cacheKey);
-        }
+        await Cache.RemoveAsync(cacheKey);
     }
 
     protected virtual string CalculateCacheKey(string name, string culture = null)

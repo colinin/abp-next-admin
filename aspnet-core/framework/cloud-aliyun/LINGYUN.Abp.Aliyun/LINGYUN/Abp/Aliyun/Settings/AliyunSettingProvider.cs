@@ -78,6 +78,7 @@ namespace LINGYUN.Abp.Aliyun.Settings
                     TenantSettingValueProvider.ProviderName),
                 new SettingDefinition(
                     AliyunSettingNames.Authorization.RegionId,
+                    defaultValue: "oss-cn-hangzhou",
                     displayName: L("DisplayName:RegionId"),
                     description: L("Description:RegionId"),
                     isVisibleToClients: false

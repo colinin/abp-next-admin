@@ -19,7 +19,6 @@ using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
-using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
@@ -109,11 +108,12 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureMvc();
         ConfigureDbContext();
         ConfigureBlobStoring();
         ConfigureLocalization();
         ConfigureKestrelServer();
-        ConfigreExceptionHandling();
+        ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
         ConfigureCaching(configuration);

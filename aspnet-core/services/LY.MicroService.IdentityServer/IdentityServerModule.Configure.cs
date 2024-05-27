@@ -2,6 +2,7 @@
 using IdentityModel;
 using LINGYUN.Abp.Account;
 using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
+using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -207,6 +208,14 @@ public partial class IdentityServerModule
             {
                 identityConfiguration.Bind(options);
             }
+        });
+
+        Configure<AbpClaimsServiceOptions>(options =>
+        {
+            options.RequestedClaims.AddRange(new[]
+            {
+                AbpOrganizationUnitClaimTypes.OrganizationUnit
+            });
         });
 
         Configure<AbpClaimsPrincipalFactoryOptions>(options =>

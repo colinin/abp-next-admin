@@ -44,6 +44,7 @@ using Volo.Abp.Security.Claims;
 using System.Collections.Generic;
 using IdentityModel;
 using System.Security.Claims;
+using Volo.Abp.AspNetCore.Mvc;
 
 namespace LY.MicroService.IdentityServer;
 
@@ -160,7 +161,7 @@ public partial class IdentityServerHttpApiHostModule
         });
     }
 
-    private void ConfigreExceptionHandling()
+    private void ConfigureExceptionHandling()
     {
         // 自定义需要处理的异常
         Configure<AbpExceptionHandlingOptions>(options =>
@@ -241,6 +242,14 @@ public partial class IdentityServerHttpApiHostModule
             var redisConfig = ConfigurationOptions.Parse(options.Configuration);
             options.ConfigurationOptions = redisConfig;
             options.InstanceName = configuration["Redis:InstanceName"];
+        });
+    }
+
+    private void ConfigureMvc()
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ExposeIntegrationServices = true;
         });
     }
 

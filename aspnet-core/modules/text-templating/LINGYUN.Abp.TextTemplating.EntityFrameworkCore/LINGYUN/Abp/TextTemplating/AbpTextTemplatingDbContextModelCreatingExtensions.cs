@@ -33,7 +33,7 @@ public static class AbpTextTemplatingDbContextModelCreatingExtensions
                 .HasColumnName(nameof(TextTemplate.Content))
                 .HasMaxLength(TextTemplateConsts.MaxContentLength);
 
-            b.HasIndex(p => new { p.TenantId, p.Name })
+            b.HasIndex(p => p.Name)
                  .HasDatabaseName("IX_Tenant_Text_Template_Name");
 
             b.ApplyObjectExtensionMappings();

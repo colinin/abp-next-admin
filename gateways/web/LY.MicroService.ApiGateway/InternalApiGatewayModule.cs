@@ -30,6 +30,20 @@ namespace LY.MicroService.ApiGateway;
 )]
 public class InternalApiGatewayModule : AbpModule
 {
+    protected const string ApplicationName = "Services.ApiGateWay";
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
+
+        PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
+        {
+            // 以开放端口区别
+            options.SnowflakeIdOptions.WorkerId = 19;
+            options.SnowflakeIdOptions.WorkerIdBits = 5;
+            options.SnowflakeIdOptions.DatacenterId = 1;
+        });
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();

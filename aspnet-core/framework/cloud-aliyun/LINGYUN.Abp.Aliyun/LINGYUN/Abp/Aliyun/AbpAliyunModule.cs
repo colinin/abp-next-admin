@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Aliyun.Localization;
+using LINGYUN.Abp.Features.LimitValidation;
 using Volo.Abp.Caching;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
@@ -12,7 +13,8 @@ namespace LINGYUN.Abp.Aliyun
         typeof(AbpCachingModule),
         typeof(AbpSettingsModule),
         typeof(AbpJsonModule),
-        typeof(AbpLocalizationModule))]
+        typeof(AbpLocalizationModule),
+        typeof(AbpFeaturesLimitValidationModule))]
     public class AbpAliyunModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

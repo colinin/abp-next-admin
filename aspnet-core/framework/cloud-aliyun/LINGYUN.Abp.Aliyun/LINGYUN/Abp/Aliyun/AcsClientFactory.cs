@@ -1,12 +1,15 @@
 ﻿using Aliyun.Acs.Core;
 using Aliyun.Acs.Core.Auth;
 using Aliyun.Acs.Core.Profile;
+using LINGYUN.Abp.Aliyun.Features;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 using Volo.Abp.Settings;
 
 namespace LINGYUN.Abp.Aliyun
 {
+    [RequiresFeature(AliyunFeatureNames.Enable)]
     public class AcsClientFactory : AliyunClientFactory<IAcsClient>, IAcsClientFactory, ITransientDependency
     {
         public AcsClientFactory(

@@ -92,7 +92,7 @@ public class WeChatWorkGrantValidator : IExtensionGrantValidator
                 if (!await SettingProvider.IsTrueAsync("Abp.Account.IsSelfRegistrationEnabled") ||
                     !await SettingProvider.IsTrueAsync(WeChatWorkSettingNames.EnabledQuickLogin))
                 {
-                    Logger.LogWarning("Invalid grant type: wechat work user not register", userInfo.UserId);
+                    Logger.LogWarning("Invalid grant type: wechat work user {userId} not register", userInfo.UserId);
                     context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, WeChatWorkLocalizer["InvalidGrant:UserIdNotRegister"]);
 
                     return;

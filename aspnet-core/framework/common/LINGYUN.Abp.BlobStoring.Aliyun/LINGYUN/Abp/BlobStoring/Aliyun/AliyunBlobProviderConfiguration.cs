@@ -7,17 +7,6 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
     public class AliyunBlobProviderConfiguration
     {
         /// <summary>
-        /// 数据中心
-        /// </summary>
-        /// <remarks>
-        /// 详见 https://help.aliyun.com/document_detail/31837.html?spm=a2c4g.11186623.2.14.417cd47eLc9LHc#concept-zt4-cvy-5db
-        /// </remarks>
-        public string Endpoint
-        {
-            get => _containerConfiguration.GetConfiguration<string>(AliyunBlobProviderConfigurationNames.Endpoint);
-            set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.Endpoint, Check.NotNullOrWhiteSpace(value, nameof(value)));
-        }
-        /// <summary>
         /// 命名空间
         /// </summary>
         public string BucketName
