@@ -49,7 +49,7 @@
   import { reactive, ref, unref } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { Form, Input, TreeSelect } from 'ant-design-vue';
-  import { ColorPicker } from "vue3-colorpicker";
+  import { ColorPicker } from 'vue3-colorpicker';
   import { Icon } from '/@/components/Icon';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { IconPicker } from '/@/components/Icon';
@@ -96,7 +96,7 @@
     getMenuList().then((res) => {
       const treeData = listToTree(res.items, { id: 'id', pid: 'parentId' });
       menuTreeData.value = treeData;
-    })
+    });
   }
 
   function handleMenuChange(_, item) {

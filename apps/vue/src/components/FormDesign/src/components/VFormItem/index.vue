@@ -195,6 +195,7 @@
   :deep(.ant-col) {
     width: auto;
   }
+
   .ant-form-item:not(.ant-form-item-with-help) {
     margin-bottom: 20px;
   }

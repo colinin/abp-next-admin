@@ -88,7 +88,7 @@
   import { useModal } from '/@/components/Modal';
   import { PageWrapper } from '/@/components/Page';
   import { BasicTitle } from '/@/components/Basic/index';
-  import { ChatMessage, MessageType } from '/@/api/messages/model/messagesModel';
+  import { ChatMessage, MessageType } from '/@/api/messages/messages/model';
   import { getChatMessages, getGroupMessages, getLastMessages } from '/@/api/messages/messages';
   import ChatSearchModal from './ChatSearchModal.vue';
   import ChatMessagePanel from './ChatMessagePanel.vue';

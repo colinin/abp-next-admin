@@ -34,7 +34,9 @@
           <CloseOutlined v-else class="disable" />
         </template>
         <template v-else-if="column.key === 'providers'">
-          <Tag v-for="provider in record.providers" style="margin-left: 5px" color="blue">{{ provider }}</Tag>
+          <Tag v-for="provider in record.providers" style="margin-left: 5px" color="blue">{{
+            provider
+          }}</Tag>
         </template>
         <template v-else-if="column.key === 'action'">
           <TableAction
@@ -73,7 +75,10 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useLocalizationSerializer } from '/@/hooks/abp/useLocalizationSerializer';
-  import { GetListAsyncByInput, DeleteOrRestoreAsyncByName } from '/@/api/settings-management/definitions';
+  import {
+    GetListAsyncByInput,
+    DeleteOrRestoreAsyncByName,
+  } from '/@/api/settings-management/definitions';
   import { getSearchFormSchemas } from '../datas/ModalData';
   import SettingDefinitionModal from './SettingDefinitionModal.vue';
 
@@ -123,11 +128,13 @@
       setLoading(true);
       setTableData([]);
       var input = form.getFieldsValue();
-      GetListAsyncByInput(input).then((res) => {
-        setTableData(res.items);
-      }).finally(() => {
-        setLoading(false);
-      });
+      GetListAsyncByInput(input)
+        .then((res) => {
+          setTableData(res.items);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     });
   }
 

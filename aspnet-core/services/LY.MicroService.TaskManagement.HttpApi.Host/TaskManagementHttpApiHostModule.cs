@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -23,6 +22,7 @@ using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using LY.MicroService.TaskManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -78,7 +78,6 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
-    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpAutofacModule)
     )]
@@ -107,12 +106,14 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
+        ConfigureTiming(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureSwagger(context.Services);
         ConfigureJsonSerializer(configuration);
+        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -122,7 +123,11 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
-        app.UseForwardedHeaders();
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+        app.UseAbpRequestLocalization();
         app.UseStaticFiles();
         app.UseCorrelationId();
         app.UseRouting();
@@ -130,7 +135,6 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         app.UseAuthentication();
         app.UseDynamicClaims();
         app.UseMultiTenancy();
-        app.UseAbpRequestLocalization();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>

@@ -112,11 +112,13 @@
       setLoading(true);
       setTableData([]);
       var input = form.getFieldsValue();
-      GetListAsyncByInput(input).then((res) => {
-        setTableData(res.items);
-      }).finally(() => {
-        setLoading(false);
-      });
+      GetListAsyncByInput(input)
+        .then((res) => {
+          setTableData(res.items);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     });
   }
 

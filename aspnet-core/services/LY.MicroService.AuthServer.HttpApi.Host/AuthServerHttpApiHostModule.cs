@@ -1,5 +1,4 @@
 using LINGYUN.Abp.Account;
-using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -16,6 +15,7 @@ using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Aliyun;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -58,7 +58,6 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpCAPEventBusModule),
     typeof(AbpAliyunSmsModule),
     typeof(AbpCachingStackExchangeRedisModule),
-    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAutofacModule)
     )]
@@ -90,11 +89,13 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         ConfigurePermissionManagement();
         ConfigureUrls(configuration);
         ConfigureCaching(configuration);
+        ConfigureTiming(configuration);
         ConfigureAuditing(configuration);
         ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -102,7 +103,10 @@ public partial class AuthServerHttpApiHostModule : AbpModule
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
-        app.UseForwardedHeaders();
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
         // 本地化
         app.UseMapRequestLocalization();
         // http调用链

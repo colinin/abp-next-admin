@@ -7,11 +7,7 @@
         </FormItem>
       </template>
       <template #toolbar>
-        <Button
-          v-auth="['AbpWebhooks.Definitions.Create']"
-          type="primary"
-          @click="handleAddNew"
-        >
+        <Button v-auth="['AbpWebhooks.Definitions.Create']" type="primary" @click="handleAddNew">
           {{ L('Webhooks:AddNew') }}
         </Button>
       </template>
@@ -92,7 +88,7 @@
     webhooks: WebhookDefinitionDto[];
   }
   interface State {
-    groups: WebhookGroupDefinitionDto[],
+    groups: WebhookGroupDefinitionDto[];
   }
 
   const { deserialize } = useLocalizationSerializer();
@@ -158,7 +154,7 @@
   });
   const getGroupDisplayName = computed(() => {
     return (groupName: string) => {
-      const group = state.groups.find(x => x.name === groupName);
+      const group = state.groups.find((x) => x.name === groupName);
       if (!group) return groupName;
       const info = deserialize(group.displayName);
       return Lr(info.resourceName, info.name);
@@ -183,22 +179,24 @@
       setLoading(true);
       setTableData([]);
       var input = form.getFieldsValue();
-      GetListAsyncByInput(input).then((res) => {
-        const webhookGroup = groupBy(res.items, 'groupName');
-        const webhookGroupData: WebhookGroup[] = [];
-        Object.keys(webhookGroup).forEach((gk) => {
-          const groupData: WebhookGroup = {
-            name: gk,
-            displayName: gk,
-            webhooks: [],
-          };
-          groupData.webhooks.push(...webhookGroup[gk]);
-          webhookGroupData.push(groupData);
+      GetListAsyncByInput(input)
+        .then((res) => {
+          const webhookGroup = groupBy(res.items, 'groupName');
+          const webhookGroupData: WebhookGroup[] = [];
+          Object.keys(webhookGroup).forEach((gk) => {
+            const groupData: WebhookGroup = {
+              name: gk,
+              displayName: gk,
+              webhooks: [],
+            };
+            groupData.webhooks.push(...webhookGroup[gk]);
+            webhookGroupData.push(groupData);
+          });
+          setTableData(webhookGroupData);
+        })
+        .finally(() => {
+          setLoading(false);
         });
-        setTableData(webhookGroupData);
-      }).finally(() => {
-        setLoading(false);
-      });
     });
   }
 

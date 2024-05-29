@@ -16,7 +16,7 @@
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { getModalFormSchemas } from './ModalData';
-  import { get } from '/@/api/identity-server/persistedGrants';
+  import { get } from '/@/api/identity-server/persisted-grants';
 
   defineEmits(['register']);
 

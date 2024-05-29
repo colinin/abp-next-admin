@@ -50,8 +50,8 @@
   import { BasicModal, useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { getDefinitions } from '/@/api/task-management/backgroundJobInfo';
-  import { BackgroundJobDefinition } from '/@/api/task-management/model/backgroundJobInfoModel';
+  import { getDefinitions } from '/@/api/task-management/jobs';
+  import { BackgroundJobDefinition } from '/@/api/task-management/jobs/model';
 
   const FormItem = Form.Item;
 
@@ -63,7 +63,7 @@
     args: {
       type: Object as PropType<ExtraPropertyDictionary>,
       default: {},
-    }
+    },
   });
   const emits = defineEmits(['args-reset']);
   const { L } = useLocalization(['TaskManagement', 'AbpUi']);

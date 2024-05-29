@@ -18,10 +18,8 @@
       <Tabs v-model:active-key="state.activeTab">
         <TabPane key="basic" :tab="L('BasicInfo')">
           <FormItem name="isEnabled" :label="L('DisplayName:IsEnabled')">
-            <Checkbox
-              :disabled="!state.allowedChange"
-              v-model:checked="state.entity.isEnabled"
-            >{{ L('DisplayName:IsEnabled') }}
+            <Checkbox :disabled="!state.allowedChange" v-model:checked="state.entity.isEnabled"
+              >{{ L('DisplayName:IsEnabled') }}
             </Checkbox>
           </FormItem>
           <FormItem name="groupName" :label="L('DisplayName:GroupName')">
@@ -48,10 +46,18 @@
             />
           </FormItem>
           <FormItem name="name" :label="L('DisplayName:Name')">
-            <Input :disabled="state.entityEditFlag && !state.allowedChange" :allow-clear="true" v-model:value="state.entity.name" />
+            <Input
+              :disabled="state.entityEditFlag && !state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.name"
+            />
           </FormItem>
           <FormItem name="displayName" :label="L('DisplayName:DisplayName')">
-            <LocalizableInput :disabled="!state.allowedChange" :allow-clear="true" v-model:value="state.entity.displayName" />
+            <LocalizableInput
+              :disabled="!state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.displayName"
+            />
           </FormItem>
           <FormItem name="multiTenancySide" :label="L('DisplayName:MultiTenancySide')">
             <Select
@@ -71,7 +77,12 @@
           </FormItem>
         </TabPane>
         <TabPane key="stateCheckers" :tab="L('StateCheckers')" force-render>
-          <FormItem name="stateCheckers" label="" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
+          <FormItem
+            name="stateCheckers"
+            label=""
+            :label-col="{ span: 0 }"
+            :wrapper-col="{ span: 24 }"
+          >
             <SimpleStateChecking
               :allow-delete="true"
               :allow-edit="true"
@@ -82,8 +93,18 @@
           </FormItem>
         </TabPane>
         <TabPane key="propertites" :tab="L('Properties')" force-render>
-          <FormItem name="extraProperties" label="" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-            <ExtraPropertyDictionary :disabled="!state.allowedChange" :allow-delete="true" :allow-edit="true" v-model:value="state.entity.extraProperties" />
+          <FormItem
+            name="extraProperties"
+            label=""
+            :label-col="{ span: 0 }"
+            :wrapper-col="{ span: 24 }"
+          >
+            <ExtraPropertyDictionary
+              :disabled="!state.allowedChange"
+              :allow-delete="true"
+              :allow-edit="true"
+              v-model:value="state.entity.extraProperties"
+            />
           </FormItem>
         </TabPane>
       </Tabs>
@@ -97,7 +118,11 @@
   import { computed, ref, reactive, unref, nextTick, watch } from 'vue';
   import { Checkbox, Form, Input, Select, Tabs, TreeSelect } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { LocalizableInput, ExtraPropertyDictionary, SimpleStateChecking } from '/@/components/Abp';
+  import {
+    LocalizableInput,
+    ExtraPropertyDictionary,
+    SimpleStateChecking,
+  } from '/@/components/Abp';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { ValidationEnum, useValidation } from '/@/hooks/abp/useValidation';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
@@ -131,17 +156,17 @@
     children: PermissionTreeData[];
   }
   interface State {
-    activeTab: string,
-    allowedChange: boolean,
-    entity: Recordable,
-    entityRules?: Dictionary<string, Rule>,
-    entityChanged: boolean,
-    entityEditFlag: boolean,
-    defaultGroup?: string,
-    availablePermissions: PermissionTreeData[],
-    availableGroups: PermissionGroupDefinitionDto[],
-    selectionDataSource: PermissionSelectData[],
-    simpleCheckState: SimplaCheckStateBase,
+    activeTab: string;
+    allowedChange: boolean;
+    entity: Recordable;
+    entityRules?: Dictionary<string, Rule>;
+    entityChanged: boolean;
+    entityEditFlag: boolean;
+    defaultGroup?: string;
+    availablePermissions: PermissionTreeData[];
+    availableGroups: PermissionGroupDefinitionDto[];
+    selectionDataSource: PermissionSelectData[];
+    simpleCheckState: SimplaCheckStateBase;
   }
 
   const emits = defineEmits(['register', 'change']);
@@ -196,7 +221,7 @@
           label: Lr(info.resourceName, info.name),
           value: group.name,
         };
-    });
+      });
   });
   watch(
     () => state.entity,
@@ -229,29 +254,34 @@
         extraProperties: {},
       };
       state.allowedChange = true;
-      nextTick(() => state.entityChanged = false);
+      nextTick(() => (state.entityChanged = false));
       return;
     }
     changeLoading(true);
     changeOkLoading(true);
-    GetAsyncByName(name).then((record) => {
-      state.entity = record;
-      state.entityEditFlag = true;
-      state.allowedChange = !record.isStatic;
-    }).finally(() => {
-      changeLoading(false);
-      changeOkLoading(false);
-      nextTick(() => {
-        state.entityChanged = false;
+    GetAsyncByName(name)
+      .then((record) => {
+        state.entity = record;
+        state.entityEditFlag = true;
+        state.allowedChange = !record.isStatic;
+      })
+      .finally(() => {
+        changeLoading(false);
+        changeOkLoading(false);
+        nextTick(() => {
+          state.entityChanged = false;
+        });
       });
-    });
   }
 
   function fetchFeatures(groupName?: string) {
     GetListAsyncByInput({
       groupName: groupName,
     }).then((res) => {
-      const permissionGroup = groupBy(res.items.filter((def) => !def.isStatic), 'groupName');
+      const permissionGroup = groupBy(
+        res.items.filter((def) => !def.isStatic),
+        'groupName',
+      );
       const permissionTreeData: PermissionTreeData[] = [];
       Object.keys(permissionGroup).forEach((gk) => {
         const permissionTree = listToTree(permissionGroup[gk], {
@@ -329,20 +359,23 @@
     form?.validate().then(() => {
       changeOkLoading(true);
       const api = state.entityEditFlag
-        ? UpdateAsyncByNameAndInput(state.entity.name, state.entity as PermissionDefinitionUpdateDto)
+        ? UpdateAsyncByNameAndInput(
+            state.entity.name,
+            state.entity as PermissionDefinitionUpdateDto,
+          )
         : CreateAsyncByInput(state.entity as PermissionDefinitionCreateDto);
-      api.then((res) => {
-        createMessage.success(L('Successful'));
-        emits('change', res);
-        form.resetFields();
-        closeModal();
-      }).finally(() => {
-        changeOkLoading(false);
-      })
+      api
+        .then((res) => {
+          createMessage.success(L('Successful'));
+          emits('change', res);
+          form.resetFields();
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

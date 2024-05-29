@@ -1,10 +1,10 @@
 import type { Ref } from 'vue';
 
 import { computed, unref, watch } from 'vue';
-import { IdentityClaimType } from '/@/api/identity/model/claimModel';
 import { FormActionType } from '/@/components/Form';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
-import { create, update } from '/@/api/identity/claim';
+import { create, update } from '/@/api/identity/claims';
+import { IdentityClaimType } from '/@/api/identity/claims/model';
 import { getModalFormSchemas } from '../datas/ModalData';
 
 interface UseClaimModal {
@@ -30,7 +30,7 @@ export function useClaimModal({ claimRef, formElRef }: UseClaimModal) {
     (data) => {
       const formEl = unref(formElRef);
       formEl?.resetFields();
-      formEl?.setFieldsValue(data);
+      formEl?.setFieldsValue(data!);
     },
     {
       immediate: true,

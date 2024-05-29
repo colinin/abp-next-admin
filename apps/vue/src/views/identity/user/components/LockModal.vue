@@ -27,10 +27,9 @@
   });
 
   function handleSaveChanges(input) {
-    return handleLock(unref(userIdRef), input)
-      .then(() => {
-        createMessage.success(L('Successful'));
-        closeModal();
-      });
+    return handleLock(unref(userIdRef), input).then(() => {
+      createMessage.success(L('Successful'));
+      closeModal();
+    });
   }
 </script>

@@ -57,13 +57,15 @@
     validate().then((input) => {
       loading.value = true;
       const api = input.id ? UpdateAsyncByIdAndInput(input.id, input) : CreateAsyncByInput(input);
-      api.then(() => {
-        createMessage.success(L('Successful'));
-        emits('change');
-        closeModal();
-      }).finally(() => {
-        loading.value = false;
-      });
+      api
+        .then(() => {
+          createMessage.success(L('Successful'));
+          emits('change');
+          closeModal();
+        })
+        .finally(() => {
+          loading.value = false;
+        });
     });
   }
 </script>

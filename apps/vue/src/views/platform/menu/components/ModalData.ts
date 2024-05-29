@@ -1,7 +1,7 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
-import { getAll as getAllLayout } from '/@/api/platform/layout';
-import { getByName as getDataByName } from '/@/api/platform/dataDic';
+import { getAll as getAllLayout } from '/@/api/platform/layouts';
+import { getByName as getDataByName } from '/@/api/platform/datas';
 
 const { L } = useLocalization('AppPlatform');
 

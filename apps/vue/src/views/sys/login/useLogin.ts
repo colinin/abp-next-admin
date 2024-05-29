@@ -16,9 +16,26 @@ export enum LoginStateEnum {
   Portal,
 }
 
+interface UserLoginfo {
+  userId?: string;
+  userName: string;
+  password: string;
+  twoFactorToken?: string;
+}
+
 const currentState = ref(LoginStateEnum.LOGIN);
+const userInfo = ref<UserLoginfo>({
+  userName: '',
+  password: '',
+});
 
 export function useLoginState() {
+  function setLoginInfoState(state: UserLoginfo) {
+    userInfo.value = state;
+  }
+
+  const getLoginInfoState = computed(() => userInfo.value);
+
   function setLoginState(state: LoginStateEnum) {
     currentState.value = state;
   }
@@ -29,7 +46,7 @@ export function useLoginState() {
     setLoginState(LoginStateEnum.LOGIN);
   }
 
-  return { setLoginState, getLoginState, handleBackLogin };
+  return { setLoginState, getLoginState, getLoginInfoState, setLoginInfoState, handleBackLogin };
 }
 
 export function useFormValid<T extends Object = any>(formRef: Ref<any>) {

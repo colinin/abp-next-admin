@@ -14,9 +14,7 @@ using Microsoft.Extensions.Hosting;
 using PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 using PackageName.CompanyName.ProjectName.SettingManagement;
 using Volo.Abp;
-#if IdentityServer4
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
-#elif OpenIddict 
+#if OpenIddict 
 using Volo.Abp.OpenIddict;
 #endif
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -52,9 +50,7 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
-#if IdentityServer4
-    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-#elif OpenIddict
+#if OpenIddict
     typeof(AbpOpenIddictAspNetCoreModule),
 #endif
     typeof(AbpCachingStackExchangeRedisModule),
@@ -85,9 +81,12 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         ConfigureVirtualFileSystem();
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
+        ConfigureIdentity(configuration);
         ConfigureMultiTenancy(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureJsonSerializer(configuration);
+        ConfigureSwagger(context.Services);
+        ConfigureMvc(context.Services, configuration);
+        ConfigureCors(context.Services, configuration);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -104,9 +103,7 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-#if IdentityServer4
-        app.UseJwtTokenMiddleware();
-#elif OpenIddict
+#if OpenIddict
         app.UseAbpOpenIddictValidation();
 #endif
         app.UseDynamicClaims();

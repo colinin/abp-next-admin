@@ -1,4 +1,4 @@
-import { ValueType } from '/@/api/platform/model/dataItemModel';
+import { ValueType } from '/@/api/platform/datas/model';
 
 export const valueTypeMaps: { [key: number]: string } = {
   [ValueType.String]: 'String',

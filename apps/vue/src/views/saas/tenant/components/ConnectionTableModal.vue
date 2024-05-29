@@ -44,7 +44,10 @@
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { BasicModal, useModal, useModalInner } from '/@/components/Modal';
   import { getConnectionStringsColumns } from '../datas/TableData';
-  import { DeleteConnectionStringAsyncByIdAndName, GetConnectionStringAsyncById } from '/@/api/saas/tenant';
+  import {
+    DeleteConnectionStringAsyncByIdAndName,
+    GetConnectionStringAsyncById,
+  } from '/@/api/saas/tenant';
   import ConnectionEditModal from './ConnectionEditModal.vue';
 
   defineEmits(['register']);

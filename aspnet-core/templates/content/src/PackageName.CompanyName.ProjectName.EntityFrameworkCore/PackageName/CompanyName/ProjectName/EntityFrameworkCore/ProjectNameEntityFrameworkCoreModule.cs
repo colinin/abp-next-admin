@@ -8,6 +8,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 #elif SqlServer 
 using Volo.Abp.EntityFrameworkCore.SqlServer;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 #elif Sqlite 
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 #elif Oracle 
@@ -50,7 +51,11 @@ public class ProjectNameEntityFrameworkCoreModule : AbpModule
             options.UseMySQL<ProjectNameDbContext>();
 #elif SqlServer
             options.UseSqlServer();
-            options.UseSqlServer<ProjectNameDbContext>();
+            options.UseSqlServer<ProjectNameDbContext>(builder =>
+            {
+                // see https://learn.microsoft.com/en-us/sql/t-sql/statements/alter-database-transact-sql-compatibility-level?view=sql-server-ver16
+                // builder.UseCompatibilityLevel(150);
+            });
 #elif Sqlite
             options.UseSqlite();
             options.UseSqlite<ProjectNameDbContext>();

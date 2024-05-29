@@ -12,8 +12,16 @@
 		<PackageReference Include="DotNetCore.CAP.Dashboard" />
 		<PackageReference Include="DotNetCore.CAP.MySql" />
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
+		<PackageReference Include="DotNetCore.CAP.OpenTelemetry" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
 		<PackageReference Include="DistributedLock.Redis" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" />
 		<PackageReference Include="Quartz.Serialization.Json" />
 		<PackageReference Include="Serilog.AspNetCore" />
 		<PackageReference Include="Serilog.Enrichers.Environment" />
@@ -41,7 +49,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
-		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />

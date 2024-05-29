@@ -44,7 +44,7 @@
         emit('cancel', e);
       }
 
-      return { handleOk, handleCancel, getOkText, getCancelText, };
+      return { handleOk, handleCancel, getOkText, getCancelText };
     },
   });
 </script>

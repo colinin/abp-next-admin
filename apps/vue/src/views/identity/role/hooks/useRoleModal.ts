@@ -4,8 +4,8 @@ import { computed, unref, watch } from 'vue';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { getModalFormSchemas } from '../datas/ModalData';
 import { FormActionType } from '/@/components/Form';
-import { Role } from '/@/api/identity/model/roleModel';
-import { create, update } from '/@/api/identity/role';
+import { Role } from '/@/api/identity/roles/model';
+import { create, update } from '/@/api/identity/roles';
 
 interface UseRoleFormContext {
   roleRef: Ref<Nullable<Role>>;
@@ -30,7 +30,7 @@ export function useRoleModal({ roleRef, formElRef }: UseRoleFormContext) {
     (role) => {
       const formEl = unref(formElRef);
       formEl?.resetFields();
-      formEl?.setFieldsValue(role);
+      formEl?.setFieldsValue(role!);
     },
     {
       immediate: true,

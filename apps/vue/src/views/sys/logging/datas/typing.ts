@@ -1,4 +1,4 @@
-import { LogLevel } from '/@/api/logging/model/loggingModel';
+import { LogLevel } from '/@/api/logging/logs/model';
 
 export const LogLevelColor: { [key: number]: string } = {
   [LogLevel.Trace]: 'purple',

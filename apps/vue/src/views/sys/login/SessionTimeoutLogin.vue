@@ -8,6 +8,8 @@
 <script lang="ts" setup>
   import { onBeforeUnmount, onMounted, ref } from 'vue';
   import Login from './Login.vue';
+  import { useRoute } from 'vue-router';
+  import { useGo } from '/@/hooks/web/usePage';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useUserStore } from '/@/store/modules/user';
   import { usePermissionStore } from '/@/store/modules/permission';
@@ -15,6 +17,8 @@
   import { PermissionModeEnum } from '/@/enums/appEnum';
 
   const { prefixCls } = useDesign('st-login');
+  const go = useGo();
+  const { path } = useRoute();
   const userStore = useUserStore();
   const permissionStore = usePermissionStore();
   const appStore = useAppStore();
@@ -28,6 +32,7 @@
     // 记录当前的UserId
     userId.value = userStore.getUserInfo?.userId;
     console.log('Mounted', userStore.getUserInfo);
+    go(`/login?redirect=${path}`);
   });
 
   onBeforeUnmount(() => {
@@ -45,7 +50,6 @@
 
   .@{prefix-cls} {
     position: fixed;
-    z-index: 9999999;
     width: 100%;
     height: 100%;
     background: @component-background;

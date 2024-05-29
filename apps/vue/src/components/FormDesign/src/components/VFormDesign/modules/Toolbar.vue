@@ -98,6 +98,7 @@
 <style lang="less" scoped>
   //noinspection CssUnknownTarget
   @import url('../styles/variable.less');
+
   .operating-area {
     border-bottom: 2px solid @border-color;
     font-size: 16px;
@@ -109,16 +110,20 @@
     justify-content: space-between;
     align-content: center;
     padding-left: 30px;
+
     a {
       color: #666;
       margin: 0 5px;
+
       &.disabled,
       &.disabled:hover {
         color: #ccc;
       }
+
       &:hover {
         color: @primary-color;
       }
+
       > span {
         font-size: 14px;
         padding-left: 2px;

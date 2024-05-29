@@ -104,15 +104,7 @@
 </template>
 <script lang="ts" setup>
   import type { BasicColumn, ColumnChangeParam } from '../../types/table';
-  import {
-    useAttrs,
-    ref,
-    reactive,
-    watchEffect,
-    nextTick,
-    unref,
-    computed,
-  } from 'vue';
+  import { useAttrs, ref, reactive, watchEffect, nextTick, unref, computed } from 'vue';
   import { Tooltip, Popover, Checkbox, Divider } from 'ant-design-vue';
   import type { CheckboxChangeEvent } from 'ant-design-vue/lib/checkbox/interface';
   import { SettingOutlined, DragOutlined } from '@ant-design/icons-vue';
@@ -382,9 +374,7 @@
   }
 
   function getPopupContainer() {
-    return isFunction(attrs.getPopupContainer)
-      ? attrs.getPopupContainer()
-      : getParentContainer();
+    return isFunction(attrs.getPopupContainer) ? attrs.getPopupContainer() : getParentContainer();
   }
 </script>
 <style lang="less">

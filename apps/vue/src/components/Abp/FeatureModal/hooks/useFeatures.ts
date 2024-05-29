@@ -5,7 +5,7 @@ import { message } from 'ant-design-vue';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useValidation } from '/@/hooks/abp/useValidation';
 import { FeatureGroup } from '/@/api/feature-management/features/model';
-import { GetByProvider, UpdateByProvider } from '/@/api/feature-management/features';
+import { get, update } from '/@/api/feature-management/features';
 import { ReturnInnerMethods } from '/@/components/Modal';
 
 interface UseFeature {
@@ -30,7 +30,7 @@ export function useFeatures({ providerName, providerKey, formRel, modalMethods }
         const form = unref(formRel);
         form.resetFields();
         onGroupChange(0);
-        GetByProvider({
+        get({
           providerName: unref(providerName),
           providerKey: key,
         }).then((res) => {
@@ -120,7 +120,7 @@ export function useFeatures({ providerName, providerKey, formRel, modalMethods }
   function handleSubmit() {
     const form = unref(formRel);
     form.validate().then(() => {
-      UpdateByProvider(
+      update(
         {
           providerName: unref(providerName),
           providerKey: unref(providerKey),

@@ -5,14 +5,15 @@
       :label="t('component.simple_state_checking.requireFeatures.requiresAll')"
       :extra="t('component.simple_state_checking.requireFeatures.requiresAllDesc')"
     >
-      <Checkbox
-        :checked="state.stateChecker.requiresAll"
-        @change="handleChangeRequiresAll"
-      >
+      <Checkbox :checked="state.stateChecker.requiresAll" @change="handleChangeRequiresAll">
         {{ t('component.simple_state_checking.requireFeatures.requiresAll') }}
       </Checkbox>
     </FormItem>
-    <FormItem :name="['stateChecker', 'featureNames']" required :label="t('component.simple_state_checking.requireFeatures.featureNames')">
+    <FormItem
+      :name="['stateChecker', 'featureNames']"
+      required
+      :label="t('component.simple_state_checking.requireFeatures.featureNames')"
+    >
       <TreeSelect
         allow-clear
         tree-checkable
@@ -35,7 +36,7 @@
   import { cloneDeep } from 'lodash-es';
   import { computed, reactive, onMounted, watchEffect } from 'vue';
   import { Checkbox, Form, TreeSelect } from 'ant-design-vue';
-  import { GetListAsyncByInput } from '/@/api/feature-management/definitions/features';
+  import { getList } from '/@/api/feature-management/definitions/features';
   import { FeatureDefinitionDto } from '/@/api/feature-management/definitions/features/model';
   import { useLocalizationSerializer } from '/@/hooks/abp/useLocalizationSerializer';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
@@ -80,7 +81,7 @@
       name: 'F',
       requiresAll: true,
       featureNames: [],
-    }
+    },
   });
   const getRequiredFeatures = computed(() => {
     return state.features
@@ -99,13 +100,13 @@
   onMounted(fetchFeatures);
 
   function fetchFeatures() {
-    GetListAsyncByInput({}).then((res) => {
+    getList({}).then((res) => {
       state.features = res.items;
       formatDisplayName(state.features);
       const featureGroup = groupBy(cloneDeep(res.items), 'groupName');
       const featureTreeData: FeatureTreeData[] = [];
       Object.keys(featureGroup).forEach((gk) => {
-        const featuresByGroup = featureGroup[gk].filter(feature => {
+        const featuresByGroup = featureGroup[gk].filter((feature) => {
           const valueType = valueTypeSerializer.deserialize(feature.valueType);
           return valueType.validator.name === 'BOOLEAN';
         });
@@ -146,6 +147,4 @@
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

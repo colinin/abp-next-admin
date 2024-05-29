@@ -4,7 +4,11 @@
       <Tabs tab-position="left" :tabBarStyle="{ width: '220px' }">
         <template v-for="item in getSettingList()" :key="item.key">
           <TabPane :tab="item.name">
-            <component :is="componentsRef[item.component]" :profile="profileRef" @profile-change="initUserInfo" />
+            <component
+              :is="componentsRef[item.component]"
+              :profile="profileRef"
+              @profile-change="initUserInfo"
+            />
           </TabPane>
         </template>
       </Tabs>
@@ -13,27 +17,29 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, shallowRef, onMounted } from 'vue';
+  import { defineAsyncComponent, ref, shallowRef, onMounted } from 'vue';
   import { Tabs } from 'ant-design-vue';
   import { ScrollContainer } from '/@/components/Container/index';
   import { getSettingList } from './data';
   import { get as getProfile } from '/@/api/account/profiles';
-  import { MyProfile } from '/@/api/account/model/profilesModel';
+  import { MyProfile } from '/@/api/account/profiles/model';
   import { useAbpStoreWithOut } from '/@/store/modules/abp';
   import BaseSetting from './BaseSetting.vue';
-  import SecureSetting from './SecureSetting.vue';
-  import AccountBind from './AccountBind.vue';
-  import MsgNotify from './MsgNotify.vue';
 
   const TabPane = Tabs.TabPane;
+  const SecureSetting = defineAsyncComponent(() => import('./SecureSetting.vue'));
+  const AccountBind = defineAsyncComponent(() => import('./AccountBind.vue'));
+  const MsgNotify = defineAsyncComponent(() => import('./MsgNotify.vue'));
+  const Authenticator = defineAsyncComponent(() => import('./Authenticator.vue'));
 
   const componentsRef = shallowRef({
-    'BaseSetting': BaseSetting,
-    'SecureSetting': SecureSetting,
-    'AccountBind': AccountBind,
-    'MsgNotify': MsgNotify,
+    BaseSetting: BaseSetting,
+    SecureSetting: SecureSetting,
+    AccountBind: AccountBind,
+    MsgNotify: MsgNotify,
+    Authenticator: Authenticator,
   });
-  
+
   const profileRef = ref<MyProfile>();
   onMounted(fetchProfile);
 

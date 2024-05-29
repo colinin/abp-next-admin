@@ -5,10 +5,7 @@
       :label="t('component.simple_state_checking.requirePermissions.requiresAll')"
       :extra="t('component.simple_state_checking.requirePermissions.requiresAllDesc')"
     >
-      <Checkbox
-        :checked="state.stateChecker.model.requiresAll"
-        @change="handleChangeRequiresAll"
-      >
+      <Checkbox :checked="state.stateChecker.model.requiresAll" @change="handleChangeRequiresAll">
         {{ t('component.simple_state_checking.requirePermissions.requiresAll') }}
       </Checkbox>
     </FormItem>
@@ -88,7 +85,7 @@
         requiresAll: true,
         permissions: [],
       },
-    }
+    },
   });
   const getRequiredPermissions = computed(() => {
     return state.permissions
@@ -150,6 +147,4 @@
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

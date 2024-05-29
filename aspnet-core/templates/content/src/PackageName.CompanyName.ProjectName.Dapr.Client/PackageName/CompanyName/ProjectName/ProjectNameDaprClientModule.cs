@@ -11,7 +11,7 @@ public class ProjectNameDaprClientModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddDaprClientProxies(
+        context.Services.AddStaticDaprClientProxies(
             typeof(ProjectNameApplicationContractsModule).Assembly,
             ProjectNameRemoteServiceConsts.RemoteServiceName);
     }

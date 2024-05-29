@@ -48,7 +48,9 @@
           <Tag color="blue">{{ JobTypeMap[record.jobType] }}</Tag>
         </template>
         <template v-else-if="column.key === 'priority'">
-          <Tag :color="JobPriorityColor[record.priority]">{{ JobPriorityMap[record.priority] }}</Tag>
+          <Tag :color="JobPriorityColor[record.priority]">{{
+            JobPriorityMap[record.priority]
+          }}</Tag>
         </template>
         <template v-if="column.key === 'action'">
           <TableAction
@@ -72,7 +74,9 @@
               {
                 auth: 'TaskManagement.BackgroundJobs.Pause',
                 label: L('BackgroundJobs:Pause'),
-                ifShow: [JobStatus.Queuing, JobStatus.Running, JobStatus.FailedRetry].includes(record.status),
+                ifShow: [JobStatus.Queuing, JobStatus.Running, JobStatus.FailedRetry].includes(
+                  record.status,
+                ),
                 onClick: handlePause.bind(null, record),
               },
               {
@@ -84,9 +88,12 @@
               {
                 auth: 'TaskManagement.BackgroundJobs.Trigger',
                 label: L('BackgroundJobs:Trigger'),
-                ifShow: [JobStatus.Queuing, JobStatus.Running, JobStatus.Completed, JobStatus.FailedRetry].includes(
-                  record.status,
-                ),
+                ifShow: [
+                  JobStatus.Queuing,
+                  JobStatus.Running,
+                  JobStatus.Completed,
+                  JobStatus.FailedRetry,
+                ].includes(record.status),
                 onClick: handleTrigger.bind(null, record),
               },
               {
@@ -124,8 +131,8 @@
     bulkDelete,
     getAvailableFields,
     advancedSearch,
-  } from '/@/api/task-management/backgroundJobInfo';
-  import { JobStatus } from '/@/api/task-management/model/backgroundJobInfoModel';
+  } from '/@/api/task-management/jobs';
+  import { JobStatus } from '/@/api/task-management/jobs/model';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
   import {

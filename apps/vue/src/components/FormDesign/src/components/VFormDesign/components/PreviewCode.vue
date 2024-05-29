@@ -60,7 +60,7 @@
     if (unref(copiedRef)) {
       createMessage.warning('复制成功！');
     }
-  }
+  };
 </script>
 
 <style lang="less" scoped>
@@ -68,6 +68,7 @@
   .copy-btn-box {
     padding-top: 8px;
     text-align: center;
+
     .copy-btn {
       margin-right: 8px;
     }

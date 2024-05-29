@@ -14,8 +14,8 @@
   import { useModalInner } from '/@/components/Modal';
   import { BasicModalForm } from '/@/components/ModalForm';
   import { getModalFormSchemas } from './ModalData';
-  import { Layout } from '/@/api/platform/model/layoutModel';
-  import { create, update } from '/@/api/platform/layout';
+  import { Layout } from '/@/api/platform/layouts/model';
+  import { create, update } from '/@/api/platform/layouts';
 
   const emits = defineEmits(['change', 'register']);
 
@@ -34,7 +34,8 @@
   });
 
   function handleSaveChanges(data) {
-    const api = data.id === undefined
+    const api =
+      data.id === undefined
         ? create({
             dataId: data.dataId,
             framework: data.framework,

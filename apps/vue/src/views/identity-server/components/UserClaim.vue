@@ -12,7 +12,7 @@
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue';
   import { Transfer } from 'ant-design-vue';
-  import { getActivedList } from '/@/api/identity/claim';
+  import { getActivedList } from '/@/api/identity/claims';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
 
   const emits = defineEmits(['change']);
@@ -42,7 +42,7 @@
   };
 
   const getListStyle = computed(() => {
-    return {...defaultListStyle, ...props.listStyle}
+    return { ...defaultListStyle, ...props.listStyle };
   });
 
   onMounted(() => {

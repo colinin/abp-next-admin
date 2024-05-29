@@ -112,9 +112,11 @@
 </script>
 <style lang="less">
   @import url(../styles/variable.less);
+
   .layout-width {
     width: 100%;
   }
+
   .hidden-item {
     background-color: rgb(240, 191, 195);
   }

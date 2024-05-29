@@ -6,7 +6,7 @@
     :error-info="state.errorInfo"
     @selected="$emit('selected')"
     @delNode="$emit('delNode')"
-    @insertNode="type => $emit('insertNode', type)"
+    @insertNode="(type) => $emit('insertNode', type)"
     placeholder="请设置抄送人"
     header-bgc="#3296fa"
   >
@@ -29,19 +29,19 @@
 
   defineEmits(['delNode', 'insertNode', 'selected']);
   const props = defineProps({
-    config:{
+    config: {
       type: Object,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
   });
   const content = computed(() => {
-    if (props.config.props.shouldAdd){
+    if (props.config.props.shouldAdd) {
       return '由发起人指定';
-    }else if (props.config.props.assignedUser.length > 0) {
+    } else if (props.config.props.assignedUser.length > 0) {
       let texts: string[] = [];
-      props.config.props.assignedUser.forEach(org => texts.push(org.name));
+      props.config.props.assignedUser.forEach((org) => texts.push(org.name));
       return String(texts).replaceAll(',', '、');
     } else {
       return undefined;
@@ -51,12 +51,12 @@
     showError: false,
     errorInfo: '',
   });
-   //校验数据配置的合法性
-  function validate(err: string[]){
+  //校验数据配置的合法性
+  function validate(err: string[]) {
     state.showError = false;
     if (props.config.props.shouldAdd) {
       state.showError = false;
-    } else if(props.config.props.assignedUser.length === 0) {
+    } else if (props.config.props.assignedUser.length === 0) {
       state.showError = true;
       state.errorInfo = '请选择需要抄送的人员';
     }
@@ -71,6 +71,4 @@
   });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

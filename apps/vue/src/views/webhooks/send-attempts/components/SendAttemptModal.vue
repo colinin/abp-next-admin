@@ -6,12 +6,7 @@
     :title="L('SendAttempts')"
     :mask-closable="false"
   >
-    <Form
-      ref="formElRef"
-      :colon="true"
-      :model="modelRef"
-      layout="vertical"
-    >
+    <Form ref="formElRef" :colon="true" :model="modelRef" layout="vertical">
       <Tabs
         v-model:activeKey="activeKey"
         :style="tabsStyle.style"
@@ -40,7 +35,11 @@
             >
           </FormItem>
           <FormItem :label="L('DisplayName:ResponseHeaders')">
-            <CodeEditor readonly :mode="MODE.JSON" :value="getJsonValue(modelRef.responseHeaders)" />
+            <CodeEditor
+              readonly
+              :mode="MODE.JSON"
+              :value="getJsonValue(modelRef.responseHeaders)"
+            />
           </FormItem>
           <FormItem :label="L('DisplayName:Response')">
             <CodeEditor readonly :value="getJsonValue(modelRef.response)" />
@@ -81,7 +80,12 @@
             <Input readonly :value="subscriptionRef.webhookUri" />
           </FormItem>
           <FormItem :label="L('DisplayName:Description')">
-            <Textarea readonly :value="subscriptionRef.description" :show-count="true" :auto-size="{ minRows: 3 }" />
+            <Textarea
+              readonly
+              :value="subscriptionRef.description"
+              :show-count="true"
+              :auto-size="{ minRows: 3 }"
+            />
           </FormItem>
           <FormItem :label="L('DisplayName:Secret')">
             <InputPassword readonly :value="subscriptionRef.secret" />
@@ -95,7 +99,7 @@
               :value="getWebhooks(subscriptionRef.webhooks)"
               :auto-size="{ minRows: 5, maxRows: 10 }"
             /> -->
-            <template v-for="(webhook) in subscriptionRef.webhooks" :key="webhook">
+            <template v-for="webhook in subscriptionRef.webhooks" :key="webhook">
               <Tag color="#1c6a8f">{{ webhook }}</Tag>
             </template>
           </FormItem>

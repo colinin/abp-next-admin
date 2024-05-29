@@ -14,7 +14,7 @@ if '%3' equ '' goto run
 exit
 
 :run
-start cmd.exe /c dotnet run
+start cmd.exe /c dotnet run --no-build
 goto end
 
 :restore

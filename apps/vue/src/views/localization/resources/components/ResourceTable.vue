@@ -44,11 +44,10 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
-  import { getList, GetAsyncByName, DeleteAsyncByName } from '/@/api/localization/resources';
-  import { Resource } from '/@/api/localization/model/resourcesModel';
+  import { getList, getByName, deleteByName } from '/@/api/localization/resources';
+  import { Resource } from '/@/api/localization/resources/model';
   import { getDataColumns } from './TableData';
   import ResourceModal from './ResourceModal.vue';
- 
 
   const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization(['LocalizationManagement', 'AbpLocalization', 'AbpUi']);
@@ -73,7 +72,7 @@
           component: 'Input',
           label: L('Search'),
           colProps: { span: 24 },
-          defaultValue: ''
+          defaultValue: '',
         },
       ],
       submitFunc: fetchResources,
@@ -91,11 +90,13 @@
     return form.validate().then((input) => {
       setLoading(true);
       setTableData([]);
-      return getList(input).then((res) => {
-        setTableData(res.items);
-      }).finally(() => {
-        setLoading(false);
-      });
+      return getList(input)
+        .then((res) => {
+          setTableData(res.items);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     });
   }
 
@@ -104,9 +105,9 @@
   }
 
   function handleEdit(record: Resource) {
-    GetAsyncByName(record.name).then((dto) => {
+    getByName(record.name).then((dto) => {
       openModal(true, dto);
-    })
+    });
   }
 
   function handleDelete(record: Resource) {
@@ -115,7 +116,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        return DeleteAsyncByName(record.name).then(() => {
+        return deleteByName(record.name).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           fetchResources();
         });

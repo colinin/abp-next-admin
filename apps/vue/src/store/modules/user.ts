@@ -19,7 +19,7 @@ import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { h } from 'vue';
 
 import { mgr } from '/@/utils/auth/oidc';
-import { formatUrl } from '/@/api/oss-management/private';
+import { formatUrl } from '/@/api/oss-management/files/private';
 
 interface UserState {
   userInfo: Nullable<GetUserInfoModel>;

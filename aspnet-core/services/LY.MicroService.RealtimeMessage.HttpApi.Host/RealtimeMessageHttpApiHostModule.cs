@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -38,6 +37,7 @@ using LINGYUN.Abp.TextTemplating.Scriban;
 using LY.MicroService.RealtimeMessage.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -102,7 +102,6 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpCAPEventBusModule),
     typeof(AbpFeaturesValidationRedisModule),
     typeof(AbpCachingStackExchangeRedisModule),
-    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
@@ -134,17 +133,19 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         ConfigureLocalization();
         ConfigureNotifications();
         ConfigureTextTemplating();
-        ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
+        ConfigureTiming(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
+        ConfigureBackgroundTasks(configuration);
+        ConfigureSwagger(context.Services);
         ConfigureCors(context.Services, configuration);
+        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -153,7 +154,10 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
-        app.UseForwardedHeaders();
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
         // 本地化
         app.UseMapRequestLocalization();
         // http调用链

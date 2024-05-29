@@ -1,4 +1,4 @@
-import { NotificationContentType } from "/@/api/messages/model/notificationsModel";
+import { NotificationContentType } from "/@/api/messages/notifications/model";
 
 export interface ListItem {
   id: string;

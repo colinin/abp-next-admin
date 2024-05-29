@@ -4,7 +4,7 @@
       <span>{{ t('common.export') }}</span>
     </template>
     <DownloadOutlined @click="exportData" />
-    <ExpExcelModal @register="registerModal" @success="handleExport"  />
+    <ExpExcelModal @register="registerModal" @success="handleExport" />
   </Tooltip>
 </template>
 <script lang="ts" setup>
@@ -36,18 +36,19 @@
   function exportDataToExcel(options) {
     const dataSource = table.getDataSource();
     // 列排序过滤
-    const columns = table.getColumns()
+    const columns = table
+      .getColumns()
       .filter((col) => !col.flag || col.flag === 'DEFAULT')
       .filter((col) => isString(col.title) && isString(col.dataIndex));
     // 标题列
-    const header: {[key:string]: string} = {};
+    const header: { [key: string]: string } = {};
     columns.forEach((col) => {
       header[String(col.dataIndex)] = String(col.title);
     });
     // 数据列
-    const rows: {[key:string]: string}[] = [];
+    const rows: { [key: string]: string }[] = [];
     dataSource.forEach((data) => {
-      const row: {[key:string]: string} = {};
+      const row: { [key: string]: string } = {};
       columns.forEach((col) => {
         const colName = String(col.dataIndex);
         if (Reflect.has(data, colName)) {

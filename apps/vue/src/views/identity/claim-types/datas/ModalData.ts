@@ -1,6 +1,6 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
-import { ValueType } from '/@/api/identity/model/claimModel';
+import { ValueType } from '/@/api/identity/claims/model';
 
 const { L } = useLocalization('AbpIdentity');
 

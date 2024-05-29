@@ -36,7 +36,7 @@
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
-  import { deleteContainer, getContainers } from '/@/api/oss-management/oss';
+  import { deleteContainer, getContainers } from '/@/api/oss-management/containers';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';

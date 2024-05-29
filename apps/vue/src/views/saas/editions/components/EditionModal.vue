@@ -62,13 +62,15 @@
     validate().then((input) => {
       changeOkLoading(true);
       const api = input.id ? UpdateAsyncByIdAndInput(input.id, input) : CreateAsyncByInput(input);
-      api.then((edition) => {
-        createMessage.success(L('Successful'));
-        emits('change', edition);
-        closeModal();
-      }).finally(() => {
-        changeOkLoading(false);
-      });
+      api
+        .then((edition) => {
+          createMessage.success(L('Successful'));
+          emits('change', edition);
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>

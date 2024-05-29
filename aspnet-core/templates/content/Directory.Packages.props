@@ -2,8 +2,8 @@
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.1.1</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
-		<VoloAbpPackageVersion>8.1.1</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>8.1.1</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>8.1.2</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>8.1.2</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>8.0.0</MicrosoftExtensionsPackageVersion>
 		<MicrosoftAspNetCorePackageVersion>8.0.0</MicrosoftAspNetCorePackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>8.0.0</MicrosoftEntityFrameworkCorePackageVersion>
@@ -12,9 +12,14 @@
 
 	<!-- LINGYUN Abp Framework -->
 	<ItemGroup>
+		<PackageVersion Include="LINGYUN.Abp.AspNetCore.HttpOverrides" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.AspNetCore.Mvc.Localization" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.AuditLogging" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.AuditLogging.Elasticsearch" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Authorization.OrganizationUnits" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.BackgroundTasks.Abstractions" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.BackgroundTasks.Jobs" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Data.DbMigrator" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.DataProtection" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.DataProtection.Abstractions" Version="$(LINGYUNAbpPackageVersion)" />
@@ -30,15 +35,35 @@
 		<PackageVersion Include="LINGYUN.Abp.Dynamic.Queryable.Application" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Dynamic.Queryable.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Dynamic.Queryable.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Elasticsearch" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Elsa.Activities" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.EntityChange.Application" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.EntityChange.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.EntityChange.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.EventBus.CAP" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.ExceptionHandling" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.ExceptionHandling.Emailing" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Http.Client.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.IdGenerator" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Localization.CultureMap" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.MultiTenancy" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Notifications" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Notifications.Core" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Notifications.SignalR" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Notifications.WxPusher" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Rules" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Rules.RulesEngine" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Saas.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.SettingManagement.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Serilog.Enrichers.Application" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Serilog.Enrichers.UniqueId" Version="$(LINGYUNAbpPackageVersion)" />
-		<PackageVersion Include="LINGYUN.Abp.SettingManagement.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.TextTemplating.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.UI.Navigation" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Webhooks" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Webhooks.Core" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Webhooks.EventBus" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Linq.Dynamic.Queryable" Version="$(LINGYUNAbpPackageVersion)" />
 	</ItemGroup>
 
 	<!-- Abp Framework -->

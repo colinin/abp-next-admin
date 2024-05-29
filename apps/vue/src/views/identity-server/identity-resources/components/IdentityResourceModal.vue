@@ -97,9 +97,9 @@
   const emits = defineEmits(['change', 'register']);
 
   const componentsRef = shallowRef({
-    'Properties': Properties,
+    Properties: Properties,
   });
-  
+
   const { createMessage } = useMessage();
   const { L } = useLocalization('AbpIdentityServer');
   const formElRef = ref<any>(null);
@@ -134,12 +134,14 @@
     const formEl = unref(formElRef);
     formEl?.validate().then(() => {
       changeOkLoading(true);
-      handleSubmit().then(() => {
-        createMessage.success(L('Successful'));
-        emits('change');
-      }).finally(() => {
-        changeOkLoading(false);
-      });
+      handleSubmit()
+        .then(() => {
+          createMessage.success(L('Successful'));
+          emits('change');
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>

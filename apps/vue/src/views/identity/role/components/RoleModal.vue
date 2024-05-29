@@ -26,10 +26,10 @@
   import { BasicForm, FormActionType } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useRoleModal } from '../hooks/useRoleModal';
-  import { Role } from '/@/api/identity/model/roleModel';
+  import { Role } from '/@/api/identity/roles/model';
 
   const emits = defineEmits(['change', 'register']);
-  
+
   const submiting = ref(false);
   const roleRef = ref<Nullable<Role>>(null);
   const formElRef = ref<Nullable<FormActionType>>(null);

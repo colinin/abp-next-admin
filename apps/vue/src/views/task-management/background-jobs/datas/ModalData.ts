@@ -1,6 +1,6 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
-import { JobStatus, JobType, JobPriority, JobSource } from '/@/api/task-management/model/backgroundJobInfoModel';
+import { JobStatus, JobType, JobPriority, JobSource } from '/@/api/task-management/jobs/model';
 import { JobStatusMap, JobTypeMap, JobPriorityMap, JobSourceMap } from './typing';
 
 const { L } = useLocalization(['TaskManagement', 'AbpUi']);

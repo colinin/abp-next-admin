@@ -16,7 +16,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm, FormActionType } from '/@/components/Form';
   import { usePassword } from '../hooks/usePassword';
-  import { changePassword } from '/@/api/identity/user';
+  import { changePassword } from '/@/api/identity/users';
 
   const { createMessage } = useMessage();
   const { L } = useLocalization('AbpIdentity');
@@ -41,12 +41,14 @@
         changeOkLoading(true);
         changePassword(userId, {
           password: res.password,
-        }).then(() => {
-          createMessage.success(L('Successful'));
-          closeModal();
-        }).finally(() => {
-          changeOkLoading(true);
-        });
+        })
+          .then(() => {
+            createMessage.success(L('Successful'));
+            closeModal();
+          })
+          .finally(() => {
+            changeOkLoading(true);
+          });
       });
     }
   }

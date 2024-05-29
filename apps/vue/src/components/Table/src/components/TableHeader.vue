@@ -63,7 +63,7 @@
       },
       tableAlertMessage: {
         type: String,
-        default: ''
+        default: '',
       },
     },
     emits: ['columns-change', 'de-select'],

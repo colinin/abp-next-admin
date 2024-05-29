@@ -1,8 +1,8 @@
 <template>
   <div
-    :class="{'line': row === 1, 'lines': row > 1}"
-    :title="hoverTip ? content: ''"
-    :style="{'--row':row}"
+    :class="{ line: row === 1, lines: row > 1 }"
+    :title="hoverTip ? content : ''"
+    :style="{ '--row': row }"
   >
     <slot name="pre"></slot>
     {{ content }}
@@ -10,31 +10,30 @@
 </template>
 
 <script setup lang="ts">
-
   defineProps({
     row: {
       type: Number,
-      default: 1
+      default: 1,
     },
-    hoverTip:{
+    hoverTip: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    content:{
+    content: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   });
-
 </script>
 
 <style lang="less" scoped>
-  .line{
+  .line {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .lines{
+
+  .lines {
     display: -webkit-box;
     word-break: break-all;
     overflow: hidden;

@@ -1,9 +1,5 @@
 <template>
-  <BasicModal
-    @register="registerModal"
-    :title="L('OrganizationUnit')"
-    @ok="handleSubmit"
-  >
+  <BasicModal @register="registerModal" :title="L('OrganizationUnit')" @ok="handleSubmit">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -15,7 +11,7 @@
   import { get, create, update } from '/@/api/identity/organization-units';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  
+
   const emits = defineEmits(['register', 'change']);
   const { createMessage } = useMessage();
   const { L } = useLocalization('AbpIdentity');
@@ -69,13 +65,15 @@
     validate().then((input) => {
       changeLoading(true);
       const api = !input.id ? create(input) : update(input.id, input);
-      api.then((ou) => {
-        createMessage.success(L('Successful'));
-        emits('change', ou);
-        closeModal();
-      }).finally(() => {
-        changeLoading(false);
-      });
-    })
+      api
+        .then((ou) => {
+          createMessage.success(L('Successful'));
+          emits('change', ou);
+          closeModal();
+        })
+        .finally(() => {
+          changeLoading(false);
+        });
+    });
   }
 </script>

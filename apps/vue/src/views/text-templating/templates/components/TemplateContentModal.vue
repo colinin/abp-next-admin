@@ -8,15 +8,23 @@
       :ok-text="L('SaveContent')"
       @ok="handleSubmit"
     >
-      <Alert v-if="isInlineLocalized" style="margin-bottom: 15px;" type="warning">
+      <Alert v-if="isInlineLocalized" style="margin-bottom: 15px" type="warning">
         <template #message>
           <MarkdownViewer :value="L('InlineContentDescription')" />
         </template>
       </Alert>
       <Card :title="getCardTitle">
         <template v-if="buttonEnabled" #extra>
-          <Button danger type="primary" style="margin-right: 15px;" @click="handleRestoreToDefault">{{ L('RestoreToDefault') }}</Button>
-          <Button type="dashed" @click="handleCustomizePerCulture">{{ L('CustomizePerCulture') }}</Button>
+          <Button
+            danger
+            type="primary"
+            style="margin-right: 15px"
+            @click="handleRestoreToDefault"
+            >{{ L('RestoreToDefault') }}</Button
+          >
+          <Button type="dashed" @click="handleCustomizePerCulture">{{
+            L('CustomizePerCulture')
+          }}</Button>
         </template>
         <BasicForm @register="registerForm" />
       </Card>
@@ -34,7 +42,11 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { TextTemplateDefinitionDto } from '/@/api/text-templating/definitions/model';
-  import { GetAsyncByInput, RestoreToDefaultAsyncByNameAndInput, UpdateAsyncByNameAndInput } from '/@/api/text-templating/contents';
+  import {
+    GetAsyncByInput,
+    RestoreToDefaultAsyncByNameAndInput,
+    UpdateAsyncByNameAndInput,
+  } from '/@/api/text-templating/contents';
   import TemplateContentCultureModal from './TemplateContentCultureModal.vue';
 
   const { L } = useLocalization('AbpTextTemplating');
@@ -53,13 +65,13 @@
   });
   const getCardTitle = computed(() => {
     const textTemplate = unref(textTemplateRef);
-    return `${L('DisplayName:Name')}: ${textTemplate?.name}(${textTemplate?.displayName})`
+    return `${L('DisplayName:Name')}: ${textTemplate?.name}(${textTemplate?.displayName})`;
   });
   const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
     layout: 'vertical',
     showActionButtonGroup: false,
     schemas: [
-     {
+      {
         field: 'content',
         component: 'InputTextArea',
         label: L('DisplayName:Content'),
@@ -104,13 +116,15 @@
       onOk: () => {
         return new Promise((resolve, reject) => {
           const textTemplate = unref(textTemplateRef);
-          RestoreToDefaultAsyncByNameAndInput(textTemplate!.name, { }).then(() => {
-            createMessage.success(L('TemplateContentRestoredToDefault'));
-            fetchContent(textTemplate!.name);
-            return resolve(textTemplate!.name);
-          }).catch((error) => {
-            return reject(error);
-          });
+          RestoreToDefaultAsyncByNameAndInput(textTemplate!.name, {})
+            .then(() => {
+              createMessage.success(L('TemplateContentRestoredToDefault'));
+              fetchContent(textTemplate!.name);
+              return resolve(textTemplate!.name);
+            })
+            .catch((error) => {
+              return reject(error);
+            });
         });
       },
     });
@@ -122,11 +136,13 @@
       const textTemplate = unref(textTemplateRef);
       UpdateAsyncByNameAndInput(textTemplate!.name, {
         content: input.content,
-      }).then(() => {
-        createMessage.success(L('TemplateContentUpdated'));
-      }).finally(() => {
-        changeOkLoading(false);
-      });
+      })
+        .then(() => {
+          createMessage.success(L('TemplateContentUpdated'));
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>

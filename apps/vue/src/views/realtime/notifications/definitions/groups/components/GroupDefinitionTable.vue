@@ -63,7 +63,10 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useLocalizationSerializer } from '/@/hooks/abp/useLocalizationSerializer';
-  import { GetListAsyncByInput, DeleteAsyncByName } from '/@/api/realtime/notifications/definitions/groups';
+  import {
+    GetListAsyncByInput,
+    DeleteAsyncByName,
+  } from '/@/api/realtime/notifications/definitions/groups';
   import { getSearchFormSchemas } from '../datas/ModalData';
   import GroupDefinitionModal from './GroupDefinitionModal.vue';
   import NotificationDefinitionModal from '../../notifications/components/NotificationDefinitionModal.vue';
@@ -113,11 +116,13 @@
       setLoading(true);
       setTableData([]);
       var input = form.getFieldsValue();
-      GetListAsyncByInput(input).then((res) => {
-        setTableData(res.items);
-      }).finally(() => {
-        setLoading(false);
-      });
+      GetListAsyncByInput(input)
+        .then((res) => {
+          setTableData(res.items);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     });
   }
 

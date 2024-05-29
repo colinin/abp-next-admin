@@ -56,7 +56,7 @@
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
   import { useGlobSetting } from '/@/hooks/setting';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { register } from '/@/api/account/accounts';
+  import { passwordRegister } from '/@/api/account/accounts';
 
   const ACol = Col;
   const ARow = Row;
@@ -82,7 +82,7 @@
   async function handleRegister() {
     const data = await validForm();
     if (!data) return;
-    register({
+    passwordRegister({
       ...data,
       appName: glob.shortName,
     }).then(() => {

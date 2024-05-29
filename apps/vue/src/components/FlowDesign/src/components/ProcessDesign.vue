@@ -1,28 +1,40 @@
 <template>
-   <Layout class="main">
+  <Layout class="main">
     <div class="scale">
-      <Button class="button" size="small" @click="state.scale += 10" :disabled="state.scale >= 150" shape="circle">
+      <Button
+        class="button"
+        size="small"
+        @click="state.scale += 10"
+        :disabled="state.scale >= 150"
+        shape="circle"
+      >
         <template #icon>
           <PlusOutlined />
         </template>
       </Button>
       <span>{{ state.scale }}%</span>
-      <Button class="button" size="small" @click="state.scale -= 10" :disabled="state.scale <= 40" shape="circle">
+      <Button
+        class="button"
+        size="small"
+        @click="state.scale -= 10"
+        :disabled="state.scale <= 40"
+        shape="circle"
+      >
         <template #icon>
           <MinusOutlined />
         </template>
       </Button>
-     <Button @click="validate">校验流程</Button>
+      <Button @click="validate">校验流程</Button>
     </div>
-    <div class="design" :style="'transform: scale('+ state.scale / 100 +');'">
-      <ProcessTree ref="processTreeRef" @selectedNode="nodeSelected"/>
+    <div class="design" :style="'transform: scale(' + state.scale / 100 + ');'">
+      <ProcessTree ref="processTreeRef" @selectedNode="nodeSelected" />
     </div>
     <Drawer
       :width="500"
       :title="selectedNode.name"
       :visible="state.showConfig"
       destroy-on-close
-      @close="() => state.showConfig = false"
+      @close="() => (state.showConfig = false)"
     >
       <div slot="title">
         <Input
@@ -47,7 +59,7 @@
   import { PlusOutlined, MinusOutlined } from '@ant-design/icons-vue';
   import { useFlowStoreWithOut } from '/@/store/modules/flow';
   import ProcessTree from './process/ProcessTree.vue';
-  import NodeConfig from './config/NodeConfig.vue'
+  import NodeConfig from './config/NodeConfig.vue';
 
   const flowStore = useFlowStoreWithOut();
   const state = reactive({
@@ -64,46 +76,46 @@
   function loadInitFrom() {
     flowStore.loadForm({
       formId: null,
-      formName: "未命名表单",
+      formName: '未命名表单',
       logo: {
-        icon: "home",
-        background: "#1e90ff"
+        icon: 'home',
+        background: '#1e90ff',
       },
       settings: {
         commiter: [],
         admin: [],
         sign: false,
         notify: {
-          types: ["APP"],
-          title: "消息通知标题"
-        }
+          types: ['APP'],
+          title: '消息通知标题',
+        },
       },
       groupId: undefined,
-      formItems:[],
+      formItems: [],
       process: {
-        id: "root",
+        id: 'root',
         parentId: null,
-        type: "ROOT",
-        name: "发起人",
-        desc: "任何人",
+        type: 'ROOT',
+        name: '发起人',
+        desc: '任何人',
         props: {
           assignedUser: [],
-          formPerms: []
+          formPerms: [],
         },
-        children: {}
+        children: {},
       },
-      remark: "备注说明"
+      remark: '备注说明',
     });
   }
 
-  function validate(){
+  function validate() {
     const processTree = unref(processTreeRef);
-    return processTree?.validateProcess()
+    return processTree?.validateProcess();
   }
 
-  function nodeSelected(node){
-    console.log('配置节点', node)
-    state.showConfig = true
+  function nodeSelected(node) {
+    console.log('配置节点', node);
+    state.showConfig = true;
   }
 
   defineExpose({
@@ -116,6 +128,7 @@
     background: white;
     height: 100%;
   }
+
   .design {
     margin-top: 100px;
     display: flex;
@@ -138,11 +151,11 @@
     }
   }
 
-  .node-config-content{
+  .node-config-content {
     padding: 0 20px 20px;
   }
 
-  :deep(.ant-drawer-body){
+  :deep(.ant-drawer-body) {
     overflow-y: auto;
   }
 </style>

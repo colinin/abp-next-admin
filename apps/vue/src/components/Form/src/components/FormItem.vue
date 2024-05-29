@@ -357,7 +357,7 @@
                 <div style="flex:1;">{getContent()}</div>
                 {showSuffix && <span class="suffix">{getSuffix}</span>}
               </div>
-              { getSlot(slots, extra) }
+              {getSlot(slots, extra)}
             </Form.Item>
           );
         }

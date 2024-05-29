@@ -32,7 +32,7 @@
     minHeight: '500px',
   };
   const getListStyle = computed(() => {
-    return {...defaultListStyle, ...props.listStyle}
+    return { ...defaultListStyle, ...props.listStyle };
   });
 
   function handleChange(targetKeys, direction, moveKeys) {

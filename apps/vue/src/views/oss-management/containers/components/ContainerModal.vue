@@ -16,7 +16,7 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form';
-  import { createContainer } from '/@/api/oss-management/oss';
+  import { createContainer } from '/@/api/oss-management/containers';
   import { getModalFormSchemas } from './ModalData';
 
   const emits = defineEmits(['change', 'register']);
@@ -40,13 +40,15 @@
   function handleSubmit() {
     validate().then((input) => {
       changeOkLoading(true);
-      createContainer(input.name).then((res) => {
-        createMessage.success(L('Successful'));
-        emits('change', res);
-        closeModal();
-      }).finally(() => {
-        changeOkLoading(false);
-      });
+      createContainer(input.name)
+        .then((res) => {
+          createMessage.success(L('Successful'));
+          emits('change', res);
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>

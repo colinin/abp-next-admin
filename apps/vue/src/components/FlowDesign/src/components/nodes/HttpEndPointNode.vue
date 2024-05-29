@@ -6,7 +6,7 @@
     :error-info="state.errorInfo"
     @selected="$emit('selected')"
     @delNode="$emit('delNode')"
-    @insertNode="type => $emit('insertNode', type)"
+    @insertNode="(type) => $emit('insertNode', type)"
     placeholder="请设置触发活动的路径"
     header-bgc="#3296fa"
   >
@@ -24,7 +24,7 @@
 
   defineEmits(['delNode', 'insertNode', 'selected']);
   const props = defineProps({
-    config:{
+    config: {
       type: Object,
       default: () => {
         return {};
@@ -51,13 +51,12 @@
       state.errorInfo = '请设置触发活动的请求地址';
       return;
     }
-    if (Array.isArray(props.config.props.methods) &&
-        props.config.props.methods.length === 0) {
+    if (Array.isArray(props.config.props.methods) && props.config.props.methods.length === 0) {
       state.showError = true;
       state.errorInfo = '请设置触发活动的请求方法';
       return;
     }
-    if (state.showError){
+    if (state.showError) {
       err.push(`${props.config.name} 活动配置未设置完善`);
     }
     return !state.showError;
@@ -68,6 +67,4 @@
   });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

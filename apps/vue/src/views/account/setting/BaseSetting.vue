@@ -35,10 +35,10 @@
   import { CropperAvatar } from '/@/components/Cropper';
   import headerImg from '/@/assets/icons/64x64/color-user.png';
   import { useUserStore } from '/@/store/modules/user';
-  import { upload } from '/@/api/oss-management/private';
+  import { upload } from '/@/api/oss-management/files/private';
   import { changeAvatar } from '/@/api/account/claims';
   import { update as updateProfile } from '/@/api/account/profiles';
-  import { MyProfile, UpdateMyProfile } from '/@/api/account/model/profilesModel';
+  import { MyProfile, UpdateMyProfile } from '/@/api/account/profiles/model';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useProfile } from './useProfile';
@@ -47,7 +47,7 @@
   const props = defineProps({
     profile: {
       type: Object as PropType<MyProfile>,
-    }
+    },
   });
 
   const { getBaseSetschemas } = useProfile({ profile: props.profile });
@@ -78,7 +78,7 @@
     {
       immediate: true,
     },
-  )
+  );
 
   function handleUploadAvatar(params: { file: Blob; name: string; filename: string }) {
     return new Promise<void>((resolve, reject) => {
@@ -111,7 +111,8 @@
         .then(() => {
           createMessage.success(L('PersonalSettingsSaved'));
           emits('profile-change');
-        }).finally(() => {
+        })
+        .finally(() => {
           confirmButton.loading = false;
           confirmButton.title = L('Submit');
         });

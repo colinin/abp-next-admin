@@ -7,7 +7,7 @@ import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useValidation } from '/@/hooks/abp/useValidation';
 
 import { get, create, update } from '/@/api/identity-server/clients';
-import { Client } from '/@/api/identity-server/model/clientsModel';
+import { Client } from '/@/api/identity-server/clients/model';
 
 interface UseModal {
   modelIdRef: Ref<string>;

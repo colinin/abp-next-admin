@@ -7,7 +7,9 @@
           style="width: 100%; margin-bottom: 20px"
           type="primary"
           ghost
-          @click="handleNewFolder">{{ L('Objects:CreateFolder') }}</Button>
+          @click="handleNewFolder"
+          >{{ L('Objects:CreateFolder') }}</Button
+        >
       </Col>
       <Col :span="24">
         <div class="folder-tree">
@@ -27,7 +29,6 @@
     </Row>
     <OssFolderModal @register="registerFolderModal" @change="handleFolderChange" />
   </div>
-
 </template>
 
 <script lang="ts" setup>
@@ -37,7 +38,7 @@
   import { Button, Tree, Row, Col } from 'ant-design-vue';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { getObjects } from '/@/api/oss-management/oss';
+  import { getObjects } from '/@/api/oss-management/objects';
   import { Folder } from '../datas/typing';
   import OssFolderModal from './OssFolderModal.vue';
 
@@ -77,14 +78,16 @@
         expandedKeys.value = [];
         selectedKeys.value = [];
         fetchFolders(bucket).then((fs) => {
-          var foldersRoot: Folder[] = [{
-            title: L('Objects:Root'),
-            key: './',
-            path: '',
-            name: './',
-            isLeaf: false,
-            children: fs,
-          }];
+          var foldersRoot: Folder[] = [
+            {
+              title: L('Objects:Root'),
+              key: './',
+              path: '',
+              name: './',
+              isLeaf: false,
+              children: fs,
+            },
+          ];
           folders.value = foldersRoot;
         });
       }
@@ -92,8 +95,8 @@
     {
       immediate: true,
     },
-  )
-  const fetchChildren: TreeProps['loadData'] = treeNode => {
+  );
+  const fetchChildren: TreeProps['loadData'] = (treeNode) => {
     return new Promise((resolve) => {
       // if (treeNode.dataRef!.children!.length > 0) {
       //   resolve();
@@ -106,26 +109,28 @@
       if (treeNode.dataRef?.name) {
         path = path + treeNode.dataRef?.name;
       }
-      fetchFolders(props.bucket, path).then((fs) => {
-        treeNode.dataRef!.children = fs;
-        folders.value = [...folders.value];
-        loadedKeys.value = [...loadedKeys.value, treeNode.key.toString()];
-        resolve();
-      }).catch(() => {
-        resolve();
-      });
+      fetchFolders(props.bucket, path)
+        .then((fs) => {
+          treeNode.dataRef!.children = fs;
+          folders.value = [...folders.value];
+          loadedKeys.value = [...loadedKeys.value, treeNode.key.toString()];
+          resolve();
+        })
+        .catch(() => {
+          resolve();
+        });
     });
   };
 
   function handleFolderExpand(_, e: any) {
     if (!e.expanded) {
       const keys = loadedKeys.value;
-      const findIndex = keys.findLastIndex(key => key === e.node.key);
+      const findIndex = keys.findLastIndex((key) => key === e.node.key);
       findIndex >= 0 && keys.splice(findIndex);
       loadedKeys.value = keys;
     }
   }
-  
+
   function fetchFolders(bucket: string, path?: string): Promise<Folder[]> {
     return new Promise((resolve) => {
       getObjects({
@@ -137,24 +142,26 @@
         sorting: '',
         skipCount: 0,
         maxResultCount: 1000,
-      }).then((res) => {
-        const fs = res.objects
-          .filter((item) => item.isFolder)
-          .map((item): Folder => {
-            return {
-              key: `${item.path ?? ''}${item.name}`,
-              name: item.name,
-              title: item.name,
-              path: item.path,
-              children: [],
-              isLeaf: false,
-            };
-          });
-        return resolve(fs);
-      }).catch(() => {
-        return resolve([]);
       })
-    })
+        .then((res) => {
+          const fs = res.objects
+            .filter((item) => item.isFolder)
+            .map((item): Folder => {
+              return {
+                key: `${item.path ?? ''}${item.name}`,
+                name: item.name,
+                title: item.name,
+                path: item.path,
+                children: [],
+                isLeaf: false,
+              };
+            });
+          return resolve(fs);
+        })
+        .catch(() => {
+          return resolve([]);
+        });
+    });
   }
 
   function handleSelectChange(selectedKeys: string[]) {
@@ -179,7 +186,7 @@
     // 刷新目录的方式为收起目录，并设置为未加载状态
     // 当用户手动展开目录时重载目录结果
     const keys = expandedKeys.value;
-    const findIndex = keys.findLastIndex(key => key === path);
+    const findIndex = keys.findLastIndex((key) => key === path);
     if (findIndex >= 0) {
       keys.splice(findIndex);
       expandedKeys.value = keys;

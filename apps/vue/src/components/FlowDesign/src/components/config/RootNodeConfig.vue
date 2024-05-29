@@ -5,9 +5,16 @@
       <template #icon>
         <PlusOutlined />
       </template>
-      请选择</Button>
-    <OrgItems v-model:value="select"/>
-    <OrgPicker title="请选择可发起本审批的人员/部门" multiple ref="orgPickerRef" :selected="select" @ok="selected"/>
+      请选择</Button
+    >
+    <OrgItems v-model:value="select" />
+    <OrgPicker
+      title="请选择可发起本审批的人员/部门"
+      multiple
+      ref="orgPickerRef"
+      :selected="select"
+      @ok="selected"
+    />
   </div>
 </template>
 
@@ -15,15 +22,15 @@
   import { computed, nextTick, reactive, ref, unref } from 'vue';
   import { Button } from 'ant-design-vue';
   import { PlusOutlined } from '@ant-design/icons-vue';
-  import OrgItems from "../OrgItems.vue";
-  import OrgPicker from "../OrgPicker.vue";
+  import OrgItems from '../OrgItems.vue';
+  import OrgPicker from '../OrgPicker.vue';
 
   const props = defineProps({
-    config:{
+    config: {
       type: Object,
-      default: ()=>{
-        return {}
-      }
+      default: () => {
+        return {};
+      },
     },
   });
   const orgPickerRef = ref<any>();
@@ -43,14 +50,12 @@
 
   function selected(sel: any) {
     select.value.length = 0;
-    sel.forEach(val => select.value.push(val));
+    sel.forEach((val) => select.value.push(val));
   }
 
-  function removeOrgItem(index: number){
+  function removeOrgItem(index: number) {
     select.value.splice(index, 1);
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

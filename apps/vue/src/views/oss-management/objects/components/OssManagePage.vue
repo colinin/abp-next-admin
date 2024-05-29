@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <Card :title="L('Objects:FileSystem')">
-      <CardGrid style="width: 25%; max-height: 800px; overflow: auto;">
+      <CardGrid style="width: 25%; max-height: 800px; overflow: auto">
         <CardMeta>
           <template #title>
             <Select
@@ -16,12 +16,22 @@
             />
           </template>
           <template #description>
-            <FolderTree ref="folderTreeRef" :bucket="currentBucket" @select="handlePathChange" @folder:created="handlePathCreated" />
+            <FolderTree
+              ref="folderTreeRef"
+              :bucket="currentBucket"
+              @select="handlePathChange"
+              @folder:created="handlePathCreated"
+            />
           </template>
         </CardMeta>
       </CardGrid>
-      <CardGrid style="width: 75%;">
-        <FileList ref="fileListRef" :bucket="currentBucket" :path="currentPath" @folder:delete="handlePathDeleted" />
+      <CardGrid style="width: 75%">
+        <FileList
+          ref="fileListRef"
+          :bucket="currentBucket"
+          :path="currentPath"
+          @folder:delete="handlePathDeleted"
+        />
       </CardGrid>
     </Card>
   </div>
@@ -31,7 +41,7 @@
   import { ref, unref, onMounted } from 'vue';
   import { Card, Select } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { getContainers } from '/@/api/oss-management/oss';
+  import { getContainers } from '/@/api/oss-management/containers';
   import { OssContainer } from '/@/api/oss-management/model/ossModel';
   import FolderTree from './FolderTree.vue';
   import FileList from './FileList.vue';

@@ -75,9 +75,7 @@
               <template #overlay>
                 <Menu @click="handleClickUrlsMenu">
                   <MenuItem key="ClientCallback">{{ L('Client:CallbackUrl') }}</MenuItem>
-                  <MenuItem key="ClientCorsOrigins">{{
-                    L('Client:AllowedCorsOrigins')
-                  }}</MenuItem>
+                  <MenuItem key="ClientCorsOrigins">{{ L('Client:AllowedCorsOrigins') }}</MenuItem>
                   <MenuItem key="ClientLogoutRedirectUris">{{
                     L('Client:PostLogoutRedirectUri')
                   }}</MenuItem>
@@ -302,16 +300,16 @@
   const Option = Select.Option;
 
   const componentsRef = shallowRef({
-    'ClientCallback': ClientCallback,
-    'ClientCorsOrigins': ClientCorsOrigins,
-    'ClientLogoutRedirectUris': ClientLogoutRedirectUris,
-    'ClientApiResource': ClientApiResource,
-    'ClientIdentityResource': ClientIdentityResource,
-    'ClientSecret': ClientSecret,
-    'ClientClaim': ClientClaim,
-    'ClientProperties': ClientProperties,
-    'ClientGrantType': ClientGrantType,
-    'ClientIdentityProvider': ClientIdentityProvider,
+    ClientCallback: ClientCallback,
+    ClientCorsOrigins: ClientCorsOrigins,
+    ClientLogoutRedirectUris: ClientLogoutRedirectUris,
+    ClientApiResource: ClientApiResource,
+    ClientIdentityResource: ClientIdentityResource,
+    ClientSecret: ClientSecret,
+    ClientClaim: ClientClaim,
+    ClientProperties: ClientProperties,
+    ClientGrantType: ClientGrantType,
+    ClientIdentityProvider: ClientIdentityProvider,
   });
 
   const emits = defineEmits(['change', 'register']);
@@ -359,12 +357,14 @@
 
   function handleOk() {
     changeOkLoading(true);
-    handleSubmit().then(() => {
-      createMessage.success(L('Successful'));
-      emits('change');
-    }).finally(() => {
-      changeOkLoading(false);
-    });
+    handleSubmit()
+      .then(() => {
+        createMessage.success(L('Successful'));
+        emits('change');
+      })
+      .finally(() => {
+        changeOkLoading(false);
+      });
   }
 </script>
 

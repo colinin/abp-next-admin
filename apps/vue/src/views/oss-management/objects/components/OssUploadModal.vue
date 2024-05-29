@@ -31,7 +31,9 @@
                 ifShow: !record.completed,
                 color: 'warning',
                 label: '',
-                icon: record.paused ? 'ant-design:caret-right-outlined' : 'ant-design:pause-outlined',
+                icon: record.paused
+                  ? 'ant-design:caret-right-outlined'
+                  : 'ant-design:pause-outlined',
                 onClick: record.paused
                   ? handleResume.bind(null, record)
                   : handlePause.bind(null, record),
@@ -56,7 +58,7 @@
   import { Tag, Tooltip } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
-  import { uploadUrl } from '/@/api/oss-management/oss';
+  import { uploadUrl } from '/@/api/oss-management/objects';
   import { useUserStoreWithOut } from '/@/store/modules/user';
   import Uploader from 'simple-uploader.js';
 

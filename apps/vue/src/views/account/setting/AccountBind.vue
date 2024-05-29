@@ -30,7 +30,7 @@
   import { CollapseContainer } from '/@/components/Container/index';
   import { useProfile } from './useProfile';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { MyProfile } from '/@/api/account/model/profilesModel';
+  import { MyProfile } from '/@/api/account/profiles/model';
   import Icon from '/@/components/Icon/index';
 
   const ListItem = List.Item;
@@ -39,7 +39,7 @@
   const props = defineProps({
     profile: {
       type: Object as PropType<MyProfile>,
-    }
+    },
   });
 
   const { L } = useLocalization('AbpAccount');

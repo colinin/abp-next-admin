@@ -77,7 +77,9 @@
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
       MenuDivider: Menu.Divider,
       LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
-      SecurityLogsModal: createAsyncComponent(() => import('/@/views/account/security-logs/index.vue')),
+      SecurityLogsModal: createAsyncComponent(
+        () => import('/@/views/account/security-logs/index.vue'),
+      ),
     },
     props: {
       theme: propTypes.oneOf(['dark', 'light']),
@@ -95,12 +97,12 @@
         const { avatar, desc, realName, username } = userStore.getUserInfo || {};
         let userName = realName ?? username;
         if (currentTenant.name) {
-          userName = `${currentTenant.name}/${userName}`
+          userName = `${currentTenant.name}/${userName}`;
         }
         return {
           realName: userName,
           avatar: avatar || headerImg,
-          desc
+          desc,
         };
       });
 

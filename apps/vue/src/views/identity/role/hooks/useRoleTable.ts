@@ -1,7 +1,7 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useTable } from '/@/components/Table';
-import { deleteById, getList } from '/@/api/identity/role';
+import { deleteById, getList } from '/@/api/identity/roles';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
 import { getDataColumns } from '../datas/TableData';
 import { getSearchFormSchemas } from '../datas/ModalData';

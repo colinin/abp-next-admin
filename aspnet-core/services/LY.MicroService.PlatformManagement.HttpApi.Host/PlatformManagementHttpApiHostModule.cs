@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -27,6 +26,7 @@ using LY.MicroService.Platform.EntityFrameworkCore;
 using LY.MicroService.PlatformManagement.BackgroundWorkers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -85,7 +85,6 @@ namespace LY.MicroService.PlatformManagement;
     // typeof(AbpFeaturesClientModule),// 当需要客户端特性限制时取消注释此模块
     // typeof(AbpFeaturesValidationRedisClientModule),// 当需要客户端特性限制时取消注释此模块
     typeof(AbpCachingStackExchangeRedisModule),
-    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
@@ -116,6 +115,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
+        ConfigureTiming(configuration);
         ConfigureCaching(configuration);
         ConfigureIdentity(configuration);
         ConfigureAuditing(configuration);
@@ -123,6 +123,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -148,8 +149,11 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
-        
-        app.UseForwardedHeaders();
+
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
         // 本地化
         app.UseMapRequestLocalization();
         // http调用链
@@ -165,7 +169,6 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         app.UseDynamicClaims();
         // 多租户
         app.UseMultiTenancy();
-       
         // 授权
         app.UseAuthorization();
         // Swagger

@@ -11,12 +11,7 @@
       </div>
       <img :src="sourceValue" v-if="sourceValue" alt="avatar" />
     </div>
-    <Button
-      :class="`${prefixCls}-upload-btn`"
-      @click="openModal"
-      v-if="showBtn"
-      v-bind="btnProps"
-    >
+    <Button :class="`${prefixCls}-upload-btn`" @click="openModal" v-if="showBtn" v-bind="btnProps">
       {{ btnText ? btnText : t('component.cropper.selectImage') }}
     </Button>
 
@@ -29,15 +24,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import {
-    computed,
-    CSSProperties,
-    unref,
-    ref,
-    watchEffect,
-    watch,
-    PropType,
-  } from 'vue';
+  import { computed, CSSProperties, unref, ref, watchEffect, watch, PropType } from 'vue';
   import { Button } from '/@/components/Button';
   import CopperModal from './CopperModal.vue';
   import { useDesign } from '/@/hooks/web/useDesign';

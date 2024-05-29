@@ -1,5 +1,14 @@
 <script lang="ts">
-  import { computed, defineComponent, reactive, ref, unref, h, resolveComponent, getCurrentInstance } from 'vue';
+  import {
+    computed,
+    defineComponent,
+    reactive,
+    ref,
+    unref,
+    h,
+    resolveComponent,
+    getCurrentInstance,
+  } from 'vue';
   import { Button } from 'ant-design-vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useFlowStoreWithOut } from '/@/store/modules/flow';
@@ -15,7 +24,7 @@
   import Root from '../nodes/RootNode.vue';
   import Node from '../nodes/Node.vue';
 
-  import DefaultProps, { PrimaryNodes } from "./DefaultNodeProps";
+  import DefaultProps, { PrimaryNodes } from './DefaultNodeProps';
   import { cloneDeep } from 'lodash-es';
 
   export default defineComponent({
@@ -55,39 +64,46 @@
           //普通业务节点
           let childDoms = getDomTree(node.children);
           decodeAppendDom(node, childDoms);
-          return [h('div', {'class':{'primary-node': true}}, { default: () => childDoms })];
+          return [h('div', { class: { 'primary-node': true } }, { default: () => childDoms })];
         } else if (isBranchNode(node)) {
           let index = 0;
           //遍历分支节点，包含并行及条件节点
-          let branchItems = node.branchs.map(branchNode => {
+          let branchItems = node.branchs.map((branchNode) => {
             //处理每个分支内子节点
             toMapping(branchNode);
             let childDoms = getDomTree(branchNode.children);
-            decodeAppendDom(branchNode, childDoms, {level: index + 1, size: node.branchs.length});
+            decodeAppendDom(branchNode, childDoms, { level: index + 1, size: node.branchs.length });
             //插入4条横线，遮挡掉条件节点左右半边线条
             insertCoverLine(index, childDoms, node.branchs);
             //遍历子分支尾部分支
             index++;
-            return h('div', {'class':{'branch-node-item': true}}, { default: () => childDoms });
+            return h('div', { class: { 'branch-node-item': true } }, { default: () => childDoms });
           });
           //插入添加分支/条件的按钮
           branchItems.unshift(
             h(
               'div',
-              {'class':{'add-branch-btn': true}},
-              { default: () => [
-                h(
-                  Button,
-                  {
-                    'class':{'add-branch-btn-el': true},
-                    size: 'small',
-                    shape : 'round',
-                    onClick: () => addBranchNode(node),
-                    innerHTML: `添加${isConditionNode(node)?'条件':'分支'}`,
-                  },
-                  { default: () => [] })
-              ]}));
-          let bchDom = [h('div', {'class':{'branch-node': true}}, { default: () => branchItems })];
+              { class: { 'add-branch-btn': true } },
+              {
+                default: () => [
+                  h(
+                    Button,
+                    {
+                      class: { 'add-branch-btn-el': true },
+                      size: 'small',
+                      shape: 'round',
+                      onClick: () => addBranchNode(node),
+                      innerHTML: `添加${isConditionNode(node) ? '条件' : '分支'}`,
+                    },
+                    { default: () => [] },
+                  ),
+                ],
+              },
+            ),
+          );
+          let bchDom = [
+            h('div', { class: { 'branch-node': true } }, { default: () => branchItems }),
+          ];
           //继续遍历分支后的节点
           let afterChildDoms = getDomTree(node.children);
           return [h('div', {}, { default: () => [bchDom, afterChildDoms] })];
@@ -95,7 +111,7 @@
           //空节点，存在于分支尾部
           let childDoms = getDomTree(node.children);
           decodeAppendDom(node, childDoms);
-          return [h('div', {'class':{'empty-node': true}}, { default: () => childDoms })];
+          return [h('div', { class: { 'empty-node': true } }, { default: () => childDoms })];
         } else {
           //遍历到了末端，无子节点
           return [];
@@ -106,18 +122,20 @@
       function decodeAppendDom(node, dom, props = {} as any) {
         props.config = node;
         const component = resolveComponent(node.type.toLowerCase());
-        dom?.unshift(h(component, {
-          ...props,
-          ref: node.id,
-          key: node.id,
-          //定义事件，插入节点，删除节点，选中节点，复制/移动
-          onInsertNode: (type) => insertNode(type, node),
-          onDelNode: () => delNode(node),
-          onSelected: () => selectNode(node),
-          onCopy: () => copyBranch(node),
-          onLeftMove: () => branchMove(node, -1),
-          onRightMove: () => branchMove(node, 1),
-        }));
+        dom?.unshift(
+          h(component, {
+            ...props,
+            ref: node.id,
+            key: node.id,
+            //定义事件，插入节点，删除节点，选中节点，复制/移动
+            onInsertNode: (type) => insertNode(type, node),
+            onDelNode: () => delNode(node),
+            onSelected: () => selectNode(node),
+            onCopy: () => copyBranch(node),
+            onLeftMove: () => branchMove(node, -1),
+            onRightMove: () => branchMove(node, 1),
+          }),
+        );
       }
 
       //id映射到map，用来向上遍历
@@ -128,15 +146,15 @@
         }
       }
 
-      function insertCoverLine(index, doms, branchs){
+      function insertCoverLine(index, doms, branchs) {
         if (index === 0) {
           //最左侧分支
-          doms.unshift(h('div', {'class':{'line-top-left': true}}, { default: () => [] }));
-          doms.unshift(h('div', {'class':{'line-bot-left': true}}, { default: () => [] }));
+          doms.unshift(h('div', { class: { 'line-top-left': true } }, { default: () => [] }));
+          doms.unshift(h('div', { class: { 'line-bot-left': true } }, { default: () => [] }));
         } else if (index === branchs.length - 1) {
           //最右侧分支
-          doms.unshift(h('div', {'class':{'line-top-right': true}}, { default: () => [] }));
-          doms.unshift(h('div', {'class':{'line-bot-right': true}}, { default: () => [] }));
+          doms.unshift(h('div', { class: { 'line-top-right': true } }, { default: () => [] }));
+          doms.unshift(h('div', { class: { 'line-bot-right': true } }, { default: () => [] }));
         }
       }
 
@@ -145,8 +163,8 @@
         let branchNode = cloneDeep(node);
         branchNode.name = branchNode.name + '-copy';
         forEachNode(parentNode, branchNode, (parent, node) => {
-          let id = getRandomId()
-          console.log(node, '新id =>'+ id, '老nodeId:' + node.id )
+          let id = getRandomId();
+          console.log(node, '新id =>' + id, '老nodeId:' + node.id);
           node.id = id;
           node.parentId = parent.id;
         });
@@ -173,7 +191,7 @@
       }
 
       function isEmptyNode(node) {
-        return node && (node.type === 'EMPTY');
+        return node && node.type === 'EMPTY';
       }
 
       //是分支节点
@@ -191,7 +209,9 @@
       }
 
       function getRandomId() {
-        return `node_${new Date().getTime().toString().substring(5)}${Math.round(Math.random()*9000+1000)}`;
+        return `node_${new Date().getTime().toString().substring(5)}${Math.round(
+          Math.random() * 9000 + 1000,
+        )}`;
       }
 
       //选中一个节点
@@ -205,7 +225,7 @@
       function insertNode(type, parentNode) {
         console.log('insertNode', type, parentNode);
         const rootEl = unref(rootRef);
-        rootEl?.click()
+        rootEl?.click();
         //缓存一下后面的节点
         let afterNode = parentNode.children;
         //插入新节点
@@ -214,19 +234,34 @@
           parentId: parentNode.id,
           props: {},
           type: type,
-        }
-        switch (type){
-          case 'APPROVAL': insertApprovalNode(parentNode); break;
-          case 'CC': insertCcNode(parentNode); break;
-          case 'DELAY': insertDelayNode(parentNode); break;
-          case 'TRIGGER': insertTriggerNode(parentNode); break;
-          case 'CONDITIONS': insertConditionsNode(parentNode); break;
-          case 'CONCURRENTS': insertConcurrentsNode(parentNode); break;
-          case 'HTTPENDPOINT': insertHttpEndPointNode(parentNode); break;
-          default: break;
+        };
+        switch (type) {
+          case 'APPROVAL':
+            insertApprovalNode(parentNode);
+            break;
+          case 'CC':
+            insertCcNode(parentNode);
+            break;
+          case 'DELAY':
+            insertDelayNode(parentNode);
+            break;
+          case 'TRIGGER':
+            insertTriggerNode(parentNode);
+            break;
+          case 'CONDITIONS':
+            insertConditionsNode(parentNode);
+            break;
+          case 'CONCURRENTS':
+            insertConcurrentsNode(parentNode);
+            break;
+          case 'HTTPENDPOINT':
+            insertHttpEndPointNode(parentNode);
+            break;
+          default:
+            break;
         }
         //拼接后续节点
-        if (isBranchNode({type: type})) {
+        if (isBranchNode({ type: type })) {
           if (afterNode && afterNode.id) {
             afterNode.parentId = parentNode.children.children.id;
           }
@@ -240,75 +275,77 @@
         instance?.proxy?.$forceUpdate();
       }
 
-      function insertApprovalNode(parentNode){
+      function insertApprovalNode(parentNode) {
         parentNode.children.name = '审批人';
         parentNode.children.props = cloneDeep(DefaultProps.APPROVAL_PROPS);
       }
 
-      function insertCcNode(parentNode){
+      function insertCcNode(parentNode) {
         parentNode.children.name = '抄送人';
         parentNode.children.props = cloneDeep(DefaultProps.CC_PROPS);
       }
 
-      function insertDelayNode(parentNode){
+      function insertDelayNode(parentNode) {
         parentNode.children.name = '延时处理';
         parentNode.children.props = cloneDeep(DefaultProps.DELAY_PROPS);
       }
 
-      function insertTriggerNode(parentNode){
+      function insertTriggerNode(parentNode) {
         parentNode.children.name = '触发器';
         parentNode.children.props = cloneDeep(DefaultProps.TRIGGER_PROPS);
       }
 
-      function insertConditionsNode(parentNode){
+      function insertConditionsNode(parentNode) {
         parentNode.children.name = '条件分支';
         parentNode.children.children = {
           id: getRandomId(),
           parentId: parentNode.children.id,
-          type: "EMPTY",
+          type: 'EMPTY',
         };
         parentNode.children.branchs = [
           {
             id: getRandomId(),
             parentId: parentNode.children.id,
-            type: "CONDITION",
+            type: 'CONDITION',
             props: cloneDeep(DefaultProps.CONDITION_PROPS),
-            name: "条件1",
-            children:{},
-          },{
+            name: '条件1',
+            children: {},
+          },
+          {
             id: getRandomId(),
             parentId: parentNode.children.id,
-            type: "CONDITION",
+            type: 'CONDITION',
             props: cloneDeep(DefaultProps.CONDITION_PROPS),
-            name: "条件2",
-            children:{},
-          }
+            name: '条件2',
+            children: {},
+          },
         ];
       }
 
-      function insertConcurrentsNode(parentNode){
+      function insertConcurrentsNode(parentNode) {
         parentNode.children.name = '并行分支';
         parentNode.children.children = {
           id: getRandomId(),
           parentId: parentNode.children.id,
-          type: "EMPTY"
+          type: 'EMPTY',
         };
         parentNode.children.branchs = [
           {
             id: getRandomId(),
-            name: "分支1",
+            name: '分支1',
             parentId: parentNode.children.id,
-            type: "CONCURRENT",
+            type: 'CONCURRENT',
             props: {},
-            children:{}
-          },{
+            children: {},
+          },
+          {
             id: getRandomId(),
-            name: "分支2",
+            name: '分支2',
             parentId: parentNode.children.id,
-            type: "CONCURRENT",
+            type: 'CONCURRENT',
             props: {},
-            children:{},
-          }
+            children: {},
+          },
         ];
       }
 
@@ -329,19 +366,19 @@
           node.branchs.push({
             id: getRandomId(),
             parentId: node.id,
-            name: (isConditionNode(node) ? '条件':'分支') + (node.branchs.length + 1),
-            props: isConditionNode(node) ? cloneDeep(DefaultProps.CONDITION_PROPS):{},
-            type: isConditionNode(node) ? "CONDITION":"CONCURRENT",
+            name: (isConditionNode(node) ? '条件' : '分支') + (node.branchs.length + 1),
+            props: isConditionNode(node) ? cloneDeep(DefaultProps.CONDITION_PROPS) : {},
+            type: isConditionNode(node) ? 'CONDITION' : 'CONCURRENT',
             children: {},
           });
         } else {
-          createMessage.warning("最多只能添加 8 项😥");
+          createMessage.warning('最多只能添加 8 项😥');
         }
       }
 
       //删除当前节点
       function delNode(node) {
-        console.log("删除节点", node);
+        console.log('删除节点', node);
         //获取该节点的父节点
         let parentNode = nodeMap.value.get(node.parentId);
         if (parentNode) {
@@ -365,7 +402,7 @@
                 if (endNode.children && endNode.children.id) {
                   endNode.children.parentId = endNode.id;
                 }
-              }else {
+              } else {
                 //直接合并分支后面的节点，这里要取EMPTY后的节点
                 ppNode.children = parentNode.children.children;
                 if (ppNode.children && ppNode.children.id) {
@@ -373,7 +410,7 @@
                 }
               }
             }
-          }else {
+          } else {
             //不是的话就直接删除
             if (node.children && node.children.id) {
               node.children.parentId = parentNode.id;
@@ -382,18 +419,18 @@
           }
           instance?.proxy?.$forceUpdate();
         } else {
-          createMessage.warning("出现错误，找不到上级节点😥");
+          createMessage.warning('出现错误，找不到上级节点😥');
         }
       }
 
-      function validateProcess(){
+      function validateProcess() {
         state.valid = true;
         let err = [];
         validate(err, dom.value);
         return err;
       }
 
-      function validateNode(err, node){
+      function validateNode(err, node) {
         const nodeRef = instance?.refs[node.id] as unknown as any;
         if (nodeRef?.validate) {
           state.valid = nodeRef.validate(err);
@@ -401,17 +438,17 @@
       }
 
       //更新指定节点的dom
-      function nodeDomUpdate(node){
+      function nodeDomUpdate(node) {
         const nodeRef = instance?.refs[node.id] as unknown as any;
         nodeRef?.$forceUpdate();
       }
 
       //给定一个起始节点，遍历内部所有节点
-      function forEachNode(parent, node, callback){
+      function forEachNode(parent, node, callback) {
         if (isBranchNode(node)) {
           callback(parent, node);
           forEachNode(node, node.children, callback);
-          node.branchs.map(branchNode => {
+          node.branchs.map((branchNode) => {
             callback(node, branchNode);
             forEachNode(branchNode, branchNode.children, callback);
           });
@@ -428,7 +465,7 @@
           validate(err, node.children);
         } else if (isBranchNode(node)) {
           //校验每个分支
-          node.branchs.map(branchNode => {
+          node.branchs.map((branchNode) => {
             //校验条件节点
             validateNode(err, branchNode);
             //校验条件节点后面的节点
@@ -449,21 +486,26 @@
         let processTrees = getDomTree(dom.value);
         //插入末端节点
         processTrees.push(
-          h('div', 
-            {style:{'text-align': 'center'}},
-            { default: () => [h('div', {class:{'process-end': true}, innerHTML:'流程结束'})]}
-          ));
-        return h('div', {class:{'_root': true}, ref: rootRef}, { default: () => processTrees });
-      }
+          h(
+            'div',
+            { style: { 'text-align': 'center' } },
+            {
+              default: () => [h('div', { class: { 'process-end': true }, innerHTML: '流程结束' })],
+            },
+          ),
+        );
+        return h('div', { class: { _root: true }, ref: rootRef }, { default: () => processTrees });
+      };
     },
   });
 </script>
 
 <style lang="less" scoped>
-  ._root{
+  ._root {
     margin: 0 auto;
   }
-  .process-end{
+
+  .process-end {
     width: 100px;
     margin: 0 auto;
     margin-bottom: 20px;
@@ -474,18 +516,21 @@
     background-color: #f2f2f2;
     box-shadow: 0 0 10px 0 #bcbcbc;
   }
-  .primary-node{
+
+  .primary-node {
     display: flex;
     align-items: center;
     flex-direction: column;
   }
-  .branch-node{
+
+  .branch-node {
     display: flex;
     justify-content: center;
     /*border-top: 2px solid #cccccc;
     border-bottom: 2px solid #cccccc;*/
   }
-  .branch-node-item{
+
+  .branch-node-item {
     position: relative;
     display: flex;
     background: white;
@@ -493,50 +538,61 @@
     align-items: center;
     border-top: 2px solid #cccccc;
     border-bottom: 2px solid #cccccc;
-    &:before{
-      content: "";
+
+    &:before {
+      content: '';
       position: absolute;
       top: 0;
       left: calc(50% - 1px);
       margin: auto;
       width: 2px;
       height: 100%;
-      background-color: #CACACA;
+      background-color: #cacaca;
     }
-    .line-top-left, .line-top-right, .line-bot-left, .line-bot-right{
+
+    .line-top-left,
+    .line-top-right,
+    .line-bot-left,
+    .line-bot-right {
       position: absolute;
       width: 50%;
       height: 4px;
       background-color: white;
     }
-    .line-top-left{
+
+    .line-top-left {
       top: -2px;
       left: -1px;
     }
-    .line-top-right{
+
+    .line-top-right {
       top: -2px;
       right: -1px;
     }
-    .line-bot-left{
+
+    .line-bot-left {
       bottom: -2px;
       left: -1px;
     }
-    .line-bot-right{
+
+    .line-bot-right {
       bottom: -2px;
       right: -1px;
     }
   }
-  .add-branch-btn{
+
+  .add-branch-btn {
     position: absolute;
     width: 80px;
-    .add-branch-btn-el{
+
+    .add-branch-btn-el {
       z-index: 999;
       position: absolute;
       top: -15px;
     }
   }
 
-  .empty-node{
+  .empty-node {
     display: flex;
     justify-content: center;
     flex-direction: column;

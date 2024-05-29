@@ -77,11 +77,13 @@
 
   function onFetch(input) {
     getKeys(input).then((res) => {
-      setTableData(res.keys.map((key) => {
-        return {
-          key: key,
-        };
-      }));
+      setTableData(
+        res.keys.map((key) => {
+          return {
+            key: key,
+          };
+        }),
+      );
     });
   }
 
@@ -96,13 +98,15 @@
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
         return new Promise((resolve, reject) => {
-          remove(record.key).then(() => {
-            createMessage.success(L('Successful'));
-            fetchCacheKeys();
-            return resolve(record.key);
-          }).catch((error) => {
-            return reject(error);
-          });
+          remove(record.key)
+            .then(() => {
+              createMessage.success(L('Successful'));
+              fetchCacheKeys();
+              return resolve(record.key);
+            })
+            .catch((error) => {
+              return reject(error);
+            });
         });
       },
     });

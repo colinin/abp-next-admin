@@ -17,7 +17,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form';
   import { getFolderModalSchemas } from '../datas/ModalData';
-  import { createObject } from '/@/api/oss-management/oss';
+  import { createObject } from '/@/api/oss-management/objects';
 
   const emits = defineEmits(['register', 'change']);
 
@@ -48,13 +48,15 @@
         path: unref(path),
         object: name,
         overwrite: false,
-      }).then(() => {
-        createMessage.success(L('Successful'));
-        closeModal();
-        emits('change', unref(bucket), unref(path), name);
-      }).finally(() => {
-        changeOkLoading(false);
-      });
+      })
+        .then(() => {
+          createMessage.success(L('Successful'));
+          closeModal();
+          emits('change', unref(bucket), unref(path), name);
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>

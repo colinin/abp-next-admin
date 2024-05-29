@@ -6,6 +6,22 @@ namespace LINGYUN.Abp.Account
     public interface IMyProfileAppService : IApplicationService
     {
         /// <summary>
+        /// 获取验证器信息
+        /// </summary>
+        /// <returns></returns>
+        Task<AuthenticatorDto> GetAuthenticator();
+        /// <summary>
+        /// 验证验证器代码
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCode(VerifyAuthenticatorCodeInput input);
+        /// <summary>
+        /// 重置验证器
+        /// </summary>
+        /// <returns></returns>
+        Task ResetAuthenticator();
+        /// <summary>
         /// 获取二次认证状态
         /// </summary>
         /// <returns></returns>

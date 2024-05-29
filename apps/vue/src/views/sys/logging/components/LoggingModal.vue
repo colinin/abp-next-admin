@@ -107,7 +107,7 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Collapse, Form, Tabs, Tag, Input } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { get } from '/@/api/logging/logging';
+  import { get } from '/@/api/logging/logs';
   import { LogLevelColor, LogLevelLabel } from '../datas/typing';
   import { Log } from '/@/api/logging/model/loggingModel';
   import { formatToDateTime } from '/@/utils/dateUtil';

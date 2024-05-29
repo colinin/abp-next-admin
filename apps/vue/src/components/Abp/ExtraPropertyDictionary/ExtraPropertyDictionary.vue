@@ -1,11 +1,21 @@
 <template>
   <div style="width: 100%">
     <div :class="`${prefixCls}__toolbar`" v-if="!props.disabled">
-      <Button type="primary" @click="handleAddNew">{{ t('component.extra_property_dictionary.actions.create') }}</Button>
-      <Button v-if="props.allowDelete" danger @click="handleClean">{{ t('component.extra_property_dictionary.actions.clean') }}</Button>
+      <Button type="primary" @click="handleAddNew">{{
+        t('component.extra_property_dictionary.actions.create')
+      }}</Button>
+      <Button v-if="props.allowDelete" danger @click="handleClean">{{
+        t('component.extra_property_dictionary.actions.clean')
+      }}</Button>
     </div>
     <Card :title="t('component.extra_property_dictionary.title')">
-      <Table sticky rowKey="key" :columns="getTableColumns" :data-source="state.table.dataSource" :scroll="{ x: 1500 }"> 
+      <Table
+        sticky
+        rowKey="key"
+        :columns="getTableColumns"
+        :data-source="state.table.dataSource"
+        :scroll="{ x: 1500 }"
+      >
         <template v-if="!props.disabled" #bodyCell="{ column, record }">
           <template v-if="column.key === 'action'">
             <div :class="`${prefixCls}__action`">
@@ -16,7 +26,12 @@
                 {{ t('component.extra_property_dictionary.actions.update') }}
               </Button>
               <Divider v-if="props.allowEdit && props.allowDelete" type="vertical" />
-              <Button v-if="props.allowDelete" type="link" @click="() => handleDelete(record)" class="ant-btn-error">
+              <Button
+                v-if="props.allowDelete"
+                type="link"
+                @click="() => handleDelete(record)"
+                class="ant-btn-error"
+              >
                 <template #icon>
                   <DeleteOutlined />
                 </template>
@@ -33,7 +48,7 @@
         :class="`${prefixCls}__form`"
         v-bind="state.form"
         :label-col="{ span: 6 }"
-        :wrapper-col="{ span: 18}"
+        :wrapper-col="{ span: 18 }"
       >
         <FormItem name="key" required :label="t('component.extra_property_dictionary.key')">
           <Input :disabled="state.editFlag" v-model:value="state.form.model.key" />
@@ -64,23 +79,23 @@
     value: string;
   }
   interface State {
-    editFlag: boolean,
+    editFlag: boolean;
     modal: {
-      title?: string,
-      visible?: boolean,
-      maskClosable?: boolean,
-      width?: number,
-      minHeight?: number,
-      onOk?: (e: MouseEvent) => void,
-      onCancel?: (e: MouseEvent) => void,
-    },
+      title?: string;
+      visible?: boolean;
+      maskClosable?: boolean;
+      width?: number;
+      minHeight?: number;
+      onOk?: (e: MouseEvent) => void;
+      onCancel?: (e: MouseEvent) => void;
+    };
     form: {
-      model: any,
-      rules?: Dictionary<string, RuleObject>,
-    },
+      model: any;
+      rules?: Dictionary<string, RuleObject>;
+    };
     table: {
-      dataSource: DataSource[],
-    },
+      dataSource: DataSource[];
+    };
   }
 
   const emits = defineEmits(['change', 'update:value']);
@@ -92,35 +107,41 @@
     allowDelete: propTypes.bool.def(false),
     disabled: propTypes.bool.def(false),
   });
-  
+
   const { prefixCls } = useDesign('extra-property-dictionary');
   const { t } = useI18n();
   const formRef = ref<any>();
   const getTableColumns = computed(() => {
-    const columns: ColumnsType = [{
-      title: t('component.extra_property_dictionary.key'),
-      dataIndex: 'key',
-      align: 'left',
-      fixed: 'left',
-      width: 180,
-    },
-    {
-      title: t('component.extra_property_dictionary.value'),
-      dataIndex: 'value',
-      align: 'left',
-      fixed: 'left',
-      width: 'auto',
-    }];
-    return columns.concat(props.disabled
-      ? []
-      : [{
-        width: 220,
-        title: t('component.extra_property_dictionary.actions.title'),
-        align: 'center',
-        dataIndex: 'action',
-        key: 'action',
-        fixed: 'right',
-    }]);
+    const columns: ColumnsType = [
+      {
+        title: t('component.extra_property_dictionary.key'),
+        dataIndex: 'key',
+        align: 'left',
+        fixed: 'left',
+        width: 180,
+      },
+      {
+        title: t('component.extra_property_dictionary.value'),
+        dataIndex: 'value',
+        align: 'left',
+        fixed: 'left',
+        width: 'auto',
+      },
+    ];
+    return columns.concat(
+      props.disabled
+        ? []
+        : [
+            {
+              width: 220,
+              title: t('component.extra_property_dictionary.actions.title'),
+              align: 'center',
+              dataIndex: 'action',
+              key: 'action',
+              fixed: 'right',
+            },
+          ],
+    );
   });
   const state = reactive<State>({
     editFlag: false,
@@ -137,11 +158,17 @@
       rules: {
         key: {
           validator: (_rule, value) => {
-            if (!state.editFlag && state.table.dataSource && state.table.dataSource.findIndex(x => x.key === value) >= 0) {
-              return Promise.reject(t('component.extra_property_dictionary.validator.duplicateKey'));
+            if (
+              !state.editFlag &&
+              state.table.dataSource &&
+              state.table.dataSource.findIndex((x) => x.key === value) >= 0
+            ) {
+              return Promise.reject(
+                t('component.extra_property_dictionary.validator.duplicateKey'),
+              );
             }
             return Promise.resolve();
-          }
+          },
         },
       },
     },
@@ -165,7 +192,7 @@
     },
     {
       immediate: true,
-    }
+    },
   );
 
   function handleAddNew() {
@@ -189,7 +216,7 @@
 
   function handleDelete(record) {
     const dataSource = state.table.dataSource ?? [];
-    const findIndex = dataSource.findIndex(x => x.key === record.key);
+    const findIndex = dataSource.findIndex((x) => x.key === record.key);
     const changeData: Dictionary<string, string> = {};
     dataSource.splice(findIndex, 1);
     dataSource.forEach((item) => {
@@ -213,8 +240,8 @@
       if (!state.editFlag) {
         dataSource.push(state.form.model);
       } else {
-        const findIndex = dataSource.findIndex(x => x.key === state.form.model.key);
-        dataSource[findIndex] = state.form.model; 
+        const findIndex = dataSource.findIndex((x) => x.key === state.form.model.key);
+        dataSource[findIndex] = state.form.model;
       }
       dataSource.forEach((item) => {
         changeData[item.key] = item.value;
@@ -229,7 +256,7 @@
 
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-extra-property-dictionary';
-  
+
   .@{prefix-cls} {
     &__toolbar {
       flex: 1;

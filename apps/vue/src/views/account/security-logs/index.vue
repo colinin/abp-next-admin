@@ -14,7 +14,13 @@
         <ScrollContainer ref="contentScrollRef">
           <template v-for="securityLog in securityLogs" :key="securityLog.id">
             <CardGrid>
-              <Form layout="horizontal" :colon="false" :model="securityLog" :labelCol="{ span: 4 }" :wrapperCol="{ span: 16 }">
+              <Form
+                layout="horizontal"
+                :colon="false"
+                :model="securityLog"
+                :labelCol="{ span: 4 }"
+                :wrapperCol="{ span: 16 }"
+              >
                 <FormItem labelAlign="left" :label="L('ApplicationName')">
                   <span>{{ securityLog.applicationName }}</span>
                 </FormItem>
@@ -63,8 +69,8 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useContentHeight } from '/@/hooks/web/useContentHeight';
   import { useUserStoreWithOut } from '/@/store/modules/user';
-  import { getList } from '/@/api/identity/securityLog';
-  import { SecurityLog } from '/@/api/identity/model/securityLogModel';
+  import { getList } from '/@/api/auditing/security-logs';
+  import { SecurityLog } from '/@/api/auditing/security-logs/model';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import { formatToDateTime } from '/@/utils/dateUtil';
 
@@ -76,16 +82,14 @@
     autoContentHeight: {
       type: Boolean,
       default: true,
-    }
+    },
   });
 
   const contentWrapRef = ref<any>();
   const contentScrollRef = ref<any>();
   const paginationRef = ref<any>();
   const getContentHeight = computed(() => props.autoContentHeight);
-  const { contentHeight } = useContentHeight(
-    getContentHeight, contentWrapRef, [paginationRef], []
-  );
+  const { contentHeight } = useContentHeight(getContentHeight, contentWrapRef, [paginationRef], []);
   const getContentStyle = computed((): CSSProperties => {
     return {
       width: '100%',

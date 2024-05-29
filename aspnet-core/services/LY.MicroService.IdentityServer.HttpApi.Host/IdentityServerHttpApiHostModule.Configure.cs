@@ -4,8 +4,8 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
-using Medallion.Threading.Redis;
 using Medallion.Threading;
+using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -13,13 +13,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
@@ -28,30 +34,24 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Identity.Localization;
+using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.IdentityServer.Localization;
-using Microsoft.IdentityModel.Logging;
-using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
-using Microsoft.AspNetCore.HttpOverrides;
-using Volo.Abp.Security.Claims;
-using System.Collections.Generic;
-using IdentityModel;
-using System.Security.Claims;
-using Volo.Abp.AspNetCore.Mvc;
 
 namespace LY.MicroService.IdentityServer;
 
 public partial class IdentityServerHttpApiHostModule
 {
+    public static string ApplicationName { get; set; }  = "IdentityService";
     protected const string DefaultCorsPolicyName = "Default";
-    protected const string ApplicationName = "Identity-Server-Admin";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -64,12 +64,6 @@ public partial class IdentityServerHttpApiHostModule
 
     private void PreForwardedHeaders()
     {
-        PreConfigure<AbpForwardedHeadersOptions>(options =>
-        {
-            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            options.KnownNetworks.Clear();
-            options.KnownProxies.Clear();
-        });
     }
 
     private void PreConfigureApp(IConfiguration configuration)
@@ -214,6 +208,54 @@ public partial class IdentityServerHttpApiHostModule
             }
         });
     }
+
+    private void ConfigureOpenTelemetry(IServiceCollection services, IConfiguration configuration)
+    {
+        var openTelemetryEnabled = configuration["OpenTelemetry:IsEnabled"];
+        if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
+        {
+            services.AddOpenTelemetry()
+                .ConfigureResource(resource =>
+                {
+                    resource.AddService(ApplicationName);
+                })
+                .WithTracing(tracing =>
+                {
+                    tracing.AddHttpClientInstrumentation();
+                    tracing.AddAspNetCoreInstrumentation();
+                    tracing.AddCapInstrumentation();
+                    tracing.AddEntityFrameworkCoreInstrumentation();
+                    tracing.AddSource(ApplicationName);
+
+                    var tracingOtlpEndpoint = configuration["OpenTelemetry:Otlp:Endpoint"];
+                    if (!tracingOtlpEndpoint.IsNullOrWhiteSpace())
+                    {
+                        tracing.AddOtlpExporter(otlpOptions =>
+                        {
+                            otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
+                        });
+                        return;
+                    }
+
+                    var zipkinEndpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
+                    if (!zipkinEndpoint.IsNullOrWhiteSpace())
+                    {
+                        tracing.AddZipkinExporter(zipKinOptions =>
+                        {
+                            zipKinOptions.Endpoint = new Uri(zipkinEndpoint);
+                        });
+                        return;
+                    }
+                })
+                .WithMetrics(metrics =>
+                {
+                    metrics.AddRuntimeInstrumentation();
+                    metrics.AddHttpClientInstrumentation();
+                    metrics.AddAspNetCoreInstrumentation();
+                });
+        }
+    }
+
     private void ConfigureDistributedLocking(IServiceCollection services, IConfiguration configuration)
     {
         var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
@@ -222,6 +264,14 @@ public partial class IdentityServerHttpApiHostModule
             var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
             services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
         }
+    }
+
+    private void ConfigureTiming(IConfiguration configuration)
+    {
+        Configure<AbpClockOptions>(options =>
+        {
+            configuration.GetSection("Clock").Bind(options);
+        });
     }
 
     private void ConfigureCaching(IConfiguration configuration)

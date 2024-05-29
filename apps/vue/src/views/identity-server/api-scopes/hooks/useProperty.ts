@@ -1,7 +1,7 @@
 import type { Ref } from 'vue';
 
 import { unref } from 'vue';
-import { ApiScope } from '/@/api/identity-server/model/apiScopesModel';
+import { ApiScope } from '/@/api/identity-server/api-scopes/model';
 
 interface UseProperty {
   modelRef: Ref<ApiScope>;

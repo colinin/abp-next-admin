@@ -62,7 +62,7 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useLocalizationSerializer } from '/@/hooks/abp/useLocalizationSerializer';
   import { FeatureGroupDefinitionDto } from '/@/api/feature-management/definitions/groups/model';
-  import { GetListAsyncByInput, DeleteAsyncByName } from '/@/api/feature-management/definitions/groups';
+  import { getList, deleteByName } from '/@/api/feature-management/definitions/groups';
   import { getSearchFormSchemas } from '../datas/ModalData';
   import GroupDefinitionModal from './GroupDefinitionModal.vue';
   import FeatureDefinitionModal from '../../features/components/FeatureDefinitionModal.vue';
@@ -120,12 +120,14 @@
       setLoading(true);
       state.groups = [];
       var input = form.getFieldsValue();
-      GetListAsyncByInput(input).then((res) => {
-        state.groups = res.items;
-      }).finally(() => {
-        setTableData(state.groups);
-        setLoading(false);
-      });
+      getList(input)
+        .then((res) => {
+          state.groups = res.items;
+        })
+        .finally(() => {
+          setTableData(state.groups);
+          setLoading(false);
+        });
     });
   }
 
@@ -138,7 +140,7 @@
   }
 
   function handleAddFeature(record) {
-    openFeatureModal(true, { 
+    openFeatureModal(true, {
       groupName: record.name,
       groups: cloneDeep(state.groups),
     });
@@ -150,7 +152,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeleteOrRestoreMessage'),
       onOk: () => {
-        return DeleteAsyncByName(record.name).then(() => {
+        return deleteByName(record.name).then(() => {
           createMessage.success(L('Successful'));
           fetch();
         });

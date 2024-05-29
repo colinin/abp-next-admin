@@ -7,12 +7,12 @@ import {
   MessageSourceTye,
   MessageState,
   MessageType,
-} from '/@/api/messages/model/messagesModel';
+} from '/@/api/messages/messages/model';
 import { formatToDateTime } from '/@/utils/dateUtil';
 import { TabItem, ListItem } from './data';
 import { ChatEventEnum, NotifyEventEnum } from '/@/enums/imEnum';
 import emitter from '/@/utils/eventBus';
-import { NotificationInfo } from '/@/api/messages/model/notificationsModel';
+import { NotificationInfo } from '/@/api/messages/notifications/model';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useSignalR } from '/@/hooks/web/useSignalR';

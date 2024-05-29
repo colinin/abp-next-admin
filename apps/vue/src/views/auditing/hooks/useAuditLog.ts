@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
-import { ChangeType } from '/@/api/auditing/model/auditLogModel';
+import { ChangeType } from '/@/api/auditing/entity-changes/model';
 
 export function useAuditLog() {
   const { L } = useLocalization('AbpAuditLogging');

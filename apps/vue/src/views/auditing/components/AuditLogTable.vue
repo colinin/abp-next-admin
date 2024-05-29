@@ -6,30 +6,57 @@
           <Tag
             :color="httpStatusCodeColor(record.httpStatusCode)"
             @click="handleFilter('httpStatusCode', record.httpStatusCode)"
-          >{{ record.httpStatusCode }}</Tag>
+            >{{ record.httpStatusCode }}</Tag
+          >
           <Tag
             style="margin-left: 5px"
             :color="httpMethodColor(record.httpMethod)"
             @click="handleFilter('httpMethod', record.httpMethod)"
-          >{{
-            record.httpMethod
-          }}</Tag>
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('url', record.url)">{{ record.url }}</a>
+            >{{ record.httpMethod }}</Tag
+          >
+          <a class="link" href="javaScript:void(0);" @click="handleFilter('url', record.url)">{{
+            record.url
+          }}</a>
         </template>
         <template v-else-if="column.key === 'applicationName'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('applicationName', record.applicationName)">{{ record.applicationName }}</a>
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('applicationName', record.applicationName)"
+            >{{ record.applicationName }}</a
+          >
         </template>
         <template v-else-if="column.key === 'userName'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('userName', record.userName)">{{ record.userName }}</a>
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('userName', record.userName)"
+            >{{ record.userName }}</a
+          >
         </template>
         <template v-else-if="column.key === 'clientIpAddress'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('clientIpAddress', record.clientIpAddress)">{{ record.clientIpAddress }}</a>
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('clientIpAddress', record.clientIpAddress)"
+            >{{ record.clientIpAddress }}</a
+          >
         </template>
         <template v-else-if="column.key === 'clientId'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('clientId', record.clientId)">{{ record.clientId }}</a>
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('clientId', record.clientId)"
+            >{{ record.clientId }}</a
+          >
         </template>
         <template v-else-if="column.key === 'correlationId'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('correlationId', record.correlationId)">{{ record.correlationId }}</a>
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('correlationId', record.correlationId)"
+            >{{ record.correlationId }}</a
+          >
         </template>
         <template v-else-if="column.key === 'action'">
           <TableAction
@@ -66,7 +93,7 @@
   import { useModal } from '/@/components/Modal';
   import { useAuditLog } from '../hooks/useAuditLog';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { deleteById, getList } from '/@/api/auditing/auditLog';
+  import { deleteById, getList } from '/@/api/auditing/audit-log';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import AuditLogModal from './AuditLogModal.vue';
 

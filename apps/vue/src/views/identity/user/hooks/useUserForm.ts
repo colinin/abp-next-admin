@@ -4,10 +4,9 @@ import { cloneDeep } from 'lodash-es';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useValidation } from '/@/hooks/abp/useValidation';
 import { computed, reactive, ref, unref, onMounted } from 'vue';
-import { CreateUser, UpdateUser } from '/@/api/identity/model/userModel';
-import { create, getById, getRoleList, update } from '/@/api/identity/user';
-import { getAssignableRoles } from '/@/api/identity/user';
-import { Role } from '/@/api/identity/model/roleModel';
+import { CreateUser, UpdateUser } from '/@/api/identity/users/model';
+import { create, getById, getRoleList, update, getAssignableRoles } from '/@/api/identity/users';
+import { Role } from '/@/api/identity/roles/model';
 
 interface UseUserFormContext {
   userRef: Ref<Recordable>;

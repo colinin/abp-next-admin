@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.Data.DbMigrator;
@@ -14,6 +13,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LY.MicroService.LocalizationManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -51,7 +51,6 @@ namespace LY.MicroService.LocalizationManagement
         typeof(AbpEmailingExceptionHandlingModule),
         typeof(AbpCAPEventBusModule),
         typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpAspNetCoreHttpOverridesModule),
         typeof(AbpLocalizationCultureMapModule),
         typeof(AbpHttpClientWrapperModule),
         typeof(AbpAspNetCoreMvcWrapperModule),
@@ -80,6 +79,7 @@ namespace LY.MicroService.LocalizationManagement
             ConfigureExceptionHandling();
             ConfigureVirtualFileSystem();
             ConfigureFeatureManagement();
+            ConfigureTiming(configuration);
             ConfigureCaching(configuration);
             ConfigureIdentity(configuration);
             ConfigureAuditing(configuration);
@@ -87,6 +87,7 @@ namespace LY.MicroService.LocalizationManagement
             ConfigureMultiTenancy(configuration);
             ConfigureJsonSerializer(configuration);
             ConfigureCors(context.Services, configuration);
+            ConfigureOpenTelemetry(context.Services, configuration);
             ConfigureDistributedLocking(context.Services, configuration);
             ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
             ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -97,7 +98,10 @@ namespace LY.MicroService.LocalizationManagement
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
-            app.UseForwardedHeaders();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
             // 本地化
             app.UseMapRequestLocalization();
             // http调用链
