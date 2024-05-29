@@ -28,7 +28,12 @@
               <SelectOption value="HEAD">HEAD</SelectOption>
             </Select>
           </FormItem>
-          <FormItem label="读取内容" extra="指示是否应将HTTP请求内容体作为HTTP请求模型的一部分读取和存储。存储的格式取决于内容类型头。" name="readContent" class="user-type">
+          <FormItem
+            label="读取内容"
+            extra="指示是否应将HTTP请求内容体作为HTTP请求模型的一部分读取和存储。存储的格式取决于内容类型头。"
+            name="readContent"
+            class="user-type"
+          >
             <Checkbox v-model:checked="nodeProps.readContent" />
           </FormItem>
         </TabPane>
@@ -44,7 +49,11 @@
           <FormItem label="身份认证" extra="选中以只允许经过身份验证的请求" name="authorize">
             <Checkbox v-model:checked="nodeProps.authorize" />
           </FormItem>
-          <FormItem label="策略" extra="提供一个要评估的策略。如果策略失败，请求将被禁止。" name="policy">
+          <FormItem
+            label="策略"
+            extra="提供一个要评估的策略。如果策略失败，请求将被禁止。"
+            name="policy"
+          >
             <Input v-model:value="nodeProps.policy" />
           </FormItem>
         </TabPane>
@@ -68,7 +77,7 @@
     config: {
       type: Object,
       default: () => {
-        return {}
+        return {};
       },
     },
   });
@@ -81,6 +90,4 @@
   });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

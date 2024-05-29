@@ -1,6 +1,5 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.Account;
-using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authentication.QQ;
 using LINGYUN.Abp.Authentication.WeChat;
@@ -23,6 +22,7 @@ using LINGYUN.Platform.EntityFrameworkCore;
 using LY.MicroService.AuthServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -76,7 +76,6 @@ namespace LY.MicroService.AuthServer;
     typeof(AuthServerMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
-    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpAliyunSmsModule)
@@ -111,10 +110,12 @@ public partial class AuthServerModule : AbpModule
         ConfigureLocalization();
         ConfigureDataSeeder();
         ConfigureUrls(configuration);
+        ConfigureTiming(configuration);
         ConfigureAuditing(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -125,7 +126,11 @@ public partial class AuthServerModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
-        app.UseForwardedHeaders();
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+        app.UseMapRequestLocalization();
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -135,7 +140,6 @@ public partial class AuthServerModule : AbpModule
             app.UseErrorPage();
             app.UseHsts();
         }
-        app.UseMapRequestLocalization();
         // app.UseHttpsRedirection();
         app.UseCookiePolicy();
         app.UseCorrelationId();
@@ -144,6 +148,7 @@ public partial class AuthServerModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         app.UseWeChatSignature();
         app.UseAuthentication();
+        app.UseDynamicClaims();
         app.UseAbpOpenIddictValidation();
         app.UseMultiTenancy();
         app.UseAuthorization();

@@ -16,7 +16,7 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { getActivedList } from '/@/api/identity/claim';
+  import { getActivedList } from '/@/api/identity/claims';
   import { isFunction } from '/@/utils/is';
 
   const emits = defineEmits(['register', 'change']);
@@ -80,7 +80,7 @@
           return values.id ? true : false;
         },
       },
-    ]
+    ],
   });
   const [registerModal, { changeLoading, closeModal }] = useModalInner((claim) => {
     console.log(claim);
@@ -94,14 +94,18 @@
     validate().then((input) => {
       changeLoading(true);
       if (isFunction(props.createApi) && isFunction(props.updateApi)) {
-        const api = !input.id ? props.createApi(props.identity, input) : props.updateApi(props.identity, input);
-        api.then(() => {
-          createMessage.success(L('Successful'));
-          closeModal();
-          emits('change');
-        }).finally(() => {
-          changeLoading(false);
-        });
+        const api = !input.id
+          ? props.createApi(props.identity, input)
+          : props.updateApi(props.identity, input);
+        api
+          .then(() => {
+            createMessage.success(L('Successful'));
+            closeModal();
+            emits('change');
+          })
+          .finally(() => {
+            changeLoading(false);
+          });
       }
     });
   }

@@ -10,7 +10,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { UpdateAsyncByIdAndInput } from '/@/api/openiddict/open-iddict-application';
+  import { update } from '/@/api/openiddict/open-iddict-application';
   import { OpenIddictApplicationUpdateDto } from '/@/api/openiddict/open-iddict-application/model';
 
   const state = reactive<{
@@ -41,7 +41,7 @@
   function handleSubmit() {
     validate().then((input) => {
       changeOkLoading(true);
-      UpdateAsyncByIdAndInput(state.application.id, {
+      update(state.application.id, {
         ...(state.application as OpenIddictApplicationUpdateDto),
         clientSecret: input.clientSecret,
       })

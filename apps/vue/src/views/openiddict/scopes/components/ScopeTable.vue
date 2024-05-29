@@ -2,11 +2,7 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <Button
-          v-auth="['AbpOpenIddict.Scopes.Create']"
-          type="primary"
-          @click="handleAddNew"
-        >
+        <Button v-auth="['AbpOpenIddict.Scopes.Create']" type="primary" @click="handleAddNew">
           {{ L('Scopes:AddNew') }}
         </Button>
       </template>
@@ -44,7 +40,7 @@
   import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { GetListAsyncByInput, DeleteAsyncById } from '/@/api/openiddict/open-iddict-scope';
+  import { getList, deleteById } from '/@/api/openiddict/open-iddict-scope';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import ScopeModal from './ScopeModal.vue';
 
@@ -54,7 +50,7 @@
   const [registerTable, { reload }] = useTable({
     rowKey: 'id',
     title: L('Scopes'),
-    api: GetListAsyncByInput,
+    api: getList,
     columns: getDataColumns(),
     beforeFetch: formatPagedRequest,
     pagination: true,
@@ -97,7 +93,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        return DeleteAsyncById(record.id).then(() => {
+        return deleteById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });

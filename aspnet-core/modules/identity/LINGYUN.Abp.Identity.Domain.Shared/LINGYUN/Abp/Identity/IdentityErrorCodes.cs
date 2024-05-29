@@ -30,5 +30,9 @@
         /// 尝试在未绑定MFA设备时启用二次认证
         /// </summary>
         public const string ChangeTwoFactorWithMFANotBound = "Volo.Abp.Identity:020011";
+        /// <summary>
+        /// 验证器验证无效
+        /// </summary>
+        public const string AuthenticatorTokenInValid = "Volo.Abp.Identity:020012";
     }
 }

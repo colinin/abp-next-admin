@@ -17,7 +17,7 @@
   import { BasicColumn } from '/@/components/Table';
   import DynamicForm from './DynamicForm.vue';
   import { useGrantType } from '../hooks/useGrantType';
-  import { Client } from '/@/api/identity-server/model/clientsModel';
+  import { Client } from '/@/api/identity-server/clients/model';
 
   const props = defineProps({
     modelRef: {

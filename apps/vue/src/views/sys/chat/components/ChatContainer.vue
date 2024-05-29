@@ -15,7 +15,7 @@
   import ChatMessage from './ChatMessage.vue';
 
   const componentsRef = shallowRef({
-    'ChatMessage': ChatMessage,
+    ChatMessage: ChatMessage,
   });
 
   const switchComp = ref('ChatMessage');

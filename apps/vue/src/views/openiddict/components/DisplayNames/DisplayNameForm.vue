@@ -108,8 +108,8 @@
     return Object.keys(props.displayNames).map((key) => {
       return {
         culture: key,
-        displayName: props.displayNames[key]
-      }
+        displayName: props.displayNames[key],
+      };
     });
   });
 

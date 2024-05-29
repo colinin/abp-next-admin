@@ -7,8 +7,12 @@
     </div>
     <div class="flex flex-1 justify-end md:mt-0 mt-4">
       <div class="flex flex-col justify-center text-right md:mr-10 mr-4">
-        <span class="text-secondary">{{ t('routes.dashboard.workbench.header.notifier.title') }}</span>
-        <a href="javascript:void(0)" class="text-2xl">{{ t('routes.dashboard.workbench.header.notifier.count', [unReadNotiferCount]) }}</a>
+        <span class="text-secondary">{{
+          t('routes.dashboard.workbench.header.notifier.title')
+        }}</span>
+        <a href="javascript:void(0)" class="text-2xl">{{
+          t('routes.dashboard.workbench.header.notifier.count', [unReadNotiferCount])
+        }}</a>
       </div>
     </div>
   </div>
@@ -20,7 +24,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { useWeatherStore } from '/@/store/modules/weather';
   import { getList as getNotifers } from '/@/api/messages/notifications';
-  import { NotificationReadState } from '/@/api/messages/model/notificationsModel';
+  import { NotificationReadState } from '/@/api/messages/notifications/model';
   import headerImg from '/@/assets/images/header.jpg';
 
   const { t } = useI18n();
@@ -33,7 +37,7 @@
     return {
       realName: userName,
       avatar: avatar || headerImg,
-      desc
+      desc,
     };
   });
 

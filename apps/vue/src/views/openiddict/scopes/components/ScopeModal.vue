@@ -75,9 +75,9 @@
   import { useValidation } from '/@/hooks/abp/useValidation';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { ScopeState } from '../types/props';
-  import { GetAsyncById, CreateAsyncByInput, UpdateAsyncByIdAndInput } from '/@/api/openiddict/open-iddict-scope';
+  import { get, create, update } from '/@/api/openiddict/open-iddict-scope';
   import { OpenIddictScopeDto } from '/@/api/openiddict/open-iddict-scope/model';
-  import { discovery } from '/@/api/identity-server/identityServer';
+  import { discovery } from '/@/api/identity-server/discovery';
   import DisplayNameForm from '../../components/DisplayNames/DisplayNameForm.vue';
   import PropertyForm from '../../components/Properties/PropertyForm.vue';
   import PermissionForm from '../../components/Permissions/PermissionForm.vue';
@@ -122,11 +122,11 @@
   });
   const getSupportResources = computed(() => {
     if (state.openIdConfiguration?.claims_supported) {
-      const supportResources = state.openIdConfiguration?.claims_supported.map(claim => {
+      const supportResources = state.openIdConfiguration?.claims_supported.map((claim) => {
         return {
           key: claim,
           title: claim,
-        }
+        };
       });
       return supportResources;
     }
@@ -162,22 +162,24 @@
       return;
     }
     changeLoading(true);
-    GetAsyncById(id).then((scope) => {
-      state.formModel = scope;
-      nextTick(() => {
-        state.isEdit = true;
-        state.entityChanged = false;
+    get(id)
+      .then((scope) => {
+        state.formModel = scope;
+        nextTick(() => {
+          state.isEdit = true;
+          state.entityChanged = false;
+        });
+      })
+      .finally(() => {
+        changeLoading(false);
       });
-    }).finally(() => {
-      changeLoading(false);
-    });
   }
 
   function handleResourceChange(_, direction, moveKeys: string[]) {
     switch (direction) {
       case 'left':
         moveKeys.forEach((key) => {
-          const index = state.formModel.resources?.findIndex(r => r === key);
+          const index = state.formModel.resources?.findIndex((r) => r === key);
           index && state.formModel.resources?.splice(index);
         });
         break;
@@ -225,7 +227,7 @@
     state.formModel.properties ??= {};
     state.formModel.properties[record.key] = record.value;
   }
-  
+
   function handleDelProperty(record) {
     if (!state.formModel || !state.formModel.properties) {
       return;
@@ -247,7 +249,7 @@
         },
         onCancel: () => {
           resolve(false);
-        }
+        },
       });
     });
   }
@@ -258,15 +260,17 @@
       changeOkLoading(true);
       console.log(state.formModel);
       const api = state.formModel.id
-        ? UpdateAsyncByIdAndInput(state.formModel.id, cloneDeep(state.formModel))
-        : CreateAsyncByInput(cloneDeep(state.formModel));
-      api.then((res) => {
-        createMessage.success(L('Successful'));
-        emits('change', res);
-        closeModal();
-      }).finally(() => {
-        changeOkLoading(false);
-      })
+        ? update(state.formModel.id, cloneDeep(state.formModel))
+        : create(cloneDeep(state.formModel));
+      api
+        .then((res) => {
+          createMessage.success(L('Successful'));
+          emits('change', res);
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>

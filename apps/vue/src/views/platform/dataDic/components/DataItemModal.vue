@@ -8,11 +8,11 @@
   import { computed, ref, unref, watch } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { DataItem } from '/@/api/platform/model/dataItemModel';
+  import { DataItem } from '/@/api/platform/datas/model';
   import { getDataItemFormSchemas } from './ModalData';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { createItem, updateItem } from '/@/api/platform/dataDic';
+  import { createItem, updateItem } from '/@/api/platform/datas';
 
   const emits = defineEmits(['change', 'register']);
 
@@ -25,12 +25,12 @@
     () => unref(dataItem),
     (item) => {
       resetFields();
-      setFieldsValue(item);
+      setFieldsValue(item!);
     },
     {
       immediate: false,
     },
-  )
+  );
 
   const [registerForm, { validate, setFieldsValue, resetFields }] = useForm({
     labelWidth: 120,
@@ -56,15 +56,17 @@
     validate().then((input) => {
       changeLoading(true);
       const api = input.id
-          ? updateItem(input.dataId, input.name, input)
-          : createItem(input.dataId, input);
-      api.then(() => {
-        createMessage.success(L('Successful'));
-        emits('change', input.dataId);
-        closeModal();
-      }).finally(() => {
-        changeLoading(false);
-      });
+        ? updateItem(input.dataId, input.name, input)
+        : createItem(input.dataId, input);
+      api
+        .then(() => {
+          createMessage.success(L('Successful'));
+          emits('change', input.dataId);
+          closeModal();
+        })
+        .finally(() => {
+          changeLoading(false);
+        });
     });
   }
 </script>

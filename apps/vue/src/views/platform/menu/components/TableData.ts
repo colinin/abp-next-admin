@@ -1,6 +1,6 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
-import { Menu } from '/@/api/platform/model/menuModel';
+import { Menu } from '/@/api/platform/menus/model';
 
 const { L } = useLocalization('AppPlatform');
 

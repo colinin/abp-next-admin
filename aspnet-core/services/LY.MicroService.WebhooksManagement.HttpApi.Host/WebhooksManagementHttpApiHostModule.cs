@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -23,6 +22,7 @@ using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using LY.MicroService.WebhooksManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -77,7 +77,6 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpDaprClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
-    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WebhooksManagementHttpApiHostModule : AbpModule
@@ -107,6 +106,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureFeatureManagement();
         ConfigureSettingManagement();
         ConfigurePermissionManagement();
+        ConfigureTiming(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
@@ -114,9 +114,9 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureWebhooks(context.Services);
         ConfigureJsonSerializer(configuration);
-        ConfigureBackgroundTasks(context.Services);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
+        ConfigureBackgroundTasks(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -126,7 +126,11 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
-        app.UseForwardedHeaders();
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+        app.UseMapRequestLocalization();
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
@@ -134,7 +138,6 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         app.UseAuthentication();
         app.UseDynamicClaims();
         app.UseMultiTenancy();
-        app.UseMapRequestLocalization();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>

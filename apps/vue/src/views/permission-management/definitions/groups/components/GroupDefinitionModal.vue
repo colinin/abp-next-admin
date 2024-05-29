@@ -15,18 +15,36 @@
       :label-col="{ span: 6 }"
       :wrapper-col="{ span: 18 }"
     >
-    <Tabs v-model:active-key="state.activeTab">
+      <Tabs v-model:active-key="state.activeTab">
         <TabPane key="basic" :tab="L('BasicInfo')">
           <FormItem name="name" :label="L('DisplayName:Name')">
-            <Input :disabled="state.entityEditFlag && !state.allowedChange" :allow-clear="true" v-model:value="state.entity.name" />
+            <Input
+              :disabled="state.entityEditFlag && !state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.name"
+            />
           </FormItem>
           <FormItem name="displayName" :label="L('DisplayName:DisplayName')">
-            <LocalizableInput :disabled="!state.allowedChange" :allow-clear="true" v-model:value="state.entity.displayName" />
+            <LocalizableInput
+              :disabled="!state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.displayName"
+            />
           </FormItem>
         </TabPane>
         <TabPane key="propertites" :tab="L('Properties')">
-          <FormItem name="extraProperties" label="" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-            <ExtraPropertyDictionary :disabled="!state.allowedChange" :allow-delete="true" :allow-edit="true" v-model:value="state.entity.extraProperties" />
+          <FormItem
+            name="extraProperties"
+            label=""
+            :label-col="{ span: 0 }"
+            :wrapper-col="{ span: 24 }"
+          >
+            <ExtraPropertyDictionary
+              :disabled="!state.allowedChange"
+              :allow-delete="true"
+              :allow-edit="true"
+              v-model:value="state.entity.extraProperties"
+            />
           </FormItem>
         </TabPane>
       </Tabs>
@@ -49,22 +67,22 @@
   import {
     GetAsyncByName,
     CreateAsyncByInput,
-    UpdateAsyncByNameAndInput
+    UpdateAsyncByNameAndInput,
   } from '/@/api/permission-management/definitions/groups';
   import {
     PermissionGroupDefinitionUpdateDto,
-    PermissionGroupDefinitionCreateDto
+    PermissionGroupDefinitionCreateDto,
   } from '/@/api/permission-management/definitions/groups/model';
 
   const FormItem = Form.Item;
   const TabPane = Tabs.TabPane;
   interface State {
-    activeTab: string,
-    allowedChange: boolean,
-    entity: Recordable,
-    entityRules?: Dictionary<string, Rule>,
-    entityChanged: boolean,
-    entityEditFlag: boolean,
+    activeTab: string;
+    allowedChange: boolean;
+    entity: Recordable;
+    entityRules?: Dictionary<string, Rule>;
+    entityChanged: boolean;
+    entityEditFlag: boolean;
   }
 
   const emits = defineEmits(['register', 'change']);
@@ -119,9 +137,11 @@
     },
   );
 
-  const [registerModal, { closeModal, changeLoading, changeOkLoading }] = useModalInner((record) => {
-    nextTick(() => fetch(record.name));
-  });
+  const [registerModal, { closeModal, changeLoading, changeOkLoading }] = useModalInner(
+    (record) => {
+      nextTick(() => fetch(record.name));
+    },
+  );
 
   function fetch(name?: string) {
     state.activeTab = 'basic';
@@ -129,20 +149,22 @@
     if (!name) {
       state.entity = {};
       state.allowedChange = true;
-      nextTick(() => state.entityChanged = false);
+      nextTick(() => (state.entityChanged = false));
       return;
     }
     changeLoading(true);
     changeOkLoading(true);
-    GetAsyncByName(name).then((record) => {
-      state.entity = record;
-      state.entityEditFlag = true;
-      state.allowedChange = !record.isStatic;
-    }).finally(() => {
-      changeLoading(false);
-      changeOkLoading(false);
-      nextTick(() => state.entityChanged = false);
-    });
+    GetAsyncByName(name)
+      .then((record) => {
+        state.entity = record;
+        state.entityEditFlag = true;
+        state.allowedChange = !record.isStatic;
+      })
+      .finally(() => {
+        changeLoading(false);
+        changeOkLoading(false);
+        nextTick(() => (state.entityChanged = false));
+      });
   }
 
   function handleBeforeClose(): Promise<boolean> {
@@ -180,20 +202,23 @@
     form?.validate().then(() => {
       changeOkLoading(true);
       const api = state.entityEditFlag
-        ? UpdateAsyncByNameAndInput(state.entity.name, cloneDeep(state.entity) as PermissionGroupDefinitionUpdateDto)
+        ? UpdateAsyncByNameAndInput(
+            state.entity.name,
+            cloneDeep(state.entity) as PermissionGroupDefinitionUpdateDto,
+          )
         : CreateAsyncByInput(cloneDeep(state.entity) as PermissionGroupDefinitionCreateDto);
-      api.then((res) => {
-        createMessage.success(L('Successful'));
-        emits('change', res);
-        form.resetFields();
-        closeModal();
-      }).finally(() => {
-        changeOkLoading(false);
-      })
+      api
+        .then((res) => {
+          createMessage.success(L('Successful'));
+          emits('change', res);
+          form.resetFields();
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

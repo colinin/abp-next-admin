@@ -23,6 +23,7 @@ using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -105,18 +106,19 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         ConfigureMvc();
         ConfigureDbContext();
         ConfigureLocalization();
-        ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
+        ConfigureTiming(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
         ConfigureMultiTenancy(configuration);
+        ConfigureBackgroundTasks(configuration);
         ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);
-        ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureBlobStoring(context.Services, configuration);
+        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 
@@ -127,8 +129,10 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
-
-        app.UseForwardedHeaders();
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
         // 本地化
         app.UseMapRequestLocalization();
         app.UseCorrelationId();

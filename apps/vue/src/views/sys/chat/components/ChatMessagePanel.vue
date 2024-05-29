@@ -77,11 +77,7 @@
   import undefinedAvatar from '/@/assets/icons/64x64/color-user.png';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
-  import {
-    ChatMessage,
-    ChatMessagePagedResult,
-    MessageSourceTye,
-  } from '/@/api/messages/model/messagesModel';
+  import { ChatMessage, MessageSourceTye } from '/@/api/messages/messages/model';
 
   const TextArea = Input.TextArea;
 
@@ -97,7 +93,7 @@
       required: true,
     },
     fetchApi: {
-      type: Function as PropType<(input) => Promise<ChatMessagePagedResult>>,
+      type: Function as PropType<(input) => Promise<PagedResultDto<ChatMessage>>>,
       required: true,
     },
     fetchParams: {

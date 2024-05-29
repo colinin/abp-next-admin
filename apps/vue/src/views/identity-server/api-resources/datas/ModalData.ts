@@ -1,6 +1,6 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
-import { HashType } from '/@/api/identity-server/model/apiResourcesModel';
+import { HashType } from '/@/api/identity-server/api-resources/model';
 
 const { L } = useLocalization('AbpIdentityServer');
 

@@ -29,7 +29,7 @@
   import { TabForm, TabFormActionType } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { basicProps } from './props';
-  import { Menu } from '/@/api/platform/model/menuModel';
+  import { Menu } from '/@/api/platform/menus/model';
   import { useMenuFormContext } from '../hooks/useMenuFormContext';
 
   const emits = defineEmits(['change', 'register']);
@@ -38,34 +38,37 @@
   const { createMessage } = useMessage();
   const { L } = useLocalization(['AppPlatform', 'AbpUi']);
   const menu = ref<Menu>({} as Menu);
-  const framework = ref<string  | undefined>('');
+  const framework = ref<string | undefined>('');
   const formElRef = ref<Nullable<TabFormActionType>>(null);
-  const { formTitle, getFormSchemas, handleFormSubmit, fetchLayoutResource } =
-    useMenuFormContext({
-      menuModel: menu,
-      formElRef: formElRef,
-      framework: framework,
-    });
-
-  const [registerDrawer, { setDrawerProps, changeOkLoading, closeDrawer }] = useDrawerInner((dataVal) => {
-    menu.value = dataVal;
-    framework.value = props.framework;
-    nextTick(() => {
-      setDrawerProps({ confirmLoading: false });
-      fetchLayoutResource(dataVal.layoutId);
-      const formEl = unref(formElRef);
-      formEl?.changeTab(L('DisplayName:Basic'));
-    });
+  const { formTitle, getFormSchemas, handleFormSubmit, fetchLayoutResource } = useMenuFormContext({
+    menuModel: menu,
+    formElRef: formElRef,
+    framework: framework,
   });
+
+  const [registerDrawer, { setDrawerProps, changeOkLoading, closeDrawer }] = useDrawerInner(
+    (dataVal) => {
+      menu.value = dataVal;
+      framework.value = props.framework;
+      nextTick(() => {
+        setDrawerProps({ confirmLoading: false });
+        fetchLayoutResource(dataVal.layoutId);
+        const formEl = unref(formElRef);
+        formEl?.changeTab(L('DisplayName:Basic'));
+      });
+    },
+  );
 
   function handleSubmit() {
     changeOkLoading(true);
-    handleFormSubmit()?.then(() => {
-      createMessage.success(L('Successful'));
-      closeDrawer();
-      emits('change');
-    }).finally(() => {
-      changeOkLoading(false);
-    });
+    handleFormSubmit()
+      ?.then(() => {
+        createMessage.success(L('Successful'));
+        closeDrawer();
+        emits('change');
+      })
+      .finally(() => {
+        changeOkLoading(false);
+      });
   }
 </script>

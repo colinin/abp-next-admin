@@ -34,7 +34,7 @@
   import { useModal } from '/@/components/Modal';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
-  import { deleteById, getList } from '/@/api/identity-server/persistedGrants';
+  import { deleteById, getList } from '/@/api/identity-server/persisted-grants';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import PersistedGrantModal from './PersistedGrantModal.vue';
 

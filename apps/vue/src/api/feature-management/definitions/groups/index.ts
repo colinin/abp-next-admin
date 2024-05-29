@@ -6,33 +6,33 @@ import {
   FeatureGroupDefinitionGetListInput,
 } from './model';
 
-export const CreateAsyncByInput = (input: FeatureGroupDefinitionCreateDto) => {
+export const create = (input: FeatureGroupDefinitionCreateDto) => {
   return defHttp.post<FeatureGroupDefinitionDto>({
     url: '/api/feature-management/definitions/groups',
     data: input,
   });
 };
 
-export const DeleteAsyncByName = (name: string) => {
+export const deleteByName = (name: string) => {
   return defHttp.delete<void>({
     url: `/api/feature-management/definitions/groups/${name}`,
   });
 };
 
-export const GetAsyncByName = (name: string) => {
+export const getByName = (name: string) => {
   return defHttp.get<FeatureGroupDefinitionDto>({
     url: `/api/feature-management/definitions/groups/${name}`,
   });
 };
 
-export const GetListAsyncByInput = (input: FeatureGroupDefinitionGetListInput) => {
+export const getList = (input: FeatureGroupDefinitionGetListInput) => {
   return defHttp.get<ListResultDto<FeatureGroupDefinitionDto>>({
     url: '/api/feature-management/definitions/groups',
     params: input,
   });
 };
 
-export const UpdateAsyncByNameAndInput = (name: string, input: FeatureGroupDefinitionUpdateDto) => {
+export const update = (name: string, input: FeatureGroupDefinitionUpdateDto) => {
   return defHttp.put<FeatureGroupDefinitionDto>({
     url: `/api/feature-management/definitions/groups/${name}`,
     data: input,

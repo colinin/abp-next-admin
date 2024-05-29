@@ -1,5 +1,5 @@
 <template>
-  <textarea style="overflow: auto;" ref="codeEditor"></textarea>
+  <textarea style="overflow: auto" ref="codeEditor"></textarea>
 </template>
 
 <script lang="ts" setup>
@@ -9,35 +9,35 @@
   import 'codemirror/theme/idea.css';
   import 'codemirror/theme/dracula.css';
 
-  import 'codemirror/mode/javascript/javascript'; 
-  import 'codemirror/mode/htmlmixed/htmlmixed'; 
+  import 'codemirror/mode/javascript/javascript';
+  import 'codemirror/mode/htmlmixed/htmlmixed';
   import 'codemirror/mode/css/css';
 
-  import 'codemirror/addon/fold/foldcode'; 
-  import 'codemirror/addon/fold/foldgutter'; 
+  import 'codemirror/addon/fold/foldcode';
+  import 'codemirror/addon/fold/foldgutter';
   import 'codemirror/addon/fold/foldgutter.css';
-  import 'codemirror/addon/fold/brace-fold'; 
+  import 'codemirror/addon/fold/brace-fold';
   import 'codemirror/addon/fold/xml-fold';
-  import 'codemirror/addon/fold/comment-fold'; 
-  import 'codemirror/addon/fold/markdown-fold'; 
-  import 'codemirror/addon/fold/indent-fold'; 
-  import 'codemirror/addon/edit/closebrackets'; 
+  import 'codemirror/addon/fold/comment-fold';
+  import 'codemirror/addon/fold/markdown-fold';
+  import 'codemirror/addon/fold/indent-fold';
+  import 'codemirror/addon/edit/closebrackets';
   import 'codemirror/addon/edit/closetag';
-  import 'codemirror/addon/edit/matchtags'; 
+  import 'codemirror/addon/edit/matchtags';
   import 'codemirror/addon/edit/matchbrackets';
   import 'codemirror/addon/selection/active-line';
-  import "codemirror/addon/scroll/annotatescrollbar";
+  import 'codemirror/addon/scroll/annotatescrollbar';
   import 'codemirror/addon/dialog/dialog';
   import 'codemirror/addon/dialog/dialog.css';
-  import 'codemirror/addon/display/autorefresh'; 
-  import 'codemirror/addon/display/placeholder'; 
+  import 'codemirror/addon/display/autorefresh';
+  import 'codemirror/addon/display/placeholder';
   import 'codemirror/addon/selection/mark-selection';
 
   import { MODE } from './../typing';
   import { isString } from '/@/utils/is';
   import { useAppStore } from '/@/store/modules/app';
   import { useWindowSizeFn } from '/@/hooks/event/useWindowSizeFn';
-  
+
   const codeEditor = ref();
   const appStore = useAppStore();
   let editor: Nullable<CodeMirror.Editor>;
@@ -104,10 +104,7 @@
   );
 
   function setTheme() {
-    unref(editor)?.setOption(
-      'theme',
-      appStore.getDarkMode === 'light' ? 'idea' : 'dracula',
-    );
+    unref(editor)?.setOption('theme', appStore.getDarkMode === 'light' ? 'idea' : 'dracula');
   }
 
   onMounted(() => {
@@ -127,11 +124,10 @@
       styleActiveLine: true, // 光标行高亮
     });
     // 监听编辑器的change事件
-    editor.on("change", () => {
+    editor.on('change', () => {
       // 触发v-model的双向绑定
       emits('update:modelValue', editor!.getValue());
     });
     useWindowSizeFn(editor.refresh);
   });
-
 </script>

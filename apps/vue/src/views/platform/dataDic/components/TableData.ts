@@ -1,7 +1,7 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { valueTypeMaps } from './BasicType';
-import { DataItem } from '/@/api/platform/model/dataItemModel';
+import { DataItem } from '/@/api/platform/datas/model';
 
 const { L } = useLocalization('AppPlatform');
 

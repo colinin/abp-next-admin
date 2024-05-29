@@ -1,6 +1,6 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
-import { LogLevel } from '/@/api/logging/model/loggingModel';
+import { LogLevel } from '/@/api/logging/logs/model';
 
 const { L } = useLocalization('AbpAuditLogging');
 

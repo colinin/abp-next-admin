@@ -48,6 +48,7 @@
     "Volo.Abp.Identity:020009": "You cannot modify your email binding information!",
     "Volo.Abp.Identity:020010": "The email address is bound!",
     "Volo.Abp.Identity:020011": "Secondary authentication cannot be enabled when an MFA device is not attached!",
+    "Volo.Abp.Identity:020012": "Invalid authenticator code!",
     "Volo.Abp.Identity:DuplicatePhoneNumber": "Phone number '{0}' is already taken.",
     "DisplayName:Abp.Identity.User.SmsNewUserRegister": "Register sms template",
     "Description:Abp.Identity.User.SmsNewUserRegister": "When the user registers, he/she should send the template number of the SMS verification code and fill in the template number of the corresponding cloud platform registration",

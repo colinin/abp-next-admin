@@ -1,14 +1,18 @@
 ﻿using LINGYUN.Abp.Account.Emailing;
 using LINGYUN.Abp.Identity;
+using LINGYUN.Abp.Identity.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
@@ -22,6 +26,7 @@ namespace LINGYUN.Abp.Account
         protected IAccountSmsSecurityCodeSender SecurityCodeSender { get; }
         protected Identity.IIdentityUserRepository UserRepository { get; }
         protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
+        protected IAuthenticatorUriGenerator AuthenticatorUriGenerator => LazyServiceProvider.LazyGetRequiredService<IAuthenticatorUriGenerator>();
 
         public MyProfileAppService(
             Identity.IIdentityUserRepository userRepository,
@@ -148,6 +153,109 @@ namespace LINGYUN.Abp.Account
                 Identity = IdentitySecurityLogIdentityConsts.Identity,
                 Action = "ConfirmEmail"
             });
+        }
+
+        public async virtual Task<AuthenticatorDto> GetAuthenticator()
+        {
+            await IdentityOptions.SetAsync();
+
+            var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
+
+            var hasAuthenticatorEnabled = user.GetProperty(UserManager.Options.Tokens.AuthenticatorTokenProvider, false);
+            if (hasAuthenticatorEnabled)
+            {
+                return new AuthenticatorDto
+                {
+                    IsAuthenticated = true,
+                };
+            }
+
+            var userEmail = await UserManager.GetEmailAsync(user);
+            var unformattedKey = await UserManager.GetAuthenticatorKeyAsync(user);
+            if (string.IsNullOrEmpty(unformattedKey))
+            {
+                await UserManager.ResetAuthenticatorKeyAsync(user);
+                unformattedKey = await UserManager.GetAuthenticatorKeyAsync(user);
+            }
+
+            var authenticatorUri = AuthenticatorUriGenerator.Generate(userEmail, unformattedKey);
+
+            return new AuthenticatorDto
+            {
+                SharedKey = FormatKey(unformattedKey),
+                AuthenticatorUri = authenticatorUri,
+            };
+        }
+
+        public async virtual Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCode(VerifyAuthenticatorCodeInput input)
+        {
+            await IdentityOptions.SetAsync();
+
+            var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
+
+            var tokenValid = await UserManager.VerifyTwoFactorTokenAsync(user, 
+                UserManager.Options.Tokens.AuthenticatorTokenProvider, input.AuthenticatorCode);
+            if (!tokenValid)
+            {
+                throw new BusinessException(Identity.IdentityErrorCodes.AuthenticatorTokenInValid);
+            }
+
+            var recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
+
+            user.SetProperty(UserManager.Options.Tokens.AuthenticatorTokenProvider, true);
+
+            await UserStore.ReplaceCodesAsync(user, recoveryCodes);
+
+            (await UserManager.UpdateAsync(user)).CheckErrors();
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            return new AuthenticatorRecoveryCodeDto
+            {
+                RecoveryCodes = recoveryCodes.ToList(),
+            };
+        }
+
+        public async virtual Task ResetAuthenticator()
+        {
+            await IdentityOptions.SetAsync();
+
+            var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
+
+            user.RemoveProperty(UserManager.Options.Tokens.AuthenticatorTokenProvider);
+
+            await UserManager.ResetAuthenticatorKeyAsync(user);
+            await UserStore.ReplaceCodesAsync(user, new string[0]);
+
+            var validTwoFactorProviders = await UserManager.GetValidTwoFactorProvidersAsync(user);
+            if (!validTwoFactorProviders
+                .Where(provider => provider != UserManager.Options.Tokens.AuthenticatorTokenProvider)
+                .Any())
+            {
+                // 如果用户没有任何双因素认证提供程序,则禁用二次认证,否则将造成无法登录
+                await UserManager.SetTwoFactorEnabledAsync(user, false);
+            }
+
+            (await UserManager.UpdateAsync(user)).CheckErrors();
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
+        private static string FormatKey(string unformattedKey)
+        {
+            var result = new StringBuilder();
+            var currentPosition = 0;
+            while (currentPosition + 4 < unformattedKey.Length)
+            {
+                result.Append(unformattedKey.AsSpan(currentPosition, 4)).Append(' ');
+                currentPosition += 4;
+            }
+            if (currentPosition < unformattedKey.Length)
+            {
+                result.Append(unformattedKey.AsSpan(currentPosition));
+            }
+
+            return result.ToString().ToLowerInvariant();
         }
     }
 }

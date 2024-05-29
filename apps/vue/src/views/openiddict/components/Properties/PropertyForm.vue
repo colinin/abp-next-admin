@@ -1,6 +1,6 @@
 <template>
   <Card :title="L('Propertites')">
-    <BasicTable @register="registerTable" :data-source="dataSource"> 
+    <BasicTable @register="registerTable" :data-source="dataSource">
       <template #toolbar>
         <Button type="primary" @click="handleAddNew">{{ L('Propertites:New') }}</Button>
       </template>
@@ -73,7 +73,7 @@
     });
   });
   const [registerTable] = useTable({
-    rowKey: "key",
+    rowKey: 'key',
     columns: [
       {
         title: L('Propertites:Key'),

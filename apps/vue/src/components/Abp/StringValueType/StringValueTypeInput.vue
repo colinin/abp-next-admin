@@ -17,25 +17,50 @@
             </Row>
             <Row>
               <Col :span="11">
-                <Select :disabled="props.disabled" :value="state.valueType.name" @change="handleValueTypeChange">
-                  <Option value="FreeTextStringValueType">{{ t('component.value_type_nput.type.FREE_TEXT.name') }}</Option>
-                  <Option value="ToggleStringValueType">{{ t('component.value_type_nput.type.TOGGLE.name') }}</Option>
-                  <Option value="SelectionStringValueType">{{ t('component.value_type_nput.type.SELECTION.name') }}</Option>
+                <Select
+                  :disabled="props.disabled"
+                  :value="state.valueType.name"
+                  @change="handleValueTypeChange"
+                >
+                  <Option value="FreeTextStringValueType">{{
+                    t('component.value_type_nput.type.FREE_TEXT.name')
+                  }}</Option>
+                  <Option value="ToggleStringValueType">{{
+                    t('component.value_type_nput.type.TOGGLE.name')
+                  }}</Option>
+                  <Option value="SelectionStringValueType">{{
+                    t('component.value_type_nput.type.SELECTION.name')
+                  }}</Option>
                 </Select>
               </Col>
               <Col :span="2">
                 <div style="width: 100%"></div>
               </Col>
               <Col :span="11">
-                <Select :disabled="props.disabled" :value="state.valueType.validator.name" @change="handleValidatorChange">
-                  <Option value="NULL">{{ t('component.value_type_nput.validator.NULL.name') }}</Option>
-                  <Option value="BOOLEAN" :disabled="state.valueType.name !== 'ToggleStringValueType'">
+                <Select
+                  :disabled="props.disabled"
+                  :value="state.valueType.validator.name"
+                  @change="handleValidatorChange"
+                >
+                  <Option value="NULL">{{
+                    t('component.value_type_nput.validator.NULL.name')
+                  }}</Option>
+                  <Option
+                    value="BOOLEAN"
+                    :disabled="state.valueType.name !== 'ToggleStringValueType'"
+                  >
                     {{ t('component.value_type_nput.validator.BOOLEAN.name') }}
                   </Option>
-                  <Option value="NUMERIC" :disabled="state.valueType.name !== 'FreeTextStringValueType'">
+                  <Option
+                    value="NUMERIC"
+                    :disabled="state.valueType.name !== 'FreeTextStringValueType'"
+                  >
                     {{ t('component.value_type_nput.validator.NUMERIC.name') }}
                   </Option>
-                  <Option value="STRING" :disabled="state.valueType.name !== 'FreeTextStringValueType'">
+                  <Option
+                    value="STRING"
+                    :disabled="state.valueType.name !== 'FreeTextStringValueType'"
+                  >
                     {{ t('component.value_type_nput.validator.STRING.name') }}
                   </Option>
                 </Select>
@@ -80,20 +105,22 @@
                   </Row>
                 </div>
                 <div v-else-if="state.valueType.validator.name === 'STRING'" class="string">
-                  <Row style="margin-top: 10px;">
+                  <Row style="margin-top: 10px">
                     <Col :span="24">
                       <Checkbox
                         :disabled="props.disabled"
                         style="width: 100%"
                         v-model:checked="(state.valueType.validator as StringValueValidator).allowNull"
-                    >
-                      {{ t('component.value_type_nput.validator.STRING.allowNull') }}
-                    </Checkbox>
+                      >
+                        {{ t('component.value_type_nput.validator.STRING.allowNull') }}
+                      </Checkbox>
                     </Col>
                   </Row>
-                  <Row style="margin-top: 10px;">
+                  <Row style="margin-top: 10px">
                     <Col :span="24">
-                      <span>{{ t('component.value_type_nput.validator.STRING.regularExpression') }}</span>
+                      <span>{{
+                        t('component.value_type_nput.validator.STRING.regularExpression')
+                      }}</span>
                     </Col>
                   </Row>
                   <Row>
@@ -105,7 +132,7 @@
                       />
                     </Col>
                   </Row>
-                  <Row style="margin-top: 10px;">
+                  <Row style="margin-top: 10px">
                     <Col :span="11">
                       <span>{{ t('component.value_type_nput.validator.STRING.minLength') }}</span>
                     </Col>
@@ -142,33 +169,54 @@
                   <template #title>
                     <Row>
                       <Col :span="12">
-                        <div class="valid" v-if="(state.valueType as SelectionStringValueType).itemSource.items.length <= 0">
-                          <span>{{ t('component.value_type_nput.type.SELECTION.itemsNotBeEmpty') }}</span>
+                        <div
+                          class="valid"
+                          v-if="(state.valueType as SelectionStringValueType).itemSource.items.length <= 0"
+                        >
+                          <span>{{
+                            t('component.value_type_nput.type.SELECTION.itemsNotBeEmpty')
+                          }}</span>
                         </div>
                       </Col>
                       <Col :span="12">
                         <div class="toolbar" v-if="!props.disabled">
-                          <Button type="primary" @click="handleAddNew">{{ t('component.value_type_nput.type.SELECTION.actions.create') }}</Button>
-                          <Button danger @click="handleClean">{{ t('component.value_type_nput.type.SELECTION.actions.clean') }}</Button>
+                          <Button type="primary" @click="handleAddNew">{{
+                            t('component.value_type_nput.type.SELECTION.actions.create')
+                          }}</Button>
+                          <Button danger @click="handleClean">{{
+                            t('component.value_type_nput.type.SELECTION.actions.clean')
+                          }}</Button>
                         </div>
                       </Col>
                     </Row>
                   </template>
-                  <Table :columns="getTableColumns" :data-source="(state.valueType as SelectionStringValueType).itemSource.items"> 
+                  <Table
+                    :columns="getTableColumns"
+                    :data-source="(state.valueType as SelectionStringValueType).itemSource.items"
+                  >
                     <template #bodyCell="{ column, record }">
                       <template v-if="column.key === 'displayText'">
                         <span>{{ getDisplayName(record.displayText) }}</span>
                       </template>
                       <template v-else-if="column.key === 'action'">
                         <div :class="`${prefixCls}__action`">
-                          <Button v-if="props.allowEdit" type="link" @click="() => handleEdit(record)">
+                          <Button
+                            v-if="props.allowEdit"
+                            type="link"
+                            @click="() => handleEdit(record)"
+                          >
                             <template #icon>
                               <EditOutlined />
                             </template>
                             {{ t('component.value_type_nput.type.SELECTION.actions.update') }}
                           </Button>
                           <Divider v-if="props.allowEdit && props.allowDelete" type="vertical" />
-                          <Button v-if="props.allowDelete" type="link" @click="() => handleDelete(record)" class="ant-btn-error">
+                          <Button
+                            v-if="props.allowDelete"
+                            type="link"
+                            @click="() => handleDelete(record)"
+                            class="ant-btn-error"
+                          >
                             <template #icon>
                               <DeleteOutlined />
                             </template>
@@ -191,12 +239,23 @@
         class="form"
         v-bind="state.selection.form"
         :label-col="{ span: 6 }"
-        :wrapper-col="{ span: 18}"
+        :wrapper-col="{ span: 18 }"
       >
-        <FormItem name="displayText" required :label="t('component.value_type_nput.type.SELECTION.displayText')">
-          <LocalizableInput :disabled="props.disabled || state.selection.form.editFlag" v-model:value="state.selection.form.model.displayText" />
+        <FormItem
+          name="displayText"
+          required
+          :label="t('component.value_type_nput.type.SELECTION.displayText')"
+        >
+          <LocalizableInput
+            :disabled="props.disabled || state.selection.form.editFlag"
+            v-model:value="state.selection.form.model.displayText"
+          />
         </FormItem>
-        <FormItem name="value" required :label="t('component.value_type_nput.type.SELECTION.value')">
+        <FormItem
+          name="value"
+          required
+          :label="t('component.value_type_nput.type.SELECTION.value')"
+        >
           <Input :disabled="props.disabled" v-model:value="state.selection.form.model.value" />
         </FormItem>
       </Form>
@@ -247,7 +306,13 @@
   const FormItemRest = Form.ItemRest;
   const FormItem = Form.Item;
   const Option = Select.Option;
-  const emits = defineEmits(['change', 'update:value', 'change:valueType', 'change:validator', 'change:selection']);
+  const emits = defineEmits([
+    'change',
+    'update:value',
+    'change:valueType',
+    'change:validator',
+    'change:selection',
+  ]);
   const props = defineProps({
     value: propTypes.string.def('{}'),
     allowEdit: propTypes.bool.def(false),
@@ -261,19 +326,19 @@
   const { prefixCls } = useDesign('string-value-type-input');
   interface Selection {
     modal: {
-      title?: string,
-      visible?: boolean,
-      maskClosable?: boolean,
-      width?: number,
-      minHeight?: number,
-      onOk?: (e: MouseEvent) => void,
-      onCancel?: (e: MouseEvent) => void,
-    },
+      title?: string;
+      visible?: boolean;
+      maskClosable?: boolean;
+      width?: number;
+      minHeight?: number;
+      onOk?: (e: MouseEvent) => void;
+      onCancel?: (e: MouseEvent) => void;
+    };
     form: {
-      model: any,
-      editFlag: boolean,
-      rules?: Dictionary<string, RuleObject>,
-    },
+      model: any;
+      editFlag: boolean;
+      rules?: Dictionary<string, RuleObject>;
+    };
   }
   interface State {
     value?: string;
@@ -301,55 +366,67 @@
           displayText: {
             validator: (_rule, value) => {
               if (!validateLocalizer(value)) {
-                return Promise.reject(t('component.value_type_nput.type.SELECTION.displayTextNotBeEmpty'));
+                return Promise.reject(
+                  t('component.value_type_nput.type.SELECTION.displayTextNotBeEmpty'),
+                );
               }
               const items = (state.valueType as SelectionStringValueType).itemSource.items;
-              if (items.findIndex(x => serialize(x.displayText) === value) >= 0) {
-                return Promise.reject(t('component.value_type_nput.type.SELECTION.duplicateKeyOrValue'));
+              if (items.findIndex((x) => serialize(x.displayText) === value) >= 0) {
+                return Promise.reject(
+                  t('component.value_type_nput.type.SELECTION.duplicateKeyOrValue'),
+                );
               }
               return Promise.resolve();
-            }
+            },
           },
           value: {
             validator: (_rule, value) => {
               const items = (state.valueType as SelectionStringValueType).itemSource.items;
-              if (items.findIndex(x => x.value === value) >= 0) {
-                return Promise.reject(t('component.value_type_nput.type.SELECTION.duplicateKeyOrValue'));
+              if (items.findIndex((x) => x.value === value) >= 0) {
+                return Promise.reject(
+                  t('component.value_type_nput.type.SELECTION.duplicateKeyOrValue'),
+                );
               }
               return Promise.resolve();
-            }
-          }
+            },
+          },
         },
       },
     },
   });
   const getTableColumns = computed(() => {
-    const columns: ColumnsType = [{
-      title: t('component.value_type_nput.type.SELECTION.displayText'),
-      dataIndex: 'displayText',
-      key: 'displayText',
-      align: 'left',
-      fixed: 'left',
-      width: 180,
-    },
-    {
-      title: t('component.value_type_nput.type.SELECTION.value'),
-      dataIndex: 'value',
-      key: 'value',
-      align: 'left',
-      fixed: 'left',
-      width: 200,
-    }];
-    return columns.concat(props.disabled
-      ? []
-      : [{
-      width: 180,
-      title: t('component.value_type_nput.type.SELECTION.actions.title'),
-      align: 'center',
-      dataIndex: 'action',
-      key: 'action',
-      fixed: 'right',
-    }]);
+    const columns: ColumnsType = [
+      {
+        title: t('component.value_type_nput.type.SELECTION.displayText'),
+        dataIndex: 'displayText',
+        key: 'displayText',
+        align: 'left',
+        fixed: 'left',
+        width: 180,
+      },
+      {
+        title: t('component.value_type_nput.type.SELECTION.value'),
+        dataIndex: 'value',
+        key: 'value',
+        align: 'left',
+        fixed: 'left',
+        width: 200,
+      },
+    ];
+    return columns.concat(
+      props.disabled
+        ? []
+        : [
+            {
+              width: 180,
+              title: t('component.value_type_nput.type.SELECTION.actions.title'),
+              align: 'center',
+              dataIndex: 'action',
+              key: 'action',
+              fixed: 'right',
+            },
+          ],
+    );
   });
   watch(
     () => props.value,
@@ -362,14 +439,13 @@
     },
     {
       immediate: true,
-    }
+    },
   );
   watch(
     () => state.valueType,
     (valueType) => {
       const isSelection = valueType.name === 'SelectionStringValueType';
-      if (isSelection &&
-      (valueType as SelectionStringValueType).itemSource.items.length < 0) {
+      if (isSelection && (valueType as SelectionStringValueType).itemSource.items.length < 0) {
         return;
       }
       state.value = valueTypeSerializer.serialize(valueType);
@@ -407,8 +483,10 @@
     }
     if (!state.valueType.validator.isValid(value)) {
       return Promise.reject(
-        t('component.value_type_nput.validator.isInvalidValue', 
-        [t(`component.value_type_nput.validator.${state.valueType.validator.name}.name`)]));
+        t('component.value_type_nput.validator.isInvalidValue', [
+          t(`component.value_type_nput.validator.${state.valueType.validator.name}.name`),
+        ]),
+      );
     }
     return Promise.resolve(value);
   }
@@ -496,8 +574,8 @@
           value: state.selection.form.model.value,
         });
       } else {
-        const findIndex = items.findIndex(x => serialize(x.displayText) === displayText);
-        items[findIndex].value = state.selection.form.model.value; 
+        const findIndex = items.findIndex((x) => serialize(x.displayText) === displayText);
+        items[findIndex].value = state.selection.form.model.value;
       }
       form.resetFields();
       state.selection.modal.visible = false;
@@ -508,11 +586,11 @@
   function handleDelete(record) {
     const displayText = serialize(record.displayText);
     const items = (state.valueType as SelectionStringValueType).itemSource.items;
-    const findIndex = items.findIndex(x => serialize(x.displayText) === displayText);
+    const findIndex = items.findIndex((x) => serialize(x.displayText) === displayText);
     items.splice(findIndex, 1);
     emits('change:selection', items);
   }
-  
+
   defineExpose({
     validate,
   });
@@ -528,7 +606,7 @@
 
     &__wrap {
       width: 100% !important;
-      
+
       .selection {
         .valid {
           color: red;
@@ -552,7 +630,7 @@
 
   &__modal {
     height: 500px;
-    
+
     .form {
       margin: 10px;
     }

@@ -1,8 +1,8 @@
 import type { Ref } from 'vue';
 
 import { ref, unref, onMounted } from 'vue';
-import { discovery } from '/@/api/identity-server/identityServer';
-import { Client } from '/@/api/identity-server/model/clientsModel';
+import { discovery } from '/@/api/identity-server/discovery';
+import { Client } from '/@/api/identity-server/clients/model';
 
 interface UseGrantType {
   modelRef: Ref<Client>;

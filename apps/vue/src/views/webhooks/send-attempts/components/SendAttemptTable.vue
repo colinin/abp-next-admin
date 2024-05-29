@@ -74,7 +74,7 @@
     DeleteAsyncById,
     DeleteManyAsyncByInput,
     ResendAsyncById,
-    ResendManyAsyncByInput
+    ResendManyAsyncByInput,
   } from '/@/api/webhooks/send-attempts';
   import SendAttemptModal from './SendAttemptModal.vue';
 
@@ -126,13 +126,15 @@
         setLoading(true);
         return DeleteManyAsyncByInput({
           recordIds: selectKeys,
-        }).then(() => {
-          createMessage.success(L('SuccessfullyDeleted'));
-          clearSelectedRowKeys();
-          reload();
-        }).finally(() => {
-          setLoading(false);
-        });
+        })
+          .then(() => {
+            createMessage.success(L('SuccessfullyDeleted'));
+            clearSelectedRowKeys();
+            reload();
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       },
     });
   }
@@ -145,13 +147,15 @@
       okCancel: true,
       onOk: () => {
         setLoading(true);
-        return DeleteAsyncById(record.id).then(() => {
-          createMessage.success(L('SuccessfullyDeleted'));
-          clearSelectedRowKeys();
-          reload();
-        }).finally(() => {
-          setLoading(false);
-        });
+        return DeleteAsyncById(record.id)
+          .then(() => {
+            createMessage.success(L('SuccessfullyDeleted'));
+            clearSelectedRowKeys();
+            reload();
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       },
     });
   }
@@ -160,17 +164,19 @@
     createConfirm({
       iconType: 'warning',
       title: L('AreYouSure'),
-      content: L('ItemWillBeResendMessageWithFormat', { 0: L('SelectedItems')}),
+      content: L('ItemWillBeResendMessageWithFormat', { 0: L('SelectedItems') }),
       okCancel: true,
       onOk: () => {
         setLoading(true);
-        return ResendAsyncById(record.id).then(() => {
-          createMessage.success(L('Successful'));
-          clearSelectedRowKeys();
-          reload();
-        }).finally(() => {
-          setLoading(false);
-        });
+        return ResendAsyncById(record.id)
+          .then(() => {
+            createMessage.success(L('Successful'));
+            clearSelectedRowKeys();
+            reload();
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       },
     });
   }
@@ -179,20 +185,22 @@
     createConfirm({
       iconType: 'warning',
       title: L('AreYouSure'),
-      content: L('ItemWillBeResendMessageWithFormat', { 0: L('SelectedItems')}),
+      content: L('ItemWillBeResendMessageWithFormat', { 0: L('SelectedItems') }),
       okCancel: true,
       onOk: () => {
         const selectKeys = getSelectRowKeys();
         setLoading(true);
         return ResendManyAsyncByInput({
           recordIds: selectKeys,
-        }).then(() => {
-          createMessage.success(L('Successful'));
-          clearSelectedRowKeys();
-          reload();
-        }).finally(() => {
-          setLoading(false);
-        });
+        })
+          .then(() => {
+            createMessage.success(L('Successful'));
+            clearSelectedRowKeys();
+            reload();
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       },
     });
   }

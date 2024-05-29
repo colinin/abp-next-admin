@@ -1,7 +1,9 @@
 <template>
   <BasicTable @register="registerTable">
     <template #toolbar>
-      <a-button v-if="isEnableNew" type="primary" @click="handleAppendItem">{{ L('Data:AppendItem') }}</a-button>
+      <a-button v-if="isEnableNew" type="primary" @click="handleAppendItem">{{
+        L('Data:AppendItem')
+      }}</a-button>
     </template>
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'allowBeNull'">
@@ -40,8 +42,8 @@
   import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { DataItem } from '/@/api/platform/model/dataItemModel';
-  import { get, removeItem } from '/@/api/platform/dataDic';
+  import { DataItem } from '/@/api/platform/datas/model';
+  import { get, removeItem } from '/@/api/platform/datas';
   import DataItemModal from './DataItemModal.vue';
 
   const emits = defineEmits(['reload']);
@@ -91,7 +93,7 @@
     {
       immediate: true,
     },
-  )
+  );
 
   function fetchItems(dataId: string) {
     get(dataId).then((res) => {
@@ -118,12 +120,11 @@
         L('ItemWillBeDeletedMessageWithFormat', [record.displayName] as Recordable),
       ),
       onOk: () => {
-        return removeItem(props.dataId!, record.name)
-          .then(() => {
-            createMessage.success(L('SuccessfullyDeleted'));
-            emits('reload');
-            fetchItems(props.dataId!);
-          });
+        return removeItem(props.dataId!, record.name).then(() => {
+          createMessage.success(L('SuccessfullyDeleted'));
+          emits('reload');
+          fetchItems(props.dataId!);
+        });
       },
     });
   }

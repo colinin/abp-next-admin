@@ -43,7 +43,12 @@
                         icon="grommet-icons:status-good"
                         color="seagreen"
                       />
-                      <Icon v-else :size="40" icon="grommet-icons:status-warning" color="orangered" />
+                      <Icon
+                        v-else
+                        :size="40"
+                        icon="grommet-icons:status-warning"
+                        color="orangered"
+                      />
                     </template>
                     <template #title>
                       <span>{{ item.runTime }}</span>
@@ -71,10 +76,10 @@
   import { useRoute, useRouter } from 'vue-router';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
-  import { getById } from '/@/api/task-management/backgroundJobInfo';
-  import { getList as getJobLogs } from '/@/api/task-management/backgroundJobLog';
-  import { BackgroundJobInfo } from '/@/api/task-management/model/backgroundJobInfoModel';
-  import { BackgroundJobLog } from '/@/api/task-management/model/backgroundJobLogModel';
+  import { getById } from '/@/api/task-management/jobs';
+  import { getList as getJobLogs } from '/@/api/task-management/logs';
+  import { BackgroundJobInfo } from '/@/api/task-management/jobs/model';
+  import { BackgroundJobLog } from '/@/api/task-management/logs/model';
   import { getDescriptionSchemas } from '../datas/DescriptionData';
 
   const ListItem = List.Item;

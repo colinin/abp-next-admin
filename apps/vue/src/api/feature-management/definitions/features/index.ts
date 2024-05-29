@@ -6,33 +6,33 @@ import {
   FeatureDefinitionGetListInput,
 } from './model';
 
-export const CreateAsyncByInput = (input: FeatureDefinitionCreateDto) => {
+export const create = (input: FeatureDefinitionCreateDto) => {
   return defHttp.post<FeatureDefinitionDto>({
     url: '/api/feature-management/definitions',
     data: input,
   });
 };
 
-export const DeleteAsyncByName = (name: string) => {
+export const deleteByName = (name: string) => {
   return defHttp.delete<void>({
     url: `/api/feature-management/definitions/${name}`,
   });
 };
 
-export const GetAsyncByName = (name: string) => {
+export const getByName = (name: string) => {
   return defHttp.get<FeatureDefinitionDto>({
     url: `/api/feature-management/definitions/${name}`,
   });
 };
 
-export const GetListAsyncByInput = (input: FeatureDefinitionGetListInput) => {
+export const getList = (input: FeatureDefinitionGetListInput) => {
   return defHttp.get<ListResultDto<FeatureDefinitionDto>>({
     url: '/api/feature-management/definitions',
     params: input,
   });
 };
 
-export const UpdateAsyncByNameAndInput = (name: string, input: FeatureDefinitionUpdateDto) => {
+export const update = (name: string, input: FeatureDefinitionUpdateDto) => {
   return defHttp.put<FeatureDefinitionDto>({
     url: `/api/feature-management/definitions/${name}`,
     data: input,

@@ -30,7 +30,8 @@
             v-auth="[
               'AbpTextTemplating.TextTemplateDefinitions.Update',
               'AbpTextTemplating.TextTemplateDefinitions.Delete',
-              'AbpTextTemplating.TextTemplateContents.Update']"
+              'AbpTextTemplating.TextTemplateContents.Update',
+            ]"
             :stop-button-propagation="true"
             :actions="[
               {
@@ -161,7 +162,9 @@
     createConfirm({
       iconType: 'warning',
       title: L('AreYouSure'),
-      content: record.isStatic ? L('RestoreTemplateToDefaultMessage') : L('ItemWillBeDeletedMessage'),
+      content: record.isStatic
+        ? L('RestoreTemplateToDefaultMessage')
+        : L('ItemWillBeDeletedMessage'),
       onOk: () => {
         return DeleteAsyncByName(record.name).then(() => {
           createMessage.success(record.isStatic ? L('TemplateUpdated') : L('SuccessfullyDeleted'));

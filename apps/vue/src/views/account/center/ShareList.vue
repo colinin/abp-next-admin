@@ -31,7 +31,7 @@
   import { copyTextToClipboard } from '/@/hooks/web/useCopyToClipboard';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { getShareDataColumns } from './data';
-  import { getShareList as getShares } from '/@/api/oss-management/private';
+  import { getShareList as getShares } from '/@/api/oss-management/files/private';
 
   const props = defineProps({
     selectGroup: {

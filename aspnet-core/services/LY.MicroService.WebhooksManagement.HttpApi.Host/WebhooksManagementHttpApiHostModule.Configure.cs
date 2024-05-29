@@ -1,5 +1,4 @@
 ﻿using DotNetCore.CAP;
-using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
 using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -15,7 +14,6 @@ using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,13 +45,14 @@ using Volo.Abp.Quartz;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LY.MicroService.WebhooksManagement;
 
 public partial class WebhooksManagementHttpApiHostModule
 {
-    protected const string ApplicationName = "WebhooksManagement";
+    public static string ApplicationName { get; set; } = "WebhookService";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -66,12 +65,6 @@ public partial class WebhooksManagementHttpApiHostModule
 
     private void PreForwardedHeaders()
     {
-        PreConfigure<AbpForwardedHeadersOptions>(options =>
-        {
-            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            options.KnownNetworks.Clear();
-            options.KnownProxies.Clear();
-        });
     }
 
     private void PreConfigureApp(IConfiguration configuration)
@@ -152,7 +145,7 @@ public partial class WebhooksManagementHttpApiHostModule
         });
     }
 
-    private void ConfigureBackgroundTasks(IServiceCollection services)
+    private void ConfigureBackgroundTasks(IServiceCollection services, IConfiguration configuration)
     {
         var webhooksOptions = services.ExecutePreConfiguredActions<AbpWebhooksOptions>();
 
@@ -218,29 +211,43 @@ public partial class WebhooksManagementHttpApiHostModule
         if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
         {
             services.AddOpenTelemetry()
-                .ConfigureResource(builder =>
+                .ConfigureResource(resource =>
                 {
-                    builder.AddService(ApplicationName);
+                    resource.AddService(ApplicationName);
                 })
-                .WithTracing(builder =>
+                .WithTracing(tracing =>
                 {
-                    builder.AddHttpClientInstrumentation();
-                    builder.AddAspNetCoreInstrumentation();
-                    builder.AddCapInstrumentation();
-                    builder.AddEntityFrameworkCoreInstrumentation();
-                    builder.AddZipkinExporter(zipKinOptions =>
+                    tracing.AddHttpClientInstrumentation();
+                    tracing.AddAspNetCoreInstrumentation();
+                    tracing.AddCapInstrumentation();
+                    tracing.AddEntityFrameworkCoreInstrumentation();
+                    tracing.AddSource(ApplicationName);
+
+                    var tracingOtlpEndpoint = configuration["OpenTelemetry:Otlp:Endpoint"];
+                    if (!tracingOtlpEndpoint.IsNullOrWhiteSpace())
                     {
-                        var endpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-                        if (!endpoint.IsNullOrWhiteSpace())
+                        tracing.AddOtlpExporter(otlpOptions =>
                         {
-                            zipKinOptions.Endpoint = new Uri(configuration["OpenTelemetry:ZipKin:Endpoint"]);
-                        }
-                    });
+                            otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
+                        });
+                        return;
+                    }
+
+                    var zipkinEndpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
+                    if (!zipkinEndpoint.IsNullOrWhiteSpace())
+                    {
+                        tracing.AddZipkinExporter(zipKinOptions =>
+                        {
+                            zipKinOptions.Endpoint = new Uri(zipkinEndpoint);
+                        });
+                        return;
+                    }
                 })
-                .WithMetrics(builder =>
+                .WithMetrics(metrics =>
                 {
-                    builder.AddHttpClientInstrumentation();
-                    builder.AddAspNetCoreInstrumentation();
+                    metrics.AddRuntimeInstrumentation();
+                    metrics.AddHttpClientInstrumentation();
+                    metrics.AddAspNetCoreInstrumentation();
                 });
         }
     }
@@ -282,7 +289,13 @@ public partial class WebhooksManagementHttpApiHostModule
             }
         });
     }
-
+    private void ConfigureTiming(IConfiguration configuration)
+    {
+        Configure<AbpClockOptions>(options =>
+        {
+            configuration.GetSection("Clock").Bind(options);
+        });
+    }
     private void ConfigureCaching(IConfiguration configuration)
     {
         Configure<AbpDistributedCacheOptions>(options =>

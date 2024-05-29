@@ -44,13 +44,8 @@
   const { L } = useLocalization('AbpIdentity');
   const [registerModal, modalMethods] = useModal();
   const [registerPermissionModal, permissionModalMethods] = useModal();
-  const {
-    ouTree,
-    getContentMenus,
-    handleDrop,
-    handleAddNew,
-    handleSelect,
-    loadOuTree,
-  } = useOuTree({ emit: emits, modalMethods, permissionModalMethods });
+  const { ouTree, getContentMenus, handleDrop, handleAddNew, handleSelect, loadOuTree } = useOuTree(
+    { emit: emits, modalMethods, permissionModalMethods },
+  );
   const { hasPermission } = usePermission();
 </script>

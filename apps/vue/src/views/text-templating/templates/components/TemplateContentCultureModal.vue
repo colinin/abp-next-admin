@@ -9,7 +9,9 @@
   >
     <Card :title="getCardTitle">
       <template v-if="buttonEnabled" #extra>
-        <Button danger type="primary" style="margin-right: 15px;" @click="handleRestoreToDefault">{{ L('RestoreToDefault') }}</Button>
+        <Button danger type="primary" style="margin-right: 15px" @click="handleRestoreToDefault">{{
+          L('RestoreToDefault')
+        }}</Button>
       </template>
       <BasicForm @register="registerForm" />
     </Card>
@@ -24,7 +26,11 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { TextTemplateDefinitionDto } from '/@/api/text-templating/definitions/model';
-  import { GetAsyncByInput, RestoreToDefaultAsyncByNameAndInput, UpdateAsyncByNameAndInput } from '/@/api/text-templating/contents';
+  import {
+    GetAsyncByInput,
+    RestoreToDefaultAsyncByNameAndInput,
+    UpdateAsyncByNameAndInput,
+  } from '/@/api/text-templating/contents';
   import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
   const abpStore = useAbpStoreWithOut();
@@ -41,13 +47,13 @@
   });
   const getCardTitle = computed(() => {
     const textTemplate = unref(textTemplateRef);
-    return `${L('DisplayName:Name')}: ${textTemplate?.name}(${textTemplate?.displayName})`
+    return `${L('DisplayName:Name')}: ${textTemplate?.name}(${textTemplate?.displayName})`;
   });
   const [registerForm, { resetFields, setFieldsValue, validateFields, clearValidate }] = useForm({
     layout: 'vertical',
     showActionButtonGroup: false,
     schemas: [
-     {
+      {
         field: 'baseCultureName',
         component: 'Select',
         label: L('BaseCultureName'),
@@ -152,12 +158,14 @@
             const textTemplate = unref(textTemplateRef);
             RestoreToDefaultAsyncByNameAndInput(textTemplate!.name, {
               culture: input.baseCultureName,
-            }).then(() => {
-              createMessage.success(L('TemplateContentRestoredToDefault'));
-              return resolve(textTemplate!.name);
-            }).catch((error) => {
-              return reject(error);
-            });
+            })
+              .then(() => {
+                createMessage.success(L('TemplateContentRestoredToDefault'));
+                return resolve(textTemplate!.name);
+              })
+              .catch((error) => {
+                return reject(error);
+              });
           });
         },
       });
@@ -172,11 +180,13 @@
       UpdateAsyncByNameAndInput(textTemplate!.name, {
         culture: input.targetCultureName,
         content: input.targetContent,
-      }).then(() => {
-        createMessage.success(L('TemplateContentUpdated'));
-      }).finally(() => {
-        changeOkLoading(false);
-      });
+      })
+        .then(() => {
+          createMessage.success(L('TemplateContentUpdated'));
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>

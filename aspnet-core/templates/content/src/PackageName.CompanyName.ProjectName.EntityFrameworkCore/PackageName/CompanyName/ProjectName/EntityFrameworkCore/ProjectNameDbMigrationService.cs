@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Saas.Tenants;
 using Microsoft.Extensions.Logging;
-using PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
-namespace PackageName.CompanyName.ProjectName.DbMigrator.EntityFrameworkCore;
+namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 
 public class ProjectNameDbMigrationService : EfCoreRuntimeDbMigratorBase<ProjectNameDbContext>, ITransientDependency
 {

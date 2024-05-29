@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Abp.Account;
-using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authentication.QQ;
@@ -24,11 +23,11 @@ using LINGYUN.Platform.EntityFrameworkCore;
 using LY.MicroService.IdentityServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
@@ -37,7 +36,6 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
-using Volo.Abp.IdentityServer.Jwt;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
@@ -77,7 +75,6 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpDataDbMigratorModule),
     //typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
-    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpHttpClientWrapperModule),
@@ -111,13 +108,14 @@ public partial class IdentityServerModule : AbpModule
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
         ConfigureLocalization();
-        ConfigureAuditing();
+        ConfigureAuditing(configuration);
         ConfigureDataSeeder();
         ConfigureMvcUiTheme();
         ConfigureUrls(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -128,7 +126,11 @@ public partial class IdentityServerModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
-        app.UseForwardedHeaders();
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+        app.UseMapRequestLocalization();
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -147,7 +149,6 @@ public partial class IdentityServerModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         app.UseAuthentication();
         app.UseMultiTenancy();
-        app.UseMapRequestLocalization();
         app.UseIdentityServer();
         app.UseDynamicClaims();
         app.UseAuthorization();

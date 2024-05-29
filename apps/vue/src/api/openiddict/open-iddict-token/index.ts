@@ -13,7 +13,7 @@ import { OpenIddictTokenDto, OpenIddictTokenGetListInput,  } from './model';
 //   });
 // };
 
-export const DeleteAsyncById = (id: string) => {
+export const deleteById = (id: string) => {
   return defAbpHttp.delete<void>({
     url: `/api/openiddict/tokens/${id}`,
   });
@@ -31,7 +31,7 @@ export const DeleteAsyncById = (id: string) => {
 //   });
 // };
 
-export const GetAsyncById = (id: string) => {
+export const get = (id: string) => {
   return defAbpHttp.get<OpenIddictTokenDto>({
     url: `/api/openiddict/tokens/${id}`,
   });
@@ -49,7 +49,7 @@ export const GetAsyncById = (id: string) => {
 //   });
 // };
 
-export const GetListAsyncByInput = (input: OpenIddictTokenGetListInput) => {
+export const getList = (input: OpenIddictTokenGetListInput) => {
   return defAbpHttp.get<PagedResultDto<OpenIddictTokenDto>>({
     url: '/api/openiddict/tokens',
     params: input,

@@ -1,7 +1,7 @@
 import type { Ref } from 'vue';
 
 import { computed, unref } from 'vue';
-import { ApiScope } from '/@/api/identity-server/model/apiScopesModel';
+import { ApiScope } from '/@/api/identity-server/api-scopes/model';
 
 interface UseClaim {
   modelRef: Ref<ApiScope>;

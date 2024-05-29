@@ -7,14 +7,16 @@
           v-feature="'AbpOssManagement.OssObject.UploadFile'"
           type="primary"
           @click="handleUpload"
-          >{{ L('Objects:UploadFile') }}</Button>
+          >{{ L('Objects:UploadFile') }}</Button
+        >
         <Button
           v-if="hasPermission('AbpOssManagement.OssObject.Delete')"
           :disabled="selectCount <= 0"
           type="primary"
           danger
           @click="handleBulkDelete"
-          >{{ L('Objects:BulkDelete') }}</Button>
+          >{{ L('Objects:BulkDelete') }}</Button
+        >
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
@@ -59,7 +61,12 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { getObjects, generateOssUrl, bulkDeleteObject, deleteObject } from '/@/api/oss-management/oss';
+  import {
+    getObjects,
+    generateOssUrl,
+    bulkDeleteObject,
+    deleteObject,
+  } from '/@/api/oss-management/objects';
   import { getDataColumns } from '../datas/TableData';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import OssUploadModal from './OssUploadModal.vue';
@@ -138,7 +145,7 @@
     {
       immediate: true,
     },
-  )
+  );
 
   function beforeFetch(request: any) {
     request.bucket = props.bucket;
@@ -187,7 +194,7 @@
   }
 
   function handlePreview(record) {
-     openPreviewModal(true, {
+    openPreviewModal(true, {
       bucket: props.bucket,
       objects: [record],
     });

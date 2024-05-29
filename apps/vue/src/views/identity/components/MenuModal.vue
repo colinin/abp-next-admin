@@ -47,9 +47,9 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTree } from '/@/components/Tree';
-  import { getByName } from '/@/api/platform/dataDic';
-  import { MenuListResult } from '/@/api/platform/model/menuModel';
-  import { getAll } from '/@/api/platform/menu';
+  import { getByName } from '/@/api/platform/datas';
+  import { Menu } from '/@/api/platform/menus/model';
+  import { getAll } from '/@/api/platform/menus';
   import { listToTree } from '/@/utils/helper/treeHelper';
 
   const FormItem = Form.Item;
@@ -61,9 +61,9 @@
       default: false,
     },
     getMenuApi: {
-      type: Function as PropType<(...args) => Promise<MenuListResult>>,
+      type: Function as PropType<(...args) => Promise<ListResultDto<Menu>>>,
       required: true,
-      default: new Promise<MenuListResult>((resolve) => {
+      default: new Promise<ListResultDto<Menu>>((resolve) => {
         return resolve({
           items: [],
         });

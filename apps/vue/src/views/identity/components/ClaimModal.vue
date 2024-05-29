@@ -49,9 +49,8 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModal, useModalInner } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
-  import { IdentityClaim } from '/@/api/identity/model/claimModel';
+  import { IdentityClaim } from '/@/api/identity/claims/model';
   import ClaimEditModal from './ClaimEditModal.vue';
-  import { ListResultDto } from '/@/api/model/baseModel';
   import { isFunction } from '/@/utils/is';
 
   const { createConfirm, createMessage } = useMessage();
@@ -102,7 +101,7 @@
         sorter: (last, next) => {
           return last.claimValue.localeCompare(next.claimValue);
         },
-      }
+      },
     ],
     api: fetchClaims,
     pagination: false,
@@ -132,7 +131,7 @@
       };
       return props.fetchApi(params);
     }
-    return new Promise((resolve) => resolve({ items: []}))
+    return new Promise((resolve) => resolve({ items: [] }));
   }
 
   function handleAddNew() {
@@ -151,11 +150,14 @@
       onOk: () => {
         return new Promise<void>((resolve, reject) => {
           if (isFunction(props.deleteApi)) {
-            props.deleteApi(identityRef.value, claim).then(() => {
-              createMessage.success(L('SuccessfullyDeleted'));
-              reload();
-              resolve();
-            }).catch((error) => reject(error));
+            props
+              .deleteApi(identityRef.value, claim)
+              .then(() => {
+                createMessage.success(L('SuccessfullyDeleted'));
+                reload();
+                resolve();
+              })
+              .catch((error) => reject(error));
           } else {
             resolve();
           }

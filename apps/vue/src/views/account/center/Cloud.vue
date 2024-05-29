@@ -37,8 +37,8 @@
   import ShareList from './ShareList.vue';
 
   const componentsRef = shallowRef({
-    'FileList': FileList,
-    'ShareList': ShareList,
+    FileList: FileList,
+    ShareList: ShareList,
   });
 
   const CardGrid = Card.Grid;

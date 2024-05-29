@@ -16,7 +16,7 @@ import {
 //   });
 // };
 
-export const CreateAsyncByInput = (input: OpenIddictScopeCreateDto) => {
+export const create = (input: OpenIddictScopeCreateDto) => {
   return defAbpHttp.post<OpenIddictScopeDto>({
     url: '/api/openiddict/scopes',
     data: input,
@@ -35,7 +35,7 @@ export const CreateAsyncByInput = (input: OpenIddictScopeCreateDto) => {
 //   });
 // };
 
-export const DeleteAsyncById = (id: string) => {
+export const deleteById = (id: string) => {
   return defAbpHttp.delete<void>({
     url: `/api/openiddict/scopes/${id}`
   });
@@ -53,7 +53,7 @@ export const DeleteAsyncById = (id: string) => {
 //   });
 // };
 
-export const GetAsyncById = (id: string) => {
+export const get = (id: string) => {
   return defAbpHttp.get<OpenIddictScopeDto>({
     url: `/api/openiddict/scopes/${id}`
   });
@@ -71,7 +71,7 @@ export const GetAsyncById = (id: string) => {
 //   });
 // };
 
-export const GetListAsyncByInput = (input: OpenIddictScopeGetListInput) => {
+export const getList = (input: OpenIddictScopeGetListInput) => {
   return defAbpHttp.get<PagedResultDto<OpenIddictScopeDto>>({
     url: '/api/openiddict/scopes',
     params: input,
@@ -91,7 +91,7 @@ export const GetListAsyncByInput = (input: OpenIddictScopeGetListInput) => {
 //   });
 // };
 
-export const UpdateAsyncByIdAndInput = (id: string, input: OpenIddictScopeUpdateDto) => {
+export const update = (id: string, input: OpenIddictScopeUpdateDto) => {
   return defAbpHttp.put<OpenIddictScopeDto>({
     url: `/api/openiddict/scopes/${id}`,
     data: input,

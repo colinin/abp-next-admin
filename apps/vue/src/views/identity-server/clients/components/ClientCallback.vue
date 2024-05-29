@@ -15,7 +15,7 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { FormSchema } from '/@/components/Form';
   import { BasicColumn } from '/@/components/Table';
-  import { Client } from '/@/api/identity-server/model/clientsModel';
+  import { Client } from '/@/api/identity-server/clients/model';
   import { useUrl } from '../hooks/useUrl';
   import DynamicForm from './DynamicForm.vue';
 

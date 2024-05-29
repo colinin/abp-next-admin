@@ -8,7 +8,7 @@
 
 <script lang="ts" setup>
   import { computed, ref, unref, onMounted } from 'vue';
-  import { GetListAsyncByInput } from '/@/api/openiddict/open-iddict-scope';
+  import { getList } from '/@/api/openiddict/open-iddict-scope';
   import PermissionForm from '../../components/Permissions/PermissionForm.vue';
 
   const emits = defineEmits(['create', 'delete']);
@@ -50,7 +50,7 @@
   });
 
   onMounted(() => {
-    GetListAsyncByInput({
+    getList({
       skipCount: 0,
       maxResultCount: 100,
     }).then((res) => {

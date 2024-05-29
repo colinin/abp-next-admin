@@ -17,7 +17,7 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicForm, FormSchema, FormActionType, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { Text } from '/@/api/localization/model/textsModel';
+  import { Text } from '/@/api/localization/texts/model';
   import { getByCulture, setText } from '/@/api/localization/texts';
   import { getList as getLanguages } from '/@/api/localization/languages';
   import { getList as getResources } from '/@/api/localization/resources';
@@ -138,15 +138,16 @@
   function handleSubmit() {
     validate().then((input) => {
       changeOkLoading(true);
-      setText(input).then(() => {
-        createMessage.success(L('Successful'));
-        emits('change');
-        resetFields();
-        closeModal();
-      })
-      .finally(() => {
-        changeOkLoading(false);
-      });
+      setText(input)
+        .then(() => {
+          createMessage.success(L('Successful'));
+          emits('change');
+          resetFields();
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>

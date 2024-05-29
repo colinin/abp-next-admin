@@ -1,9 +1,5 @@
 <template>
-  <BasicModal
-    @register="registerModal"
-    :title="L('ConnectionStrings')"
-    @ok="handleSubmit"
-  >
+  <BasicModal @register="registerModal" :title="L('ConnectionStrings')" @ok="handleSubmit">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -39,11 +35,13 @@
   function handleSubmit() {
     validate().then((input) => {
       changeOkLoading(true);
-      SetConnectionStringAsyncByIdAndInput(input.id, input).then(() => {
-        createMessage.success(L('Successful'));
-        closeModal();
-        emits('change');
-      }).finally(() => changeOkLoading(false));
+      SetConnectionStringAsyncByIdAndInput(input.id, input)
+        .then(() => {
+          createMessage.success(L('Successful'));
+          closeModal();
+          emits('change');
+        })
+        .finally(() => changeOkLoading(false));
     });
   }
 </script>

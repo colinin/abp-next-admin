@@ -6,8 +6,8 @@ import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useValidation } from '/@/hooks/abp/useValidation';
 
-import { get, create, update } from '/@/api/identity-server/identityResources';
-import { IdentityResource } from '/@/api/identity-server/model/identityResourcesModel';
+import { get, create, update } from '/@/api/identity-server/identity-resources';
+import { IdentityResource } from '/@/api/identity-server/identity-resources/model';
 
 interface UseModal {
   modelIdRef: Ref<string>;

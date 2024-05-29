@@ -1,4 +1,4 @@
-import { JobStatus, JobType, JobPriority, JobSource } from '/@/api/task-management/model/backgroundJobInfoModel';
+import { JobStatus, JobType, JobPriority, JobSource } from '/@/api/task-management/jobs/model';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 
 const { L } = useLocalization('TaskManagement');

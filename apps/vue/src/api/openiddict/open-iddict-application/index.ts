@@ -18,7 +18,7 @@ import {
 //   });
 // };
 
-export const GetAsyncById = (id: string) => {
+export const get = (id: string) => {
   return defAbpHttp.get<OpenIddictApplicationDto>({
     url: `/api/openiddict/applications/${id}`,
   });
@@ -36,7 +36,7 @@ export const GetAsyncById = (id: string) => {
 //   });
 // };
 
-export const GetListAsyncByInput = (input: OpenIddictApplicationGetListInput) => {
+export const getList = (input: OpenIddictApplicationGetListInput) => {
   return defAbpHttp.get<PagedResultDto<OpenIddictApplicationDto>>({
     url: '/api/openiddict/applications',
     params: input,
@@ -53,7 +53,7 @@ export const GetListAsyncByInput = (input: OpenIddictApplicationGetListInput) =>
 //   });
 // };
 
-export const CreateAsyncByInput = (input: OpenIddictApplicationCreateDto) => {
+export const create = (input: OpenIddictApplicationCreateDto) => {
   return defAbpHttp.post<OpenIddictApplicationDto>({
     url: '/api/openiddict/applications',
     data: input,
@@ -73,7 +73,7 @@ export const CreateAsyncByInput = (input: OpenIddictApplicationCreateDto) => {
 //   });
 // };
 
-export const UpdateAsyncByIdAndInput = (id: string, input: OpenIddictApplicationUpdateDto) => {
+export const update = (id: string, input: OpenIddictApplicationUpdateDto) => {
   return defAbpHttp.put<OpenIddictApplicationDto>({
     url: `/api/openiddict/applications/${id}`,
     data: input,
@@ -92,7 +92,7 @@ export const UpdateAsyncByIdAndInput = (id: string, input: OpenIddictApplication
 //   });
 // };
 
-export const DeleteAsyncById = (id: string) => {
+export const deleteById = (id: string) => {
   return defAbpHttp.delete<void>({
     url: `/api/openiddict/applications/${id}`,
   });

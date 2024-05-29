@@ -41,13 +41,25 @@
             />
           </FormItem>
           <FormItem name="name" :label="L('DisplayName:Name')">
-            <Input :disabled="state.entityEditFlag && !state.allowedChange" :allow-clear="true" v-model:value="state.entity.name" />
+            <Input
+              :disabled="state.entityEditFlag && !state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.name"
+            />
           </FormItem>
           <FormItem name="displayName" :label="L('DisplayName:DisplayName')">
-            <LocalizableInput :disabled="!state.allowedChange" :allow-clear="true" v-model:value="state.entity.displayName" />
+            <LocalizableInput
+              :disabled="!state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.displayName"
+            />
           </FormItem>
           <FormItem name="description" :label="L('DisplayName:Description')">
-            <LocalizableInput :disabled="!state.allowedChange" :allow-clear="true" v-model:value="state.entity.description" />
+            <LocalizableInput
+              :disabled="!state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.description"
+            />
           </FormItem>
           <FormItem name="defaultValue" :label="L('DisplayName:DefaultValue')">
             <Select
@@ -58,39 +70,54 @@
               :options="state.selectionDataSource"
             />
             <TextArea
-              v-else-if="valueTypeNameRef === 'FreeTextStringValueType' && (validatorNameRef === 'NULL' || validatorNameRef === 'STRING')"
+              v-else-if="
+                valueTypeNameRef === 'FreeTextStringValueType' &&
+                (validatorNameRef === 'NULL' || validatorNameRef === 'STRING')
+              "
               :disabled="state.entityEditFlag && !state.allowedChange"
               :allow-clear="true"
               :auto-size="{ minRows: 3 }"
               v-model:value="state.entity.defaultValue"
             />
             <InputNumber
-              v-else-if="valueTypeNameRef === 'FreeTextStringValueType' && validatorNameRef === 'NUMERIC'"
-              style="width: 100%;"
+              v-else-if="
+                valueTypeNameRef === 'FreeTextStringValueType' && validatorNameRef === 'NUMERIC'
+              "
+              style="width: 100%"
               :disabled="state.entityEditFlag && !state.allowedChange"
               v-model:value="state.entity.defaultValue"
             />
             <Checkbox
-              v-else-if="valueTypeNameRef === 'ToggleStringValueType' && validatorNameRef === 'BOOLEAN'"
+              v-else-if="
+                valueTypeNameRef === 'ToggleStringValueType' && validatorNameRef === 'BOOLEAN'
+              "
               :disabled="state.entityEditFlag && !state.allowedChange"
               :checked="state.entity.defaultValue === 'true'"
-              @change="(e) => state.entity.defaultValue = String(e.target.checked).toLowerCase()"
+              @change="(e) => (state.entity.defaultValue = String(e.target.checked).toLowerCase())"
             >
               {{ L('DisplayName:DefaultValue') }}
             </Checkbox>
           </FormItem>
-          <FormItem name="IsVisibleToClients" :label="L('DisplayName:IsVisibleToClients')" :extra="L('Description:IsVisibleToClients')">
+          <FormItem
+            name="IsVisibleToClients"
+            :label="L('DisplayName:IsVisibleToClients')"
+            :extra="L('Description:IsVisibleToClients')"
+          >
             <Checkbox
               :disabled="!state.allowedChange"
               v-model:checked="state.entity.isVisibleToClients"
-            >{{ L('DisplayName:IsVisibleToClients') }}
+              >{{ L('DisplayName:IsVisibleToClients') }}
             </Checkbox>
           </FormItem>
-          <FormItem name="IsAvailableToHost" :label="L('DisplayName:IsAvailableToHost')" :extra="L('Description:IsAvailableToHost')">
+          <FormItem
+            name="IsAvailableToHost"
+            :label="L('DisplayName:IsAvailableToHost')"
+            :extra="L('Description:IsAvailableToHost')"
+          >
             <Checkbox
               :disabled="!state.allowedChange"
               v-model:checked="state.entity.isAvailableToHost"
-            >{{ L('DisplayName:IsAvailableToHost') }}
+              >{{ L('DisplayName:IsAvailableToHost') }}
             </Checkbox>
           </FormItem>
         </TabPane>
@@ -109,8 +136,18 @@
           </FormItem>
         </TabPane>
         <TabPane key="propertites" :tab="L('Properties')" force-render>
-          <FormItem name="extraProperties" label="" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-            <ExtraPropertyDictionary :disabled="!state.allowedChange" :allow-delete="true" :allow-edit="true" v-model:value="state.entity.extraProperties" />
+          <FormItem
+            name="extraProperties"
+            label=""
+            :label-col="{ span: 0 }"
+            :wrapper-col="{ span: 24 }"
+          >
+            <ExtraPropertyDictionary
+              :disabled="!state.allowedChange"
+              :allow-delete="true"
+              :allow-edit="true"
+              v-model:value="state.entity.extraProperties"
+            />
           </FormItem>
         </TabPane>
       </Tabs>
@@ -124,22 +161,30 @@
   import { computed, ref, reactive, unref, nextTick, watch } from 'vue';
   import { Checkbox, Form, Input, InputNumber, Select, Tabs, TreeSelect } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { LocalizableInput, ExtraPropertyDictionary, StringValueTypeInput } from '/@/components/Abp';
-  import { FreeTextStringValueType, SelectionStringValueItem, valueTypeSerializer } from '/@/components/Abp/StringValueType/valueType';
+  import {
+    LocalizableInput,
+    ExtraPropertyDictionary,
+    StringValueTypeInput,
+  } from '/@/components/Abp';
+  import {
+    FreeTextStringValueType,
+    SelectionStringValueItem,
+    valueTypeSerializer,
+  } from '/@/components/Abp/StringValueType/valueType';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { ValidationEnum, useValidation } from '/@/hooks/abp/useValidation';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useLocalizationSerializer } from '/@/hooks/abp/useLocalizationSerializer';
   import {
-    GetAsyncByName,
-    CreateAsyncByInput,
-    UpdateAsyncByNameAndInput
+    getByName,
+    getList,
+    create,
+    update,
   } from '/@/api/feature-management/definitions/features';
   import {
     FeatureDefinitionUpdateDto,
-    FeatureDefinitionCreateDto
+    FeatureDefinitionCreateDto,
   } from '/@/api/feature-management/definitions/features/model';
-  import { GetListAsyncByInput } from '/@/api/feature-management/definitions/features';
   import { FeatureGroupDefinitionDto } from '/@/api/feature-management/definitions/groups/model';
   import { listToTree } from '/@/utils/helper/treeHelper';
   import { isBoolean, isNullOrUnDef } from '/@/utils/is';
@@ -159,16 +204,16 @@
     children: FeatureTreeData[];
   }
   interface State {
-    activeTab: string,
-    allowedChange: boolean,
-    entity: Recordable,
-    entityRules?: Dictionary<string, Rule>,
-    entityChanged: boolean,
-    entityEditFlag: boolean,
-    defaultGroup?: string,
-    availableFeatures: FeatureTreeData[],
-    availableGroups: FeatureGroupDefinitionDto[],
-    selectionDataSource: FeatureSelectData[],
+    activeTab: string;
+    allowedChange: boolean;
+    entity: Recordable;
+    entityRules?: Dictionary<string, Rule>;
+    entityChanged: boolean;
+    entityEditFlag: boolean;
+    defaultGroup?: string;
+    availableFeatures: FeatureTreeData[];
+    availableGroups: FeatureGroupDefinitionDto[];
+    selectionDataSource: FeatureSelectData[];
   }
 
   const emits = defineEmits(['register', 'change']);
@@ -244,7 +289,7 @@
           label: Lr(info.resourceName, info.name),
           value: group.name,
         };
-    });
+      });
   });
   watch(
     () => state.entity,
@@ -274,30 +319,35 @@
         isAvailableToHost: true,
         groupName: state.defaultGroup,
         requiredFeatures: [],
-        valueType: valueTypeSerializer.serialize(new FreeTextStringValueType())
+        valueType: valueTypeSerializer.serialize(new FreeTextStringValueType()),
       };
       state.allowedChange = true;
-      nextTick(() => state.entityChanged = false);
+      nextTick(() => (state.entityChanged = false));
       return;
     }
     changeLoading(true);
     changeOkLoading(true);
-    GetAsyncByName(name).then((record) => {
-      state.entity = record;
-      state.entityEditFlag = true;
-      state.allowedChange = !record.isStatic;
-    }).finally(() => {
-      changeLoading(false);
-      changeOkLoading(false);
-      nextTick(() => state.entityChanged = false);
-    });
+    getByName(name)
+      .then((record) => {
+        state.entity = record;
+        state.entityEditFlag = true;
+        state.allowedChange = !record.isStatic;
+      })
+      .finally(() => {
+        changeLoading(false);
+        changeOkLoading(false);
+        nextTick(() => (state.entityChanged = false));
+      });
   }
 
   function fetchFeatures(groupName?: string) {
-    GetListAsyncByInput({
+    getList({
       groupName: groupName,
     }).then((res) => {
-      const featureGroup = groupBy(res.items.filter((def) => !def.isStatic), 'groupName');
+      const featureGroup = groupBy(
+        res.items.filter((def) => !def.isStatic),
+        'groupName',
+      );
       const featureTreeData: FeatureTreeData[] = [];
       Object.keys(featureGroup).forEach((gk) => {
         const featureTree = listToTree(featureGroup[gk], {
@@ -332,7 +382,7 @@
 
   function handleParentChange(value?: string) {
     if (!value) return;
-    GetAsyncByName(value).then((res) => {
+    getByName(value).then((res) => {
       state.entity.groupName = res.groupName;
       const form = unref(formRef);
       form?.clearValidate(['groupName']);
@@ -371,7 +421,7 @@
         value: item.value,
       };
     });
-    if (!items.find(item => item.value === state.entity.defaultValue)) {
+    if (!items.find((item) => item.value === state.entity.defaultValue)) {
       state.entity.defaultValue = undefined;
     }
   }
@@ -416,20 +466,20 @@
         input.defaultValue = String(input.defaultValue);
       }
       const api = state.entityEditFlag
-        ? UpdateAsyncByNameAndInput(state.entity.name, input as FeatureDefinitionUpdateDto)
-        : CreateAsyncByInput(input as FeatureDefinitionCreateDto);
-      api.then((res) => {
-        createMessage.success(L('Successful'));
-        emits('change', res);
-        form.resetFields();
-        closeModal();
-      }).finally(() => {
-        changeOkLoading(false);
-      })
+        ? update(state.entity.name, input as FeatureDefinitionUpdateDto)
+        : create(input as FeatureDefinitionCreateDto);
+      api
+        .then((res) => {
+          createMessage.success(L('Successful'));
+          emits('change', res);
+          form.resetFields();
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

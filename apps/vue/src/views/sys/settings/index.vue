@@ -74,15 +74,17 @@
     if (!isEmail(emailAddress)) {
       createWarningModal({
         title: L('ValidationErrorMessage'),
-        content: L('ThisFieldIsNotAValidEmailAddress.')
+        content: L('ThisFieldIsNotAValidEmailAddress.'),
       });
       return;
     }
     sendingEmail.value = true;
-    sendTestEmail(emailAddress).then(() => {
-      createMessage.success(L('SuccessfullySent'));
-    }).finally(() => {
-      sendingEmail.value = false;
-    });
+    sendTestEmail(emailAddress)
+      .then(() => {
+        createMessage.success(L('SuccessfullySent'));
+      })
+      .finally(() => {
+        sendingEmail.value = false;
+      });
   }
 </script>

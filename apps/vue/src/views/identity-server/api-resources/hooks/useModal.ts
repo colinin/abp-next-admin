@@ -6,8 +6,8 @@ import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useValidation } from '/@/hooks/abp/useValidation';
 
-import { get, create, update } from '/@/api/identity-server/apiResources';
-import { ApiResource } from '/@/api/identity-server/model/apiResourcesModel';
+import { get, create, update } from '/@/api/identity-server/api-resources';
+import { ApiResource } from '/@/api/identity-server/api-resources/model';
 
 interface UseModal {
   formElRef: Ref<any>;

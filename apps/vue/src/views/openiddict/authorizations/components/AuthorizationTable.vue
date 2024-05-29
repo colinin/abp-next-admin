@@ -35,7 +35,7 @@
   import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { GetListAsyncByInput, DeleteAsyncById } from '/@/api/openiddict/open-iddict-authorization';
+  import { getList, deleteById } from '/@/api/openiddict/open-iddict-authorization';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import AuthorizationModal from './AuthorizationModal.vue';
 
@@ -45,7 +45,7 @@
   const [registerTable, { reload }] = useTable({
     rowKey: 'id',
     title: L('Authorizations'),
-    api: GetListAsyncByInput,
+    api: getList,
     columns: getDataColumns(),
     beforeFetch: formatPagedRequest,
     pagination: true,
@@ -74,7 +74,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        return DeleteAsyncById(record.id).then(() => {
+        return deleteById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });

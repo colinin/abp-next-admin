@@ -135,7 +135,11 @@
           </FormItem>
         </TabPane>
         <TabPane key="paramters" :tab="L('Paramters')">
-          <JobParamter :isEditModal="isEditModal" :args="modelRef.args" @args-reset="handleArgsChange" />
+          <JobParamter
+            :isEditModal="isEditModal"
+            :args="modelRef.args"
+            @args-reset="handleArgsChange"
+          />
         </TabPane>
         <TabPane v-if="isEditModal" key="actions" :tab="L('Job:Actions')">
           <JobAction :jobId="modelRef.id" />
@@ -152,23 +156,15 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useValidation } from '/@/hooks/abp/useValidation';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import {
-    Checkbox,
-    DatePicker,
-    Form,
-    Select,
-    Tabs,
-    Input,
-    InputNumber,
-  } from 'ant-design-vue';
+  import { Checkbox, DatePicker, Form, Select, Tabs, Input, InputNumber } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { getById, create, update } from '/@/api/task-management/backgroundJobInfo';
+  import { getById, create, update } from '/@/api/task-management/jobs';
   import {
     JobType,
     JobPriority,
     JobSource,
     BackgroundJobInfo,
-  } from '/@/api/task-management/model/backgroundJobInfoModel';
+  } from '/@/api/task-management/jobs/model';
   import { JobTypeMap, JobPriorityMap } from '../datas/typing';
   import { formatToDate } from '/@/utils/dateUtil';
   import JobAction from './JobAction.vue';
@@ -283,9 +279,7 @@
     formEl?.validate().then(() => {
       changeOkLoading(true);
       const model = unref(modelRef);
-      const api = isEditModal.value
-        ? update(model.id, model)
-        : create(model);
+      const api = isEditModal.value ? update(model.id, model) : create(model);
       api
         .then(() => {
           createMessage.success(L('Successful'));
@@ -316,5 +310,4 @@
       args: {},
     } as BackgroundJobInfo;
   }
-
 </script>

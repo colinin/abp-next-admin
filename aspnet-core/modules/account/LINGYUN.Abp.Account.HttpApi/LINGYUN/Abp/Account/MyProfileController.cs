@@ -62,5 +62,26 @@ namespace LINGYUN.Abp.Account
         {
             await MyProfileAppService.ConfirmEmailAsync(input);
         }
+
+        [HttpGet]
+        [Route("authenticator")]
+        public async virtual Task<AuthenticatorDto> GetAuthenticator()
+        {
+            return await MyProfileAppService.GetAuthenticator();
+        }
+
+        [HttpPost]
+        [Route("verify-authenticator-code")]
+        public async virtual Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCode(VerifyAuthenticatorCodeInput input)
+        {
+            return await MyProfileAppService.VerifyAuthenticatorCode(input);
+        }
+
+        [HttpPost]
+        [Route("reset-authenticator")]
+        public async virtual Task ResetAuthenticator()
+        {
+            await MyProfileAppService.ResetAuthenticator();
+        }
     }
 }

@@ -16,7 +16,7 @@
   import { onMounted, ref } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Transfer } from 'ant-design-vue';
-  import { discovery } from '/@/api/identity-server/identityServer';
+  import { discovery } from '/@/api/identity-server/discovery';
 
   const emits = defineEmits(['change']);
 

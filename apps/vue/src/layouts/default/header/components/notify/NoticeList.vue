@@ -63,7 +63,7 @@
   import { ListItem } from './data';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { List, Avatar, Tag, Typography } from 'ant-design-vue';
-  import { NotificationContentType } from "/@/api/messages/model/notificationsModel";
+  import { NotificationContentType } from '/@/api/messages/notifications/model';
   import { isNumber } from '/@/utils/is';
   export default defineComponent({
     components: {

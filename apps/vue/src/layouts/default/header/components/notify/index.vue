@@ -3,33 +3,41 @@
     <Badge :count="count" dot :numberStyle="numberStyle">
       <BellOutlined @click="showDrawer" />
     </Badge>
-    <Drawer v-model:visible="open" title="" :class="`${prefixCls}__overlay`" placement="right" :closable="false">
+    <Drawer
+      v-model:visible="open"
+      title=""
+      :class="`${prefixCls}__overlay`"
+      placement="right"
+      :closable="false"
+    >
       <Tabs>
-          <TabPane :key="notifierRef.key" :tab="notifierRef.name">
-            <NoticeList :list="notifierRef.list" @title-click="readNotifer" @content-click="handleShowNotifications" />
-          </TabPane>
-          <TabPane :key="messageRef.key" :tab="messageRef.name">
-            <NoticeList :list="messageRef.list">
-              <template #footer>
-                <ButtonGroup style="width: 100%">
-                  <Button
-                    :disabled="messageRef.list.length === 0"
-                    style="width: 50%"
-                    type="link"
-                    @click="clearMessage"
-                    >清空消息</Button
-                  >
-                  <Button style="width: 50%" type="link" @click="handleShowMessages"
-                    >查看更多</Button
-                  >
-                </ButtonGroup>
-              </template>
-            </NoticeList>
-          </TabPane>
-          <TabPane :key="tasksRef.key" :tab="tasksRef.name">
-            <NoticeList :list="tasksRef.list" />
-          </TabPane>
-        </Tabs>
+        <TabPane :key="notifierRef.key" :tab="notifierRef.name">
+          <NoticeList
+            :list="notifierRef.list"
+            @title-click="readNotifer"
+            @content-click="handleShowNotifications"
+          />
+        </TabPane>
+        <TabPane :key="messageRef.key" :tab="messageRef.name">
+          <NoticeList :list="messageRef.list">
+            <template #footer>
+              <ButtonGroup style="width: 100%">
+                <Button
+                  :disabled="messageRef.list.length === 0"
+                  style="width: 50%"
+                  type="link"
+                  @click="clearMessage"
+                  >清空消息</Button
+                >
+                <Button style="width: 50%" type="link" @click="handleShowMessages">查看更多</Button>
+              </ButtonGroup>
+            </template>
+          </NoticeList>
+        </TabPane>
+        <TabPane :key="tasksRef.key" :tab="tasksRef.name">
+          <NoticeList :list="tasksRef.list" />
+        </TabPane>
+      </Tabs>
     </Drawer>
     <!-- <Popover title="" trigger="click" :overlayClassName="`${prefixCls}__overlay`">
       <Badge :count="count" dot :numberStyle="numberStyle">

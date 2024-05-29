@@ -31,11 +31,20 @@
           <FormItem v-if="!getIsTemplate" name="message" :label="L('Notifications:Message')">
             <TextArea v-model:value="state.entity.message" />
           </FormItem>
-          <FormItem v-if="!getIsTemplate" name="description" :label="L('Notifications:Description')">
+          <FormItem
+            v-if="!getIsTemplate"
+            name="description"
+            :label="L('Notifications:Description')"
+          >
             <TextArea v-model:value="state.entity.description" />
           </FormItem>
           <FormItem name="culture" :label="L('Notifications:Culture')">
-            <Select allow-clear v-model:value="state.entity.culture" :options="getLanguageOptions" @change="handleCultureChange" />
+            <Select
+              allow-clear
+              v-model:value="state.entity.culture"
+              :options="getLanguageOptions"
+              @change="handleCultureChange"
+            />
           </FormItem>
           <FormItem name="toUsers" :label="L('Notifications:ToUsers')">
             <Select
@@ -50,16 +59,32 @@
             />
           </FormItem>
           <FormItem name="severity" :label="L('Notifications:Severity')">
-            <Select allow-clear v-model:value="state.entity.severity" :options="notificationSeverityOptions" />
+            <Select
+              allow-clear
+              v-model:value="state.entity.severity"
+              :options="notificationSeverityOptions"
+            />
           </FormItem>
         </TabPane>
         <TabPane key="propertites" :tab="L('Properties')">
           <FormItem name="data" label="" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-            <ExtraPropertyDictionary :allow-delete="true" :allow-edit="true" v-model:value="state.entity.data" />
+            <ExtraPropertyDictionary
+              :allow-delete="true"
+              :allow-edit="true"
+              v-model:value="state.entity.data"
+            />
           </FormItem>
         </TabPane>
-        <TabPane v-if="getIsTemplate && state.templateContent" key="content" :tab="L('TemplateContent')">
-          <TextArea readonly :auto-size="{ minRows: 15, maxRows: 50 }" :value="state.templateContent.content" />
+        <TabPane
+          v-if="getIsTemplate && state.templateContent"
+          key="content"
+          :tab="L('TemplateContent')"
+        >
+          <TextArea
+            readonly
+            :auto-size="{ minRows: 15, maxRows: 50 }"
+            :value="state.templateContent.content"
+          />
         </TabPane>
       </Tabs>
     </Form>
@@ -78,9 +103,9 @@
   import { ValidationEnum, useValidation } from '/@/hooks/abp/useValidation';
   import { useLocalizationSerializer } from '/@/hooks/abp/useLocalizationSerializer';
   import { getList as getLanguages } from '/@/api/localization/languages';
-  import { Language } from '/@/api/localization/model/languagesModel';
-  import { getList as getUsers } from '/@/api/identity/user';
-  import { User } from '/@/api/identity/model/userModel';
+  import { Language } from '/@/api/localization/languages/model';
+  import { getList as getUsers } from '/@/api/identity/users';
+  import { User } from '/@/api/identity/users/model';
   import { send, sendTemplate } from '/@/api/realtime/notifications';
   import { NotificationSendDto } from '/@/api/realtime/notifications/model';
   import { NotificationDefinitionDto } from '/@/api/realtime/notifications/definitions/notifications/model';
@@ -94,7 +119,7 @@
   const TabPane = Tabs.TabPane;
   const TextArea = Input.TextArea;
   interface State {
-    activeTab: string,
+    activeTab: string;
     entity: Recordable;
     entityRules?: Dictionary<string, Rule>;
     notification?: NotificationDefinitionDto;
@@ -151,7 +176,9 @@
         validator(_rule, value) {
           if (state.entity.useLocalization) {
             if (!validate(value, { required: false })) {
-              return Promise.reject(L(ValidationEnum.FieldRequired, [L('Notifications:Description')]));
+              return Promise.reject(
+                L(ValidationEnum.FieldRequired, [L('Notifications:Description')]),
+              );
             }
           }
           return Promise.resolve();
@@ -162,17 +189,19 @@
     languages: [],
     users: [],
   });
-  const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data: NotificationDefinitionDto) => {
-    state.activeTab = 'basic';
-    state.entity = {
-      data: {} as Recordable,
-    };
-    state.notification = data;
-    state.templateContent = undefined;
-    if (!isNullOrWhiteSpace(data.template)) {
-      fetchTemplateContent(data.template!);
-    }
-  });
+  const [registerModal, { changeOkLoading, closeModal }] = useModalInner(
+    (data: NotificationDefinitionDto) => {
+      state.activeTab = 'basic';
+      state.entity = {
+        data: {} as Recordable,
+      };
+      state.notification = data;
+      state.templateContent = undefined;
+      if (!isNullOrWhiteSpace(data.template)) {
+        fetchTemplateContent(data.template!);
+      }
+    },
+  );
   const getIsTemplate = computed(() => {
     if (!state.notification) return false;
     return !isNullOrWhiteSpace(state.notification.template);
@@ -215,7 +244,7 @@
       filter: filter,
     }).then((res) => {
       state.users = res.items;
-    })
+    });
   }
 
   function fetchTemplateContent(template: string) {
@@ -246,12 +275,14 @@
           data: state.entity.data,
         };
         changeOkLoading(true);
-        sendTemplate(input).then(() => {
-          createMessage.success(L('Successful'));
-          closeModal();
-        }).finally(() => {
-          changeOkLoading(false);
-        });
+        sendTemplate(input)
+          .then(() => {
+            createMessage.success(L('Successful'));
+            closeModal();
+          })
+          .finally(() => {
+            changeOkLoading(false);
+          });
       } else {
         let title: any = state.entity.title;
         let message: any = state.entity.message;
@@ -291,17 +322,17 @@
           },
         };
         changeOkLoading(true);
-        send(input).then(() => {
-          createMessage.success(L('Successful'));
-          closeModal();
-        }).finally(() => {
-          changeOkLoading(false);
-        });
+        send(input)
+          .then(() => {
+            createMessage.success(L('Successful'));
+            closeModal();
+          })
+          .finally(() => {
+            changeOkLoading(false);
+          });
       }
     });
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

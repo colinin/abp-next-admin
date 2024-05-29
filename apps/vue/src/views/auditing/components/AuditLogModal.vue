@@ -8,7 +8,11 @@
       layout="horizontal"
       :model="modelRef"
     >
-      <Tabs v-model:activeKey="activeKey" :style="tabsStyle.style" :tabBarStyle="tabsStyle.tabBarStyle">
+      <Tabs
+        v-model:activeKey="activeKey"
+        :style="tabsStyle.style"
+        :tabBarStyle="tabsStyle.tabBarStyle"
+      >
         <TabPane key="basic" :tab="L('Operation')">
           <FormItem labelAlign="left" :label="L('HttpStatusCode')">
             <Tag :color="httpStatusCodeColor(modelRef.httpStatusCode)">
@@ -155,8 +159,8 @@
   import { BasicTable, BasicColumn } from '/@/components/Table';
   import { CodeEditor, MODE } from '/@/components/CodeEditor';
   import { useAuditLog } from '../hooks/useAuditLog';
-  import { getById } from '/@/api/auditing/auditLog';
-  import { AuditLog } from '/@/api/auditing/model/auditLogModel';
+  import { get } from '/@/api/auditing/audit-log';
+  import { AuditLogDto } from '/@/api/auditing/audit-log/model';
   import { formatToDateTime } from '/@/utils/dateUtil';
   import { tryToJson } from '/@/utils/strings';
 
@@ -168,7 +172,7 @@
   const formElRef = ref<any>();
   const activeKey = ref('basic');
   const tabsStyle = useTabsStyle();
-  const modelRef = ref<AuditLog>({} as AuditLog);
+  const modelRef = ref<AuditLogDto>({} as AuditLogDto);
   const [registerModal] = useModalInner((model) => {
     activeKey.value = 'basic';
     nextTick(() => {
@@ -224,7 +228,7 @@
     const formEl = unref(formElRef);
     formEl?.resetFields();
     if (id) {
-      getById(id).then((res) => {
+      get(id).then((res) => {
         modelRef.value = res;
       });
     }

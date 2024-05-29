@@ -5,12 +5,12 @@ import { unref, computed, watch, createVNode } from 'vue';
 import { Checkbox } from 'ant-design-vue';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { cloneDeep } from 'lodash-es';
-import { get as getLayout, getAll as getAllLayout } from '/@/api/platform/layout';
-import { get as getData } from '/@/api/platform/dataDic';
-import { getAll as getAllMenu, create, update } from '/@/api/platform/menu';
-import { DataItem, ValueType } from '/@/api/platform/model/dataItemModel';
+import { get as getLayout, getAll as getAllLayout } from '/@/api/platform/layouts';
+import { get as getData } from '/@/api/platform/datas';
+import { getAll as getAllMenu, create, update } from '/@/api/platform/menus';
+import { DataItem, ValueType } from '/@/api/platform/datas/model';
 import { listToTree } from '/@/utils/helper/treeHelper';
-import { Menu, UpdateMenu, CreateMenu } from '/@/api/platform/model/menuModel';
+import { Menu, UpdateMenu, CreateMenu } from '/@/api/platform/menus/model';
 
 interface UseMenuFormContext {
   menuModel: Ref<Menu>;

@@ -6,7 +6,7 @@
     :error-info="state.errorInfo"
     @selected="$emit('selected')"
     @delNode="$emit('delNode')"
-    @insertNode="type => $emit('insertNode', type)"
+    @insertNode="(type) => $emit('insertNode', type)"
     placeholder="请设置审批人"
     header-bgc="#ff943e"
   >
@@ -24,49 +24,50 @@
 
   defineEmits(['delNode', 'insertNode', 'selected']);
   const props = defineProps({
-    config:{
+    config: {
       type: Object,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
   });
   const content = computed(() => {
     console.log('props', props);
     const config = props.config.props;
     switch (config.assignedType) {
-      case "ASSIGN_USER":
+      case 'ASSIGN_USER':
         if (config.assignedUser.length > 0) {
           let texts: string[] = [];
-          config.assignedUser.forEach(org => texts.push(org.name));
+          config.assignedUser.forEach((org) => texts.push(org.name));
           return String(texts).replaceAll(',', '、');
         } else {
           return '请指定审批人';
         }
-      case "SELF":
+      case 'SELF':
         return '发起人自己';
-      case "SELF_SELECT":
-        return config.selfSelect.multiple ? '发起人自选多人':'发起人自选一人';
-      case "FORM_USER":
+      case 'SELF_SELECT':
+        return config.selfSelect.multiple ? '发起人自选多人' : '发起人自选一人';
+      case 'FORM_USER':
         if (!config.formUser || config.formUser === '') {
           return '表单内联系人（未选择）';
         } else {
           let text = getFormItemById(config.formUser);
           if (text && text.title) {
             return `表单（${text.title}）内的人员`;
-          }else {
+          } else {
             return '该表单已被移除😥';
           }
         }
-      case "ROLE":
+      case 'ROLE':
         if (config.role.length > 0) {
           let texts: string[] = [];
-          config.role.forEach(org => texts.push(org.name));
+          config.role.forEach((org) => texts.push(org.name));
           return String(texts).replaceAll(',', '、');
         } else {
           return '指定角色（未设置）';
         }
-        default: return '未知设置项😥';
+      default:
+        return '未知设置项😥';
     }
   });
   const state = reactive({
@@ -77,12 +78,13 @@
   const flowStore = useFlowStoreWithOut();
 
   function getFormItemById(id: any) {
-    return flowStore.design.formItems.find(item => item.id === id);
+    return flowStore.design.formItems.find((item) => item.id === id);
   }
 
   function validate(err: string[]) {
     try {
-      return state.showError = !state.validate[`validate_${props.config.props.assignedType}`](err);
+      return (state.showError =
+        !state.validate[`validate_${props.config.props.assignedType}`](err));
     } catch (e) {
       return true;
     }
@@ -136,7 +138,7 @@
     return true;
   }
 
-  function validate_REFUSE(err: string[]){
+  function validate_REFUSE(err: string[]) {
     console.log(err);
     return true;
   }
@@ -154,6 +156,4 @@
   });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

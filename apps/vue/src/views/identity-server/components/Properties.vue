@@ -12,7 +12,7 @@
         title: L('Actions'),
         dataIndex: 'action',
       }"
-    > 
+    >
       <template #toolbar>
         <Button type="primary" @click="handleAddNew">{{ L('Propertites:New') }}</Button>
       </template>
@@ -44,7 +44,7 @@
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModal } from '/@/components/Modal';
   import { BasicTable, TableAction } from '/@/components/Table';
-  import { Property } from '/@/api/identity-server/model/basicModel';
+  import { Property } from '/@/api/identity-server/model';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { getDataColumns } from './TableData';
   import { getFormSchemas } from './ModalData';

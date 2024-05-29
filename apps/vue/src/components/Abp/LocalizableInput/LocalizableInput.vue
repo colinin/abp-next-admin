@@ -55,10 +55,10 @@
   const ItemReset = Form.ItemRest;
   const InputGroup = Input.Group;
   interface State {
-    resourceName?: string,
-    displayName?: string,
-    displayNames: DefaultOptionType[],
-  } 
+    resourceName?: string;
+    displayName?: string;
+    displayNames: DefaultOptionType[];
+  }
 
   const emits = defineEmits(['update:value', 'change']);
   const props = defineProps({
@@ -83,22 +83,24 @@
       return {
         label: key,
         value: key,
-      }
+      };
     });
     return [
       {
         label: t('component.localizable_input.resources.fiexed.group'),
         value: 'F',
-        options: [{
-          label: t('component.localizable_input.resources.fiexed.label'),
-          value: 'Fixed',
-        }]
+        options: [
+          {
+            label: t('component.localizable_input.resources.fiexed.label'),
+            value: 'Fixed',
+          },
+        ],
       },
       {
         label: t('component.localizable_input.resources.localization.group'),
         value: 'R',
         options: sources,
-      }
+      },
     ];
   });
   watch(
@@ -115,7 +117,7 @@
     },
     {
       immediate: true,
-    }
+    },
   );
 
   function handleResourceChange(value?: string, triggerChanged?: boolean) {
@@ -126,7 +128,7 @@
           label: resources[value][key] ? String(resources[value][key]) : key,
           value: key,
         };
-      }); 
+      });
     }
     state.displayName = undefined;
     if (triggerChanged === true) {
@@ -142,7 +144,7 @@
     const inputValue = value === undefined ? '' : value;
     let updateValue = '';
     if (getIsFixed.value) {
-      updateValue = !isNullOrWhiteSpace(value) ? `F:${value}` : 'F:' ;
+      updateValue = !isNullOrWhiteSpace(value) ? `F:${value}` : 'F:';
     } else if (!isNullOrWhiteSpace(state.resourceName)) {
       const info: LocalizableStringInfo = {
         resourceName: state.resourceName ?? '',

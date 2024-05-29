@@ -166,13 +166,9 @@
   import { useValidation } from '/@/hooks/abp/useValidation';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { ApplicationState } from '../types/props';
-  import {
-    GetAsyncById,
-    CreateAsyncByInput,
-    UpdateAsyncByIdAndInput,
-  } from '/@/api/openiddict/open-iddict-application';
+  import { get, create, update} from '/@/api/openiddict/open-iddict-application';
   import { OpenIddictApplicationDto } from '/@/api/openiddict/open-iddict-application/model';
-  import { discovery } from '/@/api/identity-server/identityServer';
+  import { discovery } from '/@/api/identity-server/discovery';
   import RedirectUri from './RedirectUri.vue';
   import PostLogoutRedirectUri from './PostLogoutRedirectUri.vue';
   import DisplayNameForm from '../../components/DisplayNames/DisplayNameForm.vue';
@@ -306,7 +302,7 @@
       return;
     }
     changeLoading(true);
-    GetAsyncById(id)
+    get(id)
       .then((application) => {
         state.application = application;
         nextTick(() => {
@@ -448,8 +444,8 @@
     form?.validate().then(() => {
       changeOkLoading(true);
       const api = state.application.id
-        ? UpdateAsyncByIdAndInput(state.application.id, cloneDeep(state.application))
-        : CreateAsyncByInput(cloneDeep(state.application));
+        ? update(state.application.id, cloneDeep(state.application))
+        : create(cloneDeep(state.application));
       api
         .then((res) => {
           createMessage.success(L('Successful'));

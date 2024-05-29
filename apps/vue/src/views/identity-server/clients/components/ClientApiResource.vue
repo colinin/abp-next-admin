@@ -6,7 +6,7 @@
   import { computed, ref, onMounted, toRefs } from 'vue';
   import Resources from './Resources.vue';
   import { getAssignableApiResources } from '/@/api/identity-server/clients';
-  import { Client } from '/@/api/identity-server/model/clientsModel';
+  import { Client } from '/@/api/identity-server/clients/model';
   import { useResource } from '../hooks/useResource';
 
   const props = defineProps({

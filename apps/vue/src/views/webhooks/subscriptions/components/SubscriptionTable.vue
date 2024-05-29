@@ -2,11 +2,7 @@
   <div class="content">
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <Button
-          v-auth="['AbpWebhooks.Subscriptions.Create']"
-          type="primary"
-          @click="handleAddNew"
-        >
+        <Button v-auth="['AbpWebhooks.Subscriptions.Create']" type="primary" @click="handleAddNew">
           {{ L('Subscriptions:AddNew') }}
         </Button>
         <Button
@@ -63,7 +59,11 @@
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
-  import { DeleteAsyncById, DeleteManyAsyncByInput, GetListAsyncByInput } from '/@/api/webhooks/subscriptions';
+  import {
+    DeleteAsyncById,
+    DeleteManyAsyncByInput,
+    GetListAsyncByInput,
+  } from '/@/api/webhooks/subscriptions';
   import SubscriptionModal from './SubscriptionModal.vue';
 
   const { createConfirm, createMessage } = useMessage();
@@ -118,13 +118,15 @@
         setLoading(true);
         return DeleteManyAsyncByInput({
           recordIds: selectKeys,
-        }).then(() => {
-          createMessage.success(L('SuccessfullyDeleted'));
-          clearSelectedRowKeys();
-          reload();
-        }).finally(() => {
-          setLoading(false);
-        });
+        })
+          .then(() => {
+            createMessage.success(L('SuccessfullyDeleted'));
+            clearSelectedRowKeys();
+            reload();
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       },
     });
   }
@@ -137,14 +139,16 @@
       okCancel: true,
       onOk: () => {
         setLoading(true);
-        return DeleteAsyncById(record.id).then(() => {
-          createMessage.success(L('SuccessfullyDeleted'));
-          clearSelectedRowKeys();
-          reload();
-          reload();
-        }).finally(() => {
-          setLoading(false);
-        });
+        return DeleteAsyncById(record.id)
+          .then(() => {
+            createMessage.success(L('SuccessfullyDeleted'));
+            clearSelectedRowKeys();
+            reload();
+            reload();
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       },
     });
   }

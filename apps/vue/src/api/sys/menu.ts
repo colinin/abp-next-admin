@@ -10,6 +10,7 @@ export const getMenuList = () => {
     service: 'Platform',
     controller: 'Menu',
     action: 'GetCurrentUserMenuListAsync',
+    uniqueName: 'GetCurrentUserMenuListAsyncByInput',
     params: {
       input: {
         framework: 'Vue Vben Admin',

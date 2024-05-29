@@ -6,8 +6,8 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue';
-  import { useRoute } from "vue-router";
-  import { useI18n } from "/@/hooks/web/useI18n";
+  import { useRoute } from 'vue-router';
+  import { useI18n } from '/@/hooks/web/useI18n';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { confirmEmail } from '/@/api/account/profiles';
 
@@ -28,19 +28,19 @@
         field: 'userId',
         component: 'Input',
         label: 'userId',
-        show: false
+        show: false,
       },
       {
         field: 'confirmToken',
         component: 'Input',
         label: 'confirmToken',
-        show: false
+        show: false,
       },
       {
         field: 'returnUrl',
         component: 'Input',
         label: 'returnUrl',
-        show: false
+        show: false,
       },
     ],
   });
@@ -62,6 +62,4 @@
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

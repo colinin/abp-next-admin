@@ -106,9 +106,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Platform.HttpApi", "modules\platform\LINGYUN.Platform.HttpApi\LINGYUN.Platform.HttpApi.csproj", "{5FBBBA6A-D6EC-42E1-8164-15C411EC77BE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{F4615BCE-D5C1-407A-8681-8EEE92DEF9D0}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\upgrade\aspnet-core\services\LY.MicroService.BackendAdmin.HttpApi.Host\appsettings.Production.json = ..\..\upgrade\aspnet-core\services\LY.MicroService.BackendAdmin.HttpApi.Host\appsettings.Production.json
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.EntityFrameworkCore.Tests", "tests\LINGYUN.Abp.EntityFrameworkCore.Tests\LINGYUN.Abp.EntityFrameworkCore.Tests.csproj", "{F3D9B137-32DE-4018-8058-78AB17FCDF9C}"
 EndProject
@@ -743,7 +740,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi.Identit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenApi.OpenIddict", "framework\open-api\LINGYUN.Abp.OpenApi.OpenIddict\LINGYUN.Abp.OpenApi.OpenIddict.csproj", "{ED3DF100-C5DB-4334-A847-118922B28D95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.TextTemplating.Scriban", "modules\text-templating\LINGYUN.Abp.TextTemplating.Scriban\LINGYUN.Abp.TextTemplating.Scriban.csproj", "{15482834-9242-4D20-9736-9DA571A9A83A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TextTemplating.Scriban", "modules\text-templating\LINGYUN.Abp.TextTemplating.Scriban\LINGYUN.Abp.TextTemplating.Scriban.csproj", "{15482834-9242-4D20-9736-9DA571A9A83A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -95,7 +95,7 @@
   const TabPane = Tabs.TabPane;
 
   const componentsRef = shallowRef({
-    'properties': Properties,
+    properties: Properties,
   });
 
   const emits = defineEmits(['change', 'register']);
@@ -132,11 +132,13 @@
 
   function handleOk() {
     changeOkLoading(true);
-    handleSubmit() .then(() => {
-      createMessage.success(L('Successful'));
-      emits('change');
-    }) .finally(() => {
-      changeOkLoading(false);
-    });
+    handleSubmit()
+      .then(() => {
+        createMessage.success(L('Successful'));
+        emits('change');
+      })
+      .finally(() => {
+        changeOkLoading(false);
+      });
   }
 </script>

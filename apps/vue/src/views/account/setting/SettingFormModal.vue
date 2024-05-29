@@ -191,8 +191,8 @@
       nextTick(() => {
         formEl?.clearValidate();
       });
-    }
-  )
+    },
+  );
 
   function _sendResetPasswordCode() {
     const formEl = unref(formElRef);
@@ -205,7 +205,7 @@
           .catch(() => {
             return Promise.reject(false);
           });
-      })
+      });
     }
     return Promise.reject(false);
   }
@@ -214,7 +214,8 @@
     const formEl = unref(formElRef);
     formEl?.validate().then((input) => {
       changeLoading(true);
-      commandApi.value(input)
+      commandApi
+        .value(input)
         .then(() => {
           createMessage.success(L('Successful'));
           closeModal();

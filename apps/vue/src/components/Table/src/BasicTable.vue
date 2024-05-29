@@ -64,7 +64,17 @@
     ColumnChangeParam,
   } from './types/table';
 
-  import { defineComponent, ref, reactive, computed, unref, toRaw, inject, watchEffect, nextTick } from 'vue';
+  import {
+    defineComponent,
+    ref,
+    reactive,
+    computed,
+    unref,
+    toRaw,
+    inject,
+    watchEffect,
+    nextTick,
+  } from 'vue';
   import { Button, Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { useModal } from '/@/components/Modal/index';
@@ -257,7 +267,13 @@
 
       const { getAlertEnabled, getAlertMessage } = useTableAlert(getProps, getRowSelectionRef);
 
-      const { getHeaderProps } = useTableHeader(getProps, slots, handlers, getAlertEnabled, getAlertMessage);
+      const { getHeaderProps } = useTableHeader(
+        getProps,
+        slots,
+        handlers,
+        getAlertEnabled,
+        getAlertMessage,
+      );
 
       const { getFooterProps } = useTableFooter(
         getProps,
@@ -273,9 +289,8 @@
         getFormSlotKeys,
         handleSearchInfoChange,
         handleAdvanceSearchChange,
-        handleAdvanceSearchInfoChange
-      } =
-        useTableForm(getProps, slots, fetch, getLoading, formActions.setFieldsValue);
+        handleAdvanceSearchInfoChange,
+      } = useTableForm(getProps, slots, fetch, getLoading, formActions.setFieldsValue);
 
       const getBindValues = computed(() => {
         const dataSource = unref(getDataSourceRef);

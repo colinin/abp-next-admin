@@ -26,13 +26,25 @@
             />
           </FormItem>
           <FormItem name="name" :label="L('DisplayName:Name')">
-            <Input :disabled="state.entityEditFlag && !state.allowedChange" :allow-clear="true" v-model:value="state.entity.name" />
+            <Input
+              :disabled="state.entityEditFlag && !state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.name"
+            />
           </FormItem>
           <FormItem name="displayName" :label="L('DisplayName:DisplayName')">
-            <LocalizableInput :disabled="!state.allowedChange" :allow-clear="true" v-model:value="state.entity.displayName" />
+            <LocalizableInput
+              :disabled="!state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.displayName"
+            />
           </FormItem>
           <FormItem name="description" :label="L('DisplayName:Description')">
-            <LocalizableInput :disabled="!state.allowedChange" :allow-clear="true" v-model:value="state.entity.description" />
+            <LocalizableInput
+              :disabled="!state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.description"
+            />
           </FormItem>
           <FormItem
             name="allowSubscriptionToClients"
@@ -42,7 +54,7 @@
             <Checkbox
               :disabled="!state.allowedChange"
               v-model:checked="state.entity.allowSubscriptionToClients"
-            >{{ L('DisplayName:AllowSubscriptionToClients') }}
+              >{{ L('DisplayName:AllowSubscriptionToClients') }}
             </Checkbox>
           </FormItem>
           <FormItem
@@ -108,8 +120,18 @@
           </FormItem>
         </TabPane>
         <TabPane key="propertites" :tab="L('Properties')">
-          <FormItem name="extraProperties" label="" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-            <ExtraPropertyDictionary :disabled="!state.allowedChange" :allow-delete="true" :allow-edit="true" v-model:value="state.entity.extraProperties" />
+          <FormItem
+            name="extraProperties"
+            label=""
+            :label-col="{ span: 0 }"
+            :wrapper-col="{ span: 24 }"
+          >
+            <ExtraPropertyDictionary
+              :disabled="!state.allowedChange"
+              :allow-delete="true"
+              :allow-edit="true"
+              v-model:value="state.entity.extraProperties"
+            />
           </FormItem>
         </TabPane>
       </Tabs>
@@ -132,27 +154,31 @@
   import {
     GetAsyncByName,
     CreateAsyncByInput,
-    UpdateAsyncByNameAndInput
+    UpdateAsyncByNameAndInput,
   } from '/@/api/realtime/notifications/definitions/notifications';
   import {
     NotificationDefinitionUpdateDto,
-    NotificationDefinitionCreateDto
+    NotificationDefinitionCreateDto,
   } from '/@/api/realtime/notifications/definitions/notifications/model';
   import { NotificationGroupDefinitionDto } from '/@/api/realtime/notifications/definitions/groups/model';
   import { GetListAsyncByInput as getGroupDefinitions } from '/@/api/realtime/notifications/definitions/groups';
-  import { NotificationContentType, NotificationLifetime, NotificationType } from '/@/api/realtime/notifications/types';
+  import {
+    NotificationContentType,
+    NotificationLifetime,
+    NotificationType,
+  } from '/@/api/realtime/notifications/types';
 
   const FormItem = Form.Item;
   const TabPane = Tabs.TabPane;
   interface State {
-    activeTab: string,
-    allowedChange: boolean,
-    entity: Recordable,
-    entityRules?: Dictionary<string, Rule>,
-    entityChanged: boolean,
-    entityEditFlag: boolean,
-    defaultGroup?: string,
-    availableGroups: NotificationGroupDefinitionDto[],
+    activeTab: string;
+    allowedChange: boolean;
+    entity: Recordable;
+    entityRules?: Dictionary<string, Rule>;
+    entityChanged: boolean;
+    entityEditFlag: boolean;
+    defaultGroup?: string;
+    availableGroups: NotificationGroupDefinitionDto[];
   }
 
   const emits = defineEmits(['register', 'change']);
@@ -220,7 +246,7 @@
           label: group.displayName,
           value: group.name,
         };
-    });
+      });
   });
   watch(
     () => state.entity,
@@ -231,20 +257,18 @@
       deep: true,
     },
   );
-  watch(
-    () => state.defaultGroup,
-    fetchGroups,
-    {
-      deep: true,
+  watch(() => state.defaultGroup, fetchGroups, {
+    deep: true,
+  });
+
+  const [registerModal, { closeModal, changeLoading, changeOkLoading }] = useModalInner(
+    (record) => {
+      state.defaultGroup = record.groupName;
+      nextTick(() => {
+        fetch(record.name);
+      });
     },
   );
-
-  const [registerModal, { closeModal, changeLoading, changeOkLoading }] = useModalInner((record) => {
-    state.defaultGroup = record.groupName;
-    nextTick(() => {
-      fetch(record.name);
-    });
-  });
 
   function fetch(name?: string) {
     state.activeTab = 'basic';
@@ -258,20 +282,22 @@
         contentType: NotificationContentType.Text,
       };
       state.allowedChange = true;
-      nextTick(() => state.entityChanged = false);
+      nextTick(() => (state.entityChanged = false));
       return;
     }
     changeLoading(true);
     changeOkLoading(true);
-    GetAsyncByName(name).then((record) => {
-      state.entity = record;
-      state.entityEditFlag = true;
-      state.allowedChange = !record.isStatic;
-    }).finally(() => {
-      changeLoading(false);
-      changeOkLoading(false);
-      nextTick(() => state.entityChanged = false);
-    });
+    GetAsyncByName(name)
+      .then((record) => {
+        state.entity = record;
+        state.entityEditFlag = true;
+        state.allowedChange = !record.isStatic;
+      })
+      .finally(() => {
+        changeLoading(false);
+        changeOkLoading(false);
+        nextTick(() => (state.entityChanged = false));
+      });
   }
 
   function fetchGroups() {
@@ -319,20 +345,23 @@
     form?.validate().then(() => {
       changeOkLoading(true);
       const api = state.entityEditFlag
-        ? UpdateAsyncByNameAndInput(state.entity.name, cloneDeep(state.entity) as NotificationDefinitionUpdateDto)
+        ? UpdateAsyncByNameAndInput(
+            state.entity.name,
+            cloneDeep(state.entity) as NotificationDefinitionUpdateDto,
+          )
         : CreateAsyncByInput(cloneDeep(state.entity) as NotificationDefinitionCreateDto);
-      api.then((res) => {
-        createMessage.success(L('Successful'));
-        emits('change', res);
-        form.resetFields();
-        closeModal();
-      }).finally(() => {
-        changeOkLoading(false);
-      })
+      api
+        .then((res) => {
+          createMessage.success(L('Successful'));
+          emits('change', res);
+          form.resetFields();
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

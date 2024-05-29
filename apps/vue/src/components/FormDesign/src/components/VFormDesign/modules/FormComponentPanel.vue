@@ -89,6 +89,7 @@
 <style lang="less" scoped>
   @import url(../styles/variable.less);
   @import url(../styles/drag.less);
+
   .v-form-container {
     // 内联布局样式
     .ant-form-inline {
@@ -97,18 +98,22 @@
         flex-wrap: wrap;
         justify-content: flex-start;
         align-content: flex-start;
+
         .layout-width {
           width: 100%;
         }
       }
+
       .ant-form-item-control-wrapper {
         min-width: 175px !important;
       }
     }
   }
+
   .form-panel {
     position: relative;
     height: 100%;
+
     .empty-text {
       color: #aaa;
       height: 150px;
@@ -120,12 +125,14 @@
       position: absolute;
       z-index: 100;
     }
+
     .draggable-box {
       // width: 100%;
       .drag-move {
         cursor: move;
         min-height: 62px;
       }
+
       .list-main {
         overflow: auto;
         height: 100%;
@@ -133,14 +140,17 @@
         .list-enter-active {
           transition: all 0.5s;
         }
+
         .list-leave-active {
           transition: all 0.3s;
         }
+
         .list-enter,
         .list-leave-to {
           opacity: 0;
           transform: translateX(-100px);
         }
+
         .list-enter {
           height: 30px;
         }

@@ -2,12 +2,8 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <Button
-          v-auth="['Platform.Package.Create']"
-          type="primary"
-          @click="handleAddNew"
-        >
-          {{ L('Package:AddNew') }} 
+        <Button v-auth="['Platform.Package.Create']" type="primary" @click="handleAddNew">
+          {{ L('Package:AddNew') }}
         </Button>
       </template>
       <template #bodyCell="{ column, record }">

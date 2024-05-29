@@ -2,11 +2,13 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button v-auth="['Platform.Menu.Create']" type="primary" @click="handleAddNew">{{ L('Menu:AddNew') }}</a-button>
+        <a-button v-auth="['Platform.Menu.Create']" type="primary" @click="handleAddNew">{{
+          L('Menu:AddNew')
+        }}</a-button>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'displayName'">
-          <Icon v-if="record.meta.icon" style="margin-right: 10px;" :icon="record.meta.icon" />
+          <Icon v-if="record.meta.icon" style="margin-right: 10px" :icon="record.meta.icon" />
           <span>{{ record.displayName }}</span>
         </template>
         <template v-else-if="column.key === 'action'">
@@ -49,7 +51,7 @@
   import { useDrawer } from '/@/components/Drawer';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
-  import { getAll, getById, deleteById } from '/@/api/platform/menu';
+  import { getAll, getById, deleteById } from '/@/api/platform/menus';
   import { listToTree } from '/@/utils/helper/treeHelper';
   import MenuDrawer from './MenuDrawer.vue';
 
@@ -88,7 +90,7 @@
   });
 
   const [registerDrawer, { openDrawer }] = useDrawer();
-  
+
   function handleAddNew(record?: Recordable) {
     openDrawer(true, {
       layoutId: record?.layoutId,
@@ -116,7 +118,7 @@
       },
     });
   }
-    
+
   function handleChange() {
     reload();
   }

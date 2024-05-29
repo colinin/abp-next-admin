@@ -41,7 +41,7 @@
   import { Button } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction } from '/@/components/Table';
-  import { ApiResourceSecret } from '/@/api/identity-server/model/apiResourcesModel';
+  import { ApiResourceSecret } from '/@/api/identity-server/api-resources/model';
   import { getSecretColumns } from '../datas/TableData';
   import ApiResourceSecretModal from './ApiResourceSecretModal.vue';
 

@@ -15,56 +15,96 @@
       :label-col="{ span: 6 }"
       :wrapper-col="{ span: 18 }"
     >
-    <Tabs v-model:active-key="state.activeTab">
-      <TabPane key="basic" :tab="L('BasicInfo')">
-        <FormItem name="name" :label="L('DisplayName:Name')">
-          <Input :disabled="state.entityEditFlag && !state.allowedChange" :allow-clear="true" v-model:value="state.entity.name" />
-        </FormItem>
-        <FormItem name="defaultValue" :label="L('DisplayName:DefaultValue')">
-          <TextArea
-            :disabled="state.entityEditFlag && !state.allowedChange"
-            :allow-clear="true"
-            :auto-size="{ minRows: 3 }"
-            v-model:value="state.entity.defaultValue"
-          />
-        </FormItem>
-        <FormItem name="displayName" :label="L('DisplayName:DisplayName')">
-          <LocalizableInput :disabled="!state.allowedChange" :allow-clear="true" v-model:value="state.entity.displayName" />
-        </FormItem>
-        <FormItem name="description" :label="L('DisplayName:Description')">
-          <LocalizableInput :disabled="!state.allowedChange" :allow-clear="true" v-model:value="state.entity.description" />
-        </FormItem>
-        <FormItem name="providers" :label="L('DisplayName:Providers')" :extra="L('Description:Providers')">
-          <Select mode="multiple" :disabled="!state.allowedChange" :allow-clear="true" v-model:value="state.entity.providers" :options="providers" />
-        </FormItem>
-        <FormItem name="isInherited" :label="L('DisplayName:IsInherited')" :extra="L('Description:IsInherited')">
-          <Checkbox
-            :disabled="!state.allowedChange"
-            v-model:checked="state.entity.isInherited"
-          >{{ L('DisplayName:IsInherited') }}
-          </Checkbox>
-        </FormItem>
-        <FormItem name="isEncrypted" :label="L('DisplayName:IsEncrypted')" :extra="L('Description:IsEncrypted')">
-          <Checkbox
-            :disabled="!state.allowedChange"
-            v-model:checked="state.entity.isEncrypted"
-          >{{ L('DisplayName:IsEncrypted') }}
-          </Checkbox>
-        </FormItem>
-        <FormItem name="isVisibleToClients" :label="L('DisplayName:IsVisibleToClients')" :extra="L('Description:IsVisibleToClients')">
-          <Checkbox
-            :disabled="!state.allowedChange"
-            v-model:checked="state.entity.isVisibleToClients"
-          >{{ L('DisplayName:IsVisibleToClients') }}
-          </Checkbox>
-        </FormItem>
-      </TabPane>
-      <TabPane key="propertites" :tab="L('Properties')">
-        <FormItem name="extraProperties" label="" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-          <ExtraPropertyDictionary :disabled="!state.allowedChange" :allow-delete="true" :allow-edit="true" v-model:value="state.entity.extraProperties" />
-        </FormItem>
-      </TabPane>
-    </Tabs>
+      <Tabs v-model:active-key="state.activeTab">
+        <TabPane key="basic" :tab="L('BasicInfo')">
+          <FormItem name="name" :label="L('DisplayName:Name')">
+            <Input
+              :disabled="state.entityEditFlag && !state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.name"
+            />
+          </FormItem>
+          <FormItem name="defaultValue" :label="L('DisplayName:DefaultValue')">
+            <TextArea
+              :disabled="state.entityEditFlag && !state.allowedChange"
+              :allow-clear="true"
+              :auto-size="{ minRows: 3 }"
+              v-model:value="state.entity.defaultValue"
+            />
+          </FormItem>
+          <FormItem name="displayName" :label="L('DisplayName:DisplayName')">
+            <LocalizableInput
+              :disabled="!state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.displayName"
+            />
+          </FormItem>
+          <FormItem name="description" :label="L('DisplayName:Description')">
+            <LocalizableInput
+              :disabled="!state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.description"
+            />
+          </FormItem>
+          <FormItem
+            name="providers"
+            :label="L('DisplayName:Providers')"
+            :extra="L('Description:Providers')"
+          >
+            <Select
+              mode="multiple"
+              :disabled="!state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.providers"
+              :options="providers"
+            />
+          </FormItem>
+          <FormItem
+            name="isInherited"
+            :label="L('DisplayName:IsInherited')"
+            :extra="L('Description:IsInherited')"
+          >
+            <Checkbox :disabled="!state.allowedChange" v-model:checked="state.entity.isInherited"
+              >{{ L('DisplayName:IsInherited') }}
+            </Checkbox>
+          </FormItem>
+          <FormItem
+            name="isEncrypted"
+            :label="L('DisplayName:IsEncrypted')"
+            :extra="L('Description:IsEncrypted')"
+          >
+            <Checkbox :disabled="!state.allowedChange" v-model:checked="state.entity.isEncrypted"
+              >{{ L('DisplayName:IsEncrypted') }}
+            </Checkbox>
+          </FormItem>
+          <FormItem
+            name="isVisibleToClients"
+            :label="L('DisplayName:IsVisibleToClients')"
+            :extra="L('Description:IsVisibleToClients')"
+          >
+            <Checkbox
+              :disabled="!state.allowedChange"
+              v-model:checked="state.entity.isVisibleToClients"
+              >{{ L('DisplayName:IsVisibleToClients') }}
+            </Checkbox>
+          </FormItem>
+        </TabPane>
+        <TabPane key="propertites" :tab="L('Properties')">
+          <FormItem
+            name="extraProperties"
+            label=""
+            :label-col="{ span: 0 }"
+            :wrapper-col="{ span: 24 }"
+          >
+            <ExtraPropertyDictionary
+              :disabled="!state.allowedChange"
+              :allow-delete="true"
+              :allow-edit="true"
+              v-model:value="state.entity.extraProperties"
+            />
+          </FormItem>
+        </TabPane>
+      </Tabs>
     </Form>
   </BasicModal>
 </template>
@@ -80,8 +120,16 @@
   import { ValidationEnum, useValidation } from '/@/hooks/abp/useValidation';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useLocalizationSerializer } from '/@/hooks/abp/useLocalizationSerializer';
-  import { GetAsyncByName, CreateAsyncByInput, UpdateAsyncByNameAndInput } from '/@/api/settings-management/definitions';
-  import { SettingDefinitionDto, SettingDefinitionUpdateDto, SettingDefinitionCreateDto } from '/@/api/settings-management/definitions/model';
+  import {
+    GetAsyncByName,
+    CreateAsyncByInput,
+    UpdateAsyncByNameAndInput,
+  } from '/@/api/settings-management/definitions';
+  import {
+    SettingDefinitionDto,
+    SettingDefinitionUpdateDto,
+    SettingDefinitionCreateDto,
+  } from '/@/api/settings-management/definitions/model';
 
   const FormItem = Form.Item;
   const TabPane = Tabs.TabPane;
@@ -148,9 +196,11 @@
     },
   );
 
-  const [registerModal, { closeModal, changeLoading, changeOkLoading }] = useModalInner((record) => {
-    nextTick(() => fetch(record.name));
-  });
+  const [registerModal, { closeModal, changeLoading, changeOkLoading }] = useModalInner(
+    (record) => {
+      nextTick(() => fetch(record.name));
+    },
+  );
 
   function fetch(name?: string) {
     state.activeTab = 'basic';
@@ -160,20 +210,22 @@
         isInherited: true,
       };
       state.allowedChange = true;
-      nextTick(() => state.entityChanged = false);
+      nextTick(() => (state.entityChanged = false));
       return;
     }
     changeLoading(true);
     changeOkLoading(true);
-    GetAsyncByName(name).then((record) => {
-      state.entity = record;
-      state.entityEditFlag = true;
-      state.allowedChange = !record.isStatic;
-    }).finally(() => {
-      changeLoading(false);
-      changeOkLoading(false);
-      nextTick(() => state.entityChanged = false);
-    });
+    GetAsyncByName(name)
+      .then((record) => {
+        state.entity = record;
+        state.entityEditFlag = true;
+        state.allowedChange = !record.isStatic;
+      })
+      .finally(() => {
+        changeLoading(false);
+        changeOkLoading(false);
+        nextTick(() => (state.entityChanged = false));
+      });
   }
 
   function handleBeforeClose(): Promise<boolean> {
@@ -211,20 +263,23 @@
     form?.validate().then(() => {
       changeOkLoading(true);
       const api = state.entityEditFlag
-        ? UpdateAsyncByNameAndInput(state.entity.name, cloneDeep(state.entity) as SettingDefinitionUpdateDto)
+        ? UpdateAsyncByNameAndInput(
+            state.entity.name,
+            cloneDeep(state.entity) as SettingDefinitionUpdateDto,
+          )
         : CreateAsyncByInput(cloneDeep(state.entity) as SettingDefinitionCreateDto);
-      api.then((res) => {
-        createMessage.success(L('Successful'));
-        emits('change', res);
-        form.resetFields();
-        closeModal();
-      }).finally(() => {
-        changeOkLoading(false);
-      })
+      api
+        .then((res) => {
+          createMessage.success(L('Successful'));
+          emits('change', res);
+          form.resetFields();
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
