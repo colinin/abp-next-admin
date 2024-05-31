@@ -1,12 +1,20 @@
 import type { BasicTableProps, TableRowSelection, BasicColumn } from '../types/table';
-import { Ref, ComputedRef, ref } from 'vue';
-import { computed, unref, nextTick, watch } from 'vue';
+import { Ref, ComputedRef, ref, computed, unref, nextTick, watch } from 'vue';
 import { getViewportOffset } from '/@/utils/domUtils';
 import { isBoolean } from '/@/utils/is';
 import { useWindowSizeFn } from '/@/hooks/event/useWindowSizeFn';
-import { useModalContext } from '/@/components/Modal';
 import { onMountedOrActivated } from '/@/hooks/core/onMountedOrActivated';
-import { useDebounceFn } from '@vueuse/core';
+import { useModalContext } from '/@/components/Modal';
+import { useDebounceFn, promiseTimeout } from '@vueuse/core';
+
+import {
+  footerHeight as layoutFooterHeight,
+  layoutMultipleHeadePlaceholderTime,
+} from '/@/settings/designSetting';
+
+import { useRootSetting } from '/@/hooks/setting/useRootSetting';
+
+const { getShowFooter, getFullContent } = useRootSetting();
 
 export function useTableScroll(
   propsRef: ComputedRef<BasicTableProps>,
@@ -29,8 +37,20 @@ export function useTableScroll(
   });
 
   watch(
-    () => [unref(getCanResize), unref(getDataSourceRef)?.length],
+    () => [unref(getCanResize), unref(getDataSourceRef)?.length, unref(getShowFooter)],
     () => {
+      debounceRedoHeight();
+    },
+    {
+      flush: 'post',
+    },
+  );
+
+  watch(
+    () => [unref(getFullContent)],
+    async () => {
+      // 等待动画结束后200毫秒
+      await promiseTimeout(layoutMultipleHeadePlaceholderTime * 1000 + 200);
       debounceRedoHeight();
     },
     {
@@ -55,22 +75,13 @@ export function useTableScroll(
   let footerEl: HTMLElement | null;
   let bodyEl: HTMLElement | null;
 
-  async function calcTableHeight() {
-    const { resizeHeightOffset, pagination, maxHeight, isCanResizeParent, useSearchForm } =
-      unref(propsRef);
-    const tableData = unref(getDataSourceRef);
+  /**
+   * table wrapper padding 的高度
+   * @description 来自于 .vben-basic-table .ant-table-wrapper
+   */
+  const tableWrapperPadding = 6;
 
-    const table = unref(tableElRef);
-    if (!table) return;
-
-    const tableEl: Element = table.$el;
-    if (!tableEl) return;
-
-    if (!bodyEl) {
-      bodyEl = tableEl.querySelector('.ant-table-body');
-      if (!bodyEl) return;
-    }
-
+  function handleScrollBar(bodyEl: HTMLElement, tableEl: Element) {
     const hasScrollBarY = bodyEl.scrollHeight > bodyEl.clientHeight;
     const hasScrollBarX = bodyEl.scrollWidth > bodyEl.clientWidth;
 
@@ -87,6 +98,178 @@ export function useTableScroll(
     } else {
       !tableEl.classList.contains('hide-scrollbar-x') && tableEl.classList.add('hide-scrollbar-x');
     }
+  }
+
+  /**
+   * 计算分页器高度
+   * @param tableEl table element
+   * @returns number
+   */
+  function caclPaginationHeight(tableEl: Element): number {
+    const { pagination } = unref(propsRef);
+
+    let paginationHeight = 0;
+    if (!isBoolean(pagination)) {
+      // 从 Dom 获取
+      if (!paginationEl) {
+        paginationEl = tableEl.querySelector('.ant-pagination') as HTMLElement;
+      }
+      if (paginationEl) {
+        // 分页 margin-top
+        const paginationElMarginTop = parseInt(getComputedStyle(paginationEl).marginTop);
+        // 分页高度
+        const offsetHeight = paginationEl.offsetHeight;
+        paginationHeight = offsetHeight + paginationElMarginTop;
+      } else {
+        // 找不到分页组件，缺省给予默认分页 margin-top + 高度
+        paginationHeight = 10 + 24;
+      }
+    } else {
+      // 不显示分页，pagination 为 false 的时候
+      paginationHeight = 0;
+    }
+    return paginationHeight;
+  }
+
+  function caclFooterHeight(tableEl: Element): number {
+    const { pagination } = unref(propsRef);
+    let footerHeight = 0;
+    if (!isBoolean(pagination)) {
+      if (!footerEl) {
+        footerEl = tableEl.querySelector('.ant-table-footer') as HTMLElement;
+      } else {
+        const offsetHeight = footerEl.offsetHeight;
+        footerHeight += offsetHeight || 0;
+      }
+    }
+    return footerHeight;
+  }
+
+  function calcHeaderHeight(headEl: Element): number {
+    let headerHeight = 0;
+    if (headEl) {
+      headerHeight = (headEl as HTMLElement).offsetHeight;
+    }
+    return headerHeight;
+  }
+
+  /**
+   * 计算从表头一直到body底部的总高度
+   * @param tableEl table element
+   * @param headEl table 页头 element
+   * @returns number
+   */
+  function calcBottomAndPaddingHeight(tableEl: Element, headEl: Element) {
+    const { isCanResizeParent } = unref(propsRef);
+    let bottomIncludeBody = 0;
+    if (unref(wrapRef) && isCanResizeParent) {
+      // 继承父元素高度
+      const wrapHeight = unref(wrapRef)?.offsetHeight ?? 0;
+
+      let formHeight = unref(formRef)?.$el.offsetHeight ?? 0;
+      if (formHeight) {
+        // 来自于 .vben-basic-table-form-container .ant-form 以及 .vben-basic-table-form-container
+        formHeight += 16 + 16 * 2;
+      }
+
+      bottomIncludeBody = wrapHeight - tableWrapperPadding - formHeight;
+    } else {
+      // 缺省 wrapRef 情况下
+      bottomIncludeBody = getViewportOffset(headEl).bottomIncludeBody;
+    }
+
+    return bottomIncludeBody;
+  }
+
+  /**
+   * 计算 table 在 modal 内 modal 所占用的高度
+   * @param tableEl table element
+   * @returns number
+   */
+  function calcModalHeight(tableEl: Element) {
+    // 找一下 table 是否在 modal 内，获得 modal、wrap、footer，并考虑 fullscreen 的情况
+    let modalEl: Nullable<HTMLElement> = null;
+    let modalWrapEl: Nullable<HTMLElement> = null;
+    let modalFooterEl: Nullable<HTMLElement> = null;
+    let modalElIterator: HTMLElement = tableEl.parentElement!;
+    let modalIsFullscreen = false;
+    while (modalElIterator !== document.body) {
+      if (modalElIterator.classList.contains('ant-modal')) {
+        modalEl = modalElIterator;
+        modalWrapEl = modalEl.parentElement;
+        modalFooterEl = modalElIterator.querySelector('.ant-modal-content>.ant-modal-footer');
+        modalIsFullscreen = modalWrapEl?.classList.contains('fullscreen-modal') ?? false;
+        break;
+      }
+      modalElIterator = modalElIterator.parentElement!;
+    }
+
+    if (modalEl) {
+      // table 在 modal 内
+
+      // modal top
+      const { top: modalTop = 0 } = modalEl ? getViewportOffset(modalEl) : {};
+
+      // 来自于 .ant-modal，非全屏为 24，全屏为 0
+      const modalBottom = modalIsFullscreen ? 0 : 24;
+
+      //  modal footer 高度
+      const modalFooterHeight = modalFooterEl?.offsetHeight ?? 0;
+
+      // modal footer 边距，来自于 .ant-modal .ant-modal-footer
+      const modalFooterMarginTop = modalFooterEl
+        ? modalIsFullscreen
+          ? 0
+          : parseInt(getComputedStyle(modalFooterEl).marginTop)
+        : 0;
+
+      // 来自于 .ant-modal .ant-modal-body > .scrollbar
+      const modalScrollBarHeight = 14;
+
+      return (
+        (modalTop > modalBottom ? modalTop : modalBottom) +
+        modalFooterHeight +
+        modalFooterMarginTop +
+        modalScrollBarHeight
+      );
+    }
+
+    // table 不住 modal 内
+    return 0;
+  }
+
+  /**
+   * 根据样式返回一些间距高度
+   * @returns number
+   */
+  function getMarginPaddingHeight() {
+    const { isCanResizeParent } = unref(propsRef);
+
+    if (unref(wrapRef) && isCanResizeParent) {
+      // 继承父元素高度
+      return tableWrapperPadding;
+    }
+    return (
+      tableWrapperPadding + 16 // 来自于 .vben-basic-table-form-container 或是 .p-4
+    );
+  }
+
+  async function calcTableHeight() {
+    const { resizeHeightOffset, maxHeight } = unref(propsRef);
+    const tableData = unref(getDataSourceRef);
+
+    const table = unref(tableElRef);
+    if (!table) return;
+
+    const tableEl: Element = table.$el;
+    if (!tableEl) return;
+
+    if (!bodyEl) {
+      bodyEl = tableEl.querySelector('.ant-table-body');
+      if (!bodyEl) return;
+    }
+
+    handleScrollBar(bodyEl, tableEl);
 
     bodyEl!.style.height = 'unset';
 
@@ -99,74 +282,32 @@ export function useTableScroll(
 
     if (!headEl) return;
 
-    // Table height from bottom height-custom offset
-    let paddingHeight = 32;
-    // Pager height
-    let paginationHeight = 2;
-    if (!isBoolean(pagination)) {
-      paginationEl = tableEl.querySelector('.ant-pagination') as HTMLElement;
-      if (paginationEl) {
-        const offsetHeight = paginationEl.offsetHeight;
-        paginationHeight += offsetHeight || 0;
-      } else {
-        // TODO First fix 24
-        paginationHeight += 24;
-      }
-    } else {
-      paginationHeight = -8;
-    }
+    const paginationHeight = caclPaginationHeight(tableEl);
+    const footerHeight = caclFooterHeight(tableEl);
+    const headerHeight = calcHeaderHeight(headEl);
+    const bottomIncludeBody = calcBottomAndPaddingHeight(tableEl, headEl);
 
-    let footerHeight = 0;
-    if (!isBoolean(pagination)) {
-      if (!footerEl) {
-        footerEl = tableEl.querySelector('.ant-table-footer') as HTMLElement;
-      } else {
-        const offsetHeight = footerEl.offsetHeight;
-        footerHeight += offsetHeight || 0;
-      }
-    }
+    const modalHeight = calcModalHeight(tableEl);
 
-    let headerHeight = 0;
-    if (headEl) {
-      headerHeight = (headEl as HTMLElement).offsetHeight;
-    }
+    const marginPaddingHeight = getMarginPaddingHeight();
 
-    let bottomIncludeBody = 0;
-    if (unref(wrapRef) && isCanResizeParent) {
-      const tablePadding = 12;
-      const formMargin = 16;
-      let paginationMargin = 10;
-      const wrapHeight = unref(wrapRef)?.offsetHeight ?? 0;
-
-      let formHeight = unref(formRef)?.$el.offsetHeight ?? 0;
-      if (formHeight) {
-        formHeight += formMargin;
-      }
-      if (isBoolean(pagination) && !pagination) {
-        paginationMargin = 0;
-      }
-      if (isBoolean(useSearchForm) && !useSearchForm) {
-        paddingHeight = 0;
-      }
-
-      const headerCellHeight =
-        (tableEl.querySelector('.ant-table-title') as HTMLElement)?.offsetHeight ?? 0;
-
-      console.log(wrapHeight - formHeight - headerCellHeight - tablePadding - paginationMargin);
-      bottomIncludeBody =
-        wrapHeight - formHeight - headerCellHeight - tablePadding - paginationMargin;
-    } else {
-      // Table height from bottom
-      bottomIncludeBody = getViewportOffset(headEl).bottomIncludeBody;
-    }
-
-    let height =
+    // Math.floor 宁愿小1px，也不溢出
+    let height = Math.floor(
       bottomIncludeBody -
-      (resizeHeightOffset || 0) -
-      paddingHeight -
-      paginationHeight -
-      footerHeight -
-      headerHeight;
+        (resizeHeightOffset || 0) -
+        paginationHeight -
+        footerHeight -
+        headerHeight -
+        // 弹窗（如果有）相关高度
+        modalHeight -
+        // 页面 footer 高度（非弹窗的时候）
+        (getShowFooter.value && modalHeight <= 0 ? layoutFooterHeight : 0) -
+        // 样式间距高度
+        marginPaddingHeight -
+        // 预留非整数高度溢出（如实际高度为100.5，offsetHeight 的值为101）
+        1,
+    );
+
     height = (height > maxHeight! ? (maxHeight as number) : height) ?? height;
     setHeight(height);
 
@@ -193,7 +334,9 @@ export function useTableScroll(
     columns.forEach((item) => {
       width += Number.parseFloat(item.width as string) || 0;
     });
-    const unsetWidthColumns = columns.filter((item) => !Reflect.has(item, 'width'));
+    const unsetWidthColumns = columns.filter(
+      (item) => !Reflect.has(item, 'width') && item.ifShow !== false,
+    );
 
     const len = unsetWidthColumns.length;
     if (len !== 0) {
@@ -213,7 +356,7 @@ export function useTableScroll(
       y: canResize ? tableHeight : null,
       scrollToFirstRowOnChange: false,
       ...scroll,
-    };
+    } as BasicTableProps['scroll'];
   });
 
   return { getScrollRef, redoHeight };

@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.Account;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authentication.QQ;
 using LINGYUN.Abp.Authentication.WeChat;
@@ -77,6 +78,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpAliyunSmsModule)
     )]
@@ -114,6 +116,7 @@ public partial class AuthServerModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
+        ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
@@ -126,10 +129,7 @@ public partial class AuthServerModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        });
+        app.UseForwardedHeaders();
         app.UseMapRequestLocalization();
         if (env.IsDevelopment())
         {

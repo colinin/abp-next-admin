@@ -23,7 +23,7 @@
       </FormItem>
       <template v-if="formData.type === 'Email'">
         <FormItem
-          name="email"
+          name="emailAddress"
           class="enter-x"
           :label="L('DisplayName:EmailAddress')"
           :rules="[
@@ -43,7 +43,7 @@
             size="large"
             class="fix-auto-fill"
             autocomplete="off"
-            v-model:value="formData.email"
+            v-model:value="formData.emailAddress"
           />
         </FormItem>
         <FormItem name="code" class="enter-x" :label="L('DisplayName:EmailVerifyCode')" required>
@@ -52,7 +52,7 @@
             class="fix-auto-fill"
             autocomplete="off"
             v-model:value="formData.code"
-            :sendCodeApi="() => handleSendCode('email', sendEmailSigninCode)"
+            :sendCodeApi="() => handleSendCode('emailAddress', sendEmailSigninCode)"
           />
         </FormItem>
       </template>
@@ -78,7 +78,7 @@
             size="large"
             class="fix-auto-fill"
             autocomplete="off"
-            v-model:value="formData.email"
+            v-model:value="formData.emailAddress"
           />
         </FormItem>
         <FormItem name="code" class="enter-x" :label="L('DisplayName:SmsVerifyCode')" required>
@@ -152,7 +152,7 @@
 
   const formData = reactive({
     type: '',
-    email: '',
+    emailAddress: '',
     phoneNumber: '',
     code: '',
   });
@@ -166,14 +166,16 @@
   function handleResetValidate() {
     formRef.value?.clearValidate();
     formData.code = '';
-    formData.email = '';
+    formData.emailAddress = '';
     formData.phoneNumber = '';
   }
 
   function handleSendCode(field: string, sendCodeApi: (...args) => Promise<void>) {
     return validFormFields([field])
       .then(() => {
-        return sendCodeApi(formData[field])
+        return sendCodeApi({
+          [field]: formData[field],
+        })
           .then(() => {
             return Promise.resolve(true);
           })

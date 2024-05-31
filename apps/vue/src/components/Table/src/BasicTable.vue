@@ -33,13 +33,17 @@
       v-show="getEmptyDataIsShowTable"
       @change="handleTableChange"
       @resizeColumn="handleResizeColumn"
+      @expand="handleTableExpand"
     >
       <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
       <template #headerCell="{ column }">
-        <HeaderCell :column="column" />
+        <slot name="headerCell" v-bind="{ column }">
+          <HeaderCell :column="column" />
+        </slot>
       </template>
+       <!-- 增加对antdv3.x兼容 -->
       <template #bodyCell="data">
         <slot name="bodyCell" v-bind="data || {}"></slot>
       </template>
@@ -62,19 +66,10 @@
     TableActionType,
     SizeType,
     ColumnChangeParam,
+    InnerMethods,
   } from './types/table';
 
-  import {
-    defineComponent,
-    ref,
-    reactive,
-    computed,
-    unref,
-    toRaw,
-    inject,
-    watchEffect,
-    nextTick,
-  } from 'vue';
+  import { defineComponent, ref, reactive, computed, unref, toRaw, inject, watchEffect, nextTick } from 'vue';
   import { Button, Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { useModal } from '/@/components/Modal/index';
@@ -209,12 +204,12 @@
         emit,
       );
 
-      function handleTableChange(...args) {
-        onTableChange.call(undefined, ...args);
-        emit('change', ...args);
+      function handleTableChange(pagination: any, filters: any, sorter: any, extra: any) {
+        onTableChange(pagination, filters, sorter);
+        emit('change', pagination, filters, sorter);
         // 解决通过useTable注册onChange时不起作用的问题
         const { onChange } = unref(getProps);
-        onChange && isFunction(onChange) && onChange.call(undefined, ...args);
+        onChange && isFunction(onChange) && onChange(pagination, filters, sorter, extra);
       }
 
       const {
@@ -248,7 +243,7 @@
 
       const { getRowClassName } = useTableStyle(getProps, prefixCls);
 
-      const { getExpandOption, expandAll, expandRows, collapseAll } = useTableExpand(
+      const { getExpandOption, expandAll, expandRows, collapseRows, collapseAll, handleTableExpand } = useTableExpand(
         getProps,
         tableData,
         emit,
@@ -265,15 +260,14 @@
         },
       };
 
+      const methods: InnerMethods = {
+        clearSelectedRowKeys,
+        getSelectRowKeys,
+      };
+
       const { getAlertEnabled, getAlertMessage } = useTableAlert(getProps, getRowSelectionRef);
 
-      const { getHeaderProps } = useTableHeader(
-        getProps,
-        slots,
-        handlers,
-        getAlertEnabled,
-        getAlertMessage,
-      );
+      const { getHeaderProps } = useTableHeader(getProps, slots, handlers, methods, getAlertEnabled, getAlertMessage);
 
       const { getFooterProps } = useTableFooter(
         getProps,
@@ -289,8 +283,9 @@
         getFormSlotKeys,
         handleSearchInfoChange,
         handleAdvanceSearchChange,
-        handleAdvanceSearchInfoChange,
-      } = useTableForm(getProps, slots, fetch, getLoading, formActions.setFieldsValue);
+        handleAdvanceSearchInfoChange
+      } =
+        useTableForm(getProps, slots, fetch, getLoading, formActions.setFieldsValue);
 
       const getBindValues = computed(() => {
         const dataSource = unref(getDataSourceRef);
@@ -310,9 +305,9 @@
           footer: unref(getFooterProps),
           ...unref(getExpandOption),
         };
-        if (slots.expandedRowRender) {
-          propsData = omit(propsData, 'scroll');
-        }
+        // if (slots.expandedRowRender) {
+        //   propsData = omit(propsData, 'scroll');
+        // }
 
         propsData = omit(propsData, ['class', 'onChange']);
         return propsData;
@@ -373,6 +368,7 @@
         setCacheColumnsByField,
         expandAll,
         expandRows,
+        collapseRows,
         collapseAll,
         scrollTo,
         getSize: () => {
@@ -427,6 +423,7 @@
         getWrapperClass,
         columns: getViewColumns,
         handleResizeColumn,
+        handleTableExpand,
       };
     },
   });

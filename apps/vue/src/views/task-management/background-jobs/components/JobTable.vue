@@ -149,7 +149,7 @@
   const { L } = useLocalization(['TaskManagement', 'AbpUi']);
   const { hasPermission } = usePermission();
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { reload, getSelectRowKeys, clearSelectedRowKeys }] = useTable({
+  const [registerTable, { reload, clearSelectedRowKeys }] = useTable({
     rowKey: 'id',
     title: L('BackgroundJobs'),
     columns: getDataColumns(),
@@ -182,7 +182,7 @@
   });
   const selectedRowKeys = ref<string[]>([]);
   const isMultiSelected = computed(() => {
-    return selectedRowKeys.value.length > 0;
+    return selectedRowKeys.value.length;
   });
 
   function handleSelectChange(keys) {
@@ -223,24 +223,21 @@
   }
 
   function handleStart() {
-    const selectKeys = getSelectRowKeys();
-    bulkStart(selectKeys).then(() => {
+    bulkStart(selectedRowKeys.value).then(() => {
       createMessage.success(L('Successful'));
       reloadTable();
     });
   }
 
   function handleStop() {
-    const selectKeys = getSelectRowKeys();
-    bulkStop(selectKeys).then(() => {
+    bulkStop(selectedRowKeys.value).then(() => {
       createMessage.success(L('Successful'));
       reloadTable();
     });
   }
 
   function handleDeleteMany() {
-    const selectKeys = getSelectRowKeys();
-    if (selectKeys.length <= 0) {
+    if (selectedRowKeys.value.length <= 0) {
       return;
     }
     createConfirm({
@@ -249,7 +246,7 @@
       content: L('MultipleSelectJobsWillBeDeletedMessage'),
       okCancel: true,
       onOk: () => {
-        return bulkDelete(selectKeys).then(() => {
+        return bulkDelete(selectedRowKeys.value).then(() => {
           reloadTable();
         });
       },

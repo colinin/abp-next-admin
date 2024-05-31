@@ -1,13 +1,20 @@
 import type { VNodeChild } from 'vue';
 import type { PaginationProps } from './pagination';
 import type { FormProps } from '/@/components/Form';
-import type { ColumnProps } from 'ant-design-vue/lib/table';
-import type { TableRowSelection as ITableRowSelection } from 'ant-design-vue/lib/table/interface';
+import type {
+  TableRowSelection as ITableRowSelection,
+  Key,
+} from 'ant-design-vue/lib/table/interface';
 import type { AdvanceSearchProps } from './advancedSearch';
+
+import type { ColumnProps } from 'ant-design-vue/lib/table';
 
 import { ComponentType } from './componentType';
 import { VueNode } from '/@/utils/propTypes';
 import { RoleEnum } from '/@/enums/roleEnum';
+import { FixedType } from 'ant-design-vue/es/vc-table/interface';
+
+import AntDesignVueTable from 'ant-design-vue/es/table';
 
 export declare type SortOrder = 'ascend' | 'descend';
 
@@ -18,9 +25,12 @@ export interface TableCurrentDataSource<T = Recordable> {
 export interface TableRowSelection<T = any> extends ITableRowSelection {
   /**
    * Callback executed when selected rows change
-   * @type Function
+   * @param selectedRowKeys 已选的 keyValues
+   * @param selectedRows 已选的 records
+   * @param isClickCustomRow 是否是点击行触发（反之，就是点击checkbox/radiobox）
+   * @returns void
    */
-  onChange?: (selectedRowKeys: string[] | number[], selectedRows: T[]) => any;
+  onChange?: (selectedRowKeys: Key[], selectedRows: T[], isClickCustomRow?: boolean) => void;
 
   /**
    * Callback executed when select/deselect one row
@@ -38,7 +48,7 @@ export interface TableRowSelection<T = any> extends ITableRowSelection {
    * Callback executed when row selection is inverted
    * @type Function
    */
-  onSelectInvert?: (selectedRows: string[] | number[]) => any;
+  onSelectInvert?: (selectedRows: Key[]) => any;
 }
 
 export interface TableCustomRecord<T> {
@@ -84,22 +94,23 @@ export interface GetColumnsParams {
 export type SizeType = 'default' | 'middle' | 'small' | 'large';
 
 export interface TableActionType {
-  reload: (opt?: FetchParams) => Promise<Recordable<any>[] | undefined | void>;
+  reload: (opt?: FetchParams) => Promise<Recordable<any>[] | undefined>;
   setSelectedRows: (rows: Recordable[]) => void;
   getSelectRows: <T = Recordable>() => T[];
   clearSelectedRowKeys: () => void;
   expandAll: () => void;
-  expandRows: (keys: string[] | number[]) => void;
   collapseAll: () => void;
+  expandRows: (keyValues: Key[]) => void;
+  collapseRows: (keyValues: Key[]) => void;
   scrollTo: (pos: string) => void; // pos: id | "top" | "bottom"
-  getSelectRowKeys: () => string[];
-  deleteSelectRowByKey: (key: string) => void;
+  getSelectRowKeys: () => Key[];
+  deleteSelectRowByKey: (keyValue: Key) => void;
   setPagination: (info: Partial<PaginationProps>) => void;
   setTableData: <T = Recordable>(values: T[]) => void;
-  updateTableDataRecord: (rowKey: string | number, record: Recordable) => Recordable | void;
-  deleteTableDataRecord: (rowKey: string | number | string[] | number[]) => void;
+  updateTableDataRecord: (keyValue: Key, record: Recordable) => Recordable | void;
+  deleteTableDataRecord: (keyValues: Key | Key[]) => void;
   insertTableDataRecord: (record: Recordable | Recordable[], index?: number) => Recordable[] | void;
-  findTableDataRecord: (rowKey: string | number) => Recordable | void;
+  findTableDataRecord: (keyValue: Key) => Recordable | void;
   getColumns: (opt?: GetColumnsParams) => BasicColumn[];
   setColumns: (columns: BasicColumn[] | string[]) => void;
   getDataSource: <T = Recordable>() => T[];
@@ -107,7 +118,7 @@ export interface TableActionType {
   setLoading: (loading: boolean) => void;
   setProps: (props: Partial<BasicTableProps>) => void;
   redoHeight: () => void;
-  setSelectedRowKeys: (rowKeys: string[] | number[]) => void;
+  setSelectedRowKeys: (keyValues: Key[]) => void;
   getPaginationRef: () => PaginationProps | boolean;
   getSize: () => SizeType;
   getRowSelection: () => TableRowSelection<Recordable>;
@@ -117,6 +128,7 @@ export interface TableActionType {
   setShowPagination: (show: boolean) => Promise<void>;
   getShowPagination: () => boolean;
   setCacheColumnsByField?: (dataIndex: string | undefined, value: BasicColumn) => void;
+  setCacheColumns?: (columns: BasicColumn[]) => void;
 }
 
 export interface FetchSetting {
@@ -133,15 +145,17 @@ export interface FetchSetting {
 export interface TableSetting {
   redo?: boolean;
   size?: boolean;
-  setting?: boolean;
-  fullScreen?: boolean;
   export?: boolean;
+  setting?: boolean;
+  settingCache?: boolean;
+  fullScreen?: boolean;
 }
 
 export interface BasicTableProps<T = any> {
   // 点击行选中
   clickToRowSelect?: boolean;
   isTreeTable?: boolean;
+  accordion?: boolean; // isTreeTable 或 expandRowByClick 时支持
   // 自定义排序方法
   sortFn?: (sortInfo: SorterResult) => any;
   // 排序方法
@@ -187,7 +201,7 @@ export interface BasicTableProps<T = any> {
   useSearchForm?: boolean;
   // 表单配置
   formConfig?: Partial<FormProps>;
-   // 高级查询配置
+  // 高级查询配置
   advancedSearchConfig?: Partial<AdvanceSearchProps>;
   // 使用已选择提示
   useSelectedAlert?: boolean;
@@ -210,7 +224,7 @@ export interface BasicTableProps<T = any> {
   // 在分页改变的时候清空选项
   clearSelectOnPageChange?: boolean;
   //
-  rowKey?: string | ((record: Recordable) => string);
+  rowKey?: InstanceType<typeof AntDesignVueTable>['$props']['rowKey'];
   // 数据
   dataSource?: Recordable[];
   // 标题右侧提示
@@ -313,12 +327,18 @@ export interface BasicTableProps<T = any> {
   rowSelection?: TableRowSelection;
 
   /**
+   * Show table selection bar（显示多选状态栏）
+   * @type boolean
+   */
+  showSelectionBar?: boolean;
+
+  /**
    * Set horizontal or vertical scrolling, can also be used to specify the width and height of the scroll area.
    * It is recommended to set a number for x, if you want to set it to true,
    * you need to add style .ant-table td { white-space: nowrap; }.
    * @type object
    */
-  scroll?: { x?: string | number | true; y?: string | number };
+  scroll?: InstanceType<typeof AntDesignVueTable>['$props']['scroll'];
 
   /**
    * Whether to show table header
@@ -385,7 +405,7 @@ export interface BasicTableProps<T = any> {
   beforeEditSubmit?: (data: {
     record: Recordable;
     index: number;
-    key: string | number;
+    key: Key;
     value: any;
   }) => Promise<any>;
 
@@ -404,7 +424,7 @@ export interface BasicTableProps<T = any> {
    * @param expanded
    * @param record
    */
-  onExpand?: (expande: boolean, record: T) => void;
+  onExpand?: (expanded: boolean, record: T) => void;
 
   /**
    * Callback executed when the expanded rows change
@@ -437,11 +457,13 @@ export interface BasicColumn extends ColumnProps<Recordable> {
 
   slots?: Recordable;
 
+  // 自定义header渲染
+  customHeaderRender?: (column: BasicColumn) => string | VNodeChild | JSX.Element;
   // Whether to hide the column by default, it can be displayed in the column configuration
   defaultHidden?: boolean;
 
   // Help text for table column header
-  helpMessage?: string | string[];
+  helpMessage?: string | string[] | VNodeChild | JSX.Element;
 
   format?: CellFormat;
 
@@ -471,6 +493,7 @@ export interface BasicColumn extends ColumnProps<Recordable> {
     record: Recordable;
     column: BasicColumn;
     index: number;
+    currentValue: string | number | boolean | Recordable;
   }) => VNodeChild | JSX.Element;
   // 动态 Disabled
   editDynamicDisabled?: boolean | ((record: Recordable) => boolean);
@@ -485,4 +508,20 @@ export type ColumnChangeParam = {
 export interface InnerHandlers {
   onColumnsChange: (data: ColumnChangeParam[]) => void;
   deSelect: () => void;
+}
+
+export interface InnerMethods {
+  clearSelectedRowKeys: TableActionType['clearSelectedRowKeys'];
+  getSelectRowKeys: TableActionType['getSelectRowKeys'];
+}
+
+export interface ColumnOptionsType {
+  value: string;
+  label: string;
+  //
+  column: {
+    defaultHidden?: boolean;
+  };
+  //
+  fixed?: FixedType;
 }

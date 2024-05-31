@@ -27,15 +27,18 @@ public class Program
                     {
                         config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
                     }
-
-                    config.AddJsonFile("yarp.json", true, true).AddEnvironmentVariables();
                 })
                 .UseSerilog((context, provider, config) =>
                 {
                     config.ReadFrom.Configuration(context.Configuration);
                 });
 
-            await builder.AddApplicationAsync<InternalGatewayModule>();
+            await builder.AddApplicationAsync<InternalGatewayModule>(options =>
+            {
+                InternalGatewayModule.ApplicationName = Environment.GetEnvironmentVariable("APPLICATION_NAME")
+                    ?? InternalGatewayModule.ApplicationName;
+                options.ApplicationName = InternalGatewayModule.ApplicationName;
+            });
             var app = builder.Build();
             await app.InitializeApplicationAsync();
             await app.RunAsync();

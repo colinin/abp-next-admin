@@ -297,11 +297,14 @@
 		<PackageVersion Include="NEST" Version="7.15.1" />
 		<PackageVersion Include="NRules" Version="0.9.2" />
 		<PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
-		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.8.0" />
-		<PackageVersion Include="OpenTelemetry.Exporter.Zipkin" Version="1.8.0" />
+		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.8.1" />
+		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.8.1" />
+		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.8.1" />
+		<PackageVersion Include="OpenTelemetry.Exporter.Zipkin" Version="1.8.1" />
 		<PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.8.1" />
 		<PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.8.1" />
 		<PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.0.0-beta.11" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.8.1" />
 		<PackageVersion Include="Polly" Version="8.2.0" />
 		<PackageVersion Include="Quartz.Serialization.Json" Version="3.7.0" />
 		<PackageVersion Include="RulesEngine" Version="4.0.0" />
@@ -313,6 +316,6 @@
 		<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
 		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
 		<PackageVersion Include="TencentCloudSDK" Version="3.0.712" />
-		<PackageVersion Include="Yarp.ReverseProxy" Version="1.1.1" />
+		<PackageVersion Include="Yarp.ReverseProxy" Version="2.1.0" />
 	</ItemGroup>
 </Project>

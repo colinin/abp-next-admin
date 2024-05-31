@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <BasicTable @register="registerTable">
+    <BasicTable @register="registerTable" @selection-change="handleSelectionChange">
       <template #toolbar>
         <Button
           v-if="isManyRecordSelected"
@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
   import { Button, Tag } from 'ant-design-vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
@@ -78,10 +78,11 @@
   } from '/@/api/webhooks/send-attempts';
   import SendAttemptModal from './SendAttemptModal.vue';
 
+  const selectionKeys = ref<string[]>([]);
   const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { reload, setLoading, getSelectRowKeys, clearSelectedRowKeys }] = useTable({
+  const [registerTable, { reload, setLoading, clearSelectedRowKeys }] = useTable({
     rowKey: 'id',
     title: L('SendAttempts'),
     columns: getDataColumns(),
@@ -107,9 +108,12 @@
     },
   });
   const isManyRecordSelected = computed(() => {
-    const selectedKeys = getSelectRowKeys();
-    return selectedKeys.length > 0;
+    return selectionKeys.value.length;
   });
+
+  function handleSelectionChange(e: { keys: string[] }) {
+    selectionKeys.value = e.keys;
+  }
 
   function handleEdit(record) {
     openModal(true, record);
@@ -122,10 +126,9 @@
       content: L('ItemWillBeDeletedMessageWithFormat', { 0: L('SelectedItems') }),
       okCancel: true,
       onOk: () => {
-        const selectKeys = getSelectRowKeys();
         setLoading(true);
         return DeleteManyAsyncByInput({
-          recordIds: selectKeys,
+          recordIds: selectionKeys.value,
         })
           .then(() => {
             createMessage.success(L('SuccessfullyDeleted'));
@@ -188,10 +191,9 @@
       content: L('ItemWillBeResendMessageWithFormat', { 0: L('SelectedItems') }),
       okCancel: true,
       onOk: () => {
-        const selectKeys = getSelectRowKeys();
         setLoading(true);
         return ResendManyAsyncByInput({
-          recordIds: selectKeys,
+          recordIds: selectionKeys.value,
         })
           .then(() => {
             createMessage.success(L('Successful'));

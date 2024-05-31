@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -78,6 +79,7 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpAutofacModule)
     )]
@@ -99,7 +101,6 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        ConfigureMvc();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureBackgroundTasks();
@@ -113,6 +114,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         ConfigureMultiTenancy(configuration);
         ConfigureSwagger(context.Services);
         ConfigureJsonSerializer(configuration);
+        ConfigureMvc(context.Services, configuration);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -123,10 +125,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        });
+        app.UseForwardedHeaders();
         app.UseAbpRequestLocalization();
         app.UseStaticFiles();
         app.UseCorrelationId();

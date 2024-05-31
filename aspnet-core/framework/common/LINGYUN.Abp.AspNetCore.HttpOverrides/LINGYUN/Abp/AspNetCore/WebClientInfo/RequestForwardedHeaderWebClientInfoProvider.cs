@@ -1,43 +1,42 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using System;
 using System.Linq;
 using Volo.Abp.AspNetCore.WebClientInfo;
-using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.AspNetCore.WebClientInfo
+namespace LINGYUN.Abp.AspNetCore.WebClientInfo;
+
+public class RequestForwardedHeaderWebClientInfoProvider : HttpContextWebClientInfoProvider
 {
-    [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
-    [ExposeServices(
-        typeof(IWebClientInfoProvider),
-        typeof(HttpContextWebClientInfoProvider))]
-    public class RequestForwardedHeaderWebClientInfoProvider : HttpContextWebClientInfoProvider
+    protected ForwardedHeadersOptions Options { get; }
+    public RequestForwardedHeaderWebClientInfoProvider(
+        ILogger<HttpContextWebClientInfoProvider> logger, 
+        IOptions<ForwardedHeadersOptions> options,
+        IHttpContextAccessor httpContextAccessor) 
+        : base(logger, httpContextAccessor)
     {
-        protected ForwardedHeadersOptions Options { get; }
-        public RequestForwardedHeaderWebClientInfoProvider(
-            ILogger<HttpContextWebClientInfoProvider> logger, 
-            IOptions<ForwardedHeadersOptions> options,
-            IHttpContextAccessor httpContextAccessor) 
-            : base(logger, httpContextAccessor)
-        {
-            Options = options.Value;
-        }
+        Options = options.Value;
+    }
 
-        protected override string GetClientIpAddress()
+    protected override string GetClientIpAddress()
+    {
+        string forwardedForHeader = null;
+        var requestHeaders = HttpContextAccessor.HttpContext?.Request?.Headers;
+        if (requestHeaders != null &&
+            Options.ForwardedHeaders.HasFlag(ForwardedHeaders.XForwardedFor) &&
+            requestHeaders.TryGetValue(Options.ForwardedForHeaderName, out StringValues headers) == true)
         {
-            IHeaderDictionary requestHeaders = HttpContextAccessor.HttpContext?.Request?.Headers;
-            if (requestHeaders != null &&
-                requestHeaders.TryGetValue(Options.ForwardedForHeaderName, out StringValues headers) == true)
+            var headerStr = headers.ToString();
+            if (!headerStr.IsNullOrWhiteSpace())
             {
-                if (!StringValues.IsNullOrEmpty(headers))
-                {
-                    return headers.Last();
-                }
+                // 原始客户端IP永远是第一个
+                forwardedForHeader = headerStr.Split(",").First();
             }
-            return base.GetClientIpAddress();
         }
+        return forwardedForHeader.IsNullOrWhiteSpace() ? base.GetClientIpAddress() : forwardedForHeader;
     }
 }

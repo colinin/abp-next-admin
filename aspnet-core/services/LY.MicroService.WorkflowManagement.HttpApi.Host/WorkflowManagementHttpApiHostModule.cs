@@ -1,4 +1,5 @@
 ﻿using Elsa;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
@@ -82,6 +83,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreMvcNewtonsoftModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WorkflowManagementHttpApiHostModule : AbpModule
@@ -103,7 +105,6 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        ConfigureMvc();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureExceptionHandling();
@@ -116,6 +117,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         ConfigureBackgroundTasks(configuration);
         ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);
+        ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureBlobStoring(context.Services, configuration);
         ConfigureOpenTelemetry(context.Services, configuration);
@@ -129,10 +131,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        });
+        app.UseForwardedHeaders();
         // 本地化
         app.UseMapRequestLocalization();
         app.UseCorrelationId();
