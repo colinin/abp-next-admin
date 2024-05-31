@@ -27,6 +27,10 @@ export interface SetPassword {
   password: string;
 }
 
+export interface IdentityUserOrganizationUnitUpdateDto {
+  organizationUnitIds: string[]
+}
+
 /** 用户对象 */
 export interface User extends FullAuditedEntityDto<string>, IUser, IHasConcurrencyStamp {
   /** 租户标识 */

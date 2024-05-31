@@ -6,9 +6,11 @@ import {
   UpdateUser,
   GetUserPagedRequest,
   UserClaim,
+  IdentityUserOrganizationUnitUpdateDto,
 } from './model';
 import { CreateIdentityClaim, UpdateIdentityClaim } from '../claims/model';
 import { Role } from '../roles/model';
+import { OrganizationUnit } from '../organization-units/model';
 
 export const create = (input: CreateUser) => {
   return defHttp.post<User>({
@@ -103,6 +105,19 @@ export const lock = (id: string, seconds: number) => {
 export const unlock = (id: string) => {
   return defHttp.put<void>({
     url: `/api/identity/users/${id}/unlock`,
+  });
+};
+
+export const getOrganizationUnits = (id: string) => {
+  return defHttp.get<ListResultDto<OrganizationUnit>>({
+    url: `/api/identity/users/${id}/organization-units`,
+  });
+};
+
+export const setOrganizationUnits = (id: string, input: IdentityUserOrganizationUnitUpdateDto) => {
+  return defHttp.put<ListResultDto<OrganizationUnit>>({
+    url: `/api/identity/users/${id}/organization-units`,
+    data: input,
   });
 };
 
