@@ -50,6 +50,7 @@ EXPOSE 80/tcp
 VOLUME [ "./app/Logs" ]
 VOLUME [ "./app/Modules" ]
 
-HEALTHCHECK CMD curl --fail http://localhost/healthz || exit
+RUN apt update
+RUN apt install wget -y
 
 ENTRYPOINT ["dotnet", "PackageName.CompanyName.ProjectName.HttpApi.Host.dll"]

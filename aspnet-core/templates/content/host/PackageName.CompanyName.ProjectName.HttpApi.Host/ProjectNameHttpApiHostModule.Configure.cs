@@ -50,8 +50,8 @@ namespace PackageName.CompanyName.ProjectName;
 
 public partial class ProjectNameHttpApiHostModule
 {
+    public static string ApplicationName { get; set; } = "ProjectNameService";
     private const string DefaultCorsPolicyName = "Default";
-    private const string ApplicationName = "ProjectName";
     private static readonly OneTimeRunner OneTimeRunner = new();
 
     private void PreConfigureFeature()
@@ -148,29 +148,43 @@ public partial class ProjectNameHttpApiHostModule
         if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
         {
             services.AddOpenTelemetry()
-                .ConfigureResource(builder =>
+                .ConfigureResource(resource =>
                 {
-                    builder.AddService(ApplicationName);
+                    resource.AddService(ApplicationName);
                 })
-                .WithTracing(builder =>
+                .WithTracing(tracing =>
                 {
-                    builder.AddHttpClientInstrumentation();
-                    builder.AddAspNetCoreInstrumentation();
-                    builder.AddCapInstrumentation();
-                    builder.AddEntityFrameworkCoreInstrumentation();
-                    builder.AddZipkinExporter(zipKinOptions =>
+                    tracing.AddHttpClientInstrumentation();
+                    tracing.AddAspNetCoreInstrumentation();
+                    tracing.AddCapInstrumentation();
+                    tracing.AddEntityFrameworkCoreInstrumentation();
+                    tracing.AddSource(ApplicationName);
+
+                    var tracingOtlpEndpoint = configuration["OpenTelemetry:Otlp:Endpoint"];
+                    if (!tracingOtlpEndpoint.IsNullOrWhiteSpace())
                     {
-                        var endpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-                        if (!endpoint.IsNullOrWhiteSpace())
+                        tracing.AddOtlpExporter(otlpOptions =>
                         {
-                            zipKinOptions.Endpoint = new Uri(endpoint);
-                        }
-                    });
+                            otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
+                        });
+                        return;
+                    }
+
+                    var zipkinEndpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
+                    if (!zipkinEndpoint.IsNullOrWhiteSpace())
+                    {
+                        tracing.AddZipkinExporter(zipKinOptions =>
+                        {
+                            zipKinOptions.Endpoint = new Uri(zipkinEndpoint);
+                        });
+                        return;
+                    }
                 })
-                .WithMetrics(builder =>
+                .WithMetrics(metrics =>
                 {
-                    builder.AddHttpClientInstrumentation();
-                    builder.AddAspNetCoreInstrumentation();
+                    metrics.AddRuntimeInstrumentation();
+                    metrics.AddHttpClientInstrumentation();
+                    metrics.AddAspNetCoreInstrumentation();
                 });
         }
     }

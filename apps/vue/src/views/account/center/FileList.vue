@@ -42,7 +42,7 @@
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
   import { getDataColumns } from './data';
-  import { OssObject } from '/@/api/oss-management/model/ossModel';
+  import { OssObject } from '/@/api/oss-management/objects/model';
   import { getList as getPrivates } from '/@/api/oss-management/files/private';
   import { getList as getPublices } from '/@/api/oss-management/files/public';
   import { generateOssUrl, deleteObject } from '/@/api/oss-management/objects';

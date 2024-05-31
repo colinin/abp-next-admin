@@ -37,7 +37,7 @@ namespace LINGYUN.MicroService.Internal.Gateway;
 )]
 public class InternalGatewayModule : AbpModule
 {
-    protected const string ApplicationName = "Services.ApiGateWay";
+    public static string ApplicationName { get; set; } = "Services.ApiGateWay";
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
@@ -55,9 +55,6 @@ public class InternalGatewayModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
-
-        var showPii = configuration.GetValue<bool>("App:ShowPii");
-        IdentityModelEventSource.ShowPII = showPii;
 
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {

@@ -13,7 +13,9 @@ using LINGYUN.Abp.Wrapper;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -311,12 +313,22 @@ public partial class WebhooksManagementHttpApiHostModule
         });
     }
 
-    private void ConfigureMvc()
+    private void ConfigureMvc(IServiceCollection services, IConfiguration configuration)
     {
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
             options.ExposeIntegrationServices = true;
         });
+
+        Configure<AbpEndpointRouterOptions>(options =>
+        {
+            options.EndpointConfigureActions.Add((builder) =>
+            {
+                builder.Endpoints.MapHealthChecks(configuration["App:HealthChecks"] ?? "/healthz");
+            });
+        });
+
+        services.AddHealthChecks();
     }
 
     private void ConfigureVirtualFileSystem()

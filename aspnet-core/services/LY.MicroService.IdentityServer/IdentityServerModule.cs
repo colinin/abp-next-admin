@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Account;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authentication.QQ;
@@ -79,6 +80,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpCAPEventBusModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAliyunSmsModule)
     )]
 public partial class IdentityServerModule : AbpModule
@@ -114,6 +116,7 @@ public partial class IdentityServerModule : AbpModule
         ConfigureUrls(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
+        ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
@@ -126,10 +129,7 @@ public partial class IdentityServerModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        });
+        app.UseForwardedHeaders();
         app.UseMapRequestLocalization();
         if (env.IsDevelopment())
         {

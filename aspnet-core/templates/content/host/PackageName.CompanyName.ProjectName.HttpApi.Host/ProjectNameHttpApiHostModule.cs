@@ -28,6 +28,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 
 namespace PackageName.CompanyName.ProjectName;
 
@@ -56,6 +57,7 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpDistributedLockingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]
@@ -97,6 +99,7 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
+        app.UseForwardedHeaders();
         app.UseMapRequestLocalization();
         app.UseCorrelationId();
         app.UseStaticFiles();

@@ -1,6 +1,6 @@
 <template>
   <div class="file-list-wrap">
-    <BasicTable @register="registerTable">
+    <BasicTable @register="registerTable" @selection-change="handleSelectRows">
       <template #toolbar>
         <Button
           v-if="hasPermission('AbpOssManagement.OssObject.Create')"
@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, watch, nextTick } from 'vue';
+  import { computed, watch, nextTick, ref } from 'vue';
   import { Button } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
@@ -88,7 +88,7 @@
   const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
   const [registerUploadModal, { openModal: openUploadModal }] = useModal();
   const [registerPreviewModal, { openModal: openPreviewModal }] = useModal();
-  const [registerTable, { reload, getSelectRowKeys, setTableData, setPagination }] = useTable({
+  const [registerTable, { reload, setTableData, setPagination }] = useTable({
     rowKey: 'name',
     title: L('DisplayName:OssObject'),
     columns: getDataColumns(),
@@ -119,8 +119,9 @@
       dataIndex: 'action',
     },
   });
+  const selectionKeys = ref<string[]>([]);
   const selectCount = computed(() => {
-    return getSelectRowKeys().length;
+    return selectionKeys.value.length;
   });
 
   watch(
@@ -146,6 +147,10 @@
       immediate: true,
     },
   );
+
+  function handleSelectRows(e: { keys: string[] }) {
+    selectionKeys.value = e.keys;
+  }
 
   function beforeFetch(request: any) {
     request.bucket = props.bucket;
@@ -180,15 +185,14 @@
       onOk: async () => {
         const bucket = props.bucket;
         const path = props.path;
-        const objects = getSelectRowKeys();
         await bulkDeleteObject({
           bucket: bucket,
           path: path,
-          objects: objects,
+          objects: selectionKeys.value,
         });
         createMessage.success(L('SuccessfullyDeleted'));
         await reload();
-        emits('oss:delete', bucket, path, objects);
+        emits('oss:delete', bucket, path, selectionKeys.value);
       },
     });
   }

@@ -47,6 +47,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
 		<ProjectReference Include="..\..\framework\dapr\LINGYUN.Abp.Dapr.Client.Wrapper\LINGYUN.Abp.Dapr.Client.Wrapper.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />

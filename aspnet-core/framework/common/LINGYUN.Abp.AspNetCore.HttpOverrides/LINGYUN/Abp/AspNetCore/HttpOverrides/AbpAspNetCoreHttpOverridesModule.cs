@@ -1,25 +1,27 @@
-﻿using LINGYUN.Abp.AspNetCore.HttpOverrides.Forwarded;
+﻿using LINGYUN.Abp.AspNetCore.WebClientInfo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Collections.Generic;
+using Volo.Abp.AspNetCore;
+using Volo.Abp.AspNetCore.WebClientInfo;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.AspNetCore.HttpOverrides
+namespace LINGYUN.Abp.AspNetCore.HttpOverrides;
+
+[DependsOn(typeof(AbpAspNetCoreModule))]
+public class AbpAspNetCoreHttpOverridesModule : AbpModule
 {
-    public class AbpAspNetCoreHttpOverridesModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        var configuration = context.Services.GetConfiguration();
+
+        Configure<ForwardedHeadersOptions>(options =>
         {
-            var configuration = context.Services.GetConfiguration();
+            configuration.GetSection("Forwarded").Bind(options);
+        });
 
-            var forwardOptions = new AbpForwardedHeadersOptions();
-            configuration.GetSection("Forwarded:Headers").Bind(forwardOptions);
-            context.Services.ExecutePreConfiguredActions(forwardOptions);
-
-            Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.Configure(forwardOptions);
-            });
-        }
+        context.Services.Replace(ServiceDescriptor.Transient<IWebClientInfoProvider, RequestForwardedHeaderWebClientInfoProvider>());
     }
 }

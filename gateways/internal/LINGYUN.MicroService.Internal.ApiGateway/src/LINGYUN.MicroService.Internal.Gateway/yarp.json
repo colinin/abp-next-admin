@@ -2,152 +2,322 @@
   "ReverseProxy": {
     "Routes": {
       "abp-route": {
-        "ClusterId": "abpCluster",
+        "ClusterId": "abp-cluster",
         "Match": {
           "Path": "/api/abp/{**everything}"
-        }
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
       },
       "token-route": {
-        "ClusterId": "tokenCluster",
+        "ClusterId": "token-cluster",
         "Match": {
           "Path": "/connect/{**everything}"
         },
         "Transforms": [
           {
             "RequestHeaderOriginalHost": "true"
+          },
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
           }
         ]
       },
       "account-route": {
-        "ClusterId": "accountCluster",
+        "ClusterId": "auth-cluster",
         "Match": {
           "Path": "/api/account/{**everything}"
-        }
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
       },
       "identity-route": {
-        "ClusterId": "identityCluster",
+        "ClusterId": "auth-cluster",
         "Match": {
           "Path": "/api/identity/{**everything}"
-        }
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
       },
       "identity-server-route": {
-        "ClusterId": "identityServerCluster",
+        "ClusterId": "auth-cluster",
         "Match": {
           "Path": "/api/identity-server/{**everything}"
-        }
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
+      },
+      "cache-management-route": {
+        "ClusterId": "admin-cluster",
+        "Match": {
+          "Path": "/api/caching-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
+      },
+      "saas-route": {
+        "ClusterId": "admin-cluster",
+        "Match": {
+          "Path": "/api/saas/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
+      },
+      "auditing-route": {
+        "ClusterId": "admin-cluster",
+        "Match": {
+          "Path": "/api/auditing/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
+      },
+      "data-protected-route": {
+        "ClusterId": "admin-cluster",
+        "Match": {
+          "Path": "/api/data-protection-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
+      },
+      "text-template-route": {
+        "ClusterId": "admin-cluster",
+        "Match": {
+          "Path": "/api/text-templating/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
       },
       "feature-management-route": {
-        "ClusterId": "feature-management-cluster",
+        "ClusterId": "admin-cluster",
         "Match": {
           "Path": "/api/feature-management/{**everything}"
-        }
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
       },
       "permission-management-route": {
-        "ClusterId": "permission-management-cluster",
+        "ClusterId": "admin-cluster",
         "Match": {
           "Path": "/api/permission-management/{**everything}"
-        }
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
       },
       "setting-management-route": {
-        "ClusterId": "setting-management-cluster",
+        "ClusterId": "admin-cluster",
         "Match": {
           "Path": "/api/setting-management/{**everything}"
-        }
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
       },
       "localization-management-route": {
-        "ClusterId": "localization-management-cluster",
+        "ClusterId": "localization-cluster",
         "Match": {
           "Path": "/api/localization/{**everything}"
-        }
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
       },
       "im-route": {
-        "ClusterId": "im-cluster",
+        "ClusterId": "realtime-cluster",
         "Match": {
           "Path": "/api/im/{**everything}"
-        }
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
       },
       "notifications-route": {
-        "ClusterId": "notifications-cluster",
+        "ClusterId": "realtime-cluster",
         "Match": {
           "Path": "/api/notifications/{**everything}"
-        }
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
+      },
+      "webhooks-management-route": {
+        "ClusterId": "webhooks-cluster",
+        "Match": {
+          "Path": "/api/webhooks/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
+      },
+      "task-management-route": {
+        "ClusterId": "tasks-cluster",
+        "Match": {
+          "Path": "/api/task-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
+      },
+      "platform-route": {
+        "ClusterId": "platform-cluster",
+        "Match": {
+          "Path": "/api/platform/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
+      },
+      "oss-route": {
+        "ClusterId": "platform-cluster",
+        "Match": {
+          "Path": "/api/oss-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
+      },
+      "files-route": {
+        "ClusterId": "platform-cluster",
+        "Match": {
+          "Path": "/api/files/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          }
+        ]
       }
     },
     "Clusters": {
-      "abpCluster": {
+      "abp-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://127.0.0.1:30010"
           }
         }
       },
-      "tokenCluster": {
+      "token-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://127.0.0.1:44385"
           }
         }
       },
-      "accountCluster": {
+      "auth-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://127.0.0.1:30015"
           }
         }
       },
-      "identityCluster": {
-        "Destinations": {
-          "destination1": {
-            "Address": "http://127.0.0.1:30015"
-          }
-        }
-      },
-      "identityServerCluster": {
-        "Destinations": {
-          "destination1": {
-            "Address": "http://127.0.0.1:30015"
-          }
-        }
-      },
-      "feature-management-cluster": {
+      "admin-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "https://127.0.0.1:30010"
           }
         }
       },
-      "permission-management-cluster": {
-        "Destinations": {
-          "destination1": {
-            "Address": "https://127.0.0.1:30010"
-          }
-        }
-      },
-      "setting-management-cluster": {
-        "Destinations": {
-          "destination1": {
-            "Address": "https://127.0.0.1:30010"
-          }
-        }
-      },
-      "localization-management-cluster": {
+      "localization-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://127.0.0.1:30030"
           }
         }
       },
-      "im-cluster": {
+      "realtime-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://127.0.0.1:30020"
           }
         }
       },
-      "nnotifications-cluster": {
+      "webhooks-cluster": {
         "Destinations": {
           "destination1": {
-            "Address": "http://127.0.0.1:30020"
+            "Address": "http://127.0.0.1:30045"
+          }
+        }
+      },
+      "tasks-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://127.0.0.1:30040"
+          }
+        }
+      },
+      "platform-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://127.0.0.1:30025"
           }
         }
       }

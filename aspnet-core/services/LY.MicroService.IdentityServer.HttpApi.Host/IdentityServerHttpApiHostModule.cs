@@ -1,3 +1,4 @@
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
@@ -59,6 +60,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAutofacModule)
     )]
 public partial class IdentityServerHttpApiHostModule : AbpModule
@@ -79,7 +81,6 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        ConfigureMvc();
         ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
@@ -94,6 +95,7 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
+        ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
@@ -103,10 +105,7 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        });
+        app.UseForwardedHeaders();
         // 本地化
         app.UseMapRequestLocalization();
         // http调用链

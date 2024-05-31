@@ -1,5 +1,5 @@
 import type { ComputedRef, Slots } from 'vue';
-import type { BasicTableProps, InnerHandlers } from '../types/table';
+import type { BasicTableProps, InnerHandlers, InnerMethods } from '../types/table';
 import { unref, computed, h } from 'vue';
 import TableHeader from '../components/TableHeader.vue';
 import { isString } from '/@/utils/is';
@@ -9,6 +9,7 @@ export function useTableHeader(
   propsRef: ComputedRef<BasicTableProps>,
   slots: Slots,
   handlers: InnerHandlers,
+  methods: InnerMethods,
   useTableAlert?: ComputedRef<Boolean>,
   tableAlertMessage?: ComputedRef<String>,
 ) {
@@ -33,6 +34,8 @@ export function useTableHeader(
                 showTableAlert: unref(useTableAlert),
                 tableAlertMessage: unref(tableAlertMessage),
                 onColumnsChange: handlers.onColumnsChange,
+                clearSelectedRowKeys: methods.clearSelectedRowKeys,
+                count: methods.getSelectRowKeys().length,
                 onDeSelect: handlers.deSelect,
               } as Recordable,
               {

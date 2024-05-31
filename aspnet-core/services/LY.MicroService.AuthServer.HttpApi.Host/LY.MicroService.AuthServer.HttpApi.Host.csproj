@@ -33,7 +33,7 @@
 		<PackageReference Include="Serilog.Enrichers.Process" />
 		<PackageReference Include="Serilog.Enrichers.Thread" />
 		<PackageReference Include="Serilog.Settings.Configuration" />
-		<PackageReference Include="Serilog.Sinks.Elasticsearch"/>
+		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
 		<PackageReference Include="Serilog.Sinks.File" />
 		<PackageReference Include="Swashbuckle.AspNetCore" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
@@ -54,6 +54,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\framework\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj" />

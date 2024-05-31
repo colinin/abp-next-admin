@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -105,6 +106,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAutofacModule)
     )]
 public partial class RealtimeMessageHttpApiHostModule : AbpModule
@@ -128,7 +130,6 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        ConfigureMvc();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureNotifications();
@@ -144,6 +145,7 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         ConfigureJsonSerializer(configuration);
         ConfigureBackgroundTasks(configuration);
         ConfigureSwagger(context.Services);
+        ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
@@ -154,10 +156,7 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        });
+        app.UseForwardedHeaders();
         // 本地化
         app.UseMapRequestLocalization();
         // http调用链
