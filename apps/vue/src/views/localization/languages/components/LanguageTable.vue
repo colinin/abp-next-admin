@@ -45,8 +45,8 @@
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
-  import { getList, GetAsyncByName, DeleteAsyncByName } from '/@/api/localization/languages';
-  import { Language } from '/@/api/localization/model/languagesModel';
+  import { getList, getByName, deleteByName } from '/@/api/localization/languages';
+  import { Language } from '/@/api/localization/languages/model';
   import { getDataColumns } from './TableData';
   import LanguageModal from './LanguageModal.vue';
 
@@ -92,11 +92,13 @@
     return form.validate().then((input) => {
       setLoading(true);
       setTableData([]);
-      return getList(input).then((res) => {
-        setTableData(res.items);
-      }).finally(() => {
-        setLoading(false);
-      });
+      return getList(input)
+        .then((res) => {
+          setTableData(res.items);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     });
   }
 
@@ -105,9 +107,9 @@
   }
 
   function handleEdit(record: Language) {
-    GetAsyncByName(record.cultureName).then((dto) => {
+    getByName(record.cultureName).then((dto) => {
       openModal(true, dto);
-    })
+    });
   }
 
   function handleDelete(record: Language) {
@@ -116,7 +118,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        return DeleteAsyncByName(record.cultureName).then(() => {
+        return deleteByName(record.cultureName).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           fetchLanguages();
         });

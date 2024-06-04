@@ -15,7 +15,13 @@
                   :loading="item.loading"
                   @change="handleChange(item, $event)"
                 />
-                <Button v-else-if="item.extra && item.enabled !== false" class="extra" type="link" :loading="item.loading" @click="toggleCommand(item)">
+                <Button
+                  v-else-if="item.extra && item.enabled !== false"
+                  class="extra"
+                  type="link"
+                  :loading="item.loading"
+                  @click="toggleCommand(item)"
+                >
                   {{ item.extra }}
                 </Button>
               </template>
@@ -43,7 +49,7 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { changeTwoFactorEnabled, sendEmailConfirmLink } from '/@/api/account/profiles';
-  import { MyProfile } from '/@/api/account/model/profilesModel';
+  import { MyProfile } from '/@/api/account/profiles/model';
   import SettingFormModal from './SettingFormModal.vue';
 
   const ListItem = List.Item;
@@ -52,7 +58,7 @@
   const props = defineProps({
     profile: {
       type: Object as PropType<MyProfile>,
-    }
+    },
   });
 
   const { createMessage } = useMessage();
@@ -91,12 +97,14 @@
     item.loading = true;
     switch (item.key) {
       case 'twofactor':
-        changeTwoFactorEnabled(checked).then(() => {
-          createMessage.success(L('Successful'));
-        }).finally(() => {
-          item.loading = false;
-          item.switch!.checked = false;
-        });
+        changeTwoFactorEnabled({ enabled: checked })
+          .then(() => {
+            createMessage.success(L('Successful'));
+          })
+          .finally(() => {
+            item.loading = false;
+            item.switch!.checked = checked;
+          });
         break;
     }
   }

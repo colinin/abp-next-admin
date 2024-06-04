@@ -24,11 +24,12 @@ Set-Location $aspnetcorePath
 cmd.exe /c create-database.bat
 
 ## 执行数据库迁移
+Start-Sleep -Seconds 5
 Write-host "migrate database..."
 Set-Location $buildPath
 foreach ($solution in $migrationArray) {  
     Set-Location $solution.Path
-    dotnet run
+    dotnet run --no-build
 }
 
 ## 发布程序包

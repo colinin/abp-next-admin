@@ -19,8 +19,8 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { getModalFormSchemas } from './ModalData';
   import { formatToDateTime } from '/@/utils/dateUtil';
-  import { Language } from '/@/api/localization/model/languagesModel';
-  import { CreateAsyncByInput, UpdateAsyncByNameAndInput } from '/@/api/localization/languages';
+  import { Language } from '/@/api/localization/languages/model';
+  import { create, update } from '/@/api/localization/languages';
 
   const emits = defineEmits(['change', 'register']);
 
@@ -44,8 +44,8 @@
   function handleSubmit() {
     validate().then((input) => {
       const api = input.id
-        ? UpdateAsyncByNameAndInput(input.cultureName, input)
-        : CreateAsyncByInput(input);
+        ? update(input.cultureName, input)
+        : create(input);
       api.then((dto) => {
         createMessage.success(L('SuccessfullySaved'));
         emits('change', dto);

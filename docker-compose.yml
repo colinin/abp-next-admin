@@ -12,6 +12,11 @@ services:
       - "30010:80"
     networks:
       - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
@@ -27,6 +32,11 @@ services:
       - "30015:80"
     networks:
       - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
@@ -42,6 +52,11 @@ services:
       - "30030:80"
     networks:
       - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
@@ -57,6 +72,11 @@ services:
       - "30025:80"
     networks:
       - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
@@ -72,6 +92,11 @@ services:
       - "30020:80"
     networks:
       - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
@@ -87,6 +112,11 @@ services:
       - "30040:80"
     networks:
       - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
@@ -102,6 +132,11 @@ services:
       - "30045:80"
     networks:
       - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
@@ -117,6 +152,11 @@ services:
       - "30050:80"
     networks:
       - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
@@ -132,6 +172,11 @@ services:
       - "44385:80"
     networks:
       - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"

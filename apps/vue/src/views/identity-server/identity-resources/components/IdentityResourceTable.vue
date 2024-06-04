@@ -55,7 +55,7 @@
   import { useModal } from '/@/components/Modal';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
-  import { deleteById, getList } from '/@/api/identity-server/identityResources';
+  import { deleteById, getList } from '/@/api/identity-server/identity-resources';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import IdentityResourceModal from './IdentityResourceModal.vue';
 

@@ -31,7 +31,11 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { createMyFavoriteMenu, delMyFavoriteMenu, getMyFavoriteMenuList } from '/@/api/platform/user-favorites-menu';
+  import {
+    createMyFavoriteMenu,
+    delMyFavoriteMenu,
+    getMyFavoriteMenuList,
+  } from '/@/api/platform/user-favorites-menu';
   import WorkbenchHeader from './components/WorkbenchHeader.vue';
   import MenuCard from './components/MenuCard.vue';
 
@@ -46,22 +50,24 @@
 
   function fetchMyFavoriteMenus() {
     loading.value = true;
-    getMyFavoriteMenuList().then((res) => {
-      const defaultFavmenus = useDefaultMenus();
-      const defineFavmenus = res.items.map((menu) => {
-        return {
-          id: menu.menuId,
-          title: menu.aliasName ?? menu.displayName,
-          icon: menu.icon,
-          color: menu.color,
-          path: menu.path,
-          hasDefault: false,
-        };
+    getMyFavoriteMenuList()
+      .then((res) => {
+        const defaultFavmenus = useDefaultMenus();
+        const defineFavmenus = res.items.map((menu) => {
+          return {
+            id: menu.menuId,
+            title: menu.aliasName ?? menu.displayName,
+            icon: menu.icon,
+            color: menu.color,
+            path: menu.path,
+            hasDefault: false,
+          };
+        });
+        myFavoriteMenus.value = defaultFavmenus.concat(defineFavmenus);
+      })
+      .finally(() => {
+        loading.value = false;
       });
-      myFavoriteMenus.value = defaultFavmenus.concat(defineFavmenus);
-    }).finally(() => {
-      loading.value = false;
-    });
   }
 
   function handleAddMyFavoriteMenu(menu) {

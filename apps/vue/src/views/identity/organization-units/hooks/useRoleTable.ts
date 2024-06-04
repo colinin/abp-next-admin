@@ -4,10 +4,10 @@ import { useTable } from '/@/components/Table';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { getDataColumns } from '../../role/datas/TableData';
-import { Role } from '/@/api/identity/model/roleModel';
+import { Role } from '/@/api/identity/roles/model';
 import { getRoleList } from '/@/api/identity/organization-units';
 import { MemberProps } from '../types/props';
-import { removeOrganizationUnit } from '/@/api/identity/role';
+import { removeOrganizationUnit } from '/@/api/identity/roles';
 
 interface UseRoleTable {
   getProps: ComputedRef<MemberProps>;

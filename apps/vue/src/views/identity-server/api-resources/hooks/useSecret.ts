@@ -1,7 +1,7 @@
 import type { Ref } from 'vue';
 
 import { unref } from 'vue';
-import { ApiResource } from '/@/api/identity-server/model/apiResourcesModel';
+import { ApiResource } from '/@/api/identity-server/api-resources/model';
 
 interface UseSecret {
   resourceRef: Ref<ApiResource>;

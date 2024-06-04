@@ -2,7 +2,6 @@
   import type { CSSProperties, PropType } from 'vue';
   import { computed, defineComponent, nextTick, ref, toRaw, unref, watchEffect } from 'vue';
   import type { BasicColumn } from '../../types/table';
-  import type { EditRecordRow } from './index';
   import { CheckOutlined, CloseOutlined, FormOutlined } from '@ant-design/icons-vue';
   import { CellComponent } from './CellComponent';
 
@@ -14,9 +13,10 @@
   import { propTypes } from '/@/utils/propTypes';
   import { isArray, isBoolean, isFunction, isNumber, isString } from '/@/utils/is';
   import { createPlaceholderMessage } from './helper';
-  import { omit, pick, set } from 'lodash-es';
+  import { pick, set } from 'lodash-es';
   import { treeToList } from '/@/utils/helper/treeHelper';
   import { Spin } from 'ant-design-vue';
+  import { parseRowKey } from '../../helper';
 
   export default defineComponent({
     name: 'EditableCell',
@@ -26,11 +26,13 @@
     },
     props: {
       value: {
-        type: [String, Number, Boolean, Object] as PropType<string | number | boolean | Recordable>,
+        type: [String, Number, Boolean, Object] as PropType<
+          string | number | boolean | Record<string, any>
+        >,
         default: '',
       },
       record: {
-        type: Object as PropType<EditRecordRow>,
+        type: Object as any,
       },
       column: {
         type: Object as PropType<BasicColumn>,
@@ -44,7 +46,7 @@
       const elRef = ref();
       const ruleVisible = ref(false);
       const ruleMessage = ref('');
-      const optionsRef = ref<LabelValueOptions>([]);
+      const optionsRef = ref([]);
       const currentValueRef = ref<any>(props.value);
       const defaultValueRef = ref<any>(props.value);
       const spinning = ref<boolean>(false);
@@ -65,13 +67,23 @@
 
       const getComponentProps = computed(() => {
         const isCheckValue = unref(getIsCheckComp);
+        let compProps = props.column?.editComponentProps ?? ({} as any);
+        const { checkedValue, unCheckedValue } = compProps;
 
         const valueField = isCheckValue ? 'checked' : 'value';
         const val = unref(currentValueRef);
 
-        const value = isCheckValue ? (isNumber(val) && isBoolean(val) ? val : !!val) : val;
+        let value = val;
+        if (isCheckValue) {
+          if (typeof checkedValue !== 'undefined') {
+            value = val === checkedValue ? checkedValue : unCheckedValue;
+          } else if (typeof unCheckedValue !== 'undefined') {
+            value = val === unCheckedValue ? unCheckedValue : checkedValue;
+          } else {
+            value = isNumber(val) || isBoolean(val) ? val : !!val;
+          }
+        }
 
-        let compProps = props.column?.editComponentProps ?? {};
         const { record, column, index } = props;
 
         if (isFunction(compProps)) {
@@ -83,7 +95,7 @@
         delete compProps.onChange;
 
         const component = unref(getComponent);
-        const apiSelectProps: Recordable = {};
+        const apiSelectProps: Record<string, any> = {};
         if (component === 'ApiSelect') {
           apiSelectProps.cache = true;
         }
@@ -93,8 +105,9 @@
           getPopupContainer: () => unref(table?.wrapRef.value) ?? document.body,
           placeholder: createPlaceholderMessage(unref(getComponent)),
           ...apiSelectProps,
-          ...omit(compProps, 'onChange'),
+          ...compProps,
           [valueField]: value,
+          disabled: unref(getDisable),
         } as any;
       });
       function upEditDynamicDisabled(record, column, value) {
@@ -112,7 +125,7 @@
         }
         if (isFunction(editDynamicDisabled)) {
           const { record } = props;
-          disabled = editDynamicDisabled({ record });
+          disabled = editDynamicDisabled({ record, currentValue: currentValueRef.value });
         }
         return disabled;
       });
@@ -130,8 +143,7 @@
           return value;
         }
 
-        const options: LabelValueOptions =
-          unref(getComponentProps)?.options ?? (unref(optionsRef) || []);
+        const options = unref(getComponentProps)?.options ?? (unref(optionsRef) || []);
         const option = options.find((item) => `${item.value}` === `${value}`);
 
         return option?.label ?? value;
@@ -157,7 +169,7 @@
       });
 
       watchEffect(() => {
-        //defaultValueRef.value = props.value;
+        // defaultValueRef.value = props.value;
         currentValueRef.value = props.value;
       });
 
@@ -168,8 +180,9 @@
         }
       });
 
-      function handleEdit() {
-        if (unref(getRowEditable) || unref(props.column?.editRow)) return;
+      function handleEdit(e) {
+        e.stopPropagation();
+        if (unref(getRowEditable) || unref(props.column?.editRow) || unref(getDisable)) return;
         ruleMessage.value = '';
         isEdit.value = true;
         nextTick(() => {
@@ -183,11 +196,11 @@
         if (!e) {
           currentValueRef.value = e;
         } else if (component === 'Checkbox') {
-          currentValueRef.value = (e as ChangeEvent).target.checked;
+          currentValueRef.value = e.target.checked;
         } else if (component === 'Switch') {
           currentValueRef.value = e;
         } else if (e?.target && Reflect.has(e.target, 'value')) {
-          currentValueRef.value = (e as ChangeEvent).target.value;
+          currentValueRef.value = e.target.value;
         } else if (isString(e) || isBoolean(e) || isNumber(e) || isArray(e)) {
           currentValueRef.value = e;
         }
@@ -215,8 +228,8 @@
             return false;
           }
           if (isFunction(editRule)) {
-            const res = await editRule(currentValue, record as Recordable);
-            if (!!res) {
+            const res = await editRule(currentValue, record);
+            if (res) {
               ruleMessage.value = res;
               ruleVisible.value = true;
               return false;
@@ -247,17 +260,20 @@
         if (!record.editable) {
           const { getBindValues } = table;
 
-          const { beforeEditSubmit, columns } = unref(getBindValues);
+          const { beforeEditSubmit, columns, rowKey } = unref(getBindValues);
+
+          const rowKeyParsed = parseRowKey(rowKey, record);
 
           if (beforeEditSubmit && isFunction(beforeEditSubmit)) {
             spinning.value = true;
             const keys: string[] = columns
               .map((_column) => _column.dataIndex)
               .filter((field) => !!field) as string[];
+
             let result: any = true;
             try {
               result = await beforeEditSubmit({
-                record: pick(record, keys),
+                record: pick(record, [rowKeyParsed, ...keys]),
                 index,
                 key: dataKey as string,
                 value,
@@ -272,8 +288,8 @@
             }
           }
         }
-
         set(record, dataKey, value);
+        defaultValueRef.value = value;
         //const record = await table.updateTableData(index, dataKey, value);
         needEmit && table.emit?.('edit-end', { record, index, key: dataKey, value });
         isEdit.value = false;
@@ -315,25 +331,25 @@
       }
 
       // only ApiSelect or TreeSelect
-      function handleOptionsChange(options: LabelValueOptions) {
+      function handleOptionsChange(options) {
         const { replaceFields } = unref(getComponentProps);
         const component = unref(getComponent);
         if (component === 'ApiTreeSelect') {
           const { title = 'title', value = 'value', children = 'children' } = replaceFields || {};
-          let listOptions: Recordable[] = treeToList(options, { children });
+          let listOptions = treeToList(options, { children });
           listOptions = listOptions.map((item) => {
             return {
               label: item[title],
               value: item[value],
             };
           });
-          optionsRef.value = listOptions as LabelValueOptions;
+          optionsRef.value = listOptions;
         } else {
           optionsRef.value = options;
         }
       }
 
-      function initCbs(cbs: 'submitCbs' | 'validCbs' | 'cancelCbs', handle: Fn) {
+      function initCbs(cbs: 'submitCbs' | 'validCbs' | 'cancelCbs', handle) {
         if (props.record) {
           /* eslint-disable  */
           isArray(props.record[cbs])
@@ -378,7 +394,6 @@
         elRef,
         getComponent,
         getRule,
-        getDisable,
         onClickOutside,
         ruleMessage,
         getRuleVisible,
@@ -391,6 +406,7 @@
         handleEnter,
         handleSubmitClick,
         spinning,
+        getDisable,
       };
     },
     render() {
@@ -408,14 +424,21 @@
                     record: this.record as Recordable,
                     column: this.column,
                     index: this.index,
+                    currentValue: this.currentValueRef,
                   })
-                : (this.getValues ?? "\u00A0")}
+                : this.getValues ?? '\u00A0'}
             </div>
-            {!this.column.editRow && <FormOutlined class={`${this.prefixCls}__normal-icon`} />}
+            {!this.column.editRow && !this.getDisable && (
+              <FormOutlined class={`${this.prefixCls}__normal-icon`} />
+            )}
           </div>
           {this.isEdit && (
-            <Spin spinning={this.spinning}>
-              <div class={`${this.prefixCls}__wrapper`} v-click-outside={this.onClickOutside}>
+            <Spin spinning={this.spinning} onClick={(e) => e.stopPropagation()}>
+              <div
+                class={`${this.prefixCls}__wrapper`}
+                v-click-outside={this.onClickOutside}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <CellComponent
                   {...this.getComponentProps}
                   component={this.getComponent}
@@ -476,13 +499,14 @@
   .edit-cell-rule-popover {
     .ant-popover-inner-content {
       padding: 4px 8px;
-      color: @error-color;
       // border: 1px solid @error-color;
       border-radius: 2px;
+      color: @error-color;
     }
   }
   .@{prefix-cls} {
     position: relative;
+    min-height: 24px; //设置高度让其始终可被hover
 
     &__wrapper {
       display: flex;
@@ -506,20 +530,20 @@
 
     .ellipsis-cell {
       .cell-content {
-        overflow-wrap: break-word;
-        word-break: break-word;
         overflow: hidden;
-        white-space: nowrap;
         text-overflow: ellipsis;
+        word-break: break-word;
+        white-space: nowrap;
+        overflow-wrap: break-word;
       }
     }
 
     &__normal {
       &-icon {
+        display: none;
         position: absolute;
         top: 4px;
         right: 0;
-        display: none;
         width: 20px;
         cursor: pointer;
       }

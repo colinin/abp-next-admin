@@ -35,6 +35,11 @@ export function getSettingList() {
       name: L('Notifies'),
       component: 'MsgNotify',
     },
+    {
+      key: '5',
+      name: L('Authenticator'),
+      component: 'Authenticator',
+    },
   ];
 }
 

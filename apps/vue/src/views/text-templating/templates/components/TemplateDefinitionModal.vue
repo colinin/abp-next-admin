@@ -14,47 +14,74 @@
       :label-col="{ span: 6 }"
       :wrapper-col="{ span: 18 }"
     >
-    <Tabs v-model:active-key="state.activeTab">
-      <TabPane key="basic" :tab="L('BasicInfo')">
-        <FormItem hidden name="concurrencyStamp" label="concurrencyStamp">
-          <Input v-model:value="state.entity.concurrencyStamp" />
-        </FormItem>
-        <FormItem hidden name="localizationResourceName" label="L('DisplayName:LocalizationResourceName')">
-          <Input v-model:value="state.entity.localizationResourceName" />
-        </FormItem>
-        <FormItem name="isInlineLocalized" :label="L('DisplayName:Name')">
-          <Checkbox
-            :disabled="state.entityEditFlag && !state.allowedChange"
-            v-model:checked="state.entity.isInlineLocalized"
-          >{{ L('DisplayName:IsInlineLocalized') }}
-          </Checkbox>
-        </FormItem>
-        <FormItem name="defaultCultureName" :label="L('DisplayName:DefaultCultureName')">
-          <Select :disabled="!state.allowedChange" :allow-clear="true" v-model:value="state.entity.defaultCultureName" :options="state.languages" />
-        </FormItem>
-        <FormItem name="isLayout" :label="L('DisplayName:IsLayout')">
-          <Checkbox
-            :disabled="state.entityEditFlag && !state.allowedChange"
-            v-model:checked="state.entity.isLayout"
-          >{{ L('DisplayName:IsLayout') }}
-          </Checkbox>
-        </FormItem>
-        <FormItem :hidden="state.entity.isLayout" name="layout" :label="L('DisplayName:Layout')">
-          <Select :disabled="!state.allowedChange" :allow-clear="true" v-model:value="state.entity.layout" :options="state.layouts" />
-        </FormItem>
-        <FormItem name="name" :label="L('DisplayName:Name')">
-          <Input :disabled="!state.allowedChange" v-model:value="state.entity.name" />
-        </FormItem>
-        <FormItem name="displayName" :label="L('DisplayName:DisplayName')">
-          <LocalizableInput :disabled="!state.allowedChange" v-model:value="state.entity.displayName" />
-        </FormItem>
-      </TabPane>
-      <TabPane key="propertites" :tab="L('Properties')">
-        <FormItem name="extraProperties" label="" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-          <ExtraPropertyDictionary :disabled="!state.allowedChange" :allow-delete="true" :allow-edit="true" v-model:value="state.entity.extraProperties" />
-        </FormItem>
-      </TabPane>
-    </Tabs>
+      <Tabs v-model:active-key="state.activeTab">
+        <TabPane key="basic" :tab="L('BasicInfo')">
+          <FormItem hidden name="concurrencyStamp" label="concurrencyStamp">
+            <Input v-model:value="state.entity.concurrencyStamp" />
+          </FormItem>
+          <FormItem
+            hidden
+            name="localizationResourceName"
+            label="L('DisplayName:LocalizationResourceName')"
+          >
+            <Input v-model:value="state.entity.localizationResourceName" />
+          </FormItem>
+          <FormItem name="isInlineLocalized" :label="L('DisplayName:Name')">
+            <Checkbox
+              :disabled="state.entityEditFlag && !state.allowedChange"
+              v-model:checked="state.entity.isInlineLocalized"
+              >{{ L('DisplayName:IsInlineLocalized') }}
+            </Checkbox>
+          </FormItem>
+          <FormItem name="defaultCultureName" :label="L('DisplayName:DefaultCultureName')">
+            <Select
+              :disabled="!state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.defaultCultureName"
+              :options="state.languages"
+            />
+          </FormItem>
+          <FormItem name="isLayout" :label="L('DisplayName:IsLayout')">
+            <Checkbox
+              :disabled="state.entityEditFlag && !state.allowedChange"
+              v-model:checked="state.entity.isLayout"
+              >{{ L('DisplayName:IsLayout') }}
+            </Checkbox>
+          </FormItem>
+          <FormItem :hidden="state.entity.isLayout" name="layout" :label="L('DisplayName:Layout')">
+            <Select
+              :disabled="!state.allowedChange"
+              :allow-clear="true"
+              v-model:value="state.entity.layout"
+              :options="state.layouts"
+            />
+          </FormItem>
+          <FormItem name="name" :label="L('DisplayName:Name')">
+            <Input :disabled="!state.allowedChange" v-model:value="state.entity.name" />
+          </FormItem>
+          <FormItem name="displayName" :label="L('DisplayName:DisplayName')">
+            <LocalizableInput
+              :disabled="!state.allowedChange"
+              v-model:value="state.entity.displayName"
+            />
+          </FormItem>
+        </TabPane>
+        <TabPane key="propertites" :tab="L('Properties')">
+          <FormItem
+            name="extraProperties"
+            label=""
+            :label-col="{ span: 0 }"
+            :wrapper-col="{ span: 24 }"
+          >
+            <ExtraPropertyDictionary
+              :disabled="!state.allowedChange"
+              :allow-delete="true"
+              :allow-edit="true"
+              v-model:value="state.entity.extraProperties"
+            />
+          </FormItem>
+        </TabPane>
+      </Tabs>
     </Form>
   </BasicModal>
 </template>
@@ -84,14 +111,14 @@
   const emits = defineEmits(['register', 'change']);
 
   interface State {
-    activeTab: string,
-    allowedChange: boolean,
-    entity: Recordable,
-    entityRules?: Dictionary<string, Rule>,
-    entityChanged: boolean,
-    entityEditFlag: boolean,
-    layouts: DefaultOptionType[],
-    languages: DefaultOptionType[],
+    activeTab: string;
+    allowedChange: boolean;
+    entity: Recordable;
+    entityRules?: Dictionary<string, Rule>;
+    entityChanged: boolean;
+    entityEditFlag: boolean;
+    layouts: DefaultOptionType[];
+    languages: DefaultOptionType[];
   }
 
   const { ruleCreator } = useValidation();
@@ -120,7 +147,9 @@
         trigger: 'blur',
         validator(_rule, value) {
           if (!validate(value)) {
-            return Promise.reject(Lr('AbpValidation', ValidationEnum.FieldRequired, [L('DisplayName:DisplayName')]));
+            return Promise.reject(
+              Lr('AbpValidation', ValidationEnum.FieldRequired, [L('DisplayName:DisplayName')]),
+            );
           }
           return Promise.resolve();
         },
@@ -167,31 +196,32 @@
         isInherited: true,
       };
       state.allowedChange = true;
-      nextTick(() => state.entityChanged = false);
+      nextTick(() => (state.entityChanged = false));
       return;
     }
     changeLoading(true);
     changeOkLoading(true);
-    GetByNameAsyncByName(name).then((record) => {
-      state.entity = record;
-      state.entityEditFlag = true;
-      state.allowedChange = !record.isStatic;
-    }).finally(() => {
-      changeLoading(false);
-      changeOkLoading(false);
-      nextTick(() => state.entityChanged = false);
-    });
+    GetByNameAsyncByName(name)
+      .then((record) => {
+        state.entity = record;
+        state.entityEditFlag = true;
+        state.allowedChange = !record.isStatic;
+      })
+      .finally(() => {
+        changeLoading(false);
+        changeOkLoading(false);
+        nextTick(() => (state.entityChanged = false));
+      });
   }
 
   function fetchLanguages() {
     getLanguages({}).then((res) => {
-      state.languages = res.items
-        .map((item) => {
-          return {
-            label: item.displayName,
-            value: item.cultureName,
-          };
-        });
+      state.languages = res.items.map((item) => {
+        return {
+          label: item.displayName,
+          value: item.cultureName,
+        };
+      });
     });
   }
 
@@ -199,14 +229,13 @@
     GetListAsyncByInput({
       isLayout: true,
     }).then((res) => {
-      state.layouts = res.items
-        .map((item) => {
-          const info = deserialize(item.displayName);
-          return {
-            label: Lr(info.resourceName, info.name),
-            value: item.name,
-          };
-        });
+      state.layouts = res.items.map((item) => {
+        const info = deserialize(item.displayName);
+        return {
+          label: Lr(info.resourceName, info.name),
+          value: item.name,
+        };
+      });
     });
   }
 
@@ -228,11 +257,11 @@
         },
         onCancel: () => {
           resolve(false);
-        }
+        },
       });
     });
   }
-  
+
   function handleSubmit() {
     if (!state.allowedChange) {
       closeModal();
@@ -245,19 +274,19 @@
       const submitApi = state.entityEditFlag
         ? UpdateAsyncByNameAndInput(input.name, input)
         : CreateAsyncByInput(input);
-      submitApi.then((res) => {
-        createMessage.success(L('Successful'));
-        emits('change', res);
-        form.resetFields();
-        closeModal();
-      }).finally(() => {
-        changeLoading(false);
-        changeOkLoading(false);
-      });
+      submitApi
+        .then((res) => {
+          createMessage.success(L('Successful'));
+          emits('change', res);
+          form.resetFields();
+          closeModal();
+        })
+        .finally(() => {
+          changeLoading(false);
+          changeOkLoading(false);
+        });
     });
   }
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

@@ -39,6 +39,9 @@ public class Program
                 });
             await builder.AddApplicationAsync<TaskManagementHttpApiHostModule>(options =>
             {
+                TaskManagementHttpApiHostModule.ApplicationName = Environment.GetEnvironmentVariable("APPLICATION_NAME")
+                    ?? TaskManagementHttpApiHostModule.ApplicationName;
+                options.ApplicationName = TaskManagementHttpApiHostModule.ApplicationName;
                 // 从环境变量取用户机密配置, 适用于容器测试
                 options.Configuration.UserSecretsId = Environment.GetEnvironmentVariable("APPLICATION_USER_SECRETS_ID");
                 // 如果容器没有指定用户机密, 从项目读取

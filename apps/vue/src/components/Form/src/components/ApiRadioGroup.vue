@@ -4,7 +4,12 @@
 <template>
   <RadioGroup v-bind="attrs" v-model:value="state" button-style="solid">
     <template v-for="item in getOptions" :key="`${item.value}`">
-      <RadioButton v-if="props.isBtn" :value="item.value" :disabled="item.disabled" @click="handleClick(item)">
+      <RadioButton
+        v-if="props.isBtn"
+        :value="item.value"
+        :disabled="item.disabled"
+        @click="handleClick(item)"
+      >
         {{ item.label }}
       </RadioButton>
       <Radio v-else :value="item.value" :disabled="item.disabled" @click="handleClick(item)">

@@ -11,9 +11,15 @@
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'name'">
-          <Tag v-if="record.isStatic" style="margin-right: 5px" color="#8baac4">{{ L('Static') }}</Tag>
-          <Tag v-if="record.isDefault" style="margin-right: 5px" color="#108ee9">{{ L('DisplayName:IsDefault') }}</Tag>
-          <Tag v-if="record.isPublic" style="margin-right: 5px" color="#87d068">{{ L('Public') }}</Tag>
+          <Tag v-if="record.isStatic" style="margin-right: 5px" color="#8baac4">{{
+            L('Static')
+          }}</Tag>
+          <Tag v-if="record.isDefault" style="margin-right: 5px" color="#108ee9">{{
+            L('DisplayName:IsDefault')
+          }}</Tag>
+          <Tag v-if="record.isPublic" style="margin-right: 5px" color="#87d068">{{
+            L('Public')
+          }}</Tag>
           <span>{{ record.name }}</span>
         </template>
         <template v-else-if="column.key === 'action'">
@@ -85,8 +91,13 @@
   import { BasicTable, TableAction } from '/@/components/Table';
   import { useRoleTable } from '../hooks/useRoleTable';
   import { usePermission as usePermissionModal } from '../hooks/usePermission';
-  import { getListByRole, setRoleMenu, setRoleStartupMenu } from '/@/api/platform/menu';
-  import { getClaimList as getRoleClaims, createClaim, updateClaim, deleteClaim } from '/@/api/identity/role';
+  import { getListByRole, setRoleMenu, setRoleStartupMenu } from '/@/api/platform/menus';
+  import {
+    getClaimList as getRoleClaims,
+    createClaim,
+    updateClaim,
+    deleteClaim,
+  } from '/@/api/identity/roles';
   import RoleModal from './RoleModal.vue';
   import MenuModal from '../../components/MenuModal.vue';
   import ClaimModal from '../../components/ClaimModal.vue';
@@ -96,8 +107,7 @@
   const { hasPermission } = usePermission();
   const [registerModal, { openModal }] = useModal();
   const [registerClaimModal, { openModal: openClaimModal }] = useModal();
-  const [registerMenuModal, { openModal: openMenuModal, closeModal: closeMenuModal }] =
-    useModal();
+  const [registerMenuModal, { openModal: openMenuModal, closeModal: closeMenuModal }] = useModal();
   const { registerTable, reloadTable, handleDelete } = useRoleTable();
   const { registerModel: registerPermissionModal, showPermissionModal } = usePermissionModal();
 
@@ -110,11 +120,13 @@
     setRoleMenu({
       roleName: roleName,
       menuIds: menuIds,
-    }).then(() => {
-      closeMenuModal();
-    }).finally(() => {
-      loadMenuRef.value = false;
-    });
+    })
+      .then(() => {
+        closeMenuModal();
+      })
+      .finally(() => {
+        loadMenuRef.value = false;
+      });
   }
 
   function handleChangeStartupMenu(roleName, meunId) {

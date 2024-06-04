@@ -1,6 +1,6 @@
 <template>
-   <div style="margin-top: 10px">
-    <template v-for="(org, index) in _value" >
+  <div style="margin-top: 10px">
+    <template v-for="(org, index) in _value">
       <Tag class="org-item" closable @close="removeOrgItem(index)">
         <template #icon>
           <InfoOutlined v-if="org.type !== 'dept'" />
@@ -21,8 +21,8 @@
     value: {
       type: Array as PropType<any[]>,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
   });
 
@@ -34,12 +34,12 @@
   });
 
   function removeOrgItem(index) {
-    _value.value.splice(index, 1)
+    _value.value.splice(index, 1);
   }
 </script>
 
 <style scoped>
-  .org-item{
+  .org-item {
     margin: 5px;
   }
 </style>

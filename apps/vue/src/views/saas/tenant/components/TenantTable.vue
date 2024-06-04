@@ -73,7 +73,7 @@
   import TenantModal from './TenantModal.vue';
   import ConnectionTableModal from './ConnectionTableModal.vue';
 
-  const { L } = useLocalization(['AbpSaas', 'AbpFeatureManagement','WeChat']);
+  const { L } = useLocalization(['AbpSaas', 'AbpFeatureManagement', 'WeChat']);
   const { hasPermission } = usePermission();
   const tableElRef = ref<Nullable<TableActionType>>(null);
   const [registerConnectModal, { openModal: openConnectModal }] = useModal();

@@ -2,7 +2,7 @@ import { computed } from 'vue';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useTable } from '/@/components/Table';
-import { deleteById, getList } from '/@/api/identity/user';
+import { deleteById, getList } from '/@/api/identity/users';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
 import { getDataColumns } from '../datas/TableData';
 import { getSearchFormSchemas } from '../datas/ModalData';

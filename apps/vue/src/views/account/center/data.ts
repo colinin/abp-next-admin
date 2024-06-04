@@ -2,8 +2,8 @@ import { FormSchema } from '/@/components/Form';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { formatToDateTime } from '/@/utils/dateUtil';
-import { getAllList as getRoles } from '/@/api/identity/role';
-import { search as getUsers } from '/@/api/identity/userLookup';
+import { getAllList as getRoles } from '/@/api/identity/roles';
+import { search as getUsers } from '/@/api/identity/users-lookup';
 
 const { L } = useLocalization('AbpOssManagement');
 const kbUnit = 1 * 1024;

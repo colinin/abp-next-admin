@@ -55,23 +55,26 @@
       if (!input.name) {
         cookies?.remove(globSetting.multiTenantKey);
       } else {
-        findTenantByName(input.name).then((result) => {
-          if (!result.success || !result.tenantId) {
-            createMessage.warn(L('GivenTenantIsNotExist', [input.name]));
-            return;
-          }
+        findTenantByName(input.name)
+          .then((result) => {
+            if (!result.success || !result.tenantId) {
+              createMessage.warn(L('GivenTenantIsNotExist', [input.name]));
+              return;
+            }
 
-          if (!result.isActive) {
-            createMessage.warn(L('GivenTenantIsNotAvailable', [input.name]));
-            return;
-          }
+            if (!result.isActive) {
+              createMessage.warn(L('GivenTenantIsNotAvailable', [input.name]));
+              return;
+            }
 
-          cookies?.set(globSetting.multiTenantKey, result.tenantId);
-        }).finally(() => changeLoading(false));
+            cookies?.set(globSetting.multiTenantKey, result.tenantId);
+          })
+          .finally(() => changeLoading(false));
       }
       // 不加延迟在下次请求不会携带租户标识
       setTimeout(() => {
-        abpStore.initlizeAbpApplication()
+        abpStore
+          .initlizeAbpApplication()
           .then(closeModal)
           .finally(() => changeLoading(false));
       }, 100);

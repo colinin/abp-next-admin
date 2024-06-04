@@ -5,10 +5,7 @@
       :label="t('component.simple_state_checking.requireFeatures.requiresAll')"
       :extra="t('component.simple_state_checking.requireFeatures.requiresAllDesc')"
     >
-      <Checkbox
-        :checked="state.stateChecker.requiresAll"
-        @change="handleChangeRequiresAll"
-      >
+      <Checkbox :checked="state.stateChecker.requiresAll" @change="handleChangeRequiresAll">
         {{ t('component.simple_state_checking.requireFeatures.requiresAll') }}
       </Checkbox>
     </FormItem>
@@ -57,7 +54,7 @@
       name: 'G',
       requiresAll: true,
       featureNames: [],
-    }
+    },
   });
   const getRequiredFeatures = computed(() => {
     let features = state.stateChecker.featureNames.join(',');
@@ -85,6 +82,4 @@
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

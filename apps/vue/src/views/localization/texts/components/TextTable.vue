@@ -35,7 +35,7 @@
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
-  import { getList,  } from '/@/api/localization/texts';
+  import { getList } from '/@/api/localization/texts';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
   import TextModal from './TextModal.vue';
@@ -72,12 +72,14 @@
       const request = cloneDeep(input);
       setLoading(true);
       setTableData([]);
-      return getList(request).then((res) => {
-        return setTableData(res.items);
-      }).finally(() => {
-        setLoading(false);
-      });
-    })
+      return getList(request)
+        .then((res) => {
+          return setTableData(res.items);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
   }
 
   function handleChange() {
@@ -89,6 +91,6 @@
   }
 
   function handleEdit(record) {
-    openModal(true, {...{ id: 1 }, ...record});
+    openModal(true, { ...{ id: 1 }, ...record });
   }
 </script>

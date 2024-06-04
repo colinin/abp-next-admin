@@ -10,7 +10,12 @@
     @cancel="onGroupChange(0)"
   >
     <Form ref="formRel" :model="featureGroup">
-      <Tabs :class="`${prefixCls}__tabs`" tabPosition="left" v-model:activeKey="featureGroupKey" @change="onGroupChange">
+      <Tabs
+        :class="`${prefixCls}__tabs`"
+        tabPosition="left"
+        v-model:activeKey="featureGroupKey"
+        @change="onGroupChange"
+      >
         <TabPane v-for="(group, gi) in featureGroup.groups" :key="gi" :tab="group.displayName">
           <div v-for="(feature, fi) in group.features" :key="feature.name">
             <FormItem
@@ -21,7 +26,10 @@
               :extra="feature.description"
             >
               <Checkbox
-                v-if="feature.valueType.name === 'ToggleStringValueType' && feature.valueType.validator.name === 'BOOLEAN'"
+                v-if="
+                  feature.valueType.name === 'ToggleStringValueType' &&
+                  feature.valueType.validator.name === 'BOOLEAN'
+                "
                 v-model:checked="feature.value"
                 >{{ feature.displayName }}</Checkbox
               >
@@ -86,7 +94,7 @@
 
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-feature-modal';
-  
+
   .@{prefix-cls} {
     &__tabs {
       height: 500px;

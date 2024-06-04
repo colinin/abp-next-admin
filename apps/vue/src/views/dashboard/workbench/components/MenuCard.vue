@@ -8,7 +8,7 @@
         v-for="menu in menus"
         :key="menu.title"
         class="menu-card-grid"
-        :style="{ float: menus.length >=  2 ? 'left' : 'right' }"
+        :style="{ float: menus.length >= 2 ? 'left' : 'right' }"
         @click="handleNavigationTo(menu)"
         @contextmenu="(e) => handleContext(e, menu)"
       >
@@ -50,7 +50,7 @@
     menus: {
       type: Array as PropType<Menu[]>,
       default: [],
-    }
+    },
   });
 
   const go = useGo();

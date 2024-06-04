@@ -3,37 +3,89 @@
     <BasicTable @register="registerTable">
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'level'">
-          <Tag :color="LogLevelColor[record.level]" @click="handleFilter('level', record.level)">{{ LogLevelLabel[record.level] }}</Tag>
+          <Tag :color="LogLevelColor[record.level]" @click="handleFilter('level', record.level)">{{
+            LogLevelLabel[record.level]
+          }}</Tag>
         </template>
         <template v-else-if="column.key === 'application'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('application', record.fields.application)">{{ record.fields.application }}</a>
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('application', record.fields.application)"
+            >{{ record.fields.application }}</a
+          >
         </template>
         <template v-else-if="column.key === 'machineName'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('machineName', record.fields.machineName)">{{ record.fields.machineName }}</a>
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('machineName', record.fields.machineName)"
+            >{{ record.fields.machineName }}</a
+          >
         </template>
         <template v-else-if="column.key === 'environment'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('environment', record.fields.environment)">{{ record.fields.environment }}</a>
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('environment', record.fields.environment)"
+            >{{ record.fields.environment }}</a
+          >
         </template>
         <template v-else-if="column.key === 'connectionId'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('connectionId', record.fields.connectionId)">{{ record.fields.connectionId }}</a>
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('connectionId', record.fields.connectionId)"
+            >{{ record.fields.connectionId }}</a
+          >
         </template>
-        <template v-else-if="column.key ==='correlationId'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('correlationId', record.fields.correlationId)">{{ record.fields.correlationId }}</a>
+        <template v-else-if="column.key === 'correlationId'">
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('correlationId', record.fields.correlationId)"
+            >{{ record.fields.correlationId }}</a
+          >
         </template>
-        <template v-else-if="column.key ==='requestId'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('requestId', record.fields.requestId)">{{ record.fields.requestId }}</a>
+        <template v-else-if="column.key === 'requestId'">
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('requestId', record.fields.requestId)"
+            >{{ record.fields.requestId }}</a
+          >
         </template>
-        <template v-else-if="column.key ==='requestPath'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('requestPath', record.fields.requestPath)">{{ record.fields.requestPath }}</a>
+        <template v-else-if="column.key === 'requestPath'">
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('requestPath', record.fields.requestPath)"
+            >{{ record.fields.requestPath }}</a
+          >
         </template>
-        <template v-else-if="column.key ==='processId'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('processId', record.fields.processId)">{{ record.fields.processId }}</a>
+        <template v-else-if="column.key === 'processId'">
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('processId', record.fields.processId)"
+            >{{ record.fields.processId }}</a
+          >
         </template>
-        <template v-else-if="column.key ==='threadId'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('threadId', record.fields.threadId)">{{ record.fields.threadId }}</a>
+        <template v-else-if="column.key === 'threadId'">
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('threadId', record.fields.threadId)"
+            >{{ record.fields.threadId }}</a
+          >
         </template>
         <template v-else-if="column.key === 'context'">
-          <a class="link" href="javaScript:void(0);" @click="handleFilter('context', record.fields.level)">{{ record.fields.level }}</a>
+          <a
+            class="link"
+            href="javaScript:void(0);"
+            @click="handleFilter('context', record.fields.level)"
+            >{{ record.fields.level }}</a
+          >
         </template>
         <template v-else-if="column.key === 'action'">
           <TableAction
@@ -61,7 +113,7 @@
   import { LogLevelColor, LogLevelLabel } from '../datas/typing';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
-  import { getList } from '/@/api/logging/logging';
+  import { getList } from '/@/api/logging/logs';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import LoggingModal from './LoggingModal.vue';
 

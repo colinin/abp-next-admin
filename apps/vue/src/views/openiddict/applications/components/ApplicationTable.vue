@@ -63,7 +63,7 @@
   import { FeatureModal } from '/@/components/Abp';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { GetListAsyncByInput, DeleteAsyncById } from '/@/api/openiddict/open-iddict-application';
+  import { getList, deleteById } from '/@/api/openiddict/open-iddict-application';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import { PermissionModal } from '/@/components/Permission';
   import ApplicationModal from './ApplicationModal.vue';
@@ -78,7 +78,7 @@
   const [registerTable, { reload }] = useTable({
     rowKey: 'id',
     title: L('Applications'),
-    api: GetListAsyncByInput,
+    api: getList,
     columns: getDataColumns(),
     beforeFetch: formatPagedRequest,
     pagination: true,
@@ -146,7 +146,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeletedMessage'),
       onOk: () => {
-        return DeleteAsyncById(record.id).then(() => {
+        return deleteById(record.id).then(() => {
           createMessage.success(L('SuccessfullyDeleted'));
           reload();
         });

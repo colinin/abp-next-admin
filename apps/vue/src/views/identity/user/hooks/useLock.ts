@@ -1,6 +1,6 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useModal } from '/@/components/Modal';
-import { lock, unlock } from '/@/api/identity/user';
+import { lock, unlock } from '/@/api/identity/users';
 import { FormSchema } from '/@/components/Form';
 
 export enum LockType {

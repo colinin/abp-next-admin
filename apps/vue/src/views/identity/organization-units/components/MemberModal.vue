@@ -34,7 +34,7 @@
   const props = defineProps({
     ouId: { type: String },
   });
-  
+
   const { createMessage } = useMessage();
   const { L } = useLocalization('AbpIdentity');
   const loading = ref(false);

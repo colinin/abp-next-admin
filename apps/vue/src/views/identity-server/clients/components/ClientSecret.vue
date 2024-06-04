@@ -23,7 +23,7 @@
   import { FormSchema } from '/@/components/Form';
   import { BasicColumn } from '/@/components/Table';
   import { formatToDate } from '/@/utils/dateUtil';
-  import { Client } from '/@/api/identity-server/model/clientsModel';
+  import { Client } from '/@/api/identity-server/clients/model';
   import { useSecret } from '../hooks/useSecret';
   import DynamicForm from './DynamicForm.vue';
 

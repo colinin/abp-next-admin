@@ -48,9 +48,15 @@
   import { CountdownInput } from '/@/components/CountDown';
   import LoginFormTitle from './LoginFormTitle.vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { useLoginState, useFormRules, useFormValid, useFormFieldsValid, LoginStateEnum } from './useLogin';
+  import {
+    useLoginState,
+    useFormRules,
+    useFormValid,
+    useFormFieldsValid,
+    LoginStateEnum,
+  } from './useLogin';
   import { MultiTenancyBox } from '/@/components/MultiTenancyBox';
-  import { sendPhoneSignCode } from '/@/api/account/accounts';
+  import { sendPhoneSigninCode } from '/@/api/account/accounts';
   import { useUserStore } from '/@/store/modules/user';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -77,17 +83,19 @@
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.MOBILE);
 
   function handleSendCode() {
-    return validFormFields(['phoneNumber']).then((data) => {
-      return sendPhoneSignCode(data.phoneNumber)
-        .then(() => {
-          return Promise.resolve(true);
-        })
-        .catch(() => {
-          return Promise.reject(false);
-        });
-    }).catch(() => {
-      return Promise.reject(false);
-    });
+    return validFormFields(['phoneNumber'])
+      .then((data) => {
+        return sendPhoneSigninCode(data.phoneNumber)
+          .then(() => {
+            return Promise.resolve(true);
+          })
+          .catch(() => {
+            return Promise.reject(false);
+          });
+      })
+      .catch(() => {
+        return Promise.reject(false);
+      });
   }
 
   async function handleLogin() {

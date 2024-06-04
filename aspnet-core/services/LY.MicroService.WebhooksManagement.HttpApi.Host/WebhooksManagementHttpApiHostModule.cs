@@ -23,6 +23,7 @@ using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using LY.MicroService.WebhooksManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -98,7 +99,6 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        ConfigureMvc();
         ConfigureWrapper();
         ConfigureDbContext();
         ConfigureLocalization();
@@ -107,6 +107,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureFeatureManagement();
         ConfigureSettingManagement();
         ConfigurePermissionManagement();
+        ConfigureTiming(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
@@ -114,9 +115,10 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureWebhooks(context.Services);
         ConfigureJsonSerializer(configuration);
-        ConfigureBackgroundTasks(context.Services);
+        ConfigureMvc(context.Services, configuration);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
+        ConfigureBackgroundTasks(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -127,6 +129,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         var env = context.GetEnvironment();
 
         app.UseForwardedHeaders();
+        app.UseMapRequestLocalization();
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
@@ -134,7 +137,6 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         app.UseAuthentication();
         app.UseDynamicClaims();
         app.UseMultiTenancy();
-        app.UseMapRequestLocalization();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>

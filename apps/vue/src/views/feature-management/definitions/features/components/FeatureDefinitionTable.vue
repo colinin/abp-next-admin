@@ -87,9 +87,9 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useLocalizationSerializer } from '/@/hooks/abp/useLocalizationSerializer';
-  import { GetListAsyncByInput as getGroupDefinitions } from '/@/api/feature-management/definitions/groups';
+  import { getList as getGroupDefinitions } from '/@/api/feature-management/definitions/groups';
   import { FeatureGroupDefinitionDto } from '/@/api/feature-management/definitions/groups/model';
-  import { GetListAsyncByInput, DeleteAsyncByName } from '/@/api/feature-management/definitions/features';
+  import { getList, deleteByName } from '/@/api/feature-management/definitions/features';
   import { getSearchFormSchemas } from '../datas/ModalData';
   import { listToTree } from '/@/utils/helper/treeHelper';
   import { groupBy } from '/@/utils/array';
@@ -183,7 +183,7 @@
   });
   const getGroupDisplayName = computed(() => {
     return (groupName: string) => {
-      const group = state.groups.find(x => x.name === groupName);
+      const group = state.groups.find((x) => x.name === groupName);
       if (!group) return groupName;
       const info = deserialize(group.displayName);
       return Lr(info.resourceName, info.name);
@@ -208,28 +208,30 @@
       setLoading(true);
       setTableData([]);
       var input = form.getFieldsValue();
-      GetListAsyncByInput(input).then((res) => {
-        const featureGroup = groupBy(res.items, 'groupName');
-        const featureGroupData: FeatureGroup[] = [];
-        Object.keys(featureGroup).forEach((gk) => {
-          const groupData: FeatureGroup = {
-            name: gk,
-            displayName: gk,
-            features: [],
-          };
-          const featureTree = listToTree(featureGroup[gk], {
-            id: 'name',
-            pid: 'parentName',
+      getList(input)
+        .then((res) => {
+          const featureGroup = groupBy(res.items, 'groupName');
+          const featureGroupData: FeatureGroup[] = [];
+          Object.keys(featureGroup).forEach((gk) => {
+            const groupData: FeatureGroup = {
+              name: gk,
+              displayName: gk,
+              features: [],
+            };
+            const featureTree = listToTree(featureGroup[gk], {
+              id: 'name',
+              pid: 'parentName',
+            });
+            featureTree.forEach((tk) => {
+              groupData.features.push(tk);
+            });
+            featureGroupData.push(groupData);
           });
-          featureTree.forEach((tk) => {
-            groupData.features.push(tk);
-          });
-          featureGroupData.push(groupData);
+          setTableData(featureGroupData);
+        })
+        .finally(() => {
+          setLoading(false);
         });
-        setTableData(featureGroupData);
-      }).finally(() => {
-        setLoading(false);
-      });
     });
   }
 
@@ -258,7 +260,7 @@
       title: L('AreYouSure'),
       content: L('ItemWillBeDeleteOrRestoreMessage'),
       onOk: () => {
-        return DeleteAsyncByName(record.name).then(() => {
+        return deleteByName(record.name).then(() => {
           createMessage.success(L('Successful'));
           fetch();
         });

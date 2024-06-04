@@ -1,10 +1,5 @@
 <template>
-  <BasicModal
-    v-bind="$attrs"
-    @register="registerModal"
-    @ok="handleSubmit"
-    :title="L('Secret:New')"
-  >
+  <BasicModal v-bind="$attrs" @register="registerModal" @ok="handleSubmit" :title="L('Secret:New')">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>

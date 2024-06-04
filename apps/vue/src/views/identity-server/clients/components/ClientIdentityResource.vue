@@ -5,7 +5,7 @@
 <script lang="ts" setup>
   import { computed, ref, onMounted, toRefs } from 'vue';
   import { getAssignableIdentityResources } from '/@/api/identity-server/clients';
-  import { Client } from '/@/api/identity-server/model/clientsModel';
+  import { Client } from '/@/api/identity-server/clients/model';
   import { useResource } from '../hooks/useResource';
   import Resources from './Resources.vue';
 

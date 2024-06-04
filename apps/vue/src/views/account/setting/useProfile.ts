@@ -5,7 +5,7 @@ import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { getTwoFactorEnabled } from '/@/api/account/profiles';
 import { getAssignableNotifiers } from '/@/api/messages/notifications';
 import { getAll as getMySubscribes } from '/@/api/messages/subscribes';
-import { MyProfile } from '/@/api/account/model/profilesModel';
+import { MyProfile } from '/@/api/account/profiles/model';
 import { getUserInfo } from '/@/api/sys/user';
 
 export interface ListItem {

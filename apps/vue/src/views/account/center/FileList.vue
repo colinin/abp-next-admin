@@ -42,11 +42,10 @@
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
   import { getDataColumns } from './data';
-  import { ListResultDto } from '/@/api/model/baseModel';
-  import { OssObject } from '/@/api/oss-management/model/ossModel';
-  import { getList as getPrivates } from '/@/api/oss-management/private';
-  import { getList as getPublices } from '/@/api/oss-management/public';
-  import { generateOssUrl, deleteObject } from '/@/api/oss-management/oss';
+  import { OssObject } from '/@/api/oss-management/objects/model';
+  import { getList as getPrivates } from '/@/api/oss-management/files/private';
+  import { getList as getPublices } from '/@/api/oss-management/files/public';
+  import { generateOssUrl, deleteObject } from '/@/api/oss-management/objects';
   import FileShareModal from './FileShareModal.vue';
 
   const props = defineProps({

@@ -123,7 +123,7 @@
 
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-permission-modal';
-  
+
   .@{prefix-cls} {
     &__tabs {
       height: 520px;

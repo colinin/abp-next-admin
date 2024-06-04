@@ -15,7 +15,7 @@
   import { ImagePreview } from '/@/components/Preview';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { OssObject } from '/@/api/oss-management/model/ossModel';
-  import { generateOssUrl } from '/@/api/oss-management/oss';
+  import { generateOssUrl } from '/@/api/oss-management/objects';
   import { useUserStoreWithOut } from '/@/store/modules/user';
 
   const { L } = useLocalization('AbpOssManagement');
@@ -28,7 +28,9 @@
   const previewImages = computed(() => {
     const userStore = useUserStoreWithOut();
     return objects.value.map((obj) => {
-      return generateOssUrl(unref(bucket), obj.path, obj.name) + '?access_token=' + userStore.getToken;
+      return (
+        generateOssUrl(unref(bucket), obj.path, obj.name) + '?access_token=' + userStore.getToken
+      );
     });
   });
 </script>

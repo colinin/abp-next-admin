@@ -70,10 +70,10 @@
   import { Avatar, Button, Input, List, Tabs } from 'ant-design-vue';
   import { BasicModal } from '/@/components/Modal';
   import { search as searchGroup } from '/@/api/messages/groups';
-  import { Group } from '/@/api/messages/model/groupModel';
+  import { Group } from '/@/api/messages/groups/model';
   import { addFriend } from '/@/api/messages/friends';
-  import { search as searchUser } from '/@/api/identity/userLookup';
-  import { IUserData } from '/@/api/identity/model/userLookupModel';
+  import { search as searchUser } from '/@/api/identity/users-lookup';
+  import { IUserData } from '/@/api/identity/users-lookup/model';
   import userAvatar from '/@/assets/icons/64x64/color-user.png';
 
   const InputSearch = Input.Search;

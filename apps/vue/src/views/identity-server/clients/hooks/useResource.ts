@@ -1,7 +1,7 @@
 import type { Ref } from 'vue';
 
 import { unref } from 'vue';
-import { Client } from '/@/api/identity-server/model/clientsModel';
+import { Client } from '/@/api/identity-server/clients/model';
 
 interface UseClaim {
   modelRef: Ref<Client>;

@@ -14,6 +14,7 @@
     "DisplayName:SmsVerifyCode": "SMS verification code",
     "DisplayName:EmailVerifyCode": "Mail verification code",
     "DisplayName:WeChatCode": "Wechat login code",
+    "DisplayName:AuthenticatorCode": "Authenticator Code",
     "TwoFactor": "Two factor authentication",
     "TwoFactor:Email": "Email",
     "TwoFactor:Phone": "Phone",
@@ -25,6 +26,22 @@
     "VerifyAuthenticatorCode": "Authentication code",
     "RememberBrowser": "Remember me in the browser",
     "TwoFactorAuthenticationInvaidUser": "Authentication failed. Your session is invalid. Please re login try again!",
-    "InvaidGenerateTwoFactorToken": "Verification code generation failed. Please contact your administrator!"
+    "InvaidGenerateTwoFactorToken": "Verification code generation failed. Please contact your administrator!",
+    "Authenticator": "Authenticator",
+    "AuthenticatorDesc": "Open the two factor authentication application and perform any of the following actions",
+    "Authenticator:UseQrCode": "Use QrCode",
+    "Authenticator:InputCode": "Enter these Code",
+    "Authenticator:CopyToClipboard": "Copy To Clipboard",
+    "ValidAuthenticator": "Valid Authenticator",
+    "ValidAuthenticatorDesc": "Your two factor authentication application will generate a code, please enter the code in the box below and confirm.",
+    "ValidAuthenticator:Valid": "Valid",
+    "RecoveryCode": "Recovery Code",
+    "RecoveryCodeDesc": "Save these codes in a safe place. If you lose your device and do not recover the code, you will not be able to access your account.",
+    "ResetAuthenticator": "Reset Authenticator",
+    "ResetAuthenticatorDesc": "If you want to change the authentication program, you can reset the validator here.",
+    "ResetAuthenticatorWarning": "Resetting the authenticator key will render the authenticator code unusable until it is reconfigured,If you do not have any other validators, the secondary authentication will be revoked, which may lower the security level of your account.",
+    "Steps:PreStep": "Pre Step",
+    "Steps:NextStep": "Next Step",
+    "Steps:Done": "Done"
   }
 }

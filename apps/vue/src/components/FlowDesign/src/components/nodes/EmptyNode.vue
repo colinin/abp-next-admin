@@ -1,5 +1,5 @@
 <template>
-  <Node :show="false" @insertNode="type => $emit('insertNode', type)"/>
+  <Node :show="false" @insertNode="(type) => $emit('insertNode', type)" />
 </template>
 
 <script lang="ts">
@@ -14,6 +14,4 @@
   defineEmits(['insertNode']);
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -13,7 +13,7 @@ import { OpenIddictAuthorizationDto, OpenIddictAuthorizationGetListInput,  } fro
 //   });
 // };
 
-export const DeleteAsyncById = (id: string) => {
+export const deleteById = (id: string) => {
   return defAbpHttp.delete<void>({
     url: `/api/openiddict/authorizations/${id}`,
   });
@@ -31,7 +31,7 @@ export const DeleteAsyncById = (id: string) => {
 //   });
 // };
 
-export const GetAsyncById = (id: string) => {
+export const get = (id: string) => {
   return defAbpHttp.get<OpenIddictAuthorizationDto>({
     url: `/api/openiddict/authorizations/${id}`,
   });
@@ -49,7 +49,7 @@ export const GetAsyncById = (id: string) => {
 //   });
 // };
 
-export const GetListAsyncByInput = (input: OpenIddictAuthorizationGetListInput) => {
+export const getList = (input: OpenIddictAuthorizationGetListInput) => {
   return defAbpHttp.get<PagedResultDto<OpenIddictAuthorizationDto>>({
     url: '/api/openiddict/authorizations',
     params: input,

@@ -1,20 +1,22 @@
 <template>
   <div class="file-list-wrap">
-    <BasicTable @register="registerTable">
+    <BasicTable @register="registerTable" @selection-change="handleSelectRows">
       <template #toolbar>
         <Button
           v-if="hasPermission('AbpOssManagement.OssObject.Create')"
           v-feature="'AbpOssManagement.OssObject.UploadFile'"
           type="primary"
           @click="handleUpload"
-          >{{ L('Objects:UploadFile') }}</Button>
+          >{{ L('Objects:UploadFile') }}</Button
+        >
         <Button
           v-if="hasPermission('AbpOssManagement.OssObject.Delete')"
           :disabled="selectCount <= 0"
           type="primary"
           danger
           @click="handleBulkDelete"
-          >{{ L('Objects:BulkDelete') }}</Button>
+          >{{ L('Objects:BulkDelete') }}</Button
+        >
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
@@ -52,14 +54,19 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, watch, nextTick } from 'vue';
+  import { computed, watch, nextTick, ref } from 'vue';
   import { Button } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { getObjects, generateOssUrl, bulkDeleteObject, deleteObject } from '/@/api/oss-management/oss';
+  import {
+    getObjects,
+    generateOssUrl,
+    bulkDeleteObject,
+    deleteObject,
+  } from '/@/api/oss-management/objects';
   import { getDataColumns } from '../datas/TableData';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import OssUploadModal from './OssUploadModal.vue';
@@ -81,7 +88,7 @@
   const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
   const [registerUploadModal, { openModal: openUploadModal }] = useModal();
   const [registerPreviewModal, { openModal: openPreviewModal }] = useModal();
-  const [registerTable, { reload, getSelectRowKeys, setTableData, setPagination }] = useTable({
+  const [registerTable, { reload, setTableData, setPagination }] = useTable({
     rowKey: 'name',
     title: L('DisplayName:OssObject'),
     columns: getDataColumns(),
@@ -112,8 +119,9 @@
       dataIndex: 'action',
     },
   });
+  const selectionKeys = ref<string[]>([]);
   const selectCount = computed(() => {
-    return getSelectRowKeys().length;
+    return selectionKeys.value.length;
   });
 
   watch(
@@ -138,7 +146,11 @@
     {
       immediate: true,
     },
-  )
+  );
+
+  function handleSelectRows(e: { keys: string[] }) {
+    selectionKeys.value = e.keys;
+  }
 
   function beforeFetch(request: any) {
     request.bucket = props.bucket;
@@ -173,21 +185,20 @@
       onOk: async () => {
         const bucket = props.bucket;
         const path = props.path;
-        const objects = getSelectRowKeys();
         await bulkDeleteObject({
           bucket: bucket,
           path: path,
-          objects: objects,
+          objects: selectionKeys.value,
         });
         createMessage.success(L('SuccessfullyDeleted'));
         await reload();
-        emits('oss:delete', bucket, path, objects);
+        emits('oss:delete', bucket, path, selectionKeys.value);
       },
     });
   }
 
   function handlePreview(record) {
-     openPreviewModal(true, {
+    openPreviewModal(true, {
       bucket: props.bucket,
       objects: [record],
     });

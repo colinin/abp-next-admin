@@ -11,23 +11,23 @@
       layout="vertical"
       @keypress.enter="handleLogin"
     >
-    <FormItem name="userName" class="enter-x" :label="L('DisplayName:UserName')">
-      <BInput
-        size="large"
-        v-model:value="formData.userName"
-        :placeholder="L('DisplayName:UserName')"
-        class="fix-auto-fill"
-      />
-    </FormItem>
-    <FormItem name="password" class="enter-x" :label="L('DisplayName:Password')">
-      <InputPassword
-        size="large"
-        visibilityToggle
-        autocomplete="off"
-        v-model:value="formData.password"
-        :placeholder="L('DisplayName:Password')"
-      />
-    </FormItem>
+      <FormItem name="userName" class="enter-x" :label="L('DisplayName:UserName')">
+        <BInput
+          size="large"
+          v-model:value="formData.userName"
+          :placeholder="L('DisplayName:UserName')"
+          class="fix-auto-fill"
+        />
+      </FormItem>
+      <FormItem name="password" class="enter-x" :label="L('DisplayName:Password')">
+        <InputPassword
+          size="large"
+          visibilityToggle
+          autocomplete="off"
+          v-model:value="formData.password"
+          :placeholder="L('DisplayName:Password')"
+        />
+      </FormItem>
 
       <FormItem class="enter-x">
         <Button type="primary" size="large" block @click="handleLogin" :loading="loading">
@@ -44,7 +44,13 @@
           <ListItem>
             <ListItemMeta>
               <template #title>
-                <Button type="text" @click="handleLoginTo(item.Id)" :loading="loading" :disabled="loading">{{ item.Name }}</Button>
+                <Button
+                  type="text"
+                  @click="handleLoginTo(item.Id)"
+                  :loading="loading"
+                  :disabled="loading"
+                  >{{ item.Name }}</Button
+                >
               </template>
               <template #avatar>
                 <Avatar :src="item.Logo" />
@@ -54,7 +60,6 @@
         </template>
       </List>
     </BasicModal>
-    <TwoFactorModal @register="registerTwoFactorModal" />
   </template>
 </template>
 <script lang="ts" setup>
@@ -70,19 +75,17 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useGlobSetting } from '/@/hooks/setting';
   import { PortalLoginModel } from '/@/api/sys/model/userModel';
-  import TwoFactorModal from './TwoFactorModal.vue';
 
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
   const ListItem = List.Item;
   const ListItemMeta = ListItem.Meta;
-  
+
   const { notification } = useMessage();
   const [registerModal, { openModal, closeModal }] = useModal();
-  const [registerTwoFactorModal, { openModal: openTwoFactorModal }] = useModal();
   const { t } = useI18n();
   const { L } = useLocalization('AbpAccount');
-  const { handleBackLogin, getLoginState } = useLoginState();
+  const { handleBackLogin, getLoginState, setLoginState, setLoginInfoState } = useLoginState();
   const userStore = useUserStoreWithOut();
   const abpStore = useAbpStoreWithOut();
 
@@ -139,11 +142,13 @@
       }
     } catch (error: any) {
       if (error.userId && error.twoFactorToken) {
-        openTwoFactorModal(true, {
+        setLoginInfoState({
           userId: error.userId,
           userName: data.userName,
           password: data.password,
+          twoFactorToken: error.twoFactorToken,
         });
+        setLoginState(LoginStateEnum.TwoFactor);
       } else {
         portalModel.value = JSON.parse(error as string) as PortalLoginModel[];
         openModal(true);

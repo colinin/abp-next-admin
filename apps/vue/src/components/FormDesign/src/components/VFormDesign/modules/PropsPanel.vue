@@ -57,8 +57,10 @@
 
 <style lang="less" scoped>
   @import url(../styles/variable.less);
+
   :deep(.ant-tabs) {
     box-sizing: border-box;
+
     form {
       width: 100%;
       position: absolute;
@@ -67,23 +69,28 @@
       overflow-y: auto;
       overflow-x: hidden;
     }
+
     .hint-box {
       margin-top: 200px;
     }
+
     .ant-form-item,
     .ant-slider-with-marks {
       margin-left: 10px;
       margin-right: 20px;
       margin-bottom: 0;
     }
+
     .ant-form-item {
       // width: 100%;
       margin-bottom: 0;
+
       .ant-form-item-label {
         line-height: 2;
         vertical-align: text-top;
       }
     }
+
     .ant-input-number {
       width: 100%;
     }

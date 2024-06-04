@@ -40,6 +40,9 @@ public class Program
                 });
             await builder.AddApplicationAsync<ProjectNameHttpApiHostModule>(options =>
             {
+                ProjectNameHttpApiHostModule.ApplicationName = Environment.GetEnvironmentVariable("APPLICATION_NAME")
+                    ?? ProjectNameHttpApiHostModule.ApplicationName;
+                options.ApplicationName = ProjectNameHttpApiHostModule.ApplicationName;
                 // 搜索 Modules 目录下所有文件作为插件
                 // 取消显示引用所有其他项目的模块，改为通过插件的形式引用
                 var pluginFolder = Path.Combine(

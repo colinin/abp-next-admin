@@ -1,9 +1,5 @@
 <template>
-  <BasicModal
-    @register="registerModal"
-    :title="L('Share')"
-    @ok="handleSubmit"
-  >
+  <BasicModal @register="registerModal" :title="L('Share')" @ok="handleSubmit">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -15,7 +11,7 @@
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { getShareModalSchemas } from './data';
-  import { share } from '/@/api/oss-management/private';
+  import { share } from '/@/api/oss-management/files/private';
 
   const { L } = useLocalization(['AbpOssManagement', 'AbpUi']);
   const { createMessage } = useMessage();
@@ -35,12 +31,14 @@
   function handleSubmit() {
     validate().then((input) => {
       changeOkLoading(true);
-      share(input).then(() => {
-        createMessage.success(L('Successful'));
-        closeModal();
-      }).finally(() => {
-        changeOkLoading(false);
-      });
+      share(input)
+        .then(() => {
+          createMessage.success(L('Successful'));
+          closeModal();
+        })
+        .finally(() => {
+          changeOkLoading(false);
+        });
     });
   }
 </script>

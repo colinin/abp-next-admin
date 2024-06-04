@@ -14,6 +14,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LY.MicroService.LocalizationManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -28,103 +29,104 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
-namespace LY.MicroService.LocalizationManagement
+namespace LY.MicroService.LocalizationManagement;
+
+[DependsOn(
+    typeof(AbpSerilogEnrichersApplicationModule),
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpLocalizationManagementApplicationModule),
+    typeof(AbpLocalizationManagementHttpApiModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(LocalizationManagementMigrationsEntityFrameworkCoreModule),
+    typeof(AbpDataDbMigratorModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpAuthorizationOrganizationUnitsModule),
+    typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpCAPEventBusModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpHttpClientWrapperModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpAutofacModule)
+    )]
+public partial class LocalizationManagementHttpApiHostModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpSerilogEnrichersApplicationModule),
-        typeof(AbpSerilogEnrichersUniqueIdModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpAuditLoggingElasticsearchModule),
-        typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(AbpLocalizationManagementApplicationModule),
-        typeof(AbpLocalizationManagementHttpApiModule),
-        typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreMySQLModule),
-        typeof(AbpSaasEntityFrameworkCoreModule),
-        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(LocalizationManagementMigrationsEntityFrameworkCoreModule),
-        typeof(AbpDataDbMigratorModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-        typeof(AbpAuthorizationOrganizationUnitsModule),
-        typeof(AbpEmailingExceptionHandlingModule),
-        typeof(AbpCAPEventBusModule),
-        typeof(AbpCachingStackExchangeRedisModule),
-        typeof(AbpAspNetCoreHttpOverridesModule),
-        typeof(AbpLocalizationCultureMapModule),
-        typeof(AbpHttpClientWrapperModule),
-        typeof(AbpAspNetCoreMvcWrapperModule),
-        typeof(AbpAutofacModule)
-        )]
-    public partial class LocalizationManagementHttpApiHostModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        var configuration = context.Services.GetConfiguration();
+
+        PreConfigureFeature();
+        PreForwardedHeaders();
+        PreConfigureApp(configuration);
+        PreConfigureCAP(configuration);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
+        ConfigureDbContext();
+        ConfigureLocalization();
+        ConfigureExceptionHandling();
+        ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
+        ConfigureTiming(configuration);
+        ConfigureCaching(configuration);
+        ConfigureIdentity(configuration);
+        ConfigureAuditing(configuration);
+        ConfigureSwagger(context.Services);
+        ConfigureMultiTenancy(configuration);
+        ConfigureJsonSerializer(configuration);
+        ConfigureMvc(context.Services, configuration);
+        ConfigureCors(context.Services, configuration);
+        ConfigureOpenTelemetry(context.Services, configuration);
+        ConfigureDistributedLocking(context.Services, configuration);
+        ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
+        ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        var env = context.GetEnvironment();
+
+        app.UseForwardedHeaders();
+        // 本地化
+        app.UseMapRequestLocalization();
+        // http调用链
+        app.UseCorrelationId();
+        // 虚拟文件系统
+        app.UseStaticFiles();
+        // 路由
+        app.UseRouting();
+        // 跨域
+        app.UseCors(DefaultCorsPolicyName);
+        // 认证
+        app.UseAuthentication();
+        app.UseDynamicClaims();
+        // 授权
+        app.UseAuthorization();
+        // Swagger
+        app.UseSwagger();
+        // Swagger可视化界面
+        app.UseSwaggerUI(options =>
         {
-            var configuration = context.Services.GetConfiguration();
-
-            PreConfigureFeature();
-            PreForwardedHeaders();
-            PreConfigureApp(configuration);
-            PreConfigureCAP(configuration);
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.GetConfiguration();
-
-            ConfigureMvc();
-            ConfigureDbContext();
-            ConfigureLocalization();
-            ConfigureExceptionHandling();
-            ConfigureVirtualFileSystem();
-            ConfigureFeatureManagement();
-            ConfigureCaching(configuration);
-            ConfigureIdentity(configuration);
-            ConfigureAuditing(configuration);
-            ConfigureSwagger(context.Services);
-            ConfigureMultiTenancy(configuration);
-            ConfigureJsonSerializer(configuration);
-            ConfigureCors(context.Services, configuration);
-            ConfigureDistributedLocking(context.Services, configuration);
-            ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
-            ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            var app = context.GetApplicationBuilder();
-            var env = context.GetEnvironment();
-
-            app.UseForwardedHeaders();
-            // 本地化
-            app.UseMapRequestLocalization();
-            // http调用链
-            app.UseCorrelationId();
-            // 虚拟文件系统
-            app.UseStaticFiles();
-            // 路由
-            app.UseRouting();
-            // 跨域
-            app.UseCors(DefaultCorsPolicyName);
-            // 认证
-            app.UseAuthentication();
-            app.UseDynamicClaims();
-            // 授权
-            app.UseAuthorization();
-            // Swagger
-            app.UseSwagger();
-            // Swagger可视化界面
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Localization Management API");
-            });
-            // 审计日志
-            app.UseAuditing();
-            app.UseAbpSerilogEnrichers();
-            // 路由
-            app.UseConfiguredEndpoints();
-        }
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Localization Management API");
+        });
+        // 审计日志
+        app.UseAuditing();
+        app.UseAbpSerilogEnrichers();
+        // 路由
+        app.UseConfiguredEndpoints();
     }
 }

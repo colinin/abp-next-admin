@@ -148,10 +148,11 @@
 
   const tabsStyle = useTabsStyle(
     props.tabPosition,
-    {}, 
+    {},
     {
-      top: props.tabPosition === 'top' ? '80px' : '0'
-    });
+      top: props.tabPosition === 'top' ? '80px' : '0',
+    },
+  );
   const sumbitButtonTitle = computed(() => {
     if (saving.value) {
       return L('Save');

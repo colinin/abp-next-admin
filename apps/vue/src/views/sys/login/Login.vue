@@ -43,6 +43,7 @@
             <MobileRegisterForm />
             <MobileForm />
             <QrCodeForm />
+            <TwoFactorLoginForm />
           </div>
         </div>
       </div>
@@ -50,7 +51,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { computed, onMounted } from 'vue';
+  import { computed, nextTick, onMounted } from 'vue';
+  import { Modal } from 'ant-design-vue';
   import { AppLogo } from '/@/components/Application';
   import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
   import LoginForm from './LoginForm.vue';
@@ -60,6 +62,7 @@
   import QrCodeForm from './QrCodeForm.vue';
   import PortalForm from './PortalForm.vue';
   import MobileRegisterForm from './MobileRegisterForm.vue';
+  import TwoFactorLoginForm from './TwoFactorLoginForm.vue';
   import { useGlobSetting } from '/@/hooks/setting';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -80,7 +83,10 @@
   const showLocale = localeStore.getShowPicker;
   const title = computed(() => globSetting?.title ?? '');
 
-  onMounted(() => setLoginState(LoginStateEnum.LOGIN));
+  onMounted(() => {
+    setLoginState(LoginStateEnum.LOGIN);
+    nextTick(Modal.destroyAll);
+  });
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-login';

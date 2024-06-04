@@ -312,10 +312,12 @@
 
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-form-design';
+
   [data-theme='dark'] {
   .@{prefix-cls}-sider{
     background-color: #1f1f1f;
   }}
+
   [data-theme='light'] {
     .@{prefix-cls}-sider{
     background-color: #fff;

@@ -115,7 +115,8 @@ export class abpRequest {
     const moduleKeys = Object.keys(modules);
     const index = moduleKeys.findIndex((key) => {
       const m = modules[key];
-      if (m.remoteServiceName.toLowerCase() === remoteService.toLowerCase()) {
+      if (m.rootPath.toLocaleLowerCase() === remoteService.toLowerCase() ||
+          m.remoteServiceName.toLowerCase() === remoteService.toLowerCase()) {
         return m;
       }
     });

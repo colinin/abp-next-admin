@@ -1,6 +1,6 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
-import { Layout } from '/@/api/platform/model/layoutModel';
+import { Layout } from '/@/api/platform/layouts/model';
 
 const { L } = useLocalization('AppPlatform');
 

@@ -3,8 +3,8 @@ import { watch, ref, unref } from 'vue';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn, useTable } from '/@/components/Table';
-import { User } from '/@/api/identity/model/userModel';
-import { removeOrganizationUnit } from '/@/api/identity/user';
+import { User } from '/@/api/identity/users/model';
+import { removeOrganizationUnit } from '/@/api/identity/users';
 import { getMemberList } from '/@/api/identity/organization-units';
 import { MemberProps } from '../types/props';
 

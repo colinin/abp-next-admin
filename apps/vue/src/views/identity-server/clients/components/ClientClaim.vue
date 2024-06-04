@@ -33,8 +33,8 @@
   import { FormSchema } from '/@/components/Form';
   import { BasicColumn } from '/@/components/Table';
   import { useClaim } from '../hooks/useClaim';
-  import { Client } from '/@/api/identity-server/model/clientsModel';
-  import { getActivedList } from '/@/api/identity/claim';
+  import { Client } from '/@/api/identity-server/clients/model';
+  import { getActivedList } from '/@/api/identity/claims';
   import DynamicForm from './DynamicForm.vue';
 
   const FormItem = Form.Item;

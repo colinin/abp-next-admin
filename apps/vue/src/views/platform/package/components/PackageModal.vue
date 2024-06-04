@@ -20,7 +20,11 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { getModalFormSchemas } from '../datas/ModalData';
   import { formatToDateTime } from '/@/utils/dateUtil';
-  import { GetAsyncById, CreateAsyncByInput, UpdateAsyncByIdAndInput } from '/@/api/platform/package';
+  import {
+    GetAsyncById,
+    CreateAsyncByInput,
+    UpdateAsyncByIdAndInput,
+  } from '/@/api/platform/package';
 
   const emits = defineEmits(['change', 'register']);
 
@@ -51,9 +55,7 @@
 
   function handleSubmit() {
     validate().then((input) => {
-      const api = input.id
-        ? UpdateAsyncByIdAndInput(input.id, input)
-        : CreateAsyncByInput(input);
+      const api = input.id ? UpdateAsyncByIdAndInput(input.id, input) : CreateAsyncByInput(input);
 
       api.then((dto) => {
         createMessage.success(L('SuccessfullySaved'));

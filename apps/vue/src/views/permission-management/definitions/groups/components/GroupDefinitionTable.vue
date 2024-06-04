@@ -62,7 +62,10 @@
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useLocalizationSerializer } from '/@/hooks/abp/useLocalizationSerializer';
   import { PermissionGroupDefinitionDto } from '/@/api/permission-management/definitions/groups/model';
-  import { GetListAsyncByInput, DeleteAsyncByName } from '/@/api/permission-management/definitions/groups';
+  import {
+    GetListAsyncByInput,
+    DeleteAsyncByName,
+  } from '/@/api/permission-management/definitions/groups';
   import { getSearchFormSchemas } from '../datas/ModalData';
   import GroupDefinitionModal from './GroupDefinitionModal.vue';
   import PermissionDefinitionModal from '../../permissions/components/PermissionDefinitionModal.vue';
@@ -120,12 +123,14 @@
       setLoading(true);
       state.groups = [];
       var input = form.getFieldsValue();
-      GetListAsyncByInput(input).then((res) => {
-        state.groups = res.items;
-      }).finally(() => {
-        setTableData(state.groups);
-        setLoading(false);
-      });
+      GetListAsyncByInput(input)
+        .then((res) => {
+          state.groups = res.items;
+        })
+        .finally(() => {
+          setTableData(state.groups);
+          setLoading(false);
+        });
     });
   }
 
@@ -138,7 +143,7 @@
   }
 
   function handleAddFeature(record) {
-    openPermissionModal(true, { 
+    openPermissionModal(true, {
       groupName: record.name,
       groups: cloneDeep(state.groups),
     });

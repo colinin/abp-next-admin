@@ -14,6 +14,7 @@
     "DisplayName:SmsVerifyCode": "短信验证码",
     "DisplayName:EmailVerifyCode": "邮件验证码",
     "DisplayName:WeChatCode": "微信登录凭证",
+    "DisplayName:AuthenticatorCode": "验证代码",
     "TwoFactor": "双因素身份验证",
     "TwoFactor:Email": "邮箱验证",
     "TwoFactor:Phone": "手机验证",
@@ -25,6 +26,22 @@
     "VerifyAuthenticatorCode": "验证身份代码",
     "RememberBrowser": "在浏览器中记住我",
     "TwoFactorAuthenticationInvaidUser": "认证失败,您的会话已失效,请程序登录!",
-    "InvaidGenerateTwoFactorToken": "验证码生成失败,请联系管理员!"
+    "InvaidGenerateTwoFactorToken": "验证码生成失败,请联系管理员!",
+    "Authenticator": "身份验证程序",
+    "AuthenticatorDesc": "打开双因素身份验证应用程序，执行以下任一操作",
+    "Authenticator:UseQrCode": "使用二维码",
+    "Authenticator:InputCode": "手动输入密码",
+    "Authenticator:CopyToClipboard": "复制到剪切板",
+    "ValidAuthenticator": "验证身份验证器",
+    "ValidAuthenticatorDesc": "您的双因素身份验证应用程序将生成一个代码，请在下框中输入该代码并确认。",
+    "ValidAuthenticator:Valid": "验证",
+    "RecoveryCode": "恢复代码",
+    "RecoveryCodeDesc": "将这些代码保存在安全的地方,如果您丢失了设备而又没有恢复代码,您将无法访问您的账户。",
+    "ResetAuthenticator": "重置验证器",
+    "ResetAuthenticatorDesc": "如果你想更换身份验证程序,可以在这里重置验证器。",
+    "ResetAuthenticatorWarning": "重置身份验证器密钥,在重新配置之前身份验证器代码将无法使用,如果你没有其他验证器,二次认证将被解除,这可能会使你的账号安全等级降低。",
+    "Steps:PreStep": "上一步",
+    "Steps:NextStep": "下一步",
+    "Steps:Done": "完成"
   }
 }

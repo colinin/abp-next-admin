@@ -13,44 +13,64 @@
           <InputSearch
             v-model="state.search"
             @search="searchUser"
-            style="width: 95%;"
+            style="width: 95%"
             size="small"
             allow-clear
             placeholder="搜索人员，支持拼音、姓名"
           />
           <div v-show="!showUsers">
-            <Ellipsis hoverTip style="height: 18px; color: #8c8c8c; padding: 5px 0 0" :row="1" :content="deptStackStr">
+            <Ellipsis
+              hoverTip
+              style="height: 18px; color: #8c8c8c; padding: 5px 0 0"
+              :row="1"
+              :content="deptStackStr"
+            >
               <!-- <i slot="pre" class="el-icon-office-building"></i> -->
               <BuildOutlined>
                 <slot name="pre"></slot>
               </BuildOutlined>
             </Ellipsis>
             <div style="margin-top: 5px">
-              <Checkbox v-model="state.checkAll" @change="handleCheckAllChange" :disabled="!multiple">全选</Checkbox>
-              <span v-show="state.deptStack.length > 0" class="top-dept" @click="beforeNode">上一级</span>
+              <Checkbox
+                v-model="state.checkAll"
+                @change="handleCheckAllChange"
+                :disabled="!multiple"
+                >全选</Checkbox
+              >
+              <span v-show="state.deptStack.length > 0" class="top-dept" @click="beforeNode"
+                >上一级</span
+              >
             </div>
           </div>
         </div>
         <div class="role-header" v-else>
           <div>系统角色</div>
         </div>
-        <div class="org-items" :style="type === 'role' ? 'height: 350px':''">
-          <Empty :image-size="100" description="似乎没有数据" v-show="orgs.length === 0"/>
-          <div v-for="(org, index) in orgs" :key="index" :class="orgItemClass(org)" @click="selectChange(org)">
+        <div class="org-items" :style="type === 'role' ? 'height: 350px' : ''">
+          <Empty :image-size="100" description="似乎没有数据" v-show="orgs.length === 0" />
+          <div
+            v-for="(org, index) in orgs"
+            :key="index"
+            :class="orgItemClass(org)"
+            @click="selectChange(org)"
+          >
             <Checkbox v-model="org.selected" :disabled="disableDept(org)"></Checkbox>
             <div v-if="org.type === 'dept'">
               <!-- <i class="el-icon-folder-opened"></i> -->
               <FolderOpenOutlined />
               <span class="name">{{ org.name }}</span>
-              <span @click.stop="nextNode(org)" :class="`next-dept${org.selected ? '-disable':''}`">
+              <span
+                @click.stop="nextNode(org)"
+                :class="`next-dept${org.selected ? '-disable' : ''}`"
+              >
                 <!-- <i class="iconfont icon-map-site"></i>下级 -->
                 <ApartmentOutlined />
                 下级
               </span>
             </div>
             <div v-else-if="org.type === 'user'" style="display: flex; align-items: center">
-              <Avatar :size="35" :src="org.avatar" v-if="!isNullOrWhiteSpace(org.avatar)"/>
-              <span v-else class="avatar">{{getShortName(org.name)}}</span>
+              <Avatar :size="35" :src="org.avatar" v-if="!isNullOrWhiteSpace(org.avatar)" />
+              <span v-else class="avatar">{{ getShortName(org.name) }}</span>
               <span class="name">{{ org.name }}</span>
             </div>
             <div style="display: inline-block" v-else>
@@ -66,17 +86,21 @@
           <span>已选 {{ state.select.length }} 项</span>
           <span @click="clearSelected">清空</span>
         </div>
-        <div class="org-items" style="height: 350px;">
-          <Empty :image-size="100" description="请点击左侧列表选择数据" v-show="state.select.length === 0"/>
-          <div v-for="(org, index) in state.select" :key="index" :class="orgItemClass(org)" >
+        <div class="org-items" style="height: 350px">
+          <Empty
+            :image-size="100"
+            description="请点击左侧列表选择数据"
+            v-show="state.select.length === 0"
+          />
+          <div v-for="(org, index) in state.select" :key="index" :class="orgItemClass(org)">
             <div v-if="org.type === 'dept'">
               <!-- <i class="el-icon-folder-opened"></i> -->
               <FolderOpenOutlined />
               <span style="position: static" class="name">{{ org.name }}</span>
             </div>
             <div v-else-if="org.type === 'user'" style="display: flex; align-items: center">
-              <Avatar :size="35" :src="org.avatar" v-if="!isNullOrWhiteSpace(org.avatar)"/>
-              <span v-else class="avatar">{{getShortName(org.name)}}</span>
+              <Avatar :size="35" :src="org.avatar" v-if="!isNullOrWhiteSpace(org.avatar)" />
+              <span v-else class="avatar">{{ getShortName(org.name) }}</span>
               <span class="name">{{ org.name }}</span>
             </div>
             <div v-else>
@@ -96,7 +120,13 @@
 <script setup lang="ts">
   import { computed, reactive } from 'vue';
   import { Avatar, Checkbox, Empty, Modal, Input } from 'ant-design-vue';
-  import { BuildOutlined, CloseOutlined, FolderOpenOutlined, ApartmentOutlined, TeamOutlined } from '@ant-design/icons-vue';
+  import {
+    BuildOutlined,
+    CloseOutlined,
+    FolderOpenOutlined,
+    ApartmentOutlined,
+    TeamOutlined,
+  } from '@ant-design/icons-vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { isNullOrWhiteSpace } from '/@/utils/strings';
   import { findByUserName } from '/@/api/identity/userLookup';
@@ -111,37 +141,38 @@
   const props = defineProps({
     width: {
       type: String,
-      default: '600px'
+      default: '600px',
     },
     clickClose: {
       type: Boolean,
-      default: false
+      default: false,
     },
     closeFree: {
       type: Boolean,
-      default: false
+      default: false,
     },
     title: {
       default: '请选择',
-      type: String
+      type: String,
     },
     type: {
       default: 'dept', //org选择部门/人员  user-选人  dept-选部门 role-选角色
-      type: String
+      type: String,
     },
-    multiple: { //是否多选
+    multiple: {
+      //是否多选
       default: false,
-      type: Boolean
+      type: Boolean,
     },
     selected: {
       default: () => {
-        return []
+        return [];
       },
-      type: Array
+      type: Array,
     },
   });
   const deptStackStr = computed(() => {
-    return String(state.deptStack.map(v => v.name)).replaceAll(',', ' > ');
+    return String(state.deptStack.map((v) => v.name)).replaceAll(',', ' > ');
   });
   const orgs = computed(() => {
     return !state.search || state.search.trim() === '' ? state.nodes : state.searchUsers;
@@ -177,7 +208,7 @@
       'org-role-item': org.type === 'role',
     };
   }
-  
+
   function disableDept(node) {
     return props.type === 'user' && 'dept' === node.type;
   }
@@ -191,57 +222,63 @@
         getRoleList();
         break;
       case 'user':
-      getUserList();
+        getUserList();
         break;
     }
   }
 
   function getUserList() {
     state.loading = true;
-    getUsers({}).then(rsp => {
-      state.loading = false;
-      state.nodes = rsp.items.map(item => {
-        return {
-          ...item,
-          name: item.userName,
-        };
+    getUsers({})
+      .then((rsp) => {
+        state.loading = false;
+        state.nodes = rsp.items.map((item) => {
+          return {
+            ...item,
+            name: item.userName,
+          };
+        });
+        selectToLeft();
+      })
+      .catch((err) => {
+        state.loading = false;
+        createMessage.error(err.response.data);
       });
-      selectToLeft();
-    }).catch(err => {
-      state.loading = false;
-      createMessage.error(err.response.data);
-    });
   }
 
   function getRoleList() {
     state.loading = true;
-    getRoles({}).then(rsp => {
-      state.loading = false;
-      state.nodes = rsp.items;
-      selectToLeft();
-    }).catch(err => {
-      state.loading = false;
-      createMessage.error(err.response.data);
-    });
+    getRoles({})
+      .then((rsp) => {
+        state.loading = false;
+        state.nodes = rsp.items;
+        selectToLeft();
+      })
+      .catch((err) => {
+        state.loading = false;
+        createMessage.error(err.response.data);
+      });
   }
 
   function getOrgList() {
     state.loading = true;
-    getOrganizationUnits({}).then(rsp => {
-      state.loading = false;
-      state.nodes = rsp.items.map(item => {
-        return {
-          ...item,
-          name: item.displayName,
-        };
+    getOrganizationUnits({})
+      .then((rsp) => {
+        state.loading = false;
+        state.nodes = rsp.items.map((item) => {
+          return {
+            ...item,
+            name: item.displayName,
+          };
+        });
+        selectToLeft();
+      })
+      .catch((err) => {
+        state.loading = false;
+        createMessage.error(err.response.data);
       });
-      selectToLeft();
-    }).catch(err => {
-      state.loading = false;
-      createMessage.error(err.response.data);
-    });
   }
-  
+
   function getShortName(name) {
     if (name) {
       return name.length > 2 ? name.substring(1, 3) : name;
@@ -253,19 +290,21 @@
     let userName = state.search.trim();
     state.searchUsers = [];
     state.loading = true;
-    findByUserName(userName).then(rsp => {
-      state.loading = false;
-      state.searchUsers = [rsp.userName];
-      selectToLeft();
-    }).catch(() => {
-      state.loading = false;
-      createMessage.error("接口异常");
-    });
+    findByUserName(userName)
+      .then((rsp) => {
+        state.loading = false;
+        state.searchUsers = [rsp.userName];
+        selectToLeft();
+      })
+      .catch(() => {
+        state.loading = false;
+        createMessage.error('接口异常');
+      });
   }
 
   function selectToLeft() {
     let nodes = state.search.trim() === '' ? state.nodes : state.searchUsers;
-    nodes.forEach(node => {
+    nodes.forEach((node) => {
       for (let i = 0; i < state.select.length; i++) {
         if (state.select[i].id === node.id) {
           node.selected = true;
@@ -291,7 +330,7 @@
       node.selected = true;
       let nodes = state.search.trim() === '' ? state.nodes : state.searchUsers;
       if (!props.multiple) {
-        nodes.forEach(nd => {
+        nodes.forEach((nd) => {
           if (node.id !== nd.id) {
             nd.selected = false;
           }
@@ -325,15 +364,15 @@
       }
       nodes = state.searchUsers;
     }
-    state.select.splice(index, 1)
+    state.select.splice(index, 1);
   }
 
   function handleCheckAllChange() {
-    state.nodes.forEach(node => {
+    state.nodes.forEach((node) => {
       if (state.checkAll) {
         if (!node.selected && !disableDept(node)) {
-          node.selected = true
-          state.select.push(node)
+          node.selected = true;
+          state.select.push(node);
         }
       } else {
         node.selected = false;
@@ -368,19 +407,25 @@
 
   function recover() {
     state.select = [];
-    state.nodes.forEach(nd => nd.selected = false);
+    state.nodes.forEach((nd) => (nd.selected = false));
   }
 
   function selectOk() {
-    emits('ok', Object.assign([], state.select.map(v => {
-      v.avatar = undefined;
-      return v;
-    })));
+    emits(
+      'ok',
+      Object.assign(
+        [],
+        state.select.map((v) => {
+          v.avatar = undefined;
+          return v;
+        }),
+      ),
+    );
     state.visible = false;
     recover();
   }
 
-  function clearSelected(){
+  function clearSelected() {
     createConfirm({
       title: '提示',
       content: '您确定要清空已选中的项?',
@@ -413,161 +458,166 @@
 </script>
 
 <style lang="less" scoped>
-@containWidth: 278px;
-.candidate, .selected {
-  position: absolute;
-  display: inline-block;
-  width: @containWidth;
-  height: 400px;
-  border: 1px solid #e8e8e8;
-}
+  @containWidth: 278px;
 
-.picker {
-  height: 402px;
-  position: relative;
-  text-align: left;
-  .candidate {
-    left: 0;
-    top: 0;
-
-    .role-header{
-      padding: 10px !important;
-      margin-bottom: 5px;
-      border-bottom: 1px solid #e8e8e8;
-    }
-
-    .top-dept{
-      margin-left: 20px;
-      cursor: pointer;
-      color:#38adff;
-    }
-    .next-dept {
-      float: right;
-      color: @primary-color;
-      cursor: pointer;
-    }
-
-    .next-dept-disable {
-      float: right;
-      color: #8c8c8c;
-      cursor: not-allowed;
-    }
-
-    & > div:first-child {
-      padding: 5px 10px;
-    }
-
-  }
-
+  .candidate,
   .selected {
-    right: 0;
-    top: 0;
+    position: absolute;
+    display: inline-block;
+    width: @containWidth;
+    height: 400px;
+    border: 1px solid #e8e8e8;
   }
 
-  .org-items {
-    overflow-y: auto;
-    height: 310px;
+  .picker {
+    height: 402px;
+    position: relative;
+    text-align: left;
 
-    .anticon-close {
-      position: absolute;
-      right: 5px;
-      cursor: pointer;
-      font-size: larger;
+    .candidate {
+      left: 0;
+      top: 0;
+
+      .role-header {
+        padding: 10px !important;
+        margin-bottom: 5px;
+        border-bottom: 1px solid #e8e8e8;
+      }
+
+      .top-dept {
+        margin-left: 20px;
+        cursor: pointer;
+        color: #38adff;
+      }
+
+      .next-dept {
+        float: right;
+        color: @primary-color;
+        cursor: pointer;
+      }
+
+      .next-dept-disable {
+        float: right;
+        color: #8c8c8c;
+        cursor: not-allowed;
+      }
+
+      & > div:first-child {
+        padding: 5px 10px;
+      }
     }
-    .org-dept-item {
-      padding: 10px 5px;
 
-      & > div {
-        display: inline-block;
+    .selected {
+      right: 0;
+      top: 0;
+    }
 
-        & > span:last-child {
-          position: absolute;
-          right: 5px;
+    .org-items {
+      overflow-y: auto;
+      height: 310px;
+
+      .anticon-close {
+        position: absolute;
+        right: 5px;
+        cursor: pointer;
+        font-size: larger;
+      }
+
+      .org-dept-item {
+        padding: 10px 5px;
+
+        & > div {
+          display: inline-block;
+
+          & > span:last-child {
+            position: absolute;
+            right: 5px;
+          }
+        }
+      }
+
+      .org-role-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 5px;
+      }
+
+      :deep(.org-user-item) {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+
+        & > div {
+          display: inline-block;
+        }
+
+        .avatar {
+          width: 35px;
+          text-align: center;
+          line-height: 35px;
+          background: @primary-color;
+          color: white;
+          border-radius: 50%;
+        }
+      }
+
+      :deep(.org-item) {
+        margin: 0 5px;
+        border-radius: 5px;
+        position: relative;
+        display: flex;
+
+        .ant-checkbox {
+          margin-right: 10px;
+        }
+
+        .name {
+          margin-left: 5px;
+        }
+
+        &:hover {
+          background: #f1f1f1;
         }
       }
     }
+  }
 
-    .org-role-item {
-      display: flex;
-      align-items: center;
-      padding: 10px 5px;
-    }
+  .selected {
+    border-left: none;
 
-    :deep(.org-user-item) {
-      display: flex;
-      align-items: center;
-      padding: 5px;
+    .count {
+      width: calc(@containWidth - 20px);
+      padding: 10px;
+      display: inline-block;
+      border-bottom: 1px solid #e8e8e8;
+      margin-bottom: 5px;
 
-      & > div {
-        display: inline-block;
-      }
-
-      .avatar {
-        width: 35px;
-        text-align: center;
-        line-height: 35px;
-        background: @primary-color;
-        color: white;
-        border-radius: 50%;
-      }
-    }
-
-    :deep(.org-item) {
-      margin: 0 5px;
-      border-radius: 5px;
-      position: relative;
-      display: flex;
-
-      .ant-checkbox {
-        margin-right: 10px;
-      }
-
-      .name {
-        margin-left: 5px;
-      }
-
-      &:hover {
-        background: #f1f1f1;
+      & > span:nth-child(2) {
+        float: right;
+        color: #c75450;
+        cursor: pointer;
       }
     }
   }
-}
 
-.selected {
-  border-left: none;
-
-  .count {
-    width: calc(@containWidth - 20px);
-    padding: 10px;
-    display: inline-block;
-    border-bottom: 1px solid #e8e8e8;
-    margin-bottom: 5px;
-    & > span:nth-child(2) {
-      float: right;
-      color: #c75450;
-      cursor: pointer;
-    }
+  :deep(.ant-modal-body) {
+    padding: 10px 20px;
   }
-}
 
-:deep(.ant-modal-body) {
-  padding: 10px 20px;
-}
+  .disabled {
+    cursor: not-allowed !important;
+    color: #8c8c8c !important;
+  }
 
-.disabled{
-  cursor: not-allowed !important;
-  color: #8c8c8c !important;
-}
+  ::-webkit-scrollbar {
+    float: right;
+    width: 4px;
+    height: 4px;
+    background-color: white;
+  }
 
-::-webkit-scrollbar {
-  float: right;
-  width: 4px;
-  height: 4px;
-  background-color: white;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 16px;
-  background-color: #efefef;
-}
+  ::-webkit-scrollbar-thumb {
+    border-radius: 16px;
+    background-color: #efefef;
+  }
 </style>

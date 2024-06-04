@@ -254,19 +254,23 @@
     fill: currentColor;
     overflow: hidden;
   }
+
   .rule-props-content {
     :deep(.ant-form-item) {
       margin-bottom: 0;
     }
+
     .rule-props-item {
       position: relative;
       background-color: #f0eded;
       padding: 3px 2px;
       border-radius: 5px;
       margin-bottom: 5px;
+
       :deep(.ant-form-item) {
         border: 0 !important;
       }
+
       &-close {
         position: absolute;
         top: -5px;
@@ -276,6 +280,7 @@
         border-radius: 7px;
         background-color: #a3a0a0;
         z-index: 999;
+
         &:hover {
           color: #00c;
         }

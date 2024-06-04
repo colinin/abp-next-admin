@@ -7,7 +7,7 @@ import {
   NotificationSeverity,
   NotificationReadState,
   NotificationContentType,
-} from '/@/api/messages/model/notificationsModel';
+} from '/@/api/messages/notifications/model';
 import { formatToDateTime } from '/@/utils/dateUtil';
 import { TabItem, ListItem as Notification } from './data';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';

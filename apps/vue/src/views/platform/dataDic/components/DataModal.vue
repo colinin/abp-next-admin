@@ -1,10 +1,5 @@
 <template>
-  <BasicModal
-    v-bind="$attrs"
-    @register="register"
-    :title="title"
-    @ok="handleSubmit"
-  >
+  <BasicModal v-bind="$attrs" @register="register" :title="title" @ok="handleSubmit">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -13,7 +8,7 @@
   import { ref, nextTick } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { get, create, update } from '/@/api/platform/dataDic';
+  import { get, create, update } from '/@/api/platform/datas';
   import { getDateFormSchemas } from './ModalData';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
@@ -56,13 +51,15 @@
     validate().then((input) => {
       changeLoading(true);
       const api = input.id ? update(input.id, input) : create(input);
-      api.then((data) => {
-        createMessage.success(L('Successful'));
-        closeModal();
-        emits('change', data);
-      }).finally(() => {
-        changeLoading(false);
-      });
+      api
+        .then((data) => {
+          createMessage.success(L('Successful'));
+          closeModal();
+          emits('change', data);
+        })
+        .finally(() => {
+          changeLoading(false);
+        });
     });
   }
 </script>

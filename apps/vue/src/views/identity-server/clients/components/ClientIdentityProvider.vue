@@ -23,7 +23,7 @@
   import { FormSchema } from '/@/components/Form';
   import { BasicColumn } from '/@/components/Table';
   import { useIdentityProvider } from '../hooks/useIdentityProvider';
-  import { Client } from '/@/api/identity-server/model/clientsModel';
+  import { Client } from '/@/api/identity-server/clients/model';
   import DynamicForm from './DynamicForm.vue';
 
   const FormItem = Form.Item;

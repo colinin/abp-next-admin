@@ -1,12 +1,8 @@
 <template>
   <div class="content">
-    <BasicTable @register="registerTable">
+    <BasicTable @register="registerTable" @selection-change="handleSelectionChange">
       <template #toolbar>
-        <Button
-          v-auth="['AbpWebhooks.Subscriptions.Create']"
-          type="primary"
-          @click="handleAddNew"
-        >
+        <Button v-auth="['AbpWebhooks.Subscriptions.Create']" type="primary" @click="handleAddNew">
           {{ L('Subscriptions:AddNew') }}
         </Button>
         <Button
@@ -53,7 +49,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
   import { Button, Tag } from 'ant-design-vue';
   import { CheckOutlined, CloseOutlined } from '@ant-design/icons-vue';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -63,13 +59,17 @@
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
-  import { DeleteAsyncById, DeleteManyAsyncByInput, GetListAsyncByInput } from '/@/api/webhooks/subscriptions';
+  import {
+    DeleteAsyncById,
+    DeleteManyAsyncByInput,
+    GetListAsyncByInput,
+  } from '/@/api/webhooks/subscriptions';
   import SubscriptionModal from './SubscriptionModal.vue';
 
   const { createConfirm, createMessage } = useMessage();
   const { L } = useLocalization(['WebhooksManagement', 'AbpUi']);
   const [registerModal, { openModal }] = useModal();
-  const [registerTable, { reload, setLoading, getSelectRowKeys, clearSelectedRowKeys }] = useTable({
+  const [registerTable, { reload, setLoading, clearSelectedRowKeys }] = useTable({
     rowKey: 'id',
     title: L('Subscriptions'),
     columns: getDataColumns(),
@@ -94,10 +94,14 @@
       type: 'checkbox',
     },
   });
-  const deleteManyEnabled = computed(() => {
-    const selectKeys = getSelectRowKeys();
-    return selectKeys.length > 0;
+  const selectionKeys = ref<string[]>([]);
+    const deleteManyEnabled = computed(() => {
+    return selectionKeys.value.length;
   });
+
+  function handleSelectionChange(e: { keys: string[] }) {
+    selectionKeys.value = e.keys;
+  }
 
   function handleAddNew() {
     openModal(true, { id: null });
@@ -114,17 +118,18 @@
       content: L('ItemWillBeDeletedMessageWithFormat', { 0: L('SelectedItems') }),
       okCancel: true,
       onOk: () => {
-        const selectKeys = getSelectRowKeys();
         setLoading(true);
         return DeleteManyAsyncByInput({
-          recordIds: selectKeys,
-        }).then(() => {
-          createMessage.success(L('SuccessfullyDeleted'));
-          clearSelectedRowKeys();
-          reload();
-        }).finally(() => {
-          setLoading(false);
-        });
+          recordIds: selectionKeys.value,
+        })
+          .then(() => {
+            createMessage.success(L('SuccessfullyDeleted'));
+            clearSelectedRowKeys();
+            reload();
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       },
     });
   }
@@ -137,14 +142,16 @@
       okCancel: true,
       onOk: () => {
         setLoading(true);
-        return DeleteAsyncById(record.id).then(() => {
-          createMessage.success(L('SuccessfullyDeleted'));
-          clearSelectedRowKeys();
-          reload();
-          reload();
-        }).finally(() => {
-          setLoading(false);
-        });
+        return DeleteAsyncById(record.id)
+          .then(() => {
+            createMessage.success(L('SuccessfullyDeleted'));
+            clearSelectedRowKeys();
+            reload();
+            reload();
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       },
     });
   }

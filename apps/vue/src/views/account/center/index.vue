@@ -40,10 +40,10 @@
   import Setting from './Setting.vue';
 
   const TabPane = Tabs.TabPane;
-  
+
   const componentsRef = shallowRef({
-    'Cloud': Cloud,
-    'Setting': Setting,
+    Cloud: Cloud,
+    Setting: Setting,
   });
 
   const prefixCls = 'account-center';
@@ -67,7 +67,7 @@
     {},
     {
       top: '80px',
-    }
+    },
   );
   const userInfo = computed(() => userStore.getUserInfo);
 </script>

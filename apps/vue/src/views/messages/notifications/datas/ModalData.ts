@@ -1,6 +1,6 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
-import { NotificationReadState } from '/@/api/messages/model/notificationsModel';
+import { NotificationReadState } from '/@/api/messages/notifications/model';
 
 const { L } = useLocalization(['AbpMessageService', 'Notifications', 'AbpUi']);
 

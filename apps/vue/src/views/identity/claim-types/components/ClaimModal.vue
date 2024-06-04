@@ -28,7 +28,7 @@
   import { useClaimModal } from '../hooks/useClaimModal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { IdentityClaimType } from '/@/api/identity/model/claimModel';
+  import { IdentityClaimType } from '/@/api/identity/claims/model';
 
   const emits = defineEmits(['change', 'register']);
 

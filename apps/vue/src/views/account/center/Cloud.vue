@@ -32,13 +32,13 @@
   import { TreeDataItem } from 'ant-design-vue/es/tree/Tree';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
-  import { OssObject } from '/@/api/oss-management/model/ossModel';
+  import { OssObject } from '/@/api/oss-management/objects/model';
   import FileList from './FileList.vue';
   import ShareList from './ShareList.vue';
 
   const componentsRef = shallowRef({
-    'FileList': FileList,
-    'ShareList': ShareList,
+    FileList: FileList,
+    ShareList: ShareList,
   });
 
   const CardGrid = Card.Grid;

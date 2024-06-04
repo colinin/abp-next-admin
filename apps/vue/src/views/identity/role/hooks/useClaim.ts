@@ -3,9 +3,9 @@ import { useMessage } from '/@/hooks/web/useMessage';
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormSchema } from '/@/components/Form';
 import { useModal } from '/@/components/Modal';
-import { getActivedList } from '/@/api/identity/claim';
+import { getActivedList } from '/@/api/identity/claims';
 import { getClaimColumns } from '../datas/TableData';
-import { createClaim, deleteClaim, getClaimList, updateClaim } from '/@/api/identity/role';
+import { createClaim, deleteClaim, getClaimList, updateClaim } from '/@/api/identity/roles';
 import { useTable } from '/@/components/Table';
 import { computed, unref, watch } from 'vue';
 

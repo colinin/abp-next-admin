@@ -26,8 +26,8 @@
   import { getModalFormSchemas } from '../datas/ModalData';
   import { formatToDateTime } from '/@/utils/dateUtil';
   import { OpenIddictAuthorizationDto } from '/@/api/openiddict/open-iddict-authorization/model';
-  import { GetAsyncById as getAuthorization } from '/@/api/openiddict/open-iddict-authorization';
-  import { GetAsyncById as getApplication } from '/@/api/openiddict/open-iddict-application';
+  import { get as getAuthorization } from '/@/api/openiddict/open-iddict-authorization';
+  import { get as getApplication } from '/@/api/openiddict/open-iddict-application';
 
   const Option = Select.Option;
 
@@ -55,10 +55,11 @@
   }
 
   function fetchApplication(auth: OpenIddictAuthorizationDto) {
-    auth.applicationId && getApplication(auth.applicationId).then((dto) => {
-      setFieldsValue({
-        applicationId: `${dto.clientId}(${auth.applicationId})`,
+    auth.applicationId &&
+      getApplication(auth.applicationId).then((dto) => {
+        setFieldsValue({
+          applicationId: `${dto.clientId}(${auth.applicationId})`,
+        });
       });
-    });
   }
 </script>

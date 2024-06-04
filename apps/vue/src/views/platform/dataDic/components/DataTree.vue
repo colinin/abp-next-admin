@@ -33,7 +33,7 @@
   import { useModal } from '/@/components/Modal';
   import { BasicTree, ContextMenuItem } from '/@/components/Tree/index';
   import { listToTree } from '/@/utils/helper/treeHelper';
-  import { getAll, remove } from '/@/api/platform/dataDic';
+  import { getAll, remove } from '/@/api/platform/datas';
   import DataModal from './DataModal.vue';
   import DataItemModal from './DataItemModal.vue';
 
@@ -53,14 +53,12 @@
   const [registerItemModal, { openModal: openItemModal }] = useModal();
   const [registerDataModal, { openModal: openDataModal }] = useModal();
   const getFlag = computed(() => true);
-  const { contentHeight } = useContentHeight(
-    getFlag, contentWrapRef, [], []
-  );
+  const { contentHeight } = useContentHeight(getFlag, contentWrapRef, [], []);
   const getContentStyle = computed((): CSSProperties => {
     return {
       width: '100%',
       height: `${contentHeight.value}px`,
-    }
+    };
   });
 
   onMounted(onLoadAllDataDic);

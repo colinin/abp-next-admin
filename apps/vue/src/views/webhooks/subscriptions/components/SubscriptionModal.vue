@@ -7,13 +7,7 @@
     :mask-closable="false"
     @ok="handleSubmit"
   >
-    <Form
-      ref="formElRef"
-      :colon="true"
-      layout="vertical"
-      :model="modelRef"
-      :rules="modelRules"
-    >
+    <Form ref="formElRef" :colon="true" layout="vertical" :model="modelRef" :rules="modelRules">
       <FormItem name="isActive">
         <Checkbox v-model:checked="modelRef.isActive">{{ L('DisplayName:IsActive') }}</Checkbox>
       </FormItem>
@@ -28,7 +22,11 @@
         <Input v-model:value="modelRef.webhookUri" autocomplete="off" />
       </FormItem>
       <FormItem name="description" :label="L('DisplayName:Description')">
-        <Textarea v-model:value="modelRef.description" :show-count="true" :auto-size="{ minRows: 3 }" />
+        <Textarea
+          v-model:value="modelRef.description"
+          :show-count="true"
+          :auto-size="{ minRows: 3 }"
+        />
       </FormItem>
       <FormItem name="secret" :label="L('DisplayName:Secret')">
         <InputPassword v-model:value="modelRef.secret" autocomplete="off" />
@@ -78,12 +76,9 @@
     GetAsyncById,
     CreateAsyncByInput,
     UpdateAsyncByIdAndInput,
-    GetAllAvailableWebhooksAsync
+    GetAllAvailableWebhooksAsync,
   } from '/@/api/webhooks/subscriptions';
-  import {
-    WebhookSubscription,
-    WebhookAvailableGroup,
-  } from '/@/api/webhooks/subscriptions/model';
+  import { WebhookSubscription, WebhookAvailableGroup } from '/@/api/webhooks/subscriptions/model';
 
   const FormItem = Form.Item;
   const SelectGroup = Select.OptGroup;

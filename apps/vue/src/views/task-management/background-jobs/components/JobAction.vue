@@ -16,7 +16,11 @@
           </Button>
         </Dropdown>
       </template>
-      <Card v-for="actionForm in actionFormsRef" :title="actionForm.model.displayName ?? actionForm.model.name" :key="actionForm.key">
+      <Card
+        v-for="actionForm in actionFormsRef"
+        :title="actionForm.model.displayName ?? actionForm.model.name"
+        :key="actionForm.key"
+      >
         <template #extra>
           <Button danger @click="handleDelAction(actionForm)">{{ L('Job:DeleteAction') }}</Button>
         </template>
@@ -48,9 +52,26 @@
   import { BasicForm, FormSchema } from '/@/components/Form';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
-  import { BackgroundJobAction, BackgroundJobActionDefinition, JobActionType } from '/@/api/task-management/model/backgroundJobActionModel';
-  import { addAction, updateAction, deleteAction, getActions, getDefinitions as getActionDefinitions } from '/@/api/task-management/backgroundJobAction';
+  import {
+    BackgroundJobAction,
+    BackgroundJobActionDefinition,
+    JobActionType,
+  } from '/@/api/task-management/model/backgroundJobActionModel';
+  import {
+    addAction,
+    updateAction,
+    deleteAction,
+    getActions,
+    getDefinitions as getActionDefinitions,
+  } from '/@/api/task-management/actions';
   import { buildUUID } from '/@/utils/uuid';
+
+  interface ActionForm {
+    key: string;
+    submiting: boolean;
+    model: BackgroundJobAction;
+    schemas: FormSchema[] | any[];
+  }
 
   const props = defineProps({
     jobId: {
@@ -61,12 +82,7 @@
   const { createConfirm } = useMessage();
   const { L } = useLocalization(['BackgroundTasks', 'TaskManagement', 'AbpUi']);
   const actionDefinitions = ref<BackgroundJobActionDefinition[]>([]);
-  const actionFormsRef = ref<{
-    key: string,
-    submiting: boolean;
-    model: BackgroundJobAction,
-    schemas: FormSchema[],
-  }[]>([]);
+  const actionFormsRef = ref<ActionForm[]>([]);
 
   watch(
     () => props.jobId,
@@ -75,22 +91,22 @@
     },
     {
       immediate: true,
-    }
-  )
+    },
+  );
 
   function fetchJobActionDefinitions(type?: JobActionType) {
     getActionDefinitions({ type: type }).then((res) => {
       actionDefinitions.value = res.items;
       actionFormsRef.value = [];
       fetchJobActions();
-    })
+    });
   }
 
   function fetchJobActions() {
     if (props.jobId) {
       getActions(props.jobId).then((res) => {
         res.items.forEach((action) => {
-          const actionDefinition = actionDefinitions.value.find(ad => ad.name === action.name);
+          const actionDefinition = actionDefinitions.value.find((ad) => ad.name === action.name);
           actionFormsRef.value.push({
             key: buildUUID(),
             submiting: false,
@@ -99,7 +115,7 @@
               jobId: action.jobId,
               name: action.name,
               isEnabled: action.isEnabled,
-              paramters:  action.paramters,
+              paramters: action.paramters,
               displayName: actionDefinition?.displayName,
             },
             schemas: getFormSchemas(actionDefinition),
@@ -109,7 +125,7 @@
     }
   }
 
-  function getFormSchemas(action?: BackgroundJobActionDefinition) {
+  function getFormSchemas(action?: BackgroundJobActionDefinition): FormSchema[] {
     const actionSchemas: FormSchema[] = [
       {
         field: 'id',
@@ -159,7 +175,7 @@
   }
 
   function handleAddAction(e) {
-    const action = actionDefinitions.value.find(ad => ad.name === e.key);
+    const action = actionDefinitions.value.find((ad) => ad.name === e.key);
     if (action) {
       const actionForms = unref(actionFormsRef);
       const paramters: ExtraPropertyDictionary = action.paramters.map((p) => {
@@ -176,7 +192,7 @@
           name: action.name,
           displayName: action.displayName,
           isEnabled: true,
-          paramters:  paramters,
+          paramters: paramters,
         },
         schemas: getFormSchemas(action),
       });
@@ -186,11 +202,13 @@
   function handleSaveAction(form, input) {
     form.submiting = true;
     const api = input.id ? updateAction(input.id, input) : addAction(props.jobId, input);
-    api.then((res) => {
-      form.model.id = res;
-    }).finally(() => {
-      form.submiting = false;
-    });
+    api
+      .then((res) => {
+        form.model.id = res;
+      })
+      .finally(() => {
+        form.submiting = false;
+      });
   }
 
   async function handleDelAction(form) {
@@ -201,25 +219,26 @@
       onOk: () => {
         return new Promise((resolve, reject) => {
           if (form.model.id) {
-            return deleteAction(form.model.id).then(() => {
-              _deleteAction(form.key);
-              return resolve(form.key);
-            }).catch((error) => {
-              return reject(error);
-            });
+            return deleteAction(form.model.id)
+              .then(() => {
+                _deleteAction(form.key);
+                return resolve(form.key);
+              })
+              .catch((error) => {
+                return reject(error);
+              });
           }
           _deleteAction(form.key);
           return resolve(form.key);
         });
-      }
+      },
     });
   }
 
   function _deleteAction(key: string) {
-    const index = actionFormsRef.value.findIndex(x => x.key === key);
+    const index = actionFormsRef.value.findIndex((x) => x.key === key);
     if (index >= 0) {
       actionFormsRef.value.splice(index, 1);
     }
   }
-
 </script>

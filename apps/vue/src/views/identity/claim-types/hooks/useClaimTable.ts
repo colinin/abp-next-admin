@@ -1,8 +1,8 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useTable } from '/@/components/Table';
-import { deleteById, getList } from '/@/api/identity/claim';
-import { ValueType } from '/@/api/identity/model/claimModel';
+import { deleteById, getList } from '/@/api/identity/claims';
+import { ValueType } from '/@/api/identity/claims/model';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
 import { getDataColumns } from '../datas/TableData';
 import { getSearchFormSchemas } from '../datas/ModalData';

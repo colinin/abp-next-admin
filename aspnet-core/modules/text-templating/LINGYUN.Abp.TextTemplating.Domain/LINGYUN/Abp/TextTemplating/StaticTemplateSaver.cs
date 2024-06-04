@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
@@ -110,6 +111,10 @@ public class StaticTemplateSaver : IStaticTemplateSaver, ITransientDependency
             }
 
             var content = await TemplateContentProvider.GetContentOrNullAsync(templateDefinition, culture);
+            if (content.IsNullOrWhiteSpace())
+            {
+                continue;
+            }
             var textTemplate = new TextTemplate(
                 GuidGenerator.Create(),
                 templateDefinition.Name,

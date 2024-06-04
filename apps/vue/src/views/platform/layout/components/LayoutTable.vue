@@ -37,7 +37,7 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
-  import { getList, deleteById } from '/@/api/platform/layout';
+  import { getList, deleteById } from '/@/api/platform/layouts';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import LayoutModal from './LayoutModal.vue';
 

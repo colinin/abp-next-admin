@@ -1,7 +1,7 @@
 import type { Ref } from 'vue';
 
 import { computed, unref } from 'vue';
-import { IdentityResource } from '/@/api/identity-server/model/identityResourcesModel';
+import { IdentityResource } from '/@/api/identity-server/identity-resources/model';
 
 interface UseClaim {
   modelRef: Ref<IdentityResource>;

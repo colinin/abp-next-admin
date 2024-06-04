@@ -43,7 +43,13 @@
           :size="20"
           color="#00DD00"
         />
-        <Icon v-else class="title-icon" icon="ic:outline-mark-email-unread" :size="20" color="#FF7744" />
+        <Icon
+          v-else
+          class="title-icon"
+          icon="ic:outline-mark-email-unread"
+          :size="20"
+          color="#FF7744"
+        />
         <a href="javascript:(0);" @click="handleExpanded(record)">{{ getTitle(record) }}</a>
       </template>
       <template v-else-if="column.key === 'message'">
@@ -66,7 +72,7 @@
           :drop-down-actions="[
             {
               label: L('MarkAs'),
-            }
+            },
           ]"
         >
           <template #more>
@@ -104,7 +110,11 @@
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
   import { markReadState, deleteById, getList } from '/@/api/messages/notifications';
-  import { NotificationType, NotificationReadState, NotificationInfo } from '/@/api/messages/model/notificationsModel';
+  import {
+    NotificationType,
+    NotificationReadState,
+    NotificationInfo,
+  } from '/@/api/messages/notifications/model';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
@@ -145,7 +155,10 @@
   const getTitle = computed(() => {
     return (notifier) => {
       if (notifier.data?.extraProperties?.L === true) {
-        return L(notifier.data.extraProperties.title.Name, notifier.data.extraProperties.title.Values);
+        return L(
+          notifier.data.extraProperties.title.Name,
+          notifier.data.extraProperties.title.Values,
+        );
       }
       return notifier.data.extraProperties.title;
     };
@@ -153,7 +166,10 @@
   const getContent = computed(() => {
     return (notifier) => {
       if (notifier.data?.extraProperties?.L === true) {
-        return L(notifier.data.extraProperties.message.Name, notifier.data.extraProperties.message.Values);
+        return L(
+          notifier.data.extraProperties.message.Name,
+          notifier.data.extraProperties.message.Values,
+        );
       }
       return notifier.data.extraProperties.message;
     };
@@ -218,7 +234,7 @@
   }
 
   function handleExpanded(record) {
-    const index = expandedRowKeys.value.findIndex(key => key === record.id);
+    const index = expandedRowKeys.value.findIndex((key) => key === record.id);
     if (index >= 0) {
       expandedRowKeys.value.splice(index, 1);
     } else {

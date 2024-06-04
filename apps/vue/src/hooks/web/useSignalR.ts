@@ -10,7 +10,7 @@ import { useUserStoreWithOut } from '/@/store/modules/user';
 
 import mitt from '/@/utils/mitt';
 
-interface UseSignalR {
+interface SignalROptions {
   serverUrl: string;
   autoStart?: boolean;
   useAccessToken?: boolean;
@@ -18,18 +18,16 @@ interface UseSignalR {
   nextRetryDelayInMilliseconds?: number;
 }
 
-export function useSignalR({
-  serverUrl,
-  autoStart = false,
-  useAccessToken = true,
-  automaticReconnect = true,
-  nextRetryDelayInMilliseconds = 60000,
-}: UseSignalR) {
+interface UseSignalR {
+  lazyInit?: boolean;
+}
+
+export function useSignalR(options: UseSignalR & SignalROptions) {
   const emitter = mitt();
   let connection: HubConnection | null = null;
 
   onMounted(() => {
-    _initlizaConnection();
+    !options.lazyInit && init(options);
   });
 
   onUnmounted(() => {
@@ -38,7 +36,13 @@ export function useSignalR({
     }
   });
 
-  function _initlizaConnection() {
+  function init({
+    serverUrl,
+    autoStart = false,
+    useAccessToken = true,
+    automaticReconnect = true,
+    nextRetryDelayInMilliseconds = 60000,
+  }: SignalROptions) {
     const httpOptions: IHttpConnectionOptions = {};
     if (useAccessToken) {
       const userStore = useUserStoreWithOut();
@@ -49,7 +53,7 @@ export function useSignalR({
     var connectionBuilder = new HubConnectionBuilder()
       .withUrl(serverUrl, httpOptions)
       .configureLogging(LogLevel.Warning);
-    if (automaticReconnect) {
+    if (automaticReconnect && nextRetryDelayInMilliseconds) {
       connectionBuilder.withAutomaticReconnect({
         nextRetryDelayInMilliseconds: () => nextRetryDelayInMilliseconds,
       });
@@ -123,6 +127,7 @@ export function useSignalR({
   return {
     on,
     off,
+    init,
     onclose,
     beforeStart,
     onStart,

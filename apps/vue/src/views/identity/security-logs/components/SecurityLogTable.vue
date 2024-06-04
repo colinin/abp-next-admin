@@ -24,7 +24,7 @@
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
-  import { deleteById, getList } from '/@/api/identity/securityLog';
+  import { deleteById, getList } from '/@/api/auditing/security-logs';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
 
   const { createMessage, createConfirm } = useMessage();

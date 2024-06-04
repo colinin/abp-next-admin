@@ -1,6 +1,6 @@
 import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
-import { GetListAsyncByInput as getApplications } from '/@/api/openiddict/open-iddict-application';
+import { getList as getApplications } from '/@/api/openiddict/open-iddict-application';
 
 const { L } = useLocalization(['AbpOpenIddict', 'AbpUi']);
 

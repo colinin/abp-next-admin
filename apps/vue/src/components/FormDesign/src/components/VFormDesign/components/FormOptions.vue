@@ -90,23 +90,27 @@
         formConfig.value.currentItem!.componentProps!['columns']?.push({
           align: 'left',
           title: `列${len}`,
-          dataIndex: `col${len}`
+          dataIndex: `col${len}`,
         });
         const dataSource = formConfig.value.currentItem!.componentProps!['dataSource'];
-        dataSource && Array.isArray(dataSource) && dataSource.forEach((data, di) => {
-          Reflect.defineProperty(data, `col${len}`, { value: `数据${len}-${di + 1}` });
-        });
-      }
+        dataSource &&
+          Array.isArray(dataSource) &&
+          dataSource.forEach((data, di) => {
+            Reflect.defineProperty(data, `col${len}`, { value: `数据${len}-${di + 1}` });
+          });
+      };
 
       const deleteTableColumns = (index: number) => {
         if (index === 0) return message.warning('请至少保留一个列');
         remove(formConfig.value.currentItem!.componentProps!['columns']!, index);
         const dataSource = formConfig.value.currentItem!.componentProps!['dataSource'];
-        dataSource && Array.isArray(dataSource) && dataSource.forEach((data) => {
-          Reflect.deleteProperty(data, `col${index + 1}`);
-        });
-      }
-  
+        dataSource &&
+          Array.isArray(dataSource) &&
+          dataSource.forEach((data) => {
+            Reflect.deleteProperty(data, `col${index + 1}`);
+          });
+      };
+
       return {
         ...toRefs(state),
         formConfig,
@@ -127,9 +131,11 @@
     display: flex;
     align-items: center;
     margin-bottom: 5px;
+
     .options-value {
       margin: 0 8px;
     }
+
     .options-delete {
       width: 30px;
       height: 30px;
@@ -139,6 +145,7 @@
       border-radius: 50%;
       background: #f5f5f5;
       color: #666;
+
       &:hover {
         background: #ff4d4f;
       }

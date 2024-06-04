@@ -5,9 +5,9 @@
       "launchBrowser": false,
       "dotnetRunMessages": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Production"
       },
-      "applicationUrl": "http://localhost:30000;https://localhost:30443"
+      "applicationUrl": "http://localhost:30000"
     }
   }
 }
