@@ -19,6 +19,7 @@ public class Program
             var builder = WebApplication.CreateBuilder(args);
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
+                .AddYarpJson()
                 .ConfigureAppConfiguration((context, config) =>
                 {
                     var configuration = config.Build();
