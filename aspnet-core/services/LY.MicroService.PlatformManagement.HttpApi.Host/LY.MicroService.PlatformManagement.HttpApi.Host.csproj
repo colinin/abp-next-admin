@@ -84,5 +84,7 @@
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj" />
+	</ItemGroup>
 </Project>
