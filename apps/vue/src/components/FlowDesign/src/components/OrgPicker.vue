@@ -129,9 +129,9 @@
   } from '@ant-design/icons-vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { isNullOrWhiteSpace } from '/@/utils/strings';
-  import { findByUserName } from '/@/api/identity/userLookup';
-  import { getList as getUsers } from '/@/api/identity/user';
-  import { getList as getRoles } from '/@/api/identity/role';
+  import { findByUserName } from '/@/api/identity/users-lookup';
+  import { getList as getUsers } from '/@/api/identity/users';
+  import { getList as getRoles } from '/@/api/identity/roles';
   import { getList as getOrganizationUnits } from '/@/api/identity/organization-units';
   import Ellipsis from './Ellipsis.vue';
 

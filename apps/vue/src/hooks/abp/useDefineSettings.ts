@@ -5,7 +5,10 @@ import { useSettings as useAbpSettings, ISettingProvider } from '/@/hooks/abp/us
 
 type SettingValue = NameValue<string>;
 
-export function useDefineSettings(settingKey: string, api: (...args) => Promise<ListResultDto<SettingGroup>>) {
+export function useDefineSettings(
+  settingKey: string, 
+  api: (...args) => Promise<ListResultDto<SettingGroup>>,
+  onReady?: () => void) {
   const settingStore = useSettingManagementStoreWithOut();
   const { settingProvider: abpSettingProvider } = useAbpSettings();
   const getSettings = computed(() => {
@@ -14,7 +17,7 @@ export function useDefineSettings(settingKey: string, api: (...args) => Promise<
   });
 
   onMounted(() => {
-    settingStore.initlize(settingKey, api);
+    settingStore.initlize(settingKey, api, onReady);
   });
 
   function get(name: string): SettingValue | undefined {

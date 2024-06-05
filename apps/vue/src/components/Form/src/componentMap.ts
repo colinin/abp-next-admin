@@ -20,6 +20,7 @@ import {
   Rate,
   Divider,
 } from 'ant-design-vue';
+import { ColorPicker } from 'vue3-colorpicker';
 
 import ApiRadioGroup from './components/ApiRadioGroup.vue';
 import RadioButtonGroup from './components/RadioButtonGroup.vue';
@@ -79,6 +80,8 @@ componentMap.set('RangePicker', DatePicker.RangePicker);
 componentMap.set('WeekPicker', DatePicker.WeekPicker);
 componentMap.set('TimePicker', TimePicker);
 componentMap.set('Divider', Divider);
+
+componentMap.set('ColorPicker', ColorPicker);
 
 componentMap.set('ExtraPropertyDictionary', ExtraPropertyDictionary);
 componentMap.set('LocalizableInput', LocalizableInput);

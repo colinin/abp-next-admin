@@ -117,4 +117,5 @@ export type ComponentType =
   | 'ApiTransfer'
   | 'CodeEditorX'
   | 'ExtraPropertyDictionary'
-  | 'LocalizableInput';
+  | 'LocalizableInput'
+  | 'ColorPicker';
