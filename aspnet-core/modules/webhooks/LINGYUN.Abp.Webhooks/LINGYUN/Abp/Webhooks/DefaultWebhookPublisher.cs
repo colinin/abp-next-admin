@@ -111,7 +111,8 @@ namespace LINGYUN.Abp.Webhooks
                         Headers = headersToSend,
                         Secret = webhookSubscription.Secret,
                         WebhookUri = webhookSubscription.WebhookUri,
-                        SendExactSameData = sendExactSameData
+                        SendExactSameData = sendExactSameData,
+                        TimeoutDuration = webhookSubscription.TimeoutDuration,
                     });
                 }
             }

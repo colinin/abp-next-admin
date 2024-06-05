@@ -17,6 +17,7 @@ public class WebhookSubscription : CreationAuditedEntity<Guid>, IHasConcurrencyS
     public virtual string Headers { get; protected set; }
     public virtual string Description { get; set; }
     public virtual string ConcurrencyStamp { get; set; }
+    public virtual int? TimeoutDuration { get; set; }
 
     protected WebhookSubscription()
     {

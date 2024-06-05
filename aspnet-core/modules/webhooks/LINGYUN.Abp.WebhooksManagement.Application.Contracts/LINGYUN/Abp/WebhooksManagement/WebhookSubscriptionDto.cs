@@ -15,4 +15,5 @@ public class WebhookSubscriptionDto : CreationAuditedEntityDto<Guid>, IHasConcur
     public List<string> Webhooks { get; set; } = new List<string>();
     public IDictionary<string, string> Headers { get; set; } = new Dictionary<string, string>();
     public string ConcurrencyStamp { get; set; }
+    public int? TimeoutDuration { get; set; }
 }

@@ -58,13 +58,13 @@ public class AbpWebhooksOptions
             { "X-Requested-From", "abp-webhooks" },
         };
 
-        DefaultAgentIdentifier = "Abp Webhooks";
+        DefaultAgentIdentifier = "Abp-Webhooks";
 
         var assembly = typeof(AbpWebhooksOptions).Assembly;
-        var versionAttr = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        var versionAttr = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
         if (versionAttr != null)
         {
-            DefaultAgentIdentifier += " " + versionAttr.InformationalVersion;
+            DefaultAgentIdentifier += "/" + versionAttr.Version;
         }
     }
 

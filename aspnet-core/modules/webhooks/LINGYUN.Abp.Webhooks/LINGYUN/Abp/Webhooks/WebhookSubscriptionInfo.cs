@@ -28,27 +28,18 @@ namespace LINGYUN.Abp.Webhooks
 
         /// <summary>
         /// Subscribed webhook definitions unique names.It contains webhook definitions list as json
-        /// <para>
-        /// Do not change it manually.
-        /// Use <see cref=" WebhookSubscriptionInfoExtensions.GetSubscribedWebhooks"/>, 
-        /// <see cref=" WebhookSubscriptionInfoExtensions.SubscribeWebhook"/>, 
-        /// <see cref="WebhookSubscriptionInfoExtensions.UnsubscribeWebhook"/> and 
-        /// <see cref="WebhookSubscriptionInfoExtensions.RemoveAllSubscribedWebhooks"/> to change it.
-        /// </para> 
         /// </summary>
         public List<string> Webhooks { get; set; }
 
         /// <summary>
         /// Gets a set of additional HTTP headers.That headers will be sent with the webhook. It contains webhook header dictionary as json
-        /// <para>
-        /// Do not change it manually.
-        /// Use <see cref=" WebhookSubscriptionInfoExtensions.GetWebhookHeaders"/>, 
-        /// <see cref="WebhookSubscriptionInfoExtensions.AddWebhookHeader"/>, 
-        /// <see cref="WebhookSubscriptionInfoExtensions.RemoveWebhookHeader"/>, 
-        /// <see cref="WebhookSubscriptionInfoExtensions.RemoveAllWebhookHeaders"/> to change it.
-        /// </para> 
         /// </summary>
         public IDictionary<string, string> Headers { get; set; }
+
+        /// <summary>
+        /// Request timeout time, in seconds
+        /// </summary>
+        public int? TimeoutDuration { get; set; }
 
         public WebhookSubscriptionInfo()
         {

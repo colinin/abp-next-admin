@@ -42,6 +42,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
         {
             IsActive = input.IsActive,
             Description = input.Description,
+            TimeoutDuration = input.TimeoutDuration,
         };
 
         subscription = await SubscriptionRepository.InsertAsync(subscription);
@@ -176,6 +177,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
             subscription.SetTenantId(input.TenantId);
         }
         subscription.IsActive = input.IsActive;
+        subscription.TimeoutDuration = input.TimeoutDuration;
     }
 
     private class WebhookSubscriptionGetListSpecification : Volo.Abp.Specifications.Specification<WebhookSubscription>
