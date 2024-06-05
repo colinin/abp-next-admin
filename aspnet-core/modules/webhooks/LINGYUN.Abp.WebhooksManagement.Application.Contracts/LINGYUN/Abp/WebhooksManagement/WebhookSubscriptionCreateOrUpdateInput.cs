@@ -29,6 +29,13 @@ public abstract class WebhookSubscriptionCreateOrUpdateInput
     [DynamicStringLength(typeof(WebhookSubscriptionConsts), nameof(WebhookSubscriptionConsts.MaxDescriptionLength))]
     public string Description { get; set; }
 
+    [DynamicRange(
+        typeof(WebhookSubscriptionConsts), 
+        typeof(int), 
+        nameof(WebhookSubscriptionConsts.TimeoutDurationMinimum), 
+        nameof(WebhookSubscriptionConsts.TimeoutDurationMaximum))]
+    public int? TimeoutDuration { get; set; }
+
     public bool IsActive { get; set; }
 
     public Guid? TenantId { get; set; }

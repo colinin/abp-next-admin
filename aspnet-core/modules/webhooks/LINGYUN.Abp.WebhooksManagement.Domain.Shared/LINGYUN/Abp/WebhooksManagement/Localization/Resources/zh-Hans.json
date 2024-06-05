@@ -64,6 +64,8 @@
     "DisplayName:IsStatic": "静态",
     "DisplayName:IsEnabled": "启用",
     "DisplayName:RequiredFeatures": "必要的功能",
+    "DisplayName:TimeoutDuration": "超时时间(s)",
+    "Description:TimeoutDuration": "设置此值后,将用设置的超时时间来发起请求,有效范围10-300s.",
     "ResponseState:Successed": "成功",
     "ResponseState:Failed": "失败",
     "GroupDefinitions": "分组定义",

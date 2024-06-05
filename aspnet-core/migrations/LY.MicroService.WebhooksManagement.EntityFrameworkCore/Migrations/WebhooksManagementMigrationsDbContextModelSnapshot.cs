@@ -18,7 +18,7 @@ namespace LY.MicroService.WebhooksManagement.EntityFrameworkCore.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookDefinitionRecord", b =>
@@ -225,6 +225,9 @@ namespace LY.MicroService.WebhooksManagement.EntityFrameworkCore.Migrations
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("char(36)");
+
+                    b.Property<int?>("TimeoutDuration")
+                        .HasColumnType("int");
 
                     b.Property<string>("WebhookUri")
                         .IsRequired()

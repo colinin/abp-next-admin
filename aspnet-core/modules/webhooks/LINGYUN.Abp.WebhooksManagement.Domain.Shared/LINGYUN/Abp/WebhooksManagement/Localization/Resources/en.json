@@ -64,6 +64,8 @@
     "DisplayName:IsStatic": "Static",
     "DisplayName:IsEnabled": "Enabled",
     "DisplayName:RequiredFeatures": "Required Features",
+    "DisplayName:TimeoutDuration": "Timeout Duration(s)",
+    "Description:TimeoutDuration": "After setting this value, the request will be initiated using the set timeout time, Effective range 10-300s.",
     "ResponseState:Successed": "Successed",
     "ResponseState:Failed": "Failed",
     "GroupDefinitions": "Group Definitions",

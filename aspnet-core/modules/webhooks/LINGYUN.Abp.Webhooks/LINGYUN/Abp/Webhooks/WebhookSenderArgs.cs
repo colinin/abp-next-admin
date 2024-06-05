@@ -58,6 +58,10 @@ namespace LINGYUN.Abp.Webhooks
         /// </para>
         /// </summary>
         public bool SendExactSameData { get; set; }
+        /// <summary>
+        /// Request timeout time, in seconds
+        /// </summary>
+        public int? TimeoutDuration { get; set; }
 
         public WebhookSenderArgs()
         {

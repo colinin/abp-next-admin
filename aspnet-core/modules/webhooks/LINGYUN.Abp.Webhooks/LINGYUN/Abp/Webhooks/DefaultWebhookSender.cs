@@ -64,7 +64,9 @@ namespace LINGYUN.Abp.Webhooks
 
             try
             {
-                var response = await SendHttpRequest(request);
+                var client = CreateWebhookClient(webhookSenderArgs);
+
+                var response = await SendHttpRequest(client, request);
 
                 isSucceed = response.IsSuccessStatusCode;
                 statusCode = response.StatusCode;
@@ -110,6 +112,18 @@ namespace LINGYUN.Abp.Webhooks
         protected virtual HttpRequestMessage CreateWebhookRequestMessage(WebhookSenderArgs webhookSenderArgs)
         {
             return new HttpRequestMessage(HttpMethod.Post, webhookSenderArgs.WebhookUri);
+        }
+
+        protected virtual HttpClient CreateWebhookClient(WebhookSenderArgs webhookSenderArgs)
+        {
+            var client = _httpClientFactory.CreateClient(AbpWebhooksModule.WebhooksClient);
+            if (webhookSenderArgs.TimeoutDuration.HasValue && 
+                (webhookSenderArgs.TimeoutDuration >= 10 && webhookSenderArgs.TimeoutDuration <= 300))
+            {
+                client.Timeout = TimeSpan.FromSeconds(webhookSenderArgs.TimeoutDuration.Value);
+            }
+
+            return client;
         }
 
         protected virtual void AddAdditionalHeaders(HttpRequestMessage request, WebhookSenderArgs webhookSenderArgs)
@@ -169,10 +183,8 @@ namespace LINGYUN.Abp.Webhooks
             }
         }
 
-        protected async virtual Task<HttpResponseMessage> SendHttpRequest(HttpRequestMessage request)
+        protected async virtual Task<HttpResponseMessage> SendHttpRequest(HttpClient client, HttpRequestMessage request)
         {
-            var client = _httpClientFactory.CreateClient(AbpWebhooksModule.WebhooksClient);
-
             return await client.SendAsync(request);
         }
 
