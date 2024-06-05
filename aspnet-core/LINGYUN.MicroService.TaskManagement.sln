@@ -154,7 +154,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.TestsBase", "tests\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj", "{6CC06BD8-FA30-45E0-BD3A-25FF39906EF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.BackgroundTasks.Activities.Tests", "tests\LINGYUN.Abp.BackgroundTasks.Activities.Tests\LINGYUN.Abp.BackgroundTasks.Activities.Tests.csproj", "{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.BackgroundTasks.Activities.Tests", "tests\LINGYUN.Abp.BackgroundTasks.Activities.Tests\LINGYUN.Abp.BackgroundTasks.Activities.Tests.csproj", "{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Claims.Mapping", "framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj", "{34042B8E-B896-4E5E-A243-31E2802264CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -398,6 +400,10 @@ Global
 		{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34042B8E-B896-4E5E-A243-31E2802264CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34042B8E-B896-4E5E-A243-31E2802264CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34042B8E-B896-4E5E-A243-31E2802264CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34042B8E-B896-4E5E-A243-31E2802264CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -462,6 +468,7 @@ Global
 		{A8EFC95D-6700-4840-A7FD-1F5BF4D0C71C} = {77341F31-F54C-436A-AF8D-F78D91303C45}
 		{6CC06BD8-FA30-45E0-BD3A-25FF39906EF5} = {77341F31-F54C-436A-AF8D-F78D91303C45}
 		{3EBB4CA4-82C2-41C6-94C5-CB0D4D2B6D07} = {77341F31-F54C-436A-AF8D-F78D91303C45}
+		{34042B8E-B896-4E5E-A243-31E2802264CE} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}

@@ -68,6 +68,7 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         PreConfigureApp();
+        PreConfigureWrapper();
         PreConfigureFeature();
         PreConfigureCAP(configuration);
     }

@@ -145,6 +145,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.Http
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Security", "framework\security\LINGYUN.Abp.Security\LINGYUN.Abp.Security.csproj", "{8F11DADB-557A-4ECF-BEBB-19AFA71998A1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Claims.Mapping", "framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj", "{047F892F-F8D2-4952-A1E9-93AA2B030F76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -375,6 +377,10 @@ Global
 		{8F11DADB-557A-4ECF-BEBB-19AFA71998A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F11DADB-557A-4ECF-BEBB-19AFA71998A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F11DADB-557A-4ECF-BEBB-19AFA71998A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{047F892F-F8D2-4952-A1E9-93AA2B030F76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{047F892F-F8D2-4952-A1E9-93AA2B030F76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{047F892F-F8D2-4952-A1E9-93AA2B030F76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{047F892F-F8D2-4952-A1E9-93AA2B030F76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -447,6 +453,7 @@ Global
 		{004CC7A9-92FF-4E98-8F1D-550D07CB47F0} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
 		{0DFDAC71-BCB9-44CF-A44A-E8288E75246F} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
 		{8F11DADB-557A-4ECF-BEBB-19AFA71998A1} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
+		{047F892F-F8D2-4952-A1E9-93AA2B030F76} = {FB7A9794-06D2-42CF-939E-4626497B97BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80ED12A5-C899-459F-A181-ADCC9D680DE5}

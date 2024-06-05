@@ -33,10 +33,12 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
 
         protected async override Task<bool> CanPublishAsync(NotificationInfo notification, CancellationToken cancellationToken = default)
         {
-            if (!await FeatureChecker.IsEnabledAsync(WeChatMiniProgramFeatures.Messages.Enable))
+            if (!await FeatureChecker.IsEnabledAsync(true,
+                WeChatMiniProgramFeatures.Enable,
+                WeChatMiniProgramFeatures.Messages.Enable))
             {
                 Logger.LogWarning(
-                    "{0} cannot push messages because the feature {0} is not enabled",
+                    "{0} cannot push messages because the feature {1} is not enabled",
                     Name,
                     WeChatMiniProgramFeatures.Messages.Enable);
                 return false;

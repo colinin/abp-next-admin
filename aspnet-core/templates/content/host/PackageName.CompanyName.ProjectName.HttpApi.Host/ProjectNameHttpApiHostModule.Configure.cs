@@ -368,10 +368,7 @@ public partial class ProjectNameHttpApiHostModule
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.Audience = configuration["AuthServer:ApiName"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.MapInboundClaims = Convert.ToBoolean(configuration["AuthServer:MapInboundClaims"]);
+                configuration.GetSection("AuthServer").Bind(options);
             });
 
         if (!isDevelopment)
@@ -382,43 +379,6 @@ public partial class ProjectNameHttpApiHostModule
                 .SetApplicationName("LINGYUN.Abp.Application")
                 .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
         }
-    }
-
-    private void ConfigureWrapper()
-    {
-        Configure<AbpWrapperOptions>(options =>
-        {
-            // 取消注释包装结果
-            // options.IsEnabled = true;
-        });
-
-        Configure<AbpHttpClientBuilderOptions>(options =>
-        {
-            // http服务间调用发送不需要包装结果的请求头
-            options.ProxyClientBuildActions.Add(
-                (_, builder) =>
-                {
-                    builder.ConfigureHttpClient((provider, client) =>
-                    {
-                        var wrapperOptions = provider.GetRequiredService<IOptions<AbpWrapperOptions>>();
-                        var wrapperHeader = wrapperOptions.Value.IsEnabled
-                            ? AbpHttpWrapConsts.AbpWrapResult
-                            : AbpHttpWrapConsts.AbpDontWrapResult;
-
-                        client.DefaultRequestHeaders.TryAddWithoutValidation(wrapperHeader, "true");
-                    });
-                });
-        });
-
-        Configure<AbpDaprClientProxyOptions>(options =>
-        {
-            // dapr服务间调用发送不需要包装结果的请求头
-            options.ProxyRequestActions.Add(
-                (appId, httpRequestMessage) =>
-                {
-                    httpRequestMessage.Headers.TryAddWithoutValidation(AbpHttpWrapConsts.AbpDontWrapResult, "true");
-                });
-        });
     }
 
     private void ConfigureCors(IServiceCollection services, IConfiguration configuration)
@@ -442,6 +402,38 @@ public partial class ProjectNameHttpApiHostModule
                     .AllowAnyMethod()
                     .AllowCredentials();
             });
+        });
+    }
+
+    private void ConfigureWrapper()
+    {
+        Configure<AbpWrapperOptions>(options =>
+        {
+            // 取消注释包装结果
+            // options.IsEnabled = true;
+        });
+    }
+
+    private void PreConfigureWrapper()
+    {
+        Configure<AbpHttpClientBuilderOptions>(options =>
+        {
+            // http服务间调用发送不需要包装结果的请求头
+            options.ProxyClientActions.Add(
+                (_, _, client) =>
+                {
+                    client.DefaultRequestHeaders.TryAddWithoutValidation(AbpHttpWrapConsts.AbpDontWrapResult, "true");
+                });
+        });
+
+        Configure<AbpDaprClientProxyOptions>(options =>
+        {
+            // dapr服务间调用发送不需要包装结果的请求头
+            options.ProxyRequestActions.Add(
+                (appId, httpRequestMessage) =>
+                {
+                    httpRequestMessage.Headers.TryAddWithoutValidation(AbpHttpWrapConsts.AbpDontWrapResult, "true");
+                });
         });
     }
 }

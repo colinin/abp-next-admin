@@ -71,7 +71,6 @@ public partial class WebhooksManagementHttpApiHostModule
 
     private void PreConfigureApp(IConfiguration configuration)
     {
-        JwtClaimTypesMapping.MapAbpClaimTypes();
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
@@ -468,15 +467,12 @@ public partial class WebhooksManagementHttpApiHostModule
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = false;
-                options.Audience = configuration["AuthServer:ApiName"];
-                options.MapInboundClaims = false;
+                configuration.GetSection("AuthServer").Bind(options);
             });
 
         if (isDevelopment)
         {
-            // services.AddAlwaysAllowAuthorization();
+            services.AddAlwaysAllowAuthorization();
         }
 
         if (!isDevelopment)

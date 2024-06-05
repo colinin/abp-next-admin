@@ -68,7 +68,6 @@ public partial class PlatformManagementHttpApiHostModule
 
     private void PreConfigureApp(IConfiguration configuration)
     {
-        JwtClaimTypesMapping.MapAbpClaimTypes();
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
@@ -427,10 +426,7 @@ public partial class PlatformManagementHttpApiHostModule
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = false;
-                options.Audience = configuration["AuthServer:ApiName"];
-                options.MapInboundClaims = false;
+                configuration.GetSection("AuthServer").Bind(options);
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
@@ -446,11 +442,6 @@ public partial class PlatformManagementHttpApiHostModule
                     }
                 };
             });
-
-        if (isDevelopment)
-        {
-            // services.AddAlwaysAllowAuthorization();
-        }
 
         if (!isDevelopment)
         {

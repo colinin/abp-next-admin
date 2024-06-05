@@ -68,7 +68,6 @@ public partial class BackendAdminHttpApiHostModule
 
     private void PreConfigureApp(IConfiguration configuration)
     {
-        JwtClaimTypesMapping.MapAbpClaimTypes();
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
@@ -471,16 +470,13 @@ public partial class BackendAdminHttpApiHostModule
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = false;
-                options.Audience = configuration["AuthServer:ApiName"];
-                options.MapInboundClaims = false;
-            });
+                configuration.GetSection("AuthServer").Bind(options);
 
-        if (isDevelopment)
-        {
-            // services.AddAlwaysAllowAuthorization();
-        }
+                //options.Authority = configuration["AuthServer:Authority"];
+                //options.RequireHttpsMetadata = false;
+                //options.Audience = configuration["AuthServer:ApiName"];
+                //options.MapInboundClaims = false;
+            });
 
         if (!isDevelopment)
         {
