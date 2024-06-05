@@ -416,7 +416,7 @@ public partial class ProjectNameHttpApiHostModule
 
     private void PreConfigureWrapper()
     {
-        Configure<AbpHttpClientBuilderOptions>(options =>
+        PreConfigure<AbpHttpClientBuilderOptions>(options =>
         {
             // http服务间调用发送不需要包装结果的请求头
             options.ProxyClientActions.Add(
@@ -426,7 +426,7 @@ public partial class ProjectNameHttpApiHostModule
                 });
         });
 
-        Configure<AbpDaprClientProxyOptions>(options =>
+        PreConfigure<AbpDaprClientProxyOptions>(options =>
         {
             // dapr服务间调用发送不需要包装结果的请求头
             options.ProxyRequestActions.Add(
