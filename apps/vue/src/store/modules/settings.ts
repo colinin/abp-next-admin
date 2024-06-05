@@ -24,14 +24,16 @@ export const useSettingManagementStore = defineStore({
     },
   },
   actions: {
-    initlize(settingKey: string, api: (...args) => Promise<ListResultDto<SettingGroup>>) {
+    initlize(settingKey: string, api: (...args) => Promise<ListResultDto<SettingGroup>>, onReady?: () => void) {
       this.settingKey = settingKey;
       this.settings = ls.get(this.settingKey);
       if (!this.settings || this.settings.length === 0) {
-        this.refreshSettings(api);
+        this.refreshSettings(api, onReady);
+      } else {
+        onReady?.call(null);
       }
     },
-    refreshSettings(api: (...args) => Promise<ListResultDto<SettingGroup>>) {
+    refreshSettings(api: (...args) => Promise<ListResultDto<SettingGroup>>, onReady?: () => void) {
       api().then((res) => {
         const settings: SettingValue[] = [];
         res.items.forEach((group) => {
@@ -46,6 +48,7 @@ export const useSettingManagementStore = defineStore({
         });
         this.settings = settings;
         ls.set(this.settingKey, settings);
+        onReady?.call(null);
       });
     },
   },

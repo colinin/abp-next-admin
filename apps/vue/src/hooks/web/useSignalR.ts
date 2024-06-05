@@ -69,8 +69,12 @@ export function useSignalR(options: UseSignalR & SignalROptions) {
       return Promise.reject('unable to start, connection not initialized!');
     }
     emitter.emit('signalR:beforeStart');
-    await connection.start();
-    emitter.emit('signalR:onStart');
+    try {
+      await connection.start();
+      emitter.emit('signalR:onStart');
+    } catch(error) {
+      emitter.emit('signalR:onError', error);
+    }
   }
 
   async function stop(): Promise<void> {
@@ -78,8 +82,12 @@ export function useSignalR(options: UseSignalR & SignalROptions) {
       return Promise.reject('unable to stop, connection not initialized!');
     }
     emitter.emit('signalR:beforeStop');
-    await connection.stop();
-    emitter.emit('signalR:onStop');
+    try {
+      await connection.stop();
+      emitter.emit('signalR:onStop');
+    } catch(error) {
+      emitter.emit('signalR:onError', error);
+    }
   }
 
   function beforeStart<T = any>(callback: (event?: T) => void) {
@@ -98,6 +106,10 @@ export function useSignalR(options: UseSignalR & SignalROptions) {
     emitter.on('signalR:onStop', callback);
   }
 
+  function onError(callback: (error?: Error) => void) {
+    emitter.on('signalR:onError', callback);
+  }
+
   function on(methodName: string, newMethod: (...args: any[]) => void): void {
     connection?.on(methodName, newMethod);
   }
@@ -106,7 +118,7 @@ export function useSignalR(options: UseSignalR & SignalROptions) {
     connection?.off(methodName, method);
   }
 
-  function onclose(callback: (error?: Error) => void): void {
+  function onClose(callback: (error?: Error) => void): void {
     connection?.onclose(callback);
   }
 
@@ -128,7 +140,8 @@ export function useSignalR(options: UseSignalR & SignalROptions) {
     on,
     off,
     init,
-    onclose,
+    onError,
+    onClose,
     beforeStart,
     onStart,
     beforeStop,
