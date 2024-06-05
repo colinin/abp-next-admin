@@ -16,26 +16,27 @@ COPY . /app
 ## 如果数据提供者是SqlServer, 且兼容性版本在120及以下,需要手动取消注释.
 ## The version of connection SqlServer TLS is too high.
 ## If the data provider is SqlServer and the compatibility version is 120 and below, manual annotation needs to be cancelled.
-RUN sed -i 's/\[openssl_init\]/# \[openssl_init\]/g' /etc/ssl/openssl.cnf
-RUN sed -i '$a\[openssl_init]' /etc/ssl/openssl.cnf
-RUN sed -i '$a\providers = provider_sect' /etc/ssl/openssl.cnf
-RUN sed -i '$a\ssl_conf = ssl_sect' /etc/ssl/openssl.cnf
- 
-RUN sed -i '$a\[provider_sect]' /etc/ssl/openssl.cnf
-RUN sed -i '$a\default = default_sect' /etc/ssl/openssl.cnf
-RUN sed -i '$a\legacy = legacy_sect' /etc/ssl/openssl.cnf
- 
-RUN sed -i '$a\[default_sect]' /etc/ssl/openssl.cnf
-RUN sed -i '$a\activate = 1' /etc/ssl/openssl.cnf
- 
-RUN sed -i '$a\[legacy_sect]' /etc/ssl/openssl.cnf
-RUN sed -i '$a\activate = 1' /etc/ssl/openssl.cnf
- 
-RUN sed -i '$a\[ssl_sect]' /etc/ssl/openssl.cnf
-RUN sed -i '$a\system_default = system_default_sect' /etc/ssl/openssl.cnf
- 
-RUN sed -i '$a\[system_default_sect]' /etc/ssl/openssl.cnf
-RUN sed -i '$a\CipherString = DEFAULT:@SECLEVEL=0' /etc/ssl/openssl.cnf
+
+#RUN sed -i 's/\[openssl_init\]/# \[openssl_init\]/g' /etc/ssl/openssl.cnf
+#RUN sed -i '$a\[openssl_init]' /etc/ssl/openssl.cnf
+#RUN sed -i '$a\providers = provider_sect' /etc/ssl/openssl.cnf
+#RUN sed -i '$a\ssl_conf = ssl_sect' /etc/ssl/openssl.cnf
+ #
+#RUN sed -i '$a\[provider_sect]' /etc/ssl/openssl.cnf
+#RUN sed -i '$a\default = default_sect' /etc/ssl/openssl.cnf
+#RUN sed -i '$a\legacy = legacy_sect' /etc/ssl/openssl.cnf
+ #
+#RUN sed -i '$a\[default_sect]' /etc/ssl/openssl.cnf
+#RUN sed -i '$a\activate = 1' /etc/ssl/openssl.cnf
+ #
+#RUN sed -i '$a\[legacy_sect]' /etc/ssl/openssl.cnf
+#RUN sed -i '$a\activate = 1' /etc/ssl/openssl.cnf
+ #
+#RUN sed -i '$a\[ssl_sect]' /etc/ssl/openssl.cnf
+#RUN sed -i '$a\system_default = system_default_sect' /etc/ssl/openssl.cnf
+ #
+#RUN sed -i '$a\[system_default_sect]' /etc/ssl/openssl.cnf
+#RUN sed -i '$a\CipherString = DEFAULT:@SECLEVEL=0' /etc/ssl/openssl.cnf
 
 ## 阿里源
 #RUN sed -i "s@http://deb.debian.org@http://mirrors.aliyun.com@g" /etc/apt/sources.list.d/debian.sources

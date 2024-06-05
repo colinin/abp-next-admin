@@ -1,9 +1,11 @@
 ﻿using LINGYUN.Abp.RealTime.Localization;
 using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Abp.WeChat.Work.Authorize;
+using LINGYUN.Abp.WeChat.Work.Features;
 using LINGYUN.Abp.WeChat.Work.Messages;
 using LINGYUN.Abp.WeChat.Work.Messages.Models;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -38,6 +40,21 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
         WeChatWorkInternalUserFinder = weChatWorkInternalUserFinder;
         NotificationDefinitionManager = notificationDefinitionManager;
         WeChatWorkOptions = weChatWorkOptions.CurrentValue;
+    }
+
+    protected async override Task<bool> CanPublishAsync(NotificationInfo notification, CancellationToken cancellationToken = default)
+    {
+        if (!await FeatureChecker.IsEnabledAsync(true,
+            WeChatWorkFeatureNames.Enable,
+            WeChatWorkFeatureNames.Message.Enable))
+        {
+            Logger.LogWarning(
+                "{0} cannot push messages because the feature {1} is not enabled",
+                Name,
+                WeChatWorkFeatureNames.Message.Enable);
+            return false;
+        }
+        return true;
     }
 
     protected async override Task PublishAsync(

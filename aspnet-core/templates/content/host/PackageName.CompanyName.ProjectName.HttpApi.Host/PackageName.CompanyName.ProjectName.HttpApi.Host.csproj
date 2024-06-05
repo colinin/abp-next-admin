@@ -17,18 +17,19 @@
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
 		<PackageReference Include="DotNetCore.CAP.OpenTelemetry" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.HttpOverrides" />
+		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Localization" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" />
+		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" />
+		<PackageReference Include="LINGYUN.Abp.AuditLogging.Elasticsearch" />
+		<PackageReference Include="LINGYUN.Abp.Data.DbMigrator" />
 		<PackageReference Include="LINGYUN.Abp.Dapr.Client.Wrapper" />
 		<PackageReference Include="LINGYUN.Abp.EventBus.CAP" />
 		<PackageReference Include="LINGYUN.Abp.ExceptionHandling.Emailing" />
+		<PackageReference Include="LINGYUN.Abp.Localization.CultureMap" />
+		<PackageReference Include="LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore" />
 		<PackageReference Include="LINGYUN.Abp.Saas.EntityFrameworkCore" />
-		<PackageReference Include="LINGYUN.Abp.AuditLogging.Elasticsearch" />
-		<PackageReference Include="LINGYUN.Abp.Data.DbMigrator" />
 		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.Application" />
 		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.UniqueId" />
-		<PackageReference Include="LINGYUN.Abp.Localization.CultureMap" />
-		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Localization" />
-		<PackageReference Include="LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore" />
 		<PackageReference Include="LINGYUN.Abp.TextTemplating.EntityFrameworkCore" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
 			<PrivateAssets>all</PrivateAssets>

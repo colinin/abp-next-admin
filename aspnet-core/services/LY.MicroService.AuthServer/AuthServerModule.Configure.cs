@@ -391,21 +391,6 @@ public partial class AuthServerModule
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
     {
-        //services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
-
-        //services.AddAuthentication()
-        //        .AddJwtBearer(options =>
-        //        {
-        //            options.Authority = configuration["AuthServer:Authority"];
-        //            options.RequireHttpsMetadata = false;
-        //            options.Audience = configuration["AuthServer:ApiName"];
-        //        });
-
-        if (isDevelopment)
-        {
-            // services.AddAlwaysAllowAuthorization();
-        }
-
         if (!isDevelopment)
         {
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);

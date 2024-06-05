@@ -51,7 +51,9 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
 
     protected async override Task<bool> CanPublishAsync(NotificationInfo notification, CancellationToken cancellationToken = default)
     {
-        if (!await FeatureChecker.IsEnabledAsync(WxPusherFeatureNames.Message.Enable))
+        if (!await FeatureChecker.IsEnabledAsync(true,
+            WxPusherFeatureNames.Enable,
+            WxPusherFeatureNames.Message.Enable))
         {
             Logger.LogWarning(
                 "{0} cannot push messages because the feature {1} is not enabled",

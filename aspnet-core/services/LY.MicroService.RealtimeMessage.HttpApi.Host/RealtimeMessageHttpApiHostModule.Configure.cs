@@ -71,7 +71,6 @@ public partial class RealtimeMessageHttpApiHostModule
 
     private void PreConfigureApp(IConfiguration configuration)
     {
-        JwtClaimTypesMapping.MapAbpClaimTypes();
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
@@ -483,10 +482,7 @@ public partial class RealtimeMessageHttpApiHostModule
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = false;
-                options.Audience = configuration["AuthServer:ApiName"];
-                options.MapInboundClaims = false;
+                configuration.GetSection("AuthServer").Bind(options);
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>

@@ -50,7 +50,7 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
         if (!await FeatureChecker.IsEnabledAsync(PushPlusFeatureNames.Message.Enable))
         {
             Logger.LogWarning(
-                "{0} cannot push messages because the feature {0} is not enabled",
+                "{0} cannot push messages because the feature {1} is not enabled",
                 Name,
                 PushPlusFeatureNames.Message.Enable);
             return false;

@@ -440,16 +440,8 @@ public partial class AuthServerHttpApiHostModule
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = false;
-                options.Audience = configuration["AuthServer:ApiName"];
-                options.MapInboundClaims = false;
+                configuration.GetSection("AuthServer").Bind(options);
             });
-
-        if (isDevelopment)
-        {
-            // services.AddAlwaysAllowAuthorization();
-        }
 
         if (!isDevelopment)
         {
