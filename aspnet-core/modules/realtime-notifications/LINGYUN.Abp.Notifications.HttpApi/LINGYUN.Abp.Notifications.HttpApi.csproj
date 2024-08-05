@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<AssemblyName>LINGYUN.Abp.ExceptionHandling.HttpApi</AssemblyName>
-		<PackageId>LINGYUN.Abp.ExceptionHandling.HttpApi</PackageId>
+		<AssemblyName>LINGYUN.Abp.Notifications.HttpApi</AssemblyName>
+		<PackageId>LINGYUN.Abp.Notifications.HttpApi</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
