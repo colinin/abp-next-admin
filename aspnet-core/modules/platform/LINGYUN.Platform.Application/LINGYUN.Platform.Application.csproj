@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<AssemblyName>LINGYUN.Abp.Platform.Application</AssemblyName>
-		<PackageId>LINGYUN.Abp.Platform.Application</PackageId>
+		<AssemblyName>LINGYUN.Platform.Application</AssemblyName>
+		<PackageId>LINGYUN.Platform.Application</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
