@@ -7,71 +7,70 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Users;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Chat;
+
+[Authorize]
+public class MyFriendAppService : ApplicationService, IMyFriendAppService
 {
-    [Authorize]
-    public class MyFriendAppService : ApplicationService, IMyFriendAppService
+    protected IFriendStore FriendStore { get; }
+
+    protected IUserChatCardRepository UserChatCardRepository { get; }
+
+    public MyFriendAppService(
+        IFriendStore friendStore,
+        IUserChatCardRepository userChatCardRepository)
     {
-        protected IFriendStore FriendStore { get; }
+        FriendStore = friendStore;
+        UserChatCardRepository = userChatCardRepository;
 
-        protected IUserChatCardRepository UserChatCardRepository { get; }
+        LocalizationResource = typeof(MessageServiceResource);
+    }
 
-        public MyFriendAppService(
-            IFriendStore friendStore,
-            IUserChatCardRepository userChatCardRepository)
-        {
-            FriendStore = friendStore;
-            UserChatCardRepository = userChatCardRepository;
+    public async virtual Task<UserFriend> GetAsync(Guid friendId)
+    {
+        return await FriendStore.GetMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), friendId);
+    }
 
-            LocalizationResource = typeof(MessageServiceResource);
-        }
+    public async virtual Task CreateAsync(MyFriendCreateDto input)
+    {
+        var friendCard = await UserChatCardRepository.GetMemberAsync(input.FriendId);
 
-        public async virtual Task<UserFriend> GetAsync(Guid friendId)
-        {
-            return await FriendStore.GetMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), friendId);
-        }
+        await FriendStore.AddMemberAsync(
+            CurrentTenant.Id,
+            CurrentUser.GetId(),
+            input.FriendId, friendCard?.NickName ?? friendCard?.UserName ?? input.FriendId.ToString());
+    }
 
-        public async virtual Task CreateAsync(MyFriendCreateDto input)
-        {
-            var friendCard = await UserChatCardRepository.GetMemberAsync(input.FriendId);
+    public async virtual Task AddRequestAsync(MyFriendAddRequestDto input)
+    {
+        await FriendStore.AddRequestAsync(CurrentTenant.Id, CurrentUser.GetId(), input.FriendId, input.RemarkName, L["AddNewFriendBySearchId"]);
+    }
 
-            await FriendStore.AddMemberAsync(
+    public async virtual Task DeleteAsync(MyFriendOperationDto input)
+    {
+        await FriendStore.RemoveMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), input.FriendId);
+    }
+
+    public async virtual Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input)
+    {
+        var myFriends = await FriendStore
+            .GetListAsync(
                 CurrentTenant.Id,
                 CurrentUser.GetId(),
-                input.FriendId, friendCard?.NickName ?? friendCard?.UserName ?? input.FriendId.ToString());
-        }
+                input.Sorting);
 
-        public async virtual Task AddRequestAsync(MyFriendAddRequestDto input)
-        {
-            await FriendStore.AddRequestAsync(CurrentTenant.Id, CurrentUser.GetId(), input.FriendId, input.RemarkName, L["AddNewFriendBySearchId"]);
-        }
+        return new ListResultDto<UserFriend>(myFriends);
+    }
 
-        public async virtual Task DeleteAsync(MyFriendOperationDto input)
-        {
-            await FriendStore.RemoveMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), input.FriendId);
-        }
+    public async virtual Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input)
+    {
+        var myFrientCount = await FriendStore.GetCountAsync(CurrentTenant.Id, CurrentUser.GetId());
 
-        public async virtual Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input)
-        {
-            var myFriends = await FriendStore
-                .GetListAsync(
-                    CurrentTenant.Id,
-                    CurrentUser.GetId(),
-                    input.Sorting);
+        var myFriends = await FriendStore
+            .GetPagedListAsync(CurrentTenant.Id, CurrentUser.GetId(),
+                input.Filter, input.Sorting,
+                input.SkipCount, input.MaxResultCount);
 
-            return new ListResultDto<UserFriend>(myFriends);
-        }
-
-        public async virtual Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input)
-        {
-            var myFrientCount = await FriendStore.GetCountAsync(CurrentTenant.Id, CurrentUser.GetId());
-
-            var myFriends = await FriendStore
-                .GetPagedListAsync(CurrentTenant.Id, CurrentUser.GetId(),
-                    input.Filter, input.Sorting,
-                    input.SkipCount, input.MaxResultCount);
-
-            return new PagedResultDto<UserFriend>(myFrientCount, myFriends);
-        }
+        return new PagedResultDto<UserFriend>(myFrientCount, myFriends);
     }
 }

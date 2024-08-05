@@ -6,24 +6,23 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Identity;
 using Volo.Abp.Users;
 
-namespace LINGYUN.Abp.Account
+namespace LINGYUN.Abp.Account;
+
+public abstract class AccountApplicationServiceBase : ApplicationService
 {
-    public abstract class AccountApplicationServiceBase : ApplicationService
+    protected IOptions<IdentityOptions> IdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();
+    protected IdentityUserStore UserStore => LazyServiceProvider.LazyGetRequiredService<IdentityUserStore>();
+    protected IdentityUserManager UserManager => LazyServiceProvider.LazyGetRequiredService<IdentityUserManager>();
+
+    protected AccountApplicationServiceBase()
     {
-        protected IOptions<IdentityOptions> IdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();
-        protected IdentityUserStore UserStore => LazyServiceProvider.LazyGetRequiredService<IdentityUserStore>();
-        protected IdentityUserManager UserManager => LazyServiceProvider.LazyGetRequiredService<IdentityUserManager>();
+        LocalizationResource = typeof(AccountResource);
+    }
 
-        protected AccountApplicationServiceBase()
-        {
-            LocalizationResource = typeof(AccountResource);
-        }
+    protected async virtual Task<IdentityUser> GetCurrentUserAsync()
+    {
+        await IdentityOptions.SetAsync();
 
-        protected async virtual Task<IdentityUser> GetCurrentUserAsync()
-        {
-            await IdentityOptions.SetAsync();
-
-            return await UserManager.GetByIdAsync(CurrentUser.GetId());
-        }
+        return await UserManager.GetByIdAsync(CurrentUser.GetId());
     }
 }

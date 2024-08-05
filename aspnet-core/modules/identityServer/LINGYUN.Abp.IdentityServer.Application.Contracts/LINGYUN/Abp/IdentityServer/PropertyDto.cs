@@ -1,9 +1,8 @@
-﻿namespace LINGYUN.Abp.IdentityServer
-{
-    public class PropertyDto
-    {
-        public string Key { get; set; }
+﻿namespace LINGYUN.Abp.IdentityServer;
 
-        public string Value { get; set; }
-    }
+public class PropertyDto
+{
+    public string Key { get; set; }
+
+    public string Value { get; set; }
 }

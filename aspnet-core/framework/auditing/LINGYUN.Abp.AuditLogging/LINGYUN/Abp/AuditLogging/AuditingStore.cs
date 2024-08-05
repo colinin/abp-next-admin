@@ -2,22 +2,21 @@
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.AuditLogging
+namespace LINGYUN.Abp.AuditLogging;
+
+[Dependency(ReplaceServices = true)]
+public class AuditingStore : IAuditingStore, ITransientDependency
 {
-    [Dependency(ReplaceServices = true)]
-    public class AuditingStore : IAuditingStore, ITransientDependency
+    private readonly IAuditLogManager _manager;
+
+    public AuditingStore(
+        IAuditLogManager manager)
     {
-        private readonly IAuditLogManager _manager;
+        _manager = manager;
+    }
 
-        public AuditingStore(
-            IAuditLogManager manager)
-        {
-            _manager = manager;
-        }
-
-        public async virtual Task SaveAsync(AuditLogInfo auditInfo)
-        {
-            await _manager.SaveAsync(auditInfo);
-        }
+    public async virtual Task SaveAsync(AuditLogInfo auditInfo)
+    {
+        await _manager.SaveAsync(auditInfo);
     }
 }

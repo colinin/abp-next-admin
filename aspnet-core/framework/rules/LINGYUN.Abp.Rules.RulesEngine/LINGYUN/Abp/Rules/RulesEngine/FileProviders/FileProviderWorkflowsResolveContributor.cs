@@ -9,94 +9,93 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Json;
 
-namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders
+namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders;
+
+public abstract class FileProviderWorkflowsResolveContributor : WorkflowsResolveContributorBase
 {
-    public abstract class FileProviderWorkflowsResolveContributor : WorkflowsResolveContributorBase
+    protected IMemoryCache RulesCache { get; private set; }
+    protected IJsonSerializer JsonSerializer { get; private set; }
+
+    protected IFileProvider FileProvider { get; private set; }
+    protected FileProviderWorkflowsResolveContributor()
     {
-        protected IMemoryCache RulesCache { get; private set; }
-        protected IJsonSerializer JsonSerializer { get; private set; }
+    }
 
-        protected IFileProvider FileProvider { get; private set; }
-        protected FileProviderWorkflowsResolveContributor()
+    public override void Initialize(RulesInitializationContext context)
+    {
+        Initialize(context.ServiceProvider);
+
+        RulesCache = context.GetRequiredService<IMemoryCache>();
+        JsonSerializer = context.GetRequiredService<IJsonSerializer>();
+
+        FileProvider = BuildFileProvider(context);
+    }
+
+    protected virtual void Initialize(IServiceProvider serviceProvider)
+    {
+    }
+
+    protected abstract IFileProvider BuildFileProvider(RulesInitializationContext context);
+
+    public async override Task ResolveAsync(IWorkflowsResolveContext context)
+    {
+        if (FileProvider != null)
         {
+            context.Workflows = await GetCachedRulesAsync(context.Type);
         }
+        context.Handled = true;
+    }
 
-        public override void Initialize(RulesInitializationContext context)
+    public override void Shutdown()
+    {
+        if (FileProvider != null && FileProvider is IDisposable resource)
         {
-            Initialize(context.ServiceProvider);
-
-            RulesCache = context.GetRequiredService<IMemoryCache>();
-            JsonSerializer = context.GetRequiredService<IJsonSerializer>();
-
-            FileProvider = BuildFileProvider(context);
+            resource.Dispose();
         }
+    }
 
-        protected virtual void Initialize(IServiceProvider serviceProvider)
-        {
-        }
+    private async Task<Workflow[]> GetCachedRulesAsync(Type type, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
 
-        protected abstract IFileProvider BuildFileProvider(RulesInitializationContext context);
+        var ruleId = GetRuleId(type);
 
-        public async override Task ResolveAsync(IWorkflowsResolveContext context)
-        {
-            if (FileProvider != null)
+        return await RulesCache.GetOrCreateAsync(ruleId,
+            async (entry) =>
             {
-                context.Workflows = await GetCachedRulesAsync(context.Type);
-            }
-            context.Handled = true;
-        }
+                entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
 
-        public override void Shutdown()
+                return await GetFileSystemRulesAsync(type, cancellationToken);
+            });
+    }
+    protected abstract int GetRuleId(Type type);
+
+    protected abstract string GetRuleName(Type type);
+
+    protected async virtual Task<Workflow[]> GetFileSystemRulesAsync(Type type, CancellationToken cancellationToken = default)
+    {
+        var ruleId = GetRuleId(type);
+        var ruleFile = GetRuleName(type);
+        var fileInfo = FileProvider.GetFileInfo(ruleFile);
+        if (fileInfo != null && fileInfo.Exists)
         {
-            if (FileProvider != null && FileProvider is IDisposable resource)
-            {
-                resource.Dispose();
-            }
-        }
-
-        private async Task<Workflow[]> GetCachedRulesAsync(Type type, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var ruleId = GetRuleId(type);
-
-            return await RulesCache.GetOrCreateAsync(ruleId,
-                async (entry) =>
+            // 规则文件监控
+            ChangeToken.OnChange(
+                () => FileProvider.Watch(ruleFile),
+                (int ruleId) =>
                 {
-                    entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
+                    // 清除规则缓存
+                    RulesCache.Remove(ruleId);
+                }, ruleId);
 
-                    return await GetFileSystemRulesAsync(type, cancellationToken);
-                });
+            // 打开文本流
+            using var stream = fileInfo.CreateReadStream();
+            var result = new byte[stream.Length];
+            await stream.ReadAsync(result, 0, (int)stream.Length);
+            var ruleDsl = Encoding.UTF8.GetString(result);
+            // 解析
+            return JsonSerializer.Deserialize<Workflow[]>(ruleDsl);
         }
-        protected abstract int GetRuleId(Type type);
-
-        protected abstract string GetRuleName(Type type);
-
-        protected async virtual Task<Workflow[]> GetFileSystemRulesAsync(Type type, CancellationToken cancellationToken = default)
-        {
-            var ruleId = GetRuleId(type);
-            var ruleFile = GetRuleName(type);
-            var fileInfo = FileProvider.GetFileInfo(ruleFile);
-            if (fileInfo != null && fileInfo.Exists)
-            {
-                // 规则文件监控
-                ChangeToken.OnChange(
-                    () => FileProvider.Watch(ruleFile),
-                    (int ruleId) =>
-                    {
-                        // 清除规则缓存
-                        RulesCache.Remove(ruleId);
-                    }, ruleId);
-
-                // 打开文本流
-                using var stream = fileInfo.CreateReadStream();
-                var result = new byte[stream.Length];
-                await stream.ReadAsync(result, 0, (int)stream.Length);
-                var ruleDsl = Encoding.UTF8.GetString(result);
-                // 解析
-                return JsonSerializer.Deserialize<Workflow[]>(ruleDsl);
-            }
-            return new Workflow[0];
-        }
+        return new Workflow[0];
     }
 }

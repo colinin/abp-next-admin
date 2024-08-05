@@ -5,34 +5,33 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 
-namespace LINGYUN.Abp.UI.Navigation
+namespace LINGYUN.Abp.UI.Navigation;
+
+[DependsOn(
+    typeof(AbpMultiTenancyModule),
+    typeof(AbpObjectExtendingModule))]
+public class AbpUINavigationModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpMultiTenancyModule),
-        typeof(AbpObjectExtendingModule))]
-    public class AbpUINavigationModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        AutoAddDefinitionProviders(context.Services);
+    }
+
+    private static void AutoAddDefinitionProviders(IServiceCollection services)
+    {
+        var definitionProviders = new List<Type>();
+
+        services.OnRegistered(context =>
         {
-            AutoAddDefinitionProviders(context.Services);
-        }
+            if (typeof(INavigationDefinitionProvider).IsAssignableFrom(context.ImplementationType))
+            {
+                definitionProviders.Add(context.ImplementationType);
+            }
+        });
 
-        private static void AutoAddDefinitionProviders(IServiceCollection services)
+        services.Configure<AbpNavigationOptions>(options =>
         {
-            var definitionProviders = new List<Type>();
-
-            services.OnRegistered(context =>
-            {
-                if (typeof(INavigationDefinitionProvider).IsAssignableFrom(context.ImplementationType))
-                {
-                    definitionProviders.Add(context.ImplementationType);
-                }
-            });
-
-            services.Configure<AbpNavigationOptions>(options =>
-            {
-                options.DefinitionProviders.AddIfNotContains(definitionProviders);
-            });
-        }
+            options.DefinitionProviders.AddIfNotContains(definitionProviders);
+        });
     }
 }

@@ -1,11 +1,10 @@
 ﻿using LINGYUN.Platform.Routes;
 using Volo.Abp.EventBus;
 
-namespace LINGYUN.Platform.Menus
+namespace LINGYUN.Platform.Menus;
+
+[EventName("platform.menus.menu")]
+public class MenuEto : RouteEto
 {
-    [EventName("platform.menus.menu")]
-    public class MenuEto : RouteEto
-    {
-        public string Framework { get; set; }
-    }
+    public string Framework { get; set; }
 }

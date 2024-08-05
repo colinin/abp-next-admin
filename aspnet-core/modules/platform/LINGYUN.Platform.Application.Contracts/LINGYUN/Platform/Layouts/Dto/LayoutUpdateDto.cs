@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Platform.Layouts
+﻿namespace LINGYUN.Platform.Layouts;
+
+public class LayoutUpdateDto : LayoutCreateOrUpdateDto
 {
-    public class LayoutUpdateDto : LayoutCreateOrUpdateDto
-    {
-    }
 }

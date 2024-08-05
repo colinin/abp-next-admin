@@ -1,8 +1,7 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.Serilog.Enrichers.Application
+namespace LINGYUN.Abp.Serilog.Enrichers.Application;
+
+public class AbpSerilogEnrichersApplicationModule : AbpModule
 {
-    public class AbpSerilogEnrichersApplicationModule : AbpModule
-    {
-    }
 }

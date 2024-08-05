@@ -1,11 +1,10 @@
 ﻿using LINGYUN.Platform.Routes;
 using Volo.Abp.Validation;
 
-namespace LINGYUN.Platform.Menus
+namespace LINGYUN.Platform.Menus;
+
+public class GetMenuInput
 {
-    public class GetMenuInput
-    {
-        [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
-        public string Framework { get; set; }
-    }
+    [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
+    public string Framework { get; set; }
 }

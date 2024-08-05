@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Platform
+﻿namespace LINGYUN.Platform;
+
+public static class PlatformRemoteServiceConsts
 {
-    public static class PlatformRemoteServiceConsts
-    {
-        public const string RemoteServiceName = "Platform";
-    }
+    public const string RemoteServiceName = "Platform";
 }

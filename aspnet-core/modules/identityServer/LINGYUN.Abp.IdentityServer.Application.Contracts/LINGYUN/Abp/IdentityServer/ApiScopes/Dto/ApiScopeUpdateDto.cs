@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Abp.IdentityServer.ApiScopes
+﻿namespace LINGYUN.Abp.IdentityServer.ApiScopes;
+
+public class ApiScopeUpdateDto : ApiScopeCreateOrUpdateDto
 {
-    public class ApiScopeUpdateDto : ApiScopeCreateOrUpdateDto
-    {
-    }
 }

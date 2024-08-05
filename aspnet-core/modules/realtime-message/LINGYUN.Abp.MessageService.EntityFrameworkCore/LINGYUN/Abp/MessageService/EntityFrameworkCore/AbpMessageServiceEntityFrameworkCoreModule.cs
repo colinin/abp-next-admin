@@ -4,26 +4,25 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
+namespace LINGYUN.Abp.MessageService.EntityFrameworkCore;
+
+[DependsOn(
+    typeof(AbpMessageServiceDomainModule),
+    typeof(AbpEntityFrameworkCoreModule))]
+public class AbpMessageServiceEntityFrameworkCoreModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpMessageServiceDomainModule),
-        typeof(AbpEntityFrameworkCoreModule))]
-    public class AbpMessageServiceEntityFrameworkCoreModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddAbpDbContext<MessageServiceDbContext>(options =>
         {
-            context.Services.AddAbpDbContext<MessageServiceDbContext>(options =>
-            {
-                options.AddDefaultRepositories<IMessageServiceDbContext>();
+            options.AddDefaultRepositories<IMessageServiceDbContext>();
 
-                options.AddRepository<ChatGroup, EfCoreGroupRepository>();
-                options.AddRepository<UserChatGroup, EfCoreUserChatGroupRepository>();
-                options.AddRepository<UserChatCard, EfCoreUserChatCardRepository>();
-                options.AddRepository<UserChatSetting, EfCoreUserChatSettingRepository>();
+            options.AddRepository<ChatGroup, EfCoreGroupRepository>();
+            options.AddRepository<UserChatGroup, EfCoreUserChatGroupRepository>();
+            options.AddRepository<UserChatCard, EfCoreUserChatCardRepository>();
+            options.AddRepository<UserChatSetting, EfCoreUserChatSettingRepository>();
 
-                options.AddRepository<UserChatFriend, EfCoreUserChatFriendRepository>();
-            });
-        }
+            options.AddRepository<UserChatFriend, EfCoreUserChatFriendRepository>();
+        });
     }
 }

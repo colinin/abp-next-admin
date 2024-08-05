@@ -58,6 +58,11 @@
                 onClick: showLockModal.bind(null, record.id),
               },
               {
+                auth: 'AbpIdentity.IdentitySessions',
+                label: L('IdentitySessions'),
+                onClick: handleShowSessionModal.bind(null, record),
+              },
+              {
                 auth: 'AbpIdentity.Users.Update',
                 label: L('UnLock'),
                 ifShow: lockEnd(record),
@@ -90,6 +95,7 @@
       </template>
     </BasicTable>
     <UserModal @register="registerModal" @change="reloadTable" />
+    <SessionModal @register="registerSessionModal" />
     <PermissionModal @register="registerPermissionModal" />
     <PasswordModal @register="registerPasswordModal" />
     <ClaimModal
@@ -129,11 +135,13 @@
     updateClaim,
     deleteClaim,
   } from '/@/api/identity/users';
+  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
   import UserModal from './UserModal.vue';
   import PasswordModal from './PasswordModal.vue';
   import LockModal from './LockModal.vue';
   import MenuModal from '../../components/MenuModal.vue';
   import ClaimModal from '../../components/ClaimModal.vue';
+  const SessionModal = createAsyncComponent(() => import('./SessionModal.vue'));
 
   const emits = defineEmits(['change']);
 
@@ -146,6 +154,7 @@
   const { registerLockModal, showLockModal, handleUnLock } = useLock({ emit: emits });
   const { registerPasswordModal, showPasswordModal } = usePassword(nullFormElRef);
   const [registerClaimModal, { openModal: openClaimModal }] = useModal();
+  const [registerSessionModal, { openModal: openSessionModal }] = useModal();
   const [registerMenuModal, { openModal: openMenuModal, closeModal: closeMenuModal }] = useModal();
   const { registerModel: registerPermissionModal, showPermissionModal } = usePermissionModal();
 
@@ -187,5 +196,9 @@
 
   function handleShowClaims(record) {
     openClaimModal(true, { id: record.id });
+  }
+
+  function handleShowSessionModal(record) {
+    openSessionModal(true, { userId: record.id });
   }
 </script>

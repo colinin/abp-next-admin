@@ -1,8 +1,9 @@
 ﻿using LINGYUN.Abp.LocalizationManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using System.Globalization;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.ObjectMapping;
+using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.LocalizationManagement;
 
@@ -26,24 +27,28 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
     [Authorize(LocalizationManagementPermissions.Language.Create)]
     public async virtual Task<LanguageDto> CreateAsync(LanguageCreateDto input)
     {
-        if (_repository.FindByCultureNameAsync(input.CultureName) != null)
+        if (await _repository.FindByCultureNameAsync(input.CultureName) != null)
         {
             throw new BusinessException(LocalizationErrorCodes.Language.NameAlreadyExists)
                 .WithData(nameof(Language.CultureName), input.CultureName);
         }
 
-        var language = new Language(
-            GuidGenerator.Create(),
-            input.CultureName,
-            input.UiCultureName,
-            input.DisplayName,
-            input.FlagIcon);
+        using (CultureHelper.Use(input.CultureName, input.UiCultureName))
+        {
 
-        language = await _repository.InsertAsync(language);
+            var language = new Language(
+                GuidGenerator.Create(),
+                input.CultureName,
+                input.UiCultureName,
+                input.DisplayName,
+                CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+            language = await _repository.InsertAsync(language);
 
-        return ObjectMapper.Map<Language, LanguageDto>(language);
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            return ObjectMapper.Map<Language, LanguageDto>(language);
+        }
     }
 
     [Authorize(LocalizationManagementPermissions.Language.Delete)]
@@ -61,7 +66,6 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
     {
         var language = await InternalGetByNameAsync(name);
 
-        language.SetFlagIcon(input.FlagIcon);
         language.SetDisplayName(input.DisplayName);
 
         await _repository.UpdateAsync(language);

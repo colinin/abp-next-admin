@@ -1,15 +1,20 @@
-﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+﻿using Autofac.Core;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.WebSockets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,6 +89,20 @@ public class InternalGatewayModule : AbpModule
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
+        context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    configuration.GetSection("AuthServer").Bind(options);
+                });
+
+        if (hostingEnvironment.IsProduction())
+        {
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            context.Services
+                .AddDataProtection()
+                .SetApplicationName("LINGYUN.Abp.Application")
+                .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
+        }
 
         context.Services.AddCors(options =>
         {
@@ -104,7 +123,10 @@ public class InternalGatewayModule : AbpModule
                     .AllowCredentials();
             });
         });
+        context.Services.AddWebSockets(options =>
+        {
 
+        });
         context.Services.AddHttpForwarder();
         context.Services
             .AddReverseProxy()
@@ -121,8 +143,14 @@ public class InternalGatewayModule : AbpModule
             app.UseDeveloperExceptionPage();
         }
         app.UseCorrelationId();
-        app.UseAbpSerilogEnrichers();
         app.UseCors();
+
+        // 认证
+        app.UseAuthentication();
+        // jwt
+        app.UseDynamicClaims();
+        // 授权
+        app.UseAuthorization();
 
         app.UseSwagger();
         app.UseSwaggerUI(options =>
@@ -163,10 +191,15 @@ public class InternalGatewayModule : AbpModule
         app.UseRewriter(new RewriteOptions().AddRedirect("^(|\\|\\s+)$", "/swagger"));
 
         app.UseRouting();
+        app.UseAuditing();
         app.UseConfiguredEndpoints(endpoints =>
         {
             endpoints.MapReverseProxy(options =>
-                options.UseLoadBalancing());
+            {
+                options.UseLoadBalancing();
+            });
         });
+        app.UseWebSockets();
+        app.UseAbpSerilogEnrichers();
     }
 }

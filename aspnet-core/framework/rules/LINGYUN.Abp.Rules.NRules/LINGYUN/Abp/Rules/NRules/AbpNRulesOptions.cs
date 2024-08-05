@@ -1,14 +1,13 @@
 ﻿using Volo.Abp.Collections;
 
-namespace LINGYUN.Abp.Rules.NRules
-{
-    public class AbpNRulesOptions
-    {
-        public ITypeList<RuleBase> DefinitionRules { get; }
+namespace LINGYUN.Abp.Rules.NRules;
 
-        public AbpNRulesOptions()
-        {
-            DefinitionRules = new TypeList<RuleBase>();
-        }
+public class AbpNRulesOptions
+{
+    public ITypeList<RuleBase> DefinitionRules { get; }
+
+    public AbpNRulesOptions()
+    {
+        DefinitionRules = new TypeList<RuleBase>();
     }
 }

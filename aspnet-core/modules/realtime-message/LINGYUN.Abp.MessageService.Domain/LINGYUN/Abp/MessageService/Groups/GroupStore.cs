@@ -7,66 +7,65 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 
-namespace LINGYUN.Abp.MessageService.Groups
+namespace LINGYUN.Abp.MessageService.Groups;
+
+public class GroupStore : IGroupStore, ITransientDependency
 {
-    public class GroupStore : IGroupStore, ITransientDependency
+    private readonly IObjectMapper _objectMapper;
+    private readonly ICurrentTenant _currentTenant;
+    private readonly IGroupRepository _groupRepository;
+
+    public GroupStore(
+        IObjectMapper objectMapper,
+        ICurrentTenant currentTenant,
+        IGroupRepository groupRepository)
     {
-        private readonly IObjectMapper _objectMapper;
-        private readonly ICurrentTenant _currentTenant;
-        private readonly IGroupRepository _groupRepository;
+        _objectMapper = objectMapper;
+        _currentTenant = currentTenant;
+        _groupRepository = groupRepository;
+    }
 
-        public GroupStore(
-            IObjectMapper objectMapper,
-            ICurrentTenant currentTenant,
-            IGroupRepository groupRepository)
+    public async virtual Task<Group> GetAsync(
+        Guid? tenantId,
+        string groupId,
+        CancellationToken cancellationToken = default)
+    {
+        using (_currentTenant.Change(tenantId))
         {
-            _objectMapper = objectMapper;
-            _currentTenant = currentTenant;
-            _groupRepository = groupRepository;
+            var group = await _groupRepository.FindByIdAsync(long.Parse(groupId), cancellationToken);
+            return _objectMapper.Map<ChatGroup, Group>(group);
         }
+    }
 
-        public async virtual Task<Group> GetAsync(
-            Guid? tenantId,
-            string groupId,
-            CancellationToken cancellationToken = default)
+    public async virtual Task<int> GetCountAsync(
+        Guid? tenantId,
+        string filter = null,
+        CancellationToken cancellationToken = default)
+    {
+        using (_currentTenant.Change(tenantId))
         {
-            using (_currentTenant.Change(tenantId))
-            {
-                var group = await _groupRepository.FindByIdAsync(long.Parse(groupId), cancellationToken);
-                return _objectMapper.Map<ChatGroup, Group>(group);
-            }
+            return await _groupRepository.GetCountAsync(filter, cancellationToken);
         }
+    }
 
-        public async virtual Task<int> GetCountAsync(
-            Guid? tenantId,
-            string filter = null,
-            CancellationToken cancellationToken = default)
+    public async virtual Task<List<Group>> GetListAsync(
+        Guid? tenantId,
+        string filter = null,
+        string sorting = nameof(Group.Name),
+        int skipCount = 0,
+        int maxResultCount = 10,
+        CancellationToken cancellationToken = default)
+    {
+        using (_currentTenant.Change(tenantId))
         {
-            using (_currentTenant.Change(tenantId))
-            {
-                return await _groupRepository.GetCountAsync(filter, cancellationToken);
-            }
-        }
+            var groups = await _groupRepository.GetListAsync(
+                filter,
+                sorting,
+                skipCount,
+                maxResultCount,
+                cancellationToken);
 
-        public async virtual Task<List<Group>> GetListAsync(
-            Guid? tenantId,
-            string filter = null,
-            string sorting = nameof(Group.Name),
-            int skipCount = 0,
-            int maxResultCount = 10,
-            CancellationToken cancellationToken = default)
-        {
-            using (_currentTenant.Change(tenantId))
-            {
-                var groups = await _groupRepository.GetListAsync(
-                    filter,
-                    sorting,
-                    skipCount,
-                    maxResultCount,
-                    cancellationToken);
-
-                return _objectMapper.Map<List<ChatGroup>, List<Group>>(groups);
-            }
+            return _objectMapper.Map<List<ChatGroup>, List<Group>>(groups);
         }
     }
 }

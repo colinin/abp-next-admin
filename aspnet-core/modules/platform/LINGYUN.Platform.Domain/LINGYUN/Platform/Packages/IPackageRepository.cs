@@ -16,6 +16,7 @@ public interface IPackageRepository : IBasicRepository<Package, Guid>
 
     Task<Package> FindLatestAsync(
         string name,
+        string version = null,
         bool includeDetails = true,
         CancellationToken cancellationToken = default);
 

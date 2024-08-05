@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.IdentityServer.Clients
+﻿namespace LINGYUN.Abp.IdentityServer.Clients;
+
+public class ClientRedirectUriDto
 {
-    public class ClientRedirectUriDto
-    {
-        public string RedirectUri { get; set; }
-    }
+    public string RedirectUri { get; set; }
 }

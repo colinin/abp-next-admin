@@ -7,41 +7,40 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Chat;
+
+public class UserOnlineChanger : IUserOnlineChanger, ITransientDependency
 {
-    public class UserOnlineChanger : IUserOnlineChanger, ITransientDependency
+    private readonly IClock _clock;
+    private readonly ICurrentTenant _currentTenant;
+    private readonly IUnitOfWorkManager _unitOfWorkManager;
+    private readonly IUserChatCardRepository _userChatCardRepository;
+
+    public UserOnlineChanger(
+        IClock clock,
+        ICurrentTenant currentTenant,
+        IUnitOfWorkManager unitOfWorkManager,
+        IUserChatCardRepository userChatCardRepository)
     {
-        private readonly IClock _clock;
-        private readonly ICurrentTenant _currentTenant;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly IUserChatCardRepository _userChatCardRepository;
+        _clock = clock;
+        _currentTenant = currentTenant;
+        _unitOfWorkManager = unitOfWorkManager;
+        _userChatCardRepository = userChatCardRepository;
+    }
 
-        public UserOnlineChanger(
-            IClock clock,
-            ICurrentTenant currentTenant,
-            IUnitOfWorkManager unitOfWorkManager,
-            IUserChatCardRepository userChatCardRepository)
+    public async virtual Task ChangeAsync(
+        Guid? tenantId,
+        Guid userId,
+        UserOnlineState state,
+        CancellationToken cancellationToken = default)
+    {
+        using var unitOfWork = _unitOfWorkManager.Begin();
+        using (_currentTenant.Change(tenantId))
         {
-            _clock = clock;
-            _currentTenant = currentTenant;
-            _unitOfWorkManager = unitOfWorkManager;
-            _userChatCardRepository = userChatCardRepository;
-        }
+            var userChatCard = await _userChatCardRepository.FindByUserIdAsync(userId);
+            userChatCard?.ChangeState(_clock, state);
 
-        public async virtual Task ChangeAsync(
-            Guid? tenantId,
-            Guid userId,
-            UserOnlineState state,
-            CancellationToken cancellationToken = default)
-        {
-            using var unitOfWork = _unitOfWorkManager.Begin();
-            using (_currentTenant.Change(tenantId))
-            {
-                var userChatCard = await _userChatCardRepository.FindByUserIdAsync(userId);
-                userChatCard?.ChangeState(_clock, state);
-
-                await unitOfWork.CompleteAsync();
-            }
+            await unitOfWork.CompleteAsync();
         }
     }
 }

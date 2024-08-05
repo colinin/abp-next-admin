@@ -4,14 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
-namespace LINGYUN.Abp.LocalizationManagement
-{
-    public interface ILanguageRepository : IRepository<Language, Guid>
-    {
-        Task<Language> FindByCultureNameAsync(
-            string cultureName,
-            CancellationToken cancellationToken = default);
+namespace LINGYUN.Abp.LocalizationManagement;
 
-        Task<List<Language>> GetActivedListAsync(CancellationToken cancellationToken = default);
-    }
+public interface ILanguageRepository : IRepository<Language, Guid>
+{
+    Task<Language> FindByCultureNameAsync(
+        string cultureName,
+        CancellationToken cancellationToken = default);
+
+    Task<List<Language>> GetActivedListAsync(CancellationToken cancellationToken = default);
 }

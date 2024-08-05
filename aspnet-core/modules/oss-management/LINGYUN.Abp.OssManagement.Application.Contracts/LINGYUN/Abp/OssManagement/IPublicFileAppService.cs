@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Abp.OssManagement
+﻿namespace LINGYUN.Abp.OssManagement;
+
+public interface IPublicFileAppService : IFileAppService
 {
-    public interface IPublicFileAppService : IFileAppService
-    {
-    }
 }

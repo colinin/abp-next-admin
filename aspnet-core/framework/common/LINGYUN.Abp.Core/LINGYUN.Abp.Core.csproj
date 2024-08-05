@@ -5,6 +5,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.Core</AssemblyName>
+		<PackageId>LINGYUN.Abp.Core</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace>LINGYUN.Abp</RootNamespace>
 		<Description>Abp扩展基础库</Description>
 	</PropertyGroup>

@@ -10,6 +10,6 @@ export const search = (input: GroupSearchRequest) => {
 
 export const getById = (groupId: string) => {
   return defHttp.get<Group>({
-    url: `'/api/im/groups/${groupId}`,
+    url: `/api/im/groups/${groupId}`,
   });
 };

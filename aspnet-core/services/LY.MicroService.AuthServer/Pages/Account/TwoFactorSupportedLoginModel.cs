@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using OpenIddict.Server.AspNetCore;
+using OpenIddict.Server;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Web;
@@ -9,6 +11,10 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 using Volo.Abp.OpenIddict;
 using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
+using System.Diagnostics;
+using Volo.Abp.Account.Settings;
+using Volo.Abp.Settings;
+using LINGYUN.Abp.Identity.Session;
 
 namespace LY.MicroService.AuthServer.Pages.Account
 {
@@ -27,7 +33,6 @@ namespace LY.MicroService.AuthServer.Pages.Account
             AbpOpenIddictRequestHelper openIddictRequestHelper)
             : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache, openIddictRequestHelper)
         {
-
         }
 
         protected async override Task<List<ExternalProviderModel>> GetExternalProviders()

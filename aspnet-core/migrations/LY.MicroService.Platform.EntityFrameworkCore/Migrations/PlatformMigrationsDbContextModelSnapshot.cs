@@ -3,6 +3,7 @@ using System;
 using LY.MicroService.Platform.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -18,8 +19,10 @@ namespace LY.MicroService.Platform.EntityFrameworkCore.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("LINGYUN.Platform.Datas.Data", b =>
                 {
@@ -647,10 +650,6 @@ namespace LY.MicroService.Platform.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(1024)")
                         .HasColumnName("Note");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("TenantId");
-
                     b.Property<string>("Version")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -669,6 +668,8 @@ namespace LY.MicroService.Platform.EntityFrameworkCore.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Authors")
                         .HasMaxLength(100)
@@ -724,10 +725,6 @@ namespace LY.MicroService.Platform.EntityFrameworkCore.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("varchar(1024)")
                         .HasColumnName("Summary");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("TenantId");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");

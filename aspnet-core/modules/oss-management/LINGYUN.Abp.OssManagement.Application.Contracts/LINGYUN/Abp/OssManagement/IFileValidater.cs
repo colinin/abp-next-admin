@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.OssManagement
+namespace LINGYUN.Abp.OssManagement;
+
+public interface IFileValidater
 {
-    public interface IFileValidater
-    {
-        Task ValidationAsync(UploadFile input);
-    }
+    Task ValidationAsync(UploadFile input);
 }

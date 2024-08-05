@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.IdentityServer.Clients
-{
-    public class ClientCreateDto : ClientCreateOrUpdateDto
-    {
+﻿namespace LINGYUN.Abp.IdentityServer.Clients;
 
-    }
+public class ClientCreateDto : ClientCreateOrUpdateDto
+{
+
 }

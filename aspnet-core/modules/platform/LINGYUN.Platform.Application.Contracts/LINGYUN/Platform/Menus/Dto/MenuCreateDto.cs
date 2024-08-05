@@ -1,11 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace LINGYUN.Platform.Menus
+namespace LINGYUN.Platform.Menus;
+
+public class MenuCreateDto : MenuCreateOrUpdateDto
 {
-    public class MenuCreateDto : MenuCreateOrUpdateDto
-    {
-        [Required]
-        public Guid LayoutId { get; set; }
-    }
+    [Required]
+    public Guid LayoutId { get; set; }
 }

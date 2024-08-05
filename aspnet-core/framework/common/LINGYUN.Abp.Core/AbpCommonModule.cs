@@ -1,8 +1,7 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp
+namespace LINGYUN.Abp;
+
+public class AbpCommonModule : AbpModule
 {
-    public class AbpCommonModule : AbpModule
-    {
-    }
 }

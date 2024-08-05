@@ -1,11 +1,10 @@
-﻿namespace LINGYUN.Abp.LocalizationManagement
+﻿namespace LINGYUN.Abp.LocalizationManagement;
+
+public static class LocalizationDbProperties
 {
-    public static class LocalizationDbProperties
-    {
-        public static string DbTablePrefix { get; set; } = "AbpLocalization";
+    public static string DbTablePrefix { get; set; } = "AbpLocalization";
 
-        public static string DbSchema { get; set; } = null;
+    public static string DbSchema { get; set; } = null;
 
-        public const string ConnectionStringName = "AbpLocalizationManagement";
-    }
+    public const string ConnectionStringName = "AbpLocalizationManagement";
 }

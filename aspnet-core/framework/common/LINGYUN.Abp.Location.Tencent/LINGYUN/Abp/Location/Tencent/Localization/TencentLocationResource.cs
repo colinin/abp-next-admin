@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Localization;
 
-namespace LINGYUN.Abp.Location.Tencent.Localization
+namespace LINGYUN.Abp.Location.Tencent.Localization;
+
+[LocalizationResourceName("TencentLocation")]
+public class TencentLocationResource
 {
-    [LocalizationResourceName("TencentLocation")]
-    public class TencentLocationResource
-    {
-    }
 }

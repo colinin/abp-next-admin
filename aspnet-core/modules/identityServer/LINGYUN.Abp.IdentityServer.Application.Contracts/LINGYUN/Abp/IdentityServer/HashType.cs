@@ -1,8 +1,7 @@
-﻿namespace LINGYUN.Abp.IdentityServer
+﻿namespace LINGYUN.Abp.IdentityServer;
+
+public enum HashType
 {
-	public enum HashType
-	{
-		Sha256,
-		Sha512
-	}
+	Sha256,
+	Sha512
 }

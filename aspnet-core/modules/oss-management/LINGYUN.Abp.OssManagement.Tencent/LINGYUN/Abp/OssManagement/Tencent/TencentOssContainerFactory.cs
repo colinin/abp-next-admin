@@ -2,30 +2,29 @@
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 
-namespace LINGYUN.Abp.OssManagement.Tencent
+namespace LINGYUN.Abp.OssManagement.Tencent;
+
+public class TencentOssContainerFactory : IOssContainerFactory
 {
-    public class TencentOssContainerFactory : IOssContainerFactory
+    protected IClock Clock { get; }
+    protected ICurrentTenant CurrentTenant { get; }
+    protected ICosClientFactory CosClientFactory { get; }
+
+    public TencentOssContainerFactory(
+        IClock clock,
+        ICurrentTenant currentTenant,
+        ICosClientFactory cosClientFactory)
     {
-        protected IClock Clock { get; }
-        protected ICurrentTenant CurrentTenant { get; }
-        protected ICosClientFactory CosClientFactory { get; }
+        Clock = clock;
+        CurrentTenant = currentTenant;
+        CosClientFactory = cosClientFactory;
+    }
 
-        public TencentOssContainerFactory(
-            IClock clock,
-            ICurrentTenant currentTenant,
-            ICosClientFactory cosClientFactory)
-        {
-            Clock = clock;
-            CurrentTenant = currentTenant;
-            CosClientFactory = cosClientFactory;
-        }
-
-        public IOssContainer Create()
-        {
-            return new TencentOssContainer(
-                Clock,
-                CurrentTenant,
-                CosClientFactory);
-        }
+    public IOssContainer Create()
+    {
+        return new TencentOssContainer(
+            Clock,
+            CurrentTenant,
+            CosClientFactory);
     }
 }

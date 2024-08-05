@@ -74,6 +74,7 @@ public class PackageController : PlatformControllerBase, IPackageAppService
 
     [HttpGet]
     [Route("{Name}/latest")]
+    [Route("{Name}/latest/{Version}")]
     [AllowAnonymous]
     public virtual Task<PackageDto> GetLatestAsync(PackageGetLatestInput input)
     {

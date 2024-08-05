@@ -1,3 +1,4 @@
+using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LY.MicroService.Applications.Single;
 using Microsoft.AspNetCore.Cors;
 using Serilog;
@@ -56,7 +57,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
-
+// app.UseAbpExceptionHandling();
 app.UseCookiePolicy();
 app.UseMapRequestLocalization();
 app.UseCorrelationId();
@@ -64,9 +65,9 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseCors();
 app.UseAuthentication();
-app.UseAbpClaimsMap();
-app.UseDynamicClaims();
 app.UseAbpOpenIddictValidation();
+app.UseAbpSession();
+app.UseDynamicClaims();
 app.UseMultiTenancy();
 app.UseAuthorization();
 app.UseSwagger();

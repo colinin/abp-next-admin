@@ -4,33 +4,32 @@ using Volo.Abp.Localization;
 using Volo.Abp.Features;
 using LINGYUN.Abp.OssManagement.Features;
 
-namespace LINGYUN.Abp.OssManagement.Permissions
+namespace LINGYUN.Abp.OssManagement.Permissions;
+
+public class AbpOssManagementPermissionDefinitionProvider : PermissionDefinitionProvider
 {
-    public class AbpOssManagementPermissionDefinitionProvider : PermissionDefinitionProvider
+    public override void Define(IPermissionDefinitionContext context)
     {
-        public override void Define(IPermissionDefinitionContext context)
-        {
-            var ossManagement = context.AddGroup(AbpOssManagementPermissions.GroupName, L("Permission:OssManagement"));
+        var ossManagement = context.AddGroup(AbpOssManagementPermissions.GroupName, L("Permission:OssManagement"));
 
-            var container = ossManagement.AddPermission(AbpOssManagementPermissions.Container.Default, L("Permission:Container"));
-            container.AddChild(AbpOssManagementPermissions.Container.Create, L("Permission:Create"));
-            container.AddChild(AbpOssManagementPermissions.Container.Delete, L("Permission:Delete"));
+        var container = ossManagement.AddPermission(AbpOssManagementPermissions.Container.Default, L("Permission:Container"));
+        container.AddChild(AbpOssManagementPermissions.Container.Create, L("Permission:Create"));
+        container.AddChild(AbpOssManagementPermissions.Container.Delete, L("Permission:Delete"));
 
-            var ossobject = ossManagement
-                .AddPermission(AbpOssManagementPermissions.OssObject.Default, L("Permission:OssObject"))
-                .RequireFeatures(AbpOssManagementFeatureNames.OssObject.Enable);
-            ossobject
-                .AddChild(AbpOssManagementPermissions.OssObject.Create, L("Permission:Create"))
-                .RequireFeatures(AbpOssManagementFeatureNames.OssObject.UploadFile);
-            ossobject.AddChild(AbpOssManagementPermissions.OssObject.Delete, L("Permission:Delete"));
-            ossobject
-                .AddChild(AbpOssManagementPermissions.OssObject.Download, L("Permission:Download"))
-                .RequireFeatures(AbpOssManagementFeatureNames.OssObject.DownloadFile);
-        }
+        var ossobject = ossManagement
+            .AddPermission(AbpOssManagementPermissions.OssObject.Default, L("Permission:OssObject"))
+            .RequireFeatures(AbpOssManagementFeatureNames.OssObject.Enable);
+        ossobject
+            .AddChild(AbpOssManagementPermissions.OssObject.Create, L("Permission:Create"))
+            .RequireFeatures(AbpOssManagementFeatureNames.OssObject.UploadFile);
+        ossobject.AddChild(AbpOssManagementPermissions.OssObject.Delete, L("Permission:Delete"));
+        ossobject
+            .AddChild(AbpOssManagementPermissions.OssObject.Download, L("Permission:Download"))
+            .RequireFeatures(AbpOssManagementFeatureNames.OssObject.DownloadFile);
+    }
 
-        private static LocalizableString L(string name)
-        {
-            return LocalizableString.Create<AbpOssManagementResource>(name);
-        }
+    private static LocalizableString L(string name)
+    {
+        return LocalizableString.Create<AbpOssManagementResource>(name);
     }
 }

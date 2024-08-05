@@ -2,15 +2,14 @@
 using Serilog.Configuration;
 using System;
 
-namespace Serilog
+namespace Serilog;
+
+public static class UniqueIdLoggerConfigurationExtensions
 {
-    public static class UniqueIdLoggerConfigurationExtensions
+    public static LoggerConfiguration WithUniqueId(
+       this LoggerEnrichmentConfiguration enrichmentConfiguration)
     {
-        public static LoggerConfiguration WithUniqueId(
-           this LoggerEnrichmentConfiguration enrichmentConfiguration)
-        {
-            if (enrichmentConfiguration == null) throw new ArgumentNullException(nameof(enrichmentConfiguration));
-            return enrichmentConfiguration.With<UniqueIdEnricher>();
-        }
+        if (enrichmentConfiguration == null) throw new ArgumentNullException(nameof(enrichmentConfiguration));
+        return enrichmentConfiguration.With<UniqueIdEnricher>();
     }
 }

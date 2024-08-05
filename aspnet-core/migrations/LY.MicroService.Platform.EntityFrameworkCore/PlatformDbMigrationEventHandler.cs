@@ -7,6 +7,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.EntityFrameworkCore.Migrations;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Features;
@@ -25,6 +26,7 @@ public class PlatformDbMigrationEventHandler :
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         ITenantStore tenantStore,
+        IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory,
         IDataSeeder dataSeeder,
@@ -32,7 +34,7 @@ public class PlatformDbMigrationEventHandler :
         IConfiguration configuration)
         : base(
             ConnectionStringNameAttribute.GetConnStringName<PlatformMigrationsDbContext>(), 
-            currentTenant, unitOfWorkManager, tenantStore, distributedEventBus, loggerFactory)
+            currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
         DataSeeder = dataSeeder;
         FeatureChecker = featureChecker;

@@ -1,9 +1,8 @@
-﻿namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
+﻿namespace LINGYUN.Abp.AspNetCore.Mvc.Localization;
+
+public class ResourceDto 
 {
-    public class ResourceDto 
-    {
-        public string Name { get; set; }
-        public string DisplayName { get; set; }
-        public string Description { get; set; }
-    }
+    public string Name { get; set; }
+    public string DisplayName { get; set; }
+    public string Description { get; set; }
 }

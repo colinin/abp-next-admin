@@ -1,9 +1,8 @@
-﻿namespace LINGYUN.Abp.Localization.CultureMap
-{
-    public class CultureMapInfo
-    {
-        public string TargetCulture { get; set; }
+﻿namespace LINGYUN.Abp.Localization.CultureMap;
 
-        public string[] SourceCultures { get; set; }
-    }
+public class CultureMapInfo
+{
+    public string TargetCulture { get; set; }
+
+    public string[] SourceCultures { get; set; }
 }

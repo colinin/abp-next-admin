@@ -1,9 +1,8 @@
-﻿namespace LINGYUN.Abp.TuiJuhe.SettingManagement
-{
-    public class TuiJuheSettingPermissionNames
-    {
-        public const string GroupName = "Abp.TuiJuhe";
+﻿namespace LINGYUN.Abp.TuiJuhe.SettingManagement;
 
-        public const string ManageSetting = GroupName + ".ManageSetting";
-    }
+public class TuiJuheSettingPermissionNames
+{
+    public const string GroupName = "Abp.TuiJuhe";
+
+    public const string ManageSetting = GroupName + ".ManageSetting";
 }

@@ -91,7 +91,7 @@ public class LocalizationManagementPersistenceWriter : ILocalizationPersistenceW
                     language.CultureName,
                     language.UiCultureName,
                     language.DisplayName,
-                    language.FlagIcon),
+                    language.TwoLetterISOLanguageName),
                 autoSave: true,
                 cancellationToken: cancellationToken);
         }

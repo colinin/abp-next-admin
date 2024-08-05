@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 
-namespace LINGYUN.Abp.MessageService
+namespace LINGYUN.Abp.MessageService;
+
+public class AbpMessageServiceApplicationAutoMapperProfile : Profile
 {
-    public class AbpMessageServiceApplicationAutoMapperProfile : Profile
+    public AbpMessageServiceApplicationAutoMapperProfile()
     {
-        public AbpMessageServiceApplicationAutoMapperProfile()
-        {
-        }
     }
 }

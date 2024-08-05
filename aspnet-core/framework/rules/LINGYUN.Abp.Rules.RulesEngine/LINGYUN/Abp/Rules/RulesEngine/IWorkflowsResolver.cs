@@ -2,15 +2,14 @@
 using System;
 using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.Rules.RulesEngine
+namespace LINGYUN.Abp.Rules.RulesEngine;
+
+public interface IWorkflowsResolver
 {
-    public interface IWorkflowsResolver
-    {
-        void Initialize(RulesInitializationContext context);
+    void Initialize(RulesInitializationContext context);
 
-        [NotNull]
-        Task<WorkflowsResolveResult> ResolveWorkflowsAsync(Type type);
+    [NotNull]
+    Task<WorkflowsResolveResult> ResolveWorkflowsAsync(Type type);
 
-        void Shutdown();
-    }
+    void Shutdown();
 }

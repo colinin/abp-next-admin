@@ -1,8 +1,7 @@
-﻿namespace LINGYUN.Abp
+﻿namespace LINGYUN.Abp;
+
+public interface IOptionsProvider<TValue>
+    where TValue: class, new()
 {
-    public interface IOptionsProvider<TValue>
-        where TValue: class, new()
-    {
-        TValue Value { get; }
-    }
+    TValue Value { get; }
 }

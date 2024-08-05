@@ -1,9 +1,8 @@
-﻿namespace LINGYUN.Abp.IM
+﻿namespace LINGYUN.Abp.IM;
+
+public enum Sex
 {
-    public enum Sex
-    {
-        Male,
-        Female,
-        Other
-    }
+    Male,
+    Female,
+    Other
 }

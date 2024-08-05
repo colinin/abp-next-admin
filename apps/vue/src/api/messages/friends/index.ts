@@ -9,7 +9,7 @@ import {
 
 export const create = (input: FriendCreateRequest) => {
   return defHttp.post<void>({
-    url: 'api/im/my-friends',
+    url: '/api/im/my-friends',
     data: input,
   });
 };

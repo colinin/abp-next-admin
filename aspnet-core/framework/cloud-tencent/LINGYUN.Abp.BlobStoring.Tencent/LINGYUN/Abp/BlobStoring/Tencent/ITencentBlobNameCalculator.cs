@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.BlobStoring;
 
-namespace LINGYUN.Abp.BlobStoring.Tencent
+namespace LINGYUN.Abp.BlobStoring.Tencent;
+
+public interface ITencentBlobNameCalculator
 {
-    public interface ITencentBlobNameCalculator
-    {
-        string Calculate(BlobProviderArgs args);
-    }
+    string Calculate(BlobProviderArgs args);
 }

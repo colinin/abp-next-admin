@@ -7,80 +7,79 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Users;
 
-namespace LINGYUN.Abp.MessageService.Groups
+namespace LINGYUN.Abp.MessageService.Groups;
+
+[Authorize]
+public class UserGroupAppService : AbpMessageServiceApplicationServiceBase, IUserGroupAppService
 {
-    [Authorize]
-    public class UserGroupAppService : AbpMessageServiceApplicationServiceBase, IUserGroupAppService
+    private readonly IUserGroupStore _userGroupStore;
+
+    public UserGroupAppService(
+        IUserGroupStore userGroupStore)
     {
-        private readonly IUserGroupStore _userGroupStore;
+        _userGroupStore = userGroupStore;
+    }
 
-        public UserGroupAppService(
-            IUserGroupStore userGroupStore)
+    public virtual Task ApplyJoinGroupAsync(UserJoinGroupDto input)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async virtual Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto input)
+    {
+        var groupUserCardCount = await _userGroupStore
+            .GetMembersCountAsync(CurrentTenant.Id, input.GroupId);
+
+        var groupUserCards = await _userGroupStore.GetMembersAsync(
+            CurrentTenant.Id,
+            input.GroupId,
+            input.Sorting,
+            input.SkipCount,
+            input.MaxResultCount);
+
+        return new PagedResultDto<GroupUserCard>(groupUserCardCount, groupUserCards);
+    }
+
+    public async virtual Task<ListResultDto<Group>> GetMyGroupsAsync()
+    {
+        var myGroups = await _userGroupStore.GetUserGroupsAsync(CurrentTenant.Id, CurrentUser.GetId());
+
+        return new ListResultDto<Group>(myGroups.ToImmutableList());
+    }
+
+    public async virtual Task GroupAcceptUserAsync(GroupAcceptUserDto input)
+    {
+        var myGroupCard = await _userGroupStore
+            .GetUserGroupCardAsync(CurrentTenant.Id, input.GroupId, CurrentUser.GetId());
+        if (myGroupCard == null)
         {
-            _userGroupStore = userGroupStore;
+            // 当前登录用户不再用户组
+            throw new UserFriendlyException("");
         }
-
-        public virtual Task ApplyJoinGroupAsync(UserJoinGroupDto input)
+        if (!myGroupCard.IsAdmin)
         {
-            throw new NotImplementedException();
+            // 当前登录用户没有加人权限
+            throw new UserFriendlyException("");
         }
+        await _userGroupStore
+            .AddUserToGroupAsync(CurrentTenant.Id, input.UserId, input.GroupId, CurrentUser.GetId());
+    }
 
-        public async virtual Task<PagedResultDto<GroupUserCard>> GetGroupUsersAsync(GroupUserGetByPagedDto input)
+    public async virtual Task GroupRemoveUserAsync(GroupRemoveUserDto input)
+    {
+        var myGroupCard = await _userGroupStore
+            .GetUserGroupCardAsync(CurrentTenant.Id, input.GroupId, CurrentUser.GetId());
+        if (myGroupCard == null)
         {
-            var groupUserCardCount = await _userGroupStore
-                .GetMembersCountAsync(CurrentTenant.Id, input.GroupId);
-
-            var groupUserCards = await _userGroupStore.GetMembersAsync(
-                CurrentTenant.Id,
-                input.GroupId,
-                input.Sorting,
-                input.SkipCount,
-                input.MaxResultCount);
-
-            return new PagedResultDto<GroupUserCard>(groupUserCardCount, groupUserCards);
+            // 当前登录用户不再用户组
+            throw new UserFriendlyException("");
         }
-
-        public async virtual Task<ListResultDto<Group>> GetMyGroupsAsync()
+        if (!myGroupCard.IsAdmin)
         {
-            var myGroups = await _userGroupStore.GetUserGroupsAsync(CurrentTenant.Id, CurrentUser.GetId());
-
-            return new ListResultDto<Group>(myGroups.ToImmutableList());
+            // 当前登录用户没有踢人权限
+            throw new UserFriendlyException("");
         }
-
-        public async virtual Task GroupAcceptUserAsync(GroupAcceptUserDto input)
-        {
-            var myGroupCard = await _userGroupStore
-                .GetUserGroupCardAsync(CurrentTenant.Id, input.GroupId, CurrentUser.GetId());
-            if (myGroupCard == null)
-            {
-                // 当前登录用户不再用户组
-                throw new UserFriendlyException("");
-            }
-            if (!myGroupCard.IsAdmin)
-            {
-                // 当前登录用户没有加人权限
-                throw new UserFriendlyException("");
-            }
-            await _userGroupStore
-                .AddUserToGroupAsync(CurrentTenant.Id, input.UserId, input.GroupId, CurrentUser.GetId());
-        }
-
-        public async virtual Task GroupRemoveUserAsync(GroupRemoveUserDto input)
-        {
-            var myGroupCard = await _userGroupStore
-                .GetUserGroupCardAsync(CurrentTenant.Id, input.GroupId, CurrentUser.GetId());
-            if (myGroupCard == null)
-            {
-                // 当前登录用户不再用户组
-                throw new UserFriendlyException("");
-            }
-            if (!myGroupCard.IsAdmin)
-            {
-                // 当前登录用户没有踢人权限
-                throw new UserFriendlyException("");
-            }
-            await _userGroupStore
-                .RemoveUserFormGroupAsync(CurrentTenant.Id, input.UserId, input.GroupId);
-        }
+        await _userGroupStore
+            .RemoveUserFormGroupAsync(CurrentTenant.Id, input.UserId, input.GroupId);
     }
 }

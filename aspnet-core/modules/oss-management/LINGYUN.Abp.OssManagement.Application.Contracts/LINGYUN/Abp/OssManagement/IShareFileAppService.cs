@@ -3,10 +3,9 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Content;
 
-namespace LINGYUN.Abp.OssManagement
+namespace LINGYUN.Abp.OssManagement;
+
+public interface IShareFileAppService : IApplicationService
 {
-    public interface IShareFileAppService : IApplicationService
-    {
-        Task<IRemoteStreamContent> GetAsync(string url);
-    }
+    Task<IRemoteStreamContent> GetAsync(string url);
 }

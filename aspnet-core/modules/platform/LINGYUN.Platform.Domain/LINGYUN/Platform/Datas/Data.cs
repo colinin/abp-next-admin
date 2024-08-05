@@ -8,120 +8,119 @@ using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
-namespace LINGYUN.Platform.Datas
+namespace LINGYUN.Platform.Datas;
+
+/// <summary>
+/// 数据字典
+/// </summary>
+public class Data : FullAuditedAggregateRoot<Guid>, IMultiTenant
 {
-    /// <summary>
-    /// 数据字典
-    /// </summary>
-    public class Data : FullAuditedAggregateRoot<Guid>, IMultiTenant
+    public virtual Guid? TenantId { get; protected set; }
+
+    public virtual string Name { get; set; }
+
+    public virtual string Code { get; set; }
+
+    public virtual string DisplayName { get; set; }
+
+    public virtual string Description { get; set; }
+
+    public virtual Guid? ParentId { get; set; }
+
+    public virtual bool IsStatic { get; set; }
+
+    public virtual ICollection<DataItem> Items { get; protected set; }
+
+    protected Data() 
     {
-        public virtual Guid? TenantId { get; protected set; }
+        Items = new Collection<DataItem>();
+    }
 
-        public virtual string Name { get; set; }
+    public Data(
+        [NotNull] Guid id,
+        [NotNull] string name,
+        [NotNull] string code,
+        [NotNull] string displayName,
+        string description = "",
+        Guid? parentId = null,
+        Guid? tenantId = null)
+    {
+        Check.NotNull(id, nameof(id));
+        Check.NotNullOrWhiteSpace(name, nameof(name));
+        Check.NotNullOrWhiteSpace(code, nameof(code));
+        Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
 
-        public virtual string Code { get; set; }
+        Id = id;
+        Name = name;
+        Code = code;
+        DisplayName = displayName;
+        Description = description;
+        ParentId = parentId;
+        TenantId = tenantId;
 
-        public virtual string DisplayName { get; set; }
+        CreationTime = DateTime.Now;
 
-        public virtual string Description { get; set; }
+        Items = new Collection<DataItem>();
+    }
 
-        public virtual Guid? ParentId { get; set; }
+    public Data AddItem(
+        [NotNull] IGuidGenerator guidGenerator,
+        [NotNull] string name,
+        [NotNull] string displayName,
+        [CanBeNull] string defaultValue,
+        ValueType valueType = ValueType.String,
+        string description = "",
+        bool allowBeNull = true,
+        bool isStatic = false)
+    {
+        Check.NotNull(guidGenerator, nameof(guidGenerator));
+        Check.NotNull(name, nameof(name));
+        Check.NotNull(displayName, nameof(displayName));
 
-        public virtual bool IsStatic { get; set; }
-
-        public virtual ICollection<DataItem> Items { get; protected set; }
-
-        protected Data() 
+        if (!IsInItem(name))
         {
-            Items = new Collection<DataItem>();
-        }
-
-        public Data(
-            [NotNull] Guid id,
-            [NotNull] string name,
-            [NotNull] string code,
-            [NotNull] string displayName,
-            string description = "",
-            Guid? parentId = null,
-            Guid? tenantId = null)
-        {
-            Check.NotNull(id, nameof(id));
-            Check.NotNullOrWhiteSpace(name, nameof(name));
-            Check.NotNullOrWhiteSpace(code, nameof(code));
-            Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
-
-            Id = id;
-            Name = name;
-            Code = code;
-            DisplayName = displayName;
-            Description = description;
-            ParentId = parentId;
-            TenantId = tenantId;
-
-            CreationTime = DateTime.Now;
-
-            Items = new Collection<DataItem>();
-        }
-
-        public Data AddItem(
-            [NotNull] IGuidGenerator guidGenerator,
-            [NotNull] string name,
-            [NotNull] string displayName,
-            [CanBeNull] string defaultValue,
-            ValueType valueType = ValueType.String,
-            string description = "",
-            bool allowBeNull = true,
-            bool isStatic = false)
-        {
-            Check.NotNull(guidGenerator, nameof(guidGenerator));
-            Check.NotNull(name, nameof(name));
-            Check.NotNull(displayName, nameof(displayName));
-
-            if (!IsInItem(name))
+            var dataItem = new DataItem(
+                guidGenerator.Create(),
+                Id,
+                name,
+                displayName,
+                defaultValue,
+                valueType,
+                description,
+                allowBeNull,
+                TenantId
+                )
             {
-                var dataItem = new DataItem(
-                    guidGenerator.Create(),
-                    Id,
-                    name,
-                    displayName,
-                    defaultValue,
-                    valueType,
-                    description,
-                    allowBeNull,
-                    TenantId
-                    )
-                {
-                    IsStatic = isStatic
-                };
-                Items.Add(dataItem);
-            }
-
-            return this;
+                IsStatic = isStatic
+            };
+            Items.Add(dataItem);
         }
 
-        public DataItem FindItem(string name)
+        return this;
+    }
+
+    public DataItem FindItem(string name)
+    {
+        return Items.FirstOrDefault(item => item.Name == name);
+    }
+
+    public DataItem FindItem(Guid id)
+    {
+        return Items.FirstOrDefault(item => item.Id == id);
+    }
+
+    public bool RemoveItem(string name)
+    {
+        if (IsInItem(name))
         {
-            return Items.FirstOrDefault(item => item.Name == name);
+            Items.RemoveAll(item => item.Name == name);
+            return true;
         }
+        return false;
+    }
 
-        public DataItem FindItem(Guid id)
-        {
-            return Items.FirstOrDefault(item => item.Id == id);
-        }
-
-        public bool RemoveItem(string name)
-        {
-            if (IsInItem(name))
-            {
-                Items.RemoveAll(item => item.Name == name);
-                return true;
-            }
-            return false;
-        }
-
-        public bool IsInItem(string name)
-        {
-            return Items.Any(item => item.Name == name);
-        }
+    public bool IsInItem(string name)
+    {
+        return Items.Any(item => item.Name == name);
     }
 }

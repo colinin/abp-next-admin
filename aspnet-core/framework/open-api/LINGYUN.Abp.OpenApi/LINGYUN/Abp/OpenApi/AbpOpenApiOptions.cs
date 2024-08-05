@@ -1,11 +1,10 @@
-﻿namespace LINGYUN.Abp.OpenApi
+﻿namespace LINGYUN.Abp.OpenApi;
+
+public class AbpOpenApiOptions
 {
-    public class AbpOpenApiOptions
+    public bool IsEnabled { get; set; }
+    public AbpOpenApiOptions()
     {
-        public bool IsEnabled { get; set; }
-        public AbpOpenApiOptions()
-        {
-            IsEnabled = true;
-        }
+        IsEnabled = true;
     }
 }

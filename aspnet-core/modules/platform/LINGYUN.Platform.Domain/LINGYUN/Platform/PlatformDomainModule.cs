@@ -12,59 +12,58 @@ using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending.Modularity;
 
-namespace LINGYUN.Platform
+namespace LINGYUN.Platform;
+
+[DependsOn(
+    typeof(PlatformDomainSharedModule),
+    typeof(AbpBlobStoringModule),
+    typeof(AbpEventBusModule))]
+public class PlatformDomainModule : AbpModule
 {
-    [DependsOn(
-        typeof(PlatformDomainSharedModule),
-        typeof(AbpBlobStoringModule),
-        typeof(AbpEventBusModule))]
-    public class PlatformDomainModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddAutoMapperObjectMapper<PlatformDomainModule>();
+
+        Configure<DataItemMappingOptions>(options =>
         {
-            context.Services.AddAutoMapperObjectMapper<PlatformDomainModule>();
+            options.SetDefaultMapping();
+        });
 
-            Configure<DataItemMappingOptions>(options =>
-            {
-                options.SetDefaultMapping();
-            });
-
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddProfile<PlatformDomainMappingProfile>(validate: true);
-            });
-
-            Configure<AbpBlobStoringOptions>(options =>
-            {
-                options.Containers.Configure<PackageContainer>(containerConfiguration =>
-                {
-                    containerConfiguration.IsMultiTenant = true;
-                });
-            });
-
-            Configure<AbpDistributedEntityEventOptions>(options =>
-            {
-                options.EtoMappings.Add<Layout, LayoutEto>(typeof(PlatformDomainModule));
-
-                options.EtoMappings.Add<Menu, MenuEto>(typeof(PlatformDomainModule));
-                options.EtoMappings.Add<UserMenu, UserMenuEto>(typeof(PlatformDomainModule));
-                options.EtoMappings.Add<RoleMenu, RoleMenuEto>(typeof(PlatformDomainModule));
-
-                options.EtoMappings.Add<Package, PackageEto>(typeof(PlatformDomainModule));
-            });
-        }
-        public override void PostConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpAutoMapperOptions>(options =>
         {
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                PlatformModuleExtensionConsts.ModuleName,
-                PlatformModuleExtensionConsts.EntityNames.Route,
-                typeof(Route)
-            );
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                PlatformModuleExtensionConsts.ModuleName,
-                PlatformModuleExtensionConsts.EntityNames.Package,
-                typeof(Package)
-            );
-        }
+            options.AddProfile<PlatformDomainMappingProfile>(validate: true);
+        });
+
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            options.Containers.Configure<PackageContainer>(containerConfiguration =>
+            {
+                containerConfiguration.IsMultiTenant = true;
+            });
+        });
+
+        Configure<AbpDistributedEntityEventOptions>(options =>
+        {
+            options.EtoMappings.Add<Layout, LayoutEto>(typeof(PlatformDomainModule));
+
+            options.EtoMappings.Add<Menu, MenuEto>(typeof(PlatformDomainModule));
+            options.EtoMappings.Add<UserMenu, UserMenuEto>(typeof(PlatformDomainModule));
+            options.EtoMappings.Add<RoleMenu, RoleMenuEto>(typeof(PlatformDomainModule));
+
+            options.EtoMappings.Add<Package, PackageEto>(typeof(PlatformDomainModule));
+        });
+    }
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+            PlatformModuleExtensionConsts.ModuleName,
+            PlatformModuleExtensionConsts.EntityNames.Route,
+            typeof(Route)
+        );
+        ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+            PlatformModuleExtensionConsts.ModuleName,
+            PlatformModuleExtensionConsts.EntityNames.Package,
+            typeof(Package)
+        );
     }
 }

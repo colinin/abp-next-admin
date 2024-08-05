@@ -4,20 +4,19 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Chat;
+
+public interface IMyFriendAppService : IApplicationService
 {
-    public interface IMyFriendAppService : IApplicationService
-    {
-        Task<UserFriend> GetAsync(Guid friendId);
+    Task<UserFriend> GetAsync(Guid friendId);
 
-        Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input);
+    Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input);
 
-        Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input);
+    Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input);
 
-        Task CreateAsync(MyFriendCreateDto input);
+    Task CreateAsync(MyFriendCreateDto input);
 
-        Task DeleteAsync(MyFriendOperationDto input);
+    Task DeleteAsync(MyFriendOperationDto input);
 
-        Task AddRequestAsync(MyFriendAddRequestDto input);
-    }
+    Task AddRequestAsync(MyFriendAddRequestDto input);
 }

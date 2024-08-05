@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.Features.LimitValidation.Redis
+﻿namespace LINGYUN.Abp.Features.LimitValidation.Redis;
+
+public interface IRedisLimitFeatureNamingNormalizer
 {
-    public interface IRedisLimitFeatureNamingNormalizer
-    {
-        string NormalizeFeatureName(string instance, RequiresLimitFeatureContext context);
-    }
+    string NormalizeFeatureName(string instance, RequiresLimitFeatureContext context);
 }

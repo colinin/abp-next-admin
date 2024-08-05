@@ -10,12 +10,6 @@ public class AbpWeChatCryptoException : AbpWeChatException
     }
 
     public AbpWeChatCryptoException(
-        SerializationInfo serializationInfo,
-        StreamingContext context) : base(serializationInfo, context)
-    {
-    }
-
-    public AbpWeChatCryptoException(
         string appId,
         string message = null,
         string details = null,

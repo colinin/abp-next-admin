@@ -1,10 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.WeChat.Token
+namespace LINGYUN.Abp.WeChat.Token;
+
+public interface IWeChatTokenProvider
 {
-    public interface IWeChatTokenProvider
-    {
-        Task<WeChatToken> GetTokenAsync(string appId, string appSecret, CancellationToken cancellationToken = default);
-    }
+    Task<WeChatToken> GetTokenAsync(string appId, string appSecret, CancellationToken cancellationToken = default);
 }

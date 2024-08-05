@@ -533,7 +533,7 @@ public partial class WorkflowManagementHttpApiHostModule
                             .ToArray()
                     )
                     .WithAbpExposedHeaders()
-                    .WithExposedHeaders("_AbpWrapResult", "_AbpDontWrapResult")
+                    .WithAbpWrapExposedHeaders()
                     .SetIsOriginAllowedToAllowWildcardSubdomains()
                     .AllowAnyHeader()
                     .AllowAnyMethod()

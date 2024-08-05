@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Abp.IdentityServer.Clients
+﻿namespace LINGYUN.Abp.IdentityServer.Clients;
+
+public class ClientPropertyDto : PropertyDto
 {
-    public class ClientPropertyDto : PropertyDto
-    {
-    }
 }

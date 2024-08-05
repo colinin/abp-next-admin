@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.AuditLogging.Elasticsearch
+﻿namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
+
+public interface IIndexNameNormalizer
 {
-    public interface IIndexNameNormalizer
-    {
-        string NormalizeIndex(string index);
-    }
+    string NormalizeIndex(string index);
 }

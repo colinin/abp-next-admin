@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Abp.MessageService.Chat
+﻿namespace LINGYUN.Abp.MessageService.Chat;
+
+public class MyFriendCreateDto : MyFriendOperationDto
 {
-    public class MyFriendCreateDto : MyFriendOperationDto
-    {
-    }
 }

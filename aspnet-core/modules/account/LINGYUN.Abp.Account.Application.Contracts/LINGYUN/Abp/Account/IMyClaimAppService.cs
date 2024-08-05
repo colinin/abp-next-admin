@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
-namespace LINGYUN.Abp.Account
+namespace LINGYUN.Abp.Account;
+
+public interface IMyClaimAppService : IApplicationService
 {
-    public interface IMyClaimAppService : IApplicationService
-    {
-        Task ChangeAvatarAsync(ChangeAvatarInput input);
-    }
+    Task ChangeAvatarAsync(ChangeAvatarInput input);
 }

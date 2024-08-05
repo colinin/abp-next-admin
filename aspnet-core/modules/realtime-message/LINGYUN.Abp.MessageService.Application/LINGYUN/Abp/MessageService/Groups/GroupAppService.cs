@@ -3,38 +3,37 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 
-namespace LINGYUN.Abp.MessageService.Groups
+namespace LINGYUN.Abp.MessageService.Groups;
+
+[AllowAnonymous]
+public class GroupAppService : AbpMessageServiceApplicationServiceBase, IGroupAppService
 {
-    [AllowAnonymous]
-    public class GroupAppService : AbpMessageServiceApplicationServiceBase, IGroupAppService
+    private readonly IGroupStore _groupStore;
+
+    public GroupAppService(
+        IGroupStore groupStore)
     {
-        private readonly IGroupStore _groupStore;
+        _groupStore = groupStore;
+    }
 
-        public GroupAppService(
-            IGroupStore groupStore)
-        {
-            _groupStore = groupStore;
-        }
+    public async virtual Task<Group> GetAsync(string groupId)
+    {
+        return await _groupStore.GetAsync(CurrentTenant.Id, groupId);
+    }
 
-        public async virtual Task<Group> GetAsync(string groupId)
-        {
-            return await _groupStore.GetAsync(CurrentTenant.Id, groupId);
-        }
+    public async virtual Task<PagedResultDto<Group>> SearchAsync(GroupSearchInput input)
+    {
+        var count = await _groupStore.GetCountAsync(
+            CurrentTenant.Id,
+            input.Filter);
 
-        public async virtual Task<PagedResultDto<Group>> SearchAsync(GroupSearchInput input)
-        {
-            var count = await _groupStore.GetCountAsync(
-                CurrentTenant.Id,
-                input.Filter);
+        var groups = await _groupStore.GetListAsync(
+            CurrentTenant.Id,
+            input.Filter,
+            input.Sorting,
+            input.SkipCount,
+            input.MaxResultCount);
 
-            var groups = await _groupStore.GetListAsync(
-                CurrentTenant.Id,
-                input.Filter,
-                input.Sorting,
-                input.SkipCount,
-                input.MaxResultCount);
-
-            return new PagedResultDto<Group>(count, groups);
-        }
+        return new PagedResultDto<Group>(count, groups);
     }
 }

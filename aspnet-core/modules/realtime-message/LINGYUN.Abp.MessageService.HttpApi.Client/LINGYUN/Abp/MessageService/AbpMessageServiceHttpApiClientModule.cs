@@ -2,19 +2,18 @@
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.MessageService
+namespace LINGYUN.Abp.MessageService;
+
+[DependsOn(
+    typeof(AbpMessageServiceApplicationContractsModule),
+    typeof(AbpHttpClientModule))]
+public class AbpMessageServiceHttpApiClientModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpMessageServiceApplicationContractsModule),
-        typeof(AbpHttpClientModule))]
-    public class AbpMessageServiceHttpApiClientModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddHttpClientProxies(
-                typeof(AbpMessageServiceApplicationContractsModule).Assembly,
-                AbpMessageServiceConsts.RemoteServiceName
-            );
-        }
+        context.Services.AddHttpClientProxies(
+            typeof(AbpMessageServiceApplicationContractsModule).Assembly,
+            AbpMessageServiceConsts.RemoteServiceName
+        );
     }
 }

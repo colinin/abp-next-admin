@@ -1,8 +1,7 @@
-﻿namespace LINGYUN.Abp.IM.Messages
+﻿namespace LINGYUN.Abp.IM.Messages;
+
+public enum MessageSourceType
 {
-    public enum MessageSourceType
-    {
-        User = 0,
-        System = 10,
-    }
+    User = 0,
+    System = 10,
 }

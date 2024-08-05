@@ -2,15 +2,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace LINGYUN.Abp.Dapr.Actors
-{
-    public class AbpDaprActorProxyOptions
-    {
-        public Dictionary<Type, DynamicDaprActorProxyConfig> ActorProxies { get; set; }
+namespace LINGYUN.Abp.Dapr.Actors;
 
-        public AbpDaprActorProxyOptions()
-        {
-            ActorProxies = new Dictionary<Type, DynamicDaprActorProxyConfig>();
-        }
+public class AbpDaprActorProxyOptions
+{
+    public Dictionary<Type, DynamicDaprActorProxyConfig> ActorProxies { get; set; }
+
+    public AbpDaprActorProxyOptions()
+    {
+        ActorProxies = new Dictionary<Type, DynamicDaprActorProxyConfig>();
     }
 }

@@ -7,42 +7,41 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 
-namespace LINGYUN.Abp.ExceptionHandling
+namespace LINGYUN.Abp.ExceptionHandling;
+
+public abstract class AbpExceptionSubscriberBase : ExceptionSubscriber
 {
-    public abstract class AbpExceptionSubscriberBase : ExceptionSubscriber
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
+    protected AbpExceptionHandlingOptions Options { get; }
+
+    public IAbpLazyServiceProvider ServiceProvider { get; set; }
+
+    protected ILoggerFactory LoggerFactory => ServiceProvider.LazyGetService<ILoggerFactory>();
+
+    protected ILogger Logger => _lazyLogger.Value;
+    private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+
+
+    protected AbpExceptionSubscriberBase(
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<AbpExceptionHandlingOptions> options)
     {
-        protected IServiceScopeFactory ServiceScopeFactory { get; }
-        protected AbpExceptionHandlingOptions Options { get; }
+        Options = options.Value;
+        ServiceScopeFactory = serviceScopeFactory;
+    }
 
-        public IAbpLazyServiceProvider ServiceProvider { get; set; }
-
-        protected ILoggerFactory LoggerFactory => ServiceProvider.LazyGetService<ILoggerFactory>();
-
-        protected ILogger Logger => _lazyLogger.Value;
-        private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
-
-
-        protected AbpExceptionSubscriberBase(
-            IServiceScopeFactory serviceScopeFactory,
-            IOptions<AbpExceptionHandlingOptions> options)
+    public override async Task HandleAsync(ExceptionNotificationContext context)
+    {
+        if (context.Handled &&
+            Options.HasNotifierError(context.Exception))
         {
-            Options = options.Value;
-            ServiceScopeFactory = serviceScopeFactory;
-        }
-
-        public override async Task HandleAsync(ExceptionNotificationContext context)
-        {
-            if (context.Handled &&
-                Options.HasNotifierError(context.Exception))
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                using (var scope = ServiceScopeFactory.CreateScope())
-                {
-                    await SendErrorNotifierAsync(
-                        new ExceptionSendNotifierContext(scope.ServiceProvider, context.Exception, context.LogLevel));
-                }
+                await SendErrorNotifierAsync(
+                    new ExceptionSendNotifierContext(scope.ServiceProvider, context.Exception, context.LogLevel));
             }
         }
-
-        protected abstract Task SendErrorNotifierAsync(ExceptionSendNotifierContext context);
     }
+
+    protected abstract Task SendErrorNotifierAsync(ExceptionSendNotifierContext context);
 }

@@ -2,22 +2,21 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.SecurityLog;
 
-namespace LINGYUN.Abp.AuditLogging
+namespace LINGYUN.Abp.AuditLogging;
+
+[Dependency(ReplaceServices = true)]
+public class SecurityLogStore : ISecurityLogStore, ITransientDependency
 {
-    [Dependency(ReplaceServices = true)]
-    public class SecurityLogStore : ISecurityLogStore, ITransientDependency
+    private readonly ISecurityLogManager _manager;
+
+    public SecurityLogStore(
+        ISecurityLogManager manager)
     {
-        private readonly ISecurityLogManager _manager;
+        _manager = manager;
+    }
 
-        public SecurityLogStore(
-            ISecurityLogManager manager)
-        {
-            _manager = manager;
-        }
-
-        public async virtual Task SaveAsync(SecurityLogInfo securityLogInfo)
-        {
-            await _manager.SaveAsync(securityLogInfo);
-        }
+    public async virtual Task SaveAsync(SecurityLogInfo securityLogInfo)
+    {
+        await _manager.SaveAsync(securityLogInfo);
     }
 }

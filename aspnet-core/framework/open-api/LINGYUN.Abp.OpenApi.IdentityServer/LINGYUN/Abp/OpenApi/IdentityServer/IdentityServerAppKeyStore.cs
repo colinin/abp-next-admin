@@ -55,16 +55,31 @@ public class IdentityServerAppKeyStore : IAppKeyStore, ITransientDependency
 
     public async virtual Task StoreAsync(AppDescriptor descriptor, CancellationToken cancellationToken = default)
     {
-        var client = new Client(_guidGenerator.Create(), descriptor.AppKey)
+        var client = await _clientRepository.FindByClientIdAsync(descriptor.AppKey);
+        if (client == null)
         {
-            ClientName = descriptor.AppName,
-        };
-        client.AddSecret(descriptor.AppSecret);
-        if (descriptor.SignLifetime.HasValue)
-        {
-            client.AddProperty(nameof(AppDescriptor.SignLifetime), descriptor.SignLifetime.Value.ToString());
+            client = new Client(_guidGenerator.Create(), descriptor.AppKey)
+            {
+                ClientName = descriptor.AppName,
+            };
+            client.AddSecret(descriptor.AppSecret);
+            if (descriptor.SignLifetime.HasValue)
+            {
+                client.AddProperty(nameof(AppDescriptor.SignLifetime), descriptor.SignLifetime.Value.ToString());
+            }
+            await _clientRepository.InsertAsync(client, cancellationToken: cancellationToken);
         }
-
-        await _clientRepository.InsertAsync(client, cancellationToken: cancellationToken);
+        else
+        {
+            if (client.FindSecret(descriptor.AppSecret) == null)
+            {
+                client.AddSecret(descriptor.AppSecret);
+            }
+            if (descriptor.SignLifetime.HasValue)
+            {
+                client.AddProperty(nameof(AppDescriptor.SignLifetime), descriptor.SignLifetime.Value.ToString());
+                await _clientRepository.UpdateAsync(client, cancellationToken: cancellationToken);
+            }
+        }
     }
 }

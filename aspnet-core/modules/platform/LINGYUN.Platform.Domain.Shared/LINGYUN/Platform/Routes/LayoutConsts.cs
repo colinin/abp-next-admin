@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Platform.Routes
+﻿namespace LINGYUN.Platform.Routes;
+
+public static class LayoutConsts
 {
-    public static class LayoutConsts
-    {
-        public static int MaxFrameworkLength { get; set; } = 64;
-    }
+    public static int MaxFrameworkLength { get; set; } = 64;
 }

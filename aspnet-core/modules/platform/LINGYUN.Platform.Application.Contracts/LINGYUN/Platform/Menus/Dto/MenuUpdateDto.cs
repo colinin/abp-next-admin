@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Platform.Menus
+﻿namespace LINGYUN.Platform.Menus;
+
+public class MenuUpdateDto : MenuCreateOrUpdateDto
 {
-    public class MenuUpdateDto : MenuCreateOrUpdateDto
-    {
-    }
 }

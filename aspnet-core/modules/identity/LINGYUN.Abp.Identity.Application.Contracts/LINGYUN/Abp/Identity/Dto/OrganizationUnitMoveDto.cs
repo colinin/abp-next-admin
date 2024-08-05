@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace LINGYUN.Abp.Identity
+namespace LINGYUN.Abp.Identity;
+
+public class OrganizationUnitMoveDto
 {
-    public class OrganizationUnitMoveDto
-    {
-        public Guid? ParentId { get; set; }
-    }
+    public Guid? ParentId { get; set; }
 }

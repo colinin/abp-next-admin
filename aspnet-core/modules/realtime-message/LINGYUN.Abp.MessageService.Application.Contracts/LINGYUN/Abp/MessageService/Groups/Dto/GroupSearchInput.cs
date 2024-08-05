@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Application.Dtos;
 
-namespace LINGYUN.Abp.MessageService.Groups
+namespace LINGYUN.Abp.MessageService.Groups;
+
+public class GroupSearchInput : PagedAndSortedResultRequestDto
 {
-    public class GroupSearchInput : PagedAndSortedResultRequestDto
-    {
-        public string Filter { get; set; }
-    }
+    public string Filter { get; set; }
 }

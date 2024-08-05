@@ -2,8 +2,10 @@
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LY.MicroService.AuthServer.Authentication;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -14,8 +16,10 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
+using OpenIddict.Validation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -39,6 +43,7 @@ using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
@@ -109,6 +114,8 @@ public partial class AuthServerModule
                 options.UseLocalServer();
 
                 options.UseAspNetCore();
+
+                options.UseDataProtection();
             });
         });
     }
@@ -139,6 +146,8 @@ public partial class AuthServerModule
                     builder.AddSigningCertificate(cer);
 
                     builder.AddEncryptionCertificate(cer);
+
+                    builder.UseDataProtection();
                 });
             }
         }
@@ -170,6 +179,9 @@ public partial class AuthServerModule
                     var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
                     builder.AddEncryptionCertificate(certificate);
                 }
+
+
+                builder.UseDataProtection();
 
                 // 禁用https
                 builder.UseAspNetCore()
@@ -317,6 +329,11 @@ public partial class AuthServerModule
                 identityConfiguration.Bind(options);
             }
         });
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+            options.IsRemoteRefreshEnabled = false;
+        });
     }
     private void ConfigureVirtualFileSystem()
     {
@@ -391,6 +408,17 @@ public partial class AuthServerModule
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
     {
+        services
+            .AddAuthentication()
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromDays(365);
+            })
+            .AddJwtBearer(options =>
+            {
+                configuration.GetSection("AuthServer").Bind(options);
+            });
+
         if (!isDevelopment)
         {
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
@@ -399,8 +427,9 @@ public partial class AuthServerModule
                 .SetApplicationName("LINGYUN.Abp.Application")
                 .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
         }
-
         services.AddSameSiteCookiePolicy();
+        // 处理cookie中过时的ajax请求判断
+        services.Replace(ServiceDescriptor.Scoped<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>());
     }
     private void ConfigureMultiTenancy(IConfiguration configuration)
     {
@@ -437,8 +466,7 @@ public partial class AuthServerModule
                             .ToArray()
                     )
                     .WithAbpExposedHeaders()
-                    // 引用 LINGYUN.Abp.AspNetCore.Mvc.Wrapper 包时可替换为 WithAbpWrapExposedHeaders
-                    .WithExposedHeaders("_AbpWrapResult", "_AbpDontWrapResult")
+                    .WithAbpWrapExposedHeaders()
                     .SetIsOriginAllowedToAllowWildcardSubdomains()
                     .AllowAnyHeader()
                     .AllowAnyMethod()

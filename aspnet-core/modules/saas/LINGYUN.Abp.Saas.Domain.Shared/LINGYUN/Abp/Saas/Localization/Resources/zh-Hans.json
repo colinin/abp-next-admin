@@ -47,6 +47,8 @@
     "Features:ExpiredRecoveryTimeDesc": "当资源超期多久没有处理, 将回收租户资源",
     "TenantNotFoundById": "租户: {0} 不存在!",
     "TenantNotFoundByName": "租户: {0} 不存在!",
-    "UnActived": "未启用"
+    "UnActived": "未启用",
+    "RecycleStrategy:Reserve": "保留",
+    "RecycleStrategy:Recycle": "回收"
   }
 }

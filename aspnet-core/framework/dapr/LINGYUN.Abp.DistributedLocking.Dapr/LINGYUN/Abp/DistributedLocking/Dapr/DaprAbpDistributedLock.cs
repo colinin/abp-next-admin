@@ -29,7 +29,7 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
-    public async virtual Task<IAbpDistributedLockHandle> TryAcquireAsync(string name, TimeSpan timeout = default, CancellationToken cancellationToken = default)
+    public async virtual Task<IAbpDistributedLockHandle?> TryAcquireAsync(string name, TimeSpan timeout = default, CancellationToken cancellationToken = default)
     {
         if (timeout == default)
         {

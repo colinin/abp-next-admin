@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.IM.Messages
+namespace LINGYUN.Abp.IM.Messages;
+
+public interface IMessageSender
 {
-    public interface IMessageSender
-    {
-        Task<string> SendMessageAsync(ChatMessage chatMessage);
-    }
+    Task<string> SendMessageAsync(ChatMessage chatMessage);
 }

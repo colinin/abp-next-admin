@@ -6,43 +6,42 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LINGYUN.Abp.TuiJuhe.SettingManagement
+namespace LINGYUN.Abp.TuiJuhe.SettingManagement;
+
+[DependsOn(
+    typeof(AbpTuiJuheModule),
+    typeof(AbpAspNetCoreMvcModule))]
+public class AbpTuiJuheSettingManagementModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpTuiJuheModule),
-        typeof(AbpAspNetCoreMvcModule))]
-    public class AbpTuiJuheSettingManagementModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
-            {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpTuiJuheSettingManagementModule).Assembly);
-            });
-        }
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpTuiJuheSettingManagementModule).Assembly);
+        });
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpTuiJuheSettingManagementModule>();
-            });
+            options.FileSets.AddEmbedded<AbpTuiJuheSettingManagementModule>();
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<TuiJuheResource>()
-                    .AddVirtualJson("/LINGYUN/Abp/TuiJuhe/SettingManagement/Localization/Resources");
-            });
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<TuiJuheResource>()
+                .AddVirtualJson("/LINGYUN/Abp/TuiJuhe/SettingManagement/Localization/Resources");
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<TuiJuheResource>()
-                    .AddBaseTypes(
-                        typeof(AbpUiResource)
-                    );
-            });
-        }
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<TuiJuheResource>()
+                .AddBaseTypes(
+                    typeof(AbpUiResource)
+                );
+        });
     }
 }

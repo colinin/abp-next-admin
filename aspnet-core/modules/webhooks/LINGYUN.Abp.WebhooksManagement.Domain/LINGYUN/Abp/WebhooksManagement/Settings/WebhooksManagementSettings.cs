@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.WebhooksManagement.Settings
+﻿namespace LINGYUN.Abp.WebhooksManagement.Settings;
+
+public static class WebhooksManagementSettings
 {
-    public static class WebhooksManagementSettings
-    {
-        public const string GroupName = "WebhooksManagement";
-    }
+    public const string GroupName = "WebhooksManagement";
 }

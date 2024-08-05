@@ -16,7 +16,7 @@ export const getByName = (name: string) => {
 
 export const create = (input: LanguageCreate) => {
   return defHttp.post<Language>({
-    url: '/api/abp/localization/languages',
+    url: '/api/localization/languages',
     data: input,
   });
 };

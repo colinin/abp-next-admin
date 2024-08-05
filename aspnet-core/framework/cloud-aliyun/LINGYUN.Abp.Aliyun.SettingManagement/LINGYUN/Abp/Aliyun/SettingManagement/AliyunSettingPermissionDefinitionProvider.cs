@@ -2,23 +2,22 @@
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 
-namespace LINGYUN.Abp.Aliyun.SettingManagement
+namespace LINGYUN.Abp.Aliyun.SettingManagement;
+
+public class AliyunSettingPermissionDefinitionProvider : PermissionDefinitionProvider
 {
-    public class AliyunSettingPermissionDefinitionProvider : PermissionDefinitionProvider
+    public override void Define(IPermissionDefinitionContext context)
     {
-        public override void Define(IPermissionDefinitionContext context)
-        {
-            var wechatGroup = context.AddGroup(
-                AliyunSettingPermissionNames.GroupName,
-                L("Permission:Aliyun"));
+        var wechatGroup = context.AddGroup(
+            AliyunSettingPermissionNames.GroupName,
+            L("Permission:Aliyun"));
 
-            wechatGroup.AddPermission(
-                AliyunSettingPermissionNames.Settings, L("Permission:Aliyun.Settings"));
-        }
+        wechatGroup.AddPermission(
+            AliyunSettingPermissionNames.Settings, L("Permission:Aliyun.Settings"));
+    }
 
-        protected LocalizableString L(string name)
-        {
-            return LocalizableString.Create<AliyunResource>(name);
-        }
+    protected LocalizableString L(string name)
+    {
+        return LocalizableString.Create<AliyunResource>(name);
     }
 }

@@ -3,16 +3,15 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
 
-namespace LINGYUN.Platform.Menus
+namespace LINGYUN.Platform.Menus;
+
+public class MenuGetByUserInput
 {
-    public class MenuGetByUserInput
-    {
-        [Required]
-        public Guid UserId { get; set; }
+    [Required]
+    public Guid UserId { get; set; }
 
-        public string[] Roles { get; set; } = new string[0];
+    public string[] Roles { get; set; } = new string[0];
 
-        [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
-        public string Framework { get; set; }
-    }
+    [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
+    public string Framework { get; set; }
 }

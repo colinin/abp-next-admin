@@ -1,9 +1,8 @@
-﻿namespace LINGYUN.Abp.Wrapper
-{
-    public static class AbpHttpWrapConsts
-    {
-        public const string AbpWrapResult = "_AbpWrapResult";
+﻿namespace LINGYUN.Abp.Wrapper;
 
-        public const string AbpDontWrapResult = "_AbpDontWrapResult";
-    }
+public static class AbpHttpWrapConsts
+{
+    public const string AbpWrapResult = "_AbpWrapResult";
+
+    public const string AbpDontWrapResult = "_AbpDontWrapResult";
 }

@@ -88,7 +88,7 @@ export const getAll = () => {
 
 export const move = (id: string, parentId?: string) => {
   return defHttp.put<void>({
-    url: `api/identity/organization-units/${id}/move`,
+    url: `/api/identity/organization-units/${id}/move`,
     data: {
       parentId: parentId,
     },

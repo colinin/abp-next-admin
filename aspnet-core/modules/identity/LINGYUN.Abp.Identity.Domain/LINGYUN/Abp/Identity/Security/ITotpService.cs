@@ -1,12 +1,11 @@
-﻿namespace LINGYUN.Abp.Identity.Security
-{
-    /// <summary>
-    /// totp算法服务
-    /// </summary>
-    public interface ITotpService
-    {
-        int GenerateCode(byte[] securityToken, string modifier = null);
+﻿namespace LINGYUN.Abp.Identity.Security;
 
-        bool ValidateCode(byte[] securityToken, int code, string modifier = null);
-    }
+/// <summary>
+/// totp算法服务
+/// </summary>
+public interface ITotpService
+{
+    int GenerateCode(byte[] securityToken, string modifier = null);
+
+    bool ValidateCode(byte[] securityToken, int code, string modifier = null);
 }

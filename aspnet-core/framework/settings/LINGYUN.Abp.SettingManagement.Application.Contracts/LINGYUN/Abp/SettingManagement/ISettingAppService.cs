@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.SettingManagement
-{
-    public interface ISettingAppService : IReadonlySettingAppService
-    {
-        Task SetGlobalAsync(UpdateSettingsDto input);
+namespace LINGYUN.Abp.SettingManagement;
 
-        Task SetCurrentTenantAsync(UpdateSettingsDto input);
-    }
+public interface ISettingAppService : IReadonlySettingAppService
+{
+    Task SetGlobalAsync(UpdateSettingsDto input);
+
+    Task SetCurrentTenantAsync(UpdateSettingsDto input);
 }

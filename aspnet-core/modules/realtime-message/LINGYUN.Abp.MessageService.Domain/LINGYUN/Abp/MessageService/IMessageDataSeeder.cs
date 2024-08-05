@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.MessageService
+namespace LINGYUN.Abp.MessageService;
+
+public interface IMessageDataSeeder
 {
-    public interface IMessageDataSeeder
-    {
-        Task SeedAsync(Guid? tenantId = null);
-    }
+    Task SeedAsync(Guid? tenantId = null);
 }

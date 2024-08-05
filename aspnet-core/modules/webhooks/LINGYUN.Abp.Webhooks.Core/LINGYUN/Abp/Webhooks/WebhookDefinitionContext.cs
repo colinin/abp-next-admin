@@ -3,53 +3,52 @@ using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Localization;
 
-namespace LINGYUN.Abp.Webhooks
+namespace LINGYUN.Abp.Webhooks;
+
+public class WebhookDefinitionContext : IWebhookDefinitionContext
 {
-    public class WebhookDefinitionContext : IWebhookDefinitionContext
+    protected IDictionary<string, WebhookGroupDefinition> Groups { get; }
+
+    public WebhookDefinitionContext(IDictionary<string, WebhookGroupDefinition> webhooks)
     {
-        protected IDictionary<string, WebhookGroupDefinition> Groups { get; }
+        Groups = webhooks;
+    }
 
-        public WebhookDefinitionContext(IDictionary<string, WebhookGroupDefinition> webhooks)
+    public WebhookGroupDefinition AddGroup(
+        [NotNull] string name,
+        ILocalizableString displayName = null)
+    {
+        Check.NotNull(name, nameof(name));
+
+        if (Groups.ContainsKey(name))
         {
-            Groups = webhooks;
+            throw new AbpException($"There is already an existing webhook group with name: {name}");
         }
 
-        public WebhookGroupDefinition AddGroup(
-            [NotNull] string name,
-            ILocalizableString displayName = null)
+        return Groups[name] = new WebhookGroupDefinition(name, displayName);
+    }
+
+    public WebhookGroupDefinition GetGroupOrNull([NotNull] string name)
+    {
+        Check.NotNull(name, nameof(name));
+
+        if (!Groups.ContainsKey(name))
         {
-            Check.NotNull(name, nameof(name));
-
-            if (Groups.ContainsKey(name))
-            {
-                throw new AbpException($"There is already an existing webhook group with name: {name}");
-            }
-
-            return Groups[name] = new WebhookGroupDefinition(name, displayName);
+            return null;
         }
 
-        public WebhookGroupDefinition GetGroupOrNull([NotNull] string name)
+        return Groups[name];
+    }
+
+    public void RemoveGroup(string name)
+    {
+        Check.NotNull(name, nameof(name));
+
+        if (!Groups.ContainsKey(name))
         {
-            Check.NotNull(name, nameof(name));
-
-            if (!Groups.ContainsKey(name))
-            {
-                return null;
-            }
-
-            return Groups[name];
+            throw new AbpException($"Undefined notification webhook group: '{name}'.");
         }
 
-        public void RemoveGroup(string name)
-        {
-            Check.NotNull(name, nameof(name));
-
-            if (!Groups.ContainsKey(name))
-            {
-                throw new AbpException($"Undefined notification webhook group: '{name}'.");
-            }
-
-            Groups.Remove(name);
-        }
+        Groups.Remove(name);
     }
 }

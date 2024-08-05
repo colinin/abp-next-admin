@@ -1,11 +1,10 @@
-﻿namespace LINGYUN.Platform
+﻿namespace LINGYUN.Platform;
+
+public static class PlatformDbProperties
 {
-    public static class PlatformDbProperties
-    {
-        public static string DbTablePrefix { get; set; } = "AppPlatform";
+    public static string DbTablePrefix { get; set; } = "AppPlatform";
 
-        public static string DbSchema { get; set; } = null;
+    public static string DbSchema { get; set; } = null;
 
-        public const string ConnectionStringName = "AppPlatform";
-    }
+    public const string ConnectionStringName = "AppPlatform";
 }

@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.IdentityServer.Clients
-{
-    public class ClientSecretDto : SecretDto
-    {
+﻿namespace LINGYUN.Abp.IdentityServer.Clients;
 
-    }
+public class ClientSecretDto : SecretDto
+{
+
 }

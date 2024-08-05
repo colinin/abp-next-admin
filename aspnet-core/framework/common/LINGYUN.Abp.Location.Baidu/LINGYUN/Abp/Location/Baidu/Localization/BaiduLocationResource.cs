@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Localization;
 
-namespace LINGYUN.Abp.Location.Baidu.Localization
+namespace LINGYUN.Abp.Location.Baidu.Localization;
+
+[LocalizationResourceName("BaiduLocation")]
+public class BaiduLocationResource
 {
-    [LocalizationResourceName("BaiduLocation")]
-    public class BaiduLocationResource
-    {
-    }
 }

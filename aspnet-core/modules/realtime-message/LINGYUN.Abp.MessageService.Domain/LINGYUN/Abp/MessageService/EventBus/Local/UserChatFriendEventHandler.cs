@@ -15,118 +15,117 @@ using Volo.Abp.EventBus;
 using Volo.Abp.Localization;
 using Volo.Abp.Users;
 
-namespace LINGYUN.Abp.MessageService.EventBus.Local
+namespace LINGYUN.Abp.MessageService.EventBus.Local;
+
+public class UserChatFriendEventHandler :
+    ILocalEventHandler<EntityCreatedEventData<UserChatFriend>>,
+    ILocalEventHandler<EntityDeletedEventData<UserChatFriend>>,
+    ILocalEventHandler<EntityUpdatedEventData<UserChatFriend>>,
+    ILocalEventHandler<UserChatFriendEto>,
+    ITransientDependency
 {
-    public class UserChatFriendEventHandler :
-        ILocalEventHandler<EntityCreatedEventData<UserChatFriend>>,
-        ILocalEventHandler<EntityDeletedEventData<UserChatFriend>>,
-        ILocalEventHandler<EntityUpdatedEventData<UserChatFriend>>,
-        ILocalEventHandler<UserChatFriendEto>,
-        ITransientDependency
+    private IStringLocalizer _stringLocalizer;
+    private IMessageSender _messageSender;
+    private INotificationSender _notificationSender;
+    private IDistributedCache<UserFriendCacheItem> _cache;
+    private ICurrentUser _currentUser;
+
+    public UserChatFriendEventHandler(
+        ICurrentUser currentUser,
+        IMessageSender messageSender,
+        INotificationSender notificationSender,
+        IDistributedCache<UserFriendCacheItem> cache,
+        IStringLocalizer<MessageServiceResource> stringLocalizer)
     {
-        private IStringLocalizer _stringLocalizer;
-        private IMessageSender _messageSender;
-        private INotificationSender _notificationSender;
-        private IDistributedCache<UserFriendCacheItem> _cache;
-        private ICurrentUser _currentUser;
+        _cache = cache;
+        _currentUser = currentUser;
+        _messageSender = messageSender;
+        _stringLocalizer = stringLocalizer;
+        _notificationSender = notificationSender;
+    }
 
-        public UserChatFriendEventHandler(
-            ICurrentUser currentUser,
-            IMessageSender messageSender,
-            INotificationSender notificationSender,
-            IDistributedCache<UserFriendCacheItem> cache,
-            IStringLocalizer<MessageServiceResource> stringLocalizer)
+    public async virtual Task HandleEventAsync(EntityCreatedEventData<UserChatFriend> eventData)
+    {
+        switch (eventData.Entity.Status)
         {
-            _cache = cache;
-            _currentUser = currentUser;
-            _messageSender = messageSender;
-            _stringLocalizer = stringLocalizer;
-            _notificationSender = notificationSender;
+            case IM.Contract.UserFriendStatus.NeedValidation:
+                await SendFriendValidationNotifierAsync(eventData.Entity);
+                break;
         }
+        await RemoveUserFriendCacheItemAsync(eventData.Entity.UserId);
+    }
 
-        public async virtual Task HandleEventAsync(EntityCreatedEventData<UserChatFriend> eventData)
+    public async virtual Task HandleEventAsync(EntityDeletedEventData<UserChatFriend> eventData)
+    {
+        await RemoveUserFriendCacheItemAsync(eventData.Entity.UserId);
+    }
+
+    public async virtual Task HandleEventAsync(EntityUpdatedEventData<UserChatFriend> eventData)
+    {
+        await RemoveUserFriendCacheItemAsync(eventData.Entity.UserId);
+    }
+
+    public async virtual Task HandleEventAsync(UserChatFriendEto eventData)
+    {
+        if (eventData.Status == IM.Contract.UserFriendStatus.Added)
         {
-            switch (eventData.Entity.Status)
-            {
-                case IM.Contract.UserFriendStatus.NeedValidation:
-                    await SendFriendValidationNotifierAsync(eventData.Entity);
-                    break;
-            }
-            await RemoveUserFriendCacheItemAsync(eventData.Entity.UserId);
+            await SendFriendAddedMessageAsync(eventData.UserId, eventData.FrientId, eventData.TenantId);
         }
+    }
 
-        public async virtual Task HandleEventAsync(EntityDeletedEventData<UserChatFriend> eventData)
+    protected async virtual Task SendFriendAddedMessageAsync(Guid userId, Guid friendId, Guid? tenantId = null)
+    {
+        // 发送添加好友的第一条消息
+
+        var addNewFirendMessage = new ChatMessage
         {
-            await RemoveUserFriendCacheItemAsync(eventData.Entity.UserId);
-        }
+            TenantId = tenantId,
+            FormUserId = _currentUser.GetId(), // 本地事件中可以获取到当前用户信息
+            FormUserName = _currentUser.UserName,
+            SendTime = DateTime.Now,
+            MessageType = MessageType.Text,
+            ToUserId = friendId,
+            Content = _stringLocalizer["Messages:NewFriend"]
+        };
 
-        public async virtual Task HandleEventAsync(EntityUpdatedEventData<UserChatFriend> eventData)
-        {
-            await RemoveUserFriendCacheItemAsync(eventData.Entity.UserId);
-        }
+        await _messageSender.SendMessageAsync(addNewFirendMessage);
+    }
 
-        public async virtual Task HandleEventAsync(UserChatFriendEto eventData)
-        {
-            if (eventData.Status == IM.Contract.UserFriendStatus.Added)
-            {
-                await SendFriendAddedMessageAsync(eventData.UserId, eventData.FrientId, eventData.TenantId);
-            }
-        }
+    protected async virtual Task SendFriendValidationNotifierAsync(UserChatFriend userChatFriend)
+    {
+        // 发送好友验证通知
+        var userIdentifer = new UserIdentifier(userChatFriend.FrientId, userChatFriend.RemarkName);
 
-        protected async virtual Task SendFriendAddedMessageAsync(Guid userId, Guid friendId, Guid? tenantId = null)
-        {
-            // 发送添加好友的第一条消息
+        var friendValidationNotifictionData = new NotificationData();
+        friendValidationNotifictionData
+            .WriteLocalizedData(
+                new LocalizableStringInfo(
+                    LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
+                    "Notifications:FriendValidation"),
+                new LocalizableStringInfo(
+                    LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
+                    "Notifications:RequestAddNewFriend",
+                    new Dictionary<object, object> { { "name", _currentUser.UserName } }),
+                DateTime.Now,
+                _currentUser.UserName,
+                new LocalizableStringInfo(
+                    LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
+                    "Notifications:RequestAddNewFriendDetail",
+                    new Dictionary<object, object> { { "description", userChatFriend.Description } }));
+        friendValidationNotifictionData.TrySetData("userId", userChatFriend.UserId);
+        friendValidationNotifictionData.TrySetData("frientId", userChatFriend.FrientId);
 
-            var addNewFirendMessage = new ChatMessage
-            {
-                TenantId = tenantId,
-                FormUserId = _currentUser.GetId(), // 本地事件中可以获取到当前用户信息
-                FormUserName = _currentUser.UserName,
-                SendTime = DateTime.Now,
-                MessageType = MessageType.Text,
-                ToUserId = friendId,
-                Content = _stringLocalizer["Messages:NewFriend"]
-            };
+        await _notificationSender
+            .SendNofiterAsync(
+                MessageServiceNotificationNames.IM.FriendValidation,
+                friendValidationNotifictionData,
+                userIdentifer,
+                userChatFriend.TenantId);
+    }
 
-            await _messageSender.SendMessageAsync(addNewFirendMessage);
-        }
-
-        protected async virtual Task SendFriendValidationNotifierAsync(UserChatFriend userChatFriend)
-        {
-            // 发送好友验证通知
-            var userIdentifer = new UserIdentifier(userChatFriend.FrientId, userChatFriend.RemarkName);
-
-            var friendValidationNotifictionData = new NotificationData();
-            friendValidationNotifictionData
-                .WriteLocalizedData(
-                    new LocalizableStringInfo(
-                        LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
-                        "Notifications:FriendValidation"),
-                    new LocalizableStringInfo(
-                        LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
-                        "Notifications:RequestAddNewFriend",
-                        new Dictionary<object, object> { { "name", _currentUser.UserName } }),
-                    DateTime.Now,
-                    _currentUser.UserName,
-                    new LocalizableStringInfo(
-                        LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
-                        "Notifications:RequestAddNewFriendDetail",
-                        new Dictionary<object, object> { { "description", userChatFriend.Description } }));
-            friendValidationNotifictionData.TrySetData("userId", userChatFriend.UserId);
-            friendValidationNotifictionData.TrySetData("frientId", userChatFriend.FrientId);
-
-            await _notificationSender
-                .SendNofiterAsync(
-                    MessageServiceNotificationNames.IM.FriendValidation,
-                    friendValidationNotifictionData,
-                    userIdentifer,
-                    userChatFriend.TenantId);
-        }
-
-        protected async virtual Task RemoveUserFriendCacheItemAsync(Guid userId)
-        {
-            // 移除好友缓存
-            await _cache.RemoveAsync(UserFriendCacheItem.CalculateCacheKey(userId.ToString()));
-        }
+    protected async virtual Task RemoveUserFriendCacheItemAsync(Guid userId)
+    {
+        // 移除好友缓存
+        await _cache.RemoveAsync(UserFriendCacheItem.CalculateCacheKey(userId.ToString()));
     }
 }

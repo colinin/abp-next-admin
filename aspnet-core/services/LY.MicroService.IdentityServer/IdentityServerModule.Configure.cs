@@ -1,12 +1,14 @@
 ﻿using DotNetCore.CAP;
-using LINGYUN.Abp.Authorization.OrganizationUnits;
+using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LY.MicroService.IdentityServer.Authentication;
 using LY.MicroService.IdentityServer.IdentityResources;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -16,6 +18,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using OpenTelemetry.Metrics;
@@ -29,6 +32,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -270,17 +274,10 @@ public partial class IdentityServerModule
             }
         });
 
-        Configure<AbpClaimsServiceOptions>(options =>
-        {
-            options.RequestedClaims.AddRange(new[]
-            {
-                AbpOrganizationUnitClaimTypes.OrganizationUnit
-            });
-        });
-
         Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.IsDynamicClaimsEnabled = true;
+            options.IsRemoteRefreshEnabled = false;
         });
     }
     private void ConfigureVirtualFileSystem()
@@ -362,13 +359,12 @@ public partial class IdentityServerModule
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
     {
-        services.AddAuthentication()
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = configuration["AuthServer:ApiName"];
-                });
+        services
+            .AddAuthentication()
+            .AddJwtBearer(options =>
+            {
+                configuration.GetSection("AuthServer").Bind(options);
+            });
 
         if (isDevelopment)
         {
@@ -385,6 +381,16 @@ public partial class IdentityServerModule
         }
 
         services.AddSameSiteCookiePolicy();
+        // 处理cookie中过时的ajax请求判断
+        services.Replace(ServiceDescriptor.Scoped<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>());
+
+        Configure<CookieAuthenticationOptions>(options =>
+        {
+            options.Events.OnSigningOut = (context) =>
+            {
+                return Task.CompletedTask;
+            };
+        });
     }
     private void ConfigureMultiTenancy(IConfiguration configuration)
     {
@@ -421,8 +427,7 @@ public partial class IdentityServerModule
                             .ToArray()
                     )
                     .WithAbpExposedHeaders()
-                    // 引用 LINGYUN.Abp.AspNetCore.Mvc.Wrapper 包时可替换为 WithAbpWrapExposedHeaders
-                    .WithExposedHeaders("_AbpWrapResult", "_AbpDontWrapResult")
+                    .WithAbpWrapExposedHeaders()
                     .SetIsOriginAllowedToAllowWildcardSubdomains()
                     .AllowAnyHeader()
                     .AllowAnyMethod()

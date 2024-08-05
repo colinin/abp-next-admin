@@ -1,12 +1,11 @@
-﻿namespace System.IO
+﻿namespace System.IO;
+
+public static class StreamExtensions
 {
-    public static class StreamExtensions
+    public static bool IsNullOrEmpty(
+        this Stream stream)
     {
-        public static bool IsNullOrEmpty(
-            this Stream stream)
-        {
-            return stream == null ||
-                Equals(stream, Stream.Null);
-        }
+        return stream == null ||
+            Equals(stream, Stream.Null);
     }
 }

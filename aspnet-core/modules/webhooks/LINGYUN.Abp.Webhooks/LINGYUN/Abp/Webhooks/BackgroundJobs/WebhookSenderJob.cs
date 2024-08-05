@@ -41,7 +41,7 @@ namespace LINGYUN.Abp.Webhooks.BackgroundJobs
                 }
                 catch (Exception e)
                 {
-                    Logger.LogWarning("An error occured while sending webhook with try once.", e);
+                    Logger.LogWarning(e, "An error occured while sending webhook with try once.");
                     // ignored
                 }
             }

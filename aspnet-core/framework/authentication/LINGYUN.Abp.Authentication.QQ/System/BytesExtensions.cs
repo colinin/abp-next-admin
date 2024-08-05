@@ -1,16 +1,15 @@
 ﻿using System.Security.Cryptography;
 
-namespace System
+namespace System;
+
+internal static class BytesExtensions
 {
-    internal static class BytesExtensions
+    public static byte[] Sha1(this byte[] data)
     {
-        public static byte[] Sha1(this byte[] data)
+        using (var sha = SHA1.Create())
         {
-            using (var sha = SHA1.Create())
-            {
-                var hashBytes = sha.ComputeHash(data);
-                return hashBytes;
-            }
+            var hashBytes = sha.ComputeHash(data);
+            return hashBytes;
         }
     }
 }

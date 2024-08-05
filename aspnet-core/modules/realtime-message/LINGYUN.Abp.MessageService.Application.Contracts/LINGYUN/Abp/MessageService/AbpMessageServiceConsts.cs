@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.MessageService
+﻿namespace LINGYUN.Abp.MessageService;
+
+public class AbpMessageServiceConsts
 {
-    public class AbpMessageServiceConsts
-    {
-        public const string RemoteServiceName = "MessageService";
-    }
+    public const string RemoteServiceName = "MessageService";
 }

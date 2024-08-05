@@ -1,10 +1,9 @@
 ﻿using LINGYUN.Platform.Routes;
 using Volo.Abp.EventBus;
 
-namespace LINGYUN.Platform.Layouts
+namespace LINGYUN.Platform.Layouts;
+
+[EventName("platform.layouts.layout")]
+public class LayoutEto : RouteEto
 {
-    [EventName("platform.layouts.layout")]
-    public class LayoutEto : RouteEto
-    {
-    }
 }

@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Abp.IdentityServer.IdentityResources
+﻿namespace LINGYUN.Abp.IdentityServer.IdentityResources;
+
+public class IdentityResourceClaimDto : UserClaimDto
 {
-    public class IdentityResourceClaimDto : UserClaimDto
-    {
-    }
 }

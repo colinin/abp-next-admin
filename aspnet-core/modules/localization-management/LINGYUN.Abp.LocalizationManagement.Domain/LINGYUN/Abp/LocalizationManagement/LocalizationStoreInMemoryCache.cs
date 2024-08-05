@@ -194,8 +194,7 @@ public class LocalizationStoreInMemoryCache : ILocalizationStoreCache, ISingleto
             Languages[language.CultureName] = new LanguageInfo(
                 language.CultureName,
                 language.UiCultureName,
-                language.DisplayName,
-                language.FlagIcon);
+                language.DisplayName);
         }
     }
 

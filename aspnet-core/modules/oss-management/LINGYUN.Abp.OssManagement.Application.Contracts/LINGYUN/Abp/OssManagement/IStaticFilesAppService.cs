@@ -2,10 +2,9 @@
 using Volo.Abp.Application.Services;
 using Volo.Abp.Content;
 
-namespace LINGYUN.Abp.OssManagement
+namespace LINGYUN.Abp.OssManagement;
+
+public interface IStaticFilesAppService: IApplicationService
 {
-    public interface IStaticFilesAppService: IApplicationService
-    {
-        Task<IRemoteStreamContent> GetAsync(GetStaticFileInput input);
-    }
+    Task<IRemoteStreamContent> GetAsync(GetStaticFileInput input);
 }

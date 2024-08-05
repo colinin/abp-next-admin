@@ -1,15 +1,19 @@
-﻿using DotNetCore.CAP;
-using LINGYUN.Abp.Account;
+﻿using LINGYUN.Abp.Account;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authentication.QQ;
 using LINGYUN.Abp.Authentication.WeChat;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.Identity.AspNetCore.Session;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.Notifications;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
+using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
+using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Portal;
 using LINGYUN.Abp.OpenIddict.Sms;
@@ -23,20 +27,17 @@ using LINGYUN.Platform.EntityFrameworkCore;
 using LY.MicroService.AuthServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -57,7 +58,9 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpIdentityApplicationModule),
-    typeof(AbpIdentityAspNetCoreModule),
+    typeof(AbpIdentityAspNetCoreSessionModule),
+    typeof(AbpIdentityNotificationsModule),
+    typeof(AbpOpenIddictAspNetCoreSessionModule),
     typeof(AbpOpenIddictEntityFrameworkCoreModule),
     typeof(AbpOpenIddictSmsModule),
     typeof(AbpOpenIddictWeChatModule),
@@ -78,6 +81,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpAliyunSmsModule)
@@ -137,7 +141,7 @@ public partial class AuthServerModule : AbpModule
         }
         else
         {
-            app.UseErrorPage();
+            // app.UseErrorPage();
             app.UseHsts();
         }
         // app.UseHttpsRedirection();
@@ -146,10 +150,10 @@ public partial class AuthServerModule : AbpModule
         app.UseStaticFiles();
         app.UseRouting();
         app.UseCors(DefaultCorsPolicyName);
-        app.UseWeChatSignature();
         app.UseAuthentication();
-        app.UseDynamicClaims();
         app.UseAbpOpenIddictValidation();
+        app.UseAbpSession();
+        app.UseDynamicClaims();
         app.UseMultiTenancy();
         app.UseAuthorization();
         app.UseAuditing();

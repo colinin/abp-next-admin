@@ -60,4 +60,9 @@ interface Profile extends ExtensibleObject, IHasConcurrencyStamp {
   export interface VerifyAuthenticatorCodeInput {
     authenticatorCode: string;
   }
+
+  export interface GetUserSessionsInput extends PagedAndSortedResultRequestDto {
+    device?: string;
+    clientId?: string;
+  }
   

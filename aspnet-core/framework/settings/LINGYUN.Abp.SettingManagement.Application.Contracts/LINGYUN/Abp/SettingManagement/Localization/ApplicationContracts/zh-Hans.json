@@ -31,6 +31,8 @@
     "Description:Identity.TwoFactor": "双因素认证配置策略",
     "DisplayName:Identity.OrganizationUnit": "组织机构",
     "Description:Identity.OrganizationUnit": "组织机构配置策略",
+    "DisplayName:Identity.Session": "会话配置",
+    "Description:Identity.Session": "配置用户会话",
     "DisplayName:Emailing": "邮件设置",
     "Description:Emailing": "邮件通知相关的配置",
     "DisplayName:Emailing.Default": "默认配置",

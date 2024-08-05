@@ -15,7 +15,7 @@ export const getById = (id: string) => {
 
 export const getList = (input: GetSecurityLogPagedRequest) => {
   return defHttp.get<PagedResultDto<SecurityLog>>({
-    url: 'api/auditing/security-log',
+    url: '/api/auditing/security-log',
     params: input,
   });
 };

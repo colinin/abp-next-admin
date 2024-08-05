@@ -1,11 +1,10 @@
-﻿namespace LINGYUN.Abp.SettingManagement
+﻿namespace LINGYUN.Abp.SettingManagement;
+
+public class UpdateSettingsDto
 {
-    public class UpdateSettingsDto
+    public UpdateSettingDto[] Settings { get; set; }
+    public UpdateSettingsDto()
     {
-        public UpdateSettingDto[] Settings { get; set; }
-        public UpdateSettingsDto()
-        {
-            Settings = new UpdateSettingDto[0];
-        }
+        Settings = new UpdateSettingDto[0];
     }
 }

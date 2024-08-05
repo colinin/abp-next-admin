@@ -51,13 +51,15 @@ $.extend( $.validator.messages, {
 	email2: "Veuillez fournir une adresse électronique valide.",
 	url2: "Veuillez fournir une adresse URL valide.",
 	creditcardtypes: "Veuillez fournir un numéro de carte de crédit valide.",
+	currency: "Veuillez fournir une monnaie valide.",
 	ipv4: "Veuillez fournir une adresse IP v4 valide.",
 	ipv6: "Veuillez fournir une adresse IP v6 valide.",
 	require_from_group: $.validator.format( "Veuillez fournir au moins {0} de ces champs." ),
 	nifES: "Veuillez fournir un numéro NIF valide.",
 	nieES: "Veuillez fournir un numéro NIE valide.",
 	cifES: "Veuillez fournir un numéro CIF valide.",
-	postalCodeCA: "Veuillez fournir un code postal valide."
+	postalCodeCA: "Veuillez fournir un code postal valide.",
+	pattern: "Format non valide."
 } );
 return $;
 }));

@@ -1,8 +1,7 @@
-﻿namespace LINGYUN.Abp.SettingManagement
+﻿namespace LINGYUN.Abp.SettingManagement;
+
+public class AbpSettingManagementRemoteServiceConsts
 {
-    public class AbpSettingManagementRemoteServiceConsts
-    {
-        public const string ModuleName = "setting-management";
-        public const string RemoteServiceName = "AbpSettingManagement";
-    }
+    public const string ModuleName = "setting-management";
+    public const string RemoteServiceName = "AbpSettingManagement";
 }

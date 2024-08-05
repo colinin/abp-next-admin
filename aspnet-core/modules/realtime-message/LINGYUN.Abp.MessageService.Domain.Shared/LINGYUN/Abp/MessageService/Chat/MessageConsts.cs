@@ -1,10 +1,9 @@
-﻿namespace LINGYUN.Abp.MessageService.Chat
-{
-    public class MessageConsts
-    {
-        public const int MaxSendUserNameLength = 64;
+﻿namespace LINGYUN.Abp.MessageService.Chat;
 
-        // 1 MB
-        public const int MaxContentLength = 1024 * 1024;
-    }
+public class MessageConsts
+{
+    public const int MaxSendUserNameLength = 64;
+
+    // 1 MB
+    public const int MaxContentLength = 1024 * 1024;
 }

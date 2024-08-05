@@ -8,75 +8,74 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
-namespace LINGYUN.Abp.Notifications.SignalR.Hubs
+namespace LINGYUN.Abp.Notifications.SignalR.Hubs;
+
+[Authorize]
+public class NotificationsHub : AbpHub
 {
-    [Authorize]
-    public class NotificationsHub : AbpHub
+    protected INotificationStore NotificationStore => LazyServiceProvider.LazyGetRequiredService<INotificationStore>();
+
+    public override async Task OnConnectedAsync()
     {
-        protected INotificationStore NotificationStore => LazyServiceProvider.LazyGetRequiredService<INotificationStore>();
+        await base.OnConnectedAsync();
 
-        public override async Task OnConnectedAsync()
+        if (CurrentTenant.IsAvailable)
         {
-            await base.OnConnectedAsync();
-
-            if (CurrentTenant.IsAvailable)
-            {
-                // 以租户为分组，将用户加入租户通讯组
-                await Groups.AddToGroupAsync(Context.ConnectionId, CurrentTenant.GetId().ToString());
-            }
-            else
-            {
-                await Groups.AddToGroupAsync(Context.ConnectionId, "Global");
-            }
+            // 以租户为分组，将用户加入租户通讯组
+            await Groups.AddToGroupAsync(Context.ConnectionId, CurrentTenant.GetId().ToString());
         }
-
-        public override async Task OnDisconnectedAsync(Exception exception)
+        else
         {
-            await base.OnDisconnectedAsync(exception);
-
-
-            if (CurrentTenant.IsAvailable)
-            {
-                // 以租户为分组，将移除租户通讯组
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, CurrentTenant.GetId().ToString());
-            }
-            else
-            {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Global");
-            }
+            await Groups.AddToGroupAsync(Context.ConnectionId, "Global");
         }
+    }
 
-        // [HubMethodName("MySubscriptions")]
-        [HubMethodName("my-subscriptions")]
-        public async virtual Task<ListResultDto<NotificationSubscriptionInfo>> GetMySubscriptionsAsync()
+    public override async Task OnDisconnectedAsync(Exception exception)
+    {
+        await base.OnDisconnectedAsync(exception);
+
+
+        if (CurrentTenant.IsAvailable)
         {
-            var subscriptions = await NotificationStore
-                .GetUserSubscriptionsAsync(CurrentTenant.Id, CurrentUser.GetId());
-
-            return new ListResultDto<NotificationSubscriptionInfo>(subscriptions);
+            // 以租户为分组，将移除租户通讯组
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, CurrentTenant.GetId().ToString());
         }
-
-        [UnitOfWork]
-        // [HubMethodName("GetNotification")]
-        [HubMethodName("get-notifications")]
-        public async virtual Task<ListResultDto<NotificationInfo>> GetNotificationAsync()
+        else
         {
-            var userNotifications = await NotificationStore
-                .GetUserNotificationsAsync(CurrentTenant.Id, CurrentUser.GetId(), NotificationReadState.UnRead, 10);
-
-            return new ListResultDto<NotificationInfo>(userNotifications);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Global");
         }
+    }
 
-        // [HubMethodName("ChangeState")]
-        [HubMethodName("change-state")]
-        public async virtual Task ChangeStateAsync(string id, NotificationReadState readState = NotificationReadState.Read)
-        {
-            await NotificationStore
-                .ChangeUserNotificationReadStateAsync(
-                    CurrentTenant.Id,
-                    CurrentUser.GetId(), 
-                    long.Parse(id), 
-                    readState);
-        }
+    // [HubMethodName("MySubscriptions")]
+    [HubMethodName("my-subscriptions")]
+    public async virtual Task<ListResultDto<NotificationSubscriptionInfo>> GetMySubscriptionsAsync()
+    {
+        var subscriptions = await NotificationStore
+            .GetUserSubscriptionsAsync(CurrentTenant.Id, CurrentUser.GetId());
+
+        return new ListResultDto<NotificationSubscriptionInfo>(subscriptions);
+    }
+
+    [UnitOfWork]
+    // [HubMethodName("GetNotification")]
+    [HubMethodName("get-notifications")]
+    public async virtual Task<ListResultDto<NotificationInfo>> GetNotificationAsync()
+    {
+        var userNotifications = await NotificationStore
+            .GetUserNotificationsAsync(CurrentTenant.Id, CurrentUser.GetId(), NotificationReadState.UnRead, 10);
+
+        return new ListResultDto<NotificationInfo>(userNotifications);
+    }
+
+    // [HubMethodName("ChangeState")]
+    [HubMethodName("change-state")]
+    public async virtual Task ChangeStateAsync(string id, NotificationReadState readState = NotificationReadState.Read)
+    {
+        await NotificationStore
+            .ChangeUserNotificationReadStateAsync(
+                CurrentTenant.Id,
+                CurrentUser.GetId(), 
+                long.Parse(id), 
+                readState);
     }
 }

@@ -5,6 +5,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.AspNetCore.Mvc.Client</AssemblyName>
+		<PackageId>LINGYUN.Abp.AspNetCore.Mvc.Client</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace />
 		<OutputType>Library</OutputType>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>

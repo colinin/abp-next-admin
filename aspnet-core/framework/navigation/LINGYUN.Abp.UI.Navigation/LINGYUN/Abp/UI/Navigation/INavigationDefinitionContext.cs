@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.UI.Navigation
+﻿namespace LINGYUN.Abp.UI.Navigation;
+
+public interface INavigationDefinitionContext
 {
-    public interface INavigationDefinitionContext
-    {
-        void Add(params NavigationDefinition[] definitions);
-    }
+    void Add(params NavigationDefinition[] definitions);
 }

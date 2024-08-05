@@ -10,37 +10,36 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending.Modularity;
 
-namespace LINGYUN.Abp.MessageService
+namespace LINGYUN.Abp.MessageService;
+
+[DependsOn(
+    typeof(AbpAutoMapperModule),
+    typeof(AbpCachingModule),
+    typeof(AbpNotificationsModule),
+    typeof(AbpMessageServiceDomainSharedModule))]
+public class AbpMessageServiceDomainModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAutoMapperModule),
-        typeof(AbpCachingModule),
-        typeof(AbpNotificationsModule),
-        typeof(AbpMessageServiceDomainSharedModule))]
-    public class AbpMessageServiceDomainModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpAutoMapperOptions>(options =>
         {
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddProfile<MessageServiceDomainAutoMapperProfile>(validate: true);
-            });
+            options.AddProfile<MessageServiceDomainAutoMapperProfile>(validate: true);
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<MessageServiceResource>()
-                    .AddBaseTypes(typeof(AbpIMResource));
-            });
-        }
-
-        public override void PostConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpLocalizationOptions>(options =>
         {
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                MessageServiceModuleExtensionConsts.ModuleName,
-                MessageServiceModuleExtensionConsts.EntityNames.Message,
-                typeof(Message)
-            );
-        }
+            options.Resources
+                .Get<MessageServiceResource>()
+                .AddBaseTypes(typeof(AbpIMResource));
+        });
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+            MessageServiceModuleExtensionConsts.ModuleName,
+            MessageServiceModuleExtensionConsts.EntityNames.Message,
+            typeof(Message)
+        );
     }
 }

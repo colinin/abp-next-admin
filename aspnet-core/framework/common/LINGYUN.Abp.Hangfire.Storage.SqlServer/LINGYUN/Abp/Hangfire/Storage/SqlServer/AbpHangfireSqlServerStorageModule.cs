@@ -5,34 +5,33 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Hangfire;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.Hangfire.Storage.SqlServer
+namespace LINGYUN.Abp.Hangfire.Storage.SqlServer;
+
+[DependsOn(typeof(AbpHangfireModule))]
+public class AbpHangfireSqlServerStorageModule : AbpModule
 {
-    [DependsOn(typeof(AbpHangfireModule))]
-    public class AbpHangfireSqlServerStorageModule : AbpModule
+    private SqlServerStorage _jobStorage;
+
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        private SqlServerStorage _jobStorage;
+        var configuration = context.Services.GetConfiguration();
 
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        var sqlserverStorageOptions = new SqlServerStorageOptions();
+        configuration.GetSection("Hangfire:SqlServer").Bind(sqlserverStorageOptions);
+
+        var hangfireSqlServerConfiguration = configuration.GetSection("Hangfire:SqlServer:Connection");
+        var hangfireSqlServerCon = hangfireSqlServerConfiguration.Exists()
+                ? hangfireSqlServerConfiguration.Value : configuration.GetConnectionString("Default");
+
+        _jobStorage = new SqlServerStorage(hangfireSqlServerCon, sqlserverStorageOptions);
+        context.Services.AddSingleton<JobStorage, SqlServerStorage>(fac =>
         {
-            var configuration = context.Services.GetConfiguration();
+            return _jobStorage;
+        });
 
-            var sqlserverStorageOptions = new SqlServerStorageOptions();
-            configuration.GetSection("Hangfire:SqlServer").Bind(sqlserverStorageOptions);
-
-            var hangfireSqlServerConfiguration = configuration.GetSection("Hangfire:SqlServer:Connection");
-            var hangfireSqlServerCon = hangfireSqlServerConfiguration.Exists()
-                    ? hangfireSqlServerConfiguration.Value : configuration.GetConnectionString("Default");
-
-            _jobStorage = new SqlServerStorage(hangfireSqlServerCon, sqlserverStorageOptions);
-            context.Services.AddSingleton<JobStorage, SqlServerStorage>(fac =>
-            {
-                return _jobStorage;
-            });
-
-            PreConfigure<IGlobalConfiguration>(config =>
-            {
-                config.UseStorage(_jobStorage);
-            });
-        }
+        PreConfigure<IGlobalConfiguration>(config =>
+        {
+            config.UseStorage(_jobStorage);
+        });
     }
 }

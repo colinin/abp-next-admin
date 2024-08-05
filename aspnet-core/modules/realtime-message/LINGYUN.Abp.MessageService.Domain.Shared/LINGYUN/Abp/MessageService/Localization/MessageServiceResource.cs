@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Localization;
 
-namespace LINGYUN.Abp.MessageService.Localization
+namespace LINGYUN.Abp.MessageService.Localization;
+
+[LocalizationResourceName("AbpMessageService")]
+public class MessageServiceResource
 {
-    [LocalizationResourceName("AbpMessageService")]
-    public class MessageServiceResource
-    {
-    }
 }

@@ -12,20 +12,6 @@ namespace LINGYUN.Abp.MultiTenancy.Editions;
 
 public class EditionClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
 {
-    // https://github.com/dotnet/aspnetcore/blob/v5.0.0/src/Identity/Extensions.Core/src/UserClaimsPrincipalFactory.cs#L79
-    private static string IdentityAuthenticationType => "Identity.Application";
-
-    protected ICurrentTenant CurrentTenant { get; }
-    protected IEditionConfigurationProvider EditionConfigurationProvider { get; }
-
-    public EditionClaimsPrincipalContributor(
-        ICurrentTenant currentTenant,
-        IEditionConfigurationProvider editionConfigurationProvider)
-    {
-        CurrentTenant = currentTenant;
-        EditionConfigurationProvider = editionConfigurationProvider;
-    }
-
     public async virtual Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
     {
         if (!GlobalFeatureManager.Instance.IsEnabled<EditionsFeature>())
@@ -33,18 +19,24 @@ public class EditionClaimsPrincipalContributor : IAbpClaimsPrincipalContributor,
             return;
         }
 
-        if (!CurrentTenant.IsAvailable)
+        var currentTenant = context.GetRequiredService<ICurrentTenant>();
+        if (!currentTenant.IsAvailable)
         {
             return;
         }
 
-        var edition = await EditionConfigurationProvider.GetAsync(CurrentTenant.Id);
+        var claimsIdentity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+        if (claimsIdentity.FindAll(x => x.Type == AbpClaimTypes.EditionId).Any())
+        {
+            return;
+        }
+
+        var editionConfigurationProvider = context.GetRequiredService<IEditionConfigurationProvider>();
+        var edition = await editionConfigurationProvider.GetAsync(currentTenant.Id);
         if (edition == null)
         {
             return;
         }
-
-        var claimsIdentity = context.ClaimsPrincipal.Identities.First(x => x.AuthenticationType == IdentityAuthenticationType);
 
         claimsIdentity.AddOrReplace(new Claim(AbpClaimTypes.EditionId, edition.Id.ToString()));
 

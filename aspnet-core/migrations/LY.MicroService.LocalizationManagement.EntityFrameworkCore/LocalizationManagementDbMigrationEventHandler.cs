@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Volo.Abp.Data;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.EntityFrameworkCore.Migrations;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
@@ -12,11 +13,12 @@ public class LocalizationManagementDbMigrationEventHandler : EfCoreDatabaseMigra
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         ITenantStore tenantStore,
+        IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory) 
         : base(
             ConnectionStringNameAttribute.GetConnStringName<LocalizationManagementMigrationsDbContext>(), 
-            currentTenant, unitOfWorkManager, tenantStore, distributedEventBus, loggerFactory)
+            currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
     }
 }

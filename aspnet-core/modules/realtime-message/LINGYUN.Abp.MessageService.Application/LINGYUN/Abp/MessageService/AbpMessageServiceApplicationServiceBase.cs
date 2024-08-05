@@ -1,14 +1,13 @@
 ﻿using LINGYUN.Abp.MessageService.Localization;
 using Volo.Abp.Application.Services;
 
-namespace LINGYUN.Abp.MessageService
+namespace LINGYUN.Abp.MessageService;
+
+public abstract class AbpMessageServiceApplicationServiceBase : ApplicationService
 {
-    public abstract class AbpMessageServiceApplicationServiceBase : ApplicationService
+    protected AbpMessageServiceApplicationServiceBase()
     {
-        protected AbpMessageServiceApplicationServiceBase()
-        {
-            LocalizationResource = typeof(MessageServiceResource);
-            ObjectMapperContext = typeof(AbpMessageServiceApplicationModule);
-        }
+        LocalizationResource = typeof(MessageServiceResource);
+        ObjectMapperContext = typeof(AbpMessageServiceApplicationModule);
     }
 }

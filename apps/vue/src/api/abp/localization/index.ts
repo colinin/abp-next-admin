@@ -5,7 +5,7 @@ export const GetAsyncByInput = (input: {
   onlyDynamics?: boolean;
 }) => {
   return defHttp.get<ApplicationLocalizationDto>({
-    url: 'api/abp/application-localization"',
+    url: '/api/abp/application-localization"',
     params: input,
   });
 };

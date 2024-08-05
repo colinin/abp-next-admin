@@ -4,32 +4,31 @@ using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.FeatureManagement;
 
-namespace LINGYUN.Abp.FeatureManagement.Client
+namespace LINGYUN.Abp.FeatureManagement.Client;
+
+
+public class ClientFeatureManagementProvider : FeatureManagementProvider, ITransientDependency
 {
+    public override string Name => ClientFeatureValueProvider.ProviderName;
 
-    public class ClientFeatureManagementProvider : FeatureManagementProvider, ITransientDependency
+    protected ICurrentClient CurrentClient;
+
+    public ClientFeatureManagementProvider(
+        ICurrentClient currentClient,
+        IFeatureManagementStore store)
+        : base(store)
     {
-        public override string Name => ClientFeatureValueProvider.ProviderName;
+        CurrentClient = currentClient;
+    }
 
-        protected ICurrentClient CurrentClient;
 
-        public ClientFeatureManagementProvider(
-            ICurrentClient currentClient,
-            IFeatureManagementStore store)
-            : base(store)
+    protected override Task<string> NormalizeProviderKeyAsync(string providerKey)
+    {
+        if (providerKey != null)
         {
-            CurrentClient = currentClient;
+            return base.NormalizeProviderKeyAsync(providerKey);
         }
 
-
-        protected override Task<string> NormalizeProviderKeyAsync(string providerKey)
-        {
-            if (providerKey != null)
-            {
-                return base.NormalizeProviderKeyAsync(providerKey);
-            }
-
-            return Task.FromResult(CurrentClient.Id);
-        }
+        return Task.FromResult(CurrentClient.Id);
     }
 }
