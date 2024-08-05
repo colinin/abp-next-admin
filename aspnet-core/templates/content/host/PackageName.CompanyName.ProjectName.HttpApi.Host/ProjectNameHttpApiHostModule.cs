@@ -16,6 +16,8 @@ using PackageName.CompanyName.ProjectName.SettingManagement;
 using Volo.Abp;
 #if OpenIddict 
 using Volo.Abp.OpenIddict;
+#elif IdentityServer4
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 #endif
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
@@ -29,6 +31,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.Identity.Session.AspNetCore;
 
 namespace PackageName.CompanyName.ProjectName;
 
@@ -53,11 +56,14 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
 #if OpenIddict
     typeof(AbpOpenIddictAspNetCoreModule),
+#elif IdentityServer4
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
 #endif
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpDistributedLockingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]
@@ -109,7 +115,10 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         app.UseAuthentication();
 #if OpenIddict
         app.UseAbpOpenIddictValidation();
+#elif IdentityServer4
+        app.UseJwtTokenMiddleware();
 #endif
+        app.UseAbpSession();
         app.UseDynamicClaims();
         app.UseMultiTenancy();
         app.UseAuthorization();

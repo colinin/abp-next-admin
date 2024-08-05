@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.EntityFrameworkCore.Migrations;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
@@ -18,11 +19,12 @@ public class ProjectNameDbMigrationEventHandler : EfCoreDatabaseMigrationEventHa
         ITenantStore tenantStore,
         ICurrentTenant currentTenant, 
         IUnitOfWorkManager unitOfWorkManager, 
+        IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus, 
         ILoggerFactory loggerFactory) 
         : base(
             ConnectionStringNameAttribute.GetConnStringName<ProjectNameDbContext>(),
-            currentTenant, unitOfWorkManager, tenantStore, distributedEventBus, loggerFactory)
+            currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
         DataSeeder = dataSeeder;
     }
