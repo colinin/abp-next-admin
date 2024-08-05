@@ -1,28 +1,27 @@
 ﻿using System.Collections.Generic;
 
-namespace LINGYUN.Abp.OssManagement
+namespace LINGYUN.Abp.OssManagement;
+
+public class GetOssContainersResponse
 {
-    public class GetOssContainersResponse
+    public string Prefix { get; }
+    public string Marker { get; }
+    public string NextMarker { get; }
+    public int MaxKeys { get; }
+    public List<OssContainer> Containers { get; }
+
+    public GetOssContainersResponse(
+        string prefix,
+        string marker,
+        string nextMarker,
+        int maxKeys,
+        List<OssContainer> containers)
     {
-        public string Prefix { get; }
-        public string Marker { get; }
-        public string NextMarker { get; }
-        public int MaxKeys { get; }
-        public List<OssContainer> Containers { get; }
+        Prefix = prefix;
+        Marker = marker;
+        NextMarker = nextMarker;
+        MaxKeys = maxKeys;
 
-        public GetOssContainersResponse(
-            string prefix,
-            string marker,
-            string nextMarker,
-            int maxKeys,
-            List<OssContainer> containers)
-        {
-            Prefix = prefix;
-            Marker = marker;
-            NextMarker = nextMarker;
-            MaxKeys = maxKeys;
-
-            Containers = containers;
-        }
+        Containers = containers;
     }
 }

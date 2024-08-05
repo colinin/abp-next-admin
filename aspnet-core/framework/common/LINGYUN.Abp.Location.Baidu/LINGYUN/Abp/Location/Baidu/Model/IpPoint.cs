@@ -1,29 +1,28 @@
 ﻿using System;
 
-namespace LINGYUN.Abp.Location.Baidu.Model
+namespace LINGYUN.Abp.Location.Baidu.Model;
+
+public class IpPoint
 {
-    public class IpPoint
+    public string X { get; set; }
+    public string Y { get; set; }
+
+    public Point ToPoint()
     {
-        public string X { get; set; }
-        public string Y { get; set; }
-
-        public Point ToPoint()
+        if (!X.IsNullOrWhiteSpace() && 
+            !Y.IsNullOrWhiteSpace())
         {
-            if (!X.IsNullOrWhiteSpace() && 
-                !Y.IsNullOrWhiteSpace())
+            if (float.TryParse(X, out float x) &&
+                float.TryParse(Y, out float y))
             {
-                if (float.TryParse(X, out float x) &&
-                    float.TryParse(Y, out float y))
+                return new Point
                 {
-                    return new Point
-                    {
-                        X = x,
-                        Y = y
-                    };
-                }
+                    X = x,
+                    Y = y
+                };
             }
-
-            return new Point();
         }
+
+        return new Point();
     }
 }

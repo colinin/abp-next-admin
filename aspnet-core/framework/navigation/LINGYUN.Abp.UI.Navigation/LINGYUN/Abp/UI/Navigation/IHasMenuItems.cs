@@ -1,10 +1,9 @@
-﻿namespace LINGYUN.Abp.UI.Navigation
+﻿namespace LINGYUN.Abp.UI.Navigation;
+
+public interface IHasMenuItems
 {
-    public interface IHasMenuItems
-    {
-        /// <summary>
-        /// Menu items.
-        /// </summary>
-        ApplicationMenuList Items { get; }
-    }
+    /// <summary>
+    /// Menu items.
+    /// </summary>
+    ApplicationMenuList Items { get; }
 }

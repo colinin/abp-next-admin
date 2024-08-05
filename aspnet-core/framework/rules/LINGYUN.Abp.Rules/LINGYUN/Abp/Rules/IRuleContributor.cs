@@ -1,14 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.Rules
+namespace LINGYUN.Abp.Rules;
+
+public interface IRuleContributor
 {
-    public interface IRuleContributor
-    {
-        void Initialize(RulesInitializationContext context);
+    void Initialize(RulesInitializationContext context);
 
-        Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default);
+    Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default);
 
-        void Shutdown();
-    }
+    void Shutdown();
 }

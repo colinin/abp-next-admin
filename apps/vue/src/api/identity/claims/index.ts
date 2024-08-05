@@ -29,7 +29,7 @@ export const update = (id: string, input: UpdateIdentityClaimType) => {
 
 export const getById = (id: string) => {
   return defHttp.get<IdentityClaimType>({
-    url: `'/api/identity/claim-types/${id}'`,
+    url: `/api/identity/claim-types/${id}'`,
   });
 };
 

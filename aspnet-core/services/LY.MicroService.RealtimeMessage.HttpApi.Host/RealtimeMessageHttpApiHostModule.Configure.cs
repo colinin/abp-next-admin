@@ -8,6 +8,7 @@ using LINGYUN.Abp.Notifications.Localization;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TextTemplating;
+using LINGYUN.Abp.Wrapper;
 using LY.MicroService.RealtimeMessage.BackgroundJobs;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -40,6 +41,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
@@ -437,8 +439,7 @@ public partial class RealtimeMessageHttpApiHostModule
                             .ToArray()
                     )
                     .WithAbpExposedHeaders()
-                    // 引用 LINGYUN.Abp.AspNetCore.Mvc.Wrapper 包时可替换为 WithAbpWrapExposedHeaders
-                    .WithExposedHeaders("_AbpWrapResult", "_AbpDontWrapResult")
+                    .WithAbpWrapExposedHeaders()
                     .SetIsOriginAllowedToAllowWildcardSubdomains()
                     .AllowAnyHeader()
                     .AllowAnyMethod()
@@ -513,5 +514,33 @@ public partial class RealtimeMessageHttpApiHostModule
                 .SetApplicationName("LINGYUN.Abp.Application")
                 .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
         }
+    }
+    private void ConfigureWrapper()
+    {
+        Configure<AbpWrapperOptions>(options =>
+        {
+            options.IsEnabled = true;
+        });
+    }
+
+    private void PreConfigureWrapper()
+    {
+        //PreConfigure<AbpDaprClientProxyOptions>(options =>
+        //{
+        //    options.ProxyRequestActions.Add(
+        //        (appid, httprequestmessage) =>
+        //        {
+        //            httprequestmessage.Headers.TryAddWithoutValidation(AbpHttpWrapConsts.AbpDontWrapResult, "true");
+        //        });
+        //});
+        // 服务间调用不包装
+        PreConfigure<AbpHttpClientBuilderOptions>(options =>
+        {
+            options.ProxyClientActions.Add(
+                (_, _, client) =>
+                {
+                    client.DefaultRequestHeaders.TryAddWithoutValidation(AbpHttpWrapConsts.AbpDontWrapResult, "true");
+                });
+        });
     }
 }

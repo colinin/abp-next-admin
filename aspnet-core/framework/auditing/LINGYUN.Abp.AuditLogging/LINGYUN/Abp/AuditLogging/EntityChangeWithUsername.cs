@@ -1,9 +1,8 @@
-﻿namespace LINGYUN.Abp.AuditLogging
-{
-    public class EntityChangeWithUsername
-    {
-        public EntityChange EntityChange { get; set; }
+﻿namespace LINGYUN.Abp.AuditLogging;
 
-        public string UserName { get; set; }
-    }
+public class EntityChangeWithUsername
+{
+    public EntityChange EntityChange { get; set; }
+
+    public string UserName { get; set; }
 }

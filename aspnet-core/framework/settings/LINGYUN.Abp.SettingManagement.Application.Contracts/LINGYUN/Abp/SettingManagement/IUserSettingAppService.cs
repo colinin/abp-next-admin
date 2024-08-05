@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
-namespace LINGYUN.Abp.SettingManagement
-{
-    public interface IUserSettingAppService : IApplicationService
-    {
-        Task SetCurrentUserAsync(UpdateSettingsDto input);
+namespace LINGYUN.Abp.SettingManagement;
 
-        Task<SettingGroupResult> GetAllForCurrentUserAsync();
-    }
+public interface IUserSettingAppService : IApplicationService
+{
+    Task SetCurrentUserAsync(UpdateSettingsDto input);
+
+    Task<SettingGroupResult> GetAllForCurrentUserAsync();
 }

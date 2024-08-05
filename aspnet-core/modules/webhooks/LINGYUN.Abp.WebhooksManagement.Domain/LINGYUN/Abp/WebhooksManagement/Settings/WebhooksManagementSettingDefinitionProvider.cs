@@ -1,11 +1,10 @@
 ﻿using Volo.Abp.Settings;
 
-namespace LINGYUN.Abp.WebhooksManagement.Settings
+namespace LINGYUN.Abp.WebhooksManagement.Settings;
+
+public class WebhooksManagementSettingDefinitionProvider : SettingDefinitionProvider
 {
-    public class WebhooksManagementSettingDefinitionProvider : SettingDefinitionProvider
+    public override void Define(ISettingDefinitionContext context)
     {
-        public override void Define(ISettingDefinitionContext context)
-        {
-        }
     }
 }

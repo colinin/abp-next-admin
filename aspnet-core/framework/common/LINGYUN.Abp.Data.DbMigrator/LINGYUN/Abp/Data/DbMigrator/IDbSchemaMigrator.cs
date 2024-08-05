@@ -4,12 +4,11 @@ using System;
 using System.Threading.Tasks;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace LINGYUN.Abp.Data.DbMigrator
+namespace LINGYUN.Abp.Data.DbMigrator;
+
+public interface IDbSchemaMigrator
 {
-    public interface IDbSchemaMigrator
-    {
-        Task MigrateAsync<TDbContext>(
-            [NotNull] Func<string, DbContextOptionsBuilder<TDbContext>, TDbContext> configureDbContext)
-            where TDbContext : AbpDbContext<TDbContext>;
-    }
+    Task MigrateAsync<TDbContext>(
+        [NotNull] Func<string, DbContextOptionsBuilder<TDbContext>, TDbContext> configureDbContext)
+        where TDbContext : AbpDbContext<TDbContext>;
 }

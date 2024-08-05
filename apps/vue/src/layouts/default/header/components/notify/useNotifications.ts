@@ -44,6 +44,10 @@ export function useNotifications() {
   });
 
   function onNotifyReceived(notificationInfo: NotificationInfo, notifer?: boolean) {
+    if (notificationInfo.type === NotificationType.ServiceCallback) {
+      emitter.emit(NotifyEventEnum.NOTIFICATIONS_SERVICE_CALLBACK, notificationInfo);
+      return;
+    } 
     const { data } = notificationInfo;
     let title = data.extraProperties.title;
     let message = data.extraProperties.message;
@@ -83,16 +87,9 @@ export function useNotifications() {
       contentType: notificationInfo.contentType,
     };
 
-    if (notifer && notificationInfo.type !== NotificationType.ServiceCallback) {
-      _notification(notifier, notificationInfo.severity);
-    }
-
-    if (notificationInfo.type === NotificationType.ServiceCallback) {
-      emitter.emit(NotifyEventEnum.NOTIFICATIONS_SERVICE_CALLBACK, notificationInfo);
-    } else {
-      emitter.emit(NotifyEventEnum.NOTIFICATIONS_RECEVIED, notificationInfo);
-      notifierRef.value.list.push(notifier);
-    }
+    notifer && _notification(notifier, notificationInfo.severity);
+    emitter.emit(NotifyEventEnum.NOTIFICATIONS_RECEVIED, notificationInfo);
+    notifierRef.value.list.push(notifier);
   }
 
   

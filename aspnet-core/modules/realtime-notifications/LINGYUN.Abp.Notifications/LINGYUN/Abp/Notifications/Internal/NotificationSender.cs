@@ -11,105 +11,104 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
-namespace LINGYUN.Abp.Notifications
+namespace LINGYUN.Abp.Notifications;
+
+/// <summary>
+/// 默认实现通过分布式事件发送通知
+/// 可替换实现来发送实时通知
+/// </summary>
+public class NotificationSender : INotificationSender, ITransientDependency
 {
     /// <summary>
-    /// 默认实现通过分布式事件发送通知
-    /// 可替换实现来发送实时通知
+    /// Reference to <see cref="IClock"/>.
     /// </summary>
-    public class NotificationSender : INotificationSender, ITransientDependency
+    protected IClock Clock { get; }
+    /// <summary>
+    /// Reference to <see cref="ILogger<NotificationSender>"/>.
+    /// </summary>
+    public ILogger<NotificationSender> Logger { get; set; }
+    /// <summary>
+    /// Reference to <see cref="IDistributedEventBus"/>.
+    /// </summary>
+    public IDistributedEventBus DistributedEventBus { get; }
+    /// <summary>
+    /// Reference to <see cref="IDistributedIdGenerator"/>.
+    /// </summary>
+    protected IDistributedIdGenerator DistributedIdGenerator { get; }
+    /// <summary>
+    /// Reference to <see cref="IUnitOfWorkManager"/>.
+    /// </summary>
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
+
+    protected AbpNotificationsPublishOptions Options { get; }
+    public NotificationSender(
+        IClock clock,
+        IDistributedEventBus distributedEventBus,
+        IDistributedIdGenerator distributedIdGenerator,
+        IUnitOfWorkManager unitOfWorkManager,
+        IOptions<AbpNotificationsPublishOptions> options)
     {
-        /// <summary>
-        /// Reference to <see cref="IClock"/>.
-        /// </summary>
-        protected IClock Clock { get; }
-        /// <summary>
-        /// Reference to <see cref="ILogger<NotificationSender>"/>.
-        /// </summary>
-        public ILogger<NotificationSender> Logger { get; set; }
-        /// <summary>
-        /// Reference to <see cref="IDistributedEventBus"/>.
-        /// </summary>
-        public IDistributedEventBus DistributedEventBus { get; }
-        /// <summary>
-        /// Reference to <see cref="IDistributedIdGenerator"/>.
-        /// </summary>
-        protected IDistributedIdGenerator DistributedIdGenerator { get; }
-        /// <summary>
-        /// Reference to <see cref="IUnitOfWorkManager"/>.
-        /// </summary>
-        protected IUnitOfWorkManager UnitOfWorkManager { get; }
+        Clock = clock;
+        Options = options.Value;
+        DistributedEventBus = distributedEventBus;
+        DistributedIdGenerator = distributedIdGenerator;
+        UnitOfWorkManager = unitOfWorkManager;
+        Logger = NullLogger<NotificationSender>.Instance;
+    }
 
-        protected AbpNotificationsPublishOptions Options { get; }
-        public NotificationSender(
-            IClock clock,
-            IDistributedEventBus distributedEventBus,
-            IDistributedIdGenerator distributedIdGenerator,
-            IUnitOfWorkManager unitOfWorkManager,
-            IOptions<AbpNotificationsPublishOptions> options)
+    public async virtual Task<string> SendNofiterAsync(
+        string name, 
+        NotificationData data,
+        IEnumerable<UserIdentifier> users = null,
+        Guid? tenantId = null, 
+        NotificationSeverity severity = NotificationSeverity.Info,
+        IEnumerable<string> useProviders = null)
+    {
+        return await PublishNofiterAsync(name, data, users, tenantId, severity, useProviders);
+    }
+
+    public async virtual Task<string> SendNofiterAsync(
+        string name,
+        NotificationTemplate template,
+        IEnumerable<UserIdentifier> users = null, 
+        Guid? tenantId = null, 
+        NotificationSeverity severity = NotificationSeverity.Info,
+        IEnumerable<string> useProviders = null)
+    {
+        return await PublishNofiterAsync(name, template, users, tenantId, severity, useProviders);
+    }
+
+    protected async virtual Task<string> PublishNofiterAsync<TData>(
+        string name,
+        TData data,
+        IEnumerable<UserIdentifier> users = null,
+        Guid? tenantId = null,
+        NotificationSeverity severity = NotificationSeverity.Info,
+        IEnumerable<string> useProviders = null)
+    {
+        var eto = new NotificationEto<TData>(data)
         {
-            Clock = clock;
-            Options = options.Value;
-            DistributedEventBus = distributedEventBus;
-            DistributedIdGenerator = distributedIdGenerator;
-            UnitOfWorkManager = unitOfWorkManager;
-            Logger = NullLogger<NotificationSender>.Instance;
-        }
+            Id = DistributedIdGenerator.Create(),
+            TenantId = tenantId,
+            Users = users?.ToList() ?? new List<UserIdentifier>(),
+            Name = name,
+            CreationTime = Clock.Now,
+            Severity = severity,
+            UseProviders = useProviders?.ToList() ?? new List<string>()
+        };
 
-        public async virtual Task<string> SendNofiterAsync(
-            string name, 
-            NotificationData data,
-            IEnumerable<UserIdentifier> users = null,
-            Guid? tenantId = null, 
-            NotificationSeverity severity = NotificationSeverity.Info,
-            IEnumerable<string> useProviders = null)
+        if (UnitOfWorkManager.Current != null)
         {
-            return await PublishNofiterAsync(name, data, users, tenantId, severity, useProviders);
-        }
-
-        public async virtual Task<string> SendNofiterAsync(
-            string name,
-            NotificationTemplate template,
-            IEnumerable<UserIdentifier> users = null, 
-            Guid? tenantId = null, 
-            NotificationSeverity severity = NotificationSeverity.Info,
-            IEnumerable<string> useProviders = null)
-        {
-            return await PublishNofiterAsync(name, template, users, tenantId, severity, useProviders);
-        }
-
-        protected async virtual Task<string> PublishNofiterAsync<TData>(
-            string name,
-            TData data,
-            IEnumerable<UserIdentifier> users = null,
-            Guid? tenantId = null,
-            NotificationSeverity severity = NotificationSeverity.Info,
-            IEnumerable<string> useProviders = null)
-        {
-            var eto = new NotificationEto<TData>(data)
-            {
-                Id = DistributedIdGenerator.Create(),
-                TenantId = tenantId,
-                Users = users?.ToList() ?? new List<UserIdentifier>(),
-                Name = name,
-                CreationTime = Clock.Now,
-                Severity = severity,
-                UseProviders = useProviders?.ToList() ?? new List<string>()
-            };
-
-            if (UnitOfWorkManager.Current != null)
-            {
-                UnitOfWorkManager.Current.OnCompleted(async () =>
-                {
-                    await DistributedEventBus.PublishAsync(eto);
-                });
-            }
-            else
+            UnitOfWorkManager.Current.OnCompleted(async () =>
             {
                 await DistributedEventBus.PublishAsync(eto);
-            }
-
-            return eto.Id.ToString();
+            });
         }
+        else
+        {
+            await DistributedEventBus.PublishAsync(eto);
+        }
+
+        return eto.Id.ToString();
     }
 }

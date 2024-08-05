@@ -2,15 +2,14 @@
 using Serilog.Configuration;
 using System;
 
-namespace Serilog
+namespace Serilog;
+
+public static class ApplicationLoggerConfigurationExtensions
 {
-    public static class ApplicationLoggerConfigurationExtensions
+    public static LoggerConfiguration WithApplicationName(
+       this LoggerEnrichmentConfiguration enrichmentConfiguration)
     {
-        public static LoggerConfiguration WithApplicationName(
-           this LoggerEnrichmentConfiguration enrichmentConfiguration)
-        {
-            if (enrichmentConfiguration == null) throw new ArgumentNullException(nameof(enrichmentConfiguration));
-            return enrichmentConfiguration.With<ApplicationNameEnricher>();
-        }
+        if (enrichmentConfiguration == null) throw new ArgumentNullException(nameof(enrichmentConfiguration));
+        return enrichmentConfiguration.With<ApplicationNameEnricher>();
     }
 }

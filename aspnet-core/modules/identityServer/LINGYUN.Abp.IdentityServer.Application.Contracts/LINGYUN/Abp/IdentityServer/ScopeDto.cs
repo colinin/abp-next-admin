@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.IdentityServer
+﻿namespace LINGYUN.Abp.IdentityServer;
+
+public class ScopeDto
 {
-    public class ScopeDto
-    {
-        public string Scope { get; set; }
-    }
+    public string Scope { get; set; }
 }

@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.Notifications
+﻿namespace LINGYUN.Abp.Notifications;
+
+public interface INotificationDefinitionProvider
 {
-    public interface INotificationDefinitionProvider
-    {
-        void Define(INotificationDefinitionContext context);
-    }
+    void Define(INotificationDefinitionContext context);
 }

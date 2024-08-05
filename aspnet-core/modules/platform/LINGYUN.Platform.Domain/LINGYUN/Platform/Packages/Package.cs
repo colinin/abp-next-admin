@@ -10,9 +10,8 @@ using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Platform.Packages;
 
-public class Package : FullAuditedAggregateRoot<Guid>, IMultiTenant
+public class Package : FullAuditedAggregateRoot<Guid>
 {
-    public virtual Guid? TenantId { get; protected set; }
     /// <summary>
     /// 名称
     /// </summary>
@@ -52,8 +51,7 @@ public class Package : FullAuditedAggregateRoot<Guid>, IMultiTenant
         string name,
         string note, 
         string version,
-        string description = null,
-        Guid? tenantId = null)
+        string description = null)
         : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), PackageConsts.MaxNameLength);
@@ -61,7 +59,6 @@ public class Package : FullAuditedAggregateRoot<Guid>, IMultiTenant
         Version = Check.NotNullOrWhiteSpace(version, nameof(version), PackageConsts.MaxVersionLength);
 
         Description = Check.Length(description, nameof(description), PackageConsts.MaxDescriptionLength);
-        TenantId = tenantId;
 
         Level = PackageLevel.None;
         Blobs = new Collection<PackageBlob>();
@@ -90,8 +87,7 @@ public class Package : FullAuditedAggregateRoot<Guid>, IMultiTenant
                 createdAt,
                 updatedAt,
                 size,
-                summary,
-                TenantId);
+                summary);
             Blobs.Add(findBlob);
         }
         return findBlob;

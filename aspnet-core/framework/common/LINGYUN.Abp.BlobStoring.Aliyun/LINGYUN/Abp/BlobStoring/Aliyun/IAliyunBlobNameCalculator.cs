@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.BlobStoring;
 
-namespace LINGYUN.Abp.BlobStoring.Aliyun
+namespace LINGYUN.Abp.BlobStoring.Aliyun;
+
+public interface IAliyunBlobNameCalculator
 {
-    public interface IAliyunBlobNameCalculator
-    {
-        string Calculate(BlobProviderArgs args);
-    }
+    string Calculate(BlobProviderArgs args);
 }

@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.Identity
+﻿namespace LINGYUN.Abp.Identity;
+
+public class TwoFactorEnabledDto
 {
-    public class TwoFactorEnabledDto
-    {
-        public bool Enabled { get; set; }
-    }
+    public bool Enabled { get; set; }
 }

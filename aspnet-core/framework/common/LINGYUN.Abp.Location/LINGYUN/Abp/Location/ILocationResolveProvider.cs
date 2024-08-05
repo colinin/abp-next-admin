@@ -1,13 +1,12 @@
 ﻿using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.Location
+namespace LINGYUN.Abp.Location;
+
+public interface ILocationResolveProvider
 {
-    public interface ILocationResolveProvider
-    {
-        Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress);
+    Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress);
 
-        Task<GecodeLocation> GeocodeAsync(string address, string city = null);
+    Task<GecodeLocation> GeocodeAsync(string address, string city = null);
 
-        Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 50);
-    }
+    Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 50);
 }

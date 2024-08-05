@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.OssManagement
+﻿namespace LINGYUN.Abp.OssManagement;
+
+public static class OssManagementRemoteServiceConsts
 {
-    public static class OssManagementRemoteServiceConsts
-    {
-        public const string RemoteServiceName = "AbpOssManagement";
-    }
+    public const string RemoteServiceName = "AbpOssManagement";
 }

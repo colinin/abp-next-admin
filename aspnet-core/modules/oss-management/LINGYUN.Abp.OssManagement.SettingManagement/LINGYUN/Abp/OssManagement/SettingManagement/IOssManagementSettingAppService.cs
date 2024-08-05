@@ -1,8 +1,7 @@
 ﻿using LINGYUN.Abp.SettingManagement;
 
-namespace LINGYUN.Abp.OssManagement.SettingManagement
+namespace LINGYUN.Abp.OssManagement.SettingManagement;
+
+public interface IOssManagementSettingAppService : IReadonlySettingAppService
 {
-    public interface IOssManagementSettingAppService : IReadonlySettingAppService
-    {
-    }
 }

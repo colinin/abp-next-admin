@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace LINGYUN.Abp.UI.Navigation
+namespace LINGYUN.Abp.UI.Navigation;
+
+public interface INavigationDefinitionManager
 {
-    public interface INavigationDefinitionManager
-    {
-        IReadOnlyList<NavigationDefinition> GetAll();
-    }
+    IReadOnlyList<NavigationDefinition> GetAll();
 }

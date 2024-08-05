@@ -1,18 +1,17 @@
 ﻿using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.Rules.RulesEngine
+namespace LINGYUN.Abp.Rules.RulesEngine;
+
+public abstract class WorkflowsResolveContributorBase : IWorkflowsResolveContributor
 {
-    public abstract class WorkflowsResolveContributorBase : IWorkflowsResolveContributor
+    public abstract string Name { get; }
+
+    public virtual void Initialize(RulesInitializationContext context)
     {
-        public abstract string Name { get; }
+    }
+    public abstract Task ResolveAsync(IWorkflowsResolveContext context);
 
-        public virtual void Initialize(RulesInitializationContext context)
-        {
-        }
-        public abstract Task ResolveAsync(IWorkflowsResolveContext context);
-
-        public virtual void Shutdown()
-        {
-        }
+    public virtual void Shutdown()
+    {
     }
 }

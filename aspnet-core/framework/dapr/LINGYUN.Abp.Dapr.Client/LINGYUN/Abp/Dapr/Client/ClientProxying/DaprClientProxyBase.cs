@@ -11,127 +11,126 @@ using Volo.Abp.Http;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Http.Client.ClientProxying;
 
-namespace LINGYUN.Abp.Dapr.Client.ClientProxying
+namespace LINGYUN.Abp.Dapr.Client.ClientProxying;
+
+public abstract class DaprClientProxyBase<TService> : ClientProxyBase<TService>
 {
-    public abstract class DaprClientProxyBase<TService> : ClientProxyBase<TService>
+    protected IOptions<AbpDaprClientProxyOptions> DaprClientProxyOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDaprClientProxyOptions>>();
+    protected IDaprClientFactory DaprClientFactory => LazyServiceProvider.LazyGetRequiredService<IDaprClientFactory>();
+
+    protected async override Task<T> RequestAsync<T>(ClientProxyRequestContext requestContext)
     {
-        protected IOptions<AbpDaprClientProxyOptions> DaprClientProxyOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDaprClientProxyOptions>>();
-        protected IDaprClientFactory DaprClientFactory => LazyServiceProvider.LazyGetRequiredService<IDaprClientFactory>();
+        var response = await MakeRequestAsync(requestContext);
 
-        protected async override Task<T> RequestAsync<T>(ClientProxyRequestContext requestContext)
+        var responseContent = response.Content;
+
+        if (typeof(T) == typeof(IRemoteStreamContent) ||
+             typeof(T) == typeof(RemoteStreamContent))
         {
-            var response = await MakeRequestAsync(requestContext);
-
-            var responseContent = response.Content;
-
-            if (typeof(T) == typeof(IRemoteStreamContent) ||
-                 typeof(T) == typeof(RemoteStreamContent))
-            {
-                /* returning a class that holds a reference to response
-                 * content just to be sure that GC does not dispose of
-                 * it before we finish doing our work with the stream */
-                return (T)(object)new RemoteStreamContent(
-                    await responseContent.ReadAsStreamAsync(),
-                    responseContent.Headers?.ContentDisposition?.FileNameStar ??
-                    RemoveQuotes(responseContent.Headers?.ContentDisposition?.FileName).ToString(),
-                    responseContent.Headers?.ContentType?.ToString(),
-                    responseContent.Headers?.ContentLength);
-            }
-
-            var stringContent = await DaprClientProxyOptions
-                .Value
-                .ProxyResponseContent(response, LazyServiceProvider);
-
-            if (stringContent.IsNullOrWhiteSpace())
-            {
-                return default;
-            }
-
-            if (typeof(T) == typeof(string))
-            {
-                return (T)(object)stringContent;
-            }
-
-            return JsonSerializer.Deserialize<T>(stringContent);
+            /* returning a class that holds a reference to response
+             * content just to be sure that GC does not dispose of
+             * it before we finish doing our work with the stream */
+            return (T)(object)new RemoteStreamContent(
+                await responseContent.ReadAsStreamAsync(),
+                responseContent.Headers?.ContentDisposition?.FileNameStar ??
+                RemoveQuotes(responseContent.Headers?.ContentDisposition?.FileName).ToString(),
+                responseContent.Headers?.ContentType?.ToString(),
+                responseContent.Headers?.ContentLength);
         }
 
-        protected async override Task<string> GetConfiguredApiVersionAsync(ClientProxyRequestContext requestContext)
-        {
-            var clientConfig = DaprClientProxyOptions.Value.DaprClientProxies.GetOrDefault(requestContext.ServiceType)
-                               ?? throw new AbpException($"Could not get DynamicDaprClientProxyConfig for {requestContext.ServiceType.FullName}.");
-            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(clientConfig.RemoteServiceName);
+        var stringContent = await DaprClientProxyOptions
+            .Value
+            .ProxyResponseContent(response, LazyServiceProvider);
 
-            return remoteServiceConfig?.Version;
+        if (stringContent.IsNullOrWhiteSpace())
+        {
+            return default;
         }
 
-        private async Task<HttpResponseMessage> MakeRequestAsync(ClientProxyRequestContext requestContext)
+        if (typeof(T) == typeof(string))
         {
-            var clientConfig = DaprClientProxyOptions.Value.DaprClientProxies.GetOrDefault(requestContext.ServiceType) ?? throw new AbpException($"Could not get DaprClientProxyConfig for {requestContext.ServiceType.FullName}.");
-            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(clientConfig.RemoteServiceName);
+            return (T)(object)stringContent;
+        }
 
-            var appId = remoteServiceConfig.GetAppId();
-            var apiVersion = await GetApiVersionInfoAsync(requestContext);
-            var methodName = await GetUrlWithParametersAsync(requestContext, apiVersion);
-            // See: https://docs.dapr.io/reference/api/service_invocation_api/#examples
-            var daprClient = DaprClientFactory.CreateClient(clientConfig.RemoteServiceName);
-            var requestMessage = daprClient.CreateInvokeMethodRequest(
-                requestContext.Action.GetHttpMethod(),
-                appId,
-                methodName);
-            requestMessage.Content = await ClientProxyRequestPayloadBuilder.BuildContentAsync(
-                requestContext.Action,
-                requestContext.Arguments,
-                JsonSerializer,
-                apiVersion);
+        return JsonSerializer.Deserialize<T>(stringContent);
+    }
 
-            AddHeaders(requestContext.Arguments, requestContext.Action, requestMessage, apiVersion);
+    protected async override Task<string> GetConfiguredApiVersionAsync(ClientProxyRequestContext requestContext)
+    {
+        var clientConfig = DaprClientProxyOptions.Value.DaprClientProxies.GetOrDefault(requestContext.ServiceType)
+                           ?? throw new AbpException($"Could not get DynamicDaprClientProxyConfig for {requestContext.ServiceType.FullName}.");
+        var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(clientConfig.RemoteServiceName);
 
-            if (requestContext.Action.AllowAnonymous != true)
+        return remoteServiceConfig?.Version;
+    }
+
+    private async Task<HttpResponseMessage> MakeRequestAsync(ClientProxyRequestContext requestContext)
+    {
+        var clientConfig = DaprClientProxyOptions.Value.DaprClientProxies.GetOrDefault(requestContext.ServiceType) ?? throw new AbpException($"Could not get DaprClientProxyConfig for {requestContext.ServiceType.FullName}.");
+        var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(clientConfig.RemoteServiceName);
+
+        var appId = remoteServiceConfig.GetAppId();
+        var apiVersion = await GetApiVersionInfoAsync(requestContext);
+        var methodName = await GetUrlWithParametersAsync(requestContext, apiVersion);
+        // See: https://docs.dapr.io/reference/api/service_invocation_api/#examples
+        var daprClient = DaprClientFactory.CreateClient(clientConfig.RemoteServiceName);
+        var requestMessage = daprClient.CreateInvokeMethodRequest(
+            requestContext.Action.GetHttpMethod(),
+            appId,
+            methodName);
+        requestMessage.Content = await ClientProxyRequestPayloadBuilder.BuildContentAsync(
+            requestContext.Action,
+            requestContext.Arguments,
+            JsonSerializer,
+            apiVersion);
+
+        AddHeaders(requestContext.Arguments, requestContext.Action, requestMessage, apiVersion);
+
+        if (requestContext.Action.AllowAnonymous != true)
+        {
+            var httpClient = HttpClientFactory.Create(AbpDaprClientModule.DaprHttpClient);
+
+            await ClientAuthenticator.Authenticate(
+                new RemoteServiceHttpClientAuthenticateContext(
+                    httpClient,
+                    requestMessage,
+                    remoteServiceConfig,
+                    clientConfig.RemoteServiceName
+                )
+            );
+
+            // 其他库可能将授权标头写入到HttpClient中
+            if (requestMessage.Headers.Authorization == null &&
+                httpClient.DefaultRequestHeaders.Authorization != null)
             {
-                var httpClient = HttpClientFactory.Create(AbpDaprClientModule.DaprHttpClient);
-
-                await ClientAuthenticator.Authenticate(
-                    new RemoteServiceHttpClientAuthenticateContext(
-                        httpClient,
-                        requestMessage,
-                        remoteServiceConfig,
-                        clientConfig.RemoteServiceName
-                    )
-                );
-
-                // 其他库可能将授权标头写入到HttpClient中
-                if (requestMessage.Headers.Authorization == null &&
-                    httpClient.DefaultRequestHeaders.Authorization != null)
-                {
-                    requestMessage.Headers.Authorization = httpClient.DefaultRequestHeaders.Authorization;
-                }
+                requestMessage.Headers.Authorization = httpClient.DefaultRequestHeaders.Authorization;
             }
+        }
 
-            // 增加一个可配置的请求消息
-            foreach (var clientRequestAction in DaprClientProxyOptions.Value.ProxyRequestActions)
+        // 增加一个可配置的请求消息
+        foreach (var clientRequestAction in DaprClientProxyOptions.Value.ProxyRequestActions)
+        {
+            clientRequestAction(appId, requestMessage);
+        }
+
+        var response = await daprClient.InvokeMethodWithResponseAsync(requestMessage, GetCancellationToken(requestContext.Arguments));
+
+        if (!response.IsSuccessStatusCode)
+        {
+            if (DaprClientProxyOptions.Value.ProxyErrorFormat != null)
             {
-                clientRequestAction(appId, requestMessage);
-            }
-
-            var response = await daprClient.InvokeMethodWithResponseAsync(requestMessage, GetCancellationToken(requestContext.Arguments));
-
-            if (!response.IsSuccessStatusCode)
-            {
-                if (DaprClientProxyOptions.Value.ProxyErrorFormat != null)
+                var errorInfo = await DaprClientProxyOptions.Value.ProxyErrorFormat(response, LazyServiceProvider);
+                if (errorInfo != null)
                 {
-                    var errorInfo = await DaprClientProxyOptions.Value.ProxyErrorFormat(response, LazyServiceProvider);
-                    if (errorInfo != null)
+                    throw new AbpRemoteCallException(errorInfo)
                     {
-                        throw new AbpRemoteCallException(errorInfo)
-                        {
-                            HttpStatusCode = (int)response.StatusCode
-                        };
-                    }
+                        HttpStatusCode = (int)response.StatusCode
+                    };
                 }
-                await ThrowExceptionForResponseAsync(response);
             }
-
-            return response;
+            await ThrowExceptionForResponseAsync(response);
         }
+
+        return response;
     }
 }

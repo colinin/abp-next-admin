@@ -5,38 +5,37 @@ using System.Web;
 using Volo.Abp.Content;
 using Volo.Abp.Features;
 
-namespace LINGYUN.Abp.OssManagement
+namespace LINGYUN.Abp.OssManagement;
+
+public class StaticFilesAppService : OssManagementApplicationServiceBase, IStaticFilesAppService
 {
-    public class StaticFilesAppService : OssManagementApplicationServiceBase, IStaticFilesAppService
+    protected IOssContainerFactory OssContainerFactory { get; }
+
+    public StaticFilesAppService(
+        IOssContainerFactory ossContainerFactory)
     {
-        protected IOssContainerFactory OssContainerFactory { get; }
+        OssContainerFactory = ossContainerFactory;
+    }
 
-        public StaticFilesAppService(
-            IOssContainerFactory ossContainerFactory)
+    [RequiresFeature(AbpOssManagementFeatureNames.OssObject.DownloadFile)]
+    [RequiresLimitFeature(
+        AbpOssManagementFeatureNames.OssObject.DownloadLimit,
+        AbpOssManagementFeatureNames.OssObject.DownloadInterval,
+        LimitPolicy.Month)]
+    public async virtual Task<IRemoteStreamContent> GetAsync(GetStaticFileInput input)
+    {
+        var ossObjectRequest = new GetOssObjectRequest(
+            HttpUtility.UrlDecode(input.Bucket), // 需要处理特殊字符
+            HttpUtility.UrlDecode(input.Name),
+            HttpUtility.UrlDecode(input.Path),
+            HttpUtility.UrlDecode(input.Process))
         {
-            OssContainerFactory = ossContainerFactory;
-        }
+            MD5 = true,
+        };
 
-        [RequiresFeature(AbpOssManagementFeatureNames.OssObject.DownloadFile)]
-        [RequiresLimitFeature(
-            AbpOssManagementFeatureNames.OssObject.DownloadLimit,
-            AbpOssManagementFeatureNames.OssObject.DownloadInterval,
-            LimitPolicy.Month)]
-        public async virtual Task<IRemoteStreamContent> GetAsync(GetStaticFileInput input)
-        {
-            var ossObjectRequest = new GetOssObjectRequest(
-                HttpUtility.UrlDecode(input.Bucket), // 需要处理特殊字符
-                HttpUtility.UrlDecode(input.Name),
-                HttpUtility.UrlDecode(input.Path),
-                HttpUtility.UrlDecode(input.Process))
-            {
-                MD5 = true,
-            };
+        var ossContainer = OssContainerFactory.Create();
+        var ossObject = await ossContainer.GetObjectAsync(ossObjectRequest);
 
-            var ossContainer = OssContainerFactory.Create();
-            var ossObject = await ossContainer.GetObjectAsync(ossObjectRequest);
-
-            return new RemoteStreamContent(ossObject.Content, ossObject.Name);
-        }
+        return new RemoteStreamContent(ossObject.Content, ossObject.Name);
     }
 }

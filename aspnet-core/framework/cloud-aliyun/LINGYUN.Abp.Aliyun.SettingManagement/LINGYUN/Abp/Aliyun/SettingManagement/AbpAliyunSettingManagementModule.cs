@@ -7,36 +7,35 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LINGYUN.Abp.Aliyun.SettingManagement
+namespace LINGYUN.Abp.Aliyun.SettingManagement;
+
+[DependsOn(
+    typeof(AbpAliyunModule),
+    typeof(AbpAliyunSmsModule),
+    typeof(AbpAspNetCoreMvcModule))]
+public class AbpAliyunSettingManagementModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAliyunModule),
-        typeof(AbpAliyunSmsModule),
-        typeof(AbpAspNetCoreMvcModule))]
-    public class AbpAliyunSettingManagementModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
-            {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAliyunSettingManagementModule).Assembly);
-            });
-        }
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAliyunSettingManagementModule).Assembly);
+        });
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpAliyunSettingManagementModule>();
-            });
+            options.FileSets.AddEmbedded<AbpAliyunSettingManagementModule>();
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<AliyunResource>()
-                    .AddBaseTypes(typeof(AbpUiResource))
-                    .AddVirtualJson("/LINGYUN/Abp/Aliyun/SettingManagement/Localization/Resources");
-            });
-        }
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<AliyunResource>()
+                .AddBaseTypes(typeof(AbpUiResource))
+                .AddVirtualJson("/LINGYUN/Abp/Aliyun/SettingManagement/Localization/Resources");
+        });
     }
 }

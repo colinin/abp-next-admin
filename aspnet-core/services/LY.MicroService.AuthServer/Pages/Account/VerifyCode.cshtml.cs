@@ -1,14 +1,18 @@
+using LINGYUN.Abp.Identity.Session;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Web.Pages.Account;
+using Volo.Abp.Identity;
 
 namespace LY.MicroService.AuthServer.Pages.Account
 {
     public class VerifyCodeModel : AccountPageModel
     {
+        protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
+
         [BindProperty]
         public VerifyCodeInputModel Input { get; set; }
         /// <summary>
@@ -36,8 +40,11 @@ namespace LY.MicroService.AuthServer.Pages.Account
         [BindProperty(SupportsGet = true)]
         public bool RememberMe { get; set; }
 
-        public VerifyCodeModel()
+        public VerifyCodeModel(
+            IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache)
         {
+            IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
+
             LocalizationResourceType = typeof(AccountResource);
         }
 
@@ -61,6 +68,9 @@ namespace LY.MicroService.AuthServer.Pages.Account
             var result = await SignInManager.TwoFactorSignInAsync(Provider, Input.VerifyCode, RememberMe, Input.RememberBrowser);
             if (result.Succeeded)
             {
+                // Clear the dynamic claims cache.
+                await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+
                 return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
             }
             if (result.IsLockedOut)

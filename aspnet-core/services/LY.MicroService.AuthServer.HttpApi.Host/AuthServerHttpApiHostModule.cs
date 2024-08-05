@@ -1,6 +1,7 @@
 using LINGYUN.Abp.Account;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.Claims.Mapping;
@@ -8,6 +9,8 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.Notifications;
+using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.OpenIddict;
@@ -21,12 +24,14 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -42,6 +47,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
+    typeof(AbpIdentityNotificationsModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
@@ -57,11 +63,15 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpCAPEventBusModule),
+    typeof(AbpHttpClientModule),
     typeof(AbpAliyunSmsModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpAutofacModule)
     )]
@@ -71,6 +81,7 @@ public partial class AuthServerHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
+        PreConfigureWrapper();
         PreConfigureFeature();
         PreForwardedHeaders();
         PreConfigureApp(configuration);
@@ -83,6 +94,7 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureWrapper();
         ConfigureIdentity();
         ConfigureDbContext();
         ConfigureLocalization();
@@ -120,6 +132,10 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         // 认证
         app.UseAuthentication();
+        app.UseJwtTokenMiddleware();
+        // 会话
+        app.UseAbpSession();
+        // 动态身份
         app.UseDynamicClaims();
         // 多租户
         app.UseMultiTenancy();

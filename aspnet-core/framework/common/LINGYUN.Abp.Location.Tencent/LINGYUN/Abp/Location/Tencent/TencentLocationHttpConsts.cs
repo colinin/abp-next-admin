@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.Location.Tencent
+﻿namespace LINGYUN.Abp.Location.Tencent;
+
+public class TencentLocationHttpConsts
 {
-    public class TencentLocationHttpConsts
-    {
-        public const string HttpClientName = "TencentLocation";
-    }
+    public const string HttpClientName = "TencentLocation";
 }

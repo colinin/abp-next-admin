@@ -8,395 +8,394 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.MultiTenancy;
 
-namespace LINGYUN.Abp.OssManagement.Aliyun
+namespace LINGYUN.Abp.OssManagement.Aliyun;
+
+/// <summary>
+/// Oss容器的阿里云实现
+/// </summary>
+internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
 {
-    /// <summary>
-    /// Oss容器的阿里云实现
-    /// </summary>
-    internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
+    protected ICurrentTenant CurrentTenant { get; }
+    protected IOssClientFactory OssClientFactory { get; }
+    public AliyunOssContainer(
+        ICurrentTenant currentTenant,
+        IOssClientFactory ossClientFactory)
     {
-        protected ICurrentTenant CurrentTenant { get; }
-        protected IOssClientFactory OssClientFactory { get; }
-        public AliyunOssContainer(
-            ICurrentTenant currentTenant,
-            IOssClientFactory ossClientFactory)
+        CurrentTenant = currentTenant;
+        OssClientFactory = ossClientFactory;
+    }
+    public async virtual Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
+    {
+        var ossClient = await CreateClientAsync();
+
+        var path = GetBasePath(request.Path);
+        var aliyunRequest = new DeleteObjectsRequest(request.Bucket, request.Objects.Select(x => x += path).ToList());
+
+        ossClient.DeleteObjects(aliyunRequest);
+    }
+
+    public async virtual Task<OssContainer> CreateAsync(string name)
+    {
+        var ossClient = await CreateClientAsync();
+
+        if (BucketExists(ossClient, name))
         {
-            CurrentTenant = currentTenant;
-            OssClientFactory = ossClientFactory;
+            throw new BusinessException(code: OssManagementErrorCodes.ContainerAlreadyExists);
         }
-        public async virtual Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
-        {
-            var ossClient = await CreateClientAsync();
 
-            var path = GetBasePath(request.Path);
-            var aliyunRequest = new DeleteObjectsRequest(request.Bucket, request.Objects.Select(x => x += path).ToList());
+        var bucket = ossClient.CreateBucket(name);
 
-            ossClient.DeleteObjects(aliyunRequest);
-        }
-
-        public async virtual Task<OssContainer> CreateAsync(string name)
-        {
-            var ossClient = await CreateClientAsync();
-
-            if (BucketExists(ossClient, name))
+        return new OssContainer(
+            bucket.Name,
+            bucket.CreationDate,
+            0L,
+            bucket.CreationDate,
+            new Dictionary<string, string>
             {
-                throw new BusinessException(code: OssManagementErrorCodes.ContainerAlreadyExists);
-            }
+                { "Id", bucket.Owner?.Id },
+                { "DisplayName", bucket.Owner?.DisplayName }
+            });
+    }
 
-            var bucket = ossClient.CreateBucket(name);
+    public async virtual Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
+    {
+        var ossClient = await CreateClientAsync();
 
-            return new OssContainer(
-                bucket.Name,
-                bucket.CreationDate,
-                0L,
-                bucket.CreationDate,
-                new Dictionary<string, string>
+        var objectPath = GetBasePath(request.Path);
+
+        var objectName = objectPath.IsNullOrWhiteSpace()
+            ? request.Object
+            : objectPath + request.Object;
+
+        if (!request.Overwrite && ObjectExists(ossClient, request.Bucket, objectName))
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ObjectAlreadyExists);
+        }
+
+        // 当一个对象名称是以 / 结尾时，不论该对象是否存有数据，都以目录的形式存在
+        // 详情见:https://help.aliyun.com/document_detail/31910.html
+        if (objectName.EndsWith("/") &&
+            request.Content.IsNullOrEmpty())
+        {
+            var emptyStream = new MemoryStream();
+            var emptyData = System.Text.Encoding.UTF8.GetBytes("");
+            await emptyStream.WriteAsync(emptyData, 0, emptyData.Length);
+            request.SetContent(emptyStream);
+        }
+
+        // 没有bucket则创建
+        if (!BucketExists(ossClient, request.Bucket))
+        {
+            ossClient.CreateBucket(request.Bucket);
+        }
+
+        var aliyunObjectRequest = new PutObjectRequest(request.Bucket, objectName, request.Content)
+        {
+            Metadata = new ObjectMetadata()
+        };
+        if (request.ExpirationTime.HasValue)
+        {
+            aliyunObjectRequest.Metadata.ExpirationTime = DateTime.Now.Add(request.ExpirationTime.Value);
+        }
+
+        var aliyunObject = ossClient.PutObject(aliyunObjectRequest);
+
+        var ossObject = new OssObject(
+           !objectPath.IsNullOrWhiteSpace()
+                ? objectName.Replace(objectPath, "")
+                : objectName,
+            objectPath,
+            aliyunObject.ETag,
+            DateTime.Now,
+            aliyunObject.ContentLength,
+            DateTime.Now,
+            aliyunObject.ResponseMetadata,
+            objectName.EndsWith("/") // 名称结尾是 / 符号的则为目录：https://help.aliyun.com/document_detail/31910.html
+            )
+        {
+            FullName = objectName
+        };
+
+        if (!Equals(request.Content, Stream.Null))
+        {
+            request.Content.Seek(0, SeekOrigin.Begin);
+            ossObject.SetContent(request.Content);
+        }
+
+        return ossObject;
+    }
+
+    public async virtual Task DeleteAsync(string name)
+    {
+        // 阿里云oss在控制台设置即可，无需改变
+        var ossClient = await CreateClientAsync();
+
+        if (BucketExists(ossClient, name))
+        {
+            ossClient.DeleteBucket(name);
+        }
+    }
+
+    public async virtual Task ExpireAsync(ExprieOssObjectRequest request)
+    {
+        var ossClient = await CreateClientAsync();
+
+        if (BucketExists(ossClient, request.Bucket))
+        {
+            var listObjects = ossClient.ListObjects(
+                new ListObjectsRequest(request.Bucket)
                 {
-                    { "Id", bucket.Owner?.Id },
-                    { "DisplayName", bucket.Owner?.DisplayName }
+                    MaxKeys = request.Batch
                 });
-        }
 
-        public async virtual Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
-        {
-            var ossClient = await CreateClientAsync();
-
-            var objectPath = GetBasePath(request.Path);
-
-            var objectName = objectPath.IsNullOrWhiteSpace()
-                ? request.Object
-                : objectPath + request.Object;
-
-            if (!request.Overwrite && ObjectExists(ossClient, request.Bucket, objectName))
+            var removeKeys = new List<string>();
+            foreach (var ossObjectSummary in listObjects.ObjectSummaries)
             {
-                throw new BusinessException(code: OssManagementErrorCodes.ObjectAlreadyExists);
-            }
-
-            // 当一个对象名称是以 / 结尾时，不论该对象是否存有数据，都以目录的形式存在
-            // 详情见:https://help.aliyun.com/document_detail/31910.html
-            if (objectName.EndsWith("/") &&
-                request.Content.IsNullOrEmpty())
-            {
-                var emptyStream = new MemoryStream();
-                var emptyData = System.Text.Encoding.UTF8.GetBytes("");
-                await emptyStream.WriteAsync(emptyData, 0, emptyData.Length);
-                request.SetContent(emptyStream);
-            }
-
-            // 没有bucket则创建
-            if (!BucketExists(ossClient, request.Bucket))
-            {
-                ossClient.CreateBucket(request.Bucket);
-            }
-
-            var aliyunObjectRequest = new PutObjectRequest(request.Bucket, objectName, request.Content)
-            {
-                Metadata = new ObjectMetadata()
-            };
-            if (request.ExpirationTime.HasValue)
-            {
-                aliyunObjectRequest.Metadata.ExpirationTime = DateTime.Now.Add(request.ExpirationTime.Value);
-            }
-
-            var aliyunObject = ossClient.PutObject(aliyunObjectRequest);
-
-            var ossObject = new OssObject(
-               !objectPath.IsNullOrWhiteSpace()
-                    ? objectName.Replace(objectPath, "")
-                    : objectName,
-                objectPath,
-                aliyunObject.ETag,
-                DateTime.Now,
-                aliyunObject.ContentLength,
-                DateTime.Now,
-                aliyunObject.ResponseMetadata,
-                objectName.EndsWith("/") // 名称结尾是 / 符号的则为目录：https://help.aliyun.com/document_detail/31910.html
-                )
-            {
-                FullName = objectName
-            };
-
-            if (!Equals(request.Content, Stream.Null))
-            {
-                request.Content.Seek(0, SeekOrigin.Begin);
-                ossObject.SetContent(request.Content);
-            }
-
-            return ossObject;
-        }
-
-        public async virtual Task DeleteAsync(string name)
-        {
-            // 阿里云oss在控制台设置即可，无需改变
-            var ossClient = await CreateClientAsync();
-
-            if (BucketExists(ossClient, name))
-            {
-                ossClient.DeleteBucket(name);
-            }
-        }
-
-        public async virtual Task ExpireAsync(ExprieOssObjectRequest request)
-        {
-            var ossClient = await CreateClientAsync();
-
-            if (BucketExists(ossClient, request.Bucket))
-            {
-                var listObjects = ossClient.ListObjects(
-                    new ListObjectsRequest(request.Bucket)
-                    {
-                        MaxKeys = request.Batch
-                    });
-
-                var removeKeys = new List<string>();
-                foreach (var ossObjectSummary in listObjects.ObjectSummaries)
+                if (ossObjectSummary.LastModified <= request.ExpirationTime)
                 {
-                    if (ossObjectSummary.LastModified <= request.ExpirationTime)
-                    {
-                        removeKeys.Add(ossObjectSummary.Key);
-                    }
-                }
-
-                foreach (var removeKey in removeKeys)
-                {
-                    ossClient.DeleteObject(listObjects.BucketName, removeKey);
+                    removeKeys.Add(ossObjectSummary.Key);
                 }
             }
-        }
 
-        public async virtual Task DeleteObjectAsync(GetOssObjectRequest request)
-        {
-            var ossClient = await CreateClientAsync();
-
-            var objectPath = GetBasePath(request.Path);
-
-            var objectName = objectPath.IsNullOrWhiteSpace()
-                ? request.Object
-                : objectPath + request.Object;
-
-            if (BucketExists(ossClient, request.Bucket) &&
-                ObjectExists(ossClient, request.Bucket, objectName))
+            foreach (var removeKey in removeKeys)
             {
-                var objectListing = ossClient.ListObjects(request.Bucket, objectName);
-                if (objectListing.CommonPrefixes.Any() ||
-                    objectListing.ObjectSummaries.Any())
-                {
-                    throw new BusinessException(code: OssManagementErrorCodes.ObjectDeleteWithNotEmpty);
-                    // throw new ObjectDeleteWithNotEmptyException("00201", $"Can't not delete oss object {request.Object}, because it is not empty!");
-                }
-                ossClient.DeleteObject(request.Bucket, objectName);
+                ossClient.DeleteObject(listObjects.BucketName, removeKey);
             }
         }
+    }
 
-        public async virtual Task<bool> ExistsAsync(string name)
+    public async virtual Task DeleteObjectAsync(GetOssObjectRequest request)
+    {
+        var ossClient = await CreateClientAsync();
+
+        var objectPath = GetBasePath(request.Path);
+
+        var objectName = objectPath.IsNullOrWhiteSpace()
+            ? request.Object
+            : objectPath + request.Object;
+
+        if (BucketExists(ossClient, request.Bucket) &&
+            ObjectExists(ossClient, request.Bucket, objectName))
         {
-            var ossClient = await CreateClientAsync();
+            var objectListing = ossClient.ListObjects(request.Bucket, objectName);
+            if (objectListing.CommonPrefixes.Any() ||
+                objectListing.ObjectSummaries.Any())
+            {
+                throw new BusinessException(code: OssManagementErrorCodes.ObjectDeleteWithNotEmpty);
+                // throw new ObjectDeleteWithNotEmptyException("00201", $"Can't not delete oss object {request.Object}, because it is not empty!");
+            }
+            ossClient.DeleteObject(request.Bucket, objectName);
+        }
+    }
 
-            return BucketExists(ossClient, name);
+    public async virtual Task<bool> ExistsAsync(string name)
+    {
+        var ossClient = await CreateClientAsync();
+
+        return BucketExists(ossClient, name);
+    }
+
+    public async virtual Task<OssContainer> GetAsync(string name)
+    {
+        var ossClient = await CreateClientAsync();
+        if (!BucketExists(ossClient, name))
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
+            // throw new ContainerNotFoundException($"Can't not found container {name} in aliyun blob storing");
+        }
+        var bucket = ossClient.GetBucketInfo(name);
+
+        return new OssContainer(
+            bucket.Bucket.Name,
+            bucket.Bucket.CreationDate,
+            0L,
+            bucket.Bucket.CreationDate,
+            new Dictionary<string, string>
+            {
+                { "Id", bucket.Bucket.Owner?.Id },
+                { "DisplayName", bucket.Bucket.Owner?.DisplayName }
+            });
+    }
+
+    public async virtual Task<OssObject> GetObjectAsync(GetOssObjectRequest request)
+    {
+        var ossClient = await CreateClientAsync();
+        if (!BucketExists(ossClient, request.Bucket))
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
+            // throw new ContainerNotFoundException($"Can't not found container {request.Bucket} in aliyun blob storing");
         }
 
-        public async virtual Task<OssContainer> GetAsync(string name)
-        {
-            var ossClient = await CreateClientAsync();
-            if (!BucketExists(ossClient, name))
-            {
-                throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
-                // throw new ContainerNotFoundException($"Can't not found container {name} in aliyun blob storing");
-            }
-            var bucket = ossClient.GetBucketInfo(name);
+        var objectPath = GetBasePath(request.Path);
+        var objectName = objectPath.IsNullOrWhiteSpace()
+            ? request.Object
+            : objectPath + request.Object;
 
-            return new OssContainer(
-                bucket.Bucket.Name,
-                bucket.Bucket.CreationDate,
-                0L,
-                bucket.Bucket.CreationDate,
-                new Dictionary<string, string>
-                {
-                    { "Id", bucket.Bucket.Owner?.Id },
-                    { "DisplayName", bucket.Bucket.Owner?.DisplayName }
-                });
+        if (!ObjectExists(ossClient, request.Bucket, objectName))
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ObjectNotFound);
+            // throw new ContainerNotFoundException($"Can't not found object {objectName} in container {request.Bucket} with aliyun blob storing");
         }
 
-        public async virtual Task<OssObject> GetObjectAsync(GetOssObjectRequest request)
+        var aliyunOssObjectRequest = new GetObjectRequest(request.Bucket, objectName, request.Process);
+        var aliyunOssObject = ossClient.GetObject(aliyunOssObjectRequest);
+        var ossObject = new OssObject(
+            !objectPath.IsNullOrWhiteSpace()
+                ? aliyunOssObject.Key.Replace(objectPath, "")
+                : aliyunOssObject.Key,
+            request.Path,
+            aliyunOssObject.Metadata.ETag,
+            aliyunOssObject.Metadata.LastModified,
+            aliyunOssObject.Metadata.ContentLength,
+            aliyunOssObject.Metadata.LastModified,
+            aliyunOssObject.Metadata.UserMetadata,
+            aliyunOssObject.Key.EndsWith("/"))
         {
-            var ossClient = await CreateClientAsync();
-            if (!BucketExists(ossClient, request.Bucket))
-            {
-                throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
-                // throw new ContainerNotFoundException($"Can't not found container {request.Bucket} in aliyun blob storing");
-            }
+            FullName = aliyunOssObject.Key
+        };
 
-            var objectPath = GetBasePath(request.Path);
-            var objectName = objectPath.IsNullOrWhiteSpace()
-                ? request.Object
-                : objectPath + request.Object;
-
-            if (!ObjectExists(ossClient, request.Bucket, objectName))
-            {
-                throw new BusinessException(code: OssManagementErrorCodes.ObjectNotFound);
-                // throw new ContainerNotFoundException($"Can't not found object {objectName} in container {request.Bucket} with aliyun blob storing");
-            }
-
-            var aliyunOssObjectRequest = new GetObjectRequest(request.Bucket, objectName, request.Process);
-            var aliyunOssObject = ossClient.GetObject(aliyunOssObjectRequest);
-            var ossObject = new OssObject(
-                !objectPath.IsNullOrWhiteSpace()
-                    ? aliyunOssObject.Key.Replace(objectPath, "")
-                    : aliyunOssObject.Key,
-                request.Path,
-                aliyunOssObject.Metadata.ETag,
-                aliyunOssObject.Metadata.LastModified,
-                aliyunOssObject.Metadata.ContentLength,
-                aliyunOssObject.Metadata.LastModified,
-                aliyunOssObject.Metadata.UserMetadata,
-                aliyunOssObject.Key.EndsWith("/"))
-            {
-                FullName = aliyunOssObject.Key
-            };
-
-            if (aliyunOssObject.IsSetResponseStream())
-            {
-                ossObject.SetContent(aliyunOssObject.Content);
-            }
-
-            return ossObject;
+        if (aliyunOssObject.IsSetResponseStream())
+        {
+            ossObject.SetContent(aliyunOssObject.Content);
         }
 
-        public async virtual Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
+        return ossObject;
+    }
+
+    public async virtual Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
+    {
+        var ossClient = await CreateClientAsync();
+
+        // TODO: 阿里云的分页差异需要前端来弥补,传递Marker, 按照Oss控制台的逻辑,直接把MaxKeys设置较大值就行了
+        var aliyunRequest = new ListBucketsRequest
         {
-            var ossClient = await CreateClientAsync();
+            Marker = request.Marker,
+            Prefix = request.Prefix,
+            MaxKeys = request.MaxKeys
+        };
+        var bucketsResponse = ossClient.ListBuckets(aliyunRequest);
 
-            // TODO: 阿里云的分页差异需要前端来弥补,传递Marker, 按照Oss控制台的逻辑,直接把MaxKeys设置较大值就行了
-            var aliyunRequest = new ListBucketsRequest
-            {
-                Marker = request.Marker,
-                Prefix = request.Prefix,
-                MaxKeys = request.MaxKeys
-            };
-            var bucketsResponse = ossClient.ListBuckets(aliyunRequest);
+        return new GetOssContainersResponse(
+            bucketsResponse.Prefix,
+            bucketsResponse.Marker,
+            bucketsResponse.NextMaker,
+            bucketsResponse.MaxKeys ?? 0,
+            bucketsResponse.Buckets
+                   .Select(x => new OssContainer(
+                       x.Name,
+                       x.CreationDate,
+                       0L,
+                       x.CreationDate,
+                       new Dictionary<string, string>
+                       {
+                           { "Id", x.Owner?.Id },
+                           { "DisplayName", x.Owner?.DisplayName }
+                       }))
+                   .ToList());
+    }
 
-            return new GetOssContainersResponse(
-                bucketsResponse.Prefix,
-                bucketsResponse.Marker,
-                bucketsResponse.NextMaker,
-                bucketsResponse.MaxKeys ?? 0,
-                bucketsResponse.Buckets
-                       .Select(x => new OssContainer(
-                           x.Name,
-                           x.CreationDate,
-                           0L,
-                           x.CreationDate,
-                           new Dictionary<string, string>
-                           {
-                               { "Id", x.Owner?.Id },
-                               { "DisplayName", x.Owner?.DisplayName }
-                           }))
-                       .ToList());
-        }
+    public async virtual Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
+    {
+        
+        var ossClient = await CreateClientAsync();
 
-        public async virtual Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
+        var objectPath = GetBasePath(request.Prefix);
+        var marker = !objectPath.IsNullOrWhiteSpace() && !request.Marker.IsNullOrWhiteSpace()
+            ? request.Marker.Replace(objectPath, "")
+            : request.Marker;
+
+        // TODO: 阿里云的分页差异需要前端来弥补,传递Marker, 按照Oss控制台的逻辑,直接把MaxKeys设置较大值就行了
+        var aliyunRequest = new ListObjectsRequest(request.BucketName)
         {
-            
-            var ossClient = await CreateClientAsync();
+            Marker = !marker.IsNullOrWhiteSpace() ? objectPath + marker : marker,
+            Prefix = objectPath,
+            MaxKeys = request.MaxKeys,
+            EncodingType = request.EncodingType,
+            Delimiter = request.Delimiter
+        };
+        var objectsResponse = ossClient.ListObjects(aliyunRequest);
 
-            var objectPath = GetBasePath(request.Prefix);
-            var marker = !objectPath.IsNullOrWhiteSpace() && !request.Marker.IsNullOrWhiteSpace()
-                ? request.Marker.Replace(objectPath, "")
-                : request.Marker;
-
-            // TODO: 阿里云的分页差异需要前端来弥补,传递Marker, 按照Oss控制台的逻辑,直接把MaxKeys设置较大值就行了
-            var aliyunRequest = new ListObjectsRequest(request.BucketName)
-            {
-                Marker = !marker.IsNullOrWhiteSpace() ? objectPath + marker : marker,
-                Prefix = objectPath,
-                MaxKeys = request.MaxKeys,
-                EncodingType = request.EncodingType,
-                Delimiter = request.Delimiter
-            };
-            var objectsResponse = ossClient.ListObjects(aliyunRequest);
-
-            var ossObjects = objectsResponse.ObjectSummaries
-                               .Where(x => !x.Key.Equals(objectsResponse.Prefix))// 过滤当前的目录返回值
-                               .Select(x => new OssObject(
-                                   !objectPath.IsNullOrWhiteSpace() && !x.Key.Equals(objectPath)
-                                    ? x.Key.Replace(objectPath, "")
-                                    : x.Key, // 去除目录名称
-                                   request.Prefix,
-                                   x.ETag,
-                                   x.LastModified,
-                                   x.Size,
-                                   x.LastModified,
-                                   new Dictionary<string, string>
-                                   {
-                                       { "Id", x.Owner?.Id },
-                                       { "DisplayName", x.Owner?.DisplayName }
-                                   },
-                                   x.Key.EndsWith("/"))
+        var ossObjects = objectsResponse.ObjectSummaries
+                           .Where(x => !x.Key.Equals(objectsResponse.Prefix))// 过滤当前的目录返回值
+                           .Select(x => new OssObject(
+                               !objectPath.IsNullOrWhiteSpace() && !x.Key.Equals(objectPath)
+                                ? x.Key.Replace(objectPath, "")
+                                : x.Key, // 去除目录名称
+                               request.Prefix,
+                               x.ETag,
+                               x.LastModified,
+                               x.Size,
+                               x.LastModified,
+                               new Dictionary<string, string>
                                {
-                                   FullName = x.Key
-                               })
-                               .ToList();
-            // 当 Delimiter 为 / 时, objectsResponse.CommonPrefixes 可用于代表层级目录
-            if (objectsResponse.CommonPrefixes.Any())
-            {
-                ossObjects.InsertRange(0,
-                    objectsResponse.CommonPrefixes
-                        .Select(x => new OssObject(
-                            x.Replace(objectPath, ""),
-                            request.Prefix,
-                            "",
-                            null,
-                            0L,
-                            null,
-                            null,
-                            true)));
-            }
-            // 排序
-            // TODO: 是否需要客户端来排序
-            ossObjects.Sort(new OssObjectComparer());
-
-            return new GetOssObjectsResponse(
-                objectsResponse.BucketName,
-                request.Prefix,
-                marker,
-                !objectPath.IsNullOrWhiteSpace() && !objectsResponse.NextMarker.IsNullOrWhiteSpace()
-                    ? objectsResponse.NextMarker.Replace(objectPath, "")
-                    : objectsResponse.NextMarker,
-                objectsResponse.Delimiter,
-                objectsResponse.MaxKeys,
-                ossObjects);
-        }
-
-        protected virtual string GetBasePath(string path)
+                                   { "Id", x.Owner?.Id },
+                                   { "DisplayName", x.Owner?.DisplayName }
+                               },
+                               x.Key.EndsWith("/"))
+                           {
+                               FullName = x.Key
+                           })
+                           .ToList();
+        // 当 Delimiter 为 / 时, objectsResponse.CommonPrefixes 可用于代表层级目录
+        if (objectsResponse.CommonPrefixes.Any())
         {
-            string objectPath = "";
-            if (CurrentTenant.Id == null)
-            {
-                objectPath += "host/";
-            }
-            else
-            {
-                objectPath += "tenants/" + CurrentTenant.Id.Value.ToString("D");
-            }
-
-            objectPath += path ?? "";
-
-            return objectPath.EnsureEndsWith('/');
+            ossObjects.InsertRange(0,
+                objectsResponse.CommonPrefixes
+                    .Select(x => new OssObject(
+                        x.Replace(objectPath, ""),
+                        request.Prefix,
+                        "",
+                        null,
+                        0L,
+                        null,
+                        null,
+                        true)));
         }
+        // 排序
+        // TODO: 是否需要客户端来排序
+        ossObjects.Sort(new OssObjectComparer());
 
-        protected virtual bool BucketExists(IOss client, string bucketName)
+        return new GetOssObjectsResponse(
+            objectsResponse.BucketName,
+            request.Prefix,
+            marker,
+            !objectPath.IsNullOrWhiteSpace() && !objectsResponse.NextMarker.IsNullOrWhiteSpace()
+                ? objectsResponse.NextMarker.Replace(objectPath, "")
+                : objectsResponse.NextMarker,
+            objectsResponse.Delimiter,
+            objectsResponse.MaxKeys,
+            ossObjects);
+    }
+
+    protected virtual string GetBasePath(string path)
+    {
+        string objectPath = "";
+        if (CurrentTenant.Id == null)
         {
-            return client.DoesBucketExist(bucketName);
+            objectPath += "host/";
+        }
+        else
+        {
+            objectPath += "tenants/" + CurrentTenant.Id.Value.ToString("D");
         }
 
-        protected virtual bool ObjectExists(IOss client, string bucketName, string objectName)
-        {
-            return client.DoesObjectExist(bucketName, objectName);
-        }
+        objectPath += path ?? "";
 
-        protected async virtual Task<IOss> CreateClientAsync()
-        {
-            return await OssClientFactory.CreateAsync();
-        }
+        return objectPath.EnsureEndsWith('/');
+    }
+
+    protected virtual bool BucketExists(IOss client, string bucketName)
+    {
+        return client.DoesBucketExist(bucketName);
+    }
+
+    protected virtual bool ObjectExists(IOss client, string bucketName, string objectName)
+    {
+        return client.DoesObjectExist(bucketName, objectName);
+    }
+
+    protected async virtual Task<IOss> CreateClientAsync()
+    {
+        return await OssClientFactory.CreateAsync();
     }
 }

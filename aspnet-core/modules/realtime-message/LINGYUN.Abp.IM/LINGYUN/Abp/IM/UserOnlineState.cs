@@ -1,10 +1,9 @@
-﻿namespace LINGYUN.Abp.IM
+﻿namespace LINGYUN.Abp.IM;
+
+public enum UserOnlineState
 {
-    public enum UserOnlineState
-    {
-        Online,
-        Offline,
-        Busy,
-        Stealth
-    }
+    Online,
+    Offline,
+    Busy,
+    Stealth
 }

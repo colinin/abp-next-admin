@@ -3,33 +3,32 @@ using NRules.Fluent.Dsl;
 using System;
 using System.Collections.Generic;
 
-namespace LINGYUN.Abp.Rules.NRules
+namespace LINGYUN.Abp.Rules.NRules;
+
+public class RuleActivator : IRuleActivator
 {
-    public class RuleActivator : IRuleActivator
+    private readonly IServiceProvider _serviceProvider;
+
+    public RuleActivator(IServiceProvider serviceProvider)
     {
-        private readonly IServiceProvider _serviceProvider;
+        _serviceProvider = serviceProvider;
+    }
 
-        public RuleActivator(IServiceProvider serviceProvider)
+    public IEnumerable<Rule> Activate(Type type)
+    {
+        var collectionType = typeof(IEnumerable<>).MakeGenericType(type);
+        var rules = _serviceProvider.GetService(collectionType);
+
+        if (rules != null)
         {
-            _serviceProvider = serviceProvider;
+            return (IEnumerable<Rule>)rules;
         }
 
-        public IEnumerable<Rule> Activate(Type type)
-        {
-            var collectionType = typeof(IEnumerable<>).MakeGenericType(type);
-            var rules = _serviceProvider.GetService(collectionType);
+        return ActivateDefault(type);
+    }
 
-            if (rules != null)
-            {
-                return (IEnumerable<Rule>)rules;
-            }
-
-            return ActivateDefault(type);
-        }
-
-        private static IEnumerable<Rule> ActivateDefault(Type type)
-        {
-            yield return (Rule)Activator.CreateInstance(type);
-        }
+    private static IEnumerable<Rule> ActivateDefault(Type type)
+    {
+        yield return (Rule)Activator.CreateInstance(type);
     }
 }

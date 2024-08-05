@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Abp.Identity
+﻿namespace LINGYUN.Abp.Identity;
+
+public class IdentityUserClaimCreateDto: IdentityUserClaimCreateOrUpdateDto
 {
-    public class IdentityUserClaimCreateDto: IdentityUserClaimCreateOrUpdateDto
-    {
-    }
 }

@@ -226,14 +226,14 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
         await RedisCache.RemoveAsync(cacheKey, cancellationToken);
     }
 
-    protected virtual Task ConnectAsync(CancellationToken token = default)
+    protected virtual ValueTask<IDatabase> ConnectAsync(CancellationToken token = default)
     {
         if (_redisDatabase != null)
         {
-            return Task.CompletedTask;
+            return default;
         }
 
-        return (Task)ConnectAsyncMethod.Invoke(RedisCache, new object[] { token });
+        return (ValueTask<IDatabase>)ConnectAsyncMethod.Invoke(RedisCache, new object[] { token });
     }
 
     private IDatabase GetRedisDatabase()

@@ -1,17 +1,16 @@
-﻿namespace LINGYUN.Abp.Notifications
+﻿namespace LINGYUN.Abp.Notifications;
+
+/// <summary>
+/// 读取状态
+/// </summary>
+public enum NotificationReadState
 {
     /// <summary>
-    /// 读取状态
+    /// 已读
     /// </summary>
-    public enum NotificationReadState
-    {
-        /// <summary>
-        /// 已读
-        /// </summary>
-        Read = 0,
-        /// <summary>
-        /// 未读
-        /// </summary>
-        UnRead = 1
-    }
+    Read = 0,
+    /// <summary>
+    /// 未读
+    /// </summary>
+    UnRead = 1
 }

@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.IdentityServer.Clients
+﻿namespace LINGYUN.Abp.IdentityServer.Clients;
+
+public class ClientCorsOriginDto
 {
-    public class ClientCorsOriginDto
-    {
-        public string Origin { get; set; }
-    }
+    public string Origin { get; set; }
 }

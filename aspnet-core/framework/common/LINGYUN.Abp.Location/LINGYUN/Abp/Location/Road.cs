@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.Location
+﻿namespace LINGYUN.Abp.Location;
+
+public class Road
 {
-    public class Road
-    {
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }

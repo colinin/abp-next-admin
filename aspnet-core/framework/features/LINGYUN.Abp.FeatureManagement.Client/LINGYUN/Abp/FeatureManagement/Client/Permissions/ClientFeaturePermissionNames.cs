@@ -1,9 +1,8 @@
-﻿namespace LINGYUN.Abp.FeatureManagement.Client.Permissions
-{
-    public class ClientFeaturePermissionNames
-    {
-        public const string GroupName = "FeatureManagement";
+﻿namespace LINGYUN.Abp.FeatureManagement.Client.Permissions;
 
-        public const string ManageClientFeatures = GroupName + ".ManageClientFeatures";
-    }
+public class ClientFeaturePermissionNames
+{
+    public const string GroupName = "FeatureManagement";
+
+    public const string ManageClientFeatures = GroupName + ".ManageClientFeatures";
 }

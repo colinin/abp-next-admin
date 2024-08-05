@@ -5,69 +5,68 @@ using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.IdentityResources;
 
-namespace LINGYUN.Abp.IdentityServer.IdentityResources
+namespace LINGYUN.Abp.IdentityServer.IdentityResources;
+
+public class CustomIdentityResourceDataSeeder : ICustomIdentityResourceDataSeeder, ITransientDependency
 {
-    public class CustomIdentityResourceDataSeeder : ICustomIdentityResourceDataSeeder, ITransientDependency
+    protected IIdentityClaimTypeRepository ClaimTypeRepository { get; }
+    protected IIdentityResourceRepository IdentityResourceRepository { get; }
+    protected IGuidGenerator GuidGenerator { get; }
+    protected CustomIdentityResourceDataSeederOptions Options { get; }
+
+    public CustomIdentityResourceDataSeeder(
+        IIdentityResourceRepository identityResourceRepository,
+        IGuidGenerator guidGenerator,
+        IIdentityClaimTypeRepository claimTypeRepository,
+        IOptions<CustomIdentityResourceDataSeederOptions> options)
     {
-        protected IIdentityClaimTypeRepository ClaimTypeRepository { get; }
-        protected IIdentityResourceRepository IdentityResourceRepository { get; }
-        protected IGuidGenerator GuidGenerator { get; }
-        protected CustomIdentityResourceDataSeederOptions Options { get; }
+        IdentityResourceRepository = identityResourceRepository;
+        GuidGenerator = guidGenerator;
+        ClaimTypeRepository = claimTypeRepository;
+        Options = options.Value;
+    }
 
-        public CustomIdentityResourceDataSeeder(
-            IIdentityResourceRepository identityResourceRepository,
-            IGuidGenerator guidGenerator,
-            IIdentityClaimTypeRepository claimTypeRepository,
-            IOptions<CustomIdentityResourceDataSeederOptions> options)
+    public async virtual Task CreateCustomResourcesAsync()
+    {
+        foreach (var resource in Options.Resources)
         {
-            IdentityResourceRepository = identityResourceRepository;
-            GuidGenerator = guidGenerator;
-            ClaimTypeRepository = claimTypeRepository;
-            Options = options.Value;
-        }
-
-        public async virtual Task CreateCustomResourcesAsync()
-        {
-            foreach (var resource in Options.Resources)
+            foreach (var claimType in resource.UserClaims)
             {
-                foreach (var claimType in resource.UserClaims)
-                {
-                    await AddClaimTypeIfNotExistsAsync(claimType);
-                }
-
-                await AddIdentityResourceIfNotExistsAsync(resource);
-            }
-        }
-
-        protected async virtual Task AddIdentityResourceIfNotExistsAsync(IdentityServer4.Models.IdentityResource resource)
-        {
-            if (await IdentityResourceRepository.CheckNameExistAsync(resource.Name))
-            {
-                return;
+                await AddClaimTypeIfNotExistsAsync(claimType);
             }
 
-            await IdentityResourceRepository.InsertAsync(
-                new IdentityResource(
-                    GuidGenerator.Create(),
-                    resource
-                )
-            );
+            await AddIdentityResourceIfNotExistsAsync(resource);
         }
+    }
 
-        protected async virtual Task AddClaimTypeIfNotExistsAsync(string claimType)
+    protected async virtual Task AddIdentityResourceIfNotExistsAsync(IdentityServer4.Models.IdentityResource resource)
+    {
+        if (await IdentityResourceRepository.CheckNameExistAsync(resource.Name))
         {
-            if (await ClaimTypeRepository.AnyAsync(claimType))
-            {
-                return;
-            }
-
-            await ClaimTypeRepository.InsertAsync(
-                new IdentityClaimType(
-                    GuidGenerator.Create(),
-                    claimType,
-                    isStatic: true
-                )
-            );
+            return;
         }
+
+        await IdentityResourceRepository.InsertAsync(
+            new IdentityResource(
+                GuidGenerator.Create(),
+                resource
+            )
+        );
+    }
+
+    protected async virtual Task AddClaimTypeIfNotExistsAsync(string claimType)
+    {
+        if (await ClaimTypeRepository.AnyAsync(claimType))
+        {
+            return;
+        }
+
+        await ClaimTypeRepository.InsertAsync(
+            new IdentityClaimType(
+                GuidGenerator.Create(),
+                claimType,
+                isStatic: true
+            )
+        );
     }
 }

@@ -1,10 +1,9 @@
 ﻿using Volo.Abp.Application.Dtos;
 
-namespace LINGYUN.Abp.OssManagement
+namespace LINGYUN.Abp.OssManagement;
+
+public class GetOssContainersInput : PagedAndSortedResultRequestDto
 {
-    public class GetOssContainersInput : PagedAndSortedResultRequestDto
-    {
-        public string Prefix { get; set; }
-        public string Marker { get; set; }
-    }
+    public string Prefix { get; set; }
+    public string Marker { get; set; }
 }

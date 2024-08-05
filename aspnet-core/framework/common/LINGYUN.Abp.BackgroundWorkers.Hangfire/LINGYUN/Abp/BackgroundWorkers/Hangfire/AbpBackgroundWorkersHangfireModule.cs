@@ -3,17 +3,16 @@ using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Hangfire;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.BackgroundWorkers.Hangfire
+namespace LINGYUN.Abp.BackgroundWorkers.Hangfire;
+
+[DependsOn(
+    typeof(AbpBackgroundWorkersModule),
+    typeof(AbpHangfireModule)
+)]
+public class AbpBackgroundWorkersHangfireModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpBackgroundWorkersModule),
-        typeof(AbpHangfireModule)
-    )]
-    public class AbpBackgroundWorkersHangfireModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddSingleton(typeof(HangfireBackgroundWorkerAdapter<>));
-        }
+        context.Services.AddSingleton(typeof(HangfireBackgroundWorkerAdapter<>));
     }
 }

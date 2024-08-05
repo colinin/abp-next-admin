@@ -17,6 +17,7 @@ using LINGYUN.Abp.Elsa.Notifications;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
+using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
@@ -86,6 +87,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpClaimsMappingModule),
     typeof(AbpAspNetCoreMvcNewtonsoftModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WorkflowManagementHttpApiHostModule : AbpModule
@@ -142,6 +144,8 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         app.UseElsaFeatures();
         app.UseAuthentication();
+        app.UseJwtTokenMiddleware();
+        app.UseAbpSession();
         app.UseDynamicClaims();
         app.UseMultiTenancy();
         app.UseAuthorization();

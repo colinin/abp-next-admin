@@ -1,17 +1,16 @@
 ﻿using System;
 
-namespace LINGYUN.Abp.Dapr.Client.DynamicProxying
+namespace LINGYUN.Abp.Dapr.Client.DynamicProxying;
+
+public class DynamicDaprClientProxyConfig
 {
-    public class DynamicDaprClientProxyConfig
+    public Type Type { get; }
+
+    public string RemoteServiceName { get; }
+
+    public DynamicDaprClientProxyConfig(Type type, string remoteServiceName)
     {
-        public Type Type { get; }
-
-        public string RemoteServiceName { get; }
-
-        public DynamicDaprClientProxyConfig(Type type, string remoteServiceName)
-        {
-            Type = type;
-            RemoteServiceName = remoteServiceName;
-        }
+        Type = type;
+        RemoteServiceName = remoteServiceName;
     }
 }

@@ -3,12 +3,12 @@ import { FindTenantResult } from './model';
 
 export const findTenantByName = (name: string) => {
   return defHttp.get<FindTenantResult>({
-    url: `api/abp/multi-tenancy/tenants/by-name/${name}`
+    url: `/api/abp/multi-tenancy/tenants/by-name/${name}`
   });
 };
 
 export const findTenantById = (id: string) => {
   return defHttp.get<FindTenantResult>({
-    url: `api/abp/multi-tenancy/tenants/by-id/${id}`
+    url: `/api/abp/multi-tenancy/tenants/by-id/${id}`
   });
 };

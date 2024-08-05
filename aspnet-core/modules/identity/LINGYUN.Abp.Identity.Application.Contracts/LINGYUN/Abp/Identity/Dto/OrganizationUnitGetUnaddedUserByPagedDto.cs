@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Application.Dtos;
 
-namespace LINGYUN.Abp.Identity
+namespace LINGYUN.Abp.Identity;
+
+public class OrganizationUnitGetUnaddedUserByPagedDto : PagedAndSortedResultRequestDto
 {
-    public class OrganizationUnitGetUnaddedUserByPagedDto : PagedAndSortedResultRequestDto
-    {
-        public string Filter { get; set; }
-    }
+    public string Filter { get; set; }
 }

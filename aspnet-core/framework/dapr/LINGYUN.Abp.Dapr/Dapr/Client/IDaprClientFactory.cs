@@ -1,7 +1,6 @@
-﻿namespace Dapr.Client
+﻿namespace Dapr.Client;
+
+public interface IDaprClientFactory
 {
-    public interface IDaprClientFactory
-    {
-        DaprClient CreateClient(string name);
-    }
+    DaprClient CreateClient(string name);
 }

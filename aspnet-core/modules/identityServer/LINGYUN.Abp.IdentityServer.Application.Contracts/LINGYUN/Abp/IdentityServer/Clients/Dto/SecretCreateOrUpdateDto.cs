@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.IdentityServer.Clients
+﻿namespace LINGYUN.Abp.IdentityServer.Clients;
+
+public class SecretCreateOrUpdateDto : SecretDto
 {
-    public class SecretCreateOrUpdateDto : SecretDto
-    {
-        public HashType HashType { get; set; }
-    }
+    public HashType HashType { get; set; }
 }

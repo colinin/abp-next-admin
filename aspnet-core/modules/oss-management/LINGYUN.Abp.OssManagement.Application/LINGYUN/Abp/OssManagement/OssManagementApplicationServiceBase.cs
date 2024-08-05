@@ -1,14 +1,13 @@
 ﻿using LINGYUN.Abp.OssManagement.Localization;
 using Volo.Abp.Application.Services;
 
-namespace LINGYUN.Abp.OssManagement
+namespace LINGYUN.Abp.OssManagement;
+
+public abstract class OssManagementApplicationServiceBase : ApplicationService
 {
-    public abstract class OssManagementApplicationServiceBase : ApplicationService
+    protected OssManagementApplicationServiceBase()
     {
-        protected OssManagementApplicationServiceBase()
-        {
-            LocalizationResource = typeof(AbpOssManagementResource);
-            ObjectMapperContext = typeof(AbpOssManagementApplicationModule);
-        }
+        LocalizationResource = typeof(AbpOssManagementResource);
+        ObjectMapperContext = typeof(AbpOssManagementApplicationModule);
     }
 }

@@ -1,14 +1,13 @@
 ﻿using Volo.Abp.Application.Services;
 using Volo.Abp.AuditLogging.Localization;
 
-namespace LINGYUN.Abp.Auditing
+namespace LINGYUN.Abp.Auditing;
+
+public abstract class AuditingApplicationServiceBase : ApplicationService
 {
-    public abstract class AuditingApplicationServiceBase : ApplicationService
+    protected AuditingApplicationServiceBase()
     {
-        protected AuditingApplicationServiceBase()
-        {
-            LocalizationResource = typeof(AuditLoggingResource);
-            ObjectMapperContext = typeof(AbpAuditingApplicationModule);
-        }
+        LocalizationResource = typeof(AuditLoggingResource);
+        ObjectMapperContext = typeof(AbpAuditingApplicationModule);
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace LINGYUN.Abp.IM.Messages
+namespace LINGYUN.Abp.IM.Messages;
+
+public interface IMessageSenderProviderManager
 {
-    public interface IMessageSenderProviderManager
-    {
-        List<IMessageSenderProvider> Providers { get; }
-    }
+    List<IMessageSenderProvider> Providers { get; }
 }

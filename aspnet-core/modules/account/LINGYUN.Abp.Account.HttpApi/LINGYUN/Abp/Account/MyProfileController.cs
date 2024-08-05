@@ -1,87 +1,102 @@
 ﻿using Asp.Versioning;
+using LINGYUN.Abp.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace LINGYUN.Abp.Account
+namespace LINGYUN.Abp.Account;
+
+[RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
+[Area("account")]
+[ControllerName("Profile")]
+[Route("/api/account/my-profile")]
+public class MyProfileController : AbpControllerBase, IMyProfileAppService
 {
-    [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
-    [Area("account")]
-    [ControllerName("Profile")]
-    [Route("/api/account/my-profile")]
-    public class MyProfileController : AbpControllerBase, IMyProfileAppService
+    protected IMyProfileAppService MyProfileAppService { get; }
+
+    public MyProfileController(
+        IMyProfileAppService myProfileAppService)
     {
-        protected IMyProfileAppService MyProfileAppService { get; }
+        MyProfileAppService = myProfileAppService;
+    }
 
-        public MyProfileController(
-            IMyProfileAppService myProfileAppService)
-        {
-            MyProfileAppService = myProfileAppService;
-        }
+    [HttpGet]
+    [Route("sessions")]
+    public virtual Task<PagedResultDto<IdentitySessionDto>> GetSessionsAsync(GetMySessionsInput input)
+    {
+        return MyProfileAppService.GetSessionsAsync(input);
+    }
 
-        [HttpGet]
-        [Route("two-factor")]
-        public async virtual Task<TwoFactorEnabledDto> GetTwoFactorEnabledAsync()
-        {
-            return await MyProfileAppService.GetTwoFactorEnabledAsync();
-        }
+    [HttpDelete]
+    [Route("sessions/{sessionId}/revoke")]
+    public virtual Task RevokeSessionAsync(string sessionId)
+    {
+        return MyProfileAppService.RevokeSessionAsync(sessionId);
+    }
 
-        [HttpPut]
-        [Route("change-two-factor")]
-        public async virtual Task ChangeTwoFactorEnabledAsync(TwoFactorEnabledDto input)
-        {
-            await MyProfileAppService.ChangeTwoFactorEnabledAsync(input);
-        }
+    [HttpGet]
+    [Route("two-factor")]
+    public virtual Task<TwoFactorEnabledDto> GetTwoFactorEnabledAsync()
+    {
+        return MyProfileAppService.GetTwoFactorEnabledAsync();
+    }
 
-        [HttpPost]
-        [Route("send-phone-number-change-code")]
-        public async virtual Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeInput input)
-        {
-            await MyProfileAppService.SendChangePhoneNumberCodeAsync(input);
-        }
+    [HttpPut]
+    [Route("change-two-factor")]
+    public virtual Task ChangeTwoFactorEnabledAsync(TwoFactorEnabledDto input)
+    {
+        return MyProfileAppService.ChangeTwoFactorEnabledAsync(input);
+    }
 
-        [HttpPut]
-        [Route("change-phone-number")]
-        public async virtual Task ChangePhoneNumberAsync(ChangePhoneNumberInput input)
-        {
-            await MyProfileAppService.ChangePhoneNumberAsync(input);
-        }
+    [HttpPost]
+    [Route("send-phone-number-change-code")]
+    public virtual Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeInput input)
+    {
+        return MyProfileAppService.SendChangePhoneNumberCodeAsync(input);
+    }
 
-        [HttpPost]
-        [Route("send-email-confirm-link")]
-        public async virtual Task SendEmailConfirmLinkAsync(SendEmailConfirmCodeDto input)
-        {
-            await MyProfileAppService.SendEmailConfirmLinkAsync(input);
-        }
+    [HttpPut]
+    [Route("change-phone-number")]
+    public virtual Task ChangePhoneNumberAsync(ChangePhoneNumberInput input)
+    {
+        return MyProfileAppService.ChangePhoneNumberAsync(input);
+    }
 
-        [HttpPut]
-        [Route("confirm-email")]
-        public async virtual Task ConfirmEmailAsync(ConfirmEmailInput input)
-        {
-            await MyProfileAppService.ConfirmEmailAsync(input);
-        }
+    [HttpPost]
+    [Route("send-email-confirm-link")]
+    public virtual Task SendEmailConfirmLinkAsync(SendEmailConfirmCodeDto input)
+    {
+        return MyProfileAppService.SendEmailConfirmLinkAsync(input);
+    }
 
-        [HttpGet]
-        [Route("authenticator")]
-        public async virtual Task<AuthenticatorDto> GetAuthenticator()
-        {
-            return await MyProfileAppService.GetAuthenticator();
-        }
+    [HttpPut]
+    [Route("confirm-email")]
+    public virtual Task ConfirmEmailAsync(ConfirmEmailInput input)
+    {
+        return MyProfileAppService.ConfirmEmailAsync(input);
+    }
 
-        [HttpPost]
-        [Route("verify-authenticator-code")]
-        public async virtual Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCode(VerifyAuthenticatorCodeInput input)
-        {
-            return await MyProfileAppService.VerifyAuthenticatorCode(input);
-        }
+    [HttpGet]
+    [Route("authenticator")]
+    public virtual Task<AuthenticatorDto> GetAuthenticator()
+    {
+        return MyProfileAppService.GetAuthenticator();
+    }
 
-        [HttpPost]
-        [Route("reset-authenticator")]
-        public async virtual Task ResetAuthenticator()
-        {
-            await MyProfileAppService.ResetAuthenticator();
-        }
+    [HttpPost]
+    [Route("verify-authenticator-code")]
+    public virtual Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCode(VerifyAuthenticatorCodeInput input)
+    {
+        return MyProfileAppService.VerifyAuthenticatorCode(input);
+    }
+
+    [HttpPost]
+    [Route("reset-authenticator")]
+    public virtual Task ResetAuthenticator()
+    {
+        return MyProfileAppService.ResetAuthenticator();
     }
 }

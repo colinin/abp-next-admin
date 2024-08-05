@@ -7,37 +7,36 @@ using Volo.Abp.Localization.Resources.AbpLocalization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Validation.Localization;
 
-namespace LINGYUN.Abp.LocalizationManagement
+namespace LINGYUN.Abp.LocalizationManagement;
+
+[DependsOn(
+    typeof(AbpAspNetCoreMvcLocalizationModule),
+    typeof(AbpLocalizationManagementApplicationContractsModule))]
+public class AbpLocalizationManagementHttpApiModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAspNetCoreMvcLocalizationModule),
-        typeof(AbpLocalizationManagementApplicationContractsModule))]
-    public class AbpLocalizationManagementHttpApiModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        // Dto验证本地化
+        PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            // Dto验证本地化
-            PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
-            {
-                options.AddAssemblyResource(
-                    typeof(LocalizationManagementResource),
-                    typeof(AbpLocalizationManagementApplicationContractsModule).Assembly);
-            });
+            options.AddAssemblyResource(
+                typeof(LocalizationManagementResource),
+                typeof(AbpLocalizationManagementApplicationContractsModule).Assembly);
+        });
 
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
-            {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpLocalizationManagementApplicationContractsModule).Assembly);
-            });
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<LocalizationManagementResource>()
-                    .AddBaseTypes(typeof(AbpValidationResource), typeof(AbpLocalizationResource));
-            });
-        }
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpLocalizationManagementApplicationContractsModule).Assembly);
+        });
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<LocalizationManagementResource>()
+                .AddBaseTypes(typeof(AbpValidationResource), typeof(AbpLocalizationResource));
+        });
     }
 }

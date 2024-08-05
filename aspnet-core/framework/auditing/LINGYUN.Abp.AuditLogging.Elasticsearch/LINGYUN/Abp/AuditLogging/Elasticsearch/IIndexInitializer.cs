@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.AuditLogging.Elasticsearch
+namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
+
+public interface IIndexInitializer
 {
-    public interface IIndexInitializer
-    {
-        Task InitializeAsync();
-    }
+    Task InitializeAsync();
 }

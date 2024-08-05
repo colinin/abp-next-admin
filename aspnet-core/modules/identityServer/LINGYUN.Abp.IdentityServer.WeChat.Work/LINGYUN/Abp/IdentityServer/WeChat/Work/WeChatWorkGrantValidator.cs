@@ -64,6 +64,7 @@ public class WeChatWorkGrantValidator : IExtensionGrantValidator
     public async virtual Task ValidateAsync(ExtensionGrantValidationContext context)
     {
         var raw = context.Request.Raw;
+        var clientId = raw.Get(OidcConstants.TokenRequest.ClientId);
         var credential = raw.Get(OidcConstants.TokenRequest.GrantType);
         if (credential == null || !credential.Equals(GrantType))
         {
@@ -121,7 +122,7 @@ public class WeChatWorkGrantValidator : IExtensionGrantValidator
                 return;
             }
 
-            await EventService.RaiseAsync(new UserLoginSuccessEvent(AbpWeChatWorkGlobalConsts.ProviderName, userInfo.UserId, null));
+            await EventService.RaiseAsync(new UserLoginSuccessEvent(currentUser.UserName, currentUser.Id.ToString(), currentUser.Name, clientId: clientId));
 
             await SetSuccessResultAsync(context, currentUser);
         }

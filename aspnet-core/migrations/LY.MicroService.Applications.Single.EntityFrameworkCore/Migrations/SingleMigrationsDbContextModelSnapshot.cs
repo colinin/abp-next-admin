@@ -3,6 +3,7 @@ using System;
 using LY.MicroService.Applications.Single.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -18,8 +19,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("LINGYUN.Abp.LocalizationManagement.Language", b =>
                 {
@@ -52,11 +55,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasDefaultValue(true);
 
-                    b.Property<string>("FlagIcon")
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)")
-                        .HasColumnName("FlagIcon");
-
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("LastModificationTime");
@@ -64,6 +62,11 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("char(36)")
                         .HasColumnName("LastModifierId");
+
+                    b.Property<string>("TwoLetterISOLanguageName")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("TwoLetterISOLanguageName");
 
                     b.Property<string>("UiCultureName")
                         .IsRequired()
@@ -139,6 +142,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("CultureName")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -171,6 +176,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
@@ -256,6 +263,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<bool>("Black")
                         .HasColumnType("tinyint(1)");
 
@@ -322,6 +331,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<bool>("AllowAddFriend")
                         .HasColumnType("tinyint(1)");
 
@@ -356,6 +367,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -418,6 +431,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Address")
                         .HasMaxLength(256)
@@ -492,6 +507,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("CreationTime");
@@ -522,6 +539,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -585,6 +604,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("CreationTime");
@@ -615,6 +636,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -673,6 +696,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("ContentType")
                         .ValueGeneratedOnAdd()
@@ -812,6 +837,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<long>("NotificationId")
                         .HasColumnType("bigint");
 
@@ -838,6 +865,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)")
@@ -1002,11 +1031,17 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("varchar(64)");
 
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EditionId");
 
                     b.HasIndex("Name");
+
+                    b.HasIndex("NormalizedName");
 
                     b.ToTable("AbpTenants", (string)null);
                 });
@@ -1234,6 +1269,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<string>("Exception")
                         .HasMaxLength(2000)
                         .HasColumnType("varchar(2000)")
@@ -1322,13 +1359,9 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(100)")
                         .HasColumnName("Name");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("TenantId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId", "Name")
+                    b.HasIndex("Name")
                         .HasDatabaseName("IX_Tenant_Text_Template_Name");
 
                     b.ToTable("AbpTextTemplates", (string)null);
@@ -1602,6 +1635,9 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("char(36)");
+
+                    b.Property<int?>("TimeoutDuration")
+                        .HasColumnType("int");
 
                     b.Property<string>("WebhookUri")
                         .IsRequired()
@@ -2245,10 +2281,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(1024)")
                         .HasColumnName("Note");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("TenantId");
-
                     b.Property<string>("Version")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -2267,6 +2299,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Authors")
                         .HasMaxLength(100)
@@ -2322,10 +2356,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("varchar(1024)")
                         .HasColumnName("Summary");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("TenantId");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -3061,6 +3091,58 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                     b.HasIndex("TenantId", "UserId");
 
                     b.ToTable("AbpSecurityLogs", (string)null);
+                });
+
+            modelBuilder.Entity("Volo.Abp.Identity.IdentitySession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ClientId")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("Device")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("DeviceInfo")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("IpAddresses")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<DateTime?>("LastAccessed")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("SessionId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<DateTime>("SignedIn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Device");
+
+                    b.HasIndex("SessionId");
+
+                    b.HasIndex("TenantId", "UserId");
+
+                    b.ToTable("AbpSessions", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUser", b =>

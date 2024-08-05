@@ -1,50 +1,49 @@
-﻿namespace LINGYUN.Abp.OssManagement.Features
+﻿namespace LINGYUN.Abp.OssManagement.Features;
+
+public class AbpOssManagementFeatureNames
 {
-    public class AbpOssManagementFeatureNames
+    public const string GroupName = "AbpOssManagement";
+    /// <summary>
+    /// 是否允许未经授权的用户访问公共目录
+    /// </summary>
+    public const string PublicAccess = GroupName + ".PublicAccess";
+
+    public class OssObject
     {
-        public const string GroupName = "AbpOssManagement";
+        public const string Default = GroupName + ".OssObject";
+
+        public const string Enable = Default + ".Enable";
         /// <summary>
-        /// 是否允许未经授权的用户访问公共目录
+        /// 允许用户分享文件
         /// </summary>
-        public const string PublicAccess = GroupName + ".PublicAccess";
-
-        public class OssObject
-        {
-            public const string Default = GroupName + ".OssObject";
-
-            public const string Enable = Default + ".Enable";
-            /// <summary>
-            /// 允许用户分享文件
-            /// </summary>
-            public const string AllowSharedFile = Default + ".AllowSharedFile";
-            /// <summary>
-            /// 下载文件功能
-            /// </summary>
-            public const string DownloadFile = Default + ".DownloadFile";
-            /// <summary>
-            /// 下载文件功能限制次数
-            /// </summary>
-            public const string DownloadLimit = Default + ".DownloadLimit";
-            /// <summary>
-            /// 下载文件功能限制次数周期
-            /// </summary>
-            public const string DownloadInterval = Default + ".DownloadInterval";
-            /// <summary>
-            /// 上传文件功能
-            /// </summary>
-            public const string UploadFile = Default + ".UploadFile";
-            /// <summary>
-            /// 上传文件功能限制次数
-            /// </summary>
-            public const string UploadLimit = Default + ".UploadLimit";
-            /// <summary>
-            /// 上传文件功能限制次数周期
-            /// </summary>
-            public const string UploadInterval = Default + ".UploadInterval";
-            /// <summary>
-            /// 最大上传文件
-            /// </summary>
-            public const string MaxUploadFileCount = Default + ".MaxUploadFileCount";
-        }
+        public const string AllowSharedFile = Default + ".AllowSharedFile";
+        /// <summary>
+        /// 下载文件功能
+        /// </summary>
+        public const string DownloadFile = Default + ".DownloadFile";
+        /// <summary>
+        /// 下载文件功能限制次数
+        /// </summary>
+        public const string DownloadLimit = Default + ".DownloadLimit";
+        /// <summary>
+        /// 下载文件功能限制次数周期
+        /// </summary>
+        public const string DownloadInterval = Default + ".DownloadInterval";
+        /// <summary>
+        /// 上传文件功能
+        /// </summary>
+        public const string UploadFile = Default + ".UploadFile";
+        /// <summary>
+        /// 上传文件功能限制次数
+        /// </summary>
+        public const string UploadLimit = Default + ".UploadLimit";
+        /// <summary>
+        /// 上传文件功能限制次数周期
+        /// </summary>
+        public const string UploadInterval = Default + ".UploadInterval";
+        /// <summary>
+        /// 最大上传文件
+        /// </summary>
+        public const string MaxUploadFileCount = Default + ".MaxUploadFileCount";
     }
 }

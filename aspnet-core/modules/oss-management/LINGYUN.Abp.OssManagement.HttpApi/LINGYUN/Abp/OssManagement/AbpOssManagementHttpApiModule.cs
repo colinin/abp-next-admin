@@ -8,40 +8,39 @@ using Volo.Abp.Validation.Localization;
 using Volo.Abp.AspNetCore.Mvc.DataAnnotations;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 
-namespace LINGYUN.Abp.OssManagement
+namespace LINGYUN.Abp.OssManagement;
+
+[DependsOn(
+    typeof(AbpOssManagementApplicationContractsModule),
+    typeof(AbpAspNetCoreMvcModule)
+    )]
+public class AbpOssManagementHttpApiModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpOssManagementApplicationContractsModule),
-        typeof(AbpAspNetCoreMvcModule)
-        )]
-    public class AbpOssManagementHttpApiModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
-            {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpOssManagementHttpApiModule).Assembly);
-            });
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpOssManagementHttpApiModule).Assembly);
+        });
 
-            PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
-            {
-                options.AddAssemblyResource(
-                    typeof(AbpOssManagementResource),
-                    typeof(AbpOssManagementApplicationContractsModule).Assembly);
-            });
-        }
-
-        //public override void ConfigureServices(ServiceConfigurationContext context)
-        //{
-        //    Configure<AbpLocalizationOptions>(options =>
-        //    {
-        //        options.Resources
-        //            .Get<AbpOssManagementResource>()
-        //            .AddBaseTypes(
-        //                typeof(AbpAuthorizationResource),
-        //                typeof(AbpValidationResource)
-        //            );
-        //    });
-        //}
+        PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+        {
+            options.AddAssemblyResource(
+                typeof(AbpOssManagementResource),
+                typeof(AbpOssManagementApplicationContractsModule).Assembly);
+        });
     }
+
+    //public override void ConfigureServices(ServiceConfigurationContext context)
+    //{
+    //    Configure<AbpLocalizationOptions>(options =>
+    //    {
+    //        options.Resources
+    //            .Get<AbpOssManagementResource>()
+    //            .AddBaseTypes(
+    //                typeof(AbpAuthorizationResource),
+    //                typeof(AbpValidationResource)
+    //            );
+    //    });
+    //}
 }

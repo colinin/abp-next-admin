@@ -6,32 +6,31 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LINGYUN.Abp.IdentityServer
+namespace LINGYUN.Abp.IdentityServer;
+
+[DependsOn(typeof(AbpIdentityServerDomainModule))]
+public class AbpIdentityServerSmsValidatorModule : AbpModule
 {
-    [DependsOn(typeof(AbpIdentityServerDomainModule))]
-    public class AbpIdentityServerSmsValidatorModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IIdentityServerBuilder>(builder =>
         {
-            PreConfigure<IIdentityServerBuilder>(builder =>
-            {
-                builder.AddExtensionGrantValidator<SmsTokenGrantValidator>();
-            });
-        }
+            builder.AddExtensionGrantValidator<SmsTokenGrantValidator>();
+        });
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpIdentityServerSmsValidatorModule>();
-            });
+            options.FileSets.AddEmbedded<AbpIdentityServerSmsValidatorModule>();
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<AbpIdentityServerResource>()
-                    .AddVirtualJson("/LINGYUN/Abp/IdentityServer/Localization/SmsValidator");
-            });
-        }
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<AbpIdentityServerResource>()
+                .AddVirtualJson("/LINGYUN/Abp/IdentityServer/Localization/SmsValidator");
+        });
     }
 }

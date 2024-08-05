@@ -1,10 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.OssManagement
+namespace LINGYUN.Abp.OssManagement;
+
+public interface IFileUploader
 {
-    public interface IFileUploader
-    {
-        Task UploadAsync(UploadFileChunkInput input, CancellationToken cancellationToken = default);
-    }
+    Task UploadAsync(UploadFileChunkInput input, CancellationToken cancellationToken = default);
 }

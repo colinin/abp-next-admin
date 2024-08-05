@@ -2,12 +2,11 @@
 using Volo.Abp.Identity;
 using Volo.Abp.Validation;
 
-namespace LINGYUN.Abp.Identity
+namespace LINGYUN.Abp.Identity;
+
+public class IdentityRoleClaimUpdateDto : IdentityRoleClaimCreateDto
 {
-    public class IdentityRoleClaimUpdateDto : IdentityRoleClaimCreateDto
-    {
-        [Required]
-        [DynamicMaxLength(typeof(IdentityRoleClaimConsts), nameof(IdentityRoleClaimConsts.MaxClaimValueLength))]
-        public string NewClaimValue { get; set; }
-    }
+    [Required]
+    [DynamicMaxLength(typeof(IdentityRoleClaimConsts), nameof(IdentityRoleClaimConsts.MaxClaimValueLength))]
+    public string NewClaimValue { get; set; }
 }

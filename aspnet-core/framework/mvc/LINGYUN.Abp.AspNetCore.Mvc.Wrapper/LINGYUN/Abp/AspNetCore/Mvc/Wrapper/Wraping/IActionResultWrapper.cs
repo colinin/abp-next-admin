@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.Wraping
+namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.Wraping;
+
+public interface IActionResultWrapper
 {
-    public interface IActionResultWrapper
-    {
-        void Wrap(FilterContext context);
-    }
+    void Wrap(FilterContext context);
 }

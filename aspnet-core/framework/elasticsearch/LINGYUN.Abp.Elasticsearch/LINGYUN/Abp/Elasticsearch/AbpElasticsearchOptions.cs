@@ -18,8 +18,8 @@ namespace LINGYUN.Abp.Elasticsearch
         public bool DisableDirectStreaming { get; set; }
         public string NodeUris { get; set; }
         public int ConnectionLimit { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        public string? UserName { get; set; }
+        public string? Password { get; set; }
         public TimeSpan ConnectionTimeout { get; set; }
         public IConnection Connection { get; set; }
         public ConnectionSettings.SourceSerializerFactory SerializerFactory { get; set; }

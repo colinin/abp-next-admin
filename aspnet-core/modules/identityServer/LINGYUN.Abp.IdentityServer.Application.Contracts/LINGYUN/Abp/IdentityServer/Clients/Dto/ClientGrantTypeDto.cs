@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.IdentityServer.Clients
+﻿namespace LINGYUN.Abp.IdentityServer.Clients;
+
+public class ClientGrantTypeDto
 {
-    public class ClientGrantTypeDto
-    {
-        public string GrantType { get; set; }
-    }
+    public string GrantType { get; set; }
 }

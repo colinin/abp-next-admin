@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.Location.Baidu
+﻿namespace LINGYUN.Abp.Location.Baidu;
+
+public class BaiduLocationHttpConsts
 {
-    public class BaiduLocationHttpConsts
-    {
-        public const string HttpClientName = "BaiduLocation";
-    }
+    public const string HttpClientName = "BaiduLocation";
 }

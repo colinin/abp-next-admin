@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Abp.Identity
+﻿namespace LINGYUN.Abp.Identity;
+
+public class IdentityRoleClaimDeleteDto : IdentityRoleClaimCreateDto
 {
-    public class IdentityRoleClaimDeleteDto : IdentityRoleClaimCreateDto
-    {
-    }
 }

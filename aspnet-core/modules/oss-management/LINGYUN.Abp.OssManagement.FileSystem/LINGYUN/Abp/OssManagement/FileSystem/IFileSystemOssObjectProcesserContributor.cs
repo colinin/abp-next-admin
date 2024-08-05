@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.OssManagement.FileSystem
+namespace LINGYUN.Abp.OssManagement.FileSystem;
+
+public interface IFileSystemOssObjectProcesserContributor
 {
-    public interface IFileSystemOssObjectProcesserContributor
-    {
-        Task ProcessAsync(FileSystemOssObjectContext context);
-    }
+    Task ProcessAsync(FileSystemOssObjectContext context);
 }

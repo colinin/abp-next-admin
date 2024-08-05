@@ -1,12 +1,11 @@
 ﻿using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.UI.Navigation
+namespace LINGYUN.Abp.UI.Navigation;
+
+public abstract class NavigationDefinitionProvider : INavigationDefinitionProvider, ITransientDependency
 {
-    public abstract class NavigationDefinitionProvider : INavigationDefinitionProvider, ITransientDependency
+    protected NavigationDefinitionProvider()
     {
-        protected NavigationDefinitionProvider()
-        {
-        }
-        public abstract void Define(INavigationDefinitionContext context);
     }
+    public abstract void Define(INavigationDefinitionContext context);
 }

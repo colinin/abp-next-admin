@@ -8,32 +8,30 @@ using Volo.Abp.Modularity;
 using Volo.Abp.TextTemplating;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LINGYUN.Abp.Notifications
-{
-    // TODO: 需要重命名 AbpNotificationsModule
-    [DependsOn(
-        typeof(AbpNotificationsCoreModule),
-        typeof(AbpBackgroundWorkersModule),
-        typeof(AbpBackgroundJobsAbstractionsModule),
-        typeof(AbpIdGeneratorModule),
-        typeof(AbpLocalizationModule),
-        typeof(AbpEventBusModule),
-        typeof(AbpTextTemplatingCoreModule))]
-    public class AbpNotificationsModule : AbpModule
-    {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpNotificationsModule>();
-            });
+namespace LINGYUN.Abp.Notifications;
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<NotificationsResource>()
-                    .AddVirtualJson("/LINGYUN/Abp/Notifications/Localization/Resources");
-            });
-        }
+[DependsOn(
+    typeof(AbpNotificationsCoreModule),
+    typeof(AbpBackgroundWorkersModule),
+    typeof(AbpBackgroundJobsAbstractionsModule),
+    typeof(AbpIdGeneratorModule),
+    typeof(AbpLocalizationModule),
+    typeof(AbpEventBusModule),
+    typeof(AbpTextTemplatingCoreModule))]
+public class AbpNotificationsModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpNotificationsModule>();
+        });
+
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<NotificationsResource>()
+                .AddVirtualJson("/LINGYUN/Abp/Notifications/Localization/Resources");
+        });
     }
 }

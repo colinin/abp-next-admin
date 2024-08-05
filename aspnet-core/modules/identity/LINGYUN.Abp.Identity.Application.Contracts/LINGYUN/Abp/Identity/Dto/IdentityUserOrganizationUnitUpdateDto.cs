@@ -1,11 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace LINGYUN.Abp.Identity
+namespace LINGYUN.Abp.Identity;
+
+public class IdentityUserOrganizationUnitUpdateDto
 {
-    public class IdentityUserOrganizationUnitUpdateDto
-    {
-        [Required]
-        public Guid[] OrganizationUnitIds { get; set; }
-    }
+    [Required]
+    public Guid[] OrganizationUnitIds { get; set; }
 }

@@ -4,64 +4,63 @@ using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.Rules.RulesEngine
+namespace LINGYUN.Abp.Rules.RulesEngine;
+
+public class WorkflowsResolver : IWorkflowsResolver, ITransientDependency
 {
-    public class WorkflowsResolver : IWorkflowsResolver, ITransientDependency
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly AbpRulesEngineResolveOptions _options;
+
+    public WorkflowsResolver(
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<AbpRulesEngineResolveOptions> options)
     {
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly AbpRulesEngineResolveOptions _options;
+        _options = options.Value;
+        _serviceScopeFactory = serviceScopeFactory;
+    }
 
-        public WorkflowsResolver(
-            IServiceScopeFactory serviceScopeFactory,
-            IOptions<AbpRulesEngineResolveOptions> options)
+    public virtual void Initialize(RulesInitializationContext context)
+    {
+        foreach (var workflowRulesResolver in _options.WorkflowsResolvers)
         {
-            _options = options.Value;
-            _serviceScopeFactory = serviceScopeFactory;
+            workflowRulesResolver.Initialize(context);
         }
+    }
 
-        public virtual void Initialize(RulesInitializationContext context)
+    public async virtual Task<WorkflowsResolveResult> ResolveWorkflowsAsync(Type type)
+    {
+        var result = new WorkflowsResolveResult();
+
+        using (var serviceScope = _serviceScopeFactory.CreateScope())
         {
+            var context = new WorkflowsResolveContext(type, serviceScope.ServiceProvider);
+
             foreach (var workflowRulesResolver in _options.WorkflowsResolvers)
             {
-                workflowRulesResolver.Initialize(context);
-            }
-        }
+                await workflowRulesResolver.ResolveAsync(context);
 
-        public async virtual Task<WorkflowsResolveResult> ResolveWorkflowsAsync(Type type)
-        {
-            var result = new WorkflowsResolveResult();
+                result.AppliedResolvers.Add(workflowRulesResolver.Name);
 
-            using (var serviceScope = _serviceScopeFactory.CreateScope())
-            {
-                var context = new WorkflowsResolveContext(type, serviceScope.ServiceProvider);
-
-                foreach (var workflowRulesResolver in _options.WorkflowsResolvers)
+                if (context.HasResolved())
                 {
-                    await workflowRulesResolver.ResolveAsync(context);
+                    result.Workflows.AddRange(context.Workflows);
 
-                    result.AppliedResolvers.Add(workflowRulesResolver.Name);
-
-                    if (context.HasResolved())
+                    if (!_options.MergingWorkflows)
                     {
-                        result.Workflows.AddRange(context.Workflows);
-
-                        if (!_options.MergingWorkflows)
-                        {
-                            break;
-                        }
+                        break;
                     }
                 }
             }
-
-            return result;
         }
 
-        public virtual void Shutdown()
+        return result;
+    }
+
+    public virtual void Shutdown()
+    {
+        foreach (var workflowRulesResolver in _options.WorkflowsResolvers)
         {
-            foreach (var workflowRulesResolver in _options.WorkflowsResolvers)
-            {
-                workflowRulesResolver.Shutdown();
-            }
+            workflowRulesResolver.Shutdown();
         }
     }
 }

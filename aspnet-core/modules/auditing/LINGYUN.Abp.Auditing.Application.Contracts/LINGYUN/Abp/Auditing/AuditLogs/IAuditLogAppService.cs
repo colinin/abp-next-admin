@@ -3,14 +3,13 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace LINGYUN.Abp.Auditing.AuditLogs
+namespace LINGYUN.Abp.Auditing.AuditLogs;
+
+public interface IAuditLogAppService : IApplicationService
 {
-    public interface IAuditLogAppService : IApplicationService
-    {
-        Task<PagedResultDto<AuditLogDto>> GetListAsync(AuditLogGetByPagedDto input);
+    Task<PagedResultDto<AuditLogDto>> GetListAsync(AuditLogGetByPagedDto input);
 
-        Task<AuditLogDto> GetAsync(Guid id);
+    Task<AuditLogDto> GetAsync(Guid id);
 
-        Task DeleteAsync(Guid id);
-    }
+    Task DeleteAsync(Guid id);
 }

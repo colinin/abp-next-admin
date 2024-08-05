@@ -1,9 +1,8 @@
-﻿namespace Volo.Abp.MultiTenancy
-{
-    public class TenantNotificationNames
-    {
-        public const string GroupName = "Volo.Abp.MultiTenancy";
+﻿namespace Volo.Abp.MultiTenancy;
 
-        public const string NewTenantRegistered = GroupName + ".NewTenantRegistered";
-    }
+public class TenantNotificationNames
+{
+    public const string GroupName = "Volo.Abp.MultiTenancy";
+
+    public const string NewTenantRegistered = GroupName + ".NewTenantRegistered";
 }

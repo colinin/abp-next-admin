@@ -5,6 +5,13 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>LINGYUN.Abp.DistributedLocking.Dapr</AssemblyName>
+		<PackageId>LINGYUN.Abp.DistributedLocking.Dapr</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace />
 	</PropertyGroup>
 

@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.Notifications
+﻿namespace LINGYUN.Abp.Notifications;
+
+public static class AbpNotificationNames
 {
-    public static class AbpNotificationNames
-    {
-        public const string GroupName = "LINGYUN.Abp.Notifications";
-    }
+    public const string GroupName = "LINGYUN.Abp.Notifications";
 }

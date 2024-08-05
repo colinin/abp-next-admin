@@ -1,10 +1,9 @@
 ﻿using Hangfire.Dashboard;
 using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.Hangfire.Dashboard.Authorization
+namespace LINGYUN.Abp.Hangfire.Dashboard.Authorization;
+
+public interface IDashboardPermissionChecker
 {
-    public interface IDashboardPermissionChecker
-    {
-        Task<bool> IsGrantedAsync(DashboardContext context, string[] requiredPermissionNames);
-    }
+    Task<bool> IsGrantedAsync(DashboardContext context, string[] requiredPermissionNames);
 }

@@ -1,9 +1,8 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.Features.LimitValidation.Redis.Client
+namespace LINGYUN.Abp.Features.LimitValidation.Redis.Client;
+
+[DependsOn(typeof(AbpFeaturesValidationRedisModule))]
+public class AbpFeaturesValidationRedisClientModule : AbpModule
 {
-    [DependsOn(typeof(AbpFeaturesValidationRedisModule))]
-    public class AbpFeaturesValidationRedisClientModule : AbpModule
-    {
-    }
 }

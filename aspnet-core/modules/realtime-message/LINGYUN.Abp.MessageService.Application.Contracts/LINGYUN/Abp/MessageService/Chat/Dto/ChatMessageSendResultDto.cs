@@ -1,11 +1,10 @@
-﻿namespace LINGYUN.Abp.MessageService.Chat
+﻿namespace LINGYUN.Abp.MessageService.Chat;
+
+public class ChatMessageSendResultDto
 {
-    public class ChatMessageSendResultDto
+    public string MessageId { get; }
+    public ChatMessageSendResultDto(string messageId)
     {
-        public string MessageId { get; }
-        public ChatMessageSendResultDto(string messageId)
-        {
-            MessageId = messageId;
-        }
+        MessageId = messageId;
     }
 }

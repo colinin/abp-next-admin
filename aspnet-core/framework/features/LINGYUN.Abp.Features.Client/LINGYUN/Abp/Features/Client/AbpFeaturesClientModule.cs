@@ -1,18 +1,17 @@
 ﻿using Volo.Abp.Features;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.Features.Client
+namespace LINGYUN.Abp.Features.Client;
+
+[DependsOn(
+    typeof(AbpFeaturesModule))]
+public class AbpFeaturesClientModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpFeaturesModule))]
-    public class AbpFeaturesClientModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpFeatureOptions>(options =>
         {
-            Configure<AbpFeatureOptions>(options =>
-            {
-                options.ValueProviders.Add<ClientFeatureValueProvider>();
-            });
-        }
+            options.ValueProviders.Add<ClientFeatureValueProvider>();
+        });
     }
 }

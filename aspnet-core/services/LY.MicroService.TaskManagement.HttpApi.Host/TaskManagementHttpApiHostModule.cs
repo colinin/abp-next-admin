@@ -12,7 +12,6 @@ using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.OssManagement;
@@ -24,7 +23,6 @@ using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using LY.MicroService.TaskManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -78,7 +76,6 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpLocalizationCultureMapModule),
-    typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpClaimsMappingModule),
@@ -91,6 +88,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
+        PreConfigureWrapper();
         PreConfigureFeature();
         PreForwardedHeaders();
         PreConfigureApp(configuration);
@@ -103,6 +101,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureWrapper();
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureBackgroundTasks();
@@ -117,6 +116,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
+        ConfigureCors(context.Services, configuration);
         ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -132,7 +132,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         app.UseStaticFiles();
         app.UseCorrelationId();
         app.UseRouting();
-        app.UseCors();
+        app.UseCors(DefaultCorsPolicyName);
         app.UseAuthentication();
         app.UseDynamicClaims();
         app.UseMultiTenancy();

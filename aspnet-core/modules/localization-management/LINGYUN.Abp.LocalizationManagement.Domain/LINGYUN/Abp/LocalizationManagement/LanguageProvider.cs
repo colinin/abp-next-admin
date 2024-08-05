@@ -31,7 +31,6 @@ public class LanguageProvider : ILanguageProvider, ITransientDependency
         return new LanguageInfo(
             language.CultureName,
             language.UiCultureName,
-            language.DisplayName,
-            language.FlagIcon);
+            language.DisplayName);
     }
 }

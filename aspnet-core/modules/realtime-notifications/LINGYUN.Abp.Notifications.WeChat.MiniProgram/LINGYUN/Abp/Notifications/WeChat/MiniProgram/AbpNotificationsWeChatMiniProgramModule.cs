@@ -2,31 +2,30 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
+namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram;
+
+[DependsOn(
+    typeof(AbpWeChatMiniProgramModule), 
+    typeof(AbpNotificationsModule))]
+public class AbpNotificationsWeChatMiniProgramModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpWeChatMiniProgramModule), 
-        typeof(AbpNotificationsModule))]
-    public class AbpNotificationsWeChatMiniProgramModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        var preActions = context.Services.GetPreConfigureActions<AbpNotificationsWeChatMiniProgramOptions>();
+
+        Configure<AbpNotificationsWeChatMiniProgramOptions>(options =>
         {
-            var preActions = context.Services.GetPreConfigureActions<AbpNotificationsWeChatMiniProgramOptions>();
+            preActions.Configure(options);
+        });
 
-            Configure<AbpNotificationsWeChatMiniProgramOptions>(options =>
-            {
-                preActions.Configure(options);
-            });
+        Configure<AbpNotificationsPublishOptions>(options =>
+        {
+            options.PublishProviders.Add<WeChatMiniProgramNotificationPublishProvider>();
 
-            Configure<AbpNotificationsPublishOptions>(options =>
-            {
-                options.PublishProviders.Add<WeChatMiniProgramNotificationPublishProvider>();
-
-                var wechatOptions = preActions.Configure();
-                options.NotificationDataMappings
-                       .MappingDefault(WeChatMiniProgramNotificationPublishProvider.ProviderName,
-                       data => NotificationData.ToStandardData(wechatOptions.DefaultMsgPrefix, data));
-            });
-        }
+            var wechatOptions = preActions.Configure();
+            options.NotificationDataMappings
+                   .MappingDefault(WeChatMiniProgramNotificationPublishProvider.ProviderName,
+                   data => NotificationData.ToStandardData(wechatOptions.DefaultMsgPrefix, data));
+        });
     }
 }

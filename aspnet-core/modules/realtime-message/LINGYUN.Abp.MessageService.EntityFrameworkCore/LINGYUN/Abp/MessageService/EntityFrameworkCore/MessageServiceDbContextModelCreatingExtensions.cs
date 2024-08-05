@@ -5,145 +5,144 @@ using System;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace LINGYUN.Abp.MessageService.EntityFrameworkCore
+namespace LINGYUN.Abp.MessageService.EntityFrameworkCore;
+
+public static class MessageServiceDbContextModelCreatingExtensions
 {
-    public static class MessageServiceDbContextModelCreatingExtensions
+    public static void ConfigureMessageService(
+       this ModelBuilder builder,
+       Action<MessageServiceModelBuilderConfigurationOptions> optionsAction = null)
     {
-        public static void ConfigureMessageService(
-           this ModelBuilder builder,
-           Action<MessageServiceModelBuilderConfigurationOptions> optionsAction = null)
+        Check.NotNull(builder, nameof(builder));
+
+        var options = new MessageServiceModelBuilderConfigurationOptions();
+
+        optionsAction?.Invoke(options);
+
+        builder.Entity<UserMessage>(b =>
         {
-            Check.NotNull(builder, nameof(builder));
+            b.ToTable(options.TablePrefix + "UserMessages", options.Schema);
 
-            var options = new MessageServiceModelBuilderConfigurationOptions();
+            b.Property(p => p.SendUserName).HasMaxLength(MessageConsts.MaxSendUserNameLength).IsRequired();
+            b.Property(p => p.Content).HasMaxLength(MessageConsts.MaxContentLength).IsRequired();
 
-            optionsAction?.Invoke(options);
+            b.ConfigureByConvention();
 
-            builder.Entity<UserMessage>(b =>
-            {
-                b.ToTable(options.TablePrefix + "UserMessages", options.Schema);
+            b.HasIndex(p => new { p.TenantId, p.ReceiveUserId });
+        });
 
-                b.Property(p => p.SendUserName).HasMaxLength(MessageConsts.MaxSendUserNameLength).IsRequired();
-                b.Property(p => p.Content).HasMaxLength(MessageConsts.MaxContentLength).IsRequired();
+        builder.Entity<GroupMessage>(b =>
+        {
+            b.ToTable(options.TablePrefix + "GroupMessages", options.Schema);
 
-                b.ConfigureByConvention();
+            b.Property(p => p.SendUserName).HasMaxLength(MessageConsts.MaxSendUserNameLength).IsRequired();
+            b.Property(p => p.Content).HasMaxLength(MessageConsts.MaxContentLength).IsRequired();
 
-                b.HasIndex(p => new { p.TenantId, p.ReceiveUserId });
-            });
+            b.ConfigureByConvention();
 
-            builder.Entity<GroupMessage>(b =>
-            {
-                b.ToTable(options.TablePrefix + "GroupMessages", options.Schema);
+            b.HasIndex(p => new { p.TenantId, p.GroupId });
+        });
 
-                b.Property(p => p.SendUserName).HasMaxLength(MessageConsts.MaxSendUserNameLength).IsRequired();
-                b.Property(p => p.Content).HasMaxLength(MessageConsts.MaxContentLength).IsRequired();
+        builder.Entity<UserChatFriend>(b =>
+        {
+            b.ToTable(options.TablePrefix + "UserChatFriends", options.Schema);
 
-                b.ConfigureByConvention();
+            b.Property(p => p.RemarkName).HasMaxLength(UserChatFriendConsts.MaxRemarkNameLength);
+            b.Property(p => p.Description).HasMaxLength(UserChatFriendConsts.MaxDescriptionLength);
 
-                b.HasIndex(p => new { p.TenantId, p.GroupId });
-            });
+            b.ConfigureByConvention();
 
-            builder.Entity<UserChatFriend>(b =>
-            {
-                b.ToTable(options.TablePrefix + "UserChatFriends", options.Schema);
+            b.HasIndex(p => new { p.TenantId, p.UserId, p.FrientId });
+        });
 
-                b.Property(p => p.RemarkName).HasMaxLength(UserChatFriendConsts.MaxRemarkNameLength);
-                b.Property(p => p.Description).HasMaxLength(UserChatFriendConsts.MaxDescriptionLength);
+        builder.Entity<UserChatCard>(b =>
+        {
+            b.ToTable(options.TablePrefix + "UserChatCards", options.Schema);
 
-                b.ConfigureByConvention();
+            b.Property(p => p.UserName).HasMaxLength(UserChatCardConsts.MaxUserNameLength).IsRequired();
 
-                b.HasIndex(p => new { p.TenantId, p.UserId, p.FrientId });
-            });
+            b.Property(p => p.AvatarUrl).HasMaxLength(UserChatCardConsts.MaxAvatarUrlLength);
+            b.Property(p => p.Description).HasMaxLength(UserChatCardConsts.MaxDescriptionLength);
+            b.Property(p => p.NickName).HasMaxLength(UserChatCardConsts.MaxNickNameLength);
+            b.Property(p => p.Sign).HasMaxLength(UserChatCardConsts.MaxSignLength);
 
-            builder.Entity<UserChatCard>(b =>
-            {
-                b.ToTable(options.TablePrefix + "UserChatCards", options.Schema);
+            b.ConfigureByConvention();
 
-                b.Property(p => p.UserName).HasMaxLength(UserChatCardConsts.MaxUserNameLength).IsRequired();
+            b.HasIndex(p => new { p.TenantId, p.UserId });
+        });
 
-                b.Property(p => p.AvatarUrl).HasMaxLength(UserChatCardConsts.MaxAvatarUrlLength);
-                b.Property(p => p.Description).HasMaxLength(UserChatCardConsts.MaxDescriptionLength);
-                b.Property(p => p.NickName).HasMaxLength(UserChatCardConsts.MaxNickNameLength);
-                b.Property(p => p.Sign).HasMaxLength(UserChatCardConsts.MaxSignLength);
+        builder.Entity<UserGroupCard>(b =>
+        {
+            b.ToTable(options.TablePrefix + "UserGroupCards", options.Schema);
 
-                b.ConfigureByConvention();
+            b.Property(p => p.NickName).HasMaxLength(UserChatCardConsts.MaxNickNameLength);
 
-                b.HasIndex(p => new { p.TenantId, p.UserId });
-            });
+            b.ConfigureByConvention();
 
-            builder.Entity<UserGroupCard>(b =>
-            {
-                b.ToTable(options.TablePrefix + "UserGroupCards", options.Schema);
-
-                b.Property(p => p.NickName).HasMaxLength(UserChatCardConsts.MaxNickNameLength);
-
-                b.ConfigureByConvention();
-
-                b.HasIndex(p => new { p.TenantId, p.UserId });
-            });
+            b.HasIndex(p => new { p.TenantId, p.UserId });
+        });
 
 
-            builder.Entity<UserChatSetting>(b =>
-            {
-                b.ToTable(options.TablePrefix + "UserChatSettings", options.Schema);
+        builder.Entity<UserChatSetting>(b =>
+        {
+            b.ToTable(options.TablePrefix + "UserChatSettings", options.Schema);
 
-                b.ConfigureByConvention();
+            b.ConfigureByConvention();
 
-                b.HasIndex(p => new { p.TenantId, p.UserId });
-            });
+            b.HasIndex(p => new { p.TenantId, p.UserId });
+        });
 
-            //builder.Entity<UserSpecialFocus>(b =>
-            //{
-            //    b.ToTable(options.TablePrefix + "UserSpecialFocuss", options.Schema);
+        //builder.Entity<UserSpecialFocus>(b =>
+        //{
+        //    b.ToTable(options.TablePrefix + "UserSpecialFocuss", options.Schema);
 
-            //    b.ConfigureMultiTenant();
+        //    b.ConfigureMultiTenant();
 
-            //    b.HasIndex(p => new { p.TenantId, p.UserId });
-            //});
+        //    b.HasIndex(p => new { p.TenantId, p.UserId });
+        //});
 
-            //builder.Entity<UserChatBlack>(b =>
-            //{
-            //    b.ToTable(options.TablePrefix + "UserChatBlacks", options.Schema);
+        //builder.Entity<UserChatBlack>(b =>
+        //{
+        //    b.ToTable(options.TablePrefix + "UserChatBlacks", options.Schema);
 
-            //    b.ConfigureMultiTenant();
+        //    b.ConfigureMultiTenant();
 
-            //    b.HasIndex(p => new { p.TenantId, p.UserId });
-            //});
+        //    b.HasIndex(p => new { p.TenantId, p.UserId });
+        //});
 
-            builder.Entity<GroupChatBlack>(b =>
-            {
-                b.ToTable(options.TablePrefix + "GroupChatBlacks", options.Schema);
+        builder.Entity<GroupChatBlack>(b =>
+        {
+            b.ToTable(options.TablePrefix + "GroupChatBlacks", options.Schema);
 
-                b.ConfigureByConvention();
+            b.ConfigureByConvention();
 
-                b.HasIndex(p => new { p.TenantId, p.GroupId });
-            });
+            b.HasIndex(p => new { p.TenantId, p.GroupId });
+        });
 
-            builder.Entity<ChatGroup>(b =>
-            {
-                b.ToTable(options.TablePrefix + "ChatGroups", options.Schema);
+        builder.Entity<ChatGroup>(b =>
+        {
+            b.ToTable(options.TablePrefix + "ChatGroups", options.Schema);
 
-                b.Property(p => p.Name).HasMaxLength(ChatGroupConsts.MaxNameLength).IsRequired();
+            b.Property(p => p.Name).HasMaxLength(ChatGroupConsts.MaxNameLength).IsRequired();
 
-                b.Property(p => p.Tag).HasMaxLength(ChatGroupConsts.MaxTagLength);
-                b.Property(p => p.Notice).HasMaxLength(ChatGroupConsts.MaxNoticeLength);
-                b.Property(p => p.Address).HasMaxLength(ChatGroupConsts.MaxAddressLength);
-                b.Property(p => p.Description).HasMaxLength(ChatGroupConsts.MaxDescriptionLength);
-                b.Property(p => p.AvatarUrl).HasMaxLength(ChatGroupConsts.MaxAvatarUrlLength);
+            b.Property(p => p.Tag).HasMaxLength(ChatGroupConsts.MaxTagLength);
+            b.Property(p => p.Notice).HasMaxLength(ChatGroupConsts.MaxNoticeLength);
+            b.Property(p => p.Address).HasMaxLength(ChatGroupConsts.MaxAddressLength);
+            b.Property(p => p.Description).HasMaxLength(ChatGroupConsts.MaxDescriptionLength);
+            b.Property(p => p.AvatarUrl).HasMaxLength(ChatGroupConsts.MaxAvatarUrlLength);
 
-                b.ConfigureByConvention();
+            b.ConfigureByConvention();
 
-                b.HasIndex(p => new { p.TenantId, p.Name });
-            });
+            b.HasIndex(p => new { p.TenantId, p.Name });
+        });
 
-            builder.Entity<UserChatGroup>(b =>
-            {
-                b.ToTable(options.TablePrefix + "UserChatGroups", options.Schema);
+        builder.Entity<UserChatGroup>(b =>
+        {
+            b.ToTable(options.TablePrefix + "UserChatGroups", options.Schema);
 
-                b.ConfigureByConvention();
+            b.ConfigureByConvention();
 
-                b.HasIndex(p => new { p.TenantId, p.GroupId, p.UserId });
-            });
-        }
+            b.HasIndex(p => new { p.TenantId, p.GroupId, p.UserId });
+        });
     }
 }

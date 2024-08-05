@@ -1,10 +1,9 @@
-﻿namespace LINGYUN.Abp.Notifications.Sms
+﻿namespace LINGYUN.Abp.Notifications.Sms;
+
+public class AbpNotificationsSmsOptions
 {
-    public class AbpNotificationsSmsOptions
-    {
-        /// <summary>
-        /// 短信模板变量前缀
-        /// </summary>
-        public string TemplateParamsPrefix { get; set; } = "[sms]";
-    }
+    /// <summary>
+    /// 短信模板变量前缀
+    /// </summary>
+    public string TemplateParamsPrefix { get; set; } = "[sms]";
 }

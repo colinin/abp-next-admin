@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Platform.Datas
-{
-    public class DataUpdateDto : DataCreateOrUpdateDto
-    {
+﻿namespace LINGYUN.Platform.Datas;
 
-    }
+public class DataUpdateDto : DataCreateOrUpdateDto
+{
+
 }

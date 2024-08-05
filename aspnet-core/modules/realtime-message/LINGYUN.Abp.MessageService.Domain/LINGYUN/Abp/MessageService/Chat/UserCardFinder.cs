@@ -5,60 +5,59 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Chat;
+
+public class UserCardFinder : IUserCardFinder, ITransientDependency
 {
-    public class UserCardFinder : IUserCardFinder, ITransientDependency
+    private readonly ICurrentTenant _currentTenant;
+    private readonly IUserChatCardRepository _userChatCardRepository;
+
+    public UserCardFinder(
+        ICurrentTenant currentTenant,
+        IUserChatCardRepository userChatCardRepository)
     {
-        private readonly ICurrentTenant _currentTenant;
-        private readonly IUserChatCardRepository _userChatCardRepository;
+        _currentTenant = currentTenant;
+        _userChatCardRepository = userChatCardRepository;
+    }
 
-        public UserCardFinder(
-            ICurrentTenant currentTenant,
-            IUserChatCardRepository userChatCardRepository)
+    public async virtual Task<int> GetCountAsync(
+        Guid? tenantId,
+        string findUserName = "", 
+        int? startAge = null, 
+        int? endAge = null, 
+        Sex? sex = null)
+    {
+        using (_currentTenant.Change(tenantId))
         {
-            _currentTenant = currentTenant;
-            _userChatCardRepository = userChatCardRepository;
+            return await _userChatCardRepository
+                .GetMemberCountAsync(findUserName, startAge, endAge, sex);
         }
+    }
 
-        public async virtual Task<int> GetCountAsync(
-            Guid? tenantId,
-            string findUserName = "", 
-            int? startAge = null, 
-            int? endAge = null, 
-            Sex? sex = null)
+    public async virtual Task<List<UserCard>> GetListAsync(
+        Guid? tenantId, 
+        string findUserName = "", 
+        int? startAge = null, 
+        int? endAge = null,
+        Sex? sex = null, 
+        string sorting = nameof(UserCard.UserId), 
+        int skipCount = 0,
+        int maxResultCount = 10)
+    {
+        using (_currentTenant.Change(tenantId))
         {
-            using (_currentTenant.Change(tenantId))
-            {
-                return await _userChatCardRepository
-                    .GetMemberCountAsync(findUserName, startAge, endAge, sex);
-            }
+            return await _userChatCardRepository
+                .GetMembersAsync(findUserName, startAge, endAge, sex,
+                    sorting, skipCount, maxResultCount);
         }
+    }
 
-        public async virtual Task<List<UserCard>> GetListAsync(
-            Guid? tenantId, 
-            string findUserName = "", 
-            int? startAge = null, 
-            int? endAge = null,
-            Sex? sex = null, 
-            string sorting = nameof(UserCard.UserId), 
-            int skipCount = 0,
-            int maxResultCount = 10)
+    public async virtual Task<UserCard> GetMemberAsync(Guid? tenantId, Guid findUserId)
+    {
+        using (_currentTenant.Change(tenantId))
         {
-            using (_currentTenant.Change(tenantId))
-            {
-                return await _userChatCardRepository
-                    .GetMembersAsync(findUserName, startAge, endAge, sex,
-                        sorting, skipCount, maxResultCount);
-            }
-        }
-
-        public async virtual Task<UserCard> GetMemberAsync(Guid? tenantId, Guid findUserId)
-        {
-            using (_currentTenant.Change(tenantId))
-            {
-                return await _userChatCardRepository
-                    .GetMemberAsync(findUserId);
-            }
+            return await _userChatCardRepository
+                .GetMemberAsync(findUserId);
         }
     }
 }

@@ -3,25 +3,24 @@ using Microsoft.Extensions.Logging;
 using System;
 using Volo.Abp;
 
-namespace LINGYUN.Abp.ExceptionHandling
+namespace LINGYUN.Abp.ExceptionHandling;
+
+public class ExceptionSendNotifierContext
 {
-    public class ExceptionSendNotifierContext
+    [NotNull]
+    public Exception Exception { get; }
+
+    [NotNull]
+    public IServiceProvider ServiceProvider { get; }
+
+    public LogLevel LogLevel { get; }
+    internal ExceptionSendNotifierContext(
+        [NotNull]  IServiceProvider serviceProvider,
+        [NotNull] Exception exception,
+        LogLevel? logLevel = null)
     {
-        [NotNull]
-        public Exception Exception { get; }
-
-        [NotNull]
-        public IServiceProvider ServiceProvider { get; }
-
-        public LogLevel LogLevel { get; }
-        internal ExceptionSendNotifierContext(
-            [NotNull]  IServiceProvider serviceProvider,
-            [NotNull] Exception exception,
-            LogLevel? logLevel = null)
-        {
-            ServiceProvider = Check.NotNull(serviceProvider, nameof(serviceProvider));
-            Exception = Check.NotNull(exception, nameof(exception));
-            LogLevel = logLevel ?? exception.GetLogLevel();
-        }
+        ServiceProvider = Check.NotNull(serviceProvider, nameof(serviceProvider));
+        Exception = Check.NotNull(exception, nameof(exception));
+        LogLevel = logLevel ?? exception.GetLogLevel();
     }
 }

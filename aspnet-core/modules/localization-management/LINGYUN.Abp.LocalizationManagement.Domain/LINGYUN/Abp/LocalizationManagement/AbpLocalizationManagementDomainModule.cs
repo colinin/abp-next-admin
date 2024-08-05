@@ -5,35 +5,34 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.LocalizationManagement
+namespace LINGYUN.Abp.LocalizationManagement;
+
+[DependsOn(
+    typeof(AbpAutoMapperModule),
+    typeof(AbpDddDomainModule),
+    typeof(AbpLocalizationPersistenceModule),
+    typeof(AbpLocalizationManagementDomainSharedModule))]
+public class AbpLocalizationManagementDomainModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAutoMapperModule),
-        typeof(AbpDddDomainModule),
-        typeof(AbpLocalizationPersistenceModule),
-        typeof(AbpLocalizationManagementDomainSharedModule))]
-    public class AbpLocalizationManagementDomainModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        context.Services.AddAutoMapperObjectMapper<AbpLocalizationManagementDomainModule>();
+
+        Configure<AbpAutoMapperOptions>(options =>
         {
-            context.Services.AddAutoMapperObjectMapper<AbpLocalizationManagementDomainModule>();
+            options.AddProfile<LocalizationManagementDomainMapperProfile>(validate: true);
+        });
 
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddProfile<LocalizationManagementDomainMapperProfile>(validate: true);
-            });
+        Configure<AbpLocalizationPersistenceOptions>(options =>
+        {
+            options.AddPersistenceResource<LocalizationManagementResource>();
+        });
 
-            Configure<AbpLocalizationPersistenceOptions>(options =>
-            {
-                options.AddPersistenceResource<LocalizationManagementResource>();
-            });
-
-            // 分布式事件
-            //Configure<AbpDistributedEntityEventOptions>(options =>
-            //{
-            //    options.AutoEventSelectors.Add<Text>();
-            //    options.EtoMappings.Add<Text, TextEto>();
-            //});
-        }
+        // 分布式事件
+        //Configure<AbpDistributedEntityEventOptions>(options =>
+        //{
+        //    options.AutoEventSelectors.Add<Text>();
+        //    options.EtoMappings.Add<Text, TextEto>();
+        //});
     }
 }

@@ -1,11 +1,10 @@
-﻿namespace LINGYUN.Abp.UI.Navigation
+﻿namespace LINGYUN.Abp.UI.Navigation;
+
+public class NavigationDefinition
 {
-    public class NavigationDefinition
+    public ApplicationMenu Menu { get; }
+    public NavigationDefinition(ApplicationMenu menu)
     {
-        public ApplicationMenu Menu { get; }
-        public NavigationDefinition(ApplicationMenu menu)
-        {
-            Menu = menu;
-        }
+        Menu = menu;
     }
 }

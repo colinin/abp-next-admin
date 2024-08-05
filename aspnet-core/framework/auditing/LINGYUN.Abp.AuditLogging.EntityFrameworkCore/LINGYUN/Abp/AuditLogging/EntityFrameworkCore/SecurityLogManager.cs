@@ -11,134 +11,133 @@ using Volo.Abp.ObjectMapping;
 using Volo.Abp.SecurityLog;
 using Volo.Abp.Uow;
 
-namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore
+namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
+
+[Dependency(ReplaceServices = true)]
+public class SecurityLogManager : ISecurityLogManager, ITransientDependency
 {
-    [Dependency(ReplaceServices = true)]
-    public class SecurityLogManager : ISecurityLogManager, ITransientDependency
+    public ILogger<SecurityLogManager> Logger { get; set; }
+
+    protected IObjectMapper ObjectMapper { get; }
+    protected AbpSecurityLogOptions SecurityLogOptions { get; }
+    protected IIdentitySecurityLogRepository IdentitySecurityLogRepository { get; }
+    protected IGuidGenerator GuidGenerator { get; }
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
+
+    public SecurityLogManager(
+        IObjectMapper objectMapper,
+        ILogger<SecurityLogManager> logger,
+        IOptions<AbpSecurityLogOptions> securityLogOptions,
+        IIdentitySecurityLogRepository identitySecurityLogRepository,
+        IGuidGenerator guidGenerator,
+        IUnitOfWorkManager unitOfWorkManager)
     {
-        public ILogger<SecurityLogManager> Logger { get; set; }
+        Logger = logger;
+        ObjectMapper = objectMapper;
+        SecurityLogOptions = securityLogOptions.Value;
+        IdentitySecurityLogRepository = identitySecurityLogRepository;
+        GuidGenerator = guidGenerator;
+        UnitOfWorkManager = unitOfWorkManager;
+    }
 
-        protected IObjectMapper ObjectMapper { get; }
-        protected AbpSecurityLogOptions SecurityLogOptions { get; }
-        protected IIdentitySecurityLogRepository IdentitySecurityLogRepository { get; }
-        protected IGuidGenerator GuidGenerator { get; }
-        protected IUnitOfWorkManager UnitOfWorkManager { get; }
-
-        public SecurityLogManager(
-            IObjectMapper objectMapper,
-            ILogger<SecurityLogManager> logger,
-            IOptions<AbpSecurityLogOptions> securityLogOptions,
-            IIdentitySecurityLogRepository identitySecurityLogRepository,
-            IGuidGenerator guidGenerator,
-            IUnitOfWorkManager unitOfWorkManager)
+    public async virtual Task SaveAsync(
+        SecurityLogInfo securityLogInfo,
+        CancellationToken cancellationToken = default)
+    {
+        if (!SecurityLogOptions.IsEnabled)
         {
-            Logger = logger;
-            ObjectMapper = objectMapper;
-            SecurityLogOptions = securityLogOptions.Value;
-            IdentitySecurityLogRepository = identitySecurityLogRepository;
-            GuidGenerator = guidGenerator;
-            UnitOfWorkManager = unitOfWorkManager;
+            return;
         }
 
-        public async virtual Task SaveAsync(
-            SecurityLogInfo securityLogInfo,
-            CancellationToken cancellationToken = default(CancellationToken))
+        using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
         {
-            if (!SecurityLogOptions.IsEnabled)
-            {
-                return;
-            }
-
-            using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
-            {
-                await IdentitySecurityLogRepository.InsertAsync(
-                    new IdentitySecurityLog(GuidGenerator, securityLogInfo),
-                    false,
-                    cancellationToken);
-                await uow.CompleteAsync();
-            }
-        }
-
-        public async virtual Task<SecurityLog> GetAsync(
-            Guid id,
-            bool includeDetails = false,
-            CancellationToken cancellationToken = default)
-        {
-            var securityLog = await IdentitySecurityLogRepository.GetAsync(id, includeDetails, cancellationToken);
-
-            return ObjectMapper.Map<IdentitySecurityLog, SecurityLog>(securityLog);
-        }
-
-        public async virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            using (var uow = UnitOfWorkManager.Begin(true))
-            {
-                await IdentitySecurityLogRepository.DeleteAsync(id);
-                await uow.CompleteAsync();
-            }
-        }
-
-        public async virtual Task<List<SecurityLog>> GetListAsync(
-            string sorting = null,
-            int maxResultCount = 50,
-            int skipCount = 0,
-            DateTime? startTime = null,
-            DateTime? endTime = null,
-            string applicationName = null,
-            string identity = null,
-            string action = null,
-            Guid? userId = null,
-            string userName = null,
-            string clientId = null,
-            string clientIpAddress = null,
-            string correlationId = null,
-            bool includeDetails = false,
-            CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var securityLogs = await IdentitySecurityLogRepository.GetListAsync(
-                sorting,
-                maxResultCount,
-                skipCount,
-                startTime,
-                endTime,
-                applicationName,
-                identity,
-                action,
-                userId,
-                userName,
-                clientId,
-                correlationId,
-                includeDetails,
+            await IdentitySecurityLogRepository.InsertAsync(
+                new IdentitySecurityLog(GuidGenerator, securityLogInfo),
+                false,
                 cancellationToken);
-
-            return ObjectMapper.Map<List<IdentitySecurityLog>, List<SecurityLog>>(securityLogs);
+            await uow.CompleteAsync();
         }
+    }
 
+    public async virtual Task<SecurityLog> GetAsync(
+        Guid id,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var securityLog = await IdentitySecurityLogRepository.GetAsync(id, includeDetails, cancellationToken);
 
-        public async virtual Task<long> GetCountAsync(
-            DateTime? startTime = null,
-            DateTime? endTime = null,
-            string applicationName = null,
-            string identity = null,
-            string action = null,
-            Guid? userId = null,
-            string userName = null,
-            string clientId = null,
-            string clientIpAddress = null,
-            string correlationId = null,
-            CancellationToken cancellationToken = default(CancellationToken))
+        return ObjectMapper.Map<IdentitySecurityLog, SecurityLog>(securityLog);
+    }
+
+    public async virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        using (var uow = UnitOfWorkManager.Begin(true))
         {
-            return await IdentitySecurityLogRepository.GetCountAsync(
-                startTime,
-                endTime,
-                applicationName,
-                identity,
-                action,
-                userId,
-                userName,
-                clientId,
-                correlationId,
-                cancellationToken);
+            await IdentitySecurityLogRepository.DeleteAsync(id);
+            await uow.CompleteAsync();
         }
+    }
+
+    public async virtual Task<List<SecurityLog>> GetListAsync(
+        string sorting = null,
+        int maxResultCount = 50,
+        int skipCount = 0,
+        DateTime? startTime = null,
+        DateTime? endTime = null,
+        string applicationName = null,
+        string identity = null,
+        string action = null,
+        Guid? userId = null,
+        string userName = null,
+        string clientId = null,
+        string clientIpAddress = null,
+        string correlationId = null,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var securityLogs = await IdentitySecurityLogRepository.GetListAsync(
+            sorting,
+            maxResultCount,
+            skipCount,
+            startTime,
+            endTime,
+            applicationName,
+            identity,
+            action,
+            userId,
+            userName,
+            clientId,
+            correlationId,
+            includeDetails,
+            cancellationToken);
+
+        return ObjectMapper.Map<List<IdentitySecurityLog>, List<SecurityLog>>(securityLogs);
+    }
+
+
+    public async virtual Task<long> GetCountAsync(
+        DateTime? startTime = null,
+        DateTime? endTime = null,
+        string applicationName = null,
+        string identity = null,
+        string action = null,
+        Guid? userId = null,
+        string userName = null,
+        string clientId = null,
+        string clientIpAddress = null,
+        string correlationId = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await IdentitySecurityLogRepository.GetCountAsync(
+            startTime,
+            endTime,
+            applicationName,
+            identity,
+            action,
+            userId,
+            userName,
+            clientId,
+            correlationId,
+            cancellationToken);
     }
 }

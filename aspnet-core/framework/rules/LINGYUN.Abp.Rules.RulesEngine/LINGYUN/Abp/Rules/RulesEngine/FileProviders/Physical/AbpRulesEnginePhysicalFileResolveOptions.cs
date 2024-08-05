@@ -1,10 +1,9 @@
-﻿namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders.Physical
+﻿namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders.Physical;
+
+public class AbpRulesEnginePhysicalFileResolveOptions
 {
-    public class AbpRulesEnginePhysicalFileResolveOptions
-    {
-        /// <summary>
-        /// 本地文件路径
-        /// </summary>
-        public string PhysicalPath { get; set; }
-    }
+    /// <summary>
+    /// 本地文件路径
+    /// </summary>
+    public string PhysicalPath { get; set; }
 }

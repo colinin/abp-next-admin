@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LINGYUN.Abp.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
@@ -277,6 +278,28 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
             StringLocalizerFactory,
             await SettingManager.GetOrNullAsync(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber, providerName, providerKey),
             ValueType.Boolean,
+            providerName);
+
+        #endregion
+
+        #region 会话
+
+        var sessionSetting = identitySetting.AddSetting(L["DisplayName:Identity.Session"], L["Description:Identity.Session"]);
+        sessionSetting.AddDetail(
+            await SettingDefinitionManager.GetAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.Session.ConcurrentLoginStrategy),
+            StringLocalizerFactory,
+            await SettingManager.GetOrNullAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.Session.ConcurrentLoginStrategy, providerName, providerKey),
+            ValueType.Option,
+            providerName)
+            .AddOption(L["ConcurrentLoginStrategy:None"], ConcurrentLoginStrategy.None.ToString())
+            .AddOption(L["ConcurrentLoginStrategy:LogoutFromSameTypeDevicesLimit"], ConcurrentLoginStrategy.LogoutFromSameTypeDevicesLimit.ToString())
+            .AddOption(L["ConcurrentLoginStrategy:LogoutFromSameTypeDevices"], ConcurrentLoginStrategy.LogoutFromSameTypeDevices.ToString())
+            .AddOption(L["ConcurrentLoginStrategy:LogoutFromAllDevices"], ConcurrentLoginStrategy.LogoutFromAllDevices.ToString());
+        sessionSetting.AddDetail(
+            await SettingDefinitionManager.GetAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.Session.LogoutFromSameTypeDevicesLimit),
+            StringLocalizerFactory,
+            await SettingManager.GetOrNullAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.Session.LogoutFromSameTypeDevicesLimit, providerName, providerKey),
+            ValueType.Number,
             providerName);
 
         #endregion

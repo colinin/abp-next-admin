@@ -12,7 +12,9 @@ import {
   AuthenticatorDto,
   VerifyAuthenticatorCodeInput,
   AuthenticatorRecoveryCodeDto,
+  GetUserSessionsInput,
 } from './model';
+import { IdentitySessionDto } from '../../identity/sessions/model';
 
 export const get = () => {
   return defHttp.get<MyProfile>({
@@ -91,5 +93,26 @@ export const verifyAuthenticatorCode = (input: VerifyAuthenticatorCodeInput) => 
 export const resetAuthenticator = () => {
   return defHttp.post<void>({
     url: '/api/account/my-profile/reset-authenticator',
+  });
+}
+/**
+ * 查询当前用户会话列表
+ * @param { GetUserSessionsInput } input 查询参数
+ * @returns { Promise<PagedResultDto<IdentitySessionDto>> }
+ */
+export const getSessions = (input?: GetUserSessionsInput): Promise<PagedResultDto<IdentitySessionDto>> => {
+  return defHttp.get<PagedResultDto<IdentitySessionDto>>({
+    url: '/api/account/my-profile/sessions',
+    params: input,
+  });
+};
+/**
+ * 撤销会话
+ * @param { string } sessionId 会话id
+ * @returns { Promise<void> }
+ */
+export const revokeSession = (sessionId: string): Promise<void> => {
+  return defHttp.delete<void>({
+    url: `/api/account/my-profile/sessions/${sessionId}/revoke`,
   });
 }

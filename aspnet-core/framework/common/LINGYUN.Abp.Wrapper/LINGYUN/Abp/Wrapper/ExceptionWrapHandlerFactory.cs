@@ -1,30 +1,29 @@
 ﻿using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.Wrapper
+namespace LINGYUN.Abp.Wrapper;
+
+public class ExceptionWrapHandlerFactory : IExceptionWrapHandlerFactory, ITransientDependency
 {
-    public class ExceptionWrapHandlerFactory : IExceptionWrapHandlerFactory, ITransientDependency
+    private readonly AbpWrapperOptions _options;
+
+    public ExceptionWrapHandlerFactory(
+        IOptions<AbpWrapperOptions> options)
     {
-        private readonly AbpWrapperOptions _options;
+        _options = options.Value;
+    }
 
-        public ExceptionWrapHandlerFactory(
-            IOptions<AbpWrapperOptions> options)
+    public IExceptionWrapHandler CreateFor(ExceptionWrapContext context)
+    {
+        var exceptionType = context.Exception.GetType();
+        var handler = _options.GetHandler(exceptionType);
+        if (handler == null)
         {
-            _options = options.Value;
-        }
-
-        public IExceptionWrapHandler CreateFor(ExceptionWrapContext context)
-        {
-            var exceptionType = context.Exception.GetType();
-            var handler = _options.GetHandler(exceptionType);
-            if (handler == null)
-            {
-                handler = new DefaultExceptionWrapHandler();
-                _options.AddHandler(exceptionType, handler);
-                return handler;
-            }
-
+            handler = new DefaultExceptionWrapHandler();
+            _options.AddHandler(exceptionType, handler);
             return handler;
         }
+
+        return handler;
     }
 }

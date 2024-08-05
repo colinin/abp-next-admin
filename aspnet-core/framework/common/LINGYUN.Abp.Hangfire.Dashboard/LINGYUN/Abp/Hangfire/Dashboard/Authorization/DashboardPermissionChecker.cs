@@ -6,43 +6,42 @@ using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.Hangfire.Dashboard.Authorization
+namespace LINGYUN.Abp.Hangfire.Dashboard.Authorization;
+
+public class DashboardPermissionChecker : IDashboardPermissionChecker, ITransientDependency
 {
-    public class DashboardPermissionChecker : IDashboardPermissionChecker, ITransientDependency
+    // 仪表板属于高频访问, 设定有效期的二级权限缓存
+    private readonly IMemoryCache _memoryCache;
+    private readonly IPermissionChecker _permissionChecker;
+
+    public DashboardPermissionChecker(
+        IMemoryCache memoryCache,
+        IPermissionChecker permissionChecker)
     {
-        // 仪表板属于高频访问, 设定有效期的二级权限缓存
-        private readonly IMemoryCache _memoryCache;
-        private readonly IPermissionChecker _permissionChecker;
+        _memoryCache = memoryCache;
+        _permissionChecker = permissionChecker;
+    }
 
-        public DashboardPermissionChecker(
-            IMemoryCache memoryCache,
-            IPermissionChecker permissionChecker)
+    public async virtual Task<bool> IsGrantedAsync(DashboardContext context, string[] requiredPermissionNames)
+    {
+        var localPermissionKey = $"_HDPS:{requiredPermissionNames.JoinAsString(";")}";
+
+        if (_memoryCache.TryGetValue(localPermissionKey, out MultiplePermissionGrantResult cacheItem))
         {
-            _memoryCache = memoryCache;
-            _permissionChecker = permissionChecker;
-        }
-
-        public async virtual Task<bool> IsGrantedAsync(DashboardContext context, string[] requiredPermissionNames)
-        {
-            var localPermissionKey = $"_HDPS:{requiredPermissionNames.JoinAsString(";")}";
-
-            if (_memoryCache.TryGetValue(localPermissionKey, out MultiplePermissionGrantResult cacheItem))
-            {
-                return cacheItem.AllGranted;
-            }
-
-            cacheItem = await _permissionChecker.IsGrantedAsync(requiredPermissionNames);
-
-            _memoryCache.Set(
-                localPermissionKey,
-                cacheItem,
-                new MemoryCacheEntryOptions
-                {
-                    // 5分钟过期
-                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5d),
-                });
-
             return cacheItem.AllGranted;
         }
+
+        cacheItem = await _permissionChecker.IsGrantedAsync(requiredPermissionNames);
+
+        _memoryCache.Set(
+            localPermissionKey,
+            cacheItem,
+            new MemoryCacheEntryOptions
+            {
+                // 5分钟过期
+                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5d),
+            });
+
+        return cacheItem.AllGranted;
     }
 }

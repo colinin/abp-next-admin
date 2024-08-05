@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.EntityFrameworkCore.Migrations;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
@@ -16,10 +17,11 @@ public class WebhooksManagementDbMigrationEventHandler : EfCoreDatabaseMigration
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         ITenantStore tenantStore,
+        IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory,
         IDataSeeder dataSeeder)
-        : base("WebhooksManagementDbMigrator", currentTenant, unitOfWorkManager, tenantStore, distributedEventBus, loggerFactory)
+        : base("WebhooksManagementDbMigrator", currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
         DataSeeder = dataSeeder;
     }

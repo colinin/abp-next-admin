@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.IdentityServer.Clients
+﻿namespace LINGYUN.Abp.IdentityServer.Clients;
+
+public class ClientIdPRestrictionDto
 {
-    public class ClientIdPRestrictionDto
-    {
-        public string Provider { get; set; }
-    }
+    public string Provider { get; set; }
 }

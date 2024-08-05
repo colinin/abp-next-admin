@@ -6,56 +6,55 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Chat;
+
+[RemoteService(Name = AbpMessageServiceConsts.RemoteServiceName)]
+[Route("api/im/my-friends")]
+public class MyFriendController : AbpControllerBase, IMyFriendAppService
 {
-    [RemoteService(Name = AbpMessageServiceConsts.RemoteServiceName)]
-    [Route("api/im/my-friends")]
-    public class MyFriendController : AbpControllerBase, IMyFriendAppService
+    protected IMyFriendAppService MyFriendAppService { get; }
+
+    public MyFriendController(IMyFriendAppService myFriendAppService)
     {
-        protected IMyFriendAppService MyFriendAppService { get; }
+        MyFriendAppService = myFriendAppService;
+    }
 
-        public MyFriendController(IMyFriendAppService myFriendAppService)
-        {
-            MyFriendAppService = myFriendAppService;
-        }
+    [HttpPost]
+    public async virtual Task CreateAsync(MyFriendCreateDto input)
+    {
+        await MyFriendAppService.CreateAsync(input);
+    }
 
-        [HttpPost]
-        public async virtual Task CreateAsync(MyFriendCreateDto input)
-        {
-            await MyFriendAppService.CreateAsync(input);
-        }
+    [HttpPost]
+    [Route("add-request")]
+    public async virtual Task AddRequestAsync(MyFriendAddRequestDto input)
+    {
+        await MyFriendAppService.AddRequestAsync(input);
+    }
 
-        [HttpPost]
-        [Route("add-request")]
-        public async virtual Task AddRequestAsync(MyFriendAddRequestDto input)
-        {
-            await MyFriendAppService.AddRequestAsync(input);
-        }
+    [HttpDelete]
+    public async virtual Task DeleteAsync(MyFriendOperationDto input)
+    {
+        await MyFriendAppService.DeleteAsync(input);
+    }
 
-        [HttpDelete]
-        public async virtual Task DeleteAsync(MyFriendOperationDto input)
-        {
-            await MyFriendAppService.DeleteAsync(input);
-        }
+    [HttpGet]
+    [Route("{friendId}")]
+    public async virtual Task<UserFriend> GetAsync(Guid friendId)
+    {
+        return await MyFriendAppService.GetAsync(friendId);
+    }
 
-        [HttpGet]
-        [Route("{friendId}")]
-        public async virtual Task<UserFriend> GetAsync(Guid friendId)
-        {
-            return await MyFriendAppService.GetAsync(friendId);
-        }
+    [HttpGet]
+    [Route("all")]
+    public async virtual Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input)
+    {
+        return await MyFriendAppService.GetAllListAsync(input);
+    }
 
-        [HttpGet]
-        [Route("all")]
-        public async virtual Task<ListResultDto<UserFriend>> GetAllListAsync(GetMyFriendsDto input)
-        {
-            return await MyFriendAppService.GetAllListAsync(input);
-        }
-
-        [HttpGet]
-        public async virtual Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input)
-        {
-            return await MyFriendAppService.GetListAsync(input);
-        }
+    [HttpGet]
+    public async virtual Task<PagedResultDto<UserFriend>> GetListAsync(MyFriendGetByPagedDto input)
+    {
+        return await MyFriendAppService.GetListAsync(input);
     }
 }

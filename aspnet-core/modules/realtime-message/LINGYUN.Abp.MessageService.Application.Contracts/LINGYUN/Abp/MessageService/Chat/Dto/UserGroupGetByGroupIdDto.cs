@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Chat;
+
+public class UserGroupGetByGroupIdDto
 {
-    public class UserGroupGetByGroupIdDto
-    {
-        [Required]
-        public long GroupId { get; set; }
-    }
+    [Required]
+    public long GroupId { get; set; }
 }

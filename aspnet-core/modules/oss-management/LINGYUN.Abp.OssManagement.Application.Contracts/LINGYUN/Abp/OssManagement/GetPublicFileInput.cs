@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LINGYUN.Abp.OssManagement
+namespace LINGYUN.Abp.OssManagement;
+
+public class GetPublicFileInput : GetFileMultiTenancyInput
 {
-    public class GetPublicFileInput : GetFileMultiTenancyInput
-    {
-        [Required]
-        public string Name { get; set; }
+    [Required]
+    public string Name { get; set; }
 
-        public string Path { get; set; }
+    public string Path { get; set; }
 
-        public string Process { get; set; }
-    }
+    public string Process { get; set; }
 }

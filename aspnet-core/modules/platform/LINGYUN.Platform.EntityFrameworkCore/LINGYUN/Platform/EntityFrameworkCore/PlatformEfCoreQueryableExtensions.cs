@@ -5,53 +5,52 @@ using LINGYUN.Platform.Packages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace LINGYUN.Platform.EntityFrameworkCore
+namespace LINGYUN.Platform.EntityFrameworkCore;
+
+public static class PlatformEfCoreQueryableExtensions
 {
-    public static class PlatformEfCoreQueryableExtensions
+
+    public static IQueryable<Layout> IncludeDetails(this IQueryable<Layout> queryable, bool include = true)
     {
-
-        public static IQueryable<Layout> IncludeDetails(this IQueryable<Layout> queryable, bool include = true)
+        if (!include)
         {
-            if (!include)
-            {
-                return queryable;
-            }
-
             return queryable;
         }
 
-        public static IQueryable<Menu> IncludeDetails(this IQueryable<Menu> queryable, bool include = true)
-        {
-            if (!include)
-            {
-                return queryable;
-            }
+        return queryable;
+    }
 
+    public static IQueryable<Menu> IncludeDetails(this IQueryable<Menu> queryable, bool include = true)
+    {
+        if (!include)
+        {
             return queryable;
         }
 
-        public static IQueryable<Data> IncludeDetails(this IQueryable<Data> queryable, bool include = true)
-        {
-            if (!include)
-            {
-                return queryable;
-            }
+        return queryable;
+    }
 
-            return queryable
-                .AsSplitQuery()
-                .Include(x => x.Items);
+    public static IQueryable<Data> IncludeDetails(this IQueryable<Data> queryable, bool include = true)
+    {
+        if (!include)
+        {
+            return queryable;
         }
 
-        public static IQueryable<Package> IncludeDetails(this IQueryable<Package> queryable, bool include = true)
-        {
-            if (!include)
-            {
-                return queryable;
-            }
+        return queryable
+            .AsSplitQuery()
+            .Include(x => x.Items);
+    }
 
-            return queryable
-                .AsSplitQuery()
-                .Include(x => x.Blobs);
+    public static IQueryable<Package> IncludeDetails(this IQueryable<Package> queryable, bool include = true)
+    {
+        if (!include)
+        {
+            return queryable;
         }
+
+        return queryable
+            .AsSplitQuery()
+            .Include(x => x.Blobs);
     }
 }

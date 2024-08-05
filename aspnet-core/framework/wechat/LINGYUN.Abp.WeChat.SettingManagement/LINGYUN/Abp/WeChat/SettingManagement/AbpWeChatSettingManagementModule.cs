@@ -10,46 +10,45 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LINGYUN.Abp.WeChat.SettingManagement
+namespace LINGYUN.Abp.WeChat.SettingManagement;
+
+[DependsOn(
+    typeof(AbpWeChatOfficialModule),
+    typeof(AbpWeChatMiniProgramModule),
+    typeof(AbpWeChatWorkModule),
+    typeof(AbpAspNetCoreMvcModule))]
+public class AbpWeChatSettingManagementModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpWeChatOfficialModule),
-        typeof(AbpWeChatMiniProgramModule),
-        typeof(AbpWeChatWorkModule),
-        typeof(AbpAspNetCoreMvcModule))]
-    public class AbpWeChatSettingManagementModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
-            {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpWeChatSettingManagementModule).Assembly);
-            });
-        }
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpWeChatSettingManagementModule).Assembly);
+        });
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpWeChatSettingManagementModule>();
-            });
+            options.FileSets.AddEmbedded<AbpWeChatSettingManagementModule>();
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<WeChatResource>()
-                    .AddVirtualJson("/LINGYUN/Abp/WeChat/SettingManagement/Localization/Resources");
-            });
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<WeChatResource>()
+                .AddVirtualJson("/LINGYUN/Abp/WeChat/SettingManagement/Localization/Resources");
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<WeChatResource>()
-                    .AddBaseTypes(
-                        typeof(AbpUiResource),
-                        typeof(WeChatWorkResource)
-                    );
-            });
-        }
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<WeChatResource>()
+                .AddBaseTypes(
+                    typeof(AbpUiResource),
+                    typeof(WeChatWorkResource)
+                );
+        });
     }
 }

@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Abp.IdentityServer.Clients
+﻿namespace LINGYUN.Abp.IdentityServer.Clients;
+
+public class ClientScopeDto : ScopeDto
 {
-    public class ClientScopeDto : ScopeDto
-    {
-    }
 }

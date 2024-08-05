@@ -84,7 +84,7 @@ namespace LINGYUN.Abp.Webhooks
             }
             catch (Exception e)
             {
-                Logger.LogError("An error occured while sending a webhook request", e);
+                Logger.LogError(e, "An error occured while sending a webhook request");
             }
             finally
             {

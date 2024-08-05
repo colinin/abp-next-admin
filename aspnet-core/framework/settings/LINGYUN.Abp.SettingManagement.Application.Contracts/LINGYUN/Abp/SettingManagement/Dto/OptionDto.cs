@@ -1,19 +1,18 @@
-﻿namespace LINGYUN.Abp.SettingManagement
+﻿namespace LINGYUN.Abp.SettingManagement;
+
+public class OptionDto
 {
-    public class OptionDto
+    public string Name { get; set; }
+    public string Value { get; set; }
+
+    public OptionDto()
     {
-        public string Name { get; set; }
-        public string Value { get; set; }
 
-        public OptionDto()
-        {
+    }
 
-        }
-
-        public OptionDto(string name, string value)
-        {
-            Name = name;
-            Value = value;
-        }
+    public OptionDto(string name, string value)
+    {
+        Name = name;
+        Value = value;
     }
 }

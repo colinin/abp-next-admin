@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.WeChat.Features
+﻿namespace LINGYUN.Abp.WeChat.Features;
+
+public static class WeChatFeatures
 {
-    public static class WeChatFeatures
-    {
-        public const string GroupName = "Abp.WeChat";
-    }
+    public const string GroupName = "Abp.WeChat";
 }

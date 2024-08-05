@@ -1,10 +1,9 @@
-﻿namespace LINGYUN.Abp.Notifications.SignalR
+﻿namespace LINGYUN.Abp.Notifications.SignalR;
+
+internal static class NotificationDataExtensions
 {
-    internal static class NotificationDataExtensions
+    public static NotificationData ToSignalRData(this NotificationData data)
     {
-        public static NotificationData ToSignalRData(this NotificationData data)
-        {
-            return data;
-        }
+        return data;
     }
 }

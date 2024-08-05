@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.Webhooks
+﻿namespace LINGYUN.Abp.Webhooks;
+
+public interface IWebhookDefinitionProvider
 {
-    public interface IWebhookDefinitionProvider
-    {
-        void Define(IWebhookDefinitionContext context);
-    }
+    void Define(IWebhookDefinitionContext context);
 }

@@ -5,32 +5,31 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Localization;
 
-namespace LINGYUN.Abp.SettingManagement
-{
-    [DependsOn(
-        typeof(AbpSettingManagementApplicationModule),
-        typeof(AbpAspNetCoreMvcModule)
-        )]
-    public class AbpSettingManagementHttpApiModule : AbpModule
-    {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
-            {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpSettingManagementHttpApiModule).Assembly);
-            });
-        }
+namespace LINGYUN.Abp.SettingManagement;
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+[DependsOn(
+    typeof(AbpSettingManagementApplicationModule),
+    typeof(AbpAspNetCoreMvcModule)
+    )]
+public class AbpSettingManagementHttpApiModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<AbpSettingManagementResource>()
-                    .AddBaseTypes(
-                        typeof(AbpUiResource)
-                    );
-            });
-        }
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpSettingManagementHttpApiModule).Assembly);
+        });
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<AbpSettingManagementResource>()
+                .AddBaseTypes(
+                    typeof(AbpUiResource)
+                );
+        });
     }
 }

@@ -4,43 +4,42 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.Notifications.Sms
+namespace LINGYUN.Abp.Notifications.Sms;
+
+public class SmsNotificationPublishProvider : NotificationPublishProvider
 {
-    public class SmsNotificationPublishProvider : NotificationPublishProvider
+    public const string ProviderName = NotificationProviderNames.Sms;
+
+    protected IUserPhoneFinder UserPhoneFinder => ServiceProvider.LazyGetRequiredService<IUserPhoneFinder>();
+    protected ISmsNotificationSender Sender { get; }
+
+    protected AbpNotificationsSmsOptions Options { get; }
+
+    public SmsNotificationPublishProvider(
+        ISmsNotificationSender sender,
+        IOptions<AbpNotificationsSmsOptions> options) 
     {
-        public const string ProviderName = NotificationProviderNames.Sms;
+        Sender = sender;
+        Options = options.Value;
+    }
 
-        protected IUserPhoneFinder UserPhoneFinder => ServiceProvider.LazyGetRequiredService<IUserPhoneFinder>();
-        protected ISmsNotificationSender Sender { get; }
+    public override string Name => ProviderName;
 
-        protected AbpNotificationsSmsOptions Options { get; }
-
-        public SmsNotificationPublishProvider(
-            ISmsNotificationSender sender,
-            IOptions<AbpNotificationsSmsOptions> options) 
+    protected override async Task PublishAsync(
+        NotificationInfo notification,
+        IEnumerable<UserIdentifier> identifiers,
+        CancellationToken cancellationToken = default)
+    {
+        if (!identifiers.Any())
         {
-            Sender = sender;
-            Options = options.Value;
+            return;
         }
 
-        public override string Name => ProviderName;
-
-        protected override async Task PublishAsync(
-            NotificationInfo notification,
-            IEnumerable<UserIdentifier> identifiers,
-            CancellationToken cancellationToken = default)
+        var sendToPhones = await UserPhoneFinder.FindByUserIdsAsync(identifiers.Select(usr => usr.UserId), cancellationToken);
+        if (!sendToPhones.Any())
         {
-            if (!identifiers.Any())
-            {
-                return;
-            }
-
-            var sendToPhones = await UserPhoneFinder.FindByUserIdsAsync(identifiers.Select(usr => usr.UserId), cancellationToken);
-            if (!sendToPhones.Any())
-            {
-                return;
-            }
-            await Sender.SendAsync(notification, sendToPhones.JoinAsString(","));
+            return;
         }
+        await Sender.SendAsync(notification, sendToPhones.JoinAsString(","));
     }
 }

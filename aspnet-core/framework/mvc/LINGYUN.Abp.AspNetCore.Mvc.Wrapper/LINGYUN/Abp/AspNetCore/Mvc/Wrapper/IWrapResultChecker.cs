@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper
+namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+
+public interface IWrapResultChecker
 {
-    public interface IWrapResultChecker
-    {
-        bool WrapOnAction(ActionDescriptor actionDescriptor);
+    bool WrapOnAction(ActionDescriptor actionDescriptor);
 
-        bool WrapOnExecution(FilterContext context);
+    bool WrapOnExecution(FilterContext context);
 
-        bool WrapOnException(ExceptionContext context);
+    bool WrapOnException(ExceptionContext context);
 
-        bool WrapOnException(PageHandlerExecutedContext context);
-    }
+    bool WrapOnException(PageHandlerExecutedContext context);
 }

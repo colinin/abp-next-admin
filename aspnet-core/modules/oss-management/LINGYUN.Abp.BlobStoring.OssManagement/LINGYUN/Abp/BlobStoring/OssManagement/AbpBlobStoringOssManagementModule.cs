@@ -2,11 +2,10 @@
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.BlobStoring.OssManagement
+namespace LINGYUN.Abp.BlobStoring.OssManagement;
+
+[DependsOn(typeof(AbpBlobStoringModule))]
+[DependsOn(typeof(AbpOssManagementHttpApiClientModule))]
+public class AbpBlobStoringOssManagementModule : AbpModule
 {
-    [DependsOn(typeof(AbpBlobStoringModule))]
-    [DependsOn(typeof(AbpOssManagementHttpApiClientModule))]
-    public class AbpBlobStoringOssManagementModule : AbpModule
-    {
-    }
 }

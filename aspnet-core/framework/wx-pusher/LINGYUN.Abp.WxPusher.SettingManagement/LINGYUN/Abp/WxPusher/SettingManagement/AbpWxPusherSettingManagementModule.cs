@@ -6,43 +6,42 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LINGYUN.Abp.WxPusher.SettingManagement
+namespace LINGYUN.Abp.WxPusher.SettingManagement;
+
+[DependsOn(
+    typeof(AbpWxPusherModule),
+    typeof(AbpAspNetCoreMvcModule))]
+public class AbpWxPusherSettingManagementModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpWxPusherModule),
-        typeof(AbpAspNetCoreMvcModule))]
-    public class AbpWxPusherSettingManagementModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
-            {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpWxPusherSettingManagementModule).Assembly);
-            });
-        }
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpWxPusherSettingManagementModule).Assembly);
+        });
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpWxPusherSettingManagementModule>();
-            });
+            options.FileSets.AddEmbedded<AbpWxPusherSettingManagementModule>();
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<WxPusherResource>()
-                    .AddVirtualJson("/LINGYUN/Abp/WxPusher/SettingManagement/Localization/Resources");
-            });
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<WxPusherResource>()
+                .AddVirtualJson("/LINGYUN/Abp/WxPusher/SettingManagement/Localization/Resources");
+        });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<WxPusherResource>()
-                    .AddBaseTypes(
-                        typeof(AbpUiResource)
-                    );
-            });
-        }
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<WxPusherResource>()
+                .AddBaseTypes(
+                    typeof(AbpUiResource)
+                );
+        });
     }
 }

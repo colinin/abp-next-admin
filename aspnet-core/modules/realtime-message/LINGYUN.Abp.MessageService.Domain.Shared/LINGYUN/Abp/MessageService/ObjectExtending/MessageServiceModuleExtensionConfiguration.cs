@@ -1,17 +1,16 @@
 ﻿using System;
 using Volo.Abp.ObjectExtending.Modularity;
 
-namespace LINGYUN.Abp.MessageService.ObjectExtending
+namespace LINGYUN.Abp.MessageService.ObjectExtending;
+
+public class MessageServiceModuleExtensionConfiguration : ModuleExtensionConfiguration
 {
-    public class MessageServiceModuleExtensionConfiguration : ModuleExtensionConfiguration
+    public MessageServiceModuleExtensionConfiguration ConfigureMessage(
+        Action<EntityExtensionConfiguration> configureAction)
     {
-        public MessageServiceModuleExtensionConfiguration ConfigureMessage(
-            Action<EntityExtensionConfiguration> configureAction)
-        {
-            return this.ConfigureEntity(
-                MessageServiceModuleExtensionConsts.EntityNames.Message,
-                configureAction
-            );
-        }
+        return this.ConfigureEntity(
+            MessageServiceModuleExtensionConsts.EntityNames.Message,
+            configureAction
+        );
     }
 }

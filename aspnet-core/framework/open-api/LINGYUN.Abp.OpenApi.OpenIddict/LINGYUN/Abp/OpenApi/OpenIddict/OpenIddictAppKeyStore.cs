@@ -43,17 +43,30 @@ public class OpenIddictAppKeyStore : IAppKeyStore, ITransientDependency
 
     public async virtual Task StoreAsync(AppDescriptor descriptor, CancellationToken cancellationToken = default)
     {
-        var application = new OpenIddictApplicationModel
+        var application = await _appStore.FindByClientIdAsync(descriptor.AppKey, cancellationToken);
+        if (application == null)
         {
-            Id = _guidGenerator.Create(),
-            ClientId = descriptor.AppKey,
-            ClientSecret = descriptor.AppSecret,
-            DisplayName = descriptor.AppName,
-        };
-        if (descriptor.SignLifetime.HasValue)
-        {
-            application.SetProperty(nameof(AppDescriptor.SignLifetime), descriptor.SignLifetime);
+            application = new OpenIddictApplicationModel
+            {
+                Id = _guidGenerator.Create(),
+                ClientId = descriptor.AppKey,
+                ClientSecret = descriptor.AppSecret,
+                DisplayName = descriptor.AppName,
+            };
+            if (descriptor.SignLifetime.HasValue)
+            {
+                application.SetProperty(nameof(AppDescriptor.SignLifetime), descriptor.SignLifetime);
+            }
+            await _appStore.CreateAsync(application, cancellationToken);
         }
-        await _appStore.CreateAsync(application, cancellationToken);
+        else
+        {
+            application.ClientSecret = descriptor.AppSecret;
+            if (descriptor.SignLifetime.HasValue)
+            {
+                application.SetProperty(nameof(AppDescriptor.SignLifetime), descriptor.SignLifetime);
+            }
+            await _appStore.UpdateAsync(application, cancellationToken);
+        }
     }
 }

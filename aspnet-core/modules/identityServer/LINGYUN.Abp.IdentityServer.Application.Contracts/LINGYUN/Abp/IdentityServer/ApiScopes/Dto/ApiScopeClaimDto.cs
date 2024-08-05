@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Abp.IdentityServer.ApiScopes
+﻿namespace LINGYUN.Abp.IdentityServer.ApiScopes;
+
+public class ApiScopeClaimDto : UserClaimDto
 {
-    public class ApiScopeClaimDto : UserClaimDto
-    {
-    }
 }

@@ -5,42 +5,41 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Users;
 
-namespace LINGYUN.Abp.Hangfire.Dashboard.Authorization
+namespace LINGYUN.Abp.Hangfire.Dashboard.Authorization;
+
+public class DashboardAuthorizationFilter : IDashboardAsyncAuthorizationFilter
 {
-    public class DashboardAuthorizationFilter : IDashboardAsyncAuthorizationFilter
+    private readonly string[] _requiredPermissionNames;
+
+    public DashboardAuthorizationFilter(params string[] requiredPermissionNames)
     {
-        private readonly string[] _requiredPermissionNames;
+        _requiredPermissionNames = requiredPermissionNames;
+    }
 
-        public DashboardAuthorizationFilter(params string[] requiredPermissionNames)
+    public async Task<bool> AuthorizeAsync(DashboardContext context)
+    {
+        if (!IsLoggedIn(context))
         {
-            _requiredPermissionNames = requiredPermissionNames;
+            return false;
         }
 
-        public async Task<bool> AuthorizeAsync(DashboardContext context)
+        if (_requiredPermissionNames.IsNullOrEmpty())
         {
-            if (!IsLoggedIn(context))
-            {
-                return false;
-            }
-
-            if (_requiredPermissionNames.IsNullOrEmpty())
-            {
-                return true;
-            }
-
-            return await IsPermissionGrantedAsync(context, _requiredPermissionNames);
+            return true;
         }
 
-        private static bool IsLoggedIn(DashboardContext context)
-        {
-            var currentUser = context.GetHttpContext().RequestServices.GetRequiredService<ICurrentUser>();
-            return currentUser.IsAuthenticated;
-        }
+        return await IsPermissionGrantedAsync(context, _requiredPermissionNames);
+    }
 
-        private static async Task<bool> IsPermissionGrantedAsync(DashboardContext context, string[] requiredPermissionNames)
-        {
-            var permissionChecker = context.GetHttpContext().RequestServices.GetRequiredService<IDashboardPermissionChecker>();
-            return await permissionChecker.IsGrantedAsync(context, requiredPermissionNames);
-        }
+    private static bool IsLoggedIn(DashboardContext context)
+    {
+        var currentUser = context.GetHttpContext().RequestServices.GetRequiredService<ICurrentUser>();
+        return currentUser.IsAuthenticated;
+    }
+
+    private static async Task<bool> IsPermissionGrantedAsync(DashboardContext context, string[] requiredPermissionNames)
+    {
+        var permissionChecker = context.GetHttpContext().RequestServices.GetRequiredService<IDashboardPermissionChecker>();
+        return await permissionChecker.IsGrantedAsync(context, requiredPermissionNames);
     }
 }

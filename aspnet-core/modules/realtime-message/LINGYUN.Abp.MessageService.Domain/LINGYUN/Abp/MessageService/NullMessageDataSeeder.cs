@@ -2,14 +2,13 @@
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.MessageService
+namespace LINGYUN.Abp.MessageService;
+
+[Dependency(TryRegister = true)]
+public class NullMessageDataSeeder : IMessageDataSeeder, ISingletonDependency
 {
-    [Dependency(TryRegister = true)]
-    public class NullMessageDataSeeder : IMessageDataSeeder, ISingletonDependency
+    public Task SeedAsync(Guid? tenantId = null)
     {
-        public Task SeedAsync(Guid? tenantId = null)
-        {
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

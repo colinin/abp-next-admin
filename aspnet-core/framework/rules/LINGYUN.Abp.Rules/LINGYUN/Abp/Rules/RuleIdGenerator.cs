@@ -2,44 +2,43 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace LINGYUN.Abp.Rules
+namespace LINGYUN.Abp.Rules;
+
+public class RuleIdGenerator : ISingletonDependency
 {
-    public class RuleIdGenerator : ISingletonDependency
+    private readonly ICurrentTenant _currentTenant;
+
+    public RuleIdGenerator(
+        ICurrentTenant currentTenant)
     {
-        private readonly ICurrentTenant _currentTenant;
+        _currentTenant = currentTenant;
+    }
 
-        public RuleIdGenerator(
-            ICurrentTenant currentTenant)
+    public virtual int CreateRuleId(Type type, bool ignoreMultiTenancy = false)
+    {
+        var typeId = type.GetHashCode();
+
+        if (!ignoreMultiTenancy)
         {
-            _currentTenant = currentTenant;
-        }
-
-        public virtual int CreateRuleId(Type type, bool ignoreMultiTenancy = false)
-        {
-            var typeId = type.GetHashCode();
-
-            if (!ignoreMultiTenancy)
+            if (_currentTenant.Id.HasValue)
             {
-                if (_currentTenant.Id.HasValue)
-                {
-                    return _currentTenant.Id.GetHashCode() & typeId;
-                }
+                return _currentTenant.Id.GetHashCode() & typeId;
             }
-
-            return typeId;
         }
 
-        public virtual string CreateRuleName(Type type, bool ignoreMultiTenancy = false)
+        return typeId;
+    }
+
+    public virtual string CreateRuleName(Type type, bool ignoreMultiTenancy = false)
+    {
+        var ruleName = type.Name;
+        if (!ignoreMultiTenancy)
         {
-            var ruleName = type.Name;
-            if (!ignoreMultiTenancy)
+            if (_currentTenant.Id.HasValue)
             {
-                if (_currentTenant.Id.HasValue)
-                {
-                    return $"{_currentTenant.Id.Value:D}/{ruleName}";
-                }
+                return $"{_currentTenant.Id.Value:D}/{ruleName}";
             }
-            return ruleName;
         }
+        return ruleName;
     }
 }

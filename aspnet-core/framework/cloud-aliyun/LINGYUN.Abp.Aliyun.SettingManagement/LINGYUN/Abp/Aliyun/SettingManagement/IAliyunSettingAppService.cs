@@ -1,8 +1,7 @@
 ﻿using LINGYUN.Abp.SettingManagement;
 
-namespace LINGYUN.Abp.Aliyun.SettingManagement
+namespace LINGYUN.Abp.Aliyun.SettingManagement;
+
+public interface IAliyunSettingAppService : IReadonlySettingAppService
 {
-    public interface IAliyunSettingAppService : IReadonlySettingAppService
-    {
-    }
 }

@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Abp.Wrapper
+﻿namespace LINGYUN.Abp.Wrapper;
+
+public interface IWrapDisabled
 {
-    public interface IWrapDisabled
-    {
-    }
 }

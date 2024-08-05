@@ -1,11 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Users;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Chat;
+
+public interface IChatDataSeeder
 {
-    public interface IChatDataSeeder
-    {
-        Task SeedAsync(
-            IUserData user);
-    }
+    Task SeedAsync(IUserData user);
 }

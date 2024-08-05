@@ -10,53 +10,52 @@ using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Hangfire;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.BackgroundJobs.Hangfire
+namespace LINGYUN.Abp.BackgroundJobs.Hangfire;
+
+[DependsOn(
+    typeof(AbpBackgroundJobsAbstractionsModule),
+    typeof(AbpHangfireModule),
+    typeof(AbpHangfireDashboardModule)
+)]
+public class AbpBackgroundJobsHangfireModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpBackgroundJobsAbstractionsModule),
-        typeof(AbpHangfireModule),
-        typeof(AbpHangfireDashboardModule)
-    )]
-    public class AbpBackgroundJobsHangfireModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<DashboardOptions>(options =>
         {
-            PreConfigure<DashboardOptions>(options =>
+            options.DisplayNameFunc = (dashboardContext, job) =>
             {
-                options.DisplayNameFunc = (dashboardContext, job) =>
+                if (job.Args.Count == 0)
                 {
-                    if (job.Args.Count == 0)
-                    {
-                        return job.Type.FullName;
+                    return job.Type.FullName;
 
-                        //if (job.Type.GenericTypeArguments.Length == 0)
-                        //{
-                        //    return job.Type.FullName;
-                        //}
-                        //// TODO: 把特性作为任务名称?
-                        //return BackgroundJobNameAttribute.GetName(job.Type.GenericTypeArguments[0]);
-                    }
-                    var context = dashboardContext.GetHttpContext();
-                    var options = context.RequestServices.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
-                    return options.GetJob(job.Args.First().GetType()).JobName;
-                };
-            });
-        }
+                    //if (job.Type.GenericTypeArguments.Length == 0)
+                    //{
+                    //    return job.Type.FullName;
+                    //}
+                    //// TODO: 把特性作为任务名称?
+                    //return BackgroundJobNameAttribute.GetName(job.Type.GenericTypeArguments[0]);
+                }
+                var context = dashboardContext.GetHttpContext();
+                var options = context.RequestServices.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
+                return options.GetJob(job.Args.First().GetType()).JobName;
+            };
+        });
+    }
 
-        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
+    public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var jobOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
+        if (!jobOptions.IsJobExecutionEnabled)
         {
-            var jobOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
-            if (!jobOptions.IsJobExecutionEnabled)
-            {
-                var hangfireOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
-                hangfireOptions.BackgroundJobServerFactory = CreateOnlyEnqueueJobServer;
-            }
+            var hangfireOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
+            hangfireOptions.BackgroundJobServerFactory = CreateOnlyEnqueueJobServer;
         }
+    }
 
-        private BackgroundJobServer CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
-        {
-            serviceProvider.GetRequiredService<JobStorage>();
-            return null;
-        }
+    private BackgroundJobServer CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
+    {
+        serviceProvider.GetRequiredService<JobStorage>();
+        return null;
     }
 }

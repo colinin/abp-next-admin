@@ -6,36 +6,35 @@ using Volo.Abp.AuditLogging.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.Auditing
+namespace LINGYUN.Abp.Auditing;
+
+[DependsOn(
+    typeof(AbpAspNetCoreMvcModule),
+    typeof(AbpAuditingApplicationContractsModule))]
+public class AbpAuditingHttpApiModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAuditingApplicationContractsModule))]
-    public class AbpAuditingHttpApiModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            PreConfigure<IMvcBuilder>(mvcBuilder =>
-            {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAuditingHttpApiModule).Assembly);
-            });
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAuditingHttpApiModule).Assembly);
+        });
 
-            PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
-            {
-                options.AddAssemblyResource(typeof(AuditLoggingResource), typeof(AbpAuditingApplicationContractsModule).Assembly);
-            });
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<AuditLoggingResource>()
-                    .AddBaseTypes(
-                        typeof(AbpUiResource)
-                    );
-            });
-        }
+            options.AddAssemblyResource(typeof(AuditLoggingResource), typeof(AbpAuditingApplicationContractsModule).Assembly);
+        });
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<AuditLoggingResource>()
+                .AddBaseTypes(
+                    typeof(AbpUiResource)
+                );
+        });
     }
 }

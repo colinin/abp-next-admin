@@ -14,18 +14,24 @@ public class DefaultNotificationDataSerializer : INotificationDataSerializer, IS
             if (source.NeedLocalizer())
             {
                 // 潜在的空对象引用修复
-                if (source.ExtraProperties.TryGetValue("title", out var title) && title != null)
+                if (source.ExtraProperties.TryGetValue("title", out var title) && 
+                    title != null &&
+                    title is not LocalizableStringInfo)
                 {
                     var titleObj = JsonConvert.DeserializeObject<LocalizableStringInfo>(title.ToString());
                     source.TrySetData("title", titleObj);
                 }
-                if (source.ExtraProperties.TryGetValue("message", out var message) && message != null)
+                if (source.ExtraProperties.TryGetValue("message", out var message) && 
+                    message != null &&
+                    message is not LocalizableStringInfo)
                 {
                     var messageObj = JsonConvert.DeserializeObject<LocalizableStringInfo>(message.ToString());
                     source.TrySetData("message", messageObj);
                 }
 
-                if (source.ExtraProperties.TryGetValue("description", out var description) && description != null)
+                if (source.ExtraProperties.TryGetValue("description", out var description) && 
+                    description != null &&
+                    description is not LocalizableStringInfo)
                 {
                     var descriptionObj = JsonConvert.DeserializeObject<LocalizableStringInfo>(description.ToString());
                     source.TrySetData("description", descriptionObj);

@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.IdentityServer
+﻿namespace LINGYUN.Abp.IdentityServer;
+
+public class UserClaimDto
 {
-    public class UserClaimDto
-    {
-        public string Type { get; set; }
-    }
+    public string Type { get; set; }
 }

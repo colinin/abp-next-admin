@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 
-namespace LINGYUN.Abp.LocalizationManagement
+namespace LINGYUN.Abp.LocalizationManagement;
+
+public class LocalizationManagementApplicationMapperProfile : Profile
 {
-    public class LocalizationManagementApplicationMapperProfile : Profile
+    public LocalizationManagementApplicationMapperProfile()
     {
-        public LocalizationManagementApplicationMapperProfile()
-        {
-            CreateMap<Language, LanguageDto>();
-            CreateMap<Resource, ResourceDto>();
-        }
+        CreateMap<Language, LanguageDto>();
+        CreateMap<Resource, ResourceDto>();
     }
 }

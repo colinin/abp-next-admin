@@ -4,16 +4,15 @@ using System;
 using System.Collections.Generic;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.Rules.RulesEngine
+namespace LINGYUN.Abp.Rules.RulesEngine;
+
+public interface IWorkflowsResolveContext : IServiceProviderAccessor
 {
-    public interface IWorkflowsResolveContext : IServiceProviderAccessor
-    {
-        [CanBeNull]
-        IEnumerable<Workflow> Workflows { get; set; }
+    [CanBeNull]
+    IEnumerable<Workflow> Workflows { get; set; }
 
-        [NotNull]
-        Type Type { get; }
+    [NotNull]
+    Type Type { get; }
 
-        bool Handled { get; set; }
-    }
+    bool Handled { get; set; }
 }

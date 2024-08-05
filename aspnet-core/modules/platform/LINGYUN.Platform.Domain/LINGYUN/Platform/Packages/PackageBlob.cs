@@ -6,9 +6,8 @@ using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Platform.Packages;
 
-public class PackageBlob : CreationAuditedEntity<int>, IMultiTenant, IHasExtraProperties
+public class PackageBlob : CreationAuditedEntity<int>, IHasExtraProperties
 {
-    public virtual Guid? TenantId { get; protected set; }
     public virtual Guid PackageId { get; private set; }
     public virtual Package Package { get; private set; }
     public virtual string Name { get; protected set; }
@@ -36,8 +35,7 @@ public class PackageBlob : CreationAuditedEntity<int>, IMultiTenant, IHasExtraPr
         DateTime createdAt,
         DateTime? updatedAt = null,
         long? size = null,
-        string summary = null,
-        Guid? tenantId = null)
+        string summary = null)
     {
         PackageId = packageId;
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), PackageBlobConsts.MaxNameLength);
@@ -45,7 +43,6 @@ public class PackageBlob : CreationAuditedEntity<int>, IMultiTenant, IHasExtraPr
         UpdatedAt = updatedAt;
         Size = size;
         Summary = Check.Length(summary, nameof(summary), PackageBlobConsts.MaxSummaryLength);
-        TenantId = tenantId;
         DownloadCount = 0;
 
         ExtraProperties = new ExtraPropertyDictionary();

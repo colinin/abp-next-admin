@@ -8,44 +8,43 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.Rules.NRules
+namespace LINGYUN.Abp.Rules.NRules;
+
+public class NRulesContributor : RuleContributorBase, ISingletonDependency
 {
-    public class NRulesContributor : RuleContributorBase, ISingletonDependency
+    private readonly AbpNRulesOptions _options;
+    private readonly IServiceProvider _serviceProvider;
+
+    public NRulesContributor(
+        IServiceProvider serviceProvider,
+        IOptions<AbpNRulesOptions> options)
     {
-        private readonly AbpNRulesOptions _options;
-        private readonly IServiceProvider _serviceProvider;
+        _options = options.Value;
+        _serviceProvider = serviceProvider;
+    }
 
-        public NRulesContributor(
-            IServiceProvider serviceProvider,
-            IOptions<AbpNRulesOptions> options)
-        {
-            _options = options.Value;
-            _serviceProvider = serviceProvider;
-        }
+    public override void Initialize(RulesInitializationContext context)
+    {
+        context.GetRequiredService<RuleRepository>()
+            .Load(loader => loader.From(_options.DefinitionRules));
+    }
 
-        public override void Initialize(RulesInitializationContext context)
+    public override Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default)
+    {
+        using (var scope = _serviceProvider.CreateScope())
         {
-            context.GetRequiredService<RuleRepository>()
-                .Load(loader => loader.From(_options.DefinitionRules));
-        }
+            var session = scope.ServiceProvider.GetRequiredService<ISession>();
 
-        public override Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default)
-        {
-            using (var scope = _serviceProvider.CreateScope())
+            session.Insert(input);
+            if (@params != null && @params.Any())
             {
-                var session = scope.ServiceProvider.GetRequiredService<ISession>();
-
-                session.Insert(input);
-                if (@params != null && @params.Any())
-                {
-                    session.InsertAll(@params);
-                }
-
-                // TODO: 需要研究源码
-                session.Fire(cancellationToken);
+                session.InsertAll(@params);
             }
 
-            return Task.CompletedTask;
+            // TODO: 需要研究源码
+            session.Fire(cancellationToken);
         }
+
+        return Task.CompletedTask;
     }
 }

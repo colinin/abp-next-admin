@@ -7,136 +7,135 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
-namespace LINGYUN.Abp.MessageService.Groups
+namespace LINGYUN.Abp.MessageService.Groups;
+
+public class UserGroupStore : IUserGroupStore, ITransientDependency
 {
-    public class UserGroupStore : IUserGroupStore, ITransientDependency
+    private readonly ICurrentTenant _currentTenant;
+    private readonly IUnitOfWorkManager _unitOfWorkManager;
+    private readonly IUserChatGroupRepository _userChatGroupRepository;
+
+    public UserGroupStore(
+        ICurrentTenant currentTenant,
+        IUnitOfWorkManager unitOfWorkManager,
+        IUserChatGroupRepository userChatGroupRepository)
     {
-        private readonly ICurrentTenant _currentTenant;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly IUserChatGroupRepository _userChatGroupRepository;
+        _currentTenant = currentTenant;
+        _unitOfWorkManager = unitOfWorkManager;
+        _userChatGroupRepository = userChatGroupRepository;
+    }
 
-        public UserGroupStore(
-            ICurrentTenant currentTenant,
-            IUnitOfWorkManager unitOfWorkManager,
-            IUserChatGroupRepository userChatGroupRepository)
+    public async virtual Task<bool> MemberHasInGroupAsync(
+        Guid? tenantId,
+        long groupId,
+        Guid userId,
+        CancellationToken cancellationToken = default)
+    {
+        using (_currentTenant.Change(tenantId))
         {
-            _currentTenant = currentTenant;
-            _unitOfWorkManager = unitOfWorkManager;
-            _userChatGroupRepository = userChatGroupRepository;
+            return await _userChatGroupRepository.MemberHasInGroupAsync(groupId, userId, cancellationToken);
         }
+    }
 
-        public async virtual Task<bool> MemberHasInGroupAsync(
-            Guid? tenantId,
-            long groupId,
-            Guid userId,
-            CancellationToken cancellationToken = default)
+    public async virtual Task AddUserToGroupAsync(
+        Guid? tenantId,
+        Guid userId,
+        long groupId,
+        Guid acceptUserId,
+        CancellationToken cancellationToken = default)
+    {
+        using (var unitOfWork = _unitOfWorkManager.Begin())
         {
             using (_currentTenant.Change(tenantId))
             {
-                return await _userChatGroupRepository.MemberHasInGroupAsync(groupId, userId, cancellationToken);
-            }
-        }
-
-        public async virtual Task AddUserToGroupAsync(
-            Guid? tenantId,
-            Guid userId,
-            long groupId,
-            Guid acceptUserId,
-            CancellationToken cancellationToken = default)
-        {
-            using (var unitOfWork = _unitOfWorkManager.Begin())
-            {
-                using (_currentTenant.Change(tenantId))
+                var userHasInGroup = await _userChatGroupRepository.MemberHasInGroupAsync(groupId, userId, cancellationToken);
+                if (!userHasInGroup)
                 {
-                    var userHasInGroup = await _userChatGroupRepository.MemberHasInGroupAsync(groupId, userId, cancellationToken);
-                    if (!userHasInGroup)
-                    {
-                        var userGroup = new UserChatGroup(groupId, userId, acceptUserId, tenantId);
+                    var userGroup = new UserChatGroup(groupId, userId, acceptUserId, tenantId);
 
-                        await _userChatGroupRepository.InsertAsync(userGroup, cancellationToken: cancellationToken);
-
-                        await unitOfWork.CompleteAsync(cancellationToken);
-                    }
-                }
-            }
-        }
-
-        public async Task<GroupUserCard> GetUserGroupCardAsync(
-            Guid? tenantId,
-            long groupId,
-            Guid userId,
-            CancellationToken cancellationToken = default)
-        {
-            using (_currentTenant.Change(tenantId))
-            {
-                var groupUserCard = await _userChatGroupRepository.GetMemberAsync(groupId, userId, cancellationToken);
-
-                return groupUserCard;
-            }
-        }
-
-        public async Task<IEnumerable<GroupUserCard>> GetMembersAsync(
-            Guid? tenantId,
-            long groupId,
-            CancellationToken cancellationToken = default)
-        {
-            using (_currentTenant.Change(tenantId))
-            {
-                return await _userChatGroupRepository.GetMembersAsync(groupId, cancellationToken: cancellationToken);
-            }
-        }
-
-        public async Task<IEnumerable<Group>> GetUserGroupsAsync(
-            Guid? tenantId,
-            Guid userId,
-            CancellationToken cancellationToken = default)
-        {
-            using (_currentTenant.Change(tenantId))
-            {
-                return await _userChatGroupRepository.GetMemberGroupsAsync(userId, cancellationToken);
-            }
-        }
-
-        public async Task RemoveUserFormGroupAsync(
-            Guid? tenantId,
-            Guid userId,
-            long groupId,
-            CancellationToken cancellationToken = default)
-        {
-            using (var unitOfWork = _unitOfWorkManager.Begin())
-            {
-                using (_currentTenant.Change(tenantId))
-                {
-                    await _userChatGroupRepository.RemoveMemberFormGroupAsync(groupId, userId, cancellationToken);
+                    await _userChatGroupRepository.InsertAsync(userGroup, cancellationToken: cancellationToken);
 
                     await unitOfWork.CompleteAsync(cancellationToken);
                 }
             }
         }
+    }
 
-        public async Task<int> GetMembersCountAsync(
-            Guid? tenantId,
-            long groupId,
-            CancellationToken cancellationToken = default)
+    public async Task<GroupUserCard> GetUserGroupCardAsync(
+        Guid? tenantId,
+        long groupId,
+        Guid userId,
+        CancellationToken cancellationToken = default)
+    {
+        using (_currentTenant.Change(tenantId))
+        {
+            var groupUserCard = await _userChatGroupRepository.GetMemberAsync(groupId, userId, cancellationToken);
+
+            return groupUserCard;
+        }
+    }
+
+    public async Task<IEnumerable<GroupUserCard>> GetMembersAsync(
+        Guid? tenantId,
+        long groupId,
+        CancellationToken cancellationToken = default)
+    {
+        using (_currentTenant.Change(tenantId))
+        {
+            return await _userChatGroupRepository.GetMembersAsync(groupId, cancellationToken: cancellationToken);
+        }
+    }
+
+    public async Task<IEnumerable<Group>> GetUserGroupsAsync(
+        Guid? tenantId,
+        Guid userId,
+        CancellationToken cancellationToken = default)
+    {
+        using (_currentTenant.Change(tenantId))
+        {
+            return await _userChatGroupRepository.GetMemberGroupsAsync(userId, cancellationToken);
+        }
+    }
+
+    public async Task RemoveUserFormGroupAsync(
+        Guid? tenantId,
+        Guid userId,
+        long groupId,
+        CancellationToken cancellationToken = default)
+    {
+        using (var unitOfWork = _unitOfWorkManager.Begin())
         {
             using (_currentTenant.Change(tenantId))
             {
-                return await _userChatGroupRepository.GetMembersCountAsync(groupId, cancellationToken);
+                await _userChatGroupRepository.RemoveMemberFormGroupAsync(groupId, userId, cancellationToken);
+
+                await unitOfWork.CompleteAsync(cancellationToken);
             }
         }
+    }
 
-        public async Task<List<GroupUserCard>> GetMembersAsync(
-            Guid? tenantId,
-            long groupId,
-            string sorting = nameof(GroupUserCard.UserId),
-            int skipCount = 0,
-            int maxResultCount = 10,
-            CancellationToken cancellationToken = default)
+    public async Task<int> GetMembersCountAsync(
+        Guid? tenantId,
+        long groupId,
+        CancellationToken cancellationToken = default)
+    {
+        using (_currentTenant.Change(tenantId))
         {
-            using (_currentTenant.Change(tenantId))
-            {
-                return await _userChatGroupRepository.GetMembersAsync(groupId, sorting, skipCount, maxResultCount, cancellationToken);
-            }
+            return await _userChatGroupRepository.GetMembersCountAsync(groupId, cancellationToken);
+        }
+    }
+
+    public async Task<List<GroupUserCard>> GetMembersAsync(
+        Guid? tenantId,
+        long groupId,
+        string sorting = nameof(GroupUserCard.UserId),
+        int skipCount = 0,
+        int maxResultCount = 10,
+        CancellationToken cancellationToken = default)
+    {
+        using (_currentTenant.Change(tenantId))
+        {
+            return await _userChatGroupRepository.GetMembersAsync(groupId, sorting, skipCount, maxResultCount, cancellationToken);
         }
     }
 }

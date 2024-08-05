@@ -8,49 +8,48 @@ using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.Filters
+namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.Filters;
+
+public class AbpWrapResultFilter : IAsyncResultFilter, ITransientDependency
 {
-    public class AbpWrapResultFilter : IAsyncResultFilter, ITransientDependency
+    public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
     {
-        public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
+        if (ShouldWrapResult(context))
         {
-            if (ShouldWrapResult(context))
-            {
-                await HandleAndWrapResult(context);
-            }
-
-            await next();
+            await HandleAndWrapResult(context);
         }
 
-        protected virtual bool ShouldWrapResult(ResultExecutingContext context)
+        await next();
+    }
+
+    protected virtual bool ShouldWrapResult(ResultExecutingContext context)
+    {
+        var wrapResultChecker = context.GetRequiredService<IWrapResultChecker>();
+
+        return wrapResultChecker.WrapOnExecution(context);
+    }
+
+    protected virtual Task HandleAndWrapResult(ResultExecutingContext context)
+    {
+        var options = context.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
+        var httpResponseWrapper = context.GetRequiredService<IHttpResponseWrapper>();
+        var actionResultWrapperFactory = context.GetRequiredService<IActionResultWrapperFactory>();
+        actionResultWrapperFactory.CreateFor(context).Wrap(context);
+
+        var wrapperHeaders = new Dictionary<string, string>()
         {
-            var wrapResultChecker = context.GetRequiredService<IWrapResultChecker>();
+            { AbpHttpWrapConsts.AbpWrapResult, "true" }
+        };
+        var responseWrapperContext = new HttpResponseWrapperContext(
+            context.HttpContext,
+            (int)options.HttpStatusCode,
+            wrapperHeaders);
 
-            return wrapResultChecker.WrapOnExecution(context);
-        }
+        httpResponseWrapper.Wrap(responseWrapperContext);
 
-        protected virtual Task HandleAndWrapResult(ResultExecutingContext context)
-        {
-            var options = context.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
-            var httpResponseWrapper = context.GetRequiredService<IHttpResponseWrapper>();
-            var actionResultWrapperFactory = context.GetRequiredService<IActionResultWrapperFactory>();
-            actionResultWrapperFactory.CreateFor(context).Wrap(context);
+        //context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
+        //context.HttpContext.Response.StatusCode = (int)options.HttpStatusCode;
 
-            var wrapperHeaders = new Dictionary<string, string>()
-            {
-                { AbpHttpWrapConsts.AbpWrapResult, "true" }
-            };
-            var responseWrapperContext = new HttpResponseWrapperContext(
-                context.HttpContext,
-                (int)options.HttpStatusCode,
-                wrapperHeaders);
-
-            httpResponseWrapper.Wrap(responseWrapperContext);
-
-            //context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
-            //context.HttpContext.Response.StatusCode = (int)options.HttpStatusCode;
-
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

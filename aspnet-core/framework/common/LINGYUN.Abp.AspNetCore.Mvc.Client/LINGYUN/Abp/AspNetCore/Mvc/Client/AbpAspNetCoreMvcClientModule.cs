@@ -4,18 +4,17 @@ using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.AspNetCore.Mvc.Client
+namespace LINGYUN.Abp.AspNetCore.Mvc.Client;
+
+[DependsOn(
+   typeof(AbpAspNetCoreMvcClientCommonModule),
+   typeof(AbpEventBusModule)
+   )]
+public class AbpAspNetCoreMvcClientModule : AbpModule
 {
-    [DependsOn(
-       typeof(AbpAspNetCoreMvcClientCommonModule),
-       typeof(AbpEventBusModule)
-       )]
-    public class AbpAspNetCoreMvcClientModule : AbpModule
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            var configuration = context.Services.GetConfiguration();
-            Configure<AbpAspNetCoreMvcClientCacheOptions>(configuration.GetSection("AbpMvcClient:Cache"));
-        }
+        var configuration = context.Services.GetConfiguration();
+        Configure<AbpAspNetCoreMvcClientCacheOptions>(configuration.GetSection("AbpMvcClient:Cache"));
     }
 }

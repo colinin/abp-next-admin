@@ -2,14 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.IM
+namespace LINGYUN.Abp.IM;
+
+public interface IUserOnlineChanger
 {
-    public interface IUserOnlineChanger
-    {
-        Task ChangeAsync(
-            Guid? tenantId,
-            Guid userId,
-            UserOnlineState state,
-            CancellationToken cancellationToken = default);
-    }
+    Task ChangeAsync(
+        Guid? tenantId,
+        Guid userId,
+        UserOnlineState state,
+        CancellationToken cancellationToken = default);
 }

@@ -5,9 +5,8 @@ using Volo.Abp.MultiTenancy;
 namespace LINGYUN.Platform.Packages;
 
 [EventName("platform.packages")]
-public class PackageEto : IMultiTenant
+public class PackageEto
 {
-    public Guid? TenantId { get; set; }
     /// <summary>
     /// 名称
     /// </summary>

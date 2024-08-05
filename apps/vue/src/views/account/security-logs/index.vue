@@ -9,45 +9,23 @@
     :can-fullscreen="false"
     :show-ok-btn="false"
   >
-    <Card style="height: 100%">
-      <div :style="getContentStyle" ref="contentWrapRef">
-        <ScrollContainer ref="contentScrollRef">
-          <template v-for="securityLog in securityLogs" :key="securityLog.id">
-            <CardGrid>
-              <Form
-                layout="horizontal"
-                :colon="false"
-                :model="securityLog"
-                :labelCol="{ span: 4 }"
-                :wrapperCol="{ span: 16 }"
-              >
-                <FormItem labelAlign="left" :label="L('ApplicationName')">
-                  <span>{{ securityLog.applicationName }}</span>
-                </FormItem>
-                <FormItem labelAlign="left" :label="L('Identity')">
-                  <span>{{ securityLog.identity }}</span>
-                </FormItem>
-                <FormItem labelAlign="left" :label="L('Actions')">
-                  <span>{{ securityLog.action }}</span>
-                </FormItem>
-                <FormItem labelAlign="left" :label="L('ClientId')">
-                  <span>{{ securityLog.clientId }}</span>
-                </FormItem>
-                <FormItem labelAlign="left" :label="L('ClientIpAddress')">
-                  <span>{{ securityLog.clientIpAddress }}</span>
-                </FormItem>
-                <FormItem labelAlign="left" :label="L('BrowserInfo')">
-                  <span>{{ securityLog.browserInfo }}</span>
-                </FormItem>
-                <FormItem labelAlign="left" :label="L('CreationTime')">
-                  <span>{{ formatToDateTime(securityLog.creationTime) }}</span>
-                </FormItem>
-              </Form>
-            </CardGrid>
-          </template>
-        </ScrollContainer>
-      </div>
-    </Card>
+  <div :style="getContentStyle" ref="contentWrapRef">
+    <ScrollContainer ref="contentScrollRef">
+      <template v-for="securityLog in securityLogs" :key="securityLog.id">
+        <Card hoverable style="height: 100%; margin-bottom: 15px;">
+          <Descriptions bordered size="small" :column="1">
+            <DescriptionItem :label="L('ApplicationName')">{{ securityLog.applicationName }}</DescriptionItem>
+            <DescriptionItem :label="L('Identity')">{{ securityLog.identity }}</DescriptionItem>
+            <DescriptionItem :label="L('Actions')">{{ securityLog.action }}</DescriptionItem>
+            <DescriptionItem :label="L('ClientId')">{{ securityLog.clientId }}</DescriptionItem>
+            <DescriptionItem :label="L('ClientIpAddress')">{{ securityLog.clientIpAddress }}</DescriptionItem>
+            <DescriptionItem :label="L('BrowserInfo')">{{ formatToDateTime(securityLog.browserInfo) }}</DescriptionItem>
+            <DescriptionItem :label="L('CreationTime')">{{ formatToDateTime(securityLog.creationTime) }}</DescriptionItem>
+          </Descriptions>
+        </Card>
+      </template>
+    </ScrollContainer>
+  </div>
     <template #footer>
       <APagination
         ref="paginationRef"
@@ -63,7 +41,7 @@
 <script lang="ts" setup>
   import type { CSSProperties } from 'vue';
   import { computed, ref } from 'vue';
-  import { Card, Form, Pagination } from 'ant-design-vue';
+  import { Card, Descriptions, Pagination } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { ScrollContainer } from '/@/components/Container';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
@@ -74,9 +52,8 @@
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import { formatToDateTime } from '/@/utils/dateUtil';
 
-  const CardGrid = Card.Grid;
-  const FormItem = Form.Item;
   const APagination = Pagination;
+  const DescriptionItem = Descriptions.Item;
 
   const props = defineProps({
     autoContentHeight: {

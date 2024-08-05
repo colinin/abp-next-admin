@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace LINGYUN.Abp.Wrapper
+namespace LINGYUN.Abp.Wrapper;
+
+public interface IExceptionWrapHandlerFactory
 {
-    public interface IExceptionWrapHandlerFactory
-    {
-        IExceptionWrapHandler CreateFor(ExceptionWrapContext context);
-    }
+    IExceptionWrapHandler CreateFor(ExceptionWrapContext context);
 }

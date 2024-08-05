@@ -1,6 +1,5 @@
-﻿namespace LINGYUN.Abp.IdentityServer.ApiResources
+﻿namespace LINGYUN.Abp.IdentityServer.ApiResources;
+
+public class ApiResourcePropertyDto : PropertyDto
 {
-    public class ApiResourcePropertyDto : PropertyDto
-    {
-    }
 }

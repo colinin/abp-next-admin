@@ -6,49 +6,48 @@ using System.Collections.Immutable;
 using System.Linq;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.UI.Navigation
+namespace LINGYUN.Abp.UI.Navigation;
+
+public class NavigationDefinitionManager : INavigationDefinitionManager, ISingletonDependency
 {
-    public class NavigationDefinitionManager : INavigationDefinitionManager, ISingletonDependency
+    protected Lazy<IList<NavigationDefinition>> NavigationDefinitions { get; }
+
+    protected AbpNavigationOptions Options { get; }
+
+    protected IServiceProvider ServiceProvider { get; }
+
+    public NavigationDefinitionManager(
+        IOptions<AbpNavigationOptions> options,
+        IServiceProvider serviceProvider)
     {
-        protected Lazy<IList<NavigationDefinition>> NavigationDefinitions { get; }
+        ServiceProvider = serviceProvider;
+        Options = options.Value;
 
-        protected AbpNavigationOptions Options { get; }
+        NavigationDefinitions = new Lazy<IList<NavigationDefinition>>(CreateSettingDefinitions, true);
+    }
 
-        protected IServiceProvider ServiceProvider { get; }
+    public virtual IReadOnlyList<NavigationDefinition> GetAll()
+    {
+        return NavigationDefinitions.Value.ToImmutableList();
+    }
 
-        public NavigationDefinitionManager(
-            IOptions<AbpNavigationOptions> options,
-            IServiceProvider serviceProvider)
+    protected virtual IList<NavigationDefinition> CreateSettingDefinitions()
+    {
+        var settings = new List<NavigationDefinition>();
+
+        using (var scope = ServiceProvider.CreateScope())
         {
-            ServiceProvider = serviceProvider;
-            Options = options.Value;
+            var providers = Options
+                .DefinitionProviders
+                .Select(p => scope.ServiceProvider.GetRequiredService(p) as INavigationDefinitionProvider)
+                .ToList();
 
-            NavigationDefinitions = new Lazy<IList<NavigationDefinition>>(CreateSettingDefinitions, true);
-        }
-
-        public virtual IReadOnlyList<NavigationDefinition> GetAll()
-        {
-            return NavigationDefinitions.Value.ToImmutableList();
-        }
-
-        protected virtual IList<NavigationDefinition> CreateSettingDefinitions()
-        {
-            var settings = new List<NavigationDefinition>();
-
-            using (var scope = ServiceProvider.CreateScope())
+            foreach (var provider in providers)
             {
-                var providers = Options
-                    .DefinitionProviders
-                    .Select(p => scope.ServiceProvider.GetRequiredService(p) as INavigationDefinitionProvider)
-                    .ToList();
-
-                foreach (var provider in providers)
-                {
-                    provider.Define(new NavigationDefinitionContext(settings));
-                }
+                provider.Define(new NavigationDefinitionContext(settings));
             }
-
-            return settings;
         }
+
+        return settings;
     }
 }

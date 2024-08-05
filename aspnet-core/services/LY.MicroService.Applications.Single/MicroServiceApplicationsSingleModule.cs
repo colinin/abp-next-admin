@@ -34,9 +34,15 @@ using LINGYUN.Abp.Features.LimitValidation;
 using LINGYUN.Abp.Features.LimitValidation.Redis.Client;
 using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Identity;
+using LINGYUN.Abp.Identity.AspNetCore.Session;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.Notifications;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
+using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Identity.WeChat;
+using LINGYUN.Abp.IdentityServer;
+using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
+using LINGYUN.Abp.IdentityServer.Session;
 using LINGYUN.Abp.IdGenerator;
 using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -55,6 +61,7 @@ using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
 using LINGYUN.Abp.OpenApi.Authorization;
 using LINGYUN.Abp.OpenIddict;
 using LINGYUN.Abp.OpenIddict.AspNetCore;
+using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 using LINGYUN.Abp.OpenIddict.Portal;
 using LINGYUN.Abp.OpenIddict.Sms;
 using LINGYUN.Abp.OpenIddict.WeChat;
@@ -95,6 +102,7 @@ using LINGYUN.Platform.HttpApi;
 using LINGYUN.Platform.Settings.VueVbenAdmin;
 using LINGYUN.Platform.Theme.VueVbenAdmin;
 using LY.MicroService.Applications.Single.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -103,10 +111,10 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.EventBus;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
-using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -114,6 +122,7 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Threading;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -127,15 +136,13 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpCachingManagementStackExchangeRedisModule),
     typeof(AbpCachingManagementApplicationModule),
     typeof(AbpCachingManagementHttpApiModule),
-    typeof(AbpIdentityAspNetCoreModule),
+    typeof(AbpIdentityAspNetCoreSessionModule),
+    typeof(AbpIdentitySessionAspNetCoreModule),
+    typeof(AbpIdentityNotificationsModule),
     typeof(AbpIdentityDomainModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
-    //typeof(AbpIdentityServerDomainModule),
-    //typeof(AbpIdentityServerApplicationModule),
-    //typeof(AbpIdentityServerHttpApiModule),
-    //typeof(AbpIdentityServerEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementDomainModule),
     typeof(AbpLocalizationManagementApplicationModule),
     typeof(AbpLocalizationManagementHttpApiModule),
@@ -150,7 +157,14 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsApplicationModule),
     typeof(AbpNotificationsHttpApiModule),
     typeof(AbpNotificationsEntityFrameworkCoreModule),
+
+    //typeof(AbpIdentityServerSessionModule),
+    //typeof(AbpIdentityServerApplicationModule),
+    //typeof(AbpIdentityServerHttpApiModule),
+    //typeof(AbpIdentityServerEntityFrameworkCoreModule),
+
     typeof(AbpOpenIddictAspNetCoreModule),
+    typeof(AbpOpenIddictAspNetCoreSessionModule),
     typeof(AbpOpenIddictApplicationModule),
     typeof(AbpOpenIddictHttpApiModule),
     typeof(AbpOpenIddictEntityFrameworkCoreModule),
@@ -158,6 +172,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpOpenIddictPortalModule),
     typeof(AbpOpenIddictWeChatModule),
     typeof(AbpOpenIddictWeChatWorkModule),
+
     typeof(AbpOssManagementDomainModule),
     typeof(AbpOssManagementApplicationModule),
     typeof(AbpOssManagementHttpApiModule),
@@ -200,7 +215,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpPermissionManagementHttpApiModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
-    typeof(AbpPermissionManagementDomainIdentityServerModule),
+    // typeof(AbpPermissionManagementDomainIdentityServerModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
     typeof(SingleMigrationsEntityFrameworkCoreModule),
@@ -274,9 +289,9 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
 
+        PreConfigureWrapper();
         PreConfigureFeature();
         PreConfigureIdentity();
-        PreConfigureForwardedHeaders();
         PreConfigureApp(configuration);
         PreConfigureQuartz(configuration);
         PreConfigureAuthServer(configuration);
@@ -322,49 +337,13 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 
-    //public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    //{
-    //    var app = context.GetApplicationBuilder();
-    //    var configuration = context.GetConfiguration();
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        AsyncHelper.RunSync(async () => await OnApplicationInitializationAsync(context));
+    }
 
-    //    app.UseCookiePolicy();
-    //    // 本地化
-    //    app.UseMapRequestLocalization();
-    //    // http调用链
-    //    app.UseCorrelationId();
-    //    // 虚拟文件系统
-    //    app.UseStaticFiles();
-    //    // 路由
-    //    app.UseRouting();
-    //    // 跨域
-    //    app.UseCors(DefaultCorsPolicyName);
-    //    // 认证
-    //    app.UseAuthentication();
-    //    if (configuration.GetValue<bool>("AuthServer:UseOpenIddict"))
-    //    {
-    //        app.UseAbpOpenIddictValidation();
-    //    }
-    //    else
-    //    {
-    //        // jwt
-    //        app.UseJwtTokenMiddleware();
-    //        app.UseIdentityServer();
-    //    }
-    //    // 多租户
-    //    app.UseMultiTenancy();
-    //    // 授权
-    //    app.UseAuthorization();
-    //    // Swagger
-    //    app.UseSwagger();
-    //    // Swagger可视化界面
-    //    app.UseSwaggerUI(options =>
-    //    {
-    //        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support App API");
-    //    });
-    //    // 审计日志
-    //    app.UseAuditing();
-    //    app.UseAbpSerilogEnrichers();
-    //    // 路由
-    //    app.UseConfiguredEndpoints();
-    //}
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        await context.ServiceProvider.GetRequiredService<IDataSeeder>().SeedAsync(); ;
+    }
 }

@@ -1,25 +1,26 @@
 ﻿using AutoMapper;
 using Volo.Abp.Identity;
 
-namespace LINGYUN.Abp.Identity
+namespace LINGYUN.Abp.Identity;
+
+public class AbpIdentityApplicationModuleAutoMapperProfile : Profile
 {
-    public class AbpIdentityApplicationModuleAutoMapperProfile : Profile
+    public AbpIdentityApplicationModuleAutoMapperProfile()
     {
-        public AbpIdentityApplicationModuleAutoMapperProfile()
-        {
-            CreateMap<IdentityClaimType, IdentityClaimTypeDto>()
-                .MapExtraProperties();
-            CreateMap<IdentityUserClaim, IdentityClaimDto>();
-            CreateMap<IdentityRoleClaim, IdentityClaimDto>();
+        CreateMap<IdentityClaimType, IdentityClaimTypeDto>()
+            .MapExtraProperties();
+        CreateMap<IdentityUserClaim, IdentityClaimDto>();
+        CreateMap<IdentityRoleClaim, IdentityClaimDto>();
 
-            CreateMap<IdentityUser, IdentityUserDto>()
-                .MapExtraProperties();
+        CreateMap<IdentityUser, IdentityUserDto>()
+            .MapExtraProperties();
 
-            CreateMap<IdentityRole, IdentityRoleDto>()
-                .MapExtraProperties();
+        CreateMap<IdentitySession, IdentitySessionDto>();
 
-            CreateMap<OrganizationUnit, OrganizationUnitDto>()
-                .MapExtraProperties();
-        }
+        CreateMap<IdentityRole, IdentityRoleDto>()
+            .MapExtraProperties();
+
+        CreateMap<OrganizationUnit, OrganizationUnitDto>()
+            .MapExtraProperties();
     }
 }

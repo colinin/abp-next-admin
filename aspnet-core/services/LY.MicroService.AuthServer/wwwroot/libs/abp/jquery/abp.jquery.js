@@ -205,14 +205,16 @@ var abp = abp || {};
         handleAbpErrorResponse: function (jqXHR, userOptions, $dfd) {
             var messagePromise = null;
 
+            var responseJSON = jqXHR.responseJSON ? jqXHR.responseJSON : JSON.parse(jqXHR.responseText);
+
             if (userOptions.abpHandleError !== false) {
-                messagePromise = abp.ajax.showError(jqXHR.responseJSON.error);
+                messagePromise = abp.ajax.showError(responseJSON.error);
             }
 
-            abp.ajax.logError(jqXHR.responseJSON.error);
+            abp.ajax.logError(responseJSON.error);
 
-            $dfd && $dfd.reject(jqXHR.responseJSON.error, jqXHR);
-            userOptions.error && userOptions.error(jqXHR.responseJSON.error, jqXHR);
+            $dfd && $dfd.reject(responseJSON.error, jqXHR);
+            userOptions.error && userOptions.error(responseJSON.error, jqXHR);
 
             if (jqXHR.status === 401 && userOptions.abpHandleError !== false) {
                 abp.ajax.handleUnAuthorizedRequest(messagePromise);
@@ -369,13 +371,18 @@ var abp = abp || {};
         };
 
         var _loadScript = function (url, loadCallback, failCallback) {
+            var nonce = document.body.nonce || document.body.getAttribute('nonce');
             _loadFromUrl(url, loadCallback, failCallback, function (urlInfo) {
                 $.get({
                     url: url,
                     dataType: 'text'
                 })
                 .done(function (script) {
-                    $.globalEval(script);
+                    if(nonce){
+                        $.globalEval(script, { nonce: nonce});
+                    }else{
+                        $.globalEval(script);
+                    }
                     urlInfo.succeed();
                 })
                 .fail(function () {

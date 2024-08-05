@@ -8,56 +8,55 @@ using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.VirtualFileSystem;
 
-namespace LINGYUN.Abp.SettingManagement
+namespace LINGYUN.Abp.SettingManagement;
+
+[DependsOn(typeof(AbpDddApplicationContractsModule))]
+[DependsOn(typeof(AbpSettingManagementDomainSharedModule))]
+public class AbpSettingManagementApplicationContractsModule : AbpModule
 {
-    [DependsOn(typeof(AbpDddApplicationContractsModule))]
-    [DependsOn(typeof(AbpSettingManagementDomainSharedModule))]
-    public class AbpSettingManagementApplicationContractsModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        AutoAddSettingProviders(context.Services);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            AutoAddSettingProviders(context.Services);
-        }
+            options.FileSets.AddEmbedded<AbpSettingManagementApplicationContractsModule>();
+        });
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        Configure<AbpLocalizationOptions>(options =>
         {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpSettingManagementApplicationContractsModule>();
-            });
+            options.Resources
+            .Get<AbpSettingManagementResource>()
+            .AddVirtualJson("/LINGYUN/Abp/SettingManagement/Localization/ApplicationContracts");
+        });
+    }
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                .Get<AbpSettingManagementResource>()
-                .AddVirtualJson("/LINGYUN/Abp/SettingManagement/Localization/ApplicationContracts");
-            });
-        }
+    private static void AutoAddSettingProviders(IServiceCollection services)
+    {
+        var userSettingProviders = new List<Type>();
+        var globalSettingProviders = new List<Type>();
 
-        private static void AutoAddSettingProviders(IServiceCollection services)
+        services.OnRegistered(context =>
         {
-            var userSettingProviders = new List<Type>();
-            var globalSettingProviders = new List<Type>();
-
-            services.OnRegistered(context =>
+            if (typeof(IUserSettingAppService).IsAssignableFrom(context.ImplementationType) &&
+                context.ImplementationType.Name.EndsWith("AppService"))
             {
-                if (typeof(IUserSettingAppService).IsAssignableFrom(context.ImplementationType) &&
-                    context.ImplementationType.Name.EndsWith("AppService"))
-                {
-                    userSettingProviders.Add(context.ImplementationType);
-                }
-                if (typeof(IReadonlySettingAppService).IsAssignableFrom(context.ImplementationType) &&
-                    context.ImplementationType.Name.EndsWith("AppService"))
-                {
-                    globalSettingProviders.Add(context.ImplementationType);
-                }
-            });
-
-            services.Configure<SettingManagementMergeOptions>(options =>
+                userSettingProviders.Add(context.ImplementationType);
+            }
+            if (typeof(IReadonlySettingAppService).IsAssignableFrom(context.ImplementationType) &&
+                context.ImplementationType.Name.EndsWith("AppService"))
             {
-                options.UserSettingProviders.AddIfNotContains(userSettingProviders);
-                options.GlobalSettingProviders.AddIfNotContains(globalSettingProviders);
-            });
-        }
+                globalSettingProviders.Add(context.ImplementationType);
+            }
+        });
+
+        services.Configure<SettingManagementMergeOptions>(options =>
+        {
+            options.UserSettingProviders.AddIfNotContains(userSettingProviders);
+            options.GlobalSettingProviders.AddIfNotContains(globalSettingProviders);
+        });
     }
 }

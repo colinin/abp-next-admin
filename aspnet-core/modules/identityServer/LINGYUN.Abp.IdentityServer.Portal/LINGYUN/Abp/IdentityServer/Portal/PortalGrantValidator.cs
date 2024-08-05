@@ -197,7 +197,7 @@ public class PortalGrantValidator : IExtensionGrantValidator
 
             var currentUser = await _userManager.GetUserAsync(resourceOwnerContext.Result.Subject);
 
-            await _events.RaiseAsync(new UserLoginSuccessEvent(userName, currentUser.Id.ToString(), currentUser.Name));
+            await _events.RaiseAsync(new UserLoginSuccessEvent(userName, currentUser.Id.ToString(), currentUser.Name, clientId: resourceOwnerContext.Request.ClientId));
 
             await SetSuccessResultAsync(context, currentUser);
         }

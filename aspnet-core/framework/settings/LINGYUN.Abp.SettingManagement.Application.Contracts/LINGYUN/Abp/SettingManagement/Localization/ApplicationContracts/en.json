@@ -31,6 +31,8 @@
     "Description:Identity.TwoFactor": "TwoFactor",
     "DisplayName:Identity.OrganizationUnit": "OrganizationUnit",
     "Description:Identity.OrganizationUnit": "OrganizationUnit",
+    "DisplayName:Identity.Session": "Session",
+    "Description:Identity.Session": "Session",
     "DisplayName:Emailing": "Emailing",
     "Description:Emailing": "Emailing",
     "DisplayName:Emailing.Default": "Default",

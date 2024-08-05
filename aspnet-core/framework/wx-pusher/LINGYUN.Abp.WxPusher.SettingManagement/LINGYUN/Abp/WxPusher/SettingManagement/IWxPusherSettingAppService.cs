@@ -1,8 +1,7 @@
 ﻿using LINGYUN.Abp.SettingManagement;
 
-namespace LINGYUN.Abp.WxPusher.SettingManagement
+namespace LINGYUN.Abp.WxPusher.SettingManagement;
+
+public interface IWxPusherSettingAppService : IReadonlySettingAppService
 {
-    public interface IWxPusherSettingAppService : IReadonlySettingAppService
-    {
-    }
 }

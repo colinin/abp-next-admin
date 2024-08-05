@@ -7,81 +7,80 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing;
 
-namespace LINGYUN.Abp.MessageService.Chat
+namespace LINGYUN.Abp.MessageService.Chat;
+
+[Dependency(ReplaceServices = true)]
+public class MessageProcessor : IMessageProcessor, ITransientDependency
 {
-    [Dependency(ReplaceServices = true)]
-    public class MessageProcessor : IMessageProcessor, ITransientDependency
+    private readonly IClock _clock;
+    private readonly IMessageRepository _repository;
+    private readonly ISettingProvider _settingProvider;
+
+    public MessageProcessor(
+        IClock clock,
+        IMessageRepository repository,
+        ISettingProvider settingProvider)
     {
-        private readonly IClock _clock;
-        private readonly IMessageRepository _repository;
-        private readonly ISettingProvider _settingProvider;
+        _clock = clock;
+        _repository = repository;
+        _settingProvider = settingProvider;
+    }
 
-        public MessageProcessor(
-            IClock clock,
-            IMessageRepository repository,
-            ISettingProvider settingProvider)
+    public async virtual Task ReadAsync(ChatMessage message)
+    {
+        if (!message.GroupId.IsNullOrWhiteSpace())
         {
-            _clock = clock;
-            _repository = repository;
-            _settingProvider = settingProvider;
+            long messageId = long.Parse(message.MessageId);
+            var groupMessage = await _repository.GetGroupMessageAsync(messageId);
+            groupMessage.ChangeSendState(MessageState.Read);
+
+            await _repository.UpdateGroupMessageAsync(groupMessage);
         }
-
-        public async virtual Task ReadAsync(ChatMessage message)
+        else
         {
-            if (!message.GroupId.IsNullOrWhiteSpace())
-            {
-                long messageId = long.Parse(message.MessageId);
-                var groupMessage = await _repository.GetGroupMessageAsync(messageId);
-                groupMessage.ChangeSendState(MessageState.Read);
+            long messageId = long.Parse(message.MessageId);
+            var userMessage = await _repository.GetUserMessageAsync(messageId);
+            userMessage.ChangeSendState(MessageState.Read);
 
-                await _repository.UpdateGroupMessageAsync(groupMessage);
-            }
-            else
-            {
-                long messageId = long.Parse(message.MessageId);
-                var userMessage = await _repository.GetUserMessageAsync(messageId);
-                userMessage.ChangeSendState(MessageState.Read);
-
-                await _repository.UpdateUserMessageAsync(userMessage);
-            }
+            await _repository.UpdateUserMessageAsync(userMessage);
         }
+    }
 
-        public async virtual Task ReCallAsync(ChatMessage message)
+    public async virtual Task ReCallAsync(ChatMessage message)
+    {
+        var expiration = await _settingProvider.GetAsync(
+            MessageServiceSettingNames.Messages.RecallExpirationTime, 2d);
+
+        Func<Message, bool> hasExpiredMessage = (Message msg) =>
+            msg.CreationTime.AddMinutes(expiration) < _clock.Now;
+
+        if (!message.GroupId.IsNullOrWhiteSpace())
         {
-            var expiration = await _settingProvider.GetAsync(
-                MessageServiceSettingNames.Messages.RecallExpirationTime, 2d);
-
-            Func<Message, bool> hasExpiredMessage = (Message msg) =>
-                msg.CreationTime.AddMinutes(expiration) < _clock.Now;
-
-            if (!message.GroupId.IsNullOrWhiteSpace())
+            long messageId = long.Parse(message.MessageId);
+            var groupMessage = await _repository.GetGroupMessageAsync(messageId);
+            if (hasExpiredMessage(groupMessage))
             {
-                long messageId = long.Parse(message.MessageId);
-                var groupMessage = await _repository.GetGroupMessageAsync(messageId);
-                if (hasExpiredMessage(groupMessage))
-                {
-                    throw new BusinessException(MessageServiceErrorCodes.ExpiredMessageCannotBeReCall)
-                        .WithData("Time", expiration);
-                }
-
-                groupMessage.ChangeSendState(MessageState.ReCall);
-
-                await _repository.UpdateGroupMessageAsync(groupMessage);
+                throw new BusinessException(MessageServiceErrorCodes.ExpiredMessageCannotBeReCall)
+                    .WithData("Time", expiration);
             }
-            else
+
+            groupMessage.ChangeSendState(MessageState.ReCall);
+
+            await _repository.UpdateGroupMessageAsync(groupMessage);
+        }
+        else
+        {
+            long messageId = long.Parse(message.MessageId);
+            var userMessage = await _repository.GetUserMessageAsync(messageId);
+            if (hasExpiredMessage(userMessage))
             {
-                long messageId = long.Parse(message.MessageId);
-                var userMessage = await _repository.GetUserMessageAsync(messageId);
-                if (hasExpiredMessage(userMessage))
-                {
-                    throw new BusinessException(MessageServiceErrorCodes.ExpiredMessageCannotBeReCall)
-                        .WithData("Time", expiration);
-                }
-
-                userMessage.ChangeSendState(MessageState.ReCall);
-
-                await _repository.UpdateUserMessageAsync(userMessage);
+                throw new BusinessException(MessageServiceErrorCodes.ExpiredMessageCannotBeReCall)
+                    .WithData("Time", expiration);
             }
+
+            userMessage.ChangeSendState(MessageState.ReCall);
+
+            await _repository.UpdateUserMessageAsync(userMessage);
         }
     }
 }

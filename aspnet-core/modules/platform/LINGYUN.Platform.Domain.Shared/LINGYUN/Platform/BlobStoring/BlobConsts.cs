@@ -1,16 +1,15 @@
-﻿namespace LINGYUN.Platform.BlobStoring
+﻿namespace LINGYUN.Platform.BlobStoring;
+
+public static class BlobConsts
 {
-    public static class BlobConsts
+    public static int MaxNameLength
     {
-        public static int MaxNameLength
-        {
-            get;
-            set;
-        } = 255;
-        public static int MaxSha256Length
-        {
-            get;
-            set;
-        } = 65;
-    }
+        get;
+        set;
+    } = 255;
+    public static int MaxSha256Length
+    {
+        get;
+        set;
+    } = 65;
 }

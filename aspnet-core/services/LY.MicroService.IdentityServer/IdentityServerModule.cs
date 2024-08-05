@@ -7,12 +7,16 @@ using LINGYUN.Abp.Authentication.WeChat;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Http.Client.Wrapper;
+using LINGYUN.Abp.Identity.AspNetCore.Session;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.Notifications;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
+using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer.LinkUser;
 using LINGYUN.Abp.IdentityServer.Portal;
+using LINGYUN.Abp.IdentityServer.Session;
 using LINGYUN.Abp.IdentityServer.WeChat.Work;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
@@ -24,7 +28,6 @@ using LINGYUN.Platform.EntityFrameworkCore;
 using LY.MicroService.IdentityServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -56,12 +59,20 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpIdentityApplicationModule),
-    // typeof(AbpIdentityHttpApiModule),
+    typeof(AbpIdentityNotificationsModule),
+
+    // 请勿混淆这两个模块, 他们各自都自己的职能
+    // 此模块仅用于认证中心
+    typeof(AbpIdentityAspNetCoreSessionModule),
+    // 此模块可用于所有微服务
+    typeof(AbpIdentitySessionAspNetCoreModule),
+
     typeof(AbpIdentityServerEntityFrameworkCoreModule),
     typeof(AbpIdentityServerSmsValidatorModule),
     typeof(AbpIdentityServerLinkUserModule),
     typeof(AbpIdentityServerPortalModule),
     typeof(AbpIdentityServerWeChatWorkModule),
+    typeof(AbpIdentityServerSessionModule),
     typeof(AbpAuthenticationWeChatModule),
     typeof(AbpAuthenticationQQModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),
@@ -148,9 +159,11 @@ public partial class IdentityServerModule : AbpModule
         app.UseRouting();
         app.UseCors(DefaultCorsPolicyName);
         app.UseAuthentication();
+        app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
-        app.UseIdentityServer();
+        app.UseAbpSession();
         app.UseDynamicClaims();
+        app.UseIdentityServer();
         app.UseAuthorization();
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();

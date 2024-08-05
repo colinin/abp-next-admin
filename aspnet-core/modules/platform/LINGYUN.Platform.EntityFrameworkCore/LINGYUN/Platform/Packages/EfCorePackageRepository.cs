@@ -35,13 +35,24 @@ public class EfCorePackageRepository :
 
     public async virtual Task<Package> FindLatestAsync(
         string name,
+        string version = null,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
+        if (version.IsNullOrWhiteSpace())
+        {
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .Where(x => x.Name == name)
+                .OrderByDescending(x => x.Version)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+        }
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
             .Where(x => x.Name == name)
-            .OrderByDescending(x => x.Version)
+            .OrderByDescending(x => x.Level)
+            .ThenByDescending(x => x.Version)
+            .Where(x => x.Version.CompareTo(version) > 0)
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 

@@ -2,10 +2,9 @@
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace LINGYUN.Abp.AspNetCore.Mvc.Localization
+namespace LINGYUN.Abp.AspNetCore.Mvc.Localization;
+
+public interface IResourceAppService : IApplicationService
 {
-    public interface IResourceAppService : IApplicationService
-    {
-        Task<ListResultDto<ResourceDto>> GetListAsync(GetResourceWithFilterDto input);
-    }
+    Task<ListResultDto<ResourceDto>> GetListAsync(GetResourceWithFilterDto input);
 }

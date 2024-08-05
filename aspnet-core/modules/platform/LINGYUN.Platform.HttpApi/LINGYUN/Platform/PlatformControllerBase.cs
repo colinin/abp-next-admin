@@ -2,15 +2,14 @@
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Settings;
 
-namespace LINGYUN.Platform
-{
-    public abstract class PlatformControllerBase : AbpControllerBase
-    {
-        protected ISettingProvider SettingProvider => LazyServiceProvider.LazyGetRequiredService<ISettingProvider>();
+namespace LINGYUN.Platform;
 
-        protected PlatformControllerBase()
-        {
-            LocalizationResource = typeof(PlatformResource);
-        }
+public abstract class PlatformControllerBase : AbpControllerBase
+{
+    protected ISettingProvider SettingProvider => LazyServiceProvider.LazyGetRequiredService<ISettingProvider>();
+
+    protected PlatformControllerBase()
+    {
+        LocalizationResource = typeof(PlatformResource);
     }
 }

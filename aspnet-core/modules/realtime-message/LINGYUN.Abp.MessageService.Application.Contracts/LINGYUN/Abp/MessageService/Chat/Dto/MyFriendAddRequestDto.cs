@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.MessageService.Chat
+﻿namespace LINGYUN.Abp.MessageService.Chat;
+
+public class MyFriendAddRequestDto : MyFriendOperationDto
 {
-    public class MyFriendAddRequestDto : MyFriendOperationDto
-    {
-        public string RemarkName { get; set; }
-    }
+    public string RemarkName { get; set; }
 }

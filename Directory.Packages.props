@@ -2,17 +2,16 @@
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.1.1</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
-		<VoloAbpPackageVersion>8.1.3</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>8.1.3</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>8.2.0</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>8.2.0</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>8.0.0</MicrosoftExtensionsPackageVersion>
 		<MicrosoftAspNetCorePackageVersion>8.0.0</MicrosoftAspNetCorePackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>8.0.0</MicrosoftEntityFrameworkCorePackageVersion>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
-
 	<!-- Abp Framework -->
 	<ItemGroup>
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="3.0.5" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="3.2.0" />
 		<PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -133,10 +132,9 @@
 		<PackageVersion Include="Volo.Abp.Users.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Validation" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
-
 	<!-- .NET -->
 	<ItemGroup>
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftAspNetCorePackageVersion)" />
+		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
 		<PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
@@ -152,9 +150,8 @@
 		<PackageVersion Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.Options" Version="$(MicrosoftExtensionsPackageVersion)" />
+		<PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />
 	</ItemGroup>
-
 	<!-- Elsa -->
 	<ItemGroup>
 		<PackageVersion Include="Elsa" Version="$(ElsaPackageVersion)" />
@@ -172,7 +169,6 @@
 		<PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
 		<PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
 	</ItemGroup>
-
 	<!-- DotNetCore.CAP -->
 	<ItemGroup>
 		<PackageVersion Include="DotNetCore.CAP" Version="$(DotNetCoreCAPPackageVersion)" />
@@ -181,7 +177,6 @@
 		<PackageVersion Include="DotNetCore.CAP.OpenTelemetry" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageVersion Include="DotNetCore.CAP.RabbitMQ" Version="$(DotNetCoreCAPPackageVersion)" />
 	</ItemGroup>
-
 	<!-- Serilog -->
 	<ItemGroup>
 		<PackageVersion Include="Serilog" Version="3.1.1" />
@@ -198,7 +193,6 @@
 		<PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
 		<PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
 	</ItemGroup>
-
 	<!-- Test -->
 	<ItemGroup>
 		<PackageVersion Include="coverlet.collector" Version="6.0.0" />
@@ -210,13 +204,11 @@
 		<PackageVersion Include="xunit.extensibility.execution" Version="2.6.1" />
 		<PackageVersion Include="xunit.runner.visualstudio" Version="2.5.3" />
 	</ItemGroup>
-
 	<!-- Fody -->
 	<ItemGroup>
 		<PackageVersion Include="ConfigureAwait.Fody" Version="3.3.2" />
 		<PackageVersion Include="Fody" Version="6.8.0" />
 	</ItemGroup>
-
 	<!-- Other -->
 	<ItemGroup>
 		<PackageVersion Include="aliyun-net-sdk-core" Version="1.5.10" />
@@ -228,7 +220,7 @@
 		<PackageVersion Include="DistributedLock.Core" Version="1.0.5" />
 		<PackageVersion Include="DistributedLock.Redis" Version="1.0.2" />
 		<PackageVersion Include="Hangfire.MySqlStorage" Version="2.0.3" />
-		<PackageVersion Include="HangFire.SqlServer" Version="1.8.6" />
+		<PackageVersion Include="HangFire.SqlServer" Version="1.8.14" />
 		<PackageVersion Include="IdentityModel" Version="6.2.0" />
 		<PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
 		<PackageVersion Include="Markdig" Version="0.34.0" />
@@ -236,6 +228,8 @@
 		<PackageVersion Include="NEST" Version="7.15.1" />
 		<PackageVersion Include="NRules" Version="0.9.2" />
 		<PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
+		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="5.5.0" />
+		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="5.5.0" />
 		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.8.1" />
 		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.8.1" />
 		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.8.1" />

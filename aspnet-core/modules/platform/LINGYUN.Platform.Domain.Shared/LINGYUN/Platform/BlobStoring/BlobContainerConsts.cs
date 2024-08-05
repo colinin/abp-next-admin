@@ -1,17 +1,16 @@
-﻿namespace LINGYUN.Platform.BlobStoring
-{
-    public static class BlobContainerConsts
-    {
-        public static int MaxNameLength
-        {
-            get;
-            set;
-        } = 255;
+﻿namespace LINGYUN.Platform.BlobStoring;
 
-        public static int MaxPathLength
-        {
-            get;
-            set;
-        } = 255;
-    }
+public static class BlobContainerConsts
+{
+    public static int MaxNameLength
+    {
+        get;
+        set;
+    } = 255;
+
+    public static int MaxPathLength
+    {
+        get;
+        set;
+    } = 255;
 }

@@ -8,127 +8,126 @@ using Volo.Abp;
 using Volo.Abp.Internal;
 using Volo.Abp.Localization;
 
-namespace LINGYUN.Abp.Localization.Xml
+namespace LINGYUN.Abp.Localization.Xml;
+
+public abstract class XmlFileLocalizationResourceContributorBase : ILocalizationResourceContributor
 {
-    public abstract class XmlFileLocalizationResourceContributorBase : ILocalizationResourceContributor
+    private readonly string _filePath;
+
+    private IFileProvider _fileProvider;
+    private Dictionary<string, ILocalizationDictionary> _dictionaries;
+    private bool _subscribedForChanges;
+    private readonly object _syncObj = new object();
+
+    public bool IsDynamic => false;
+
+    protected XmlFileLocalizationResourceContributorBase(string filePath)
     {
-        private readonly string _filePath;
+        _filePath = filePath;
+    }
 
-        private IFileProvider _fileProvider;
-        private Dictionary<string, ILocalizationDictionary> _dictionaries;
-        private bool _subscribedForChanges;
-        private readonly object _syncObj = new object();
+    public virtual void Initialize(LocalizationResourceInitializationContext context)
+    {
+        _fileProvider = BuildFileProvider(context);
 
-        public bool IsDynamic => false;
+        Check.NotNull(_fileProvider, nameof(_fileProvider));
+    }
 
-        protected XmlFileLocalizationResourceContributorBase(string filePath)
+    public virtual LocalizedString GetOrNull(string cultureName, string name)
+    {
+        return GetDictionaries().GetOrDefault(cultureName)?.GetOrNull(name);
+    }
+
+    public virtual void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
+    {
+        GetDictionaries().GetOrDefault(cultureName)?.Fill(dictionary);
+    }
+
+    protected virtual Dictionary<string, ILocalizationDictionary> GetDictionaries()
+    {
+        var dictionaries = _dictionaries;
+        if (dictionaries != null)
         {
-            _filePath = filePath;
+            return dictionaries;
         }
 
-        public virtual void Initialize(LocalizationResourceInitializationContext context)
+        lock (_syncObj)
         {
-            _fileProvider = BuildFileProvider(context);
-
-            Check.NotNull(_fileProvider, nameof(_fileProvider));
-        }
-
-        public virtual LocalizedString GetOrNull(string cultureName, string name)
-        {
-            return GetDictionaries().GetOrDefault(cultureName)?.GetOrNull(name);
-        }
-
-        public virtual void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
-        {
-            GetDictionaries().GetOrDefault(cultureName)?.Fill(dictionary);
-        }
-
-        protected virtual Dictionary<string, ILocalizationDictionary> GetDictionaries()
-        {
-            var dictionaries = _dictionaries;
+            dictionaries = _dictionaries;
             if (dictionaries != null)
             {
                 return dictionaries;
             }
 
-            lock (_syncObj)
+            if (!_subscribedForChanges)
             {
-                dictionaries = _dictionaries;
-                if (dictionaries != null)
-                {
-                    return dictionaries;
-                }
+                ChangeToken.OnChange(() => _fileProvider.Watch(_filePath.EnsureEndsWith('/') + "*.*"),
+                    () =>
+                    {
+                        _dictionaries = null;
+                    });
 
-                if (!_subscribedForChanges)
-                {
-                    ChangeToken.OnChange(() => _fileProvider.Watch(_filePath.EnsureEndsWith('/') + "*.*"),
-                        () =>
-                        {
-                            _dictionaries = null;
-                        });
-
-                    _subscribedForChanges = true;
-                }
-
-                dictionaries = _dictionaries = CreateDictionaries(_fileProvider, _filePath);
+                _subscribedForChanges = true;
             }
 
-            return dictionaries;
+            dictionaries = _dictionaries = CreateDictionaries(_fileProvider, _filePath);
         }
 
-        protected virtual Dictionary<string, ILocalizationDictionary> CreateDictionaries(IFileProvider fileProvider, string filePath)
+        return dictionaries;
+    }
+
+    protected virtual Dictionary<string, ILocalizationDictionary> CreateDictionaries(IFileProvider fileProvider, string filePath)
+    {
+        var dictionaries = new Dictionary<string, ILocalizationDictionary>();
+
+        foreach (var file in fileProvider.GetDirectoryContents(filePath))
         {
-            var dictionaries = new Dictionary<string, ILocalizationDictionary>();
-
-            foreach (var file in fileProvider.GetDirectoryContents(filePath))
+            if (file.IsDirectory || !CanParseFile(file))
             {
-                if (file.IsDirectory || !CanParseFile(file))
-                {
-                    continue;
-                }
-
-                var dictionary = CreateDictionaryFromFile(file);
-                if (dictionaries.ContainsKey(dictionary.CultureName))
-                {
-                    throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined!");
-                }
-
-                dictionaries[dictionary.CultureName] = dictionary;
+                continue;
             }
 
-            return dictionaries;
-        }
-
-        protected virtual bool CanParseFile(IFileInfo file)
-        {
-            return file.Name.EndsWith(".xml", StringComparison.OrdinalIgnoreCase);
-        }
-
-        protected virtual ILocalizationDictionary CreateDictionaryFromFile(IFileInfo file)
-        {
-            using (var stream = file.CreateReadStream())
+            var dictionary = CreateDictionaryFromFile(file);
+            if (dictionaries.ContainsKey(dictionary.CultureName))
             {
-                return CreateDictionaryFromFileContent(Utf8Helper.ReadStringFromStream(stream));
+                throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined!");
             }
+
+            dictionaries[dictionary.CultureName] = dictionary;
         }
 
-        protected virtual ILocalizationDictionary CreateDictionaryFromFileContent(string fileContent)
+        return dictionaries;
+    }
+
+    protected virtual bool CanParseFile(IFileInfo file)
+    {
+        return file.Name.EndsWith(".xml", StringComparison.OrdinalIgnoreCase);
+    }
+
+    protected virtual ILocalizationDictionary CreateDictionaryFromFile(IFileInfo file)
+    {
+        using (var stream = file.CreateReadStream())
         {
-            return XmlLocalizationDictionaryBuilder.BuildFromXmlString(fileContent);
+            return CreateDictionaryFromFileContent(Utf8Helper.ReadStringFromStream(stream));
         }
+    }
 
-        protected abstract IFileProvider BuildFileProvider(LocalizationResourceInitializationContext context);
+    protected virtual ILocalizationDictionary CreateDictionaryFromFileContent(string fileContent)
+    {
+        return XmlLocalizationDictionaryBuilder.BuildFromXmlString(fileContent);
+    }
 
-        public virtual Task FillAsync(string cultureName, Dictionary<string, LocalizedString> dictionary)
-        {
-            Fill(cultureName, dictionary);
+    protected abstract IFileProvider BuildFileProvider(LocalizationResourceInitializationContext context);
 
-            return Task.CompletedTask;
-        }
+    public virtual Task FillAsync(string cultureName, Dictionary<string, LocalizedString> dictionary)
+    {
+        Fill(cultureName, dictionary);
 
-        public virtual Task<IEnumerable<string>> GetSupportedCulturesAsync()
-        {
-            return Task.FromResult((IEnumerable<string>)GetDictionaries().Keys);
-        }
+        return Task.CompletedTask;
+    }
+
+    public virtual Task<IEnumerable<string>> GetSupportedCulturesAsync()
+    {
+        return Task.FromResult((IEnumerable<string>)GetDictionaries().Keys);
     }
 }

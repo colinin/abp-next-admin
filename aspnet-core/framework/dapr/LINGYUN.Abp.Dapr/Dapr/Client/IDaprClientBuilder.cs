@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Dapr.Client
+namespace Dapr.Client;
+
+public interface IDaprClientBuilder
 {
-    public interface IDaprClientBuilder
-    {
-        string Name { get; }
-        IServiceCollection Services { get; }
-    }
+    string Name { get; }
+    IServiceCollection Services { get; }
 }

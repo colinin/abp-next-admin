@@ -2,28 +2,27 @@
 using Newtonsoft.Json;
 using System.Linq;
 
-namespace LINGYUN.Abp.WebhooksManagement.Extensions
+namespace LINGYUN.Abp.WebhooksManagement.Extensions;
+
+public static class WebhookSubscriptionExtensions
 {
-    public static class WebhookSubscriptionExtensions
+    public static string ToSubscribedWebhooksString(this WebhookSubscriptionInfo webhookSubscription)
     {
-        public static string ToSubscribedWebhooksString(this WebhookSubscriptionInfo webhookSubscription)
+        if (webhookSubscription.Webhooks.Any())
         {
-            if (webhookSubscription.Webhooks.Any())
-            {
-                return JsonConvert.SerializeObject(webhookSubscription.Webhooks);
-            }
-
-            return null;
+            return JsonConvert.SerializeObject(webhookSubscription.Webhooks);
         }
 
-        public static string ToWebhookHeadersString(this WebhookSubscriptionInfo webhookSubscription)
-        {
-            if (webhookSubscription.Headers.Any())
-            {
-                return JsonConvert.SerializeObject(webhookSubscription.Headers);
-            }
+        return null;
+    }
 
-            return null;
+    public static string ToWebhookHeadersString(this WebhookSubscriptionInfo webhookSubscription)
+    {
+        if (webhookSubscription.Headers.Any())
+        {
+            return JsonConvert.SerializeObject(webhookSubscription.Headers);
         }
+
+        return null;
     }
 }

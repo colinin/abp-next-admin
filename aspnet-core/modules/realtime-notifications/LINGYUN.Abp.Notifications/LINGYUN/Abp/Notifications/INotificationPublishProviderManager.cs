@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace LINGYUN.Abp.Notifications
+namespace LINGYUN.Abp.Notifications;
+
+public interface INotificationPublishProviderManager
 {
-    public interface INotificationPublishProviderManager
-    {
-        List<INotificationPublishProvider> Providers { get; }
-    }
+    List<INotificationPublishProvider> Providers { get; }
 }

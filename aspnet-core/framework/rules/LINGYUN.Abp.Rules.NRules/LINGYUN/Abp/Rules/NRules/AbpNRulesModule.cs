@@ -3,43 +3,42 @@ using System;
 using System.Collections.Generic;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.Rules.NRules
+namespace LINGYUN.Abp.Rules.NRules;
+
+[DependsOn(
+    typeof(AbpRulesModule))]
+public class AbpNRulesModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpRulesModule))]
-    public class AbpNRulesModule : AbpModule
+    public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
+        AddDefinitionRules(context.Services);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddNRules();
+
+        Configure<AbpRulesOptions>(options =>
         {
-            AddDefinitionRules(context.Services);
-        }
+            options.Contributors.Add<NRulesContributor>();
+        });
+    }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+    private static void AddDefinitionRules(IServiceCollection services)
+    {
+        var definitionRules = new List<Type>();
+
+        services.OnRegistered(context =>
         {
-            context.Services.AddNRules();
-
-            Configure<AbpRulesOptions>(options =>
+            if (typeof(RuleBase).IsAssignableFrom(context.ImplementationType))
             {
-                options.Contributors.Add<NRulesContributor>();
-            });
-        }
+                definitionRules.Add(context.ImplementationType);
+            }
+        });
 
-        private static void AddDefinitionRules(IServiceCollection services)
+        services.Configure<AbpNRulesOptions>(options =>
         {
-            var definitionRules = new List<Type>();
-
-            services.OnRegistered(context =>
-            {
-                if (typeof(RuleBase).IsAssignableFrom(context.ImplementationType))
-                {
-                    definitionRules.Add(context.ImplementationType);
-                }
-            });
-
-            services.Configure<AbpNRulesOptions>(options =>
-            {
-                options.DefinitionRules.AddIfNotContains(definitionRules);
-            });
-        }
+            options.DefinitionRules.AddIfNotContains(definitionRules);
+        });
     }
 }

@@ -110,6 +110,7 @@ declare interface CurrentUser {
   phoneNumber?: string;
   phoneNumberVerified: boolean;
   roles: string[];
+  sessionId?: string;
 }
 
 type SimpleStateCheckerResult<TState extends IHasSimpleStateCheckers<TState>> = Recordable<

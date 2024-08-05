@@ -1,7 +1,6 @@
-﻿namespace LINGYUN.Abp.Wrapper
+﻿namespace LINGYUN.Abp.Wrapper;
+
+public interface IExceptionWrapHandler
 {
-    public interface IExceptionWrapHandler
-    {
-        void Wrap(ExceptionWrapContext context);
-    }
+    void Wrap(ExceptionWrapContext context);
 }

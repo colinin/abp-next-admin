@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -26,7 +27,7 @@ public class PackageAppService : PlatformApplicationServiceBase, IPackageAppServ
 
     public async virtual Task<PackageDto> GetLatestAsync(PackageGetLatestInput input)
     {
-        var package = await _packageRepository.FindLatestAsync(input.Name);
+        var package = await _packageRepository.FindLatestAsync(input.Name, input.Version);
 
         return package == null ? PackageDto.None() : ObjectMapper.Map<Package, PackageDto>(package);
     }
@@ -50,8 +51,7 @@ public class PackageAppService : PlatformApplicationServiceBase, IPackageAppServ
             input.Name,
             input.Note,
             input.Version,
-            input.Description,
-            CurrentTenant.Id);
+            input.Description);
 
         UpdateByInput(package, input);
 
@@ -119,7 +119,11 @@ public class PackageAppService : PlatformApplicationServiceBase, IPackageAppServ
         var package = await _packageRepository.GetAsync(id);
         var packageBlob = package.FindBlob(input.Name);
 
-        var stream = await _blobManager.DownloadBlobAsync(package, packageBlob);
+        Stream stream;
+        using (CurrentTenant.Change(null))
+        {
+            stream = await _blobManager.DownloadBlobAsync(package, packageBlob);
+        }
 
         return new RemoteStreamContent(stream, packageBlob.Name, packageBlob.ContentType);
     }
