@@ -212,21 +212,7 @@ public class AbpUINavigationVueVbenAdminNavigationDefinitionProvider : Navigatio
                description: "通知定义",
                multiTenancySides: MultiTenancySides.Host));
 
-        var removedIdsVersion = false;
-        var assembly = typeof(AbpUINavigationVueVbenAdminNavigationDefinitionProvider).Assembly;
-        var versionAttr = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
-        if (versionAttr != null)
-        {
-            if (Version.TryParse(versionAttr.Version, out var version))
-            {
-                var version6 = new Version("6.0.0");
-                removedIdsVersion = version6 >= version;
-            }
-        }
-
-        if (!removedIdsVersion)
-        {
-            var identityServer = manage.AddItem(
+        var identityServer = manage.AddItem(
                 new ApplicationMenu(
                     name: "IdentityServer",
                     displayName: "身份认证服务器",
@@ -234,50 +220,48 @@ public class AbpUINavigationVueVbenAdminNavigationDefinitionProvider : Navigatio
                     component: "",
                     description: "身份认证服务器",
                     multiTenancySides: MultiTenancySides.Host));
-            identityServer.AddItem(
-                new ApplicationMenu(
-                    name: "Clients",
-                    displayName: "客户端",
-                    url: "/manage/identity-server/clients",
-                    component: "/identity-server/clients/index",
-                    description: "客户端",
-                    multiTenancySides: MultiTenancySides.Host));
-            identityServer.AddItem(
-                new ApplicationMenu(
-                    name: "ApiResources",
-                    displayName: "Api 资源",
-                    url: "/manage/identity-server/api-resources",
-                    component: "/identity-server/api-resources/index",
-                    description: "Api 资源",
-                    multiTenancySides: MultiTenancySides.Host));
-            identityServer.AddItem(
-                new ApplicationMenu(
-                    name: "IdentityResources",
-                    displayName: "身份资源",
-                    url: "/manage/identity-server/identity-resources",
-                    component: "/identity-server/identity-resources/index",
-                    description: "身份资源",
-                    multiTenancySides: MultiTenancySides.Host));
-            identityServer.AddItem(
-                new ApplicationMenu(
-                    name: "ApiScopes",
-                    displayName: "Api 范围",
-                    url: "/manage/identity-server/api-scopes",
-                    component: "/identity-server/api-scopes/index",
-                    description: "Api 范围",
-                    multiTenancySides: MultiTenancySides.Host));
-            identityServer.AddItem(
-                new ApplicationMenu(
-                    name: "PersistedGrants",
-                    displayName: "持久授权",
-                    url: "/manage/identity-server/persisted-grants",
-                    component: "/identity-server/persisted-grants/index",
-                    description: "持久授权",
-                    multiTenancySides: MultiTenancySides.Host));
-        }
-        else
-        {
-            var openIddict = manage.AddItem(
+        identityServer.AddItem(
+            new ApplicationMenu(
+                name: "Clients",
+                displayName: "客户端",
+                url: "/manage/identity-server/clients",
+                component: "/identity-server/clients/index",
+                description: "客户端",
+                multiTenancySides: MultiTenancySides.Host));
+        identityServer.AddItem(
+            new ApplicationMenu(
+                name: "ApiResources",
+                displayName: "Api 资源",
+                url: "/manage/identity-server/api-resources",
+                component: "/identity-server/api-resources/index",
+                description: "Api 资源",
+                multiTenancySides: MultiTenancySides.Host));
+        identityServer.AddItem(
+            new ApplicationMenu(
+                name: "IdentityResources",
+                displayName: "身份资源",
+                url: "/manage/identity-server/identity-resources",
+                component: "/identity-server/identity-resources/index",
+                description: "身份资源",
+                multiTenancySides: MultiTenancySides.Host));
+        identityServer.AddItem(
+            new ApplicationMenu(
+                name: "ApiScopes",
+                displayName: "Api 范围",
+                url: "/manage/identity-server/api-scopes",
+                component: "/identity-server/api-scopes/index",
+                description: "Api 范围",
+                multiTenancySides: MultiTenancySides.Host));
+        identityServer.AddItem(
+            new ApplicationMenu(
+                name: "PersistedGrants",
+                displayName: "持久授权",
+                url: "/manage/identity-server/persisted-grants",
+                component: "/identity-server/persisted-grants/index",
+                description: "持久授权",
+                multiTenancySides: MultiTenancySides.Host));
+
+        var openIddict = manage.AddItem(
                 new ApplicationMenu(
                     name: "OpenIddict",
                     displayName: "身份认证服务器",
@@ -285,39 +269,38 @@ public class AbpUINavigationVueVbenAdminNavigationDefinitionProvider : Navigatio
                     component: "LAYOUT",
                     description: "身份认证服务器(OpenIddict)",
                     multiTenancySides: MultiTenancySides.Host));
-            openIddict.AddItem(
-                new ApplicationMenu(
-                    name: "OpenIddictApplications",
-                    displayName: "应用管理",
-                    url: "/manage/openiddict/applications",
-                    component: "/openiddict/applications/index",
-                    description: "应用管理",
-                    multiTenancySides: MultiTenancySides.Host));
-            openIddict.AddItem(
-                new ApplicationMenu(
-                    name: "OpenIddictAuthorizations",
-                    displayName: "授权管理",
-                    url: "/manage/openiddict/authorizations",
-                    component: "/openiddict/authorizations/index",
-                    description: "授权管理",
-                    multiTenancySides: MultiTenancySides.Host));
-            openIddict.AddItem(
-                new ApplicationMenu(
-                    name: "OpenIddictScopes",
-                    displayName: "Api 范围",
-                    url: "/manage/openiddict/scopes",
-                    component: "/openiddict/scopes/index",
-                    description: "Api 范围",
-                    multiTenancySides: MultiTenancySides.Host));
-            openIddict.AddItem(
-                new ApplicationMenu(
-                    name: "OpenIddictTokens",
-                    displayName: "授权令牌",
-                    url: "/manage/openiddict/tokens",
-                    component: "/openiddict/tokens/index",
-                    description: "授权令牌",
-                    multiTenancySides: MultiTenancySides.Host));
-        }
+        openIddict.AddItem(
+            new ApplicationMenu(
+                name: "OpenIddictApplications",
+                displayName: "应用管理",
+                url: "/manage/openiddict/applications",
+                component: "/openiddict/applications/index",
+                description: "应用管理",
+                multiTenancySides: MultiTenancySides.Host));
+        openIddict.AddItem(
+            new ApplicationMenu(
+                name: "OpenIddictAuthorizations",
+                displayName: "授权管理",
+                url: "/manage/openiddict/authorizations",
+                component: "/openiddict/authorizations/index",
+                description: "授权管理",
+                multiTenancySides: MultiTenancySides.Host));
+        openIddict.AddItem(
+            new ApplicationMenu(
+                name: "OpenIddictScopes",
+                displayName: "Api 范围",
+                url: "/manage/openiddict/scopes",
+                component: "/openiddict/scopes/index",
+                description: "Api 范围",
+                multiTenancySides: MultiTenancySides.Host));
+        openIddict.AddItem(
+            new ApplicationMenu(
+                name: "OpenIddictTokens",
+                displayName: "授权令牌",
+                url: "/manage/openiddict/tokens",
+                component: "/openiddict/tokens/index",
+                description: "授权令牌",
+                multiTenancySides: MultiTenancySides.Host));
 
         manage.AddItem(
             new ApplicationMenu(
