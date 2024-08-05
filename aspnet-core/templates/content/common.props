@@ -1,12 +1,12 @@
 <Project>
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
-		<Version>8.1.3</Version>
+		<Version>8.2.0</Version>
 		<Authors>colin</Authors>
 		<NoWarn>$(NoWarn);CS1591;CS0436;CS8618;NU1803</NoWarn>
 		<PackageProjectUrl>https://github.com/colinin/abp-next-admin</PackageProjectUrl>
 		<PackageOutputPath>$(SolutionDir)LocalNuget</PackageOutputPath>
-		<PackageVersion>8.1.3</PackageVersion>
+		<PackageVersion>8.2.0</PackageVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/colinin/abp-next-admin</RepositoryUrl>

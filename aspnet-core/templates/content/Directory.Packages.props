@@ -2,8 +2,8 @@
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.1.1</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
-		<VoloAbpPackageVersion>8.1.3</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>8.1.3</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>8.2.0</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>8.2.0</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>8.0.0</MicrosoftExtensionsPackageVersion>
 		<MicrosoftAspNetCorePackageVersion>8.0.0</MicrosoftAspNetCorePackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>8.0.0</MicrosoftEntityFrameworkCorePackageVersion>
@@ -45,6 +45,8 @@
 		<PackageVersion Include="LINGYUN.Abp.ExceptionHandling.Emailing" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Http.Client.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.IdGenerator" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Identity.Session" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Identity.Session.AspNetCore" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Localization.CultureMap" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.MultiTenancy" Version="$(LINGYUNAbpPackageVersion)" />
