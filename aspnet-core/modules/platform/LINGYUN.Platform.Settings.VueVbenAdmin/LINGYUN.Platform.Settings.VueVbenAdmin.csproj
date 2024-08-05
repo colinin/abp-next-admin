@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
-		<AssemblyName>LINGYUN.Abp.Platform.Settings.VueVbenAdmin</AssemblyName>
-		<PackageId>LINGYUN.Abp.Platform.Settings.VueVbenAdmin</PackageId>
+		<AssemblyName>LINGYUN.Platform.Settings.VueVbenAdmin</AssemblyName>
+		<PackageId>LINGYUN.Platform.Settings.VueVbenAdmin</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

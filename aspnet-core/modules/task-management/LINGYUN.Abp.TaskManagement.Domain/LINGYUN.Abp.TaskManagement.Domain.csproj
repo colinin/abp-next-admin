@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<AssemblyName>LINGYUN.Abp.BackgroundTasks.Domain</AssemblyName>
-		<PackageId>LINGYUN.Abp.BackgroundTasks.Domain</PackageId>
+		<AssemblyName>LINGYUN.Abp.TaskManagement.Domain</AssemblyName>
+		<PackageId>LINGYUN.Abp.TaskManagement.Domain</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

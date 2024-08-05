@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<AssemblyName>LINGYUN.Abp.BackgroundTasks.HttpApi</AssemblyName>
-		<PackageId>LINGYUN.Abp.BackgroundTasks.HttpApi</PackageId>
+		<AssemblyName>LINGYUN.Abp.TaskManagement.HttpApi</AssemblyName>
+		<PackageId>LINGYUN.Abp.TaskManagement.HttpApi</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

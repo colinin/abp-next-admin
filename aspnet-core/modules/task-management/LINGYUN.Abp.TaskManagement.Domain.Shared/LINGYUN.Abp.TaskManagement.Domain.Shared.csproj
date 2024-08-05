@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
-		<AssemblyName>LINGYUN.Abp.BackgroundTasks.Domain.Shared</AssemblyName>
-		<PackageId>LINGYUN.Abp.BackgroundTasks.Domain.Shared</PackageId>
+		<AssemblyName>LINGYUN.Abp.TaskManagement.Domain.Shared</AssemblyName>
+		<PackageId>LINGYUN.Abp.TaskManagement.Domain.Shared</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

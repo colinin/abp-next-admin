@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<AssemblyName>LINGYUN.Abp.Platform.EntityFrameworkCore</AssemblyName>
-		<PackageId>LINGYUN.Abp.Platform.EntityFrameworkCore</PackageId>
+		<AssemblyName>LINGYUN.Platform.EntityFrameworkCore</AssemblyName>
+		<PackageId>LINGYUN.Platform.EntityFrameworkCore</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

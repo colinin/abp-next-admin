@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
-		<AssemblyName>LINGYUN.Abp.Platform.Application.Contracts</AssemblyName>
-		<PackageId>LINGYUN.Abp.Platform.Application.Contracts</PackageId>
+		<AssemblyName>LINGYUN.Platform.Application.Contracts</AssemblyName>
+		<PackageId>LINGYUN.Platform.Application.Contracts</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<AssemblyName>LINGYUN.Abp.BackgroundTasks.EntityFrameworkCore</AssemblyName>
-		<PackageId>LINGYUN.Abp.BackgroundTasks.EntityFrameworkCore</PackageId>
+		<AssemblyName>LINGYUN.Abp.TaskManagement.EntityFrameworkCore</AssemblyName>
+		<PackageId>LINGYUN.Abp.TaskManagement.EntityFrameworkCore</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
