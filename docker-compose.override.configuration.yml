@@ -52,7 +52,9 @@ services:
       - Redis__Configuration=host.docker.internal,defaultDatabase=10
       - Redis__InstanceName=LINGYUN.Abp.Application
       - AuthServer__Authority=http://auth-server:44385
-      - AuthServer__ApiName=lingyun-abp-application
+      - AuthServer__Audience=lingyun-abp-application
+      - AuthServer__MapInboundClaims=false
+      - AuthServer__RequireHttpsMetadata=false
       - IdentityServer__Clients__InternalService__ClientId=InternalServiceClient
       - IdentityServer__Clients__AuthVueAdmin__ClientId=vue-admin-client
       - IdentityServer__Clients__AuthVueAdmin__RootUrl=http://localhost:3100/
@@ -106,7 +108,9 @@ services:
       - Redis__Configuration=host.docker.internal,defaultDatabase=10
       - Redis__InstanceName=LINGYUN.Abp.Application
       - AuthServer__Authority=http://auth-server:44385
-      - AuthServer__ApiName=lingyun-abp-application
+      - AuthServer__Audience=lingyun-abp-application
+      - AuthServer__MapInboundClaims=false
+      - AuthServer__RequireHttpsMetadata=false
 
   admin-api:
     environment:
@@ -160,7 +164,9 @@ services:
       - Redis__Configuration=host.docker.internal,defaultDatabase=10
       - Redis__InstanceName=LINGYUN.Abp.Application
       - AuthServer__Authority=http://auth-server:44385
-      - AuthServer__ApiName=lingyun-abp-application
+      - AuthServer__Audience=lingyun-abp-application
+      - AuthServer__MapInboundClaims=false
+      - AuthServer__RequireHttpsMetadata=false
 
   localization-api:
     environment:
@@ -211,7 +217,9 @@ services:
       - Redis__Configuration=host.docker.internal,defaultDatabase=10
       - Redis__InstanceName=LINGYUN.Abp.Application
       - AuthServer__Authority=http://auth-server:44385
-      - AuthServer__ApiName=lingyun-abp-application
+      - AuthServer__Audience=lingyun-abp-application
+      - AuthServer__MapInboundClaims=false
+      - AuthServer__RequireHttpsMetadata=false
 
   platform-api:
     environment:
@@ -272,7 +280,9 @@ services:
       - Redis__Configuration=host.docker.internal,defaultDatabase=10
       - Redis__InstanceName=LINGYUN.Abp.Application
       - AuthServer__Authority=http://auth-server:44385
-      - AuthServer__ApiName=lingyun-abp-application
+      - AuthServer__Audience=lingyun-abp-application
+      - AuthServer__MapInboundClaims=false
+      - AuthServer__RequireHttpsMetadata=false
 
   messages-api:
     environment:
@@ -322,8 +332,11 @@ services:
       - Serilog__WriteTo__1__Args__nodeUris=http://host.docker.internal:9200
       - Redis__Configuration=host.docker.internal,defaultDatabase=10
       - Redis__InstanceName=LINGYUN.Abp.Application
+      - SignalR__Redis__Configuration=host.docker.internal,defaultDatabase=13,channelPrefix=abp-realtime-channel
       - AuthServer__Authority=http://auth-server:44385
-      - AuthServer__ApiName=lingyun-abp-application
+      - AuthServer__Audience=lingyun-abp-application
+      - AuthServer__MapInboundClaims=false
+      - AuthServer__RequireHttpsMetadata=false
       - Notifications__WeChat__WeApp__DefaultWeAppState=formal
 
   task-api:
@@ -375,7 +388,9 @@ services:
       - Redis__Configuration=host.docker.internal,defaultDatabase=10
       - Redis__InstanceName=LINGYUN.Abp.Application
       - AuthServer__Authority=http://auth-server:44385
-      - AuthServer__ApiName=lingyun-abp-application
+      - AuthServer__Audience=lingyun-abp-application
+      - AuthServer__MapInboundClaims=false
+      - AuthServer__RequireHttpsMetadata=false
 
   webhook-api:
     environment:
@@ -426,7 +441,9 @@ services:
       - Redis__Configuration=host.docker.internal,defaultDatabase=10
       - Redis__InstanceName=LINGYUN.Abp.Application
       - AuthServer__Authority=http://auth-server:44385
-      - AuthServer__ApiName=lingyun-abp-application
+      - AuthServer__Audience=lingyun-abp-application
+      - AuthServer__MapInboundClaims=false
+      - AuthServer__RequireHttpsMetadata=false
 
   workflow-api:
     environment:
@@ -487,7 +504,10 @@ services:
       - IdentityClients__InternalServiceClient__ClientSecret=1q2w3e*
       - IdentityClients__InternalServiceClient__RequireHttps=false
       - AuthServer__Authority=http://auth-server:44385
-      - AuthServer__ApiName=lingyun-abp-application
+      - AuthServer__Audience=lingyun-abp-application
+      - AuthServer__MapInboundClaims=false
+      - AuthServer__RequireHttpsMetadata=false
+
 
   internal-apigateway:
     environment:
@@ -506,4 +526,6 @@ services:
       - Redis__Configuration=host.docker.internal,defaultDatabase=10
       - Redis__InstanceName=LINGYUN.Abp.Application
       - AuthServer__Authority=http://auth-server:44385
-      - AuthServer__ApiName=lingyun-abp-application
+      - AuthServer__Audience=lingyun-abp-application
+      - AuthServer__MapInboundClaims=false
+      - AuthServer__RequireHttpsMetadata=false

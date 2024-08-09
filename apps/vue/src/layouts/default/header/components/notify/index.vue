@@ -42,15 +42,21 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+  import { computed, ref, onMounted, onUnmounted } from 'vue';
   import { Button, Drawer, Tabs, Badge } from 'ant-design-vue';
   import { BellOutlined } from '@ant-design/icons-vue';
-  import NoticeList from './NoticeList.vue';
   import { useGo } from '/@/hooks/web/usePage';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useTasks } from './useTasks';
   import { useMessages } from './useMessages';
   import { useNotifications } from './useNotifications';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useNotificationSerializer } from '/@/hooks/abp/useNotificationSerializer';
+  import { useAbpStoreWithOut } from '/@/store/modules/abp';
+  import { useUserStoreWithOut } from '/@/store/modules/user';
+  import { NotificationInfo } from '/@/api/messages/notifications/model';
+  import emitter from '/@/utils/eventBus';
+  import NoticeList from './NoticeList.vue';
 
   const ButtonGroup = Button.Group;
   const TabPane = Tabs.TabPane;
@@ -59,8 +65,12 @@
   const go = useGo();
   const open = ref(false);
   const { tasksRef } = useTasks();
+  const { createWarningModal } = useMessage();
   const { messageRef, clearMessage } = useMessages();
   const { notifierRef, readNotifer } = useNotifications();
+  const { deserialize } = useNotificationSerializer();
+  const abpStore = useAbpStoreWithOut();
+  const userStrore = useUserStoreWithOut();
   // const listData = ref(tabListData);
 
   const count = computed(() => {
@@ -71,13 +81,34 @@
     return count;
   });
 
+  function registerSessionEvent() {
+    // 注册用户会话过期事件, 退出登录状态
+    emitter.on('AbpIdentity.Session.Expiration', (notificationInfo: NotificationInfo) => {
+      const { data } = notificationInfo;
+      const sessionId = data.extraProperties['SessionId'];
+      if (sessionId === abpStore.getApplication?.currentUser?.sessionId) {
+        const { title, message } = deserialize(notificationInfo);
+        createWarningModal({
+          title: title,
+          content: message,
+          iconType: 'warning',
+          afterClose: () => {
+            userStrore.logout(true);
+          }
+        });
+      }
+    });
+  }
+
+  function unRegisterSessionEvent() {
+    emitter.off('AbpIdentity.Session.Expiration', () => {});
+  }
+
   function handleShowMessages() {
-    console.log('handleShowMessages');
     go('/sys/chat?type=chat-message');
   }
 
   function handleShowNotifications() {
-    console.log('handleShowNotifications');
     open.value = false;
     go('/messages/notifications');
   }
@@ -86,6 +117,9 @@
     console.log('showDrawer');
     open.value = true;
   }
+
+  onMounted(registerSessionEvent);
+  onUnmounted(unRegisterSessionEvent);
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-header-notify';

@@ -83,7 +83,6 @@
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Application\LINGYUN.Abp.Identity.Application.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.HttpApi\LINGYUN.Abp.Identity.HttpApi.csproj" />
-		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Notifications\LINGYUN.Abp.Identity.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />

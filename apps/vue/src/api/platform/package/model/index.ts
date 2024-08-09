@@ -25,6 +25,7 @@ export interface PackageBlobDownloadInput {
 
 export interface PackageGetLatestInput {
   name: string;
+  version: string;
 }
 
 export interface PackageGetPagedListInput extends PagedAndSortedResultRequestDto {

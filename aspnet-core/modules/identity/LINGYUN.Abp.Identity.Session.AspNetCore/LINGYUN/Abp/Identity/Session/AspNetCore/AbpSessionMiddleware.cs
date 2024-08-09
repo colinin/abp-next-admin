@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Middleware;
@@ -24,18 +25,18 @@ public class AbpSessionMiddleware : AbpMiddlewareBase, ITransientDependency
 
     public override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        var sessionId = _correlationIdProvider.Get() ?? Guid.NewGuid().ToString("N");
         if (context.User.Identity?.IsAuthenticated == true)
         {
             if (context.RequestServices.GetRequiredService<IOptions<AbpClaimsPrincipalFactoryOptions>>().Value.IsDynamicClaimsEnabled)
             {
                 // 在处理动态声明前保留全局会话用于验证
-                var sessionId = context.User.FindSessionId();
-                using (_sessionInfoProvider.Change(sessionId))
-                {
-                    return next(context);
-                }
+                sessionId = context.User.FindSessionId();
             }
         }
-        return next(context);
+        using (_sessionInfoProvider.Change(sessionId))
+        {
+            return next(context);
+        }
     }
 }

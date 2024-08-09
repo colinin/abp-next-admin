@@ -9,7 +9,6 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Identity.AspNetCore.Session;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
-using LINGYUN.Abp.Identity.Notifications;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.IdentityServer;
@@ -59,7 +58,6 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpIdentityApplicationModule),
-    typeof(AbpIdentityNotificationsModule),
 
     // 请勿混淆这两个模块, 他们各自都自己的职能
     // 此模块仅用于认证中心

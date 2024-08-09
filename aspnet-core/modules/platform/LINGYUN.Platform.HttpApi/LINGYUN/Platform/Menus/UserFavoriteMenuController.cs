@@ -28,7 +28,7 @@ public class UserFavoriteMenuController : PlatformControllerBase, IUserFavoriteM
     }
 
     [HttpPost]
-    [Route("my-favorite-menu")]
+    [Route("my-favorite-menus")]
     public virtual Task<UserFavoriteMenuDto> CreateMyFavoriteMenuAsync(UserFavoriteMenuCreateDto input)
     {
         return Service.CreateMyFavoriteMenuAsync(input);
@@ -42,7 +42,7 @@ public class UserFavoriteMenuController : PlatformControllerBase, IUserFavoriteM
     }
 
     [HttpDelete]
-    [Route("my-favorite-menu/{MenuId}")]
+    [Route("my-favorite-menus/{MenuId}")]
     public virtual Task DeleteMyFavoriteMenuAsync(UserFavoriteMenuRemoveInput input)
     {
         return Service.DeleteMyFavoriteMenuAsync(input);
@@ -70,7 +70,7 @@ public class UserFavoriteMenuController : PlatformControllerBase, IUserFavoriteM
     }
 
     [HttpPut]
-    [Route("my-favorite-menu")]
+    [Route("my-favorite-menus")]
     public virtual Task<UserFavoriteMenuDto> UpdateMyFavoriteMenuAsync(UserFavoriteMenuUpdateDto input)
     {
         return Service.UpdateMyFavoriteMenuAsync(input);

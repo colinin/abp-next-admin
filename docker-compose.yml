@@ -2,8 +2,8 @@ version: '3.4'
 
 services:
   admin-api:
-    hostname: admin
-    container_name: admin
+    hostname: admin-api
+    container_name: admin-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=80
@@ -42,8 +42,8 @@ services:
       - "auth-server:host-gateway"
 
   localization-api:
-    hostname: localization
-    container_name: localization
+    hostname: localization-api
+    container_name: localization-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=80
@@ -62,8 +62,8 @@ services:
       - "auth-server:host-gateway"
 
   platform-api:
-    hostname: platform
-    container_name: platform
+    hostname: platform-api
+    container_name: platform-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=80
@@ -82,8 +82,8 @@ services:
       - "auth-server:host-gateway"
 
   messages-api:
-    hostname: messages
-    container_name: messages
+    hostname: messages-api
+    container_name: messages-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=80
@@ -102,8 +102,8 @@ services:
       - "auth-server:host-gateway"
 
   task-api:
-    hostname: task
-    container_name: task
+    hostname: tasks-api
+    container_name: tasks-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=80
@@ -122,8 +122,8 @@ services:
       - "auth-server:host-gateway"
 
   webhook-api:
-    hostname: webhook
-    container_name: webhook
+    hostname: webhooks-api
+    container_name: webhooks-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=80
@@ -142,8 +142,8 @@ services:
       - "auth-server:host-gateway"
 
   workflow-api:
-    hostname: workflow
-    container_name: workflow
+    hostname: workflow-api
+    container_name: workflow-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=80
@@ -196,13 +196,13 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
       - "auth-server-api:host-gateway"
-      - "localization:host-gateway"
-      - "workflow:host-gateway"
-      - "webhook:host-gateway"
-      - "messages:host-gateway"
-      - "platform:host-gateway"
-      - "task:host-gateway"
-      - "admin:host-gateway"
+      - "localization-api:host-gateway"
+      - "workflow-api:host-gateway"
+      - "webhooks-api:host-gateway"
+      - "messages-api:host-gateway"
+      - "platform-api:host-gateway"
+      - "tasks-api:host-gateway"
+      - "admin-api:host-gateway"
 
   ui:
     restart: always

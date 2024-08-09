@@ -80,7 +80,6 @@
 		<ProjectReference Include="..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.WeChat.Work\LINGYUN.Abp.IdentityServer.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.AspNetCore.Session\LINGYUN.Abp.Identity.AspNetCore.Session.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Notifications\LINGYUN.Abp.Identity.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.OrganizaztionUnits\LINGYUN.Abp.Identity.OrganizaztionUnits.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />

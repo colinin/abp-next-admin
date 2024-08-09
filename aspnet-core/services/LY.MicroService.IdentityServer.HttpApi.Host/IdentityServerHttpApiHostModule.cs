@@ -40,7 +40,6 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(LINGYUN.Abp.Account.AbpAccountApplicationModule),
     typeof(LINGYUN.Abp.Account.AbpAccountHttpApiModule),
-    typeof(LINGYUN.Abp.Identity.Notifications.AbpIdentityNotificationsModule),
     typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationModule),
     typeof(LINGYUN.Abp.Identity.AbpIdentityHttpApiModule),
     typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerApplicationModule),

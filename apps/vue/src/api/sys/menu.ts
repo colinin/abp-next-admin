@@ -1,4 +1,4 @@
-import { defAbpHttp } from '/@/utils/http/abp';
+import { defHttp } from '/@/utils/http/axios';
 import { RouteItem } from './model/menuModel';
 
 /**
@@ -6,15 +6,7 @@ import { RouteItem } from './model/menuModel';
  */
 
 export const getMenuList = () => {
-  return defAbpHttp.request<ListResultDto<RouteItem>>({
-    service: 'Platform',
-    controller: 'Menu',
-    action: 'GetCurrentUserMenuListAsync',
-    uniqueName: 'GetCurrentUserMenuListAsyncByInput',
-    params: {
-      input: {
-        framework: 'Vue Vben Admin',
-      },
-    },
+  return defHttp.get<ListResultDto<RouteItem>>({
+    url: `/api/platform/menus/by-current-user?framework=Vue Vben Admin`,
   });
 };

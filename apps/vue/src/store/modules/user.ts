@@ -10,6 +10,7 @@ import { useAbpStoreWithOut } from './abp';
 import { useAppStoreWithOut } from './app';
 
 import { loginApi, loginPhoneApi, getUserInfo } from '/@/api/sys/user';
+import { revokeSession } from '/@/api/account/profiles';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -20,6 +21,7 @@ import { h } from 'vue';
 
 import { mgr } from '/@/utils/auth/oidc';
 import { formatUrl } from '/@/api/oss-management/files/private';
+import { isNullOrWhiteSpace } from '/@/utils/strings';
 
 interface UserState {
   userInfo: Nullable<GetUserInfoModel>;
@@ -234,7 +236,14 @@ export const useUserStore = defineStore({
         title: () => h('span', t('sys.app.logoutTip')),
         content: () => h('span', t('sys.app.logoutMessage')),
         onOk: async () => {
-          await this.logout(true);
+          const abpStore = useAbpStoreWithOut();
+          const sessionId = abpStore.getApplication?.currentUser?.sessionId
+          if (!isNullOrWhiteSpace(sessionId)) {
+            abpStore.resetSession();
+            await revokeSession(sessionId).finally(() => this.logout(true));
+          } else {
+            await this.logout(true);
+          }
         },
       });
     },

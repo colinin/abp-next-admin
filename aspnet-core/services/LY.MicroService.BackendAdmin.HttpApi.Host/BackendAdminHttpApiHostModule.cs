@@ -14,7 +14,6 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FeatureManagement;
 using LINGYUN.Abp.FeatureManagement.HttpApi;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
-using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;

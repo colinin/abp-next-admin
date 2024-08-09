@@ -12,6 +12,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.Notifications;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Identity.WeChat;
 using LINGYUN.Abp.Identity.WeChat.Work;
@@ -97,6 +98,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpNotificationsWeChatWorkModule),
     typeof(AbpNotificationsExceptionHandlingModule),
+    typeof(AbpIdentityNotificationsModule),
 
     // 重写模板引擎支持外部本地化
     typeof(AbpTextTemplatingScribanModule),

@@ -1,64 +1,35 @@
-import { defAbpHttp } from '/@/utils/http/abp';
+import { defHttp } from '/@/utils/http/axios';
 import { EditionCreateDto, EditionDto,EditionGetListInput, EditionUpdateDto,  } from './model';
 
-const remoteServiceName = 'AbpSaas';
-const controllerName = 'Edition';
-
 export const CreateAsyncByInput = (input: EditionCreateDto) => {
-  return defAbpHttp.request<EditionDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'CreateAsync',
-    uniqueName: 'CreateAsyncByInput',
+  return defHttp.post<EditionDto>({
+    url: `/api/saas/editions`,
     data: input,
   });
 };
 
 export const DeleteAsyncById = (id: string) => {
-  return defAbpHttp.request<void>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'DeleteAsync',
-    uniqueName: 'DeleteAsyncById',
-    params: {
-      id: id,
-    },
+  return defHttp.delete<void>({
+    url: `/api/saas/editions/${id}`,
   });
 };
 
 export const GetAsyncById = (id: string) => {
-  return defAbpHttp.request<EditionDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetAsync',
-    uniqueName: 'GetAsyncById',
-    params: {
-      id: id,
-    },
+  return defHttp.get<EditionDto>({
+    url: `/api/saas/editions/${id}`,
   });
 };
 
 export const GetListAsyncByInput = (input: EditionGetListInput) => {
-  return defAbpHttp.pagedRequest<EditionDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetListAsync',
-    uniqueName: 'GetListAsyncByInput',
-    params: {
-      input: input,
-    },
+  return defHttp.get<PagedResultDto<EditionDto>>({
+    url: `/api/saas/editions`,
+    params: input,
   });
 };
 
 export const UpdateAsyncByIdAndInput = (id: string, input: EditionUpdateDto) => {
-  return defAbpHttp.request<EditionDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'UpdateAsync',
-    uniqueName: 'UpdateAsyncByIdAndInput',
-    params: {
-      id: id,
-    },
+  return defHttp.put<EditionDto>({
+    url: `/api/saas/editions/${id}`,
     data: input,
   });
 };
