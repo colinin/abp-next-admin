@@ -242,7 +242,7 @@ services:
       - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
-      - RemoteServices__AbpIdentity__BaseUrl=http://sts-api:30015/
+      - RemoteServices__AbpIdentity__BaseUrl=http://apigateway:30000/
       - RemoteServices__AbpIdentity__IdentityClient=InternalServiceClient
       - IdentityClients__InternalServiceClient__Authority=http://auth-server:44385/
       - IdentityClients__InternalServiceClient__RequireHttps=false
@@ -494,7 +494,7 @@ services:
       - Serilog__WriteTo__1__Args__nodeUris=http://host.docker.internal:9200
       - Redis__Configuration=host.docker.internal,defaultDatabase=10
       - Redis__InstanceName=LINGYUN.Abp.Application
-      - RemoteServices__AbpOssManagement__BaseUrl=http://platform:30025
+      - RemoteServices__AbpOssManagement__BaseUrl=http://apigateway:30000
       - RemoteServices__AbpOssManagement__IdentityClient=InternalServiceClient
       - RemoteServices__AbpOssManagement__UseCurrentAccessToken=false
       - IdentityClients__InternalServiceClient__Authority=http://auth-server:44385/
