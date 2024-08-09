@@ -27,7 +27,8 @@ public class IdentitySessionClaimsPrincipalContributor : IAbpClaimsPrincipalCont
         var userId = claimsIdentity.FindUserId();
         if (userId.HasValue)
         {
-            sessionId = Guid.NewGuid().ToString("N");
+            var sessionInfoProvider = context.GetRequiredService<ISessionInfoProvider>();
+            sessionId = sessionInfoProvider.SessionId ?? Guid.NewGuid().ToString("N");
 
             claimsIdentity.AddOrReplace(new Claim(AbpClaimTypes.SessionId, sessionId));
             context.ClaimsPrincipal.AddIdentityIfNotContains(claimsIdentity);

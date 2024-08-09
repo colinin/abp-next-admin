@@ -1,4 +1,4 @@
-import { defAbpHttp } from '/@/utils/http/abp';
+import { defHttp } from '/@/utils/http/axios';
 import {
   TextTemplateContentDto,
   TextTemplateContentGetInput,
@@ -6,43 +6,23 @@ import {
   TextTemplateContentUpdateDto
 } from './model';
 
-const remoteServiceName = 'AbpTextTemplating';
-const controllerName = 'TextTemplateContent';
-
 export const GetAsyncByInput = (input: TextTemplateContentGetInput) => {
-  return defAbpHttp.request<TextTemplateContentDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetAsync',
-    uniqueName: 'GetAsyncByInput',
-    params: {
-      input: input,
-    },
+  return defHttp.get<TextTemplateContentDto>({
+    url: `/api/text-templating/templates/content`,
+    params: input,
   });
 };
 
 export const RestoreToDefaultAsyncByNameAndInput = (name: string, input: TextTemplateRestoreInput) => {
-  return defAbpHttp.request<void>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'RestoreToDefaultAsync',
-    uniqueName: 'RestoreToDefaultAsyncByNameAndInput',
-    params: {
-      name: name,
-    },
+  return defHttp.put<void>({
+    url: `/api/text-templating/templates/content/${name}/restore-to-default`,
     data: input,
   });
 };
 
 export const UpdateAsyncByNameAndInput = (name: string, input: TextTemplateContentUpdateDto) => {
-  return defAbpHttp.request<TextTemplateContentDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'UpdateAsync',
-    uniqueName: 'UpdateAsyncByNameAndInput',
-    params: {
-      name: name,
-    },
+  return defHttp.put<TextTemplateContentDto>({
+    url: `/api/text-templating/templates/content/${name}`,
     data: input,
   });
 };

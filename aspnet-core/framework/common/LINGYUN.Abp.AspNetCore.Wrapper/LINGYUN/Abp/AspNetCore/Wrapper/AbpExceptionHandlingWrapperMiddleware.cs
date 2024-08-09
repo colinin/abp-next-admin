@@ -68,56 +68,68 @@ public class AbpExceptionHandlingWrapperMiddleware : IMiddleware, ITransientDepe
                 new ExceptionNotificationContext(exception)
             );
 
+        var wrapOptions = httpContext.RequestServices.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
+
         if (exception is AbpAuthorizationException)
         {
             await httpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
                 .HandleAsync(exception.As<AbpAuthorizationException>(), httpContext);
-        }
-        else
-        {
-            var jsonSerializer = httpContext.RequestServices.GetRequiredService<IJsonSerializer>();
-            var wrapOptions = httpContext.RequestServices.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
-            var httpResponseWrapper = httpContext.RequestServices.GetRequiredService<IHttpResponseWrapper>();
-            var statusCodFinder = httpContext.RequestServices.GetRequiredService<IHttpExceptionStatusCodeFinder>();
-            var exceptionWrapHandler = httpContext.RequestServices.GetRequiredService<IExceptionWrapHandlerFactory>();
-            var errorInfoConverter = httpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
-            var exceptionHandlingOptions = httpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
-
-            var remoteServiceErrorInfo = errorInfoConverter.Convert(exception, options =>
+            if (!wrapOptions.IsWrapUnauthorizedEnabled)
             {
-                options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
-                options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
-            });
+                await httpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
+                .HandleAsync(exception.As<AbpAuthorizationException>(), httpContext);
+                return;
+            }
 
-            var exceptionWrapContext = new ExceptionWrapContext(
-                exception,
-                remoteServiceErrorInfo,
-                httpContext.RequestServices,
-                statusCodFinder.GetStatusCode(httpContext, exception));
+            var isAuthenticated = httpContext.User?.Identity?.IsAuthenticated ?? false;
+            if (isAuthenticated)
+            {
+                await httpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
+                    .HandleAsync(exception.As<AbpAuthorizationException>(), httpContext);
+                return;
+            }
+        }
+        var jsonSerializer = httpContext.RequestServices.GetRequiredService<IJsonSerializer>();
+        var httpResponseWrapper = httpContext.RequestServices.GetRequiredService<IHttpResponseWrapper>();
+        var statusCodFinder = httpContext.RequestServices.GetRequiredService<IHttpExceptionStatusCodeFinder>();
+        var exceptionWrapHandler = httpContext.RequestServices.GetRequiredService<IExceptionWrapHandlerFactory>();
+        var errorInfoConverter = httpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
+        var exceptionHandlingOptions = httpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
 
-            exceptionWrapHandler.CreateFor(exceptionWrapContext).Wrap(exceptionWrapContext);
+        var remoteServiceErrorInfo = errorInfoConverter.Convert(exception, options =>
+        {
+            options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
+            options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+        });
 
-            var wrapperHeaders = new Dictionary<string, string>()
+        var exceptionWrapContext = new ExceptionWrapContext(
+            exception,
+            remoteServiceErrorInfo,
+            httpContext.RequestServices,
+            statusCodFinder.GetStatusCode(httpContext, exception));
+
+        exceptionWrapHandler.CreateFor(exceptionWrapContext).Wrap(exceptionWrapContext);
+
+        var wrapperHeaders = new Dictionary<string, string>()
             {
                 { AbpHttpWrapConsts.AbpWrapResult, "true" }
             };
-            var responseWrapperContext = new HttpResponseWrapperContext(
-                httpContext,
-                (int)wrapOptions.HttpStatusCode,
-                wrapperHeaders);
+        var responseWrapperContext = new HttpResponseWrapperContext(
+            httpContext,
+            (int)wrapOptions.HttpStatusCode,
+            wrapperHeaders);
 
-            httpResponseWrapper.Wrap(responseWrapperContext);
+        httpResponseWrapper.Wrap(responseWrapperContext);
 
-            httpContext.Response.Clear();
-            httpContext.Response.OnStarting(_clearCacheHeadersDelegate, httpContext.Response);
-            httpContext.Response.Headers.Append("Content-Type", "application/json");
+        httpContext.Response.Clear();
+        httpContext.Response.OnStarting(_clearCacheHeadersDelegate, httpContext.Response);
+        httpContext.Response.Headers.Append("Content-Type", "application/json");
 
-            var wrapResult = new WrapResult(
-                exceptionWrapContext.ErrorInfo.Code,
-                exceptionWrapContext.ErrorInfo.Message,
-                exceptionWrapContext.ErrorInfo.Details);
-            await httpContext.Response.WriteAsync(jsonSerializer.Serialize(wrapResult));
-        }
+        var wrapResult = new WrapResult(
+            exceptionWrapContext.ErrorInfo.Code,
+            exceptionWrapContext.ErrorInfo.Message,
+            exceptionWrapContext.ErrorInfo.Details);
+        await httpContext.Response.WriteAsync(jsonSerializer.Serialize(wrapResult));
     }
 
     private Task ClearCacheHeaders(object state)

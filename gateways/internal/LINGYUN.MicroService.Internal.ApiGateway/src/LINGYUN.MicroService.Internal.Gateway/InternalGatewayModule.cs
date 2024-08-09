@@ -1,4 +1,5 @@
 ﻿using Autofac.Core;
+using DeviceDetectorNET.Parser.Device;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -18,6 +19,7 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.ApiExploring;
@@ -28,6 +30,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
 using Yarp.ReverseProxy.Configuration;
+using Yarp.Telemetry.Consumption;
 
 namespace LINGYUN.MicroService.Internal.Gateway;
 
@@ -128,8 +131,14 @@ public class InternalGatewayModule : AbpModule
 
         });
         context.Services.AddHttpForwarder();
+        context.Services.AddTelemetryListeners();
+
         context.Services
             .AddReverseProxy()
+            .ConfigureHttpClient((context, handler) =>
+            {
+                handler.ActivityHeadersPropagator = null;
+            })
             .LoadFromConfig(configuration.GetSection("ReverseProxy"));
     }
 
@@ -182,24 +191,30 @@ public class InternalGatewayModule : AbpModule
                     continue;
                 }
 
-                options.SwaggerEndpoint($"{clusterGroup.Value.Address}/swagger/v1/swagger.json", $"{routeConfig.RouteId} API");
+                var swaggerEndpoint = clusterGroup.Value.Address;
+                if (clusterGroup.Value.Metadata != null &&
+                    clusterGroup.Value.Metadata.TryGetValue("SwaggerEndpoint", out var address) &&
+                    !address.IsNullOrWhiteSpace())
+                {
+                    swaggerEndpoint = address;
+                }
+
+                options.SwaggerEndpoint($"{swaggerEndpoint}/swagger/v1/swagger.json", $"{routeConfig.RouteId} API");
                 options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
                 options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
             }
         });
 
-        app.UseRewriter(new RewriteOptions().AddRedirect("^(|\\|\\s+)$", "/swagger"));
+        // app.UseRewriter(new RewriteOptions().AddRedirect("^(|\\|\\s+)$", "/swagger"));
 
         app.UseRouting();
         app.UseAuditing();
+        app.UseWebSockets();
+        app.UseWebSocketsTelemetry();
         app.UseConfiguredEndpoints(endpoints =>
         {
-            endpoints.MapReverseProxy(options =>
-            {
-                options.UseLoadBalancing();
-            });
+            endpoints.MapReverseProxy();
         });
-        app.UseWebSockets();
         app.UseAbpSerilogEnrichers();
     }
 }

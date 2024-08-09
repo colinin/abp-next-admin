@@ -34,11 +34,18 @@ public class SignalRNotificationPublishProvider : NotificationPublishProvider
         if (identifiers?.Count() == 0)
         {
             var groupName = notification.TenantId?.ToString() ?? "Global";
-
-            var singalRGroup = _hubContext.Clients.Group(groupName);
-            // 租户通知群发
-            Logger.LogDebug($"Found a singalr group, begin senging notifications");
-            await singalRGroup.SendAsync(_options.MethodName, notification, cancellationToken);
+            try
+            {
+                var singalRGroup = _hubContext.Clients.Group(groupName);
+                // 租户通知群发
+                Logger.LogDebug($"Found a singalr group, begin senging notifications");
+                await singalRGroup.SendAsync(_options.MethodName, notification, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("Could not send notifications to group {0}", groupName);
+                Logger.LogWarning("Send to user notifications error: {0}", ex.Message);
+            }
         }
         else
         {

@@ -358,7 +358,7 @@ public partial class RealtimeMessageHttpApiHostModule
         {
             // 宿主项目启用动态通知
             options.IsDynamicNotificationsStoreEnabled = true;
-            options.SaveStaticNotificationsToDatabase = false;
+            options.SaveStaticNotificationsToDatabase = true;
         });
     }
 

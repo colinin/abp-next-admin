@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ProxyScripting;
 using Volo.Abp.Content;
@@ -56,7 +57,7 @@ public class AbpAspNetCoreMvcWrapperModule : AbpModule
             //options.IgnoreReturnTypes.Add<ViewResult>();
             //options.IgnoreReturnTypes.Add<ViewEngineResult>();
             //options.IgnoreReturnTypes.Add<ViewComponentResult>();
-            
+
             //options.IgnoreReturnTypes.Add<RedirectToActionResult>();
             //options.IgnoreReturnTypes.Add<RedirectToPageResult>();
             //options.IgnoreReturnTypes.Add<RedirectToRouteResult>();
@@ -65,10 +66,14 @@ public class AbpAspNetCoreMvcWrapperModule : AbpModule
             //options.IgnoreReturnTypes.Add<SignOutResult>();
             //options.IgnoreReturnTypes.Add<ForbidResult>();
 
-            // Abp/ServiceProxyScript
-            options.IgnoreControllers.Add<AbpServiceProxyScriptController>();
             // options.IgnoreControllers.Add<AbpApplicationLocalizationController>();
             // options.IgnoreControllers.Add<AbpApplicationConfigurationController>();
+
+            // Api Endpoints
+            options.IgnoreControllers.Add<AbpApiDefinitionController>();
+            // Abp/ServiceProxyScript
+            options.IgnoreControllers.Add<AbpServiceProxyScriptController>();
+            // Application Configuration Script
             options.IgnoreControllers.Add<AbpApplicationConfigurationScriptController>();
 
             // 官方模块不包装结果

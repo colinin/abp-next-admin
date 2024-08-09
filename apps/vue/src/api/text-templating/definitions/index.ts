@@ -1,4 +1,4 @@
-import { defAbpHttp } from '/@/utils/http/abp';
+import { defHttp } from '/@/utils/http/axios';
 import {
   TextTemplateDefinitionDto,
   TextTemplateDefinitionCreateDto,
@@ -6,64 +6,35 @@ import {
   TextTemplateDefinitionGetListInput
 } from './model';
 
-const remoteServiceName = 'AbpTextTemplating';
-const controllerName = 'TextTemplateDefinition';
-
 export const CreateAsyncByInput = (input: TextTemplateDefinitionCreateDto) => {
-  return defAbpHttp.request<TextTemplateDefinitionDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'CreateAsync',
-    uniqueName: 'CreateAsyncByInput',
+  return defHttp.post<TextTemplateDefinitionDto>({
+    url: `/api/text-templating/template/definitions`,
     data: input,
   });
 };
 
 export const DeleteAsyncByName = (name: string) => {
-  return defAbpHttp.request<void>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'DeleteAsync',
-    uniqueName: 'DeleteAsyncByName',
-    params: {
-      name: name,
-    },
+  return defHttp.delete<void>({
+    url: `/api/text-templating/template/definitions/${name}`,
   });
 };
 
 export const GetByNameAsyncByName = (name: string) => {
-  return defAbpHttp.request<TextTemplateDefinitionDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetByNameAsync',
-    uniqueName: 'GetByNameAsyncByName',
-    params: {
-      name: name,
-    },
+  return defHttp.get<TextTemplateDefinitionDto>({
+    url: `/api/text-templating/template/definitions/${name}`,
   });
 };
 
 export const GetListAsyncByInput = (input: TextTemplateDefinitionGetListInput) => {
-  return defAbpHttp.request<ListResultDto<TextTemplateDefinitionDto>>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetListAsync',
-    uniqueName: 'GetListAsyncByInput',
-    params: {
-      input: input,
-    },
+  return defHttp.get<ListResultDto<TextTemplateDefinitionDto>>({
+    url: `/api/text-templating/template/definitions`,
+    params: input,
   });
 };
 
 export const UpdateAsyncByNameAndInput = (name: string, input: TextTemplateDefinitionUpdateDto) => {
-  return defAbpHttp.request<TextTemplateDefinitionDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'UpdateAsync',
-    uniqueName: 'UpdateAsyncByNameAndInput',
-    params: {
-      name: name,
-    },
+  return defHttp.put<TextTemplateDefinitionDto>({
+    url: `/api/text-templating/template/definitions/${name}`,
     data: input,
   });
 };

@@ -1,4 +1,4 @@
-import { defAbpHttp } from '/@/utils/http/abp';
+import { defHttp } from '/@/utils/http/axios';
 import {
   PackageCreateDto,
   PackageDto,
@@ -11,111 +11,58 @@ import {
   PackageUpdateDto
 } from './model';
 
-const remoteServiceName = 'Platform';
-const controllerName = 'Package';
-
 export const CreateAsyncByInput = (input: PackageCreateDto) => {
-  return defAbpHttp.request<PackageDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'CreateAsync',
-    uniqueName: 'CreateAsyncByInput',
-    params: {
-    },
+  return defHttp.post<PackageDto>({
+    url: `/api/platform/packages`,
     data: input,
   });
 };
 export const DeleteAsyncById = (id: string) => {
-  return defAbpHttp.request<void>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'DeleteAsync',
-    uniqueName: 'DeleteAsyncById',
-    params: {
-      id: id,
-    },
+  return defHttp.delete<void>({
+    url: `/api/platform/packages/${id}`,
   });
 };
 export const UploadBlobAsyncByIdAndInput = (id: string, input: PackageBlobUploadDto) => {
-  return defAbpHttp.request<PackageBlobDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'UploadBlobAsync',
-    uniqueName: 'UploadBlobAsyncByIdAndInput',
-    params: id,
+  return defHttp.post<PackageBlobDto>({
+    url: `/api/platform/packages/${id}/blob`,
     data: input,
   });
 };
 export const RemoveBlobAsyncByIdAndInput = (id: string, input: PackageBlobRemoveDto) => {
-  return defAbpHttp.request<void>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'RemoveBlobAsync',
-    uniqueName: 'RemoveBlobAsyncByIdAndInput',
-    params: {
-      id: id,
-      input: input,
-    },
+  return defHttp.delete<void>({
+    url: `/api/platform/packages/${id}/blob?name=${input.name}`,
   });
 };
 export const DownloadBlobAsyncByIdAndInput = (id: string, input: PackageBlobDownloadInput) => {
-  return defAbpHttp.request<Blob>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'DownloadBlobAsync',
-    uniqueName: 'DownloadBlobAsyncByIdAndInput',
-    params: {
-      id: id,
-      input: input,
-    },
+  return defHttp.get<Blob>({
+    url: `/api/platform/packages/${id}/blob?name=${input.name}`,
   },{
     withToken: false,
   });
 };
 export const GetAsyncById = (id: string) => {
-  return defAbpHttp.request<PackageDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetAsync',
-    uniqueName: 'GetAsyncById',
-    params: {
-      id: id,
-    },
+  return defHttp.get<PackageDto>({
+    url: `/api/platform/packages/${id}`,
   },{
     withToken: false,
   });
 };
 export const GetLatestAsyncByInput = (input: PackageGetLatestInput) => {
-  return defAbpHttp.request<PackageDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetLatestAsync',
-    uniqueName: 'GetLatestAsyncByInput',
-    params: {
-      input: input,
-    },
+  return defHttp.get<PackageDto>({
+    url: `/api/platform/packages/${input.name}/latest/${input.version}`,
   },{
     withToken: false,
   });
 };
 export const GetListAsyncByInput = (input: PackageGetPagedListInput) => {
-  return defAbpHttp.pagedRequest<PackageDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetListAsync',
-    uniqueName: 'GetListAsyncByInput',
-    params: {
-      input: input,
-    },
+  return defHttp.get<PagedResultDto<PackageDto>>({
+    url: `/api/platform/packages`,
+    params: input,
   });
 };
 export const UpdateAsyncByIdAndInput = (id: string, input: PackageUpdateDto) => {
-  return defAbpHttp.request<PackageDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'UpdateAsync',
-    uniqueName: 'UpdateAsyncByIdAndInput',
-    params: id,
+  return defHttp.put<PackageDto>({
+    url: `/api/platform/packages/${id}`,
     data: input,
   });
 };

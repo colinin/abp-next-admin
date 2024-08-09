@@ -48,7 +48,7 @@ public class IdentitySessionRevokeEventHandler :
         notificationData.TrySetData("SignedIn", eventData.Entity.SignedIn.ToString("yyyy-MM-dd HH:mm:ss"));
         if (eventData.Entity.LastAccessed.HasValue)
         {
-            notificationData.TrySetData("SessionId", eventData.Entity.LastAccessed.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+            notificationData.TrySetData("LastAccessed", eventData.Entity.LastAccessed.Value.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
         await _notificationSender.SendNofiterAsync(

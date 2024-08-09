@@ -1,127 +1,66 @@
-import { defAbpHttp } from '/@/utils/http/abp';
+import { defHttp } from '/@/utils/http/axios';
 import { TenantDto,TenantGetListInput, TenantCreateDto, TenantUpdateDto, TenantConnectionStringDto,TenantConnectionStringCreateOrUpdate,  } from './model';
 
-const remoteServiceName = 'AbpSaas';
-const controllerName = 'Tenant';
-
 export const GetAsyncById = (id: string) => {
-  return defAbpHttp.request<TenantDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetAsync',
-    uniqueName: 'GetAsyncById',
-    params: {
-      id: id,
-    },
+  return defHttp.get<TenantDto>({
+    url: `/api/saas/tenants/${id}`,
   });
 };
 
 export const GetAsyncByName = (name: string) => {
-  return defAbpHttp.request<TenantDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetAsync',
-    uniqueName: 'GetAsyncByName',
-    params: {
-      name: name,
-    },
+  return defHttp.get<TenantDto>({
+    url: `/api/saas/tenants/by-name/${name}`,
   });
 };
 
 export const GetListAsyncByInput = (input: TenantGetListInput) => {
-  return defAbpHttp.pagedRequest<TenantDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetListAsync',
-    uniqueName: 'GetListAsyncByInput',
-    params: {
-      input: input,
-    },
+  return defHttp.get<PagedResultDto<TenantDto>>({
+    url: `/api/saas/tenants`,
+    params: input,
   });
 };
 
 export const CreateAsyncByInput = (input: TenantCreateDto) => {
-  return defAbpHttp.request<TenantDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'CreateAsync',
-    uniqueName: 'CreateAsyncByInput',
+  return defHttp.post<TenantDto>({
+    url: `/api/saas/tenants`,
     data: input,
   });
 };
 
 export const UpdateAsyncByIdAndInput = (id: string, input: TenantUpdateDto) => {
-  return defAbpHttp.request<TenantDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'UpdateAsync',
-    uniqueName: 'UpdateAsyncByIdAndInput',
-    params: {
-      id: id,
-    },
+  return defHttp.put<TenantDto>({
+    url: `/api/saas/tenants/${id}`,
     data: input,
   });
 };
 
 export const DeleteAsyncById = (id: string) => {
-  return defAbpHttp.request<void>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'DeleteAsync',
-    uniqueName: 'DeleteAsyncById',
-    params: {
-      id: id,
-    },
+  return defHttp.delete<void>({
+    url: `/api/saas/tenants/${id}`,
   });
 };
 
 export const GetConnectionStringAsyncByIdAndName = (id: string, name: string) => {
-  return defAbpHttp.request<TenantConnectionStringDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetConnectionStringAsync',
-    uniqueName: 'GetConnectionStringAsyncByIdAndName',
-    params: {
-      id: id,
-      name: name,
-    },
+  return defHttp.get<TenantConnectionStringDto>({
+    url: `/api/saas/tenants/${id}/connection-string/${name}`,
   });
 };
 
 export const GetConnectionStringAsyncById = (id: string) => {
-  return defAbpHttp.listRequest<TenantConnectionStringDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'GetConnectionStringAsync',
-    uniqueName: 'GetConnectionStringAsyncById',
-    params: {
-      id: id,
-    },
+  return defHttp.get<ListResultDto<TenantConnectionStringDto>>({
+    url: `/api/saas/tenants/${id}/connection-string`,
   });
 };
 
 export const SetConnectionStringAsyncByIdAndInput = (id: string, input: TenantConnectionStringCreateOrUpdate) => {
-  return defAbpHttp.request<TenantConnectionStringDto>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'SetConnectionStringAsync',
-    uniqueName: 'SetConnectionStringAsyncByIdAndInput',
-    params: {
-      id: id,
-    },
+  return defHttp.put<TenantConnectionStringDto>({
+    url: `/api/saas/tenants/${id}/connection-string`,
     data: input,
   });
 };
 
 export const DeleteConnectionStringAsyncByIdAndName = (id: string, name: string) => {
-  return defAbpHttp.request<void>({
-    service: remoteServiceName,
-    controller: controllerName,
-    action: 'DeleteConnectionStringAsync',
-    uniqueName: 'DeleteConnectionStringAsyncByIdAndName',
-    params: {
-      id: id,
-      name: name,
-    },
+  return defHttp.delete<void>({
+    url: `/api/saas/tenants/${id}/connection-string/${name}`,
   });
 };

@@ -16,7 +16,7 @@ $serviceArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/services/LY.
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/services/LY.MicroService.TaskManagement.HttpApi.Host/"; Service = "task-management" }
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/services/LY.MicroService.WebhooksManagement.HttpApi.Host/"; Service = "webhooks" }
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/services/LY.MicroService.WorkflowManagement.HttpApi.Host/"; Service = "workflow" }
-$serviceArray += [PsObject]@{ Path = $rootFolder + "/../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.Internal.ApiGateway/"; Service = "internal-apigateway" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.Internal.Gateway/"; Service = "internal-apigateway" }
 
 [PsObject[]]$solutionArray = @()
 $solutionArray += [PsObject]@{ File = $rootFolder + "/../aspnet-core/LINGYUN.MicroService.All.sln" }
@@ -25,7 +25,7 @@ $solutionArray += [PsObject]@{ File = $rootFolder + "/../aspnet-core/LINGYUN.Mic
 $solutionArray += [PsObject]@{ File = $rootFolder + "/../aspnet-core/LINGYUN.MicroService.WebhooksManagement.sln" }
 $solutionArray += [PsObject]@{ File = $rootFolder + "/../aspnet-core/LINGYUN.MicroService.Workflow.sln" }
 $solutionArray += [PsObject]@{ File = $rootFolder + "/../aspnet-core/LINGYUN.MicroService.SingleProject.sln" }
-$solutionArray += [PsObject]@{ File = $rootFolder + "/../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/LINGYUN.MicroService.Internal.ApiGateway.sln" }
+$solutionArray += [PsObject]@{ File = $rootFolder + "/../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/LINGYUN.MicroService.Internal.Gateway.sln" }
 
 [PsObject[]]$migrationArray = @()
 $migrationArray += [PsObject]@{ Path = $rootFolder + "/../aspnet-core/migrations/LY.MicroService.Platform.DbMigrator" }

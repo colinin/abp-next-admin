@@ -8,7 +8,6 @@ using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Identity.AspNetCore.Session;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
-using LINGYUN.Abp.Identity.Notifications;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -59,7 +58,6 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityAspNetCoreSessionModule),
-    typeof(AbpIdentityNotificationsModule),
     typeof(AbpOpenIddictAspNetCoreSessionModule),
     typeof(AbpOpenIddictEntityFrameworkCoreModule),
     typeof(AbpOpenIddictSmsModule),

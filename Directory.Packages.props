@@ -252,5 +252,6 @@
 		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
 		<PackageVersion Include="TencentCloudSDK" Version="3.0.712" />
 		<PackageVersion Include="Yarp.ReverseProxy" Version="2.1.0" />
+		<PackageVersion Include="Yarp.Telemetry.Consumption" Version="2.1.0" />
 	</ItemGroup>
 </Project>

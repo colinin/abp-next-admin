@@ -148,9 +148,10 @@
   const expandedRowKeys = ref<string[]>([]);
   const selectedRowKeys = ref<string[]>([]);
   const typeTitleMap = reactive({
-    [NotificationType.System]: L('Notifications:System'),
-    [NotificationType.Application]: L('Notifications:Application'),
-    [NotificationType.User]: L('Notifications:User'),
+    [NotificationType.System]: L('NotificationType:System'),
+    [NotificationType.Application]: L('NotificationType:Application'),
+    [NotificationType.User]: L('NotificationType:User'),
+    [NotificationType.ServiceCallback]: L('NotificationType:ServiceCallback'),
   });
   const getTitle = computed(() => {
     return (notifier) => {

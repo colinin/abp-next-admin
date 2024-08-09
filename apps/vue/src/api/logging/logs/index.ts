@@ -1,14 +1,14 @@
-import { defAbpHttp } from '/@/utils/http/abp';
+import { defHttp } from '/@/utils/http/axios';
 import { Log, GetLogPagedRequest } from './model';
 
 export const get = (id: string) => {
-  return defAbpHttp.get<Log>({
+  return defHttp.get<Log>({
     url: `/api/auditing/logging/${id}`,
   });
 };
 
 export const getList = (input: GetLogPagedRequest) => {
-  return defAbpHttp.get<PagedResultDto<Log>>({
+  return defHttp.get<PagedResultDto<Log>>({
     url: '/api/auditing/logging',
     params: input,
   });
