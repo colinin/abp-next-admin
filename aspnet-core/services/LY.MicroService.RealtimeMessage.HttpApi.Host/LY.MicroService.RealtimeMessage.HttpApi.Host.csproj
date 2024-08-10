@@ -69,6 +69,8 @@
 		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.Identity.WeChat.Work\LINGYUN.Abp.Identity.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj" />
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official.Handlers\LINGYUN.Abp.WeChat.Official.Handlers.csproj" />
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Handlers\LINGYUN.Abp.WeChat.Work.Handlers.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

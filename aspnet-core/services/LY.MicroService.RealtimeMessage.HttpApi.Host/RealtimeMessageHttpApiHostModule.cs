@@ -37,6 +37,8 @@ using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.Scriban;
+using LINGYUN.Abp.WeChat.Official.Handlers;
+using LINGYUN.Abp.WeChat.Work.Handlers;
 using LY.MicroService.RealtimeMessage.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -98,6 +100,8 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpNotificationsWeChatWorkModule),
     typeof(AbpNotificationsExceptionHandlingModule),
+    typeof(AbpWeChatWorkHandlersModule),
+    typeof(AbpWeChatOfficialHandlersModule),
     typeof(AbpIdentityNotificationsModule),
 
     // 重写模板引擎支持外部本地化
