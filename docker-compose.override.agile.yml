@@ -120,6 +120,18 @@ services:
     depends_on:
       - agile-config
 
+  wechat-api:
+    environment:
+      - AgileConfig__IsEnabled=true
+      - AgileConfig__env=DEV
+      - AgileConfig__appId=LINGYUN.Abp.Wechat
+      - AgileConfig__secret=1q2w3E*
+      - AgileConfig__nodes=http://agile-config:5000
+      - AgileConfig__name=Wechat
+      - AgileConfig__tag=Wechat
+    depends_on:
+      - agile-config
+
   internal-apigateway:
     environment:
       - AgileConfig__IsEnabled=true

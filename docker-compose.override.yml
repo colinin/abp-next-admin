@@ -90,6 +90,16 @@ services:
     depends_on:
       - sts-server
 
+  wechat-api:
+    build:
+      context: ./aspnet-core/services/Publish/wechat
+    volumes:
+      - ./deploy/framework/wechat/logs:/app/Logs
+      - ./deploy/framework/wechat/modules:/app/Modules
+    restart: always
+    depends_on:
+      - sts-server
+
   internal-apigateway:
     build:
       context: ./aspnet-core/services/Publish/internal-apigateway

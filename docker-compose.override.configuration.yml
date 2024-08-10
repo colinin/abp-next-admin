@@ -508,6 +508,68 @@ services:
       - AuthServer__MapInboundClaims=false
       - AuthServer__RequireHttpsMetadata=false
 
+  wechat-api:
+    environment:
+      - AgileConfig__IsEnabled=false
+      - Auditing__AllEntitiesSelector=true
+      - App__CorsOrigins=http://localhost:3100,http://localhost:30000,http://apigateway:30000
+      - ConnectionStrings__Default=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpSaas=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpTenantManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpFeatureManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpSettingManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpPermissionManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpLocalizationManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpTextTemplating=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
+      - ConnectionStrings__TaskManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
+      - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
+      - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - Encryption__PassPhrase=s46c5q55nxpeS8Ra
+      - Encryption__InitVector=s83ng0abvd02js84
+      - Encryption__Salt=sf&5)s3#
+      - Elsa__Rebus__RabbitMQ__Connection=amqp://admin:123456@host.docker.internal:5672/
+      - CAP__EventBus__DefaultGroup=wechat
+      - CAP__EventBus__Version=v1
+      - CAP__EventBus__FailedRetryInterval=300
+      - CAP__EventBus__FailedRetryCount=10
+      - CAP__RabbitMQ__HostName=host.docker.internal
+      - CAP__RabbitMQ__Port=5672
+      - CAP__RabbitMQ__UserName=admin
+      - CAP__RabbitMQ__Password=123456
+      - CAP__RabbitMQ__ExchangeName=LINGYUN.Abp.Application
+      - CAP__RabbitMQ__VirtualHost=/
+      - CAP__MySql__TableNamePrefix=wechat
+      - CAP__MySql__ConnectionString=Server=host.docker.internal;Database=Platform-v70;User Id=root;Password=123456
+      - DistributedCache__HideErrors=true
+      - DistributedCache__KeyPrefix=LINGYUN.Abp.Application
+      - DistributedCache__GlobalCacheEntryOptions__SlidingExpiration=30:00:00
+      - DistributedCache__GlobalCacheEntryOptions__AbsoluteExpirationRelativeToNow=60:00:00
+      - DistributedLock__IsEnabled=true
+      - DistributedLock__Redis__Configuration=host.docker.internal,defaultDatabase=13
+      - Elasticsearch__NodeUris=http://host.docker.internal:9200
+      - Serilog__WriteTo__0__Name=Console
+      - Serilog__WriteTo__1__Name=Elasticsearch
+      - Serilog__WriteTo__1__Args__nodeUris=http://host.docker.internal:9200
+      - Redis__Configuration=host.docker.internal,defaultDatabase=10
+      - Redis__InstanceName=LINGYUN.Abp.Application
+      - RemoteServices__AbpOssManagement__BaseUrl=http://apigateway:30000
+      - RemoteServices__AbpOssManagement__IdentityClient=InternalServiceClient
+      - RemoteServices__AbpOssManagement__UseCurrentAccessToken=false
+      - IdentityClients__InternalServiceClient__Authority=http://auth-server:44385/
+      - IdentityClients__InternalServiceClient__GrantType=client_credentials
+      - IdentityClients__InternalServiceClient__Scope=lingyun-abp-application
+      - IdentityClients__InternalServiceClient__ClientId=InternalServiceClient
+      - IdentityClients__InternalServiceClient__ClientSecret=1q2w3e*
+      - IdentityClients__InternalServiceClient__RequireHttps=false
+      - AuthServer__Authority=http://auth-server:44385
+      - AuthServer__Audience=lingyun-abp-application
+      - AuthServer__MapInboundClaims=false
+      - AuthServer__RequireHttpsMetadata=false
 
   internal-apigateway:
     environment:

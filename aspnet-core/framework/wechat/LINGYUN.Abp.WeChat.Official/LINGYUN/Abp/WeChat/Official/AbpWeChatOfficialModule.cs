@@ -1,8 +1,6 @@
 ﻿using LINGYUN.Abp.WeChat.Common.Messages;
-using LINGYUN.Abp.WeChat.Common.Messages.Handlers;
 using LINGYUN.Abp.WeChat.Localization;
 using LINGYUN.Abp.WeChat.Official.Messages;
-using LINGYUN.Abp.WeChat.Official.Messages.Handlers;
 using LINGYUN.Abp.WeChat.Official.Messages.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;

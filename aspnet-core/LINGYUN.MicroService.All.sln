@@ -758,6 +758,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OpenIddict.AspN
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.Notifications", "modules\identity\LINGYUN.Abp.Identity.Notifications\LINGYUN.Abp.Identity.Notifications.csproj", "{54BBA043-317B-4A4F-B583-513D08BC25A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.Handlers", "framework\wechat\LINGYUN.Abp.WeChat.Work.Handlers\LINGYUN.Abp.WeChat.Work.Handlers.csproj", "{79FA2CBA-2904-4D80-A217-DCC0A38F93C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Official.Handlers", "framework\wechat\LINGYUN.Abp.WeChat.Official.Handlers\LINGYUN.Abp.WeChat.Official.Handlers.csproj", "{E469F047-6AD0-4D2B-9900-46358DA3BC30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1940,6 +1944,14 @@ Global
 		{54BBA043-317B-4A4F-B583-513D08BC25A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54BBA043-317B-4A4F-B583-513D08BC25A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54BBA043-317B-4A4F-B583-513D08BC25A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79FA2CBA-2904-4D80-A217-DCC0A38F93C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79FA2CBA-2904-4D80-A217-DCC0A38F93C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79FA2CBA-2904-4D80-A217-DCC0A38F93C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79FA2CBA-2904-4D80-A217-DCC0A38F93C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E469F047-6AD0-4D2B-9900-46358DA3BC30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E469F047-6AD0-4D2B-9900-46358DA3BC30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E469F047-6AD0-4D2B-9900-46358DA3BC30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E469F047-6AD0-4D2B-9900-46358DA3BC30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2306,6 +2318,8 @@ Global
 		{8826831D-8733-473A-B47B-A30C3732B13D} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
 		{D1484DD3-BB0A-45A4-BED5-FFA132DE2E72} = {83E698F6-F8CD-4604-AB80-01A203389501}
 		{54BBA043-317B-4A4F-B583-513D08BC25A7} = {52B5D4F7-237B-4E0A-A167-68442164F70A}
+		{79FA2CBA-2904-4D80-A217-DCC0A38F93C4} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
+		{E469F047-6AD0-4D2B-9900-46358DA3BC30} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}
