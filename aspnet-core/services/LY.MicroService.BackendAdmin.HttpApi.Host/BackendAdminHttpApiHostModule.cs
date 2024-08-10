@@ -32,7 +32,6 @@ using LINGYUN.Abp.Tencent.SettingManagement;
 using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.Scriban;
-using LINGYUN.Abp.WeChat.SettingManagement;
 using LINGYUN.Abp.WxPusher.SettingManagement;
 using LY.MicroService.BackendAdmin.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
@@ -70,7 +69,7 @@ namespace LY.MicroService.BackendAdmin;
     // 设置管理
     typeof(AbpAliyunSettingManagementModule),
     typeof(AbpTencentCloudSettingManagementModule),
-    typeof(AbpWeChatSettingManagementModule),
+    // typeof(AbpWeChatSettingManagementModule),
     typeof(AbpWxPusherSettingManagementModule),
     typeof(AbpOssManagementSettingManagementModule),
 
