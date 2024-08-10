@@ -6,6 +6,12 @@ using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.WeChat.Official.Account;
 
+/// <summary>
+/// 带参数二维码接口
+/// </summary>
+/// <remarks>
+/// 详情见: https://developers.weixin.qq.com/doc/offiaccount/Account_Management/Generating_a_Parametric_QR_Code.html
+/// </remarks>
 [Controller]
 [RemoteService(Name = AbpWeChatOfficialRemoteServiceConsts.RemoteServiceName)]
 [Area(AbpWeChatOfficialRemoteServiceConsts.ModuleName)]
@@ -18,7 +24,14 @@ public class ParametricQrCodeController : AbpControllerBase, IParametricQrCodeAp
     {
         _service = service;
     }
-
+    /// <summary>
+    /// 生成带参数的二维码
+    /// </summary>
+    /// <remarks>
+    /// 详情见: https://developers.weixin.qq.com/doc/offiaccount/Account_Management/Generating_a_Parametric_QR_Code.html
+    /// </remarks>
+    /// <param name="input"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("generate")]
     public virtual Task<IRemoteStreamContent> GenerateAsync(ParametricQrCodeGenerateInput input)

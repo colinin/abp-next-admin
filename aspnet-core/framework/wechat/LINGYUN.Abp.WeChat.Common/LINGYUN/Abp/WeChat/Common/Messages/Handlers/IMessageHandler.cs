@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.WeChat.Common.Messages;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.WeChat.Common.Messages.Handlers;
 public interface IMessageHandler

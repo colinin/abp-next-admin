@@ -1,10 +1,11 @@
 ﻿using LINGYUN.Abp.WeChat.Common.Messages.Handlers;
+using LINGYUN.Abp.WeChat.Work.Common.Messages;
 using LINGYUN.Abp.WeChat.Work.Common.Messages.Models;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 
-namespace LINGYUN.Abp.WeChat.Work.Common.Messages.Handlers;
+namespace LINGYUN.Abp.WeChat.Work.Handlers.Messages;
 public class WeChatWorkEventEventHandler :
     IDistributedEventHandler<WeChatWorkEventMessageEto<CustomMenuPushEvent>>,
     IDistributedEventHandler<WeChatWorkEventMessageEto<MenuClickJumpLinkPushEvent>>,

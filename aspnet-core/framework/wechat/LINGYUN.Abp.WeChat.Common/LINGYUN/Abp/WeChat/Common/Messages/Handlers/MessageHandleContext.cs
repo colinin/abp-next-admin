@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.WeChat.Common.Messages;
-using System;
+﻿using System;
 
 namespace LINGYUN.Abp.WeChat.Common.Messages.Handlers;
 public class MessageHandleContext<TMessage> where TMessage : WeChatMessage

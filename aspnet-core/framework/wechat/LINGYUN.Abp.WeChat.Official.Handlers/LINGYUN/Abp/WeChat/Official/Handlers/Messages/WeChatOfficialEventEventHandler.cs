@@ -1,11 +1,11 @@
-﻿using LINGYUN.Abp.WeChat.Common.Messages;
-using LINGYUN.Abp.WeChat.Common.Messages.Handlers;
+﻿using LINGYUN.Abp.WeChat.Common.Messages.Handlers;
+using LINGYUN.Abp.WeChat.Official.Messages;
 using LINGYUN.Abp.WeChat.Official.Messages.Models;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 
-namespace LINGYUN.Abp.WeChat.Official.Messages.Handlers;
+namespace LINGYUN.Abp.WeChat.Official.Handlers.Messages;
 public class WeChatOfficialEventEventHandler :
     IDistributedEventHandler<WeChatOfficialEventMessageEto<CustomMenuEvent>>,
     IDistributedEventHandler<WeChatOfficialEventMessageEto<UserSubscribeEvent>>,

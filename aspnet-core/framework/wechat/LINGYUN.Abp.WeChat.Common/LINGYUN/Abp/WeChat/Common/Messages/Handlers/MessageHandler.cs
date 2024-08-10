@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.WeChat.Common.Messages;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;

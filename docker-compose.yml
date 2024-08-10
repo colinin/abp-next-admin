@@ -161,6 +161,26 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
 
+  wechat-api:
+    hostname: wechat-api
+    container_name: wechat-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
+    ports:
+      - "30060:80"
+    networks:
+      - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
+
   sts-server:
     hostname: auth-server
     container_name: auth-server
@@ -199,6 +219,7 @@ services:
       - "localization-api:host-gateway"
       - "workflow-api:host-gateway"
       - "webhooks-api:host-gateway"
+      - "wechat-api:host-gateway"
       - "messages-api:host-gateway"
       - "platform-api:host-gateway"
       - "tasks-api:host-gateway"
