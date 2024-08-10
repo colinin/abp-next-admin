@@ -94,8 +94,10 @@ using LINGYUN.Abp.WebhooksManagement;
 using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using LINGYUN.Abp.WeChat.MiniProgram;
 using LINGYUN.Abp.WeChat.Official;
+using LINGYUN.Abp.WeChat.Official.Handlers;
 using LINGYUN.Abp.WeChat.SettingManagement;
 using LINGYUN.Abp.WeChat.Work;
+using LINGYUN.Abp.WeChat.Work.Handlers;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
@@ -260,6 +262,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpWeChatWorkModule),
     typeof(AbpWeChatWorkApplicationModule),
     typeof(AbpWeChatWorkHttpApiModule),
+    typeof(AbpWeChatOfficialHandlersModule),
+    typeof(AbpWeChatWorkHandlersModule),
     typeof(AbpWeChatSettingManagementModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpIdGeneratorModule),

@@ -96,11 +96,13 @@
 		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official.Handlers\LINGYUN.Abp.WeChat.Official.Handlers.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official.Application\LINGYUN.Abp.WeChat.Official.Application.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official.HttpApi\LINGYUN.Abp.WeChat.Official.HttpApi.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.SettingManagement\LINGYUN.Abp.WeChat.SettingManagement.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Application\LINGYUN.Abp.WeChat.Work.Application.csproj" />
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Handlers\LINGYUN.Abp.WeChat.Work.Handlers.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.HttpApi\LINGYUN.Abp.WeChat.Work.HttpApi.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj" />
