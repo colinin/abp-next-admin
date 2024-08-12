@@ -17,16 +17,13 @@
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'displayName'">
-          <span>{{ getGroupDisplayName(record.displayName) }}</span>
+          <span>{{ getDisplayName(record.displayName) }}</span>
         </template>
       </template>
       <template #expandedRowRender="{ record }">
         <BasicTable @register="registerSubTable" :data-source="record.permissions">
           <template #bodyCell="{ column, record }">
-            <template v-if="column.key === 'groupName'">
-              <span>{{ getGroupDisplayName(record.groupName) }}</span>
-            </template>
-            <template v-else-if="column.key === 'displayName'">
+            <template v-if="column.key === 'displayName'">
               <span>{{ getDisplayName(record.displayName) }}</span>
             </template>
             <template v-else-if="column.key === 'multiTenancySide'">
@@ -94,7 +91,6 @@
   import { multiTenancySidesMap, providersMap } from '../../typing';
   import { getSearchFormSchemas } from '../datas/ModalData';
   import { listToTree } from '/@/utils/helper/treeHelper';
-  import { groupBy } from '/@/utils/array';
   import { sorter } from '/@/utils/table';
   import PermissionDefinitionModal from './PermissionDefinitionModal.vue';
 
@@ -180,14 +176,6 @@
       };
     });
   });
-  const getGroupDisplayName = computed(() => {
-    return (groupName: string) => {
-      const group = state.groups.find((x) => x.name === groupName);
-      if (!group) return groupName;
-      const info = deserialize(group.displayName);
-      return Lr(info.resourceName, info.name);
-    };
-  });
   const getDisplayName = computed(() => {
     return (displayName?: string) => {
       if (!displayName) return displayName;
@@ -197,8 +185,7 @@
   });
 
   onMounted(() => {
-    fetch();
-    fetchGroups();
+    fetchGroups().then(fetch);
   });
 
   function fetch() {
@@ -209,15 +196,14 @@
       var input = form.getFieldsValue();
       GetListAsyncByInput(input)
         .then((res) => {
-          const permissionGroup = groupBy(res.items, 'groupName');
           const permissionGroupData: PermissionGroup[] = [];
-          Object.keys(permissionGroup).forEach((gk) => {
+          state.groups.forEach((group) => {
             const groupData: PermissionGroup = {
-              name: gk,
-              displayName: gk,
+              name: group.name,
+              displayName: group.displayName,
               permissions: [],
             };
-            const permissionTree = listToTree(permissionGroup[gk], {
+            const permissionTree = listToTree(res.items.filter((item) => item.groupName === group.name), {
               id: 'name',
               pid: 'parentName',
             });
@@ -235,7 +221,7 @@
   }
 
   function fetchGroups() {
-    getGroupDefinitions({}).then((res) => {
+    return getGroupDefinitions({}).then((res) => {
       state.groups = res.items;
     });
   }

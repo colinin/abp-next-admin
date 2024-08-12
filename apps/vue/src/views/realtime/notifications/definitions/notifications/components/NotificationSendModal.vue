@@ -267,12 +267,19 @@
     const formEl = unref(formRef);
     formEl?.validate().then(() => {
       let input: NotificationSendDto;
+      let toUsers: { userId: string }[] = [];
+      if (state.entity.toUsers && Array.isArray(state.entity.toUsers)) {
+        toUsers = state.entity.toUsers.map((id) => {
+          return { userId: id };
+        });
+      }
       if (getIsTemplate.value) {
         input = {
           name: state.notification!.template!,
           severity: state.entity.severity,
           culture: state.entity.culture,
           data: state.entity.data,
+          toUsers: toUsers,
         };
         changeOkLoading(true);
         sendTemplate(input)
@@ -320,6 +327,7 @@
             formUser: getApplication.currentUser.userName,
             createTime: formatToDateTime(new Date()),
           },
+          toUsers: toUsers,
         };
         changeOkLoading(true);
         send(input)

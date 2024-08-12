@@ -3,7 +3,9 @@ using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.Session;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.IdentityServer;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Claims;
 
 namespace LINGYUN.Abp.IdentityServer.Session;
 
@@ -18,6 +20,11 @@ public class AbpIdentityServerSessionModule : AbpModule
         Configure<AbpIdentityServerEventOptions>(options =>
         {
             options.EventServiceHandlers.Add<AbpIdentitySessionEventServiceHandler>();
+        });
+
+        Configure<AbpClaimsServiceOptions>(options =>
+        {
+            options.RequestedClaims.Add(AbpClaimTypes.SessionId);
         });
 
         Configure<IdentitySessionSignInOptions>(options =>

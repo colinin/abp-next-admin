@@ -4,49 +4,48 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.EventBus.CAP
+namespace LINGYUN.Abp.EventBus.CAP;
+
+/// <summary>
+/// AbpCAPEventBusModule
+/// </summary>
+[DependsOn(typeof(AbpEventBusModule))]
+public class AbpCAPEventBusModule : AbpModule
 {
     /// <summary>
-    /// AbpCAPEventBusModule
+    /// ConfigureServices
     /// </summary>
-    [DependsOn(typeof(AbpEventBusModule))]
-    public class AbpCAPEventBusModule : AbpModule
+    /// <param name="context"></param>
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        /// <summary>
-        /// ConfigureServices
-        /// </summary>
-        /// <param name="context"></param>
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        var configuration = context.Services.GetConfiguration();
+
+        Configure<AbpCAPEventBusOptions>(configuration.GetSection("CAP:Abp"));
+
+        context.Services.AddTransient<IFailedThresholdCallbackNotifier, FailedThresholdCallbackNotifier>();
+
+        var preActions = context.Services.GetPreConfigureActions<CapOptions>();
+
+        context.Services.AddCAPEventBus(options =>
         {
-            var configuration = context.Services.GetConfiguration();
+            // 取消默认的五分钟高频清理
+            // options.CollectorCleaningInterval = 360_0000;
 
-            Configure<AbpCAPEventBusOptions>(configuration.GetSection("CAP:Abp"));
+            configuration.GetSection("CAP:EventBus").Bind(options);
+            preActions.Configure(options);
 
-            context.Services.AddTransient<IFailedThresholdCallbackNotifier, FailedThresholdCallbackNotifier>();
-
-            var preActions = context.Services.GetPreConfigureActions<CapOptions>();
-
-            context.Services.AddCAPEventBus(options =>
+            if (options.FailedThresholdCallback == null)
             {
-                // 取消默认的五分钟高频清理
-                // options.CollectorCleaningInterval = 360_0000;
-
-                configuration.GetSection("CAP:EventBus").Bind(options);
-                preActions.Configure(options);
-
-                if (options.FailedThresholdCallback == null)
+                options.FailedThresholdCallback = async (failed) =>
                 {
-                    options.FailedThresholdCallback = async (failed) =>
+                    var exceptionNotifier = failed.ServiceProvider.GetService<IFailedThresholdCallbackNotifier>();
+                    if (exceptionNotifier != null)
                     {
-                        var exceptionNotifier = failed.ServiceProvider.GetService<IFailedThresholdCallbackNotifier>();
-                        if (exceptionNotifier != null)
-                        {
-                            // TODO: 作为异常处理?
-                            await exceptionNotifier.NotifyAsync(new AbpCAPExecutionFailedException(failed.MessageType, failed.Message));
-                        }
-                    };
-                }
-            });
-        }
+                        // TODO: 作为异常处理?
+                        await exceptionNotifier.NotifyAsync(new AbpCAPExecutionFailedException(failed.MessageType, failed.Message));
+                    }
+                };
+            }
+        });
     }
 }
