@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.SettingManagement;
 using Microsoft.AspNetCore.Authorization;
-using PackageName.CompanyName.ProjectName.Authorization;
+using PackageName.CompanyName.ProjectName.Permissions;
 using PackageName.CompanyName.ProjectName.Localization;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
