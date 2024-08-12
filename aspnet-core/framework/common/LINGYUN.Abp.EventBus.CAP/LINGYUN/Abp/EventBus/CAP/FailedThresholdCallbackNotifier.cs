@@ -3,29 +3,28 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 
-namespace LINGYUN.Abp.EventBus.CAP
+namespace LINGYUN.Abp.EventBus.CAP;
+
+[DisableConventionalRegistration]
+public class FailedThresholdCallbackNotifier : IFailedThresholdCallbackNotifier
 {
-    [DisableConventionalRegistration]
-    public class FailedThresholdCallbackNotifier : IFailedThresholdCallbackNotifier
+    protected AbpCAPEventBusOptions Options { get; }
+    protected IExceptionNotifier ExceptionNotifier { get; }
+
+    public FailedThresholdCallbackNotifier(
+        IOptions<AbpCAPEventBusOptions> options,
+        IExceptionNotifier exceptionNotifier)
     {
-        protected AbpCAPEventBusOptions Options { get; }
-        protected IExceptionNotifier ExceptionNotifier { get; }
+        Options = options.Value;
+        ExceptionNotifier = exceptionNotifier;
+    }
 
-        public FailedThresholdCallbackNotifier(
-            IOptions<AbpCAPEventBusOptions> options,
-            IExceptionNotifier exceptionNotifier)
+    public async virtual Task NotifyAsync(AbpCAPExecutionFailedException exception)
+    {
+        // 通过额外的选项来控制是否发送消息处理失败的事件
+        if (Options.NotifyFailedCallback)
         {
-            Options = options.Value;
-            ExceptionNotifier = exceptionNotifier;
-        }
-
-        public async virtual Task NotifyAsync(AbpCAPExecutionFailedException exception)
-        {
-            // 通过额外的选项来控制是否发送消息处理失败的事件
-            if (Options.NotifyFailedCallback)
-            {
-                await ExceptionNotifier.NotifyAsync(exception);
-            }
+            await ExceptionNotifier.NotifyAsync(exception);
         }
     }
 }

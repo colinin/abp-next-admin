@@ -8,14 +8,14 @@ import {
 
 export const getKeys = (input: GetCacheKeysRequest) => {
   return defHttp.get<CacheKeys>({
-    url: '/api/caching-management/cache',
+    url: '/api/caching-management/cache/keys',
     params: input,
   });
 };
 
 export const getValue = (key: string) => {
   return defHttp.get<CacheValue>({
-    url: `/api/caching-management/cache?key=${key}`,
+    url: `/api/caching-management/cache/value?key=${key}`,
   });
 };
 
@@ -28,6 +28,6 @@ export const refresh = (input: CacheRefreshRequest) => {
 
 export const remove = (key: string) => {
   return defHttp.delete<void>({
-    url: `/api/caching-management/cache?key=${key}`,
+    url: `/api/caching-management/cache/remove?key=${key}`,
   });
 };

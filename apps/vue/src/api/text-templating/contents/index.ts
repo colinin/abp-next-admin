@@ -7,9 +7,12 @@ import {
 } from './model';
 
 export const GetAsyncByInput = (input: TextTemplateContentGetInput) => {
+  let url = `/api/text-templating/templates/content/${input.name}`;
+  if (input.culture) {
+    url = `/api/text-templating/templates/content/${input.culture}/${input.name}`;
+  }
   return defHttp.get<TextTemplateContentDto>({
-    url: `/api/text-templating/templates/content`,
-    params: input,
+    url,
   });
 };
 
