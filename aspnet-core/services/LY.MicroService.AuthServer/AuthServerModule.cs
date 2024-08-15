@@ -150,9 +150,9 @@ public partial class AuthServerModule : AbpModule
         app.UseCors(DefaultCorsPolicyName);
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
+        app.UseMultiTenancy();
         app.UseAbpSession();
         app.UseDynamicClaims();
-        app.UseMultiTenancy();
         app.UseAuthorization();
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();

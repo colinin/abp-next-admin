@@ -60,13 +60,13 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpEmailingExceptionHandlingModule),
-    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpHttpClientModule),
     typeof(AbpAliyunSmsModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpClaimsMappingModule),
@@ -130,12 +130,12 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         // 认证
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
+        // 多租户
+        app.UseMultiTenancy();
         // 会话
         app.UseAbpSession();
         // 动态身份
         app.UseDynamicClaims();
-        // 多租户
-        app.UseMultiTenancy();
         // 授权
         app.UseAuthorization();
         // Swagger

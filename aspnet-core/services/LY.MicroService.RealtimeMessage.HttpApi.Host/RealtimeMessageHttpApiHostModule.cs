@@ -181,11 +181,11 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         // 认证
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
+        // 多租户
+        app.UseMultiTenancy();
         // 会话
         app.UseAbpSession();
         app.UseDynamicClaims();
-        // 多租户
-        app.UseMultiTenancy();
         // 授权
         app.UseAuthorization();
         // Swagger
