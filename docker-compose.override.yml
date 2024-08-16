@@ -19,6 +19,26 @@ services:
     depends_on:
       - sts-server
 
+  # 取消注释以使用openiddict
+  # sts-server:
+  #   build:
+  #     context: ./aspnet-core/services/Publish/authserver
+  #   volumes:
+  #     - ./deploy/framework/ids-sts/logs:/app/Logs
+  #     - ./deploy/framework/ids-sts/modules:/app/Modules
+  #   restart: always
+
+  # 取消注释以使用openiddict
+  # sts-api:
+  #   build:
+  #     context: ./aspnet-core/services/Publish/authserver-api
+  #   volumes:
+  #     - ./deploy/framework/ids-admin/logs:/app/Logs
+  #     - ./deploy/framework/ids-admin/modules:/app/Modules
+  #   restart: always
+  #   depends_on:
+  #     - sts-server
+
   admin-api:
     build:
       context: ./aspnet-core/services/Publish/admin

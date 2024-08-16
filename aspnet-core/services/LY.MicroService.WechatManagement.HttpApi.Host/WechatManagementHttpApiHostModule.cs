@@ -122,9 +122,9 @@ public partial class WechatManagementHttpApiHostModule : AbpModule
         app.UseCors();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
+        app.UseMultiTenancy();
         app.UseAbpSession();
         app.UseDynamicClaims();
-        app.UseMultiTenancy();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>

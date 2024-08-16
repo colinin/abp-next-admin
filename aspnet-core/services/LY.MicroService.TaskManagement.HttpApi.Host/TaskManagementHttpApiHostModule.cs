@@ -134,8 +134,9 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         app.UseRouting();
         app.UseCors(DefaultCorsPolicyName);
         app.UseAuthentication();
-        app.UseDynamicClaims();
+        app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
+        app.UseDynamicClaims();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>

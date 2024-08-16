@@ -10,7 +10,7 @@ services:
       - Auditing__AllEntitiesSelector=true
       - ConnectionStrings__Default=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
-      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=AuthServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpSaas=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
@@ -66,7 +66,7 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:30000,http://apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
-      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=AuthServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpSaas=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
@@ -119,7 +119,7 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:30000,http://apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
-      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=AuthServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpSaas=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
@@ -175,7 +175,7 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:30000,http://apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
-      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=AuthServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpSaas=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
@@ -228,7 +228,7 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:30000,http://apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
-      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=AuthServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpSaas=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
@@ -291,7 +291,7 @@ services:
       - Auditing__AllEntitiesSelector=true
       - ConnectionStrings__Default=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
-      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=AuthServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpSaas=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
@@ -346,7 +346,7 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:30000,http://apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
-      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=AuthServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpSaas=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
@@ -399,7 +399,7 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:30000,http://apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
-      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=AuthServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpSaas=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
@@ -452,7 +452,7 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:30000,http://apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
-      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=AuthServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpSaas=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
@@ -515,7 +515,7 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:30000,http://apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
-      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
+      - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=AuthServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=IdentityServer-V70;User Id=root;Password=123456
       - ConnectionStrings__AbpSaas=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456

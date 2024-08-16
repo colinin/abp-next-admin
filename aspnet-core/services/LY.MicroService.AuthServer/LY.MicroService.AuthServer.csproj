@@ -35,6 +35,7 @@
 		<PackageReference Include="Serilog.Settings.Configuration" />
 		<PackageReference Include="Serilog.Sinks.File" />
 		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
 		<!--<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
 			<PrivateAssets>all</PrivateAssets>
@@ -44,7 +45,6 @@
 		<PackageReference Include="Volo.Abp.Account.Application" />
 		<PackageReference Include="Volo.Abp.Account.Web.OpenIddict" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" />

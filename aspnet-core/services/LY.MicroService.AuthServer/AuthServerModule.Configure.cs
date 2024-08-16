@@ -147,7 +147,7 @@ public partial class AuthServerModule
 
                     builder.AddEncryptionCertificate(cer);
 
-                    builder.UseDataProtection();
+                    // builder.UseDataProtection();
                 });
             }
         }
@@ -181,7 +181,7 @@ public partial class AuthServerModule
                 }
 
 
-                builder.UseDataProtection();
+                // builder.UseDataProtection();
 
                 // 禁用https
                 builder.UseAspNetCore()
