@@ -3,7 +3,6 @@ using OpenIddict.Server;
 using System;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 /// <summary>
@@ -11,7 +10,6 @@ namespace LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 /// </summary>
 public class RevocationIdentitySession : IOpenIddictServerHandler<OpenIddictServerEvents.HandleRevocationRequestContext>
 {
-    protected ICurrentTenant CurrentTenant { get; }
     protected IIdentitySessionManager IdentitySessionManager { get; }
 
     public static OpenIddictServerHandlerDescriptor Descriptor { get; }
@@ -22,24 +20,17 @@ public class RevocationIdentitySession : IOpenIddictServerHandler<OpenIddictServ
             .SetType(OpenIddictServerHandlerType.Custom)
             .Build();
 
-    public RevocationIdentitySession(
-        ICurrentTenant currentTenant,
-        IIdentitySessionManager identitySessionManager)
+    public RevocationIdentitySession(IIdentitySessionManager identitySessionManager)
     {
-        CurrentTenant = currentTenant;
         IdentitySessionManager = identitySessionManager;
     }
 
     public async virtual ValueTask HandleAsync(OpenIddictServerEvents.HandleRevocationRequestContext context)
     {
-        var tenantId = context.Principal.FindTenantId();
         var sessionId = context.Principal.FindSessionId();
-        using (CurrentTenant.Change(tenantId))
+        if (!sessionId.IsNullOrWhiteSpace())
         {
-            if (!sessionId.IsNullOrWhiteSpace())
-            {
-                await IdentitySessionManager.RevokeSessionAsync(sessionId);
-            }
+            await IdentitySessionManager.RevokeSessionAsync(sessionId);
         }
     }
 }

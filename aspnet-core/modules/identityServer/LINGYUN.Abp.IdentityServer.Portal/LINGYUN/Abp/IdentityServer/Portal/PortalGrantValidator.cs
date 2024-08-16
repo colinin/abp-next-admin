@@ -89,7 +89,7 @@ public class PortalGrantValidator : IExtensionGrantValidator
         Guid? tenantId = null;
         using (_currentTenant.Change(null))
         {
-            var enterprise = parameters.Get("enterpriseId") ?? parameters.Get("EnterpriseId");
+            var enterprise = parameters.Get("EnterpriseId");
             if (enterprise.IsNullOrWhiteSpace() || !Guid.TryParse(enterprise, out var enterpriseId))
             {
                 // TODO: configurabled
