@@ -46,13 +46,13 @@ public class PortalGrantValidator : IExtensionGrantValidator
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public PortalGrantValidator(
-        ILogger<PortalGrantValidator> logger, 
-        IOptions<IdentityServerOptions> options, 
-        IEventService events, 
-        IResourceOwnerPasswordValidator resourceOwnerValidator, 
-        IdentitySecurityLogManager identitySecurityLogManager, 
-        UserManager<IdentityUser> userManager, 
-        ICurrentTenant currentTenant, 
+        ILogger<PortalGrantValidator> logger,
+        IOptions<IdentityServerOptions> options,
+        IEventService events,
+        IResourceOwnerPasswordValidator resourceOwnerValidator,
+        IdentitySecurityLogManager identitySecurityLogManager,
+        UserManager<IdentityUser> userManager,
+        ICurrentTenant currentTenant,
         IEnterpriseRepository enterpriseRepository,
         IOptions<AbpAspNetCoreMultiTenancyOptions> multiTenancyOptions,
         IHttpContextAccessor httpContextAccessor)
@@ -89,7 +89,7 @@ public class PortalGrantValidator : IExtensionGrantValidator
         Guid? tenantId = null;
         using (_currentTenant.Change(null))
         {
-            var enterprise = parameters.Get("EnterpriseId");
+            var enterprise = parameters.Get("enterpriseId") ?? parameters.Get("EnterpriseId");
             if (enterprise.IsNullOrWhiteSpace() || !Guid.TryParse(enterprise, out var enterpriseId))
             {
                 // TODO: configurabled

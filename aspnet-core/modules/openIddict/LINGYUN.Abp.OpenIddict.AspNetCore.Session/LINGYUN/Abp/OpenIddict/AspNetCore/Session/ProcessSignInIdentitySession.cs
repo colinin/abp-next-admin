@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.Identity.Session;
-using OpenIddict.Abstractions;
+using Microsoft.Extensions.Options;
 using OpenIddict.Server;
 using System.Threading.Tasks;
 
@@ -10,6 +10,7 @@ namespace LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 public class ProcessSignInIdentitySession : IOpenIddictServerHandler<OpenIddictServerEvents.ProcessSignInContext>
 {
     protected IIdentitySessionManager IdentitySessionManager { get; }
+    protected AbpOpenIddictAspNetCoreSessionOptions AbpOpenIddictAspNetCoreSessionOptions { get; }
 
     public static OpenIddictServerHandlerDescriptor Descriptor { get; }
         = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ProcessSignInContext>()
@@ -19,14 +20,18 @@ public class ProcessSignInIdentitySession : IOpenIddictServerHandler<OpenIddictS
             .SetType(OpenIddictServerHandlerType.Custom)
             .Build();
 
-    public ProcessSignInIdentitySession(IIdentitySessionManager identitySessionManager)
+    public ProcessSignInIdentitySession(
+        IIdentitySessionManager identitySessionManager,
+        IOptions<AbpOpenIddictAspNetCoreSessionOptions> abpOpenIddictAspNetCoreSessionOptions)
     {
         IdentitySessionManager = identitySessionManager;
+        AbpOpenIddictAspNetCoreSessionOptions = abpOpenIddictAspNetCoreSessionOptions.Value;
     }
 
     public async virtual ValueTask HandleAsync(OpenIddictServerEvents.ProcessSignInContext context)
     {
-        if (context.Request.IsPasswordGrantType() && context.Principal != null)
+        if (AbpOpenIddictAspNetCoreSessionOptions.PersistentSessionGrantTypes.Contains(context.Request.GrantType) &&
+            context.Principal != null)
         {
             await IdentitySessionManager.SaveSessionAsync(context.Principal, context.CancellationToken);
         }

@@ -56,8 +56,7 @@
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
 		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
 		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" />
-		<PackageReference Include="Volo.Abp.OpenIddict.AspNetCore" Condition="'$(OpenIddict)'=='true'" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Condition="'$(IdentityServer4)'=='true'" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.DistributedLocking" />
 		<PackageReference Include="Volo.Abp.Swashbuckle" />

@@ -9,7 +9,12 @@ using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
+using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Permissions;
+using LINGYUN.Abp.OpenIddict.Portal;
+using LINGYUN.Abp.OpenIddict.Sms;
+using LINGYUN.Abp.OpenIddict.WeChat;
 using LINGYUN.Abp.Saas;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -18,6 +23,7 @@ using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.WebhooksManagement;
 using LINGYUN.Abp.WeChat.Common.Messages.Handlers;
 using LINGYUN.Abp.WeChat.Localization;
+using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Abp.Wrapper;
 using LINGYUN.Platform.Localization;
 using LY.MicroService.Applications.Single.Authentication;
@@ -311,6 +317,15 @@ public partial class MicroServiceApplicationsSingleModule
             options.RefreshTokenReuseLeeway = lifetime.GetValue("RefreshTokenReuseLeeway", options.RefreshTokenReuseLeeway);
             options.UserCodeLifetime = lifetime.GetValue("UserCode", options.UserCodeLifetime);
         });
+        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
+        {
+            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
+            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
+        });
     }
 
     private void ConfigureEndpoints(IServiceCollection services)
@@ -454,8 +469,8 @@ public partial class MicroServiceApplicationsSingleModule
         {
             // Rename IdentityServer.Client.ManagePermissions
             // See https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo/Abp/PermissionManagement/IdentityServer/AbpPermissionManagementDomainIdentityServerModule.cs
-            options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = AbpOpenIddictPermissions.Applications.ManagePermissions; 
-            
+            options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = AbpOpenIddictPermissions.Applications.ManagePermissions;
+
             //if (configuration.GetValue<bool>("AuthServer:UseOpenIddict"))
             //{
             //    options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = AbpOpenIddictPermissions.Applications.ManagePermissions;

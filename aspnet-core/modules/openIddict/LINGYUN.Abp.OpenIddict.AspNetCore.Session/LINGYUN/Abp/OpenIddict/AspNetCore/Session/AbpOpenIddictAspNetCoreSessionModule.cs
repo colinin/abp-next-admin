@@ -4,6 +4,7 @@ using LINGYUN.Abp.Identity.Session.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 
@@ -30,6 +31,11 @@ public class AbpOpenIddictAspNetCoreSessionModule : AbpModule
         {
             options.SignInSessionEnabled = true;
             options.SignOutSessionEnabled = true;
+        });
+
+        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
+        {
+            options.PersistentSessionGrantTypes.Add(GrantTypes.Password);
         });
     }
 }

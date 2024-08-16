@@ -65,10 +65,11 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseCors();
 app.UseAuthentication();
+app.UseMultiTenancy();
+app.UseUnitOfWork();
 app.UseAbpOpenIddictValidation();
 app.UseAbpSession();
 app.UseDynamicClaims();
-app.UseMultiTenancy();
 app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI(options =>
