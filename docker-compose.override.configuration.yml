@@ -24,6 +24,7 @@ services:
       - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - ConnectionStrings__WebhooksManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AppPlatform=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - Encryption__PassPhrase=s46c5q55nxpeS8Ra
       - Encryption__InitVector=s83ng0abvd02js84
@@ -81,6 +82,7 @@ services:
       - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - ConnectionStrings__WebhooksManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AppPlatform=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - Encryption__PassPhrase=s46c5q55nxpeS8Ra
       - Encryption__InitVector=s83ng0abvd02js84
@@ -135,6 +137,7 @@ services:
       - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - ConnectionStrings__WebhooksManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AppPlatform=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - Encryption__PassPhrase=s46c5q55nxpeS8Ra
       - Encryption__InitVector=s83ng0abvd02js84
@@ -192,6 +195,7 @@ services:
       - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - ConnectionStrings__WebhooksManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AppPlatform=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - Encryption__PassPhrase=s46c5q55nxpeS8Ra
       - Encryption__InitVector=s83ng0abvd02js84
@@ -246,6 +250,7 @@ services:
       - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - ConnectionStrings__WebhooksManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AppPlatform=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - RemoteServices__AbpIdentity__BaseUrl=http://apigateway:30000/
       - RemoteServices__AbpIdentity__IdentityClient=InternalServiceClient
@@ -310,6 +315,7 @@ services:
       - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - ConnectionStrings__WebhooksManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AppPlatform=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - Encryption__PassPhrase=s46c5q55nxpeS8Ra
       - Encryption__InitVector=s83ng0abvd02js84
@@ -366,6 +372,7 @@ services:
       - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - ConnectionStrings__WebhooksManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AppPlatform=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - Encryption__PassPhrase=s46c5q55nxpeS8Ra
       - Encryption__InitVector=s83ng0abvd02js84
@@ -420,6 +427,7 @@ services:
       - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - ConnectionStrings__WebhooksManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AppPlatform=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - Encryption__PassPhrase=s46c5q55nxpeS8Ra
       - Encryption__InitVector=s83ng0abvd02js84
@@ -474,6 +482,7 @@ services:
       - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - ConnectionStrings__WebhooksManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AppPlatform=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - Encryption__PassPhrase=s46c5q55nxpeS8Ra
       - Encryption__InitVector=s83ng0abvd02js84
@@ -538,6 +547,7 @@ services:
       - ConnectionStrings__Workflow=Server=host.docker.internal;Database=Workflow-V70;User Id=root;Password=123456
       - ConnectionStrings__Notifications=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
       - ConnectionStrings__MessageService=Server=host.docker.internal;Database=Messages-V70;User Id=root;Password=123456
+      - ConnectionStrings__WebhooksManagement=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - ConnectionStrings__AppPlatform=Server=host.docker.internal;Database=Platform-V70;User Id=root;Password=123456
       - Encryption__PassPhrase=s46c5q55nxpeS8Ra
       - Encryption__InitVector=s83ng0abvd02js84
