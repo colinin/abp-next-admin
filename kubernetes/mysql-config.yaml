@@ -1,0 +1,18 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mysql-config
+  namespace: abp
+data:
+  my.cnf: |-
+    [client]
+    default-character-set=utf8mb4
+    [mysql]
+    default-character-set=utf8mb4
+    [mysqld]
+    default-authentication-plugin=mysql_native_password
+    collation-server=utf8mb4_general_ci
+    lower_case_table_names=1
+    max_connections = 2000
+    secure_file_priv=/var/lib/mysql
+    sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION

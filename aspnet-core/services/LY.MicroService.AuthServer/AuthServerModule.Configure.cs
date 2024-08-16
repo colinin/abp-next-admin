@@ -1,7 +1,13 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
+using LINGYUN.Abp.OpenIddict.LinkUser;
+using LINGYUN.Abp.OpenIddict.Portal;
+using LINGYUN.Abp.OpenIddict.Sms;
+using LINGYUN.Abp.OpenIddict.WeChat;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.WeChat.Work;
 using LY.MicroService.AuthServer.Authentication;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -10,7 +16,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
@@ -19,7 +24,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
-using OpenIddict.Validation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -333,6 +337,16 @@ public partial class AuthServerModule
         {
             options.IsDynamicClaimsEnabled = true;
             options.IsRemoteRefreshEnabled = false;
+        });
+
+        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
+        {
+            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
+            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
         });
     }
     private void ConfigureVirtualFileSystem()

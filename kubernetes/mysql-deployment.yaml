@@ -1,0 +1,43 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: mysql
+  namespace: abp
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: abp-mysql:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "123456"
+            - name: MYSQL_ROOT_HOST
+              value: "%"
+            - name: MYSQL_LOWER_CASE_TABLE_NAMES
+              value: "1"
+            - name: TZ
+              value: Asia/Shanghai
+          volumeMounts:
+            - name: dbdata
+              mountPath: /var/lib/mysql
+            - name: config
+              mountPath: /etc/mysql/my.cnf
+              subPath: my.cnf
+      volumes:
+        - name: dbdata
+          persistentVolumeClaim:
+            claimName: mysql-data
+        - name: config      
+          configMap:
+            name: mysql-config
