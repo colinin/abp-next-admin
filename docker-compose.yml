@@ -5,7 +5,7 @@ services:
     hostname: admin-api
     container_name: admin-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
@@ -25,7 +25,7 @@ services:
     hostname: auth-server-api
     container_name: auth-server-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
@@ -45,7 +45,7 @@ services:
     hostname: localization-api
     container_name: localization-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
@@ -65,7 +65,7 @@ services:
     hostname: platform-api
     container_name: platform-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
@@ -85,7 +85,7 @@ services:
     hostname: messages-api
     container_name: messages-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
@@ -105,7 +105,7 @@ services:
     hostname: tasks-api
     container_name: tasks-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
@@ -125,7 +125,7 @@ services:
     hostname: webhooks-api
     container_name: webhooks-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
@@ -145,7 +145,7 @@ services:
     hostname: workflow-api
     container_name: workflow-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
@@ -165,7 +165,7 @@ services:
     hostname: wechat-api
     container_name: wechat-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
@@ -185,7 +185,7 @@ services:
     hostname: auth-server
     container_name: auth-server
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
@@ -205,7 +205,7 @@ services:
     hostname: apigateway
     container_name: apigateway
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
