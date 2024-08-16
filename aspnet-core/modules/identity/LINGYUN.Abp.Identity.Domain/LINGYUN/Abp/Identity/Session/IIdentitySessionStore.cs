@@ -19,6 +19,8 @@ public interface IIdentitySessionStore
     /// <param name="userId">用户id</param>
     /// <param name="clientId">客户端id</param>
     /// <param name="ipAddresses">ip地址</param>
+    /// <param name="signedIn">登录时间</param>
+    /// <param name="lastAccessed">上次访问时间</param>
     /// <param name="tenantId">租户id</param>
     /// <param name="cancellationToken"></param>
     /// <returns>创建完成的 <seealso cref="IdentitySession"/></returns>
@@ -29,6 +31,8 @@ public interface IIdentitySessionStore
         Guid userId,
         string clientId,
         string ipAddresses,
+        DateTime signedIn,
+        DateTime? lastAccessed = null,
         Guid? tenantId = null,
         CancellationToken cancellationToken = default);
     /// <summary>
@@ -124,7 +128,7 @@ public interface IIdentitySessionStore
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task RevokeAllAsync(
-        Guid userId, 
+        Guid userId,
         Guid? exceptSessionId = null,
         CancellationToken cancellationToken = default);
     /// <summary>
@@ -136,7 +140,7 @@ public interface IIdentitySessionStore
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task RevokeAllAsync(
-        Guid userId, 
+        Guid userId,
         string device,
         Guid? exceptSessionId = null,
         CancellationToken cancellationToken = default);
@@ -147,7 +151,7 @@ public interface IIdentitySessionStore
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task RevokeAllAsync(
-        TimeSpan inactiveTimeSpan, 
+        TimeSpan inactiveTimeSpan,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 撤销指定的会话

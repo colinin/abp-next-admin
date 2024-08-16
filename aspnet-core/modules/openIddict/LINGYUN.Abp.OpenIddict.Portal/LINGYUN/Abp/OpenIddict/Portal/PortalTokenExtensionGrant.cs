@@ -52,7 +52,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
     {
         LazyServiceProvider = context.HttpContext.RequestServices.GetRequiredService<IAbpLazyServiceProvider>();
 
-        var enterprise = context.Request.GetParameter("EnterpriseId")?.ToString();
+        var enterprise = context.Request.GetParameter("enterpriseId")?.ToString() ?? context.Request.GetParameter("EnterpriseId")?.ToString();
 
         Guid? tenantId = null;
         using (CurrentTenant.Change(null))

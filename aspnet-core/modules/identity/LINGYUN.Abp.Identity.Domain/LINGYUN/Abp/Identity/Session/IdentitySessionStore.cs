@@ -7,24 +7,20 @@ using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
-using Volo.Abp.Timing;
 using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.Identity.Session;
 public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
 {
-    protected IClock Clock { get; }
     protected ICurrentUser CurrentUser { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IIdentitySessionRepository IdentitySessionRepository { get; }
 
     public IdentitySessionStore(
-        IClock clock,
         ICurrentUser currentUser,
         IGuidGenerator guidGenerator,
         IIdentitySessionRepository identitySessionRepository)
     {
-        Clock = clock;
         CurrentUser = currentUser;
         GuidGenerator = guidGenerator;
         IdentitySessionRepository = identitySessionRepository;
@@ -37,6 +33,8 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
         Guid userId,
         string clientId,
         string ipAddresses,
+        DateTime signedIn,
+        DateTime? lastAccessed = null,
         Guid? tenantId = null,
         CancellationToken cancellationToken = default)
     {
@@ -52,8 +50,8 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
             tenantId,
             clientId,
             ipAddresses,
-            Clock.Now,
-            Clock.Now
+            signedIn,
+            lastAccessed
         );
 
         identitySession = await IdentitySessionRepository.InsertAsync(identitySession, cancellationToken: cancellationToken);
@@ -90,14 +88,14 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
     }
 
     public async virtual Task<IdentitySession> FindAsync(
-        string sessionId, 
+        string sessionId,
         CancellationToken cancellationToken = default)
     {
         return await IdentitySessionRepository.FindAsync(sessionId, cancellationToken: cancellationToken);
     }
 
     public async virtual Task<IdentitySession> FindLastAsync(
-        Guid userId, 
+        Guid userId,
         string device,
         CancellationToken cancellationToken = default)
     {
@@ -105,7 +103,7 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
     }
 
     public async virtual Task<bool> ExistAsync(
-        string sessionId, 
+        string sessionId,
         CancellationToken cancellationToken = default)
     {
         return await IdentitySessionRepository.ExistAsync(sessionId, cancellationToken: cancellationToken);
@@ -126,7 +124,7 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
     }
 
     public async virtual Task RevokeAllAsync(
-        Guid userId, 
+        Guid userId,
         Guid? exceptSessionId = null,
         CancellationToken cancellationToken = default)
     {
@@ -134,8 +132,8 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
     }
 
     public async virtual Task RevokeAllAsync(
-        Guid userId, 
-        string device, 
+        Guid userId,
+        string device,
         Guid? exceptSessionId = null,
         CancellationToken cancellationToken = default)
     {
@@ -150,8 +148,8 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
     }
 
     public async virtual Task RevokeWithAsync(
-        Guid userId, 
-        string device = null, 
+        Guid userId,
+        string device = null,
         Guid? exceptSessionId = null,
         int maxCount = 0,
         CancellationToken cancellationToken = default)
