@@ -213,6 +213,8 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     [Authorize(AbpSaasPermissions.Tenants.ManageConnectionStrings)]
     public async virtual Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdate input)
     {
+        await CheckConnectionString(input.Value, input.Name);
+
         var tenant = await TenantRepository.GetAsync(id);
 
         var oldConnectionString = tenant.FindConnectionString(input.Name);
