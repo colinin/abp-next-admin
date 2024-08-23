@@ -537,6 +537,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Official
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.WeChat.Work.Handlers", "framework\wechat\LINGYUN.Abp.WeChat.Work.Handlers\LINGYUN.Abp.WeChat.Work.Handlers.csproj", "{DB80C55F-8B70-4840-942A-ED021ED88BD6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.MultiTenancy.Saas", "modules\saas\LINGYUN.Abp.MultiTenancy.Saas\LINGYUN.Abp.MultiTenancy.Saas.csproj", "{E3C07A77-EAF9-4A3F-8814-7D2F116C8E26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1415,6 +1417,10 @@ Global
 		{DB80C55F-8B70-4840-942A-ED021ED88BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB80C55F-8B70-4840-942A-ED021ED88BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB80C55F-8B70-4840-942A-ED021ED88BD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3C07A77-EAF9-4A3F-8814-7D2F116C8E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3C07A77-EAF9-4A3F-8814-7D2F116C8E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3C07A77-EAF9-4A3F-8814-7D2F116C8E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3C07A77-EAF9-4A3F-8814-7D2F116C8E26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1677,6 +1683,7 @@ Global
 		{4634B421-36E6-4169-AA1A-11050902495F} = {D94D6AFE-20BD-4F21-8708-03F5E34F49FC}
 		{BB2DF96A-6ED8-4F47-948C-230EA2065C4C} = {91867618-0D86-4410-91C6-B1166A9ACDF9}
 		{DB80C55F-8B70-4840-942A-ED021ED88BD6} = {91867618-0D86-4410-91C6-B1166A9ACDF9}
+		{E3C07A77-EAF9-4A3F-8814-7D2F116C8E26} = {ECE6E6D7-A4F6-4F50-BC21-AE2EB14A3129}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {711A43C0-A2F8-4E5C-9B9F-F2551E4B3FF1}

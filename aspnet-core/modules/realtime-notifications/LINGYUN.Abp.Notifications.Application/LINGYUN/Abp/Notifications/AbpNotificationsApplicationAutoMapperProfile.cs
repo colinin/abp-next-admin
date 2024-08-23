@@ -8,7 +8,7 @@ public class AbpNotificationsApplicationAutoMapperProfile : Profile
     public AbpNotificationsApplicationAutoMapperProfile()
     {
         CreateMap<UserNotificationInfo, UserNotificationDto>()
-            .ForMember(dto => dto.Id, map => map.MapFrom(src => src.Id.ToString()))
+            .ForMember(dto => dto.Id, map => map.MapFrom(src => src.NotificationId.ToString()))
             .ForMember(dto => dto.Lifetime, map => map.Ignore())
             .ForMember(dto => dto.Data, map => map.MapFrom((src, nfi) =>
             {

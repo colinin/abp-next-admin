@@ -8,6 +8,7 @@ public class UserNotificationInfo
     public Guid? TenantId { get; set; }
     public string Name { get; set; }
     public long Id { get; set; }
+    public long NotificationId { get; set; }
     public ExtraPropertyDictionary ExtraProperties { get; set; }
     public string NotificationTypeName { get; set; }
     public DateTime CreationTime { get; set; }

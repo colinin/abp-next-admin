@@ -47,7 +47,8 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
                              where n.NotificationId.Equals(notificationId)
                              select new UserNotificationInfo
                              {
-                                 Id = n.NotificationId,
+                                 Id = un.Id,
+                                 NotificationId = n.NotificationId,
                                  TenantId = n.TenantId,
                                  Name = n.NotificationName,
                                  ExtraProperties = n.ExtraProperties,
@@ -89,7 +90,7 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
                                      on un.NotificationId equals n.NotificationId
                              select new UserNotificationInfo
                              {
-                                 Id = n.NotificationId,
+                                 NotificationId = n.NotificationId,
                                  TenantId = n.TenantId,
                                  Name = n.NotificationName,
                                  ExtraProperties = n.ExtraProperties,
@@ -121,7 +122,7 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
                              where un.UserId == userId
                              select new UserNotificationInfo
                              {
-                                 Id = n.NotificationId,
+                                 NotificationId = n.NotificationId,
                                  TenantId = n.TenantId,
                                  Name = n.NotificationName,
                                  ExtraProperties = n.ExtraProperties,
@@ -170,7 +171,7 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
                              where un.UserId == userId
                              select new UserNotificationInfo
                              {
-                                 Id = n.NotificationId,
+                                 NotificationId = n.NotificationId,
                                  TenantId = n.TenantId,
                                  Name = n.NotificationName,
                                  ExtraProperties = n.ExtraProperties,
