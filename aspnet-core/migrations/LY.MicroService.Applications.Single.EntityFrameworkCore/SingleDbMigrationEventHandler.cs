@@ -3,6 +3,7 @@ using LINGYUN.Abp.BackgroundTasks.Internal;
 using LINGYUN.Abp.Saas.Tenants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -43,13 +44,19 @@ public class SingleDbMigrationEventHandler :
         IGuidGenerator guidGenerator,
         IdentityUserManager identityUserManager,
         IdentityRoleManager identityRoleManager,
-        IPermissionDataSeeder permissionDataSeeder) 
+        IPermissionDataSeeder permissionDataSeeder,
+        IJobStore jobStore,
+        IJobScheduler jobScheduler,
+        IOptions<AbpBackgroundTasksOptions> options) 
         : base("SingleDbMigrator", currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
         GuidGenerator = guidGenerator;
         IdentityUserManager = identityUserManager;
         IdentityRoleManager = identityRoleManager;
         PermissionDataSeeder = permissionDataSeeder;
+        JobStore = jobStore;
+        JobScheduler = jobScheduler;
+        Options = options.Value;
     }
     public async virtual Task HandleEventAsync(EntityDeletedEto<TenantEto> eventData)
     {
