@@ -18,22 +18,22 @@ public class SaasFeatureDefinitionProvider : FeatureDefinitionProvider
             ItemSource = new StaticSelectionStringValueItemSource(
                 new LocalizableSelectionStringValueItem
                 {
-                    Value = RecycleStrategy.Reserve.ToString(),
+                    Value = "0",
                     DisplayText = new LocalizableStringInfo(
-                    LocalizationResourceNameAttribute.GetName(typeof(AbpSaasResource)),
-                    "RecycleStrategy:Reserve")
+                        LocalizationResourceNameAttribute.GetName(typeof(AbpSaasResource)),
+                        "RecycleStrategy:Reserve")
                 },
                 new LocalizableSelectionStringValueItem
                 {
-                    Value = RecycleStrategy.Recycle.ToString(),
+                    Value = "1",
                     DisplayText = new LocalizableStringInfo(
-                LocalizationResourceNameAttribute.GetName(typeof(AbpSaasResource)),
-                "RecycleStrategy:Recycle")
+                        LocalizationResourceNameAttribute.GetName(typeof(AbpSaasResource)),
+                        "RecycleStrategy:Recycle")
                 })
         };
         saas.AddFeature(
             name: SaasFeatureNames.Tenant.RecycleStrategy,
-            defaultValue: RecycleStrategy.Recycle.ToString(),
+            defaultValue: "1",
             displayName: L("Features:RecycleStrategy"),
             description: L("Features:RecycleStrategyDesc"),
             valueType: selectionValueType,
