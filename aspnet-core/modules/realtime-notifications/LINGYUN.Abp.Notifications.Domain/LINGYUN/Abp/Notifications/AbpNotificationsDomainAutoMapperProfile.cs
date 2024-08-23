@@ -28,7 +28,7 @@ public class AbpNotificationsDomainAutoMapperProfile : Profile
             }));
 
         CreateMap<UserNotificationInfo, NotificationInfo>()
-            .ForMember(dto => dto.Id, map => map.MapFrom(src => src.Id.ToString()))
+            .ForMember(dto => dto.Id, map => map.MapFrom(src => src.NotificationId.ToString()))
             .ForMember(dto => dto.Name, map => map.MapFrom(src => src.Name))
             .ForMember(dto => dto.Lifetime, map => map.Ignore())
             .ForMember(dto => dto.Type, map => map.MapFrom(src => src.Type))
