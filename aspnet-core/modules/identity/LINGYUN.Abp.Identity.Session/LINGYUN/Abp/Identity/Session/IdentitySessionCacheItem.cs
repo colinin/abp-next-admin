@@ -18,6 +18,7 @@ public class IdentitySessionCacheItem
     public string ClientId { get; set; }
 
     public string IpAddresses { get; set; }
+    public string IpRegion { get; set; }
 
     public DateTime SignedIn { get; set; }
 
@@ -35,7 +36,8 @@ public class IdentitySessionCacheItem
         string clientId,
         string ipAddresses,
         DateTime signedIn,
-        DateTime? lastAccessed = null)
+        DateTime? lastAccessed = null,
+        string ipRegion = null)
     {
         Device = device;
         DeviceInfo = deviceInfo;
@@ -43,6 +45,7 @@ public class IdentitySessionCacheItem
         SessionId = sessionId;
         ClientId = clientId;
         IpAddresses = ipAddresses;
+        IpRegion = ipRegion;
         SignedIn = signedIn;
         LastAccessed = lastAccessed;
     }

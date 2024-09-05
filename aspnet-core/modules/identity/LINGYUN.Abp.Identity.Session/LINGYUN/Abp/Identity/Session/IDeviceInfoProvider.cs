@@ -1,7 +1,9 @@
-﻿namespace LINGYUN.Abp.Identity.Session;
+﻿using System.Threading.Tasks;
+
+namespace LINGYUN.Abp.Identity.Session;
 public interface IDeviceInfoProvider
 {
-    DeviceInfo DeviceInfo { get; }
+    Task<DeviceInfo> GetDeviceInfoAsync();
 
     string ClientIpAddress { get; }
 }

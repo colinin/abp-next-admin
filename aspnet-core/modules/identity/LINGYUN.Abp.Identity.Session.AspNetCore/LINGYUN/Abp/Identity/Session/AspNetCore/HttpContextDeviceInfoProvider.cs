@@ -1,31 +1,67 @@
 ﻿using DeviceDetectorNET;
+using Microsoft.Extensions.Options;
 using System;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.WebClientInfo;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Identity.Session.AspNetCore;
 public class HttpContextDeviceInfoProvider : IDeviceInfoProvider, ITransientDependency
 {
+    protected IIpLocationInfoProvider IpLocationInfoProvider { get; }
     protected IWebClientInfoProvider WebClientInfoProvider { get; }
+    protected AbpIdentitySessionAspNetCoreOptions Options { get; }
 
     public HttpContextDeviceInfoProvider(
-        IWebClientInfoProvider webClientInfoProvider)
+        IIpLocationInfoProvider ipLocationInfoProvider,
+        IWebClientInfoProvider webClientInfoProvider,
+        IOptions<AbpIdentitySessionAspNetCoreOptions> options)
     {
+        IpLocationInfoProvider = ipLocationInfoProvider;
         WebClientInfoProvider = webClientInfoProvider;
+        Options = options.Value;
     }
-
-    public DeviceInfo DeviceInfo => GetDeviceInfo();
 
     public string ClientIpAddress => WebClientInfoProvider.ClientIpAddress;
 
-    protected virtual DeviceInfo GetDeviceInfo()
+    public async virtual Task<DeviceInfo> GetDeviceInfoAsync()
     {
         var deviceInfo = BrowserDeviceInfo.Parse(WebClientInfoProvider.BrowserInfo);
+        var ipAddress = WebClientInfoProvider.ClientIpAddress;
+        var ipRegion = "";
+        if (!ipAddress.IsNullOrWhiteSpace())
+        {
+            if (Options.IsParseIpLocation)
+            {
+                var region = await GetRegion(ipAddress);
+                if (!region.IsNullOrWhiteSpace())
+                {
+                    ipRegion = region;
+                }
+            }
+        }
 
         return new DeviceInfo(
             deviceInfo.Device,
             deviceInfo.Description,
-            WebClientInfoProvider.ClientIpAddress);
+            ipAddress,
+            ipRegion);
+    }
+
+    protected async virtual Task<string> GetRegion(string ipAddress)
+    {
+        var locationInfo = await IpLocationInfoProvider.GetLocationInfoAsync(ipAddress);
+        if (locationInfo == null)
+        {
+            return null;
+        }
+
+        if (Options.LocationParser != null)
+        {
+            return Options.LocationParser(locationInfo);
+        }
+
+        return null;
     }
 
     private class BrowserDeviceInfo
