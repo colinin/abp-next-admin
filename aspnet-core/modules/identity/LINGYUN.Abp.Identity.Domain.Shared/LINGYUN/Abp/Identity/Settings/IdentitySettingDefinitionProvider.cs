@@ -14,7 +14,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 defaultValue: "",
                 displayName: L("DisplayName:Abp.Identity.User.SmsNewUserRegister"),
                 description: L("Description:Abp.Identity.User.SmsNewUserRegister"),
-                isVisibleToClients: true)
+                isVisibleToClients: false)
             .WithProviders(
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
@@ -25,7 +25,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 defaultValue: "",
                 displayName: L("DisplayName:Abp.Identity.User.SmsUserSignin"),
                 description: L("Description:Abp.Identity.User.SmsUserSignin"),
-                isVisibleToClients: true)
+                isVisibleToClients: false)
             .WithProviders(
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
@@ -36,7 +36,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 defaultValue: "",
                 displayName: L("DisplayName:Abp.Identity.User.SmsResetPassword"),
                 description: L("Description:Abp.Identity.User.SmsResetPassword"),
-                isVisibleToClients: true)
+                isVisibleToClients: false)
             .WithProviders(
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
@@ -47,7 +47,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 defaultValue: "",
                 displayName: L("DisplayName:Abp.Identity.User.SmsPhoneNumberConfirmed"),
                 description: L("Description:Abp.Identity.User.SmsPhoneNumberConfirmed"),
-                isVisibleToClients: true)
+                isVisibleToClients: false)
             .WithProviders(
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
@@ -58,7 +58,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 defaultValue: "5",
                 displayName: L("DisplayName:Abp.Identity.User.SmsRepetInterval"),
                 description: L("Description:Abp.Identity.User.SmsRepetInterval"),
-                isVisibleToClients: true)
+                isVisibleToClients: false)
             .WithProviders(
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
@@ -69,7 +69,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 defaultValue: ConcurrentLoginStrategy.None.ToString(),
                 displayName: L("DisplayName:Abp.Identity.Session.ConcurrentLoginStrategy"),
                 description: L("Description:Abp.Identity.Session.ConcurrentLoginStrategy"),
-                isVisibleToClients: true)
+                isVisibleToClients: false)
             .WithProviders(
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
@@ -80,7 +80,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 defaultValue: "1",
                 displayName: L("DisplayName:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit"),
                 description: L("Description:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit"),
-                isVisibleToClients: true)
+                isVisibleToClients: false)
             .WithProviders(
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
