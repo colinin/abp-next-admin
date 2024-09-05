@@ -83,7 +83,7 @@ export function checkStatus(
 
 export function checkResponse(response: any): string | undefined {
   // 会话超时
-  if (response.status === 401) {
+  if (response?.status === 401) {
     const userStore = useUserStoreWithOut();
     userStore.setToken(undefined);
     userStore.setSessionTimeout(true);
@@ -97,11 +97,11 @@ export function checkResponse(response: any): string | undefined {
     return undefined;
   }
 
-  if (response.data.Enterprises) {
+  if (response?.data.Enterprises) {
     return response.data.Enterprises;
   }
 
-  let errorJson = response.data.error;
+  let errorJson = response?.data.error;
 
   // abp框架抛出异常信息
   if (response.headers['_abperrorformat'] === 'true') {
@@ -124,18 +124,18 @@ export function checkResponse(response: any): string | undefined {
   }
 
   // oauth错误信息
-  if (response.data.error_description) {
+  if (response?.data.error_description) {
     error(response.data.error_description);
     return response.data;
   }
 
   // 其他错误
-  if (response.data.error.details) {
+  if (response?.data.error.details) {
     error(response.data.error.details);
     return response.data.error.details;
   }
 
-  if (response.data.error.message) {
+  if (response?.data.error.message) {
     error(response.data.error.message);
     return response.data.error.message;
   }
