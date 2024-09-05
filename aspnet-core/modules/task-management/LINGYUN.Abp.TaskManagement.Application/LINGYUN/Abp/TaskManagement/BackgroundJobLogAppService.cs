@@ -1,6 +1,8 @@
 ﻿using LINGYUN.Abp.TaskManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 
@@ -32,22 +34,38 @@ public class BackgroundJobLogAppService : TaskManagementApplicationService, IBac
 
     public async virtual Task<PagedResultDto<BackgroundJobLogDto>> GetListAsync(BackgroundJobLogGetListInput input)
     {
-        var filter = new BackgroundJobLogFilter
-        {
-            BeginRunTime = input.BeginRunTime,
-            EndRunTime = input.EndRunTime,
-            HasExceptions = input.HasExceptions,
-            Filter = input.Filter,
-            Group = input.Group,
-            Name = input.Name,
-            Type = input.Type
-        };
+        var specification = new BackgroundJobLogGetListSpecification(input);
 
-        var totalCount = await BackgroundJobLogRepository.GetCountAsync(filter, input.JobId);
+        var totalCount = await BackgroundJobLogRepository.GetCountAsync(specification);
         var backgroundJobLogs = await BackgroundJobLogRepository.GetListAsync(
-            filter, input.JobId, input.Sorting, input.MaxResultCount, input.SkipCount);
+            specification, input.Sorting, input.MaxResultCount, input.SkipCount);
 
         return new PagedResultDto<BackgroundJobLogDto>(totalCount,
-     ObjectMapper.Map<List<BackgroundJobLog>, List<BackgroundJobLogDto>>(backgroundJobLogs));
+            ObjectMapper.Map<List<BackgroundJobLog>, List<BackgroundJobLogDto>>(backgroundJobLogs));
+    }
+
+    private class BackgroundJobLogGetListSpecification : Volo.Abp.Specifications.Specification<BackgroundJobLog>
+    {
+        protected BackgroundJobLogGetListInput Input { get; }
+        public BackgroundJobLogGetListSpecification(BackgroundJobLogGetListInput input)
+        {
+            Input = input;
+        }
+
+        public override Expression<Func<BackgroundJobLog, bool>> ToExpression()
+        {
+            Expression<Func<BackgroundJobLog, bool>> expression = _ => true;
+
+            return expression
+                .AndIf(!Input.JobId.IsNullOrWhiteSpace(), x => x.JobId.Equals(Input.JobId))
+                .AndIf(!Input.Type.IsNullOrWhiteSpace(), x => x.JobType.Contains(Input.Type))
+                .AndIf(!Input.Group.IsNullOrWhiteSpace(), x => x.JobGroup.Equals(Input.Group))
+                .AndIf(!Input.Name.IsNullOrWhiteSpace(), x => x.JobName.Equals(Input.Name))
+                .AndIf(!Input.Filter.IsNullOrWhiteSpace(), x => x.JobName.Contains(Input.Filter) ||
+                    x.JobGroup.Contains(Input.Filter) || x.JobType.Contains(Input.Filter) || x.Message.Contains(Input.Filter))
+                .AndIf(Input.HasExceptions.HasValue, x => !string.IsNullOrWhiteSpace(x.Exception))
+                .AndIf(Input.BeginRunTime.HasValue, x => x.RunTime >= Input.BeginRunTime)
+                .AndIf(Input.EndRunTime.HasValue, x => x.RunTime <= Input.EndRunTime);
+        }
     }
 }
