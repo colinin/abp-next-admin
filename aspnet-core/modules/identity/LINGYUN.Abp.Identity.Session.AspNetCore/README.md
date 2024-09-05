@@ -5,12 +5,19 @@
 ## 接口描述
 
 ### AbpSessionMiddleware 在请求管道中从用户令牌提取 *sessionId* 作为全局会话标识, 可用于注销会话  
-  注意: 当匿名用户访问时, 以请求 *CorrelationId* 作为标识;
+> 注意: 当匿名用户访问时, 以请求 *CorrelationId* 作为标识;
         当 *CorrelationId* 不存在时, 使用随机 *Guid.NewGuid()*.
 
 ### HttpContextDeviceInfoProvider 从请求参数中提取设备标识  
 
-出于模块职责分离原则, 请勿与 *LINGYUN.Abp.Identity.AspNetCore.Session* 模块混淆  
+> 出于模块职责分离原则, 请勿与 *LINGYUN.Abp.Identity.AspNetCore.Session* 模块混淆  
+
+
+### HttpContextDeviceInfoProvider 用于处理会话IP的地址位置解析
+
+> IsParseIpLocation 启用后将对会话IP进行地理位置解析
+> IgnoreProvinces 解析地理位置时需要忽略的省份,通常情况下中国的直辖市需要
+> LocationParser 自定义需要处理的地理位置数据
 
 ## 配置使用
 

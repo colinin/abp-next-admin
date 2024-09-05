@@ -13,7 +13,7 @@ public class YouProjectModule : AbpModule
     {
         Configure<IdentitySessionCheckOptions>(options =>
         {
-            // 设置会话缓存与数据库刷新间隔为10分钟
+            // 设置会话缓存与持久化设施刷新间隔为10分钟
             options.KeepAccessTimeSpan = TimeSpan.FromMinutes(10);
         });
     }

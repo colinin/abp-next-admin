@@ -131,6 +131,7 @@
 		<PackageVersion Include="Volo.Abp.Users.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Users.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Validation" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.VirtualFileSystem" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 	<!-- .NET -->
 	<ItemGroup>
@@ -222,6 +223,7 @@
 		<PackageVersion Include="Hangfire.MySqlStorage" Version="2.0.3" />
 		<PackageVersion Include="HangFire.SqlServer" Version="1.8.14" />
 		<PackageVersion Include="IdentityModel" Version="6.2.0" />
+		<PackageVersion Include="IP2Region.Net" Version="2.0.2" />
 		<PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
 		<PackageVersion Include="Markdig" Version="0.34.0" />
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />

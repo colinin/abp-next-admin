@@ -18,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\common\LINGYUN.Abp.IP2Region\LINGYUN.Abp.IP2Region.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Identity.Session\LINGYUN.Abp.Identity.Session.csproj" />
 	</ItemGroup>
 

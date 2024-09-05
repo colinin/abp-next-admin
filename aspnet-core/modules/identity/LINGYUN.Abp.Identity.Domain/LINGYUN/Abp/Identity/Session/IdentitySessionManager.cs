@@ -50,7 +50,7 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
                 {
                     return;
                 }
-                var deviceInfo = DeviceInfoProvider.DeviceInfo;
+                var deviceInfo = await DeviceInfoProvider.GetDeviceInfoAsync();
 
                 var device = deviceInfo.Device ?? IdentitySessionDevices.OAuth;
                 var deviceDesc = deviceInfo.Description;
@@ -85,7 +85,8 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
                         clientId,
                         clientIpAddress,
                         Clock.Now,
-                        Clock.Now));
+                        Clock.Now,
+                        deviceInfo.IpRegion));
             }
         }
     }
