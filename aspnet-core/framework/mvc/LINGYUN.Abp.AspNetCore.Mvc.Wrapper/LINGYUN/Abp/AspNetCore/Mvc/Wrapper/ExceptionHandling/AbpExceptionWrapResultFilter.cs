@@ -71,10 +71,6 @@ public class AbpExceptionWrapResultFilter : AbpExceptionFilter, ITransientDepend
             context.HttpContext.RequestServices,
             statusCodFinder.GetStatusCode(context.HttpContext, context.Exception));
         exceptionWrapHandler.CreateFor(exceptionWrapContext).Wrap(exceptionWrapContext);
-        context.Result = new ObjectResult(new WrapResult(
-            exceptionWrapContext.ErrorInfo.Code,
-            exceptionWrapContext.ErrorInfo.Message,
-            exceptionWrapContext.ErrorInfo.Details));
 
         var wrapperHeaders = new Dictionary<string, string>()
             {
@@ -86,6 +82,11 @@ public class AbpExceptionWrapResultFilter : AbpExceptionFilter, ITransientDepend
             wrapperHeaders);
 
         httpResponseWrapper.Wrap(responseWrapperContext);
+
+        context.Result = new ObjectResult(new WrapResult(
+            exceptionWrapContext.ErrorInfo.Code,
+            exceptionWrapContext.ErrorInfo.Message,
+            exceptionWrapContext.ErrorInfo.Details));
 
         context.Exception = null; //Handled!
     }

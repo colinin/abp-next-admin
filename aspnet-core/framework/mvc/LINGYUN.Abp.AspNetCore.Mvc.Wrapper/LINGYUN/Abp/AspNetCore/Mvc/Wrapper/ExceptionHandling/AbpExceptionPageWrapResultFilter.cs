@@ -90,10 +90,6 @@ public class AbpExceptionPageWrapResultFilter: AbpExceptionPageFilter, ITransien
             context.HttpContext.RequestServices,
             statusCodFinder.GetStatusCode(context.HttpContext, context.Exception));
         exceptionWrapHandler.CreateFor(exceptionWrapContext).Wrap(exceptionWrapContext);
-        context.Result = new ObjectResult(new WrapResult(
-            exceptionWrapContext.ErrorInfo.Code,
-            exceptionWrapContext.ErrorInfo.Message,
-            exceptionWrapContext.ErrorInfo.Details));
 
         var wrapperHeaders = new Dictionary<string, string>()
             {
@@ -106,8 +102,10 @@ public class AbpExceptionPageWrapResultFilter: AbpExceptionPageFilter, ITransien
 
         httpResponseWrapper.Wrap(responseWrapperContext);
 
-        //context.HttpContext.Response.Headers.Add(AbpHttpWrapConsts.AbpWrapResult, "true");
-        //context.HttpContext.Response.StatusCode = (int)wrapOptions.HttpStatusCode;
+        context.Result = new ObjectResult(new WrapResult(
+            exceptionWrapContext.ErrorInfo.Code,
+            exceptionWrapContext.ErrorInfo.Message,
+            exceptionWrapContext.ErrorInfo.Details));
 
         context.Exception = null; //Handled!
     }
