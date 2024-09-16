@@ -84,7 +84,7 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
     /// </summary>
     /// <param name="dynamicInput"></param>
     /// <returns></returns>
-    public async virtual Task<PagedResultDto<TEntityDto>> GetListAsync(GetListByDynamicQueryableInput dynamicInput)
+    public async virtual Task<PagedResultDto<TEntityDto>> SearchAsync(GetListByDynamicQueryableInput dynamicInput)
     {
         Expression<Func<TEntity, bool>> condition = (e) => true;
 
