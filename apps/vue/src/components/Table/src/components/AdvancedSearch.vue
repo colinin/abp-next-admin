@@ -324,13 +324,14 @@
         newParamter.value = false;
       }
       formMdel.paramters.push(newParamter);
+      emits('change', formMdel);
     }
   }
 
   function handleDelField(paramter) {
     const index = formMdel.paramters.findIndex(p => p.field === paramter.field);
     formMdel.paramters.splice(index, 1);
-    emits('change', getSearchInput());
+    emits('change', formMdel);
   }
 
   function handleFieldChange(field, record) {
@@ -344,26 +345,18 @@
       if (defineParam.javaScriptType === 'boolean') {
         record.value = false;
       }
-      emits('change', getSearchInput());
+      emits('change', formMdel);
     }
   }
 
   function handleSubmit() {
-    emits('search', getSearchInput());
+    emits('search', formMdel);
     closeModal();
   }
 
   function resetFields() {
     formMdel.paramters = [];
-    emits('change', getSearchInput());
-  }
-
-  function getSearchInput() {
-    const searchInput = {
-      // 过滤未定义值
-      paramters: formMdel.paramters.filter(p => p.value !== undefined)
-    };
-    return searchInput;
+    emits('change', formMdel);
   }
 
   function setLoading(loading: boolean) {
