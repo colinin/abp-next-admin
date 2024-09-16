@@ -15,14 +15,15 @@
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
       <template #advanceBefore>
-        <Button
-          v-if="getAdvancedSearchProps?.useAdvancedSearch"
-          type="link"
-          size="small"
-          @click="handleAdvanceSearch"
-        >
-          {{ t('component.table.advancedSearch.title') }}
-        </Button>
+        <Badge v-if="getAdvancedSearchProps?.useAdvancedSearch" :count="advancedSearchInput?.paramters.length">
+          <Button
+            type="link"
+            size="small"
+            @click="handleAdvanceSearch"
+          >
+            {{ t('component.table.advancedSearch.title') }}
+          </Button>
+        </Badge>
       </template>
     </BasicForm>
 
@@ -55,7 +56,7 @@
       ref="advancedSearchRef"
       @register="registerAdSearchModal"
       v-bind="getAdvancedSearchProps"
-      @change="handleAdvanceSearchChange"
+      @change="handleAdvanceSearchChanged"
       @search="handleAdvanceSearchInfoChange"
     />
   </div>
@@ -70,13 +71,14 @@
   } from './types/table';
 
   import { defineComponent, ref, reactive, computed, unref, toRaw, inject, watchEffect, nextTick } from 'vue';
-  import { Button, Table } from 'ant-design-vue';
+  import { Badge, Button, Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { useModal } from '/@/components/Modal/index';
   import { PageWrapperFixedHeightKey } from '/@/components/Page';
   import HeaderCell from './components/HeaderCell.vue';
   import AdvancedSearch from './components/AdvancedSearch.vue';
   import { InnerHandlers } from './types/table';
+  import { DynamicQueryable } from './types/advancedSearch';
 
   import { usePagination } from './hooks/usePagination';
   import { useColumns } from './hooks/useColumns';
@@ -105,6 +107,7 @@
     name: 'BasicTable',
     components: {
       Table,
+      Badge,
       BasicForm,
       Button,
       HeaderCell,
@@ -137,6 +140,7 @@
       const wrapRef = ref(null);
       const formRef = ref(null);
       const advancedSearchRef = ref<any>(null);
+      const advancedSearchInput = ref<DynamicQueryable>();
       const innerPropsRef = ref<Partial<BasicTableProps>>();
 
       const { prefixCls } = useDesign('basic-table');
@@ -276,6 +280,11 @@
         getDataSourceRef,
       );
 
+      function handleAdvanceSearchChanged(queryable: DynamicQueryable) {
+        advancedSearchInput.value = queryable;
+        handleAdvanceSearchChange(queryable);
+      }
+
       const {
         getFormProps,
         getAdvancedSearchProps,
@@ -401,12 +410,13 @@
         formRef,
         tableElRef,
         advancedSearchRef,
+        advancedSearchInput,
         getBindValues,
         getLoading,
         registerForm,
         handleSearchInfoChange,
         registerAdSearchModal,
-        handleAdvanceSearchChange,
+        handleAdvanceSearchChanged,
         handleAdvanceSearchInfoChange,
         handleSearchInfoReset,
         handleAdvanceSearch,

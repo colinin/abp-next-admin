@@ -242,12 +242,17 @@ export function useDataSource(
     } = unref(propsRef);
     let fetchApi = api;
     // 高级查询条件支持
+    const searchInput = cloneDeep(getFieldsValue());
     if (advancedSearchConfig?.useAdvancedSearch) {
-      const searchInput = getFieldsValue();
-      if (Reflect.has(searchInput, 'queryable') &&
-          Array.isArray(searchInput.queryable?.paramters) &&
-          searchInput.queryable.paramters.length > 0)
-      fetchApi = advancedSearchConfig?.fetchApi;
+      if (Reflect.has(searchInput, 'queryable') 
+          && searchInput?.queryable?.paramters 
+          && Array.isArray(searchInput.queryable?.paramters)) {
+        searchInput.queryable.paramters = searchInput.queryable.paramters
+            .filter((p) => p.value !== undefined);
+        if (searchInput.queryable.paramters.length > 0) {
+          fetchApi = advancedSearchConfig?.fetchApi;
+        }
+      }
     }
     if (!fetchApi || !isFunction(fetchApi)) return;
     try {
@@ -275,7 +280,7 @@ export function useDataSource(
 
       let params: Recordable = merge(
         pageParams,
-        useSearchForm ? getFieldsValue() : {},
+        useSearchForm ? searchInput : {},
         searchInfo,
         opt?.searchInfo ?? {},
         defSort,
