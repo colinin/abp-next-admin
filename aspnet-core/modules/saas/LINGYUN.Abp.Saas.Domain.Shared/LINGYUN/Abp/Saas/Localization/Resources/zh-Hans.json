@@ -4,6 +4,7 @@
     "Saas:010001": "已经存在名为 {DisplayName} 的版本!",
     "Saas:010002": "试图删除正在使用的版本: {DisplayName}!",
     "Saas:020001": "已经存在名为 {Name} 的租户!",
+    "Saas:020002": "租户: {Tenant} 不存在!",
     "Saas:020101": "无法打开默认连接字符串指向的数据库连接!",
     "Saas:020102": "默认连接字符串指向的数据库已经存在!",
     "Saas:020103": "无法打开 {Name} 指向的数据库连接!",
@@ -47,8 +48,6 @@
     "Features:ExpirationReminderDaysDesc": "当资源还有多少天过期时, 给管理员发送提醒",
     "Features:ExpiredRecoveryTime": "过期回收时长",
     "Features:ExpiredRecoveryTimeDesc": "当资源超期多久没有处理, 将回收租户资源",
-    "TenantNotFoundById": "租户: {0} 不存在!",
-    "TenantNotFoundByName": "租户: {0} 不存在!",
     "UnActived": "未启用",
     "RecycleStrategy:Reserve": "保留",
     "RecycleStrategy:Recycle": "回收"
