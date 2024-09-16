@@ -39,7 +39,8 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         var tenant = await TenantRepository.FindAsync(id);
         if (tenant == null)
         {
-            throw new UserFriendlyException(L["TenantNotFoundById", id]);
+            throw new BusinessException(AbpSaasErrorCodes.TenantIdOrNameNotFound)
+                .WithData("Tenant", id);
         }
 
         return ObjectMapper.Map<Tenant, TenantDto>(tenant);
@@ -50,7 +51,8 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         var tenant = await TenantRepository.FindByNameAsync(name);
         if (tenant == null)
         {
-            throw new UserFriendlyException(L["TenantNotFoundByName", name]);
+            throw new BusinessException(AbpSaasErrorCodes.TenantIdOrNameNotFound)
+                .WithData("Tenant", name);
         }
         return ObjectMapper.Map<Tenant, TenantDto>(tenant);
     }

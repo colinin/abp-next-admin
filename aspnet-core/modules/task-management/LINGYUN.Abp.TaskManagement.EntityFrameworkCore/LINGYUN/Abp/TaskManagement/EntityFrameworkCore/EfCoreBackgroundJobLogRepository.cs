@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 
@@ -21,45 +22,27 @@ public class EfCoreBackgroundJobLogRepository :
     }
 
     public async virtual Task<int> GetCountAsync(
-        BackgroundJobLogFilter filter,
-        string jobId = null,
+        ISpecification<BackgroundJobLog> specification,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .WhereIf(!jobId.IsNullOrWhiteSpace(), x => x.JobId.Equals(jobId))
-            .WhereIf(!filter.Type.IsNullOrWhiteSpace(), x => x.JobType.Contains(filter.Type))
-            .WhereIf(!filter.Group.IsNullOrWhiteSpace(), x => x.JobGroup.Equals(filter.Group))
-            .WhereIf(!filter.Name.IsNullOrWhiteSpace(), x => x.JobName.Equals(filter.Name))
-            .WhereIf(!filter.Filter.IsNullOrWhiteSpace(), x => x.JobName.Contains(filter.Filter) ||
-                x.JobGroup.Contains(filter.Filter) || x.JobType.Contains(filter.Filter) || x.Message.Contains(filter.Filter))
-            .WhereIf(filter.HasExceptions.HasValue, x => !string.IsNullOrWhiteSpace(x.Exception))
-            .WhereIf(filter.BeginRunTime.HasValue, x => x.RunTime.CompareTo(filter.BeginRunTime.Value) >= 0)
-            .WhereIf(filter.EndRunTime.HasValue, x => x.RunTime.CompareTo(filter.EndRunTime.Value) <= 0)
+            .Where(specification.ToExpression())
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<BackgroundJobLog>> GetListAsync(
-        BackgroundJobLogFilter filter,
-        string jobId = null,
-        string sorting = nameof(BackgroundJobLog.RunTime),
+        ISpecification<BackgroundJobLog> specification,
+        string sorting = $"{nameof(BackgroundJobLog.RunTime)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default)
     {
         if (sorting.IsNullOrWhiteSpace())
         {
-            sorting = $"{nameof(BackgroundJobLog.RunTime)}";
+            sorting = $"{nameof(BackgroundJobLog.RunTime)} DESC";
         }
         return await (await GetDbSetAsync())
-            .WhereIf(!jobId.IsNullOrWhiteSpace(), x => x.JobId.Equals(jobId))
-            .WhereIf(!filter.Type.IsNullOrWhiteSpace(), x => x.JobType.Contains(filter.Type))
-            .WhereIf(!filter.Group.IsNullOrWhiteSpace(), x => x.JobGroup.Equals(filter.Group))
-            .WhereIf(!filter.Name.IsNullOrWhiteSpace(), x => x.JobName.Equals(filter.Name))
-            .WhereIf(!filter.Filter.IsNullOrWhiteSpace(), x => x.JobName.Contains(filter.Filter) ||
-                x.JobGroup.Contains(filter.Filter) || x.JobType.Contains(filter.Filter) || x.Message.Contains(filter.Filter))
-            .WhereIf(filter.HasExceptions.HasValue, x => !string.IsNullOrWhiteSpace(x.Exception))
-            .WhereIf(filter.BeginRunTime.HasValue, x => x.RunTime.CompareTo(filter.BeginRunTime.Value) >= 0)
-            .WhereIf(filter.EndRunTime.HasValue, x => x.RunTime.CompareTo(filter.EndRunTime.Value) <= 0)
+            .Where(specification.ToExpression())
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));

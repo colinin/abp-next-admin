@@ -7,7 +7,4 @@ public abstract class LanguageCreateOrUpdateDto
     [Required]
     [DynamicStringLength(typeof(LanguageConsts), nameof(LanguageConsts.MaxDisplayNameLength))]
     public string DisplayName { get; set; }
-
-    [DynamicStringLength(typeof(LanguageConsts), nameof(LanguageConsts.MaxTwoLetterISOLanguageNameLength))]
-    public string FlagIcon { get; set; }
 }
