@@ -24,8 +24,8 @@ public abstract class DynamicQueryableControllerBase<TEntityDto> : AbpController
 
     [HttpPost]
     [Route("search")]
-    public Task<PagedResultDto<TEntityDto>> GetListAsync(GetListByDynamicQueryableInput dynamicInput)
+    public Task<PagedResultDto<TEntityDto>> SearchAsync(GetListByDynamicQueryableInput dynamicInput)
     {
-        return DynamicQueryableAppService.GetListAsync(dynamicInput);
+        return DynamicQueryableAppService.SearchAsync(dynamicInput);
     }
 }

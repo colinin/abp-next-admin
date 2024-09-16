@@ -15,5 +15,5 @@ public interface IDynamicQueryableAppService<TEntityDto>
     /// </summary>
     /// <param name="dynamicInput"></param>
     /// <returns></returns>
-    Task<PagedResultDto<TEntityDto>> GetListAsync(GetListByDynamicQueryableInput dynamicInput);
+    Task<PagedResultDto<TEntityDto>> SearchAsync(GetListByDynamicQueryableInput dynamicInput);
 }
