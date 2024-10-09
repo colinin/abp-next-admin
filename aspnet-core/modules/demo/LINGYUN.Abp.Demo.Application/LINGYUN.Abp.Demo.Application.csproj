@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<IsPackable>false</IsPackable>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\framework\exporter\LINGYUN.Abp.Exporter.Application\LINGYUN.Abp.Exporter.Application.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.Demo.Application.Contracts\LINGYUN.Abp.Demo.Application.Contracts.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.Demo.Domain\LINGYUN.Abp.Demo.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

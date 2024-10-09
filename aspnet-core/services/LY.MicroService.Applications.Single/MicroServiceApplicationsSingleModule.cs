@@ -22,12 +22,17 @@ using LINGYUN.Abp.CachingManagement;
 using LINGYUN.Abp.CachingManagement.StackExchangeRedis;
 using LINGYUN.Abp.Dapr.Client;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.DataProtectionManagement;
+using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Demo;
+using LINGYUN.Abp.Demo.EntityFrameworkCore;
 using LINGYUN.Abp.Elsa;
 using LINGYUN.Abp.Elsa.Activities;
 using LINGYUN.Abp.Elsa.EntityFrameworkCore;
 using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Exporter.MiniExcel;
 using LINGYUN.Abp.FeatureManagement;
 using LINGYUN.Abp.FeatureManagement.HttpApi;
 using LINGYUN.Abp.Features.LimitValidation;
@@ -180,25 +185,30 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpOssManagementHttpApiModule),
     typeof(AbpOssManagementFileSystemImageSharpModule),
     typeof(AbpOssManagementSettingManagementModule),
+
     typeof(PlatformDomainModule),
     typeof(PlatformApplicationModule),
     typeof(PlatformHttpApiModule),
     typeof(PlatformEntityFrameworkCoreModule),
     typeof(PlatformSettingsVueVbenAdminModule),
     typeof(PlatformThemeVueVbenAdminModule),
+
     typeof(AbpUINavigationVueVbenAdminModule),
     typeof(AbpSaasDomainModule),
     typeof(AbpSaasApplicationModule),
     typeof(AbpSaasHttpApiModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
+
     typeof(TaskManagementDomainModule),
     typeof(TaskManagementApplicationModule),
     typeof(TaskManagementHttpApiModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
+
     typeof(AbpTextTemplatingDomainModule),
     typeof(AbpTextTemplatingApplicationModule),
     typeof(AbpTextTemplatingHttpApiModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
+
     typeof(AbpWebhooksModule),
     typeof(AbpWebhooksEventBusModule),
     typeof(AbpWebhooksIdentityModule),
@@ -207,27 +217,33 @@ namespace LY.MicroService.Applications.Single;
     typeof(WebhooksManagementApplicationModule),
     typeof(WebhooksManagementHttpApiModule),
     typeof(WebhooksManagementEntityFrameworkCoreModule),
+
     typeof(AbpFeatureManagementApplicationModule),
     typeof(AbpFeatureManagementHttpApiModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+
     typeof(AbpSettingManagementDomainModule),
     typeof(AbpSettingManagementApplicationModule),
     typeof(AbpSettingManagementHttpApiModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
+
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpPermissionManagementHttpApiModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     // typeof(AbpPermissionManagementDomainIdentityServerModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
+
     typeof(SingleMigrationsEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpAliyunSmsModule),
     typeof(AbpAliyunSettingManagementModule),
+
     typeof(AbpAuthenticationQQModule),
     typeof(AbpAuthenticationWeChatModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),
+
     typeof(AbpBackgroundTasksModule),
     typeof(AbpBackgroundTasksActivitiesModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
@@ -236,23 +252,38 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpBackgroundTasksJobsModule),
     typeof(AbpBackgroundTasksNotificationsModule),
     typeof(AbpBackgroundTasksQuartzModule),
+
+    typeof(AbpDataProtectionManagementApplicationModule),
+    typeof(AbpDataProtectionManagementHttpApiModule),
+    typeof(AbpDataProtectionManagementEntityFrameworkCoreModule),
+
+    typeof(AbpDemoApplicationModule),
+    typeof(AbpDemoHttpApiModule),
+    typeof(AbpDemoEntityFrameworkCoreModule),
+
     typeof(AbpDaprClientModule),
     typeof(AbpExceptionHandlingModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpFeaturesLimitValidationModule),
     typeof(AbpFeaturesValidationRedisClientModule),
     typeof(AbpAspNetCoreMvcLocalizationModule),
+
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpLocalizationPersistenceModule),
+
     typeof(AbpOpenApiAuthorizationModule),
+
     typeof(AbpIMSignalRModule),
+
     typeof(AbpNotificationsModule),
     typeof(AbpNotificationsCommonModule),
     typeof(AbpNotificationsSignalRModule),
     typeof(AbpNotificationsEmailingModule),
     typeof(AbpMultiTenancyEditionsModule),
+
     typeof(AbpTencentQQModule),
     typeof(AbpTencentCloudSettingManagementModule),
+
     typeof(AbpIdentityWeChatModule),
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpWeChatMiniProgramModule),
@@ -265,17 +296,21 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpWeChatOfficialHandlersModule),
     typeof(AbpWeChatWorkHandlersModule),
     typeof(AbpWeChatSettingManagementModule),
+
     typeof(AbpDataDbMigratorModule),
     typeof(AbpIdGeneratorModule),
     typeof(AbpUINavigationModule),
     typeof(AbpAccountTemplatesModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpCachingStackExchangeRedisModule),
+
     typeof(AbpElsaModule),
     typeof(AbpElsaServerModule),
     typeof(AbpElsaActivitiesModule),
     typeof(AbpElsaEntityFrameworkCoreModule),
     typeof(AbpElsaEntityFrameworkCoreMySqlModule),
+
+    typeof(AbpExporterMiniExcelModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpHttpClientWrapperModule),
@@ -310,6 +345,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
 
         ConfigureWeChat();
         ConfigureWrapper();
+        ConfigureExporter();
         ConfigureAuditing();
         ConfigureDbContext();
         ConfigureIdempotent();
@@ -321,6 +357,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
+        ConfigureEntityDataProtected();
         ConfigureUrls(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);

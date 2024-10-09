@@ -2,8 +2,12 @@
 using Elsa.Options;
 using LINGYUN.Abp.Aliyun.Localization;
 using LINGYUN.Abp.BackgroundTasks;
+using LINGYUN.Abp.DataProtectionManagement;
+using LINGYUN.Abp.Demo.Books;
+using LINGYUN.Abp.Demo.Localization;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Exporter;
 using LINGYUN.Abp.Idempotent;
 using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
@@ -37,8 +41,11 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using MiniExcelLibs.Attributes;
 using OpenIddict.Server;
 using OpenIddict.Server.AspNetCore;
 using Quartz;
@@ -455,6 +462,42 @@ public partial class MicroServiceApplicationsSingleModule
             });
         }
     }
+    /// <summary>
+    /// 配置数据导出
+    /// </summary>
+    private void ConfigureExporter()
+    {
+        Configure<AbpExporterMiniExcelOptions>(options =>
+        {
+            options.MapExportSetting(typeof(BookDto), config =>
+            {
+                config.DynamicColumns = new[]
+                {
+                    // 忽略某些字段
+                    new DynamicExcelColumn(nameof(BookDto.AuthorId)){ Ignore = true },
+                    new DynamicExcelColumn(nameof(BookDto.LastModificationTime)){ Ignore = true },
+                    new DynamicExcelColumn(nameof(BookDto.LastModifierId)){ Ignore = true },
+                    new DynamicExcelColumn(nameof(BookDto.CreationTime)){ Ignore = true },
+                    new DynamicExcelColumn(nameof(BookDto.CreatorId)){ Ignore = true },
+                    new DynamicExcelColumn(nameof(BookDto.Id)){ Ignore = true },
+                };
+            });
+        });
+    }
+    /// <summary>
+    /// 配置数据权限
+    /// </summary>
+    private void ConfigureEntityDataProtected()
+    {
+        Configure<DataProtectionManagementOptions>(options =>
+        {
+            options.AddEntities(typeof(DemoResource),
+                new[]
+                {
+                    typeof(Book),
+                });
+        });
+    }
 
     private void ConfigurePermissionManagement(IConfiguration configuration)
     {
@@ -813,24 +856,21 @@ public partial class MicroServiceApplicationsSingleModule
         services.Replace<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>(ServiceLifetime.Scoped);
 
         services.AddAuthentication()
-                .AddJwtBearer(options =>
+                .AddAbpJwtBearer(options =>
                 {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = configuration["AuthServer:ApiName"];
-                    options.Events = new JwtBearerEvents
+                    configuration.GetSection("AuthServer").Bind(options);
+
+                    options.Events ??= new JwtBearerEvents();
+                    options.Events.OnMessageReceived = context =>
                     {
-                        OnMessageReceived = context =>
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/api/files")))
                         {
-                            var accessToken = context.Request.Query["access_token"];
-                            var path = context.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments("/api/files")))
-                            {
-                                context.Token = accessToken;
-                            }
-                            return Task.CompletedTask;
+                            context.Token = accessToken;
                         }
+                        return Task.CompletedTask;
                     };
                 });
 
