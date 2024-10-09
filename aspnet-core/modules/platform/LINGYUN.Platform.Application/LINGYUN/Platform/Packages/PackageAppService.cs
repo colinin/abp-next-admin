@@ -29,7 +29,7 @@ public class PackageAppService : PlatformApplicationServiceBase, IPackageAppServ
     {
         var package = await _packageRepository.FindLatestAsync(input.Name, input.Version);
 
-        return package == null ? PackageDto.None() : ObjectMapper.Map<Package, PackageDto>(package);
+        return ObjectMapper.Map<Package, PackageDto>(package);
     }
 
     [Authorize(PlatformPermissions.Package.Create)]
