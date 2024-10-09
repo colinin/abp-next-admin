@@ -16,8 +16,7 @@ public abstract class AbpDataProtectionDbContext<TDbContext> : AbpDbContext<TDbC
     public IOptions<AbpDataProtectionOptions> DataProtectionOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDataProtectionOptions>>();
     public ICurrentUser CurrentUser => LazyServiceProvider.LazyGetRequiredService<ICurrentUser>();
 
-    public AbpDataProtectionDbContext(
-        DbContextOptions<TDbContext> options) : base(options)
+    protected AbpDataProtectionDbContext(DbContextOptions<TDbContext> options) : base(options)
     {
     }
 
