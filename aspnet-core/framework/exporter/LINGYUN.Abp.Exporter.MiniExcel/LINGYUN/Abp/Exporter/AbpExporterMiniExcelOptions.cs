@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LINGYUN.Abp.Exporter;
+namespace LINGYUN.Abp.Exporter.MiniExcel;
 public class AbpExporterMiniExcelOptions
 {
     public IDictionary<Type, Action<OpenXmlConfiguration>> ExportSettingMapping { get; }

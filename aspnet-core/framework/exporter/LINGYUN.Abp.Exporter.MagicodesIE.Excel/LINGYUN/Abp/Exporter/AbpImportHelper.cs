@@ -3,7 +3,7 @@ using Magicodes.ExporterAndImporter.Excel.Utility;
 using System;
 using System.IO;
 
-namespace LINGYUN.Abp.Exporter;
+namespace LINGYUN.Abp.Exporter.MagicodesIE.Excel;
 public class AbpImportHelper<T> : ImportHelper<T> where T : class, new()
 {
     public AbpImportHelper(string? filePath = null, string? labelingFilePath = null)

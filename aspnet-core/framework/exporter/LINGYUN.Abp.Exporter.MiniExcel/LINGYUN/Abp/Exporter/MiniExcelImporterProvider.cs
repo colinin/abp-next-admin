@@ -7,7 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.Exporter;
+namespace LINGYUN.Abp.Exporter.MiniExcel;
 public class MiniExcelImporterProvider : IImporterProvider, ITransientDependency
 {
     private readonly AbpExporterMiniExcelOptions _options;

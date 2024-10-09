@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.Exporter;
+namespace LINGYUN.Abp.Exporter.MagicodesIE.Excel;
 public class MagicodesIEExcelExporterProvider : IExporterProvider, ITransientDependency
 {
     private readonly AbpExporterMagicodesIEExcelOptions _options;

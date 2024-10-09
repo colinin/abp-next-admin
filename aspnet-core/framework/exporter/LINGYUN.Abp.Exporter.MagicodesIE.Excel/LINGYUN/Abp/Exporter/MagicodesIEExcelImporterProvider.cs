@@ -11,7 +11,7 @@ using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
-namespace LINGYUN.Abp.Exporter;
+namespace LINGYUN.Abp.Exporter.MagicodesIE.Excel;
 
 public class MagicodesIEExcelImporterProvider : IImporterProvider, ITransientDependency
 {

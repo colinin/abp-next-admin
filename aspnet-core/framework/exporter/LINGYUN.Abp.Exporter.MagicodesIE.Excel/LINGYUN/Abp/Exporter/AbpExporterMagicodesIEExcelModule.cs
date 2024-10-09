@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Modularity;
 
-namespace LINGYUN.Abp.Exporter.MiniExcel;
+namespace LINGYUN.Abp.Exporter.MagicodesIE.Excel;
 
 [DependsOn(typeof(AbpExporterCoreModule))]
 public class AbpExporterMagicodesIEExcelModule : AbpModule
