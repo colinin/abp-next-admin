@@ -78,6 +78,7 @@
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj" />
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj" />
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Linq.Dynamic.Queryable\LINGYUN.Linq.Dynamic.Queryable.csproj" />
+		<ProjectReference Include="..\..\framework\exporter\LINGYUN.Abp.Exporter.MiniExcel\LINGYUN.Abp.Exporter.MiniExcel.csproj" />
 		<ProjectReference Include="..\..\framework\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj" />
 		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
 		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
@@ -122,6 +123,12 @@
 		<ProjectReference Include="..\..\modules\caching-management\LINGYUN.Abp.CachingManagement.Domain\LINGYUN.Abp.CachingManagement.Domain.csproj" />
 		<ProjectReference Include="..\..\modules\caching-management\LINGYUN.Abp.CachingManagement.HttpApi\LINGYUN.Abp.CachingManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\caching-management\LINGYUN.Abp.CachingManagement.StackExchangeRedis\LINGYUN.Abp.CachingManagement.StackExchangeRedis.csproj" />
+		<ProjectReference Include="..\..\modules\data-protection\LINGYUN.Abp.DataProtectionManagement.Application\LINGYUN.Abp.DataProtectionManagement.Application.csproj" />
+		<ProjectReference Include="..\..\modules\data-protection\LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore\LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\data-protection\LINGYUN.Abp.DataProtectionManagement.HttpApi\LINGYUN.Abp.DataProtectionManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\demo\LINGYUN.Abp.Demo.Application\LINGYUN.Abp.Demo.Application.csproj" />
+		<ProjectReference Include="..\..\modules\demo\LINGYUN.Abp.Demo.EntityFrameworkCore\LINGYUN.Abp.Demo.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\demo\LINGYUN.Abp.Demo.HttpApi\LINGYUN.Abp.Demo.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.BlobStoring\LINGYUN.Abp.Elsa.Activities.BlobStoring.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.Emailing\LINGYUN.Abp.Elsa.Activities.Emailing.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.IM\LINGYUN.Abp.Elsa.Activities.IM.csproj" />
