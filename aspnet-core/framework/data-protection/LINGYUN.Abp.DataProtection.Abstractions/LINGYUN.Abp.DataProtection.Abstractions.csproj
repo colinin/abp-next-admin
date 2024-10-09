@@ -14,7 +14,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\DataProtection\Localization\Resources\en.json" />
+	  <None Remove="LINGYUN\Abp\DataProtection\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\DataProtection\Localization\Resources\en.json" />
+	  <EmbeddedResource Include="LINGYUN\Abp\DataProtection\Localization\Resources\zh-Hans.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Volo.Abp.ObjectExtending" />
+		<PackageReference Include="Volo.Abp.Localization" />
 	</ItemGroup>
 
 </Project>
