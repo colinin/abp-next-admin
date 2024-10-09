@@ -36,8 +36,8 @@ public class OrganizationUnitEntityRuleAppService : DataProtectionManagementAppl
         {
             throw new BusinessException(DataProtectionManagementErrorCodes.OrganizationUnitEntityRule.DuplicateEntityRule)
                 .WithData(nameof(OrganizationUnitEntityRule.OrgCode), input.OrgCode)
-                .WithData(nameof(EntityTypeInfo.DisplayName), entityTypeInfo.DisplayName)
-                .WithData(nameof(EntityRuleBase.Operation), input.Operation);
+                .WithData(nameof(EntityTypeInfo.Name), entityTypeInfo.Name)
+                .WithData(nameof(EntityRuleBase.Operation), input.Operation.ToString());
         }
 
         var entityRule = new OrganizationUnitEntityRule(
@@ -78,6 +78,7 @@ public class OrganizationUnitEntityRuleAppService : DataProtectionManagementAppl
         {
             entityRule.AllowProperties = allowPropertites;
         }
+        entityRule.FilterGroup = input.FilterGroup;
 
         entityRule = await _organizationUnitEntityRuleRepository.UpdateAsync(entityRule);
 

@@ -67,7 +67,7 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
         var newRecords = new List<EntityTypeInfo>();
         var changeRecords = new List<EntityTypeInfo>();
 
-        var entityTypeList = await EntityTypeInfoRepository.GetListAsync();
+        var entityTypeList = await EntityTypeInfoRepository.GetListAsync(includeDetails: true);
         foreach (var protectedEntityMap in ManagementOptions.ProtectedEntities)
         {
             var resourceType = protectedEntityMap.Key;
