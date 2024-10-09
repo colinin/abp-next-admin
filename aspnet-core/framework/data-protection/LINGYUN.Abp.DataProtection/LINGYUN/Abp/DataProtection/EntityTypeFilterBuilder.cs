@@ -240,10 +240,8 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
     {
         if (_options.KeywordContributors.TryGetValue(rule.Value?.ToString() ?? "", out var contributor))
         {
-            var context = new DataAccessKeywordContributorContext(_serviceProvider);
-            var keyValue = contributor.Contribute(context);
-            var value = CastTo(keyValue, conversionType);
-            return Expression.Constant(value, conversionType);
+            var context = new DataAccessKeywordContributorContext(_serviceProvider, conversionType);
+            return contributor.Contribute(context);
         }
         else
         {
