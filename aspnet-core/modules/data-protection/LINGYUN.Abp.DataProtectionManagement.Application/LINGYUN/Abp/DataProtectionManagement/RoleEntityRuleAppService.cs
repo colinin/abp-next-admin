@@ -34,10 +34,10 @@ public class RoleEntityRuleAppService : DataProtectionManagementApplicationServi
         var entityTypeInfo = await _entityTypeInfoRepository.GetAsync(input.EntityTypeId);
         if (await _roleEntityRuleRepository.FindEntityRuleAsync(input.RoleName, entityTypeInfo.TypeFullName, input.Operation) != null)
         {
-            throw new BusinessException(DataProtectionManagementErrorCodes.OrganizationUnitEntityRule.DuplicateEntityRule)
+            throw new BusinessException(DataProtectionManagementErrorCodes.RoleEntityRule.DuplicateEntityRule)
                 .WithData(nameof(RoleEntityRule.RoleName), input.RoleName)
-                .WithData(nameof(EntityTypeInfo.DisplayName), entityTypeInfo.DisplayName)
-                .WithData(nameof(EntityRuleBase.Operation), input.Operation);
+                .WithData(nameof(EntityTypeInfo.Name), entityTypeInfo.Name)
+                .WithData(nameof(EntityRuleBase.Operation), input.Operation.ToString());
         }
 
         var entityRule = new RoleEntityRule(
@@ -78,6 +78,8 @@ public class RoleEntityRuleAppService : DataProtectionManagementApplicationServi
         {
             entityRule.AllowProperties = allowPropertites;
         }
+
+        entityRule.FilterGroup = input.FilterGroup;
 
         entityRule = await _roleEntityRuleRepository.UpdateAsync(entityRule);
 

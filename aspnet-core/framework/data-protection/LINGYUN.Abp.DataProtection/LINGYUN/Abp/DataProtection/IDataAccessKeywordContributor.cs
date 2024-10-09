@@ -1,6 +1,8 @@
-﻿namespace LINGYUN.Abp.DataProtection;
+﻿using System.Linq.Expressions;
+
+namespace LINGYUN.Abp.DataProtection;
 public interface IDataAccessKeywordContributor
 {
     string Keyword { get; }
-    object Contribute(DataAccessKeywordContributorContext context);
+    Expression Contribute(DataAccessKeywordContributorContext context);
 }

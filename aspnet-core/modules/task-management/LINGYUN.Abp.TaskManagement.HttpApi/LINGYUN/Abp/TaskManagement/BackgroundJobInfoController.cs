@@ -142,9 +142,9 @@ public class BackgroundJobInfoController : DynamicQueryableControllerBase<Backgr
         return BackgroundJobInfoAppService.BulkPauseAsync(input);
     }
 
-    [HttpPut]
+    [HttpDelete]
     [Route("bulk-delete")]
-    public virtual Task BulkDeleteAsync(BackgroundJobInfoBatchInput input)
+    public virtual Task BulkDeleteAsync([FromBody] BackgroundJobInfoBatchInput input)
     {
         return BackgroundJobInfoAppService.BulkDeleteAsync(input);
     }

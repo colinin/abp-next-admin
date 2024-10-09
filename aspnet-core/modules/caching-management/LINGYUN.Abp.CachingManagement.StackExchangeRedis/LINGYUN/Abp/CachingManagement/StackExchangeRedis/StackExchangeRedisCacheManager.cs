@@ -19,7 +19,6 @@ namespace LINGYUN.Abp.CachingManagement.StackExchangeRedis;
 [Dependency(ReplaceServices = true)]
 public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependency
 {
-    private readonly static MethodInfo GetRedisDatabaseMethod;
     private readonly static MethodInfo ConnectAsyncMethod;
 
     protected RedisCacheOptions RedisCacheOptions { get; }
@@ -28,15 +27,11 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
     protected IDistributedCache DistributedCache { get; }
     protected AbpRedisCache RedisCache => DistributedCache.As<AbpRedisCache>();
 
-    protected IDatabase RedisDatabase => GetRedisDatabase();
-    private IDatabase _redisDatabase;
-
     static StackExchangeRedisCacheManager()
     {
         var type = typeof(AbpRedisCache);
 
         ConnectAsyncMethod = type.GetMethod("ConnectAsync", BindingFlags.Instance | BindingFlags.NonPublic);
-        GetRedisDatabaseMethod = type.GetMethod("GetRedisDatabase", BindingFlags.Instance | BindingFlags.NonPublic);
     }
 
     public StackExchangeRedisCacheManager(
@@ -53,7 +48,7 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
 
     public async virtual Task<CackeKeysResponse> GetKeysAsync(GetCacheKeysRequest request, CancellationToken cancellationToken = default)
     {
-        await ConnectAsync(cancellationToken);
+        var cache = await ConnectAsync(cancellationToken);
 
         // 缓存键名规则: InstanceName + (t + TenantId)(CurrentTenant.IsAvailable) + CacheItemName + KeyPrefix + Key
         // 缓存键名规则: InstanceName + (c:)(!CurrentTenant.IsAvailable) + CacheItemName + KeyPrefix + Key
@@ -75,17 +70,17 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
             match += "c:*";
         }
         // abp*t:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx*application*
-        // abp*c:*application*
+        // abp*c:application*
         if (!CacheOptions.KeyPrefix.IsNullOrWhiteSpace())
         {
-            match += CacheOptions.KeyPrefix + "*";
+            match += CacheOptions.KeyPrefix.EnsureEndsWith('*');
         }
 
         // app*abp*t:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx*application*
         // app*abp*c:*application*
         if (!request.Prefix.IsNullOrWhiteSpace())
         {
-            match = request.Prefix + "*" + match;
+            match += request.Prefix.EnsureEndsWith('*') + match;
         }
 
         // if filter is Mailing:
@@ -93,14 +88,14 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
         // app*abp*c:*application*Mailing*
         if (!request.Filter.IsNullOrWhiteSpace())
         {
-            match += request.Filter + "*";
+            match += request.Filter.EnsureStartsWith('*').EnsureEndsWith('*');
         }
         // scan 0 match * count 50000
         // redis有自定义的key排序,由传递的marker来确定下一次检索起始位
 
         var args = new object[] { request.Marker ?? "0", "match", match, "count", 50000 };
 
-        var result = await RedisDatabase.ExecuteAsync("scan", args);
+        var result = await cache.ExecuteAsync("scan", args);
 
         var results = (RedisResult[])result;
 
@@ -119,19 +114,20 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
         long size = 0;
         var values = new Dictionary<string, object>();
 
+        var cache = await ConnectAsync(cancellationToken);
+
         // type RedisKey
-        var type = await RedisDatabase.KeyTypeAsync(key);
+        var type = await cache.KeyTypeAsync(key);
         // ttl RedisKey
-        var ttl = await RedisDatabase.KeyTimeToLiveAsync(key);
+        var ttl = await cache.KeyTimeToLiveAsync(key);
 
         switch (type)
         {
             case RedisType.Hash:
                 // hlen RedisKey
-                size = await RedisDatabase.HashLengthAsync(key);
+                size = await cache.HashLengthAsync(key);
                 // hscan RedisKey
-                var hvalues = RedisDatabase.HashScan(key);
-                foreach (var hvalue in hvalues)
+                await foreach (var hvalue in cache.HashScanAsync(key))
                 {
                     if (!hvalue.Name.IsNullOrEmpty)
                     {
@@ -141,16 +137,16 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
                 break;
             case RedisType.String:
                 // strlen RedisKey
-                size = await RedisDatabase.StringLengthAsync(key);
+                size = await cache.StringLengthAsync(key);
                 // get RedisKey
-                var svalue = RedisDatabase.StringGet(key);
+                var svalue = await cache.StringGetAsync(key);
                 values.Add("value", svalue.IsNullOrEmpty ? "" : svalue.ToString());
                 break;
             case RedisType.List:
                 // llen RedisKey
-                size = await RedisDatabase.ListLengthAsync(key);
+                size = await cache.ListLengthAsync(key);
                 // lrange RedisKey
-                var lvalues = RedisDatabase.ListRange(key);
+                var lvalues = await cache.ListRangeAsync(key);
                 for (var lindex = 0; lindex < lvalues.Length; lindex++)
                 {
                     if (!lvalues[lindex].IsNullOrEmpty)
@@ -228,21 +224,6 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
 
     protected virtual ValueTask<IDatabase> ConnectAsync(CancellationToken token = default)
     {
-        if (_redisDatabase != null)
-        {
-            return default;
-        }
-
         return (ValueTask<IDatabase>)ConnectAsyncMethod.Invoke(RedisCache, new object[] { token });
-    }
-
-    private IDatabase GetRedisDatabase()
-    {
-        if (_redisDatabase == null)
-        {
-            _redisDatabase = GetRedisDatabaseMethod.Invoke(RedisCache, null) as IDatabase;
-        }
-
-        return _redisDatabase;
     }
 }

@@ -1,6 +1,8 @@
 ﻿using LINGYUN.Abp.DataProtection;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
@@ -33,6 +35,11 @@ public class AbpDataProtectionManagementDomainModule : AbpModule
             options.AutoEventSelectors.Add<EntityTypeInfo>();
             options.AutoEventSelectors.Add<RoleEntityRule>();
             options.AutoEventSelectors.Add<OrganizationUnitEntityRule>();
+        });
+
+        Configure<AbpDistributedCacheOptions>(options =>
+        {
+            options.ConfigureCache<DataProtectedResourceCacheItem>(new DistributedCacheEntryOptions());
         });
 
         context.Services.AddHostedService<ProtectedEntitiesSaverService>();

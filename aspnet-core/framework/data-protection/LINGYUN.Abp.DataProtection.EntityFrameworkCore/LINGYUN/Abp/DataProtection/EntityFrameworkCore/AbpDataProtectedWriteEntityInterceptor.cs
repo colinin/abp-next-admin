@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.Authorization;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
@@ -40,7 +39,7 @@ public class AbpDataProtectedWriteEntityInterceptor : SaveChangesInterceptor, IT
                     var entityKeys = updateEntites
                         .Select(entity => (entity is IEntity abpEntity ? abpEntity.GetKeys() : new string[1] { entity.ToString() }).ToString())
                         .JoinAsString(";");
-                    throw new AbpAuthorizationException(
+                    throw new AbpDataAccessDeniedException(
                         $"Delete data permission not granted to entity {updateEntites.First().GetType()} for data {entityKeys}!");
                 }
             }
@@ -56,7 +55,7 @@ public class AbpDataProtectedWriteEntityInterceptor : SaveChangesInterceptor, IT
                     var entityKeys = deleteEntites
                         .Select(entity => (entity is IEntity abpEntity ? abpEntity.GetKeys() : new string[1] { entity.ToString() }).ToString())
                         .JoinAsString(";");
-                    throw new AbpAuthorizationException(
+                    throw new AbpDataAccessDeniedException(
                         $"Delete data permission not granted to entity {deleteEntites.First().GetType()} for data {entityKeys}!");
                 }
             }

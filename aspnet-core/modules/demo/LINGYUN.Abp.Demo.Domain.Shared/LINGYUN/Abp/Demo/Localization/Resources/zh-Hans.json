@@ -1,0 +1,16 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:Books": "书籍管理",
+    "Permission:Books.Create": "新增书籍",
+    "Permission:Books.Edit": "编辑书籍",
+    "Permission:Books.Delete": "删除书籍",
+    "Permission:Books.Export": "导出书籍",
+    "Permission:Books.Import": "导入书籍",
+    "Permission:Authors": "作者管理",
+    "Permission:Authors.Create": "新增作者",
+    "Permission:Authors.Edit": "编辑作者",
+    "Permission:Authors.Delete": "删除作者",
+    "Demo:00001": "作者 {Name} 已经存在!"
+  }
+}

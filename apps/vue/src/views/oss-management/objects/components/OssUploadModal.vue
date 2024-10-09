@@ -60,6 +60,7 @@
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { uploadUrl } from '/@/api/oss-management/objects';
   import { useUserStoreWithOut } from '/@/store/modules/user';
+  import { Result } from '/#/axios';
   import Uploader from 'simple-uploader.js';
 
   const emits = defineEmits(['file:uploaded', 'register']);
@@ -172,7 +173,20 @@
     fileList.value.push(...files);
   }
 
-  function _fileProgress(_, file) {
+  function _fileProgress(_, file, chunk) {
+    // 2024-09-29 处理上传失败的包装错误
+    if (chunk.processedState?.res) {
+      try {
+        const result = JSON.parse(chunk.processedState.res) as Result<any>;
+        if (result.code !== '0') {
+          file.error = true;
+          file.errorMsg = result.message;
+          file.pause();
+        }
+      } catch (error) {
+        console.log('upload error ---> ', error);
+      }
+    }
     if (file._prevUploadedSize) {
       file.progress = `${Math.floor((file._prevUploadedSize / file.size) * 100)} %`;
     }

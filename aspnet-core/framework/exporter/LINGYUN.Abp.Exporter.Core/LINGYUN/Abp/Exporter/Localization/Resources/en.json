@@ -1,0 +1,6 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "AbpExporter:010001": "There were some errors during the data import process. Please check the validity of the data!"
+  }
+}

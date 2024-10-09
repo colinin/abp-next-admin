@@ -1,0 +1,9 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "DataProtectionManagement:001100": "已经存在名为 {Name} 的实体类型定义!",
+    "DataProtectionManagement:001200": "实体类型已经存在名为 {Name} 的属性定义!",
+    "DataProtectionManagement:002100": "已为角色 {RoleName} 分配了实体 {Name} 的 {Operation} 访问规则!",
+    "DataProtectionManagement:003100": "已为组织机构 {OrgCode} 分配了实体 {Name} 的 {Operation} 访问规则!"
+  }
+}

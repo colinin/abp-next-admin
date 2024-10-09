@@ -1,0 +1,16 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:Books": "Books",
+    "Permission:Books.Create": "Create Books",
+    "Permission:Books.Edit": "Edit Books",
+    "Permission:Books.Delete": "Delete Books",
+    "Permission:Books.Export": "Export Books",
+    "Permission:Books.Import": "Import Books",
+    "Permission:Authors": "Authors",
+    "Permission:Authors.Create": "Create Authors",
+    "Permission:Authors.Edit": "Edit Authors",
+    "Permission:Authors.Delete": "Delete Authors",
+    "Demo:00001": "Author {Name} already exists!"
+  }
+}

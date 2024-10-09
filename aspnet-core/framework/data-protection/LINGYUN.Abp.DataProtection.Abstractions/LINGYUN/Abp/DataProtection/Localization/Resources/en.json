@@ -1,0 +1,6 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "DataProtection:010001": "Data access permission not granted to protected resources!"
+  }
+}

@@ -4,7 +4,7 @@ using LINGYUN.Abp.DataProtection.Operations;
 using LINGYUN.Abp.DataProtection.Subjects;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Domain;
-using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.DataProtection;
@@ -37,13 +37,14 @@ public class AbpDataProtectionModule : AbpModule
             options.OperateContributors.Add(DataAccessFilterOperate.NotContains, new DataAccessNotContainsContributor());
 
             options.SubjectContributors.Add(new DataAccessUserIdContributor());
+            options.SubjectContributors.Add(new DataAccessClientIdContributor());
             options.SubjectContributors.Add(new DataAccessRoleNameContributor());
             options.SubjectContributors.Add(new DataAccessOrganizationUnitContributor());
         });
 
-        Configure<AbpLocalizationOptions>(options =>
+        Configure<AbpExceptionLocalizationOptions>(options =>
         {
-            options.Resources.Add<DataProtectionResource>();
+            options.MapCodeNamespace("DataProtection", typeof(DataProtectionResource));
         });
     }
 }
