@@ -3585,7 +3585,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/files/{everything}",
-      "UpstreamPathTemplate": "/api/api/files/{everything}",
+      "UpstreamPathTemplate": "/api/files/{everything}",
       "UpstreamHttpMethod": [
         "GET",
         "POST",
