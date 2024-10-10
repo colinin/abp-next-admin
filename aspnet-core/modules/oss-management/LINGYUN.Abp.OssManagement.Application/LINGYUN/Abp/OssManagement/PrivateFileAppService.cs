@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
 using Volo.Abp.Content;
@@ -61,6 +63,10 @@ public class PrivateFileAppService : FileAppServiceBase, IPrivateFileAppService
 
         var ossContainer = OssContainerFactory.Create();
         var ossObject = await ossContainer.GetObjectAsync(ossObjectRequest);
+        if (ossObject == null || ossObject.Content.IsNullOrEmpty())
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ObjectNotFound);
+        }
 
         return new RemoteStreamContent(ossObject.Content);
     }

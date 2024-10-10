@@ -1,7 +1,9 @@
 ﻿using LINGYUN.Abp.Features.LimitValidation;
 using LINGYUN.Abp.OssManagement.Features;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web;
+using Volo.Abp;
 using Volo.Abp.Content;
 using Volo.Abp.Features;
 
@@ -35,6 +37,10 @@ public class StaticFilesAppService : OssManagementApplicationServiceBase, IStati
 
         var ossContainer = OssContainerFactory.Create();
         var ossObject = await ossContainer.GetObjectAsync(ossObjectRequest);
+        if (ossObject == null || ossObject.Content.IsNullOrEmpty())
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ObjectNotFound);
+        }
 
         return new RemoteStreamContent(ossObject.Content, ossObject.Name);
     }
