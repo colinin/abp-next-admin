@@ -25,7 +25,11 @@ enum Api {
 /**
  * @description: user login api
  */
-export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal', isPortalLogin: boolean = false) {
+export function loginApi(
+  params: LoginParams,
+  mode: ErrorMessageMode = 'modal',
+  isPortalLogin = false,
+) {
   const setting = useGlobSetting();
   const tokenParams = {
     client_id: setting.clientId,
@@ -48,7 +52,6 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal', 
     },
     {
       errorMessageMode: mode,
-      apiUrl: '/connect',
       withToken: false,
     },
   );
@@ -79,7 +82,6 @@ export function loginPhoneApi(params: LoginByPhoneParams, mode: ErrorMessageMode
     },
     {
       errorMessageMode: mode,
-      apiUrl: '/connect',
     },
   );
 }
@@ -88,14 +90,16 @@ export function loginPhoneApi(params: LoginByPhoneParams, mode: ErrorMessageMode
  * @description: getUserInfo
  */
 export function getUserInfo() {
-  return defHttp.get<GetUserInfoModel>(
-    {
-      url: Api.GetUserInfo,
-    }, 
-    {
-      errorMessageMode: 'none',
-      apiUrl: '/connect',
-    }).catch(() => {
+  return defHttp
+    .get<GetUserInfoModel>(
+      {
+        url: Api.GetUserInfo,
+      },
+      {
+        errorMessageMode: 'none',
+      },
+    )
+    .catch(() => {
       const userStore = useUserStoreWithOut();
       createErrorModal({
         title: t('sys.api.errorTip'),
@@ -103,7 +107,7 @@ export function getUserInfo() {
         onOk: () => {
           userStore.setToken(undefined);
           userStore.logout(true);
-        }
+        },
       });
     });
 }

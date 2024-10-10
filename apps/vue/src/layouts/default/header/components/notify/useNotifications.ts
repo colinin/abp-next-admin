@@ -29,7 +29,7 @@ export function useNotifications() {
     list: [],
   });
   const signalR = useSignalR({
-    serverUrl: '/signalr-hubs/signalr-hubs/notifications',
+    serverUrl: '/signalr-hubs/notifications',
   });
 
   onMounted(() => {
@@ -49,17 +49,9 @@ export function useNotifications() {
       // 以通知名称来发起服务端回调
       emitter.emit(notificationInfo.name, notificationInfo);
       return;
-    } 
-    const {
-      title,
-      message,
-      description,
-      creationTime,
-      contentType,
-      severity,
-      type,
-      data,
-    } = deserialize(notificationInfo);
+    }
+    const { title, message, description, creationTime, contentType, severity, type, data } =
+      deserialize(notificationInfo);
     const notifier: Notification = {
       id: notificationInfo.id,
       avatar: data.avatar,
@@ -76,7 +68,6 @@ export function useNotifications() {
     notifierRef.value.list.push(notifier);
   }
 
-  
   function _notification(notifier: Notification, severity: NotificationSeverity) {
     let message = notifier.description;
     switch (notifier.contentType) {

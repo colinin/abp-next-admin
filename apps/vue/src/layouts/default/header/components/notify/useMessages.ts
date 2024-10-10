@@ -29,7 +29,7 @@ export function useMessages() {
   const { createConfirm, createMessage } = useMessage();
   const signalR = useSignalR({
     autoStart: false,
-    serverUrl: '/signalr-hubs/signalr-hubs/messages',
+    serverUrl: '/signalr-hubs/messages',
   });
 
   onMounted(() => {
@@ -57,7 +57,7 @@ export function useMessages() {
     messageRef.value.list.length = 0;
   }
 
-  function refreshLastMessages(maxResultCount: number = 10) {
+  function refreshLastMessages(maxResultCount = 10) {
     getLastMessages({
       sorting: '',
       state: MessageState.Send,
@@ -69,7 +69,10 @@ export function useMessages() {
 
   function onMessageReceived(message: ChatMessage) {
     // 处理需要本地化的系统消息
-    if (message.source === MessageSourceTye.System && (message.extraProperties.L === true || message.extraProperties.L === 'true')) {
+    if (
+      message.source === MessageSourceTye.System &&
+      (message.extraProperties.L === true || message.extraProperties.L === 'true')
+    ) {
       message.content = t(
         message.extraProperties.content.ResourceName + '.' + message.extraProperties.content.Name,
         message.extraProperties.content.Values as Recordable,

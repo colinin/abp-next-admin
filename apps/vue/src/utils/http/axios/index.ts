@@ -92,7 +92,10 @@ const transform: AxiosTransform = {
     } else {
       if (!isString(params)) {
         formatDate && formatRequestDate(params);
-        if (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length > 0 || config.data instanceof FormData) {
+        if (
+          (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length > 0) ||
+          config.data instanceof FormData
+        ) {
           config.data = data;
           config.params = params;
         } else if (
@@ -161,7 +164,7 @@ const transform: AxiosTransform = {
     if (axios.isCancel(error)) {
       return Promise.reject(error);
     }
-    
+
     if (error.code && ['ECONNABORTED', 'ETIMEDOUT'].includes(error.code)) {
       const { t } = useI18n();
       const timeout = t('sys.api.apiTimeoutMessage');

@@ -14,8 +14,8 @@ import { useAbpStoreWithOut } from '/@/store/modules/abp';
 import { format } from '/@/utils/strings';
 import { ContentTypeEnum } from '/@/enums/httpEnum';
 
-export const uploadUrl = '/api/api/oss-management/objects/upload';
-export const downloadUrl = '/api/api/files/static/{bucket}/p/{path}/{name}';
+export const uploadUrl = '/api/oss-management/objects/upload';
+export const downloadUrl = '/api/files/static/{bucket}/p/{path}/{name}';
 
 export function generateOssUrl(bucket: string, path: string, object: string) {
   if (path) {
@@ -35,8 +35,6 @@ export const downloadBlob = (bucket: string, path: string, object: string) => {
       accept: 'application/json',
     },
     responseType: 'blob',
-  }, {
-    apiUrl: '/api'
   });
 };
 
@@ -78,7 +76,7 @@ export const uploadObject = (params: UploadFileParams, event: any) => {
           const path = encodeURIComponent(params.data?.path);
           res.data = {
             url: format(formatUrl, {
-              bucket:  params.data?.bucket,
+              bucket: params.data?.bucket,
               tenantId: currentTenant.id,
               path: path,
               name: fileName,
@@ -112,7 +110,7 @@ export const uploadObject = (params: UploadFileParams, event: any) => {
         fileName: fileName,
       };
       return defHttp
-        .uploadFile<void>(requestConfig, {
+        .uploadFile(requestConfig, {
           data: requestData,
           file: fileData,
         })
@@ -157,12 +155,10 @@ export const createObject = (input: OssObjectCreate, file?: Blob) => {
 };
 
 export const deleteObject = (input: GetOssObjectRequest) => {
-  return defHttp.delete<void>(
-    {
-      url: '/api/oss-management/objects',
-      params: input,
-    },
-  );
+  return defHttp.delete<void>({
+    url: '/api/oss-management/objects',
+    params: input,
+  });
 };
 
 export const bulkDeleteObject = (input: OssObjectBulkDelete) => {
@@ -170,7 +166,7 @@ export const bulkDeleteObject = (input: OssObjectBulkDelete) => {
     url: '/api/oss-management/objects/bulk-delete',
     data: input,
   });
-}
+};
 
 export const getObject = (input: GetOssObjectRequest) => {
   return defHttp.get<OssObject>({

@@ -50,7 +50,7 @@ export function useSignalR(options: UseSignalR & SignalROptions) {
       httpOptions.accessTokenFactory = () =>
         token.startsWith('Bearer ') ? token.substring(7) : token;
     }
-    var connectionBuilder = new HubConnectionBuilder()
+    const connectionBuilder = new HubConnectionBuilder()
       .withUrl(serverUrl, httpOptions)
       .configureLogging(LogLevel.Warning);
     if (automaticReconnect && nextRetryDelayInMilliseconds) {
@@ -72,7 +72,7 @@ export function useSignalR(options: UseSignalR & SignalROptions) {
     try {
       await connection.start();
       emitter.emit('signalR:onStart');
-    } catch(error) {
+    } catch (error) {
       emitter.emit('signalR:onError', error);
     }
   }
@@ -85,7 +85,7 @@ export function useSignalR(options: UseSignalR & SignalROptions) {
     try {
       await connection.stop();
       emitter.emit('signalR:onStop');
-    } catch(error) {
+    } catch (error) {
       emitter.emit('signalR:onError', error);
     }
   }
