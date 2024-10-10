@@ -18,7 +18,7 @@ function buildWeatherProxy(): Record<string, ProxyOptions> {
     '/wapi': {
       target: 'http://www.nmc.cn',
       changeOrigin: true,
-      rewrite: (path) => path.replace('/wapi', ''),
+      rewrite: (path) => path,
       headers: {
         host: 'www.nmc.cn',
         referer: 'http://www.nmc.cn',

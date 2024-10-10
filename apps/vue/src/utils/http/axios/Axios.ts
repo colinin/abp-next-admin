@@ -144,15 +144,40 @@ export class VAxios {
       });
     }
 
-    return this.axiosInstance.request<T>({
-      ...config,
-      method: 'POST',
-      data: formData,
-      headers: {
-        'Content-type': ContentTypeEnum.FORM_DATA,
-        // @ts-ignore
-        ignoreCancelToken: true,
-      },
+    let conf: CreateAxiosOptions = cloneDeep(config);
+    const transform = this.getTransform();
+    const { requestOptions } = this.options;
+
+    const opt: RequestOptions = Object.assign({}, requestOptions);
+    const { beforeRequestHook, transformRequestHook } = transform || {};
+    if (beforeRequestHook && isFunction(beforeRequestHook)) {
+      conf = beforeRequestHook(conf, opt);
+    }
+
+    return new Promise<T>((resolve, reject) => {
+      this.axiosInstance
+        .request<T>({
+          ...conf,
+          method: 'POST',
+          data: formData,
+          headers: {
+            'Content-type': ContentTypeEnum.FORM_DATA,
+            // @ts-ignore
+            ignoreCancelToken: true,
+          },
+        })
+        .then((res) => {
+          if (transformRequestHook && isFunction(transformRequestHook)) {
+            try {
+              const ret = transformRequestHook(res as any, opt);
+              resolve(ret);
+            } catch (err) {
+              reject(err || new Error('request error!'));
+            }
+            return;
+          }
+          resolve(res as unknown as Promise<T>);
+        });
     });
   }
 

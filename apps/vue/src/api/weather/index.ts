@@ -15,61 +15,73 @@ const Api = {
 };
 
 export const getProvinces = () => {
-  return defHttp.get<Province[]>({
-    url: Api.GetProvinces,
-    //baseURL: Host,
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest'
-    }
-  }, {
-    apiUrl: '',
-    joinTime: false,
-    withToken: false,
-    withAcceptLanguage: false,
-  });
+  return defHttp.get<Province[]>(
+    {
+      url: Api.GetProvinces,
+      //baseURL: Host,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    },
+    {
+      apiUrl: '',
+      joinTime: false,
+      withToken: false,
+      withAcceptLanguage: false,
+    },
+  );
 };
 
 export const getPosition = () => {
-  return defHttp.get<Position>({
-    url: Api.GetPosition,
-    //baseURL: Host,
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-    }
-  }, {
-    apiUrl: '',
-    joinTime: false,
-    withToken: false,
-    withAcceptLanguage: false,
-  });
-}
+  return defHttp.get<Position>(
+    {
+      url: Api.GetPosition,
+      //baseURL: Host,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    },
+    {
+      apiUrl: '',
+      joinTime: false,
+      withToken: false,
+      withAcceptLanguage: false,
+    },
+  );
+};
 
 export const getCitys = (provinceCode: string) => {
-  return defHttp.get<Position[]>({
-    url: format(Api.GetCitys, {province: provinceCode}),
-    //baseURL: Host,
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest'
-    }
-  }, {
-    apiUrl: '',
-    joinTime: false,
-    withToken: false,
-    withAcceptLanguage: false,
-  });
-}
+  return defHttp.get<Position[]>(
+    {
+      url: format(Api.GetCitys, { province: provinceCode }),
+      //baseURL: Host,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    },
+    {
+      apiUrl: '',
+      joinTime: false,
+      withToken: false,
+      withAcceptLanguage: false,
+    },
+  );
+};
 
 export const getWeather = (cityCode: string) => {
-  return defHttp.get<WeatherResult>({
-    url: format(Api.GetWeather, {code: cityCode}),
-    //baseURL: Host,
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest'
-    }
-  }, {
-    apiUrl: '',
-    joinTime: false,
-    withToken: false,
-    withAcceptLanguage: false,
-  });
-}
+  return defHttp.get<WeatherResult>(
+    {
+      url: format(Api.GetWeather, { code: cityCode }),
+      //baseURL: Host,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    },
+    {
+      apiUrl: '',
+      joinTime: false,
+      withToken: false,
+      withAcceptLanguage: false,
+    },
+  );
+};
