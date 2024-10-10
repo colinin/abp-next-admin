@@ -42,7 +42,7 @@
   import { Card, Select } from 'ant-design-vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { getContainers } from '/@/api/oss-management/containers';
-  import { OssContainer } from '/@/api/oss-management/model/ossModel';
+  import { OssContainer } from '/@/api/oss-management/containers/model';
   import FolderTree from './FolderTree.vue';
   import FileList from './FileList.vue';
 
