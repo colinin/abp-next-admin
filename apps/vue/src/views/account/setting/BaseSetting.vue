@@ -84,8 +84,8 @@
     return new Promise<void>((resolve, reject) => {
       upload(params.file, 'avatar', params.filename)
         .then((res) => {
-          const path = encodeURIComponent(res.data.path.substring(0, res.data.path.length - 1));
-          changeAvatar({ avatarUrl: `${path}/${res.data.name}` })
+          const path = encodeURIComponent(res.path.substring(0, res.path.length - 1));
+          changeAvatar({ avatarUrl: `${path}/${res.name}` })
             .then(() => {
               createMessage.success(L('Successful'));
               emits('profile-change');
