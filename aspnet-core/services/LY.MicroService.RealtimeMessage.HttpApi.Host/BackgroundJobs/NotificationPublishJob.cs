@@ -33,13 +33,7 @@ public class NotificationPublishJob : AsyncBackgroundJob<NotificationPublishJobA
                 var store = scope.ServiceProvider.GetRequiredService<INotificationStore>();
                 var notification = await store.GetNotificationOrNullAsync(args.TenantId, args.NotificationId);
                 notification.Data = NotificationDataSerializer.Serialize(notification.Data);
-
-                var notifacationDataMapping = Options.NotificationDataMappings
-                        .GetMapItemOrDefault(notification.Name, publishProvider.Name);
-                if (notifacationDataMapping != null)
-                {
-                    notification.Data = notifacationDataMapping.MappingFunc(notification.Data);
-                }
+                
                 await publishProvider.PublishAsync(notification, args.UserIdentifiers);
             }
         }

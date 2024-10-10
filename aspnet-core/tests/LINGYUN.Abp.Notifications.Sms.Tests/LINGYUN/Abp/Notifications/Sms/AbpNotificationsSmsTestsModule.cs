@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.Notifications.Sms
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            // 改变默认数据前缀方法
+            // 锟侥憋拷默锟斤拷锟斤拷锟斤拷前缀锟斤拷锟斤拷
             PreConfigure<AbpNotificationsSmsOptions>(options =>
             {
                 options.TemplateParamsPrefix = "[sms-override]";
@@ -20,22 +20,9 @@ namespace LINGYUN.Abp.Notifications.Sms
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            // 自定义数据处理方法
+            // 锟皆讹拷锟斤拷锟斤拷锟捷达拷锟斤拷锟斤拷锟斤拷
             Configure<AbpNotificationOptions>(options =>
             {
-                // 这条通知返回标准化的通知
-                options.NotificationDataMappings
-                    .Mapping(
-                        SmsNotificationPublishProvider.ProviderName,
-                        NotificationsTestsNames.Test2,
-                        data => NotificationData.ToStandardData(data));
-
-                // 这条通知不做任何处理
-                options.NotificationDataMappings
-                    .Mapping(
-                        SmsNotificationPublishProvider.ProviderName,
-                        NotificationsTestsNames.Test3,
-                        data => data);
             });
         }
     }

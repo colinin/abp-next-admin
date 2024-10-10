@@ -11,10 +11,6 @@ public class AbpNotificationsPublishOptions
     /// </summary>
     public ITypeList<INotificationPublishProvider> PublishProviders { get; }
     /// <summary>
-    /// 可以自定义某个通知的格式
-    /// </summary>
-    public NotificationDataMappingDictionary NotificationDataMappings { get; }
-    /// <summary>
     /// 过期时间
     /// 默认60天
     /// </summary>
@@ -29,7 +25,6 @@ public class AbpNotificationsPublishOptions
     public AbpNotificationsPublishOptions()
     {
         PublishProviders = new TypeList<INotificationPublishProvider>();
-        NotificationDataMappings = new NotificationDataMappingDictionary();
 
         ExpirationTime = TimeSpan.FromDays(60);
         DateTimeFormat = DefaultDateTimeFormat;

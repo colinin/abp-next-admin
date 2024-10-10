@@ -9,10 +9,6 @@
 
 自定义的发送方法可以通过实现 ##ISmsNotificationSender## 接口或重写 ##SmsNotificationSender## 即可
 
-内置了通知数据 NotificationDataMappings 方法  
-可通过 NotificationDataMappings.MappingAll(SmsNotificationPublishProvider.ProviderName, Func<NotificationData, NotificationData> func) 来自定义规则
-
-
 ## 配置使用
 
 * 此配置项将在下一个短信相关大版本移除

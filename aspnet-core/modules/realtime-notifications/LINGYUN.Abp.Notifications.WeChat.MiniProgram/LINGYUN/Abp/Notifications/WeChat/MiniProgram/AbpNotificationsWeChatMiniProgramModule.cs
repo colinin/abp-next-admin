@@ -21,11 +21,6 @@ public class AbpNotificationsWeChatMiniProgramModule : AbpModule
         Configure<AbpNotificationsPublishOptions>(options =>
         {
             options.PublishProviders.Add<WeChatMiniProgramNotificationPublishProvider>();
-
-            var wechatOptions = preActions.Configure();
-            options.NotificationDataMappings
-                   .MappingDefault(WeChatMiniProgramNotificationPublishProvider.ProviderName,
-                   data => NotificationData.ToStandardData(wechatOptions.DefaultMsgPrefix, data));
         });
     }
 }
