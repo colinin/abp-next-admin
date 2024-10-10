@@ -6,6 +6,7 @@
           <template #description>
             <DirectoryTree
               :tree-data="folderTree"
+              :loadedKeys="loadedKeys"
               :expandedKeys="expandedKeys"
               @expand="fetchFolders"
               @select="handleSelectFolder"
@@ -29,7 +30,7 @@
 <script lang="ts" setup>
   import { computed, ref, shallowRef } from 'vue';
   import { Card, Tree } from 'ant-design-vue';
-  import { TreeDataItem } from 'ant-design-vue/es/tree/Tree';
+  import { AntTreeNodeBaseEvent, TreeDataItem } from 'ant-design-vue/es/tree/Tree';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { OssObject } from '/@/api/oss-management/objects/model';
@@ -50,6 +51,12 @@
     group: string;
     path: string;
     dataRef: any;
+  }
+
+  interface NodeInfo {
+    path?: string;
+    node: NodeInfo;
+    parent?: NodeInfo;
   }
 
   const { hasPermission } = usePermission();
@@ -97,28 +104,36 @@
         return false;
     }
   });
+  const loadedKeys = ref<string[]>([]);
   const expandedKeys = ref<string[]>([]);
 
-  function fetchFolders(keys) {
+  function fetchFolders(keys, e) {
     expandedKeys.value = keys;
+    if (!e.expanded) {
+      const keys = loadedKeys.value;
+      const findIndex = keys.findLastIndex((key) => key === e.node.key);
+      findIndex >= 0 && keys.splice(findIndex);
+      loadedKeys.value = keys;
+    }
   }
 
-  function handleSelectFolder(_, e) {
-    switch (e.node.dataRef.group) {
+  function handleSelectFolder(_, e: AntTreeNodeBaseEvent) {
+    const path = calculateFilePath(e.node as any);
+    switch (e.node.group) {
       case 'private':
       case 'public':
         switchComponent.value = {
           name: 'FileList',
-          group: e.node.dataRef.group,
-          path: e.node.dataRef.path,
+          group: e.node.group,
+          path: path,
           dataRef: e.node.dataRef,
         };
         break;
       case 'share':
         switchComponent.value = {
           name: 'ShareList',
-          group: e.node.dataRef.group,
-          path: e.node.dataRef.path,
+          group: e.node.group,
+          path: path,
           dataRef: e.node.dataRef,
         };
         break;
@@ -128,12 +143,21 @@
   function handleAppendFolder(folders: OssObject[]) {
     switchComponent.value.dataRef.children = folders.map((obj) => {
       return {
-        key: obj.name,
+        key: switchComponent.value.path + obj.name,
         group: switchComponent.value.group,
         title: obj.name,
         path: obj.name,
         children: [],
       };
     });
+  }
+
+  function calculateFilePath(e: NodeInfo) {
+    let path = e.path ?? '';
+    if (e.parent?.node?.path) {
+      path = e.parent.node.path + path;
+      path = calculateFilePath(e.parent) + path;
+    }
+    return path;
   }
 </script>
