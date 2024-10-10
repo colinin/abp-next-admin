@@ -24,10 +24,13 @@ public abstract class AbpDataProtectionDbContext<TDbContext> : AbpDbContext<TDbC
     {
         base.OnConfiguring(optionsBuilder);
 
-        // TODO: 需要优化表达式树
-        // optionsBuilder.AddInterceptors(LazyServiceProvider.GetRequiredService<AbpDataProtectedReadEntityInterceptor>());
-        //optionsBuilder.AddInterceptors(LazyServiceProvider.GetRequiredService<AbpDataProtectedWriteEntityInterceptor>());
-        optionsBuilder.AddInterceptors(LazyServiceProvider.GetRequiredService<AbpDataProtectedWritePropertiesInterceptor>());
+        if (LazyServiceProvider != null)
+        {
+            // TODO: 需要优化表达式树
+            // optionsBuilder.AddInterceptors(LazyServiceProvider.GetRequiredService<AbpDataProtectedReadEntityInterceptor>());
+            //optionsBuilder.AddInterceptors(LazyServiceProvider.GetRequiredService<AbpDataProtectedWriteEntityInterceptor>());
+            optionsBuilder.AddInterceptors(LazyServiceProvider.GetRequiredService<AbpDataProtectedWritePropertiesInterceptor>());
+        }
     }
 
     protected override void ApplyAbpConceptsForAddedEntity(EntityEntry entry)
