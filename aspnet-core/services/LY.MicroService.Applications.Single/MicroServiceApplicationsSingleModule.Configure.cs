@@ -90,7 +90,7 @@ namespace LY.MicroService.Applications.Single;
 public partial class MicroServiceApplicationsSingleModule
 {
     protected const string DefaultCorsPolicyName = "Default";
-    protected const string ApplicationName = "MicroService-Applications-Single";
+    public static string ApplicationName { get; set; } = "MicroService-Applications-Single";
     private readonly static OneTimeRunner OneTimeRunner = new();
 
     private void PreConfigureFeature()
