@@ -6,10 +6,6 @@
 public class AbpNotificationsWeChatMiniProgramOptions
 {
     /// <summary>
-    /// 默认消息头部标记
-    /// </summary>
-    public string DefaultMsgPrefix { get; set; } = "[wmp]";
-    /// <summary>
     /// 默认小程序模板
     /// </summary>
     public string DefaultTemplateId { get; set; }

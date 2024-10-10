@@ -13,9 +13,6 @@ public class AbpNotificationsSignalRModule : AbpModule
         Configure<AbpNotificationsPublishOptions>(options =>
         {
             options.PublishProviders.Add<SignalRNotificationPublishProvider>();
-            options.NotificationDataMappings
-                   .MappingDefault(SignalRNotificationPublishProvider.ProviderName,
-                   data => data.ToSignalRData());
         });
     }
 }

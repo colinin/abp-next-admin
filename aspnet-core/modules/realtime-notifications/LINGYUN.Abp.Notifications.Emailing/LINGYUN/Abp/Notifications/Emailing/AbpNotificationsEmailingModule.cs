@@ -15,8 +15,6 @@ public class AbpNotificationsEmailingModule : AbpModule
         Configure<AbpNotificationsPublishOptions>(options =>
         {
             options.PublishProviders.Add<EmailingNotificationPublishProvider>();
-            options.NotificationDataMappings
-                   .MappingDefault(EmailingNotificationPublishProvider.ProviderName, data => data);
         });
     }
 }

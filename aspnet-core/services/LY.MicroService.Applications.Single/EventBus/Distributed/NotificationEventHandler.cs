@@ -413,12 +413,15 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
             try
             {
                 Logger.LogDebug($"Sending notification with provider {provider.Name}");
-                var notifacationDataMapping = Options.NotificationDataMappings
-                        .GetMapItemOrDefault(provider.Name, notificationInfo.Name);
-                if (notifacationDataMapping != null)
-                {
-                    notificationInfo.Data = notifacationDataMapping.MappingFunc(notificationInfo.Data);
-                }
+
+                // 2024-10-10: 框架层面应该取消通知数据转换,而是交给提供商来实现
+                //var notifacationDataMapping = Options.NotificationDataMappings
+                //        .GetMapItemOrDefault(provider.Name, notificationInfo.Name);
+                //if (notifacationDataMapping != null)
+                //{
+                //    notificationInfo.Data = notifacationDataMapping.MappingFunc(notificationInfo.Data);
+                //}
+
                 // 发布
                 await provider.PublishAsync(notificationInfo, subscriptionUsers);
 

@@ -7,9 +7,6 @@
 
 #### 注意
 
-内置了通知数据 NotificationDataMappings 方法  
-可通过 NotificationDataMappings.MappingAll(WeChatMiniProgramNotificationPublishProvider.ProviderName, Func<NotificationData, NotificationData> func) 来自定义规则
-
 ## 配置使用
 
 * 此配置项将在下一个微信相关大版本移除,合并到 LINGYUN.Abp.WeChat.MiniProgram.AbpWeChatMiniProgramOptions

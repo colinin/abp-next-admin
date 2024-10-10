@@ -20,13 +20,6 @@ public class AbpNotificationsSmsModule : AbpModule
         Configure<AbpNotificationsPublishOptions>(options =>
         {
             options.PublishProviders.Add<SmsNotificationPublishProvider>();
-
-            var smsOptions = preSmsActions.Configure();
-
-            options.NotificationDataMappings
-                   .MappingDefault(
-                        SmsNotificationPublishProvider.ProviderName,
-                        data => NotificationData.ToStandardData(smsOptions.TemplateParamsPrefix, data));
         });
     }
 }
