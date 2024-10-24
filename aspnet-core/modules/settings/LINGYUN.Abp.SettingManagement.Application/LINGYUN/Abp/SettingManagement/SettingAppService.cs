@@ -396,7 +396,8 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
 
         #region 邮件设置
 
-        if (await FeatureChecker.IsEnabledAsync(true, [SettingManagementFeatures.Enable, SettingManagementFeatures.AllowChangingEmailSettings]))
+        if (!CurrentTenant.IsAvailable || 
+            await FeatureChecker.IsEnabledAsync(true, [SettingManagementFeatures.Enable, SettingManagementFeatures.AllowChangingEmailSettings]))
         {
             var emailSettingGroup = new SettingGroupDto(L["DisplayName:Emailing"], L["Description:Emailing"]);
 
