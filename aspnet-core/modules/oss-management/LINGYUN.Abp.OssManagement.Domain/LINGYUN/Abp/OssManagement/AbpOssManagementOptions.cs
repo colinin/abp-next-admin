@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp;
@@ -38,6 +39,11 @@ public class AbpOssManagementOptions
     /// default: 30 minutes
     /// </summary>
     public TimeSpan MinimumTempLifeSpan { get; set; }
+    /// <summary>
+    /// 文件流处理器
+    /// </summary>
+    [NotNull]
+    public List<IOssObjectProcesserContributor> Processers { get; }
 
     public AbpOssManagementOptions()
     {
@@ -55,6 +61,10 @@ public class AbpOssManagementOptions
             "icons",
             // 缓存
             "temp"
+        };
+        Processers = new List<IOssObjectProcesserContributor>
+        {
+            new NoneOssObjectProcesser()
         };
 
         IsCleanupEnabled = true;

@@ -17,35 +17,29 @@ namespace LINGYUN.Abp.OssManagement.FileSystem;
 /// <summary>
 /// Oss容器的本地文件系统实现
 /// </summary>
-internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
+internal class FileSystemOssContainer : OssContainerBase, IOssObjectExpireor
 {
     protected ICurrentTenant CurrentTenant { get; }
     protected IHostEnvironment Environment { get; }
     protected IBlobFilePathCalculator FilePathCalculator { get; }
     protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
-    protected IServiceProvider ServiceProvider { get; }
-    protected FileSystemOssOptions Options { get; }
-    protected AbpOssManagementOptions OssOptions { get; }
 
     public FileSystemOssContainer(
         ICurrentTenant currentTenant,
         IHostEnvironment environment,
-        IServiceProvider serviceProvider,
+        IServiceScopeFactory serviceScopeFactory,
         IBlobFilePathCalculator blobFilePathCalculator,
         IBlobContainerConfigurationProvider configurationProvider,
-        IOptions<FileSystemOssOptions> options,
         IOptions<AbpOssManagementOptions> ossOptions)
+        : base(ossOptions, serviceScopeFactory)
     {
         CurrentTenant = currentTenant;
         Environment = environment;
-        ServiceProvider = serviceProvider;
         FilePathCalculator = blobFilePathCalculator;
         ConfigurationProvider = configurationProvider;
-        Options = options.Value;
-        OssOptions = ossOptions.Value;
     }
 
-    public virtual Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
+    public override Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
     {
         var objectPath = !request.Path.IsNullOrWhiteSpace()
             ? request.Path.EnsureEndsWith('/')
@@ -72,7 +66,7 @@ internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
         return Task.CompletedTask;
     }
 
-    public virtual Task<OssContainer> CreateAsync(string name)
+    public override Task<OssContainer> CreateAsync(string name)
     {
         var filePath = CalculateFilePath(name);
         ThrowOfPathHasTooLong(filePath);
@@ -128,7 +122,7 @@ internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
         return Task.CompletedTask;
     }
 
-    public async virtual Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
+    public async override Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
     {
         var objectPath = !request.Path.IsNullOrWhiteSpace()
              ? request.Path.EnsureEndsWith('/')
@@ -213,10 +207,8 @@ internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
         }
     }
 
-    public virtual Task DeleteAsync(string name)
+    protected override Task DeleteBucketAsync(string name)
     {
-        CheckStaticBucket(name);
-
         var filePath = CalculateFilePath(name);
         if (!Directory.Exists(filePath))
         {
@@ -233,7 +225,7 @@ internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
         return Task.CompletedTask;
     }
 
-    public virtual Task DeleteObjectAsync(GetOssObjectRequest request)
+    public override Task DeleteObjectAsync(GetOssObjectRequest request)
     {
         var objectName = request.Path.IsNullOrWhiteSpace()
             ? request.Object
@@ -255,14 +247,14 @@ internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
         return Task.CompletedTask;
     }
 
-    public virtual Task<bool> ExistsAsync(string name)
+    public override Task<bool> ExistsAsync(string name)
     {
         var filePath = CalculateFilePath(name);
 
         return Task.FromResult(Directory.Exists(filePath));
     }
 
-    public virtual Task<OssContainer> GetAsync(string name)
+    public override Task<OssContainer> GetAsync(string name)
     {
         var filePath = CalculateFilePath(name);
         if (!Directory.Exists(filePath))
@@ -285,7 +277,7 @@ internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
         return Task.FromResult(container);
     }
 
-    public async virtual Task<OssObject> GetObjectAsync(GetOssObjectRequest request)
+    protected override Task<OssObject> GetOssObjectAsync(GetOssObjectRequest request)
     {
         var objectPath = !request.Path.IsNullOrWhiteSpace()
              ? request.Path.EnsureEndsWith('/')
@@ -321,7 +313,7 @@ internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
             {
                 FullName = directoryInfo.FullName.Replace(Environment.ContentRootPath, "")
             };
-            return ossObject;
+            return Task.FromResult(ossObject);
         }
         else
         {
@@ -345,27 +337,11 @@ internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
 
             ossObject.SetContent(fileStream);
 
-            if (!request.Process.IsNullOrWhiteSpace())
-            {
-                using var serviceScope = ServiceProvider.CreateScope();
-                var context = new FileSystemOssObjectContext(request.Process, ossObject, serviceScope.ServiceProvider);
-                foreach (var processer in Options.Processers)
-                {
-                    await processer.ProcessAsync(context);
-
-                    if (context.Handled)
-                    {
-                        ossObject.SetContent(context.Content);
-                        break;
-                    }
-                }
-            }
-
-            return ossObject;
+            return Task.FromResult(ossObject);
         }
     }
 
-    public virtual Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
+    public override Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
     {
         // 不传递Bucket 检索根目录的Bucket
         var filePath = CalculateFilePath(null);
@@ -412,7 +388,7 @@ internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
         return Task.FromResult(response);
     }
 
-    public virtual Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
+    public override Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
     {
         // 先定位检索的目录
         var filePath = CalculateFilePath(request.BucketName, request.Prefix);
@@ -570,14 +546,6 @@ internal class FileSystemOssContainer : IOssContainer, IOssObjectExpireor
         }
 
         return blobPath;
-    }
-
-    protected virtual void CheckStaticBucket(string bucket)
-    {
-        if (OssOptions.CheckStaticBucket(bucket))
-        {
-            throw new BusinessException(code: OssManagementErrorCodes.ContainerDeleteWithStatic);
-        }
     }
 
     private void ThrowOfPathHasTooLong(string path)

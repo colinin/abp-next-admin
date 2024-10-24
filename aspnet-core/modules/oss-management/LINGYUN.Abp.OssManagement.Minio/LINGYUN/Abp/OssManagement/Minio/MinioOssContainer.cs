@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.DataModel.ILM;
@@ -22,7 +24,7 @@ namespace LINGYUN.Abp.OssManagement.Minio;
 /// <summary>
 /// Oss容器的Minio实现
 /// </summary>
-public class MinioOssContainer : IOssContainer, IOssObjectExpireor
+public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
 {
     protected IMinioBlobNameCalculator MinioBlobNameCalculator { get; }
     protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
@@ -38,7 +40,10 @@ public class MinioOssContainer : IOssContainer, IOssObjectExpireor
         ILogger<MinioOssContainer> logger,
         IMinioBlobNameCalculator minioBlobNameCalculator, 
         IBlobNormalizeNamingService blobNormalizeNamingService, 
-        IBlobContainerConfigurationProvider configurationProvider)
+        IBlobContainerConfigurationProvider configurationProvider,
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<AbpOssManagementOptions> options)
+        : base(options, serviceScopeFactory)
     {
         Clock = clock;
         Logger = logger;
@@ -48,7 +53,7 @@ public class MinioOssContainer : IOssContainer, IOssObjectExpireor
         ConfigurationProvider = configurationProvider;
     }
 
-    public async virtual Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
+    public async override Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
     {
         var client = GetMinioClient();
 
@@ -76,7 +81,7 @@ public class MinioOssContainer : IOssContainer, IOssObjectExpireor
         await tcs.Task;
     }
 
-    public async virtual Task<OssContainer> CreateAsync(string name)
+    public async override Task<OssContainer> CreateAsync(string name)
     {
         var client = GetMinioClient();
 
@@ -97,7 +102,7 @@ public class MinioOssContainer : IOssContainer, IOssObjectExpireor
             new Dictionary<string, string>());
     }
 
-    public async virtual Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
+    public async override Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
     {
         var client = GetMinioClient();
 
@@ -176,46 +181,7 @@ public class MinioOssContainer : IOssContainer, IOssObjectExpireor
         return ossObject;
     }
 
-    public async virtual Task DeleteAsync(string name)
-    {
-        var client = GetMinioClient();
-        var bucket = GetBucket(name);
-
-        if (!await BucketExists(client, bucket))
-        {
-            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
-        }
-
-        // 非空目录无法删除
-        var tcs = new TaskCompletionSource<bool>();
-        var listObjectObs = client.ListObjectsAsync(
-            new ListObjectsArgs()
-                .WithBucket(bucket));
-
-        var listObjects = new List<string>();
-        using var _ = listObjectObs.Subscribe(
-            (item) =>
-            {
-                listObjects.Add(item.Key);
-                tcs.TrySetResult(true);
-            },
-            (ex) => tcs.TrySetException(ex),
-            () => tcs.TrySetResult(true));
-
-        await tcs.Task;
-
-        if (listObjects.Count > 0)
-        {
-            throw new BusinessException(code: OssManagementErrorCodes.ContainerDeleteWithNotEmpty);
-        }
-
-        var deleteBucketArgs = new RemoveBucketArgs()
-                .WithBucket(bucket);
-
-        await client.RemoveBucketAsync(deleteBucketArgs);
-    }
-
-    public async virtual Task DeleteObjectAsync(GetOssObjectRequest request)
+    public async override Task DeleteObjectAsync(GetOssObjectRequest request)
     {
         if (request.Object.EndsWith('/'))
         {
@@ -245,7 +211,7 @@ public class MinioOssContainer : IOssContainer, IOssObjectExpireor
         }
     }
 
-    public async virtual Task<bool> ExistsAsync(string name)
+    public async override Task<bool> ExistsAsync(string name)
     {
         var client = GetMinioClient();
 
@@ -297,7 +263,7 @@ public class MinioOssContainer : IOssContainer, IOssObjectExpireor
         }
     }
 
-    public async virtual Task<OssContainer> GetAsync(string name)
+    public async override Task<OssContainer> GetAsync(string name)
     {
         var client = GetMinioClient();
 
@@ -319,7 +285,7 @@ public class MinioOssContainer : IOssContainer, IOssObjectExpireor
             new Dictionary<string, string>());
     }
 
-    public async virtual Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
+    public async override Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
     {
         var client = GetMinioClient();
 
@@ -347,7 +313,112 @@ public class MinioOssContainer : IOssContainer, IOssObjectExpireor
             resultObjects);
     }
 
-    public async virtual Task<OssObject> GetObjectAsync(GetOssObjectRequest request)
+    public async override Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
+    {
+        var client = GetMinioClient();
+
+        var bucket = GetBucket(request.BucketName);
+
+        var prefixPath = GetPrefixPath();
+        var objectPath = GetBlobPath(prefixPath, request.Prefix);
+        var marker = !objectPath.IsNullOrWhiteSpace() && !request.Marker.IsNullOrWhiteSpace()
+            ? request.Marker.Replace(objectPath, "")
+            : request.Marker;
+
+        var listObjectArgs = new ListObjectsArgs()
+            .WithBucket(bucket)
+            .WithPrefix(objectPath);
+
+        var tcs = new TaskCompletionSource<bool>();
+
+        var listObjectResult = client.ListObjectsAsync(listObjectArgs);
+
+        var resultObjects = new List<OssObject>();
+
+        using var _ = listObjectResult.Subscribe(
+            onNext: (item) =>
+            {
+                resultObjects.Add(new OssObject(
+                    !objectPath.IsNullOrWhiteSpace()
+                        ? item.Key.Replace(objectPath, "")
+                        : item.Key,
+                    request.Prefix,
+                    item.ETag,
+                    item.LastModifiedDateTime,
+                    item.Size.To<long>(),
+                    item.LastModifiedDateTime,
+                    new Dictionary<string, string>(),
+                    item.IsDir));
+            },
+            onError: (ex) =>
+            {
+                tcs.TrySetException(ex);
+            },
+            onCompleted: () =>
+            {
+                tcs.SetResult(true);
+            }
+        );
+
+        await tcs.Task;
+
+        var totalCount = resultObjects.Count;
+        resultObjects = resultObjects
+            .AsQueryable()
+            .OrderBy(x => x.Name)
+            .PageBy(request.Current, request.MaxKeys ?? 10)
+            .ToList();
+
+        return new GetOssObjectsResponse(
+            bucket,
+            request.Prefix,
+            request.Marker,
+            marker,
+            "/",
+            totalCount,
+            resultObjects);
+    }
+
+    protected async override Task DeleteBucketAsync(string name)
+    {
+        var client = GetMinioClient();
+        var bucket = GetBucket(name);
+
+        if (!await BucketExists(client, bucket))
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
+        }
+
+        // 非空目录无法删除
+        var tcs = new TaskCompletionSource<bool>();
+        var listObjectObs = client.ListObjectsAsync(
+            new ListObjectsArgs()
+                .WithBucket(bucket));
+
+        var listObjects = new List<string>();
+        using var _ = listObjectObs.Subscribe(
+            (item) =>
+            {
+                listObjects.Add(item.Key);
+                tcs.TrySetResult(true);
+            },
+            (ex) => tcs.TrySetException(ex),
+            () => tcs.TrySetResult(true));
+
+        await tcs.Task;
+
+        if (listObjects.Count > 0)
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ContainerDeleteWithNotEmpty);
+        }
+
+        var deleteBucketArgs = new RemoveBucketArgs()
+                .WithBucket(bucket);
+
+        await client.RemoveBucketAsync(deleteBucketArgs);
+    }
+
+    protected async override Task<OssObject> GetOssObjectAsync(GetOssObjectRequest request)
     {
         var client = GetMinioClient();
 
@@ -402,78 +473,7 @@ public class MinioOssContainer : IOssContainer, IOssObjectExpireor
             ossObject.SetContent(memoryStream);
         }
 
-        if (!request.Process.IsNullOrWhiteSpace())
-        {
-            // TODO: 文件流处理
-        }
-
         return ossObject;
-    }
-
-    public async virtual Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
-    {
-        var client = GetMinioClient();
-
-        var bucket = GetBucket(request.BucketName);
-
-        var prefixPath = GetPrefixPath();
-        var objectPath = GetBlobPath(prefixPath, request.Prefix);
-        var marker = !objectPath.IsNullOrWhiteSpace() && !request.Marker.IsNullOrWhiteSpace()
-            ? request.Marker.Replace(objectPath, "")
-            : request.Marker;
-
-        var listObjectArgs = new ListObjectsArgs()
-            .WithBucket(bucket)
-            .WithPrefix(objectPath);
-
-        var tcs = new TaskCompletionSource<bool>();
-
-        var listObjectResult = client.ListObjectsAsync(listObjectArgs);
-
-        var resultObjects = new List<OssObject>();
-        
-        using var _ = listObjectResult.Subscribe(
-            onNext: (item) =>
-            {
-                resultObjects.Add(new OssObject(
-                    !objectPath.IsNullOrWhiteSpace()
-                        ? item.Key.Replace(objectPath, "")
-                        : item.Key,
-                    request.Prefix,
-                    item.ETag,
-                    item.LastModifiedDateTime,
-                    item.Size.To<long>(),
-                    item.LastModifiedDateTime,
-                    new Dictionary<string, string>(),
-                    item.IsDir));
-            },
-            onError: (ex) =>
-            {
-                tcs.TrySetException(ex);
-            },
-            onCompleted: () =>
-            {
-                tcs.SetResult(true);
-            }
-        );
-
-        await tcs.Task;
-
-        var totalCount = resultObjects.Count;
-        resultObjects = resultObjects
-            .AsQueryable()
-            .OrderBy(x => x.Name)
-            .PageBy(request.Current, request.MaxKeys ?? 10)
-            .ToList();
-
-        return new GetOssObjectsResponse(
-            bucket,
-            request.Prefix,
-            request.Marker,
-            marker,
-            "/",
-            totalCount,
-            resultObjects);
     }
 
     protected virtual IMinioClient GetMinioClient()

@@ -69,7 +69,9 @@ using LINGYUN.Abp.OpenIddict.Sms;
 using LINGYUN.Abp.OpenIddict.WeChat;
 using LINGYUN.Abp.OpenIddict.WeChat.Work;
 using LINGYUN.Abp.OssManagement;
-using LINGYUN.Abp.OssManagement.FileSystem.ImageSharp;
+using LINGYUN.Abp.OssManagement.FileSystem;
+using LINGYUN.Abp.OssManagement.Imaging.ImageSharp;
+using LINGYUN.Abp.OssManagement.Minio;
 using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Abp.PermissionManagement;
 using LINGYUN.Abp.PermissionManagement.HttpApi;
@@ -175,8 +177,9 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpOpenIddictWeChatModule),
     typeof(AbpOpenIddictWeChatWorkModule),
 
-    // typeof(AbpOssManagementMinioModule), // 取消注释以使用Minio
-    typeof(AbpOssManagementFileSystemImageSharpModule),
+    //typeof(AbpOssManagementMinioModule), // 取消注释以使用Minio
+    typeof(AbpOssManagementFileSystemModule),
+    typeof(AbpOssManagementImagingImageSharpModule),
     typeof(AbpOssManagementDomainModule),
     typeof(AbpOssManagementApplicationModule),
     typeof(AbpOssManagementHttpApiModule),

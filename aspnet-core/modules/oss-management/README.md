@@ -17,12 +17,14 @@ File-Management更名为Oss-Management
 ### 高阶模块
 
 * [LINGYUN.Abp.BlobStoring.OssManagement](./LINGYUN.Abp.BlobStoring.OssManagement)						abp框架对象存储提供者**IBlobProvider**的Oss管理模块实现, 依赖于Oss客户端代理模块  
-* [LINGYUN.Abp.OssManagement.Aliyun](./LINGYUN.Abp.OssManagement.Aliyun)									Oss管理的阿里云实现，实现了部分阿里云Oss服务的容器与对象管理  
-* [LINGYUN.Abp.OssManagement.FileSystem](./LINGYUN.Abp.OssManagement.FileSystem)							Oss管理的本地文件系统实现，实现了部分本地文件系统的容器（目录）与对象（文件/目录）管理  
-* [LINGYUN.Abp.OssManagement.FileSystem.ImageSharp](./LINGYUN.Abp.OssManagement.FileSystem.ImageSharp)	Oss本地对象的ImageSharp扩展，当前端传递需求处理对象时，此模块用于实现基于图形文件流的处理   
-* [LINGYUN.Abp.OssManagement.FileSystem.Imaging](./LINGYUN.Abp.OssManagement.FileSystem.Imaging)	Oss本地对象的Volo.Abp.Imaging扩展  
-* [LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp](./LINGYUN.Abp.OssManagement.FileSystem.Imaging.ImageSharp)	Oss本地对象的Volo.Abp.Imaging.ImageSharp扩展   
+* [LINGYUN.Abp.OssManagement.Aliyun](./LINGYUN.Abp.OssManagement.Aliyun)								Oss管理的阿里云实现，实现了部分阿里云Oss服务的容器与对象管理  
+* [LINGYUN.Abp.OssManagement.FileSystem](./LINGYUN.Abp.OssManagement.FileSystem)						Oss管理的本地文件系统实现，实现了部分本地文件系统的容器（目录）与对象（文件/目录）管理  
+* [LINGYUN.Abp.OssManagement.ImageSharp](./LINGYUN.Abp.OssManagement.ImageSharp)	                    Oss对象的ImageSharp扩展，当前端传递需求处理对象时，此模块用于实现基于图形文件流的处理   
+* [LINGYUN.Abp.OssManagement.Imaging](./LINGYUN.Abp.OssManagement.Imaging)	                            Oss对象的Volo.Abp.Imaging扩展  
+* [LINGYUN.Abp.OssManagement.Imaging.ImageSharp](./LINGYUN.Abp.OssManagement.Imaging.ImageSharp)	    Oss对象的Volo.Abp.Imaging.ImageSharp扩展   
 * [LINGYUN.Abp.OssManagement.Nexus](./LINGYUN.Abp.OssManagement.Nexus)									Oss管理的Nexus实现，管理来自私有Nexus仓库的RAW存储类型 
+* [LINGYUN.Abp.OssManagement.Minio](./LINGYUN.Abp.OssManagement.Minio)									Oss管理的Minio实现，管理基于Minio的对象存储服务 
+* [LINGYUN.Abp.OssManagement.Tencent](./LINGYUN.Abp.OssManagement.Tencent)								Oss管理的腾讯云实现，实现了部分腾讯云Oss服务的容器与对象管理（未完全实现） 
 
 ### 权限定义
 
@@ -57,3 +59,4 @@ File-Management更名为Oss-Management
 *【2021-12-13】	增加LINGYUN.Abp.BlobStoring.OssManagement用于实现Oss代理二进制文件存储  
 *【2023-09-04】	集成Volo.Abp.Imaging模块用于图形文件流处理  
 *【2023-10-11】	集成Nexus仓库实现基于Nexus Raw类型存储(**未完善**)  
+*【2024-10-24】	集成Volo.Abp.BlobStoring.Minio模块用于实现基于Minio的文件存储    

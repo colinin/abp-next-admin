@@ -3,6 +3,8 @@ using LINGYUN.Abp.Sonatype.Nexus.Assets;
 using LINGYUN.Abp.Sonatype.Nexus.Components;
 using LINGYUN.Abp.Sonatype.Nexus.Search;
 using LINGYUN.Abp.Sonatype.Nexus.Services.CoreUI;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.MultiTenancy;
 
@@ -17,6 +19,9 @@ internal class NexusOssContainerFactory : IOssContainerFactory
     protected IBlobRawPathCalculator BlobRawPathCalculator { get; }
     protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
 
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
+    protected IOptions<AbpOssManagementOptions> Options { get; }
+
     public NexusOssContainerFactory(
         ICoreUiServiceProxy coreUiServiceProxy,
         INexusAssetManager nexusAssetManager,
@@ -24,7 +29,9 @@ internal class NexusOssContainerFactory : IOssContainerFactory
         INexusLookupService nexusLookupService,
         ICurrentTenant currentTenant,
         IBlobRawPathCalculator blobRawPathCalculator,
-        IBlobContainerConfigurationProvider configurationProvider)
+        IBlobContainerConfigurationProvider configurationProvider,
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<AbpOssManagementOptions> options)
     {
         CoreUiServiceProxy = coreUiServiceProxy;
         NexusAssetManager = nexusAssetManager;
@@ -33,6 +40,8 @@ internal class NexusOssContainerFactory : IOssContainerFactory
         CurrentTenant = currentTenant;
         BlobRawPathCalculator = blobRawPathCalculator;
         ConfigurationProvider = configurationProvider;
+        Options = options;
+        ServiceScopeFactory = serviceScopeFactory;
     }
 
     public IOssContainer Create()
@@ -44,6 +53,8 @@ internal class NexusOssContainerFactory : IOssContainerFactory
             NexusLookupService,
             CurrentTenant,
             BlobRawPathCalculator,
-            ConfigurationProvider);
+            ConfigurationProvider,
+            ServiceScopeFactory,
+            Options);
     }
 }
