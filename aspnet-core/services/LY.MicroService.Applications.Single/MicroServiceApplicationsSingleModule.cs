@@ -45,9 +45,6 @@ using LINGYUN.Abp.Identity.Notifications;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Identity.WeChat;
-using LINGYUN.Abp.IdentityServer;
-using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
-using LINGYUN.Abp.IdentityServer.Session;
 using LINGYUN.Abp.IdGenerator;
 using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -109,7 +106,6 @@ using LINGYUN.Platform.HttpApi;
 using LINGYUN.Platform.Settings.VueVbenAdmin;
 using LINGYUN.Platform.Theme.VueVbenAdmin;
 using LY.MicroService.Applications.Single.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -126,7 +122,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
@@ -180,10 +175,11 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpOpenIddictWeChatModule),
     typeof(AbpOpenIddictWeChatWorkModule),
 
+    // typeof(AbpOssManagementMinioModule), // 取消注释以使用Minio
+    typeof(AbpOssManagementFileSystemImageSharpModule),
     typeof(AbpOssManagementDomainModule),
     typeof(AbpOssManagementApplicationModule),
     typeof(AbpOssManagementHttpApiModule),
-    typeof(AbpOssManagementFileSystemImageSharpModule),
     typeof(AbpOssManagementSettingManagementModule),
 
     typeof(PlatformDomainModule),
@@ -351,7 +347,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureIdempotent();
         ConfigureMvcUiTheme();
         ConfigureDataSeeder();
-        ConfigureBlobStoring();
         ConfigureLocalization();
         ConfigureKestrelServer();
         ConfigureBackgroundTasks();
@@ -365,6 +360,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureAuthServer(configuration);
         ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);
+        ConfigureBlobStoring(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureTextTemplating(configuration);

@@ -386,7 +386,7 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
-    private void ConfigureBlobStoring()
+    private void ConfigureBlobStoring(IConfiguration configuration)
     {
         Configure<AbpBlobStoringOptions>(options =>
         {
@@ -396,6 +396,11 @@ public partial class MicroServiceApplicationsSingleModule
                 {
                     fileSystem.BasePath = Path.Combine(Directory.GetCurrentDirectory(), "blobs");
                 });
+
+                //containerConfiguration.UseMinio(minio =>
+                //{
+                //    configuration.GetSection("Minio").Bind(minio);
+                //});
             });
         });
     }
@@ -405,9 +410,9 @@ public partial class MicroServiceApplicationsSingleModule
         Configure<AbpBackgroundTasksOptions>(options =>
         {
             options.NodeName = ApplicationName;
-            options.JobCleanEnabled = false;
-            options.JobFetchEnabled = false;
-            options.JobCheckEnabled = false;
+            options.JobCleanEnabled = true;
+            options.JobFetchEnabled = true;
+            options.JobCheckEnabled = true;
         });
     }
 

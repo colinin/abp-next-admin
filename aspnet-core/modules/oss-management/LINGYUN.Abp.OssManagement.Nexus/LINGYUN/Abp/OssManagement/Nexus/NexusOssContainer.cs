@@ -118,10 +118,12 @@ internal class NexusOssContainer : IOssContainer, IOssObjectExpireor
 
         var nexusComponentListResult = await NexusLookupService.ListComponentAsync(nexusSearchArgs);
         var nexusComponent = nexusComponentListResult.Items.FirstOrDefault();
-        if (nexusComponent != null)
+        if (nexusComponent == null)
         {
-            await NexusComponentManager.DeleteAsync(nexusComponent.Id);
+            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
         }
+
+        await NexusComponentManager.DeleteAsync(nexusComponent.Id);
     }
 
     public async virtual Task DeleteObjectAsync(GetOssObjectRequest request)
