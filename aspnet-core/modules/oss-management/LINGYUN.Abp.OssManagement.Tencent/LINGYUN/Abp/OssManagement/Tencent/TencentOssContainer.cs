@@ -3,6 +3,8 @@ using COSXML.Model.Bucket;
 using COSXML.Model.Object;
 using COSXML.Model.Service;
 using LINGYUN.Abp.BlobStoring.Tencent;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +19,7 @@ namespace LINGYUN.Abp.OssManagement.Tencent;
 /// <summary>
 /// Oss容器的阿里云实现
 /// </summary>
-internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
+internal class TencentOssContainer : OssContainerBase, IOssObjectExpireor
 {
     protected IClock Clock { get; }
     protected ICurrentTenant CurrentTenant { get; }
@@ -25,13 +27,16 @@ internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
     public TencentOssContainer(
         IClock clock,
         ICurrentTenant currentTenant,
-        ICosClientFactory cosClientFactory)
+        ICosClientFactory cosClientFactory,
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<AbpOssManagementOptions> options)
+        : base(options, serviceScopeFactory)
     {
         Clock = clock;
         CurrentTenant = currentTenant;
         CosClientFactory = cosClientFactory;
     }
-    public async virtual Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
+    public async override Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
     {
         var ossClient = await CreateClientAsync();
 
@@ -42,7 +47,7 @@ internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
         ossClient.DeleteMultiObjects(deleteRequest);
     }
 
-    public async virtual Task<OssContainer> CreateAsync(string name)
+    public async override Task<OssContainer> CreateAsync(string name)
     {
         var ossClient = await CreateClientAsync();
 
@@ -66,7 +71,7 @@ internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
             });
     }
 
-    public async virtual Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
+    public async override Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
     {
         var ossClient = await CreateClientAsync();
 
@@ -146,19 +151,6 @@ internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
         return ossObject;
     }
 
-    public async virtual Task DeleteAsync(string name)
-    {
-        // 阿里云oss在控制台设置即可，无需改变
-        var ossClient = await CreateClientAsync();
-
-        if (!BucketExists(ossClient, name))
-        {
-            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
-        }
-        var deleteBucketRequest = new DeleteBucketRequest(name);
-        ossClient.DeleteBucket(deleteBucketRequest);
-    }
-
     public async virtual Task ExpireAsync(ExprieOssObjectRequest request)
     {
         var ossClient = await CreateClientAsync();
@@ -186,7 +178,7 @@ internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
         }
     }
 
-    public async virtual Task DeleteObjectAsync(GetOssObjectRequest request)
+    public async override Task DeleteObjectAsync(GetOssObjectRequest request)
     {
         var ossClient = await CreateClientAsync();
 
@@ -212,14 +204,14 @@ internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
         }
     }
 
-    public async virtual Task<bool> ExistsAsync(string name)
+    public async override Task<bool> ExistsAsync(string name)
     {
         var ossClient = await CreateClientAsync();
 
         return BucketExists(ossClient, name);
     }
 
-    public async virtual Task<OssContainer> GetAsync(string name)
+    public async override Task<OssContainer> GetAsync(string name)
     {
         var ossClient = await CreateClientAsync();
         if (!BucketExists(ossClient, name))
@@ -242,59 +234,7 @@ internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
             });
     }
 
-    public async virtual Task<OssObject> GetObjectAsync(GetOssObjectRequest request)
-    {
-        var ossClient = await CreateClientAsync();
-        if (!BucketExists(ossClient, request.Bucket))
-        {
-            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
-            // throw new ContainerNotFoundException($"Can't not found container {request.Bucket} in aliyun blob storing");
-        }
-
-        var objectPath = GetBasePath(request.Path);
-        var objectName = objectPath.IsNullOrWhiteSpace()
-            ? request.Object
-            : objectPath + request.Object;
-
-        if (!ObjectExists(ossClient, request.Bucket, objectName))
-        {
-            throw new BusinessException(code: OssManagementErrorCodes.ObjectNotFound);
-            // throw new ContainerNotFoundException($"Can't not found object {objectName} in container {request.Bucket} with aliyun blob storing");
-        }
-
-        var getObjectRequest = new GetObjectBytesRequest(request.Bucket, objectName);
-        if (!request.Process.IsNullOrWhiteSpace())
-        {
-            getObjectRequest.SetQueryParameter(request.Process, null);
-        }
-        var objectResult = ossClient.GetObject(getObjectRequest);
-        var ossObject = new OssObject(
-            !objectPath.IsNullOrWhiteSpace()
-                ? objectResult.Key.Replace(objectPath, "")
-                : objectResult.Key,
-            request.Path,
-            objectResult.eTag,
-            null,
-            objectResult.content.Length,
-            null,
-            new Dictionary<string, string>(),
-            objectResult.Key.EndsWith("/"))
-        {
-            FullName = objectResult.Key
-        };
-
-        if (objectResult.content.Length > 0)
-        {
-            var memoryStream = new MemoryStream();
-            await memoryStream.WriteAsync(objectResult.content, 0, objectResult.content.Length);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            ossObject.SetContent(memoryStream);
-        }
-
-        return ossObject;
-    }
-
-    public async virtual Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
+    public async override Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
     {
         var ossClient = await CreateClientAsync();
 
@@ -321,7 +261,7 @@ internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
                    .ToList());
     }
 
-    public async virtual Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
+    public async override Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
     {
         
         var ossClient = await CreateClientAsync();
@@ -392,6 +332,71 @@ internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
             getBucketResult.listBucket.delimiter,
             getBucketResult.listBucket.maxKeys,
             ossObjects);
+    }
+
+    protected async override Task DeleteBucketAsync(string name)
+    {
+        // 腾讯云oss在控制台设置即可，无需改变
+        var ossClient = await CreateClientAsync();
+
+        if (!BucketExists(ossClient, name))
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
+        }
+        var deleteBucketRequest = new DeleteBucketRequest(name);
+        ossClient.DeleteBucket(deleteBucketRequest);
+    }
+
+    protected async override Task<OssObject> GetOssObjectAsync(GetOssObjectRequest request)
+    {
+        var ossClient = await CreateClientAsync();
+        if (!BucketExists(ossClient, request.Bucket))
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
+            // throw new ContainerNotFoundException($"Can't not found container {request.Bucket} in aliyun blob storing");
+        }
+
+        var objectPath = GetBasePath(request.Path);
+        var objectName = objectPath.IsNullOrWhiteSpace()
+            ? request.Object
+            : objectPath + request.Object;
+
+        if (!ObjectExists(ossClient, request.Bucket, objectName))
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ObjectNotFound);
+            // throw new ContainerNotFoundException($"Can't not found object {objectName} in container {request.Bucket} with aliyun blob storing");
+        }
+
+        var getObjectRequest = new GetObjectBytesRequest(request.Bucket, objectName);
+        if (!request.Process.IsNullOrWhiteSpace())
+        {
+            getObjectRequest.SetQueryParameter(request.Process, null);
+        }
+        var objectResult = ossClient.GetObject(getObjectRequest);
+        var ossObject = new OssObject(
+            !objectPath.IsNullOrWhiteSpace()
+                ? objectResult.Key.Replace(objectPath, "")
+                : objectResult.Key,
+            request.Path,
+            objectResult.eTag,
+            null,
+            objectResult.content.Length,
+            null,
+            new Dictionary<string, string>(),
+            objectResult.Key.EndsWith("/"))
+        {
+            FullName = objectResult.Key
+        };
+
+        if (objectResult.content.Length > 0)
+        {
+            var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(objectResult.content, 0, objectResult.content.Length);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            ossObject.SetContent(memoryStream);
+        }
+
+        return ossObject;
     }
 
     protected virtual string GetBasePath(string path)

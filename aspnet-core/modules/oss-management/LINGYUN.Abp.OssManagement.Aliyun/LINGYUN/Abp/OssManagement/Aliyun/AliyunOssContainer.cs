@@ -1,5 +1,7 @@
 ﻿using Aliyun.OSS;
 using LINGYUN.Abp.BlobStoring.Aliyun;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,18 +15,21 @@ namespace LINGYUN.Abp.OssManagement.Aliyun;
 /// <summary>
 /// Oss容器的阿里云实现
 /// </summary>
-internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
+internal class AliyunOssContainer : OssContainerBase, IOssObjectExpireor
 {
     protected ICurrentTenant CurrentTenant { get; }
     protected IOssClientFactory OssClientFactory { get; }
     public AliyunOssContainer(
         ICurrentTenant currentTenant,
-        IOssClientFactory ossClientFactory)
+        IOssClientFactory ossClientFactory,
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<AbpOssManagementOptions> options)
+        : base(options, serviceScopeFactory)
     {
         CurrentTenant = currentTenant;
         OssClientFactory = ossClientFactory;
     }
-    public async virtual Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
+    public async override Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
     {
         var ossClient = await CreateClientAsync();
 
@@ -34,7 +39,7 @@ internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
         ossClient.DeleteObjects(aliyunRequest);
     }
 
-    public async virtual Task<OssContainer> CreateAsync(string name)
+    public async override Task<OssContainer> CreateAsync(string name)
     {
         var ossClient = await CreateClientAsync();
 
@@ -57,7 +62,7 @@ internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
             });
     }
 
-    public async virtual Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
+    public async override Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
     {
         var ossClient = await CreateClientAsync();
 
@@ -125,7 +130,7 @@ internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
         return ossObject;
     }
 
-    public async virtual Task DeleteAsync(string name)
+    protected async override Task DeleteBucketAsync(string name)
     {
         // 阿里云oss在控制台设置即可，无需改变
         var ossClient = await CreateClientAsync();
@@ -166,7 +171,7 @@ internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
         }
     }
 
-    public async virtual Task DeleteObjectAsync(GetOssObjectRequest request)
+    public async override Task DeleteObjectAsync(GetOssObjectRequest request)
     {
         var ossClient = await CreateClientAsync();
 
@@ -190,14 +195,14 @@ internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
         }
     }
 
-    public async virtual Task<bool> ExistsAsync(string name)
+    public async override Task<bool> ExistsAsync(string name)
     {
         var ossClient = await CreateClientAsync();
 
         return BucketExists(ossClient, name);
     }
 
-    public async virtual Task<OssContainer> GetAsync(string name)
+    public async override Task<OssContainer> GetAsync(string name)
     {
         var ossClient = await CreateClientAsync();
         if (!BucketExists(ossClient, name))
@@ -219,7 +224,7 @@ internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
             });
     }
 
-    public async virtual Task<OssObject> GetObjectAsync(GetOssObjectRequest request)
+    protected async override Task<OssObject> GetOssObjectAsync(GetOssObjectRequest request)
     {
         var ossClient = await CreateClientAsync();
         if (!BucketExists(ossClient, request.Bucket))
@@ -264,7 +269,7 @@ internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
         return ossObject;
     }
 
-    public async virtual Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
+    public async override Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
     {
         var ossClient = await CreateClientAsync();
 
@@ -296,7 +301,7 @@ internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
                    .ToList());
     }
 
-    public async virtual Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
+    public async override Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
     {
         
         var ossClient = await CreateClientAsync();
@@ -399,5 +404,11 @@ internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
     protected async virtual Task<IOss> CreateClientAsync()
     {
         return await OssClientFactory.CreateAsync();
+    }
+
+    protected override bool ShouldProcessObject(OssObject ossObject)
+    {
+        // 阿里云自行处理
+        return false;
     }
 }

@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using System;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.MultiTenancy;
@@ -11,28 +11,25 @@ public class FileSystemOssContainerFactory : IOssContainerFactory
 {
     protected ICurrentTenant CurrentTenant { get; }
     protected IHostEnvironment Environment { get; }
-    protected IServiceProvider ServiceProvider { get; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected IBlobFilePathCalculator FilePathCalculator { get; }
     protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
-    protected IOptions<FileSystemOssOptions> Options { get; }
-    protected IOptions<AbpOssManagementOptions> OssOptions { get; }
+    protected IOptions<AbpOssManagementOptions> Options { get; }
 
     public FileSystemOssContainerFactory(
         ICurrentTenant currentTenant,
         IHostEnvironment environment,
-        IServiceProvider serviceProvider,
+        IServiceScopeFactory serviceScopeFactory,
         IBlobFilePathCalculator blobFilePathCalculator,
         IBlobContainerConfigurationProvider configurationProvider,
-        IOptions<FileSystemOssOptions> options,
-        IOptions<AbpOssManagementOptions> ossOptions)
+        IOptions<AbpOssManagementOptions> options)
     {
+        Options = options;
         Environment = environment;
         CurrentTenant = currentTenant;
-        ServiceProvider = serviceProvider;
+        ServiceScopeFactory = serviceScopeFactory;
         FilePathCalculator = blobFilePathCalculator;
         ConfigurationProvider = configurationProvider;
-        Options = options;
-        OssOptions = ossOptions;
     }
 
     public IOssContainer Create()
@@ -40,10 +37,9 @@ public class FileSystemOssContainerFactory : IOssContainerFactory
         return new FileSystemOssContainer(
             CurrentTenant,
             Environment,
-            ServiceProvider,
+            ServiceScopeFactory,
             FilePathCalculator,
             ConfigurationProvider,
-            Options,
-            OssOptions);
+            Options);
     }
 }

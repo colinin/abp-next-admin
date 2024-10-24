@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.MultiTenancy;
@@ -15,17 +17,24 @@ public class MinioOssContainerFactory : IOssContainerFactory
     protected ICurrentTenant CurrentTenant { get; }
     protected ILogger<MinioOssContainer> Logger { get; }
 
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
+    protected IOptions<AbpOssManagementOptions> Options { get; }
+
     public MinioOssContainerFactory(
-       IClock clock,
+        IClock clock,
         ICurrentTenant currentTenant,
-       ILogger<MinioOssContainer> logger,
-       IMinioBlobNameCalculator minioBlobNameCalculator,
-       IBlobNormalizeNamingService blobNormalizeNamingService,
-       IBlobContainerConfigurationProvider configurationProvider)
+        ILogger<MinioOssContainer> logger,
+        IMinioBlobNameCalculator minioBlobNameCalculator,
+        IBlobNormalizeNamingService blobNormalizeNamingService,
+        IBlobContainerConfigurationProvider configurationProvider,
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<AbpOssManagementOptions> options)
     {
         Clock = clock;
         Logger = logger;
         CurrentTenant = currentTenant;
+        Options = options;
+        ServiceScopeFactory = serviceScopeFactory;
         MinioBlobNameCalculator = minioBlobNameCalculator;
         BlobNormalizeNamingService = blobNormalizeNamingService;
         ConfigurationProvider = configurationProvider;
@@ -39,6 +48,8 @@ public class MinioOssContainerFactory : IOssContainerFactory
             Logger,
             MinioBlobNameCalculator,
             BlobNormalizeNamingService,
-            ConfigurationProvider);
+            ConfigurationProvider,
+            ServiceScopeFactory,
+            Options);
     }
 }

@@ -5,6 +5,8 @@ using LINGYUN.Abp.Sonatype.Nexus.Search;
 using LINGYUN.Abp.Sonatype.Nexus.Services.CoreUI;
 using LINGYUN.Abp.Sonatype.Nexus.Services.CoreUI.Assets;
 using LINGYUN.Abp.Sonatype.Nexus.Services.CoreUI.Browsers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +19,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.OssManagement.Nexus;
 
-internal class NexusOssContainer : IOssContainer, IOssObjectExpireor
+internal class NexusOssContainer : OssContainerBase, IOssObjectExpireor
 {
     protected ICoreUiServiceProxy CoreUiServiceProxy { get; }
     protected INexusAssetManager NexusAssetManager { get; }
@@ -34,7 +36,10 @@ internal class NexusOssContainer : IOssContainer, IOssObjectExpireor
         INexusLookupService nexusLookupService, 
         ICurrentTenant currentTenant, 
         IBlobRawPathCalculator blobRawPathCalculator, 
-        IBlobContainerConfigurationProvider configurationProvider)
+        IBlobContainerConfigurationProvider configurationProvider,
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<AbpOssManagementOptions> options)
+        : base(options, serviceScopeFactory)
     {
         CoreUiServiceProxy = coreUiServiceProxy;
         NexusAssetManager = nexusAssetManager;
@@ -45,12 +50,12 @@ internal class NexusOssContainer : IOssContainer, IOssObjectExpireor
         ConfigurationProvider = configurationProvider;
     }
 
-    public Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
+    public override Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
     {
         throw new NotImplementedException();
     }
 
-    public async virtual Task<OssContainer> CreateAsync(string name)
+    public async override Task<OssContainer> CreateAsync(string name)
     {
         // 创建容器的逻辑就是创建一个包含一个空白assets的component
 
@@ -72,7 +77,7 @@ internal class NexusOssContainer : IOssContainer, IOssObjectExpireor
             DateTime.Now);
     }
 
-    public async virtual Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
+    public async override Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
     {
         var nexusConfiguration = GetNexusConfiguration();
         var blobPath = GetBasePath(request.Bucket, request.Path, request.Object);
@@ -106,27 +111,7 @@ internal class NexusOssContainer : IOssContainer, IOssObjectExpireor
         return await GetObjectAsync(getOssObjectRequest);
     }
 
-    public async virtual Task DeleteAsync(string name)
-    {
-        var nexusConfiguration = GetNexusConfiguration();
-        var blobPath = BlobRawPathCalculator.CalculateGroup(name, "/");
-
-        var nexusSearchArgs = new NexusSearchArgs(
-              nexusConfiguration.Repository,
-              blobPath,
-              "/");
-
-        var nexusComponentListResult = await NexusLookupService.ListComponentAsync(nexusSearchArgs);
-        var nexusComponent = nexusComponentListResult.Items.FirstOrDefault();
-        if (nexusComponent == null)
-        {
-            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
-        }
-
-        await NexusComponentManager.DeleteAsync(nexusComponent.Id);
-    }
-
-    public async virtual Task DeleteObjectAsync(GetOssObjectRequest request)
+    public async override Task DeleteObjectAsync(GetOssObjectRequest request)
     {
         var nexusConfiguration = GetNexusConfiguration();
         var blobPath = GetBasePath(request.Bucket, request.Path, request.Object);
@@ -145,17 +130,17 @@ internal class NexusOssContainer : IOssContainer, IOssObjectExpireor
         }
     }
 
-    public virtual Task<bool> ExistsAsync(string name)
+    public override Task<bool> ExistsAsync(string name)
     {
         throw new NotImplementedException();
     }
 
-    public Task ExpireAsync(ExprieOssObjectRequest request)
+    public virtual Task ExpireAsync(ExprieOssObjectRequest request)
     {
         throw new NotImplementedException();
     }
 
-    public async virtual Task<OssContainer> GetAsync(string name)
+    public async override Task<OssContainer> GetAsync(string name)
     {
         var nexusConfiguration = GetNexusConfiguration();
         var blobPath = BlobRawPathCalculator.CalculateGroup(name, "/");
@@ -184,7 +169,7 @@ internal class NexusOssContainer : IOssContainer, IOssObjectExpireor
             lastModified);
     }
 
-    public async virtual Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
+    public async override Task<GetOssContainersResponse> GetListAsync(GetOssContainersRequest request)
     {
         var nexusConfiguration = GetNexusConfiguration();
         var blobPath = request.Prefix.RemovePreFix(".").RemovePreFix("/");
@@ -208,7 +193,65 @@ internal class NexusOssContainer : IOssContainer, IOssObjectExpireor
             .ToList());
     }
 
-    public async virtual Task<OssObject> GetObjectAsync(GetOssObjectRequest request)
+    public async override Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
+    {
+        var nexusConfiguration = GetNexusConfiguration();
+        var blobPath = GetBasePath(request.BucketName, request.Prefix, "");
+        var readComponent = CoreUIBrowse.Read(nexusConfiguration.Repository, blobPath.RemovePreFix("/"));
+
+        var coreUIResponse = await CoreUiServiceProxy.SearchAsync<CoreUIBrowseReadComponent, CoreUIBrowseComponentResult>(readComponent);
+        var filterComponents = coreUIResponse.Result.Data
+            .WhereIf(string.Equals(request.Delimiter, "/"), component => component.Type == "folder")
+            .OrderBy(component => component.Text)
+            .AsQueryable()
+            .PageBy(request.Current, request.MaxKeys ?? 10)
+            .ToArray();
+
+        var response = new GetOssObjectsResponse(
+                request.BucketName,
+                request.Prefix,
+                request.Marker,
+                "",
+                "/", // 文件系统目录分隔符
+                coreUIResponse.Result.Data.Count,
+                filterComponents.Select(component => new OssObject(
+                    component.Text,
+                    request.Prefix,
+                    "",
+                    null,
+                    0L,
+                    null,
+                    new Dictionary<string, string>(),
+                    component.Type == "folder")
+                {
+                    FullName = component.Id
+                })
+                .ToList());
+
+        return response;
+    }
+
+    protected async override Task DeleteBucketAsync(string name)
+    {
+        var nexusConfiguration = GetNexusConfiguration();
+        var blobPath = BlobRawPathCalculator.CalculateGroup(name, "/");
+
+        var nexusSearchArgs = new NexusSearchArgs(
+              nexusConfiguration.Repository,
+              blobPath,
+              "/");
+
+        var nexusComponentListResult = await NexusLookupService.ListComponentAsync(nexusSearchArgs);
+        var nexusComponent = nexusComponentListResult.Items.FirstOrDefault();
+        if (nexusComponent == null)
+        {
+            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
+        }
+
+        await NexusComponentManager.DeleteAsync(nexusComponent.Id);
+    }
+
+    protected async override Task<OssObject> GetOssObjectAsync(GetOssObjectRequest request)
     {
         var nexusConfiguration = GetNexusConfiguration();
         var blobPath = GetBasePath(request.Bucket, request.Path, request.Object);
@@ -251,44 +294,6 @@ internal class NexusOssContainer : IOssContainer, IOssObjectExpireor
             coreUIResponse.Result.Data.BlobUpdated,
             metadata
             );
-    }
-
-    public async virtual Task<GetOssObjectsResponse> GetObjectsAsync(GetOssObjectsRequest request)
-    {
-        var nexusConfiguration = GetNexusConfiguration();
-        var blobPath = GetBasePath(request.BucketName, request.Prefix, "");
-        var readComponent = CoreUIBrowse.Read(nexusConfiguration.Repository, blobPath.RemovePreFix("/"));
-
-        var coreUIResponse = await CoreUiServiceProxy.SearchAsync<CoreUIBrowseReadComponent, CoreUIBrowseComponentResult>(readComponent);
-        var filterComponents = coreUIResponse.Result.Data
-            .WhereIf(string.Equals(request.Delimiter, "/"), component => component.Type == "folder")
-            .OrderBy(component => component.Text)
-            .AsQueryable()
-            .PageBy(request.Current, request.MaxKeys ?? 10)
-            .ToArray();
-
-        var response = new GetOssObjectsResponse(
-                request.BucketName,
-                request.Prefix,
-                request.Marker,
-                "",
-                "/", // 文件系统目录分隔符
-                coreUIResponse.Result.Data.Count,
-                filterComponents.Select(component => new OssObject(
-                    component.Text,
-                    request.Prefix,
-                    "",
-                    null,
-                    0L,
-                    null,
-                    new Dictionary<string, string>(),
-                    component.Type == "folder")
-                {
-                    FullName = component.Id
-                })
-                .ToList());
-
-        return response;
     }
 
     protected virtual NexusBlobProviderConfiguration GetNexusConfiguration()
