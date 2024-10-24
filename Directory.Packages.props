@@ -46,6 +46,7 @@
 		<PackageVersion Include="Volo.Abp.BackgroundWorkers" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.BlobStoring" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.BlobStoring.FileSystem" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.BlobStoring.Minio" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Caching.StackExchangeRedis" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Cli.Core" Version="$(VoloAbpPackageVersion)" />
