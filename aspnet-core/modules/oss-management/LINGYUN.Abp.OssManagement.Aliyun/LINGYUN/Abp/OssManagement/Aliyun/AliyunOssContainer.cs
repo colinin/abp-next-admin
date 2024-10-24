@@ -130,10 +130,12 @@ internal class AliyunOssContainer : IOssContainer, IOssObjectExpireor
         // 阿里云oss在控制台设置即可，无需改变
         var ossClient = await CreateClientAsync();
 
-        if (BucketExists(ossClient, name))
+        if (!BucketExists(ossClient, name))
         {
-            ossClient.DeleteBucket(name);
+            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
         }
+
+        ossClient.DeleteBucket(name);
     }
 
     public async virtual Task ExpireAsync(ExprieOssObjectRequest request)

@@ -22,9 +22,9 @@ public class OssObjectAcknowledgeHandler : IDistributedEventHandler<OssObjectAck
         var ossContainer = _containerFactory.Create();
 
         var tempPath = HttpUtility.UrlDecode(GetTempPath(eventData.TempPath));
-        var tempObkect = HttpUtility.UrlDecode(GetTempObject(eventData.TempPath));
+        var tempObject = HttpUtility.UrlDecode(GetTempObject(eventData.TempPath));
 
-        var ossObject = await ossContainer.GetObjectAsync(Bucket, tempObkect, tempPath, createPathIsNotExists: true);
+        var ossObject = await ossContainer.GetObjectAsync(Bucket, tempObject, tempPath, createPathIsNotExists: true);
 
         using (ossObject.Content)
         {

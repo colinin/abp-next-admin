@@ -36,6 +36,10 @@ public interface IOssContainer
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
+    /// <exception cref="Volo.Abp.BusinessException">
+    /// When the bucket does not exist, an exception is thrown with the error code is 
+    /// <see cref="OssManagementErrorCodes.ContainerDeleteWithNotEmpty"/>
+    /// </exception>
     Task DeleteAsync(string name);
     /// <summary>
     /// 删除Oss对象

@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.OssManagement;
 
-[BlobContainerName("abp-oss-management")]
+[BlobContainerName("abp-blobs")]
 public class AbpOssManagementContainer
 {
 }

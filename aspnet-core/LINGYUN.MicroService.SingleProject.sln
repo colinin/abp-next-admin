@@ -587,15 +587,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Demo.HttpApi", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "exporter", "exporter", "{4A2CF141-F32D-45A0-8665-B3705667A6D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Exporter.Application.Contracts", "framework\exporter\LINGYUN.Abp.Exporter.Application.Contracts\LINGYUN.Abp.Exporter.Application.Contracts.csproj", "{A3924A79-1ADC-458D-8764-3958297BDEB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Exporter.Application.Contracts", "framework\exporter\LINGYUN.Abp.Exporter.Application.Contracts\LINGYUN.Abp.Exporter.Application.Contracts.csproj", "{A3924A79-1ADC-458D-8764-3958297BDEB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Exporter.Application", "framework\exporter\LINGYUN.Abp.Exporter.Application\LINGYUN.Abp.Exporter.Application.csproj", "{38A933EB-82F1-42A6-ABF3-F55975B4078E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Exporter.Application", "framework\exporter\LINGYUN.Abp.Exporter.Application\LINGYUN.Abp.Exporter.Application.csproj", "{38A933EB-82F1-42A6-ABF3-F55975B4078E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Exporter.Core", "framework\exporter\LINGYUN.Abp.Exporter.Core\LINGYUN.Abp.Exporter.Core.csproj", "{03C9FFB2-E9A3-4CCC-A6B1-8B248BFBCB65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Exporter.Core", "framework\exporter\LINGYUN.Abp.Exporter.Core\LINGYUN.Abp.Exporter.Core.csproj", "{03C9FFB2-E9A3-4CCC-A6B1-8B248BFBCB65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Exporter.MiniExcel", "framework\exporter\LINGYUN.Abp.Exporter.MiniExcel\LINGYUN.Abp.Exporter.MiniExcel.csproj", "{CBC64BD6-297B-48F6-A3BA-0DBB4B0F5A69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Exporter.MiniExcel", "framework\exporter\LINGYUN.Abp.Exporter.MiniExcel\LINGYUN.Abp.Exporter.MiniExcel.csproj", "{CBC64BD6-297B-48F6-A3BA-0DBB4B0F5A69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Exporter.MagicodesIE.Excel", "framework\exporter\LINGYUN.Abp.Exporter.MagicodesIE.Excel\LINGYUN.Abp.Exporter.MagicodesIE.Excel.csproj", "{319428B9-CE7F-4027-92FA-6311C4CE95FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Exporter.MagicodesIE.Excel", "framework\exporter\LINGYUN.Abp.Exporter.MagicodesIE.Excel\LINGYUN.Abp.Exporter.MagicodesIE.Excel.csproj", "{319428B9-CE7F-4027-92FA-6311C4CE95FB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Minio", "modules\oss-management\LINGYUN.Abp.OssManagement.Minio\LINGYUN.Abp.OssManagement.Minio.csproj", "{9AE3E97E-8846-4315-9546-FF97E97FD49F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1575,6 +1577,10 @@ Global
 		{319428B9-CE7F-4027-92FA-6311C4CE95FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{319428B9-CE7F-4027-92FA-6311C4CE95FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{319428B9-CE7F-4027-92FA-6311C4CE95FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AE3E97E-8846-4315-9546-FF97E97FD49F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AE3E97E-8846-4315-9546-FF97E97FD49F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AE3E97E-8846-4315-9546-FF97E97FD49F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AE3E97E-8846-4315-9546-FF97E97FD49F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1866,6 +1872,7 @@ Global
 		{03C9FFB2-E9A3-4CCC-A6B1-8B248BFBCB65} = {4A2CF141-F32D-45A0-8665-B3705667A6D2}
 		{CBC64BD6-297B-48F6-A3BA-0DBB4B0F5A69} = {4A2CF141-F32D-45A0-8665-B3705667A6D2}
 		{319428B9-CE7F-4027-92FA-6311C4CE95FB} = {4A2CF141-F32D-45A0-8665-B3705667A6D2}
+		{9AE3E97E-8846-4315-9546-FF97E97FD49F} = {3AD66E47-B667-40D1-AE61-F5EC186241F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {711A43C0-A2F8-4E5C-9B9F-F2551E4B3FF1}

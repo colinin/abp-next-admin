@@ -151,11 +151,12 @@ internal class TencentOssContainer : IOssContainer, IOssObjectExpireor
         // 阿里云oss在控制台设置即可，无需改变
         var ossClient = await CreateClientAsync();
 
-        if (BucketExists(ossClient, name))
+        if (!BucketExists(ossClient, name))
         {
-            var deleteBucketRequest = new DeleteBucketRequest(name);
-            ossClient.DeleteBucket(deleteBucketRequest);
+            throw new BusinessException(code: OssManagementErrorCodes.ContainerNotFound);
         }
+        var deleteBucketRequest = new DeleteBucketRequest(name);
+        ossClient.DeleteBucket(deleteBucketRequest);
     }
 
     public async virtual Task ExpireAsync(ExprieOssObjectRequest request)
