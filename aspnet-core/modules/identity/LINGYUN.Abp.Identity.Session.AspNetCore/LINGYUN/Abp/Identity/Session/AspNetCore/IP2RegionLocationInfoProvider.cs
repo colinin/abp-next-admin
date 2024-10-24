@@ -1,10 +1,10 @@
 ﻿using IP2Region.Net.Abstractions;
 using System;
 using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Identity.Session.AspNetCore;
-public class IP2RegionLocationInfoProvider : IIpLocationInfoProvider, ISingletonDependency
+
+public class IP2RegionLocationInfoProvider : IIpLocationInfoProvider
 {
     protected static readonly LocationInfo _nullCache = null;
 

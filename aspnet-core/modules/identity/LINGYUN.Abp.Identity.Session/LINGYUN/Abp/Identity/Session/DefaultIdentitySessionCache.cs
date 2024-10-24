@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
@@ -9,6 +11,7 @@ namespace LINGYUN.Abp.Identity.Session;
 public class DefaultIdentitySessionCache : IIdentitySessionCache, ITransientDependency
 {
     public ILogger<DefaultIdentitySessionCache> Logger { protected get; set; }
+
     protected IDistributedCache<IdentitySessionCacheItem> Cache { get; }
 
     public DefaultIdentitySessionCache(IDistributedCache<IdentitySessionCacheItem> cache)
@@ -31,8 +34,16 @@ public class DefaultIdentitySessionCache : IIdentitySessionCache, ITransientDepe
         Logger.LogDebug($"Refresh user session cache for: {sessionId}");
 
         var cacheKey = IdentitySessionCacheItem.CalculateCacheKey(sessionId);
+        DistributedCacheEntryOptions cacheOptions = null;
+        if (cacheItem.ExpiraIn.HasValue)
+        {
+            cacheOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMilliseconds(cacheItem.ExpiraIn.Value),
+            };
+        }
 
-        await Cache.SetAsync(cacheKey, cacheItem, token: cancellationToken);
+        await Cache.SetAsync(cacheKey, cacheItem, options: cacheOptions, token: cancellationToken);
     }
 
     public async virtual Task RemoveAsync(string sessionId, CancellationToken cancellationToken = default)

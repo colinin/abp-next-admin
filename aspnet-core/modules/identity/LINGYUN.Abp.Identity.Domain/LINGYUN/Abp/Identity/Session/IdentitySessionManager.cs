@@ -76,7 +76,19 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
 
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(userId.Value, tenantId);
 
-                await IdentitySessionCache.RefreshAsync(sessionId,
+                // 2024-10-10 从令牌中取颁布时间与过期时间计算时间戳,作为默认缓存过期时间
+                double? expiraIn = null;
+                var expirainTime = claimsPrincipal.FindExpirainTime();
+                var issuedTime = claimsPrincipal.FindIssuedTime();
+                if (expirainTime.HasValue && issuedTime.HasValue)
+                {
+                    expiraIn = DateTimeOffset.FromUnixTimeMilliseconds(expirainTime.Value)
+                        .Subtract(DateTimeOffset.FromUnixTimeMilliseconds(issuedTime.Value))
+                        .TotalMicroseconds;
+                }
+
+                await IdentitySessionCache.RefreshAsync(
+                    sessionId,
                     new IdentitySessionCacheItem(
                         device,
                         deviceDesc,
@@ -86,7 +98,9 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
                         clientIpAddress,
                         Clock.Now,
                         Clock.Now,
-                        deviceInfo.IpRegion));
+                        deviceInfo.IpRegion,
+                        expiraIn),
+                    cancellationToken);
             }
         }
     }
