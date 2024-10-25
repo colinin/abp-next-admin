@@ -27,7 +27,7 @@ public class IdentityServerAppKeyStore : IAppKeyStore, ITransientDependency
         Logger = NullLogger<IdentityServerAppKeyStore>.Instance;
     }
 
-    public async virtual Task<AppDescriptor> FindAsync(string appKey, CancellationToken cancellationToken = default)
+    public async virtual Task<AppDescriptor?> FindAsync(string appKey, CancellationToken cancellationToken = default)
     {
         var client = await _clientRepository.FindByClientIdAsync(appKey, cancellationToken: cancellationToken);
         if (client != null)

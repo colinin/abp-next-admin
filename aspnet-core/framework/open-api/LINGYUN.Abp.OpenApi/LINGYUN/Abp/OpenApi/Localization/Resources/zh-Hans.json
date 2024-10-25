@@ -7,6 +7,8 @@
     "AbpOpenApi:9111": "未携带签名(sign).",
     "AbpOpenApi:9210": "请求超时或会话已过期.",
     "AbpOpenApi:9211": "未携带时间戳标识.",
+    "AbpOpenApi:9220": "重复发起的请求.",
+    "AbpOpenApi:9221": "未携带随机数.",
     "AbpOpenApi:9300": "客户端不在允许的范围内.",
     "AbpOpenApi:9400": "客户端IP不在允许的范围内."
   }

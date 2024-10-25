@@ -57,6 +57,8 @@ namespace OpenApi
         {
             // UTC时间戳
             var timeStamp = GetUtcTimeStampString();
+            // 随机数
+            var nonce = Guid.NewGuid().ToString();
             // 取出api地址
             var baseUrl = url.Split('?')[0];
             // 组装请求参数
@@ -65,34 +67,39 @@ namespace OpenApi
                 url.Contains('?') ? "&" : "?",
                 "appKey=",
                 appKey,
+                "appSecret=",
+                appSecret,
+                "nonce=",
+                nonce,
                 "&t=",
                 timeStamp);
-            var quertString = ReverseQueryString(requestUrl);
-            // 密钥参与计算
-            quertString.Add("appSecret", appSecret);
+            var queryString = ReverseQueryString(requestUrl);
             // 对请求参数签名
-            var sign = CalculationSignature(baseUrl, quertString);
-            // 移除密钥
-            quertString.Remove("appSecret");
-            // 签名随请求传递
-            quertString.Add("sign", sign);
-            // 重新拼接请求参数
-            requestUrl = string.Concat(baseUrl, "?", BuildQuery(quertString));
+            var sign = CalculationSignature(baseUrl, queryString);
+
             // 构建请求体
-            var requestMessage = new HttpRequestMessage(httpMethod, requestUrl);
+            var requestMessage = new HttpRequestMessage(httpMethod, url);
 
             if (request != null)
             {
                 // Request Payload
                 requestMessage.Content = new StringContent(JsonConvert.SerializeObject(request));
             }
-
-            // 返回中文错误提示
+            // appKey添加到headers
+            requestMessage.Headers.TryAddWithoutValidation("X-API-APPKEY", appKey);
+            // 随机数添加到headers
+            requestMessage.Headers.TryAddWithoutValidation("X-API-NONCE", nonce);
+            // 时间戳添加到headers
+            requestMessage.Headers.TryAddWithoutValidation("X-API-TIMESTAMP", timeStamp);
+            // 签名添加到headers
+            requestMessage.Headers.TryAddWithoutValidation("X-API-SIGN", sign);
+            // 返回本地化错误提示
             requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(CultureInfo.CurrentUICulture.Name));
             // 返回错误消息可序列化
             requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             // 序列化响应
             var response = await client.SendAsync(requestMessage);
+
             var stringContent = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<ApiResponse<TResult>>(stringContent);

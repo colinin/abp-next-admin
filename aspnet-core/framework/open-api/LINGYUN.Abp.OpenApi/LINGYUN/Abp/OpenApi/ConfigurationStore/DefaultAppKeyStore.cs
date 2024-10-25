@@ -17,12 +17,12 @@ public class DefaultAppKeyStore : IAppKeyStore, ITransientDependency
         _options = options.CurrentValue;
     }
 
-    public Task<AppDescriptor> FindAsync(string appKey, CancellationToken cancellationToken = default)
+    public Task<AppDescriptor?> FindAsync(string appKey, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(Find(appKey));
     }
 
-    public AppDescriptor Find(string appKey)
+    public AppDescriptor? Find(string appKey)
     {
         return _options.AppDescriptors?.FirstOrDefault(t => t.AppKey == appKey);
     }

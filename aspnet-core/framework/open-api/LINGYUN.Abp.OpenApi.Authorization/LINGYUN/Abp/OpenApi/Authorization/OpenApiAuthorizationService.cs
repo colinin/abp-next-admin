@@ -13,7 +13,6 @@ using System.Web;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.WebClientInfo;
-using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
@@ -24,23 +23,23 @@ namespace LINGYUN.Abp.OpenApi.Authorization
     {
         private readonly IAppKeyStore _appKeyStore;
         private readonly AbpOpenApiOptions _openApiOptions;
-        private readonly ICurrentClient _currentClient;
         private readonly IWebClientInfoProvider _clientInfoProvider;
+        private readonly INonceStore _nonceStore;
         private readonly IClientChecker _clientChecker;
         private readonly IIpAddressChecker _ipAddressChecker;
         private readonly AbpExceptionHandlingOptions _exceptionHandlingOptions;
 
         public OpenApiAuthorizationService(
+            INonceStore nonceStore,
             IAppKeyStore appKeyStore,
-            ICurrentClient currentClient,
             IClientChecker clientChecker,
             IIpAddressChecker ipAddressChecker,
             IWebClientInfoProvider clientInfoProvider,
             IOptionsMonitor<AbpOpenApiOptions> options,
             IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions)
         {
+            _nonceStore = nonceStore;
             _appKeyStore = appKeyStore;
-            _currentClient = currentClient;
             _clientChecker = clientChecker;
             _ipAddressChecker = ipAddressChecker;
             _clientInfoProvider = clientInfoProvider;
@@ -55,7 +54,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                 return true;
             }
 
-            if (!await ValidateClient(httpContext))
+            if (!await ValidateClientIpAddress(httpContext))
             {
                 return false;
             }
@@ -73,18 +72,8 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             return true;
         }
 
-        protected async virtual Task<bool> ValidateClient(HttpContext httpContext)
+        protected async virtual Task<bool> ValidateClientIpAddress(HttpContext httpContext)
         {
-            if (_currentClient.IsAuthenticated && !await _clientChecker.IsGrantAsync(_currentClient.Id, httpContext.RequestAborted))
-            {
-                var exception = new BusinessException(
-                    AbpOpenApiConsts.InvalidAccessWithClientId,
-                    $"Client Id {_currentClient.Id} Not Allowed",
-                    $"Client Id {_currentClient.Id} Not Allowed");
-                await Unauthorized(httpContext, exception);
-                return false;
-            }
-
             if (!string.IsNullOrWhiteSpace(_clientInfoProvider.ClientIpAddress) &&
                 !await _ipAddressChecker.IsGrantAsync(_clientInfoProvider.ClientIpAddress, httpContext.RequestAborted))
             {
@@ -114,9 +103,11 @@ namespace LINGYUN.Abp.OpenApi.Authorization
 
         protected async virtual Task<bool> ValidatAppDescriptor(HttpContext httpContext)
         {
-            httpContext.Request.Query.TryGetValue(AbpOpenApiConsts.AppKeyFieldName, out var appKey);
-            httpContext.Request.Query.TryGetValue(AbpOpenApiConsts.SignatureFieldName, out var sign);
-            httpContext.Request.Query.TryGetValue(AbpOpenApiConsts.TimeStampFieldName, out var timeStampString);
+            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.AppKeyFieldName, out var appKey);
+            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.SignatureFieldName, out var sign);
+            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.NonceFieldName, out var nonce);
+            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.TimeStampFieldName, out var timeStampString);
+
 
             if (StringValues.IsNullOrEmpty(appKey))
             {
@@ -124,6 +115,17 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                     AbpOpenApiConsts.InvalidAccessWithAppKeyNotFound,
                     $"{AbpOpenApiConsts.AppKeyFieldName} Not Found",
                     $"{AbpOpenApiConsts.AppKeyFieldName} Not Found");
+                await Unauthorized(httpContext, exception);
+                return false;
+            }
+
+            if (StringValues.IsNullOrEmpty(nonce))
+            {
+                var exception = new BusinessException(
+                    AbpOpenApiConsts.InvalidAccessWithNonceNotFound,
+                    $"{AbpOpenApiConsts.NonceFieldName} Not Found",
+                    $"{AbpOpenApiConsts.NonceFieldName} Not Found");
+
                 await Unauthorized(httpContext, exception);
                 return false;
             }
@@ -161,6 +163,26 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                 return false;
             }
 
+            if (!await _nonceStore.TrySetAsync(nonce.ToString(), httpContext.RequestAborted))
+            {
+                var exception = new BusinessException(
+                    AbpOpenApiConsts.InvalidAccessWithNonceRepeated,
+                    $"Request {nonce} has repeated",
+                    $"Request {nonce} has repeated");
+                await Unauthorized(httpContext, exception);
+                return false;
+            }
+
+            if (!await _clientChecker.IsGrantAsync(appKey.ToString(), httpContext.RequestAborted))
+            {
+                var exception = new BusinessException(
+                    AbpOpenApiConsts.InvalidAccessWithClientId,
+                    $"Client Id {appKey} Not Allowed",
+                    $"Client Id {appKey} Not Allowed");
+                await Unauthorized(httpContext, exception);
+                return false;
+            }
+
             var appDescriptor = await _appKeyStore.FindAsync(appKey.ToString(), httpContext.RequestAborted);
             if (appDescriptor == null)
             {
@@ -178,13 +200,13 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             var queryStringCollection = httpContext.Request.Query;
             foreach (var queryString in queryStringCollection)
             {
-                if (queryString.Key.Equals(AbpOpenApiConsts.SignatureFieldName))
-                {
-                    continue;
-                }
                 queryDictionary.Add(queryString.Key, queryString.Value.ToString());
             }
+            queryDictionary.TryAdd("appKey", appDescriptor.AppKey);
             queryDictionary.TryAdd("appSecret", appDescriptor.AppSecret);
+            queryDictionary.TryAdd("nonce", nonce.ToString());
+            queryDictionary.TryAdd("t", timeStampString.ToString());
+
             var requiredSign = CalculationSignature(httpContext.Request.Path.Value, queryDictionary);
             if (!string.Equals(requiredSign, sign.ToString()))
             {
