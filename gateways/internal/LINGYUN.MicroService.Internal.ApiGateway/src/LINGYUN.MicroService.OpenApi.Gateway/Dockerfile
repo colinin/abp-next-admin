@@ -8,4 +8,4 @@ EXPOSE 80/tcp
 VOLUME [ "./app/Logs" ]
 VOLUME [ "./app/Modules" ]
 
-ENTRYPOINT ["dotnet", "LINGYUN.MicroService.Internal.Gateway.dll"]
+ENTRYPOINT ["dotnet", "LINGYUN.MicroService.OpenApi.Gateway.dll"]
