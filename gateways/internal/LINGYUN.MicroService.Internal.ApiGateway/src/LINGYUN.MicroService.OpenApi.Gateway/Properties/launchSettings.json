@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "LINGYUN.MicroService.Internal.Gateway": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:30000"
+    }
+  }
+}
