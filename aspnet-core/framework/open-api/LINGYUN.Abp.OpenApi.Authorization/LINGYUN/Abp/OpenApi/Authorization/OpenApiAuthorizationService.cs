@@ -59,11 +59,6 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                 return false;
             }
 
-            if (!await ValidateQueryString(httpContext))
-            {
-                return false;
-            }
-
             if (!await ValidatAppDescriptor(httpContext))
             {
                 return false;
@@ -81,20 +76,6 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                     AbpOpenApiConsts.InvalidAccessWithIpAddress,
                     $"Client IpAddress {_clientInfoProvider.ClientIpAddress} Not Allowed",
                     $"Client IpAddress {_clientInfoProvider.ClientIpAddress} Not Allowed");
-                await Unauthorized(httpContext, exception);
-                return false;
-            }
-            return true;
-        }
-
-        protected async virtual Task<bool> ValidateQueryString(HttpContext httpContext)
-        {
-            if (!httpContext.Request.QueryString.HasValue)
-            {
-                var exception = new BusinessException(
-                    AbpOpenApiConsts.InvalidAccessWithAppKeyNotFound,
-                    $"{AbpOpenApiConsts.AppKeyFieldName} Not Found",
-                    $"{AbpOpenApiConsts.AppKeyFieldName} Not Found");
                 await Unauthorized(httpContext, exception);
                 return false;
             }
