@@ -2,6 +2,7 @@
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.2.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
+		<ElsaNextPackageVersion>3.2.1</ElsaNextPackageVersion>
 		<VoloAbpPackageVersion>8.3.0</VoloAbpPackageVersion>
 		<LINGYUNAbpPackageVersion>8.3.0</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>8.0.0</MicrosoftExtensionsPackageVersion>
@@ -110,6 +111,7 @@
 		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
