@@ -10,6 +10,7 @@
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
 		<RootNamespace />
 	</PropertyGroup>
 
@@ -22,6 +23,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Caching" />
 		<PackageReference Include="Volo.Abp.Security" />
 		<PackageReference Include="Volo.Abp.Localization" />
 	</ItemGroup>

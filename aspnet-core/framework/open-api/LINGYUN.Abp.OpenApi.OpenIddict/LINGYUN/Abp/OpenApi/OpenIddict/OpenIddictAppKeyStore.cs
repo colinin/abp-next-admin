@@ -22,7 +22,7 @@ public class OpenIddictAppKeyStore : IAppKeyStore, ITransientDependency
         _guidGenerator = guidGenerator;
     }
 
-    public async virtual Task<AppDescriptor> FindAsync(string appKey, CancellationToken cancellationToken = default)
+    public async virtual Task<AppDescriptor?> FindAsync(string appKey, CancellationToken cancellationToken = default)
     {
         var application = await _appStore.FindByClientIdAsync(appKey, cancellationToken);
         if (application != null)

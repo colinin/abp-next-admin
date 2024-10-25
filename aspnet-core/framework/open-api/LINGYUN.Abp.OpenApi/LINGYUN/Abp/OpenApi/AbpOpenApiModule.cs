@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.OpenApi.ConfigurationStore;
 using LINGYUN.Abp.OpenApi.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Caching;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
@@ -10,6 +11,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.OpenApi;
 
 [DependsOn(
+    typeof(AbpCachingModule),
     typeof(AbpSecurityModule),
     typeof(AbpLocalizationModule))]
 public class AbpOpenApiModule : AbpModule

@@ -7,6 +7,8 @@
     "AbpOpenApi:9111": "sign not found.",
     "AbpOpenApi:9210": "Request timed out or the session expired.",
     "AbpOpenApi:9211": "timestamp not found.",
+    "AbpOpenApi:9220": "Repeatedly initiated requests.",
+    "AbpOpenApi:9221": "nonce not found.",
     "AbpOpenApi:9300": "The client is not within the allowed range.",
     "AbpOpenApi:9400": "The client IP is not within the allowed range."
   }

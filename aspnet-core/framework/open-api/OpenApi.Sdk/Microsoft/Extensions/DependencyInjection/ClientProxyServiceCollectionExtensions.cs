@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddClientProxy(this IServiceCollection services, string serverUrl)
         {
-            services.AddHttpClient("opensdk", options =>
+            services.AddHttpClient("openapi-sdk", options =>
             {
                 options.BaseAddress = new Uri(serverUrl);
             });
