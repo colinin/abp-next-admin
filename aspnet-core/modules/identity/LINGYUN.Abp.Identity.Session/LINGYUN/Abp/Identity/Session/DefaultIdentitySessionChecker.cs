@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -40,8 +42,9 @@ public class DefaultIdentitySessionChecker : IIdentitySessionChecker, ITransient
         Logger = NullLogger<DefaultIdentitySessionChecker>.Instance;
     }
 
-    public async virtual Task<bool> ValidateSessionAsync(string sessionId, CancellationToken cancellationToken = default)
+    public async virtual Task<bool> ValidateSessionAsync(ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken = default)
     {
+        var sessionId = claimsPrincipal.FindSessionId();
         if (sessionId.IsNullOrWhiteSpace())
         {
             Logger.LogDebug("No user session id found.");
@@ -66,6 +69,15 @@ public class DefaultIdentitySessionChecker : IIdentitySessionChecker, ITransient
             // 更新缓存中的访问地址以及客户端Ip地址
             identitySessionCacheItem.LastAccessed = accressedTime;
             identitySessionCacheItem.IpAddresses = DeviceInfoProvider.ClientIpAddress;
+
+            // 2024-10-10 从令牌中取颁布时间与过期时间计算时间戳,作为默认缓存过期时间
+            var expirainTime = claimsPrincipal.FindExpirainTime();
+            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            if (expirainTime.HasValue)
+            {
+                // 2024-10-25 应计算剩余过期时间
+                identitySessionCacheItem.ExpiraIn = (expirainTime.Value - timestamp) * 1000;
+            }
 
             Logger.LogDebug($"Refresh the user access info in the cache from {sessionId}.");
             await IdentitySessionCache.RefreshAsync(sessionId, identitySessionCacheItem, cancellationToken);

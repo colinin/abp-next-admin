@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity;
-using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.Identity.Session;
 public class IdentitySessionManager : DomainService, IIdentitySessionManager
@@ -76,17 +75,6 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
 
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(userId.Value, tenantId);
 
-                // 2024-10-10 从令牌中取颁布时间与过期时间计算时间戳,作为默认缓存过期时间
-                double? expiraIn = null;
-                var expirainTime = claimsPrincipal.FindExpirainTime();
-                var issuedTime = claimsPrincipal.FindIssuedTime();
-                if (expirainTime.HasValue && issuedTime.HasValue)
-                {
-                    expiraIn = DateTimeOffset.FromUnixTimeMilliseconds(expirainTime.Value)
-                        .Subtract(DateTimeOffset.FromUnixTimeMilliseconds(issuedTime.Value))
-                        .TotalMicroseconds;
-                }
-
                 await IdentitySessionCache.RefreshAsync(
                     sessionId,
                     new IdentitySessionCacheItem(
@@ -98,8 +86,7 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
                         clientIpAddress,
                         Clock.Now,
                         Clock.Now,
-                        deviceInfo.IpRegion,
-                        expiraIn),
+                        deviceInfo.IpRegion),
                     cancellationToken);
             }
         }
