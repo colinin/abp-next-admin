@@ -24,7 +24,7 @@ public class AbpIdentitySessionDynamicClaimsPrincipalContributor : IAbpDynamicCl
         using (currentTenant.Change(tenantId))
         {
             var identitySessionChecker = context.GetRequiredService<IIdentitySessionChecker>();
-            if (!await identitySessionChecker.ValidateSessionAsync(sessionId))
+            if (!await identitySessionChecker.ValidateSessionAsync(context.ClaimsPrincipal))
             {
                 // 用户会话已过期
                 context.ClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
