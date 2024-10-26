@@ -155,7 +155,7 @@ public partial class PlatformManagementHttpApiHostModule
             {
                 containerConfiguration.UseFileSystem(fileSystem =>
                 {
-                    fileSystem.BasePath = Path.Combine(Directory.GetCurrentDirectory(), "file-blob-storing");
+                    fileSystem.BasePath = Path.Combine(Directory.GetCurrentDirectory(), "blobs");
                 });
             });
         });

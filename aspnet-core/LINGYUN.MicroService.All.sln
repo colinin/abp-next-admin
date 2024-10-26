@@ -762,11 +762,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Domain.Tests", "tests\LINGYUN.Abp.OssManagement.Domain.Tests\LINGYUN.Abp.OssManagement.Domain.Tests.csproj", "{F2AD691B-71B9-4B86-95BC-E020DA6B1E4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.ImageSharp", "modules\oss-management\LINGYUN.Abp.OssManagement.ImageSharp\LINGYUN.Abp.OssManagement.ImageSharp.csproj", "{76DDE71D-00BD-4BC8-AEA2-31209E2B7E05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.ImageSharp", "modules\oss-management\LINGYUN.Abp.OssManagement.ImageSharp\LINGYUN.Abp.OssManagement.ImageSharp.csproj", "{76DDE71D-00BD-4BC8-AEA2-31209E2B7E05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.Imaging", "modules\oss-management\LINGYUN.Abp.OssManagement.Imaging\LINGYUN.Abp.OssManagement.Imaging.csproj", "{267933BD-BFB8-4906-BA39-DF193B2FD558}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.OssManagement.Imaging.ImageSharp", "modules\oss-management\LINGYUN.Abp.OssManagement.Imaging.ImageSharp\LINGYUN.Abp.OssManagement.Imaging.ImageSharp.csproj", "{220D3C8D-B117-4319-A911-1D7F53AFE8DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Imaging", "modules\oss-management\LINGYUN.Abp.OssManagement.Imaging\LINGYUN.Abp.OssManagement.Imaging.csproj", "{267933BD-BFB8-4906-BA39-DF193B2FD558}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1966,10 +1964,6 @@ Global
 		{267933BD-BFB8-4906-BA39-DF193B2FD558}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{267933BD-BFB8-4906-BA39-DF193B2FD558}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{267933BD-BFB8-4906-BA39-DF193B2FD558}.Release|Any CPU.Build.0 = Release|Any CPU
-		{220D3C8D-B117-4319-A911-1D7F53AFE8DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{220D3C8D-B117-4319-A911-1D7F53AFE8DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{220D3C8D-B117-4319-A911-1D7F53AFE8DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{220D3C8D-B117-4319-A911-1D7F53AFE8DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2340,7 +2334,6 @@ Global
 		{F2AD691B-71B9-4B86-95BC-E020DA6B1E4A} = {370D7CD5-1E17-4F3D-BBFA-03429F6D4F2F}
 		{76DDE71D-00BD-4BC8-AEA2-31209E2B7E05} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{267933BD-BFB8-4906-BA39-DF193B2FD558} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
-		{220D3C8D-B117-4319-A911-1D7F53AFE8DB} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

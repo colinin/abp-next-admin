@@ -110,6 +110,7 @@
 		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />

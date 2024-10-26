@@ -602,8 +602,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Imaging", "modules\oss-management\LINGYUN.Abp.OssManagement.Imaging\LINGYUN.Abp.OssManagement.Imaging.csproj", "{BC7A8662-4313-4F1D-B267-9B1B69444CD3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Imaging.ImageSharp", "modules\oss-management\LINGYUN.Abp.OssManagement.Imaging.ImageSharp\LINGYUN.Abp.OssManagement.Imaging.ImageSharp.csproj", "{5325AA6E-FB76-46D2-B1C8-BAAAE15E42F3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1586,10 +1584,6 @@ Global
 		{BC7A8662-4313-4F1D-B267-9B1B69444CD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC7A8662-4313-4F1D-B267-9B1B69444CD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC7A8662-4313-4F1D-B267-9B1B69444CD3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5325AA6E-FB76-46D2-B1C8-BAAAE15E42F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5325AA6E-FB76-46D2-B1C8-BAAAE15E42F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5325AA6E-FB76-46D2-B1C8-BAAAE15E42F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5325AA6E-FB76-46D2-B1C8-BAAAE15E42F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1882,7 +1876,6 @@ Global
 		{319428B9-CE7F-4027-92FA-6311C4CE95FB} = {4A2CF141-F32D-45A0-8665-B3705667A6D2}
 		{9AE3E97E-8846-4315-9546-FF97E97FD49F} = {3AD66E47-B667-40D1-AE61-F5EC186241F7}
 		{BC7A8662-4313-4F1D-B267-9B1B69444CD3} = {3AD66E47-B667-40D1-AE61-F5EC186241F7}
-		{5325AA6E-FB76-46D2-B1C8-BAAAE15E42F3} = {3AD66E47-B667-40D1-AE61-F5EC186241F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {711A43C0-A2F8-4E5C-9B9F-F2551E4B3FF1}

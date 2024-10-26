@@ -6,6 +6,7 @@ COPY . /app
 
 EXPOSE 80/tcp
 VOLUME [ "./app/Logs" ]
+VOLUME [ "./app/blobs" ]
 VOLUME [ "./app/Modules" ]
 
 RUN apt update
