@@ -14,7 +14,7 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.OssManagement.FileSystem;
-using LINGYUN.Abp.OssManagement.FileSystem.ImageSharp;
+using LINGYUN.Abp.OssManagement.Imaging;
 using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -44,6 +44,7 @@ using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
+using Volo.Abp.Imaging;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -62,10 +63,11 @@ namespace LY.MicroService.PlatformManagement;
     typeof(PlatformThemeVueVbenAdminModule),
     // typeof(AbpOssManagementAliyunModule),
     typeof(AbpOssManagementFileSystemModule),           // 本地文件系统提供者模块
-    typeof(AbpOssManagementFileSystemImageSharpModule), // 本地文件系统图形处理模块
+    typeof(AbpOssManagementImagingModule), // 本地文件系统图形处理模块
     typeof(AbpOssManagementApplicationModule),
     typeof(AbpOssManagementHttpApiModule),
     typeof(AbpOssManagementSettingManagementModule),
+    typeof(AbpImagingImageSharpModule),
     typeof(PlatformApplicationModule),
     typeof(PlatformHttpApiModule),
     typeof(PlatformEntityFrameworkCoreModule),

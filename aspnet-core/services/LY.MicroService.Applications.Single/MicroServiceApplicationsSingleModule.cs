@@ -70,7 +70,7 @@ using LINGYUN.Abp.OpenIddict.WeChat;
 using LINGYUN.Abp.OpenIddict.WeChat.Work;
 using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.OssManagement.FileSystem;
-using LINGYUN.Abp.OssManagement.Imaging.ImageSharp;
+using LINGYUN.Abp.OssManagement.Imaging;
 using LINGYUN.Abp.OssManagement.Minio;
 using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Abp.PermissionManagement;
@@ -120,10 +120,12 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.EventBus;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Imaging;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
@@ -179,11 +181,12 @@ namespace LY.MicroService.Applications.Single;
 
     //typeof(AbpOssManagementMinioModule), // 取消注释以使用Minio
     typeof(AbpOssManagementFileSystemModule),
-    typeof(AbpOssManagementImagingImageSharpModule),
+    typeof(AbpOssManagementImagingModule),
     typeof(AbpOssManagementDomainModule),
     typeof(AbpOssManagementApplicationModule),
     typeof(AbpOssManagementHttpApiModule),
     typeof(AbpOssManagementSettingManagementModule),
+    typeof(AbpImagingImageSharpModule),
 
     typeof(PlatformDomainModule),
     typeof(PlatformApplicationModule),
@@ -191,8 +194,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(PlatformEntityFrameworkCoreModule),
     typeof(PlatformSettingsVueVbenAdminModule),
     typeof(PlatformThemeVueVbenAdminModule),
-
     typeof(AbpUINavigationVueVbenAdminModule),
+
     typeof(AbpSaasDomainModule),
     typeof(AbpSaasApplicationModule),
     typeof(AbpSaasHttpApiModule),
@@ -229,12 +232,14 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpPermissionManagementHttpApiModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
+    typeof(AbpPermissionManagementDomainOpenIddictModule),
     // typeof(AbpPermissionManagementDomainIdentityServerModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
 
     typeof(SingleMigrationsEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
+
     typeof(AbpAliyunSmsModule),
     typeof(AbpAliyunSettingManagementModule),
 
