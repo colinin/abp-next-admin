@@ -40,6 +40,7 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
+using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -84,6 +85,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpMailKitModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpAspNetCoreMvcNewtonsoftModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
