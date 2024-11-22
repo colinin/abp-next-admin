@@ -37,4 +37,20 @@ public static class PlatformErrorCodes
     /// 用户收藏菜单未找到
     /// </summary>
     public const string UserFavoriteMenuNotFound = Namespace + ":04404";
+    /// <summary>
+    /// 无法对处于{Status}状态的问题进行评论
+    /// </summary>
+    public const string UnableFeedbackCommentInStatus = Namespace + ":05101";
+    /// <summary>
+    /// 不能添加重复的附件 {Name}!
+    /// </summary>
+    public const string DuplicateFeedbackAttachment = Namespace + ":05102";
+    /// <summary>
+    /// 用户反馈未找到名为 {Name} 的附件!
+    /// </summary>
+    public const string FeedackAttachmentNotFound = Namespace + ":05103";
+    /// <summary>
+    /// 附件 {Name} 已失效, 请重新上传!
+    /// </summary>
+    public const string FeedackAttachmentLoseEffectiveness = Namespace + ":05104";
 }

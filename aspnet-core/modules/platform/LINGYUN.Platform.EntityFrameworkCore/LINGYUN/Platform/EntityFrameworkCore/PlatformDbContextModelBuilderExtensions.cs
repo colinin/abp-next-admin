@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using LINGYUN.Platform.Datas;
+using LINGYUN.Platform.Feedbacks;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
 using LINGYUN.Platform.Packages;
@@ -273,6 +274,61 @@ public static class PlatformDbContextModelBuilderExtensions
             x.Property(p => p.RegistrationCode)
                 .HasColumnName(nameof(Enterprise.RegistrationCode))
                 .HasMaxLength(EnterpriseConsts.MaxRegistrationCodeLength);
+
+            x.ConfigureByConvention();
+        });
+
+        builder.Entity<Feedback>(x =>
+        {
+            x.ToTable(options.TablePrefix + "Feedbacks", options.Schema);
+
+            x.Property(p => p.Category)
+                .IsRequired()
+                .HasColumnName(nameof(Feedback.Category))
+                .HasMaxLength(FeedbackConsts.MaxCategoryLength);
+            x.Property(p => p.Content)
+               .IsRequired()
+               .HasColumnName(nameof(Feedback.Content))
+               .HasMaxLength(FeedbackConsts.MaxContentLength);
+
+            x.HasMany(p => p.Attachments)
+             .WithOne()
+             .HasForeignKey(fk => fk.FeedbackId)
+             .IsRequired();
+            x.HasMany(p => p.Comments)
+             .WithOne()
+             .HasForeignKey(fk => fk.FeedbackId)
+             .IsRequired();
+
+            x.ConfigureByConvention();
+        });
+        builder.Entity<FeedbackComment>(x =>
+        {
+            x.ToTable(options.TablePrefix + "FeedbackComments", options.Schema);
+
+            x.Property(p => p.Capacity)
+                .IsRequired()
+                .HasColumnName(nameof(FeedbackComment.Capacity))
+                .HasMaxLength(FeedbackCommentConsts.MaxCapacityLength);
+            x.Property(p => p.Content)
+                .IsRequired()
+                .HasColumnName(nameof(FeedbackComment.Content))
+                .HasMaxLength(FeedbackCommentConsts.MaxContentLength);
+
+            x.ConfigureByConvention();
+        });
+        builder.Entity<FeedbackAttachment>(x =>
+        {
+            x.ToTable(options.TablePrefix + "FeedbackAttachments", options.Schema);
+
+            x.Property(p => p.Name)
+                .IsRequired()
+                .HasColumnName(nameof(FeedbackAttachment.Name))
+                .HasMaxLength(FeedbackAttachmentConsts.MaxNameLength);
+            x.Property(p => p.Url)
+               .IsRequired()
+               .HasColumnName(nameof(FeedbackAttachment.Url))
+               .HasMaxLength(FeedbackAttachmentConsts.MaxUrlLength);
 
             x.ConfigureByConvention();
         });

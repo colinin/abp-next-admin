@@ -35,6 +35,13 @@ public class PlatformPermissionDefinitionProvider : PermissionDefinitionProvider
         package.AddChild(PlatformPermissions.Package.Update, L("Permission:Update"));
         package.AddChild(PlatformPermissions.Package.Delete, L("Permission:Delete"));
         package.AddChild(PlatformPermissions.Package.ManageBlobs, L("Permission:ManageBlobs"));
+
+        var feedback = platform.AddPermission(PlatformPermissions.Feedback.Default, L("Permission:Feedback"));
+        feedback.AddChild(PlatformPermissions.Feedback.Create, L("Permission:Create"));
+        feedback.AddChild(PlatformPermissions.Feedback.Update, L("Permission:Update"));
+        feedback.AddChild(PlatformPermissions.Feedback.Delete, L("Permission:Delete"));
+        feedback.AddChild(PlatformPermissions.Feedback.ManageAttachments, L("Permission:ManageAttachments"));
+        feedback.AddChild(PlatformPermissions.Feedback.ManageComments, L("Permission:ManageComments"));
     }
 
     private static LocalizableString L(string name)
