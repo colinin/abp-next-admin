@@ -18,7 +18,7 @@ public class FeedbackComment : AuditedEntity<Guid>, IMultiTenant
 
     }
 
-    public FeedbackComment(
+    internal FeedbackComment(
         Guid id,
         Guid feedbackId,
         string capacity,

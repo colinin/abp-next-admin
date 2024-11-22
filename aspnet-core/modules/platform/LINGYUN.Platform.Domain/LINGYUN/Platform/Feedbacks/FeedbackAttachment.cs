@@ -16,7 +16,7 @@ public class FeedbackAttachment : CreationAuditedEntity<Guid>, IMultiTenant
 
     }
 
-    public FeedbackAttachment(
+    internal FeedbackAttachment(
         Guid id,
         Guid feedbackId,
         string name,
