@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Platform.Datas;
+using LINGYUN.Platform.Feedbacks;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
 using LINGYUN.Platform.Packages;
@@ -26,6 +27,8 @@ public class PlatformEntityFrameworkCoreModule : AbpModule
             options.AddRepository<Layout, EfCoreLayoutRepository>();
             options.AddRepository<Package, EfCorePackageRepository>();
             options.AddRepository<Enterprise, EfCoreEnterpriseRepository>();
+
+            options.AddRepository<Feedback, EfCoreFeedbackRepository>();
 
             options.AddDefaultRepositories(includeAllEntities: true);
         });

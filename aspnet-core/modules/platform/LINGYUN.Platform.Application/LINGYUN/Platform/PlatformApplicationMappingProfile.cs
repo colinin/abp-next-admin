@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LINGYUN.Platform.Datas;
+using LINGYUN.Platform.Feedbacks;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
 using LINGYUN.Platform.Packages;
@@ -21,5 +22,9 @@ public class PlatformApplicationMappingProfile : Profile
         CreateMap<Layout, LayoutDto>()
             .ForMember(dto => dto.Meta, map => map.MapFrom(src => src.ExtraProperties));
         CreateMap<UserFavoriteMenu, UserFavoriteMenuDto>();
+
+        CreateMap<Feedback, FeedbackDto>();
+        CreateMap<FeedbackComment, FeedbackCommentDto>();
+        CreateMap<FeedbackAttachment, FeedbackAttachmentDto>();
     }
 }

@@ -10,6 +10,10 @@
     "Platform:03001": "元数据格式不匹配!",
     "Platform:04400": "用户重复收藏菜单!",
     "Platform:04404": "用户收藏菜单未找到!",
+    "Platform:05101": "无法对处于{Status}状态的问题进行评论!",
+    "Platform:05102": "不能添加重复的附件 {Name}!",
+    "Platform:05103": "用户反馈未找到名为 {Name} 的附件!",
+    "Platform:05104": "附件 {Name} 已失效, 请重新上传!",
     "UploadFileSizeBeyondLimit": "上传文件大小不能超过 {0} MB!",
     "NotAllowedFileExtensionName": "不被允许的文件扩展名: {0}!",
     "DisplayName:VersionFileLimitLength": "文件限制大小",
@@ -75,6 +79,10 @@
     "DataItemNotFound": "不存在名为 {0} 的数据字典项!",
     "UnableRemoveHasChildNode": "当前数据字典存在子节点,无法删除!",
     "DuplicateLayout": "已经存在名为 {0} 的布局!",
-    "Packages": "包列表"
+    "Packages": "包列表",
+    "FeedbackStatus:Created": "新增",
+    "FeedbackStatus:InProgress": "处理中",
+    "FeedbackStatus:Closed": "已关闭",
+    "FeedbackStatus:Resolved": "已解决"
   }
 }
