@@ -61,6 +61,13 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         }
 
         LambdaExpression subExp = null;
+
+        if (subjectFilterGroups.Count == 0 &&
+            _options.DefaultEntityFilters.TryGetValue(entityType, out var filterFunc))
+        {
+            subExp = filterFunc(_serviceProvider, entityType, operation);
+        }
+
         foreach (var subGroup in subjectFilterGroups)
         {
             subExp = subExp == null ? GetExpression(entityType, subGroup) : subExp.OrElse(func, GetExpression(entityType, subGroup));
