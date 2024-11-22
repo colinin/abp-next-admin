@@ -5,6 +5,7 @@ export interface WebhookSubscription extends CreationAuditedEntityDto<string>, I
   secret: string;
   isActive: boolean;
   webhooks: string[];
+  timeoutDuration?: number;
   headers: Dictionary<string, string>;
 }
 
@@ -14,6 +15,7 @@ export interface WebhookSubscriptionCreateOrUpdate {
   secret: string;
   isActive: boolean;
   webhooks: string[];
+  timeoutDuration?: number;
   headers: Dictionary<string, string>;
 }
 

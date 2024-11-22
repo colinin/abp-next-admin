@@ -2,6 +2,7 @@
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.2.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
+		<ElsaNextPackageVersion>3.2.3</ElsaNextPackageVersion>
 		<VoloAbpPackageVersion>8.3.0</VoloAbpPackageVersion>
 		<LINGYUNAbpPackageVersion>8.3.0</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>8.0.0</MicrosoftExtensionsPackageVersion>
@@ -95,6 +96,7 @@
 		<PackageVersion Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Json.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.MailKit" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.MultiTenancy.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.ObjectExtending" Version="$(VoloAbpPackageVersion)" />
