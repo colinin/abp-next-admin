@@ -30,6 +30,7 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
+using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -63,6 +64,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpCAPEventBusModule),
     typeof(AbpHttpClientModule),
     typeof(AbpAliyunSmsModule),
+    typeof(AbpMailKitModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),

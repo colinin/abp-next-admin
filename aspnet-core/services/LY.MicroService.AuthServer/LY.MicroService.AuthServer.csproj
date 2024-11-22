@@ -49,6 +49,7 @@
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" />
 		<PackageReference Include="Volo.Abp.Identity.AspNetCore" />
+		<PackageReference Include="Volo.Abp.MailKit" />
 		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" />
 		<PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" />

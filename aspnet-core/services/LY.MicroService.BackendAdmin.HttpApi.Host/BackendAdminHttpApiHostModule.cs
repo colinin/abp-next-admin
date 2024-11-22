@@ -48,6 +48,7 @@ using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
+using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
@@ -114,6 +115,7 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientModule),
+    typeof(AbpMailKitModule),
     typeof(AbpAliyunSmsModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),

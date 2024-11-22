@@ -38,6 +38,7 @@ using Volo.Abp.DistributedLocking;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
+using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -80,6 +81,7 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpDaprClientWrapperModule),
     typeof(AbpClaimsMappingModule),
+    typeof(AbpMailKitModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
