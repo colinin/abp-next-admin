@@ -324,6 +324,7 @@
         newParamter.value = false;
       }
       formMdel.paramters.push(newParamter);
+      emits('change', formMdel);
     }
   }
 
