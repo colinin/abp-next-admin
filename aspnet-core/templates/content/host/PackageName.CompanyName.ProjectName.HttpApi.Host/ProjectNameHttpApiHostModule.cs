@@ -28,6 +28,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
+using Volo.Abp.MailKit;
 
 namespace PackageName.CompanyName.ProjectName;
 
@@ -56,6 +57,7 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
+    typeof(AbpMailKitModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]
