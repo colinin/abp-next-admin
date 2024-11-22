@@ -1,11 +1,8 @@
-﻿using IdentityServer4.Models;
-using LINGYUN.Abp.Identity;
-
-namespace LY.MicroService.Applications.Single.IdentityResources;
+﻿namespace LY.MicroService.Applications.Single.IdentityResources;
 
 public class CustomIdentityResources
 {
-    public class AvatarUrl : IdentityResource
+    public class AvatarUrl : IdentityServer4.Models.IdentityResource
     {
         public AvatarUrl()
         {
