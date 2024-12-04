@@ -1,0 +1,44 @@
+{
+  "name": "@abp/ui",
+  "version": "8.3.2",
+  "homepage": "https://github.com/colinin/abp-next-admin",
+  "bugs": "https://github.com/colinin/abp-next-admin/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colinin/abp-next-admin.git",
+    "directory": "packages/@abp/ui"
+  },
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "development": "./src/index.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
+  "dependencies": {
+    "@vben/common-ui": "workspace:*",
+    "@vben/locales": "workspace:*",
+    "@vben/plugins": "workspace:*",
+    "ant-design-vue": "catalog:",
+    "vue": "catalog:*"
+  }
+}
