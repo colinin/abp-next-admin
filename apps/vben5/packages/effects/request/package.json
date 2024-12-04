@@ -1,0 +1,30 @@
+{
+  "name": "@vben/request",
+  "version": "5.4.8",
+  "homepage": "https://github.com/vbenjs/vue-vben-admin",
+  "bugs": "https://github.com/vbenjs/vue-vben-admin/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vbenjs/vue-vben-admin.git",
+    "directory": "packages/effects/request"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@vben/locales": "workspace:*",
+    "@vben/utils": "workspace:*",
+    "axios": "catalog:"
+  },
+  "devDependencies": {
+    "axios-mock-adapter": "catalog:"
+  }
+}

@@ -1,0 +1,177 @@
+<script setup lang="ts">
+import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+
+import type { IdentityRoleDto } from '../../types/role';
+
+import { defineAsyncComponent, h } from 'vue';
+
+import { useVbenModal } from '@vben/common-ui';
+import { $t } from '@vben/locales';
+
+import { useVbenVxeGrid } from '@abp/ui';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
+import { Button, Modal, Tag } from 'ant-design-vue';
+
+import { deleteApi, getPagedListApi } from '../../api/role';
+
+defineOptions({
+  name: 'UserTable',
+});
+
+const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
+
+const formOptions: VbenFormProps = {
+  // 默认展开
+  collapsed: false,
+  schema: [
+    {
+      component: 'Input',
+      fieldName: 'filter',
+      formItemClass: 'col-span-2 items-baseline',
+      label: $t('AbpUi.Search'),
+    },
+  ],
+  // 控制表单是否显示折叠按钮
+  showCollapseButton: true,
+  // 按下回车时是否提交表单
+  submitOnEnter: true,
+};
+
+const gridOptions: VxeGridProps<IdentityRoleDto> = {
+  columns: [
+    {
+      align: 'left',
+      field: 'name',
+      slots: { default: 'name' },
+      title: $t('AbpIdentity.DisplayName:RoleName'),
+    },
+    {
+      field: 'action',
+      fixed: 'right',
+      slots: { default: 'action' },
+      title: $t('AbpUi.Actions'),
+      width: 180,
+    },
+  ],
+  exportConfig: {},
+  keepSource: true,
+  proxyConfig: {
+    ajax: {
+      query: async ({ page }, formValues) => {
+        return await getPagedListApi({
+          maxResultCount: page.pageSize,
+          skipCount: (page.currentPage - 1) * page.pageSize,
+          ...formValues,
+        });
+      },
+    },
+    response: {
+      total: 'totalCount',
+      list: 'items',
+    },
+  },
+  toolbarConfig: {
+    custom: true,
+    export: true,
+    // import: true,
+    refresh: true,
+    zoom: true,
+  },
+};
+
+const gridEvents: VxeGridListeners<IdentityRoleDto> = {
+  cellClick: () => {},
+};
+const [RoleEditModal, roleModalApi] = useVbenModal({
+  connectedComponent: RoleModal,
+});
+const [Grid, { query }] = useVbenVxeGrid({
+  formOptions,
+  gridEvents,
+  gridOptions,
+});
+
+const handleAdd = () => {
+  roleModalApi.setData({});
+  roleModalApi.open();
+};
+
+const handleEdit = (row: IdentityRoleDto) => {
+  roleModalApi.setData({
+    values: row,
+  });
+  roleModalApi.open();
+};
+
+const handleDelete = (row: IdentityRoleDto) => {
+  Modal.confirm({
+    centered: true,
+    content: $t('AbpIdentity.RoleDeletionConfirmationMessage', [row.name]),
+    onOk: () => {
+      return deleteApi(row.id).then(() => query());
+    },
+    title: $t('AbpUi.AreYouSure'),
+  });
+};
+</script>
+
+<template>
+  <Grid :table-title="$t('AbpIdentity.Roles')">
+    <template #toolbar-tools>
+      <Button
+        type="primary"
+        v-access:code="['AbpIdentity.Roles.Create']"
+        @click="handleAdd"
+      >
+        {{ $t('AbpIdentity.NewRole') }}
+      </Button>
+    </template>
+    <template #name="{ row }">
+      <Tag v-if="row.isStatic" color="#8baac4" style="margin-right: 5px">
+        {{ $t('AbpIdentity.Static') }}
+      </Tag>
+      <Tag v-if="row.isDefault" color="#108ee9" style="margin-right: 5px">
+        {{ $t('AbpIdentity.DisplayName:IsDefault') }}
+      </Tag>
+      <Tag v-if="row.isPublic" color="#87d068" style="margin-right: 5px">
+        {{ $t('AbpIdentity.Public') }}
+      </Tag>
+      <span>{{ row.name }}</span>
+    </template>
+    <template #action="{ row }">
+      <div class="flex flex-row">
+        <div class="basis-1/2">
+          <Button
+            :icon="h(EditOutlined)"
+            block
+            type="link"
+            v-access:code="['AbpIdentity.Roles.Update']"
+            @click="handleEdit(row)"
+          >
+            {{ $t('AbpUi.Edit') }}
+          </Button>
+        </div>
+        <div class="basis-1/2">
+          <Button
+            :icon="h(DeleteOutlined)"
+            block
+            danger
+            type="link"
+            v-access:code="['AbpIdentity.Roles.Delete']"
+            @click="handleDelete(row)"
+          >
+            {{ $t('AbpUi.Delete') }}
+          </Button>
+        </div>
+      </div>
+    </template>
+  </Grid>
+  <RoleEditModal @change="() => query()" />
+</template>
+
+<style lang="scss" scoped>
+.checkbox-box {
+  display: flex;
+  justify-content: center;
+}
+</style>
