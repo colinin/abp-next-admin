@@ -49,14 +49,12 @@ const actionsMap: ContextMenuActionMap = {
 };
 
 const organizationUnits = ref<DataNode[]>([]);
-const expandedKeys = ref<string[]>([]);
 const loadedKeys = ref<string[]>([]);
 const selectedKey = ref<string>();
 
 /** 刷新组织机构树 */
 async function onRefresh() {
   loadedKeys.value = [];
-  expandedKeys.value = [];
   const { items } = await getRootListApi();
   organizationUnits.value = items.map((item) => {
     return {
@@ -82,7 +80,6 @@ async function onLoad(node: EventDataNode) {
     };
   });
   organizationUnits.value = [...organizationUnits.value];
-  expandedKeys.value.push(nodeKey);
   loadedKeys.value.push(nodeKey);
 }
 
@@ -162,7 +159,6 @@ watchEffect(() => {
       </Button>
     </template>
     <Tree
-      :expanded-keys="expandedKeys"
       :load-data="onLoad"
       :loaded-keys="loadedKeys"
       :tree-data="organizationUnits"
