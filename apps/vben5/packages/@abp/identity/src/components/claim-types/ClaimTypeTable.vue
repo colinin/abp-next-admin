@@ -17,7 +17,7 @@ import { deleteApi, getPagedListApi } from '../../api/claim-types';
 import { ValueType } from '../../types/claim-types';
 
 defineOptions({
-  name: 'UserTable',
+  name: 'ClaimTypeTable',
 });
 
 const ClaimTypeModal = defineAsyncComponent(

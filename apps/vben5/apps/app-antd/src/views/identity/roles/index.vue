@@ -2,6 +2,10 @@
 import { Page } from '@vben/common-ui';
 
 import { RoleTable } from '@abp/identity';
+
+defineOptions({
+  name: 'IdentityRoles',
+});
 </script>
 
 <template>

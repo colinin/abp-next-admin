@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { FormInstance } from 'ant-design-vue';
 
-import type { IdentityRoleDto } from '../../types/role';
-import type { IdentityUserDto } from '../../types/user';
+import type { IdentityRoleDto } from '../../types/roles';
+import type { IdentityUserDto } from '../../types/users';
 
 import { defineEmits, defineOptions, ref, toValue } from 'vue';
 
@@ -20,7 +20,7 @@ import {
   Transfer,
 } from 'ant-design-vue';
 
-import { createApi, getApi, updateApi } from '../../api/user';
+import { createApi, getApi, updateApi } from '../../api/users';
 
 defineOptions({
   name: 'UserModal',

@@ -32,7 +32,7 @@ const routes: RouteRecordRaw[] = [
             path: '/manage/identity',
             children: [
               {
-                component: () => import('#/views/identity/user/index.vue'),
+                component: () => import('#/views/identity/users/index.vue'),
                 name: 'Users',
                 path: '/manage/identity/users',
                 meta: {
@@ -41,7 +41,7 @@ const routes: RouteRecordRaw[] = [
                 },
               },
               {
-                component: () => import('#/views/identity/role/index.vue'),
+                component: () => import('#/views/identity/roles/index.vue'),
                 name: 'Roles',
                 path: '/manage/identity/roles',
                 meta: {
@@ -67,6 +67,16 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                   title: $t('abp.manage.identity.securityLogs'),
                   icon: 'carbon:security',
+                },
+              },
+              {
+                component: () =>
+                  import('#/views/identity/organization-units/index.vue'),
+                name: 'OrganizationUnits',
+                path: '/manage/identity/organization-units',
+                meta: {
+                  title: $t('abp.manage.identity.organizationUnits'),
+                  icon: 'clarity:organization-line',
                 },
               },
             ],

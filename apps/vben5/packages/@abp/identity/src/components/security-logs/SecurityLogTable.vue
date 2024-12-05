@@ -15,7 +15,7 @@ import { Button, Modal } from 'ant-design-vue';
 import { deleteApi, getPagedListApi } from '../../api/security-logs';
 
 defineOptions({
-  name: 'UserTable',
+  name: 'SecurityLogTable',
 });
 
 const formOptions: VbenFormProps = {
@@ -204,7 +204,6 @@ const handleDelete = (row: SecurityLogDto) => {
       </div>
     </template>
   </Grid>
-  <EntityEditModal @change="() => query()" />
 </template>
 
 <style lang="scss" scoped>
