@@ -3,7 +3,7 @@ import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 
 import type { IdentityUserDto } from '../../types/users';
 
-import { computed, defineAsyncComponent, h, nextTick, watchEffect } from 'vue';
+import { computed, defineAsyncComponent, h, nextTick, watch } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
@@ -147,10 +147,7 @@ const onCreateMember = (users: IdentityUserDto[]) => {
     });
 };
 
-watchEffect(() => {
-  props.selectedKey && onRefresh();
-  !props.selectedKey && onRefresh();
-});
+watch(() => props.selectedKey, onRefresh);
 </script>
 
 <template>

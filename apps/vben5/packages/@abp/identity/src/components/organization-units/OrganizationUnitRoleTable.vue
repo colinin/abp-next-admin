@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IdentityRoleDto } from '../../types/roles';
 
-import { computed, defineAsyncComponent, h, nextTick, watchEffect } from 'vue';
+import { computed, defineAsyncComponent, h, nextTick, watch } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
@@ -144,11 +144,7 @@ const onCreateRole = (roles: IdentityRoleDto[]) => {
       });
     });
 };
-
-watchEffect(() => {
-  props.selectedKey && onRefresh();
-  !props.selectedKey && onRefresh();
-});
+watch(() => props.selectedKey, onRefresh);
 </script>
 
 <template>
