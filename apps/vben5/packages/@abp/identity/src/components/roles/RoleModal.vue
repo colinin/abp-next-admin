@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormInstance } from 'ant-design-vue';
 
-import type { IdentityRoleDto } from '../../types/role';
+import type { IdentityRoleDto } from '../../types/roles';
 
 import { defineEmits, defineOptions, ref, toValue } from 'vue';
 
@@ -10,7 +10,7 @@ import { $t } from '@vben/locales';
 
 import { Checkbox, Form, Input, message } from 'ant-design-vue';
 
-import { createApi, getApi, updateApi } from '../../api/role';
+import { createApi, getApi, updateApi } from '../../api/roles';
 
 defineOptions({
   name: 'RoleModal',

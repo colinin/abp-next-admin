@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { Page } from '@vben/common-ui';
 
-import { ClaimTypeTable } from '@abp/identity';
+import { OrganizationUnitPage } from '@abp/identity';
 
 defineOptions({
-  name: 'IdentityClaimTypes',
+  name: 'IdentityOrganizationUnits',
 });
 </script>
 
 <template>
   <Page>
-    <ClaimTypeTable />
+    <OrganizationUnitPage />
   </Page>
 </template>

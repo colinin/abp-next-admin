@@ -22,7 +22,7 @@ import { createApi, getApi, updateApi } from '../../api/claim-types';
 import { ValueType } from '../../types/claim-types';
 
 defineOptions({
-  name: 'RoleModal',
+  name: 'ClaimTypeModal',
 });
 const emits = defineEmits<{
   (event: 'change', data: IdentityClaimTypeDto): void;
@@ -138,7 +138,7 @@ const [Modal, modalApi] = useVbenModal({
       <FormItem :label="$t('AbpIdentity.IdentityClaim:Description')">
         <Textarea
           v-model:value="formModel.description"
-          :autosize="{ minRows: 2 }"
+          :auto-size="{ minRows: 2 }"
         />
       </FormItem>
     </Form>

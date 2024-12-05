@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
 
-import type { IdentityUserDto } from '../../types/user';
+import type { IdentityUserDto } from '../../types/users';
 
 import { defineAsyncComponent, h } from 'vue';
 
@@ -14,7 +14,7 @@ import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button, Modal } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/user';
+import { deleteApi, getPagedListApi } from '../../api/users';
 
 defineOptions({
   name: 'UserTable',

@@ -5,7 +5,7 @@ import type {
   IdentityUserCreateDto,
   IdentityUserDto,
   IdentityUserUpdateDto,
-} from '../types/user';
+} from '../types/users';
 
 import { requestClient } from '@abp/request';
 
@@ -62,5 +62,19 @@ export function getPagedListApi(
     {
       params: input,
     },
+  );
+}
+
+/**
+ * 从组织机构中移除用户
+ * @param id 用户id
+ * @param ouId 组织机构id
+ */
+export function removeOrganizationUnit(
+  id: string,
+  ouId: string,
+): Promise<void> {
+  return requestClient.delete(
+    `/api/identity/users/${id}/organization-units/${ouId}`,
   );
 }

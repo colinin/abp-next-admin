@@ -5,7 +5,7 @@ import type {
   IdentityRoleCreateDto,
   IdentityRoleDto,
   IdentityRoleUpdateDto,
-} from '../types/role';
+} from '../types/roles';
 
 import { requestClient } from '@abp/request';
 
@@ -62,5 +62,19 @@ export function getPagedListApi(
     {
       params: input,
     },
+  );
+}
+
+/**
+ * 从组织机构中移除角色
+ * @param id 角色id
+ * @param ouId 组织机构id
+ */
+export function removeOrganizationUnit(
+  id: string,
+  ouId: string,
+): Promise<void> {
+  return requestClient.delete(
+    `/api/identity/roles/${id}/organization-units/${ouId}`,
   );
 }

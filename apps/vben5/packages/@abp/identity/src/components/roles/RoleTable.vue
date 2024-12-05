@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
 
-import type { IdentityRoleDto } from '../../types/role';
+import type { IdentityRoleDto } from '../../types/roles';
 
 import { defineAsyncComponent, h } from 'vue';
 
@@ -12,10 +12,10 @@ import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button, Modal, Tag } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/role';
+import { deleteApi, getPagedListApi } from '../../api/roles';
 
 defineOptions({
-  name: 'UserTable',
+  name: 'RoleTable',
 });
 
 const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
