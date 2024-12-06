@@ -192,5 +192,9 @@
       "name": "@abp/account",
       "path": "packages/@abp/account",
     },
+    {
+      "name": "@abp/permission",
+      "path": "packages/@abp/permission",
+    },
   ],
 }
