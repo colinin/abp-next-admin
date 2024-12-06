@@ -113,15 +113,24 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       const state = modalApi.getData<ModalState>();
       modelState.value = state;
-      const dto = await getApi({
-        providerKey: state.providerKey,
-        providerName: state.providerName,
-      });
       modalApi.setState({
-        title: `${$t('AbpPermissionManagement.Permissions')} - ${state.displayName ?? dto.entityDisplayName}`,
+        loading: true,
       });
-      permissionTree.value = generatePermissionTree(dto.groups);
-      checkedNodeKeys.value = getGrantedPermissionKeys(permissionTree.value);
+      try {
+        const dto = await getApi({
+          providerKey: state.providerKey,
+          providerName: state.providerName,
+        });
+        modalApi.setState({
+          title: `${$t('AbpPermissionManagement.Permissions')} - ${state.displayName ?? dto.entityDisplayName}`,
+        });
+        permissionTree.value = generatePermissionTree(dto.groups);
+        checkedNodeKeys.value = getGrantedPermissionKeys(permissionTree.value);
+      } finally {
+        modalApi.setState({
+          loading: false,
+        });
+      }
     }
   },
   title: $t('AbpPermissionManagement.Permissions'),
@@ -153,6 +162,15 @@ function onCheckNodeAll(e: CheckboxChangeEvent, permission: PermissionTree) {
     ? [...checkedNodeKeys.value, ...childKeys]
     : checkedNodeKeys.value.filter((key) => !childKeys.includes(key));
   permission.isGranted = e.target.checked;
+}
+
+function onExpandNode(_keys: any, info: { node: EventDataNode }) {
+  const nodeKey = String(info.node.key);
+  const index = expandNodeKeys.value.indexOf(nodeKey);
+  expandNodeKeys.value =
+    index === -1
+      ? [...expandNodeKeys.value, nodeKey]
+      : expandNodeKeys.value.filter((key) => key !== nodeKey);
 }
 
 function onSelectNode(
@@ -275,6 +293,7 @@ function getChildren(permissions: PermissionTree[]): PermissionTree[] {
                   }"
                   :tree-data="permission.children"
                   @check="(keys, info) => onCheckNode(permission, keys, info)"
+                  @expand="onExpandNode"
                   @select="onSelectNode"
                 />
               </div>
