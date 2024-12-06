@@ -1,28 +1,47 @@
 <script setup lang="ts">
 import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { IdentityUserDto } from '../../types/users';
 
 import { defineAsyncComponent, h } from 'vue';
 
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useAbpStore } from '@abp/core';
+import { PermissionModal } from '@abp/permission';
 import { useVbenVxeGrid } from '@abp/ui';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Button, Modal } from 'ant-design-vue';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+} from '@ant-design/icons-vue';
+import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi } from '../../api/users';
+import { IdentityUserPermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'UserTable',
 });
 
 const UserModal = defineAsyncComponent(() => import('./UserModal.vue'));
+
+const MenuItem = Menu.Item;
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
+const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
+const ClaimOutlined = createIconifyIcon('la:id-card-solid');
+const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
+const [UserPermissionModal, permissionModalApi] = useVbenModal({
+  connectedComponent: PermissionModal,
+});
+
+const abpStore = useAbpStore();
+const { hasAccessByCodes } = useAccess();
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -73,7 +92,7 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
       fixed: 'right',
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
-      width: 180,
+      width: 220,
     },
   ],
   exportConfig: {},
@@ -136,6 +155,22 @@ const handleDelete = (row: IdentityUserDto) => {
     title: $t('AbpUi.AreYouSure'),
   });
 };
+
+const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
+  switch (info.key) {
+    case 'permissions': {
+      const userId = abpStore.application?.currentUser.id;
+      permissionModalApi.setData({
+        displayName: row.userName,
+        providerKey: row.id,
+        providerName: 'U',
+        readonly: userId === row.id,
+      });
+      permissionModalApi.open();
+      break;
+    }
+  }
+};
 </script>
 
 <template>
@@ -143,57 +178,86 @@ const handleDelete = (row: IdentityUserDto) => {
     <template #toolbar-tools>
       <Button
         type="primary"
-        v-access:code="['AbpIdentity.Users.Create']"
+        v-access:code="[IdentityUserPermissions.Create]"
         @click="handleAdd"
       >
         {{ $t('AbpIdentity.NewUser') }}
       </Button>
     </template>
     <template #active="{ row }">
-      <div class="active-box">
-        <CheckIcon v-if="row.isActive" class="actived" />
-        <CloseIcon v-else />
+      <div class="flex flex-row justify-center">
+        <div :class="row.isActive ? 'text-green-600' : 'text-red-600'">
+          <CheckIcon v-if="row.isActive" />
+          <CloseIcon v-else />
+        </div>
       </div>
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
-        <div class="basis-1/2">
+        <div class="basis-1/3">
           <Button
             :icon="h(EditOutlined)"
             block
             type="link"
-            v-access:code="['AbpIdentity.Users.Update']"
+            v-access:code="[IdentityUserPermissions.Update]"
             @click="handleEdit(row)"
           >
             {{ $t('AbpUi.Edit') }}
           </Button>
         </div>
-        <div class="basis-1/2">
+        <div class="basis-1/3">
           <Button
             :icon="h(DeleteOutlined)"
             block
             danger
             type="link"
-            v-access:code="['AbpIdentity.Users.Delete']"
+            v-access:code="[IdentityUserPermissions.Delete]"
             @click="handleDelete(row)"
           >
             {{ $t('AbpUi.Delete') }}
           </Button>
         </div>
+        <div class="basis-1/3">
+          <Dropdown>
+            <template #overlay>
+              <Menu @click="(info) => handleMenuClick(row, info)">
+                <MenuItem
+                  v-if="
+                    hasAccessByCodes([
+                      IdentityUserPermissions.ManagePermissions,
+                    ])
+                  "
+                  key="permissions"
+                  :icon="h(PermissionsOutlined)"
+                >
+                  {{ $t('AbpPermissionManagement.Permissions') }}
+                </MenuItem>
+                <MenuItem
+                  v-if="
+                    hasAccessByCodes([IdentityUserPermissions.ManageClaims])
+                  "
+                  key="claims"
+                  :icon="h(ClaimOutlined)"
+                >
+                  {{ $t('AbpIdentity.ManageClaim') }}
+                </MenuItem>
+                <MenuItem
+                  v-if="hasAccessByCodes(['Platform.Menu.ManageUsers'])"
+                  key="menus"
+                  :icon="h(MenuOutlined)"
+                >
+                  {{ $t('AppPlatform.Menu:Manage') }}
+                </MenuItem>
+              </Menu>
+            </template>
+            <Button :icon="h(EllipsisOutlined)" type="link" />
+          </Dropdown>
+        </div>
       </div>
     </template>
   </Grid>
   <UserEditModal @change="() => query()" />
+  <UserPermissionModal />
 </template>
 
-<style lang="scss" scoped>
-.active-box {
-  display: flex;
-  justify-content: center;
-  color: red;
-
-  .actived {
-    color: green;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

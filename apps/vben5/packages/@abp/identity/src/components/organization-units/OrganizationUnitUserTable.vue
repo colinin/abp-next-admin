@@ -15,6 +15,7 @@ import { Button, Modal } from 'ant-design-vue';
 
 import { addMembers, getUserListApi } from '../../api/organization-units';
 import { removeOrganizationUnit } from '../../api/users';
+import { OrganizationUnitPermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'OrganizationUnitUserTable',
@@ -33,7 +34,7 @@ const { hasAccessByCodes } = useAccess();
 const getAddMemberEnabled = computed(() => {
   return (
     props.selectedKey &&
-    hasAccessByCodes(['AbpIdentity.OrganizationUnits.ManageUsers'])
+    hasAccessByCodes([OrganizationUnitPermissions.ManageUsers])
   );
 });
 
@@ -167,7 +168,7 @@ watch(() => props.selectedKey, onRefresh);
         :icon="h(DeleteOutlined)"
         danger
         type="link"
-        v-access:code="['AbpIdentity.OrganizationUnits.ManageUsers']"
+        v-access:code="[OrganizationUnitPermissions.ManageUsers]"
         @click="onDelete(row)"
       >
         {{ $t('AbpUi.Delete') }}

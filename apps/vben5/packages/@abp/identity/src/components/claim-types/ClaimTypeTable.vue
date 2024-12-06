@@ -5,6 +5,7 @@ import type { IdentityClaimTypeDto } from '../../types/claim-types';
 
 import { defineAsyncComponent, h } from 'vue';
 
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
@@ -14,6 +15,7 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button, Modal } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi } from '../../api/claim-types';
+import { IdentityClaimTypePermissions } from '../../constants/permissions';
 import { ValueType } from '../../types/claim-types';
 
 defineOptions({
@@ -25,6 +27,8 @@ const ClaimTypeModal = defineAsyncComponent(
 );
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
+
+const { hasAccessByCodes } = useAccess();
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -102,6 +106,10 @@ const gridOptions: VxeGridProps<IdentityClaimTypeDto> = {
       fixed: 'right',
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
+      visible: hasAccessByCodes([
+        IdentityClaimTypePermissions.Update,
+        IdentityClaimTypePermissions.Delete,
+      ]),
       width: 180,
     },
   ],
@@ -172,7 +180,7 @@ const handleDelete = (row: IdentityClaimTypeDto) => {
     <template #toolbar-tools>
       <Button
         type="primary"
-        v-access:code="['AbpIdentity.IdentityClaimTypes.Create']"
+        v-access:code="[IdentityClaimTypePermissions.Create]"
         @click="handleAdd"
       >
         {{ $t('AbpIdentity.IdentityClaim:New') }}
@@ -197,7 +205,7 @@ const handleDelete = (row: IdentityClaimTypeDto) => {
             :icon="h(EditOutlined)"
             block
             type="link"
-            v-access:code="['AbpIdentity.IdentityClaimTypes.Update']"
+            v-access:code="[IdentityClaimTypePermissions.Update]"
             @click="handleEdit(row)"
           >
             {{ $t('AbpUi.Edit') }}
@@ -209,7 +217,7 @@ const handleDelete = (row: IdentityClaimTypeDto) => {
             block
             danger
             type="link"
-            v-access:code="['AbpIdentity.IdentityClaimTypes.Delete']"
+            v-access:code="[IdentityClaimTypePermissions.Delete]"
             @click="handleDelete(row)"
           >
             {{ $t('AbpUi.Delete') }}

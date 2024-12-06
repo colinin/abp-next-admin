@@ -6,11 +6,13 @@ import type {
 } from 'ant-design-vue/es/tree';
 import type { Key } from 'ant-design-vue/es/vc-table/interface';
 
-import { h, onMounted, ref, watchEffect } from 'vue';
+import { defineAsyncComponent, h, onMounted, ref, watchEffect } from 'vue';
 
+import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { PermissionModal } from '@abp/permission';
 import {
   DeleteOutlined,
   EditOutlined,
@@ -21,6 +23,7 @@ import { Button, Card, Dropdown, Menu, Modal, Tree } from 'ant-design-vue';
 
 import {
   deleteApi,
+  getApi,
   getChildrenApi,
   getRootListApi,
   moveTo,
@@ -36,6 +39,9 @@ const emits = defineEmits<{
 
 const MenuItem = Menu.Item;
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
+const OrganizationUnitModal = defineAsyncComponent(
+  () => import('./OrganizationUnitModal.vue'),
+);
 
 interface ContextMenuActionMap {
   [key: string]: (id: string) => Promise<void> | void;
@@ -51,6 +57,13 @@ const actionsMap: ContextMenuActionMap = {
 const organizationUnits = ref<DataNode[]>([]);
 const loadedKeys = ref<string[]>([]);
 const selectedKey = ref<string>();
+
+const [OrganizationUnitEditModal, editModalApi] = useVbenModal({
+  connectedComponent: OrganizationUnitModal,
+});
+const [OrganizationUnitPermissionModal, permissionModalApi] = useVbenModal({
+  connectedComponent: PermissionModal,
+});
 
 /** 刷新组织机构树 */
 async function onRefresh() {
@@ -90,18 +103,25 @@ function onRightClick() {
 
 /** 创建组织机构树 */
 function onCreate(parentId?: string) {
-  !parentId && console.warn('create root method not implemented!');
-  parentId && console.warn('create children method not implemented!');
+  editModalApi.setData({ parentId });
+  editModalApi.open();
 }
 
 /** 编辑组织机构树 */
 function onUpdate(id: string) {
-  console.warn('update method not implemented!', id);
+  editModalApi.setData({ id });
+  editModalApi.open();
 }
 
 /** 编辑组织机构树权限 */
-function onPermissions(id: string) {
-  console.warn('permissions method not implemented!', id);
+async function onPermissions(id: string) {
+  const dto = await getApi(id);
+  permissionModalApi.setData({
+    displayName: dto.displayName,
+    providerKey: id,
+    providerName: 'O',
+  });
+  permissionModalApi.open();
 }
 
 /** 删除组织机构 */
@@ -194,6 +214,8 @@ watchEffect(() => {
       </template>
     </Tree>
   </Card>
+  <OrganizationUnitEditModal @change="onRefresh" />
+  <OrganizationUnitPermissionModal />
 </template>
 
 <style scoped></style>
