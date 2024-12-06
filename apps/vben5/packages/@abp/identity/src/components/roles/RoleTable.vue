@@ -237,9 +237,4 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
   <RolePermissionModal />
 </template>
 
-<style lang="scss" scoped>
-.checkbox-box {
-  display: flex;
-  justify-content: center;
-}
-</style>
+<style lang="scss" scoped></style>

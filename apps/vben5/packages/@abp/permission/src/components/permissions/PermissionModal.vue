@@ -74,6 +74,7 @@ const getPermissionNodeState = computed(() => {
 });
 
 const [Modal, modalApi] = useVbenModal({
+  centered: true,
   class: 'w-1/2',
   closeOnClickModal: false,
   closeOnPressEscape: false,
@@ -307,10 +308,10 @@ function getChildren(permissions: PermissionTree[]): PermissionTree[] {
 
 <style lang="scss" scoped>
 :deep(.ant-tabs) {
-  max-height: 34rem;
+  height: 34rem;
 
   .ant-tabs-nav {
-    max-width: 14rem;
+    width: 14rem;
   }
 
   .ant-tabs-content-holder {
