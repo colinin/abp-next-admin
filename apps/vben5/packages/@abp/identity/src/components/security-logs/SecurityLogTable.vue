@@ -13,6 +13,7 @@ import { DeleteOutlined } from '@ant-design/icons-vue';
 import { Button, Modal } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi } from '../../api/security-logs';
+import { SecurityLogPermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'SecurityLogTable',
@@ -196,7 +197,7 @@ const handleDelete = (row: SecurityLogDto) => {
           block
           danger
           type="link"
-          v-access:code="['AbpAuditing.SecurityLog.Delete']"
+          v-access:code="[SecurityLogPermissions.Delete]"
           @click="handleDelete(row)"
         >
           {{ $t('AbpUi.Delete') }}

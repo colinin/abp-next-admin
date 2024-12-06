@@ -17,6 +17,7 @@ import { Button, Modal } from 'ant-design-vue';
 
 import { addRoles, getRoleListApi } from '../../api/organization-units';
 import { removeOrganizationUnit } from '../../api/roles';
+import { OrganizationUnitPermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'OrganizationUnitRoleTable',
@@ -35,7 +36,7 @@ const { hasAccessByCodes } = useAccess();
 const getAddRoleEnabled = computed(() => {
   return (
     props.selectedKey &&
-    hasAccessByCodes(['AbpIdentity.OrganizationUnits.ManageRoles'])
+    hasAccessByCodes([OrganizationUnitPermissions.ManageRoles])
   );
 });
 
@@ -164,7 +165,7 @@ watch(() => props.selectedKey, onRefresh);
         :icon="h(DeleteOutlined)"
         danger
         type="link"
-        v-access:code="['AbpIdentity.OrganizationUnits.ManageRoles']"
+        v-access:code="[OrganizationUnitPermissions.ManageRoles]"
         @click="onDelete(row)"
       >
         {{ $t('AbpUi.Delete') }}

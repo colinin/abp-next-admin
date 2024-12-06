@@ -22,6 +22,7 @@ import {
 import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi } from '../../api/users';
+import { IdentityUserPermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'UserTable',
@@ -177,7 +178,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
     <template #toolbar-tools>
       <Button
         type="primary"
-        v-access:code="['AbpIdentity.Users.Create']"
+        v-access:code="[IdentityUserPermissions.Create]"
         @click="handleAdd"
       >
         {{ $t('AbpIdentity.NewUser') }}
@@ -198,7 +199,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
             :icon="h(EditOutlined)"
             block
             type="link"
-            v-access:code="['AbpIdentity.Users.Update']"
+            v-access:code="[IdentityUserPermissions.Update]"
             @click="handleEdit(row)"
           >
             {{ $t('AbpUi.Edit') }}
@@ -210,7 +211,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
             block
             danger
             type="link"
-            v-access:code="['AbpIdentity.Users.Delete']"
+            v-access:code="[IdentityUserPermissions.Delete]"
             @click="handleDelete(row)"
           >
             {{ $t('AbpUi.Delete') }}
@@ -222,7 +223,9 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
               <Menu @click="(info) => handleMenuClick(row, info)">
                 <MenuItem
                   v-if="
-                    hasAccessByCodes(['AbpIdentity.Users.ManagePermissions'])
+                    hasAccessByCodes([
+                      IdentityUserPermissions.ManagePermissions,
+                    ])
                   "
                   key="permissions"
                   :icon="h(PermissionsOutlined)"
@@ -230,7 +233,9 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                   {{ $t('AbpPermissionManagement.Permissions') }}
                 </MenuItem>
                 <MenuItem
-                  v-if="hasAccessByCodes(['AbpIdentity.Users.ManageClaims'])"
+                  v-if="
+                    hasAccessByCodes([IdentityUserPermissions.ManageClaims])
+                  "
                   key="claims"
                   :icon="h(ClaimOutlined)"
                 >
