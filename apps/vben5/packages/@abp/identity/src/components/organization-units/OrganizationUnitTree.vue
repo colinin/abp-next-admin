@@ -12,6 +12,7 @@ import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { PermissionModal } from '@abp/permission';
 import {
   DeleteOutlined,
   EditOutlined,
@@ -22,6 +23,7 @@ import { Button, Card, Dropdown, Menu, Modal, Tree } from 'ant-design-vue';
 
 import {
   deleteApi,
+  getApi,
   getChildrenApi,
   getRootListApi,
   moveTo,
@@ -58,6 +60,9 @@ const selectedKey = ref<string>();
 
 const [OrganizationUnitEditModal, editModalApi] = useVbenModal({
   connectedComponent: OrganizationUnitModal,
+});
+const [OrganizationUnitPermissionModal, permissionModalApi] = useVbenModal({
+  connectedComponent: PermissionModal,
 });
 
 /** 刷新组织机构树 */
@@ -109,8 +114,14 @@ function onUpdate(id: string) {
 }
 
 /** 编辑组织机构树权限 */
-function onPermissions(id: string) {
-  console.warn('permissions method not implemented!', id);
+async function onPermissions(id: string) {
+  const dto = await getApi(id);
+  permissionModalApi.setData({
+    displayName: dto.displayName,
+    providerKey: id,
+    providerName: 'O',
+  });
+  permissionModalApi.open();
 }
 
 /** 删除组织机构 */
@@ -204,6 +215,7 @@ watchEffect(() => {
     </Tree>
   </Card>
   <OrganizationUnitEditModal @change="onRefresh" />
+  <OrganizationUnitPermissionModal />
 </template>
 
 <style scoped></style>
