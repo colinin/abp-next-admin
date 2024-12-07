@@ -4,7 +4,7 @@ import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { IdentityUserDto } from '../../types/users';
 
-import { defineAsyncComponent, h } from 'vue';
+import { computed, defineAsyncComponent, h } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
@@ -18,10 +18,12 @@ import {
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
+  LockOutlined,
+  UnlockOutlined,
 } from '@ant-design/icons-vue';
 import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/users';
+import { deleteApi, getPagedListApi, unLockApi } from '../../api/users';
 import { IdentityUserPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -29,6 +31,7 @@ defineOptions({
 });
 
 const UserModal = defineAsyncComponent(() => import('./UserModal.vue'));
+const LockModal = defineAsyncComponent(() => import('./UserLockModal.vue'));
 
 const MenuItem = Menu.Item;
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
@@ -36,8 +39,19 @@ const CloseIcon = createIconifyIcon('ant-design:close-outlined');
 const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
 const ClaimOutlined = createIconifyIcon('la:id-card-solid');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
-const [UserPermissionModal, permissionModalApi] = useVbenModal({
-  connectedComponent: PermissionModal,
+
+const getLockEnd = computed(() => {
+  return (row: IdentityUserDto) => {
+    if (row.lockoutEnd) {
+      const lockTime = new Date(row.lockoutEnd);
+      if (lockTime) {
+        // 锁定时间高于当前时间不显示
+        const nowTime = new Date();
+        return lockTime < nowTime;
+      }
+    }
+    return true;
+  };
 });
 
 const abpStore = useAbpStore();
@@ -127,6 +141,12 @@ const gridEvents: VxeGridListeners<IdentityUserDto> = {
 const [UserEditModal, userModalApi] = useVbenModal({
   connectedComponent: UserModal,
 });
+const [UserLockModal, lockModalApi] = useVbenModal({
+  connectedComponent: LockModal,
+});
+const [UserPermissionModal, permissionModalApi] = useVbenModal({
+  connectedComponent: PermissionModal,
+});
 const [Grid, { query }] = useVbenVxeGrid({
   formOptions,
   gridEvents,
@@ -156,8 +176,18 @@ const handleDelete = (row: IdentityUserDto) => {
   });
 };
 
+const handleUnlock = async (row: IdentityUserDto) => {
+  await unLockApi(row.id);
+  await query();
+};
+
 const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
   switch (info.key) {
+    case 'lock': {
+      lockModalApi.setData(row);
+      lockModalApi.open();
+      break;
+    }
     case 'permissions': {
       const userId = abpStore.application?.currentUser.id;
       permissionModalApi.setData({
@@ -167,6 +197,10 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
         readonly: userId === row.id,
       });
       permissionModalApi.open();
+      break;
+    }
+    case 'unlock': {
+      handleUnlock(row);
       break;
     }
   }
@@ -223,6 +257,28 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
               <Menu @click="(info) => handleMenuClick(row, info)">
                 <MenuItem
                   v-if="
+                    hasAccessByCodes([IdentityUserPermissions.Update]) &&
+                    row.isActive &&
+                    getLockEnd(row)
+                  "
+                  key="lock"
+                  :icon="h(LockOutlined)"
+                >
+                  {{ $t('AbpIdentity.Lock') }}
+                </MenuItem>
+                <MenuItem
+                  v-if="
+                    hasAccessByCodes([IdentityUserPermissions.Update]) &&
+                    row.isActive &&
+                    !getLockEnd(row)
+                  "
+                  key="unlock"
+                  :icon="h(UnlockOutlined)"
+                >
+                  {{ $t('AbpIdentity.UnLock') }}
+                </MenuItem>
+                <MenuItem
+                  v-if="
                     hasAccessByCodes([
                       IdentityUserPermissions.ManagePermissions,
                     ])
@@ -256,6 +312,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
       </div>
     </template>
   </Grid>
+  <UserLockModal @change="query" />
   <UserEditModal @change="() => query()" />
   <UserPermissionModal />
 </template>

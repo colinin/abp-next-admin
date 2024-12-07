@@ -78,3 +78,20 @@ export function removeOrganizationUnit(
     `/api/identity/users/${id}/organization-units/${ouId}`,
   );
 }
+
+/**
+ * 锁定用户
+ * @param id 用户id
+ * @param seconds 锁定时长(秒)
+ */
+export function lockApi(id: string, seconds: number): Promise<void> {
+  return requestClient.put(`/api/identity/users/${id}/lock/${seconds}`);
+}
+
+/**
+ * 解锁用户
+ * @param id 用户id
+ */
+export function unLockApi(id: string): Promise<void> {
+  return requestClient.put(`/api/identity/users/${id}/unlock`);
+}
