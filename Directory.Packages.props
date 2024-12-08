@@ -60,6 +60,7 @@
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.FeatureManagement.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.FeatureManagement.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -171,6 +172,8 @@
 		<PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.Core" Version="$(ElsaPackageVersion)" />
 		<PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
 		<PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
+		<PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.PostgreSql" Version="$(ElsaPackageVersion)" />
+		<PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.PostgreSql" Version="$(ElsaPackageVersion)" />
 	</ItemGroup>
 	<!-- DotNetCore.CAP -->
 	<ItemGroup>
