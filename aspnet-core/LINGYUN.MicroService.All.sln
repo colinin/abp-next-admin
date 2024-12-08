@@ -768,6 +768,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql", "modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql\LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql.csproj", "{CD70B78F-C15B-49B6-B0EA-570A9D18D7C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer", "modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer\LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer.csproj", "{416C0C27-4E3C-4919-857F-14DA41D84CFA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1970,6 +1972,10 @@ Global
 		{CD70B78F-C15B-49B6-B0EA-570A9D18D7C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD70B78F-C15B-49B6-B0EA-570A9D18D7C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD70B78F-C15B-49B6-B0EA-570A9D18D7C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{416C0C27-4E3C-4919-857F-14DA41D84CFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{416C0C27-4E3C-4919-857F-14DA41D84CFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{416C0C27-4E3C-4919-857F-14DA41D84CFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{416C0C27-4E3C-4919-857F-14DA41D84CFA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2341,6 +2347,7 @@ Global
 		{76DDE71D-00BD-4BC8-AEA2-31209E2B7E05} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{267933BD-BFB8-4906-BA39-DF193B2FD558} = {B05CB08F-C088-4D6D-97EE-A94A5D1AE4A6}
 		{CD70B78F-C15B-49B6-B0EA-570A9D18D7C8} = {0A00FAF9-A96B-4BF5-8D42-15C8678F70F3}
+		{416C0C27-4E3C-4919-857F-14DA41D84CFA} = {0A00FAF9-A96B-4BF5-8D42-15C8678F70F3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}
