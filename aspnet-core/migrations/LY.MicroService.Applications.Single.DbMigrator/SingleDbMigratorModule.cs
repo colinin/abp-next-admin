@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
+using Microsoft.Extensions.DependencyInjection;
 #if POSTGRESQL
 using LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql;
 #else
@@ -20,5 +21,9 @@ namespace LY.MicroService.Applications.Single.DbMigrator;
     )]
 public partial class SingleDbMigratorModule : AbpModule
 {
-
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var configuration = context.Services.GetConfiguration();
+        ConfigureTiming(configuration);
+    }
 }

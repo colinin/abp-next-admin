@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using Volo.Abp.Modularity;
@@ -17,6 +18,7 @@ public class SingleMigrationsEntityFrameworkCorePostgreSqlModule : AbpModule
 
         Configure<AbpDbContextOptions>(options =>
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             options.UseNpgsql();
         });
     }

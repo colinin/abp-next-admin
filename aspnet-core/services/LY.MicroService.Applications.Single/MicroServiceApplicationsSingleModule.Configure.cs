@@ -572,6 +572,7 @@ public partial class MicroServiceApplicationsSingleModule
         {
             
 #if POSTGRESQL
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             options.UseNpgsql();
 #else
             options.UseMySQL();
