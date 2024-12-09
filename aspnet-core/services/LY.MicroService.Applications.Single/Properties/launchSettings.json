@@ -16,6 +16,15 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
+    },
+    "LY.MicroService.Applications.Single.PostgreSQL": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://0.0.0.0:30001",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "PostgreSQL"
+      }
     }
   }
 }
