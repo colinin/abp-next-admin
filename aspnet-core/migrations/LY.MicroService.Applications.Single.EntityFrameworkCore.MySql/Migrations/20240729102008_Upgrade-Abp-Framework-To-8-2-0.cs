@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
+namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migrations
 {
     /// <inheritdoc />
     public partial class UpgradeAbpFrameworkTo820 : Migration

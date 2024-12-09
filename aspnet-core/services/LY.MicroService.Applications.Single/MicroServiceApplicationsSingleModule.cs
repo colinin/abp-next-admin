@@ -34,6 +34,7 @@ using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql;
 #else
 using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
+using Volo.Abp.EntityFrameworkCore.MySQL;
 #endif
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -122,7 +123,6 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.EventBus;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Imaging;

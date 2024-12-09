@@ -9,11 +9,11 @@ using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
+namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migrations
 {
     [DbContext(typeof(SingleMigrationsDbContext))]
-    [Migration("20231222014501_Upgrade-Abp-Framework-To-8.0.0")]
-    partial class UpgradeAbpFrameworkTo800
+    [Migration("20231028000247_Fix-Notification-Template-Length")]
+    partial class FixNotificationTemplateLength
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LINGYUN.Abp.LocalizationManagement.Language", b =>
@@ -2639,6 +2639,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasColumnName("ChangeType");
 
                     b.Property<string>("EntityId")
+                        .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("varchar(128)")
                         .HasColumnName("EntityId");
@@ -4340,20 +4341,12 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("ApplicationType")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
                     b.Property<string>("ClientId")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("ClientSecret")
                         .HasColumnType("longtext");
-
-                    b.Property<string>("ClientType")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("ClientUri")
                         .HasColumnType("longtext");
@@ -4402,9 +4395,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("IsDeleted");
 
-                    b.Property<string>("JsonWebKeySet")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("LastModificationTime");
@@ -4431,8 +4421,9 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                     b.Property<string>("Requirements")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Settings")
-                        .HasColumnType("longtext");
+                    b.Property<string>("Type")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 

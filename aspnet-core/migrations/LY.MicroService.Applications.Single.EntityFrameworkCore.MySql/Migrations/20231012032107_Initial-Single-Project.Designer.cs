@@ -9,11 +9,11 @@ using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
+namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migrations
 {
     [DbContext(typeof(SingleMigrationsDbContext))]
-    [Migration("20231016100545_Add-Field-With-Text-Template-Definition")]
-    partial class AddFieldWithTextTemplateDefinition
+    [Migration("20231012032107_Initial-Single-Project")]
+    partial class InitialSingleProject
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1375,11 +1375,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)")
                         .HasColumnName("Layout");
-
-                    b.Property<string>("LocalizationResourceName")
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)")
-                        .HasColumnName("LocalizationResourceName");
 
                     b.Property<string>("Name")
                         .IsRequired()

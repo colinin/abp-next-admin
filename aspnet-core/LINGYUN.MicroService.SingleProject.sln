@@ -608,6 +608,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.EntityFram
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql", "migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.csproj", "{5A07FFDF-F979-44F9-BE24-81D6A25BEADB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.Applications.Single.EntityFrameworkCore.MySql", "migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.csproj", "{2B167D92-2327-4679-9096-49F274FABE0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2097,6 +2099,12 @@ Global
 		{5A07FFDF-F979-44F9-BE24-81D6A25BEADB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A07FFDF-F979-44F9-BE24-81D6A25BEADB}.PostgreSQL|Any CPU.ActiveCfg = PostgreSQL|Any CPU
 		{5A07FFDF-F979-44F9-BE24-81D6A25BEADB}.PostgreSQL|Any CPU.Build.0 = PostgreSQL|Any CPU
+		{2B167D92-2327-4679-9096-49F274FABE0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B167D92-2327-4679-9096-49F274FABE0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B167D92-2327-4679-9096-49F274FABE0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B167D92-2327-4679-9096-49F274FABE0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B167D92-2327-4679-9096-49F274FABE0C}.PostgreSQL|Any CPU.ActiveCfg = PostgreSQL|Any CPU
+		{2B167D92-2327-4679-9096-49F274FABE0C}.PostgreSQL|Any CPU.Build.0 = PostgreSQL|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2392,6 +2400,7 @@ Global
 		{8D0C8993-580A-4585-BE3B-87895C76FC89} = {07DFEB1E-ED92-4E97-A801-FAB2D70F4F35}
 		{AA742577-63B0-4188-AA36-AC6E0ED99BB6} = {07DFEB1E-ED92-4E97-A801-FAB2D70F4F35}
 		{5A07FFDF-F979-44F9-BE24-81D6A25BEADB} = {0D69B63D-F082-4D57-9FF0-355642C56993}
+		{2B167D92-2327-4679-9096-49F274FABE0C} = {0D69B63D-F082-4D57-9FF0-355642C56993}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {711A43C0-A2F8-4E5C-9B9F-F2551E4B3FF1}

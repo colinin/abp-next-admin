@@ -9,11 +9,11 @@ using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
+namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migrations
 {
     [DbContext(typeof(SingleMigrationsDbContext))]
-    [Migration("20231028000247_Fix-Notification-Template-Length")]
-    partial class FixNotificationTemplateLength
+    [Migration("20231026015443_Add-Field-With-Notification-Definition")]
+    partial class AddFieldWithNotificationDefinition
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -801,8 +801,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(200)");
 
                     b.Property<string>("Template")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
