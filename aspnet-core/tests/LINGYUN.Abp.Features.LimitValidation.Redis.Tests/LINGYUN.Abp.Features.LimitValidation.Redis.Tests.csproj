@@ -5,6 +5,10 @@
 		<RootNamespace />
 
 		<IsPackable>false</IsPackable>
+
+		<Configurations>Debug;Release;PostgreSQL</Configurations>
+
+		<Platforms>AnyCPU</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>

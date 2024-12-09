@@ -7,6 +7,12 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<Configurations>Debug;Release;PostgreSQL</Configurations>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PostgreSQL|AnyCPU'">
+		<DefineConstants>POSTGRESQL</DefineConstants>
+		<OutputPath>bin\Debug/</OutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -26,6 +32,15 @@
 		<Content Remove="Logs\**" />
 		<EmbeddedResource Remove="Logs\**" />
 		<None Remove="Logs\**" />
+		<Content Update="appsettings.PostgreSql.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<None Remove="appsettings.PostgreSql.json" />
+		<Content Include="appsettings.PostgreSql.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -39,15 +54,16 @@
 	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 	  </Content>
-	  <Content Include="appsettings.Production.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	  </Content>
+<!--	  <Content Include="appsettings.Production.json">-->
+<!--	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>-->
+<!--	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>-->
+<!--	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>-->
+<!--	  </Content>-->
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin\LINGYUN.Abp.UI.Navigation.VueVbenAdmin.csproj" />
+		<ProjectReference Include="..\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.csproj" />
 		<ProjectReference Include="..\LY.MicroService.Applications.Single.EntityFrameworkCore\LY.MicroService.Applications.Single.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
