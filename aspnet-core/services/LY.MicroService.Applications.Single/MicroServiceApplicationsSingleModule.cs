@@ -29,7 +29,12 @@ using LINGYUN.Abp.Demo.EntityFrameworkCore;
 using LINGYUN.Abp.Elsa;
 using LINGYUN.Abp.Elsa.Activities;
 using LINGYUN.Abp.Elsa.EntityFrameworkCore;
+#if POSTGRESQL
+using Volo.Abp.EntityFrameworkCore.PostgreSql;
+using LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql;
+#else
 using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
+#endif
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Exporter.MiniExcel;
@@ -238,7 +243,11 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
 
     typeof(SingleMigrationsEntityFrameworkCoreModule),
+#if POSTGRESQL
+    typeof(AbpEntityFrameworkCorePostgreSqlModule),
+#else
     typeof(AbpEntityFrameworkCoreMySQLModule),
+#endif
 
     typeof(AbpAliyunSmsModule),
     typeof(AbpAliyunSettingManagementModule),
@@ -312,7 +321,11 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpElsaServerModule),
     typeof(AbpElsaActivitiesModule),
     typeof(AbpElsaEntityFrameworkCoreModule),
+#if POSTGRESQL
+    typeof(AbpElsaEntityFrameworkCorePostgreSqlModule),
+#else
     typeof(AbpElsaEntityFrameworkCoreMySqlModule),
+#endif
 
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),

@@ -570,7 +570,12 @@ public partial class MicroServiceApplicationsSingleModule
     {
         Configure<AbpDbContextOptions>(options =>
         {
+            
+#if POSTGRESQL
+            options.UseNpgsql();
+#else
             options.UseMySQL();
+#endif
         });
     }
 

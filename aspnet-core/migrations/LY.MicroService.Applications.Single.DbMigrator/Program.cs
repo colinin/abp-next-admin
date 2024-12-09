@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -23,7 +24,6 @@ public class Program
             .WriteTo.Console()
             .WriteTo.File("Logs/migrations.txt")
             .CreateLogger();
-
         await CreateHostBuilder(args).RunConsoleAsync();
     }
 
@@ -31,6 +31,11 @@ public class Program
     {
         return Host.CreateDefaultBuilder(args)
             .AddAppSettingsSecretsJson()
+            // .ConfigureAppConfiguration((context, builder) =>
+            // {
+            //     builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            //         .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+            // }  )
             .ConfigureLogging((context, logging) => logging.ClearProviders())
             .ConfigureServices((hostContext, services) =>
             {
