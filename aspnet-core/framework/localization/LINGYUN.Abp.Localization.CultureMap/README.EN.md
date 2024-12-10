@@ -1,42 +1,42 @@
 # LINGYUN.Abp.Localization.CultureMap
 
-## 模块说明
+## Module Description
 
-本模块用于解决存在多种格式的区域性本地化问题。它允许你将不同格式的区域性标识映射到标准格式。
+This module solves localization issues with multiple culture format variants. It allows you to map different culture format identifiers to a standard format.
 
-参考项目: [Owl.Abp.CultureMap](https://github.com/maliming/Owl.Abp.CultureMap)
+Reference Project: [Owl.Abp.CultureMap](https://github.com/maliming/Owl.Abp.CultureMap)
 
-## 功能特性
+## Features
 
-* 支持将多种格式的区域性标识映射到标准格式
-* 支持区域性（Culture）和UI区域性（UICulture）的独立映射
-* 与ABP请求本地化集成
-* 支持自定义区域性映射规则
+* Support mapping multiple culture format identifiers to standard format
+* Support independent mapping for Culture and UICulture
+* Integration with ABP request localization
+* Support custom culture mapping rules
 
-## 安装
+## Installation
 
 ```bash
 dotnet add package LINGYUN.Abp.Localization.CultureMap
 ```
 
-## 基础模块
+## Base Modules
 
 * Volo.Abp.AspNetCore
 
-## 配置说明
+## Configuration
 
-模块提供了以下配置选项：
+The module provides the following configuration options:
 
-* CulturesMaps：区域性映射列表
-* UiCulturesMaps：UI区域性映射列表
+* CulturesMaps: List of culture mappings
+* UiCulturesMaps: List of UI culture mappings
 
-每个映射项包含：
-* TargetCulture：目标区域性标识
-* SourceCultures：源区域性标识列表
+Each mapping item contains:
+* TargetCulture: Target culture identifier
+* SourceCultures: List of source culture identifiers
 
-## 使用方法
+## Usage
 
-1. 添加模块依赖：
+1. Add module dependency:
 
 ```csharp
 [DependsOn(
@@ -67,9 +67,9 @@ public class YouProjectModule : AbpModule
 }
 ```
 
-## 常见用例
+## Common Use Cases
 
-1. 统一简体中文区域性标识：
+1. Unify Simplified Chinese culture identifiers:
 ```csharp
 options.CulturesMaps.Add(new CultureMapInfo
 {
@@ -78,7 +78,7 @@ options.CulturesMaps.Add(new CultureMapInfo
 });
 ```
 
-2. 统一繁体中文区域性标识：
+2. Unify Traditional Chinese culture identifiers:
 ```csharp
 options.CulturesMaps.Add(new CultureMapInfo
 {
@@ -87,9 +87,7 @@ options.CulturesMaps.Add(new CultureMapInfo
 });
 ```
 
-## 更多信息
+## More Information
 
-* [English Documentation](./README.EN.md)
-* [ABP本地化文档](https://docs.abp.io/zh-Hans/abp/latest/Localization)
-
-## 更新日志 
+* [中文文档](./README.md)
+* [ABP Localization Documentation](https://docs.abp.io/en/abp/latest/Localization)
