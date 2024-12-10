@@ -72,6 +72,57 @@ public class YouProjectModule : AbpModule
   * 类型：可选
   * 格式：JSON字符串
 
+### 短信服务配置
+
+```json
+{
+  "Settings": {
+    "Abp.Aliyun.Sms": {
+      "Domain": "dysmsapi.aliyuncs.com", // API域名，默认为 dysmsapi.aliyuncs.com
+      "Version": "2017-05-25", // API版本，默认为 2017-05-25
+      "ActionName": "SendSms", // API方法名，默认为 SendSms
+      "DefaultSignName": "", // 默认短信签名
+      "DefaultTemplateCode": "", // 默认短信模板代码
+      "DefaultPhoneNumber": "", // 默认接收短信的手机号码
+      "VisableErrorToClient": "false" // 是否向客户端显示错误信息
+    }
+  }
+}
+```
+
+## 可用区域
+
+本模块支持以下阿里云区域：
+
+* 中国区域
+  * 华北1（青岛）- cn-qingdao
+  * 华北2（北京）- cn-beijing
+  * 华北3（张家口）- cn-zhangjiakou
+  * 华北5（呼和浩特）- cn-huhehaote
+  * 华东1（杭州）- cn-hangzhou
+  * 华东2（上海）- cn-shanghai
+  * 华南1（深圳）- cn-shenzhen
+  * 华南2（河源）- cn-heyuan
+  * 华南3（广州）- cn-guangzhou
+  * 西南1（成都）- cn-chengdu
+
+* 香港及海外区域
+  * 香港 - cn-hongkong
+  * 美国（硅谷）- us-west-1
+  * 美国（弗吉尼亚）- us-east-1
+  * 日本（东京）- ap-northeast-1
+  * 韩国（首尔）- ap-northeast-2
+  * 新加坡 - ap-southeast-1
+  * 澳大利亚（悉尼）- ap-southeast-2
+  * 马来西亚（吉隆坡）- ap-southeast-3
+  * 印度尼西亚（雅加达）- ap-southeast-5
+  * 菲律宾（马尼拉）- ap-southeast-6
+  * 泰国（曼谷）- ap-southeast-7
+  * 印度（孟买）- ap-south-1
+  * 德国（法兰克福）- eu-central-1
+  * 英国（伦敦）- eu-west-1
+  * 阿联酋（迪拜）- me-east-1
+
 ## 性能优化
 
 * 在高并发场景下，建议开启分布式缓存以提高性能

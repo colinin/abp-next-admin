@@ -72,6 +72,57 @@ public class YouProjectModule : AbpModule
   * Type: Optional
   * Format: JSON string
 
+### SMS Service Configuration
+
+```json
+{
+  "Settings": {
+    "Abp.Aliyun.Sms": {
+      "Domain": "dysmsapi.aliyuncs.com", // API endpoint, default is dysmsapi.aliyuncs.com
+      "Version": "2017-05-25", // API version, default is 2017-05-25
+      "ActionName": "SendSms", // API method name, default is SendSms
+      "DefaultSignName": "", // Default SMS signature
+      "DefaultTemplateCode": "", // Default SMS template code
+      "DefaultPhoneNumber": "", // Default phone number for receiving SMS
+      "VisableErrorToClient": "false" // Whether to show error messages to client
+    }
+  }
+}
+```
+
+## Available Regions
+
+The module supports the following Alibaba Cloud regions:
+
+* China Regions
+  * North China 1 (Qingdao) - cn-qingdao
+  * North China 2 (Beijing) - cn-beijing
+  * North China 3 (Zhangjiakou) - cn-zhangjiakou
+  * North China 5 (Hohhot) - cn-huhehaote
+  * East China 1 (Hangzhou) - cn-hangzhou
+  * East China 2 (Shanghai) - cn-shanghai
+  * South China 1 (Shenzhen) - cn-shenzhen
+  * South China 2 (Heyuan) - cn-heyuan
+  * South China 3 (Guangzhou) - cn-guangzhou
+  * Southwest 1 (Chengdu) - cn-chengdu
+
+* Hong Kong and International Regions
+  * Hong Kong - cn-hongkong
+  * US (Silicon Valley) - us-west-1
+  * US (Virginia) - us-east-1
+  * Japan (Tokyo) - ap-northeast-1
+  * South Korea (Seoul) - ap-northeast-2
+  * Singapore - ap-southeast-1
+  * Australia (Sydney) - ap-southeast-2
+  * Malaysia (Kuala Lumpur) - ap-southeast-3
+  * Indonesia (Jakarta) - ap-southeast-5
+  * Philippines (Manila) - ap-southeast-6
+  * Thailand (Bangkok) - ap-southeast-7
+  * India (Mumbai) - ap-south-1
+  * Germany (Frankfurt) - eu-central-1
+  * UK (London) - eu-west-1
+  * UAE (Dubai) - me-east-1
+
 ## Performance Optimization
 
 * In high concurrency scenarios, it is recommended to enable distributed caching to improve performance
