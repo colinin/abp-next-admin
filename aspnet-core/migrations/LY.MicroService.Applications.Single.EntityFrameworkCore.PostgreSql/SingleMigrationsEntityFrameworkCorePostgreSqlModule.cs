@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
@@ -8,6 +9,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql;
 
 [DependsOn(
     typeof(AbpEntityFrameworkCorePostgreSqlModule),
+    typeof(AbpElsaEntityFrameworkCorePostgreSqlModule),
     typeof(SingleMigrationsEntityFrameworkCoreModule)
     )]
 public class SingleMigrationsEntityFrameworkCorePostgreSqlModule : AbpModule
