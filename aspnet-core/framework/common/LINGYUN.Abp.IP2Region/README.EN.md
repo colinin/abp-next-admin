@@ -1,25 +1,25 @@
 # LINGYUN.Abp.IP2Region
 
-## 介绍
+## Introduction
 
-`LINGYUN.Abp.IP2Region` 是一个基于IP2Region的ABP框架模块，提供IP地址查询功能。本模块集成了IP2Region.Net库，提供了便捷的IP地址查询服务。
+`LINGYUN.Abp.IP2Region` is an ABP framework module based on IP2Region, providing IP address query functionality. This module integrates the IP2Region.Net library and provides convenient IP address query services.
 
-## 功能
+## Features
 
-* 提供IP地址查询服务
-* 支持多种缓存策略
-* 内置IP数据库文件
-* 支持ABP虚拟文件系统
+* Provides IP address query service
+* Supports multiple caching strategies
+* Built-in IP database file
+* Supports ABP virtual file system
 
-## 安装
+## Installation
 
 ```bash
 dotnet add package LINGYUN.Abp.IP2Region
 ```
 
-## 使用
+## Usage
 
-1. 添加 `[DependsOn(typeof(AbpIP2RegionModule))]` 到你的模块类上。
+1. Add `[DependsOn(typeof(AbpIP2RegionModule))]` to your module class.
 
 ```csharp
 [DependsOn(typeof(AbpIP2RegionModule))]
@@ -29,7 +29,7 @@ public class YourModule : AbpModule
 }
 ```
 
-2. 注入并使用IP查询服务：
+2. Inject and use the IP query service:
 
 ```csharp
 public class YourService
@@ -48,7 +48,7 @@ public class YourService
 }
 ```
 
-## IP2Region.Net 库说明
+## IP2Region.Net Library Description
 
 ### Installation
 
@@ -73,27 +73,20 @@ ISearcher searcher = new Searcher(CachePolicy , "your xdb file path");
 | CachePolicy.Content     | Cache the entire `xdb` data.                                                                               | Yes         |
 | CachePolicy.VectorIndex | Cache `vecotorIndex` to speed up queries and reduce system io pressure by reducing one fixed IO operation. | Yes         |
 | CachePolicy.File        | Completely file-based queries                                                                              | Yes         |
+
 ### XDB File Description
 Generate using [maker](https://github.com/lionsoul2014/ip2region/tree/master/maker/csharp), or [download](https://github.com/lionsoul2014/ip2region/blob/master/data/ip2region.xdb) pre-generated xdb files
-
-## ASP.NET Core Usage
-
-```csharp
-services.AddSingleton<ISearcher>(new Searcher(CachePolicy , "your xdb file path"));
-```
 
 ## Performance
 
 ``` ini
-
 BenchmarkDotNet=v0.13.2, OS=macOS 13.4.1 (c) (22F770820d) [Darwin 22.5.0]
 Apple M1, 1 CPU, 8 logical and 8 physical cores
 .NET SDK=7.0.306
   [Host]     : .NET 6.0.20 (6.0.2023.32017), Arm64 RyuJIT AdvSIMD
   DefaultJob : .NET 6.0.20 (6.0.2023.32017), Arm64 RyuJIT AdvSIMD
-
-
 ```
+
 | Method                  |       Mean |    Error |   StdDev |
 |-------------------------|-----------:|---------:|---------:|
 | CachePolicy_Content     |   155.7 ns |  0.46 ns |  0.39 ns |
@@ -108,6 +101,6 @@ Please make sure to update tests as appropriate.
 ## License
 [Apache License 2.0](https://github.com/lionsoul2014/ip2region/blob/master/LICENSE.md)
 
-## 链接
+## Links
 
-* [English document](./README.EN.md)
+* [中文文档](./README.md)
