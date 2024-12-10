@@ -13,11 +13,13 @@ $projectPath = Resolve-Path (Join-Path $PSScriptRoot "..")
 $dbContexts = @{
     "1" = @{
         Name = "LY.MicroService.Applications.Single.EntityFrameworkCore.MySql"
-        Factory = "SingleMySqlDbContextFactory"
+        Context = "SingleMigrationsDbContext"
+        Factory = "SingleMigrationsDbContextFactory"
     }
     "2" = @{
         Name = "LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql"
-        Factory = "SinglePostgreSqlDbContextFactory"
+        Context = "SingleMigrationsDbContext"
+        Factory = "SingleMigrationsDbContextFactory"
     }
 }
 
@@ -76,7 +78,7 @@ function Invoke-DatabaseMigration($dbContext, $migrationName) {
     # 切换到项目目录并执行迁移
     Push-Location $projectPath
     try {
-        dotnet ef migrations add $migrationName --project "migrations/$($dbContext.Name)" --context "$($dbContext.Name)DbContext"
+        dotnet ef migrations add $migrationName --project "migrations/$($dbContext.Name)" --context "$($dbContext.Context)"
     }
     finally {
         Pop-Location
@@ -87,7 +89,7 @@ function Invoke-DatabaseMigration($dbContext, $migrationName) {
 function Get-AllMigrations($dbContext) {
     Push-Location $projectPath
     try {
-        $migrations = @(dotnet ef migrations list --project "migrations/$($dbContext.Name)" --context "$($dbContext.Name)DbContext")
+        $migrations = @(dotnet ef migrations list --project "migrations/$($dbContext.Name)" --context "$($dbContext.Context)")
         return $migrations | Where-Object { $_ -match '\S' } # 过滤空行
     }
     finally {
@@ -170,10 +172,10 @@ function Export-SqlScript($dbContext, $migrationName) {
         Push-Location $projectPath
         try {
             if ($fromMigration) {
-                dotnet ef migrations script $fromMigration --project "migrations/$($dbContext.Name)" --context "$($dbContext.Name)DbContext" --output $sqlFilePath
+                dotnet ef migrations script $fromMigration --project "migrations/$($dbContext.Name)" --context "$($dbContext.Context)" --output $sqlFilePath
             }
             else {
-                dotnet ef migrations script --project "migrations/$($dbContext.Name)" --context "$($dbContext.Name)DbContext" --output $sqlFilePath
+                dotnet ef migrations script --project "migrations/$($dbContext.Name)" --context "$($dbContext.Context)" --output $sqlFilePath
             }
         }
         finally {
