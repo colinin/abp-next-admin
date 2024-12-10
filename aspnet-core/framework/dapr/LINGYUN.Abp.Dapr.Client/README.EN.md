@@ -1,79 +1,79 @@
-[Actors](../README.md) | Dapr.Client 文档
+[Actors](../README.md) | Dapr.Client Documentation
 
 # LINGYUN.Abp.Dapr.Client
 
-实现了Dapr文档中的服务间调用，项目设计与Volo.Abp.Http.Client一致，通过配置文件即可无缝替代Volo.Abp.Http.Client。
+Implements service-to-service invocation as described in the Dapr documentation. The project design is consistent with Volo.Abp.Http.Client and can seamlessly replace Volo.Abp.Http.Client through configuration.
 
-配置参考 [AbpRemoteServiceOptions](https://docs.abp.io/zh-Hans/abp/latest/API/Dynamic-CSharp-API-Clients#abpremoteserviceoptions)
+For configuration reference, see [AbpRemoteServiceOptions](https://docs.abp.io/en/abp/latest/API/Dynamic-CSharp-API-Clients#abpremoteserviceoptions)
 
-## 功能特性
+## Features
 
-* 与ABP远程服务系统集成
-* 支持动态代理生成
-* 支持服务发现和负载均衡
-* 支持自定义请求和响应处理
-* 支持错误处理和格式化
-* 支持多服务端点配置
-* 支持请求/响应拦截器
-* 支持自定义DaprClient行为
+* Integration with ABP remote service system
+* Dynamic proxy generation
+* Service discovery and load balancing
+* Custom request and response handling
+* Error handling and formatting
+* Multiple service endpoint configuration
+* Request/response interceptors
+* Custom DaprClient behavior support
 
-## 配置选项
+## Configuration Options
 
 ```json
 {
     "RemoteServices": {
         "Default": {
-            "AppId": "default-app",  // Dapr应用ID
-            "BaseUrl": "http://localhost:3500",  // Dapr HTTP端点
-            "HealthCheckUrl": "/health",  // 健康检查端点
-            "RequestTimeout": 30000,  // 请求超时时间（毫秒）
-            "RetryCount": 3,  // 重试次数
-            "RetryWaitTime": 1000  // 重试等待时间（毫秒）
+            "AppId": "default-app",  // Dapr application ID
+            "BaseUrl": "http://localhost:3500",  // Dapr HTTP endpoint
+            "HealthCheckUrl": "/health",  // Health check endpoint
+            "RequestTimeout": 30000,  // Request timeout in milliseconds
+            "RetryCount": 3,  // Number of retry attempts
+            "RetryWaitTime": 1000  // Retry wait time in milliseconds
         },
         "System": {
             "AppId": "system-app",
             "BaseUrl": "http://localhost:50000",
-            "Headers": {  // 自定义请求头
+            "Headers": {  // Custom request headers
                 "Tenant": "Default",
-                "Culture": "zh-Hans"
+                "Culture": "en-US"
             }
         }
     }
 }
 ```
 
-## 配置使用
+## Basic Usage
 
-模块按需引用：
+Module reference as needed:
 
 ```csharp
 [DependsOn(typeof(AbpDaprClientModule))]
-public class YouProjectModule : AbpModule
+public class YourProjectModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        // 注册代理，类似于 Volo.Abp.Http.Client 模块
+        // Register proxies similar to Volo.Abp.Http.Client module
         context.Services.AddDaprClientProxies(
-            typeof(YouProjectInterfaceModule).Assembly, // 搜索模块下的远程服务定义
+            typeof(YourProjectInterfaceModule).Assembly, // Search for remote service definitions
             RemoteServiceName
         );
 
-        // 配置代理选项
+        // Configure proxy options
         Configure<AbpDaprClientProxyOptions>(options =>
         {
-            // 配置请求拦截器
+            // Configure request interceptor
             options.ProxyRequestActions.Add((appId, request) =>
             {
                 request.Headers.Add("Custom-Header", "Value");
             });
 
-            // 配置响应处理
+            // Configure response handling
             options.OnResponse(async (response, serviceProvider) =>
             {
                 return await response.Content.ReadAsStringAsync();
             });
 
-            // 配置错误处理
+            // Configure error handling
             options.OnError(async (response, serviceProvider) =>
             {
                 var error = await response.Content.ReadAsStringAsync();
@@ -88,12 +88,12 @@ public class YouProjectModule : AbpModule
 }
 ```
 
-## 实现示例
+## Implementation Example
 
-### 1. 接口定义
+### 1. Interface Definition
 
 ```csharp
-// IApplicationService 实现了 IRemoteService
+// IApplicationService implements IRemoteService
 public interface ISystemAppService : IApplicationService
 {
     Task<string> GetAsync();
@@ -107,7 +107,7 @@ public class SystemInterfaceModule : AbpModule
 }
 ```
 
-### 2. 服务端实现
+### 2. Server Implementation
 
 ```csharp
 [DependsOn(
@@ -164,7 +164,7 @@ public class SystemAppService : ApplicationService, ISystemAppService
 }
 ```
 
-### 3. 客户端使用
+### 3. Client Usage
 
 ```csharp
 [DependsOn(typeof(AbpDaprClientModule))]
@@ -174,13 +174,13 @@ public class SystemClientModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        // 注册代理
+        // Register proxies
         context.Services.AddDaprClientProxies(
             typeof(SystemInterfaceModule).Assembly,
             RemoteServiceName
         );
 
-        // 配置重试策略
+        // Configure retry policy
         context.Services.AddDaprClientBuilder(builder =>
         {
             builder.ConfigureHttpClient((sp, client) =>
@@ -208,7 +208,7 @@ public class SystemService
         }
         catch (AbpRemoteCallException ex)
         {
-            // 处理远程调用异常
+            // Handle remote call exception
             _logger.LogError(ex, "Failed to get systems");
             throw;
         }
@@ -216,9 +216,9 @@ public class SystemService
 }
 ```
 
-## 高级用法
+## Advanced Usage
 
-### 1. 自定义请求处理
+### 1. Custom Request Handling
 
 ```csharp
 public class CustomRequestHandler
@@ -230,7 +230,7 @@ public class CustomRequestHandler
     }
 }
 
-// 在模块中注册
+// Register in module
 Configure<AbpDaprClientProxyOptions>(options =>
 {
     options.ProxyRequestActions.Add((appId, request) =>
@@ -240,7 +240,7 @@ Configure<AbpDaprClientProxyOptions>(options =>
 });
 ```
 
-### 2. 自定义响应处理
+### 2. Custom Response Handling
 
 ```csharp
 public class CustomResponseHandler
@@ -248,12 +248,12 @@ public class CustomResponseHandler
     public async Task<string> HandleAsync(HttpResponseMessage response)
     {
         var content = await response.Content.ReadAsStringAsync();
-        // 自定义响应处理逻辑
+        // Custom response handling logic
         return content;
     }
 }
 
-// 在模块中注册
+// Register in module
 Configure<AbpDaprClientProxyOptions>(options =>
 {
     options.OnResponse(async (response, sp) =>
@@ -263,15 +263,15 @@ Configure<AbpDaprClientProxyOptions>(options =>
 });
 ```
 
-## 注意事项
+## Important Notes
 
-* 远程服务接口必须继承`IRemoteService`
-* 配置更改需要重新创建代理实例才能生效
-* 建议配置适当的超时和重试策略
-* 错误处理应该考虑网络异常和服务不可用的情况
-* 在生产环境中应该启用服务发现
-* 建议使用健康检查确保服务可用性
-* 请求头配置应考虑安全性和身份验证需求
-* 日志记录对于问题诊断很重要
+* Remote service interfaces must inherit `IRemoteService`
+* Configuration changes require recreating proxy instances
+* Configure appropriate timeout and retry policies
+* Error handling should consider network exceptions and service unavailability
+* Enable service discovery in production environments
+* Use health checks to ensure service availability
+* Request header configuration should consider security and authentication requirements
+* Logging is important for problem diagnosis
 
-[查看英文](README.EN.md)
+[查看中文](README.md)

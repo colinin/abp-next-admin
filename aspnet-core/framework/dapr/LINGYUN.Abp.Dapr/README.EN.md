@@ -1,36 +1,36 @@
 # LINGYUN.Abp.Dapr
 
-Dapr 集成基础模块, 实现dapr文档中的命名单例DaprClient
+Dapr integration base module, implementing the named singleton DaprClient as described in the Dapr documentation.
 
 See: https://docs.dapr.io/developing-applications/sdks/dotnet/dotnet-client/dotnet-daprclient-usage
 
-## 功能特性
+## Features
 
-* 支持创建默认和具名DaprClient实例
-* 支持配置HTTP和gRPC端点
-* 支持自定义JSON序列化选项
-* 支持Dapr API Token认证
-* 支持gRPC通道配置
-* 支持DaprClient实例配置和构建配置的扩展
-* 支持多个Dapr Sidecar连接
-* 支持自定义DaprClient行为
+* Support for creating default and named DaprClient instances
+* Support for configuring HTTP and gRPC endpoints
+* Support for custom JSON serialization options
+* Support for Dapr API Token authentication
+* Support for gRPC channel configuration
+* Support for DaprClient instance configuration and builder configuration extensions
+* Support for multiple Dapr Sidecar connections
+* Support for custom DaprClient behaviors
 
-## 配置选项
+## Configuration Options
 
 ```json
 {
   "Dapr": {
     "Client": {
-      "DaprApiToken": "your-api-token",  // 可选，Dapr API Token
-      "HttpEndpoint": "http://localhost:3500",  // 可选，HTTP端点
-      "GrpcEndpoint": "http://localhost:50001",  // 可选，gRPC端点
-      "JsonSerializerOptions": {  // 可选，JSON序列化选项
+      "DaprApiToken": "your-api-token",  // Optional, Dapr API Token
+      "HttpEndpoint": "http://localhost:3500",  // Optional, HTTP endpoint
+      "GrpcEndpoint": "http://localhost:50001",  // Optional, gRPC endpoint
+      "JsonSerializerOptions": {  // Optional, JSON serialization options
         "PropertyNamingPolicy": "CamelCase",
         "PropertyNameCaseInsensitive": true,
         "WriteIndented": true,
         "DefaultIgnoreCondition": "WhenWritingNull"
       },
-      "GrpcChannelOptions": {  // 可选，gRPC通道选项
+      "GrpcChannelOptions": {  // Optional, gRPC channel options
         "Credentials": "Insecure",
         "MaxReceiveMessageSize": 1048576,
         "MaxSendMessageSize": 1048576
@@ -40,9 +40,9 @@ See: https://docs.dapr.io/developing-applications/sdks/dotnet/dotnet-client/dotn
 }
 ```
 
-## 配置使用
+## Basic Usage
 
-模块按需引用：
+Module reference as needed:
 
 ```csharp
 [DependsOn(typeof(AbpDaprModule))]
@@ -50,62 +50,62 @@ public class YouProjectModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        // 创建一个DaprClient
+        // Create a DaprClient
         context.Services.AddDaprClient();
 
-        // 创建一个具名DaprClient
+        // Create a named DaprClient
         context.Services.AddDaprClient("__DaprClient");
         
-        // 配置DaprClient选项
+        // Configure DaprClient options
         Configure<DaprClientFactoryOptions>(options =>
         {
             options.HttpEndpoint = "http://localhost:3500";
             options.GrpcEndpoint = "http://localhost:50001";
             options.DaprApiToken = "your-api-token";
             
-            // 添加DaprClient配置动作
+            // Add DaprClient configuration actions
             options.DaprClientActions.Add(client =>
             {
-                // 配置DaprClient实例
+                // Configure DaprClient instance
             });
             
-            // 添加DaprClientBuilder配置动作
+            // Add DaprClientBuilder configuration actions
             options.DaprClientBuilderActions.Add(builder =>
             {
-                // 配置DaprClientBuilder
+                // Configure DaprClientBuilder
             });
         });
     }
 }
 ```
 
-## 高级用法
+## Advanced Usage
 
-### 1. 配置DaprClient
+### 1. Configure DaprClient
 
 ```csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    // 配置具名DaprClient
+    // Configure named DaprClient
     context.Services.AddDaprClient("CustomClient", builder =>
     {
-        // 配置HTTP端点
+        // Configure HTTP endpoint
         builder.UseHttpEndpoint("http://localhost:3500");
         
-        // 配置gRPC端点
+        // Configure gRPC endpoint
         builder.UseGrpcEndpoint("http://localhost:50001");
         
-        // 配置API Token
+        // Configure API Token
         builder.UseDaprApiToken("your-api-token");
         
-        // 配置JSON序列化选项
+        // Configure JSON serialization options
         builder.UseJsonSerializerOptions(new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = true
         });
         
-        // 配置gRPC通道选项
+        // Configure gRPC channel options
         builder.UseGrpcChannelOptions(new GrpcChannelOptions
         {
             MaxReceiveMessageSize = 1024 * 1024,
@@ -115,7 +115,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-### 2. 使用DaprClient
+### 2. Using DaprClient
 
 ```csharp
 public class YourService
@@ -129,55 +129,55 @@ public class YourService
 
     public async Task InvokeMethodAsync()
     {
-        // 使用默认客户端
+        // Use default client
         var defaultClient = _daprClientFactory.CreateClient();
         
-        // 使用具名客户端
+        // Use named client
         var namedClient = _daprClientFactory.CreateClient("CustomClient");
         
-        // 调用服务方法
+        // Invoke service method
         var response = await defaultClient.InvokeMethodAsync<OrderDto>(
             HttpMethod.Get,
-            "order-service",  // 目标服务ID
-            "api/orders/1",   // 方法路径
-            new { id = 1 }    // 请求参数
+            "order-service",  // Target service ID
+            "api/orders/1",   // Method path
+            new { id = 1 }    // Request parameters
         );
         
-        // 发布事件
+        // Publish event
         await defaultClient.PublishEventAsync(
-            "pubsub",         // Pub/sub组件名称
-            "order-created",  // 主题名称
-            response         // 事件数据
+            "pubsub",         // Pub/sub component name
+            "order-created",  // Topic name
+            response         // Event data
         );
         
-        // 保存状态
+        // Save state
         await defaultClient.SaveStateAsync(
-            "statestore",    // 状态存储组件名称
-            "order-1",       // 键
-            response        // 值
+            "statestore",    // State store component name
+            "order-1",       // Key
+            response        // Value
         );
         
-        // 获取状态
+        // Get state
         var state = await defaultClient.GetStateAsync<OrderDto>(
-            "statestore",    // 状态存储组件名称
-            "order-1"       // 键
+            "statestore",    // State store component name
+            "order-1"       // Key
         );
     }
 }
 ```
 
-### 3. 自定义DaprClient行为
+### 3. Custom DaprClient Behavior
 
 ```csharp
 public class CustomDaprClientBehavior
 {
     public void Configure(DaprClient client)
     {
-        // 配置自定义行为
+        // Configure custom behavior
     }
 }
 
-// 在模块中注册
+// Register in module
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
     Configure<DaprClientFactoryOptions>(options =>
@@ -190,15 +190,15 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-## 注意事项
+## Important Notes
 
-* DaprClient实例是线程安全的，建议使用单例模式
-* 具名DaprClient可以有不同的配置，适用于需要连接不同Dapr Sidecar的场景
-* 配置更改后需要重新创建DaprClient实例才能生效
-* gRPC通道配置需要注意性能和资源消耗
-* JSON序列化选项会影响所有使用该DaprClient的请求
-* API Token应该通过安全的配置管理系统管理
-* 建议为不同的微服务使用不同的具名DaprClient
-* 在生产环境中应该适当配置超时和重试策略
+* DaprClient instances are thread-safe, singleton pattern is recommended
+* Named DaprClients can have different configurations, suitable for scenarios requiring connections to different Dapr Sidecars
+* Configuration changes require recreating the DaprClient instance to take effect
+* Pay attention to performance and resource consumption when configuring gRPC channels
+* JSON serialization options affect all requests using that DaprClient
+* API Tokens should be managed through secure configuration management systems
+* Recommended to use different named DaprClients for different microservices
+* Configure appropriate timeout and retry policies in production environments
 
-[查看英文](README.EN.md)
+[查看中文](README.md)
