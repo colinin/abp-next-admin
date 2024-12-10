@@ -1,5 +1,7 @@
 # LINGYUN.Abp.Logging.Serilog.Elasticsearch
 
+简体中文 | [English](./README.EN.md)
+
 ILoggingManager 接口的ES实现, 从ES中检索日志信息  
 
 ## 模块引用
@@ -28,5 +30,3 @@ public class YouProjectModule : AbpModule
     }
   }
 }
-
-```
