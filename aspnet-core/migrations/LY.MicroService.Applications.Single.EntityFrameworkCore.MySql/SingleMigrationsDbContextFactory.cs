@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
@@ -21,11 +21,9 @@ public class SingleMigrationsDbContextFactory : IDesignTimeDbContextFactory<Sing
     private static IConfigurationRoot BuildConfiguration()
     {
         var builder = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../LY.MicroService.Applications.Single.DbMigrator/"))
+            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(),
+                "../LY.MicroService.Applications.Single.DbMigrator/"))
             .AddJsonFile("appsettings.json", optional: false)
-#if MYSQL
-            .AddJsonFile("appsettings.MySql.json", optional: false)
-#endif
             .AddJsonFile("appsettings.Development.json", optional: true);
 
         return builder.Build();
