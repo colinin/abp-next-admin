@@ -439,6 +439,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.HttpOverrides", "framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj", "{D67EBE62-C541-45E4-957E-D1D11BE74F68}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "single-project", "single-project", "{0D69B63D-F082-4D57-9FF0-355642C56993}"
+	ProjectSection(SolutionItems) = preProject
+		migrations\Migrate.ps1 = migrations\Migrate.ps1
+		migrations\MigrateEn.ps1 = migrations\MigrateEn.ps1
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.Applications.Single.EntityFrameworkCore", "migrations\LY.MicroService.Applications.Single.EntityFrameworkCore\LY.MicroService.Applications.Single.EntityFrameworkCore.csproj", "{7623D363-F0BD-400C-B8AB-3FD9699D92D9}"
 EndProject
