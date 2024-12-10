@@ -316,14 +316,18 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAccountTemplatesModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpCachingStackExchangeRedisModule),
-
+    
+#if POSTGRESQL
+    // typeof(AbpElsaModule),
+    // typeof(AbpElsaServerModule),
+    // typeof(AbpElsaActivitiesModule),
+    // typeof(AbpElsaEntityFrameworkCoreModule),
+    // typeof(AbpElsaEntityFrameworkCorePostgreSqlModule),
+#else
     typeof(AbpElsaModule),
     typeof(AbpElsaServerModule),
     typeof(AbpElsaActivitiesModule),
     typeof(AbpElsaEntityFrameworkCoreModule),
-#if POSTGRESQL
-    typeof(AbpElsaEntityFrameworkCorePostgreSqlModule),
-#else
     typeof(AbpElsaEntityFrameworkCoreMySqlModule),
 #endif
 
