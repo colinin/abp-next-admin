@@ -1,27 +1,27 @@
-# LINGYUN.Abp.OssManagement.ImageSharp
+# LINGYUN.Abp.OssManagement.Imaging
 
-oss对象ImageSharp图形处理接口 
-
-## 配置使用
-
-模块按需引用
-
-```csharp
-[DependsOn(typeof(AbpOssManagementFileSystemImageSharpModule))]
-public class YouProjectModule : AbpModule
-{
-  // other
-}
-```
+对象存储管理图像处理模块
 
 ## 功能
 
-* 基于ImageSharp实现OSS对象的图像处理功能
+* 提供对象存储的图像处理基础功能
 * 支持图像格式转换
 * 支持图像缩放和裁剪
 * 支持图像水印添加
 * 支持图像质量调整
 * 支持图像元数据处理
+
+## 配置使用
+
+模块按需引用：
+
+```csharp
+[DependsOn(typeof(AbpOssManagementImagingModule))]
+public class YouProjectModule : AbpModule
+{
+    // other
+}
+```
 
 ## 图像处理功能
 
@@ -40,6 +40,10 @@ public class YouProjectModule : AbpModule
 ```
 http://your-domain/api/oss-management/objects/my-image.jpg?process=image/resize,w_100,h_100/watermark,text_Hello
 ```
+
+## 相关模块
+
+* LINGYUN.Abp.OssManagement.ImageSharp：提供基于ImageSharp的具体实现
 
 ## 链接
 
