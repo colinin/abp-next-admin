@@ -1,36 +1,34 @@
 # LINGYUN.Abp.Notifications.Sms
 
-通知发布提供程序的短信实现
+SMS implementation of notification publishing provider
 
-大部分重写的模块都和官方模块名称保持一致,通过命名空间区分,主要是只改写了一小部分或者增加额外的功能
-如果大部分模块代码都重写,或者完全就是扩展模块,才会定义自己的名字
+Most rewritten modules maintain the same name as the official modules and are distinguished by namespace, mainly because only a small part was rewritten or additional functionality was added.
+If most of the module code is rewritten, or if it's a completely extended module, then it will have its own name.
 
-#### 注意
+#### Note
 
-自定义的发送方法可以通过实现 ##ISmsNotificationSender## 接口或重写 ##SmsNotificationSender## 即可
+Custom sending methods can be implemented by implementing the ##ISmsNotificationSender## interface or overriding ##SmsNotificationSender##
 
-## 功能特性
+## Features
 
-* 短信通知发送
-* 短信模板支持
-* 支持多个短信服务商
-* 支持短信变量替换
-* 支持批量发送
+* SMS notification sending
+* SMS template support
+* Support for multiple SMS service providers
+* Support for SMS variable replacement
+* Support for batch sending
 
-## 配置使用
+## Configuration
 
-* 此配置项将在下一个短信相关大版本移除
+* This configuration item will be removed in the next major SMS-related version
 
 ```json
-
 {
   "Notifications": {
     "Sms": {
-      "TemplateParamsPrefix": "短信模板变量前缀"
+      "TemplateParamsPrefix": "SMS template variable prefix"
     }
   }
 }
-
 ```
 
 ```csharp
@@ -39,10 +37,11 @@ public class YouProjectModule : AbpModule
 {
   // other
 }
+```
 
-## 基本用法
+## Basic Usage
 
-1. 实现短信发送接口
+1. Implement SMS sending interface
 ```csharp
 public class YourSmsNotificationSender : SmsNotificationSender
 {
@@ -58,15 +57,15 @@ public class YourSmsNotificationSender : SmsNotificationSender
 }
 ```
 
-2. 注册短信发送服务
+2. Register SMS sending service
 ```csharp
 Configure<AbpNotificationsSmsOptions>(options =>
 {
-    options.TemplateParamsPrefix = "sms_"; // 短信模板变量前缀
+    options.TemplateParamsPrefix = "sms_"; // SMS template variable prefix
 });
 ```
 
-3. 发送短信通知
+3. Send SMS notification
 ```csharp
 public class YourService
 {
@@ -83,7 +82,7 @@ public class YourService
             "YourNotification",
             new NotificationData
             {
-                // 短信模板参数
+                // SMS template parameters
                 ["sms_code"] = "123456",
                 ["sms_time"] = "5"
             },
@@ -93,7 +92,7 @@ public class YourService
 }
 ```
 
-## 更多信息
+## More Information
 
-* [ABP文档](https://docs.abp.io)
-* [短信服务文档](https://docs.abp.io/en/abp/latest/SMS-Sending)
+* [ABP Documentation](https://docs.abp.io)
+* [SMS Service Documentation](https://docs.abp.io/en/abp/latest/SMS-Sending)
