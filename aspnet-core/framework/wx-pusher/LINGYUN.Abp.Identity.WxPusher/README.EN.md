@@ -1,23 +1,23 @@
 # LINGYUN.Abp.Identity.WxPusher
 
-IWxPusherUserStore 接口的Identity模块实现, 通过用户Claims来获取关注的topic列表  
+Implementation of the IWxPusherUserStore interface for the Identity module, retrieving subscribed topic lists through user Claims.
 
-[English](./README.EN.md)
+[简体中文](./README.md)
 
-## 功能特性
+## Features
 
-* 集成WxPusher用户存储接口
-* 通过用户Claims管理WxPusher的UID和Topic
-* 支持批量获取用户绑定的UID
-* 支持批量获取用户订阅的Topic
+* Integration with WxPusher user storage interface
+* Manage WxPusher UID and Topic through user Claims
+* Support batch retrieval of user-bound UIDs
+* Support batch retrieval of user-subscribed Topics
 
-## 安装
+## Installation
 
 ```bash
 dotnet add package LINGYUN.Abp.Identity.WxPusher
 ```
 
-## 模块引用
+## Module Reference
 
 ```csharp
 [DependsOn(typeof(AbpIdentityWxPusherModule))]
@@ -27,14 +27,14 @@ public class YouProjectModule : AbpModule
 }
 ```
 
-## 使用方式
+## Usage
 
-该模块实现了 `IWxPusherUserStore` 接口，通过用户Claims存储WxPusher相关信息：
+This module implements the `IWxPusherUserStore` interface, storing WxPusher-related information through user Claims:
 
-* `AbpWxPusherClaimTypes.Uid`: 存储用户绑定的WxPusher UID
-* `AbpWxPusherClaimTypes.Topic`: 存储用户订阅的Topic ID
+* `AbpWxPusherClaimTypes.Uid`: Stores the WxPusher UID bound to the user
+* `AbpWxPusherClaimTypes.Topic`: Stores the Topic ID subscribed by the user
 
-### 获取用户绑定的UID
+### Get User-Bound UIDs
 
 ```csharp
 public class YourService
@@ -49,12 +49,12 @@ public class YourService
     public async Task DoSomethingAsync(IEnumerable<Guid> userIds)
     {
         var uids = await _wxPusherUserStore.GetBindUidsAsync(userIds);
-        // 使用获取到的uids进行消息推送等操作
+        // Use the retrieved uids for message pushing or other operations
     }
 }
 ```
 
-### 获取用户订阅的Topic
+### Get User-Subscribed Topics
 
 ```csharp
 public class YourService
@@ -69,11 +69,11 @@ public class YourService
     public async Task DoSomethingAsync(IEnumerable<Guid> userIds)
     {
         var topics = await _wxPusherUserStore.GetSubscribeTopicsAsync(userIds);
-        // 使用获取到的topics进行消息推送等操作
+        // Use the retrieved topics for message pushing or other operations
     }
 }
 ```
 
-## 源码位置
+## Source Code
 
 [LINGYUN.Abp.Identity.WxPusher](https://github.com/colinin/abp-next-admin/tree/master/aspnet-core/framework/wx-pusher/LINGYUN.Abp.Identity.WxPusher)
