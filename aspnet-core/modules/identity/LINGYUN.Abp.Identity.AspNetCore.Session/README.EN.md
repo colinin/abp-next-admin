@@ -1,10 +1,10 @@
 # LINGYUN.Abp.Identity.AspNetCore.Session
 
-用户会话登录扩展模块,主要处理 *AspNetCore.Identity* 提供的登录/登出事件来管理会话   
+User session login extension module, mainly handling login/logout events provided by *AspNetCore.Identity* to manage sessions.
 
-出于模块职责分离原则, 请勿与 *LINGYUN.Abp.Identity.Session.AspNetCore* 模块混淆  
+Due to module responsibility separation principle, please do not confuse with *LINGYUN.Abp.Identity.Session.AspNetCore* module.
 
-## 配置使用
+## Configuration Usage
 
 ```csharp
 [DependsOn(typeof(AbpIdentityAspNetCoreSessionModule))]
@@ -14,23 +14,23 @@ public class YouProjectModule : AbpModule
 }
 ```
 
-## 功能特性
+## Features
 
-* 扩展AbpIdentityAspNetCoreModule模块
-* 提供AspNetCore环境下的会话管理功能
-* 自定义身份认证服务实现
-* 集成AspNetCore.Identity的登录/登出事件
+* Extends AbpIdentityAspNetCoreModule module
+* Provides session management functionality in AspNetCore environment
+* Custom authentication service implementation
+* Integrates with AspNetCore.Identity login/logout events
 
-## 服务实现
+## Service Implementation
 
-* AbpIdentitySessionAuthenticationService - 自定义身份认证服务
-  * 处理用户登录/登出事件
-  * 管理用户会话状态
-  * 与Identity会话系统集成
+* AbpIdentitySessionAuthenticationService - Custom authentication service
+  * Handles user login/logout events
+  * Manages user session state
+  * Integrates with Identity session system
 
-## 基本用法
+## Basic Usage
 
-1. 配置身份认证服务
+1. Configure authentication service
 ```csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
@@ -38,7 +38,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-2. 使用身份认证服务
+2. Use authentication service
 ```csharp
 public class YourService
 {
@@ -61,7 +61,7 @@ public class YourService
 }
 ```
 
-## 更多信息
+## More Information
 
-* [ABP身份认证文档](https://docs.abp.io/en/abp/latest/Identity)
-* [ASP.NET Core Identity文档](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity)
+* [ABP Identity Documentation](https://docs.abp.io/en/abp/latest/Identity)
+* [ASP.NET Core Identity Documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity)
