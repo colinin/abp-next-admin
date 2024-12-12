@@ -570,13 +570,10 @@ public partial class MicroServiceApplicationsSingleModule
     {
         Configure<AbpDbContextOptions>(options =>
         {
-            
-#if POSTGRESQL
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);//解决PostgreSql设置为utc时间后无法写入local时区的问题
             options.UseNpgsql();
-#else
-            options.UseMySQL();
-#endif
+            
+            // options.UseMySQL();
         });
     }
 
