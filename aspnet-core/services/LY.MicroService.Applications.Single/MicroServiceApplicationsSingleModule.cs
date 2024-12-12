@@ -29,13 +29,10 @@ using LINGYUN.Abp.Demo.EntityFrameworkCore;
 using LINGYUN.Abp.Elsa;
 using LINGYUN.Abp.Elsa.Activities;
 using LINGYUN.Abp.Elsa.EntityFrameworkCore;
-#if POSTGRESQL
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql;
-#else
-using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
-using Volo.Abp.EntityFrameworkCore.MySQL;
-#endif
+// using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
+// using Volo.Abp.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Exporter.MiniExcel;
@@ -113,7 +110,6 @@ using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
 using LINGYUN.Platform.Settings.VueVbenAdmin;
 using LINGYUN.Platform.Theme.VueVbenAdmin;
-using LY.MicroService.Applications.Single.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -242,12 +238,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
 
-    typeof(SingleMigrationsEntityFrameworkCoreModule),
-#if POSTGRESQL
     typeof(AbpEntityFrameworkCorePostgreSqlModule),
-#else
-    typeof(AbpEntityFrameworkCoreMySQLModule),
-#endif
+    // typeof(AbpEntityFrameworkCoreMySQLModule),
 
     typeof(AbpAliyunSmsModule),
     typeof(AbpAliyunSettingManagementModule),
@@ -316,20 +308,16 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAccountTemplatesModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpCachingStackExchangeRedisModule),
-    
-#if POSTGRESQL
     // typeof(AbpElsaModule),
     // typeof(AbpElsaServerModule),
     // typeof(AbpElsaActivitiesModule),
     // typeof(AbpElsaEntityFrameworkCoreModule),
     // typeof(AbpElsaEntityFrameworkCorePostgreSqlModule),
-#else
-    typeof(AbpElsaModule),
-    typeof(AbpElsaServerModule),
-    typeof(AbpElsaActivitiesModule),
-    typeof(AbpElsaEntityFrameworkCoreModule),
-    typeof(AbpElsaEntityFrameworkCoreMySqlModule),
-#endif
+    // typeof(AbpElsaModule),
+    // typeof(AbpElsaServerModule),
+    // typeof(AbpElsaActivitiesModule),
+    // typeof(AbpElsaEntityFrameworkCoreModule),
+    // typeof(AbpElsaEntityFrameworkCoreMySqlModule),
 
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
