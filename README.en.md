@@ -10,6 +10,19 @@ This is a [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) -based Abp 
 
 [![Build](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml/badge.svg)](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml)
 
+## Deployment Options
+
+### Monolithic Service Deployment
+
+If you don't need a microservices architecture, you can choose the monolithic service deployment option. Monolithic services are characterized by simple deployment and easy maintenance.
+
+- [Monolithic Service Startup Guide](./docs/startup-aio-readme.en.md)
+- [单体服务启动说明](./docs/startup-aio-readme.md)
+
+### Microservices Deployment
+
+If you need higher scalability and a more flexible service architecture, you can choose the microservices deployment option.
+
 ## Quick Start
 
 ### 0、Configurate hosts

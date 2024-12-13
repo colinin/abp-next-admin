@@ -1,4 +1,3 @@
-
 [English](./README.en.md) | 简体中文
 
 [更新说明](./RELEASE.md) 更新说明
@@ -11,6 +10,18 @@
 
 [![Build](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml/badge.svg)](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml)
 
+## 部署方案
+
+### 单体服务部署
+
+如果您不需要微服务架构，可以选择单体服务部署方案。单体服务具有部署简单、维护方便的特点。
+
+- [单体服务启动说明](./docs/startup-aio-readme.md)
+- [Monolithic Service Startup Guide](./docs/startup-aio-readme.en.md)
+
+### 微服务部署
+
+如果您需要更高的可扩展性和更灵活的服务架构，可以选择微服务部署方案。
 
 ## 快速搭建微服务启动项目
 
