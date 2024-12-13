@@ -428,6 +428,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\NuGet.Config = ..\NuGet.Config
 		..\README.en.md = ..\README.en.md
 		..\README.md = ..\README.md
+		..\docs\startup-aio-readme.md = ..\docs\startup-aio-readme.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{FD9F5933-FDE5-4504-99BF-9050E0435C6D}"
@@ -1288,10 +1289,10 @@ Global
 		{F94E77C1-61E0-4FE8-9ECD-10A0102342E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F94E77C1-61E0-4FE8-9ECD-10A0102342E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F94E77C1-61E0-4FE8-9ECD-10A0102342E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CAEF3248-527D-48B7-9C98-929AC573C381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CAEF3248-527D-48B7-9C98-929AC573C381}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAEF3248-527D-48B7-9C98-929AC573C381}.Release|Any CPU.ActiveCfg = Release|Any CPU
