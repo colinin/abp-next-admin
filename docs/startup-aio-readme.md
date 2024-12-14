@@ -69,7 +69,7 @@ docker run -d --name mysql \
 CREATE DATABASE `Platform-V70`;
 ```
 
-##### SQL Server（即将支持）
+##### SQL Server
 
 ```shell
 # 使用Docker启动SQL Server
@@ -109,7 +109,7 @@ MySQL:
 }
 ```
 
-SQL Server（即将支持）:
+SQL Server:
 
 ```json
 {

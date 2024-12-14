@@ -21,6 +21,11 @@ $dbContexts = @{
         Context = "SingleMigrationsDbContext"
         Factory = "SingleMigrationsDbContextFactory"
     }
+    “3” = @{
+        Name = "LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer"
+        Context = "SingleMigrationsDbContext"
+        Factory = "SingleMigrationsDbContextFactory"
+    }
 }
 
 # 显示DbContext选择菜单
