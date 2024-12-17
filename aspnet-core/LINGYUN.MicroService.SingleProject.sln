@@ -617,6 +617,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.Application
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer", "migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.csproj", "{30EEF879-CFF7-4661-89CB-9CB68328D008}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.AIO.Applications.Single", "services\LY.AIO.Applications.Single\LY.AIO.Applications.Single.csproj", "{37740138-D088-46F5-83A8-8A8180FE65D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1619,6 +1621,10 @@ Global
 		{30EEF879-CFF7-4661-89CB-9CB68328D008}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30EEF879-CFF7-4661-89CB-9CB68328D008}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30EEF879-CFF7-4661-89CB-9CB68328D008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37740138-D088-46F5-83A8-8A8180FE65D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37740138-D088-46F5-83A8-8A8180FE65D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37740138-D088-46F5-83A8-8A8180FE65D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37740138-D088-46F5-83A8-8A8180FE65D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1916,6 +1922,7 @@ Global
 		{5A07FFDF-F979-44F9-BE24-81D6A25BEADB} = {0D69B63D-F082-4D57-9FF0-355642C56993}
 		{2B167D92-2327-4679-9096-49F274FABE0C} = {0D69B63D-F082-4D57-9FF0-355642C56993}
 		{30EEF879-CFF7-4661-89CB-9CB68328D008} = {0D69B63D-F082-4D57-9FF0-355642C56993}
+		{37740138-D088-46F5-83A8-8A8180FE65D8} = {B4247B78-34BC-4A3F-91A4-661F7DCD6E10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {711A43C0-A2F8-4E5C-9B9F-F2551E4B3FF1}
