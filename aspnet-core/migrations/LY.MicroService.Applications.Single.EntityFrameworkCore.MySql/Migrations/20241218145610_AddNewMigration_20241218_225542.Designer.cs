@@ -4,6 +4,7 @@ using LY.MicroService.Applications.Single.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migrations
 {
     [DbContext(typeof(SingleMigrationsDbContext))]
-    partial class SingleMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241218145610_AddNewMigration_20241218_225542")]
+    partial class AddNewMigration_20241218_225542
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
