@@ -11,7 +11,6 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/colinin/abp-next-admin</RepositoryUrl>
 		<GeneratePackageOnBuild Condition="$(AssemblyName.StartsWith('LINGYUN'))">true</GeneratePackageOnBuild>
-		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -33,11 +32,6 @@
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<OutputPath>$(SolutionDir)LocalNuget</OutputPath>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PostgreSQL|AnyCPU'">
-		<DefineConstants>POSTGRESQL</DefineConstants>
 		<OutputPath>$(SolutionDir)LocalNuget</OutputPath>
 	</PropertyGroup>
 

@@ -47,19 +47,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="appsettings.Development.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	  </Content>
-<!--	  <Content Include="appsettings.Production.json">-->
-<!--	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>-->
-<!--	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>-->
-<!--	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>-->
-<!--	  </Content>-->
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin\LINGYUN.Abp.UI.Navigation.VueVbenAdmin.csproj" />
 		<ProjectReference Include="..\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.csproj" />
 		<ProjectReference Include="..\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql\LY.MicroService.Applications.Single.EntityFrameworkCore.Mysql.csproj" />
