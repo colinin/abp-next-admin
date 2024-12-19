@@ -1,4 +1,4 @@
-import type { PagedResultDto } from '@abp/core';
+import type { ListResultDto, PagedResultDto } from '@abp/core';
 
 import type {
   GetIdentityClaimTypePagedListInput,
@@ -70,5 +70,16 @@ export function getPagedListApi(
     {
       params: input,
     },
+  );
+}
+
+/**
+ * 获取可用的声明类型列表
+ */
+export function getAssignableClaimsApi(): Promise<
+  ListResultDto<IdentityClaimTypeDto>
+> {
+  return requestClient.get<ListResultDto<IdentityClaimTypeDto>>(
+    `/api/identity/claim-types/actived-list`,
   );
 }

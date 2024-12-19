@@ -6,6 +6,8 @@ import type {
   PagedAndSortedResultRequestDto,
 } from '@abp/core';
 
+import type { IdentityClaimDto } from './claim-types';
+
 /** 用户对象接口 */
 interface IUser {
   /** 邮件地址 */
@@ -25,11 +27,16 @@ interface IUser {
 }
 
 /** 更改密码数据传输对象 */
-interface ChangePasswordInput {
+interface ChangeMyPasswordInput {
   /** 当前密码 */
   currentPassword?: string;
   /** 新密码 */
   newPassword: string;
+}
+
+interface ChangeUserPasswordInput {
+  /** 新密码 */
+  password: string;
 }
 
 /** 用户组织机构数据传输对象 */
@@ -85,9 +92,25 @@ interface GetUserPagedListInput extends PagedAndSortedResultRequestDto {
 type IdentityUserCreateDto = IdentityUserCreateOrUpdateDto;
 type IdentityUserUpdateDto = IdentityUserCreateOrUpdateDto;
 
+interface IdentityUserClaimDto extends IdentityClaimDto {
+  id: string;
+}
+
+interface IdentityUserClaimUpdateDto extends IdentityClaimDto {
+  newClaimValue: string;
+}
+
+type IdentityUserClaimDeleteDto = IdentityClaimDto;
+type IdentityUserClaimCreateDto = IdentityClaimDto;
+
 export type {
-  ChangePasswordInput,
+  ChangeMyPasswordInput,
+  ChangeUserPasswordInput,
   GetUserPagedListInput,
+  IdentityUserClaimCreateDto,
+  IdentityUserClaimDeleteDto,
+  IdentityUserClaimDto,
+  IdentityUserClaimUpdateDto,
   IdentityUserCreateDto,
   IdentityUserDto,
   IdentityUserOrganizationUnitUpdateDto,

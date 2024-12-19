@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
 import type { IdentityUserDto } from '../../types/users';
 
 import { defineEmits, defineOptions, nextTick, ref, toValue } from 'vue';
@@ -6,11 +8,7 @@ import { defineEmits, defineOptions, nextTick, ref, toValue } from 'vue';
 import { useVbenModal, type VbenFormProps } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  useVbenVxeGrid,
-  type VxeGridListeners,
-  type VxeGridProps,
-} from '@abp/ui';
+import { useVbenVxeGrid } from '@abp/ui';
 
 import { getUnaddedUserListApi } from '../../api/organization-units';
 

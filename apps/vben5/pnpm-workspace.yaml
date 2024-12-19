@@ -44,6 +44,7 @@ catalog:
   '@types/eslint': ^9.6.1
   '@types/html-minifier-terser': ^7.0.2
   '@types/jsonwebtoken': ^9.0.7
+  '@types/lodash': ^4.17.13
   '@types/lodash.clonedeep': ^4.5.9
   '@types/node': ^22.10.0
   '@types/nprogress': ^0.2.3
@@ -113,6 +114,7 @@ catalog:
   jsonc-eslint-parser: ^2.4.0
   jsonwebtoken: ^9.0.2
   lint-staged: ^15.2.10
+  lodash: ^4.17.13
   lodash.clonedeep: ^4.5.0
   lucide-vue-next: ^0.461.0
   medium-zoom: ^1.1.0

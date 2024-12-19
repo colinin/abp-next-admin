@@ -14,7 +14,7 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import { Button, Modal } from 'ant-design-vue';
 
 import { addMembers, getUserListApi } from '../../api/organization-units';
-import { removeOrganizationUnit } from '../../api/users';
+import { removeOrganizationUnitApi } from '../../api/users';
 import { OrganizationUnitPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -113,7 +113,7 @@ const onDelete = (row: IdentityUserDto) => {
     ]),
     onOk: () => {
       setLoading(true);
-      return removeOrganizationUnit(row.id, props.selectedKey!)
+      return removeOrganizationUnitApi(row.id, props.selectedKey!)
         .then(onRefresh)
         .finally(() => setLoading(false));
     },

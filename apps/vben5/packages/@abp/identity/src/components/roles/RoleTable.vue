@@ -117,9 +117,7 @@ const handleAdd = () => {
 };
 
 const handleEdit = (row: IdentityRoleDto) => {
-  roleModalApi.setData({
-    values: row,
-  });
+  roleModalApi.setData(row);
   roleModalApi.open();
 };
 
