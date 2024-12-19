@@ -2,12 +2,14 @@ import type { ListResultDto, PagedResultDto } from '@abp/core';
 
 import type { IdentityRoleDto, OrganizationUnitDto } from '../types';
 import type {
+  IdentityClaimCreateDto,
+  IdentityClaimDeleteDto,
+  IdentityClaimDto,
+  IdentityClaimUpdateDto,
+} from '../types/claims';
+import type {
   ChangeUserPasswordInput,
   GetUserPagedListInput,
-  IdentityUserClaimCreateDto,
-  IdentityUserClaimDeleteDto,
-  IdentityUserClaimDto,
-  IdentityUserClaimUpdateDto,
   IdentityUserCreateDto,
   IdentityUserDto,
   IdentityUserUpdateDto,
@@ -158,8 +160,8 @@ export function getRolesApi(
  */
 export function getClaimsApi(
   id: string,
-): Promise<ListResultDto<IdentityUserClaimDto>> {
-  return requestClient.get<ListResultDto<IdentityUserClaimDto>>(
+): Promise<ListResultDto<IdentityClaimDto>> {
+  return requestClient.get<ListResultDto<IdentityClaimDto>>(
     `/api/identity/users/${id}/claims`,
   );
 }
@@ -171,7 +173,7 @@ export function getClaimsApi(
  */
 export function deleteClaimApi(
   id: string,
-  input: IdentityUserClaimDeleteDto,
+  input: IdentityClaimDeleteDto,
 ): Promise<void> {
   return requestClient.delete(`/api/identity/users/${id}/claims`, {
     params: input,
@@ -185,7 +187,7 @@ export function deleteClaimApi(
  */
 export function createClaimApi(
   id: string,
-  input: IdentityUserClaimCreateDto,
+  input: IdentityClaimCreateDto,
 ): Promise<void> {
   return requestClient.post(`/api/identity/users/${id}/claims`, input);
 }
@@ -197,7 +199,7 @@ export function createClaimApi(
  */
 export function updateClaimApi(
   id: string,
-  input: IdentityUserClaimUpdateDto,
+  input: IdentityClaimUpdateDto,
 ): Promise<void> {
   return requestClient.put(`/api/identity/users/${id}/claims`, input);
 }

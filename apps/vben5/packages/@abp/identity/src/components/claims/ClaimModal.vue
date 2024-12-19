@@ -1,22 +1,19 @@
 <script setup lang="ts">
-import type { IdentityUserClaimDto } from '../../types/users';
+import type { IdentityClaimDto } from '../../types/claims';
+import type { ClaimEditModalProps } from './types';
 
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { getAssignableClaimsApi } from '../../api/claim-types';
-import { createClaimApi, updateClaimApi } from '../../api/users';
-
-interface IdentityUserClaimVto extends IdentityUserClaimDto {
-  userId: string;
-}
 
 defineOptions({
-  name: 'UserClaimEditModal',
+  name: 'ClaimModal',
 });
 
+const { createApi, updateApi } = defineProps<ClaimEditModalProps>();
 const emits = defineEmits<{
-  (event: 'change', data: IdentityUserClaimDto): void;
+  (event: 'change', data: IdentityClaimDto): void;
 }>();
 
 const [Form, formApi] = useVbenForm({
@@ -53,20 +50,20 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       try {
         modalApi.setState({ loading: true });
-        const claimVto = modalApi.getData<IdentityUserClaimVto>();
+        const claimDto = modalApi.getData<IdentityClaimDto>();
         formApi.setValues({
-          ...claimVto,
-          newClaimValue: claimVto.claimValue,
+          ...claimDto,
+          newClaimValue: claimDto.claimValue,
         });
         // 新增可选, 修改不可选
         formApi.updateSchema([
           {
-            disabled: !!claimVto.id,
+            disabled: !!claimDto.id,
             fieldName: 'claimType',
           },
         ]);
         // 新增时初始化可选声明
-        !claimVto.id && (await initAssignableClaims());
+        !claimDto.id && (await initAssignableClaims());
       } finally {
         modalApi.setState({ loading: false });
       }
@@ -94,19 +91,19 @@ async function initAssignableClaims() {
 async function onSubmit(values: Record<string, any>) {
   try {
     modalApi.setState({ confirmLoading: true });
-    const claimVto = modalApi.getData<IdentityUserClaimVto>();
-    const api = claimVto.id
-      ? updateClaimApi(claimVto.userId, {
-          claimType: claimVto.claimType,
-          claimValue: claimVto.claimValue,
+    const claimDto = modalApi.getData<IdentityClaimDto>();
+    const api = claimDto.id
+      ? updateApi({
+          claimType: claimDto.claimType,
+          claimValue: claimDto.claimValue,
           newClaimValue: values.claimValue,
         })
-      : createClaimApi(claimVto.userId, {
+      : createApi({
           claimType: values.claimType,
           claimValue: values.claimValue,
         });
     await api;
-    emits('change', values as IdentityUserClaimDto);
+    emits('change', values as IdentityClaimDto);
     modalApi.close();
   } finally {
     modalApi.setState({ confirmLoading: false });

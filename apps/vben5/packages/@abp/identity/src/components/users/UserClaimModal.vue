@@ -1,26 +1,30 @@
 <script setup lang="ts">
-import type { VxeGridProps } from '@abp/ui';
+import type { IdentityUserDto } from '../../types';
+import type {
+  IdentityClaimCreateDto,
+  IdentityClaimDeleteDto,
+  IdentityClaimUpdateDto,
+} from '../../types/claims';
 
-import type { IdentityUserClaimDto, IdentityUserDto } from '../../types';
-
-import { defineAsyncComponent, h } from 'vue';
+import { defineAsyncComponent } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useVbenVxeGrid } from '@abp/ui';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Button, Popconfirm } from 'ant-design-vue';
-
-import { deleteClaimApi, getClaimsApi } from '../../api/users';
+import {
+  createClaimApi,
+  deleteClaimApi,
+  getClaimsApi,
+  updateClaimApi,
+} from '../../api/users';
 import { IdentityUserPermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'UserClaimModal',
 });
 
-const ClaimEditModal = defineAsyncComponent(
-  () => import('./UserClaimEditModal.vue'),
+const ClaimTable = defineAsyncComponent(
+  () => import('../claims/ClaimTable.vue'),
 );
 
 const [Modal, modalApi] = useVbenModal({
@@ -34,129 +38,43 @@ const [Modal, modalApi] = useVbenModal({
   showConfirmButton: false,
   title: $t('AbpIdentity.ManageClaim'),
 });
-const gridOptions: VxeGridProps<IdentityUserClaimDto> = {
-  columns: [
-    {
-      field: 'claimType',
-      minWidth: 120,
-      title: $t('AbpIdentity.DisplayName:ClaimType'),
-    },
-    {
-      field: 'claimValue',
-      title: $t('AbpIdentity.DisplayName:ClaimValue'),
-      width: 'auto',
-    },
-    {
-      field: 'action',
-      fixed: 'right',
-      slots: { default: 'action' },
-      title: $t('AbpUi.Actions'),
-      width: 180,
-    },
-  ],
-  exportConfig: {},
-  keepSource: true,
-  pagerConfig: {
-    enabled: false,
-  },
-  proxyConfig: {
-    ajax: {
-      query: async () => {
-        const { id } = modalApi.getData<IdentityUserDto>();
-        return await getClaimsApi(id);
-      },
-    },
-    response: {
-      total: 'totalCount',
-      list: 'items',
-    },
-  },
-  toolbarConfig: {
-    custom: true,
-    export: true,
-    // import: true,
-    refresh: true,
-    zoom: true,
-  },
-};
-const [Grid, { query }] = useVbenVxeGrid({
-  gridOptions,
+
+async function onGet() {
+  const { id } = modalApi.getData<IdentityUserDto>();
+  return await getClaimsApi(id);
+}
+
+async function onCreate(input: IdentityClaimCreateDto) {
+  const { id } = modalApi.getData<IdentityUserDto>();
+  await createClaimApi(id, input);
+}
+
+async function onDelete(input: IdentityClaimDeleteDto) {
+  const { id } = modalApi.getData<IdentityUserDto>();
+  await deleteClaimApi(id, input);
+}
+
+async function onUpdate(input: IdentityClaimUpdateDto) {
+  const { id } = modalApi.getData<IdentityUserDto>();
+  await updateClaimApi(id, input);
+}
+
+defineExpose({
+  modalApi,
 });
-
-const [UserClaimEditModal, editModalApi] = useVbenModal({
-  connectedComponent: ClaimEditModal,
-});
-function onCreate() {
-  const { id } = modalApi.getData<IdentityUserDto>();
-  editModalApi.setData({
-    userId: id,
-  });
-  editModalApi.open();
-}
-
-async function onDelete(row: IdentityUserClaimDto) {
-  const { id } = modalApi.getData<IdentityUserDto>();
-  await deleteClaimApi(id, {
-    claimType: row.claimType,
-    claimValue: row.claimValue,
-  }).then(() => query());
-}
-
-function onUpdate(row: IdentityUserClaimDto) {
-  const { id } = modalApi.getData<IdentityUserDto>();
-  editModalApi.setData({
-    userId: id,
-    ...row,
-  });
-  editModalApi.open();
-}
 </script>
 
 <template>
   <Modal>
-    <Grid>
-      <template #toolbar-tools>
-        <Button
-          type="primary"
-          v-access:code="[IdentityUserPermissions.ManageClaims]"
-          @click="onCreate"
-        >
-          {{ $t('AbpIdentity.AddClaim') }}
-        </Button>
-      </template>
-      <template #action="{ row }">
-        <div class="flex flex-row">
-          <div class="basis-1/2">
-            <Button
-              :icon="h(EditOutlined)"
-              block
-              type="link"
-              v-access:code="[IdentityUserPermissions.ManageClaims]"
-              @click="onUpdate(row)"
-            >
-              {{ $t('AbpUi.Edit') }}
-            </Button>
-          </div>
-          <div class="basis-1/2">
-            <Popconfirm
-              :title="$t('AbpIdentity.WillDeleteClaim', [row.claimType])"
-              @confirm="onDelete(row)"
-            >
-              <Button
-                :icon="h(DeleteOutlined)"
-                block
-                danger
-                type="link"
-                v-access:code="[IdentityUserPermissions.Delete]"
-              >
-                {{ $t('AbpUi.Delete') }}
-              </Button>
-            </Popconfirm>
-          </div>
-        </div>
-      </template>
-    </Grid>
-    <UserClaimEditModal @change="() => query()" />
+    <ClaimTable
+      :create-api="onCreate"
+      :create-policy="IdentityUserPermissions.ManageClaims"
+      :delete-api="onDelete"
+      :delete-policy="IdentityUserPermissions.ManageClaims"
+      :get-api="onGet"
+      :update-api="onUpdate"
+      :update-policy="IdentityUserPermissions.ManageClaims"
+    />
   </Modal>
 </template>
 

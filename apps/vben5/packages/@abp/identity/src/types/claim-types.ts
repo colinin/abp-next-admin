@@ -42,28 +42,9 @@ interface GetIdentityClaimTypePagedListInput
   filter?: string;
 }
 
-interface IdentityClaimDto {
-  claimType: string;
-  claimValue: string;
-}
-
-interface IdentityClaimDeleteDto {
-  claimType: string;
-  claimValue: string;
-}
-
-type IdentityClaimCreateDto = IdentityClaimDeleteDto;
-
-interface IdentityClaimUpdateDto extends IdentityClaimDeleteDto {
-  newClaimValue: string;
-}
-
 export type {
   GetIdentityClaimTypePagedListInput,
-  IdentityClaimCreateDto,
-  IdentityClaimDto,
   IdentityClaimTypeCreateDto,
   IdentityClaimTypeDto,
   IdentityClaimTypeUpdateDto,
-  IdentityClaimUpdateDto,
 };
