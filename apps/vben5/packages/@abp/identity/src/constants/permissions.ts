@@ -12,7 +12,7 @@ export const IdentityUserPermissions = {
   Update: 'AbpIdentity.Users.Update',
 };
 /** 角色权限 */
-export const IdentitRolePermissions = {
+export const IdentityRolePermissions = {
   /** 新增 */
   Create: 'AbpIdentity.Roles.Create',
   /** 删除 */

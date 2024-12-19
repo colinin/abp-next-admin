@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IdentityUserDto } from '../../types';
+import type { IdentityRoleDto } from '../../types';
 import type {
   IdentityClaimCreateDto,
   IdentityClaimDeleteDto,
@@ -16,11 +16,11 @@ import {
   deleteClaimApi,
   getClaimsApi,
   updateClaimApi,
-} from '../../api/users';
-import { IdentityUserPermissions } from '../../constants/permissions';
+} from '../../api/roles';
+import { IdentityRolePermissions } from '../../constants/permissions';
 
 defineOptions({
-  name: 'UserClaimModal',
+  name: 'RoleClaimModal',
 });
 
 const ClaimTable = defineAsyncComponent(
@@ -40,22 +40,22 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onGet() {
-  const { id } = modalApi.getData<IdentityUserDto>();
+  const { id } = modalApi.getData<IdentityRoleDto>();
   return await getClaimsApi(id);
 }
 
 async function onCreate(input: IdentityClaimCreateDto) {
-  const { id } = modalApi.getData<IdentityUserDto>();
+  const { id } = modalApi.getData<IdentityRoleDto>();
   await createClaimApi(id, input);
 }
 
 async function onDelete(input: IdentityClaimDeleteDto) {
-  const { id } = modalApi.getData<IdentityUserDto>();
+  const { id } = modalApi.getData<IdentityRoleDto>();
   await deleteClaimApi(id, input);
 }
 
 async function onUpdate(input: IdentityClaimUpdateDto) {
-  const { id } = modalApi.getData<IdentityUserDto>();
+  const { id } = modalApi.getData<IdentityRoleDto>();
   await updateClaimApi(id, input);
 }
 
@@ -68,12 +68,12 @@ defineExpose({
   <Modal>
     <ClaimTable
       :create-api="onCreate"
-      :create-policy="IdentityUserPermissions.ManageClaims"
+      :create-policy="IdentityRolePermissions.ManageClaims"
       :delete-api="onDelete"
-      :delete-policy="IdentityUserPermissions.ManageClaims"
+      :delete-policy="IdentityRolePermissions.ManageClaims"
       :get-api="onGet"
       :update-api="onUpdate"
-      :update-policy="IdentityUserPermissions.ManageClaims"
+      :update-policy="IdentityRolePermissions.ManageClaims"
     />
   </Modal>
 </template>

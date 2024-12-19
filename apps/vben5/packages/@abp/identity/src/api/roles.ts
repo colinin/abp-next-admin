@@ -1,5 +1,11 @@
-import type { PagedResultDto } from '@abp/core';
+import type { ListResultDto, PagedResultDto } from '@abp/core';
 
+import type {
+  IdentityClaimCreateDto,
+  IdentityClaimDeleteDto,
+  IdentityClaimDto,
+  IdentityClaimUpdateDto,
+} from '../types/claims';
 import type {
   GetRolePagedListInput,
   IdentityRoleCreateDto,
@@ -77,4 +83,54 @@ export function removeOrganizationUnitApi(
   return requestClient.delete(
     `/api/identity/roles/${id}/organization-units/${ouId}`,
   );
+}
+
+/**
+ * 获取角色声明列表
+ * @param id 角色id
+ */
+export function getClaimsApi(
+  id: string,
+): Promise<ListResultDto<IdentityClaimDto>> {
+  return requestClient.get<ListResultDto<IdentityClaimDto>>(
+    `/api/identity/roles/${id}/claims`,
+  );
+}
+
+/**
+ * 删除角色声明
+ * @param id 角色id
+ * @param input 角色声明dto
+ */
+export function deleteClaimApi(
+  id: string,
+  input: IdentityClaimDeleteDto,
+): Promise<void> {
+  return requestClient.delete(`/api/identity/roles/${id}/claims`, {
+    params: input,
+  });
+}
+
+/**
+ * 创建角色声明
+ * @param id 角色id
+ * @param input 角色声明dto
+ */
+export function createClaimApi(
+  id: string,
+  input: IdentityClaimCreateDto,
+): Promise<void> {
+  return requestClient.post(`/api/identity/roles/${id}/claims`, input);
+}
+
+/**
+ * 更新角色声明
+ * @param id 角色id
+ * @param input 用户角色dto
+ */
+export function updateClaimApi(
+  id: string,
+  input: IdentityClaimUpdateDto,
+): Promise<void> {
+  return requestClient.put(`/api/identity/roles/${id}/claims`, input);
 }

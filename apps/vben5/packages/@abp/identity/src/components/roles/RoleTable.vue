@@ -22,7 +22,7 @@ import {
 import { Button, Dropdown, Menu, Modal, Tag } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi } from '../../api/roles';
-import { IdentitRolePermissions } from '../../constants/permissions';
+import { IdentityRolePermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'RoleTable',
@@ -33,11 +33,15 @@ const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
 const ClaimOutlined = createIconifyIcon('la:id-card-solid');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
+const ClaimModal = defineAsyncComponent(() => import('./RoleClaimModal.vue'));
 
 const abpStore = useAbpStore();
 const { hasAccessByCodes } = useAccess();
 const [RolePermissionModal, permissionModalApi] = useVbenModal({
   connectedComponent: PermissionModal,
+});
+const [RoleClaimModal, claimModalApi] = useVbenModal({
+  connectedComponent: ClaimModal,
 });
 
 const formOptions: VbenFormProps = {
@@ -134,6 +138,11 @@ const handleDelete = (row: IdentityRoleDto) => {
 
 const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
   switch (info.key) {
+    case 'claims': {
+      claimModalApi.setData(row);
+      claimModalApi.open();
+      break;
+    }
     case 'permissions': {
       const roles = abpStore.application?.currentUser.roles ?? [];
       permissionModalApi.setData({
@@ -154,7 +163,7 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
     <template #toolbar-tools>
       <Button
         type="primary"
-        v-access:code="[IdentitRolePermissions.Create]"
+        v-access:code="[IdentityRolePermissions.Create]"
         @click="handleAdd"
       >
         {{ $t('AbpIdentity.NewRole') }}
@@ -179,7 +188,7 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
             :icon="h(EditOutlined)"
             block
             type="link"
-            v-access:code="[IdentitRolePermissions.Update]"
+            v-access:code="[IdentityRolePermissions.Update]"
             @click="handleEdit(row)"
           >
             {{ $t('AbpUi.Edit') }}
@@ -191,7 +200,7 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
             block
             danger
             type="link"
-            v-access:code="[IdentitRolePermissions.Delete]"
+            v-access:code="[IdentityRolePermissions.Delete]"
             @click="handleDelete(row)"
           >
             {{ $t('AbpUi.Delete') }}
@@ -203,7 +212,9 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
               <Menu @click="(info) => handleMenuClick(row, info)">
                 <MenuItem
                   v-if="
-                    hasAccessByCodes([IdentitRolePermissions.ManagePermissions])
+                    hasAccessByCodes([
+                      IdentityRolePermissions.ManagePermissions,
+                    ])
                   "
                   key="permissions"
                   :icon="h(PermissionsOutlined)"
@@ -211,7 +222,9 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
                   {{ $t('AbpPermissionManagement.Permissions') }}
                 </MenuItem>
                 <MenuItem
-                  v-if="hasAccessByCodes([IdentitRolePermissions.ManageClaims])"
+                  v-if="
+                    hasAccessByCodes([IdentityRolePermissions.ManageClaims])
+                  "
                   key="claims"
                   :icon="h(ClaimOutlined)"
                 >
@@ -233,6 +246,7 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
     </template>
   </Grid>
   <RoleEditModal @change="() => query()" />
+  <RoleClaimModal @change="query" />
   <RolePermissionModal />
 </template>
 
