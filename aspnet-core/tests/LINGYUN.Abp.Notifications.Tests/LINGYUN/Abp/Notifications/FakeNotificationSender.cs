@@ -205,12 +205,12 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
         IEnumerable<UserIdentifier> subscriptionUserIdentifiers)
     {
         Logger.LogDebug($"Sending notification with provider {provider.Name}");
-        var notifacationDataMapping = Options.NotificationDataMappings
-                .GetMapItemOrDefault(provider.Name, notificationInfo.Name);
-        if (notifacationDataMapping != null)
-        {
-            notificationInfo.Data = notifacationDataMapping.MappingFunc(notificationInfo.Data);
-        }
+        // var notifacationDataMapping = Options.NotificationDataMappings
+        //         .GetMapItemOrDefault(provider.Name, notificationInfo.Name);
+        // if (notifacationDataMapping != null)
+        // {
+        //     notificationInfo.Data = notifacationDataMapping.MappingFunc(notificationInfo.Data);
+        // }
         // 发布
         await provider.PublishAsync(notificationInfo, subscriptionUserIdentifiers);
 

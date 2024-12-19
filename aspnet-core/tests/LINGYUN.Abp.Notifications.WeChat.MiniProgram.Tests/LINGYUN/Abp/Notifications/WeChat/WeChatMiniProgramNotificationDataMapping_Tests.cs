@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
         private void InitNotificationData(NotificationData data)
         {
             data.WriteStandardData("title", "message", DateTime.Now, "formUser", "description");
-            data.WriteStandardData(NotificationWeChatMiniProgramOptions.DefaultMsgPrefix, "openid", "TEST");
+            // data.WriteStandardData(NotificationWeChatMiniProgramOptions.DefaultMsgPrefix, "openid", "TEST");
             data.TrySetData("otherDataKey", "otherDataValue");
         }
 
