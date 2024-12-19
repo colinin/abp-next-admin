@@ -54,24 +54,23 @@ const [Modal, modalApi] = useVbenModal({
   },
   onOpenChange: async (isOpen: boolean) => {
     if (isOpen) {
-      const { values } = modalApi.getData<Record<string, any>>();
-      if (values?.id) {
-        modalApi.setState({ loading: true });
-        return getApi(values.id)
-          .then((dto) => {
-            formModel.value = dto;
-            modalApi.setState({
-              title: $t('AbpIdentity.RoleSubject', [dto.name]),
-            });
-          })
-          .finally(() => {
-            modalApi.setState({ loading: false });
-          });
-      }
       formModel.value = { ...defaultModel };
       modalApi.setState({
-        title: $t('NewRole'),
+        title: $t('AbpIdentity.NewRole'),
       });
+      const roleDto = modalApi.getData<IdentityRoleDto>();
+      if (roleDto?.id) {
+        try {
+          modalApi.setState({ loading: true });
+          const dto = await getApi(roleDto.id);
+          formModel.value = dto;
+          modalApi.setState({
+            title: $t('AbpIdentity.RoleSubject', [dto.name]),
+          });
+        } finally {
+          modalApi.setState({ loading: false });
+        }
+      }
     }
   },
   title: 'Roles',

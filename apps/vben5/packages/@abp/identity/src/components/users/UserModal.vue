@@ -93,15 +93,18 @@ const [Modal, modalApi] = useVbenModal({
       formModel.value = { ...defaultModel };
       modalApi.setState({
         loading: true,
-        title: $t('NewUser'),
+        title: $t('AbpIdentity.NewUser'),
       });
       try {
-        const { values } = modalApi.getData<Record<string, any>>();
+        const userDto = modalApi.getData<IdentityUserDto>();
         const manageRolePolicy = checkManageRolePolicy();
-        if (values?.id) {
-          await initUserInfo(values.id);
-          manageRolePolicy && (await initUserRoles(values.id));
-          checkManageOuPolicy() && (await initOrganizationUnitTree(values.id));
+        if (userDto?.id) {
+          await initUserInfo(userDto.id);
+          manageRolePolicy && (await initUserRoles(userDto.id));
+          checkManageOuPolicy() && (await initOrganizationUnitTree(userDto.id));
+          modalApi.setState({
+            title: `${$t('AbpIdentity.Users')} - ${userDto.userName}`,
+          });
         }
         manageRolePolicy && (await initAssignableRoles());
       } finally {
@@ -275,7 +278,10 @@ async function onLoadOuChildren(node: EventDataNode) {
               height: '338px',
             }"
             :render="(item) => item.title"
-            :titles="[$t('AbpIdentity.Assigned'), $t('AbpIdentity.Available')]"
+            :titles="[
+              $t('AbpIdentityServer.Assigned'),
+              $t('AbpIdentityServer.Available'),
+            ]"
             class="tree-transfer"
           />
         </TabPane>

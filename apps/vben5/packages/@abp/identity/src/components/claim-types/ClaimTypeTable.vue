@@ -157,9 +157,7 @@ const handleAdd = () => {
 };
 
 const handleEdit = (row: IdentityClaimTypeDto) => {
-  roleModalApi.setData({
-    values: row,
-  });
+  roleModalApi.setData(row);
   roleModalApi.open();
 };
 

@@ -4,6 +4,10 @@ import type { IdentityRoleDto, OrganizationUnitDto } from '../types';
 import type {
   ChangeUserPasswordInput,
   GetUserPagedListInput,
+  IdentityUserClaimCreateDto,
+  IdentityUserClaimDeleteDto,
+  IdentityUserClaimDto,
+  IdentityUserClaimUpdateDto,
   IdentityUserCreateDto,
   IdentityUserDto,
   IdentityUserUpdateDto,
@@ -146,4 +150,54 @@ export function getRolesApi(
   return requestClient.get<ListResultDto<IdentityRoleDto>>(
     `/api/identity/users/${id}/roles`,
   );
+}
+
+/**
+ * 获取用户声明列表
+ * @param id 用户id
+ */
+export function getClaimsApi(
+  id: string,
+): Promise<ListResultDto<IdentityUserClaimDto>> {
+  return requestClient.get<ListResultDto<IdentityUserClaimDto>>(
+    `/api/identity/users/${id}/claims`,
+  );
+}
+
+/**
+ * 删除用户声明
+ * @param id 用户id
+ * @param input 用户声明dto
+ */
+export function deleteClaimApi(
+  id: string,
+  input: IdentityUserClaimDeleteDto,
+): Promise<void> {
+  return requestClient.delete(`/api/identity/users/${id}/claims`, {
+    params: input,
+  });
+}
+
+/**
+ * 创建用户声明
+ * @param id 用户id
+ * @param input 用户声明dto
+ */
+export function createClaimApi(
+  id: string,
+  input: IdentityUserClaimCreateDto,
+): Promise<void> {
+  return requestClient.post(`/api/identity/users/${id}/claims`, input);
+}
+
+/**
+ * 更新用户声明
+ * @param id 用户id
+ * @param input 用户声明dto
+ */
+export function updateClaimApi(
+  id: string,
+  input: IdentityUserClaimUpdateDto,
+): Promise<void> {
+  return requestClient.put(`/api/identity/users/${id}/claims`, input);
 }

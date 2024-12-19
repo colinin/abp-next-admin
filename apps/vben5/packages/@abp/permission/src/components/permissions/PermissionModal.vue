@@ -115,6 +115,7 @@ const [Modal, modalApi] = useVbenModal({
       const state = modalApi.getData<ModalState>();
       modelState.value = state;
       modalApi.setState({
+        confirmLoading: true,
         loading: true,
       });
       try {
@@ -129,6 +130,7 @@ const [Modal, modalApi] = useVbenModal({
         checkedNodeKeys.value = getGrantedPermissionKeys(permissionTree.value);
       } finally {
         modalApi.setState({
+          confirmLoading: false,
           loading: false,
         });
       }

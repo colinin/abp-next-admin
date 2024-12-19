@@ -19,6 +19,7 @@ import {
   EditOutlined,
   EllipsisOutlined,
   LockOutlined,
+  PlusOutlined,
   UnlockOutlined,
 } from '@ant-design/icons-vue';
 import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
@@ -32,6 +33,7 @@ defineOptions({
 
 const UserModal = defineAsyncComponent(() => import('./UserModal.vue'));
 const LockModal = defineAsyncComponent(() => import('./UserLockModal.vue'));
+const ClaimModal = defineAsyncComponent(() => import('./UserClaimModal.vue'));
 const PasswordModal = defineAsyncComponent(
   () => import('./UserPasswordModal.vue'),
 );
@@ -151,6 +153,9 @@ const [UserLockModal, lockModalApi] = useVbenModal({
 const [UserPasswordModal, pwdModalApi] = useVbenModal({
   connectedComponent: PasswordModal,
 });
+const [UserClaimModal, claimModalApi] = useVbenModal({
+  connectedComponent: ClaimModal,
+});
 const [UserPermissionModal, permissionModalApi] = useVbenModal({
   connectedComponent: PermissionModal,
 });
@@ -166,9 +171,7 @@ const handleAdd = () => {
 };
 
 const handleEdit = (row: IdentityUserDto) => {
-  userModalApi.setData({
-    values: row,
-  });
+  userModalApi.setData(row);
   userModalApi.open();
 };
 
@@ -190,6 +193,11 @@ const handleUnlock = async (row: IdentityUserDto) => {
 
 const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
   switch (info.key) {
+    case 'claims': {
+      claimModalApi.setData(row);
+      claimModalApi.open();
+      break;
+    }
     case 'lock': {
       lockModalApi.setData(row);
       lockModalApi.open();
@@ -223,6 +231,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
   <Grid :table-title="$t('AbpIdentity.Users')">
     <template #toolbar-tools>
       <Button
+        :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[IdentityUserPermissions.Create]"
         @click="handleAdd"
@@ -332,6 +341,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
     </template>
   </Grid>
   <UserLockModal @change="query" />
+  <UserClaimModal @change="query" />
   <UserEditModal @change="() => query()" />
   <UserPasswordModal @change="query" />
   <UserPermissionModal />
