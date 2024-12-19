@@ -194,7 +194,6 @@ const handleUnlock = async (row: IdentityUserDto) => {
 const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
   switch (info.key) {
     case 'claims': {
-      console.log(claimModalApi);
       claimModalApi.setData(row);
       claimModalApi.open();
       break;

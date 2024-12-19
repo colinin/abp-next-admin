@@ -33,11 +33,15 @@ const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
 const ClaimOutlined = createIconifyIcon('la:id-card-solid');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
+const ClaimModal = defineAsyncComponent(() => import('./RoleClaimModal.vue'));
 
 const abpStore = useAbpStore();
 const { hasAccessByCodes } = useAccess();
 const [RolePermissionModal, permissionModalApi] = useVbenModal({
   connectedComponent: PermissionModal,
+});
+const [RoleClaimModal, claimModalApi] = useVbenModal({
+  connectedComponent: ClaimModal,
 });
 
 const formOptions: VbenFormProps = {
@@ -134,6 +138,11 @@ const handleDelete = (row: IdentityRoleDto) => {
 
 const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
   switch (info.key) {
+    case 'claims': {
+      claimModalApi.setData(row);
+      claimModalApi.open();
+      break;
+    }
     case 'permissions': {
       const roles = abpStore.application?.currentUser.roles ?? [];
       permissionModalApi.setData({
@@ -233,6 +242,7 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
     </template>
   </Grid>
   <RoleEditModal @change="() => query()" />
+  <RoleClaimModal @change="query" />
   <RolePermissionModal />
 </template>
 
