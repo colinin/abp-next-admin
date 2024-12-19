@@ -31,26 +31,18 @@ export function useRandomPassword() {
   }
 
   function generatePassword() {
-    const { settingProvider } = useSettings();
+    const { getNumber, isTrue } = useSettings();
     // 根据配置项生成随机密码
     // 密码长度
-    const length = settingProvider.getNumber(
-      'Abp.Identity.Password.RequiredLength',
-    );
+    const length = getNumber('Abp.Identity.Password.RequiredLength');
     // 需要小写字母
-    const lower = settingProvider.isTrue(
-      'Abp.Identity.Password.RequireLowercase',
-    );
+    const lower = isTrue('Abp.Identity.Password.RequireLowercase');
     // 需要大写字母
-    const upper = settingProvider.isTrue(
-      'Abp.Identity.Password.RequireUppercase',
-    );
+    const upper = isTrue('Abp.Identity.Password.RequireUppercase');
     // 需要数字
-    const number = settingProvider.isTrue('Abp.Identity.Password.RequireDigit');
+    const number = isTrue('Abp.Identity.Password.RequireDigit');
     // 需要符号
-    const symbol = settingProvider.isTrue(
-      'Abp.Identity.Password.RequireNonAlphanumeric',
-    );
+    const symbol = isTrue('Abp.Identity.Password.RequireNonAlphanumeric');
     // 默认生成数字
     const defaultNumber = !lower && !upper && !number && !symbol;
 

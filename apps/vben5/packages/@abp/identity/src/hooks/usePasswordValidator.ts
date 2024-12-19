@@ -13,8 +13,7 @@ import {
 } from '@abp/core';
 
 export function usePasswordValidator() {
-  const { settingProvider } = useSettings();
-  const { getNumber, isTrue } = settingProvider;
+  const { getNumber, isTrue } = useSettings();
   const { L } = useLocalization(['AbpIdentity', 'AbpUi']);
 
   const passwordSetting = computed(() => {
