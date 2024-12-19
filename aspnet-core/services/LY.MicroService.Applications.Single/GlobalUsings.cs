@@ -122,7 +122,6 @@ global using LINGYUN.Platform.Localization;
 global using LINGYUN.Platform.Settings.VueVbenAdmin;
 global using LINGYUN.Platform.Theme.VueVbenAdmin;
 global using LY.MicroService.Applications.Single.Authentication;
-global using LY.MicroService.Applications.Single.EntityFrameworkCore;
 global using LY.MicroService.Applications.Single.IdentityResources;
 global using Medallion.Threading;
 global using Medallion.Threading.Redis;
