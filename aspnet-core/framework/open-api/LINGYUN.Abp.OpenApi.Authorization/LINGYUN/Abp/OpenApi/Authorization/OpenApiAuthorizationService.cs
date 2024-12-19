@@ -84,18 +84,18 @@ namespace LINGYUN.Abp.OpenApi.Authorization
 
         protected async virtual Task<bool> ValidatAppDescriptor(HttpContext httpContext)
         {
-            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.AppKeyFieldName, out var appKey);
-            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.SignatureFieldName, out var sign);
-            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.NonceFieldName, out var nonce);
-            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.TimeStampFieldName, out var timeStampString);
+            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.HEADER_APP_KEY, out var appKey);
+            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.HEADER_SIGNATURE, out var sign);
+            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.HEADER_NONCE, out var nonce);
+            httpContext.Request.Headers.TryGetValue(AbpOpenApiConsts.HEADER_TIMESTAMP, out var timeStampString);
 
 
             if (StringValues.IsNullOrEmpty(appKey))
             {
                 var exception = new BusinessException(
                     AbpOpenApiConsts.InvalidAccessWithAppKeyNotFound,
-                    $"{AbpOpenApiConsts.AppKeyFieldName} Not Found",
-                    $"{AbpOpenApiConsts.AppKeyFieldName} Not Found");
+                    $"{AbpOpenApiConsts.HEADER_APP_KEY} Not Found",
+                    $"{AbpOpenApiConsts.HEADER_APP_KEY} Not Found");
                 await Unauthorized(httpContext, exception);
                 return false;
             }
@@ -104,8 +104,8 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             {
                 var exception = new BusinessException(
                     AbpOpenApiConsts.InvalidAccessWithNonceNotFound,
-                    $"{AbpOpenApiConsts.NonceFieldName} Not Found",
-                    $"{AbpOpenApiConsts.NonceFieldName} Not Found");
+                    $"{AbpOpenApiConsts.HEADER_NONCE} Not Found",
+                    $"{AbpOpenApiConsts.HEADER_NONCE} Not Found");
 
                 await Unauthorized(httpContext, exception);
                 return false;
@@ -115,8 +115,8 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             {
                 var exception = new BusinessException(
                     AbpOpenApiConsts.InvalidAccessWithSignNotFound,
-                    $"{AbpOpenApiConsts.SignatureFieldName} Not Found",
-                    $"{AbpOpenApiConsts.SignatureFieldName} Not Found");
+                    $"{AbpOpenApiConsts.HEADER_SIGNATURE} Not Found",
+                    $"{AbpOpenApiConsts.HEADER_SIGNATURE} Not Found");
 
                 await Unauthorized(httpContext, exception);
                 return false;
@@ -126,8 +126,8 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             {
                 var exception = new BusinessException(
                     AbpOpenApiConsts.InvalidAccessWithTimestampNotFound,
-                    $"{AbpOpenApiConsts.TimeStampFieldName} Not Found",
-                    $"{AbpOpenApiConsts.TimeStampFieldName} Not Found");
+                    $"{AbpOpenApiConsts.HEADER_TIMESTAMP} Not Found",
+                    $"{AbpOpenApiConsts.HEADER_TIMESTAMP} Not Found");
 
                 await Unauthorized(httpContext, exception);
                 return false;
@@ -264,7 +264,8 @@ namespace LINGYUN.Abp.OpenApi.Authorization
         private static string CalculationSignature(string url, IDictionary<string, string> queryDictionary)
         {
             var queryString = BuildQuery(queryDictionary);
-            var encodeUrl = UrlEncode(string.Concat(url, "?", queryString));
+            // %20 替换 +
+            var encodeUrl = UrlEncode(string.Concat(url, "?", queryString)).Replace("+", "%20");
 
             return encodeUrl.ToMd5();
         }

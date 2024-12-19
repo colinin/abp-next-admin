@@ -4,6 +4,8 @@
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace>LINGYUN.MicroService.Internal.Gateway</RootNamespace>
+		<Language>latest</Language>
+		<ImplicitUsings >enable</ImplicitUsings >
 	</PropertyGroup>
 
 	<ItemGroup>

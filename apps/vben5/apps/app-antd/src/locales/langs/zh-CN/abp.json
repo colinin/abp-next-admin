@@ -1,0 +1,14 @@
+{
+  "title": "Abp框架",
+  "manage": {
+    "title": "管理",
+    "identity": {
+      "title": "身份认证管理",
+      "user": "用户",
+      "role": "角色",
+      "claimTypes": "身份标识",
+      "securityLogs": "安全日志",
+      "organizationUnits": "组织机构"
+    }
+  }
+}

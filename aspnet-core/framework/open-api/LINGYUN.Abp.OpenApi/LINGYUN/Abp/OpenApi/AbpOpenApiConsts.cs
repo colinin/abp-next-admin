@@ -4,10 +4,10 @@ public static class AbpOpenApiConsts
 {
     public const string SecurityChecking = "_AbpOpenApiSecurityChecking";
 
-    public const string AppKeyFieldName = "X-API-APPKEY";
-    public const string SignatureFieldName = "X-API-SIGN";
-    public const string NonceFieldName = "X-API-NONCE";
-    public const string TimeStampFieldName = "X-API-TIMESTAMP";
+    public const string HEADER_APP_KEY = "X-API-APPKEY";
+    public const string HEADER_SIGNATURE = "X-API-SIGN";
+    public const string HEADER_NONCE = "X-API-NONCE";
+    public const string HEADER_TIMESTAMP = "X-API-TIMESTAMP";
 
     public const string KeyPrefix = "AbpOpenApi";
     /// <summary>

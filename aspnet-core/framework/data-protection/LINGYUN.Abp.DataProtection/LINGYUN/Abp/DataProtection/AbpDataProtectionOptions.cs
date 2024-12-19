@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
@@ -16,15 +17,19 @@ public class AbpDataProtectionOptions
     /// <summary>
     /// 权限主体
     /// </summary>
-    public IList<IDataAccessSubjectContributor> SubjectContributors { get; set; }
+    public IList<IDataAccessSubjectContributor> SubjectContributors { get; }
     /// <summary>
     /// 过滤字段关键字
     /// </summary>
-    public IDictionary<string, IDataAccessKeywordContributor> KeywordContributors { get; set; }
+    public IDictionary<string, IDataAccessKeywordContributor> KeywordContributors { get; }
     /// <summary>
     /// 数据操作
     /// </summary>
-    public IDictionary<DataAccessFilterOperate, IDataAccessOperateContributor> OperateContributors { get; set; }
+    public IDictionary<DataAccessFilterOperate, IDataAccessOperateContributor> OperateContributors { get; }
+    /// <summary>
+    /// 默认实体过滤
+    /// </summary>
+    public IDictionary<Type, Func<IServiceProvider, Type, DataAccessOperation, LambdaExpression>> DefaultEntityFilters { get; }
     /// <summary>
     /// 忽略审计字段列表
     /// </summary>
@@ -35,6 +40,7 @@ public class AbpDataProtectionOptions
         SubjectContributors = new List<IDataAccessSubjectContributor>();
         KeywordContributors = new Dictionary<string, IDataAccessKeywordContributor>();
         OperateContributors = new Dictionary<DataAccessFilterOperate, IDataAccessOperateContributor>();
+        DefaultEntityFilters = new Dictionary<Type, Func<IServiceProvider, Type, DataAccessOperation, LambdaExpression>>();
 
         IgnoreAuditedProperties = new List<string>
         {

@@ -153,6 +153,7 @@
 		<PackageVersion Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Json.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.MailKit" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.MemoryDb" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.MultiTenancy.Abstractions" Version="$(VoloAbpPackageVersion)" />
