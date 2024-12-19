@@ -15,6 +15,10 @@ import { Button, Popconfirm } from 'ant-design-vue';
 import { deleteClaimApi, getClaimsApi } from '../../api/users';
 import { IdentityUserPermissions } from '../../constants/permissions';
 
+defineOptions({
+  name: 'UserClaimModal',
+});
+
 const ClaimEditModal = defineAsyncComponent(
   () => import('./UserClaimEditModal.vue'),
 );

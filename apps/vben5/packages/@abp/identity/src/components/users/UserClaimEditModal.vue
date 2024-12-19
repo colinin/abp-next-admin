@@ -11,6 +11,10 @@ interface IdentityUserClaimVto extends IdentityUserClaimDto {
   userId: string;
 }
 
+defineOptions({
+  name: 'UserClaimEditModal',
+});
+
 const emits = defineEmits<{
   (event: 'change', data: IdentityUserClaimDto): void;
 }>();
