@@ -17,7 +17,7 @@ import {
   getClaimsApi,
   updateClaimApi,
 } from '../../api/roles';
-import { IdentitRolePermissions } from '../../constants/permissions';
+import { IdentityRolePermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'RoleClaimModal',
@@ -68,12 +68,12 @@ defineExpose({
   <Modal>
     <ClaimTable
       :create-api="onCreate"
-      :create-policy="IdentitRolePermissions.ManageClaims"
+      :create-policy="IdentityRolePermissions.ManageClaims"
       :delete-api="onDelete"
-      :delete-policy="IdentitRolePermissions.ManageClaims"
+      :delete-policy="IdentityRolePermissions.ManageClaims"
       :get-api="onGet"
       :update-api="onUpdate"
-      :update-policy="IdentitRolePermissions.ManageClaims"
+      :update-policy="IdentityRolePermissions.ManageClaims"
     />
   </Modal>
 </template>

@@ -22,7 +22,7 @@ import {
 import { Button, Dropdown, Menu, Modal, Tag } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi } from '../../api/roles';
-import { IdentitRolePermissions } from '../../constants/permissions';
+import { IdentityRolePermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'RoleTable',
@@ -163,7 +163,7 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
     <template #toolbar-tools>
       <Button
         type="primary"
-        v-access:code="[IdentitRolePermissions.Create]"
+        v-access:code="[IdentityRolePermissions.Create]"
         @click="handleAdd"
       >
         {{ $t('AbpIdentity.NewRole') }}
@@ -188,7 +188,7 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
             :icon="h(EditOutlined)"
             block
             type="link"
-            v-access:code="[IdentitRolePermissions.Update]"
+            v-access:code="[IdentityRolePermissions.Update]"
             @click="handleEdit(row)"
           >
             {{ $t('AbpUi.Edit') }}
@@ -200,7 +200,7 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
             block
             danger
             type="link"
-            v-access:code="[IdentitRolePermissions.Delete]"
+            v-access:code="[IdentityRolePermissions.Delete]"
             @click="handleDelete(row)"
           >
             {{ $t('AbpUi.Delete') }}
@@ -212,7 +212,9 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
               <Menu @click="(info) => handleMenuClick(row, info)">
                 <MenuItem
                   v-if="
-                    hasAccessByCodes([IdentitRolePermissions.ManagePermissions])
+                    hasAccessByCodes([
+                      IdentityRolePermissions.ManagePermissions,
+                    ])
                   "
                   key="permissions"
                   :icon="h(PermissionsOutlined)"
@@ -220,7 +222,9 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
                   {{ $t('AbpPermissionManagement.Permissions') }}
                 </MenuItem>
                 <MenuItem
-                  v-if="hasAccessByCodes([IdentitRolePermissions.ManageClaims])"
+                  v-if="
+                    hasAccessByCodes([IdentityRolePermissions.ManageClaims])
+                  "
                   key="claims"
                   :icon="h(ClaimOutlined)"
                 >
