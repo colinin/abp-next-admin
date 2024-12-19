@@ -1,17 +1,20 @@
 # LINGYUN.Abp.WeChat.Official
 
-微信公众号SDK集成,考虑是否需要集成[Senparc.Weixin SDK](https://github.com/JeffreySu/WeiXinMPSDK)
+微信公众号SDK集成模块，提供微信公众号开发所需的功能支持。
 
-大部分重写的模块都和官方模块名称保持一致,通过命名空间区分,主要是只改写了一小部分或者增加额外的功能
-如果大部分模块代码都重写,或者完全就是扩展模块,才会定义自己的名字
+## 功能特性
 
-#### 注意
+* 微信公众号OAuth2.0认证
+* 自定义菜单管理
+* 模板消息发送
+* 素材管理
+* 用户管理
+* 客服消息
+* 微信支付集成
+* 消息加解密
+* 事件处理
 
-在动态配置中有一个已知的问题: https://github.com/abpframework/abp/issues/6318  
-因此必须要重建一个动态变更 AbpWeChatOfficialOptions 的方法，请使用AbpWeChatOfficialOptionsFactory.CreateAsync()
-
-## 配置使用
-
+## 模块引用
 
 ```csharp
 [DependsOn(typeof(AbpWeChatOfficialModule))]
@@ -19,3 +22,39 @@ public class YouProjectModule : AbpModule
 {
   // other
 }
+```
+
+## 配置项
+
+```json
+{
+  "WeChat": {
+    "Official": {
+      "AppId": "",                // 公众号AppId
+      "AppSecret": "",           // 公众号AppSecret
+      "Token": "",               // 公众号消息Token
+      "EncodingAESKey": "",      // 公众号消息加密密钥
+      "IsSandBox": false,        // 是否为沙箱环境
+      "Url": ""                  // 公众号服务器URL
+    }
+  }
+}
+```
+
+#### 注意事项
+
+在动态配置中有一个已知的问题: https://github.com/abpframework/abp/issues/6318  
+因此必须要重建一个动态变更 AbpWeChatOfficialOptions 的方法，请使用AbpWeChatOfficialOptionsFactory.CreateAsync()
+
+## Settings配置
+
+* `WeChat.Official.AppId`: 公众号AppId
+* `WeChat.Official.AppSecret`: 公众号AppSecret
+* `WeChat.Official.Token`: 公众号消息Token
+* `WeChat.Official.EncodingAESKey`: 公众号消息加密密钥
+* `WeChat.Official.IsSandBox`: 是否为沙箱环境
+* `WeChat.Official.Url`: 公众号服务器URL
+
+## 更多文档
+
+* [微信公众号模块文档](README.EN.md)

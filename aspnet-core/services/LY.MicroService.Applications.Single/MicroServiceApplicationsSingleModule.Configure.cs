@@ -1,4 +1,4 @@
-﻿using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
+using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -484,6 +484,9 @@ public partial class MicroServiceApplicationsSingleModule
     {
         Configure<AbpDbContextOptions>(options =>
         {
+            // AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);//解决PostgreSql设置为utc时间后无法写入local时区的问题
+            // options.UseNpgsql();
+            
             options.UseMySQL();
         });
     }

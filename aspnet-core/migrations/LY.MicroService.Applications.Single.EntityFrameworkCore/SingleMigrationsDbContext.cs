@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Demo.EntityFrameworkCore;
+﻿using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Demo.EntityFrameworkCore;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications.EntityFrameworkCore;
@@ -49,6 +50,8 @@ public class SingleMigrationsDbContext : AbpDbContext<SingleMigrationsDbContext>
         modelBuilder.ConfigureNotifications();
         modelBuilder.ConfigureNotificationsDefinition();
         modelBuilder.ConfigureMessageService();
+        modelBuilder.ConfigureDataProtectionManagement();
+        modelBuilder.ConfigureWebhooksManagement();
 
         modelBuilder.ConfigureDemo();
     }

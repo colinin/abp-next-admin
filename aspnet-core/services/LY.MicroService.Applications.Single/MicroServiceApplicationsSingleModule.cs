@@ -1,4 +1,4 @@
-﻿using Volo.Abp.MailKit;
+using Volo.Abp.MailKit;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -107,7 +107,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
 
-    typeof(SingleMigrationsEntityFrameworkCoreModule),
+    // typeof(AbpEntityFrameworkCorePostgreSqlModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
 
     typeof(AbpAliyunSmsModule),
@@ -177,12 +177,16 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAccountTemplatesModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpCachingStackExchangeRedisModule),
-
-    typeof(AbpElsaModule),
-    typeof(AbpElsaServerModule),
-    typeof(AbpElsaActivitiesModule),
-    typeof(AbpElsaEntityFrameworkCoreModule),
-    typeof(AbpElsaEntityFrameworkCoreMySqlModule),
+    // typeof(AbpElsaModule),
+    // typeof(AbpElsaServerModule),
+    // typeof(AbpElsaActivitiesModule),
+    // typeof(AbpElsaEntityFrameworkCoreModule),
+    // typeof(AbpElsaEntityFrameworkCorePostgreSqlModule),
+    // typeof(AbpElsaModule),
+    // typeof(AbpElsaServerModule),
+    // typeof(AbpElsaActivitiesModule),
+    // typeof(AbpElsaEntityFrameworkCoreModule),
+    // typeof(AbpElsaEntityFrameworkCoreMySqlModule),
 
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),

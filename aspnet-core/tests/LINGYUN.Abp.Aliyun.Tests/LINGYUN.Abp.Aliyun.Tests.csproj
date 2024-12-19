@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
 	  <RootNamespace />
     <IsPackable>false</IsPackable>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
