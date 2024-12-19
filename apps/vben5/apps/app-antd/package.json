@@ -30,6 +30,7 @@
     "@abp/core": "workspace:*",
     "@abp/identity": "workspace:*",
     "@abp/request": "workspace:*",
+    "@abp/ui": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/constants": "workspace:*",

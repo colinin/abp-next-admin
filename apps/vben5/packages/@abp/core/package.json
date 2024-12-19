@@ -36,7 +36,12 @@
   },
   "dependencies": {
     "dayjs": "catalog:",
+    "lodash": "catalog:",
     "pinia": "catalog:",
+    "pinia-plugin-persistedstate": "catalog:",
     "vue": "catalog:"
+  },
+  "devDependencies": {
+    "@types/lodash": "catalog:"
   }
 }

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { FormInstance } from 'ant-design-vue';
+import type { TransferItem } from 'ant-design-vue/es/transfer';
+import type { DataNode, EventDataNode } from 'ant-design-vue/es/tree';
 
-import type { IdentityRoleDto } from '../../types/roles';
 import type { IdentityUserDto } from '../../types/users';
 
 import { defineEmits, defineOptions, ref, toValue } from 'vue';
@@ -10,6 +11,7 @@ import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { useSettings } from '@abp/core';
 import {
   Checkbox,
   Form,
@@ -18,9 +20,18 @@ import {
   message,
   Tabs,
   Transfer,
+  Tree,
 } from 'ant-design-vue';
 
-import { createApi, getApi, updateApi } from '../../api/users';
+import { getChildrenApi, getRootListApi } from '../../api/organization-units';
+import {
+  createApi,
+  getApi,
+  getAssignableRolesApi,
+  getOrganizationUnitsApi,
+  getRolesApi,
+  updateApi,
+} from '../../api/users';
 
 defineOptions({
   name: 'UserModal',
@@ -36,12 +47,20 @@ const defaultModel = {
   isActive: true,
 } as IdentityUserDto;
 
-const assignableRoles = ref<IdentityRoleDto[]>([]);
-
 const activedTab = ref('info');
 const form = ref<FormInstance>();
+/** 可分配的角色列表 */
+const assignedRoles = ref<TransferItem[]>([]);
+/** 组织机构 */
+const organizationUnits = ref<DataNode[]>([]);
+/** 已加载的组织机构Keys */
+const loadedOuKeys = ref<string[]>([]);
+/** 用户拥有的组织机构节点keys */
+const checkedOuKeys = ref<string[]>([]);
+/** 表单数据 */
 const formModel = ref<IdentityUserDto>({ ...defaultModel });
 
+const { isTrue } = useSettings();
 const { hasAccessByCodes } = useAccess();
 const [Modal, modalApi] = useVbenModal({
   draggable: true,
@@ -54,41 +73,124 @@ const [Modal, modalApi] = useVbenModal({
     const api = formModel.value.id
       ? updateApi(formModel.value.id, toValue(formModel))
       : createApi(toValue(formModel));
-    modalApi.setState({ loading: true });
+    modalApi.setState({ confirmLoading: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.Success'));
+        message.success($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })
       .finally(() => {
-        modalApi.setState({ loading: false });
+        modalApi.setState({ confirmLoading: false });
       });
   },
   onOpenChange: async (isOpen: boolean) => {
     if (isOpen) {
-      const { values } = modalApi.getData<Record<string, any>>();
-      if (values?.id) {
-        modalApi.setState({ loading: true });
-        return getApi(values.id)
-          .then((dto) => {
-            formModel.value = dto;
-            modalApi.setState({
-              title: `${$t('AbpIdentity.Users')} - ${dto.userName}`,
-            });
-          })
-          .finally(() => {
-            modalApi.setState({ loading: false });
-          });
-      }
+      loadedOuKeys.value = [];
+      assignedRoles.value = [];
+      activedTab.value = 'info';
+      organizationUnits.value = [];
       formModel.value = { ...defaultModel };
       modalApi.setState({
+        loading: true,
         title: $t('NewUser'),
       });
+      try {
+        const { values } = modalApi.getData<Record<string, any>>();
+        const manageRolePolicy = checkManageRolePolicy();
+        if (values?.id) {
+          await initUserInfo(values.id);
+          manageRolePolicy && (await initUserRoles(values.id));
+          checkManageOuPolicy() && (await initOrganizationUnitTree(values.id));
+        }
+        manageRolePolicy && (await initAssignableRoles());
+      } finally {
+        modalApi.setState({
+          loading: false,
+        });
+      }
     }
   },
   title: $t('AbpIdentity.Users'),
 });
+
+/** 检查管理角色权限 */
+function checkManageRolePolicy() {
+  return hasAccessByCodes(['AbpIdentity.Users.Update.ManageRoles']);
+}
+
+/** 检查管理组织机构权限 */
+function checkManageOuPolicy() {
+  return hasAccessByCodes(['AbpIdentity.Users.ManageOrganizationUnits']);
+}
+
+/**
+ * 初始化用户信息
+ * @param userId 用户id
+ */
+async function initUserInfo(userId: string) {
+  const dto = await getApi(userId);
+  formModel.value = dto;
+  modalApi.setState({
+    title: `${$t('AbpIdentity.Users')} - ${dto.userName}`,
+  });
+}
+
+/**
+ * 初始化用户角色
+ * @param userId 用户id
+ */
+async function initUserRoles(userId: string) {
+  const { items } = await getRolesApi(userId);
+  formModel.value.roleNames = items.map((item) => item.name);
+}
+
+/** 初始化可用角色列表 */
+async function initAssignableRoles() {
+  const { items } = await getAssignableRolesApi();
+  assignedRoles.value = items.map((item) => {
+    return {
+      key: item.name,
+      title: item.name,
+      ...item,
+    };
+  });
+}
+
+/**
+ * 初始化组织机构树
+ * @param userId 用户id
+ */
+async function initOrganizationUnitTree(userId: string) {
+  const ouResult = await getRootListApi();
+  organizationUnits.value = ouResult.items.map((item) => {
+    return {
+      isLeaf: false,
+      key: item.id,
+      title: item.displayName,
+      children: [],
+    };
+  });
+  const userOuResult = await getOrganizationUnitsApi(userId);
+  checkedOuKeys.value = userOuResult.items.map((item) => item.id);
+}
+
+/** 加载组织机构树节点 */
+async function onLoadOuChildren(node: EventDataNode) {
+  const nodeKey = String(node.key);
+  const { items } = await getChildrenApi({ id: nodeKey });
+  node.dataRef!.isLeaf = items.length === 0;
+  node.dataRef!.children = items.map((item): DataNode => {
+    return {
+      isLeaf: false,
+      key: item.id,
+      title: item.displayName,
+      children: [],
+    };
+  });
+  organizationUnits.value = [...organizationUnits.value];
+  loadedOuKeys.value.push(nodeKey);
+}
 </script>
 
 <template>
@@ -100,6 +202,7 @@ const [Modal, modalApi] = useVbenModal({
       :wrapper-col="{ span: 18 }"
     >
       <Tabs v-model:active-key="activedTab">
+        <!-- 基本信息 -->
         <TabPane key="info" :tab="$t('AbpIdentity.UserInformations')">
           <FormItem :label="$t('AbpIdentity.DisplayName:IsActive')">
             <Checkbox v-model:checked="formModel.isActive">
@@ -111,7 +214,10 @@ const [Modal, modalApi] = useVbenModal({
             name="userName"
             required
           >
-            <Input v-model:value="formModel.userName" />
+            <Input
+              v-model:value="formModel.userName"
+              :disabled="!isTrue('Abp.Identity.User.IsUserNameUpdateEnabled')"
+            />
           </FormItem>
           <FormItem
             v-if="!formModel.id"
@@ -135,7 +241,10 @@ const [Modal, modalApi] = useVbenModal({
             name="email"
             required
           >
-            <Input v-model:value="formModel.email" />
+            <Input
+              v-model:value="formModel.email"
+              :disabled="!isTrue('Abp.Identity.User.IsEmailUpdateEnabled')"
+            />
           </FormItem>
           <FormItem
             :label="$t('AbpIdentity.DisplayName:PhoneNumber')"
@@ -152,17 +261,39 @@ const [Modal, modalApi] = useVbenModal({
             </Checkbox>
           </FormItem>
         </TabPane>
-        <TabPane key="role" :tab="$t('Roles')">
+        <!-- 角色 -->
+        <TabPane
+          v-if="checkManageRolePolicy()"
+          key="role"
+          :tab="$t('AbpIdentity.Roles')"
+        >
           <Transfer
-            :data-source="assignableRoles"
-            :disabled="hasAccessByCodes(['AbpIdentity.Users.ManageRoles'])"
+            v-model:target-keys="formModel.roleNames"
+            :data-source="assignedRoles"
             :list-style="{
               width: '47%',
               height: '338px',
             }"
-            :target-keys="formModel.roleNames"
+            :render="(item) => item.title"
             :titles="[$t('AbpIdentity.Assigned'), $t('AbpIdentity.Available')]"
             class="tree-transfer"
+          />
+        </TabPane>
+        <!-- 组织机构 -->
+        <TabPane
+          v-if="formModel.id && checkManageOuPolicy()"
+          key="ou"
+          :tab="$t('AbpIdentity.OrganizationUnits')"
+        >
+          <Tree
+            :checked-keys="checkedOuKeys"
+            :load-data="onLoadOuChildren"
+            :loaded-keys="loadedOuKeys"
+            :tree-data="organizationUnits"
+            block-node
+            check-strictly
+            checkable
+            disabled
           />
         </TabPane>
       </Tabs>

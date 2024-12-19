@@ -32,10 +32,14 @@ defineOptions({
 
 const UserModal = defineAsyncComponent(() => import('./UserModal.vue'));
 const LockModal = defineAsyncComponent(() => import('./UserLockModal.vue'));
+const PasswordModal = defineAsyncComponent(
+  () => import('./UserPasswordModal.vue'),
+);
 
 const MenuItem = Menu.Item;
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
+const PasswordIcon = createIconifyIcon('carbon:password');
 const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
 const ClaimOutlined = createIconifyIcon('la:id-card-solid');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
@@ -144,6 +148,9 @@ const [UserEditModal, userModalApi] = useVbenModal({
 const [UserLockModal, lockModalApi] = useVbenModal({
   connectedComponent: LockModal,
 });
+const [UserPasswordModal, pwdModalApi] = useVbenModal({
+  connectedComponent: PasswordModal,
+});
 const [UserPermissionModal, permissionModalApi] = useVbenModal({
   connectedComponent: PermissionModal,
 });
@@ -186,6 +193,11 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
     case 'lock': {
       lockModalApi.setData(row);
       lockModalApi.open();
+      break;
+    }
+    case 'password': {
+      pwdModalApi.setData(row);
+      pwdModalApi.open();
       break;
     }
     case 'permissions': {
@@ -298,6 +310,13 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                   {{ $t('AbpIdentity.ManageClaim') }}
                 </MenuItem>
                 <MenuItem
+                  v-if="hasAccessByCodes([IdentityUserPermissions.Update])"
+                  key="password"
+                  :icon="h(PasswordIcon)"
+                >
+                  {{ $t('AbpIdentity.SetPassword') }}
+                </MenuItem>
+                <MenuItem
                   v-if="hasAccessByCodes(['Platform.Menu.ManageUsers'])"
                   key="menus"
                   :icon="h(MenuOutlined)"
@@ -314,6 +333,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
   </Grid>
   <UserLockModal @change="query" />
   <UserEditModal @change="() => query()" />
+  <UserPasswordModal @change="query" />
   <UserPermissionModal />
 </template>
 

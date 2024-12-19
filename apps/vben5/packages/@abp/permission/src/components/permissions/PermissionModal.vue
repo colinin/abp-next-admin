@@ -276,7 +276,7 @@ function getChildren(permissions: PermissionTree[]): PermissionTree[] {
                 <Checkbox
                   :disabled="modelState?.readonly"
                   v-bind="getPermissionNodeState(permission)"
-                  @change="(e) => onCheckNodeAll(e, permission)"
+                  @change="(e: any) => onCheckNodeAll(e, permission)"
                 >
                   {{ $t('AbpPermissionManagement.SelectAllInThisTab') }}
                 </Checkbox>
@@ -293,7 +293,10 @@ function getChildren(permissions: PermissionTree[]): PermissionTree[] {
                     children: 'children',
                   }"
                   :tree-data="permission.children"
-                  @check="(keys, info) => onCheckNode(permission, keys, info)"
+                  @check="
+                    (keys: any, info: CheckInfo) =>
+                      onCheckNode(permission, keys, info)
+                  "
                   @expand="onExpandNode"
                   @select="onSelectNode"
                 />

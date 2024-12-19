@@ -70,7 +70,7 @@ export function getPagedListApi(
  * @param id 角色id
  * @param ouId 组织机构id
  */
-export function removeOrganizationUnit(
+export function removeOrganizationUnitApi(
   id: string,
   ouId: string,
 ): Promise<void> {
