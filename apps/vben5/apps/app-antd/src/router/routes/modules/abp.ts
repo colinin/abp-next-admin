@@ -81,6 +81,15 @@ const routes: RouteRecordRaw[] = [
               },
             ],
           },
+          {
+            meta: {
+              title: $t('abp.manage.identity.auditLogs'),
+              icon: 'fluent-mdl2:compliance-audit',
+            },
+            name: 'AuditingAuditLogs',
+            path: '/manage/audit-logs',
+            component: () => import('#/views/auditing/audit-logs/index.vue'),
+          },
         ],
       },
     ],

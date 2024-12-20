@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@abp/account": "workspace:*",
+    "@abp/auditing": "workspace:*",
     "@abp/core": "workspace:*",
     "@abp/identity": "workspace:*",
     "@abp/request": "workspace:*",

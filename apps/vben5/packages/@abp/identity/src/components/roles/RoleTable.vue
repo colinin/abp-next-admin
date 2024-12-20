@@ -7,10 +7,11 @@ import type { IdentityRoleDto } from '../../types/roles';
 import { defineAsyncComponent, h } from 'vue';
 
 import { useAccess } from '@vben/access';
-import { useVbenModal } from '@vben/common-ui';
+import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
 import { useAbpStore } from '@abp/core';
 import { PermissionModal } from '@abp/permission';
 import { useVbenVxeGrid } from '@abp/ui';
@@ -32,9 +33,10 @@ const MenuItem = Menu.Item;
 const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
 const ClaimOutlined = createIconifyIcon('la:id-card-solid');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
+const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
+
 const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
 const ClaimModal = defineAsyncComponent(() => import('./RoleClaimModal.vue'));
-
 const abpStore = useAbpStore();
 const { hasAccessByCodes } = useAccess();
 const [RolePermissionModal, permissionModalApi] = useVbenModal({
@@ -42,6 +44,9 @@ const [RolePermissionModal, permissionModalApi] = useVbenModal({
 });
 const [RoleClaimModal, claimModalApi] = useVbenModal({
   connectedComponent: ClaimModal,
+});
+const [RoleChangeDrawer, roleChangeDrawerApi] = useVbenDrawer({
+  connectedComponent: EntityChangeDrawer,
 });
 
 const formOptions: VbenFormProps = {
@@ -143,6 +148,14 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
       claimModalApi.open();
       break;
     }
+    case 'entity-changes': {
+      roleChangeDrawerApi.setData({
+        entityId: row.id,
+        entityTypeFullName: 'Volo.Abp.Identity.IdentityRole',
+      });
+      roleChangeDrawerApi.open();
+      break;
+    }
     case 'permissions': {
       const roles = abpStore.application?.currentUser.roles ?? [];
       permissionModalApi.setData({
@@ -237,6 +250,13 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
                 >
                   {{ $t('AppPlatform.Menu:Manage') }}
                 </MenuItem>
+                <MenuItem
+                  v-if="hasAccessByCodes([AuditLogPermissions.Default])"
+                  key="entity-changes"
+                  :icon="h(AuditLogIcon)"
+                >
+                  {{ $t('AbpAuditLogging.EntitiesChanged') }}
+                </MenuItem>
               </Menu>
             </template>
             <Button :icon="h(EllipsisOutlined)" type="link" />
@@ -248,6 +268,7 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
   <RoleEditModal @change="() => query()" />
   <RoleClaimModal @change="query" />
   <RolePermissionModal />
+  <RoleChangeDrawer />
 </template>
 
 <style lang="scss" scoped></style>

@@ -35,6 +35,7 @@
     }
   },
   "dependencies": {
+    "@vueuse/core": "catalog:",
     "dayjs": "catalog:",
     "lodash": "catalog:",
     "pinia": "catalog:",
