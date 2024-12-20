@@ -38,7 +38,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 <template>
   <Drawer>
-    <EntityChangeTable :data="entityChanges" show-user-name />
+    <div style="max-width: 800px">
+      <EntityChangeTable :data="entityChanges" show-user-name />
+    </div>
   </Drawer>
 </template>
 

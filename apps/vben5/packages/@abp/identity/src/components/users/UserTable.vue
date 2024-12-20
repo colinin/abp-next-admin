@@ -7,10 +7,11 @@ import type { IdentityUserDto } from '../../types/users';
 import { computed, defineAsyncComponent, h } from 'vue';
 
 import { useAccess } from '@vben/access';
-import { useVbenModal } from '@vben/common-ui';
+import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
 import { formatToDateTime, useAbpStore } from '@abp/core';
 import { PermissionModal } from '@abp/permission';
 import { useVbenVxeGrid } from '@abp/ui';
@@ -45,6 +46,7 @@ const PasswordIcon = createIconifyIcon('carbon:password');
 const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
 const ClaimOutlined = createIconifyIcon('la:id-card-solid');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
+const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 
 const getLockEnd = computed(() => {
   return (row: IdentityUserDto) => {
@@ -159,6 +161,9 @@ const [UserClaimModal, claimModalApi] = useVbenModal({
 const [UserPermissionModal, permissionModalApi] = useVbenModal({
   connectedComponent: PermissionModal,
 });
+const [UserChangeDrawer, userChangeDrawerApi] = useVbenDrawer({
+  connectedComponent: EntityChangeDrawer,
+});
 const [Grid, { query }] = useVbenVxeGrid({
   formOptions,
   gridEvents,
@@ -196,6 +201,14 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
     case 'claims': {
       claimModalApi.setData(row);
       claimModalApi.open();
+      break;
+    }
+    case 'entity-changes': {
+      userChangeDrawerApi.setData({
+        entityId: row.id,
+        entityTypeFullName: 'Volo.Abp.Identity.IdentityUser',
+      });
+      userChangeDrawerApi.open();
       break;
     }
     case 'lock': {
@@ -332,6 +345,13 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                 >
                   {{ $t('AppPlatform.Menu:Manage') }}
                 </MenuItem>
+                <MenuItem
+                  v-if="hasAccessByCodes([AuditLogPermissions.Default])"
+                  key="entity-changes"
+                  :icon="h(AuditLogIcon)"
+                >
+                  {{ $t('AbpAuditLogging.EntitiesChanged') }}
+                </MenuItem>
               </Menu>
             </template>
             <Button :icon="h(EllipsisOutlined)" type="link" />
@@ -345,6 +365,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
   <UserEditModal @change="() => query()" />
   <UserPasswordModal @change="query" />
   <UserPermissionModal />
+  <UserChangeDrawer />
 </template>
 
 <style lang="scss" scoped></style>

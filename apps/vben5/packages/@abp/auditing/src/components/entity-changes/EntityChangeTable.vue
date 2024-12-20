@@ -149,7 +149,6 @@ watchEffect(() => {
     :data="getEntityChanges"
     :expand-config="{
       padding: true,
-      trigger: 'row',
     }"
     :pager-config="pagerConfig"
     @page-change="onPageChange"
