@@ -8,7 +8,8 @@
       "role": "Role",
       "claimTypes": "Claim Types",
       "securityLogs": "Security Logs",
-      "organizationUnits": "Organization Units"
+      "organizationUnits": "Organization Units",
+      "auditLogs": "Audit Logs"
     }
   }
 }

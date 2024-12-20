@@ -8,7 +8,8 @@
       "role": "角色",
       "claimTypes": "身份标识",
       "securityLogs": "安全日志",
-      "organizationUnits": "组织机构"
+      "organizationUnits": "组织机构",
+      "auditLogs": "审计日志"
     }
   }
 }

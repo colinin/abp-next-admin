@@ -41,6 +41,7 @@ catalog:
   '@tanstack/vue-query': ^5.62.0
   '@tanstack/vue-store': ^0.6.0
   '@types/archiver': ^6.0.3
+  '@types/codemirror': ^5.60.15
   '@types/eslint': ^9.6.1
   '@types/html-minifier-terser': ^7.0.2
   '@types/jsonwebtoken': ^9.0.7
@@ -73,6 +74,7 @@ catalog:
   circular-dependency-scanner: ^2.3.0
   class-variance-authority: ^0.7.1
   clsx: ^2.1.1
+  codemirror: ^5.65.3
   commitlint-plugin-function-rules: ^4.0.1
   consola: ^3.2.3
   cross-env: ^7.0.3

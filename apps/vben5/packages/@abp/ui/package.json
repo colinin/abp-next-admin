@@ -35,10 +35,19 @@
     }
   },
   "dependencies": {
+    "@abp/core": "workspace:*",
+    "@vben-core/preferences": "workspace:*",
+    "@vben-core/shared": "workspace:*",
+    "@vben-core/typings": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/locales": "workspace:*",
     "@vben/plugins": "workspace:*",
+    "@vueuse/core": "catalog:",
     "ant-design-vue": "catalog:",
+    "codemirror": "catalog:",
     "vue": "catalog:*"
+  },
+  "devDependencies": {
+    "@types/codemirror": "catalog:"
   }
 }
