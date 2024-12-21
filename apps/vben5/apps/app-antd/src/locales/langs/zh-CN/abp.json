@@ -11,5 +11,9 @@
       "organizationUnits": "组织机构",
       "auditLogs": "审计日志"
     }
+  },
+  "openiddict": {
+    "title": "OpenIddict",
+    "applications": "应用管理"
   }
 }

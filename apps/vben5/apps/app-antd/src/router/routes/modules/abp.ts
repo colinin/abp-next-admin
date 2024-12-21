@@ -92,6 +92,26 @@ const routes: RouteRecordRaw[] = [
           },
         ],
       },
+      {
+        meta: {
+          title: $t('abp.openiddict.title'),
+          icon: 'mdi:openid',
+        },
+        name: 'OpenIddict',
+        path: '/openiddict',
+        children: [
+          {
+            meta: {
+              title: $t('abp.openiddict.applications'),
+              icon: 'carbon:application',
+            },
+            name: 'OpenIddictApplications',
+            path: '/openiddict/applications',
+            component: () =>
+              import('#/views/openiddict/applications/index.vue'),
+          },
+        ],
+      },
     ],
   },
 ];
