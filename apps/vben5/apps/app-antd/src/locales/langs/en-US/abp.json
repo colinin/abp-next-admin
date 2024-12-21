@@ -11,5 +11,9 @@
       "organizationUnits": "Organization Units",
       "auditLogs": "Audit Logs"
     }
+  },
+  "openiddict": {
+    "title": "OpenIddict",
+    "applications": "Applications"
   }
 }

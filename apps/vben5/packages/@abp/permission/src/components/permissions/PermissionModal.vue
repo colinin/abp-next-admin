@@ -48,7 +48,8 @@ const permissionTree = ref<PermissionTree[]>([]);
 const getPermissionTab = computed(() => {
   return (tree: PermissionTree) => {
     const grantCount = getGrantPermissionCount(tree);
-    return `${tree.displayName} (${grantCount})`;
+    const permissionCount = getPermissionCount(tree);
+    return `${tree.displayName} (${grantCount}/${permissionCount})`;
   };
 });
 
