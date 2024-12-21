@@ -1,5 +1,5 @@
-/** 用户权限 */
-export const IdentityUserPermissions = {
+/** 应用权限 */
+export const ApplicationsPermissions = {
   /** 新增 */
   Create: 'AbpOpenIddict.Applications.Create',
   Default: 'AbpOpenIddict.Applications',

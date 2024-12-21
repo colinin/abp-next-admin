@@ -32,6 +32,7 @@
     "@vben/layouts": "workspace:*",
     "@vben/locales": "workspace:*",
     "ant-design-vue": "catalog:",
-    "vue": "catalog:*"
+    "vue": "catalog:*",
+    "vxe-table": "catalog:"
   }
 }
