@@ -31,6 +31,7 @@ defineOptions({
 const MenuItem = Menu.Item;
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
+const SecretIcon = createIconifyIcon('codicon:gist-secret');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 
 const { hasAccessByCodes } = useAccess();
@@ -138,6 +139,11 @@ const [ApplicationModal, modalApi] = useVbenModal({
     () => import('./ApplicationModal.vue'),
   ),
 });
+const [ApplicationSecretModal, secretModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./ApplicationSecretModal.vue'),
+  ),
+});
 const [ApplicationPermissionModal, permissionModalApi] = useVbenModal({
   connectedComponent: PermissionModal,
 });
@@ -180,6 +186,11 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
         providerName: 'C',
       });
       permissionModalApi.open();
+      break;
+    }
+    case 'secret': {
+      secretModalApi.setData(row);
+      secretModalApi.open();
       break;
     }
   }
@@ -241,6 +252,16 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
               <Menu @click="(info) => onMenuClick(row, info)">
                 <MenuItem
                   v-if="
+                    row.clientType === 'confidential' &&
+                    hasAccessByCodes([ApplicationsPermissions.ManageSecret])
+                  "
+                  key="secret"
+                  :icon="h(SecretIcon)"
+                >
+                  {{ $t('AbpOpenIddict.GenerateSecret') }}
+                </MenuItem>
+                <MenuItem
+                  v-if="
                     hasAccessByCodes([
                       ApplicationsPermissions.ManagePermissions,
                     ])
@@ -259,6 +280,7 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
     </template>
   </Grid>
   <ApplicationModal @change="() => query()" />
+  <ApplicationSecretModal @change="() => query()" />
   <ApplicationPermissionModal />
 </template>
 
