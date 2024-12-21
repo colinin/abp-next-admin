@@ -5,6 +5,7 @@ vue.config.js
 task
 obj
 bin
+!apps/vben5/scripts/**/bin/
 Logs
 appsettings.Production.json
 appsettings.secrets.json
