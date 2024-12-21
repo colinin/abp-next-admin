@@ -150,8 +150,22 @@ function sidebarComponents(): DefaultTheme.SidebarItem[] {
     },
     {
       collapsed: false,
+      text: '布局组件',
+      items: [
+        {
+          link: 'layout-ui/page',
+          text: 'Page 页面',
+        },
+      ],
+    },
+    {
+      collapsed: false,
       text: '通用组件',
       items: [
+        {
+          link: 'common-ui/vben-api-component',
+          text: 'ApiComponent Api组件包装器',
+        },
         {
           link: 'common-ui/vben-modal',
           text: 'Modal 模态框',
@@ -171,6 +185,10 @@ function sidebarComponents(): DefaultTheme.SidebarItem[] {
         {
           link: 'common-ui/vben-count-to-animator',
           text: 'CountToAnimator 数字动画',
+        },
+        {
+          link: 'common-ui/vben-ellipsis-text',
+          text: 'EllipsisText 省略文本',
         },
       ],
     },

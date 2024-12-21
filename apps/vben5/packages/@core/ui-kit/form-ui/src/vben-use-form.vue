@@ -6,7 +6,11 @@ import type { ExtendedFormApi, VbenFormProps } from './types';
 import { useForwardPriorityValues } from '@vben-core/composables';
 // import { isFunction } from '@vben-core/shared/utils';
 
-import { useTemplateRef } from 'vue';
+import { nextTick, onMounted, watch } from 'vue';
+
+import { cloneDeep } from '@vben-core/shared/utils';
+
+import { useDebounceFn } from '@vueuse/core';
 
 import FormActions from './components/form-actions.vue';
 import {
@@ -23,8 +27,6 @@ interface Props extends VbenFormProps {
 
 const props = defineProps<Props>();
 
-const formActionsRef = useTemplateRef<typeof FormActions>('formActionsRef');
-
 const state = props.formApi?.useStore?.();
 
 const forward = useForwardPriorityValues(props, state);
@@ -40,11 +42,7 @@ const handleUpdateCollapsed = (value: boolean) => {
 };
 
 function handleKeyDownEnter(event: KeyboardEvent) {
-  if (
-    !state.value.submitOnEnter ||
-    !formActionsRef.value ||
-    !formActionsRef.value.handleSubmit
-  ) {
+  if (!state.value.submitOnEnter || !forward.value.formApi?.isMounted) {
     return;
   }
   // 如果是 textarea 不阻止默认行为，否则会导致无法换行。
@@ -54,8 +52,19 @@ function handleKeyDownEnter(event: KeyboardEvent) {
   }
   event.preventDefault();
 
-  formActionsRef.value?.handleSubmit?.();
+  forward.value.formApi.validateAndSubmitForm();
 }
+
+const handleValuesChangeDebounced = useDebounceFn((newVal) => {
+  forward.value.handleValuesChange?.(cloneDeep(newVal));
+  state.value.submitOnChange && forward.value.formApi?.validateAndSubmitForm();
+}, 300);
+
+onMounted(async () => {
+  // 只在挂载后开始监听，form.values会有一个初始化的过程
+  await nextTick();
+  watch(() => form.values, handleValuesChangeDebounced, { deep: true });
+});
 </script>
 
 <template>
@@ -79,7 +88,6 @@ function handleKeyDownEnter(event: KeyboardEvent) {
       <slot v-bind="slotProps">
         <FormActions
           v-if="forward.showDefaultActions"
-          ref="formActionsRef"
           :model-value="state.collapsed"
           @update:model-value="handleUpdateCollapsed"
         >

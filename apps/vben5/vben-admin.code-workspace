@@ -168,33 +168,5 @@
       "name": "@vben/vsh",
       "path": "scripts/vsh",
     },
-    {
-      "name": "@vben/app",
-      "path": "apps/app-antd",
-    },
-    {
-      "name": "@abp/core",
-      "path": "packages/@abp/core",
-    },
-    {
-      "name": "@abp/request",
-      "path": "packages/@abp/request",
-    },
-    {
-      "name": "@abp/ui",
-      "path": "packages/@abp/ui",
-    },
-    {
-      "name": "@abp/identity",
-      "path": "packages/@abp/identity",
-    },
-    {
-      "name": "@abp/account",
-      "path": "packages/@abp/account",
-    },
-    {
-      "name": "@abp/permission",
-      "path": "packages/@abp/permission",
-    },
   ],
 }

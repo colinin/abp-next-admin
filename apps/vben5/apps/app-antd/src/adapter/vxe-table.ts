@@ -20,6 +20,10 @@ setupVbenVxeTable({
           // 全局禁用vxe-table的表单配置，使用formOptions
           enabled: false,
         },
+        pagerConfig: {
+          pageSize: 10,
+          pageSizes: [10, 15, 25, 50, 100],
+        },
         proxyConfig: {
           autoLoad: true,
           response: {

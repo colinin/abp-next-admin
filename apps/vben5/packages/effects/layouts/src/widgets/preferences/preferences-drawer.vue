@@ -87,6 +87,10 @@ const sidebarCollapsed = defineModel<boolean>('sidebarCollapsed');
 const sidebarCollapsedShowTitle = defineModel<boolean>(
   'sidebarCollapsedShowTitle',
 );
+const sidebarAutoActivateChild = defineModel<boolean>(
+  'sidebarAutoActivateChild',
+);
+const SidebarExpandOnHover = defineModel<boolean>('sidebarExpandOnHover');
 
 const headerEnable = defineModel<boolean>('headerEnable');
 const headerMode = defineModel<LayoutHeaderModeType>('headerMode');
@@ -105,6 +109,7 @@ const tabbarShowMore = defineModel<boolean>('tabbarShowMore');
 const tabbarShowMaximize = defineModel<boolean>('tabbarShowMaximize');
 const tabbarPersist = defineModel<boolean>('tabbarPersist');
 const tabbarDraggable = defineModel<boolean>('tabbarDraggable');
+const tabbarWheelable = defineModel<boolean>('tabbarWheelable');
 const tabbarStyleType = defineModel<string>('tabbarStyleType');
 
 const navigationStyleType = defineModel<NavigationStyleType>(
@@ -298,10 +303,13 @@ async function handleReset() {
 
             <Block :title="$t('preferences.sidebar.title')">
               <Sidebar
+                v-model:sidebar-auto-activate-child="sidebarAutoActivateChild"
                 v-model:sidebar-collapsed="sidebarCollapsed"
                 v-model:sidebar-collapsed-show-title="sidebarCollapsedShowTitle"
                 v-model:sidebar-enable="sidebarEnable"
+                v-model:sidebar-expand-on-hover="SidebarExpandOnHover"
                 v-model:sidebar-width="sidebarWidth"
+                :current-layout="appLayout"
                 :disabled="!isSideMode"
               />
             </Block>
@@ -345,6 +353,7 @@ async function handleReset() {
                 v-model:tabbar-show-maximize="tabbarShowMaximize"
                 v-model:tabbar-show-more="tabbarShowMore"
                 v-model:tabbar-style-type="tabbarStyleType"
+                v-model:tabbar-wheelable="tabbarWheelable"
               />
             </Block>
             <Block :title="$t('preferences.widget.title')">

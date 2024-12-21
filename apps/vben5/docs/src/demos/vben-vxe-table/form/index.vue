@@ -76,6 +76,8 @@ const formOptions: VbenFormProps = {
   submitButtonOptions: {
     content: '查询',
   },
+  // 是否在字段值改变时提交表单
+  submitOnChange: false,
   // 按下回车时是否提交表单
   submitOnEnter: false,
 };
@@ -107,6 +109,11 @@ const gridOptions: VxeGridProps<RowType> = {
         });
       },
     },
+  },
+  toolbarConfig: {
+    // 是否显示搜索表单控制按钮
+    // @ts-ignore 正式环境时有完整的类型声明
+    search: true,
   },
 };
 
