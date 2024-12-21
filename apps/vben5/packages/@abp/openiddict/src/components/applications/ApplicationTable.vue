@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { VbenFormProps, VxeGridProps } from '@abp/ui';
+import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { OpenIddictApplicationDto } from '../../types/applications';
 
@@ -10,13 +11,15 @@ import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { PermissionModal } from '@abp/permission';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
+  EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi } from '../../api/applications';
 import { ApplicationsPermissions } from '../../constants/permissions';
@@ -25,8 +28,10 @@ defineOptions({
   name: 'ApplicationTable',
 });
 
+const MenuItem = Menu.Item;
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
+const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 
 const { hasAccessByCodes } = useAccess();
 
@@ -100,7 +105,7 @@ const gridOptions: VxeGridProps<OpenIddictApplicationDto> = {
         ApplicationsPermissions.Update,
         ApplicationsPermissions.Delete,
       ]),
-      width: 180,
+      width: 220,
     },
   ],
   exportConfig: {},
@@ -133,6 +138,10 @@ const [ApplicationModal, modalApi] = useVbenModal({
     () => import('./ApplicationModal.vue'),
   ),
 });
+const [ApplicationPermissionModal, permissionModalApi] = useVbenModal({
+  connectedComponent: PermissionModal,
+});
+
 const [Grid, { query }] = useVbenVxeGrid({
   formOptions,
   gridOptions,
@@ -160,6 +169,20 @@ const onDelete = (row: OpenIddictApplicationDto) => {
     },
     title: $t('AbpUi.AreYouSure'),
   });
+};
+
+const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
+  switch (info.key) {
+    case 'permissions': {
+      permissionModalApi.setData({
+        displayName: row.clientId,
+        providerKey: row.clientId,
+        providerName: 'C',
+      });
+      permissionModalApi.open();
+      break;
+    }
+  }
 };
 </script>
 
@@ -189,7 +212,7 @@ const onDelete = (row: OpenIddictApplicationDto) => {
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
-        <div class="basis-1/2">
+        <div class="basis-1/3">
           <Button
             :icon="h(EditOutlined)"
             block
@@ -200,7 +223,7 @@ const onDelete = (row: OpenIddictApplicationDto) => {
             {{ $t('AbpUi.Edit') }}
           </Button>
         </div>
-        <div class="basis-1/2">
+        <div class="basis-1/3">
           <Button
             :icon="h(DeleteOutlined)"
             block
@@ -212,10 +235,31 @@ const onDelete = (row: OpenIddictApplicationDto) => {
             {{ $t('AbpUi.Delete') }}
           </Button>
         </div>
+        <div class="basis-1/3">
+          <Dropdown>
+            <template #overlay>
+              <Menu @click="(info) => onMenuClick(row, info)">
+                <MenuItem
+                  v-if="
+                    hasAccessByCodes([
+                      ApplicationsPermissions.ManagePermissions,
+                    ])
+                  "
+                  key="permissions"
+                  :icon="h(PermissionsOutlined)"
+                >
+                  {{ $t('AbpOpenIddict.ManagePermissions') }}
+                </MenuItem>
+              </Menu>
+            </template>
+            <Button :icon="h(EllipsisOutlined)" type="link" />
+          </Dropdown>
+        </div>
       </div>
     </template>
   </Grid>
   <ApplicationModal @change="() => query()" />
+  <ApplicationPermissionModal />
 </template>
 
 <style lang="scss" scoped></style>
