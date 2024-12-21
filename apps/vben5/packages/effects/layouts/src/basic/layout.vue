@@ -103,6 +103,7 @@ const {
 
 const {
   handleMenuSelect,
+  handleMenuOpen,
   headerActive,
   headerMenus,
   sidebarActive,
@@ -110,10 +111,19 @@ const {
   sidebarVisible,
 } = useMixedMenu();
 
-function wrapperMenus(menus: MenuRecordRaw[]) {
-  return mapTree(menus, (item) => {
-    return { ...cloneDeep(item), name: $t(item.name) };
-  });
+/**
+ * 包装菜单，翻译菜单名称
+ * @param menus 原始菜单数据
+ * @param deep 是否深度包装。对于双列布局，只需要包装第一层，因为更深层的数据会在扩展菜单中重新包装
+ */
+function wrapperMenus(menus: MenuRecordRaw[], deep: boolean = true) {
+  return deep
+    ? mapTree(menus, (item) => {
+        return { ...cloneDeep(item), name: $t(item.name) };
+      })
+    : menus.map((item) => {
+        return { ...cloneDeep(item), name: $t(item.name) };
+      });
 }
 
 function toggleSidebar() {
@@ -251,13 +261,14 @@ const headerSlots = computed(() => {
         :rounded="isMenuRounded"
         :theme="sidebarTheme"
         mode="vertical"
+        @open="handleMenuOpen"
         @select="handleMenuSelect"
       />
     </template>
     <template #mixed-menu>
       <LayoutMixedMenu
         :active-path="extraActiveMenu"
-        :menus="wrapperMenus(headerMenus)"
+        :menus="wrapperMenus(headerMenus, false)"
         :rounded="isMenuRounded"
         :theme="sidebarTheme"
         @default-select="handleDefaultSelect"

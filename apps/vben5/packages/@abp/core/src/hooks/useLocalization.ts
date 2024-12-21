@@ -2,7 +2,7 @@ import type { Dictionary, StringLocalizer } from '../types';
 
 import { computed } from 'vue';
 
-import { merge } from 'lodash';
+import merge from 'lodash.merge';
 
 import { useAbpStore } from '../store/abp';
 import { format } from '../utils/string';

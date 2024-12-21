@@ -37,12 +37,12 @@
   "dependencies": {
     "@vueuse/core": "catalog:",
     "dayjs": "catalog:",
-    "lodash": "catalog:",
+    "lodash.merge": "catalog:",
     "pinia": "catalog:",
     "pinia-plugin-persistedstate": "catalog:",
     "vue": "catalog:"
   },
   "devDependencies": {
-    "@types/lodash": "catalog:"
+    "@types/lodash.merge": "catalog:"
   }
 }

@@ -8,7 +8,7 @@ import type { BaseFormComponentType } from '@vben/common-ui';
 import type { Component, SetupContext } from 'vue';
 import { h } from 'vue';
 
-import { globalShareState } from '@vben/common-ui';
+import { ApiComponent, globalShareState, IconPicker } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
@@ -21,7 +21,6 @@ import {
   Input,
   InputNumber,
   InputPassword,
-  InputSearch,
   Mentions,
   notification,
   Radio,
@@ -49,16 +48,18 @@ const withDefaultPlaceholder = <T extends Component>(
 
 // 这里需要自行根据业务组件库进行适配，需要用到的组件都需要在这里类型说明
 export type ComponentType =
+  | 'ApiSelect'
+  | 'ApiTreeSelect'
   | 'AutoComplete'
   | 'Checkbox'
   | 'CheckboxGroup'
   | 'DatePicker'
   | 'DefaultButton'
   | 'Divider'
+  | 'IconPicker'
   | 'Input'
   | 'InputNumber'
   | 'InputPassword'
-  | 'InputSearch'
   | 'Mentions'
   | 'PrimaryButton'
   | 'Radio'
@@ -79,7 +80,38 @@ async function initComponentAdapter() {
     // 如果你的组件体积比较大，可以使用异步加载
     // Button: () =>
     // import('xxx').then((res) => res.Button),
-
+    ApiSelect: (props, { attrs, slots }) => {
+      return h(
+        ApiComponent,
+        {
+          placeholder: $t('ui.placeholder.select'),
+          ...props,
+          ...attrs,
+          component: Select,
+          loadingSlot: 'suffixIcon',
+          modelPropName: 'value',
+          visibleEvent: 'onDropdownVisibleChange',
+        },
+        slots,
+      );
+    },
+    ApiTreeSelect: (props, { attrs, slots }) => {
+      return h(
+        ApiComponent,
+        {
+          placeholder: $t('ui.placeholder.select'),
+          ...props,
+          ...attrs,
+          component: TreeSelect,
+          fieldNames: { label: 'label', value: 'value', children: 'children' },
+          loadingSlot: 'suffixIcon',
+          modelPropName: 'value',
+          optionsPropName: 'treeData',
+          visibleEvent: 'onVisibleChange',
+        },
+        slots,
+      );
+    },
     AutoComplete,
     Checkbox,
     CheckboxGroup,
@@ -89,10 +121,16 @@ async function initComponentAdapter() {
       return h(Button, { ...props, attrs, type: 'default' }, slots);
     },
     Divider,
+    IconPicker: (props, { attrs, slots }) => {
+      return h(
+        IconPicker,
+        { iconSlot: 'addonAfter', inputComponent: Input, ...props, ...attrs },
+        slots,
+      );
+    },
     Input: withDefaultPlaceholder(Input, 'input'),
     InputNumber: withDefaultPlaceholder(InputNumber, 'input'),
     InputPassword: withDefaultPlaceholder(InputPassword, 'input'),
-    InputSearch,
     Mentions: withDefaultPlaceholder(Mentions, 'input'),
     // 自定义主要按钮
     PrimaryButton: (props, { attrs, slots }) => {

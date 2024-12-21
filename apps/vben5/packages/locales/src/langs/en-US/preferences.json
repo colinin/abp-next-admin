@@ -45,7 +45,11 @@
     "width": "Width",
     "visible": "Show Sidebar",
     "collapsed": "Collpase Menu",
-    "collapsedShowTitle": "Show Menu Title"
+    "collapsedShowTitle": "Show Menu Title",
+    "autoActivateChild": "Auto Activate SubMenu",
+    "autoActivateChildTip": "`Enabled` to automatically activate the submenu while click menu.",
+    "expandOnHover": "Expand On Hover",
+    "expandOnHoverTip": "When the mouse hovers over menu, \n `Enabled` to expand children menus \n `Disabled` to expand whole sidebar."
   },
   "tabbar": {
     "title": "Tabbar",
@@ -55,6 +59,8 @@
     "showMaximize": "Show Maximize Button",
     "persist": "Persist Tabs",
     "draggable": "Enable Draggable Sort",
+    "wheelable": "Support Mouse Wheel",
+    "wheelableTip": "When enabled, the Tabbar area responds to vertical scrolling events of the scroll wheel.",
     "styleType": {
       "title": "Tabs Style",
       "chrome": "Chrome",
