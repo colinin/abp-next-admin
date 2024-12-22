@@ -12,7 +12,7 @@ import { $t } from '@vben/locales';
 
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Button, Modal } from 'ant-design-vue';
+import { Button, message, Modal } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi } from '../../api/claim-types';
 import { IdentityClaimTypePermissions } from '../../constants/permissions';
@@ -165,8 +165,10 @@ const handleDelete = (row: IdentityClaimTypeDto) => {
   Modal.confirm({
     centered: true,
     content: $t('AbpIdentity.WillDeleteClaim', [row.name]),
-    onOk: () => {
-      return deleteApi(row.id).then(() => query());
+    onOk: async () => {
+      await deleteApi(row.id);
+      message.success($t('AbpUi.SuccessfullyDeleted'));
+      query();
     },
     title: $t('AbpUi.AreYouSure'),
   });

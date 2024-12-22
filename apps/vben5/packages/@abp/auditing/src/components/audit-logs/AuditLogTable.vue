@@ -4,7 +4,7 @@ import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
 
 import type { AuditLogDto } from '../../types/audit-logs';
 
-import { defineAsyncComponent, h, nextTick } from 'vue';
+import { defineAsyncComponent, h } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -12,7 +12,7 @@ import { $t } from '@vben/locales';
 import { formatToDateTime } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Button, Popconfirm, Tag } from 'ant-design-vue';
+import { Button, message, Modal, Tag } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi } from '../../api/audit-logs';
 import { AuditLogPermissions } from '../../constants/permissions';
@@ -235,7 +235,7 @@ const gridOptions: VxeGridProps<AuditLogDto> = {
 const gridEvents: VxeGridListeners<AuditLogDto> = {
   sortChange: onSort,
 };
-const [Grid, { formApi, query }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
   gridOptions,
@@ -253,19 +253,26 @@ function onUpdate(row: AuditLogDto) {
 }
 
 async function onDelete(row: AuditLogDto) {
-  await deleteApi(row.id).then(() => query());
+  Modal.confirm({
+    centered: true,
+    content: $t('AbpUi.ItemWillBeDeletedMessage'),
+    onOk: async () => {
+      await deleteApi(row.id);
+      message.success($t('AbpUi.SuccessfullyDeleted'));
+      gridApi.query();
+    },
+    title: $t('AbpUi.AreYouSure'),
+  });
 }
 
 function onSort(params: { field: string; order: SortOrder }) {
   const sorting = params.order ? `${params.field} ${params.order}` : undefined;
-  query({ sorting });
+  gridApi.query({ sorting });
 }
 
 function onFilter(field: string, value: any) {
-  nextTick(() => {
-    formApi.setFieldValue(field, value);
-    formApi.validateAndSubmitForm();
-  });
+  gridApi.formApi.setFieldValue(field, value);
+  gridApi.formApi.validateAndSubmitForm();
 }
 </script>
 
@@ -274,13 +281,14 @@ function onFilter(field: string, value: any) {
     <template #url="{ row }">
       <Tag
         :color="getHttpStatusCodeColor(row.httpStatusCode)"
+        class="cursor-pointer"
         @click="onFilter('httpStatusCode', row.httpStatusCode)"
       >
         {{ row.httpStatusCode }}
       </Tag>
       <Tag
         :color="getHttpMethodColor(row.httpMethod)"
-        style="margin-left: 5px"
+        class="ml-px cursor-pointer"
         @click="onFilter('httpMethod', row.httpMethod)"
       >
         {{ row.httpMethod }}
@@ -303,20 +311,16 @@ function onFilter(field: string, value: any) {
         >
           {{ $t('AbpAuditLogging.ShowLogDialog') }}
         </Button>
-        <Popconfirm
-          :title="$t('AbpUi.ItemWillBeDeletedMessage')"
-          @confirm="onDelete(row)"
+        <Button
+          :icon="h(DeleteOutlined)"
+          block
+          danger
+          type="link"
+          v-access:code="[AuditLogPermissions.Delete]"
+          @click="onDelete(row)"
         >
-          <Button
-            :icon="h(DeleteOutlined)"
-            block
-            danger
-            type="link"
-            v-access:code="[AuditLogPermissions.Delete]"
-          >
-            {{ $t('AbpUi.Delete') }}
-          </Button>
-        </Popconfirm>
+          {{ $t('AbpUi.Delete') }}
+        </Button>
       </div>
     </template>
   </Grid>

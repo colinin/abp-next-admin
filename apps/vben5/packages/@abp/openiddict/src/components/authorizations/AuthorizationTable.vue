@@ -194,11 +194,10 @@ function onDelete(row: OpenIddictAuthorizationDto) {
   Modal.confirm({
     centered: true,
     content: `${$t('AbpUi.ItemWillBeDeletedMessage')}`,
-    onOk: () => {
-      return deleteApi(row.id).then(() => {
-        message.success($t('AbpUi.SuccessfullyDeleted'));
-        gridApi.query();
-      });
+    onOk: async () => {
+      await deleteApi(row.id);
+      message.success($t('AbpUi.SuccessfullyDeleted'));
+      gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
   });

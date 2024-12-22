@@ -10,7 +10,7 @@ import { $t } from '@vben/locales';
 import { formatToDateTime } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined } from '@ant-design/icons-vue';
-import { Button, Modal } from 'ant-design-vue';
+import { Button, message, Modal } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi } from '../../api/security-logs';
 import { SecurityLogPermissions } from '../../constants/permissions';
@@ -180,8 +180,10 @@ const handleDelete = (row: SecurityLogDto) => {
   Modal.confirm({
     centered: true,
     content: $t('AbpUi.ItemWillBeDeletedMessage'),
-    onOk: () => {
-      return deleteApi(row.id).then(() => query());
+    onOk: async () => {
+      await deleteApi(row.id);
+      message.success($t('AbpUi.SuccessfullyDeleted'));
+      query();
     },
     title: $t('AbpUi.AreYouSure'),
   });

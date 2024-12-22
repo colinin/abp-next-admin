@@ -1,2 +1,2 @@
-export * from './token';
-export * from './user';
+export * as tokenApi from './token';
+export * as userInfoApi from './user';
