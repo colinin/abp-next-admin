@@ -14,3 +14,11 @@ export const ApplicationsPermissions = {
   /** 更新 */
   Update: 'AbpOpenIddict.Applications.Update',
 };
+/** 授权权限 */
+export const AuthorizationsPermissions = {
+  /** 新增 */
+  Create: 'AbpOpenIddict.Authorizations.Create',
+  Default: 'AbpOpenIddict.Authorizations',
+  /** 删除 */
+  Delete: 'AbpOpenIddict.Authorizations.Delete',
+};

@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@abp/core": "workspace:*",
+    "@abp/identity": "workspace:*",
     "@abp/permission": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/ui": "workspace:*",
@@ -32,7 +33,11 @@
     "@vben/layouts": "workspace:*",
     "@vben/locales": "workspace:*",
     "ant-design-vue": "catalog:",
+    "lodash.debounce": "catalog:",
     "vue": "catalog:*",
     "vxe-table": "catalog:"
+  },
+  "devDependencies": {
+    "@types/lodash.debounce": "catalog:"
   }
 }

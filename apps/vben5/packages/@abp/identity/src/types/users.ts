@@ -90,6 +90,14 @@ interface GetUserPagedListInput extends PagedAndSortedResultRequestDto {
 type IdentityUserCreateDto = IdentityUserCreateOrUpdateDto;
 type IdentityUserUpdateDto = IdentityUserCreateOrUpdateDto;
 
+interface UserLookupCountInput {
+  filter?: string;
+}
+
+interface UserLookupSearchInput
+  extends UserLookupCountInput,
+    PagedAndSortedResultRequestDto {}
+
 export type {
   ChangeMyPasswordInput,
   ChangeUserPasswordInput,
@@ -98,4 +106,6 @@ export type {
   IdentityUserDto,
   IdentityUserOrganizationUnitUpdateDto,
   IdentityUserUpdateDto,
+  UserLookupCountInput,
+  UserLookupSearchInput,
 };
