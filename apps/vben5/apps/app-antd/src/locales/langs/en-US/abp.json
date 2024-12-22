@@ -16,6 +16,7 @@
     "title": "OpenIddict",
     "applications": "Applications",
     "authorizations": "Authorizations",
-    "scopes": "Scopes"
+    "scopes": "Scopes",
+    "tokens": "Tokens"
   }
 }

@@ -16,6 +16,7 @@
     "title": "OpenIddict",
     "applications": "应用管理",
     "authorizations": "授权管理",
-    "scopes": "范围管理"
+    "scopes": "范围管理",
+    "tokens": "授权令牌"
   }
 }
