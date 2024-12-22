@@ -120,6 +120,15 @@ const routes: RouteRecordRaw[] = [
             component: () =>
               import('#/views/openiddict/authorizations/index.vue'),
           },
+          {
+            meta: {
+              title: $t('abp.openiddict.scopes'),
+              icon: 'et:scope',
+            },
+            name: 'OpenIddictScopes',
+            path: '/openiddict/scopes',
+            component: () => import('#/views/openiddict/scopes/index.vue'),
+          },
         ],
       },
     ],
