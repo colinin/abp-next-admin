@@ -14,6 +14,7 @@
   },
   "openiddict": {
     "title": "OpenIddict",
-    "applications": "应用管理"
+    "applications": "应用管理",
+    "authorizations": "授权管理"
   }
 }

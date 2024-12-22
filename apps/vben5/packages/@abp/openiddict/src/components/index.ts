@@ -1,1 +1,2 @@
 export { default as ApplicationTable } from './applications/ApplicationTable.vue';
+export { default as AuthorizationTable } from './authorizations/AuthorizationTable.vue';

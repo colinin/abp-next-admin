@@ -14,6 +14,7 @@
   },
   "openiddict": {
     "title": "OpenIddict",
-    "applications": "Applications"
+    "applications": "Applications",
+    "authorizations": "Authorizations"
   }
 }
