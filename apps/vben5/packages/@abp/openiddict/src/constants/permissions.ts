@@ -22,3 +22,13 @@ export const AuthorizationsPermissions = {
   /** 删除 */
   Delete: 'AbpOpenIddict.Authorizations.Delete',
 };
+/** 范围权限 */
+export const ScopesPermissions = {
+  /** 新增 */
+  Create: 'AbpOpenIddict.Scopes.Create',
+  Default: 'AbpOpenIddict.Scopes',
+  /** 删除 */
+  Delete: 'AbpOpenIddict.Scopes.Delete',
+  /** 更新 */
+  Update: 'AbpOpenIddict.Scopes.Update',
+};
