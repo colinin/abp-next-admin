@@ -45,3 +45,11 @@ export const SecurityLogPermissions = {
   /** 删除 */
   Delete: 'AbpAuditing.SecurityLog.Delete',
 };
+/**
+ * 搜索用户权限
+ * @deprecated 后台服务删除权限后将无法使用.
+ * @todo 需要检查abp框架权限定义
+ */
+export const UserLookupPermissions = {
+  Default: 'AbpIdentity.UserLookup',
+};

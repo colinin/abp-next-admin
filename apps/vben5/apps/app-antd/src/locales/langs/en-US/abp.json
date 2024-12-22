@@ -11,5 +11,12 @@
       "organizationUnits": "Organization Units",
       "auditLogs": "Audit Logs"
     }
+  },
+  "openiddict": {
+    "title": "OpenIddict",
+    "applications": "Applications",
+    "authorizations": "Authorizations",
+    "scopes": "Scopes",
+    "tokens": "Tokens"
   }
 }

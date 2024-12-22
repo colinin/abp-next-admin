@@ -92,6 +92,54 @@ const routes: RouteRecordRaw[] = [
           },
         ],
       },
+      {
+        meta: {
+          title: $t('abp.openiddict.title'),
+          icon: 'mdi:openid',
+        },
+        name: 'OpenIddict',
+        path: '/openiddict',
+        children: [
+          {
+            meta: {
+              title: $t('abp.openiddict.applications'),
+              icon: 'carbon:application',
+            },
+            name: 'OpenIddictApplications',
+            path: '/openiddict/applications',
+            component: () =>
+              import('#/views/openiddict/applications/index.vue'),
+          },
+          {
+            meta: {
+              title: $t('abp.openiddict.authorizations'),
+              icon: 'arcticons:ente-authenticator',
+            },
+            name: 'OpenIddictAuthorizations',
+            path: '/openiddict/authorizations',
+            component: () =>
+              import('#/views/openiddict/authorizations/index.vue'),
+          },
+          {
+            meta: {
+              title: $t('abp.openiddict.scopes'),
+              icon: 'et:scope',
+            },
+            name: 'OpenIddictScopes',
+            path: '/openiddict/scopes',
+            component: () => import('#/views/openiddict/scopes/index.vue'),
+          },
+          {
+            meta: {
+              title: $t('abp.openiddict.tokens'),
+              icon: 'oui:token-key',
+            },
+            name: 'OpenIddictTokens',
+            path: '/openiddict/tokens',
+            component: () => import('#/views/openiddict/tokens/index.vue'),
+          },
+        ],
+      },
     ],
   },
 ];
