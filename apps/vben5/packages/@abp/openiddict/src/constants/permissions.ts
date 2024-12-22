@@ -32,3 +32,11 @@ export const ScopesPermissions = {
   /** 更新 */
   Update: 'AbpOpenIddict.Scopes.Update',
 };
+/** 授权令牌权限 */
+export const TokensPermissions = {
+  /** 新增 */
+  Create: 'AbpOpenIddict.Tokens.Create',
+  Default: 'AbpOpenIddict.Tokens',
+  /** 删除 */
+  Delete: 'AbpOpenIddict.Tokens.Delete',
+};
