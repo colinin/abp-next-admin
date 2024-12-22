@@ -70,7 +70,6 @@ async function onSubmit(input: Record<string, any>) {
   message.success($t('AbpUi.SavedSuccessfully'));
   emits('change', dto);
   modalApi.close();
-  modalApi.close();
 }
 </script>
 
