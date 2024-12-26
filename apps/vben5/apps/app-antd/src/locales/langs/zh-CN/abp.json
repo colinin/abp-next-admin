@@ -10,6 +10,11 @@
       "securityLogs": "安全日志",
       "organizationUnits": "组织机构",
       "auditLogs": "审计日志"
+    },
+    "permissions": {
+      "title": "权限管理",
+      "groups": "权限分组",
+      "definitions": "权限定义"
     }
   },
   "openiddict": {

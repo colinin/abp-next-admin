@@ -52,7 +52,12 @@ export const useAbpStore = defineStore(
       localization.value = val;
     }
 
+    function $reset() {
+      application.value = undefined;
+    }
+
     return {
+      $reset,
       application,
       getI18nLocales,
       localization,

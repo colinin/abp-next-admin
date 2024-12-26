@@ -4,8 +4,8 @@ import { computed } from 'vue';
 
 import { isString } from '@vben-core/shared/utils';
 
-import CodeMirror from './codemirror/CodeMirror.vue';
-import { MODE } from './codemirror/types';
+import CodeMirror from '../codemirror/CodeMirror.vue';
+import { MODE } from '../codemirror/types';
 
 const props = defineProps({
   autoFormat: { default: true, type: Boolean },

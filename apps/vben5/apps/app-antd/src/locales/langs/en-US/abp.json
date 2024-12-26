@@ -10,6 +10,11 @@
       "securityLogs": "Security Logs",
       "organizationUnits": "Organization Units",
       "auditLogs": "Audit Logs"
+    },
+    "permissions": {
+      "title": "Permissions",
+      "groups": "Groups",
+      "definitions": "Definitions"
     }
   },
   "openiddict": {
