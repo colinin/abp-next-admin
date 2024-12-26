@@ -69,3 +69,16 @@ export function setUserSettingsApi(input: SettingsUpdateInput): Promise<void> {
     input,
   );
 }
+
+/**
+ * 发送测试邮件
+ * @param emailAddress 邮件接收方地址
+ */
+export const sendTestEmailApi = (emailAddress: string) => {
+  return requestClient.post(
+    `/api/setting-management/settings/send-test-email`,
+    {
+      emailAddress,
+    },
+  );
+};

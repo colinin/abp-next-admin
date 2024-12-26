@@ -2,7 +2,7 @@ interface SettingBase {
   /** 名称 */
   name: string;
   /** 当前设置值 */
-  value: any;
+  value: string;
 }
 
 /** 配置变更对象 */
@@ -53,4 +53,4 @@ interface SettingGroup {
   settings: Setting[];
 }
 
-export type { SettingGroup, SettingsUpdateInput };
+export type { Setting, SettingDetail, SettingGroup, SettingsUpdateInput };
