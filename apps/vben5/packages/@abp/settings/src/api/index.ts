@@ -1,1 +1,2 @@
-export * as settingDefintiionsApi from './definitions';
+export * as settingDefinitionsApi from './definitions';
+export * as settingsApi from './settings';
