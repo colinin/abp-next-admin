@@ -31,7 +31,7 @@
     "@abp/core": "workspace:*",
     "@abp/identity": "workspace:*",
     "@abp/openiddict": "workspace:*",
-    "@abp/permission": "workspace:*",
+    "@abp/permissions": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/settings": "workspace:*",
     "@abp/ui": "workspace:*",

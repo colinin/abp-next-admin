@@ -11,7 +11,7 @@ import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { PermissionModal } from '@abp/permission';
+import { PermissionModal } from '@abp/permissions';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
