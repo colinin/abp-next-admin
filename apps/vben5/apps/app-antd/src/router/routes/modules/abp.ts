@@ -128,6 +128,15 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                   import('#/views/settings/definitions/index.vue'),
               },
+              {
+                meta: {
+                  title: $t('abp.manage.settings.system'),
+                  icon: 'tabler:settings-cog',
+                },
+                name: 'SystemSettings',
+                path: '/manage/settings/system',
+                component: () => import('#/views/settings/system/index.vue'),
+              },
             ],
           },
           {
