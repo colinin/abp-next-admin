@@ -14,7 +14,9 @@ import { requestClient } from '@abp/request';
  * @param name 设置名称
  */
 export function deleteApi(name: string): Promise<void> {
-  return requestClient.delete(`/api/permission-management/definitions/${name}`);
+  return requestClient.delete(
+    `/api/setting-management/settings/definitions/${name}`,
+  );
 }
 
 /**
@@ -24,7 +26,7 @@ export function deleteApi(name: string): Promise<void> {
  */
 export function getApi(name: string): Promise<SettingDefinitionDto> {
   return requestClient.get<SettingDefinitionDto>(
-    `/api/permission-management/definitions/${name}`,
+    `/api/setting-management/settings/definitions/${name}`,
   );
 }
 
@@ -37,7 +39,7 @@ export function getListApi(
   input?: SettingDefinitionGetListInput,
 ): Promise<ListResultDto<SettingDefinitionDto>> {
   return requestClient.get<ListResultDto<SettingDefinitionDto>>(
-    `/api/permission-management/definitions`,
+    `/api/setting-management/settings/definitions`,
     {
       params: input,
     },
@@ -53,7 +55,7 @@ export function createApi(
   input: SettingDefinitionCreateDto,
 ): Promise<SettingDefinitionDto> {
   return requestClient.post<SettingDefinitionDto>(
-    '/api/permission-management/definitions',
+    '/api/setting-management/settings/definitions',
     input,
   );
 }
@@ -69,7 +71,7 @@ export function updateApi(
   input: SettingDefinitionUpdateDto,
 ): Promise<SettingDefinitionDto> {
   return requestClient.put<SettingDefinitionDto>(
-    `/api/permission-management/definitions/${name}`,
+    `/api/setting-management/settings/definitions/${name}`,
     input,
   );
 }
