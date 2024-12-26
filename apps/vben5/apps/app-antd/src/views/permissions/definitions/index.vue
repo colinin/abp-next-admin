@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Page } from '@vben/common-ui';
 
-import { PermissionDefinitionTable } from '@abp/permission';
+import { PermissionDefinitionTable } from '@abp/permissions';
 
 defineOptions({
   name: 'PermissionDefinitions',

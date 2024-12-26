@@ -13,7 +13,7 @@ import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
 import { formatToDateTime, useAbpStore } from '@abp/core';
-import { PermissionModal } from '@abp/permission';
+import { PermissionModal } from '@abp/permissions';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,

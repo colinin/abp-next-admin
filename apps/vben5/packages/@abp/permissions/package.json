@@ -1,12 +1,12 @@
 {
-  "name": "@abp/permission",
+  "name": "@abp/permissions",
   "version": "8.3.2",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/colinin/abp-next-admin.git",
-    "directory": "packages/@abp/permission"
+    "directory": "packages/@abp/permissions"
   },
   "license": "MIT",
   "type": "module",
