@@ -15,6 +15,11 @@
       "title": "权限管理",
       "groups": "权限分组",
       "definitions": "权限定义"
+    },
+    "settings": {
+      "title": "设置管理",
+      "definitions": "设置定义",
+      "system": "系统设置"
     }
   },
   "openiddict": {

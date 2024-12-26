@@ -112,6 +112,26 @@ const routes: RouteRecordRaw[] = [
           },
           {
             meta: {
+              title: $t('abp.manage.settings.title'),
+              icon: 'ic:outline-settings',
+            },
+            name: 'SettingManagement',
+            path: '/manage/settings',
+            children: [
+              {
+                meta: {
+                  title: $t('abp.manage.settings.definitions'),
+                  icon: 'codicon:settings',
+                },
+                name: 'SettingDefinitions',
+                path: '/manage/settings/definitions',
+                component: () =>
+                  import('#/views/settings/definitions/index.vue'),
+              },
+            ],
+          },
+          {
+            meta: {
               title: $t('abp.manage.identity.auditLogs'),
               icon: 'fluent-mdl2:compliance-audit',
             },

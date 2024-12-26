@@ -33,6 +33,7 @@
     "@abp/openiddict": "workspace:*",
     "@abp/permission": "workspace:*",
     "@abp/request": "workspace:*",
+    "@abp/settings": "workspace:*",
     "@abp/ui": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
