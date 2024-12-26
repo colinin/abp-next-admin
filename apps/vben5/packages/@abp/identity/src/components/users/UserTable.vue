@@ -23,7 +23,7 @@ import {
   PlusOutlined,
   UnlockOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi, unLockApi } from '../../api/users';
 import { IdentityUserPermissions } from '../../constants/permissions';
@@ -184,8 +184,10 @@ const handleDelete = (row: IdentityUserDto) => {
   Modal.confirm({
     centered: true,
     content: $t('AbpIdentity.UserDeletionConfirmationMessage', [row.userName]),
-    onOk: () => {
-      return deleteApi(row.id).then(() => query());
+    onOk: async () => {
+      await deleteApi(row.id);
+      message.success($t('AbpUi.SuccessfullyDeleted'));
+      query();
     },
     title: $t('AbpUi.AreYouSure'),
   });

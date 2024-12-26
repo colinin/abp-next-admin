@@ -11,7 +11,7 @@ import { $t } from '@vben/locales';
 
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Button, Popconfirm } from 'ant-design-vue';
+import { Button, message, Popconfirm } from 'ant-design-vue';
 
 defineOptions({
   name: 'ClaimTable',
@@ -91,6 +91,7 @@ async function onDelete(row: IdentityClaimDto) {
     claimType: row.claimType,
     claimValue: row.claimValue,
   });
+  message.success($t('AbpUi.SuccessfullyDeleted'));
   query();
   emits('onDelete');
 }

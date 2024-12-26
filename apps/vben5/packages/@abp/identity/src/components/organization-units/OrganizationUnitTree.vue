@@ -19,7 +19,15 @@ import {
   PlusOutlined,
   RedoOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Card, Dropdown, Menu, Modal, Tree } from 'ant-design-vue';
+import {
+  Button,
+  Card,
+  Dropdown,
+  Menu,
+  message,
+  Modal,
+  Tree,
+} from 'ant-design-vue';
 
 import {
   deleteApi,
@@ -130,8 +138,10 @@ function onDelete(id: string) {
     centered: true,
     content: $t('AbpUi.ItemWillBeDeletedMessage'),
     maskClosable: false,
-    onOk: () => {
-      return deleteApi(id).then(() => onRefresh());
+    onOk: async () => {
+      await deleteApi(id);
+      message.success($t('AbpUi.SuccessfullyDeleted'));
+      onRefresh();
     },
     title: $t('AbpUi.AreYouSure'),
   });

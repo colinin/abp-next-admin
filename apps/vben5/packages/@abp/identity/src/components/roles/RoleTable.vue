@@ -20,7 +20,7 @@ import {
   EditOutlined,
   EllipsisOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, Modal, Tag } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal, Tag } from 'ant-design-vue';
 
 import { deleteApi, getPagedListApi } from '../../api/roles';
 import { IdentityRolePermissions } from '../../constants/permissions';
@@ -134,8 +134,10 @@ const handleDelete = (row: IdentityRoleDto) => {
   Modal.confirm({
     centered: true,
     content: $t('AbpIdentity.RoleDeletionConfirmationMessage', [row.name]),
-    onOk: () => {
-      return deleteApi(row.id).then(() => query());
+    onOk: async () => {
+      await deleteApi(row.id);
+      message.success($t('AbpUi.SuccessfullyDeleted'));
+      query();
     },
     title: $t('AbpUi.AreYouSure'),
   });

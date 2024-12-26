@@ -167,11 +167,10 @@ const onDelete = (row: OpenIddictApplicationDto) => {
   Modal.confirm({
     centered: true,
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.clientId])}`,
-    onOk: () => {
-      return deleteApi(row.id).then(() => {
-        message.success($t('AbpUi.SuccessfullyDeleted'));
-        query();
-      });
+    onOk: async () => {
+      await deleteApi(row.id);
+      message.success($t('AbpUi.SuccessfullyDeleted'));
+      query();
     },
     title: $t('AbpUi.AreYouSure'),
   });

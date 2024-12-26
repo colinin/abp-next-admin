@@ -1,0 +1,120 @@
+{
+  "localizable_input": {
+    "placeholder": "请选择本地化资源",
+    "resources": {
+      "fiexed": {
+        "group": "自定义",
+        "label": "固定内容",
+        "placeholder": "请输入自定义内容"
+      },
+      "localization": {
+        "group": "本地化",
+        "placeholder": "请选择名称"
+      }
+    }
+  },
+  "extra_property_dictionary": {
+    "title": "扩展属性",
+    "key": "名称",
+    "value": "键值",
+    "actions": {
+      "title": "操作",
+      "create": "新增",
+      "update": "编辑",
+      "delete": "删除",
+      "clean": "清除"
+    },
+    "validator": {
+      "duplicateKey": "已经添加了一个相同名称的键"
+    },
+    "itemWillBeDeleted": "{key} 将被删除!"
+  },
+  "value_type_nput": {
+    "type": {
+      "name": "类型",
+      "FREE_TEXT": {
+        "name": "自由文本"
+      },
+      "TOGGLE": {
+        "name": "切换"
+      },
+      "SELECTION": {
+        "name": "选择",
+        "displayText": "显示名称",
+        "displayTextNotBeEmpty": "显示名称不可为空",
+        "value": "选择项",
+        "duplicateKeyOrValue": "选择项的名称或值不允许重复",
+        "itemsNotBeEmpty": "可选择项列表不能为空",
+        "itemsNotFound": "选择项不包含在可选列表中",
+        "actions": {
+          "title": "操作",
+          "create": "新增",
+          "update": "编辑",
+          "delete": "删除",
+          "clean": "清除"
+        },
+        "modal": {
+          "title": "选择项"
+        }
+      }
+    },
+    "validator": {
+      "name": "验证器",
+      "isInvalidValue": "值未能通过 {0} 校验, 请检查验证器选项.",
+      "NULL": {
+        "name": "未定义"
+      },
+      "BOOLEAN": {
+        "name": "布尔类型"
+      },
+      "NUMERIC": {
+        "name": "数值类型",
+        "minValue": "最小值",
+        "maxValue": "最大值"
+      },
+      "STRING": {
+        "name": "字符类型",
+        "allowNull": "允许空值",
+        "minLength": "最小长度",
+        "maxLength": "最大长度",
+        "regularExpression": "正则表达式"
+      }
+    }
+  },
+  "simple_state_checking": {
+    "title": "状态检查",
+    "actions": {
+      "create": "新增",
+      "update": "编辑",
+      "delete": "删除",
+      "clean": "清除"
+    },
+    "table": {
+      "name": "名称",
+      "properties": "属性",
+      "actions": "操作"
+    },
+    "form": {
+      "name": "状态检查器"
+    },
+    "requireAuthenticated": {
+      "title": "需要用户认证"
+    },
+    "requireFeatures": {
+      "title": "检查所需功能",
+      "requiresAll": "要求所有",
+      "requiresAllDesc": "如果勾选,则需要启用所有选择的功能.",
+      "featureNames": "需要的功能"
+    },
+    "requireGlobalFeatures": {
+      "title": "检查全局功能",
+      "featureNames": "需要的全局功能"
+    },
+    "requirePermissions": {
+      "title": "检查所需权限",
+      "requiresAll": "要求所有",
+      "requiresAllDesc": "如果勾选,则需要拥有所有选择的权限.",
+      "permissions": "需要的权限"
+    }
+  }
+}

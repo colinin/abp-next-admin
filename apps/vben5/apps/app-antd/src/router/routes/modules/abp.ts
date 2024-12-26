@@ -83,6 +83,35 @@ const routes: RouteRecordRaw[] = [
           },
           {
             meta: {
+              title: $t('abp.manage.permissions.title'),
+              icon: 'arcticons:permissionsmanager',
+            },
+            name: 'PermissionManagement',
+            path: '/manage/permissions',
+            children: [
+              {
+                meta: {
+                  title: $t('abp.manage.permissions.groups'),
+                  icon: 'lucide:group',
+                },
+                name: 'PermissionGroupDefinitions',
+                path: '/manage/permissions/groups',
+                component: () => import('#/views/permissions/groups/index.vue'),
+              },
+              {
+                meta: {
+                  title: $t('abp.manage.permissions.definitions'),
+                  icon: 'icon-park-outline:permissions',
+                },
+                name: 'PermissionDefinitions',
+                path: '/manage/permissions/definitions',
+                component: () =>
+                  import('#/views/permissions/definitions/index.vue'),
+              },
+            ],
+          },
+          {
+            meta: {
               title: $t('abp.manage.identity.auditLogs'),
               icon: 'fluent-mdl2:compliance-audit',
             },

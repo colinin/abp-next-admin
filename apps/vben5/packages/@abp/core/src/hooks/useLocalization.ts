@@ -1,6 +1,6 @@
 import type { Dictionary, StringLocalizer } from '../types';
 
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import merge from 'lodash.merge';
 
@@ -9,24 +9,47 @@ import { format } from '../utils/string';
 
 export function useLocalization(resourceNames?: string | string[]) {
   const abpStore = useAbpStore();
-  const getResource = computed(() => {
-    if (!abpStore.application) {
-      return {};
-    }
-    const { values } = abpStore.application.localization;
 
+  const localizations = ref<Dictionary<string, Dictionary<string, string>>>({});
+
+  watch(
+    () => abpStore.localization,
+    (localization) => {
+      if (!localization?.resources) {
+        localizations.value = {};
+        return;
+      }
+      const localizationResource: Dictionary<
+        string,
+        Dictionary<string, string>
+      > = {};
+      Object.keys(localization.resources).forEach((resourceName) => {
+        if (localization.resources[resourceName]) {
+          localizationResource[resourceName] =
+            localization.resources[resourceName].texts;
+        }
+      });
+      localizations.value = localizationResource;
+    },
+    {
+      deep: true,
+      immediate: true,
+    },
+  );
+
+  const getResource = computed(() => {
     let resource: { [key: string]: string } = {};
     if (resourceNames) {
       if (Array.isArray(resourceNames)) {
         resourceNames.forEach((name) => {
-          resource = merge(resource, values[name]);
+          resource = merge(resource, localizations.value[name]);
         });
       } else {
-        resource = merge(resource, values[resourceNames]);
+        resource = merge(resource, localizations.value[resourceNames]);
       }
     } else {
-      Object.keys(values).forEach((rs) => {
-        resource = merge(resource, values[rs]);
+      Object.keys(localizations.value).forEach((rs) => {
+        resource = merge(resource, localizations.value[rs]);
       });
     }
 
@@ -34,11 +57,7 @@ export function useLocalization(resourceNames?: string | string[]) {
   });
   const getResourceByName = computed(() => {
     return (resource: string): Dictionary<string, string> => {
-      if (!abpStore.application) {
-        return {};
-      }
-      const { values } = abpStore.application.localization;
-      return values[resource] ?? {};
+      return localizations.value[resource] ?? {};
     };
   });
 
