@@ -21,6 +21,7 @@ import {
   Input,
   InputNumber,
   InputPassword,
+  InputSearch,
   Mentions,
   notification,
   Radio,
@@ -60,6 +61,7 @@ export type ComponentType =
   | 'Input'
   | 'InputNumber'
   | 'InputPassword'
+  | 'InputSearch'
   | 'Mentions'
   | 'PrimaryButton'
   | 'Radio'
@@ -89,8 +91,8 @@ async function initComponentAdapter() {
           ...attrs,
           component: Select,
           loadingSlot: 'suffixIcon',
-          visibleEvent: 'onDropdownVisibleChange',
           modelPropName: 'value',
+          visibleEvent: 'onDropdownVisibleChange',
         },
         slots,
       );
@@ -131,6 +133,7 @@ async function initComponentAdapter() {
     Input: withDefaultPlaceholder(Input, 'input'),
     InputNumber: withDefaultPlaceholder(InputNumber, 'input'),
     InputPassword: withDefaultPlaceholder(InputPassword, 'input'),
+    InputSearch: withDefaultPlaceholder(InputSearch, 'input'),
     Mentions: withDefaultPlaceholder(Mentions, 'input'),
     // 自定义主要按钮
     PrimaryButton: (props, { attrs, slots }) => {

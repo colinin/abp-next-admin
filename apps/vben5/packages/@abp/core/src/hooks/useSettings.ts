@@ -5,8 +5,8 @@ import { computed } from 'vue';
 import { useAbpStore } from '../store';
 
 export function useSettings(): ISettingProvider {
+  const abpStore = useAbpStore();
   const getSettings = computed(() => {
-    const abpStore = useAbpStore();
     if (!abpStore.application) {
       return [];
     }

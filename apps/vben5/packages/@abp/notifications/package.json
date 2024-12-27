@@ -1,12 +1,12 @@
 {
-  "name": "@abp/ui",
+  "name": "@abp/notifications",
   "version": "8.3.2",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/colinin/abp-next-admin.git",
-    "directory": "packages/@abp/ui"
+    "directory": "packages/@abp/notifications"
   },
   "license": "MIT",
   "type": "module",
@@ -21,26 +21,17 @@
   },
   "dependencies": {
     "@abp/core": "workspace:*",
-    "@vben-core/form-ui": "workspace:*",
-    "@vben-core/preferences": "workspace:*",
-    "@vben-core/shadcn-ui": "workspace:*",
-    "@vben-core/shared": "workspace:*",
-    "@vben-core/typings": "workspace:*",
+    "@abp/request": "workspace:*",
+    "@abp/ui": "workspace:*",
+    "@ant-design/icons-vue": "catalog:",
+    "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/hooks": "workspace:*",
     "@vben/icons": "workspace:*",
+    "@vben/layouts": "workspace:*",
     "@vben/locales": "workspace:*",
-    "@vben/preferences": "workspace:*",
-    "@vben/types": "workspace:*",
-    "@vben/utils": "workspace:*",
-    "@vueuse/core": "catalog:",
     "ant-design-vue": "catalog:",
-    "codemirror": "catalog:",
-    "vue": "catalog:*",
-    "vxe-pc-ui": "catalog:",
-    "vxe-table": "catalog:"
-  },
-  "devDependencies": {
-    "@types/codemirror": "catalog:"
+    "dayjs": "catalog:",
+    "vue": "catalog:*"
   }
 }

@@ -27,6 +27,7 @@
   "scripts": {
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 turbo build",
     "build:analyze": "turbo build:analyze",
+    "build:app": "pnpm run build --filter=@vben/app-antd",
     "build:antd": "pnpm run build --filter=@vben/web-antd",
     "build:docker": "./scripts/deploy/build-local-docker-image.sh",
     "build:docs": "pnpm run build --filter=@vben/docs",
