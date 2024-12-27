@@ -39,7 +39,7 @@ const getDataResource = computed((): PropertyInfo[] => {
 const [PropertyModal, modalApi] = useVbenModal({
   connectedComponent: defineAsyncComponent(() => import('./PropertyModal.vue')),
 });
-const getTableColumns = computed(() => {
+const getTableColumns = computed((): TableColumnsType<PropertyInfo> => {
   const columns: TableColumnsType<PropertyInfo> = [
     {
       align: 'left',
@@ -59,7 +59,7 @@ const getTableColumns = computed(() => {
     ...columns,
     ...(props.disabled
       ? []
-      : [
+      : ([
           {
             align: 'center',
             dataIndex: 'action',
@@ -68,7 +68,7 @@ const getTableColumns = computed(() => {
             title: $t('component.extra_property_dictionary.actions.title'),
             width: 150,
           },
-        ]),
+        ] as TableColumnsType<PropertyInfo>)),
   ];
 });
 

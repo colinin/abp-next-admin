@@ -10,43 +10,35 @@
   },
   "license": "MIT",
   "type": "module",
-  "scripts": {
-    "build": "pnpm vite build",
-    "prepublishOnly": "npm run build"
-  },
-  "files": [
-    "dist",
-    "src"
+  "sideEffects": [
+    "**/*.css"
   ],
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
   "exports": {
     ".": {
       "types": "./src/index.ts",
-      "development": "./src/index.ts",
-      "default": "./dist/index.mjs"
-    }
-  },
-  "publishConfig": {
-    "exports": {
-      ".": {
-        "default": "./dist/index.mjs"
-      }
+      "default": "./src/index.ts"
     }
   },
   "dependencies": {
     "@abp/core": "workspace:*",
+    "@vben-core/form-ui": "workspace:*",
     "@vben-core/preferences": "workspace:*",
+    "@vben-core/shadcn-ui": "workspace:*",
     "@vben-core/shared": "workspace:*",
     "@vben-core/typings": "workspace:*",
     "@vben/common-ui": "workspace:*",
+    "@vben/hooks": "workspace:*",
     "@vben/icons": "workspace:*",
     "@vben/locales": "workspace:*",
-    "@vben/plugins": "workspace:*",
+    "@vben/preferences": "workspace:*",
+    "@vben/types": "workspace:*",
+    "@vben/utils": "workspace:*",
     "@vueuse/core": "catalog:",
     "ant-design-vue": "catalog:",
     "codemirror": "catalog:",
-    "vue": "catalog:*"
+    "vue": "catalog:*",
+    "vxe-pc-ui": "catalog:",
+    "vxe-table": "catalog:"
   },
   "devDependencies": {
     "@types/codemirror": "catalog:"

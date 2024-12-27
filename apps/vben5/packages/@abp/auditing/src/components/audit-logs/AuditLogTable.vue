@@ -235,11 +235,13 @@ const gridOptions: VxeGridProps<AuditLogDto> = {
 const gridEvents: VxeGridListeners<AuditLogDto> = {
   sortChange: onSort,
 };
+
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
   gridOptions,
 });
+
 const { getHttpMethodColor, getHttpStatusCodeColor } = useAuditlogs();
 const [AuditLogDrawer, logDrawerApi] = useVbenDrawer({
   connectedComponent: defineAsyncComponent(
