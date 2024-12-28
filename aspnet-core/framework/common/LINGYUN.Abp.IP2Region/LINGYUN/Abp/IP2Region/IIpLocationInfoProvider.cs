@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace LINGYUN.Abp.Identity.Session;
+namespace LINGYUN.Abp.IP2Region;
 public interface IIpLocationInfoProvider
 {
     /// <summary>
@@ -10,5 +10,5 @@ public interface IIpLocationInfoProvider
     /// <returns>
     /// 如果解析成功返回地理信息,否则返回null
     /// </returns>
-    Task<LocationInfo> GetLocationInfoAsync(string ipAddress);
+    Task<LocationInfo?> GetLocationInfoAsync(string ipAddress);
 }

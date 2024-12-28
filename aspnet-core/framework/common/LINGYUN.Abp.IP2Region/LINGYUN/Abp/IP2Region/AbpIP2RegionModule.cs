@@ -1,6 +1,7 @@
 ﻿using IP2Region.Net.Abstractions;
 using IP2Region.Net.XDB;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -24,5 +25,7 @@ public class AbpIP2RegionModule : AbpModule
 
             return searcher;
         });
+
+        context.Services.TryAddTransient<IIpLocationInfoProvider, IP2RegionLocationInfoProvider>();
     }
 }
