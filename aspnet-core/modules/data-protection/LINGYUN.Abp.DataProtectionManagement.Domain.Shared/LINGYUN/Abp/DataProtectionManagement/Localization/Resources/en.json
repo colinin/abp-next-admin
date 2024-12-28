@@ -1,6 +1,13 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Permission:DataProtectionManagement": "Data Protection",
+    "Permission:EntityTypeInfo": "Entity Type Info",
+    "Permission:RoleEntityRule": "Role Entity Rule",
+    "Permission:OrganizationUnitEntityRule": "Organization Unit Entity Rule",
+    "Permission:Create": "Create",
+    "Permission:Update": "Update",
+    "Permission:Delete": "Delete",
     "DataProtectionManagement:001100": "There already exists an entity type definition named {Name}!",
     "DataProtectionManagement:001200": "The entity type already has a property definition named {Name}!",
     "DataProtectionManagement:002100": "The {Operation} access rule for entity {Name} has been assigned to role {RoleName}!",

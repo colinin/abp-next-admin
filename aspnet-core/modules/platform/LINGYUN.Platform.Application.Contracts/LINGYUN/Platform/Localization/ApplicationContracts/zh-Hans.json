@@ -28,6 +28,11 @@
     "Permission:ManageItems": "管理项目",
     "Permission:ManageRoleMenus": "管理角色菜单",
     "Permission:ManageUserMenus": "管理用户菜单",
-    "Permission:ManageUserFavoriteMenus": "管理用户收藏菜单"
+    "Permission:ManageUserFavoriteMenus": "管理用户收藏菜单",
+    "Permission:Package": "包管理",
+    "Permission:ManageBlobs": "资源管理",
+    "Permission:Feedback": "反馈管理",
+    "Permission:ManageAttachments": "附件管理",
+    "Permission:ManageComments": "评论管理"
   }
 }
