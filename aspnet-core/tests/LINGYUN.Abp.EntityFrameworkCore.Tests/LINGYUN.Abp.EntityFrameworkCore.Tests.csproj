@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace />
+    <Configurations>Debug;Release;PostgreSQL</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
   
   <ItemGroup>

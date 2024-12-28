@@ -1,4 +1,4 @@
-﻿using DotNetCore.CAP;
+using DotNetCore.CAP;
 using Microsoft.Extensions.Configuration;
 using Savorboard.CAP.InMemoryMessageQueue;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
@@ -874,3 +874,4 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 }
+

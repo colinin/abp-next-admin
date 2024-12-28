@@ -1,5 +1,7 @@
 # LINGYUN.Abp.Elasticsearch
 
+简体中文 | [English](./README.EN.md)
+
 Abp Elasticsearch集成,提供全局唯一IElasticClient访问接口
 
 ## 模块引用
@@ -31,5 +33,3 @@ public class YouProjectModule : AbpModule
     "NodeUris": "http://localhost:9200"
   }
 }
-
-```

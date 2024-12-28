@@ -13,13 +13,12 @@ namespace LINGYUN.Abp.Notifications.WeChat.MiniProgram
         {
             PreConfigure<AbpNotificationsWeChatMiniProgramOptions>(options =>
             {
-                options.DefaultMsgPrefix = "[wmp-override]";
+                // options.DefaultMsgPrefix = "[wmp-override]";
             });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            // �Զ������ݴ�������
             Configure<AbpNotificationsPublishOptions>(options =>
             {
             });
