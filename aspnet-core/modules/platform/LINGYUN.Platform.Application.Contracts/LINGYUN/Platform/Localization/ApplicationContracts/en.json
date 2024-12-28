@@ -28,6 +28,11 @@
     "Permission:ManageItems": "Manage Items",
     "Permission:ManageRoleMenus": "Manage Role Menus",
     "Permission:ManageUserMenus": "Manage User Menus",
-    "Permission:ManageUserFavoriteMenus": "Manage User Favorite Menus"
+    "Permission:ManageUserFavoriteMenus": "Manage User Favorite Menus",
+    "Permission:Package": "Package",
+    "Permission:ManageBlobs": "Manage Blobs",
+    "Permission:Feedback": "Feedback",
+    "Permission:ManageAttachments": "Manage Attachments",
+    "Permission:ManageComments": "Manage Comments"
   }
 }

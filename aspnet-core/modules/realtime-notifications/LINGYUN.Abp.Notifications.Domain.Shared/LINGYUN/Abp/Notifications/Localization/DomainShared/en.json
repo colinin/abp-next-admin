@@ -1,7 +1,7 @@
 ﻿{
   "culture": "en",
   "texts": {
-    "Permission:Notification": "Notification",
+    "Permission:Notifications": "Notification",
     "Permission:GroupDefinitions": "Group Definitions",
     "Permission:NotificationDefinitions": "Notification Definitions",
     "Permission:Create": "Create",

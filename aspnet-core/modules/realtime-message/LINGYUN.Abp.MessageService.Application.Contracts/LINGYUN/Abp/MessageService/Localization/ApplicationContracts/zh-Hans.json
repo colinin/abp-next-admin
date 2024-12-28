@@ -1,10 +1,4 @@
 ﻿{
   "culture": "zh-Hans",
-  "texts": {
-    "Permission:MessageService": "消息服务",
-    "Permission:Delete": "删除",
-    "Permission:Hangfire": "Hangfire",
-    "Permission:Dashboard": "仪表板",
-    "Permission:ManageQueue": "管理队列"
-  }
+  "texts": {}
 }
