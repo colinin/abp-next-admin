@@ -261,12 +261,4 @@
 		<PackageReference Include="LINGYUN.Abp.WebhooksManagement.HttpApi" />
 		<PackageReference Include="LINGYUN.Abp.Webhooks" />
 	</ItemGroup>
-
-<!--	<ItemGroup>-->
-<!--	  <ProjectReference Include="..\..\modules\demo\LINGYUN.Abp.Demo.Application\LINGYUN.Abp.Demo.Application.csproj" />-->
-<!--	  <ProjectReference Include="..\..\modules\demo\LINGYUN.Abp.Demo.EntityFrameworkCore\LINGYUN.Abp.Demo.EntityFrameworkCore.csproj" />-->
-<!--	  <ProjectReference Include="..\..\modules\demo\LINGYUN.Abp.Demo.HttpApi\LINGYUN.Abp.Demo.HttpApi.csproj" />-->
-<!--	  <ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Imaging\LINGYUN.Abp.OssManagement.Imaging.csproj" />-->
-<!--	</ItemGroup>-->
-
 </Project>

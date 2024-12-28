@@ -2,8 +2,8 @@
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.2.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
-		<VoloAbpPackageVersion>8.2.1</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>8.2.1</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>8.3.0</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>8.3.0</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>8.0.0</MicrosoftExtensionsPackageVersion>
 		<MicrosoftAspNetCorePackageVersion>8.0.0</MicrosoftAspNetCorePackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>8.0.0</MicrosoftEntityFrameworkCorePackageVersion>
@@ -299,6 +299,171 @@
 		<PackageVersion Include="NEST" Version="7.15.1" />
 		<PackageVersion Include="NRules" Version="0.9.2" />
 		<PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
+		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.AuditLogging.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Authentication.QQ" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Authentication.WeChat" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Aliyun.SettingManagement" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Aliyun" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Tencent.QQ" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Tencent.SettingManagement" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Tencent" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Features.LimitValidation.Redis.Client" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Features.LimitValidation.Redis" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Features.LimitValidation" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.RealTime" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Exporter.MiniExcel" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.FeatureManagement.Client" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Localization.Persistence" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Logging.Serilog.Elasticsearch" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Logging" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Sms.Aliyun" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.AspNetCore.Mvc.Idempotent.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.OpenApi.Authorization" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.OpenApi" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.MultiTenancy.Editions" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Identity.WeChat" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.WeChat.MiniProgram" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.WeChat.Official.Handlers" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.WeChat.Official" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WeChat.Official.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WeChat.Official.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WeChat.SettingManagement" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WeChat.Work.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WeChat.Work.Handlers" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WeChat.Work.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WeChat.Work" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WeChat" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Account.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Account.Application" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Account.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Account.Templates" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Auditing.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Auditing.Application" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Auditing.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.CachingManagement.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.CachingManagement.Application" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.CachingManagement.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.CachingManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.CachingManagement.StackExchangeRedis" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Elsa.Activities.BlobStoring" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Elsa.Activities.Emailing" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Elsa.Activities.IM" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Elsa.Activities.Notifications" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Elsa.Activities.Sms" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Elsa.Activities.Webhooks" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Elsa.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Elsa.Server" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Elsa" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.FeatureManagement.Application" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.FeatureManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IdentityServer.Session" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Identity.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Identity.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Identity.AspNetCore.Session" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Identity.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Identity.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Identity.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Identity.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Identity.Notifications" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Identity.OrganizaztionUnits" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IdentityServer.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IdentityServer.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IdentityServer.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IdentityServer.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IdentityServer.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IdentityServer.LinkUser" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IdentityServer.Portal" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IdentityServer.SmsValidator" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IdentityServer.WeChat.Work" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.LocalizationManagement.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.LocalizationManagement.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.LocalizationManagement.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.LocalizationManagement.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.LocalizationManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OpenIddict.AspNetCore.Session" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OpenIddict.AspNetCore" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IM.SignalR" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.IM" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.MessageService.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.MessageService.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.MessageService.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.MessageService.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.MessageService.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.MessageService.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.ExceptionHandling.Notifications" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Notifications.Common" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Notifications.Emailing" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Notifications.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Notifications.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Notifications.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Notifications.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Notifications.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Notifications.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Notifications.WeChat.MiniProgram" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Notifications.WeChat.Work" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OpenIddict.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OpenIddict.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OpenIddict.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OpenIddict.LinkUser" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OpenIddict.Sms" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OpenIddict.Portal" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OpenIddict.WeChat" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OpenIddict.WeChat.Work" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OssManagement.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OssManagement.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OssManagement.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OssManagement.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OssManagement.FileSystem" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OssManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.OssManagement.SettingManagement" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.PermissionManagement.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.PermissionManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.UI.Navigation.VueVbenAdmin" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Platform.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Platform.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Platform.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Platform.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Platform.Settings.VueVbenAdmin" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Platform.Theme.VueVbenAdmin" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Saas.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Saas.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Saas.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Saas.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Saas.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.SettingManagement.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.SettingManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.BackgroundTasks.Activities" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.BackgroundTasks.DistributedLocking" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.BackgroundTasks.EventBus" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.BackgroundTasks.ExceptionHandling" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.BackgroundTasks.Notifications" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.BackgroundTasks.Quartz" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.BackgroundTasks" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.TaskManagement.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.TaskManagement.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.TaskManagement.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.TaskManagement.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.TaskManagement.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.TaskManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.TextTemplating.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.TextTemplating.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.TextTemplating.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.TextTemplating.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.TextTemplating.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Webhooks.Identity" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.Webhooks.Saas" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WebhooksManagement.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WebhooksManagement.Application" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WebhooksManagement.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WebhooksManagement.Domain" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Abp.WebhooksManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Platform.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
+        <PackageVersion Include="LINGYUN.Platform.Application" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.8.1" />
 		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.8.1" />
 		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.8.1" />
@@ -319,5 +484,7 @@
 		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
 		<PackageVersion Include="TencentCloudSDK" Version="3.0.712" />
 		<PackageVersion Include="Yarp.ReverseProxy" Version="2.1.0" />
+		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="6.0.0" />
+		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="6.0.0" />
 	</ItemGroup>
 </Project>
