@@ -1,4 +1,5 @@
 ﻿using DeviceDetectorNET;
+using LINGYUN.Abp.IP2Region;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
@@ -51,17 +52,7 @@ public class HttpContextDeviceInfoProvider : IDeviceInfoProvider, ITransientDepe
     protected async virtual Task<string> GetRegion(string ipAddress)
     {
         var locationInfo = await IpLocationInfoProvider.GetLocationInfoAsync(ipAddress);
-        if (locationInfo == null)
-        {
-            return null;
-        }
-
-        if (Options.LocationParser != null)
-        {
-            return Options.LocationParser(locationInfo);
-        }
-
-        return null;
+        return locationInfo?.Remarks;
     }
 
     private class BrowserDeviceInfo
