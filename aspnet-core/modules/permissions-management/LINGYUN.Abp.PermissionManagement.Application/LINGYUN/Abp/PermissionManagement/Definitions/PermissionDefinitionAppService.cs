@@ -91,6 +91,12 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
     [Authorize(PermissionManagementPermissionNames.Definition.Delete)]
     public async virtual Task DeleteAsync(string name)
     {
+        if (await _staticPermissionDefinitionStore.GetOrNullAsync(name) != null)
+        {
+            throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
+              .WithData("Name", name);
+        }
+
         var definitionRecord = await FindByNameAsync(name);
 
         if (definitionRecord != null)

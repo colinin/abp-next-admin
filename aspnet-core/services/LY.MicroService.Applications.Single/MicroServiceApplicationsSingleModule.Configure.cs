@@ -1,3 +1,6 @@
+using DotNetCore.CAP;
+using Microsoft.Extensions.Configuration;
+using Savorboard.CAP.InMemoryMessageQueue;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -32,6 +35,28 @@ public partial class MicroServiceApplicationsSingleModule
         {
             IdentityModelEventSource.ShowPII = true;
         }
+    }
+
+    private void PreConfigureCAP(IConfiguration configuration)
+    {
+        PreConfigure<CapOptions>(options =>
+        {
+            options.UseDashboard();
+            if (!configuration.GetValue<bool>("CAP:IsEnabled"))
+            {
+                options.UseInMemoryStorage().UseInMemoryMessageQueue();
+                return;
+            }
+            options
+                .UseMySql(sqlOptions =>
+                {
+                    configuration.GetSection("CAP:MySql").Bind(sqlOptions);
+                })
+                .UseRabbitMQ(rabbitMQOptions =>
+                {
+                    configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
+                });
+        });
     }
 
     private void PreConfigureAuthServer(IConfiguration configuration)
@@ -480,13 +505,14 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
-    private void ConfigureDbContext()
+    private void ConfigureDbContext(IConfiguration configuration)
     {
+        Configure<AbpDbConnectionOptions>(options =>
+        {
+            configuration.GetSection("Databases").Bind(options.Databases);
+        });
         Configure<AbpDbContextOptions>(options =>
         {
-            // AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);//解决PostgreSql设置为utc时间后无法写入local时区的问题
-            // options.UseNpgsql();
-            
             options.UseMySQL();
         });
     }
@@ -848,3 +874,4 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 }
+

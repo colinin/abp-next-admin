@@ -186,6 +186,8 @@
 		<PackageVersion Include="DotNetCore.CAP.MySql" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageVersion Include="DotNetCore.CAP.OpenTelemetry" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageVersion Include="DotNetCore.CAP.RabbitMQ" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageVersion Include="DotNetCore.CAP.InMemoryStorage" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageVersion Include="Savorboard.CAP.InMemoryMessageQueue" Version="$(DotNetCoreCAPPackageVersion)" />
 	</ItemGroup>
 	<!-- Serilog -->
 	<ItemGroup>

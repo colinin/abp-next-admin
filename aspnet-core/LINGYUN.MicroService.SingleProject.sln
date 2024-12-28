@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -439,10 +438,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.AspNetCore.HttpOverrides", "framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj", "{D67EBE62-C541-45E4-957E-D1D11BE74F68}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "single-project", "single-project", "{0D69B63D-F082-4D57-9FF0-355642C56993}"
-	ProjectSection(SolutionItems) = preProject
-		migrations\Migrate.ps1 = migrations\Migrate.ps1
-		migrations\MigrateEn.ps1 = migrations\MigrateEn.ps1
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LY.MicroService.Applications.Single.EntityFrameworkCore", "migrations\LY.MicroService.Applications.Single.EntityFrameworkCore\LY.MicroService.Applications.Single.EntityFrameworkCore.csproj", "{7623D363-F0BD-400C-B8AB-3FD9699D92D9}"
 EndProject
@@ -606,13 +601,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.OssManagement.Imaging", "modules\oss-management\LINGYUN.Abp.OssManagement.Imaging\LINGYUN.Abp.OssManagement.Imaging.csproj", "{BC7A8662-4313-4F1D-B267-9B1B69444CD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql", "modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql\LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql.csproj", "{8D0C8993-580A-4585-BE3B-87895C76FC89}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cap", "cap", "{7C35101B-EA29-4B3D-B424-FAD625977E4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer", "modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer\LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer.csproj", "{AA742577-63B0-4188-AA36-AC6E0ED99BB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.EventBus.CAP", "framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj", "{4539FCDB-7192-442C-BD9B-0AC71E882F4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql", "migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.csproj", "{5A07FFDF-F979-44F9-BE24-81D6A25BEADB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.Applications.Single.EntityFrameworkCore.MySql", "migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.csproj", "{2B167D92-2327-4679-9096-49F274FABE0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.AuditLogging.IP2Region", "framework\auditing\LINGYUN.Abp.AuditLogging.IP2Region\LINGYUN.Abp.AuditLogging.IP2Region.csproj", "{DFDF367D-EDE1-4365-90F9-32F529117B60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1288,10 +1281,10 @@ Global
 		{F94E77C1-61E0-4FE8-9ECD-10A0102342E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F94E77C1-61E0-4FE8-9ECD-10A0102342E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F94E77C1-61E0-4FE8-9ECD-10A0102342E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83D2F8F2-82C7-4919-9B65-D0FBF0B5324C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CAEF3248-527D-48B7-9C98-929AC573C381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CAEF3248-527D-48B7-9C98-929AC573C381}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAEF3248-527D-48B7-9C98-929AC573C381}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1596,22 +1589,14 @@ Global
 		{BC7A8662-4313-4F1D-B267-9B1B69444CD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC7A8662-4313-4F1D-B267-9B1B69444CD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC7A8662-4313-4F1D-B267-9B1B69444CD3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8D0C8993-580A-4585-BE3B-87895C76FC89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D0C8993-580A-4585-BE3B-87895C76FC89}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D0C8993-580A-4585-BE3B-87895C76FC89}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8D0C8993-580A-4585-BE3B-87895C76FC89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA742577-63B0-4188-AA36-AC6E0ED99BB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA742577-63B0-4188-AA36-AC6E0ED99BB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA742577-63B0-4188-AA36-AC6E0ED99BB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA742577-63B0-4188-AA36-AC6E0ED99BB6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A07FFDF-F979-44F9-BE24-81D6A25BEADB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A07FFDF-F979-44F9-BE24-81D6A25BEADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A07FFDF-F979-44F9-BE24-81D6A25BEADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A07FFDF-F979-44F9-BE24-81D6A25BEADB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B167D92-2327-4679-9096-49F274FABE0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B167D92-2327-4679-9096-49F274FABE0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B167D92-2327-4679-9096-49F274FABE0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B167D92-2327-4679-9096-49F274FABE0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4539FCDB-7192-442C-BD9B-0AC71E882F4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4539FCDB-7192-442C-BD9B-0AC71E882F4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4539FCDB-7192-442C-BD9B-0AC71E882F4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4539FCDB-7192-442C-BD9B-0AC71E882F4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFDF367D-EDE1-4365-90F9-32F529117B60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFDF367D-EDE1-4365-90F9-32F529117B60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFDF367D-EDE1-4365-90F9-32F529117B60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFDF367D-EDE1-4365-90F9-32F529117B60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1904,10 +1889,9 @@ Global
 		{319428B9-CE7F-4027-92FA-6311C4CE95FB} = {4A2CF141-F32D-45A0-8665-B3705667A6D2}
 		{9AE3E97E-8846-4315-9546-FF97E97FD49F} = {3AD66E47-B667-40D1-AE61-F5EC186241F7}
 		{BC7A8662-4313-4F1D-B267-9B1B69444CD3} = {3AD66E47-B667-40D1-AE61-F5EC186241F7}
-		{8D0C8993-580A-4585-BE3B-87895C76FC89} = {07DFEB1E-ED92-4E97-A801-FAB2D70F4F35}
-		{AA742577-63B0-4188-AA36-AC6E0ED99BB6} = {07DFEB1E-ED92-4E97-A801-FAB2D70F4F35}
-		{5A07FFDF-F979-44F9-BE24-81D6A25BEADB} = {0D69B63D-F082-4D57-9FF0-355642C56993}
-		{2B167D92-2327-4679-9096-49F274FABE0C} = {0D69B63D-F082-4D57-9FF0-355642C56993}
+		{7C35101B-EA29-4B3D-B424-FAD625977E4D} = {99B7CBDE-A251-4738-97F0-DB1DB484BEE1}
+		{4539FCDB-7192-442C-BD9B-0AC71E882F4F} = {7C35101B-EA29-4B3D-B424-FAD625977E4D}
+		{DFDF367D-EDE1-4365-90F9-32F529117B60} = {C22741F9-FC56-4AE3-B543-9F15C779D345}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {711A43C0-A2F8-4E5C-9B9F-F2551E4B3FF1}

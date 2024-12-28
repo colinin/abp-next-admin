@@ -8,9 +8,15 @@
 		<RootNamespace>LY.MicroService.Applications.Single</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
 		<PackageReference Include="DistributedLock.Redis" />
+		<PackageReference Include="DotNetCore.CAP.Dashboard" />
+		<PackageReference Include="DotNetCore.CAP.MySql" />
+		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
+		<PackageReference Include="DotNetCore.CAP.OpenTelemetry" />
+		<PackageReference Include="DotNetCore.CAP.InMemoryStorage" />
+		<PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" />
 		<PackageReference Include="Elsa.Activities.Email" />
 		<PackageReference Include="Elsa.Activities.Http" />
 		<PackageReference Include="Elsa.Activities.UserTask" />
@@ -38,8 +44,7 @@
 		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
-<!--		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" />-->
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.Application" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" />
@@ -59,6 +64,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.EntityFrameworkCore\LINGYUN.Abp.AuditLogging.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.IP2Region\LINGYUN.Abp.AuditLogging.IP2Region.csproj" />
 		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj" />
 		<ProjectReference Include="..\..\framework\authentication\LINGYUN.Abp.Authentication.QQ\LINGYUN.Abp.Authentication.QQ.csproj" />
 		<ProjectReference Include="..\..\framework\authentication\LINGYUN.Abp.Authentication.WeChat\LINGYUN.Abp.Authentication.WeChat.csproj" />
@@ -70,6 +76,7 @@
 		<ProjectReference Include="..\..\framework\cloud-tencent\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Features.LimitValidation.Redis.Client\LINGYUN.Abp.Features.LimitValidation.Redis.Client.csproj" />
@@ -115,6 +122,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore\LY.MicroService.Applications.Single.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
@@ -141,7 +149,6 @@
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.Webhooks\LINGYUN.Abp.Elsa.Activities.Webhooks.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities\LINGYUN.Abp.Elsa.Activities.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql\LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql.csproj" />
-		<!-- <ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql\LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql.csproj" /> -->
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore\LINGYUN.Abp.Elsa.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Server\LINGYUN.Abp.Elsa.Server.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj" />
