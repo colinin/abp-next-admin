@@ -78,6 +78,13 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
     [Authorize(PermissionManagementPermissionNames.GroupDefinition.Delete)]
     public async virtual Task DeleteAsync(string name)
     {
+        var staticGroups = await _staticPermissionDefinitionStore.GetGroupsAsync();
+        if (staticGroups.Any(g => g.Name == name))
+        {
+            throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
+              .WithData("Name", name);
+        }
+
         var groupDefinitionRecord = await FindByNameAsync(name);
 
         if (groupDefinitionRecord != null)
@@ -133,8 +140,8 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
     [Authorize(PermissionManagementPermissionNames.GroupDefinition.Update)]
     public async virtual Task<PermissionGroupDefinitionDto> UpdateAsync(string name, PermissionGroupDefinitionUpdateDto input)
     {
-        var groupDefinition = await _permissionDefinitionManager.GetGroupOrNullAsync(name);
-        if (groupDefinition != null)
+        var staticGroups = await _staticPermissionDefinitionStore.GetGroupsAsync();
+        if (staticGroups.Any(g => g.Name == name))
         {
             throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
               .WithData("Name", name);

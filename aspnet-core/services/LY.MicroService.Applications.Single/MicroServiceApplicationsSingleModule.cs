@@ -1,4 +1,6 @@
-﻿using Volo.Abp.MailKit;
+﻿using LINGYUN.Abp.AuditLogging.IP2Region;
+using LINGYUN.Abp.EventBus.CAP;
+using Volo.Abp.MailKit;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -8,6 +10,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAuditingApplicationModule),
     typeof(AbpAuditingHttpApiModule),
+    typeof(AbpAuditLoggingIP2RegionModule),
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
     typeof(AbpCachingManagementStackExchangeRedisModule),
     typeof(AbpCachingManagementApplicationModule),
@@ -184,6 +187,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpElsaEntityFrameworkCoreModule),
     typeof(AbpElsaEntityFrameworkCoreMySqlModule),
 
+    typeof(AbpCAPEventBusModule),
+
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpAspNetCoreSerilogModule),
@@ -193,7 +198,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpMailKitModule),
-    typeof(AbpEventBusModule),
     typeof(AbpAutofacModule)
     )]
 public partial class MicroServiceApplicationsSingleModule : AbpModule
@@ -207,6 +211,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         PreConfigureFeature();
         PreConfigureIdentity();
         PreConfigureApp(configuration);
+        PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
         PreConfigureAuthServer(configuration);
         PreConfigureElsa(context.Services, configuration);
@@ -222,7 +227,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureWrapper();
         ConfigureExporter();
         ConfigureAuditing();
-        ConfigureDbContext();
         ConfigureIdempotent();
         ConfigureMvcUiTheme();
         ConfigureDataSeeder();
@@ -236,6 +240,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
+        ConfigureDbContext(configuration);
         ConfigureAuthServer(configuration);
         ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);

@@ -11,6 +11,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="DistributedLock.Redis" />
+		<PackageReference Include="DotNetCore.CAP.Dashboard" />
+		<PackageReference Include="DotNetCore.CAP.MySql" />
+		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
+		<PackageReference Include="DotNetCore.CAP.OpenTelemetry" />
+		<PackageReference Include="DotNetCore.CAP.InMemoryStorage" />
+		<PackageReference Include="Savorboard.CAP.InMemoryMessageQueue" />
 		<PackageReference Include="Elsa.Activities.Email" />
 		<PackageReference Include="Elsa.Activities.Http" />
 		<PackageReference Include="Elsa.Activities.UserTask" />
@@ -58,6 +64,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.EntityFrameworkCore\LINGYUN.Abp.AuditLogging.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.IP2Region\LINGYUN.Abp.AuditLogging.IP2Region.csproj" />
 		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj" />
 		<ProjectReference Include="..\..\framework\authentication\LINGYUN.Abp.Authentication.QQ\LINGYUN.Abp.Authentication.QQ.csproj" />
 		<ProjectReference Include="..\..\framework\authentication\LINGYUN.Abp.Authentication.WeChat\LINGYUN.Abp.Authentication.WeChat.csproj" />
@@ -69,6 +76,7 @@
 		<ProjectReference Include="..\..\framework\cloud-tencent\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.ExceptionHandling\LINGYUN.Abp.ExceptionHandling.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Features.LimitValidation.Redis.Client\LINGYUN.Abp.Features.LimitValidation.Redis.Client.csproj" />
