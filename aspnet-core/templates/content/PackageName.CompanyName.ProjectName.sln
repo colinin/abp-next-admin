@@ -50,6 +50,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PackageName.CompanyName.Pro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PackageName.CompanyName.ProjectName.SettingManagement", "src\PackageName.CompanyName.ProjectName.SettingManagement\PackageName.CompanyName.ProjectName.SettingManagement.csproj", "{CAEB3435-A332-4FFA-BE5F-4E386FA8B19B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackageName.CompanyName.ProjectName.AIO.Host", "host\PackageName.CompanyName.ProjectName.AIO.Host\PackageName.CompanyName.ProjectName.AIO.Host.csproj", "{26F1E2F7-3B0E-4333-9E66-EFE0D113386B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,10 @@ Global
 		{CAEB3435-A332-4FFA-BE5F-4E386FA8B19B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAEB3435-A332-4FFA-BE5F-4E386FA8B19B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAEB3435-A332-4FFA-BE5F-4E386FA8B19B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26F1E2F7-3B0E-4333-9E66-EFE0D113386B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26F1E2F7-3B0E-4333-9E66-EFE0D113386B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26F1E2F7-3B0E-4333-9E66-EFE0D113386B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26F1E2F7-3B0E-4333-9E66-EFE0D113386B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -136,6 +142,7 @@ Global
 		{FDB3A3E9-C072-438D-8B8D-2AA957C1167F} = {4B0AD527-99B3-49A9-8A45-FD8671F8BE4D}
 		{8CE7C515-CD78-42D4-A9D7-39D217A3D046} = {4B0AD527-99B3-49A9-8A45-FD8671F8BE4D}
 		{CAEB3435-A332-4FFA-BE5F-4E386FA8B19B} = {4B0AD527-99B3-49A9-8A45-FD8671F8BE4D}
+		{26F1E2F7-3B0E-4333-9E66-EFE0D113386B} = {4786387C-C1C5-46F8-806F-EBC54DB0A4FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {62C0F185-E2C2-46A2-B4B2-5E703E25849E}

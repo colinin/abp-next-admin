@@ -1,11 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-	
-	<Import Project="..\..\..\common.secrets.props" />
-
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<RootNamespace>LY.AIO.Applications.Single</RootNamespace>
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -263,10 +259,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.Application\PackageName.CompanyName.ProjectName.Application.csproj" />
+		<ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.EntityFrameworkCore\PackageName.CompanyName.ProjectName.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.HttpApi\PackageName.CompanyName.ProjectName.HttpApi.csproj" />
+		<ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.SettingManagement\PackageName.CompanyName.ProjectName.SettingManagement.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Folder Include="blobs\host\public\" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <None Remove="blobs\host\public\iShot_2024-12-04_11.51.43.png" />
 	</ItemGroup>
+
 </Project>

@@ -484,7 +484,7 @@
 		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
 		<PackageVersion Include="TencentCloudSDK" Version="3.0.712" />
 		<PackageVersion Include="Yarp.ReverseProxy" Version="2.1.0" />
-		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="6.0.0" />
-		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="6.0.0" />
+		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="5.5.0" />
+		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="5.5.0" />
 	</ItemGroup>
 </Project>
