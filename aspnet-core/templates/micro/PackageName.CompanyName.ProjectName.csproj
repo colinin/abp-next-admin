@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework> <!-- 或其他适合的框架 -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>LINGYUN.Abp.MicroService.Templates</PackageId>
+    <Version>8.3.0</Version>
+    <Authors>colin.in@foxmail.com</Authors>
+    <Description>Abp framework micro-service template</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/colinin/abp-next-admin</PackageProjectUrl>
+    <PackageTags>micro webapi cloud</PackageTags>
+    <PackageType>Template</PackageType>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/colinin/abp-next-admin</RepositoryUrl>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <IsPackable>true</IsPackable>
+    <IsShipping>true</IsShipping>
+    <IsShippingPackage>true</IsShippingPackage>
+    <IncludeBuildOutput>False</IncludeBuildOutput>
+    <IncludeSource>False</IncludeSource>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="content\**" Exclude="**/bin/**;**/obj/**;**/LocalNuget/**;**/.vs/**;**/.vscode/**;">
+      <Pack>true</Pack>
+      <PackagePath>content</PackagePath>
+    </Content>
+  </ItemGroup>
+</Project>
