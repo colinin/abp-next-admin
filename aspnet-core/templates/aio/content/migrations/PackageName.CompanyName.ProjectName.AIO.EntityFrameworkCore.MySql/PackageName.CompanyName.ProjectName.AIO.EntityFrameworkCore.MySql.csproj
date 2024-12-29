@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../../common.props" />
+	<Import Project="../../configureawait.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore\PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+
+</Project>
