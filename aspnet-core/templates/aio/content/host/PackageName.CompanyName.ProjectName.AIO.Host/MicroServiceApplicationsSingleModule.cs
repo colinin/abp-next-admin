@@ -102,6 +102,8 @@ using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
 using LINGYUN.Platform.Settings.VueVbenAdmin;
 using LINGYUN.Platform.Theme.VueVbenAdmin;
+using PackageName.CompanyName.ProjectName.EntityFrameworkCore;
+using PackageName.CompanyName.ProjectName.SettingManagement;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -111,7 +113,6 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
-using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using Volo.Abp.EventBus;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Imaging;
@@ -123,8 +124,20 @@ using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
-// using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
+#if MySQL
 using Volo.Abp.EntityFrameworkCore.MySQL;
+#elif SqlServer 
+using Volo.Abp.EntityFrameworkCore.SqlServer;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+#elif Sqlite 
+using Volo.Abp.EntityFrameworkCore.Sqlite;
+#elif Oracle 
+using Volo.Abp.EntityFrameworkCore.Oracle;
+#elif OracleDevart 
+using Volo.Abp.EntityFrameworkCore.Oracle.Devart;
+#elif PostgreSql 
+using Volo.Abp.EntityFrameworkCore.PostgreSql;
+#endif
 
 namespace PackageName.CompanyName.ProjectName.AIO.Host;
 
@@ -233,8 +246,19 @@ namespace PackageName.CompanyName.ProjectName.AIO.Host;
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
 
-    // typeof(AbpEntityFrameworkCorePostgreSqlModule),
+#if MySQL
     typeof(AbpEntityFrameworkCoreMySQLModule),
+#elif SqlServer
+    typeof(AbpEntityFrameworkCoreSqlServerModule),
+#elif Sqlite
+    typeof(AbpEntityFrameworkCoreSqliteModule),
+#elif Oracle
+    typeof(AbpEntityFrameworkCoreOracleModule),
+#elif OracleDevart
+    typeof(AbpEntityFrameworkCoreOracleDevartModule),
+#elif PostgreSql
+    typeof(AbpEntityFrameworkCorePostgreSqlModule),
+#endif
 
     typeof(AbpAliyunSmsModule),
     typeof(AbpAliyunSettingManagementModule),
@@ -323,7 +347,12 @@ namespace PackageName.CompanyName.ProjectName.AIO.Host;
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpEventBusModule),
-    typeof(AbpAutofacModule)
+    typeof(AbpAutofacModule),
+    
+    typeof(ProjectNameApplicationModule),
+    typeof(ProjectNameHttpApiModule),
+    typeof(ProjectNameEntityFrameworkCoreModule),
+    typeof(ProjectNameSettingManagementModule)
     )]
 public partial class MicroServiceApplicationsSingleModule : AbpModule
 {

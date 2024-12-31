@@ -16,4 +16,4 @@ VOLUME [ "./app/Modules" ]
 RUN apt update
 RUN apt install wget -y
 
-ENTRYPOINT ["dotnet", "LY.MicroService.Applications.Single.dll"]
+ENTRYPOINT ["dotnet", "PackageName.CompanyName.ProjectName.AIO.dll"]

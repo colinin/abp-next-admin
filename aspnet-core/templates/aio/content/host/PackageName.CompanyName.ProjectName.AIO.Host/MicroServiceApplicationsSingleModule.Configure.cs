@@ -552,7 +552,7 @@ public partial class MicroServiceApplicationsSingleModule
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<MicroServiceApplicationsSingleModule>("LY.MicroService.Applications.Single");
+            options.FileSets.AddEmbedded<MicroServiceApplicationsSingleModule>("PackageName.CompanyName.ProjectName.AIO");
         });
     }
 
@@ -567,12 +567,30 @@ public partial class MicroServiceApplicationsSingleModule
 
     private void ConfigureDbContext()
     {
+        // 配置Ef
         Configure<AbpDbContextOptions>(options =>
         {
-            // AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);//解决PostgreSql设置为utc时间后无法写入local时区的问题
-            // options.UseNpgsql();
-            
+#if MySQL
             options.UseMySQL();
+            options.UseMySQL<ProjectNameDbContext>();
+#elif SqlServer
+            options.UseSqlServer();
+            options.UseSqlServer<ProjectNameDbContext>(builder =>
+            {
+                // see https://learn.microsoft.com/en-us/sql/t-sql/statements/alter-database-transact-sql-compatibility-level?view=sql-server-ver16
+                // builder.UseCompatibilityLevel(150);
+            });
+#elif Sqlite
+            options.UseSqlite();
+            options.UseSqlite<ProjectNameDbContext>();
+#elif Oracle || OracleDevart
+            options.UseOracle();
+            options.UseOracle<ProjectNameDbContext>();
+#elif PostgreSql
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);//解决PostgreSql设置为utc时间后无法写入local时区的问题
+            options.UseNpgsql();
+            options.UseNpgsql<ProjectNameDbContext>();
+#endif
         });
     }
 
