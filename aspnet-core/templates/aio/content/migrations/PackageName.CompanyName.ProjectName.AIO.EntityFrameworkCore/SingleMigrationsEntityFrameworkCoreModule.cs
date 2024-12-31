@@ -18,7 +18,7 @@ using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
-namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
+namespace PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore;
 
 [DependsOn(
     typeof(AbpSaasEntityFrameworkCoreModule),

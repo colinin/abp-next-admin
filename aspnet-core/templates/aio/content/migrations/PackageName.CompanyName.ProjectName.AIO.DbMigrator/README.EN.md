@@ -1,4 +1,4 @@
-# LY.MicroService.Applications.Single.DbMigrator
+# PackageName.CompanyName.ProjectName.AIO.DbMigrator
 
 Single application database migration tool for automatically executing database migrations and initializing data.
 

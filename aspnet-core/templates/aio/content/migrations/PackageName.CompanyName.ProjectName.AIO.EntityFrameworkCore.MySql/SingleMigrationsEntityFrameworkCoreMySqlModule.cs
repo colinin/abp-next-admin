@@ -1,4 +1,4 @@
-﻿using LY.MicroService.Applications.Single.EntityFrameworkCore;
+﻿using PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;

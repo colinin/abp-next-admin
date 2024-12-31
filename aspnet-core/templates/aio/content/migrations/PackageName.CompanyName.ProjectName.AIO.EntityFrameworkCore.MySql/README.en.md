@@ -26,7 +26,7 @@ This guide will help you manage MySQL database migrations using the migration sc
 
 2. Select MySQL database context from the menu:
    ```
-   [1] LY.MicroService.Applications.Single.EntityFrameworkCore.MySql
+   [1] PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.MySql
    ```
 
 3. Enter migration name (optional):
@@ -45,7 +45,7 @@ After creating the migration, the script will ask if you want to generate SQL sc
 
 Generated SQL scripts will be saved in:
 ```
-aspnet-core/InitSql/LY.MicroService.Applications.Single.EntityFrameworkCore.MySql/
+aspnet-core/InitSql/PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.MySql/
 ```
 
 ### 3. Apply Migration

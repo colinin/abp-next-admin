@@ -19,7 +19,7 @@ using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
-namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
+namespace PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore;
 
 [ConnectionStringName("SingleDbMigrator")]
 public class SingleMigrationsDbContext : AbpDbContext<SingleMigrationsDbContext>

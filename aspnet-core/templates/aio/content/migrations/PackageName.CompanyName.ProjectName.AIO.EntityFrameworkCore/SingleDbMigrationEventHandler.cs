@@ -20,7 +20,7 @@ using Volo.Abp.Uow;
 using IdentityRole = Volo.Abp.Identity.IdentityRole;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
-namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
+namespace PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore;
 public class SingleDbMigrationEventHandler : 
     EfCoreDatabaseMigrationEventHandlerBase<SingleMigrationsDbContext>,
     IDistributedEventHandler<EntityDeletedEto<TenantEto>>

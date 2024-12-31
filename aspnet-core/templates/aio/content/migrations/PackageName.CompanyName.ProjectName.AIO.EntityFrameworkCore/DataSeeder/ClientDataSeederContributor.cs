@@ -17,7 +17,7 @@ using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 
-namespace LY.MicroService.Applications.Single.EntityFrameworkCore.DataSeeder;
+namespace PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.DataSeeder;
 
 public class ClientDataSeederContributor : IDataSeedContributor, ITransientDependency
 {

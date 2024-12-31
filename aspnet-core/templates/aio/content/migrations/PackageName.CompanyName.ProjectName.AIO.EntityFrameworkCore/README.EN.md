@@ -1,4 +1,4 @@
-# LY.MicroService.Applications.Single.EntityFrameworkCore
+# PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore
 
 Monolithic Application Database Migration Module, providing comprehensive application database migration functionality.
 

@@ -26,7 +26,7 @@
 
 2. 在菜单中选择 MySQL 数据库上下文：
    ```
-   [1] LY.MicroService.Applications.Single.EntityFrameworkCore.MySql
+   [1] PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.MySql
    ```
 
 3. 输入迁移名称（可选）：
@@ -45,7 +45,7 @@
 
 生成的 SQL 脚本将保存在：
 ```
-aspnet-core/InitSql/LY.MicroService.Applications.Single.EntityFrameworkCore.MySql/
+aspnet-core/InitSql/PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.MySql/
 ```
 
 ### 3. 应用迁移

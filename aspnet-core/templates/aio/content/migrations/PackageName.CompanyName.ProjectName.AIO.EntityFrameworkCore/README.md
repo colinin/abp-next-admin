@@ -1,4 +1,4 @@
-# LY.MicroService.Applications.Single.EntityFrameworkCore
+# PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore
 
 单体应用数据迁移模块，提供完整的应用程序数据库迁移功能。
 

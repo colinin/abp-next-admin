@@ -5,7 +5,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<RootNamespace>LY.MicroService.Applications.Single.EntityFrameworkCore</RootNamespace>
+		<RootNamespace>PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -1,4 +1,4 @@
-﻿using LY.MicroService.Applications.Single.EntityFrameworkCore;
+﻿using PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

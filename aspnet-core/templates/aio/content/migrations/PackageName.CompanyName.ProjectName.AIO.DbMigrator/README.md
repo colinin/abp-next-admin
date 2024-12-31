@@ -1,4 +1,4 @@
-# LY.MicroService.Applications.Single.DbMigrator
+# PackageName.CompanyName.ProjectName.AIO.DbMigrator
 
 单体应用数据库迁移工具，用于自动执行数据库迁移和初始化数据。
 

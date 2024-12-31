@@ -15,9 +15,9 @@ public class Program
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning)
 #if DEBUG
-                .MinimumLevel.Override("LY.MicroService.Applications.Single.DbMigrator", LogEventLevel.Debug)
+                .MinimumLevel.Override("PackageName.CompanyName.ProjectName.AIO.DbMigrator", LogEventLevel.Debug)
 #else
-                .MinimumLevel.Override("LY.MicroService.Applications.Single.DbMigrator", LogEventLevel.Information)
+                .MinimumLevel.Override("PackageName.CompanyName.ProjectName.AIO.DbMigrator", LogEventLevel.Information)
 #endif
                 .Enrich.FromLogContext()
             .WriteTo.Console()

@@ -14,7 +14,7 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
-namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
+namespace PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore;
 
 public class SingleDbMigrationService : EfCoreRuntimeDatabaseMigratorBase<SingleMigrationsDbContext>, ITransientDependency
 {

@@ -1,4 +1,4 @@
-using LY.MicroService.Applications.Single.EntityFrameworkCore;
+using PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +14,7 @@ public class SingleMigrationsDbContextFactory : IDesignTimeDbContextFactory<Sing
         var connectionString = configuration.GetConnectionString("Default");
 
         var builder = new DbContextOptionsBuilder<SingleMigrationsDbContext>()
-            .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), b => b.MigrationsAssembly("LY.MicroService.Applications.Single.EntityFrameworkCore.MySql"));
+            .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), b => b.MigrationsAssembly("PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.MySql"));
 
         return new SingleMigrationsDbContext(builder!.Options);
     }
@@ -23,7 +23,7 @@ public class SingleMigrationsDbContextFactory : IDesignTimeDbContextFactory<Sing
     {
         var builder = new ConfigurationBuilder()
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(),
-                "../LY.MicroService.Applications.Single.DbMigrator/"))
+                "../PackageName.CompanyName.ProjectName.AIO.DbMigrator/"))
             .AddJsonFile("appsettings.json", optional: false)
             .AddJsonFile("appsettings.MySql.json", optional: true);
 
