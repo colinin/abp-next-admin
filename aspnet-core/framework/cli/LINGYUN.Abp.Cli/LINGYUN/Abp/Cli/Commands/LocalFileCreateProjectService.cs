@@ -87,7 +87,7 @@ namespace LINGYUN.Abp.Cli.Commands
                 projectFiles,
                 createArgs.PackageName,
                 createArgs.SolutionName.CompanyName,
-                createArgs.DatabaseManagementSystem);
+                dbm);
 
             Logger.LogInformation("Rewrite appsettings.json.");
             await TryReplaceAppSettingsWithProjectFile(
@@ -96,6 +96,13 @@ namespace LINGYUN.Abp.Cli.Commands
                 createArgs.SolutionName.CompanyName,
                 createArgs.SolutionName.ProjectName,
                 createArgs.ConnectionString);
+            
+            // Logger.LogInformation("Rewrite scripts.");
+            // await TryReplaceScriptProjectFile(
+            //     projectFiles,
+            //     createArgs.PackageName,
+            //     createArgs.SolutionName.CompanyName,
+            //     dbm);
 
             Logger.LogInformation("Rewrite application url.");
             await TryReplaceApplicationUrlWithProjectFile(
@@ -112,7 +119,8 @@ namespace LINGYUN.Abp.Cli.Commands
             await TryReplacePackageAndCompanyNameWithProjectFolder(
                 projectFiles,
                 createArgs.PackageName,
-                createArgs.SolutionName.CompanyName);
+                createArgs.SolutionName.CompanyName,
+                dbm);
 
             Logger.LogInformation($"'{createArgs.SolutionName.ProjectName}' has been successfully created to '{createArgs.OutputFolder}'");
         }
@@ -203,32 +211,53 @@ namespace LINGYUN.Abp.Cli.Commands
                 await ReplaceFileTextAsync(projectFile, defaultConnectionString, connectionString);
             }
         }
+        
+        //
+        // protected async virtual Task TryReplaceScriptProjectFile(
+        //     List<FindFile> projectFiles,
+        //     string packageName,
+        //     string companyName,
+        //     string dbm = "MySQL")
+        // {
+        //     var canReplaceFiles = projectFiles.Where(f => !f.IsFolder && f.Name.EndsWith(".bat", StringComparison.OrdinalIgnoreCase) ||
+        //                                                               f.Name.EndsWith(".sh", StringComparison.OrdinalIgnoreCase) ||
+        //                                                               f.Name.EndsWith(".ps1", StringComparison.OrdinalIgnoreCase));
+        //     foreach (var projectFile in canReplaceFiles)
+        //     {
+        //         await ReplaceFileTextAsync(projectFile, "PackageName", packageName);
+        //         await ReplaceFileTextAsync(projectFile, "CompanyName", companyName);
+        //         
+        //         await ReplaceFileTextAsync(projectFile, "DatabaseManagementName", dbm);
+        //     }
+        // }
 
         protected async virtual Task TryReplacePackageAndCompanyNameWithProjectFile(
             List<FindFile> projectFiles,
             string packageName,
             string companyName,
-            DatabaseManagementSystem database = DatabaseManagementSystem.NotSpecified)
+            string dbm = "MySQL")
         {
             var canReplaceFiles = projectFiles.Where(f => !f.IsFolder && !f.Name.Contains("appsettings"));
             foreach (var projectFile in canReplaceFiles)
             {
                 await ReplaceFileTextAsync(projectFile, "PackageName", packageName);
                 await ReplaceFileTextAsync(projectFile, "CompanyName", companyName);
+                await ReplaceFileTextAsync(projectFile, "DatabaseManagementName", dbm);
             }
         }
 
         protected virtual Task TryReplacePackageAndCompanyNameWithProjectFolder(
             List<FindFile> projectFiles,
             string packageName,
-            string companyName)
+            string companyName,
+            string dbm = "MySQL")
         {
             var canReplaceFiles = projectFiles
                 .OrderByDescending(f => f.Depth)
                 .OrderByDescending(f => !f.IsFolder);
             foreach (var projectFile in canReplaceFiles)
             {
-                var replaceFileName = projectFile.Name.Replace("PackageName", packageName).Replace("CompanyName", companyName);
+                var replaceFileName = projectFile.Name.Replace("PackageName", packageName).Replace("CompanyName", companyName).Replace("DatabaseManagementName", dbm);
 
                 if (File.Exists(projectFile.Name))
                 {
@@ -238,7 +267,7 @@ namespace LINGYUN.Abp.Cli.Commands
             }
 
             var canReplacePaths = projectFiles
-                .Where(projectFile => projectFile.Name.Contains("PackageName") || projectFile.Name.Contains("CompanyName"))
+                .Where(projectFile => projectFile.Name.Contains("PackageName") || projectFile.Name.Contains("CompanyName") || projectFile.Name.Contains("DatabaseManagementName"))
                 .OrderByDescending(f => f.Depth)
                 .OrderByDescending(f => f.IsFolder);
             foreach (var projectFile in canReplacePaths)
