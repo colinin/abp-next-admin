@@ -5,7 +5,7 @@
   "name": "LINGYUN.Abp.AllInOne",
   "identity": "LINGYUN.Abp.AllInOne",
   "description": "Abp framework all-in-one template",
-  "groupIdentity": "LINGYUN.Abp.Application",
+  "groupIdentity": "LINGYUN.Abp",
   "shortName": "laa",
   "tags": {
     "language": "C#",
