@@ -29,6 +29,7 @@ using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Abp.Wrapper;
 using LINGYUN.Platform.Localization;
 using PackageName.CompanyName.ProjectName.AIO.Host.Microsoft.Extensions.DependencyInjection;
+using PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -587,7 +588,7 @@ public partial class MicroServiceApplicationsSingleModule
             options.UseOracle();
             options.UseOracle<ProjectNameDbContext>();
 #elif PostgreSql
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);//解决PostgreSql设置为utc时间后无法写入local时区的问题
+            System.AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);//解决PostgreSql设置为utc时间后无法写入local时区的问题
             options.UseNpgsql();
             options.UseNpgsql<ProjectNameDbContext>();
 #endif
