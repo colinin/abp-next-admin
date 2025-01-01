@@ -98,6 +98,21 @@ public static class PlatformPermissions
         public const string ManageBlobs = Default + ".ManageBlobs";
     }
 
+    public class Feedback
+    {
+        public const string Default = GroupName + ".Feedback";
+
+        public const string Create = Default + ".Create";
+
+        public const string Update = Default + ".Update";
+
+        public const string Delete = Default + ".Delete";
+
+        public const string ManageComments = Default + ".ManageComments";
+
+        public const string ManageAttachments = Default + ".ManageAttachments";
+    }
+
     public static string[] GetAll()
     {
         return ReflectionHelper.GetPublicConstantsRecursively(typeof(PlatformPermissions));

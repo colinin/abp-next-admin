@@ -40,3 +40,83 @@ public class YouProjectModule : AbpModule
 * PushPlus.Channel.Sms.Enable					启用短信消息通道	
 * PushPlus.Channel.Sms.SendLimit				短信消息通道限制次数	
 * PushPlus.Channel.Sms.SendLimitInterval		短信消息通道限制周期(天)	
+
+## 配置项
+
+```json
+{
+  "PushPlus": {
+    "Security": {
+      "Token": "你的PushPlus Token",      // PushPlus平台获取的Token
+      "SecretKey": "你的PushPlus密钥"     // PushPlus平台获取的密钥
+    }
+  }
+}
+```
+
+## 基本用法
+
+1. 配置 PushPlus 凭证
+   * 在PushPlus平台获取Token和密钥
+   * 在配置文件中设置Token和密钥
+
+2. 发送消息
+   ```csharp
+   public class YourService
+   {
+       private readonly IPushPlusMessageSender _messageSender;
+
+       public YourService(IPushPlusMessageSender messageSender)
+       {
+           _messageSender = messageSender;
+       }
+
+       public async Task SendMessageAsync()
+       {
+           // 发送微信消息
+           await _messageSender.SendWeChatAsync(
+               title: "消息标题",
+               content: "消息内容",
+               topic: "可选的主题",
+               template: PushPlusMessageTemplate.Html
+           );
+
+           // 发送企业微信消息
+           await _messageSender.SendWeWorkAsync(
+               title: "消息标题",
+               content: "消息内容"
+           );
+
+           // 发送邮件
+           await _messageSender.SendEmailAsync(
+               title: "邮件标题",
+               content: "邮件内容"
+           );
+
+           // 发送短信
+           await _messageSender.SendSmsAsync(
+               title: "短信标题",
+               content: "短信内容"
+           );
+
+           // 发送Webhook消息
+           await _messageSender.SendWebhookAsync(
+               title: "消息标题",
+               content: "消息内容",
+               webhook: "webhook地址"
+           );
+       }
+   }
+   ```
+
+## 消息模板
+
+* Html - HTML格式（默认）
+* Text - 纯文本格式
+* Json - JSON格式
+* Markdown - Markdown格式
+
+## 更多信息
+
+* [PushPlus官方文档](https://www.pushplus.plus/doc/guide/openApi.html)
+* [ABP框架](https://abp.io/)

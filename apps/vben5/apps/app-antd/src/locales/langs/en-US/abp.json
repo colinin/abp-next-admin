@@ -1,0 +1,14 @@
+{
+  "title": "Abp Framework",
+  "manage": {
+    "title": "Manage",
+    "identity": {
+      "title": "Identity",
+      "user": "User",
+      "role": "Role",
+      "claimTypes": "Claim Types",
+      "securityLogs": "Security Logs",
+      "organizationUnits": "Organization Units"
+    }
+  }
+}

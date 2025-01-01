@@ -22,7 +22,8 @@ public class BackgroundTasksNotificationDefinitionProvider : NotificationDefinit
             allowSubscriptionToClients: true)
             .WithProviders(
                 NotificationProviderNames.SignalR,
-                NotificationProviderNames.Emailing);
+                NotificationProviderNames.Emailing)
+            .WithTemplate(typeof(BackgroundTasksResource));
         backgroundTaskGroup.AddNotification(
             BackgroundTasksNotificationNames.JobExecuteFailed,
             L("Notifications:JobExecuteFailed"),
@@ -33,7 +34,8 @@ public class BackgroundTasksNotificationDefinitionProvider : NotificationDefinit
             allowSubscriptionToClients: true)
             .WithProviders(
                 NotificationProviderNames.SignalR,
-                NotificationProviderNames.Emailing);
+                NotificationProviderNames.Emailing)
+            .WithTemplate(typeof(BackgroundTasksResource));
         backgroundTaskGroup.AddNotification(
             BackgroundTasksNotificationNames.JobExecuteCompleted,
             L("Notifications:JobExecuteCompleted"),
@@ -44,7 +46,8 @@ public class BackgroundTasksNotificationDefinitionProvider : NotificationDefinit
             allowSubscriptionToClients: true)
             .WithProviders(
                 NotificationProviderNames.SignalR,
-                NotificationProviderNames.Emailing);
+                NotificationProviderNames.Emailing)
+            .WithTemplate(typeof(BackgroundTasksResource));
     }
 
     protected LocalizableString L(string name)

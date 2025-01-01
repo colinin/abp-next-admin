@@ -29,6 +29,7 @@ using Volo.Abp.DistributedLocking;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
+using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -64,6 +65,7 @@ namespace LY.MicroService.WechatManagement;
     typeof(AbpDistributedLockingModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpHttpClientWrapperModule),
+    typeof(AbpMailKitModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),

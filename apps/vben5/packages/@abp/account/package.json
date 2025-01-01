@@ -1,0 +1,32 @@
+{
+  "name": "@abp/account",
+  "version": "8.2.3",
+  "homepage": "https://github.com/colinin/abp-next-admin",
+  "bugs": "https://github.com/colinin/abp-next-admin/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colinin/abp-next-admin.git",
+    "directory": "packages/@abp/account"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@abp/core": "workspace:*",
+    "@abp/request": "workspace:*",
+    "@abp/ui": "workspace:*",
+    "@vben/hooks": "workspace:*",
+    "@vben/layouts": "workspace:*",
+    "@vben/locales": "workspace:*",
+    "ant-design-vue": "catalog:",
+    "vue": "catalog:*"
+  }
+}
