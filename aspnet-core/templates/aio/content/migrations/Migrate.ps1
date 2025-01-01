@@ -12,7 +12,7 @@ $projectPath = Resolve-Path (Join-Path $PSScriptRoot "..")
 # 定义可用的DbContext
 $dbContexts = @{
     "1" = @{
-        Name = "PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.MySql"
+        Name = "PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.DatabaseManagementName"
         Context = "SingleMigrationsDbContext"
         Factory = "SingleMigrationsDbContextFactory"
     }
