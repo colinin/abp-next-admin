@@ -4,16 +4,69 @@ English | [简体中文](startup-aio-readme.md)
 
 ## Table of Contents
 
-- [Requirements](#requirements)
-- [Project Compilation](#project-compilation)
-- [Environment Configuration](#environment-configuration)
-  - [Required Configuration](#required-configuration)
-  - [Optional Configuration](#optional-configuration)
-- [Database Initialization](#database-initialization)
-- [Service Startup](#service-startup)
-- [Configuration Details](#configuration-details)
+- [Quick Start with CLI](#quick-start-with-cli)
+  - [Requirements](#cli-requirements)
+  - [Install CLI Tool](#install-cli-tool)
+  - [Create Project](#create-project)
+  - [Run Project](#run-project)
+- [Source Code Startup](#source-code-startup)
+  - [Requirements](#requirements)
+  - [Project Compilation](#project-compilation)
+  - [Environment Configuration](#environment-configuration)
+    - [Required Configuration](#required-configuration)
+    - [Optional Configuration](#optional-configuration)
+  - [Database Initialization](#database-initialization)
+  - [Service Startup](#service-startup)
+  - [Configuration Details](#configuration-details)
+- [Common Issues](#common-issues)
 
-## Requirements
+## Quick Start with CLI
+
+### CLI Requirements
+
+- .NET 8.0 SDK
+- Database (support any of the following):
+  - MySQL
+  - SQL Server
+  - SQLite
+  - Oracle
+  - Oracle Devart
+  - PostgreSQL
+- Redis
+
+### Install CLI Tool
+
+```bash
+dotnet tool install --global LINGYUN.Abp.Cli
+```
+
+### Create Project
+
+```bash
+# Short name: laa (LINGYUN Abp AllInOne)
+labp create YourCompanyName.YourProjectName -pk YourPackageName -t laa -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None" --no-random-port
+```
+
+Parameter Description:
+- `-pk` or `--package-name`: Package name
+- `-t` or `--template`: Template type, use `laa` for All-in-One template
+- `-o` or `--output`: Output directory
+- `--dbms`: Database type, supports MySql, SqlServer, Sqlite, Oracle, OracleDevart, PostgreSql
+- `--cs`: Database connection string
+- `--no-random-port`: Do not use random port
+
+### Run Project
+
+After creating the project, navigate to the project directory:
+
+```bash
+cd /path/to/output/host/YourPackageName.YourCompanyName.YourProjectName.AIO.Host
+dotnet run --launch-profile "YourPackageName.YourCompanyName.YourProjectName.Development"
+```
+
+## Source Code Startup
+
+### Requirements
 
 - .NET 8.0 SDK
 - Database (support any of the following):
@@ -23,7 +76,7 @@ English | [简体中文](startup-aio-readme.md)
 - Redis
 - Docker (optional)
 
-## Project Compilation
+### Project Compilation
 
 1. Ensure .NET 8.0 SDK is installed
 2. Execute the following command in the project root directory to compile the entire project:
@@ -34,9 +87,9 @@ English | [简体中文](startup-aio-readme.md)
 
 3. Open the `LY.MicroService.Applications.Single` solution in your IDE for debugging or publishing
 
-## Environment Configuration
+### Environment Configuration
 
-### Required Configuration
+#### Required Configuration
 
 #### 1. Database Configuration
 
@@ -181,7 +234,7 @@ The following configurations are applicable for monolithic distributed architect
 }
 ```
 
-## Database Initialization
+### Database Initialization
 
 1. Run database migration script:
 
@@ -210,15 +263,15 @@ Taking PostgreSQL as an example:
    - Run the `LY.MicroService.Applications.Single.DbMigrator` project
    - Wait for migration to complete, basic table data will be initialized
 
-## Service Startup
+### Service Startup
 
 1. Run the `LY.MicroService.Applications.Single` project
 2. Access Swagger API documentation in your browser:
    - URL: http://127.0.0.1:30000/swagger
 
-## Configuration Details
+### Configuration Details
 
-### 1. Basic Configuration
+#### 1. Basic Configuration
 
 #### Application Configuration
 

@@ -36,11 +36,17 @@ LINGYUN.Abp.Templates 基于 ABP Framework 提供两种项目模板：
 ### 安装模板
 
 ```bash
-# 安装微服务模板
+# 安装微服务模板:lam
 dotnet new install LINGYUN.Abp.MicroService.Templates
 
-# 安装单体应用模板
+# 安装单体应用模板:laa
 dotnet new install LINGYUN.Abp.AllInOne.Templates
+```
+
+### 安装 labp 命令行工具
+
+```bash
+  dotnet tool install --global LINGYUN.Abp.Cli
 ```
 
 ### 创建新项目
@@ -49,14 +55,14 @@ dotnet new install LINGYUN.Abp.AllInOne.Templates
 
 ```bash
 # 简写名称：lam (LINGYUN Abp Microservice)
-dotnet new lam -n YourCompanyName.YourProjectName -pk YourPackageName -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=YourDatabase;User Id=your_user;Password=your_password;SslMode=None" --no-random-port
+labp create YourCompanyName.YourProjectName -pk YourPackageName -t lam -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None" --no-random-port
 ```
 
 #### 创建单体应用项目
 
 ```bash
 # 简写名称：laa (LINGYUN Abp AllInOne)
-labp create MyCompanyName.MyProjectName -pk MyPackageName -t laa -o /Users/feijie/Projects/Tests --dbms MySql --cs "Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None" --no-random-port
+labp create YourCompanyName.YourProjectName -pk YourPackageName -t laa -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None" --no-random-port
 ```
 
 ## 运行项目

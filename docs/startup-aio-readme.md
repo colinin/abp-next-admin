@@ -4,16 +4,70 @@
 
 ## 目录
 
-- [环境要求](#环境要求)
-- [项目编译](#项目编译)
-- [环境配置](#环境配置)
-  - [必选配置](#必选配置)
-  - [可选配置](#可选配置)
-- [数据库初始化](#数据库初始化)
-- [服务启动](#服务启动)
-- [配置说明](#配置说明)
+- [CLI 快速启动](#cli快速启动)
+  - [环境要求](#cli环境要求)
+  - [安装命令行工具](#安装命令行工具)
+  - [创建项目](#创建项目)
+  - [运行项目](#运行项目)
+- [源码启动](#源码启动)
+  - [环境要求](#环境要求)
+  - [项目编译](#项目编译)
+  - [环境配置](#环境配置)
+    - [必选配置](#必选配置)
+    - [可选配置](#可选配置)
+  - [数据库初始化](#数据库初始化)
+  - [服务启动](#服务启动)
+  - [配置说明](#配置说明)
+- [常见问题](#常见问题)
 
-## 环境要求
+## CLI 快速启动
+
+### CLI 环境要求
+
+- .NET 8.0 SDK
+- 数据库（支持以下任一种）：
+  - MySQL
+  - SQL Server
+  - SQLite
+  - Oracle
+  - Oracle Devart
+  - PostgreSQL
+- Redis
+
+### 安装命令行工具
+
+```bash
+dotnet tool install --global LINGYUN.Abp.Cli
+```
+
+### 创建项目
+
+```bash
+# 简写名称：laa (LINGYUN Abp AllInOne)
+labp create YourCompanyName.YourProjectName -pk YourPackageName -t laa -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None" --no-random-port
+```
+
+参数说明：
+
+- `-pk` 或 `--package-name`: 包名
+- `-t` 或 `--template`: 模板类型，使用 `laa` 表示单体应用模板
+- `-o` 或 `--output`: 输出目录
+- `--dbms`: 数据库类型，支持 MySql、SqlServer、Sqlite、Oracle、OracleDevart、PostgreSql
+- `--cs`: 数据库连接字符串
+- `--no-random-port`: 不使用随机端口
+
+### 运行项目
+
+创建项目后，进入项目目录：
+
+```bash
+cd /path/to/output/host/YourPackageName.YourCompanyName.YourProjectName.AIO.Host
+dotnet run --launch-profile "YourPackageName.YourCompanyName.YourProjectName.Development"
+```
+
+## 源码启动
+
+### 环境要求
 
 - .NET 8.0 SDK
 - 数据库（支持以下任一种）：
@@ -23,7 +77,7 @@
 - Redis
 - Docker（可选）
 
-## 项目编译
+### 项目编译
 
 1. 确保已安装 .NET 8.0 SDK
 2. 在项目根目录执行以下命令编译整个项目：
@@ -34,9 +88,9 @@
 
 3. 使用 IDE 打开 `LY.MicroService.Applications.Single` 解决方案进行调试或发布
 
-## 环境配置
+### 环境配置
 
-### 必选配置
+#### 必选配置
 
 #### 1. 数据库配置
 
@@ -181,7 +235,7 @@ Redis 配置示例：
 }
 ```
 
-## 数据库初始化
+### 数据库初始化
 
 1. 运行数据库迁移脚本：
 
@@ -210,15 +264,15 @@ Redis 配置示例：
    - 运行 `LY.MicroService.Applications.Single.DbMigrator` 项目
    - 等待数据迁移完成，基础表数据将被初始化
 
-## 服务启动
+### 服务启动
 
 1. 运行 `LY.MicroService.Applications.Single` 项目
 2. 在浏览器中访问 Swagger 接口文档：
    - URL: http://127.0.0.1:30000/swagger
 
-## 配置说明
+### 配置说明
 
-### 1. 基础配置
+#### 基础配置
 
 #### 应用程序配置
 
@@ -247,7 +301,7 @@ Redis 配置示例：
 }
 ```
 
-### 2. 认证配置
+### 认证配置
 
 #### OpenIddict 配置
 
@@ -294,7 +348,7 @@ Redis 配置示例：
 }
 ```
 
-### 3. 功能开关配置
+### 功能开关配置
 
 ```json
 {
@@ -310,7 +364,7 @@ Redis 配置示例：
 }
 ```
 
-### 4. 日志配置
+### 日志配置
 
 ```json
 {

@@ -33,6 +33,12 @@ LINGYUN.Abp.Templates provides two types of project templates based on ABP Frame
 
 ## How to Use
 
+### Install labp CLI Tool
+
+```bash
+dotnet tool install --global LINGYUN.Abp.Cli
+```
+
 ### Install Templates
 
 ```bash
@@ -49,14 +55,14 @@ dotnet new install LINGYUN.Abp.AllInOne.Templates
 
 ```bash
 # Short name: lam (LINGYUN Abp Microservice)
-dotnet new lam -n YourCompanyName.YourProjectName -pk YourPackageName -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=YourDatabase;User Id=your_user;Password=your_password;SslMode=None" --no-random-port
+labp create YourCompanyName.YourProjectName -pk YourPackageName -t lam -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None" --no-random-port
 ```
 
 #### For All-in-One Project
 
 ```bash
 # Short name: laa (LINGYUN Abp AllInOne)
-dotnet new laa -n YourCompanyName.YourProjectName -pk YourPackageName -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=YourDatabase;User Id=your_user;Password=your_password;SslMode=None" --no-random-port
+labp create YourCompanyName.YourProjectName -pk YourPackageName -t laa -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None" --no-random-port
 ```
 
 ## How to Run
