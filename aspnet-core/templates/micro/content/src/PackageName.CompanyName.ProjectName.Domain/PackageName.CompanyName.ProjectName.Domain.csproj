@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../../common.props" />
+	<Import Project="../../configureawait.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<AssemblyName>PackageName.CompanyName.ProjectName.Domain</AssemblyName>
+		<PackageId>PackageName.CompanyName.ProjectName.Domain</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AutoMapper" />
+		<PackageReference Include="Volo.Abp.Caching" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" />
+		<PackageReference Include="LINGYUN.Abp.DataProtection" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\PackageName.CompanyName.ProjectName.Domain.Shared\PackageName.CompanyName.ProjectName.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

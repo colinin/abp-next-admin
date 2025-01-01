@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../../common.props" />
+	<Import Project="../../configureawait.props" />
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Serilog.Extensions.Logging" />
+		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Serilog.Sinks.Console" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Volo.Abp.Autofac" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Condition="'$(MySQL)'=='true'" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Condition="'$(SqlServer)'=='true'" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Condition="'$(Sqlite)'=='true'" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Oracle" Condition="'$(Oracle)'=='true'" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Oracle.Devart" Condition="'$(OracleDevart)'=='true'" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Condition="'$(PostgreSql)'=='true'" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="Logs\**" />
+		<Content Remove="Logs\**" />
+		<EmbeddedResource Remove="Logs\**" />
+		<None Remove="Logs\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.EntityFrameworkCore\PackageName.CompanyName.ProjectName.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+
+</Project>

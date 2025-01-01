@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "colin.in@foxmail.com",
+  "classifications": ["allinone", "webapi", "cloud"],
+  "name": "LINGYUN.Abp.AllInOne",
+  "identity": "LINGYUN.Abp.AllInOne",
+  "description": "Abp framework all-in-one template",
+  "groupIdentity": "LINGYUN.Abp",
+  "shortName": "laa",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [
+            "**/[Bb]in/**",
+            "**/[Oo]bj/**",
+            "**/[Ll]ocalNuget/**",
+            ".template.config/**/*",
+            ".vs/**/*"
+          ]
+        }
+      ]
+    }
+  ],
+  "sourceName": "ProjectName",
+  "preferNameDirectory": true,
+  "symbols": {
+    "AuthenticationScheme": {
+      "type": "parameter",
+      "description": "Authentication Scheme",
+      "datatype": "choice",
+      "defaultValue": "IdentityServer4",
+      "isRequired": false,
+      "choices": [
+        {
+          "choice": "IdentityServer4",
+          "description": "IdentityServer4"
+        },
+        {
+          "choice": "OpenIddict",
+          "description": "OpenIddict"
+        }
+      ]
+    },
+    "DatabaseManagement": {
+      "type": "parameter",
+      "description": "Database Management",
+      "dataType": "choice",
+      "defaultValue": "MySQL",
+      "isRequired": false,
+      "choices": [
+        {
+          "choice": "SqlServer",
+          "description": "Sql Server"
+        },
+        {
+          "choice": "MySQL",
+          "description": "My SQL"
+        },
+        {
+          "choice": "Sqlite",
+          "description": "Sqlite"
+        },
+        {
+          "choice": "Oracle",
+          "description": "Oracle"
+        },
+        {
+          "choice": "OracleDevart",
+          "description": "Oracle Devart Driver"
+        },
+        {
+          "choice": "PostgreSql",
+          "description": "Postgre Sql"
+        }
+      ]
+    },
+    "SqlServer": {
+      "type": "computed",
+      "value": "(DatabaseManagement == \"SqlServer\")"
+    },
+    "MySQL": {
+      "type": "computed",
+      "value": "(DatabaseManagement == \"MySQL\")"
+    },
+    "Sqlite": {
+      "type": "computed",
+      "value": "(DatabaseManagement == \"Sqlite\")"
+    },
+    "Oracle": {
+      "type": "computed",
+      "value": "(DatabaseManagement == \"Oracle\")"
+    },
+    "OracleDevart": {
+      "type": "computed",
+      "value": "(DatabaseManagement == \"Oracle.Devart\")"
+    },
+    "PostgreSql": {
+      "type": "computed",
+      "value": "(DatabaseManagement == \"PostgreSql\")"
+    },
+    "IdentityServer4": {
+      "type": "computed",
+      "value": "(AuthenticationScheme == \"IdentityServer4\")"
+    },
+    "OpenIddict": {
+      "type": "computed",
+      "value": "(AuthenticationScheme == \"OpenIddict\")"
+    }
+  }
+}
