@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../../common.props" />
+	<Import Project="../../configureawait.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RootNamespace>PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Volo.Abp.Identity.Application.Contracts" />
+		<PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="LINGYUN.Abp.AuditLogging.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Abp.WeChat" />
+		<PackageReference Include="LINGYUN.Abp.Data.DbMigrator" />
+		<PackageReference Include="LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="LINGYUN.Abp.MessageService.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Abp.Notifications.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Abp.Saas.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Platform.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Abp.IdentityServer.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Abp.Identity.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Abp.TextTemplating.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Abp.TaskManagement.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.EntityFrameworkCore\PackageName.CompanyName.ProjectName.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+
+</Project>

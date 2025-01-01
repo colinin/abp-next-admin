@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+	  <RootNamespace />
+	  <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+	  <PackageReference Include="NSubstitute" />
+	  <PackageReference Include="Shouldly" />
+	  <PackageReference Include="xunit" />
+	  <PackageReference Include="xunit.extensibility.execution" />
+	  <PackageReference Include="xunit.runner.visualstudio" />
+	  <PackageReference Include="Volo.Abp.Autofac" />
+	  <PackageReference Include="Volo.Abp.Authorization" />
+	  <PackageReference Include="Volo.Abp.Features" />
+	  <PackageReference Include="Volo.Abp.MemoryDb" />
+	  <PackageReference Include="Volo.Abp.TestBase" />
+  </ItemGroup>
+
+</Project>

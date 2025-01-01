@@ -12,7 +12,7 @@
 		<RepositoryUrl>https://github.com/colinin/abp-next-admin</RepositoryUrl>
 		<GeneratePackageOnBuild Condition="$(AssemblyName.StartsWith('LINGYUN'))">true</GeneratePackageOnBuild>
 	</PropertyGroup>
-
+	
 	<ItemGroup>
 		<Compile Remove="LocalNuget\**" />
 		<EmbeddedResource Remove="LocalNuget\**" />
