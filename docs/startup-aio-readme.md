@@ -34,10 +34,20 @@
   - PostgreSQL
 - Redis
 
-### 安装命令行工具
+### 安装模板
 
 ```bash
-dotnet tool install --global LINGYUN.Abp.Cli
+# 安装微服务模板:lam
+dotnet new install LINGYUN.Abp.MicroService.Templates
+
+# 安装单体应用模板:laa
+dotnet new install LINGYUN.Abp.AllInOne.Templates
+```
+
+### 安装 labp 命令行工具
+
+```bash
+  dotnet tool install --global LINGYUN.Abp.Cli
 ```
 
 ### 创建项目
