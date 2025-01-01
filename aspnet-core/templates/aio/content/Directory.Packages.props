@@ -118,6 +118,10 @@
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.Oracle" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.Oracle.Devart" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.FeatureManagement.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.FeatureManagement.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -195,7 +199,7 @@
 
 	<!-- .NET -->
 	<ItemGroup>
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
+		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
@@ -211,7 +215,7 @@
 		<PackageVersion Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />
+		<PackageVersion Include="Microsoft.Extensions.Options" Version="$(MicrosoftExtensionsPackageVersion)" />
 	</ItemGroup>
 
 	<!-- Elsa -->
