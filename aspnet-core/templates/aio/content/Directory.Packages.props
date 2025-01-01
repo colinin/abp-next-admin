@@ -7,6 +7,46 @@
 		<MicrosoftExtensionsPackageVersion>8.0.0</MicrosoftExtensionsPackageVersion>
 		<MicrosoftAspNetCorePackageVersion>8.0.0</MicrosoftAspNetCorePackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>8.0.0</MicrosoftEntityFrameworkCorePackageVersion>
+		<SerilogPackageVersion>3.1.1</SerilogPackageVersion>
+		<SerilogAspNetCorePackageVersion>8.0.0</SerilogAspNetCorePackageVersion>
+		<XunitPackageVersion>2.6.1</XunitPackageVersion>
+		<OpenTelemetryPackageVersion>1.8.1</OpenTelemetryPackageVersion>
+		<FodyPackageVersion>6.8.0</FodyPackageVersion>
+		<MicrosoftTestSdkPackageVersion>17.8.0</MicrosoftTestSdkPackageVersion>
+		<DaprPackageVersion>1.12.0</DaprPackageVersion>
+		<IdentityModelPackageVersion>6.2.0</IdentityModelPackageVersion>
+		<PollyPackageVersion>8.2.0</PollyPackageVersion>
+		<QuartzPackageVersion>3.7.0</QuartzPackageVersion>
+		<HangfirePackageVersion>1.8.6</HangfirePackageVersion>
+		<DistributedLockPackageVersion>1.0.5</DistributedLockPackageVersion>
+		<DistributedLockRedisPackageVersion>1.0.2</DistributedLockRedisPackageVersion>
+		<SenparcWeixinPackageVersion>16.18.9</SenparcWeixinPackageVersion>
+		<ImageSharpPackageVersion>3.0.2</ImageSharpPackageVersion>
+		<CoverletPackageVersion>6.0.0</CoverletPackageVersion>
+		<MoqPackageVersion>3.0.0</MoqPackageVersion>
+		<NSubstitutePackageVersion>5.1.0</NSubstitutePackageVersion>
+		<ShouldlyPackageVersion>4.2.1</ShouldlyPackageVersion>
+		<XunitRunnerPackageVersion>2.5.3</XunitRunnerPackageVersion>
+		<AliyunSdkPackageVersion>1.5.10</AliyunSdkPackageVersion>
+		<AliyunOssPackageVersion>2.13.0</AliyunOssPackageVersion>
+		<AgileConfigPackageVersion>1.6.9</AgileConfigPackageVersion>
+		<MarkdigPackageVersion>0.34.0</MarkdigPackageVersion>
+		<NewtonsoftJsonPackageVersion>13.0.3</NewtonsoftJsonPackageVersion>
+		<NestPackageVersion>7.15.1</NestPackageVersion>
+		<NRulesPackageVersion>0.9.2</NRulesPackageVersion>
+		<OcelotPackageVersion>20.0.0</OcelotPackageVersion>
+		<RulesEnginePackageVersion>4.0.0</RulesEnginePackageVersion>
+		<JetBrainsAnnotationsPackageVersion>2023.3.0</JetBrainsAnnotationsPackageVersion>
+		<ImageSharpDrawingPackageVersion>2.0.1</ImageSharpDrawingPackageVersion>
+		<StackExchangeRedisPackageVersion>2.7.4</StackExchangeRedisPackageVersion>
+		<SwashbucklePackageVersion>6.5.0</SwashbucklePackageVersion>
+		<HangfireMySqlPackageVersion>2.0.3</HangfireMySqlPackageVersion>
+		<OpenTelemetryEfCorePackageVersion>1.0.0-beta.11</OpenTelemetryEfCorePackageVersion>
+		<SystemComponentModelPackageVersion>5.0.0</SystemComponentModelPackageVersion>
+		<TencentCloudCosPackageVersion>5.4.37</TencentCloudCosPackageVersion>
+		<TencentCloudSdkPackageVersion>3.0.712</TencentCloudSdkPackageVersion>
+		<YarpReverseProxyPackageVersion>2.1.0</YarpReverseProxyPackageVersion>
+		<OpenIddictDataProtectionPackageVersion>5.5.0</OpenIddictDataProtectionPackageVersion>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 
@@ -216,6 +256,7 @@
 		<PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Options" Version="$(MicrosoftExtensionsPackageVersion)" />
+		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSdkPackageVersion)" />
 	</ItemGroup>
 
 	<!-- Elsa -->
@@ -251,15 +292,15 @@
 
 	<!-- Serilog -->
 	<ItemGroup>
-		<PackageVersion Include="Serilog" Version="3.1.1" />
-		<PackageVersion Include="Serilog.AspNetCore" Version="8.0.0" />
+		<PackageVersion Include="Serilog" Version="$(SerilogPackageVersion)" />
+		<PackageVersion Include="Serilog.AspNetCore" Version="$(SerilogAspNetCorePackageVersion)" />
 		<PackageVersion Include="Serilog.Enrichers.Environment" Version="2.3.0" />
 		<PackageVersion Include="Serilog.Enrichers.Assembly" Version="2.0.0" />
 		<PackageVersion Include="Serilog.Enrichers.Process" Version="2.0.2" />
 		<PackageVersion Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-		<PackageVersion Include="Serilog.Extensions.Hosting" Version="8.0.0" />
-		<PackageVersion Include="Serilog.Extensions.Logging" Version="8.0.0" />
-		<PackageVersion Include="Serilog.Settings.Configuration" Version="8.0.0" />
+		<PackageVersion Include="Serilog.Extensions.Hosting" Version="$(SerilogAspNetCorePackageVersion)" />
+		<PackageVersion Include="Serilog.Extensions.Logging" Version="$(SerilogAspNetCorePackageVersion)" />
+		<PackageVersion Include="Serilog.Settings.Configuration" Version="$(SerilogAspNetCorePackageVersion)" />
 		<PackageVersion Include="Serilog.Sinks.Async" Version="1.5.0" />
 		<PackageVersion Include="Serilog.Sinks.Console" Version="5.0.0" />
 		<PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
@@ -268,41 +309,40 @@
 
 	<!-- Test -->
 	<ItemGroup>
-		<PackageVersion Include="coverlet.collector" Version="6.0.0" />
-		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-		<PackageVersion Include="Moq.AutoMock" Version="3.0.0" />
-		<PackageVersion Include="NSubstitute" Version="5.1.0" />
-		<PackageVersion Include="Shouldly" Version="4.2.1" />
-		<PackageVersion Include="xunit" Version="2.6.1" />
-		<PackageVersion Include="xunit.extensibility.execution" Version="2.6.1" />
-		<PackageVersion Include="xunit.runner.visualstudio" Version="2.5.3" />
+		<PackageVersion Include="coverlet.collector" Version="$(CoverletPackageVersion)" />
+		<PackageVersion Include="xunit" Version="$(XunitPackageVersion)" />
+		<PackageVersion Include="xunit.extensibility.execution" Version="$(XunitPackageVersion)" />
+		<PackageVersion Include="xunit.runner.visualstudio" Version="$(XunitRunnerPackageVersion)" />
+		<PackageVersion Include="Moq.AutoMock" Version="$(MoqPackageVersion)" />
+		<PackageVersion Include="NSubstitute" Version="$(NSubstitutePackageVersion)" />
+		<PackageVersion Include="Shouldly" Version="$(ShouldlyPackageVersion)" />
 	</ItemGroup>
 
 	<!-- Fody -->
 	<ItemGroup>
 		<PackageVersion Include="ConfigureAwait.Fody" Version="3.3.2" />
-		<PackageVersion Include="Fody" Version="6.8.0" />
+		<PackageVersion Include="Fody" Version="$(FodyPackageVersion)" />
 	</ItemGroup>
 
 	<!-- Other -->
 	<ItemGroup>
-		<PackageVersion Include="aliyun-net-sdk-core" Version="1.5.10" />
-		<PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.13.0" />
-		<PackageVersion Include="AgileConfig.Client" Version="1.6.9" />
-		<PackageVersion Include="Dapr.Client" Version="1.12.0" />
-		<PackageVersion Include="Dapr.Actors" Version="1.12.0" />
-		<PackageVersion Include="Dapr.Actors.AspNetCore" Version="1.12.0" />
-		<PackageVersion Include="DistributedLock.Core" Version="1.0.5" />
-		<PackageVersion Include="DistributedLock.Redis" Version="1.0.2" />
-		<PackageVersion Include="Hangfire.MySqlStorage" Version="2.0.3" />
-		<PackageVersion Include="HangFire.SqlServer" Version="1.8.6" />
-		<PackageVersion Include="IdentityModel" Version="6.2.0" />
-		<PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
-		<PackageVersion Include="Markdig" Version="0.34.0" />
-		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageVersion Include="NEST" Version="7.15.1" />
-		<PackageVersion Include="NRules" Version="0.9.2" />
-		<PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
+		<PackageVersion Include="aliyun-net-sdk-core" Version="$(AliyunSdkPackageVersion)" />
+		<PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="$(AliyunOssPackageVersion)" />
+		<PackageVersion Include="AgileConfig.Client" Version="$(AgileConfigPackageVersion)" />
+		<PackageVersion Include="Dapr.Client" Version="$(DaprPackageVersion)" />
+		<PackageVersion Include="Dapr.Actors" Version="$(DaprPackageVersion)" />
+		<PackageVersion Include="Dapr.Actors.AspNetCore" Version="$(DaprPackageVersion)" />
+		<PackageVersion Include="DistributedLock.Core" Version="$(DistributedLockPackageVersion)" />
+		<PackageVersion Include="DistributedLock.Redis" Version="$(DistributedLockRedisPackageVersion)" />
+		<PackageVersion Include="Hangfire.MySqlStorage" Version="$(HangfireMySqlPackageVersion)" />
+		<PackageVersion Include="HangFire.SqlServer" Version="$(HangfirePackageVersion)" />
+		<PackageVersion Include="IdentityModel" Version="$(IdentityModelPackageVersion)" />
+		<PackageVersion Include="JetBrains.Annotations" Version="$(JetBrainsAnnotationsPackageVersion)" />
+		<PackageVersion Include="Markdig" Version="$(MarkdigPackageVersion)" />
+		<PackageVersion Include="Newtonsoft.Json" Version="$(NewtonsoftJsonPackageVersion)" />
+		<PackageVersion Include="NEST" Version="$(NestPackageVersion)" />
+		<PackageVersion Include="NRules" Version="$(NRulesPackageVersion)" />
+		<PackageVersion Include="Ocelot.Provider.Polly" Version="$(OcelotPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.AuditLogging.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
@@ -468,27 +508,30 @@
         <PackageVersion Include="LINGYUN.Abp.WebhooksManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
         <PackageVersion Include="LINGYUN.Platform.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
         <PackageVersion Include="LINGYUN.Platform.Application" Version="$(LINGYUNAbpPackageVersion)" />
-		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.8.1" />
-		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.8.1" />
-		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.8.1" />
-		<PackageVersion Include="OpenTelemetry.Exporter.Zipkin" Version="1.8.1" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.8.1" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.8.1" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.0.0-beta.11" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.8.1" />
-		<PackageVersion Include="Polly" Version="8.2.0" />
-		<PackageVersion Include="Quartz.Serialization.Json" Version="3.7.0" />
-		<PackageVersion Include="RulesEngine" Version="4.0.0" />
-		<PackageVersion Include="Senparc.Weixin.MP" Version="16.18.9" />
-		<PackageVersion Include="SixLabors.ImageSharp" Version="3.0.2" />
-		<PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.0.1" />
-		<PackageVersion Include="StackExchange.Redis" Version="2.7.4" />
-		<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-		<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
-		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
-		<PackageVersion Include="TencentCloudSDK" Version="3.0.712" />
-		<PackageVersion Include="Yarp.ReverseProxy" Version="2.1.0" />
-		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="5.5.0" />
-		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="5.5.0" />
+		<PackageVersion Include="System.ComponentModel.Annotations" Version="$(SystemComponentModelPackageVersion)" />
+		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="$(TencentCloudCosPackageVersion)" />
+		<PackageVersion Include="TencentCloudSDK" Version="$(TencentCloudSdkPackageVersion)" />
+		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="$(OpenTelemetryPackageVersion)" />
+		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="$(OpenTelemetryPackageVersion)" />
+		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="$(OpenTelemetryPackageVersion)" />
+		<PackageVersion Include="OpenTelemetry.Exporter.Zipkin" Version="$(OpenTelemetryPackageVersion)" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="$(OpenTelemetryPackageVersion)" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="$(OpenTelemetryPackageVersion)" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="$(OpenTelemetryEfCorePackageVersion)" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="$(OpenTelemetryPackageVersion)" />
+		<PackageVersion Include="Polly" Version="$(PollyPackageVersion)" />
+		<PackageVersion Include="Quartz.Serialization.Json" Version="$(QuartzPackageVersion)" />
+		<PackageVersion Include="RulesEngine" Version="$(RulesEnginePackageVersion)" />
+		<PackageVersion Include="Senparc.Weixin.MP" Version="$(SenparcWeixinPackageVersion)" />
+		<PackageVersion Include="SixLabors.ImageSharp" Version="$(ImageSharpPackageVersion)" />
+		<PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="$(ImageSharpDrawingPackageVersion)" />
+		<PackageVersion Include="StackExchange.Redis" Version="$(StackExchangeRedisPackageVersion)" />
+		<PackageVersion Include="Swashbuckle.AspNetCore" Version="$(SwashbucklePackageVersion)" />
+		<PackageVersion Include="System.ComponentModel.Annotations" Version="$(SystemComponentModelPackageVersion)" />
+		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="$(TencentCloudCosPackageVersion)" />
+		<PackageVersion Include="TencentCloudSDK" Version="$(TencentCloudSdkPackageVersion)" />
+		<PackageVersion Include="Yarp.ReverseProxy" Version="$(YarpReverseProxyPackageVersion)" />
+		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="$(OpenIddictDataProtectionPackageVersion)" />
+		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="$(OpenIddictDataProtectionPackageVersion)" />
 	</ItemGroup>
 </Project>
