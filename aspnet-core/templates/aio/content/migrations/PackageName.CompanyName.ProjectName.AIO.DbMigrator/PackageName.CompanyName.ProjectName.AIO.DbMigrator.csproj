@@ -23,21 +23,9 @@
 		<Content Remove="Logs\**" />
 		<EmbeddedResource Remove="Logs\**" />
 		<None Remove="Logs\**" />
-		<Content Update="appsettings.PostgreSql.json">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<None Remove="appsettings.PostgreSql.json" />
-		<None Remove="appsettings.json" />
 		<Content Include="appsettings.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="appsettings.Development.json" />
-	  <None Remove="appsettings.Production.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -45,7 +33,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.MySql\PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.MySql.csproj" />
+	  <ProjectReference Include="..\PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.DatabaseManagementName\PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.DatabaseManagementName.csproj" />
 	</ItemGroup>
 
 </Project>
