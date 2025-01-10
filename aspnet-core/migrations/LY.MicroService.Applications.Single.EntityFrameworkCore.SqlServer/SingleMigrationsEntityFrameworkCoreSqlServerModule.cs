@@ -1,4 +1,4 @@
-using LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer;
+// using LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Volo.Abp.EntityFrameworkCore;
@@ -9,7 +9,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer;
 
 [DependsOn(
     typeof(AbpEntityFrameworkCoreSqlServerModule),
-    typeof(AbpElsaEntityFrameworkCoreSqlServerModule),
+    // typeof(AbpElsaEntityFrameworkCoreSqlServerModule),
     typeof(SingleMigrationsEntityFrameworkCoreModule)
     )]
 public class SingleMigrationsEntityFrameworkCoreSqlServerModule : AbpModule

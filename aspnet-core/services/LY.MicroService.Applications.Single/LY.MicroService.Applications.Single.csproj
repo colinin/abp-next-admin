@@ -64,7 +64,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.EntityFrameworkCore\LINGYUN.Abp.AuditLogging.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.IP2Region\LINGYUN.Abp.AuditLogging.IP2Region.csproj" />
+		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.IP.Location\LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
 		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj" />
 		<ProjectReference Include="..\..\framework\authentication\LINGYUN.Abp.Authentication.QQ\LINGYUN.Abp.Authentication.QQ.csproj" />
 		<ProjectReference Include="..\..\framework\authentication\LINGYUN.Abp.Authentication.WeChat\LINGYUN.Abp.Authentication.WeChat.csproj" />
@@ -84,6 +84,7 @@
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Http.Client.Wrapper\LINGYUN.Abp.Http.Client.Wrapper.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.IdGenerator\LINGYUN.Abp.IdGenerator.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.IP2Region\LINGYUN.Abp.IP2Region.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj" />
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj" />
@@ -119,10 +120,10 @@
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.HttpApi\LINGYUN.Abp.WeChat.Work.HttpApi.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj" />
+		<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore\LY.MicroService.Applications.Single.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />

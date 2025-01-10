@@ -1,5 +1,6 @@
 using DotNetCore.CAP;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Savorboard.CAP.InMemoryMessageQueue;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
@@ -799,9 +800,12 @@ public partial class MicroServiceApplicationsSingleModule
             options.AutoValidate = false;
         });
 
-        services.Replace<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>(ServiceLifetime.Scoped);
 
         services.AddAuthentication()
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromDays(365);
+                })
                 .AddAbpJwtBearer(options =>
                 {
                     configuration.GetSection("AuthServer").Bind(options);
@@ -830,6 +834,8 @@ public partial class MicroServiceApplicationsSingleModule
         }
 
         services.AddSameSiteCookiePolicy();
+        // 处理cookie中过时的ajax请求判断
+        services.Replace(ServiceDescriptor.Scoped<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>());
     }
 
     private void ConfigureCors(IServiceCollection services, IConfiguration configuration)

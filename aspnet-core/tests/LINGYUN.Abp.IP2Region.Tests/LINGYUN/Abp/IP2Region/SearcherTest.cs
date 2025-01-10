@@ -1,4 +1,5 @@
 ﻿using IP2Region.Net.XDB;
+using LINGYUN.Abp.IP.Location;
 using Shouldly;
 using System;
 using System.IO;
@@ -24,9 +25,9 @@ public class SearcherTest : AbpIP2RegionTestBase
     [InlineData("220.246.0.1", "中国香港")]
     public async void TestSearchLocation(string ip, string shouleBeRemarks)
     {
-        var provider = GetRequiredService<IIpLocationInfoProvider>();
-        var locationInfo = await provider.GetLocationInfoAsync(ip);
-        locationInfo.Remarks.ShouldBe(shouleBeRemarks);
+        var resolver = GetRequiredService<IIPLocationResolver>();
+        var result = await resolver.ResolveAsync(ip);
+        result.Location.Remarks.ShouldBe(shouleBeRemarks);
     }
 
     [Theory]
