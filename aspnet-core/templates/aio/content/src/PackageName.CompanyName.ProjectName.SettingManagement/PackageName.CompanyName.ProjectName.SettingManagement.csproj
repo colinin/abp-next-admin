@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../../common.props" />
+	<Import Project="../../configureawait.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<AssemblyName>PackageName.CompanyName.ProjectName.SettingManagement</AssemblyName>
+		<PackageId>PackageName.CompanyName.ProjectName.SettingManagement</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" />
+		<PackageReference Include="Volo.Abp.SettingManagement.Domain" />
+		<PackageReference Include="LINGYUN.Abp.SettingManagement.Application.Contracts" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\PackageName.CompanyName.ProjectName.Application.Contracts\PackageName.CompanyName.ProjectName.Application.Contracts.csproj" />
+	  <ProjectReference Include="..\PackageName.CompanyName.ProjectName.Domain\PackageName.CompanyName.ProjectName.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

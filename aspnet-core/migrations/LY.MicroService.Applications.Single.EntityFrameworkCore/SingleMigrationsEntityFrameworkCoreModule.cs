@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
+using LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
@@ -13,7 +13,6 @@ using LINGYUN.Abp.WeChat;
 using LINGYUN.Platform.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
@@ -38,7 +37,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
     typeof(WebhooksManagementEntityFrameworkCoreModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpWeChatModule),
     typeof(AbpDataDbMigratorModule)
     )]
@@ -47,10 +45,5 @@ public class SingleMigrationsEntityFrameworkCoreModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddAbpDbContext<SingleMigrationsDbContext>();
-
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
-        });
     }
 }

@@ -1,5 +1,7 @@
 # LINGYUN.Abp.AuditLogging.Elasticsearch
 
+简体中文 | [English](./README.EN.md)
+
 审计模块 Elasticsearch 实现
 
 ElasticsearchAuditLogManager    实现了 IAuditLogManager, 审计日志由ES管理  
@@ -34,5 +36,3 @@ public class YouProjectModule : AbpModule
     }
   }
 }
-
-```

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 	
 	<Import Project="..\..\..\common.secrets.props" />
 
@@ -120,10 +120,10 @@
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.HttpApi\LINGYUN.Abp.WeChat.Work.HttpApi.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj" />
+		<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore\LY.MicroService.Applications.Single.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />

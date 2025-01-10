@@ -1,5 +1,5 @@
 ﻿using DeviceDetectorNET;
-using LINGYUN.Abp.IP2Region;
+using LINGYUN.Abp.IP.Location;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
@@ -9,16 +9,16 @@ using Volo.Abp.DependencyInjection;
 namespace LINGYUN.Abp.Identity.Session.AspNetCore;
 public class HttpContextDeviceInfoProvider : IDeviceInfoProvider, ITransientDependency
 {
-    protected IIpLocationInfoProvider IpLocationInfoProvider { get; }
+    protected IIPLocationResolver IPLocationResolver { get; }
     protected IWebClientInfoProvider WebClientInfoProvider { get; }
     protected AbpIdentitySessionAspNetCoreOptions Options { get; }
 
     public HttpContextDeviceInfoProvider(
-        IIpLocationInfoProvider ipLocationInfoProvider,
+        IIPLocationResolver iPLocationResolver,
         IWebClientInfoProvider webClientInfoProvider,
         IOptions<AbpIdentitySessionAspNetCoreOptions> options)
     {
-        IpLocationInfoProvider = ipLocationInfoProvider;
+        IPLocationResolver = iPLocationResolver;
         WebClientInfoProvider = webClientInfoProvider;
         Options = options.Value;
     }
@@ -51,8 +51,8 @@ public class HttpContextDeviceInfoProvider : IDeviceInfoProvider, ITransientDepe
 
     protected async virtual Task<string> GetRegion(string ipAddress)
     {
-        var locationInfo = await IpLocationInfoProvider.GetLocationInfoAsync(ipAddress);
-        return locationInfo?.Remarks;
+        var locationInfo = await IPLocationResolver.ResolveAsync(ipAddress);
+        return locationInfo.Location?.Remarks;
     }
 
     private class BrowserDeviceInfo

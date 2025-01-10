@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.IM.Messages;
+using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.Groups;
 using Microsoft.EntityFrameworkCore;
@@ -170,274 +170,75 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
     {
-        if (sorting.IsNullOrWhiteSpace())
-        {
-            sorting = $"{nameof(LastChatMessage.SendTime)} DESC";
-        }
+        // 参数验证和默认值设置
+        sorting = sorting.IsNullOrWhiteSpace() ? $"{nameof(LastChatMessage.SendTime)} DESC" : sorting;
         var dbContext = await GetDbContextAsync();
+        var token = GetCancellationToken(cancellationToken);
 
-        #region SQL 原型
-
-        //var sqlBuilder = new StringBuilder(1280);
-        //sqlBuilder.AppendLine("SELECT");
-        //sqlBuilder.AppendLine("    msg.* ");
-        //sqlBuilder.AppendLine("FROM");
-        //sqlBuilder.AppendLine("    (");
-        //sqlBuilder.AppendLine("    SELECT");
-        //sqlBuilder.AppendLine("        um.Content,");
-        //sqlBuilder.AppendLine("        um.CreationTime,");
-        //sqlBuilder.AppendLine("        um.CreatorId,");
-        //sqlBuilder.AppendLine("        um.SendUserName,");
-        //sqlBuilder.AppendLine("        ac.NickName AS Object,");
-        //sqlBuilder.AppendLine("        ac.AvatarUrl,");
-        //sqlBuilder.AppendLine("        um.Source,");
-        //sqlBuilder.AppendLine("        um.MessageId,");
-        //sqlBuilder.AppendLine("        um.Type,");
-        //sqlBuilder.AppendLine("        um.TenantId,");
-        //sqlBuilder.AppendLine("        um.ReceiveUserId,");
-        //sqlBuilder.AppendLine("        '' AS GroupId,");
-        //sqlBuilder.AppendLine("        um.ExtraProperties");
-        //sqlBuilder.AppendLine("    FROM");
-        //sqlBuilder.AppendLine("        (");
-        //sqlBuilder.AppendLine("        SELECT");
-        //sqlBuilder.AppendLine("            um.* ");
-        //sqlBuilder.AppendLine("        FROM");
-        //sqlBuilder.AppendLine("            appusermessages um");
-        //sqlBuilder.AppendLine("            INNER JOIN ( SELECT max( um.MessageId ) AS MessageId FROM appusermessages um");
-        //sqlBuilder.AppendLine("            WHERE");
-        //sqlBuilder.AppendLine("              um.ReceiveUserId = @ReceiveUserId");
-        //if (state.HasValue)
-        //{
-        //    sqlBuilder.AppendLine("              AND um.State = @State");
-        //}
-        //if (CurrentTenant.IsAvailable)
-        //{
-        //    sqlBuilder.AppendLine("              AND um.TenantId = @TenantId");
-        //}
-        //sqlBuilder.AppendLine("            GROUP BY um.ReceiveUserId ) gum ON um.MessageId = gum.MessageId");
-        //sqlBuilder.AppendLine("        ) um");
-        //sqlBuilder.AppendLine("        LEFT JOIN appuserchatcards ac ON ac.UserId = um.CreatorId ");
-        //sqlBuilder.AppendLine("    UNION ALL");
-        //sqlBuilder.AppendLine("    SELECT");
-        //sqlBuilder.AppendLine("        gm.Content,");
-        //sqlBuilder.AppendLine("        gm.CreationTime,");
-        //sqlBuilder.AppendLine("        gm.CreatorId,");
-        //sqlBuilder.AppendLine("        gm.SendUserName,");
-        //sqlBuilder.AppendLine("        ag.Name AS Object,");
-        //sqlBuilder.AppendLine("        ag.AvatarUrl,");
-        //sqlBuilder.AppendLine("        gm.Source,");
-        //sqlBuilder.AppendLine("        gm.MessageId,");
-        //sqlBuilder.AppendLine("        gm.Type,");
-        //sqlBuilder.AppendLine("        gm.TenantId,");
-        //sqlBuilder.AppendLine("        '' AS ReceiveUserId,");
-        //sqlBuilder.AppendLine("        gm.GroupId,");
-        //sqlBuilder.AppendLine("        gm.ExtraProperties");
-        //sqlBuilder.AppendLine("    FROM");
-        //sqlBuilder.AppendLine("        appgroupmessages gm");
-        //sqlBuilder.AppendLine("        INNER JOIN (");
-        //sqlBuilder.AppendLine("        SELECT");
-        //sqlBuilder.AppendLine("          max( gm.MessageId ) AS MessageId ");
-        //sqlBuilder.AppendLine("        FROM");
-        //sqlBuilder.AppendLine("          appuserchatcards ac");
-        //sqlBuilder.AppendLine("          LEFT JOIN appuserchatgroups acg ON acg.UserId = ac.UserId");
-        //sqlBuilder.AppendLine("          LEFT JOIN appgroupmessages gm ON gm.GroupId = acg.GroupId ");
-        //sqlBuilder.AppendLine("        WHERE");
-        //sqlBuilder.AppendLine("          ac.UserId = @ReceiveUserId ");
-        //if (state.HasValue)
-        //{
-        //    sqlBuilder.AppendLine("          AND gm.State = @State");
-        //}
-        //if (CurrentTenant.IsAvailable)
-        //{
-        //    sqlBuilder.AppendLine("          AND gm.TenantId = @TenantId");
-        //}
-        //sqlBuilder.AppendLine("        GROUP BY");
-        //sqlBuilder.AppendLine("        gm.GroupId");
-        //sqlBuilder.AppendLine("        ) ggm ON ggm.MessageId = gm.MessageId ");
-        //sqlBuilder.AppendLine("        INNER JOIN appchatgroups ag on ag.GroupId = gm.GroupId");
-        //sqlBuilder.AppendLine("    ) AS msg");
-        //sqlBuilder.AppendLine("ORDER BY ");
-        //sqlBuilder.AppendLine("   @Sorting");
-        //sqlBuilder.AppendLine("   LIMIT @MaxResultCount");
-
-        //using var dbContection = dbContext.Database.GetDbConnection();
-        //await dbContection.OpenAsync();
-        //using var command = dbContection.CreateCommand();
-        //command.Transaction = dbContext.Database.CurrentTransaction?.GetDbTransaction();
-        //command.CommandText = sqlBuilder.ToString();
-
-        //var receivedUser = command.CreateParameter();
-        //receivedUser.DbType = System.Data.DbType.Guid;
-        //receivedUser.ParameterName = "@ReceiveUserId";
-        //receivedUser.Value = userId;
-        //command.Parameters.Add(receivedUser);
-
-        //var sorttingParam = command.CreateParameter();
-        //sorttingParam.DbType = System.Data.DbType.String;
-        //sorttingParam.ParameterName = "@Sorting";
-        //sorttingParam.Value = sorting;
-        //command.Parameters.Add(sorttingParam);
-
-        //var limitParam = command.CreateParameter();
-        //limitParam.DbType = System.Data.DbType.Int32;
-        //limitParam.ParameterName = "@MaxResultCount";
-        //limitParam.Value = maxResultCount;
-        //command.Parameters.Add(limitParam);
-
-        //if (state.HasValue)
-        //{
-        //    var stateParam = command.CreateParameter();
-        //    stateParam.DbType = System.Data.DbType.Int32;
-        //    stateParam.ParameterName = "@State";
-        //    stateParam.Value = (int)state.Value;
-        //    command.Parameters.Add(stateParam);
-        //}
-        //if (CurrentTenant.IsAvailable)
-        //{
-        //    var tenantParam = command.CreateParameter();
-        //    tenantParam.DbType = System.Data.DbType.Guid;
-        //    tenantParam.ParameterName = "@TenantId";
-        //    tenantParam.Value = CurrentTenant.Id.Value;
-        //    command.Parameters.Add(tenantParam);
-        //}
-        //var messages = new List<LastChatMessage>();
-        //using var reader = await command.ExecuteReaderAsync();
-
-        //T GetValue<T>(DbDataReader reader, int index)
-        //{
-        //    var value = reader.GetValue(index);
-        //    if (value == null || value == DBNull.Value)
-        //    {
-        //        return default;
-        //    }
-
-        //    var valueType = typeof(T);
-        //    var converter = TypeDescriptor.GetConverter(valueType);
-        //    if (converter.CanConvertFrom(value.GetType()))
-        //    {
-        //        return (T)converter.ConvertFrom(value);
-        //    }
-        //    return (T)Convert.ChangeType(value, typeof(T));
-        //};
-
-        //ExtraPropertyDictionary GetExtraProperties(DbDataReader reader, int index)
-        //{
-        //    var value = reader.GetValue(index);
-        //    if (value == null || value == DBNull.Value)
-        //    {
-        //        return new ExtraPropertyDictionary();
-        //    }
-        //    var extraPropertiesAsJson = value.ToString();
-        //    if (extraPropertiesAsJson.IsNullOrEmpty() || extraPropertiesAsJson == "{}")
-        //    {
-        //        return new ExtraPropertyDictionary();
-        //    }
-
-        //    var deserializeOptions = new JsonSerializerOptions();
-        //    deserializeOptions.Converters.Add(new ObjectToInferredTypesConverter());
-
-        //    var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, deserializeOptions) ??
-        //                     new ExtraPropertyDictionary();
-
-        //    return dictionary;
-        //}
-
-        //while (reader.Read())
-        //{
-        //    messages.Add(new LastChatMessage
-        //    {
-        //        Content = GetValue<string>(reader, 0),
-        //        SendTime = GetValue<DateTime>(reader, 1),
-        //        FormUserId = GetValue<Guid>(reader, 2),
-        //        FormUserName = GetValue<string>(reader, 3),
-        //        Object = GetValue<string>(reader, 4),
-        //        AvatarUrl = GetValue<string>(reader, 5),
-        //        Source = (MessageSourceType)GetValue<int>(reader, 6),
-        //        MessageId = GetValue<string>(reader, 7),
-        //        MessageType = (MessageType)GetValue<int>(reader, 8),
-        //        TenantId = GetValue<Guid?>(reader, 9),
-        //        ToUserId = GetValue<string>(reader, 10),
-        //        GroupId = GetValue<string>(reader, 11),
-        //        ExtraProperties = GetExtraProperties(reader, 12),
-        //    });
-        //}
-
-        //return messages;
-        #endregion
-
-        #region 待 EF 团队解决此问题
-
-        //// 聚合用户消息
-        var aggreUserMsgIdQuery = dbContext.Set<UserMessage>()
-            .Where(msg => msg.ReceiveUserId == userId)
-            .WhereIf(state.HasValue, x => x.State == state)
-            .GroupBy(msg => msg.ReceiveUserId)
-            .Select(msg => new
+        // 使用Union All合并用户消息和群组消息查询
+        var lastMessages = await (
+            // 用户消息查询
+            from um in dbContext.Set<UserMessage>()
+            join ucc in dbContext.Set<UserChatCard>()
+                on um.CreatorId equals ucc.UserId
+            where um.ReceiveUserId == userId &&
+                  (state == null || um.State == state) &&
+                  um.MessageId == (
+                      from subUm in dbContext.Set<UserMessage>()
+                      where subUm.ReceiveUserId == userId &&
+                            subUm.CreatorId == um.CreatorId
+                      select subUm.MessageId
+                  ).Max()
+            select new LastChatMessage
             {
-                MessageId = msg.Max(x => x.MessageId)
-            });
-        var joinUserMsg = from um in dbContext.Set<UserMessage>()
-                          join aum in aggreUserMsgIdQuery
-                               on um.MessageId equals aum.MessageId
-                          join ucc in dbContext.Set<UserChatCard>()
-                                on um.CreatorId equals ucc.UserId
-                          select new LastChatMessage
-                          {
-                              Content = Convert.ToString(um.Content),
-                              SendTime = um.CreationTime,
-                              FormUserId = um.CreatorId.Value,
-                              FormUserName = Convert.ToString(um.SendUserName),
-                              Object = Convert.ToString(ucc.NickName),
-                              AvatarUrl = Convert.ToString(ucc.AvatarUrl),
-                              Source = um.Source,
-                              MessageId = Convert.ToString(um.MessageId),
-                              MessageType = um.Type,
-                              TenantId = um.TenantId,
-                              ToUserId = Convert.ToString(um.ReceiveUserId),
-                              GroupId = Convert.ToString(""),
-                          };
-        // 聚合群组消息
-        var aggreGroupMsgIdQuery = from ucc in dbContext.Set<UserChatCard>()
-                                   join ucg in dbContext.Set<UserChatGroup>()
-                                        on ucc.UserId equals ucg.UserId
-                                   join gm in dbContext.Set<GroupMessage>()
-                                        on ucg.GroupId equals gm.GroupId
-                                   where ucc.UserId.Equals(userId)
-                                   group gm by gm.GroupId into ggm
-                                   select new
-                                   {
-                                       MessageId = ggm.Max(gm => gm.MessageId),
-                                   };
-
-        var joinGroupMsg = from gm in dbContext.Set<GroupMessage>()
-                           join agm in aggreGroupMsgIdQuery
-                                on gm.MessageId equals agm.MessageId
-                           join cg in dbContext.Set<ChatGroup>()
-                                on gm.GroupId equals cg.GroupId
-                           select new LastChatMessage
-                           {
-                               Content = Convert.ToString(gm.Content),
-                               SendTime = gm.CreationTime,
-                               FormUserId = gm.CreatorId.Value,
-                               FormUserName = Convert.ToString(gm.SendUserName),
-                               Object = Convert.ToString(cg.Name),
-                               AvatarUrl = Convert.ToString(cg.AvatarUrl),
-                               Source = gm.Source,
-                               MessageId = Convert.ToString(gm.MessageId),
-                               MessageType = gm.Type,
-                               TenantId = gm.TenantId,
-                               ToUserId = Convert.ToString(""),
-                               GroupId = Convert.ToString(gm.GroupId)
-                           };
-
-        return await joinUserMsg
-            .Concat(joinGroupMsg)
+                Content = um.Content,
+                SendTime = um.CreationTime,
+                FormUserId = um.CreatorId.Value,
+                FormUserName = um.SendUserName,
+                Object = ucc.NickName,
+                AvatarUrl = ucc.AvatarUrl,
+                Source = um.Source,
+                MessageId = um.MessageId.ToString(),
+                MessageType = um.Type,
+                TenantId = um.TenantId,
+                ToUserId = um.ReceiveUserId.ToString(),
+                GroupId = ""
+            })
+            .Union(
+                // 群组消息查询
+                from gm in dbContext.Set<GroupMessage>()
+                join cg in dbContext.Set<ChatGroup>()
+                    on gm.GroupId equals cg.GroupId
+                join ucg in dbContext.Set<UserChatGroup>()
+                    on new { GroupId = gm.GroupId, UserId = userId } equals new { ucg.GroupId, ucg.UserId }
+                where (state == null || gm.State == state) &&
+                      gm.MessageId == (
+                          from subGm in dbContext.Set<GroupMessage>()
+                          where subGm.GroupId == gm.GroupId
+                          select subGm.MessageId
+                      ).Max()
+                select new LastChatMessage
+                {
+                    Content = gm.Content,
+                    SendTime = gm.CreationTime,
+                    FormUserId = gm.CreatorId.Value,
+                    FormUserName = gm.SendUserName,
+                    Object = cg.Name,
+                    AvatarUrl = cg.AvatarUrl,
+                    Source = gm.Source,
+                    MessageId = gm.MessageId.ToString(),
+                    MessageType = gm.Type,
+                    TenantId = gm.TenantId,
+                    ToUserId = "",
+                    GroupId = gm.GroupId.ToString()
+                }
+            )
+            // 排序和分页
             .OrderBy(sorting)
             .Take(maxResultCount)
-            .ToListAsync(GetCancellationToken(cancellationToken));
+            .ToListAsync(token);
 
-        #endregion
-
+        return lastMessages;
     }
 
     public async virtual Task<List<UserMessage>> GetUserMessagesAsync(

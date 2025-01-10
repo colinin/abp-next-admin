@@ -1,12 +1,13 @@
-﻿using LINGYUN.Abp.AuditLogging.IP.Location;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.IP2Region;
+using LY.MicroService.Applications.Single.EntityFrameworkCore;
+using LY.MicroService.Applications.Single.EntityFrameworkCore.MySql;
 using Volo.Abp.MailKit;
 
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
-
     // 账户模块 应用服务
     typeof(AbpAccountApplicationModule),
     // 账户模块 控制器
@@ -213,10 +214,9 @@ namespace LY.MicroService.Applications.Single;
     // 权限管理模块 组织机构集成
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
 
-    // 单体服务实体框架迁移模块
-    typeof(SingleMigrationsEntityFrameworkCoreModule),
+    typeof(SingleMigrationsEntityFrameworkCoreMySqlModule),
     // 实体框架MySQL集成
-    typeof(AbpEntityFrameworkCoreMySQLModule),
+    // typeof(AbpEntityFrameworkCoreMySQLModule),
 
     // 短信模块 阿里云集成
     typeof(AbpAliyunSmsModule),
