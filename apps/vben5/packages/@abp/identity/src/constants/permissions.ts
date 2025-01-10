@@ -42,6 +42,7 @@ export const OrganizationUnitPermissions = {
 };
 /** 安全日志权限 */
 export const SecurityLogPermissions = {
+  Default: 'AbpAuditing.SecurityLog',
   /** 删除 */
   Delete: 'AbpAuditing.SecurityLog.Delete',
 };

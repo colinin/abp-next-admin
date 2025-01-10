@@ -163,6 +163,7 @@ const gridOptions: VxeGridProps<AuditLogDto> = {
     {
       align: 'left',
       field: 'clientIpAddress',
+      slots: { default: 'clientIpAddress' },
       sortable: true,
       title: $t('AbpAuditLogging.ClientIpAddress'),
       width: 150,
@@ -280,6 +281,12 @@ function onFilter(field: string, value: any) {
 
 <template>
   <Grid :table-title="$t('AbpAuditLogging.AuditLog')">
+    <template #clientIpAddress="{ row }">
+      <Tag v-if="row.extraProperties?.Location" color="blue">
+        {{ row.extraProperties?.Location }}
+      </Tag>
+      <span>{{ row.clientIpAddress }}</span>
+    </template>
     <template #url="{ row }">
       <Tag
         :color="getHttpStatusCodeColor(row.httpStatusCode)"

@@ -1,26 +1,26 @@
-﻿using LINGYUN.Abp.IP2Region;
+﻿using LINGYUN.Abp.IP.Location;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Auditing;
 using Volo.Abp.Modularity;
 using Volo.Abp.SecurityLog;
 
-namespace LINGYUN.Abp.AuditLogging.IP2Region;
+namespace LINGYUN.Abp.AuditLogging.IP.Location;
 
 [DependsOn(
-    typeof(AbpIP2RegionModule),
+    typeof(AbpIPLocationModule),
     typeof(AbpAuditLoggingModule))]
-public class AbpAuditLoggingIP2RegionModule : AbpModule
+public class AbpAuditLoggingIPLocationModule : AbpModule
 {
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
 
-        Configure<AbpAuditLoggingIP2RegionOptions>(configuration.GetSection("AuditLogging:IP2Region"));
+        Configure<AbpAuditLoggingIPLocationOptions>(configuration.GetSection("AuditLogging:IPLocation"));
 
         context.Services.Replace(
-            ServiceDescriptor.Transient<IAuditingStore, IP2RegionAuditingStore>());
+            ServiceDescriptor.Transient<IAuditingStore, IPLocationAuditingStore>());
         context.Services.Replace(
-            ServiceDescriptor.Transient<ISecurityLogStore, IP2RegionSecurityLogStore>());
+            ServiceDescriptor.Transient<ISecurityLogStore, IPLocationSecurityLogStore>());
     }
 }

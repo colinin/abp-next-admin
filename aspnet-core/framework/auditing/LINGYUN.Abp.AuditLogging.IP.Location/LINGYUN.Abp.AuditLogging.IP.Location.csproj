@@ -7,19 +7,20 @@
 		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<WarningsAsErrors>Nullable</WarningsAsErrors>
-		<AssemblyName>LINGYUN.Abp.AuditLogging.IP2Region</AssemblyName>
-		<PackageId>LINGYUN.Abp.AuditLogging.IP2Region</PackageId>
+		<AssemblyName>LINGYUN.Abp.AuditLogging.IP.Location</AssemblyName>
+		<PackageId>LINGYUN.Abp.AuditLogging.IP.Location</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace />
-	</PropertyGroup><PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	</PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\common\LINGYUN.Abp.IP2Region\LINGYUN.Abp.IP2Region.csproj" />
-    <ProjectReference Include="..\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\common\LINGYUN.Abp.IP.Location\LINGYUN.Abp.IP.Location.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj" />
+	</ItemGroup>
 
 </Project>

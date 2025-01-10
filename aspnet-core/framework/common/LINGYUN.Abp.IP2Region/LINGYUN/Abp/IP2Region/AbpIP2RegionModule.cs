@@ -1,12 +1,13 @@
 ﻿using IP2Region.Net.Abstractions;
 using IP2Region.Net.XDB;
+using LINGYUN.Abp.IP.Location;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.IP2Region;
 
+[DependsOn(typeof(AbpIPLocationModule))]
 [DependsOn(typeof(AbpVirtualFileSystemModule))]
 public class AbpIP2RegionModule : AbpModule
 {
@@ -26,6 +27,9 @@ public class AbpIP2RegionModule : AbpModule
             return searcher;
         });
 
-        context.Services.TryAddTransient<IIpLocationInfoProvider, IP2RegionLocationInfoProvider>();
+        Configure<AbpIPLocationResolveOptions>(options =>
+        {
+            options.IPLocationResolvers.Add(new IP2RegionIPLocationResolveContributorBase());
+        });
     }
 }
