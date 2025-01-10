@@ -13,13 +13,14 @@ import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button, message, Modal, Tag } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/security-logs';
+import { useSecurityLogsApi } from '../../api/useSecurityLogsApi';
 import { SecurityLogPermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'SecurityLogTable',
 });
 
+const { cancel, deleteApi, getPagedListApi } = useSecurityLogsApi();
 const formOptions: VbenFormProps = {
   // 默认展开
   collapsed: false,
@@ -182,6 +183,7 @@ const gridOptions: VxeGridProps<SecurityLogDto> = {
 const gridEvents: VxeGridListeners<SecurityLogDto> = {
   sortChange: onSort,
 };
+
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
@@ -202,6 +204,9 @@ function onDelete(row: SecurityLogDto) {
   Modal.confirm({
     centered: true,
     content: $t('AbpUi.ItemWillBeDeletedMessage'),
+    onCancel: () => {
+      cancel('User closed cancel delete modal.');
+    },
     onOk: async () => {
       await deleteApi(row.id);
       message.success($t('AbpUi.SuccessfullyDeleted'));

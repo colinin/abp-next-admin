@@ -5,7 +5,7 @@ import { $t } from '@vben/locales';
 
 import { useVbenForm } from '@abp/ui';
 
-import { lockApi } from '../../api/users';
+import { useUserApi } from '../../api/useUsersApi';
 
 defineOptions({
   name: 'UserLockModal',
@@ -23,6 +23,7 @@ enum LockType {
   Years = 32_140_800, // 按31*12天计算
 }
 
+const { cancel, lockApi } = useUserApi();
 const [Form, formApi] = useVbenForm({
   commonConfig: {
     // 所有表单项
@@ -76,6 +77,9 @@ const [Modal, modalApi] = useVbenModal({
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel('User lock modal has closed!');
   },
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();

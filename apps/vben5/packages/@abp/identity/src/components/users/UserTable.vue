@@ -25,7 +25,7 @@ import {
 } from '@ant-design/icons-vue';
 import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi, unLockApi } from '../../api/users';
+import { useUserApi } from '../../api/useUsersApi';
 import { IdentityUserPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -64,6 +64,7 @@ const getLockEnd = computed(() => {
 
 const abpStore = useAbpStore();
 const { hasAccessByCodes } = useAccess();
+const { cancel, deleteApi, getPagedListApi, unLockApi } = useUserApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -184,6 +185,9 @@ const handleDelete = (row: IdentityUserDto) => {
   Modal.confirm({
     centered: true,
     content: $t('AbpIdentity.UserDeletionConfirmationMessage', [row.userName]),
+    onCancel: () => {
+      cancel('User closed cancel delete modal.');
+    },
     onOk: async () => {
       await deleteApi(row.id);
       message.success($t('AbpUi.SuccessfullyDeleted'));

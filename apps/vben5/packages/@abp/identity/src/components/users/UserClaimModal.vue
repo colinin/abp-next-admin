@@ -11,12 +11,7 @@ import { defineAsyncComponent } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  createClaimApi,
-  deleteClaimApi,
-  getClaimsApi,
-  updateClaimApi,
-} from '../../api/users';
+import { useUserApi } from '../../api/useUsersApi';
 import { IdentityUserPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -27,13 +22,17 @@ const ClaimTable = defineAsyncComponent(
   () => import('../claims/ClaimTable.vue'),
 );
 
+const { cancel, createClaimApi, deleteClaimApi, getClaimsApi, updateClaimApi } =
+  useUserApi();
 const [Modal, modalApi] = useVbenModal({
   draggable: true,
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
   },
-  onConfirm: async () => {},
+  onClosed() {
+    cancel('User claim modal has closed!');
+  },
   showCancelButton: false,
   showConfirmButton: false,
   title: $t('AbpIdentity.ManageClaim'),

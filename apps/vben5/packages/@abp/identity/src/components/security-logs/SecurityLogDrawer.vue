@@ -9,7 +9,7 @@ import { $t } from '@vben/locales';
 import { formatToDateTime } from '@abp/core';
 import { Descriptions } from 'ant-design-vue';
 
-import { getApi } from '../../api/security-logs';
+import { useSecurityLogsApi } from '../../api/useSecurityLogsApi';
 
 defineOptions({
   name: 'SecurityLogDrawer',
@@ -19,8 +19,13 @@ const DescriptionsItem = Descriptions.Item;
 
 const formModel = ref<SecurityLogDto>({} as SecurityLogDto);
 
+const { cancel, getApi } = useSecurityLogsApi();
+
 const [Drawer, drawerApi] = useVbenDrawer({
   class: 'w-auto',
+  onBeforeClose() {
+    cancel('Security log drawer has closed!');
+  },
   onCancel() {
     drawerApi.close();
   },

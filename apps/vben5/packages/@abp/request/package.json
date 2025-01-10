@@ -22,6 +22,8 @@
   "dependencies": {
     "@abp/core": "workspace:*",
     "@vben/hooks": "workspace:*",
-    "@vben/request": "workspace:*"
+    "@vben/request": "workspace:*",
+    "axios": "catalog:",
+    "vue": "catalog:"
   }
 }

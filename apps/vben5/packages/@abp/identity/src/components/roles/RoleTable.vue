@@ -22,7 +22,7 @@ import {
 } from '@ant-design/icons-vue';
 import { Button, Dropdown, Menu, message, Modal, Tag } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/roles';
+import { useRolesApi } from '../../api/useRolesApi';
 import { IdentityRolePermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -39,6 +39,8 @@ const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
 const ClaimModal = defineAsyncComponent(() => import('./RoleClaimModal.vue'));
 const abpStore = useAbpStore();
 const { hasAccessByCodes } = useAccess();
+const { cancel, deleteApi, getPagedListApi } = useRolesApi();
+
 const [RolePermissionModal, permissionModalApi] = useVbenModal({
   connectedComponent: PermissionModal,
 });
@@ -134,6 +136,9 @@ const handleDelete = (row: IdentityRoleDto) => {
   Modal.confirm({
     centered: true,
     content: $t('AbpIdentity.RoleDeletionConfirmationMessage', [row.name]),
+    onCancel: () => {
+      cancel('User closed cancel delete modal.');
+    },
     onOk: async () => {
       await deleteApi(row.id);
       message.success($t('AbpUi.SuccessfullyDeleted'));

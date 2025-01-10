@@ -10,7 +10,7 @@ import { $t } from '@vben/locales';
 
 import { useVbenVxeGrid } from '@abp/ui';
 
-import { getUnaddedUserListApi } from '../../api/organization-units';
+import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
 
 defineOptions({
   name: 'SelectMemberModal',
@@ -18,6 +18,7 @@ defineOptions({
 const emits = defineEmits<{
   (event: 'confirm', items: IdentityUserDto[]): void;
 }>();
+const { cancel, getUnaddedUserListApi } = useOrganizationUnitsApi();
 
 const selectedUsers = ref<IdentityUserDto[]>([]);
 
@@ -51,6 +52,9 @@ const [Modal, modalApi] = useVbenModal({
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel();
   },
   onConfirm: async () => {
     emits('confirm', toValue(selectedUsers));
