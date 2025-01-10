@@ -22,13 +22,13 @@ public class SingleDbMigrationService : EfCoreRuntimeDatabaseMigratorBase<Single
     protected ITenantRepository TenantRepository { get; }
     public SingleDbMigrationService(
         IUnitOfWorkManager unitOfWorkManager,
-        IServiceProvider serviceProvider, 
-        ICurrentTenant currentTenant, 
-        IAbpDistributedLock abpDistributedLock, 
-        IDistributedEventBus distributedEventBus, 
+        IServiceProvider serviceProvider,
+        ICurrentTenant currentTenant,
+        IAbpDistributedLock abpDistributedLock,
+        IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory,
         IDataSeeder dataSeeder,
-        ITenantRepository tenantRepository) 
+        ITenantRepository tenantRepository)
         : base("SingleDbMigrator", unitOfWorkManager, serviceProvider, currentTenant, abpDistributedLock, distributedEventBus, loggerFactory)
     {
         DataSeeder = dataSeeder;
