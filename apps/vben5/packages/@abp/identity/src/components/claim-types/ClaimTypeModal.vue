@@ -18,7 +18,7 @@ import {
   Textarea,
 } from 'ant-design-vue';
 
-import { createApi, getApi, updateApi } from '../../api/claim-types';
+import { useClaimTypesApi } from '../../api/useClaimTypesApi';
 import { ValueType } from '../../types/claim-types';
 
 defineOptions({
@@ -55,11 +55,15 @@ const valueTypeOptions = reactive<DefaultOptionType[]>([
   },
 ]);
 
+const { cancel, createApi, getApi, updateApi } = useClaimTypesApi();
 const [Modal, modalApi] = useVbenModal({
   draggable: true,
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel('ClaimType Modal has closed!');
   },
   onConfirm: async () => {
     await form.value?.validate();

@@ -214,7 +214,6 @@ namespace LY.MicroService.Applications.Single;
     // 权限管理模块 组织机构集成
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
 
-    // 单体服务实体框架迁移模块
     typeof(SingleMigrationsEntityFrameworkCoreMySqlModule),
     // 实体框架MySQL集成
     // typeof(AbpEntityFrameworkCoreMySQLModule),

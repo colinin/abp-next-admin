@@ -7,7 +7,7 @@ import { $t } from '@vben/locales';
 
 import { Button, message } from 'ant-design-vue';
 
-import { changePasswordApi } from '../../api/users';
+import { useUserApi } from '../../api/useUsersApi';
 import { useRandomPassword } from '../../hooks';
 
 defineOptions({
@@ -18,6 +18,7 @@ const emits = defineEmits<{
 }>();
 
 const { generatePassword } = useRandomPassword();
+const { cancel, changePasswordApi } = useUserApi();
 
 const [Form, formApi] = useVbenForm({
   commonConfig: {
@@ -61,6 +62,9 @@ const [Modal, modalApi] = useVbenModal({
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel('User password modal has closed!');
   },
   onConfirm: async () => {
     try {

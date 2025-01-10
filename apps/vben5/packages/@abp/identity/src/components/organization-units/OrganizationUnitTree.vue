@@ -29,13 +29,7 @@ import {
   Tree,
 } from 'ant-design-vue';
 
-import {
-  deleteApi,
-  getApi,
-  getChildrenApi,
-  getRootListApi,
-  moveTo,
-} from '../../api/organization-units';
+import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
 
 defineOptions({
   name: 'OrganizationUnitTree',
@@ -44,6 +38,9 @@ defineOptions({
 const emits = defineEmits<{
   (event: 'selected', id?: string): void;
 }>();
+
+const { deleteApi, getApi, getChildrenApi, getRootListApi, moveTo } =
+  useOrganizationUnitsApi();
 
 const MenuItem = Menu.Item;
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
@@ -169,9 +166,9 @@ function onDrop(info: AntTreeNodeDropEvent) {
   const eventKey = String(info.dragNode.eventKey);
   const api =
     info.dropPosition === -1
-      ? moveTo(eventKey) // parent
+      ? moveTo(eventKey, undefined) // parent
       : moveTo(eventKey, String(info.node.eventKey)); // children
-  api.then(() => onRefresh());
+  api.then(onRefresh);
 }
 
 onMounted(onRefresh);

@@ -10,7 +10,7 @@ import { $t } from '@vben/locales';
 
 import { Checkbox, Form, Input, message } from 'ant-design-vue';
 
-import { createApi, getApi, updateApi } from '../../api/roles';
+import { useRolesApi } from '../../api/useRolesApi';
 
 defineOptions({
   name: 'RoleModal',
@@ -30,11 +30,15 @@ const defaultModel = {
 const form = ref<FormInstance>();
 const formModel = ref<IdentityRoleDto>({ ...defaultModel });
 
+const { cancel, createApi, getApi, updateApi } = useRolesApi();
 const [Modal, modalApi] = useVbenModal({
   draggable: true,
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel('Role modal has closed!');
   },
   onConfirm: async () => {
     await form.value?.validate();

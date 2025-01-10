@@ -14,7 +14,7 @@ import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button, message, Modal } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/claim-types';
+import { useClaimTypesApi } from '../../api/useClaimTypesApi';
 import { IdentityClaimTypePermissions } from '../../constants/permissions';
 import { ValueType } from '../../types/claim-types';
 
@@ -29,6 +29,7 @@ const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
 
 const { hasAccessByCodes } = useAccess();
+const { cancel, deleteApi, getPagedListApi } = useClaimTypesApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -165,6 +166,9 @@ const handleDelete = (row: IdentityClaimTypeDto) => {
   Modal.confirm({
     centered: true,
     content: $t('AbpIdentity.WillDeleteClaim', [row.name]),
+    onCancel: () => {
+      cancel('User closed delete modal.');
+    },
     onOk: async () => {
       await deleteApi(row.id);
       message.success($t('AbpUi.SuccessfullyDeleted'));
