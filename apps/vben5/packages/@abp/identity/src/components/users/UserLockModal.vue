@@ -5,7 +5,7 @@ import { $t } from '@vben/locales';
 
 import { useVbenForm } from '@abp/ui';
 
-import { useUserApi } from '../../api/useUsersApi';
+import { useUsersApi } from '../../api/useUsersApi';
 
 defineOptions({
   name: 'UserLockModal',
@@ -23,7 +23,7 @@ enum LockType {
   Years = 32_140_800, // 按31*12天计算
 }
 
-const { cancel, lockApi } = useUserApi();
+const { cancel, lockApi } = useUsersApi();
 const [Form, formApi] = useVbenForm({
   commonConfig: {
     // 所有表单项

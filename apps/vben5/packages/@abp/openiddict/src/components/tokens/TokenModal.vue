@@ -1,15 +1,13 @@
 <script setup lang="ts">
+import type { IdentityUserDto } from '@abp/identity';
+
 import type { OpenIddictTokenDto } from '../../types/tokens';
 
 import { useAccess } from '@vben/access';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  type IdentityUserDto,
-  userLookupApi,
-  UserLookupPermissions,
-} from '@abp/identity';
+import { UserLookupPermissions, useUserLookupApi } from '@abp/identity';
 import { CodeEditor } from '@abp/ui';
 
 import { getApi as getApplication } from '../../api/applications';
@@ -20,6 +18,7 @@ defineOptions({
 });
 
 const { hasAccessByCodes } = useAccess();
+const userLookupApi = useUserLookupApi();
 
 const [Form, formApi] = useVbenForm({
   commonConfig: {

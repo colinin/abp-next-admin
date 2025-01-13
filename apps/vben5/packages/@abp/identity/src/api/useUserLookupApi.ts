@@ -8,7 +8,7 @@ import type {
 
 import { useRequest } from '@abp/request';
 
-export function useUserLookup() {
+export function useUserLookupApi() {
   const { cancel, request } = useRequest();
 
   /**

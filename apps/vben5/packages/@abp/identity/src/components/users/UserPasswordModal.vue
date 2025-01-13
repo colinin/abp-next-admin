@@ -7,7 +7,7 @@ import { $t } from '@vben/locales';
 
 import { Button, message } from 'ant-design-vue';
 
-import { useUserApi } from '../../api/useUsersApi';
+import { useUsersApi } from '../../api/useUsersApi';
 import { useRandomPassword } from '../../hooks';
 
 defineOptions({
@@ -18,7 +18,7 @@ const emits = defineEmits<{
 }>();
 
 const { generatePassword } = useRandomPassword();
-const { cancel, changePasswordApi } = useUserApi();
+const { cancel, changePasswordApi } = useUsersApi();
 
 const [Form, formApi] = useVbenForm({
   commonConfig: {

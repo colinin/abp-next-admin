@@ -11,7 +11,7 @@ import { defineAsyncComponent } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useUserApi } from '../../api/useUsersApi';
+import { useUsersApi } from '../../api/useUsersApi';
 import { IdentityUserPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -23,7 +23,7 @@ const ClaimTable = defineAsyncComponent(
 );
 
 const { cancel, createClaimApi, deleteClaimApi, getClaimsApi, updateClaimApi } =
-  useUserApi();
+  useUsersApi();
 const [Modal, modalApi] = useVbenModal({
   draggable: true,
   fullscreenButton: false,

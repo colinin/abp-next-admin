@@ -17,7 +17,7 @@ import type {
 
 import { useRequest } from '@abp/request';
 
-export function useUserApi() {
+export function useUsersApi() {
   const { cancel, request } = useRequest();
 
   /**

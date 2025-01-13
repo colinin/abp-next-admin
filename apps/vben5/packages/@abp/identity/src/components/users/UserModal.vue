@@ -24,7 +24,7 @@ import {
 } from 'ant-design-vue';
 
 import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
-import { useUserApi } from '../../api/useUsersApi';
+import { useUsersApi } from '../../api/useUsersApi';
 
 defineOptions({
   name: 'UserModal',
@@ -63,7 +63,7 @@ const {
   getOrganizationUnitsApi,
   getRolesApi,
   updateApi,
-} = useUserApi();
+} = useUsersApi();
 const { getChildrenApi, getRootListApi } = useOrganizationUnitsApi();
 const [Modal, modalApi] = useVbenModal({
   draggable: true,
