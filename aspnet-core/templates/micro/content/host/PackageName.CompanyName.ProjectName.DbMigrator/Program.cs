@@ -1,16 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PackageName.CompanyName.ProjectName.DbMigrator;
 using Serilog;
 using Serilog.Events;
 
-namespace PackageName.CompanyName.ProjectName.DbMigrator;
-
-public class Program
+try
 {
-    public async static Task Main(string[] args)
-    {
-        Log.Logger = new LoggerConfiguration()
+    Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning)
@@ -24,17 +22,26 @@ public class Program
             .WriteTo.Console()
             .CreateLogger();
 
-        await CreateHostBuilder(args).RunConsoleAsync();
+    var builder = Host.CreateDefaultBuilder(args)
+        .AddAppSettingsSecretsJson()
+        .ConfigureLogging((context, logger) => logger.ClearProviders())
+        .ConfigureServices((hostContext, services) => services.AddHostedService<DbMigratorHostedService>());
+
+    await builder.RunConsoleAsync();
+
+    return 0;
+}
+catch (Exception ex)
+{
+    if (ex is HostAbortedException)
+    {
+        throw;
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args)
-    {
-        return Host.CreateDefaultBuilder(args)
-            .AddAppSettingsSecretsJson()
-            .ConfigureLogging((context, logging) => logging.ClearProviders())
-            .ConfigureServices((hostContext, services) =>
-            {
-                services.AddHostedService<DbMigratorHostedService>();
-            });
-    }
+    Log.Fatal(ex, "Host terminated unexpectedly!");
+    return 1;
+}
+finally
+{
+    Log.CloseAndFlush();
 }

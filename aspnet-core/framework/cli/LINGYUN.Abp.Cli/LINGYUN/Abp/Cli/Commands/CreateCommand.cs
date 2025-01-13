@@ -179,7 +179,7 @@ namespace LINGYUN.Abp.Cli.Commands
             await CreateProjectService.CreateAsync(projectArgs);
         }
 
-        public string GetShortDescription()
+        public static string GetShortDescription()
         {
             return "Generate a new solution based on the customed ABP startup templates.";
         }
