@@ -25,7 +25,7 @@ import {
 } from '@ant-design/icons-vue';
 import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
-import { useUserApi } from '../../api/useUsersApi';
+import { useUsersApi } from '../../api/useUsersApi';
 import { IdentityUserPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -64,7 +64,7 @@ const getLockEnd = computed(() => {
 
 const abpStore = useAbpStore();
 const { hasAccessByCodes } = useAccess();
-const { cancel, deleteApi, getPagedListApi, unLockApi } = useUserApi();
+const { cancel, deleteApi, getPagedListApi, unLockApi } = useUsersApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开

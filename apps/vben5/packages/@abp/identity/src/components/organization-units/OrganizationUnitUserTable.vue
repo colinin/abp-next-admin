@@ -14,7 +14,7 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import { Button, Modal } from 'ant-design-vue';
 
 import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
-import { useUserApi } from '../../api/useUsersApi';
+import { useUsersApi } from '../../api/useUsersApi';
 import { OrganizationUnitPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -24,7 +24,7 @@ defineOptions({
 const props = defineProps<{
   selectedKey?: string;
 }>();
-const { cancel, removeOrganizationUnitApi } = useUserApi();
+const { cancel, removeOrganizationUnitApi } = useUsersApi();
 const { addMembers, getUserListApi } = useOrganizationUnitsApi();
 
 const SelectMemberModal = defineAsyncComponent(
