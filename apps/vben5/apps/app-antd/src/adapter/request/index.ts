@@ -5,12 +5,14 @@ import {
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
+import { useTokenApi } from '@abp/account';
 import { requestClient } from '@abp/request';
 import { message } from 'ant-design-vue';
 
 import { useAuthStore } from '#/store';
 
 export function initRequestClient() {
+  const { refreshTokenApi } = useTokenApi();
   /**
    * 重新认证逻辑
    */
@@ -33,6 +35,16 @@ export function initRequestClient() {
    * 刷新token逻辑
    */
   async function doRefreshToken() {
+    const accessStore = useAccessStore();
+    if (accessStore.refreshToken) {
+      const { accessToken, tokenType, refreshToken } = await refreshTokenApi({
+        refreshToken: accessStore.refreshToken,
+      });
+      const newToken = `${tokenType} ${accessToken}`;
+      accessStore.setAccessToken(newToken);
+      accessStore.setRefreshToken(refreshToken);
+      return newToken;
+    }
     return '';
   }
 
