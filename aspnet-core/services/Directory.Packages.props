@@ -3,53 +3,6 @@
 	<PropertyGroup>
 		<LYAbpPackageVersion>8.3.4</LYAbpPackageVersion>
 	</PropertyGroup>
-		
-	<ItemGroup>
-		<PackageVersion Include="DistributedLock.Redis" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Elsa.Activities.Email" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Elsa.Activities.Http" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Elsa.Activities.UserTask" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Elsa.Activities.Temporal.Quartz" Version="$(LYAbpPackageVersion)" />
-		<!--<PackageVersion Include="Elsa.Designer.Components.Web" Version="$(LYAbpPackageVersion)" />-->
-		<PackageVersion Include="Elsa.Webhooks.Api" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Serilog.AspNetCore" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Serilog.Enrichers.Environment" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Serilog.Enrichers.Assembly" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Serilog.Enrichers.Process" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Serilog.Enrichers.Thread" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Serilog.Settings.Configuration" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Serilog.Sinks.File" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Swashbuckle.AspNetCore" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Quartz.Serialization.Json" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Account.Web.OpenIddict" Version="$(LYAbpPackageVersion)" />
-		<!--<PackageVersion Include="Volo.Abp.Account.Web.IdentityServer" Version="$(LYAbpPackageVersion)" />-->
-		<PackageVersion Include="Volo.Abp.AspNetCore.Serilog" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Autofac" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Caching.StackExchangeRedis" Version="$(LYAbpPackageVersion)" />
-<!--		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="$(LYAbpPackageVersion)" />-->
-		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.FeatureManagement.Application" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.FeatureManagement.HttpApi" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Application" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.HttpApi" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Identity.AspNetCore" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Imaging.ImageSharp" Version="$(LYAbpPackageVersion)" />
-		<!--<PackageVersion Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="$(LYAbpPackageVersion)" />-->
-		<PackageVersion Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(LYAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.OpenIddict.EntityFrameworkCore" Version="$(LYAbpPackageVersion)" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageVersion Include="LINGYUN.Abp.AuditLogging.EntityFrameworkCore" Version="$(LYAbpPackageVersion)" />
