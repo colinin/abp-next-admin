@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	
 	<Import Project="..\..\..\common.secrets.props" />
 
@@ -54,6 +54,7 @@
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="LINGYUN.Abp.AuditLogging.EntityFrameworkCore" />
 		<PackageReference Include="LINGYUN.Abp.AuditLogging" />
@@ -212,8 +213,6 @@
 		<PackageReference Include="LINGYUN.Abp.UI.Navigation.VueVbenAdmin" />
 		<PackageReference Include="LINGYUN.Platform.Application.Contracts" />
 		<PackageReference Include="LINGYUN.Platform.Application" />
-		<PackageReference Include="LINGYUN.Platform.Application.Contracts" />
-		<PackageReference Include="LINGYUN.Platform.Application" />
 		<PackageReference Include="LINGYUN.Platform.Domain.Shared" />
 		<PackageReference Include="LINGYUN.Platform.Domain" />
 		<PackageReference Include="LINGYUN.Platform.EntityFrameworkCore" />
@@ -260,13 +259,5 @@
 		<PackageReference Include="LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore" />
 		<PackageReference Include="LINGYUN.Abp.WebhooksManagement.HttpApi" />
 		<PackageReference Include="LINGYUN.Abp.Webhooks" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="blobs\host\public\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="blobs\host\public\iShot_2024-12-04_11.51.43.png" />
 	</ItemGroup>
 </Project>
