@@ -85,6 +85,7 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       formModel.value = { ...defaultModel };
       modalApi.setState({
+        showConfirmButton: false,
         title: $t('AbpIdentity.IdentityClaim:New'),
       });
       const claimTypeDto = modalApi.getData<IdentityClaimTypeDto>();
@@ -94,11 +95,16 @@ const [Modal, modalApi] = useVbenModal({
           const dto = await getApi(claimTypeDto.id);
           formModel.value = dto;
           modalApi.setState({
+            showConfirmButton: !dto.isStatic,
             title: `${$t('AbpIdentity.DisplayName:ClaimType')} - ${dto.name}`,
           });
         } finally {
           modalApi.setState({ loading: false });
         }
+      } else {
+        modalApi.setState({
+          showConfirmButton: true,
+        });
       }
     }
   },
@@ -119,22 +125,29 @@ const [Modal, modalApi] = useVbenModal({
         name="name"
         required
       >
-        <Input v-model:value="formModel.name" />
+        <Input v-model:value="formModel.name" :disabled="formModel.isStatic" />
       </FormItem>
       <FormItem :label="$t('AbpIdentity.IdentityClaim:Required')">
-        <Checkbox v-model:checked="formModel.required">
+        <Checkbox
+          v-model:checked="formModel.required"
+          :disabled="formModel.isStatic"
+        >
           {{ $t('AbpIdentity.IdentityClaim:Required') }}
         </Checkbox>
       </FormItem>
       <FormItem :label="$t('AbpIdentity.IdentityClaim:Regex')">
-        <Input v-model:value="formModel.regex" />
+        <Input v-model:value="formModel.regex" :disabled="formModel.isStatic" />
       </FormItem>
       <FormItem :label="$t('AbpIdentity.IdentityClaim:RegexDescription')">
-        <Input v-model:value="formModel.regexDescription" />
+        <Input
+          v-model:value="formModel.regexDescription"
+          :disabled="formModel.isStatic"
+        />
       </FormItem>
       <FormItem :label="$t('AbpIdentity.IdentityClaim:ValueType')">
         <Select
           v-model:value="formModel.valueType"
+          :disabled="formModel.isStatic"
           :options="valueTypeOptions"
         />
       </FormItem>
@@ -142,6 +155,7 @@ const [Modal, modalApi] = useVbenModal({
         <Textarea
           v-model:value="formModel.description"
           :auto-size="{ minRows: 2 }"
+          :disabled="formModel.isStatic"
         />
       </FormItem>
     </Form>

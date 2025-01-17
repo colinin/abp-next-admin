@@ -1,5 +1,7 @@
 <!-- eslint-disable no-unused-vars -->
 <script setup lang="ts">
+import type { IdentityUserDto } from '../../types/users';
+
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
@@ -53,12 +55,18 @@ const [Form, formApi] = useVbenForm({
       componentProps: {
         options: [
           // TODO: 本地化
-          { label: $t('LockType:Seconds'), value: LockType.Seconds },
-          { label: $t('LockType:Minutes'), value: LockType.Minutes },
-          { label: $t('LockType:Hours'), value: LockType.Hours },
-          { label: $t('LockType:Days'), value: LockType.Days },
-          { label: $t('LockType:Months'), value: LockType.Months },
-          { label: $t('LockType:Years'), value: LockType.Years },
+          {
+            label: $t('AbpIdentity.LockType:Seconds'),
+            value: LockType.Seconds,
+          },
+          {
+            label: $t('AbpIdentity.LockType:Minutes'),
+            value: LockType.Minutes,
+          },
+          { label: $t('AbpIdentity.LockType:Hours'), value: LockType.Hours },
+          { label: $t('AbpIdentity.LockType:Days'), value: LockType.Days },
+          { label: $t('AbpIdentity.LockType:Months'), value: LockType.Months },
+          { label: $t('AbpIdentity.LockType:Years'), value: LockType.Years },
         ],
       },
       defaultValue: LockType.Seconds,
@@ -85,12 +93,15 @@ const [Modal, modalApi] = useVbenModal({
     await formApi.validateAndSubmitForm();
   },
   async onOpenChange(isOpen: boolean) {
+    let title = $t('AbpIdentity.Lock');
     if (isOpen) {
-      const { id } = modalApi.getData<Record<string, any>>();
+      const { id, userName } = modalApi.getData<IdentityUserDto>();
+      title += ` - ${userName}`;
       formApi.setValues({
         userId: id,
       });
     }
+    modalApi.setState({ title });
   },
   title: $t('AbpIdentity.Lock'),
 });

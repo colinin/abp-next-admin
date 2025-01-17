@@ -2,6 +2,7 @@ import type { PagedResultDto } from '@abp/core';
 
 import type {
   GetSecurityLogPagedRequest,
+  SecurityLogDeleteManyInput,
   SecurityLogDto,
 } from '../types/security-logs';
 
@@ -16,6 +17,17 @@ export function useSecurityLogsApi() {
    */
   function deleteApi(id: string): Promise<void> {
     return request(`/api/auditing/security-log/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  /**
+   * 批量删除安全日志
+   * @param input 参数
+   */
+  function deleteManyApi(input: SecurityLogDeleteManyInput): Promise<void> {
+    return request(`/api/auditing/security-log/bulk`, {
+      data: input,
       method: 'DELETE',
     });
   }
@@ -51,6 +63,7 @@ export function useSecurityLogsApi() {
   return {
     cancel,
     deleteApi,
+    deleteManyApi,
     getApi,
     getPagedListApi,
   };

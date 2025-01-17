@@ -6,15 +6,18 @@ import { useRouter } from 'vue-router';
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@vben/constants';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
-import { tokenApi, userInfoApi } from '@abp/account';
+import { useTokenApi, useUserInfoApi } from '@abp/account';
 import { useAbpStore } from '@abp/core';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { getConfigApi } from '#/api/core/abp';
+import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
+  const { loginApi } = useTokenApi();
+  const { getUserInfoApi } = useUserInfoApi();
+  const { getConfigApi } = useAbpConfigApi();
   const accessStore = useAccessStore();
   const userStore = useUserStore();
   const abpStore = useAbpStore();
@@ -35,7 +38,7 @@ export const useAuthStore = defineStore('auth', () => {
     let userInfo: null | UserInfo = null;
     try {
       loginLoading.value = true;
-      const loginResult = await tokenApi.loginApi(params as any);
+      const loginResult = await loginApi(params as any);
       const { accessToken, tokenType, refreshToken } = loginResult;
       // 如果成功获取到 accessToken
       if (accessToken) {
@@ -93,7 +96,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchUserInfo() {
     let userInfo: ({ [key: string]: any } & UserInfo) | null = null;
-    const userInfoRes = await userInfoApi.getUserInfoApi();
+    const userInfoRes = await getUserInfoApi();
     const abpConfig = await getConfigApi();
     userInfo = {
       userId: userInfoRes.sub,

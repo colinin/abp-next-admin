@@ -213,6 +213,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
       userChangeDrawerApi.setData({
         entityId: row.id,
         entityTypeFullName: 'Volo.Abp.Identity.IdentityUser',
+        subject: row.userName,
       });
       userChangeDrawerApi.open();
       break;

@@ -21,7 +21,7 @@ import {
 } from '@ant-design/icons-vue';
 import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
-import { deleteApi, getListApi } from '../../../api/groups';
+import { usePermissionGroupDefinitionsApi } from '../../../api/usePermissionGroupDefinitionsApi';
 import {
   GroupDefinitionsPermissions,
   PermissionDefinitionsPermissions,
@@ -45,6 +45,7 @@ const pageState = reactive({
 const { Lr } = useLocalization();
 const { hasAccessByCodes } = useAccess();
 const { deserialize } = useLocalizationSerializer();
+const { deleteApi, getListApi } = usePermissionGroupDefinitionsApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开

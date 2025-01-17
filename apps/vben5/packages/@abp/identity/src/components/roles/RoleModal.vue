@@ -60,6 +60,7 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       formModel.value = { ...defaultModel };
       modalApi.setState({
+        showConfirmButton: false,
         title: $t('AbpIdentity.NewRole'),
       });
       const roleDto = modalApi.getData<IdentityRoleDto>();
@@ -69,11 +70,16 @@ const [Modal, modalApi] = useVbenModal({
           const dto = await getApi(roleDto.id);
           formModel.value = dto;
           modalApi.setState({
+            showConfirmButton: !dto.isStatic,
             title: $t('AbpIdentity.RoleSubject', [dto.name]),
           });
         } finally {
           modalApi.setState({ loading: false });
         }
+      } else {
+        modalApi.setState({
+          showConfirmButton: true,
+        });
       }
     }
   },
@@ -90,12 +96,18 @@ const [Modal, modalApi] = useVbenModal({
       :wrapper-col="{ span: 18 }"
     >
       <FormItem :label="$t('AbpIdentity.DisplayName:IsDefault')">
-        <Checkbox v-model:checked="formModel.isDefault">
+        <Checkbox
+          v-model:checked="formModel.isDefault"
+          :disabled="formModel.isStatic"
+        >
           {{ $t('AbpIdentity.DisplayName:IsDefault') }}
         </Checkbox>
       </FormItem>
       <FormItem :label="$t('AbpIdentity.DisplayName:IsPublic')">
-        <Checkbox v-model:checked="formModel.isPublic">
+        <Checkbox
+          v-model:checked="formModel.isPublic"
+          :disabled="formModel.isStatic"
+        >
           {{ $t('AbpIdentity.DisplayName:IsPublic') }}
         </Checkbox>
       </FormItem>
@@ -104,7 +116,7 @@ const [Modal, modalApi] = useVbenModal({
         name="name"
         required
       >
-        <Input v-model:value="formModel.name" />
+        <Input v-model:value="formModel.name" :disabled="formModel.isStatic" />
       </FormItem>
     </Form>
   </Modal>

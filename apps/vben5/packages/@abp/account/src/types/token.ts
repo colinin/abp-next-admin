@@ -32,6 +32,10 @@ interface TokenResult {
   /** 令牌类型 */
   tokenType: string;
 }
+interface OAuthTokenRefreshModel {
+  /** 刷新令牌 */
+  refreshToken: string;
+}
 /** oauth标准令牌返回结构 */
 interface OAuthTokenResult {
   /** 访问令牌 */
@@ -45,6 +49,7 @@ interface OAuthTokenResult {
 }
 
 export type {
+  OAuthTokenRefreshModel,
   OAuthTokenResult,
   PasswordTokenRequest,
   PasswordTokenRequestModel,

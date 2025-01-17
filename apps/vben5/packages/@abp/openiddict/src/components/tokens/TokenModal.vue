@@ -10,8 +10,8 @@ import { $t } from '@vben/locales';
 import { UserLookupPermissions, useUserLookupApi } from '@abp/identity';
 import { CodeEditor } from '@abp/ui';
 
-import { getApi as getApplication } from '../../api/applications';
-import { getApi as getAuthorization } from '../../api/tokens';
+import { useApplicationsApi } from '../../api/useApplicationsApi';
+import { useTokensApi } from '../../api/useTokensApi';
 
 defineOptions({
   name: 'TokenModal',
@@ -19,6 +19,8 @@ defineOptions({
 
 const { hasAccessByCodes } = useAccess();
 const userLookupApi = useUserLookupApi();
+const { getApi: getApplication } = useApplicationsApi();
+const { cancel, getApi: getAuthorization } = useTokensApi();
 
 const [Form, formApi] = useVbenForm({
   commonConfig: {
@@ -118,6 +120,9 @@ const [Modal, modalApi] = useVbenModal({
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel('TokenModal has closed!');
   },
   async onOpenChange(isOpen) {
     if (isOpen) {

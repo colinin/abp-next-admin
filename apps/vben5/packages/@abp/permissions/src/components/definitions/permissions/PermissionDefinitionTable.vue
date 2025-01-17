@@ -22,11 +22,8 @@ import {
 import { Button, message, Modal, Tag } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
 
-import {
-  deleteApi,
-  getListApi as getPermissionsApi,
-} from '../../../api/definitions';
-import { getListApi as getGroupsApi } from '../../../api/groups';
+import { usePermissionDefinitionsApi } from '../../../api/usePermissionDefinitionsApi';
+import { usePermissionGroupDefinitionsApi } from '../../../api/usePermissionGroupDefinitionsApi';
 import { GroupDefinitionsPermissions } from '../../../constants/permissions';
 import { type PermissionDefinitionDto } from '../../../types/definitions';
 import { useTypesMap } from './types';
@@ -62,6 +59,9 @@ const pageState = reactive({
 const { Lr } = useLocalization();
 const { deserialize } = useLocalizationSerializer();
 const { multiTenancySidesMap, providersMap } = useTypesMap();
+const { getListApi: getGroupsApi } = usePermissionGroupDefinitionsApi();
+const { deleteApi, getListApi: getPermissionsApi } =
+  usePermissionDefinitionsApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开

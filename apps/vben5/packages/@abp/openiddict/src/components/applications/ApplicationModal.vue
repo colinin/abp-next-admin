@@ -37,8 +37,8 @@ import {
   Transfer,
 } from 'ant-design-vue';
 
-import { createApi, getApi, updateApi } from '../../api/applications';
-import { discoveryApi } from '../../api/openid';
+import { useApplicationsApi } from '../../api/useApplicationsApi';
+import { useOpenIdApi } from '../../api/useOpenIdApi';
 import DisplayNameTable from '../display-names/DisplayNameTable.vue';
 import PropertyTable from '../properties/PropertyTable.vue';
 
@@ -139,12 +139,17 @@ const getSupportScopes = computed((): TransferItem[] => {
   });
 });
 
+const { discoveryApi } = useOpenIdApi();
+const { cancel, createApi, getApi, updateApi } = useApplicationsApi();
 const [Modal, modalApi] = useVbenModal({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel('ApplicationModal has closed!');
   },
   onConfirm: async () => {
     await form.value?.validate();

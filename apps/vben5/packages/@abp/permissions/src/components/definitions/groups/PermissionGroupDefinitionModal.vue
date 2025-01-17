@@ -12,7 +12,7 @@ import { $t } from '@vben/locales';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
 import { Form, Input, message, Tabs } from 'ant-design-vue';
 
-import { createApi, getApi, updateApi } from '../../../api/groups';
+import { usePermissionGroupDefinitionsApi } from '../../../api/usePermissionGroupDefinitionsApi';
 
 defineOptions({
   name: 'PermissionGroupDefinitionModal',
@@ -33,12 +33,17 @@ const activeTab = ref<TabKeys>('basic');
 const form = useTemplateRef<FormInstance>('form');
 const formModel = ref<PermissionGroupDefinitionDto>({ ...defaultModel });
 
+const { cancel, createApi, getApi, updateApi } =
+  usePermissionGroupDefinitionsApi();
 const [Modal, modalApi] = useVbenModal({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel('PermissionGroupDefinitionModal has closed!');
   },
   onConfirm: async () => {
     await form.value?.validate();

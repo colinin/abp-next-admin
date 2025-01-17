@@ -1,2 +1,2 @@
-export * as tokenApi from './token';
-export * as userInfoApi from './user';
+export { useTokenApi } from './useTokenApi';
+export { useUserInfoApi } from './useUserInfoApi';

@@ -9,11 +9,16 @@ import { ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getListWithUsernameApi } from '../../api/entity-changes';
+import { useEntityChangesApi } from '../../api/useEntityChangesApi';
 import EntityChangeTable from '../entity-changes/EntityChangeTable.vue';
 
 const entityChanges = ref<EntityChangeDto[]>([]);
 
+interface State extends EntityChangeGetWithUsernameInput {
+  subject?: string;
+}
+
+const { getListWithUsernameApi } = useEntityChangesApi();
 const [Drawer, drawerApi] = useVbenDrawer({
   class: 'w-auto',
   onCancel() {
@@ -21,16 +26,22 @@ const [Drawer, drawerApi] = useVbenDrawer({
   },
   onConfirm: async () => {},
   onOpenChange: async (isOpen: boolean) => {
+    let title = $t('AbpAuditLogging.EntitiesChanged');
     if (isOpen) {
-      const input = drawerApi.getData<EntityChangeGetWithUsernameInput>();
-      const { items } = await getListWithUsernameApi(input);
+      const state = drawerApi.getData<State>();
+      const { items } = await getListWithUsernameApi({
+        entityId: state.entityId,
+        entityTypeFullName: state.entityTypeFullName,
+      });
       entityChanges.value = items.map((item) => {
         return {
           ...item.entityChange,
           userName: item.userName,
         };
       });
+      state.subject && (title += ` - ${state.subject}`);
     }
+    drawerApi.setState({ title });
   },
   title: $t('AbpAuditLogging.EntitiesChanged'),
 });

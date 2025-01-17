@@ -33,7 +33,14 @@ const [Modal, modalApi] = useVbenModal({
   onClosed() {
     cancel('Role Claim modal has closed!');
   },
-  onConfirm: async () => {},
+  onOpenChange(isOpen) {
+    let title = $t('AbpIdentity.ManageClaim');
+    if (isOpen) {
+      const { name } = modalApi.getData<IdentityRoleDto>();
+      title += ` - ${name}`;
+    }
+    modalApi.setState({ title });
+  },
   showCancelButton: false,
   showConfirmButton: false,
   title: $t('AbpIdentity.ManageClaim'),
