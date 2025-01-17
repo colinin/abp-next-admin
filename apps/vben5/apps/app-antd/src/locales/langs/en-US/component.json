@@ -116,5 +116,8 @@
       "requiresAllDesc": "If checked, you need to have all the selected permissions.",
       "permissions": "Required Permissions"
     }
+  },
+  "table": {
+    "selectedItemWellBeDeleted": "Multiple items selected will be deleted!"
   }
 }

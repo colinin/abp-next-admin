@@ -16,7 +16,7 @@ import antdEnLocale from 'ant-design-vue/es/locale/en_US';
 import antdDefaultLocale from 'ant-design-vue/es/locale/zh_CN';
 import dayjs from 'dayjs';
 
-import { getLocalizationApi } from '#/api/core';
+import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
 
 const antdLocale = ref<Locale>(antdDefaultLocale);
 
@@ -101,6 +101,7 @@ async function loadAntdLocale(lang: SupportedLanguagesType) {
  */
 async function loadAbpLocale(lang: SupportedLanguagesType) {
   const abpStore = useAbpStore();
+  const { getLocalizationApi } = useAbpConfigApi();
   let localization = abpStore.localization;
 
   if (lang !== localization?.currentCulture.cultureName) {
