@@ -141,6 +141,15 @@ public class AuditLogManager : IAuditLogManager, ITransientDependency
         }
     }
 
+    public async virtual Task DeleteManyAsync(List<Guid> ids, CancellationToken cancellationToken = default)
+    {
+        using (var uow = UnitOfWorkManager.Begin(true))
+        {
+            await AuditLogRepository.DeleteManyAsync(ids);
+            await uow.CompleteAsync();
+        }
+    }
+
     public async virtual Task<string> SaveAsync(
         AuditLogInfo auditInfo,
         CancellationToken cancellationToken = default)

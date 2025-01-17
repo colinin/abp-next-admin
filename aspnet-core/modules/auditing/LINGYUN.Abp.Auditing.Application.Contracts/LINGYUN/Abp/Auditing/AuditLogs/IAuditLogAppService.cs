@@ -12,4 +12,6 @@ public interface IAuditLogAppService : IApplicationService
     Task<AuditLogDto> GetAsync(Guid id);
 
     Task DeleteAsync(Guid id);
+
+    Task DeleteManyAsync(AuditLogDeleteManyInput input);
 }

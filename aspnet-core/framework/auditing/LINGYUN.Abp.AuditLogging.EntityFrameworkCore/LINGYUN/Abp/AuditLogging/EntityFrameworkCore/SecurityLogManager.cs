@@ -40,6 +40,16 @@ public class SecurityLogManager : ISecurityLogManager, ITransientDependency
         UnitOfWorkManager = unitOfWorkManager;
     }
 
+    public async virtual Task DeleteManyAsync(List<Guid> ids, CancellationToken cancellationToken = default)
+    {
+        using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
+        {
+            await IdentitySecurityLogRepository.DeleteManyAsync(ids,
+                cancellationToken: cancellationToken);
+            await uow.CompleteAsync();
+        }
+    }
+
     public async virtual Task SaveAsync(
         SecurityLogInfo securityLogInfo,
         CancellationToken cancellationToken = default)

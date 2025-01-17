@@ -52,4 +52,10 @@ public class SecurityLogAppService : AuditingApplicationServiceBase, ISecurityLo
     {
         await SecurityLogManager.DeleteAsync(id);
     }
+
+    [Authorize(AuditingPermissionNames.SecurityLog.Delete)]
+    public async virtual Task DeleteManyAsync(SecurityLogDeleteManyInput input)
+    {
+        await SecurityLogManager.DeleteManyAsync(input.Ids);
+    }
 }

@@ -92,4 +92,10 @@ public class DefaultAuditLogManager : IAuditLogManager, ISingletonDependency
         Logger.LogDebug("No audit log manager is available!");
         return Task.CompletedTask;
     }
+
+    public virtual Task DeleteManyAsync(List<Guid> ids, CancellationToken cancellationToken = default)
+    {
+        Logger.LogDebug("No audit log manager is available!");
+        return Task.CompletedTask;
+    }
 }
