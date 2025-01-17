@@ -23,9 +23,16 @@
     "@abp/core": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/ui": "workspace:*",
+    "@ant-design/icons-vue": "catalog:",
+    "@vben-core/shadcn-ui": "workspace:*",
+    "@vben/common-ui": "workspace:*",
     "@vben/hooks": "workspace:*",
     "@vben/layouts": "workspace:*",
     "@vben/locales": "workspace:*",
+    "@vben/preferences": "workspace:*",
+    "@vben/stores": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "@vueuse/integrations": "catalog:",
     "ant-design-vue": "catalog:",
     "vue": "catalog:*"
   }

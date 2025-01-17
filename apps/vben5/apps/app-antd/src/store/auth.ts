@@ -99,12 +99,18 @@ export const useAuthStore = defineStore('auth', () => {
     const userInfoRes = await getUserInfoApi();
     const abpConfig = await getConfigApi();
     userInfo = {
-      userId: userInfoRes.sub,
-      username: userInfoRes.uniqueName,
-      realName: userInfoRes.name,
+      userId: userInfoRes.sub ?? abpConfig.currentUser.id,
+      username: userInfoRes.uniqueName ?? abpConfig.currentUser.userName,
+      realName: userInfoRes.name ?? abpConfig.currentUser.name,
       avatar: userInfoRes.avatarUrl ?? userInfoRes.picture,
       desc: userInfoRes.uniqueName ?? userInfoRes.name,
       email: userInfoRes.email ?? userInfoRes.email,
+      emailVerified:
+        userInfoRes.emailVerified ?? abpConfig.currentUser.emailVerified,
+      phoneNumber: userInfoRes.phoneNumber ?? abpConfig.currentUser.phoneNumber,
+      phoneNumberVerified:
+        userInfoRes.phoneNumberVerified ??
+        abpConfig.currentUser.phoneNumberVerified,
       token: '',
       roles: abpConfig.currentUser.roles,
       homePath: '/',

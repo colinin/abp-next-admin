@@ -198,6 +198,26 @@ const routes: RouteRecordRaw[] = [
           },
         ],
       },
+      {
+        name: 'Account',
+        path: '/account',
+        meta: {
+          title: $t('abp.account.title'),
+          icon: 'mdi:account-outline',
+          hideInMenu: true,
+        },
+        children: [
+          {
+            meta: {
+              title: $t('abp.account.settings.title'),
+              icon: 'tdesign:user-setting',
+            },
+            name: 'MySettings',
+            path: '/account/my-settings',
+            component: () => import('#/views/account/my-settings/index.vue'),
+          },
+        ],
+      },
     ],
   },
 ];

@@ -28,5 +28,28 @@
     "authorizations": "授权管理",
     "scopes": "范围管理",
     "tokens": "授权令牌"
+  },
+  "account": {
+    "title": "账户管理",
+    "settings": {
+      "title": "个人设置",
+      "basic": {
+        "title": "基本设置"
+      },
+      "security": {
+        "title": "安全设置",
+        "verified": "已验证",
+        "unVerified": "未验证",
+        "email": "电子邮件",
+        "password": "密码",
+        "passwordDesc": "重置我的密码",
+        "phoneNumber": "手机号码"
+      },
+      "bindSettings": "账号绑定",
+      "noticeSettings": "新消息通知",
+      "authenticatorSettings": "身份验证程序",
+      "changeAvatar": "更改头像"
+    },
+    "profile": "个人中心"
   }
 }
