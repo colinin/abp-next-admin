@@ -95,6 +95,19 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
             cancellationToken);
     }
 
+    public async virtual Task DeleteManyAsync(List<Guid> ids, CancellationToken cancellationToken = default)
+    {
+        var client = _clientFactory.Create();
+
+        await client.DeleteByQueryAsync<SecurityLog>(
+            x => x.Index(CreateIndex())
+                  .Query(query =>
+                    query.Terms(terms =>
+                        terms.Field(field => field.Id)
+                             .Terms(ids))),
+            cancellationToken);
+    }
+
     public async virtual Task<List<SecurityLog>> GetListAsync(
         string sorting = null,
         int maxResultCount = 50,
