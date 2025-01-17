@@ -116,5 +116,8 @@
       "requiresAllDesc": "如果勾选,则需要拥有所有选择的权限.",
       "permissions": "需要的权限"
     }
+  },
+  "table": {
+    "selectedItemWellBeDeleted": "选择的多个项目将被删除!"
   }
 }
