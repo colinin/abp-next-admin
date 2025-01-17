@@ -11,12 +11,13 @@ import { useAbpStore } from '@abp/core';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { getConfigApi } from '#/api/core/abp';
+import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
   const { loginApi } = useTokenApi();
   const { getUserInfoApi } = useUserInfoApi();
+  const { getConfigApi } = useAbpConfigApi();
   const accessStore = useAccessStore();
   const userStore = useUserStore();
   const abpStore = useAbpStore();

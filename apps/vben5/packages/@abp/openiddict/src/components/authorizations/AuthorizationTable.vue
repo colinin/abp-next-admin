@@ -18,8 +18,8 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button, message, Modal, Select } from 'ant-design-vue';
 import debounce from 'lodash.debounce';
 
-import { getPagedListApi as getApplications } from '../../api/applications';
-import { deleteApi, getPagedListApi } from '../../api/authorizations';
+import { useApplicationsApi } from '../../api/useApplicationsApi';
+import { useAuthorizationsApi } from '../../api/useAuthorizationsApi';
 import { AuthorizationsPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -30,6 +30,8 @@ const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
 
 const { hasAccessByCodes } = useAccess();
+const { getPagedListApi: getApplications } = useApplicationsApi();
+const { deleteApi, getPagedListApi } = useAuthorizationsApi();
 
 const applications = ref<OpenIddictApplicationDto[]>([]);
 const formOptions: VbenFormProps = {

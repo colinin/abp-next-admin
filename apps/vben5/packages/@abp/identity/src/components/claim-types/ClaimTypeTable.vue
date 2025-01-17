@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { IdentityClaimTypeDto } from '../../types/claim-types';
 
 import { defineAsyncComponent, h } from 'vue';
 
 import { useAccess } from '@vben/access';
-import { useVbenModal } from '@vben/common-ui';
+import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
 import { useVbenVxeGrid } from '@abp/ui';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+} from '@ant-design/icons-vue';
+import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
 import { useClaimTypesApi } from '../../api/useClaimTypesApi';
 import { IdentityClaimTypePermissions } from '../../constants/permissions';
@@ -22,11 +28,13 @@ defineOptions({
   name: 'ClaimTypeTable',
 });
 
+const MenuItem = Menu.Item;
 const ClaimTypeModal = defineAsyncComponent(
   () => import('./ClaimTypeModal.vue'),
 );
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
+const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 
 const { hasAccessByCodes } = useAccess();
 const { cancel, deleteApi, getPagedListApi } = useClaimTypesApi();
@@ -151,18 +159,21 @@ const [Grid, { query }] = useVbenVxeGrid({
   gridEvents,
   gridOptions,
 });
+const [ClaimTypeChangeDrawer, roleChangeDrawerApi] = useVbenDrawer({
+  connectedComponent: EntityChangeDrawer,
+});
 
-const handleAdd = () => {
+const onCreate = () => {
   roleModalApi.setData({});
   roleModalApi.open();
 };
 
-const handleEdit = (row: IdentityClaimTypeDto) => {
+const onUpdate = (row: IdentityClaimTypeDto) => {
   roleModalApi.setData(row);
   roleModalApi.open();
 };
 
-const handleDelete = (row: IdentityClaimTypeDto) => {
+const onDelete = (row: IdentityClaimTypeDto) => {
   Modal.confirm({
     centered: true,
     content: $t('AbpIdentity.WillDeleteClaim', [row.name]),
@@ -177,6 +188,20 @@ const handleDelete = (row: IdentityClaimTypeDto) => {
     title: $t('AbpUi.AreYouSure'),
   });
 };
+
+const onMenuClick = (row: IdentityClaimTypeDto, info: MenuInfo) => {
+  switch (info.key) {
+    case 'entity-changes': {
+      roleChangeDrawerApi.setData({
+        entityId: row.id,
+        entityTypeFullName: 'Volo.Abp.Identity.IdentityRole',
+        subject: row.name,
+      });
+      roleChangeDrawerApi.open();
+      break;
+    }
+  }
+};
 </script>
 
 <template>
@@ -185,7 +210,7 @@ const handleDelete = (row: IdentityClaimTypeDto) => {
       <Button
         type="primary"
         v-access:code="[IdentityClaimTypePermissions.Create]"
-        @click="handleAdd"
+        @click="onCreate"
       >
         {{ $t('AbpIdentity.IdentityClaim:New') }}
       </Button>
@@ -204,33 +229,45 @@ const handleDelete = (row: IdentityClaimTypeDto) => {
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
-        <div class="basis-1/2">
-          <Button
-            :icon="h(EditOutlined)"
-            block
-            type="link"
-            v-access:code="[IdentityClaimTypePermissions.Update]"
-            @click="handleEdit(row)"
-          >
-            {{ $t('AbpUi.Edit') }}
-          </Button>
-        </div>
-        <div class="basis-1/2">
-          <Button
-            :icon="h(DeleteOutlined)"
-            block
-            danger
-            type="link"
-            v-access:code="[IdentityClaimTypePermissions.Delete]"
-            @click="handleDelete(row)"
-          >
-            {{ $t('AbpUi.Delete') }}
-          </Button>
-        </div>
+        <Button
+          :icon="h(EditOutlined)"
+          block
+          type="link"
+          v-access:code="[IdentityClaimTypePermissions.Update]"
+          @click="onUpdate(row)"
+        >
+          {{ $t('AbpUi.Edit') }}
+        </Button>
+        <Button
+          v-if="row.isStatic === false"
+          :icon="h(DeleteOutlined)"
+          block
+          danger
+          type="link"
+          v-access:code="[IdentityClaimTypePermissions.Delete]"
+          @click="onDelete(row)"
+        >
+          {{ $t('AbpUi.Delete') }}
+        </Button>
+        <Dropdown>
+          <template #overlay>
+            <Menu @click="(info) => onMenuClick(row, info)">
+              <MenuItem
+                v-if="hasAccessByCodes([AuditLogPermissions.Default])"
+                key="entity-changes"
+                :icon="h(AuditLogIcon)"
+              >
+                {{ $t('AbpAuditLogging.EntitiesChanged') }}
+              </MenuItem>
+            </Menu>
+          </template>
+          <Button :icon="h(EllipsisOutlined)" type="link" />
+        </Dropdown>
       </div>
     </template>
   </Grid>
   <ClaimTypeEditModal @change="() => query()" />
+  <ClaimTypeChangeDrawer />
 </template>
 
 <style lang="scss" scoped></style>

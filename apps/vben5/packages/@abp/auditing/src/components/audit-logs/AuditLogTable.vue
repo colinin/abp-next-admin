@@ -4,7 +4,7 @@ import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
 
 import type { AuditLogDto } from '../../types/audit-logs';
 
-import { defineAsyncComponent, h } from 'vue';
+import { defineAsyncComponent, h, ref, toValue } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -14,7 +14,7 @@ import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button, message, Modal, Tag } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/audit-logs';
+import { useAuditLogsApi } from '../../api/useAuditLogsApi';
 import { AuditLogPermissions } from '../../constants/permissions';
 import { useAuditlogs } from '../../hooks/useAuditlogs';
 import { httpMethodOptions, httpStatusCodeOptions } from './mapping';
@@ -22,7 +22,9 @@ import { httpMethodOptions, httpStatusCodeOptions } from './mapping';
 defineOptions({
   name: 'AuditLogTable',
 });
+const { deleteApi, deleteManyApi, getPagedListApi } = useAuditLogsApi();
 
+const selectedKeys = ref<string[]>([]);
 const formOptions: VbenFormProps = {
   // 默认展开
   collapsed: true,
@@ -121,6 +123,10 @@ const formOptions: VbenFormProps = {
 
 const gridOptions: VxeGridProps<AuditLogDto> = {
   columns: [
+    {
+      align: 'center',
+      type: 'checkbox',
+    },
     {
       align: 'left',
       field: 'url',
@@ -234,6 +240,12 @@ const gridOptions: VxeGridProps<AuditLogDto> = {
 };
 
 const gridEvents: VxeGridListeners<AuditLogDto> = {
+  checkboxAll: (params) => {
+    selectedKeys.value = params.records.map((x) => x.id);
+  },
+  checkboxChange: (params) => {
+    selectedKeys.value = params.records.map((x) => x.id);
+  },
   sortChange: onSort,
 };
 
@@ -268,6 +280,22 @@ async function onDelete(row: AuditLogDto) {
   });
 }
 
+function onBulkDelete() {
+  Modal.confirm({
+    centered: true,
+    content: $t('component.table.selectedItemWellBeDeleted'),
+    onOk: async () => {
+      await deleteManyApi({
+        ids: toValue(selectedKeys),
+      });
+      selectedKeys.value = [];
+      message.success($t('AbpUi.SuccessfullyDeleted'));
+      gridApi.query();
+    },
+    title: $t('AbpUi.AreYouSure'),
+  });
+}
+
 function onSort(params: { field: string; order: SortOrder }) {
   const sorting = params.order ? `${params.field} ${params.order}` : undefined;
   gridApi.query({ sorting });
@@ -281,6 +309,19 @@ function onFilter(field: string, value: any) {
 
 <template>
   <Grid :table-title="$t('AbpAuditLogging.AuditLog')">
+    <template #toolbar-tools>
+      <Button
+        v-if="selectedKeys.length > 0"
+        :icon="h(DeleteOutlined)"
+        danger
+        ghost
+        type="primary"
+        v-access:code="[AuditLogPermissions.Delete]"
+        @click="onBulkDelete"
+      >
+        {{ $t('AbpUi.Delete') }}
+      </Button>
+    </template>
     <template #clientIpAddress="{ row }">
       <Tag v-if="row.extraProperties?.Location" color="blue">
         {{ row.extraProperties?.Location }}

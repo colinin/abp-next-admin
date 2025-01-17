@@ -18,7 +18,7 @@ import {
 } from '@ant-design/icons-vue';
 import { Button, message, Modal } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/scopes';
+import { useScopesApi } from '../../api/useScopesApi';
 import { ScopesPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -27,6 +27,8 @@ defineOptions({
 
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
+
+const { deleteApi, getPagedListApi } = useScopesApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -110,7 +112,6 @@ const gridOptions: VxeGridProps<OpenIddictScopeDto> = {
 const [ScopeModal, modalApi] = useVbenModal({
   connectedComponent: defineAsyncComponent(() => import('./ScopeModal.vue')),
 });
-
 const [Grid, { query }] = useVbenVxeGrid({
   formOptions,
   gridOptions,

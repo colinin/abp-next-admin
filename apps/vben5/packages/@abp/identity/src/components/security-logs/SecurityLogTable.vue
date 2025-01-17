@@ -3,7 +3,7 @@ import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
 
 import type { SecurityLogDto } from '../../types/security-logs';
 
-import { defineAsyncComponent, h } from 'vue';
+import { defineAsyncComponent, h, ref, toValue } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -20,7 +20,10 @@ defineOptions({
   name: 'SecurityLogTable',
 });
 
-const { cancel, deleteApi, getPagedListApi } = useSecurityLogsApi();
+const { cancel, deleteApi, deleteManyApi, getPagedListApi } =
+  useSecurityLogsApi();
+
+const selectedKeys = ref<string[]>([]);
 const formOptions: VbenFormProps = {
   // 默认展开
   collapsed: false,
@@ -72,6 +75,10 @@ const formOptions: VbenFormProps = {
 
 const gridOptions: VxeGridProps<SecurityLogDto> = {
   columns: [
+    {
+      align: 'center',
+      type: 'checkbox',
+    },
     {
       align: 'left',
       field: 'creationTime',
@@ -144,7 +151,7 @@ const gridOptions: VxeGridProps<SecurityLogDto> = {
       field: 'browserInfo',
       sortable: true,
       title: $t('AbpAuditLogging.BrowserInfo'),
-      width: 'auto',
+      width: 500,
     },
     {
       field: 'actions',
@@ -181,6 +188,12 @@ const gridOptions: VxeGridProps<SecurityLogDto> = {
 };
 
 const gridEvents: VxeGridListeners<SecurityLogDto> = {
+  checkboxAll: (params) => {
+    selectedKeys.value = params.records.map((x) => x.id);
+  },
+  checkboxChange: (params) => {
+    selectedKeys.value = params.records.map((x) => x.id);
+  },
   sortChange: onSort,
 };
 
@@ -216,6 +229,22 @@ function onDelete(row: SecurityLogDto) {
   });
 }
 
+function onBulkDelete() {
+  Modal.confirm({
+    centered: true,
+    content: $t('component.table.selectedItemWellBeDeleted'),
+    onOk: async () => {
+      await deleteManyApi({
+        ids: toValue(selectedKeys),
+      });
+      selectedKeys.value = [];
+      message.success($t('AbpUi.SuccessfullyDeleted'));
+      gridApi.query();
+    },
+    title: $t('AbpUi.AreYouSure'),
+  });
+}
+
 function onSort(params: { field: string; order: SortOrder }) {
   const sorting = params.order ? `${params.field} ${params.order}` : undefined;
   gridApi.query({ sorting });
@@ -224,6 +253,19 @@ function onSort(params: { field: string; order: SortOrder }) {
 
 <template>
   <Grid :table-title="$t('AbpAuditLogging.SecurityLog')">
+    <template #toolbar-tools>
+      <Button
+        v-if="selectedKeys.length > 0"
+        :icon="h(DeleteOutlined)"
+        danger
+        ghost
+        type="primary"
+        v-access:code="[SecurityLogPermissions.Delete]"
+        @click="onBulkDelete"
+      >
+        {{ $t('AbpUi.Delete') }}
+      </Button>
+    </template>
     <template #clientIpAddress="{ row }">
       <Tag v-if="row.extraProperties?.Location" color="blue">
         {{ row.extraProperties?.Location }}

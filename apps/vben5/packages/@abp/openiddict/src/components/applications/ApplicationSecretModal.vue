@@ -8,7 +8,7 @@ import { $t } from '@vben/locales';
 
 import { message } from 'ant-design-vue';
 
-import { getApi, updateApi } from '../../api/applications';
+import { useApplicationsApi } from '../../api/useApplicationsApi';
 
 defineOptions({
   name: 'ApplicationSecretModal',
@@ -18,6 +18,8 @@ const emits = defineEmits<{
 }>();
 
 const applicationModel = ref<OpenIddictApplicationDto>();
+
+const { cancel, getApi, updateApi } = useApplicationsApi();
 const [Form, formApi] = useVbenForm({
   commonConfig: {
     // 所有表单项
@@ -42,19 +44,25 @@ const [Modal, modalApi] = useVbenModal({
   onCancel() {
     modalApi.close();
   },
+  onClosed() {
+    cancel('ApplicationSecretModal has closed!');
+  },
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();
   },
   onOpenChange: async (isOpen) => {
+    let title = $t('AbpOpenIddict.ManageSecret');
     if (isOpen) {
       try {
         modalApi.setState({ loading: true });
-        const { id } = modalApi.getData<OpenIddictApplicationDto>();
+        const { clientId, id } = modalApi.getData<OpenIddictApplicationDto>();
         await onGet(id);
+        title += ` - ${clientId}`;
       } finally {
         modalApi.setState({ loading: false });
       }
     }
+    modalApi.setState({ title });
   },
   title: $t('AbpOpenIddict.ManageSecret'),
 });

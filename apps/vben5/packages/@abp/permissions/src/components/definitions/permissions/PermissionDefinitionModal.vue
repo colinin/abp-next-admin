@@ -26,13 +26,8 @@ import {
   TreeSelect,
 } from 'ant-design-vue';
 
-import {
-  createApi,
-  getApi,
-  getListApi as getPermissionsApi,
-  updateApi,
-} from '../../../api/definitions';
-import { getListApi as getGroupsApi } from '../../../api/groups';
+import { usePermissionDefinitionsApi } from '../../../api/usePermissionDefinitionsApi';
+import { usePermissionGroupDefinitionsApi } from '../../../api/usePermissionGroupDefinitionsApi';
 import { useTypesMap } from './types';
 
 defineOptions({
@@ -68,6 +63,13 @@ const availablePermissions = ref<PermissionTreeVo[]>([]);
 
 const { Lr } = useLocalization();
 const { deserialize } = useLocalizationSerializer();
+const { getListApi: getGroupsApi } = usePermissionGroupDefinitionsApi();
+const {
+  createApi,
+  getApi,
+  getListApi: getPermissionsApi,
+  updateApi,
+} = usePermissionDefinitionsApi();
 const [Modal, modalApi] = useVbenModal({
   class: 'w-1/2',
   draggable: true,

@@ -11,8 +11,8 @@ import { UserLookupPermissions, useUserLookupApi } from '@abp/identity';
 import { CodeEditor } from '@abp/ui';
 import { Select } from 'ant-design-vue';
 
-import { getApi as getApplication } from '../../api/applications';
-import { getApi as getAuthorization } from '../../api/authorizations';
+import { useApplicationsApi } from '../../api/useApplicationsApi';
+import { useAuthorizationsApi } from '../../api/useAuthorizationsApi';
 
 defineOptions({
   name: 'AuthorizationModal',
@@ -22,6 +22,8 @@ const Option = Select.Option;
 
 const { hasAccessByCodes } = useAccess();
 const userLookupApi = useUserLookupApi();
+const { getApi: getApplication } = useApplicationsApi();
+const { cancel, getApi: getAuthorization } = useAuthorizationsApi();
 
 const [Form, formApi] = useVbenForm({
   commonConfig: {
@@ -97,6 +99,9 @@ const [Modal, modalApi] = useVbenModal({
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel('AuthorizationModal has closed!');
   },
   async onOpenChange(isOpen) {
     if (isOpen) {

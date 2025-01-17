@@ -15,7 +15,7 @@ import { $t } from '@vben/locales';
 
 import { Card, Checkbox, Divider, message, Tabs, Tree } from 'ant-design-vue';
 
-import { getApi, updateApi } from '../../api/permissions';
+import { usePermissionsApi } from '../../api/usePermissionsApi';
 import {
   generatePermissionTree,
   getGrantedPermissionKeys,
@@ -74,6 +74,7 @@ const getPermissionNodeState = computed(() => {
   };
 });
 
+const { cancel, getApi, updateApi } = usePermissionsApi();
 const [Modal, modalApi] = useVbenModal({
   centered: true,
   class: 'w-1/2',
@@ -83,6 +84,9 @@ const [Modal, modalApi] = useVbenModal({
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel('Permission modal has closed!');
   },
   onConfirm: async () => {
     const permissions = toPermissionList(permissionTree.value);

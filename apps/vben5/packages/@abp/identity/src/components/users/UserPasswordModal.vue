@@ -1,5 +1,7 @@
 <!-- eslint-disable no-unused-vars -->
 <script setup lang="ts">
+import type { IdentityUserDto } from '../../types/users';
+
 import { h } from 'vue';
 
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
@@ -74,11 +76,19 @@ const [Modal, modalApi] = useVbenModal({
       modalApi.setState({ confirmLoading: false });
     }
   },
+  onOpenChange(isOpen) {
+    let title = $t('AbpIdentity.SetPassword');
+    if (isOpen) {
+      const { userName } = modalApi.getData<IdentityUserDto>();
+      title += ` - ${userName}`;
+    }
+    modalApi.setState({ title });
+  },
   title: $t('AbpIdentity.SetPassword'),
 });
 
 async function onSubmit(input: Record<string, any>) {
-  const { id } = modalApi.getData<Record<string, any>>();
+  const { id } = modalApi.getData<IdentityUserDto>();
   await changePasswordApi(id, { password: input.password });
   message.success($t('AbpUi.SavedSuccessfully'));
   emits('change');

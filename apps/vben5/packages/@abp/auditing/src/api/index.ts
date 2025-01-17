@@ -1,2 +1,2 @@
-export * as auditLogsApi from './audit-logs';
-export * as entityChangesApi from './entity-changes';
+export { useAuditLogsApi } from './useAuditLogsApi';
+export { useEntityChangesApi } from './useEntityChangesApi';

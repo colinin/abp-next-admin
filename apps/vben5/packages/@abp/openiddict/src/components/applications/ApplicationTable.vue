@@ -21,7 +21,7 @@ import {
 } from '@ant-design/icons-vue';
 import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/applications';
+import { useApplicationsApi } from '../../api/useApplicationsApi';
 import { ApplicationsPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -35,6 +35,7 @@ const SecretIcon = createIconifyIcon('codicon:gist-secret');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 
 const { hasAccessByCodes } = useAccess();
+const { deleteApi, getPagedListApi } = useApplicationsApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开

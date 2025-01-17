@@ -159,6 +159,7 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
       roleChangeDrawerApi.setData({
         entityId: row.id,
         entityTypeFullName: 'Volo.Abp.Identity.IdentityRole',
+        subject: row.name,
       });
       roleChangeDrawerApi.open();
       break;
@@ -203,72 +204,63 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
-        <div class="basis-1/3">
-          <Button
-            :icon="h(EditOutlined)"
-            block
-            type="link"
-            v-access:code="[IdentityRolePermissions.Update]"
-            @click="handleEdit(row)"
-          >
-            {{ $t('AbpUi.Edit') }}
-          </Button>
-        </div>
-        <div class="basis-1/3">
-          <Button
-            :icon="h(DeleteOutlined)"
-            block
-            danger
-            type="link"
-            v-access:code="[IdentityRolePermissions.Delete]"
-            @click="handleDelete(row)"
-          >
-            {{ $t('AbpUi.Delete') }}
-          </Button>
-        </div>
-        <div class="basis-1/3">
-          <Dropdown>
-            <template #overlay>
-              <Menu @click="(info) => handleMenuClick(row, info)">
-                <MenuItem
-                  v-if="
-                    hasAccessByCodes([
-                      IdentityRolePermissions.ManagePermissions,
-                    ])
-                  "
-                  key="permissions"
-                  :icon="h(PermissionsOutlined)"
-                >
-                  {{ $t('AbpPermissionManagement.Permissions') }}
-                </MenuItem>
-                <MenuItem
-                  v-if="
-                    hasAccessByCodes([IdentityRolePermissions.ManageClaims])
-                  "
-                  key="claims"
-                  :icon="h(ClaimOutlined)"
-                >
-                  {{ $t('AbpIdentity.ManageClaim') }}
-                </MenuItem>
-                <MenuItem
-                  v-if="hasAccessByCodes(['Platform.Menu.ManageRoles'])"
-                  key="menus"
-                  :icon="h(MenuOutlined)"
-                >
-                  {{ $t('AppPlatform.Menu:Manage') }}
-                </MenuItem>
-                <MenuItem
-                  v-if="hasAccessByCodes([AuditLogPermissions.Default])"
-                  key="entity-changes"
-                  :icon="h(AuditLogIcon)"
-                >
-                  {{ $t('AbpAuditLogging.EntitiesChanged') }}
-                </MenuItem>
-              </Menu>
-            </template>
-            <Button :icon="h(EllipsisOutlined)" type="link" />
-          </Dropdown>
-        </div>
+        <Button
+          :icon="h(EditOutlined)"
+          block
+          type="link"
+          v-access:code="[IdentityRolePermissions.Update]"
+          @click="handleEdit(row)"
+        >
+          {{ $t('AbpUi.Edit') }}
+        </Button>
+        <Button
+          v-if="row.isStatic === false"
+          :icon="h(DeleteOutlined)"
+          block
+          danger
+          type="link"
+          v-access:code="[IdentityRolePermissions.Delete]"
+          @click="handleDelete(row)"
+        >
+          {{ $t('AbpUi.Delete') }}
+        </Button>
+        <Dropdown>
+          <template #overlay>
+            <Menu @click="(info) => handleMenuClick(row, info)">
+              <MenuItem
+                v-if="
+                  hasAccessByCodes([IdentityRolePermissions.ManagePermissions])
+                "
+                key="permissions"
+                :icon="h(PermissionsOutlined)"
+              >
+                {{ $t('AbpPermissionManagement.Permissions') }}
+              </MenuItem>
+              <MenuItem
+                v-if="hasAccessByCodes([IdentityRolePermissions.ManageClaims])"
+                key="claims"
+                :icon="h(ClaimOutlined)"
+              >
+                {{ $t('AbpIdentity.ManageClaim') }}
+              </MenuItem>
+              <MenuItem
+                v-if="hasAccessByCodes(['Platform.Menu.ManageRoles'])"
+                key="menus"
+                :icon="h(MenuOutlined)"
+              >
+                {{ $t('AppPlatform.Menu:Manage') }}
+              </MenuItem>
+              <MenuItem
+                v-if="hasAccessByCodes([AuditLogPermissions.Default])"
+                key="entity-changes"
+                :icon="h(AuditLogIcon)"
+              >
+                {{ $t('AbpAuditLogging.EntitiesChanged') }}
+              </MenuItem>
+            </Menu>
+          </template>
+          <Button :icon="h(EllipsisOutlined)" type="link" />
+        </Dropdown>
       </div>
     </template>
   </Grid>

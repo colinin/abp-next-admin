@@ -16,6 +16,10 @@ interface Action {
   serviceName?: string;
 }
 
+interface AuditLogDeleteManyInput {
+  ids: string[];
+}
+
 interface AuditLogDto {
   [key: string]: any;
   actions?: Action[];
@@ -59,4 +63,9 @@ interface AuditLogGetListInput extends PagedAndSortedResultRequestDto {
   userName?: string;
 }
 
-export type { Action, AuditLogDto, AuditLogGetListInput };
+export type {
+  Action,
+  AuditLogDeleteManyInput,
+  AuditLogDto,
+  AuditLogGetListInput,
+};
