@@ -66,7 +66,7 @@ public class AccountEmailSender :
 
         var url = await AppUrlProvider.GetUrlAsync(appName, AccountUrlNames.EmailConfirm);
 
-        var link = $"{url}?userId={user.Id}&{TenantResolverConsts.DefaultTenantKey}={user.TenantId}&confirmToken={UrlEncoder.Default.Encode(confirmToken)}";
+        var link = $"{url}?userId={user.Id}&{TenantResolverConsts.DefaultTenantKey}={user.TenantId}&confirmToken={confirmToken}";
 
         if (!returnUrl.IsNullOrEmpty())
         {

@@ -9,8 +9,11 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using System.Web;
 using Volo.Abp;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Application.Dtos;
@@ -165,11 +168,12 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         }
 
         var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmToken = WebUtility.UrlEncode(token);
         var sender = LazyServiceProvider.LazyGetRequiredService<IAccountEmailConfirmSender>();
 
         await sender.SendEmailConfirmLinkAsync(
             user,
-            token,
+            confirmToken,
             input.AppName,
             input.ReturnUrl,
             input.ReturnUrlHash);
@@ -181,7 +185,9 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
         var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
 
-        (await UserManager.ConfirmEmailAsync(user, input.ConfirmToken)).CheckErrors();
+        // 字符编码错误
+        var confirmToken = WebUtility.UrlDecode(input.ConfirmToken.Replace("%20", "%2B"));
+        (await UserManager.ConfirmEmailAsync(user, confirmToken)).CheckErrors();
 
         await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
         {
