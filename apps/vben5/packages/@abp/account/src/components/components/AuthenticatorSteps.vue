@@ -207,4 +207,8 @@ async function onValidCode() {
   </Card>
 </template>
 
-<style scoped></style>
+<style scoped>
+.mh-350 {
+  min-height: 350px;
+}
+</style>

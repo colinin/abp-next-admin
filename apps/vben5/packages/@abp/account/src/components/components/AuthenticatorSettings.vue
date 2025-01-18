@@ -63,8 +63,4 @@ onMounted(onGet);
   </Card>
 </template>
 
-<style scoped>
-.mh-350 {
-  min-height: 350px;
-}
-</style>
+<style scoped></style>
