@@ -1,24 +1,40 @@
 import type { FeatureValue, IFeatureChecker } from '../types/features';
 
-import { computed } from 'vue';
+import { ref, watch } from 'vue';
 
 import { useAbpStore } from '../store/abp';
 
-export function useFeatures() {
+export function useFeatures(): IFeatureChecker {
   const abpStore = useAbpStore();
-  const getFeatures = computed(() => {
-    const fetures = abpStore.application?.features.values ?? {};
-    const fetureValues = Object.keys(fetures).map((key): FeatureValue => {
-      return {
-        name: key,
-        value: fetures[key] ?? '',
-      };
-    });
-    return fetureValues;
-  });
+
+  const features = ref<FeatureValue[]>([]);
+
+  watch(
+    () => abpStore.application,
+    (application) => {
+      if (!application?.features.values) {
+        features.value = [];
+        return;
+      }
+      const featuresSet: FeatureValue[] = [];
+      Object.keys(application.features.values).forEach((name) => {
+        if (application.features.values[name]) {
+          featuresSet.push({
+            name,
+            value: application.features.values[name],
+          });
+        }
+      });
+      features.value = featuresSet;
+    },
+    {
+      deep: true,
+      immediate: true,
+    },
+  );
 
   function get(name: string): FeatureValue | undefined {
-    return getFeatures.value.find((feature) => name === feature.name);
+    return features.value.find((feature) => name === feature.name);
   }
 
   function _isEnabled(name: string): boolean {
@@ -52,5 +68,5 @@ export function useFeatures() {
     },
   };
 
-  return { featureChecker };
+  return featureChecker;
 }

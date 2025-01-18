@@ -50,7 +50,7 @@ export function useRequireFeaturesSimpleStateChecker<
   featureNames: string[],
   requiresAll: boolean = false,
 ): ISimpleStateChecker<TState> {
-  const { featureChecker } = useFeatures();
+  const featureChecker = useFeatures();
   return new RequireFeaturesSimpleStateChecker(
     featureChecker,
     featureNames,

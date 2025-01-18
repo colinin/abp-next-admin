@@ -12,7 +12,7 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
-import { useAbpStore } from '@abp/core';
+import { useAbpStore, useFeatures } from '@abp/core';
 import { PermissionModal } from '@abp/permissions';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -37,7 +37,9 @@ const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 
 const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
 const ClaimModal = defineAsyncComponent(() => import('./RoleClaimModal.vue'));
+
 const abpStore = useAbpStore();
+const { isEnabled } = useFeatures();
 const { hasAccessByCodes } = useAccess();
 const { cancel, deleteApi, getPagedListApi } = useRolesApi();
 
@@ -251,7 +253,10 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
                 {{ $t('AppPlatform.Menu:Manage') }}
               </MenuItem>
               <MenuItem
-                v-if="hasAccessByCodes([AuditLogPermissions.Default])"
+                v-if="
+                  isEnabled('AbpAuditing.Logging.AuditLog') &&
+                  hasAccessByCodes([AuditLogPermissions.Default])
+                "
                 key="entity-changes"
                 :icon="h(AuditLogIcon)"
               >

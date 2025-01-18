@@ -12,6 +12,7 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
+import { useFeatures } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -36,6 +37,7 @@ const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
 const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 
+const { isEnabled } = useFeatures();
 const { hasAccessByCodes } = useAccess();
 const { cancel, deleteApi, getPagedListApi } = useClaimTypesApi();
 
@@ -194,7 +196,7 @@ const onMenuClick = (row: IdentityClaimTypeDto, info: MenuInfo) => {
     case 'entity-changes': {
       roleChangeDrawerApi.setData({
         entityId: row.id,
-        entityTypeFullName: 'Volo.Abp.Identity.IdentityRole',
+        entityTypeFullName: 'Volo.Abp.Identity.IdentityClaimType',
         subject: row.name,
       });
       roleChangeDrawerApi.open();
@@ -249,7 +251,7 @@ const onMenuClick = (row: IdentityClaimTypeDto, info: MenuInfo) => {
         >
           {{ $t('AbpUi.Delete') }}
         </Button>
-        <Dropdown>
+        <Dropdown v-if="isEnabled('AbpAuditing.Logging.AuditLog')">
           <template #overlay>
             <Menu @click="(info) => onMenuClick(row, info)">
               <MenuItem

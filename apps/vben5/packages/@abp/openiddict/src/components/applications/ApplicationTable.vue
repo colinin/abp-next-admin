@@ -7,10 +7,12 @@ import type { OpenIddictApplicationDto } from '../../types/applications';
 import { defineAsyncComponent, h } from 'vue';
 
 import { useAccess } from '@vben/access';
-import { useVbenModal } from '@vben/common-ui';
+import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
+import { useFeatures } from '@abp/core';
 import { PermissionModal } from '@abp/permissions';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -29,11 +31,14 @@ defineOptions({
 });
 
 const MenuItem = Menu.Item;
+
+const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
 const SecretIcon = createIconifyIcon('codicon:gist-secret');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 
+const { isEnabled } = useFeatures();
 const { hasAccessByCodes } = useAccess();
 const { deleteApi, getPagedListApi } = useApplicationsApi();
 
@@ -148,6 +153,9 @@ const [ApplicationSecretModal, secretModalApi] = useVbenModal({
 const [ApplicationPermissionModal, permissionModalApi] = useVbenModal({
   connectedComponent: PermissionModal,
 });
+const [ApplicationChangeDrawer, applicationChangeDrawerApi] = useVbenDrawer({
+  connectedComponent: EntityChangeDrawer,
+});
 
 const [Grid, { query }] = useVbenVxeGrid({
   formOptions,
@@ -179,6 +187,16 @@ const onDelete = (row: OpenIddictApplicationDto) => {
 
 const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
   switch (info.key) {
+    case 'entity-changes': {
+      applicationChangeDrawerApi.setData({
+        entityId: row.id,
+        entityTypeFullName:
+          'Volo.Abp.OpenIddict.Applications.OpenIddictApplication',
+        subject: row.clientId,
+      });
+      applicationChangeDrawerApi.open();
+      break;
+    }
     case 'permissions': {
       permissionModalApi.setData({
         displayName: row.clientId,
@@ -271,6 +289,16 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
                 >
                   {{ $t('AbpOpenIddict.ManagePermissions') }}
                 </MenuItem>
+                <MenuItem
+                  v-if="
+                    isEnabled('AbpAuditing.Logging.AuditLog') &&
+                    hasAccessByCodes([AuditLogPermissions.Default])
+                  "
+                  key="entity-changes"
+                  :icon="h(AuditLogIcon)"
+                >
+                  {{ $t('AbpAuditLogging.EntitiesChanged') }}
+                </MenuItem>
               </Menu>
             </template>
             <Button :icon="h(EllipsisOutlined)" type="link" />
@@ -282,6 +310,7 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
   <ApplicationModal @change="() => query()" />
   <ApplicationSecretModal @change="() => query()" />
   <ApplicationPermissionModal />
+  <ApplicationChangeDrawer />
 </template>
 
 <style lang="scss" scoped></style>

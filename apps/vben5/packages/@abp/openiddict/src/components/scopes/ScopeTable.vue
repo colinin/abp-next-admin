@@ -1,22 +1,26 @@
 <script setup lang="ts">
 import type { VbenFormProps, VxeGridProps } from '@abp/ui';
+import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { OpenIddictScopeDto } from '../../types/scopes';
 
 import { defineAsyncComponent, h } from 'vue';
 
-import { useVbenModal } from '@vben/common-ui';
+import { useAccess } from '@vben/access';
+import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
+import { formatToDateTime, useFeatures } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
+  EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
 import { useScopesApi } from '../../api/useScopesApi';
 import { ScopesPermissions } from '../../constants/permissions';
@@ -25,9 +29,14 @@ defineOptions({
   name: 'ScopeTable',
 });
 
+const MenuItem = Menu.Item;
+
+const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
 
+const { isEnabled } = useFeatures();
+const { hasAccessByCodes } = useAccess();
 const { deleteApi, getPagedListApi } = useScopesApi();
 
 const formOptions: VbenFormProps = {
@@ -109,8 +118,12 @@ const gridOptions: VxeGridProps<OpenIddictScopeDto> = {
     zoom: true,
   },
 };
+
 const [ScopeModal, modalApi] = useVbenModal({
   connectedComponent: defineAsyncComponent(() => import('./ScopeModal.vue')),
+});
+const [ScopeChangeDrawer, scopeChangeDrawerApi] = useVbenDrawer({
+  connectedComponent: EntityChangeDrawer,
 });
 const [Grid, { query }] = useVbenVxeGrid({
   formOptions,
@@ -138,6 +151,19 @@ const onDelete = (row: OpenIddictScopeDto) => {
     },
     title: $t('AbpUi.AreYouSure'),
   });
+};
+const onMenuClick = (row: OpenIddictScopeDto, info: MenuInfo) => {
+  switch (info.key) {
+    case 'entity-changes': {
+      scopeChangeDrawerApi.setData({
+        entityId: row.id,
+        entityTypeFullName: 'Volo.Abp.OpenIddict.Scopes.OpenIddictScope',
+        subject: row.name,
+      });
+      scopeChangeDrawerApi.open();
+      break;
+    }
+  }
 };
 </script>
 
@@ -167,33 +193,44 @@ const onDelete = (row: OpenIddictScopeDto) => {
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
-        <div class="basis-1/3">
-          <Button
-            :icon="h(EditOutlined)"
-            block
-            type="link"
-            v-access:code="[ScopesPermissions.Update]"
-            @click="onUpdate(row)"
-          >
-            {{ $t('AbpUi.Edit') }}
-          </Button>
-        </div>
-        <div class="basis-1/3">
-          <Button
-            :icon="h(DeleteOutlined)"
-            block
-            danger
-            type="link"
-            v-access:code="[ScopesPermissions.Delete]"
-            @click="onDelete(row)"
-          >
-            {{ $t('AbpUi.Delete') }}
-          </Button>
-        </div>
+        <Button
+          :icon="h(EditOutlined)"
+          block
+          type="link"
+          v-access:code="[ScopesPermissions.Update]"
+          @click="onUpdate(row)"
+        >
+          {{ $t('AbpUi.Edit') }}
+        </Button>
+        <Button
+          :icon="h(DeleteOutlined)"
+          block
+          danger
+          type="link"
+          v-access:code="[ScopesPermissions.Delete]"
+          @click="onDelete(row)"
+        >
+          {{ $t('AbpUi.Delete') }}
+        </Button>
+        <Dropdown v-if="isEnabled('AbpAuditing.Logging.AuditLog')">
+          <template #overlay>
+            <Menu @click="(info) => onMenuClick(row, info)">
+              <MenuItem
+                v-if="hasAccessByCodes([AuditLogPermissions.Default])"
+                key="entity-changes"
+                :icon="h(AuditLogIcon)"
+              >
+                {{ $t('AbpAuditLogging.EntitiesChanged') }}
+              </MenuItem>
+            </Menu>
+          </template>
+          <Button :icon="h(EllipsisOutlined)" type="link" />
+        </Dropdown>
       </div>
     </template>
   </Grid>
   <ScopeModal @change="() => query()" />
+  <ScopeChangeDrawer />
 </template>
 
 <style lang="scss" scoped></style>

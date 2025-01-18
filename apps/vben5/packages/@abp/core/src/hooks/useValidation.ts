@@ -17,7 +17,7 @@ import { ValidationEnum } from '../constants';
 import { isEmail, isPhone } from '../utils/regex';
 import { useLocalization } from './useLocalization';
 
-export function useValidation() {
+export function useValidation(): RuleCreator {
   const { L } = useLocalization(['AbpValidation']);
   function _getFieldName(field: Field) {
     return __getFieldName(
@@ -399,7 +399,5 @@ export function useValidation() {
     },
   };
 
-  return {
-    ruleCreator,
-  };
+  return ruleCreator;
 }
