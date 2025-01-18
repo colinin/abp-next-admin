@@ -40,6 +40,7 @@
     "ResetAuthenticator": "重置验证器",
     "ResetAuthenticatorDesc": "如果你想更换身份验证程序,可以在这里重置验证器。",
     "ResetAuthenticatorWarning": "重置身份验证器密钥,在重新配置之前身份验证器代码将无法使用,如果你没有其他验证器,二次认证将被解除,这可能会使你的账号安全等级降低。",
+    "YourAuthenticatorIsSuccessfullyReset": "您的验证器重置成功.",
     "Steps:PreStep": "上一步",
     "Steps:NextStep": "下一步",
     "Steps:Done": "完成"
