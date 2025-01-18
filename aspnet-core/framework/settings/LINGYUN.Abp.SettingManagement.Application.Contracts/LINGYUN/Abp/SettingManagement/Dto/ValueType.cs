@@ -3,6 +3,10 @@
 public enum ValueType
 {
     /// <summary>
+    /// 不加入设置管理(配合前端请勿传递设置值)
+    /// </summary>
+    NoSet = -1,
+    /// <summary>
     /// 字符
     /// </summary>
     String = 0,
