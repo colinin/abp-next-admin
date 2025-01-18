@@ -128,8 +128,6 @@ class SimpleStateCheckerSerializer implements ISimpleStateCheckerSerializer {
 
 export function useSimpleStateCheck<
   TState extends IHasSimpleStateCheckers<TState>,
->() {
-  return {
-    serializer: new SimpleStateCheckerSerializer(),
-  };
+>(): ISimpleStateCheckerSerializer {
+  return new SimpleStateCheckerSerializer();
 }

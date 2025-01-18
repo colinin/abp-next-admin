@@ -12,7 +12,7 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
-import { formatToDateTime, useAbpStore } from '@abp/core';
+import { formatToDateTime, useAbpStore, useFeatures } from '@abp/core';
 import { PermissionModal } from '@abp/permissions';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -63,6 +63,7 @@ const getLockEnd = computed(() => {
 });
 
 const abpStore = useAbpStore();
+const { isEnabled } = useFeatures();
 const { hasAccessByCodes } = useAccess();
 const { cancel, deleteApi, getPagedListApi, unLockApi } = useUsersApi();
 
@@ -353,7 +354,10 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                   {{ $t('AppPlatform.Menu:Manage') }}
                 </MenuItem>
                 <MenuItem
-                  v-if="hasAccessByCodes([AuditLogPermissions.Default])"
+                  v-if="
+                    isEnabled('AbpAuditing.Logging.AuditLog') &&
+                    hasAccessByCodes([AuditLogPermissions.Default])
+                  "
                   key="entity-changes"
                   :icon="h(AuditLogIcon)"
                 >

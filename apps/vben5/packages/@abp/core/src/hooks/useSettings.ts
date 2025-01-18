@@ -1,37 +1,47 @@
 import type { ISettingProvider, SettingValue } from '../types/settings';
 
-import { computed } from 'vue';
+import { ref, watch } from 'vue';
 
 import { useAbpStore } from '../store';
 
 export function useSettings(): ISettingProvider {
   const abpStore = useAbpStore();
-  const getSettings = computed(() => {
-    if (!abpStore.application) {
-      return [];
-    }
-    const { values: settings } = abpStore.application.setting;
-    const settingValues = Object.keys(settings).map((key): SettingValue => {
-      return {
-        name: key,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        value: settings[key]!,
-      };
-    });
-    return settingValues;
-  });
+
+  const settings = ref<SettingValue[]>([]);
+
+  watch(
+    () => abpStore.application,
+    (application) => {
+      if (!application?.setting.values) {
+        settings.value = [];
+        return;
+      }
+      const settingsSet: SettingValue[] = [];
+      Object.keys(application.setting.values).forEach((name) => {
+        if (application.setting.values[name]) {
+          settingsSet.push({
+            name,
+            value: application.setting.values[name],
+          });
+        }
+      });
+      settings.value = settingsSet;
+    },
+    {
+      deep: true,
+      immediate: true,
+    },
+  );
 
   function get(name: string): SettingValue | undefined {
-    return getSettings.value.find((setting) => name === setting.name);
+    return settings.value.find((setting) => name === setting.name);
   }
 
   function getAll(...names: string[]): SettingValue[] {
     if (names) {
-      return getSettings.value.filter((setting) =>
-        names.includes(setting.name),
-      );
+      return settings.value.filter((setting) => names.includes(setting.name));
     }
-    return getSettings.value;
+    return settings.value;
   }
 
   function getOrDefault<T>(name: string, defaultValue: T): string | T {

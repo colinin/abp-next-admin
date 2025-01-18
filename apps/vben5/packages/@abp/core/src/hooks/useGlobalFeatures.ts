@@ -4,10 +4,13 @@ import { useAbpStore } from '../store/abp';
 import { isNullOrWhiteSpace } from '../utils/string';
 
 export function useGlobalFeatures() {
+  const abpStore = useAbpStore();
   const getGlobalFeatures = computed(() => {
-    const abpStore = useAbpStore();
+    if (!abpStore.application) {
+      return [];
+    }
     const enabledFeatures =
-      abpStore.application?.globalFeatures.enabledFeatures ?? [];
+      abpStore.application.globalFeatures.enabledFeatures ?? [];
     return enabledFeatures;
   });
 
