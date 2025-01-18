@@ -28,9 +28,8 @@ export function useTokenApi() {
         client_id: clientId,
         client_secret: clientSecret,
         grant_type: 'password',
-        password: input.password,
         scope: audience,
-        username: input.username,
+        ...input,
       },
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

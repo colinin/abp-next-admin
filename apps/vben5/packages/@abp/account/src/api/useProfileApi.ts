@@ -2,7 +2,9 @@ import type {
   AuthenticatorDto,
   AuthenticatorRecoveryCodeDto,
   ChangePasswordInput,
+  ConfirmEmailInput,
   ProfileDto,
+  SendEmailConfirmCodeDto,
   TwoFactorEnabledDto,
   UpdateProfileDto,
   VerifyAuthenticatorCodeInput,
@@ -103,14 +105,40 @@ export function useProfileApi() {
     });
   }
 
+  /**
+   * 发送邮件确认链接
+   * @param input 参数
+   */
+  function sendEmailConfirmLinkApi(
+    input: SendEmailConfirmCodeDto,
+  ): Promise<void> {
+    return request('/api/account/my-profile/send-email-confirm-link', {
+      data: input,
+      method: 'POST',
+    });
+  }
+
+  /**
+   * 确认邮件
+   * @param input 参数
+   */
+  function confirmEmailApi(input: ConfirmEmailInput) {
+    return request('/api/account/my-profile/confirm-email', {
+      data: input,
+      method: 'PUT',
+    });
+  }
+
   return {
     cancel,
     changePasswordApi,
     changeTwoFactorEnabledApi,
+    confirmEmailApi,
     getApi,
     getAuthenticatorApi,
     getTwoFactorEnabledApi,
     resetAuthenticatorApi,
+    sendEmailConfirmLinkApi,
     updateApi,
     verifyAuthenticatorCodeApi,
   };

@@ -2,7 +2,7 @@
 import type { TwoFactorEnabledDto } from '../../types';
 import type { UserInfo } from '../../types/user';
 
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
@@ -16,14 +16,28 @@ defineProps<{
 const emits = defineEmits<{
   (event: 'changePassword'): void;
   (event: 'changePhoneNumber'): void;
-  (event: 'validateEmail'): void;
 }>();
 const ListItem = List.Item;
 const ListItemMeta = List.Item.Meta;
 
-const { changeTwoFactorEnabledApi, getTwoFactorEnabledApi } = useProfileApi();
+const {
+  changeTwoFactorEnabledApi,
+  getTwoFactorEnabledApi,
+  sendEmailConfirmLinkApi,
+} = useProfileApi();
 const twoFactor = ref<TwoFactorEnabledDto>();
 const loading = ref(false);
+
+const sendMailInternal = ref(0);
+const getSendMailLoading = computed(() => {
+  return sendMailInternal.value > 0;
+});
+const getSendMailTitle = computed(() => {
+  if (sendMailInternal.value > 0) {
+    return `${sendMailInternal.value} s`;
+  }
+  return $t('AbpAccount.ClickToValidation');
+});
 
 async function onGet() {
   const dto = await getTwoFactorEnabledApi();
@@ -37,6 +51,24 @@ async function onTwoFactorChange(enabled: boolean) {
     twoFactor.value!.enabled = !enabled;
   } finally {
     loading.value = false;
+  }
+}
+async function onValidateEmail(email: string) {
+  sendMailInternal.value = 60;
+  try {
+    await sendEmailConfirmLinkApi({
+      appName: 'VueVben5',
+      email,
+      returnUrl: window.location.href,
+    });
+    setInterval(() => {
+      if (sendMailInternal.value <= 0) {
+        return;
+      }
+      sendMailInternal.value -= 1;
+    }, 1000);
+  } catch {
+    sendMailInternal.value = 0;
   }
 }
 onMounted(onGet);
@@ -75,12 +107,19 @@ onMounted(onGet);
           </template>
           <template #description>
             {{ userInfo?.phoneNumber }}
-            <Tag v-if="userInfo?.phoneNumberVerified" color="success">
-              {{ $t('abp.account.settings.security.verified') }}
-            </Tag>
-            <Tag v-else color="warning">
-              {{ $t('abp.account.settings.security.unVerified') }}
-            </Tag>
+            <template v-if="!userInfo?.phoneNumber">
+              <Tag color="warning">
+                {{ $t('abp.account.settings.security.unSet') }}
+              </Tag>
+            </template>
+            <template v-else>
+              <Tag v-if="userInfo?.phoneNumberVerified" color="success">
+                {{ $t('abp.account.settings.security.verified') }}
+              </Tag>
+              <Tag v-else color="warning">
+                {{ $t('abp.account.settings.security.unVerified') }}
+              </Tag>
+            </template>
           </template>
         </ListItemMeta>
       </ListItem>
@@ -89,10 +128,11 @@ onMounted(onGet);
         <template #extra>
           <Button
             v-if="userInfo?.email && !userInfo?.emailVerified"
+            :disabled="getSendMailLoading"
             type="link"
-            @click="emits('validateEmail')"
+            @click="onValidateEmail(userInfo.email)"
           >
-            {{ $t('AbpAccount.ClickToValidation') }}
+            {{ getSendMailTitle }}
           </Button>
         </template>
         <ListItemMeta>

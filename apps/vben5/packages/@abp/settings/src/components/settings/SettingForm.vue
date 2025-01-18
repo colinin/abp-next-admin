@@ -88,6 +88,9 @@ function onDateChange(e: any, setting: SettingDetail) {
 }
 
 function onValueChange(setting: SettingDetail) {
+  if (setting.valueType === ValueType.NoSet) {
+    return;
+  }
   const index = settingsUpdateInput.value.settings.findIndex(
     (s) => s.name === setting.name,
   );

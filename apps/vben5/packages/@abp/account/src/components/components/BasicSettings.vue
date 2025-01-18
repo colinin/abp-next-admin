@@ -79,12 +79,6 @@ watchEffect(() => {
             />
           </FormItem>
           <FormItem
-            :label="$t('AbpAccount.DisplayName:PhoneNumber')"
-            name="phoneNumber"
-          >
-            <Input v-model:value="formModel.phoneNumber" autocomplete="off" />
-          </FormItem>
-          <FormItem
             :label="$t('AbpAccount.DisplayName:Surname')"
             name="surname"
           >

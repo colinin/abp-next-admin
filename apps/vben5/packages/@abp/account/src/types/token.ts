@@ -48,11 +48,27 @@ interface OAuthTokenResult {
   token_type: string;
 }
 
+interface OAuthError {
+  /** 错误类型 */
+  error: string;
+  /** 错误描述 */
+  error_description: string;
+  /** 错误描述链接 */
+  error_uri?: string;
+}
+
+interface TwoFactorError extends OAuthError {
+  twoFactorToken: string;
+  userId: string;
+}
+
 export type {
+  OAuthError,
   OAuthTokenRefreshModel,
   OAuthTokenResult,
   PasswordTokenRequest,
   PasswordTokenRequestModel,
   TokenRequest,
   TokenResult,
+  TwoFactorError,
 };
