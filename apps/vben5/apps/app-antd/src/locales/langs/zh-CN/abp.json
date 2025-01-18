@@ -1,5 +1,19 @@
 {
   "title": "Abp框架",
+  "oauth": {
+    "Invalid username or password!": "用户名或密码错误!",
+    "Invalid authenticator code!": "无效的验证器代码!",
+    "The specified refresh token is no longer valid.": "会话已过期,请重新登陆!",
+    "RequiresTwoFactor": "需要二次认证",
+    "twoFactor": {
+      "title": "二次认证",
+      "authenticator": "验证方式",
+      "emailAddress": "电子邮件",
+      "phoneNumber": "手机号码",
+      "getCode": "获取验证码",
+      "code": "验证码"
+    }
+  },
   "manage": {
     "title": "管理",
     "identity": {
@@ -38,6 +52,7 @@
       },
       "security": {
         "title": "安全设置",
+        "unSet": "未设置",
         "verified": "已验证",
         "unVerified": "未验证",
         "email": "电子邮件",

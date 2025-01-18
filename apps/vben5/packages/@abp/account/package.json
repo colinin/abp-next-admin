@@ -34,6 +34,7 @@
     "@vueuse/core": "catalog:",
     "@vueuse/integrations": "catalog:",
     "ant-design-vue": "catalog:",
-    "vue": "catalog:*"
+    "vue": "catalog:*",
+    "vue-router": "catalog:"
   }
 }

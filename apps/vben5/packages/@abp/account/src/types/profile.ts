@@ -55,11 +55,23 @@ interface AuthenticatorRecoveryCodeDto {
   recoveryCodes: string[];
 }
 
+interface SendEmailConfirmCodeDto {
+  appName: string;
+  email: string;
+  returnUrl?: string;
+}
+
+interface ConfirmEmailInput {
+  confirmToken: string;
+}
+
 export type {
   AuthenticatorDto,
   AuthenticatorRecoveryCodeDto,
   ChangePasswordInput,
+  ConfirmEmailInput,
   ProfileDto,
+  SendEmailConfirmCodeDto,
   TwoFactorEnabledDto,
   UpdateProfileDto,
   VerifyAuthenticatorCodeInput,

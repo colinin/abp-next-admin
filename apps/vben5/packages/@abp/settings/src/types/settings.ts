@@ -18,6 +18,7 @@ export enum ValueType {
   Array = 4,
   Boolean = 2,
   Date = 3,
+  NoSet = -1,
   Number = 1,
   Object = 10,
   Option = 5,

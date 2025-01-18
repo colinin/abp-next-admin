@@ -1,5 +1,19 @@
 {
   "title": "Abp Framework",
+  "oauth": {
+    "Invalid username or password!": "Invalid username or password!",
+    "Invalid authenticator code!": "Invalid authenticator code!",
+    "The specified refresh token is no longer valid.": "The session has expired. Please log in again!",
+    "RequiresTwoFactor": "Requires Two Factor",
+    "twoFactor": {
+      "title": "Two Factor",
+      "authenticator": "Authenticator",
+      "emailAddress": "Email Address",
+      "phoneNumber": "Phone Number",
+      "getCode": "Get Code",
+      "code": "Code"
+    }
+  },
   "manage": {
     "title": "Manage",
     "identity": {
@@ -38,6 +52,7 @@
       },
       "security": {
         "title": "Security Settings",
+        "unSet": "Not Set",
         "verified": "Verified",
         "unVerified": "Not Verified",
         "email": "Email",
