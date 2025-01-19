@@ -1,4 +1,3 @@
-import { $t } from '@vben/locales';
 import { preferences } from '@vben/preferences';
 import {
   authenticateResponseInterceptor,
@@ -6,8 +5,8 @@ import {
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
-import { useTokenApi } from '@abp/account';
-import { requestClient } from '@abp/request';
+import { useOAuthError, useTokenApi } from '@abp/account';
+import { requestClient, useWrapperResult } from '@abp/request';
 import { message } from 'ant-design-vue';
 
 import { useAuthStore } from '#/store';
@@ -38,13 +37,17 @@ export function initRequestClient() {
   async function doRefreshToken() {
     const accessStore = useAccessStore();
     if (accessStore.refreshToken) {
-      const { accessToken, tokenType, refreshToken } = await refreshTokenApi({
-        refreshToken: accessStore.refreshToken,
-      });
-      const newToken = `${tokenType} ${accessToken}`;
-      accessStore.setAccessToken(newToken);
-      accessStore.setRefreshToken(refreshToken);
-      return newToken;
+      try {
+        const { accessToken, tokenType, refreshToken } = await refreshTokenApi({
+          refreshToken: accessStore.refreshToken,
+        });
+        const newToken = `${tokenType} ${accessToken}`;
+        accessStore.setAccessToken(newToken);
+        accessStore.setRefreshToken(refreshToken);
+        return newToken;
+      } catch {
+        console.warn('The refresh token has expired or is unavailable.');
+      }
     }
     return '';
   }
@@ -68,17 +71,11 @@ export function initRequestClient() {
   // response数据解构
   requestClient.addResponseInterceptor<any>({
     fulfilled: (response) => {
-      const { data, status, headers } = response;
+      const { data, status } = response;
+      const { hasWrapResult, getData } = useWrapperResult(response);
 
-      if (headers._abpwrapresult === 'true') {
-        const { code, result, message, details } = data;
-        const hasSuccess = data && Reflect.has(data, 'code') && code === '0';
-        if (hasSuccess) {
-          return result;
-        }
-        const content = details || message;
-
-        throw Object.assign({}, response, { response, message: content });
+      if (hasWrapResult()) {
+        return getData();
       }
 
       if (status >= 200 && status < 400) {
@@ -107,7 +104,8 @@ export function initRequestClient() {
       // 当前mock接口返回的错误字段是 error 或者 message
       const responseData = error?.response?.data ?? {};
       if (responseData?.error_description) {
-        message.error($t(`abp.oauth.${responseData.error_description}`) || msg);
+        const { formatError } = useOAuthError();
+        message.error(formatError(responseData) || msg);
         return;
       }
       const errorMessage = responseData?.error ?? responseData?.message ?? '';

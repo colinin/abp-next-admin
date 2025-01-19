@@ -1,4 +1,5 @@
 export * from './dto';
+export * from './error';
 export * from './features';
 export * from './global';
 export * from './localization';
