@@ -1,10 +1,6 @@
 {
   "title": "Abp框架",
   "oauth": {
-    "invalidUserNameOrPassword": "用户名或密码错误!",
-    "invalidAuthenticatorCode": "无效的验证器代码!",
-    "sessionExpired": "会话已过期,请重新登陆!",
-    "requiresTwoFactor": "需要二次认证",
     "twoFactor": {
       "title": "二次认证",
       "authenticator": "验证方式",

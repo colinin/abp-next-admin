@@ -1,10 +1,6 @@
 {
   "title": "Abp Framework",
   "oauth": {
-    "invalidUserNameOrPassword": "Invalid username or password!!",
-    "invalidAuthenticatorCode": "Invalid authenticator code!",
-    "sessionExpired": "The session has expired. Please log in again!",
-    "requiresTwoFactor": "Requires Two Factor",
     "twoFactor": {
       "title": "Two Factor",
       "authenticator": "Authenticator",
