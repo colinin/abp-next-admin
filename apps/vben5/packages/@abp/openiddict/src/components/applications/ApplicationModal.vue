@@ -26,6 +26,7 @@ import { $t } from '@vben/locales';
 
 import { DownOutlined } from '@ant-design/icons-vue';
 import {
+  Checkbox,
   Dropdown,
   Form,
   Input,
@@ -137,6 +138,9 @@ const getSupportScopes = computed((): TransferItem[] => {
       title: type,
     };
   });
+});
+const getPkceEnabled = computed(() => {
+  return formModel.value.requirements?.includes('pkce');
 });
 
 const { discoveryApi } = useOpenIdApi();
@@ -265,6 +269,13 @@ function onUriDelete(uri: string) {
       break;
     }
   }
+}
+function onPkceChange(checked: boolean) {
+  const requirements: string[] = [];
+  if (checked) {
+    requirements.push('pkce');
+  }
+  formModel.value.requirements = requirements;
 }
 </script>
 
@@ -401,6 +412,17 @@ function onUriDelete(uri: string) {
         </TabPane>
         <!-- 授权 -->
         <TabPane key="authorize" :tab="$t('AbpOpenIddict.Authorizations')">
+          <FormItem
+            :label="$t('AbpOpenIddict.Requirements:PKCE')"
+            name="requirements"
+          >
+            <Checkbox
+              :checked="getPkceEnabled"
+              @change="(e) => onPkceChange(e.target.checked)"
+            >
+              {{ $t('AbpOpenIddict.Requirements:PKCE') }}
+            </Checkbox>
+          </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:Endpoints')"
             :label-col="{ span: 4 }"
