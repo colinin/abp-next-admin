@@ -59,7 +59,8 @@
       "bindSettings": "账号绑定",
       "noticeSettings": "新消息通知",
       "authenticatorSettings": "身份验证程序",
-      "changeAvatar": "更改头像"
+      "changeAvatar": "更改头像",
+      "sessionSettings": "会话管理"
     },
     "profile": "个人中心"
   }

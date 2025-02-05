@@ -46,6 +46,12 @@ export const SecurityLogPermissions = {
   /** 删除 */
   Delete: 'AbpAuditing.SecurityLog.Delete',
 };
+/** 用户会话权限 */
+export const IdentitySessionPermissions = {
+  Default: 'AbpIdentity.IdentitySessions',
+  /** 移除 */
+  Revoke: 'AbpIdentity.IdentitySessions.Revoke',
+};
 /**
  * 搜索用户权限
  * @deprecated 后台服务删除权限后将无法使用.

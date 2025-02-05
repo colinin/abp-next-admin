@@ -59,7 +59,8 @@
       "bindSettings": "Bind Settings",
       "noticeSettings": "Notice Settings",
       "authenticatorSettings": "Authenticator Settings",
-      "changeAvatar": "Change Avatar"
+      "changeAvatar": "Change Avatar",
+      "sessionSettings": "Session Settings"
     },
     "profile": "My Profile"
   }
