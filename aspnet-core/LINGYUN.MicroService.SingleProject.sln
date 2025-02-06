@@ -616,6 +616,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.AuditLogging.IP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.Applications.Single.EntityFrameworkCore.MySql", "migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.csproj", "{746813A9-4221-42D8-AAB5-66CB69EC844F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Encryption.SM4", "framework\security\LINGYUN.Abp.Encryption.SM4\LINGYUN.Abp.Encryption.SM4.csproj", "{15106D95-EE9A-4C9D-AB12-41FBE46A9A89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1622,6 +1624,10 @@ Global
 		{746813A9-4221-42D8-AAB5-66CB69EC844F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{746813A9-4221-42D8-AAB5-66CB69EC844F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{746813A9-4221-42D8-AAB5-66CB69EC844F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15106D95-EE9A-4C9D-AB12-41FBE46A9A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15106D95-EE9A-4C9D-AB12-41FBE46A9A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15106D95-EE9A-4C9D-AB12-41FBE46A9A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15106D95-EE9A-4C9D-AB12-41FBE46A9A89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1921,6 +1927,7 @@ Global
 		{5BE31786-EAAB-4C86-8FFF-C07F27FBFD1C} = {99B7CBDE-A251-4738-97F0-DB1DB484BEE1}
 		{77B3C7A4-15C7-4EFF-8451-4F13B4CCA4AE} = {C22741F9-FC56-4AE3-B543-9F15C779D345}
 		{746813A9-4221-42D8-AAB5-66CB69EC844F} = {0D69B63D-F082-4D57-9FF0-355642C56993}
+		{15106D95-EE9A-4C9D-AB12-41FBE46A9A89} = {99B7CBDE-A251-4738-97F0-DB1DB484BEE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {711A43C0-A2F8-4E5C-9B9F-F2551E4B3FF1}
