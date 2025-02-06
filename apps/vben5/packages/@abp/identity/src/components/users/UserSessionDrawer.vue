@@ -10,8 +10,8 @@ import { message, Modal } from 'ant-design-vue';
 
 import { useUserSessionsApi } from '../../api/useUserSessionsApi';
 
-const SessionTable = defineAsyncComponent(
-  () => import('../sessions/SessionTable.vue'),
+const UserSessionTable = defineAsyncComponent(
+  () => import('../sessions/UserSessionTable.vue'),
 );
 
 const sessions = ref<IdentitySessionDto[]>([]);
@@ -60,7 +60,7 @@ async function onRevoke(session: IdentitySessionDto) {
 
 <template>
   <Drawer>
-    <SessionTable :sessions="sessions" @revoke="onRevoke" />
+    <UserSessionTable :sessions="sessions" @revoke="onRevoke" />
   </Drawer>
 </template>
 

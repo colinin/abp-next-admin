@@ -5,7 +5,7 @@ import { onMounted, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { SessionTable } from '@abp/identity';
+import { UserSessionTable } from '@abp/identity';
 import { Card, message, Modal } from 'ant-design-vue';
 
 import { useMySessionApi } from '../../api/useMySessionApi';
@@ -41,7 +41,7 @@ onMounted(getSessions);
 
 <template>
   <Card :bordered="false" :title="$t('abp.account.settings.sessionSettings')">
-    <SessionTable :sessions="sessions" @revoke="onRevoke" />
+    <UserSessionTable :sessions="sessions" @revoke="onRevoke" />
   </Card>
 </template>
 
