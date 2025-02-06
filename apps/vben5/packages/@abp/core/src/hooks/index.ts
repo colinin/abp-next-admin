@@ -1,4 +1,5 @@
 export * from './useAuthorization';
+export * from './useEventBus';
 export * from './useFeatures';
 export * from './useGlobalFeatures';
 export * from './useLocalization';

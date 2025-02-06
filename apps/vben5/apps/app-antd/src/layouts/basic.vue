@@ -23,6 +23,7 @@ import { preferences } from '@vben/preferences';
 import { useAccessStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
 
+import { useSessions } from '#/hooks/useSessions';
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
@@ -59,6 +60,8 @@ const notifications = ref<NotificationItem[]>([
     title: '代办提醒',
   },
 ]);
+
+useSessions();
 
 const { replace } = useRouter();
 const userStore = useUserStore();
