@@ -11,4 +11,8 @@
     <PackageReference Include="Volo.Abp.Security" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\security\LINGYUN.Abp.Encryption.SM4\LINGYUN.Abp.Encryption.SM4.csproj" />
+  </ItemGroup>
+
 </Project>

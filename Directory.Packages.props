@@ -147,6 +147,7 @@
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
 		<PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="$(MicrosoftExtensionsPackageVersion)" />
@@ -157,6 +158,8 @@
 		<PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />
+		<PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.12.0" />
+		<PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
 	</ItemGroup>
 	<!-- Elsa -->
 	<ItemGroup>
@@ -178,6 +181,21 @@
 		<PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.PostgreSql" Version="$(ElsaPackageVersion)" />
 		<PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.SqlServer" Version="$(ElsaPackageVersion)" />
 		<PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.SqlServer" Version="$(ElsaPackageVersion)" />
+	</ItemGroup>
+	<!-- Elsa Next-->
+	<ItemGroup>
+		<PackageVersion Include="Elsa.Api.Client" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Core.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Login.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Localization.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Core.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Login.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Translations" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Agents" Version="$(ElsaNextPackageVersion)"  />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.20" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.20" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.20" />
 	</ItemGroup>
 	<!-- DotNetCore.CAP -->
 	<ItemGroup>
@@ -226,6 +244,7 @@
 		<PackageVersion Include="aliyun-net-sdk-core" Version="1.5.10" />
 		<PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.13.0" />
 		<PackageVersion Include="AgileConfig.Client" Version="1.6.9" />
+		<PackageVersion Include="BouncyCastle.Cryptography" Version="2.5.0" />
 		<PackageVersion Include="Dapr.Client" Version="1.12.0" />
 		<PackageVersion Include="Dapr.Actors" Version="1.12.0" />
 		<PackageVersion Include="Dapr.Actors.AspNetCore" Version="1.12.0" />
