@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.Notifications.Templating;
 using LY.MicroService.Applications.Single.BackgroundJobs;
 using LY.MicroService.Applications.Single.MultiTenancy;
 using Microsoft.Extensions.Localization;
@@ -65,6 +66,10 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
         /// </summary>
         protected IStringLocalizerFactory StringLocalizerFactory { get; }
         /// <summary>
+        /// Reference to <see cref="INotificationTemplateResolver"/>.
+        /// </summary>
+        protected INotificationTemplateResolver NotificationTemplateResolver { get; }
+        /// <summary>
         /// Reference to <see cref="INotificationDataSerializer"/>.
         /// </summary>
         protected INotificationDataSerializer NotificationDataSerializer { get; }
@@ -94,6 +99,7 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
             IOptions<AbpNotificationsPublishOptions> options,
             INotificationStore notificationStore,
             INotificationDataSerializer notificationDataSerializer,
+            INotificationTemplateResolver notificationTemplateResolver,
             INotificationDefinitionManager notificationDefinitionManager,
             INotificationSubscriptionManager notificationSubscriptionManager,
             INotificationPublishProviderManager notificationPublishProviderManager)
@@ -107,6 +113,7 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
             StringLocalizerFactory = stringLocalizerFactory;
             NotificationStore = notificationStore;
             NotificationDataSerializer = notificationDataSerializer;
+            NotificationTemplateResolver = notificationTemplateResolver;
             NotificationDefinitionManager = notificationDefinitionManager;
             NotificationSubscriptionManager = notificationSubscriptionManager;
             NotificationPublishProviderManager = notificationPublishProviderManager;
@@ -130,23 +137,25 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
             }
             using (CultureHelper.Use(culture, culture))
             {
+                var result = await NotificationTemplateResolver.ResolveAsync(eventData.Data);
+
                 if (notification.NotificationType == NotificationType.System)
                 {
                     using (CurrentTenant.Change(null))
                     {
-                        await SendToTenantAsync(null, notification, eventData);
+                        await SendToTenantAsync(null, notification, eventData, result);
 
                         var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
 
                         foreach (var activeTenant in allActiveTenants)
                         {
-                            await SendToTenantAsync(activeTenant.Id, notification, eventData);
+                            await SendToTenantAsync(activeTenant.Id, notification, eventData, result);
                         }
                     }
                 }
                 else
                 {
-                    await SendToTenantAsync(eventData.TenantId, notification, eventData);
+                    await SendToTenantAsync(eventData.TenantId, notification, eventData, result);
                 }
             }
         }
@@ -183,7 +192,8 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
         protected async virtual Task SendToTenantAsync(
             Guid? tenantId,
             NotificationDefinition notification,
-            NotificationEto<NotificationTemplate> eventData)
+            NotificationEto<NotificationTemplate> eventData,
+            NotificationTemplateResolveResult templateResolveResult)
         {
             using (CurrentTenant.Change(tenantId))
             {
@@ -219,7 +229,8 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
                     // 由于模板通知受租户影响, 格式化失败的消息将被丢弃.
                     message = await TemplateRenderer.RenderAsync(
                         templateName: eventData.Data.Name,
-                        model: eventData.Data.ExtraProperties,
+                        // 序列化之后数据可能需要自行处理, 如未处理数据, 将使用默认数据渲染模板
+                        model: templateResolveResult.Model ?? eventData.Data.ExtraProperties,
                         cultureName: eventData.Data.Culture,
                         globalContext: new Dictionary<string, object>
                         {

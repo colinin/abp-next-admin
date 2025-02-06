@@ -39,7 +39,7 @@ public class ProjectNameDbContextFactory : IDesignTimeDbContextFactory<ProjectNa
     private static IConfigurationRoot BuildConfiguration()
     {
         var builder = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../PackageName.CompanyName.ProjectName.DbMigrator/"))
+            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../host/PackageName.CompanyName.ProjectName.DbMigrator/"))
             .AddJsonFile("appsettings.json", optional: false)
             .AddJsonFile("appsettings.Development.json", optional: true);
 

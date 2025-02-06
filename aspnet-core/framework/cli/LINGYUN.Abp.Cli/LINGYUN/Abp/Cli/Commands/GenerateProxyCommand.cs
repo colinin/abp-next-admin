@@ -142,7 +142,7 @@ public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Generates client service proxies and DTOs to consume HTTP APIs.";
     }
