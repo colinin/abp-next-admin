@@ -37,10 +37,9 @@ public class SM4StringEncryptionService : StringEncryptionService
         using var password = new Rfc2898DeriveBytes(passPhrase, salt);
         // 128-bit key
         var keyBytes = password.GetBytes(16);
-        var ivBytes = password.GetBytes(16);
 
         var cipher = new PaddedBufferedBlockCipher(new CbcBlockCipher(new SM4Engine()), new Pkcs7Padding());
-        cipher.Init(false, new ParametersWithIV(new KeyParameter(keyBytes), ivBytes));
+        cipher.Init(false, new ParametersWithIV(new KeyParameter(keyBytes), Options.InitVectorBytes));
 
         var decryptTextBytes = cipher.DoFinal(cipherTextBytes);
 
@@ -61,10 +60,9 @@ public class SM4StringEncryptionService : StringEncryptionService
         using var password = new Rfc2898DeriveBytes(passPhrase, salt);
         // 128-bit key
         var keyBytes = password.GetBytes(16);
-        var ivBytes = password.GetBytes(16);
 
         var cipher = new PaddedBufferedBlockCipher(new CbcBlockCipher(new SM4Engine()), new Pkcs7Padding());
-        cipher.Init(true, new ParametersWithIV(new KeyParameter(keyBytes), ivBytes));
+        cipher.Init(true, new ParametersWithIV(new KeyParameter(keyBytes), Options.InitVectorBytes));
 
         var decryptTextBytes = cipher.DoFinal(plainTextBytes);
 
