@@ -31,6 +31,10 @@
       "title": "Settings",
       "definitions": "Definitions",
       "system": "System Settings"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "myNotifilers": "My Notifilers"
     }
   },
   "openiddict": {
