@@ -79,6 +79,15 @@ const routes: RouteRecordRaw[] = [
                   icon: 'clarity:organization-line',
                 },
               },
+              {
+                component: () => import('#/views/identity/sessions/index.vue'),
+                name: 'IdentitySessions',
+                path: '/manage/identity/sessions',
+                meta: {
+                  title: $t('abp.manage.identity.sessions'),
+                  icon: 'carbon:prompt-session',
+                },
+              },
             ],
           },
           {

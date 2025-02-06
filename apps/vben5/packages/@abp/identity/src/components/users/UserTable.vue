@@ -26,7 +26,10 @@ import {
 import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
 import { useUsersApi } from '../../api/useUsersApi';
-import { IdentityUserPermissions } from '../../constants/permissions';
+import {
+  IdentitySessionPermissions,
+  IdentityUserPermissions,
+} from '../../constants/permissions';
 
 defineOptions({
   name: 'UserTable',
@@ -46,6 +49,7 @@ const PasswordIcon = createIconifyIcon('carbon:password');
 const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
 const ClaimOutlined = createIconifyIcon('la:id-card-solid');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
+const SessionIcon = createIconifyIcon('carbon:prompt-session');
 const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 
 const getLockEnd = computed(() => {
@@ -166,6 +170,11 @@ const [UserPermissionModal, permissionModalApi] = useVbenModal({
 const [UserChangeDrawer, userChangeDrawerApi] = useVbenDrawer({
   connectedComponent: EntityChangeDrawer,
 });
+const [UserSessionDrawer, userSessionDrawerApi] = useVbenDrawer({
+  connectedComponent: defineAsyncComponent(
+    () => import('./UserSessionDrawer.vue'),
+  ),
+});
 const [Grid, { query }] = useVbenVxeGrid({
   formOptions,
   gridEvents,
@@ -238,6 +247,11 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
         readonly: userId === row.id,
       });
       permissionModalApi.open();
+      break;
+    }
+    case 'session': {
+      userSessionDrawerApi.setData(row);
+      userSessionDrawerApi.open();
       break;
     }
     case 'unlock': {
@@ -331,6 +345,13 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                   {{ $t('AbpPermissionManagement.Permissions') }}
                 </MenuItem>
                 <MenuItem
+                  v-if="hasAccessByCodes([IdentitySessionPermissions.Default])"
+                  key="session"
+                  :icon="h(SessionIcon)"
+                >
+                  {{ $t('AbpIdentity.IdentitySessions') }}
+                </MenuItem>
+                <MenuItem
                   v-if="
                     hasAccessByCodes([IdentityUserPermissions.ManageClaims])
                   "
@@ -376,6 +397,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
   <UserEditModal @change="() => query()" />
   <UserPasswordModal @change="query" />
   <UserPermissionModal />
+  <UserSessionDrawer />
   <UserChangeDrawer />
 </template>
 

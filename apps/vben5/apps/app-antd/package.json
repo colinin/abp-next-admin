@@ -30,6 +30,7 @@
     "@abp/auditing": "workspace:*",
     "@abp/core": "workspace:*",
     "@abp/identity": "workspace:*",
+    "@abp/notifications": "workspace:*",
     "@abp/openiddict": "workspace:*",
     "@abp/permissions": "workspace:*",
     "@abp/request": "workspace:*",

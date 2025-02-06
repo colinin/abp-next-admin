@@ -19,7 +19,8 @@
       "claimTypes": "Claim Types",
       "securityLogs": "Security Logs",
       "organizationUnits": "Organization Units",
-      "auditLogs": "Audit Logs"
+      "auditLogs": "Audit Logs",
+      "sessions": "Sessions"
     },
     "permissions": {
       "title": "Permissions",
@@ -59,7 +60,8 @@
       "bindSettings": "Bind Settings",
       "noticeSettings": "Notice Settings",
       "authenticatorSettings": "Authenticator Settings",
-      "changeAvatar": "Change Avatar"
+      "changeAvatar": "Change Avatar",
+      "sessionSettings": "Session Settings"
     },
     "profile": "My Profile"
   }

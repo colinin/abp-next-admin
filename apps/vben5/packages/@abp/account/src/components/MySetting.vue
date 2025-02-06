@@ -12,12 +12,25 @@ import { useUserStore } from '@vben/stores';
 import { Card, Menu, message, Modal } from 'ant-design-vue';
 
 import { useProfileApi } from '../api/useProfileApi';
-import AuthenticatorSettings from './components/AuthenticatorSettings.vue';
-import BasicSettings from './components/BasicSettings.vue';
-import BindSettings from './components/BindSettings.vue';
-import NoticeSettings from './components/NoticeSettings.vue';
-import SecuritySettings from './components/SecuritySettings.vue';
 
+const AuthenticatorSettings = defineAsyncComponent(
+  () => import('./components/AuthenticatorSettings.vue'),
+);
+const BasicSettings = defineAsyncComponent(
+  () => import('./components/BasicSettings.vue'),
+);
+const BindSettings = defineAsyncComponent(
+  () => import('./components/BindSettings.vue'),
+);
+const NoticeSettings = defineAsyncComponent(
+  () => import('./components/NoticeSettings.vue'),
+);
+const SecuritySettings = defineAsyncComponent(
+  () => import('./components/SecuritySettings.vue'),
+);
+const SessionSettings = defineAsyncComponent(
+  () => import('./components/SessionSettings.vue'),
+);
 const { getApi, updateApi } = useProfileApi();
 const userStore = useUserStore();
 const { query } = useRoute();
@@ -36,6 +49,10 @@ const menuItems = reactive([
   {
     key: 'bind',
     label: $t('abp.account.settings.bindSettings'),
+  },
+  {
+    key: 'session',
+    label: $t('abp.account.settings.sessionSettings'),
   },
   {
     key: 'notice',
@@ -137,6 +154,7 @@ onMounted(async () => {
           <AuthenticatorSettings
             v-else-if="selectedMenuKeys[0] === 'authenticator'"
           />
+          <SessionSettings v-else-if="selectedMenuKeys[0] === 'session'" />
         </div>
       </div>
     </Card>

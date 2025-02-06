@@ -75,7 +75,21 @@ interface NotificationGroupDto {
   notifications: NotificationDto[];
 }
 
+interface Notification {
+  contentType: NotificationContentType;
+  creationTime: Date;
+  data: Record<string, any>;
+  description?: string;
+  lifetime: NotificationLifetime;
+  message: string;
+  name: string;
+  severity: NotificationSeverity;
+  title: string;
+  type: NotificationType;
+}
+
 export type {
+  Notification,
   NotificationData,
   NotificationDto,
   NotificationGroupDto,
