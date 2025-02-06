@@ -31,6 +31,10 @@
       "title": "设置管理",
       "definitions": "设置定义",
       "system": "系统设置"
+    },
+    "notifications": {
+      "title": "通知管理",
+      "myNotifilers": "我的通知"
     }
   },
   "openiddict": {

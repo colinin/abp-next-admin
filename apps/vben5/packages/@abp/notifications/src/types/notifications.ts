@@ -43,39 +43,41 @@ interface UserIdentifier {
 }
 
 interface NotificationSendInput {
+  /** 当前文化（模板渲染时需要） */
   culture?: string;
+  /** 通知数据 */
   data: Dictionary<string, any>;
+  /** 通知（模板通知时为模板名称）名称 */
   name: string;
+  /** 紧急程度 */
   severity?: NotificationSeverity;
+  /** 接收人列表 */
   toUsers?: UserIdentifier[];
 }
 
+type NotificationTemplateSendInput = NotificationSendInput;
+
 interface NotificationInfo {
+  /** 内容类型 */
   contentType: NotificationContentType;
+  /** 创建时间 */
   creationTime: Date;
+  /** 数据 */
   data: NotificationData;
+  /** Id */
   id: string;
+  /** 生命周期 */
   lifetime: NotificationLifetime;
+  /** 名称 */
   name: string;
+  /** 紧急程度 */
   severity: NotificationSeverity;
+  /** 类型 */
   type: NotificationType;
-}
-
-interface NotificationDto {
-  description: string;
-  displayName: string;
-  lifetime: NotificationLifetime;
-  name: string;
-  type: NotificationType;
-}
-
-interface NotificationGroupDto {
-  displayName: string;
-  name: string;
-  notifications: NotificationDto[];
 }
 
 interface Notification {
+  [key: string]: any;
   contentType: NotificationContentType;
   creationTime: Date;
   data: Record<string, any>;
@@ -91,8 +93,7 @@ interface Notification {
 export type {
   Notification,
   NotificationData,
-  NotificationDto,
-  NotificationGroupDto,
   NotificationInfo,
   NotificationSendInput,
+  NotificationTemplateSendInput,
 };

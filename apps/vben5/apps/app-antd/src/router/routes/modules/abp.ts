@@ -157,6 +157,26 @@ const routes: RouteRecordRaw[] = [
             path: '/manage/audit-logs',
             component: () => import('#/views/auditing/audit-logs/index.vue'),
           },
+          {
+            meta: {
+              title: $t('abp.manage.notifications.title'),
+              icon: 'tabler:notification',
+            },
+            name: 'Notifications',
+            path: '/manage/notifications',
+            children: [
+              {
+                meta: {
+                  title: $t('abp.manage.notifications.myNotifilers'),
+                  icon: 'ant-design:notification-outlined',
+                },
+                name: 'MyNotifications',
+                path: '/manage/notifications/my-notifilers',
+                component: () =>
+                  import('#/views/notifications/my-notifilers/index.vue'),
+              },
+            ],
+          },
         ],
       },
       {
