@@ -19,7 +19,8 @@
       "claimTypes": "身份标识",
       "securityLogs": "安全日志",
       "organizationUnits": "组织机构",
-      "auditLogs": "审计日志"
+      "auditLogs": "审计日志",
+      "sessions": "会话管理"
     },
     "permissions": {
       "title": "权限管理",

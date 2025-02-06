@@ -33,6 +33,10 @@
     "@vben/layouts": "workspace:*",
     "@vben/locales": "workspace:*",
     "ant-design-vue": "catalog:",
+    "lodash.debounce": "catalog:",
     "vue": "catalog:*"
+  },
+  "devDependencies": {
+    "@types/lodash.debounce": "catalog:"
   }
 }
