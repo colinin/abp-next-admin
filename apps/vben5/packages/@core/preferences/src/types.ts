@@ -5,6 +5,7 @@ import type {
   BuiltinThemeType,
   ContentCompactType,
   DeepPartial,
+  LayoutHeaderMenuAlignType,
   LayoutHeaderModeType,
   LayoutType,
   LoginExpiredModeType,
@@ -104,6 +105,8 @@ interface HeaderPreferences {
   enable: boolean;
   /** 顶栏是否隐藏,css-隐藏 */
   hidden: boolean;
+  /** 顶栏菜单位置 */
+  menuAlign: LayoutHeaderMenuAlignType;
   /** header显示模式 */
   mode: LayoutHeaderModeType;
 }
@@ -165,6 +168,10 @@ interface TabbarPreferences {
   height: number;
   /** 开启标签页缓存功能 */
   keepAlive: boolean;
+  /** 限制最大数量 */
+  maxCount: number;
+  /** 是否点击中键时关闭标签 */
+  middleClickToClose: boolean;
   /** 是否持久化标签 */
   persist: boolean;
   /** 是否开启多标签页图标 */

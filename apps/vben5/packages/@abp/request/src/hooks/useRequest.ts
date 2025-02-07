@@ -1,6 +1,6 @@
 import type { AxiosRequestConfig } from 'axios';
 
-import { requestClient } from '@abp/request';
+import { requestClient } from '../index';
 
 type HttpMethod =
   | 'CONNECT'
