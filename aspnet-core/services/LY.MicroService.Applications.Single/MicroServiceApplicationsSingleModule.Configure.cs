@@ -251,6 +251,16 @@ public partial class MicroServiceApplicationsSingleModule
             options.DisableTransportSecurityRequirement = true;
         });
 
+        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
+        {
+            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
+            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
+        });
+
         Configure<OpenIddictServerOptions>(options =>
         {
             var lifetime = configuration.GetSection("OpenIddict:Lifetime");
@@ -261,15 +271,6 @@ public partial class MicroServiceApplicationsSingleModule
             options.RefreshTokenLifetime = lifetime.GetValue("RefreshToken", options.RefreshTokenLifetime);
             options.RefreshTokenReuseLeeway = lifetime.GetValue("RefreshTokenReuseLeeway", options.RefreshTokenReuseLeeway);
             options.UserCodeLifetime = lifetime.GetValue("UserCode", options.UserCodeLifetime);
-        });
-        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
-        {
-            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
-            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
         });
     }
 

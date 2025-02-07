@@ -618,6 +618,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.Application
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Encryption.SM4", "framework\security\LINGYUN.Abp.Encryption.SM4\LINGYUN.Abp.Encryption.SM4.csproj", "{15106D95-EE9A-4C9D-AB12-41FBE46A9A89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer", "modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer\LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer.csproj", "{EB3EC78D-CD1C-423F-B866-74E0DC8D429D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql", "modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql\LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql.csproj", "{C4761F7E-6DFB-4D84-BCA1-38A7EDC28B01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql", "migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.csproj", "{FCD95DCE-9DF4-403C-966C-FF19ADD2EA43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1628,6 +1634,18 @@ Global
 		{15106D95-EE9A-4C9D-AB12-41FBE46A9A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15106D95-EE9A-4C9D-AB12-41FBE46A9A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15106D95-EE9A-4C9D-AB12-41FBE46A9A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB3EC78D-CD1C-423F-B866-74E0DC8D429D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB3EC78D-CD1C-423F-B866-74E0DC8D429D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB3EC78D-CD1C-423F-B866-74E0DC8D429D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB3EC78D-CD1C-423F-B866-74E0DC8D429D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4761F7E-6DFB-4D84-BCA1-38A7EDC28B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4761F7E-6DFB-4D84-BCA1-38A7EDC28B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4761F7E-6DFB-4D84-BCA1-38A7EDC28B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4761F7E-6DFB-4D84-BCA1-38A7EDC28B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCD95DCE-9DF4-403C-966C-FF19ADD2EA43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD95DCE-9DF4-403C-966C-FF19ADD2EA43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD95DCE-9DF4-403C-966C-FF19ADD2EA43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD95DCE-9DF4-403C-966C-FF19ADD2EA43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1928,6 +1946,9 @@ Global
 		{77B3C7A4-15C7-4EFF-8451-4F13B4CCA4AE} = {C22741F9-FC56-4AE3-B543-9F15C779D345}
 		{746813A9-4221-42D8-AAB5-66CB69EC844F} = {0D69B63D-F082-4D57-9FF0-355642C56993}
 		{15106D95-EE9A-4C9D-AB12-41FBE46A9A89} = {99B7CBDE-A251-4738-97F0-DB1DB484BEE1}
+		{EB3EC78D-CD1C-423F-B866-74E0DC8D429D} = {07DFEB1E-ED92-4E97-A801-FAB2D70F4F35}
+		{C4761F7E-6DFB-4D84-BCA1-38A7EDC28B01} = {07DFEB1E-ED92-4E97-A801-FAB2D70F4F35}
+		{FCD95DCE-9DF4-403C-966C-FF19ADD2EA43} = {0D69B63D-F082-4D57-9FF0-355642C56993}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {711A43C0-A2F8-4E5C-9B9F-F2551E4B3FF1}

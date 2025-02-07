@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.2.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
-		<ElsaNextPackageVersion>3.2.3</ElsaNextPackageVersion>
+		<ElsaNextPackageVersion>3.3.0-rc7</ElsaNextPackageVersion>
 		<VoloAbpPackageVersion>8.3.4</VoloAbpPackageVersion>
 		<LINGYUNAbpPackageVersion>8.3.4</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>8.0.0</MicrosoftExtensionsPackageVersion>
