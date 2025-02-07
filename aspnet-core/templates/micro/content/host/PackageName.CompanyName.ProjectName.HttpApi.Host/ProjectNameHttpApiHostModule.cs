@@ -1,12 +1,14 @@
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,13 +24,11 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
+using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
-using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
-using Volo.Abp.MailKit;
 
 namespace PackageName.CompanyName.ProjectName;
 

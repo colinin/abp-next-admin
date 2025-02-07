@@ -1,7 +1,7 @@
 <Project>
 	<Import Project="..\..\Directory.Packages.props" />
 	<PropertyGroup>
-		<LYAbpPackageVersion>8.3.0</LYAbpPackageVersion>
+		<LYAbpPackageVersion>8.3.4</LYAbpPackageVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

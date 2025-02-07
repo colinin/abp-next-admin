@@ -511,7 +511,31 @@ public partial class MicroServiceApplicationsSingleModule
     {
         Configure<AbpDbConnectionOptions>(options =>
         {
-            configuration.GetSection("Databases").Bind(options.Databases);
+            options.Databases.Configure("Default", db =>
+            {
+                db.MappedConnections.Add("AbpIdentity");
+                db.MappedConnections.Add("AppPlatform");
+                db.MappedConnections.Add("TaskManagement");
+                db.MappedConnections.Add("Notifications");
+                db.MappedConnections.Add("MessageService");
+                db.MappedConnections.Add("AbpAuditLogging");
+                db.MappedConnections.Add("AbpOpenIddict");
+                db.MappedConnections.Add("AbpIdentityServer");
+                db.MappedConnections.Add("AbpFeatureManagement");
+                db.MappedConnections.Add("AbpSettingManagement");
+                db.MappedConnections.Add("AbpPermissionManagement");
+            });
+
+            options.Databases.Configure("HostOnly", db =>
+            {
+                db.MappedConnections.Add("AbpSaas");
+                db.MappedConnections.Add("AbpTextTemplating");
+                db.MappedConnections.Add("AbpLocalizationManagement");
+                db.MappedConnections.Add("Workflow");
+                db.MappedConnections.Add("Demo");
+
+                db.IsUsedByTenants = false;
+            });
         });
         Configure<AbpDbContextOptions>(options =>
         {
