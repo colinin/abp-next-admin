@@ -1,7 +1,9 @@
-import type { LocaleSetupOptions, SupportedLanguagesType } from '@vben/locales';
 import type { Locale } from 'ant-design-vue/es/locale';
 
 import type { App } from 'vue';
+
+import type { LocaleSetupOptions, SupportedLanguagesType } from '@vben/locales';
+
 import { ref } from 'vue';
 
 import {
@@ -15,6 +17,7 @@ import { useAbpStore } from '@abp/core';
 import antdEnLocale from 'ant-design-vue/es/locale/en_US';
 import antdDefaultLocale from 'ant-design-vue/es/locale/zh_CN';
 import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
 
@@ -73,6 +76,7 @@ async function loadDayjsLocale(lang: SupportedLanguagesType) {
   }
   if (locale) {
     dayjs.locale(locale);
+    dayjs.extend(localizedFormat);
   } else {
     console.error(`Failed to load dayjs locale for ${lang}`);
   }
@@ -119,8 +123,7 @@ async function setupI18n(app: App, options: LocaleSetupOptions = {}) {
   await coreSetup(app, {
     defaultLocale: preferences.app.locale,
     loadMessages,
-    // missingWarn: !import.meta.env.PROD,
-    missingWarn: false,
+    missingWarn: !import.meta.env.PROD,
     ...options,
   });
 }

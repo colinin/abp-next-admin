@@ -41,12 +41,13 @@ const {
   label,
   labelClass,
   labelWidth,
+  modelPropName,
   renderComponentContent,
   rules,
 } = defineProps<
-  {
+  Props & {
     commonComponentProps: MaybeComponentProps;
-  } & Props
+  }
 >();
 
 const { componentBindEventMap, componentMap, isVertical } = useFormContext();
@@ -202,9 +203,9 @@ function fieldBindEvent(slotProps: Record<string, any>) {
   const modelValue = slotProps.componentField.modelValue;
   const handler = slotProps.componentField['onUpdate:modelValue'];
 
-  const bindEventField = isString(component)
-    ? componentBindEventMap.value?.[component]
-    : null;
+  const bindEventField =
+    modelPropName ||
+    (isString(component) ? componentBindEventMap.value?.[component] : null);
 
   let value = modelValue;
   // antd design 的一些组件会传递一个 event 对象
@@ -328,10 +329,14 @@ function autofocus() {
               v-bind="createComponentProps(slotProps)"
               :disabled="shouldDisabled"
             >
-              <template v-for="name in renderContentKey" :key="name" #[name]>
+              <template
+                v-for="name in renderContentKey"
+                :key="name"
+                #[name]="renderSlotProps"
+              >
                 <VbenRenderContent
                   :content="customContentRender[name]"
-                  v-bind="slotProps"
+                  v-bind="{ ...renderSlotProps, $formContext: slotProps }"
                 />
               </template>
               <!-- <slot></slot> -->
