@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.Server</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.Server</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+		<Nullable>Enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Elsa" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.CSharp" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Scheduling" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Workflows.Api" VersionOverride="$(ElsaNextPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LINGYUN.Abp.ElsaNext\LINGYUN.Abp.ElsaNext.csproj" />
+	</ItemGroup>
+
+</Project>

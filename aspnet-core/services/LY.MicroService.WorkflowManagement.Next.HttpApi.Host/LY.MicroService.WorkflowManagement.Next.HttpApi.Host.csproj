@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>LY.MicroService.WorkflowManagement.Next</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AgileConfig.Client" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
+		<!--<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />-->
+		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" />
+		<!--<PackageReference Include="Volo.Abp.AspNetCore.Mvc.NewtonsoftJson" />-->
+		<PackageReference Include="Volo.Abp.Autofac" />
+		<PackageReference Include="Volo.Abp.Json" />
+		<PackageReference Include="Volo.Abp.Swashbuckle" />
+		<PackageReference Include="Volo.Abp.MailKit" />
+		<!--<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" />-->
+		<!--<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />-->
+		<!--<PackageReference Include="Microsoft.CodeAnalysis.Common" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>-->
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Serilog.AspNetCore" />
+		<PackageReference Include="Serilog.Enrichers.Environment" />
+		<PackageReference Include="Serilog.Enrichers.Assembly" />
+		<PackageReference Include="Serilog.Enrichers.Process" />
+		<PackageReference Include="Serilog.Enrichers.Thread" />
+		<PackageReference Include="Serilog.Settings.Configuration" />
+		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
+		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Elsa.EntityFrameworkCore" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.EntityFrameworkCore.Sqlite" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Identity" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Studio" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Studio.Core.BlazorServer" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Studio.Login.BlazorServer" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Studio.Localization.BlazorServer" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Studio.Translations" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Api.Client" VersionOverride="$(ElsaNextPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Server\LINGYUN.Abp.ElsaNext.Server.csproj" />
+	</ItemGroup>
+
+</Project>

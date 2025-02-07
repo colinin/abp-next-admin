@@ -73,6 +73,7 @@
     "Available": "已拥有的",
     "Propertites:New": "新属性",
     "Propertites:Key": "属性名称",
-    "Propertites:Value": "属性值"
+    "Propertites:Value": "属性值",
+    "Requirements:PKCE": "启用PKCE"
   }
 }

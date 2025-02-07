@@ -15,6 +15,7 @@ import { useAbpStore } from '@abp/core';
 import antdEnLocale from 'ant-design-vue/es/locale/en_US';
 import antdDefaultLocale from 'ant-design-vue/es/locale/zh_CN';
 import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
 
@@ -72,6 +73,7 @@ async function loadDayjsLocale(lang: SupportedLanguagesType) {
     }
   }
   if (locale) {
+    dayjs.extend(localizedFormat);
     dayjs.locale(locale);
   } else {
     console.error(`Failed to load dayjs locale for ${lang}`);

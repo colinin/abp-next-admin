@@ -73,6 +73,7 @@
     "Available": "Available",
     "Propertites:New": "New Property",
     "Propertites:Key": "Key",
-    "Propertites:Value": "Value"
+    "Propertites:Value": "Value",
+    "Requirements:PKCE": "Enabling PKCE enforcement"
   }
 }
