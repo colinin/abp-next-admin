@@ -245,6 +245,46 @@ const routes: RouteRecordRaw[] = [
           },
         ],
       },
+      {
+        name: 'Platform',
+        path: '/platform',
+        meta: {
+          title: $t('abp.platform.title'),
+          icon: 'ep:platform',
+        },
+        children: [
+          {
+            meta: {
+              title: $t('abp.platform.messages.title'),
+              icon: 'tabler:message-cog',
+            },
+            name: 'PlatformMessages',
+            path: '/platform/messages',
+            children: [
+              {
+                meta: {
+                  title: $t('abp.platform.messages.email'),
+                  icon: 'material-symbols:attach-email-outline',
+                },
+                name: 'PlatformEmailMessages',
+                path: '/platform/messages/email',
+                component: () =>
+                  import('#/views/platform/messages/email/index.vue'),
+              },
+              {
+                meta: {
+                  title: $t('abp.platform.messages.sms'),
+                  icon: 'material-symbols:sms-outline',
+                },
+                name: 'PlatformSmsMessages',
+                path: '/platform/messages/sms',
+                component: () =>
+                  import('#/views/platform/messages/sms/index.vue'),
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
 ];
