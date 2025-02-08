@@ -114,6 +114,6 @@
     "SmsMessages": "Sms Messages",
     "SendMessage": "Send Message",
     "MessageWillBeReSendWarningMessage": "The selected message will be resend.",
-    "SuccessfullySent": "Successfully Sent!"
+    "SuccessfullySent": "Successfully Sent, Please check the status later in the message center!"
   }
 }

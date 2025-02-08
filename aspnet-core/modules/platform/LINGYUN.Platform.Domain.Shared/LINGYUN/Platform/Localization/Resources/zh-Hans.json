@@ -114,6 +114,6 @@
     "SmsMessages": "短信消息",
     "SendMessage": "发送消息",
     "MessageWillBeReSendWarningMessage": "将重新发送选择的消息.",
-    "SuccessfullySent": "发送成功!"
+    "SuccessfullySent": "发送成功,请稍后在消息中心查看状态!"
   }
 }
