@@ -31,10 +31,6 @@
 		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.Application" />
 		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.UniqueId" />
 		<PackageReference Include="LINGYUN.Abp.TextTemplating.EntityFrameworkCore" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
 		<PackageReference Include="DistributedLock.Redis" />
@@ -75,4 +71,3 @@
 	</ItemGroup>
 
 </Project>
-

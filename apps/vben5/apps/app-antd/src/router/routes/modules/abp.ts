@@ -1,11 +1,9 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-import { BasicLayout } from '#/layouts';
 import { $t } from '#/locales';
 
 const routes: RouteRecordRaw[] = [
   {
-    component: BasicLayout,
     meta: {
       icon: 'https://abp.io/assets/favicon.ico/favicon-16x16.png',
       keepAlive: true,

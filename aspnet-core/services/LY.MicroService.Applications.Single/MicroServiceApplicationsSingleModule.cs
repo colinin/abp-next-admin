@@ -288,6 +288,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsSignalRModule),
     // 通知模块 邮件通知
     typeof(AbpNotificationsEmailingModule),
+    // 通知模块 模板解析
+    typeof(AbpNotificationsTemplatingModule),
     // 通知模块 微信小程序
     typeof(AbpNotificationsWeChatMiniProgramModule),
     // 多租户模块 版本

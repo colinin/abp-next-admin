@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	
 	<Import Project="..\..\..\common.secrets.props" />
 
@@ -54,6 +54,7 @@
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="LINGYUN.Abp.AuditLogging.EntityFrameworkCore" />
 		<PackageReference Include="LINGYUN.Abp.AuditLogging" />

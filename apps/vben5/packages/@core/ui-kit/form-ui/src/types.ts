@@ -1,11 +1,12 @@
-import type { VbenButtonProps } from '@vben-core/shadcn-ui';
-import type { ClassType } from '@vben-core/typings';
 import type { FieldOptions, FormContext, GenericObject } from 'vee-validate';
 import type { ZodTypeAny } from 'zod';
 
-import type { FormApi } from './form-api';
-
 import type { Component, HtmlHTMLAttributes, Ref } from 'vue';
+
+import type { VbenButtonProps } from '@vben-core/shadcn-ui';
+import type { ClassType, MaybeComputedRef } from '@vben-core/typings';
+
+import type { FormApi } from './form-api';
 
 export type FormLayout = 'horizontal' | 'vertical';
 
@@ -19,7 +20,7 @@ export type BaseFormComponentType =
   | 'VbenSelect'
   | (Record<never, never> & string);
 
-type Breakpoints = '' | '2xl:' | '3xl:' | 'lg:' | 'md:' | 'sm:' | 'xl:';
+type Breakpoints = '2xl:' | '3xl:' | '' | 'lg:' | 'md:' | 'sm:' | 'xl:';
 
 type GridCols = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
 
@@ -35,12 +36,12 @@ export type FormItemClassType =
   | WrapperClassType;
 
 export type FormFieldOptions = Partial<
-  {
+  FieldOptions & {
     validateOnBlur?: boolean;
     validateOnChange?: boolean;
     validateOnInput?: boolean;
     validateOnModelUpdate?: boolean;
-  } & FieldOptions
+  }
 >;
 
 export interface FormShape {
@@ -197,6 +198,11 @@ export interface FormCommonConfig {
    */
   labelWidth?: number;
   /**
+   * 所有表单项的model属性名
+   * @default "modelValue"
+   */
+  modelPropName?: string;
+  /**
    * 所有表单项的wrapper样式
    */
   wrapperClass?: string;
@@ -218,7 +224,12 @@ export type HandleResetFn = (
 export type FieldMappingTime = [
   string,
   [string, string],
-  ([string, string] | string)?,
+  (
+    | ((value: any, fieldName: string) => any)
+    | [string, string]
+    | null
+    | string
+  )?,
 ][];
 
 export interface FormSchema<
@@ -310,7 +321,7 @@ export interface FormRenderProps<
 
 export interface ActionButtonOptions extends VbenButtonProps {
   [key: string]: any;
-  content?: string;
+  content?: MaybeComputedRef<string>;
   show?: boolean;
 }
 
@@ -329,7 +340,7 @@ export interface VbenFormProps<
    */
   actionWrapperClass?: ClassType;
   /**
-   * 表单字段映射成时间格式
+   * 表单字段映射
    */
   fieldMappingTime?: FieldMappingTime;
   /**
@@ -372,11 +383,11 @@ export interface VbenFormProps<
   submitOnEnter?: boolean;
 }
 
-export type ExtendedFormApi = {
+export type ExtendedFormApi = FormApi & {
   useStore: <T = NoInfer<VbenFormProps>>(
     selector?: (state: NoInfer<VbenFormProps>) => T,
   ) => Readonly<Ref<T>>;
-} & FormApi;
+};
 
 export interface VbenFormAdapterOptions<
   T extends BaseFormComponentType = BaseFormComponentType,
