@@ -1,7 +1,4 @@
-using DotNetCore.CAP;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Savorboard.CAP.InMemoryMessageQueue;
+
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -511,35 +508,7 @@ public partial class MicroServiceApplicationsSingleModule
     {
         Configure<AbpDbConnectionOptions>(options =>
         {
-            options.Databases.Configure("Default", db =>
-            {
-                db.MappedConnections.Add("AbpIdentity");
-                db.MappedConnections.Add("AppPlatform");
-                db.MappedConnections.Add("TaskManagement");
-                db.MappedConnections.Add("Notifications");
-                db.MappedConnections.Add("MessageService");
-                db.MappedConnections.Add("AbpAuditLogging");
-                db.MappedConnections.Add("AbpOpenIddict");
-                db.MappedConnections.Add("AbpIdentityServer");
-                db.MappedConnections.Add("AbpFeatureManagement");
-                db.MappedConnections.Add("AbpSettingManagement");
-                db.MappedConnections.Add("AbpPermissionManagement");
-            });
-
-            options.Databases.Configure("HostOnly", db =>
-            {
-                db.MappedConnections.Add("AbpSaas");
-                db.MappedConnections.Add("AbpTextTemplating");
-                db.MappedConnections.Add("AbpLocalizationManagement");
-                db.MappedConnections.Add("Workflow");
-                db.MappedConnections.Add("Demo");
-
-                db.IsUsedByTenants = false;
-            });
-        });
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
+            // 
         });
     }
 
@@ -800,6 +769,20 @@ public partial class MicroServiceApplicationsSingleModule
             // options.IsEnabledForGetRequests = true;
             options.ApplicationName = ApplicationName;
         });
+    }
+
+    private void ConfigureSingleModule(IServiceCollection services)
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ExposeIntegrationServices = true;
+        });
+
+        services.Replace<Volo.Abp.Emailing.IEmailSender, PlatformEmailSender>(ServiceLifetime.Transient);
+        services.AddKeyedTransient<Volo.Abp.Emailing.IEmailSender, MailKitSmtpEmailSender>("DefaultEmailSender");
+
+        services.Replace<ISmsSender, PlatformSmsSender>(ServiceLifetime.Transient);
+        services.AddKeyedSingleton<ISmsSender, AliyunSmsSender>("DefaultSmsSender");
     }
 
     private void ConfigureUrls(IConfiguration configuration)

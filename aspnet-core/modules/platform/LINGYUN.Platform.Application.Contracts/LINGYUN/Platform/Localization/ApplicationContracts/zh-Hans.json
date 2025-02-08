@@ -33,6 +33,9 @@
     "Permission:ManageBlobs": "资源管理",
     "Permission:Feedback": "反馈管理",
     "Permission:ManageAttachments": "附件管理",
-    "Permission:ManageComments": "评论管理"
+    "Permission:ManageComments": "评论管理",
+    "Permission:SmsMessage": "短信消息",
+    "Permission:EmailMessage": "邮件消息",
+    "Permission:SendMessage": "发送消息"
   }
 }
