@@ -33,6 +33,7 @@
     "@abp/notifications": "workspace:*",
     "@abp/openiddict": "workspace:*",
     "@abp/permissions": "workspace:*",
+    "@abp/platform": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/settings": "workspace:*",
     "@abp/ui": "workspace:*",
