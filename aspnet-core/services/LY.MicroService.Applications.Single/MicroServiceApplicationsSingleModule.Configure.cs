@@ -1,7 +1,4 @@
-using DotNetCore.CAP;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Savorboard.CAP.InMemoryMessageQueue;
+
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -511,11 +508,7 @@ public partial class MicroServiceApplicationsSingleModule
     {
         Configure<AbpDbConnectionOptions>(options =>
         {
-            configuration.GetSection("Databases").Bind(options.Databases);
-        });
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
+            // 
         });
     }
 
@@ -776,6 +769,20 @@ public partial class MicroServiceApplicationsSingleModule
             // options.IsEnabledForGetRequests = true;
             options.ApplicationName = ApplicationName;
         });
+    }
+
+    private void ConfigureSingleModule(IServiceCollection services)
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ExposeIntegrationServices = true;
+        });
+
+        services.Replace<Volo.Abp.Emailing.IEmailSender, PlatformEmailSender>(ServiceLifetime.Transient);
+        services.AddKeyedTransient<Volo.Abp.Emailing.IEmailSender, MailKitSmtpEmailSender>("DefaultEmailSender");
+
+        services.Replace<ISmsSender, PlatformSmsSender>(ServiceLifetime.Transient);
+        services.AddKeyedSingleton<ISmsSender, AliyunSmsSender>("DefaultSmsSender");
     }
 
     private void ConfigureUrls(IConfiguration configuration)

@@ -33,6 +33,9 @@
     "Permission:ManageBlobs": "Manage Blobs",
     "Permission:Feedback": "Feedback",
     "Permission:ManageAttachments": "Manage Attachments",
-    "Permission:ManageComments": "Manage Comments"
+    "Permission:ManageComments": "Manage Comments",
+    "Permission:SmsMessage": "Sms Message",
+    "Permission:EmailMessage": "Email Message",
+    "Permission:SendMessage": "Send Message"
   }
 }

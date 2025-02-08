@@ -53,4 +53,12 @@ public static class PlatformErrorCodes
     /// 附件 {Name} 已失效, 请重新上传!
     /// </summary>
     public const string FeedackAttachmentLoseEffectiveness = Namespace + ":05104";
+    /// <summary>
+    /// 不能添加重复的标头 {Key}!
+    /// </summary>
+    public const string DuplicateEmailMessageHeader = Namespace + ":06101";
+    /// <summary>
+    /// 不能添加重复的附件 {Name}!
+    /// </summary>
+    public const string DuplicateEmailMessageAttachment = Namespace + ":06102";
 }

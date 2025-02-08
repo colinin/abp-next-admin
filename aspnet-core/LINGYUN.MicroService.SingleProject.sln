@@ -624,6 +624,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elsa.EntityFram
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql", "migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.csproj", "{FCD95DCE-9DF4-403C-966C-FF19ADD2EA43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Sms.Platform", "modules\platform\LINGYUN.Abp.Sms.Platform\LINGYUN.Abp.Sms.Platform.csproj", "{A31C7F96-3AC6-44AF-B505-7D900C945291}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Platform.HttpApi.Client", "modules\platform\LINGYUN.Platform.HttpApi.Client\LINGYUN.Platform.HttpApi.Client.csproj", "{6C9E816F-3ECD-4AD1-A592-C4EDA1F011A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Emailing.Platform", "modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj", "{9D357D4C-532A-4ADC-9CCB-C95B4E033547}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1646,6 +1652,18 @@ Global
 		{FCD95DCE-9DF4-403C-966C-FF19ADD2EA43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCD95DCE-9DF4-403C-966C-FF19ADD2EA43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCD95DCE-9DF4-403C-966C-FF19ADD2EA43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A31C7F96-3AC6-44AF-B505-7D900C945291}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A31C7F96-3AC6-44AF-B505-7D900C945291}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A31C7F96-3AC6-44AF-B505-7D900C945291}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A31C7F96-3AC6-44AF-B505-7D900C945291}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C9E816F-3ECD-4AD1-A592-C4EDA1F011A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C9E816F-3ECD-4AD1-A592-C4EDA1F011A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C9E816F-3ECD-4AD1-A592-C4EDA1F011A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C9E816F-3ECD-4AD1-A592-C4EDA1F011A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D357D4C-532A-4ADC-9CCB-C95B4E033547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D357D4C-532A-4ADC-9CCB-C95B4E033547}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D357D4C-532A-4ADC-9CCB-C95B4E033547}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D357D4C-532A-4ADC-9CCB-C95B4E033547}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1949,6 +1967,9 @@ Global
 		{EB3EC78D-CD1C-423F-B866-74E0DC8D429D} = {07DFEB1E-ED92-4E97-A801-FAB2D70F4F35}
 		{C4761F7E-6DFB-4D84-BCA1-38A7EDC28B01} = {07DFEB1E-ED92-4E97-A801-FAB2D70F4F35}
 		{FCD95DCE-9DF4-403C-966C-FF19ADD2EA43} = {0D69B63D-F082-4D57-9FF0-355642C56993}
+		{A31C7F96-3AC6-44AF-B505-7D900C945291} = {F3449D35-8671-4BF6-8D1B-EFBB8AFD61DD}
+		{6C9E816F-3ECD-4AD1-A592-C4EDA1F011A3} = {F3449D35-8671-4BF6-8D1B-EFBB8AFD61DD}
+		{9D357D4C-532A-4ADC-9CCB-C95B4E033547} = {F3449D35-8671-4BF6-8D1B-EFBB8AFD61DD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {711A43C0-A2F8-4E5C-9B9F-F2551E4B3FF1}

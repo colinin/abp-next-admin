@@ -1,10 +1,3 @@
-using LINGYUN.Abp.AuditLogging.IP.Location;
-using LINGYUN.Abp.EventBus.CAP;
-using LINGYUN.Abp.IP2Region;
-using LY.MicroService.Applications.Single.EntityFrameworkCore;
-using LY.MicroService.Applications.Single.EntityFrameworkCore.MySql;
-using Volo.Abp.MailKit;
-
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
@@ -418,6 +411,8 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+        ConfigureSingleModule(context.Services);
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
