@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import type { PropType } from 'vue';
+
 import type { Nullable } from '@vben-core/typings';
 
-import type { PropType } from 'vue';
 import {
   nextTick,
   onMounted,
@@ -20,15 +21,15 @@ import CodeMirror from 'codemirror';
 
 import { MODE } from './types';
 
-// css
-import './codemirror.css';
-import 'codemirror/theme/idea.css';
-import 'codemirror/theme/material-palenight.css';
-
 // modes
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/htmlmixed/htmlmixed';
+
+// css
+import './codemirror.css';
+import 'codemirror/theme/idea.css';
+import 'codemirror/theme/material-palenight.css';
 
 const props = defineProps({
   mode: {

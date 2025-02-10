@@ -4,9 +4,10 @@ import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { EmailMessageDto } from '../../../types/messages';
 
-import { h } from 'vue';
+import { defineAsyncComponent, h } from 'vue';
 
 import { useAccess } from '@vben/access';
+import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
@@ -202,8 +203,16 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions,
 });
 
+const [EmailMessageModal, modalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./EmailMessageModal.vue'),
+  ),
+});
+
 function onUpdate(row: EmailMessageDto) {
-  console.warn('onUpdate is not implementation!', row);
+  // console.warn('onUpdate is not implementation!', row);
+  modalApi.setData(row);
+  modalApi.open();
 }
 
 function onDelete(row: EmailMessageDto) {
@@ -218,7 +227,7 @@ function onDelete(row: EmailMessageDto) {
         gridApi.setLoading(true);
         await deleteApi(row.id);
         message.success($t('AbpUi.SuccessfullyDeleted'));
-        gridApi.reload();
+        gridApi.query();
       } finally {
         gridApi.setLoading(false);
       }
@@ -236,7 +245,7 @@ async function onSend(row: EmailMessageDto) {
         gridApi.setLoading(true);
         await sendApi(row.id);
         message.success($t('AppPlatform.SuccessfullySent'));
-        gridApi.reload();
+        gridApi.query();
       } finally {
         gridApi.setLoading(false);
       }
@@ -305,6 +314,7 @@ async function onMenuClick(row: EmailMessageDto, info: MenuInfo) {
       </div>
     </template>
   </Grid>
+  <EmailMessageModal />
 </template>
 
 <style lang="scss" scoped></style>

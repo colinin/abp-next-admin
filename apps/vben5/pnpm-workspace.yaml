@@ -50,6 +50,7 @@ catalog:
   '@types/lodash.debounce': ^4.0.9
   '@types/lodash.get': ^4.4.9
   '@types/lodash.isequal': ^4.5.8
+  '@types/lodash.isnumber': ^3.0.9
   '@types/lodash.merge': ^4.6.9
   '@types/node': ^22.13.1
   '@types/nprogress': ^0.2.3
@@ -124,6 +125,7 @@ catalog:
   lodash.debounce: ^4.0.8
   lodash.get: ^4.4.2
   lodash.isequal: ^4.5.0
+  lodash.isnumber: ^3.0.3
   lodash.merge: ^4.6.2
   lucide-vue-next: ^0.469.0
   medium-zoom: ^1.1.0
@@ -165,6 +167,7 @@ catalog:
   tailwindcss: ^3.4.17
   tailwindcss-animate: ^1.0.7
   theme-colors: ^0.1.0
+  tinymce: ^5.10.7
   tippy.js: ^6.2.5
   turbo: ^2.4.0
   typescript: ^5.7.3
