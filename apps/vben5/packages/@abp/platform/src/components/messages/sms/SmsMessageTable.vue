@@ -12,11 +12,7 @@ import { $t } from '@vben/locales';
 
 import { formatToDateTime } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
-import {
-  DeleteOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-} from '@ant-design/icons-vue';
+import { DeleteOutlined, EllipsisOutlined } from '@ant-design/icons-vue';
 import { Button, Dropdown, Menu, message, Modal, Tag } from 'ant-design-vue';
 
 import { useSmsMessagesApi } from '../../../api/useSmsMessagesApi';
@@ -157,7 +153,7 @@ const gridOptions: VxeGridProps<SmsMessageDto> = {
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
       visible: hasAccessByCodes([SmsMessagesPermissions.Delete]),
-      width: 220,
+      width: 160,
     },
   ],
   exportConfig: {},
@@ -191,10 +187,6 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions,
 });
 
-function onUpdate(row: SmsMessageDto) {
-  console.warn('onUpdate is not implementation!', row);
-}
-
 function onDelete(row: SmsMessageDto) {
   Modal.confirm({
     afterClose: () => {
@@ -207,7 +199,7 @@ function onDelete(row: SmsMessageDto) {
         gridApi.setLoading(true);
         await deleteApi(row.id);
         message.success($t('AbpUi.SuccessfullyDeleted'));
-        gridApi.reload();
+        gridApi.query();
       } finally {
         gridApi.setLoading(false);
       }
@@ -225,7 +217,7 @@ async function onSend(row: SmsMessageDto) {
         gridApi.setLoading(true);
         await sendApi(row.id);
         message.success($t('AppPlatform.SuccessfullySent'));
-        gridApi.reload();
+        gridApi.query();
       } finally {
         gridApi.setLoading(false);
       }
@@ -257,14 +249,6 @@ async function onMenuClick(row: SmsMessageDto, info: MenuInfo) {
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
-        <Button
-          :icon="h(EditOutlined)"
-          block
-          type="link"
-          @click="onUpdate(row)"
-        >
-          {{ $t('AbpUi.Edit') }}
-        </Button>
         <Button
           :icon="h(DeleteOutlined)"
           block

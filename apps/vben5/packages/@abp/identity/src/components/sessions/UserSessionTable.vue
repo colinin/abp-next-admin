@@ -8,7 +8,7 @@ import { computed, nextTick, reactive, watch } from 'vue';
 import { useAccess } from '@vben/access';
 import { $t } from '@vben/locales';
 
-import { useAbpStore } from '@abp/core';
+import { formatToDateTime, useAbpStore } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { Button, Descriptions, Tag } from 'ant-design-vue';
 
@@ -133,10 +133,10 @@ function onDelete(session: IdentitySessionDto) {
           {{ row.ipAddresses }}
         </DescriptionItem>
         <DescriptionItem :label="$t('AbpIdentity.DisplayName:SignedIn')">
-          {{ row.signedIn }}
+          {{ formatToDateTime(row.signedIn) }}
         </DescriptionItem>
         <DescriptionItem :label="$t('AbpIdentity.DisplayName:LastAccessed')">
-          {{ row.lastAccessed }}
+          {{ formatToDateTime(row.lastAccessed) }}
         </DescriptionItem>
       </Descriptions>
     </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { LocalizableStringInfo } from '@abp/core';
 import type { DefaultOptionType } from 'ant-design-vue/lib/select';
 
 import { computed, shallowReactive, watch } from 'vue';
@@ -7,7 +8,6 @@ import { $t } from '@vben/locales';
 
 import {
   isNullOrWhiteSpace,
-  type LocalizableStringInfo,
   useAbpStore,
   useLocalizationSerializer,
 } from '@abp/core';
@@ -137,7 +137,9 @@ function triggerDisplayNameChange(value?: string) {
               :options="getResources"
               :placeholder="$t('component.localizable_input.placeholder')"
               class="w-full"
-              @change="(value) => handleResourceChange(value?.toString(), true)"
+              @change="
+                (value: any) => handleResourceChange(value?.toString(), true)
+              "
             />
           </div>
           <div class="basis-3/5">
@@ -152,7 +154,7 @@ function triggerDisplayNameChange(value?: string) {
               autocomplete="off"
               class="w-full"
               @change="
-                (e) => handleDisplayNameChange(e.target.value?.toString())
+                (e: any) => handleDisplayNameChange(e.target.value?.toString())
               "
             />
             <Select
@@ -167,7 +169,9 @@ function triggerDisplayNameChange(value?: string) {
               "
               :value="state.displayName"
               class="w-full"
-              @change="(e) => handleDisplayNameChange(e?.toString())"
+              @change="
+                (value: any) => handleDisplayNameChange(value?.toString())
+              "
             />
           </div>
         </div>
