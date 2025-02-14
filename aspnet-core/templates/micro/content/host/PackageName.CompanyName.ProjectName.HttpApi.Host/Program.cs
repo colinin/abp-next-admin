@@ -23,15 +23,19 @@ public class Program
             Log.Information("Starting web host.");
 
             var builder = WebApplication.CreateBuilder(args);
-            builder.Host.AddAppSettingsSecretsJson()
+            builder.Host
+                .AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .ConfigureAppConfiguration((context, config) =>
                 {
-                    var configuration = config.Build();
-                    var agileConfigEnabled = configuration["AgileConfig:IsEnabled"];
-                    if (agileConfigEnabled.IsNullOrEmpty() || bool.Parse(agileConfigEnabled))
+                    var agileConfig = context.Configuration.GetSection("AgileConfig");//IsEnabled
+                    if (agileConfig.Exists())
                     {
-                        config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
+                        var isAgileConfigEnabled = agileConfig["IsEnabled"];
+                        if (isAgileConfigEnabled.IsNullOrWhiteSpace() || bool.Parse(isAgileConfigEnabled))
+                        {
+                            config.AddAgileConfig(new AgileConfig.Client.ConfigClient(context.Configuration));
+                        }
                     }
                 })
                 .UseSerilog((context, provider, config) =>
@@ -45,12 +49,11 @@ public class Program
                 options.ApplicationName = ProjectNameHttpApiHostModule.ApplicationName;
                 // 搜索 Modules 目录下所有文件作为插件
                 // 取消显示引用所有其他项目的模块，改为通过插件的形式引用
-                var pluginFolder = Path.Combine(
-                        Directory.GetCurrentDirectory(), "Modules");
+                var pluginFolder = Path.Combine(Directory.GetCurrentDirectory(), "Modules");
+
                 DirectoryHelper.CreateIfNotExists(pluginFolder);
-                options.PlugInSources.AddFolder(
-                    pluginFolder,
-                    SearchOption.AllDirectories);
+
+                options.PlugInSources.AddFolder(pluginFolder, SearchOption.AllDirectories);
             });
             var app = builder.Build();
             await app.InitializeApplicationAsync();

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import { computed } from 'vue';
 
 import { isString } from '@vben-core/shared/utils';

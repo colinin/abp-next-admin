@@ -68,5 +68,13 @@
       "sessionSettings": "Session Settings"
     },
     "profile": "My Profile"
+  },
+  "platform": {
+    "title": "Platform",
+    "messages": {
+      "title": "Message Manage",
+      "email": "Email Messages",
+      "sms": "Sms Messages"
+    }
   }
 }

@@ -2,6 +2,7 @@
 using LINGYUN.Abp.DataProtection.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 #if MySQL
@@ -43,6 +44,26 @@ public class ProjectNameEntityFrameworkCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<AbpDbConnectionOptions>(options =>
+        {
+            options.Databases.Configure("Business", db =>
+            {
+                db.MappedConnections.Add("ProjectName");
+            });
+
+            options.Databases.Configure("Framework", db =>
+            {
+                db.MappedConnections.Add("AbpSaas");
+                db.MappedConnections.Add("AbpFeatureManagement");
+                db.MappedConnections.Add("AbpPermissionManagement");
+                db.MappedConnections.Add("AbpSettingManagement");
+                db.MappedConnections.Add("AbpLocalizationManagement");
+                db.MappedConnections.Add("AbpTextTemplating");
+
+                db.IsUsedByTenants = false;
+            });
+        });
+
         // 配置Ef
         Configure<AbpDbContextOptions>(options =>
         {

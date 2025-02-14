@@ -8,8 +8,9 @@ import { ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { CodeEditor, MODE } from '@abp/components/codeeditor';
 import { formatToDateTime } from '@abp/core';
-import { CodeEditor, MODE, useVbenVxeGrid } from '@abp/ui';
+import { useVbenVxeGrid } from '@abp/ui';
 import { Descriptions, Tabs, Tag } from 'ant-design-vue';
 
 import { useAuditLogsApi } from '../../api/useAuditLogsApi';

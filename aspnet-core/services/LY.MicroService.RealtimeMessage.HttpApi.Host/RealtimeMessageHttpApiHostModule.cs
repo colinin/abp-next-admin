@@ -28,6 +28,7 @@ using LINGYUN.Abp.Notifications.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications.Jobs;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
+using LINGYUN.Abp.Notifications.Templating;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
 using LINGYUN.Abp.Notifications.WeChat.Work;
 using LINGYUN.Abp.Notifications.WxPusher;
@@ -101,6 +102,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpNotificationsWeChatWorkModule),
     typeof(AbpNotificationsExceptionHandlingModule),
+    typeof(AbpNotificationsTemplatingModule),
     typeof(AbpWeChatWorkHandlersModule),
     typeof(AbpWeChatOfficialHandlersModule),
     typeof(AbpIdentityNotificationsModule),
