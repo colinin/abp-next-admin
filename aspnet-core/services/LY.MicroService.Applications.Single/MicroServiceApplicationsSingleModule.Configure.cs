@@ -775,12 +775,21 @@ public partial class MicroServiceApplicationsSingleModule
     {
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
+            // 允许第三方调用集成服务
             options.ExposeIntegrationServices = true;
         });
 
+        Configure<AbpIdentitySessionAspNetCoreOptions>(options =>
+        {
+            // abp 9.0版本可存储登录IP地域, 开启IP解析
+            options.IsParseIpLocation = true;
+        });
+
+        // 用于消息中心邮件集中发送
         services.Replace<Volo.Abp.Emailing.IEmailSender, PlatformEmailSender>(ServiceLifetime.Transient);
         services.AddKeyedTransient<Volo.Abp.Emailing.IEmailSender, MailKitSmtpEmailSender>("DefaultEmailSender");
 
+        // 用于消息中心短信集中发送
         services.Replace<ISmsSender, PlatformSmsSender>(ServiceLifetime.Transient);
         services.AddKeyedSingleton<ISmsSender, AliyunSmsSender>("DefaultSmsSender");
     }

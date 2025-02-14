@@ -3,6 +3,8 @@ using Elsa.WorkflowSettings;
 using Elsa.WorkflowSettings.Extensions;
 using Elsa.WorkflowSettings.Persistence.EntityFramework.Core;
 using Elsa.WorkflowSettings.Persistence.EntityFramework.Core.Extensions;
+using Elsa.WorkflowSettings.Persistence.EntityFramework.Core.Stores;
+using LINGYUN.Abp.Elsa.EntityFrameworkCore.Stores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,5 +41,7 @@ public abstract class WorkflowSettingsStartupBase : EntityFrameworkWorkflowSetti
         }, autoRunMigrations: false);
         elsa.Services.AddScoped((provider) => workflowSettingsOptionsBuilder.WorkflowSettingsOptions.WorkflowSettingsStoreFactory(provider));
         elsa.AddWorkflowSettings();
+
+        elsa.Services.Replace<EntityFrameworkWorkflowSettingsStore, FixedEntityFrameworkWorkflowSettingsStore>(ServiceLifetime.Scoped);
     }
 }

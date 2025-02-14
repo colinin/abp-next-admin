@@ -103,15 +103,6 @@ public partial class BackendAdminHttpApiHostModule
         });
     }
 
-    private void ConfigureDbContext()
-    {
-        // 配置Ef
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
-        });
-    }
-
     private void ConfigureTextTemplating()
     {
         Configure<AbpTextTemplatingCachingOptions>(options =>

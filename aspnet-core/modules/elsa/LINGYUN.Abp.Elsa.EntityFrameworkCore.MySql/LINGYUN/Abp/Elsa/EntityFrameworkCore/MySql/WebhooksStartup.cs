@@ -13,6 +13,7 @@ public class WebhooksStartup : WebhooksStartupBase
         options.UseMySql(
             connectionString,
             ServerVersion.AutoDetect(connectionString),
-            x => x.MigrationsHistoryTable("__EFMigrationsHistory_Webhooks"));
+            mysql => mysql.MigrationsHistoryTable("__EFMigrationsHistory_Webhooks")
+                .TranslateParameterizedCollectionsToConstants());
     }
 }

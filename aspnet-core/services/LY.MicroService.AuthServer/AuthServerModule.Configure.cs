@@ -212,14 +212,6 @@ public partial class AuthServerModule
         services.AddHealthChecks();
     }
 
-    private void ConfigureDbContext()
-    {
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
-        });
-    }
-
     private void ConfigureDataSeeder()
     {
 

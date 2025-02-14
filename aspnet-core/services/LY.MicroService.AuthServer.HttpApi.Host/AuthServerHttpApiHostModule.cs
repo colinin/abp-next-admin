@@ -124,7 +124,7 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         // 路由
         app.UseRouting();
         // 跨域

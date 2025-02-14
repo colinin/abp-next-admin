@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework> <!-- 或其他适合的框架 -->
+    <TargetFramework>net9.0</TargetFramework> <!-- 或其他适合的框架 -->
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>LINGYUN.Abp.MicroService.Templates</PackageId>
     <Version>8.3.4</Version>

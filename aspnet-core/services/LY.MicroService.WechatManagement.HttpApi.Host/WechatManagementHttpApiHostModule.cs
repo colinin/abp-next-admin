@@ -119,7 +119,7 @@ public partial class WechatManagementHttpApiHostModule : AbpModule
         app.UseForwardedHeaders();
         app.UseMapRequestLocalization();
         app.UseCorrelationId();
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();

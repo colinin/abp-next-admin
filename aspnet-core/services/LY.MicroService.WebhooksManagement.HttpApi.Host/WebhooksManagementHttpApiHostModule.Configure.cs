@@ -133,20 +133,6 @@ public partial class WebhooksManagementHttpApiHostModule
         });
     }
 
-    private void ConfigureDbContext()
-    {
-        // 配置Ef
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
-            //options.Configure(cfg =>
-            //{
-            //    cfg.UseMySQL();
-            //    cfg.DbContextOptions.EnableSensitiveDataLogging();
-            //});
-        });
-    }
-
     private void ConfigureBackgroundTasks(IServiceCollection services, IConfiguration configuration)
     {
         var webhooksOptions = services.ExecutePreConfiguredActions<AbpWebhooksOptions>();
