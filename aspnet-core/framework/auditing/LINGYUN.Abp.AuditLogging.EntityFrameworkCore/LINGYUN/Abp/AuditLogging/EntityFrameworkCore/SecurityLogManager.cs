@@ -118,6 +118,7 @@ public class SecurityLogManager : ISecurityLogManager, ITransientDependency
             userName,
             clientId,
             correlationId,
+            clientIpAddress,
             includeDetails,
             cancellationToken);
 
@@ -148,6 +149,7 @@ public class SecurityLogManager : ISecurityLogManager, ITransientDependency
             userName,
             clientId,
             correlationId,
+            clientIpAddress,
             cancellationToken);
     }
 }
