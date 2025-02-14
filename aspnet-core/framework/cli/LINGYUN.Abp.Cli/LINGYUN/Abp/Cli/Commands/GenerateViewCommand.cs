@@ -71,7 +71,7 @@ public class GenerateViewCommand : IConsoleCommand, ITransientDependency
             serviceType);
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Generate the view code from the http api proxy.";
     }

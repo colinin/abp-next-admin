@@ -68,5 +68,13 @@
       "sessionSettings": "会话管理"
     },
     "profile": "个人中心"
+  },
+  "platform": {
+    "title": "平台管理",
+    "messages": {
+      "title": "消息管理",
+      "email": "邮件消息",
+      "sms": "短信消息"
+    }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@abp/openiddict",
-  "version": "8.3.2",
+  "version": "9.0.4",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@abp/auditing": "workspace:*",
+    "@abp/components": "workspace:*",
     "@abp/core": "workspace:*",
     "@abp/identity": "workspace:*",
     "@abp/permissions": "workspace:*",

@@ -4,8 +4,9 @@ import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { Notification } from '../../types/notifications';
 
-import { h, ref } from 'vue';
+import { defineAsyncComponent, h, ref } from 'vue';
 
+import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
@@ -189,8 +190,16 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions,
 });
 
+const [NotificationModal, modalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./MyNotificationModal.vue'),
+  ),
+});
+
 /** 点击行标记已读 */
 async function onClickRead(row: Notification) {
+  modalApi.setData(row);
+  modalApi.open();
   await _onRead([row.id], NotificationReadState.Read);
 }
 
@@ -228,7 +237,7 @@ async function _onRead(idList: string[], state: NotificationReadState) {
       idList,
       state,
     });
-    await gridApi.reload();
+    await gridApi.query();
   } finally {
     gridApi.setLoading(false);
   }
@@ -332,6 +341,7 @@ const onDelete = (row: Notification) => {
       </div>
     </template>
   </Grid>
+  <NotificationModal />
 </template>
 
 <style lang="scss" scoped></style>
