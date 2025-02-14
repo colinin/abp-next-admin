@@ -18,6 +18,10 @@ public interface IAuditLogManager
         Guid id,
         CancellationToken cancellationToken = default);
 
+    Task DeleteManyAsync(
+        List<Guid> ids,
+        CancellationToken cancellationToken = default);
+
     Task<string> SaveAsync(
         AuditLogInfo auditInfo,
         CancellationToken cancellationToken = default);

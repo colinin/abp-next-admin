@@ -11,7 +11,7 @@ interface UserInfo {
   /**
    * 名称
    */
-  givenName: string;
+  givenName?: string;
   /**
    * 用户名
    */

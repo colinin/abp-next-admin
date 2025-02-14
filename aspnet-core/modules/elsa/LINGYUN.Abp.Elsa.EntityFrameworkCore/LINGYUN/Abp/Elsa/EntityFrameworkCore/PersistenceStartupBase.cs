@@ -1,8 +1,12 @@
-﻿using Elsa.Options;
+﻿using DotLiquid;
+using Elsa.Options;
 using Elsa.Persistence.EntityFramework.Core;
 using Elsa.Persistence.EntityFramework.Core.Extensions;
+using Elsa.Persistence.EntityFramework.Core.Stores;
+using LINGYUN.Abp.Elsa.EntityFrameworkCore.Stores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace LINGYUN.Abp.Elsa.EntityFrameworkCore;
@@ -33,5 +37,11 @@ public abstract class PersistenceStartupBase : EntityFrameworkCoreStartupBase
         {
             Configure(options, connectionString);
         }, autoRunMigrations: false);
+
+        elsa.Services.Replace<EntityFrameworkBookmarkStore, FixedEntityFrameworkBookmarkStore>(ServiceLifetime.Scoped);
+        elsa.Services.Replace<EntityFrameworkTriggerStore, FixedEntityFrameworkTriggerStore>(ServiceLifetime.Scoped);
+        elsa.Services.Replace<EntityFrameworkWorkflowDefinitionStore, FixedEntityFrameworkWorkflowDefinitionStore>(ServiceLifetime.Scoped);
+        elsa.Services.Replace<EntityFrameworkWorkflowExecutionLogRecordStore, FixedEntityFrameworkWorkflowExecutionLogRecordStore>(ServiceLifetime.Scoped);
+        elsa.Services.Replace<EntityFrameworkWorkflowInstanceStore, FixedEntityFrameworkWorkflowInstanceStore>(ServiceLifetime.Scoped);
     }
 }

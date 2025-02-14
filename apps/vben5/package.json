@@ -1,6 +1,6 @@
 {
   "name": "vben-admin-monorepo",
-  "version": "5.4.8",
+  "version": "5.5.3",
   "private": true,
   "keywords": [
     "monorepo",
@@ -27,6 +27,7 @@
   "scripts": {
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 turbo build",
     "build:analyze": "turbo build:analyze",
+    "build:app": "pnpm run build --filter=@abp/app-antd",
     "build:antd": "pnpm run build --filter=@vben/web-antd",
     "build:docker": "./scripts/deploy/build-local-docker-image.sh",
     "build:docs": "pnpm run build --filter=@vben/docs",
@@ -42,7 +43,7 @@
     "clean": "node ./scripts/clean.mjs",
     "commit": "czg",
     "dev": "turbo-run dev",
-    "dev:app": "pnpm -F @vben/app-antd run dev",
+    "dev:app": "pnpm -F @abp/app-antd run dev",
     "dev:antd": "pnpm -F @vben/web-antd run dev",
     "dev:docs": "pnpm -F @vben/docs run dev",
     "dev:ele": "pnpm -F @vben/web-ele run dev",
@@ -101,7 +102,7 @@
     "node": ">=20.10.0",
     "pnpm": ">=9.12.0"
   },
-  "packageManager": "pnpm@9.14.4",
+  "packageManager": "pnpm@9.15.5",
   "pnpm": {
     "peerDependencyRules": {
       "allowedVersions": {
@@ -112,6 +113,7 @@
       "@ast-grep/napi": "catalog:",
       "@ctrl/tinycolor": "catalog:",
       "clsx": "catalog:",
+      "esbuild": "0.24.0",
       "pinia": "catalog:",
       "vue": "catalog:"
     },

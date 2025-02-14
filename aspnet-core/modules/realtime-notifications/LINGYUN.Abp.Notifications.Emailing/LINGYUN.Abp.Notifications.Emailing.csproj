@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<AssemblyName>LINGYUN.Abp.Notifications.Emailing</AssemblyName>
 		<PackageId>LINGYUN.Abp.Notifications.Emailing</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>

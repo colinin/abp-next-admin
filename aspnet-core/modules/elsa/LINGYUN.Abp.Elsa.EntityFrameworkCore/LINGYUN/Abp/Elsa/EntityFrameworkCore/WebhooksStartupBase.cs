@@ -1,7 +1,10 @@
 ﻿using Elsa.Activities.Webhooks;
 using Elsa.Options;
+using Elsa.Persistence.EntityFramework.Core.Stores;
 using Elsa.Webhooks.Persistence.EntityFramework.Core;
 using Elsa.Webhooks.Persistence.EntityFramework.Core.Extensions;
+using Elsa.Webhooks.Persistence.EntityFramework.Core.Stores;
+using LINGYUN.Abp.Elsa.EntityFrameworkCore.Stores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,5 +40,7 @@ public abstract class WebhooksStartupBase : EntityFrameworkWebhookStartupBase
             Configure(options, connectionString);
         }, autoRunMigrations: false);
         elsa.Services.AddSingleton(webhookOptionsBuilder.WebhookOptions);
+
+        elsa.Services.Replace<EntityFrameworkWebhookDefinitionStore, FixedEntityFrameworkWebhookDefinitionStore>(ServiceLifetime.Scoped);
     }
 }

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { DialogContentEmits, DialogContentProps } from 'radix-vue';
+
 import type { ClassType } from '@vben-core/typings';
 
 import { computed, ref } from 'vue';
@@ -9,8 +11,6 @@ import { X } from 'lucide-vue-next';
 import {
   DialogClose,
   DialogContent,
-  type DialogContentEmits,
-  type DialogContentProps,
   DialogPortal,
   useForwardPropsEmits,
 } from 'radix-vue';
@@ -19,18 +19,21 @@ import DialogOverlay from './DialogOverlay.vue';
 
 const props = withDefaults(
   defineProps<
-    {
+    DialogContentProps & {
+      appendTo?: HTMLElement | string;
       class?: ClassType;
       closeClass?: ClassType;
       modal?: boolean;
       open?: boolean;
+      overlayBlur?: number;
       showClose?: boolean;
-    } & DialogContentProps
+      zIndex?: number;
+    }
   >(),
-  { showClose: true },
+  { appendTo: 'body', showClose: true },
 );
 const emits = defineEmits<
-  { close: []; closed: []; opened: [] } & DialogContentEmits
+  DialogContentEmits & { close: []; closed: []; opened: [] }
 >();
 
 const delegatedProps = computed(() => {
@@ -43,6 +46,18 @@ const delegatedProps = computed(() => {
   } = props;
 
   return delegated;
+});
+
+function isAppendToBody() {
+  return (
+    props.appendTo === 'body' ||
+    props.appendTo === document.body ||
+    !props.appendTo
+  );
+}
+
+const position = computed(() => {
+  return isAppendToBody() ? 'fixed' : 'absolute';
 });
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
@@ -64,17 +79,27 @@ defineExpose({
 </script>
 
 <template>
-  <DialogPortal>
+  <DialogPortal :to="appendTo">
     <Transition name="fade">
-      <DialogOverlay v-if="open && modal" @click="() => emits('close')" />
+      <DialogOverlay
+        v-if="open && modal"
+        :style="{
+          ...(zIndex ? { zIndex } : {}),
+          position,
+          backdropFilter:
+            overlayBlur && overlayBlur > 0 ? `blur(${overlayBlur}px)` : 'none',
+        }"
+        @click="() => emits('close')"
+      />
     </Transition>
     <DialogContent
       ref="contentRef"
+      :style="{ ...(zIndex ? { zIndex } : {}), position }"
       @animationend="onAnimationEnd"
       v-bind="forwarded"
       :class="
         cn(
-          'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-top-[48%] fixed z-[1000] w-full p-6 shadow-lg outline-none sm:rounded-xl',
+          'z-popup bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-top-[48%] w-full p-6 shadow-lg outline-none sm:rounded-xl',
           props.class,
         )
       "

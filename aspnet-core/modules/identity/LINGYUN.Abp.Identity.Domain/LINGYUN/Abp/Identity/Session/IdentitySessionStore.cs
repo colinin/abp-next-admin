@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
@@ -35,6 +36,7 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
         string ipAddresses,
         DateTime signedIn,
         DateTime? lastAccessed = null,
+        string ipRegion = null,
         Guid? tenantId = null,
         CancellationToken cancellationToken = default)
     {
@@ -53,6 +55,10 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
             signedIn,
             lastAccessed
         );
+        if (!ipRegion.IsNullOrWhiteSpace())
+        {
+            identitySession.SetProperty("Location", ipRegion);
+        }
 
         identitySession = await IdentitySessionRepository.InsertAsync(identitySession, cancellationToken: cancellationToken);
 

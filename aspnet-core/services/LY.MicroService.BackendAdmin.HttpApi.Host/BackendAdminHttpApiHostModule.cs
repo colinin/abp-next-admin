@@ -92,7 +92,6 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpCachingManagementApplicationModule),
     typeof(AbpCachingManagementHttpApiModule),
     typeof(AbpCachingManagementStackExchangeRedisModule),
-    typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
     typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
@@ -142,7 +141,6 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
-        ConfigureDbContext();
         ConfigureLocalization();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
@@ -174,8 +172,8 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         app.UseMapRequestLocalization();
         // http调用链
         app.UseCorrelationId();
-        // 虚拟文件系统
-        app.UseStaticFiles();
+        // 文件系统
+        app.MapAbpStaticAssets();
         // 路由
         app.UseRouting();
         // 跨域

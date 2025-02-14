@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
 		<AssemblyName>LINGYUN.Abp.DataProtection.EntityFrameworkCore</AssemblyName>
 		<PackageId>LINGYUN.Abp.DataProtection.EntityFrameworkCore</PackageId>

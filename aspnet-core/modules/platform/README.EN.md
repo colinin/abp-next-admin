@@ -42,6 +42,7 @@ Platform management module that provides a complete set of platform management f
 * `LINGYUN.Platform.Application.Contracts`: Application service contracts layer
 * `LINGYUN.Platform.Application`: Application service implementation layer
 * `LINGYUN.Platform.HttpApi`: HTTP API layer
+* `LINGYUN.Platform.HttpApi.Client`: HTTP API Proxy layer
 * `LINGYUN.Platform.Settings.VueVbenAdmin`: VueVbenAdmin frontend framework settings module
 
 ## Quick Start

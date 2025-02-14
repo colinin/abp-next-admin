@@ -1,0 +1,38 @@
+<Project>
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
+		<Version>8.2.1</Version>
+		<Authors>colin</Authors>
+		<NoWarn>$(NoWarn);CS1591;CS0436;CS8618;NU1803</NoWarn>
+		<PackageProjectUrl>https://github.com/colinin/abp-next-admin</PackageProjectUrl>
+		<PackageOutputPath>$(SolutionDir)LocalNuget</PackageOutputPath>
+		<PackageVersion>8.2.1</PackageVersion>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/colinin/abp-next-admin</RepositoryUrl>
+		<GeneratePackageOnBuild Condition="$(AssemblyName.StartsWith('LINGYUN'))">true</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="LocalNuget\**" />
+		<EmbeddedResource Remove="LocalNuget\**" />
+		<None Remove="LocalNuget\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="Logs\**" />
+		<EmbeddedResource Remove="Logs\**" />
+		<None Remove="Logs\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="Modules\**" />
+		<EmbeddedResource Remove="Modules\**" />
+		<None Remove="Modules\**" />
+	</ItemGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>$(SolutionDir)LocalNuget</OutputPath>
+	</PropertyGroup>
+
+</Project>

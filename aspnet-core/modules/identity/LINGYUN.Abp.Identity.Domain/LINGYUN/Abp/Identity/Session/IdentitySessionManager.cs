@@ -68,6 +68,7 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
                     clientIpAddress,
                     Clock.Now,
                     Clock.Now,
+                    deviceInfo.IpRegion,
                     tenantId,
                     cancellationToken);
 

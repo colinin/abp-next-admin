@@ -118,7 +118,6 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
-        ConfigureDbContext();
         ConfigureBlobStoring();
         ConfigureLocalization();
         ConfigureKestrelServer();
@@ -167,7 +166,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         // 路由
         app.UseRouting();
         // 跨域

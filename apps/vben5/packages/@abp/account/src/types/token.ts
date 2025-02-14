@@ -32,6 +32,10 @@ interface TokenResult {
   /** 令牌类型 */
   tokenType: string;
 }
+interface OAuthTokenRefreshModel {
+  /** 刷新令牌 */
+  refreshToken: string;
+}
 /** oauth标准令牌返回结构 */
 interface OAuthTokenResult {
   /** 访问令牌 */
@@ -44,10 +48,27 @@ interface OAuthTokenResult {
   token_type: string;
 }
 
+interface OAuthError {
+  /** 错误类型 */
+  error: string;
+  /** 错误描述 */
+  error_description: string;
+  /** 错误描述链接 */
+  error_uri?: string;
+}
+
+interface TwoFactorError extends OAuthError {
+  twoFactorToken: string;
+  userId: string;
+}
+
 export type {
+  OAuthError,
+  OAuthTokenRefreshModel,
   OAuthTokenResult,
   PasswordTokenRequest,
   PasswordTokenRequestModel,
   TokenRequest,
   TokenResult,
+  TwoFactorError,
 };

@@ -1,7 +1,7 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "Permission:Notification": "通知管理",
+    "Permission:Notifications": "通知管理",
     "Permission:GroupDefinitions": "分组定义",
     "Permission:NotificationDefinitions": "通知定义",
     "Permission:Create": "新增",

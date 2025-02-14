@@ -32,7 +32,9 @@ public abstract class OpenIddictApplicationCreateOrUpdateDto : ExtensibleObject
 
     public List<string> RedirectUris { get; set; } = new List<string>();
 
-    public List<string> Requirements { get; set; } = new List<string>();
+    public OpenIddictApplicationRequirementsDto Requirements { get; set; } = new OpenIddictApplicationRequirementsDto();
+
+    public OpenIddictApplicationSettingsDto Settings { get; set; } = new OpenIddictApplicationSettingsDto();
 
     [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ApplicationTypeMaxLength))]
     public string ApplicationType { get; set; }

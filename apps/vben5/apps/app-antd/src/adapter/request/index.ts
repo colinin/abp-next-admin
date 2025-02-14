@@ -5,12 +5,14 @@ import {
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
-import { requestClient } from '@abp/request';
+import { useOAuthError, useTokenApi } from '@abp/account';
+import { requestClient, useWrapperResult } from '@abp/request';
 import { message } from 'ant-design-vue';
 
 import { useAuthStore } from '#/store';
 
 export function initRequestClient() {
+  const { refreshTokenApi } = useTokenApi();
   /**
    * 重新认证逻辑
    */
@@ -33,6 +35,20 @@ export function initRequestClient() {
    * 刷新token逻辑
    */
   async function doRefreshToken() {
+    const accessStore = useAccessStore();
+    if (accessStore.refreshToken) {
+      try {
+        const { accessToken, tokenType, refreshToken } = await refreshTokenApi({
+          refreshToken: accessStore.refreshToken,
+        });
+        const newToken = `${tokenType} ${accessToken}`;
+        accessStore.setAccessToken(newToken);
+        accessStore.setRefreshToken(refreshToken);
+        return newToken;
+      } catch {
+        console.warn('The refresh token has expired or is unavailable.');
+      }
+    }
     return '';
   }
 
@@ -47,6 +63,7 @@ export function initRequestClient() {
         config.headers.Authorization = `${accessStore.accessToken}`;
       }
       config.headers['Accept-Language'] = preferences.app.locale;
+      config.headers['X-Request-From'] = 'vben';
       return config;
     },
   });
@@ -54,17 +71,11 @@ export function initRequestClient() {
   // response数据解构
   requestClient.addResponseInterceptor<any>({
     fulfilled: (response) => {
-      const { data, status, headers } = response;
+      const { data, status } = response;
+      const { hasWrapResult, getData } = useWrapperResult(response);
 
-      if (headers._abpwrapresult === 'true') {
-        const { code, result, message, details } = data;
-        const hasSuccess = data && Reflect.has(data, 'code') && code === '0';
-        if (hasSuccess) {
-          return result;
-        }
-        const content = details || message;
-
-        throw Object.assign({}, response, { response, message: content });
+      if (hasWrapResult()) {
+        return getData();
       }
 
       if (status >= 200 && status < 400) {
@@ -92,6 +103,11 @@ export function initRequestClient() {
       // 这里可以根据业务进行定制,你可以拿到 error 内的信息进行定制化处理，根据不同的 code 做不同的提示，而不是直接使用 message.error 提示 msg
       // 当前mock接口返回的错误字段是 error 或者 message
       const responseData = error?.response?.data ?? {};
+      if (responseData?.error_description) {
+        const { formatError } = useOAuthError();
+        message.error(formatError(responseData) || msg);
+        return;
+      }
       const errorMessage = responseData?.error ?? responseData?.message ?? '';
       // 如果没有错误信息，则会根据状态码进行提示
       message.error(errorMessage || msg);

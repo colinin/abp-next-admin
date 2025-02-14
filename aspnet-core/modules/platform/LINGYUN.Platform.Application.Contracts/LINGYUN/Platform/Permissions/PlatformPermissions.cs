@@ -113,6 +113,24 @@ public static class PlatformPermissions
         public const string ManageAttachments = Default + ".ManageAttachments";
     }
 
+    public class EmailMessage
+    {
+        public const string Default = GroupName + ".EmailMessage";
+
+        public const string Delete = Default + ".Delete";
+
+        public const string SendMessage = Default + ".SendMessage";
+    }
+
+    public class SmsMessage
+    {
+        public const string Default = GroupName + ".SmsMessage";
+
+        public const string Delete = Default + ".Delete";
+
+        public const string SendMessage = Default + ".SendMessage";
+    }
+
     public static string[] GetAll()
     {
         return ReflectionHelper.GetPublicConstantsRecursively(typeof(PlatformPermissions));

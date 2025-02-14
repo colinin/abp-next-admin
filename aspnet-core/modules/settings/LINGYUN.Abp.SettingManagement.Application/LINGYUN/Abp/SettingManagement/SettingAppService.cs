@@ -477,7 +477,7 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
                         description: LocalizableString.Create<AbpSettingManagementResource>("Description:Emailing.SendTestEmail")),
                     StringLocalizerFactory,
                     "",
-                    ValueType.String,
+                    ValueType.NoSet,
                     providerName)
                     .WithSlot("send-test-email")
                     .RequiredPermission("SettingManagement.Emailing");

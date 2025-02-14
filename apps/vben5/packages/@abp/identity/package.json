@@ -1,6 +1,6 @@
 {
   "name": "@abp/identity",
-  "version": "8.2.3",
+  "version": "9.0.4",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
@@ -20,8 +20,9 @@
     }
   },
   "dependencies": {
+    "@abp/auditing": "workspace:*",
     "@abp/core": "workspace:*",
-    "@abp/permission": "workspace:*",
+    "@abp/permissions": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/ui": "workspace:*",
     "@ant-design/icons-vue": "catalog:",
@@ -32,6 +33,10 @@
     "@vben/layouts": "workspace:*",
     "@vben/locales": "workspace:*",
     "ant-design-vue": "catalog:",
+    "lodash.debounce": "catalog:",
     "vue": "catalog:*"
+  },
+  "devDependencies": {
+    "@types/lodash.debounce": "catalog:"
   }
 }

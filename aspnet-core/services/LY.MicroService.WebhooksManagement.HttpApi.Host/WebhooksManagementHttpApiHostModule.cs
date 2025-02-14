@@ -25,7 +25,6 @@ using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using LY.MicroService.WebhooksManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
@@ -35,7 +34,6 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.MailKit;
@@ -67,7 +65,6 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(WebhooksManagementMigrationsEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpEmailingExceptionHandlingModule),
@@ -107,7 +104,6 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
-        ConfigureDbContext();
         ConfigureLocalization();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
@@ -138,7 +134,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         app.UseForwardedHeaders();
         app.UseMapRequestLocalization();
         app.UseCorrelationId();
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();

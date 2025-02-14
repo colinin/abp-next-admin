@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<AssemblyName>LINGYUN.Abp.Identity.Session.AspNetCore</AssemblyName>
 		<PackageId>LINGYUN.Abp.Identity.Session.AspNetCore</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\framework\common\LINGYUN.Abp.IP2Region\LINGYUN.Abp.IP2Region.csproj" />
+		<ProjectReference Include="..\..\..\framework\common\LINGYUN.Abp.IP.Location\LINGYUN.Abp.IP.Location.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Identity.Session\LINGYUN.Abp.Identity.Session.csproj" />
 	</ItemGroup>
 

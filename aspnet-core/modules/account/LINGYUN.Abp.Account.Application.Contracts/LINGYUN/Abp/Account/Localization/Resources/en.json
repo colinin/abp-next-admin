@@ -40,6 +40,7 @@
     "ResetAuthenticator": "Reset Authenticator",
     "ResetAuthenticatorDesc": "If you want to change the authentication program, you can reset the validator here.",
     "ResetAuthenticatorWarning": "Resetting the authenticator key will render the authenticator code unusable until it is reconfigured,If you do not have any other validators, the secondary authentication will be revoked, which may lower the security level of your account.",
+    "YourAuthenticatorIsSuccessfullyReset": "Your authenticator reset was successful.",
     "Steps:PreStep": "Pre Step",
     "Steps:NextStep": "Next Step",
     "Steps:Done": "Done"

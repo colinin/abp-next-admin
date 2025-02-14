@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Platform.Datas;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
+using LINGYUN.Platform.Messages;
 using LINGYUN.Platform.Packages;
 using LINGYUN.Platform.Portal;
 using Microsoft.EntityFrameworkCore;
@@ -22,4 +23,6 @@ public interface IPlatformDbContext : IEfCoreDbContext
     DbSet<Package> Packages { get; }
     DbSet<PackageBlob> PackageBlobs { get; }
     DbSet<Enterprise> Enterprises { get; }
+    DbSet<EmailMessage> EmailMessages { get; }
+    DbSet<SmsMessage> SmsMessages { get; }
 }

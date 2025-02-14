@@ -12,7 +12,7 @@ import {
   type VxeGridProps,
 } from '@abp/ui';
 
-import { getUnaddedRoleListApi } from '../../api/organization-units';
+import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
 
 defineOptions({
   name: 'SelectRoleModal',
@@ -20,6 +20,7 @@ defineOptions({
 const emits = defineEmits<{
   (event: 'confirm', items: IdentityRoleDto[]): void;
 }>();
+const { cancel, getUnaddedRoleListApi } = useOrganizationUnitsApi();
 
 const selectedRoles = ref<IdentityRoleDto[]>([]);
 
@@ -53,6 +54,9 @@ const [Modal, modalApi] = useVbenModal({
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel();
   },
   onConfirm: async () => {
     emits('confirm', toValue(selectedRoles));
