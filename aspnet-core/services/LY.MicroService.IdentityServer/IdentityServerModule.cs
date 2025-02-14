@@ -113,7 +113,6 @@ public partial class IdentityServerModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        ConfigureDbContext();
         ConfigureCaching(configuration);
         ConfigureIdentity(configuration);
         ConfigureVirtualFileSystem();
