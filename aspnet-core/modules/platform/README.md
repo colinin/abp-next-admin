@@ -42,6 +42,7 @@
 * `LINGYUN.Platform.Application.Contracts`: 应用服务契约层
 * `LINGYUN.Platform.Application`: 应用服务实现层
 * `LINGYUN.Platform.HttpApi`: HTTP API层
+* `LINGYUN.Platform.HttpApi.Client`: HTTP API代理层
 * `LINGYUN.Platform.Settings.VueVbenAdmin`: VueVbenAdmin前端框架设置模块
 
 ## 快速开始

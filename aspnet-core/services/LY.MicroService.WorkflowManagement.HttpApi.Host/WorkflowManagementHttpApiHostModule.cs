@@ -141,7 +141,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         // 本地化
         app.UseMapRequestLocalization();
         app.UseCorrelationId();
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseCors(DefaultCorsPolicyName);
         app.UseElsaFeatures();

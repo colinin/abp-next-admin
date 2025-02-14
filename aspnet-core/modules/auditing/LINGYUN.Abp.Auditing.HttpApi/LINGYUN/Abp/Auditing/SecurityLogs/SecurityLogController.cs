@@ -32,6 +32,14 @@ public class SecurityLogController : AbpControllerBase, ISecurityLogAppService
         await SecurityLogAppService.DeleteAsync(id);
     }
 
+    [HttpDelete]
+    [Route("bulk")]
+    [Authorize(AuditingPermissionNames.SecurityLog.Delete)]
+    public async virtual Task DeleteManyAsync([FromBody] SecurityLogDeleteManyInput input)
+    {
+        await SecurityLogAppService.DeleteManyAsync(input);
+    }
+
     [HttpGet]
     [Route("{id}")]
     public async virtual Task<SecurityLogDto> GetAsync(Guid id)

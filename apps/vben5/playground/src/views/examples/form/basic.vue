@@ -1,16 +1,40 @@
 <script lang="ts" setup>
+import { h, ref } from 'vue';
+
 import { Page } from '@vben/common-ui';
 
-import { Button, Card, message } from 'ant-design-vue';
+import { useDebounceFn } from '@vueuse/core';
+import { Button, Card, message, Spin, TabPane, Tabs } from 'ant-design-vue';
 import dayjs from 'dayjs';
 
 import { useVbenForm } from '#/adapter/form';
+import { getAllMenusApi } from '#/api';
 
 import DocButton from '../doc-button.vue';
+
+const activeTab = ref('basic');
+const keyword = ref('');
+const fetching = ref(false);
+// 模拟远程获取数据
+function fetchRemoteOptions({ keyword = '选项' }: Record<string, any>) {
+  fetching.value = true;
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const options = Array.from({ length: 10 }).map((_, index) => ({
+        label: `${keyword}-${index}`,
+        value: `${keyword}-${index}`,
+      }));
+      resolve(options);
+      fetching.value = false;
+    }, 1000);
+  });
+}
 
 const [BaseForm, baseFormApi] = useVbenForm({
   // 所有表单项共用，可单独在表单内覆盖
   commonConfig: {
+    // 在label后显示一个冒号
+    colon: true,
     // 所有表单项
     componentProps: {
       class: 'w-full',
@@ -35,6 +59,74 @@ const [BaseForm, baseFormApi] = useVbenForm({
       fieldName: 'username',
       // 界面显示的label
       label: '字符串',
+      rules: 'required',
+    },
+    {
+      // 组件需要在 #/adapter.ts内注册，并加上类型
+      component: 'ApiSelect',
+      // 对应组件的参数
+      componentProps: {
+        // 菜单接口转options格式
+        afterFetch: (data: { name: string; path: string }[]) => {
+          return data.map((item: any) => ({
+            label: item.name,
+            value: item.path,
+          }));
+        },
+        // 菜单接口
+        api: getAllMenusApi,
+      },
+      // 字段名
+      fieldName: 'api',
+      // 界面显示的label
+      label: 'ApiSelect',
+    },
+    {
+      component: 'ApiSelect',
+      // 对应组件的参数
+      componentProps: () => {
+        return {
+          api: fetchRemoteOptions,
+          // 禁止本地过滤
+          filterOption: false,
+          // 如果正在获取数据，使用插槽显示一个loading
+          notFoundContent: fetching.value ? undefined : null,
+          // 搜索词变化时记录下来， 使用useDebounceFn防抖。
+          onSearch: useDebounceFn((value: string) => {
+            keyword.value = value;
+          }, 300),
+          // 远程搜索参数。当搜索词变化时，params也会更新
+          params: {
+            keyword: keyword.value || undefined,
+          },
+          showSearch: true,
+        };
+      },
+      // 字段名
+      fieldName: 'remoteSearch',
+      // 界面显示的label
+      label: '远程搜索',
+      renderComponentContent: () => {
+        return {
+          notFoundContent: fetching.value ? h(Spin) : undefined,
+        };
+      },
+    },
+    {
+      component: 'ApiTreeSelect',
+      // 对应组件的参数
+      componentProps: {
+        // 菜单接口
+        api: getAllMenusApi,
+        // 菜单接口转options格式
+        labelField: 'name',
+        valueField: 'path',
+        childrenField: 'children',
+      },
+      // 字段名
+      fieldName: 'apiTree',
+      // 界面显示的label
+      label: 'ApiTreeSelect',
     },
     {
       component: 'InputPassword',
@@ -52,6 +144,11 @@ const [BaseForm, baseFormApi] = useVbenForm({
       fieldName: 'number',
       label: '数字(带后缀)',
       suffix: () => '¥',
+    },
+    {
+      component: 'IconPicker',
+      fieldName: 'icon',
+      label: '图标',
     },
     {
       component: 'Select',
@@ -331,18 +428,30 @@ function handleSetFormValue() {
   <Page
     content-class="flex flex-col gap-4"
     description="表单组件基础示例，请注意，该页面用到的参数代码会添加一些简单注释，方便理解，请仔细查看。"
+    header-class="pb-0"
     title="表单组件"
   >
-    <template #extra>
-      <DocButton path="/components/common-ui/vben-form" />
+    <template #description>
+      <div class="text-muted-foreground">
+        <p>
+          表单组件基础示例，请注意，该页面用到的参数代码会添加一些简单注释，方便理解，请仔细查看。
+        </p>
+      </div>
+      <Tabs v-model:active-key="activeTab" :tab-bar-style="{ marginBottom: 0 }">
+        <TabPane key="basic" tab="基础示例" />
+        <TabPane key="layout" tab="自定义布局" />
+      </Tabs>
     </template>
-    <Card title="基础示例">
+    <template #extra>
+      <DocButton class="mb-2" path="/components/common-ui/vben-form" />
+    </template>
+    <Card v-show="activeTab === 'basic'" title="基础示例">
       <template #extra>
         <Button type="primary" @click="handleSetFormValue">设置表单值</Button>
       </template>
       <BaseForm />
     </Card>
-    <Card title="使用tailwind自定义布局">
+    <Card v-show="activeTab === 'layout'" title="使用tailwind自定义布局">
       <CustomLayoutForm />
     </Card>
   </Page>

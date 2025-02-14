@@ -6,15 +6,19 @@ import { useRouter } from 'vue-router';
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@vben/constants';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
-import { getUserInfoApi, loginApi } from '@abp/account';
-import { useAbpStore } from '@abp/core';
+import { useTokenApi, useUserInfoApi } from '@abp/account';
+import { Events, useAbpStore, useEventBus } from '@abp/core';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { getConfigApi } from '#/api/core/abp';
+import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
+  const { publish } = useEventBus();
+  const { loginApi } = useTokenApi();
+  const { getUserInfoApi } = useUserInfoApi();
+  const { getConfigApi } = useAbpConfigApi();
   const accessStore = useAccessStore();
   const userStore = useUserStore();
   const abpStore = useAbpStore();
@@ -45,6 +49,8 @@ export const useAuthStore = defineStore('auth', () => {
         userInfo = await fetchUserInfo();
 
         userStore.setUserInfo(userInfo);
+
+        publish(Events.UserLogin, userInfo);
 
         if (accessStore.loginExpired) {
           accessStore.setLoginExpired(false);
@@ -80,6 +86,8 @@ export const useAuthStore = defineStore('auth', () => {
     resetAllStores();
     accessStore.setLoginExpired(false);
 
+    publish(Events.UserLogout);
+
     // 回登录页带上当前路由地址
     await router.replace({
       path: LOGIN_PATH,
@@ -96,12 +104,18 @@ export const useAuthStore = defineStore('auth', () => {
     const userInfoRes = await getUserInfoApi();
     const abpConfig = await getConfigApi();
     userInfo = {
-      userId: userInfoRes.sub,
-      username: userInfoRes.uniqueName,
-      realName: userInfoRes.name,
+      userId: userInfoRes.sub ?? abpConfig.currentUser.id,
+      username: userInfoRes.uniqueName ?? abpConfig.currentUser.userName,
+      realName: userInfoRes.name ?? abpConfig.currentUser.name,
       avatar: userInfoRes.avatarUrl ?? userInfoRes.picture,
       desc: userInfoRes.uniqueName ?? userInfoRes.name,
       email: userInfoRes.email ?? userInfoRes.email,
+      emailVerified:
+        userInfoRes.emailVerified ?? abpConfig.currentUser.emailVerified,
+      phoneNumber: userInfoRes.phoneNumber ?? abpConfig.currentUser.phoneNumber,
+      phoneNumberVerified:
+        userInfoRes.phoneNumberVerified ??
+        abpConfig.currentUser.phoneNumberVerified,
       token: '',
       roles: abpConfig.currentUser.roles,
       homePath: '/',

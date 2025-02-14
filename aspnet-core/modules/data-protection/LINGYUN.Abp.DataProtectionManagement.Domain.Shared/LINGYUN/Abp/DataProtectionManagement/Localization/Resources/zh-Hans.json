@@ -1,6 +1,13 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Permission:DataProtectionManagement": "数据保护",
+    "Permission:EntityTypeInfo": "实体类型",
+    "Permission:RoleEntityRule": "角色规则",
+    "Permission:OrganizationUnitEntityRule": "组织机构规则",
+    "Permission:Create": "新增",
+    "Permission:Update": "修改",
+    "Permission:Delete": "删除",
     "DataProtectionManagement:001100": "已经存在名为 {Name} 的实体类型定义!",
     "DataProtectionManagement:001200": "实体类型已经存在名为 {Name} 的属性定义!",
     "DataProtectionManagement:002100": "已为角色 {RoleName} 分配了实体 {Name} 的 {Operation} 访问规则!",

@@ -17,6 +17,10 @@ public interface ISecurityLogManager
         Guid id,
         CancellationToken cancellationToken = default);
 
+    Task DeleteManyAsync(
+       List<Guid> ids,
+       CancellationToken cancellationToken = default);
+
     Task SaveAsync(
         SecurityLogInfo securityLogInfo,
         CancellationToken cancellationToken = default);

@@ -1,5 +1,15 @@
 {
   "title": "Abp框架",
+  "oauth": {
+    "twoFactor": {
+      "title": "二次认证",
+      "authenticator": "验证方式",
+      "emailAddress": "电子邮件",
+      "phoneNumber": "手机号码",
+      "getCode": "获取验证码",
+      "code": "验证码"
+    }
+  },
   "manage": {
     "title": "管理",
     "identity": {
@@ -8,7 +18,63 @@
       "role": "角色",
       "claimTypes": "身份标识",
       "securityLogs": "安全日志",
-      "organizationUnits": "组织机构"
+      "organizationUnits": "组织机构",
+      "auditLogs": "审计日志",
+      "sessions": "会话管理"
+    },
+    "permissions": {
+      "title": "权限管理",
+      "groups": "权限分组",
+      "definitions": "权限定义"
+    },
+    "settings": {
+      "title": "设置管理",
+      "definitions": "设置定义",
+      "system": "系统设置"
+    },
+    "notifications": {
+      "title": "通知管理",
+      "myNotifilers": "我的通知"
+    }
+  },
+  "openiddict": {
+    "title": "OpenIddict",
+    "applications": "应用管理",
+    "authorizations": "授权管理",
+    "scopes": "范围管理",
+    "tokens": "授权令牌"
+  },
+  "account": {
+    "title": "账户管理",
+    "settings": {
+      "title": "个人设置",
+      "basic": {
+        "title": "基本设置"
+      },
+      "security": {
+        "title": "安全设置",
+        "unSet": "未设置",
+        "verified": "已验证",
+        "unVerified": "未验证",
+        "email": "电子邮件",
+        "password": "密码",
+        "passwordDesc": "重置我的密码",
+        "phoneNumber": "手机号码"
+      },
+      "bindSettings": "账号绑定",
+      "noticeSettings": "新消息通知",
+      "authenticatorSettings": "身份验证程序",
+      "changeAvatar": "更改头像",
+      "sessionSettings": "会话管理"
+    },
+    "profile": "个人中心"
+  },
+  "platform": {
+    "title": "平台管理",
+    "messages": {
+      "title": "消息管理",
+      "email": "邮件消息",
+      "sms": "短信消息"
     }
   }
 }

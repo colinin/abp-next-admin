@@ -13,8 +13,8 @@ import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import { Button, Modal } from 'ant-design-vue';
 
-import { addMembers, getUserListApi } from '../../api/organization-units';
-import { removeOrganizationUnit } from '../../api/users';
+import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
+import { useUsersApi } from '../../api/useUsersApi';
 import { OrganizationUnitPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -24,6 +24,8 @@ defineOptions({
 const props = defineProps<{
   selectedKey?: string;
 }>();
+const { cancel, removeOrganizationUnitApi } = useUsersApi();
+const { addMembers, getUserListApi } = useOrganizationUnitsApi();
 
 const SelectMemberModal = defineAsyncComponent(
   () => import('./SelectMemberModal.vue'),
@@ -111,9 +113,12 @@ const onDelete = (row: IdentityUserDto) => {
     content: $t('AbpIdentity.OrganizationUnit:AreYouSureRemoveUser', [
       row.userName,
     ]),
+    onCancel: () => {
+      cancel('User closed cancel delete modal.');
+    },
     onOk: () => {
       setLoading(true);
-      return removeOrganizationUnit(row.id, props.selectedKey!)
+      return removeOrganizationUnitApi(row.id, props.selectedKey!)
         .then(onRefresh)
         .finally(() => setLoading(false));
     },

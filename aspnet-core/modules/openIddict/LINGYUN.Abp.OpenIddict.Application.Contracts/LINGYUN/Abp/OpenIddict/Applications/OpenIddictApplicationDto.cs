@@ -20,11 +20,11 @@ public class OpenIddictApplicationDto : ExtensibleAuditedEntityDto<Guid>, IHasCo
     public List<string> PostLogoutRedirectUris { get; set; } = new List<string>();
     public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
     public List<string> RedirectUris { get; set; } = new List<string>();
-    public List<string> Requirements { get; set; } = new List<string>();
+    public OpenIddictApplicationRequirementsDto Requirements { get; set; } = new OpenIddictApplicationRequirementsDto();
+    public OpenIddictApplicationSettingsDto Settings { get; set; } = new OpenIddictApplicationSettingsDto();
     public string ApplicationType { get; set; }
     public string ClientUri { get; set; }
     public string LogoUri { get; set; }
-    public string Settings { get; set; }
     public string JsonWebKeySet { get; set; }
     public string ConcurrencyStamp { get; set; }
 }

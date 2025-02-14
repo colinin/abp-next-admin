@@ -18,8 +18,8 @@ public class Program
     {
         try
         {
-            Console.Title = "IdentityServer";
-            Log.Information("Starting IdentityServer.");
+            Console.Title = "AuthServer";
+            Log.Information("Starting AuthServer.");
  
             var builder = WebApplication.CreateBuilder(args);
             builder.Host.AddAppSettingsSecretsJson()

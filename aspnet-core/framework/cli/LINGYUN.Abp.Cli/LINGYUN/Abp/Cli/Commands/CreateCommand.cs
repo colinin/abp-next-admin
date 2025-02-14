@@ -179,7 +179,7 @@ namespace LINGYUN.Abp.Cli.Commands
             await CreateProjectService.CreateAsync(projectArgs);
         }
 
-        public string GetShortDescription()
+        public static string GetShortDescription()
         {
             return "Generate a new solution based on the customed ABP startup templates.";
         }
@@ -196,7 +196,7 @@ namespace LINGYUN.Abp.Cli.Commands
             sb.AppendLine("Options:");
             sb.AppendLine("");
             sb.AppendLine("-pk|--package <package-name>               (default: app)");
-            sb.AppendLine("-t|--template <template-name>               (default: lam)");
+            sb.AppendLine("-t|--template <template-name>               (default: lam), optional:lam、laa");
             sb.AppendLine("-d|--database-provider <database-provider>  (if supported by the template)");
             sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
             sb.AppendLine("-v|--version <version>                      (default: latest version)");

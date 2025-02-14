@@ -4,6 +4,7 @@ export interface UserInfo {
   realName: string;
   roles: string[];
   username: string;
+  homePath?: string;
 }
 
 export const MOCK_USERS: UserInfo[] = [
@@ -20,6 +21,7 @@ export const MOCK_USERS: UserInfo[] = [
     realName: 'Admin',
     roles: ['admin'],
     username: 'admin',
+    homePath: '/workspace',
   },
   {
     id: 2,
@@ -27,6 +29,7 @@ export const MOCK_USERS: UserInfo[] = [
     realName: 'Jack',
     roles: ['user'],
     username: 'jack',
+    homePath: '/analytics',
   },
 ];
 
@@ -50,13 +53,12 @@ export const MOCK_CODES = [
 
 const dashboardMenus = [
   {
-    component: 'BasicLayout',
     meta: {
       order: -1,
       title: 'page.dashboard.title',
     },
     name: 'Dashboard',
-    path: '/',
+    path: '/dashboard',
     redirect: '/analytics',
     children: [
       {
@@ -113,7 +115,6 @@ const createDemosMenus = (role: 'admin' | 'super' | 'user') => {
 
   return [
     {
-      component: 'BasicLayout',
       meta: {
         icon: 'ic:baseline-view-in-ar',
         keepAlive: true,

@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { CSSProperties } from 'vue';
+
 import type { VbenLayoutProps } from './vben-layout';
 
-import type { CSSProperties } from 'vue';
 import { computed, ref, watch } from 'vue';
 
 import {
@@ -11,6 +12,7 @@ import {
 } from '@vben-core/composables';
 import { Menu } from '@vben-core/icons';
 import { VbenIconButton } from '@vben-core/shadcn-ui';
+import { ELEMENT_ID_MAIN_CONTENT } from '@vben-core/shared/constants';
 
 import { useMouse, useScroll, useThrottleFn } from '@vueuse/core';
 
@@ -86,6 +88,7 @@ const { y: mouseY } = useMouse({ target: contentRef, type: 'client' });
 const {
   currentLayout,
   isFullContent,
+  isHeaderMixedNav,
   isHeaderNav,
   isMixedNav,
   isSidebarMixedNav,
@@ -111,7 +114,9 @@ const getSideCollapseWidth = computed(() => {
   const { sidebarCollapseShowTitle, sidebarMixedWidth, sideCollapseWidth } =
     props;
 
-  return sidebarCollapseShowTitle || isSidebarMixedNav.value
+  return sidebarCollapseShowTitle ||
+    isSidebarMixedNav.value ||
+    isHeaderMixedNav.value
     ? sidebarMixedWidth
     : sideCollapseWidth;
 });
@@ -144,12 +149,15 @@ const getSidebarWidth = computed(() => {
 
   if (
     !sidebarEnableState.value ||
-    (sidebarHidden && !isSidebarMixedNav.value && !isMixedNav.value)
+    (sidebarHidden &&
+      !isSidebarMixedNav.value &&
+      !isMixedNav.value &&
+      !isHeaderMixedNav.value)
   ) {
     return width;
   }
 
-  if (isSidebarMixedNav.value && !isMobile) {
+  if ((isHeaderMixedNav.value || isSidebarMixedNav.value) && !isMobile) {
     width = sidebarMixedWidth;
   } else if (sidebarCollapse.value) {
     width = isMobile ? 0 : getSideCollapseWidth.value;
@@ -175,7 +183,9 @@ const isSideMode = computed(
   () =>
     currentLayout.value === 'mixed-nav' ||
     currentLayout.value === 'sidebar-mixed-nav' ||
-    currentLayout.value === 'sidebar-nav',
+    currentLayout.value === 'sidebar-nav' ||
+    currentLayout.value === 'header-mixed-nav' ||
+    currentLayout.value === 'header-sidebar-nav',
 );
 
 /**
@@ -207,12 +217,13 @@ const mainStyle = computed(() => {
     headerFixed.value &&
     currentLayout.value !== 'header-nav' &&
     currentLayout.value !== 'mixed-nav' &&
+    currentLayout.value !== 'header-sidebar-nav' &&
     showSidebar.value &&
     !props.isMobile
   ) {
     // fixed模式下生效
     const isSideNavEffective =
-      isSidebarMixedNav.value &&
+      (isSidebarMixedNav.value || isHeaderMixedNav.value) &&
       sidebarExpandOnHover.value &&
       sidebarExtraVisible.value;
 
@@ -457,6 +468,8 @@ function handleHeaderToggle() {
     emit('toggleSidebar');
   }
 }
+
+const idMainContent = ELEMENT_ID_MAIN_CONTENT;
 </script>
 
 <template>
@@ -473,7 +486,7 @@ function handleHeaderToggle() {
       :extra-width="sidebarExtraWidth"
       :fixed-extra="sidebarExpandOnHover"
       :header-height="isMixedNav ? 0 : headerHeight"
-      :is-sidebar-mixed="isSidebarMixedNav"
+      :is-sidebar-mixed="isSidebarMixedNav || isHeaderMixedNav"
       :margin-top="sidebarMarginTop"
       :mixed-width="sidebarMixedWidth"
       :show="showSidebar"
@@ -486,7 +499,7 @@ function handleHeaderToggle() {
         <slot name="logo"></slot>
       </template>
 
-      <template v-if="isSidebarMixedNav">
+      <template v-if="isSidebarMixedNav || isHeaderMixedNav">
         <slot name="mixed-menu"></slot>
       </template>
       <template v-else>
@@ -533,7 +546,7 @@ function handleHeaderToggle() {
           <template #toggle-button>
             <VbenIconButton
               v-if="showHeaderToggleButton"
-              class="my-0 ml-2 mr-1 rounded-md"
+              class="my-0 mr-1 rounded-md"
               @click="handleHeaderToggle"
             >
               <Menu class="size-4" />
@@ -553,6 +566,7 @@ function handleHeaderToggle() {
 
       <!-- </div> -->
       <LayoutContent
+        :id="idMainContent"
         :content-compact="contentCompact"
         :content-compact-width="contentCompactWidth"
         :padding="contentPadding"

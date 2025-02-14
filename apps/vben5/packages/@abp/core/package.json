@@ -1,6 +1,6 @@
 {
   "name": "@abp/core",
-  "version": "8.3.2",
+  "version": "9.0.4",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
@@ -35,8 +35,14 @@
     }
   },
   "dependencies": {
+    "@vueuse/core": "catalog:",
     "dayjs": "catalog:",
+    "lodash.merge": "catalog:",
     "pinia": "catalog:",
+    "pinia-plugin-persistedstate": "catalog:",
     "vue": "catalog:"
+  },
+  "devDependencies": {
+    "@types/lodash.merge": "catalog:"
   }
 }

@@ -4,44 +4,72 @@ import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { IdentityUserDto } from '../../types/users';
 
-import { defineAsyncComponent, h } from 'vue';
+import { computed, defineAsyncComponent, h } from 'vue';
 
 import { useAccess } from '@vben/access';
-import { useVbenModal } from '@vben/common-ui';
+import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime, useAbpStore } from '@abp/core';
-import { PermissionModal } from '@abp/permission';
+import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
+import { formatToDateTime, useAbpStore, useFeatures } from '@abp/core';
+import { PermissionModal } from '@abp/permissions';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
+  LockOutlined,
+  PlusOutlined,
+  UnlockOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/users';
-import { IdentityUserPermissions } from '../../constants/permissions';
+import { useUsersApi } from '../../api/useUsersApi';
+import {
+  IdentitySessionPermissions,
+  IdentityUserPermissions,
+} from '../../constants/permissions';
 
 defineOptions({
   name: 'UserTable',
 });
 
 const UserModal = defineAsyncComponent(() => import('./UserModal.vue'));
+const LockModal = defineAsyncComponent(() => import('./UserLockModal.vue'));
+const ClaimModal = defineAsyncComponent(() => import('./UserClaimModal.vue'));
+const PasswordModal = defineAsyncComponent(
+  () => import('./UserPasswordModal.vue'),
+);
 
 const MenuItem = Menu.Item;
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
+const PasswordIcon = createIconifyIcon('carbon:password');
 const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
 const ClaimOutlined = createIconifyIcon('la:id-card-solid');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
-const [UserPermissionModal, permissionModalApi] = useVbenModal({
-  connectedComponent: PermissionModal,
+const SessionIcon = createIconifyIcon('carbon:prompt-session');
+const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
+
+const getLockEnd = computed(() => {
+  return (row: IdentityUserDto) => {
+    if (row.lockoutEnd) {
+      const lockTime = new Date(row.lockoutEnd);
+      if (lockTime) {
+        // 锁定时间高于当前时间不显示
+        const nowTime = new Date();
+        return lockTime < nowTime;
+      }
+    }
+    return true;
+  };
 });
 
 const abpStore = useAbpStore();
+const { isEnabled } = useFeatures();
 const { hasAccessByCodes } = useAccess();
+const { cancel, deleteApi, getPagedListApi, unLockApi } = useUsersApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -127,6 +155,26 @@ const gridEvents: VxeGridListeners<IdentityUserDto> = {
 const [UserEditModal, userModalApi] = useVbenModal({
   connectedComponent: UserModal,
 });
+const [UserLockModal, lockModalApi] = useVbenModal({
+  connectedComponent: LockModal,
+});
+const [UserPasswordModal, pwdModalApi] = useVbenModal({
+  connectedComponent: PasswordModal,
+});
+const [UserClaimModal, claimModalApi] = useVbenModal({
+  connectedComponent: ClaimModal,
+});
+const [UserPermissionModal, permissionModalApi] = useVbenModal({
+  connectedComponent: PermissionModal,
+});
+const [UserChangeDrawer, userChangeDrawerApi] = useVbenDrawer({
+  connectedComponent: EntityChangeDrawer,
+});
+const [UserSessionDrawer, userSessionDrawerApi] = useVbenDrawer({
+  connectedComponent: defineAsyncComponent(
+    () => import('./UserSessionDrawer.vue'),
+  ),
+});
 const [Grid, { query }] = useVbenVxeGrid({
   formOptions,
   gridEvents,
@@ -139,9 +187,7 @@ const handleAdd = () => {
 };
 
 const handleEdit = (row: IdentityUserDto) => {
-  userModalApi.setData({
-    values: row,
-  });
+  userModalApi.setData(row);
   userModalApi.open();
 };
 
@@ -149,15 +195,49 @@ const handleDelete = (row: IdentityUserDto) => {
   Modal.confirm({
     centered: true,
     content: $t('AbpIdentity.UserDeletionConfirmationMessage', [row.userName]),
-    onOk: () => {
-      return deleteApi(row.id).then(() => query());
+    onCancel: () => {
+      cancel('User closed cancel delete modal.');
+    },
+    onOk: async () => {
+      await deleteApi(row.id);
+      message.success($t('AbpUi.SuccessfullyDeleted'));
+      query();
     },
     title: $t('AbpUi.AreYouSure'),
   });
 };
 
+const handleUnlock = async (row: IdentityUserDto) => {
+  await unLockApi(row.id);
+  await query();
+};
+
 const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
   switch (info.key) {
+    case 'claims': {
+      claimModalApi.setData(row);
+      claimModalApi.open();
+      break;
+    }
+    case 'entity-changes': {
+      userChangeDrawerApi.setData({
+        entityId: row.id,
+        entityTypeFullName: 'Volo.Abp.Identity.IdentityUser',
+        subject: row.userName,
+      });
+      userChangeDrawerApi.open();
+      break;
+    }
+    case 'lock': {
+      lockModalApi.setData(row);
+      lockModalApi.open();
+      break;
+    }
+    case 'password': {
+      pwdModalApi.setData(row);
+      pwdModalApi.open();
+      break;
+    }
     case 'permissions': {
       const userId = abpStore.application?.currentUser.id;
       permissionModalApi.setData({
@@ -169,6 +249,15 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
       permissionModalApi.open();
       break;
     }
+    case 'session': {
+      userSessionDrawerApi.setData(row);
+      userSessionDrawerApi.open();
+      break;
+    }
+    case 'unlock': {
+      handleUnlock(row);
+      break;
+    }
   }
 };
 </script>
@@ -177,6 +266,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
   <Grid :table-title="$t('AbpIdentity.Users')">
     <template #toolbar-tools>
       <Button
+        :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[IdentityUserPermissions.Create]"
         @click="handleAdd"
@@ -223,6 +313,28 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
               <Menu @click="(info) => handleMenuClick(row, info)">
                 <MenuItem
                   v-if="
+                    hasAccessByCodes([IdentityUserPermissions.Update]) &&
+                    row.isActive &&
+                    getLockEnd(row)
+                  "
+                  key="lock"
+                  :icon="h(LockOutlined)"
+                >
+                  {{ $t('AbpIdentity.Lock') }}
+                </MenuItem>
+                <MenuItem
+                  v-if="
+                    hasAccessByCodes([IdentityUserPermissions.Update]) &&
+                    row.isActive &&
+                    !getLockEnd(row)
+                  "
+                  key="unlock"
+                  :icon="h(UnlockOutlined)"
+                >
+                  {{ $t('AbpIdentity.UnLock') }}
+                </MenuItem>
+                <MenuItem
+                  v-if="
                     hasAccessByCodes([
                       IdentityUserPermissions.ManagePermissions,
                     ])
@@ -231,6 +343,13 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                   :icon="h(PermissionsOutlined)"
                 >
                   {{ $t('AbpPermissionManagement.Permissions') }}
+                </MenuItem>
+                <MenuItem
+                  v-if="hasAccessByCodes([IdentitySessionPermissions.Default])"
+                  key="session"
+                  :icon="h(SessionIcon)"
+                >
+                  {{ $t('AbpIdentity.IdentitySessions') }}
                 </MenuItem>
                 <MenuItem
                   v-if="
@@ -242,11 +361,28 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                   {{ $t('AbpIdentity.ManageClaim') }}
                 </MenuItem>
                 <MenuItem
+                  v-if="hasAccessByCodes([IdentityUserPermissions.Update])"
+                  key="password"
+                  :icon="h(PasswordIcon)"
+                >
+                  {{ $t('AbpIdentity.SetPassword') }}
+                </MenuItem>
+                <MenuItem
                   v-if="hasAccessByCodes(['Platform.Menu.ManageUsers'])"
                   key="menus"
                   :icon="h(MenuOutlined)"
                 >
                   {{ $t('AppPlatform.Menu:Manage') }}
+                </MenuItem>
+                <MenuItem
+                  v-if="
+                    isEnabled('AbpAuditing.Logging.AuditLog') &&
+                    hasAccessByCodes([AuditLogPermissions.Default])
+                  "
+                  key="entity-changes"
+                  :icon="h(AuditLogIcon)"
+                >
+                  {{ $t('AbpAuditLogging.EntitiesChanged') }}
                 </MenuItem>
               </Menu>
             </template>
@@ -256,8 +392,13 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
       </div>
     </template>
   </Grid>
+  <UserLockModal @change="query" />
+  <UserClaimModal @change="query" />
   <UserEditModal @change="() => query()" />
+  <UserPasswordModal @change="query" />
   <UserPermissionModal />
+  <UserSessionDrawer />
+  <UserChangeDrawer />
 </template>
 
 <style lang="scss" scoped></style>

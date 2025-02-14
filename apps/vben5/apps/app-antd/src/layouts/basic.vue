@@ -2,11 +2,17 @@
 import type { NotificationItem } from '@vben/layouts';
 
 import { computed, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { AuthenticationLoginExpiredModal } from '@vben/common-ui';
 import { VBEN_DOC_URL, VBEN_GITHUB_URL } from '@vben/constants';
 import { useWatermark } from '@vben/hooks';
-import { BookOpenText, CircleHelp, MdiGithub } from '@vben/icons';
+import {
+  BookOpenText,
+  CircleHelp,
+  createIconifyIcon,
+  MdiGithub,
+} from '@vben/icons';
 import {
   BasicLayout,
   LockScreen,
@@ -17,9 +23,12 @@ import { preferences } from '@vben/preferences';
 import { useAccessStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
 
+import { useSessions } from '#/hooks/useSessions';
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
+
+const UserSettingsIcon = createIconifyIcon('tdesign:user-setting');
 
 const notifications = ref<NotificationItem[]>([
   {
@@ -52,6 +61,9 @@ const notifications = ref<NotificationItem[]>([
   },
 ]);
 
+useSessions();
+
+const { replace } = useRouter();
 const userStore = useUserStore();
 const authStore = useAuthStore();
 const accessStore = useAccessStore();
@@ -61,6 +73,13 @@ const showDot = computed(() =>
 );
 
 const menus = computed(() => [
+  {
+    handler: () => {
+      replace('/account/my-settings');
+    },
+    icon: UserSettingsIcon,
+    text: $t('abp.account.settings.title'),
+  },
   {
     handler: () => {
       openWindow(VBEN_DOC_URL, {
@@ -127,10 +146,10 @@ watch(
     <template #user-dropdown>
       <UserDropdown
         :avatar
+        :description="userStore.userInfo?.email"
         :menus
+        :tag-text="userStore.userInfo?.username"
         :text="userStore.userInfo?.realName"
-        description="ann.vben@gmail.com"
-        tag-text="Pro"
         @logout="handleLogout"
       />
     </template>

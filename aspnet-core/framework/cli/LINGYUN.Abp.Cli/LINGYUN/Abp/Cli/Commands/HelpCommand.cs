@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Cli;
@@ -70,13 +71,13 @@ namespace LINGYUN.Abp.Cli.Commands
 
             foreach (var command in AbpCliOptions.Commands.ToArray())
             {
-                string shortDescription;
-
-                using (var scope = ServiceScopeFactory.CreateScope())
+                var method = command.Value.GetMethod("GetShortDescription", BindingFlags.Static | BindingFlags.Public);
+                if (method == null)
                 {
-                    shortDescription = ((IConsoleCommand)scope.ServiceProvider
-                            .GetRequiredService(command.Value)).GetShortDescription();
+                    continue;
                 }
+
+                var shortDescription = (string)method.Invoke(null, null);
 
                 sb.Append("    > ");
                 sb.Append(command.Key);

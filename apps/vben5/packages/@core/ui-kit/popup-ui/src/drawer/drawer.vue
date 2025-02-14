@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { DrawerProps, ExtendedDrawerApi } from './drawer';
 
-import { provide, ref, useId, watch } from 'vue';
+import { computed, provide, ref, useId, watch } from 'vue';
 
 import {
   useIsMobile,
@@ -10,6 +10,7 @@ import {
 } from '@vben-core/composables';
 import { X } from '@vben-core/icons';
 import {
+  Separator,
   Sheet,
   SheetClose,
   SheetContent,
@@ -23,6 +24,7 @@ import {
   VbenLoading,
   VisuallyHidden,
 } from '@vben-core/shadcn-ui';
+import { ELEMENT_ID_MAIN_CONTENT } from '@vben-core/shared/constants';
 import { globalShareState } from '@vben-core/shared/global-state';
 import { cn } from '@vben-core/shared/utils';
 
@@ -31,7 +33,10 @@ interface Props extends DrawerProps {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  appendToMain: false,
+  closeIconPlacement: 'right',
   drawerApi: undefined,
+  zIndex: 1000,
 });
 
 const components = globalShareState.getComponents();
@@ -46,6 +51,7 @@ const { isMobile } = useIsMobile();
 const state = props.drawerApi?.useStore?.();
 
 const {
+  appendToMain,
   cancelText,
   class: drawerClass,
   closable,
@@ -62,11 +68,13 @@ const {
   loading: showLoading,
   modal,
   openAutoFocus,
+  overlayBlur,
   placement,
   showCancelButton,
   showConfirmButton,
   title,
   titleTooltip,
+  zIndex,
 } = usePriorityValues(props, state);
 
 watch(
@@ -110,6 +118,10 @@ function handleFocusOutside(e: Event) {
   e.preventDefault();
   e.stopPropagation();
 }
+
+const getAppendTo = computed(() => {
+  return appendToMain.value ? `#${ELEMENT_ID_MAIN_CONTENT}` : undefined;
+});
 </script>
 <template>
   <Sheet
@@ -118,6 +130,7 @@ function handleFocusOutside(e: Event) {
     @update:open="() => drawerApi?.close()"
   >
     <SheetContent
+      :append-to="getAppendTo"
       :class="
         cn('flex w-[520px] flex-col', drawerClass, {
           '!w-full': isMobile || placement === 'bottom' || placement === 'top',
@@ -127,11 +140,15 @@ function handleFocusOutside(e: Event) {
       :modal="modal"
       :open="state?.isOpen"
       :side="placement"
+      :z-index="zIndex"
+      :overlay-blur="overlayBlur"
       @close-auto-focus="handleFocusOutside"
+      @closed="() => drawerApi?.onClosed()"
       @escape-key-down="escapeKeyDown"
       @focus-outside="handleFocusOutside"
       @interact-outside="interactOutside"
       @open-auto-focus="handerOpenAutoFocus"
+      @opened="() => drawerApi?.onOpened()"
       @pointer-down-outside="pointerDownOutside"
     >
       <SheetHeader
@@ -142,11 +159,29 @@ function handleFocusOutside(e: Event) {
             headerClass,
             {
               'px-4 py-3': closable,
+              'pl-2': closable && closeIconPlacement === 'left',
             },
           )
         "
       >
-        <div>
+        <div class="flex items-center">
+          <SheetClose
+            v-if="closable && closeIconPlacement === 'left'"
+            as-child
+            class="data-[state=open]:bg-secondary ml-[2px] cursor-pointer rounded-full opacity-80 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"
+          >
+            <slot name="close-icon">
+              <VbenIconButton>
+                <X class="size-4" />
+              </VbenIconButton>
+            </slot>
+          </SheetClose>
+          <Separator
+            v-if="closable && closeIconPlacement === 'left'"
+            class="ml-1 mr-2 h-8"
+            decorative
+            orientation="vertical"
+          />
           <SheetTitle v-if="title" class="text-left">
             <slot name="title">
               {{ title }}
@@ -171,13 +206,15 @@ function handleFocusOutside(e: Event) {
         <div class="flex-center">
           <slot name="extra"></slot>
           <SheetClose
-            v-if="closable"
+            v-if="closable && closeIconPlacement === 'right'"
             as-child
             class="data-[state=open]:bg-secondary ml-[2px] cursor-pointer rounded-full opacity-80 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"
           >
-            <VbenIconButton>
-              <X class="size-4" />
-            </VbenIconButton>
+            <slot name="close-icon">
+              <VbenIconButton>
+                <X class="size-4" />
+              </VbenIconButton>
+            </slot>
           </SheetClose>
         </div>
       </SheetHeader>

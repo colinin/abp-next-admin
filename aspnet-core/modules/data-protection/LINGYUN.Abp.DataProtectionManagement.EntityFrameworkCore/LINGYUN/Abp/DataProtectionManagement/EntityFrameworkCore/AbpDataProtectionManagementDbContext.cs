@@ -15,6 +15,6 @@ public class AbpDataProtectionManagementDbContext : AbpDbContext<AbpDataProtecti
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ConfigureDataProtectionManagement(); ;
+        modelBuilder.ConfigureDataProtectionManagement();
     }
 }

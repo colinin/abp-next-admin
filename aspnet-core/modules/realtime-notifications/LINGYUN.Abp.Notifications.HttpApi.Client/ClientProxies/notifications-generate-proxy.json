@@ -1,0 +1,1413 @@
+{
+  "modules": {
+    "notifications": {
+      "rootPath": "notifications",
+      "remoteServiceName": "Notifications",
+      "controllers": {
+        "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionController": {
+          "controllerName": "NotificationGroupDefinition",
+          "controllerGroupName": "NotificationGroupDefinition",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.Notifications.Definitions.Groups.INotificationGroupDefinitionAppService",
+              "name": "INotificationGroupDefinitionAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionGetListInput, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionGetListInput",
+                      "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto>"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionCreateDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionCreateDto",
+                      "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionCreateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionUpdateDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionUpdateDto",
+                      "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionUpdateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/notifications/definitions/groups",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionCreateDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionCreateDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionCreateDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.Definitions.Groups.INotificationGroupDefinitionAppService"
+            },
+            "DeleteAsyncByName": {
+              "uniqueName": "DeleteAsyncByName",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/notifications/definitions/groups/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.Definitions.Groups.INotificationGroupDefinitionAppService"
+            },
+            "GetAsyncByName": {
+              "uniqueName": "GetAsyncByName",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/definitions/groups/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.Definitions.Groups.INotificationGroupDefinitionAppService"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/definitions/groups",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionGetListInput, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionGetListInput",
+                  "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionGetListInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.Definitions.Groups.INotificationGroupDefinitionAppService"
+            },
+            "UpdateAsyncByNameAndInput": {
+              "uniqueName": "UpdateAsyncByNameAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/notifications/definitions/groups/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionUpdateDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionUpdateDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionUpdateDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Groups.NotificationGroupDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.Definitions.Groups.INotificationGroupDefinitionAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionController": {
+          "controllerName": "NotificationDefinition",
+          "controllerGroupName": "NotificationDefinition",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.INotificationDefinitionAppService",
+              "name": "INotificationDefinitionAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionCreateDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionCreateDto",
+                      "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionCreateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionUpdateDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionUpdateDto",
+                      "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionUpdateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionGetListInput, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionGetListInput",
+                      "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto>"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/notifications/definitions/notifications",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionCreateDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionCreateDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionCreateDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.Definitions.Notifications.INotificationDefinitionAppService"
+            },
+            "DeleteAsyncByName": {
+              "uniqueName": "DeleteAsyncByName",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/notifications/definitions/notifications/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.Definitions.Notifications.INotificationDefinitionAppService"
+            },
+            "GetAsyncByName": {
+              "uniqueName": "GetAsyncByName",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/definitions/notifications/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.Definitions.Notifications.INotificationDefinitionAppService"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/definitions/notifications",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionGetListInput, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionGetListInput",
+                  "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionGetListInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "GroupName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Template",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "AllowSubscriptionToClients",
+                  "jsonName": null,
+                  "type": "System.Boolean?",
+                  "typeSimple": "boolean?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "NotificationLifetime",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "NotificationType",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ContentType",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.Definitions.Notifications.INotificationDefinitionAppService"
+            },
+            "UpdateAsyncByNameAndInput": {
+              "uniqueName": "UpdateAsyncByNameAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/notifications/definitions/notifications/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionUpdateDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionUpdateDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionUpdateDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.Notifications.Definitions.Notifications.NotificationDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.Definitions.Notifications.INotificationDefinitionAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.Notifications.MyNotificationController": {
+          "controllerName": "MyNotification",
+          "controllerGroupName": "MyNotification",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Notifications.MyNotificationController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.Notifications.IMyNotificationAppService",
+              "name": "IMyNotificationAppService",
+              "methods": [
+                {
+                  "name": "MarkReadStateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.NotificationMarkReadStateInput, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.NotificationMarkReadStateInput",
+                      "typeSimple": "LINGYUN.Abp.Notifications.NotificationMarkReadStateInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Int64, System.Private.CoreLib",
+                      "type": "System.Int64",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Notifications.UserNotificationDto",
+                    "typeSimple": "LINGYUN.Abp.Notifications.UserNotificationDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.UserNotificationGetByPagedDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.UserNotificationGetByPagedDto",
+                      "typeSimple": "LINGYUN.Abp.Notifications.UserNotificationGetByPagedDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Notifications.UserNotificationDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Notifications.UserNotificationDto>"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Int64, System.Private.CoreLib",
+                      "type": "System.Int64",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "MarkReadStateAsyncByInput": {
+              "uniqueName": "MarkReadStateAsyncByInput",
+              "name": "MarkReadStateAsync",
+              "httpMethod": "PUT",
+              "url": "api/notifications/my-notifilers/mark-read-state",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.NotificationMarkReadStateInput, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.NotificationMarkReadStateInput",
+                  "typeSimple": "LINGYUN.Abp.Notifications.NotificationMarkReadStateInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Notifications.NotificationMarkReadStateInput",
+                  "typeSimple": "LINGYUN.Abp.Notifications.NotificationMarkReadStateInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.IMyNotificationAppService"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/notifications/my-notifilers/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Int64, System.Private.CoreLib",
+                  "type": "System.Int64",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Int64",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IDeleteAppService<System.Int64>"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/my-notifilers/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Int64, System.Private.CoreLib",
+                  "type": "System.Int64",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Int64",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Notifications.UserNotificationDto",
+                "typeSimple": "LINGYUN.Abp.Notifications.UserNotificationDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<LINGYUN.Abp.Notifications.UserNotificationDto,LINGYUN.Abp.Notifications.UserNotificationDto,System.Int64,LINGYUN.Abp.Notifications.UserNotificationGetByPagedDto>"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/my-notifilers",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.UserNotificationGetByPagedDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.UserNotificationGetByPagedDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.UserNotificationGetByPagedDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ReadState",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Notifications.UserNotificationDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Notifications.UserNotificationDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<LINGYUN.Abp.Notifications.UserNotificationDto,LINGYUN.Abp.Notifications.UserNotificationDto,System.Int64,LINGYUN.Abp.Notifications.UserNotificationGetByPagedDto>"
+            }
+          }
+        },
+        "LINGYUN.Abp.Notifications.MySubscriptionController": {
+          "controllerName": "MySubscription",
+          "controllerGroupName": "MySubscription",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Notifications.MySubscriptionController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.Notifications.IMySubscriptionAppService",
+              "name": "IMySubscriptionAppService",
+              "methods": [
+                {
+                  "name": "IsSubscribedAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                      "typeSimple": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Notifications.UserSubscriptionsResult",
+                    "typeSimple": "LINGYUN.Abp.Notifications.UserSubscriptionsResult"
+                  }
+                },
+                {
+                  "name": "SubscribeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                      "typeSimple": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "UnSubscribeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                      "typeSimple": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.SubscriptionsGetByPagedDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.SubscriptionsGetByPagedDto",
+                      "typeSimple": "LINGYUN.Abp.Notifications.SubscriptionsGetByPagedDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Notifications.UserSubscreNotificationDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Notifications.UserSubscreNotificationDto>"
+                  }
+                },
+                {
+                  "name": "GetAllListAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.UserSubscreNotificationDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.UserSubscreNotificationDto>"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetAllListAsync": {
+              "uniqueName": "GetAllListAsync",
+              "name": "GetAllListAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/my-subscribes/all",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.UserSubscreNotificationDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.UserSubscreNotificationDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.IMySubscriptionAppService"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/my-subscribes",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.SubscriptionsGetByPagedDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.SubscriptionsGetByPagedDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.SubscriptionsGetByPagedDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Notifications.UserSubscreNotificationDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Notifications.UserSubscreNotificationDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.IMySubscriptionAppService"
+            },
+            "IsSubscribedAsyncByInput": {
+              "uniqueName": "IsSubscribedAsyncByInput",
+              "name": "IsSubscribedAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/my-subscribes/is-subscribed/{Name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Notifications.UserSubscriptionsResult",
+                "typeSimple": "LINGYUN.Abp.Notifications.UserSubscriptionsResult"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.IMySubscriptionAppService"
+            },
+            "SubscribeAsyncByInput": {
+              "uniqueName": "SubscribeAsyncByInput",
+              "name": "SubscribeAsync",
+              "httpMethod": "POST",
+              "url": "api/notifications/my-subscribes",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.IMySubscriptionAppService"
+            },
+            "UnSubscribeAsyncByInput": {
+              "uniqueName": "UnSubscribeAsyncByInput",
+              "name": "UnSubscribeAsync",
+              "httpMethod": "DELETE",
+              "url": "api/notifications/my-subscribes",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.SubscriptionsGetByNameDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.IMySubscriptionAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.Notifications.NotificationController": {
+          "controllerName": "Notification",
+          "controllerGroupName": "Notification",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Notifications.NotificationController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.Notifications.INotificationAppService",
+              "name": "INotificationAppService",
+              "methods": [
+                {
+                  "name": "GetAssignableNotifiersAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationGroupDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationGroupDto>"
+                  }
+                },
+                {
+                  "name": "GetAssignableTemplatesAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationTemplateDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationTemplateDto>"
+                  }
+                },
+                {
+                  "name": "SendAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.NotificationSendDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.NotificationSendDto",
+                      "typeSimple": "LINGYUN.Abp.Notifications.NotificationSendDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "SendAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Notifications.NotificationTemplateSendDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                      "type": "LINGYUN.Abp.Notifications.NotificationTemplateSendDto",
+                      "typeSimple": "LINGYUN.Abp.Notifications.NotificationTemplateSendDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "SendAsyncByInput": {
+              "uniqueName": "SendAsyncByInput",
+              "name": "SendAsync",
+              "httpMethod": "POST",
+              "url": "api/notifications/send",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.NotificationSendDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.NotificationSendDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.NotificationSendDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Notifications.NotificationSendDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.NotificationSendDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.INotificationAppService"
+            },
+            "GetAssignableNotifiersAsync": {
+              "uniqueName": "GetAssignableNotifiersAsync",
+              "name": "GetAssignableNotifiersAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/assignables",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationGroupDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationGroupDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.INotificationAppService"
+            },
+            "GetAssignableTemplatesAsync": {
+              "uniqueName": "GetAssignableTemplatesAsync",
+              "name": "GetAssignableTemplatesAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/assignable-templates",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationTemplateDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationTemplateDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.INotificationAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

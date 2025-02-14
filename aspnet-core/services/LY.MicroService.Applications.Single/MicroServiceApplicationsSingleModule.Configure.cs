@@ -1,3 +1,4 @@
+
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -32,6 +33,28 @@ public partial class MicroServiceApplicationsSingleModule
         {
             IdentityModelEventSource.ShowPII = true;
         }
+    }
+
+    private void PreConfigureCAP(IConfiguration configuration)
+    {
+        PreConfigure<CapOptions>(options =>
+        {
+            options.UseDashboard();
+            if (!configuration.GetValue<bool>("CAP:IsEnabled"))
+            {
+                options.UseInMemoryStorage().UseInMemoryMessageQueue();
+                return;
+            }
+            options
+                .UseMySql(sqlOptions =>
+                {
+                    configuration.GetSection("CAP:MySql").Bind(sqlOptions);
+                })
+                .UseRabbitMQ(rabbitMQOptions =>
+                {
+                    configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
+                });
+        });
     }
 
     private void PreConfigureAuthServer(IConfiguration configuration)
@@ -225,6 +248,16 @@ public partial class MicroServiceApplicationsSingleModule
             options.DisableTransportSecurityRequirement = true;
         });
 
+        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
+        {
+            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
+            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
+        });
+
         Configure<OpenIddictServerOptions>(options =>
         {
             var lifetime = configuration.GetSection("OpenIddict:Lifetime");
@@ -235,15 +268,6 @@ public partial class MicroServiceApplicationsSingleModule
             options.RefreshTokenLifetime = lifetime.GetValue("RefreshToken", options.RefreshTokenLifetime);
             options.RefreshTokenReuseLeeway = lifetime.GetValue("RefreshTokenReuseLeeway", options.RefreshTokenReuseLeeway);
             options.UserCodeLifetime = lifetime.GetValue("UserCode", options.UserCodeLifetime);
-        });
-        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
-        {
-            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
-            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
         });
     }
 
@@ -480,14 +504,11 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
-    private void ConfigureDbContext()
+    private void ConfigureDbContext(IConfiguration configuration)
     {
-        Configure<AbpDbContextOptions>(options =>
+        Configure<AbpDbConnectionOptions>(options =>
         {
-            // AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);//解决PostgreSql设置为utc时间后无法写入local时区的问题
-            // options.UseNpgsql();
-            
-            options.UseMySQL();
+            // 
         });
     }
 
@@ -750,6 +771,29 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
+    private void ConfigureSingleModule(IServiceCollection services)
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            // 允许第三方调用集成服务
+            options.ExposeIntegrationServices = true;
+        });
+
+        Configure<AbpIdentitySessionAspNetCoreOptions>(options =>
+        {
+            // abp 9.0版本可存储登录IP地域, 开启IP解析
+            options.IsParseIpLocation = true;
+        });
+
+        // 用于消息中心邮件集中发送
+        services.Replace<Volo.Abp.Emailing.IEmailSender, PlatformEmailSender>(ServiceLifetime.Transient);
+        services.AddKeyedTransient<Volo.Abp.Emailing.IEmailSender, MailKitSmtpEmailSender>("DefaultEmailSender");
+
+        // 用于消息中心短信集中发送
+        services.Replace<ISmsSender, PlatformSmsSender>(ServiceLifetime.Transient);
+        services.AddKeyedSingleton<ISmsSender, AliyunSmsSender>("DefaultSmsSender");
+    }
+
     private void ConfigureUrls(IConfiguration configuration)
     {
         Configure<AppUrlOptions>(options =>
@@ -773,9 +817,12 @@ public partial class MicroServiceApplicationsSingleModule
             options.AutoValidate = false;
         });
 
-        services.Replace<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>(ServiceLifetime.Scoped);
 
         services.AddAuthentication()
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromDays(365);
+                })
                 .AddAbpJwtBearer(options =>
                 {
                     configuration.GetSection("AuthServer").Bind(options);
@@ -804,6 +851,8 @@ public partial class MicroServiceApplicationsSingleModule
         }
 
         services.AddSameSiteCookiePolicy();
+        // 处理cookie中过时的ajax请求判断
+        services.Replace(ServiceDescriptor.Scoped<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>());
     }
 
     private void ConfigureCors(IServiceCollection services, IConfiguration configuration)
@@ -848,3 +897,4 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 }
+

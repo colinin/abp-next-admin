@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { ref, useTemplateRef, watch, watchEffect } from 'vue';
+import type { VNode } from 'vue';
+
+import { computed, ref, watch, watchEffect } from 'vue';
 
 import { usePagination } from '@vben/hooks';
-import { EmptyIcon, Grip } from '@vben/icons';
+import { EmptyIcon, Grip, listIcons } from '@vben/icons';
+import { $t } from '@vben/locales';
+
 import {
   Button,
+  Input,
   Pagination,
   PaginationEllipsis,
   PaginationFirst,
@@ -18,58 +23,116 @@ import {
   VbenPopover,
 } from '@vben-core/shadcn-ui';
 
+import { refDebounced, watchDebounced } from '@vueuse/core';
+
+import { fetchIconsData } from './icons';
+
 interface Props {
-  value?: string;
   pageSize?: number;
+  /** 图标集的名字 */
+  prefix?: string;
+  /** 是否自动请求API以获得图标集的数据.提供prefix时有效 */
+  autoFetchApi?: boolean;
   /**
    * 图标列表
    */
   icons?: string[];
+  /** Input组件 */
+  inputComponent?: VNode;
+  /** 图标插槽名，预览图标将被渲染到此插槽中 */
+  iconSlot?: string;
+  /** input组件的值属性名称 */
+  modelValueProp?: string;
+  /** 图标样式 */
+  iconClass?: string;
+  type?: 'icon' | 'input';
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  value: '',
+  prefix: 'ant-design',
   pageSize: 36,
   icons: () => [],
+  iconSlot: 'default',
+  iconClass: 'size-4',
+  autoFetchApi: true,
+  modelValueProp: 'modelValue',
+  inputComponent: undefined,
+  type: 'input',
 });
 
 const emit = defineEmits<{
   change: [string];
-  'update:value': [string];
 }>();
 
-const refTrigger = useTemplateRef<HTMLElement>('refTrigger');
-const currentSelect = ref('');
-const currentList = ref(props.icons);
-const currentPage = ref(1);
+const modelValue = defineModel({ default: '', type: String });
 
-watch(
-  () => props.icons,
-  (newIcons) => {
-    currentList.value = newIcons;
+const visible = ref(false);
+const currentSelect = ref('');
+const currentPage = ref(1);
+const keyword = ref('');
+const keywordDebounce = refDebounced(keyword, 300);
+const innerIcons = ref<string[]>([]);
+
+watchDebounced(
+  () => props.prefix,
+  async (prefix) => {
+    if (prefix && prefix !== 'svg' && props.autoFetchApi) {
+      innerIcons.value = await fetchIconsData(prefix);
+    }
   },
-  { immediate: true },
+  { immediate: true, debounce: 500, maxWait: 1000 },
 );
 
+const currentList = computed(() => {
+  try {
+    if (props.prefix) {
+      if (
+        props.prefix !== 'svg' &&
+        props.autoFetchApi &&
+        props.icons.length === 0
+      ) {
+        return innerIcons.value;
+      }
+      const icons = listIcons('', props.prefix);
+      if (icons.length === 0) {
+        console.warn(`No icons found for prefix: ${props.prefix}`);
+      }
+      return icons;
+    } else {
+      return props.icons;
+    }
+  } catch (error) {
+    console.error('Failed to load icons:', error);
+    return [];
+  }
+});
+
+const showList = computed(() => {
+  return currentList.value.filter((item) =>
+    item.includes(keywordDebounce.value),
+  );
+});
+
 const { paginationList, total, setCurrentPage } = usePagination(
-  currentList,
+  showList,
   props.pageSize,
 );
 
 watchEffect(() => {
-  currentSelect.value = props.value;
+  currentSelect.value = modelValue.value;
 });
 
 watch(
   () => currentSelect.value,
   (v) => {
-    emit('update:value', v);
     emit('change', v);
   },
 );
 
 const handleClick = (icon: string) => {
   currentSelect.value = icon;
+  modelValue.value = icon;
+  close();
 };
 
 const handlePageChange = (page: number) => {
@@ -77,22 +140,96 @@ const handlePageChange = (page: number) => {
   setCurrentPage(page);
 };
 
-function changeOpenState() {
-  refTrigger.value?.click?.();
+function toggleOpenState() {
+  visible.value = !visible.value;
 }
 
-defineExpose({ changeOpenState });
+function open() {
+  visible.value = true;
+}
+
+function close() {
+  visible.value = false;
+}
+
+function onKeywordChange(v: string) {
+  keyword.value = v;
+}
+
+const searchInputProps = computed(() => {
+  return {
+    placeholder: $t('ui.iconPicker.search'),
+    [props.modelValueProp]: keyword.value,
+    [`onUpdate:${props.modelValueProp}`]: onKeywordChange,
+    class: 'mx-2',
+  };
+});
+
+defineExpose({ toggleOpenState, open, close });
 </script>
 <template>
   <VbenPopover
+    v-model:open="visible"
     :content-props="{ align: 'end', alignOffset: -11, sideOffset: 8 }"
     content-class="p-0 pt-3"
   >
     <template #trigger>
-      <div ref="refTrigger">
-        <VbenIcon :icon="currentSelect || Grip" class="size-5" />
-      </div>
+      <template v-if="props.type === 'input'">
+        <component
+          v-if="props.inputComponent"
+          :is="inputComponent"
+          :[modelValueProp]="currentSelect"
+          :placeholder="$t('ui.iconPicker.placeholder')"
+          role="combobox"
+          :aria-label="$t('ui.iconPicker.placeholder')"
+          aria-expanded="visible"
+          v-bind="$attrs"
+        >
+          <template #[iconSlot]>
+            <VbenIcon
+              :icon="currentSelect || Grip"
+              class="size-4"
+              aria-hidden="true"
+            />
+          </template>
+        </component>
+        <div class="relative w-full" v-else>
+          <Input
+            v-bind="$attrs"
+            v-model="currentSelect"
+            :placeholder="$t('ui.iconPicker.placeholder')"
+            class="h-8 w-full pr-8"
+            role="combobox"
+            :aria-label="$t('ui.iconPicker.placeholder')"
+            aria-expanded="visible"
+          />
+          <VbenIcon
+            :icon="currentSelect || Grip"
+            class="absolute right-1 top-1 size-6"
+            aria-hidden="true"
+          />
+        </div>
+      </template>
+      <VbenIcon
+        :icon="currentSelect || Grip"
+        v-else
+        class="size-4"
+        v-bind="$attrs"
+      />
     </template>
+    <div class="mb-2 flex w-full">
+      <component
+        v-if="inputComponent"
+        :is="inputComponent"
+        v-bind="searchInputProps"
+      />
+      <Input
+        v-else
+        class="mx-2 h-8 w-full"
+        :placeholder="$t('ui.iconPicker.search')"
+        v-model="keyword"
+      />
+    </div>
 
     <template v-if="paginationList.length > 0">
       <div class="grid max-h-[360px] w-full grid-cols-6 justify-items-center">

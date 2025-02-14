@@ -70,14 +70,15 @@ public class DefaultIdentitySessionChecker : IIdentitySessionChecker, ITransient
             identitySessionCacheItem.LastAccessed = accressedTime;
             identitySessionCacheItem.IpAddresses = DeviceInfoProvider.ClientIpAddress;
 
+            // TODO: 暂时移除,否则刷新令牌将无效
             // 2024-10-10 从令牌中取颁布时间与过期时间计算时间戳,作为默认缓存过期时间
-            var expirainTime = claimsPrincipal.FindExpirainTime();
-            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            if (expirainTime.HasValue)
-            {
-                // 2024-10-25 应计算剩余过期时间
-                identitySessionCacheItem.ExpiraIn = (expirainTime.Value - timestamp) * 1000;
-            }
+            //var expirainTime = claimsPrincipal.FindExpirainTime();
+            //var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            //if (expirainTime.HasValue)
+            //{
+            //    // 2024-10-25 应计算剩余过期时间
+            //    identitySessionCacheItem.ExpiraIn = (expirainTime.Value - timestamp) * 1000;
+            //}
 
             Logger.LogDebug($"Refresh the user access info in the cache from {sessionId}.");
             await IdentitySessionCache.RefreshAsync(sessionId, identitySessionCacheItem, cancellationToken);

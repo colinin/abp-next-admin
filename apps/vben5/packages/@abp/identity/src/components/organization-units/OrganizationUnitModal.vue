@@ -10,7 +10,7 @@ import { $t } from '@vben/locales';
 
 import { useVbenForm } from '@abp/ui';
 
-import { createApi, getApi, updateApi } from '../../api/organization-units';
+import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
 
 defineOptions({
   name: 'OrganizationUnitModal',
@@ -23,6 +23,7 @@ const defaultModel = {
   displayName: '',
 } as OrganizationUnitDto;
 
+const { cancel, createApi, getApi, updateApi } = useOrganizationUnitsApi();
 const [Form, formApi] = useVbenForm({
   handleSubmit: onSubmit,
   schema: [
@@ -65,6 +66,9 @@ const [Modal, modalApi] = useVbenModal({
   onCancel() {
     modalApi.close();
   },
+  onClosed() {
+    cancel('Organization Unit Modal has closed!');
+  },
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();
   },
@@ -97,13 +101,13 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onSubmit(input: Record<string, any>) {
-  const api = input.id
-    ? updateApi(input.id, input as OrganizationUnitUpdateDto)
-    : createApi(input as OrganizationUnitCreateDto);
   try {
     modalApi.setState({
       confirmLoading: true,
     });
+    const api = input.id
+      ? updateApi(input.id, input as OrganizationUnitUpdateDto)
+      : createApi(input as OrganizationUnitCreateDto);
     const dto = await api;
     emits('change', dto);
     modalApi.close();

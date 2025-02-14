@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { DialogContentEmits, DialogContentProps } from 'radix-vue';
+
 import { computed } from 'vue';
 
 import { cn } from '@vben-core/shared/utils';
@@ -7,14 +9,15 @@ import { X } from 'lucide-vue-next';
 import {
   DialogClose,
   DialogContent,
-  type DialogContentEmits,
-  type DialogContentProps,
   DialogOverlay,
   DialogPortal,
   useForwardPropsEmits,
 } from 'radix-vue';
 
-const props = defineProps<{ class?: any } & DialogContentProps>();
+const props = withDefaults(
+  defineProps<DialogContentProps & { class?: any; zIndex?: number }>(),
+  { zIndex: 1000 },
+);
 const emits = defineEmits<DialogContentEmits>();
 
 const delegatedProps = computed(() => {
@@ -29,7 +32,8 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 <template>
   <DialogPortal>
     <DialogOverlay
-      class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 border-border fixed inset-0 z-[1000] grid place-items-center overflow-y-auto border bg-black/80"
+      :style="{ zIndex }"
+      class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 border-border absolute inset-0 grid place-items-center overflow-y-auto border bg-black/80"
     >
       <DialogContent
         :class="
@@ -38,6 +42,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
             props.class,
           )
         "
+        :style="{ zIndex }"
         v-bind="forwarded"
         @pointer-down-outside="
           (event) => {

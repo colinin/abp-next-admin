@@ -1,7 +1,9 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueComparers;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
@@ -50,9 +52,13 @@ public static class TaskManagementDbContextModelCreatingExtensions
             b.Property(p => p.NodeName)
                 .HasColumnName(nameof(BackgroundJobInfo.NodeName))
                 .HasMaxLength(BackgroundJobInfoConsts.MaxNodeNameLength);
+
+            var type = typeof(ExtraPropertiesValueConverter<>).MakeGenericType(b.Metadata.ClrType);
+            var extraPropertiesValueConverter = Activator.CreateInstance(type)!.As<ValueConverter<ExtraPropertyDictionary, string>>();
+
             b.Property(p => p.Args)
                 .HasColumnName(nameof(BackgroundJobInfo.Args))
-                .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))
+                .HasConversion(extraPropertiesValueConverter)
                 .Metadata.SetValueComparer(new ExtraPropertyDictionaryValueComparer());
 
             b.ConfigureByConvention();
@@ -101,9 +107,12 @@ public static class TaskManagementDbContextModelCreatingExtensions
                 .HasMaxLength(BackgroundJobActionConsts.MaxNameLength)
                 .IsRequired(true);
 
+            var type = typeof(ExtraPropertiesValueConverter<>).MakeGenericType(b.Metadata.ClrType);
+            var extraPropertiesValueConverter = Activator.CreateInstance(type)!.As<ValueConverter<ExtraPropertyDictionary, string>>();
+
             b.Property(p => p.Paramters)
                 .HasColumnName(nameof(BackgroundJobAction.Paramters))
-                .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))
+                .HasConversion(extraPropertiesValueConverter)
                 .Metadata.SetValueComparer(new ExtraPropertyDictionaryValueComparer());
 
             b.ConfigureByConvention();

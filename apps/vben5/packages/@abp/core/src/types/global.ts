@@ -206,29 +206,33 @@ interface CurrentUser {
   userName: string;
 }
 
-// eslint-disable-next-line no-use-before-define
+interface IHasSimpleStateCheckers<
+  TState extends IHasSimpleStateCheckers<TState>,
+> {
+  // eslint-disable-next-line no-use-before-define
+  stateCheckers: ISimpleStateChecker<TState>[];
+}
+
+type SimpleStateRecord<
+  TState extends IHasSimpleStateCheckers<TState>,
+  TValue,
+> = {
+  [P in TState]: TValue;
+};
+
 type SimpleStateCheckerResult<TState extends IHasSimpleStateCheckers<TState>> =
-  Map<TState, boolean>;
+  SimpleStateRecord<TState, boolean>;
 
 interface SimpleStateCheckerContext<
-  // eslint-disable-next-line no-use-before-define
   TState extends IHasSimpleStateCheckers<TState>,
 > {
   state: TState;
 }
 
 interface SimpleBatchStateCheckerContext<
-  // eslint-disable-next-line no-use-before-define
   TState extends IHasSimpleStateCheckers<TState>,
 > {
   states: TState[];
-}
-
-interface IHasSimpleStateCheckers<
-  TState extends IHasSimpleStateCheckers<TState>,
-> {
-  // eslint-disable-next-line no-use-before-define
-  stateCheckers: ISimpleStateChecker<TState>[];
 }
 
 interface ISimpleStateChecker<TState extends IHasSimpleStateCheckers<TState>> {

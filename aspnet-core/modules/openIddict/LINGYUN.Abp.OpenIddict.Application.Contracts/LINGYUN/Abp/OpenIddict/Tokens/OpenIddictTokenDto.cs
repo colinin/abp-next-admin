@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities;
 namespace LINGYUN.Abp.OpenIddict.Tokens;
 
 [Serializable]
-public class OpenIddictTokenDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
+public class OpenIddictTokenDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
 {
     public string ConcurrencyStamp { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
+using LINGYUN.Platform.Messages;
 using LINGYUN.Platform.Packages;
 
 namespace LINGYUN.Platform;
@@ -16,5 +17,8 @@ public class PlatformDomainMappingProfile : Profile
         CreateMap<RoleMenu, RoleMenuEto>();
 
         CreateMap<Package, PackageEto>();
+
+        CreateMap<EmailMessage, EmailMessageEto>();
+        CreateMap<SmsMessage, SmsMessageEto>();
     }
 }

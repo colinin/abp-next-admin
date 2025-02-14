@@ -1,2 +1,2 @@
-export * from './abp';
 export * from './menu';
+export { useAbpConfigApi } from './useAbpConfigApi';

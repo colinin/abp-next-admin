@@ -25,11 +25,16 @@ interface IUser {
 }
 
 /** 更改密码数据传输对象 */
-interface ChangePasswordInput {
+interface ChangeMyPasswordInput {
   /** 当前密码 */
   currentPassword?: string;
   /** 新密码 */
   newPassword: string;
+}
+
+interface ChangeUserPasswordInput {
+  /** 新密码 */
+  password: string;
 }
 
 /** 用户组织机构数据传输对象 */
@@ -85,11 +90,22 @@ interface GetUserPagedListInput extends PagedAndSortedResultRequestDto {
 type IdentityUserCreateDto = IdentityUserCreateOrUpdateDto;
 type IdentityUserUpdateDto = IdentityUserCreateOrUpdateDto;
 
+interface UserLookupCountInput {
+  filter?: string;
+}
+
+interface UserLookupSearchInput
+  extends UserLookupCountInput,
+    PagedAndSortedResultRequestDto {}
+
 export type {
-  ChangePasswordInput,
+  ChangeMyPasswordInput,
+  ChangeUserPasswordInput,
   GetUserPagedListInput,
   IdentityUserCreateDto,
   IdentityUserDto,
   IdentityUserOrganizationUnitUpdateDto,
   IdentityUserUpdateDto,
+  UserLookupCountInput,
+  UserLookupSearchInput,
 };

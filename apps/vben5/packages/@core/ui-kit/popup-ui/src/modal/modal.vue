@@ -22,6 +22,7 @@ import {
   VbenLoading,
   VisuallyHidden,
 } from '@vben-core/shadcn-ui';
+import { ELEMENT_ID_MAIN_CONTENT } from '@vben-core/shared/constants';
 import { globalShareState } from '@vben-core/shared/global-state';
 import { cn } from '@vben-core/shared/utils';
 
@@ -32,6 +33,7 @@ interface Props extends ModalProps {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  appendToMain: false,
   modalApi: undefined,
 });
 
@@ -52,6 +54,7 @@ const { isMobile } = useIsMobile();
 const state = props.modalApi?.useStore?.();
 
 const {
+  appendToMain,
   bordered,
   cancelText,
   centered,
@@ -74,10 +77,13 @@ const {
   loading: showLoading,
   modal,
   openAutoFocus,
+  overlayBlur,
   showCancelButton,
   showConfirmButton,
+  submitting,
   title,
   titleTooltip,
+  zIndex,
 } = usePriorityValues(props, state);
 
 const shouldFullscreen = computed(
@@ -110,9 +116,9 @@ watch(
 );
 
 watch(
-  () => showLoading.value,
-  (v) => {
-    if (v && wrapperRef.value) {
+  () => [showLoading.value, submitting.value],
+  ([l, s]) => {
+    if ((s || l) && wrapperRef.value) {
       wrapperRef.value.scrollTo({
         // behavior: 'smooth',
         top: 0,
@@ -130,13 +136,13 @@ function handleFullscreen() {
   });
 }
 function interactOutside(e: Event) {
-  if (!closeOnClickModal.value) {
+  if (!closeOnClickModal.value || submitting.value) {
     e.preventDefault();
     e.stopPropagation();
   }
 }
 function escapeKeyDown(e: KeyboardEvent) {
-  if (!closeOnPressEscape.value) {
+  if (!closeOnPressEscape.value || submitting.value) {
     e.preventDefault();
   }
 }
@@ -151,7 +157,11 @@ function handerOpenAutoFocus(e: Event) {
 function pointerDownOutside(e: Event) {
   const target = e.target as HTMLElement;
   const isDismissableModal = target?.dataset.dismissableModal;
-  if (!closeOnClickModal.value || isDismissableModal !== id) {
+  if (
+    !closeOnClickModal.value ||
+    isDismissableModal !== id ||
+    submitting.value
+  ) {
     e.preventDefault();
     e.stopPropagation();
   }
@@ -161,18 +171,22 @@ function handleFocusOutside(e: Event) {
   e.preventDefault();
   e.stopPropagation();
 }
+const getAppendTo = computed(() => {
+  return appendToMain.value ? `#${ELEMENT_ID_MAIN_CONTENT}` : undefined;
+});
 </script>
 <template>
   <Dialog
     :modal="false"
     :open="state?.isOpen"
-    @update:open="() => modalApi?.close()"
+    @update:open="() => (!submitting ? modalApi?.close() : undefined)"
   >
     <DialogContent
       ref="contentRef"
+      :append-to="getAppendTo"
       :class="
         cn(
-          'left-0 right-0 top-[10vh] mx-auto flex max-h-[80%] w-[520px] flex-col p-0 sm:rounded-2xl',
+          'left-0 right-0 top-[10vh] mx-auto flex max-h-[80%] w-[520px] flex-col p-0 sm:rounded-[var(--radius)]',
           modalClass,
           {
             'border-border border': bordered,
@@ -186,7 +200,9 @@ function handleFocusOutside(e: Event) {
       "
       :modal="modal"
       :open="state?.isOpen"
-      :show-close="closable"
+      :show-close="submitting ? false : closable"
+      :z-index="zIndex"
+      :overlay-blur="overlayBlur"
       close-class="top-3"
       @close-auto-focus="handleFocusOutside"
       @closed="() => modalApi?.onClosed()"
@@ -236,12 +252,12 @@ function handleFocusOutside(e: Event) {
         ref="wrapperRef"
         :class="
           cn('relative min-h-40 flex-1 overflow-y-auto p-3', contentClass, {
-            'pointer-events-none overflow-hidden': showLoading,
+            'overflow-hidden': showLoading || submitting,
           })
         "
       >
         <VbenLoading
-          v-if="showLoading"
+          v-if="showLoading || submitting"
           class="size-full h-auto min-h-full"
           spinning
         />
@@ -276,6 +292,7 @@ function handleFocusOutside(e: Event) {
             :is="components.DefaultButton || VbenButton"
             v-if="showCancelButton"
             variant="ghost"
+            :disabled="submitting"
             @click="() => modalApi?.onCancel()"
           >
             <slot name="cancelText">
@@ -287,7 +304,7 @@ function handleFocusOutside(e: Event) {
             :is="components.PrimaryButton || VbenButton"
             v-if="showConfirmButton"
             :disabled="confirmDisabled"
-            :loading="confirmLoading"
+            :loading="confirmLoading || submitting"
             @click="() => modalApi?.onConfirm()"
           >
             <slot name="confirmText">
