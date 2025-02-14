@@ -5,6 +5,7 @@ using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace LY.MicroService.AuthServer.EntityFrameworkCore;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpDataDbMigratorModule)
     )]
 public class AuthServerMigrationsEntityFrameworkCoreModule : AbpModule
@@ -32,7 +34,12 @@ public class AuthServerMigrationsEntityFrameworkCoreModule : AbpModule
 
         Configure<AbpDbContextOptions>(options =>
         {
-            options.UseMySQL();
+            options.UseMySQL(
+                mysql =>
+                {
+                    // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
+                    mysql.TranslateParameterizedCollectionsToConstants();
+                });
         });
     }
 }

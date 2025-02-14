@@ -22,7 +22,6 @@ using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
 using Volo.Abp.MailKit;
@@ -41,7 +40,6 @@ namespace LY.MicroService.LocalizationManagement;
     typeof(AbpLocalizationManagementApplicationModule),
     typeof(AbpLocalizationManagementHttpApiModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
@@ -80,7 +78,6 @@ public partial class LocalizationManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
-        ConfigureDbContext();
         ConfigureLocalization();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
@@ -111,7 +108,7 @@ public partial class LocalizationManagementHttpApiHostModule : AbpModule
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         // 路由
         app.UseRouting();
         // 跨域

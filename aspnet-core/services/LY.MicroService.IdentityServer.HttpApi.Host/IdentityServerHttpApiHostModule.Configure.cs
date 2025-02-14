@@ -119,7 +119,12 @@ public partial class IdentityServerHttpApiHostModule
         // 配置Ef
         Configure<AbpDbContextOptions>(options =>
         {
-            options.UseMySQL();
+            options.UseMySQL(
+                mysql =>
+                {
+                    // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
+                    mysql.TranslateParameterizedCollectionsToConstants();
+                });
         });
     }
 

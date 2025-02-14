@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Entities;
 namespace LINGYUN.Abp.OpenIddict.Authorizations;
 
 [Serializable]
-public class OpenIddictAuthorizationDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
+public class OpenIddictAuthorizationDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
 {
     public string ConcurrencyStamp { get; set; }
     public Guid? ApplicationId { get; set; }

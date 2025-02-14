@@ -149,14 +149,6 @@ public partial class IdentityServerModule
         services.AddHealthChecks();
     }
 
-    private void ConfigureDbContext()
-    {
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
-        });
-    }
-
     private void ConfigureDataSeeder()
     {
         Configure<CustomIdentityResourceDataSeederOptions>(options =>

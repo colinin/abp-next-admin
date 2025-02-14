@@ -103,15 +103,6 @@ public partial class PlatformManagementHttpApiHostModule
         });
     }
 
-    private void ConfigureDbContext()
-    {
-        // 配置Ef
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
-        });
-    }
-
     private void ConfigureFeatureManagement()
     {
         Configure<FeatureManagementOptions>(options =>

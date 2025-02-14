@@ -143,7 +143,6 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
-        ConfigureDbContext();
         ConfigureLocalization();
         ConfigureNotifications();
         ConfigureTextTemplating();
@@ -175,7 +174,7 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         // 路由
         app.UseRouting();
         // 跨域

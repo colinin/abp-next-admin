@@ -60,7 +60,7 @@ if (app.Environment.IsDevelopment())
 app.UseCookiePolicy();
 app.UseMapRequestLocalization();
 app.UseCorrelationId();
-app.UseStaticFiles();
+app.MapAbpStaticAssets();
 app.UseRouting();
 app.UseCors();
 app.UseAuthentication();

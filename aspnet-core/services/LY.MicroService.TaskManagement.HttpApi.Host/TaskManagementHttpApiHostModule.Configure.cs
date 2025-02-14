@@ -206,15 +206,6 @@ public partial class TaskManagementHttpApiHostModule
         }
     }
 
-    private void ConfigureDbContext()
-    {
-        // 配置Ef
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
-        });
-    }
-
     private void ConfigureJsonSerializer(IConfiguration configuration)
     {
         // 统一时间日期格式
