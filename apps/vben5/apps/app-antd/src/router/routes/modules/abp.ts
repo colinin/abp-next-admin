@@ -179,6 +179,34 @@ const routes: RouteRecordRaw[] = [
       },
       {
         meta: {
+          title: $t('abp.saas.title'),
+          icon: 'ant-design:cloud-server-outlined',
+        },
+        name: 'Saas',
+        path: '/saas',
+        children: [
+          {
+            meta: {
+              title: $t('abp.saas.editions'),
+              icon: 'icon-park-outline:multi-rectangle',
+            },
+            name: 'SaasEditions',
+            path: '/saas/editions',
+            component: () => import('#/views/saas/editions/index.vue'),
+          },
+          {
+            meta: {
+              title: $t('abp.saas.tenants'),
+              icon: 'arcticons:tenantcloud-pro',
+            },
+            name: 'SaasTenants',
+            path: '/saas/tenants',
+            component: () => import('#/views/saas/tenants/index.vue'),
+          },
+        ],
+      },
+      {
+        meta: {
           title: $t('abp.openiddict.title'),
           icon: 'mdi:openid',
         },

@@ -76,5 +76,10 @@
       "email": "邮件消息",
       "sms": "短信消息"
     }
+  },
+  "saas": {
+    "title": "Saas",
+    "editions": "版本管理",
+    "tenants": "租户管理"
   }
 }
