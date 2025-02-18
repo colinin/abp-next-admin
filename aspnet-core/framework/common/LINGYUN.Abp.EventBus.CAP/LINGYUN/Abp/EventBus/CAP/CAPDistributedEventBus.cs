@@ -34,7 +34,7 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
     /// <summary>
     /// CAP消息发布接口
     /// </summary>
-    protected readonly ICapPublisher CapPublisher;
+    protected ICapPublisher CapPublisher { get; }
     /// <summary>
     /// 自定义事件注册接口
     /// </summary>
@@ -166,7 +166,8 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
     protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-        await PublishAsync(eventName, eventData);
+
+        await PublishToCapAsync(eventName, eventData, messageId: null, correlationId: CorrelationIdProvider.Get());
     }
 
     /// <summary>
@@ -204,9 +205,39 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
         return false;
     }
 
+    protected override byte[] Serialize(object eventData)
+    {
+        var eventJson = JsonSerializer.Serialize(eventData);
+
+        return Encoding.UTF8.GetBytes(eventJson);
+    }
+
+    protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+    {
+        unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
+    }
+
     public override async Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData);
+        await PublishToCapAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.Id, outgoingEvent.GetCorrelationId());
+
+        using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
+        {
+            await TriggerDistributedEventSentAsync(new DistributedEventSent()
+            {
+                Source = DistributedEventSource.Outbox,
+                EventName = outgoingEvent.EventName,
+                EventData = outgoingEvent.EventData
+            });
+        }
+    }
+
+    public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    {
+        foreach (var outgoingEvent in outgoingEvents)
+        {
+            await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
+        }
     }
 
     public override async Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
@@ -220,57 +251,46 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
         var eventJson = Encoding.UTF8.GetString(incomingEvent.EventData);
         var eventData = JsonSerializer.Deserialize(eventType, eventJson);
         var exceptions = new List<Exception>();
-        await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
+        using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
+        {
+            await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
+        }
+
         if (exceptions.Any())
         {
             ThrowOriginalExceptions(eventType, exceptions);
         }
     }
 
-    protected override byte[] Serialize(object eventData)
+    protected virtual async Task PublishToCapAsync(Type eventType, object eventData, Guid? messageId, string correlationId = null)
     {
-        var eventJson = JsonSerializer.Serialize(eventData);
-
-        return Encoding.UTF8.GetBytes(eventJson);
+        await PublishToCapAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData, null, correlationId);
     }
 
-    protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+    protected virtual async Task PublishToCapAsync(string eventName, object eventData, Guid? messageId, string correlationId = null)
     {
-        unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
-    }
-
-    protected async Task PublishAsync(string eventName, object eventData)
-    {
-        await CapPublisher
-            .PublishAsync(
-                eventName, eventData,
-                new Dictionary<string, string>
-                {
-                    { AbpCAPHeaders.UserId, CurrentUser.Id?.ToString() ?? "" },
-                    { AbpCAPHeaders.ClientId, CurrentClient.Id ?? "" },
-                    { AbpCAPHeaders.TenantId, CurrentTenant.Id?.ToString() ?? "" },
-                },
-                CancellationTokenProvider.FallbackToProvider());
-    }
-
-    public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
-    {
-        var outgoingEventArray = outgoingEvents.ToArray();
-
-        foreach (var outgoingEvent in outgoingEventArray)
+        var headers = new Dictionary<string, string>();
+        if (messageId.HasValue)
         {
-            await CapPublisher
-                .PublishAsync(
-                    outgoingEvent.EventName,
-                    outgoingEvent.EventData,
-                    new Dictionary<string, string>
-                    {
-                        { AbpCAPHeaders.MessageId, outgoingEvent.Id.ToString() },
-                        { AbpCAPHeaders.UserId, CurrentUser.Id?.ToString() ?? "" },
-                        { AbpCAPHeaders.ClientId, CurrentClient.Id ?? "" },
-                        { AbpCAPHeaders.TenantId, CurrentTenant.Id?.ToString() ?? "" },
-                    },
-                    CancellationTokenProvider.FallbackToProvider());
+            headers.TryAdd(AbpCAPHeaders.MessageId, messageId.ToString());
         }
+        if (CurrentUser.Id.HasValue)
+        {
+            headers.TryAdd(AbpCAPHeaders.UserId, CurrentUser.Id.ToString());
+        }
+        if (CurrentTenant.Id.HasValue)
+        {
+            headers.TryAdd(AbpCAPHeaders.TenantId, CurrentTenant.Id.ToString());
+        }
+        if (!CurrentClient.Id.IsNullOrWhiteSpace())
+        {
+            headers.TryAdd(AbpCAPHeaders.ClientId, CurrentClient.Id);
+        }
+        if (!correlationId.IsNullOrWhiteSpace())
+        {
+            headers.TryAdd(AbpCAPHeaders.CorrelationId, correlationId);
+        }
+
+        await CapPublisher.PublishAsync(eventName, eventData, headers, CancellationTokenProvider.FallbackToProvider());
     }
 }
