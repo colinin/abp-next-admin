@@ -1,3 +1,7 @@
+using LINGYUN.Abp.Gdpr;
+using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
+using LINGYUN.Abp.Gdpr.Identity;
+
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
@@ -46,6 +50,15 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpIdentityHttpApiModule),
     // 身份认证模块 实体框架
     typeof(AbpIdentityEntityFrameworkCoreModule),
+
+    // Gdpr 身份认证提供者模块
+    typeof(AbpGdprDomainIdentityModule),
+    // Gdpr 应用服务模块
+    typeof(AbpGdprApplicationModule),
+    // Gdpr 控制器模块
+    typeof(AbpGdprHttpApiModule),
+    // Gdpr 实体框架模块
+    typeof(AbpGdprEntityFrameworkCoreModule),
 
     // 多语言管理模块 领域服务
     typeof(AbpLocalizationManagementDomainModule),

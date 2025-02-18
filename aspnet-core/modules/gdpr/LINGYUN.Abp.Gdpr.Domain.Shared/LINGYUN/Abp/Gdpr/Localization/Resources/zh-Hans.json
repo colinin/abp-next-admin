@@ -1,0 +1,31 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Gdpr:010001": "你已经提交了一个个人数据下载请求, 请在 {RequestTimeInterval} 后再次尝试.",
+    "Gdpr:010002": "你的个人数据正在准备中, 请在 {ReadyTime} 后再次尝试下载.",
+    "DisplayName:PersonalData": "个人数据",
+    "DisplayName:Provider": "收集模块",
+    "DisplayName:UserId": "用户Id",
+    "DisplayName:CreationTime": "请求时间",
+    "DisplayName:ReadyTime": "就绪时间",
+    "PersonalData:Empty": "无",
+    "Preparing": "准备中",
+    "Download": "下载",
+    "RequestPersonalData": "请求个人数据",
+    "DeletePersonalData": "删除个人数据",
+    "DeletePersonalAccount": "注销账号",
+    "RequestedSuccessfully": "请求成功",
+    "DeletePersonalAccountWarning": "此操作将会删除你的账户(包括你的个人数据), 并且你将不能再登录到应用程序!",
+    "PersonalAccountDeleteRequestReceived": "你的账户删除请求正在处理中, 在删除过程结束后，你的个人数据将被删除.",
+    "DeletePersonalDataWarning": "此操作将会删除你的账户个人数据, 某些数据被删除可能会影响页面体验!",
+    "PersonalDataDeleteRequestReceived": "你的个人数据删除请求正在处理中, 在删除过程结束后, 你可能需要重新登录应用程序.",
+    "PersonalDataPrepareRequestReceived": "你的个人数据请求正在处理中, 如果数据准备就绪, 你可以在这个页面下载它.",
+    "Accept": "接受",
+    "PersonalData": "个人数据",
+    "CookiePolicy": "Cookie政策",
+    "PrivacyPolicy": "隐私政策",
+    "ThisWebsiteUsesCookie": "本网站使用cookie以确保您在网站上获得最佳体验.",
+    "CookieConsentAgreePolicy": "如果您继续浏览, 即表示您同意我们的 {0}.",
+    "CookieConsentAgreePolicies": "如果您继续浏览, 则表示您同意我们的 {0} 和 {1}."
+  }
+}
