@@ -31,6 +31,9 @@ const SecuritySettings = defineAsyncComponent(
 const SessionSettings = defineAsyncComponent(
   () => import('./components/SessionSettings.vue'),
 );
+const PersonalDataSettings = defineAsyncComponent(
+  () => import('./components/PersonalDataSettings.vue'),
+);
 const { getApi, updateApi } = useProfileApi();
 const userStore = useUserStore();
 const { query } = useRoute();
@@ -61,6 +64,10 @@ const menuItems = reactive([
   {
     key: 'authenticator',
     label: $t('abp.account.settings.authenticatorSettings'),
+  },
+  {
+    key: 'personal-data',
+    label: $t('abp.account.settings.personalDataSettings'),
   },
 ]);
 const getUserInfo = computed((): null | UserInfo => {
@@ -155,6 +162,9 @@ onMounted(async () => {
             v-else-if="selectedMenuKeys[0] === 'authenticator'"
           />
           <SessionSettings v-else-if="selectedMenuKeys[0] === 'session'" />
+          <PersonalDataSettings
+            v-else-if="selectedMenuKeys[0] === 'personal-data'"
+          />
         </div>
       </div>
     </Card>

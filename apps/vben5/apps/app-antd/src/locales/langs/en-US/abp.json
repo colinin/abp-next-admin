@@ -65,7 +65,8 @@
       "noticeSettings": "Notice Settings",
       "authenticatorSettings": "Authenticator Settings",
       "changeAvatar": "Change Avatar",
-      "sessionSettings": "Session Settings"
+      "sessionSettings": "Session Settings",
+      "personalDataSettings": "Personal Data Settings"
     },
     "profile": "My Profile"
   },

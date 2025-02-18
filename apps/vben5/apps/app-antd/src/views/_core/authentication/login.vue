@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { TwoFactorError } from '@abp/account';
+
 import type { VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
