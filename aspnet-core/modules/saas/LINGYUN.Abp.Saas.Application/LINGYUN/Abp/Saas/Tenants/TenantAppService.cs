@@ -83,18 +83,18 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         tenant.SetDisableTime(input.DisableTime);
         input.MapExtraPropertiesTo(tenant);
 
-        if (!input.UseSharedDatabase && !input.DefaultConnectionString.IsNullOrWhiteSpace())
+        if (!input.UseSharedDatabase)
         {
             await CheckConnectionString(input.DefaultConnectionString);
             tenant.SetDefaultConnectionString(input.DefaultConnectionString);
-        }
 
-        if (input.ConnectionStrings.Any())
-        {
-            foreach (var connectionString in input.ConnectionStrings)
+            if (input.ConnectionStrings.Any())
             {
-                await CheckConnectionString(connectionString.Value, connectionString.Key);
-                tenant.SetConnectionString(connectionString.Key, connectionString.Value);
+                foreach (var connectionString in input.ConnectionStrings)
+                {
+                    await CheckConnectionString(connectionString.Value, connectionString.Name);
+                    tenant.SetConnectionString(connectionString.Name, connectionString.Value);
+                }
             }
         }
 
@@ -213,7 +213,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     }
 
     [Authorize(AbpSaasPermissions.Tenants.ManageConnectionStrings)]
-    public async virtual Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdate input)
+    public async virtual Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringSetInput input)
     {
         await CheckConnectionString(input.Value, input.Name);
 
