@@ -100,14 +100,17 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUserInfo() {
-    let userInfo: ({ [key: string]: any } & UserInfo) | null = null;
+    let userInfo: null | (UserInfo & { [key: string]: any }) = null;
     const userInfoRes = await getUserInfoApi();
     const abpConfig = await getConfigApi();
     userInfo = {
       userId: userInfoRes.sub ?? abpConfig.currentUser.id,
       username: userInfoRes.uniqueName ?? abpConfig.currentUser.userName,
-      realName: userInfoRes.name ?? abpConfig.currentUser.name,
-      avatar: userInfoRes.avatarUrl ?? userInfoRes.picture,
+      realName:
+        userInfoRes.name ??
+        abpConfig.currentUser.name ??
+        abpConfig.currentUser.userName,
+      avatar: userInfoRes.avatarUrl ?? userInfoRes.picture ?? '',
       desc: userInfoRes.uniqueName ?? userInfoRes.name,
       email: userInfoRes.email ?? userInfoRes.email,
       emailVerified:
