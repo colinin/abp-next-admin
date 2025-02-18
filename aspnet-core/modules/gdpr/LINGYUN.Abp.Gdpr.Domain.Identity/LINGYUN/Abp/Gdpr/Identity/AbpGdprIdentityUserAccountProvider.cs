@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Volo.Abp.Identity;
-using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.Gdpr.Identity;
 
@@ -15,7 +14,6 @@ public class AbpGdprIdentityUserAccountProvider : GdprUserAccountProviderBase
 
     public override string Name => ProviderName;
 
-    [UnitOfWork]
     public async override Task DeleteAsync(GdprDeleteUserAccountContext context)
     {
         var identityUserManager = context.ServiceProvider.GetRequiredService<IdentityUserManager>();
