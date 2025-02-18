@@ -160,6 +160,7 @@ function onNameChange(name?: string) {
   ) {
     tenant.value.adminEmailAddress = `admin@${name}.com`;
   }
+  form.value?.clearValidate('adminEmailAddress');
 }
 
 function onConnectionChange(data: TenantConnectionStringDto) {
