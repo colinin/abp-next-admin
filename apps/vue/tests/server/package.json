@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "fs-extra": "^10.0.1",
-    "koa": "^2.13.4",
+    "koa": "^2.15.4",
     "koa-body": "^4.2.0",
     "koa-bodyparser": "^4.3.0",
     "koa-route": "^3.2.0",
