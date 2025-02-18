@@ -43,4 +43,29 @@ public static class AbpCAPMessageExtensions
         }
         return null;
     }
+    /// <summary>
+    /// 尝试获取消息标头中的链路标识
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="correlationId"></param>
+    /// <returns></returns>
+    public static bool TryGetCorrelationId(
+        this Message message,
+        out string correlationId)
+    {
+        return message.Headers.TryGetValue(AbpCAPHeaders.CorrelationId, out correlationId);
+    }
+    /// <summary>
+    /// 获取消息标头中的链路标识
+    /// </summary>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    public static string GetCorrelationIdOrNull(this Message message)
+    {
+        if (message.TryGetCorrelationId(out var correlationId))
+        {
+            return correlationId;
+        }
+        return null;
+    }
 }

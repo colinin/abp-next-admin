@@ -1,6 +1,6 @@
 <Project>
 	<PropertyGroup>
-		<DotNetCoreCAPPackageVersion>8.2.0</DotNetCoreCAPPackageVersion>
+		<DotNetCoreCAPPackageVersion>8.3.2</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
 		<ElsaNextPackageVersion>3.3.0-rc7</ElsaNextPackageVersion>
 		<VoloAbpPackageVersion>9.0.4</VoloAbpPackageVersion>
@@ -75,6 +75,7 @@
 		<PackageVersion Include="Volo.Abp.EventBus.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.ExceptionHandling" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Guids" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.Gdpr.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.GlobalFeatures" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.HangFire" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Http.Client" Version="$(VoloAbpPackageVersion)" />
@@ -208,6 +209,7 @@
 		<PackageVersion Include="DotNetCore.CAP.OpenTelemetry" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageVersion Include="DotNetCore.CAP.RabbitMQ" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageVersion Include="DotNetCore.CAP.InMemoryStorage" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageVersion Include="DotNetCore.CAP.RedisStreams" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageVersion Include="Savorboard.CAP.InMemoryMessageQueue" Version="$(DotNetCoreCAPPackageVersion)" />
 	</ItemGroup>
 	<!-- Serilog -->

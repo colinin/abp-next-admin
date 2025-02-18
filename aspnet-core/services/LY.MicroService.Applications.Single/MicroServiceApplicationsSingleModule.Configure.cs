@@ -1,4 +1,3 @@
-
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -42,7 +41,9 @@ public partial class MicroServiceApplicationsSingleModule
             options.UseDashboard();
             if (!configuration.GetValue<bool>("CAP:IsEnabled"))
             {
-                options.UseInMemoryStorage().UseInMemoryMessageQueue();
+                options
+                    .UseInMemoryStorage()
+                    .UseRedis(configuration["CAP:Redis:Configuration"]);
                 return;
             }
             options
