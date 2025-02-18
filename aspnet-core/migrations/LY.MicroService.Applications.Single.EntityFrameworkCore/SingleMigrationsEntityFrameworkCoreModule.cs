@@ -1,5 +1,6 @@
 using LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
@@ -37,6 +38,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
     typeof(WebhooksManagementEntityFrameworkCoreModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
+    typeof(AbpGdprEntityFrameworkCoreModule),
     typeof(AbpWeChatModule),
     typeof(AbpDataDbMigratorModule)
     )]

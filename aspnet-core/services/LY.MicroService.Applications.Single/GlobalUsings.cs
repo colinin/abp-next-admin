@@ -141,7 +141,6 @@ global using MiniExcelLibs.Attributes;
 global using OpenIddict.Server;
 global using OpenIddict.Server.AspNetCore;
 global using Quartz;
-global using Savorboard.CAP.InMemoryMessageQueue;
 global using StackExchange.Redis;
 global using System.Security.Cryptography;
 global using System.Security.Cryptography.X509Certificates;

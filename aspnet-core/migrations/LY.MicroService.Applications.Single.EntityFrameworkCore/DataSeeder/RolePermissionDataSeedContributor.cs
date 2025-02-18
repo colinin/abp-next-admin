@@ -44,7 +44,7 @@ public class RolePermissionDataSeedContributor : IDataSeedContributor
 
             await PermissionDataSeeder.SeedAsync(
                 RolePermissionValueProvider.ProviderName,
-                "users",
+                "Users",
                 new string[] { "Platform.Feedback.Create" },
                 context.TenantId);
         }

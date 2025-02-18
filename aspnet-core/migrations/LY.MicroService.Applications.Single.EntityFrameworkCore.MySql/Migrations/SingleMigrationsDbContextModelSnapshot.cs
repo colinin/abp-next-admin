@@ -399,6 +399,68 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                     b.ToTable("Demo_Books", (string)null);
                 });
 
+            modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("Data");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)")
+                        .HasColumnName("Provider");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("AbpGdprInfos", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<DateTime>("ReadyTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AbpGdprRequests", (string)null);
+                });
+
             modelBuilder.Entity("LINGYUN.Abp.LocalizationManagement.Language", b =>
                 {
                     b.Property<Guid>("Id")
@@ -5737,6 +5799,15 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprInfo", b =>
+                {
+                    b.HasOne("LINGYUN.Abp.Gdpr.GdprRequest", null)
+                        .WithMany("Infos")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("LINGYUN.Abp.Saas.Tenants.Tenant", b =>
                 {
                     b.HasOne("LINGYUN.Abp.Saas.Editions.Edition", "Edition")
@@ -6111,6 +6182,11 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityTypeInfo", b =>
                 {
                     b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprRequest", b =>
+                {
+                    b.Navigation("Infos");
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.Saas.Tenants.Tenant", b =>

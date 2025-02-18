@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>net9.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.Gdpr.HttpApi</AssemblyName>
+		<PackageId>LINGYUN.Abp.Gdpr.HttpApi</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.Gdpr.Application.Contracts\LINGYUN.Abp.Gdpr.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>
