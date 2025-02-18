@@ -35,6 +35,7 @@
     "@abp/permissions": "workspace:*",
     "@abp/platform": "workspace:*",
     "@abp/request": "workspace:*",
+    "@abp/saas": "workspace:*",
     "@abp/settings": "workspace:*",
     "@abp/ui": "workspace:*",
     "@vben/access": "workspace:*",

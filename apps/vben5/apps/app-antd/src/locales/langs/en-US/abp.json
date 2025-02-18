@@ -76,5 +76,10 @@
       "email": "Email Messages",
       "sms": "Sms Messages"
     }
+  },
+  "saas": {
+    "title": "Saas",
+    "editions": "Editions",
+    "tenants": "Tenants"
   }
 }

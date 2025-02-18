@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
 
+import type { PermissionDefinitionDto } from '../../../types/definitions';
 import type { PermissionGroupDefinitionDto } from '../../../types/groups';
 
 import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
@@ -25,7 +26,6 @@ import { VxeGrid } from 'vxe-table';
 import { usePermissionDefinitionsApi } from '../../../api/usePermissionDefinitionsApi';
 import { usePermissionGroupDefinitionsApi } from '../../../api/usePermissionGroupDefinitionsApi';
 import { GroupDefinitionsPermissions } from '../../../constants/permissions';
-import { type PermissionDefinitionDto } from '../../../types/definitions';
 import { useTypesMap } from './types';
 
 defineOptions({
