@@ -1,0 +1,29 @@
+{
+	"ui": {
+		"fallback": {
+			"pageNotFound": "Oops! Page Not Found",
+			"pageNotFoundDesc": "Sorry, we couldn't find the page you were looking for.",
+			"forbidden": "Oops! Access Denied",
+			"forbiddenDesc": "Sorry, but you don't have permission to access this page.",
+			"internalError": "Oops! Something Went Wrong",
+			"internalErrorDesc": "Sorry, but the server encountered an error.",
+			"offline": "Offline Page",
+			"offlineError": "Oops! Network Error",
+			"offlineErrorDesc": "Sorry, can't connect to the internet. Check your connection.",
+			"comingSoon": "Coming Soon",
+			"http": {
+				"requestTimeout": "The request timed out. Please try again later.",
+				"networkError": "A network error occurred. Please check your internet connection and try again.",
+				"badRequest": "Bad Request. Please check your input and try again.",
+				"unauthorized": "Unauthorized. Please log in to continue.",
+				"forbidden": "Forbidden. You do not have permission to access this resource.",
+				"notFound": "Not Found. The requested resource could not be found.",
+				"internalServerError": "Internal Server Error. Something went wrong on our end. Please try again later."
+			}
+		},
+		"placeholder": {
+			"input": "Please enter",
+			"select": "Please select"
+		}
+	}
+}
