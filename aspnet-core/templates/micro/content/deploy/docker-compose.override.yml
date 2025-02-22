@@ -1,0 +1,9 @@
+services:
+  project-name-api:
+    build:
+      context: ../host/PackageName.CompanyName.ProjectName.HttpApi.Host/bin/Release/net9.0
+      dockerfile: ../host/PackageName.CompanyName.ProjectName.HttpApi.Host/Dockerfile
+    volumes:
+      - /var/opt/project-name/logs:/app/Logs
+      - /var/opt/project-name/modules:/app/Modules
+    restart: always
