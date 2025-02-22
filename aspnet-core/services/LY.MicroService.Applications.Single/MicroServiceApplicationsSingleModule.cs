@@ -1,10 +1,6 @@
-using LINGYUN.Abp.AuditLogging.IP.Location;
-using LINGYUN.Abp.EventBus.CAP;
-using LINGYUN.Abp.IP2Region;
-using LINGYUN.Abp.Notifications.Templating;
-using LY.MicroService.Applications.Single.EntityFrameworkCore;
-using LY.MicroService.Applications.Single.EntityFrameworkCore.MySql;
-using Volo.Abp.MailKit;
+using LINGYUN.Abp.Gdpr;
+using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
+using LINGYUN.Abp.Gdpr.Identity;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -54,6 +50,15 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpIdentityHttpApiModule),
     // 身份认证模块 实体框架
     typeof(AbpIdentityEntityFrameworkCoreModule),
+
+    // Gdpr 身份认证提供者模块
+    typeof(AbpGdprDomainIdentityModule),
+    // Gdpr 应用服务模块
+    typeof(AbpGdprApplicationModule),
+    // Gdpr 控制器模块
+    typeof(AbpGdprHttpApiModule),
+    // Gdpr 实体框架模块
+    typeof(AbpGdprEntityFrameworkCoreModule),
 
     // 多语言管理模块 领域服务
     typeof(AbpLocalizationManagementDomainModule),
@@ -421,6 +426,8 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+        ConfigureSingleModule(context.Services);
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

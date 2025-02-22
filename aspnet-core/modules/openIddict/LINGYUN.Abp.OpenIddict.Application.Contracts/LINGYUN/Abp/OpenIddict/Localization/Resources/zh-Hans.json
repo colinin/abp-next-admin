@@ -51,6 +51,18 @@
     "DisplayName:ReferenceId": "引用标识",
     "DisplayName:LastModificationTime": "修改时间",
     "DisplayName:CreationTime": "创建时间",
+    "DisplayName:AccessTokenLifetime": "访问令牌有效期(s)",
+    "Description:AccessTokenLifetime": "客户端应用程序将在令牌过期后刷新或获取新的访问令牌.为空使用服务器配置",
+    "DisplayName:AuthorizationCodeLifetime": "授权码有效期(s)",
+    "Description:AuthorizationCodeLifetime": "设置授权码在发出后保持有效的时间期限.为空使用服务器配置",
+    "DisplayName:DeviceCodeLifetime": "设备授权码有效期(s)",
+    "Description:DeviceCodeLifetime": "当用户批准授权请求时,设备代码的过期日期会自动延长,以便给客户端应用程序足够的时间来赎回设备代码.为空使用服务器配置",
+    "DisplayName:IdentityTokenLifetime": "身份令牌有效期(s)",
+    "Description:IdentityTokenLifetime": "客户端应用程序在令牌过期后刷新或获取新的身份令牌.为空使用服务器配置",
+    "DisplayName:RefreshTokenLifetime": "刷新令牌有效期(s)",
+    "Description:RefreshTokenLifetime": "在刷新令牌过期后,客户端应用程序将启动一个全新的身份验证流程.为空使用服务器配置",
+    "DisplayName:UserCodeLifetime": "用户代码有效期(s)",
+    "Description:UserCodeLifetime": "客户端应用程序将在用户代码过期后启动一个全新的身份验证流.为空使用服务器配置",
     "Applications": "应用",
     "Applications:AddNew": "新应用",
     "Authorizations": "授权",
@@ -73,6 +85,7 @@
     "Available": "已拥有的",
     "Propertites:New": "新属性",
     "Propertites:Key": "属性名称",
-    "Propertites:Value": "属性值"
+    "Propertites:Value": "属性值",
+    "Requirements:PKCE": "启用PKCE"
   }
 }

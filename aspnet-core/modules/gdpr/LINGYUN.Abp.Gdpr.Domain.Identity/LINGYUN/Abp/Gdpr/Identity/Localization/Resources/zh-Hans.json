@@ -1,0 +1,14 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "PersonalData:UserName": "用户名",
+    "PersonalData:Name": "名称",
+    "PersonalData:Surname": "姓氏",
+    "PersonalData:Email": "邮件地址",
+    "PersonalData:PhoneNumber": "手机号",
+    "PersonalData:CreationTime": "注册时间",
+    "PersonalData:AvatarUrl": "头像",
+    "PersonalData:Picture": "头像",
+    "PersonalData:Website": "个人页"
+  }
+}

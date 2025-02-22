@@ -11,6 +11,9 @@ public class PersistenceStartup : PersistenceStartupBase
 
     protected override void Configure(DbContextOptionsBuilder options, string connectionString)
     {
-        options.UseMySql(connectionString);
+        options.UseMySql(
+            connectionString,
+            ServerVersion.AutoDetect(connectionString),
+            mysql => mysql.TranslateParameterizedCollectionsToConstants());
     }
 }

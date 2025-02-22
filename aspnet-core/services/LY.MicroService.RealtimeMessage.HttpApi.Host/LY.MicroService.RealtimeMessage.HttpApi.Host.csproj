@@ -3,7 +3,7 @@
 	<Import Project="..\..\..\common.secrets.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<RootNamespace>LY.MicroService.RealtimeMessage</RootNamespace>
 		<Configurations>Debug;Release;PostgreSQL</Configurations>
 		<Platforms>AnyCPU</Platforms>

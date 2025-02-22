@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Entities.Events.Distributed;
+using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Identity;
 
 namespace LINGYUN.Abp.Identity.Session;
 public class IdentitySessionCacheItemSynchronizer :
     IDistributedEventHandler<EntityCreatedEto<IdentitySessionEto>>,
     IDistributedEventHandler<EntityDeletedEto<IdentitySessionEto>>,
     IDistributedEventHandler<IdentitySessionChangeAccessedEvent>,
+    ILocalEventHandler<EntityDeletedEventData<IdentityUser>>,
     ITransientDependency
 {
     protected IIdentitySessionCache IdentitySessionCache { get; }
@@ -62,5 +66,11 @@ public class IdentitySessionCacheItemSynchronizer :
             // 数据库中不存在会话, 清理缓存, 后续请求会话失效
             await IdentitySessionCache.RemoveAsync(eventData.SessionId);
         }
+    }
+
+    public async virtual Task HandleEventAsync(EntityDeletedEventData<IdentityUser> eventData)
+    {
+        // 用户被删除, 移除所有会话
+        await IdentitySessionStore.RevokeAllAsync(eventData.Entity.Id);
     }
 }

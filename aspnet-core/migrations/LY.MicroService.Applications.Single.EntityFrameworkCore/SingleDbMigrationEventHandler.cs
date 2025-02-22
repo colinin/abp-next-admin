@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Data;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore.Migrations;
@@ -48,7 +49,9 @@ public class SingleDbMigrationEventHandler :
         IJobStore jobStore,
         IJobScheduler jobScheduler,
         IOptions<AbpBackgroundTasksOptions> options) 
-        : base("SingleDbMigrator", currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
+        : base(
+            ConnectionStringNameAttribute.GetConnStringName<SingleMigrationsDbContext>(),
+            currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
         GuidGenerator = guidGenerator;
         IdentityUserManager = identityUserManager;
@@ -76,11 +79,6 @@ public class SingleDbMigrationEventHandler :
 
     protected async override Task AfterTenantCreated(TenantCreatedEto eventData, bool schemaMigrated)
     {
-        if (!schemaMigrated)
-        {
-            return;
-        }
-
         using (CurrentTenant.Change(eventData.Id))
         {
             await QueueBackgroundJobAsync(eventData);

@@ -70,7 +70,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
             var queryable = from tenant in tenantDbSet
                     join edition in editionDbSet on tenant.EditionId equals edition.Id into eg
                     from e in eg.DefaultIfEmpty()
-                    where tenant.Name.Equals(name)
+                    where tenant.Name.Equals(name) || tenant.NormalizedName.Equals(name)
                     orderby tenant.Id
                     select new
                     {
@@ -104,7 +104,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
             var queryable = from tenant in tenantDbSet
                             join edition in editionDbSet on tenant.EditionId equals edition.Id into eg
                             from e in eg.DefaultIfEmpty()
-                            where tenant.Name.Equals(name)
+                            where tenant.Name.Equals(name) || tenant.NormalizedName.Equals(name)
                             orderby tenant.Id
                             select new
                             {

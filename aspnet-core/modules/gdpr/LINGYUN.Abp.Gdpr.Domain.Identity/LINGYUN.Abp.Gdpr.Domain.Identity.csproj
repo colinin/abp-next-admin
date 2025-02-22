@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>net9.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.Gdpr.Domain.Identity</AssemblyName>
+		<PackageId>LINGYUN.Abp.Gdpr.Domain.Identity</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\Gdpr\Identity\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Gdpr\Identity\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Gdpr.Domain\LINGYUN.Abp.Gdpr.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

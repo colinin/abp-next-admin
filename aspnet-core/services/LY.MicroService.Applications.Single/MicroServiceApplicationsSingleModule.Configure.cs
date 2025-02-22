@@ -1,7 +1,3 @@
-using DotNetCore.CAP;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Savorboard.CAP.InMemoryMessageQueue;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -45,7 +41,9 @@ public partial class MicroServiceApplicationsSingleModule
             options.UseDashboard();
             if (!configuration.GetValue<bool>("CAP:IsEnabled"))
             {
-                options.UseInMemoryStorage().UseInMemoryMessageQueue();
+                options
+                    .UseInMemoryStorage()
+                    .UseRedis(configuration["CAP:Redis:Configuration"]);
                 return;
             }
             options
@@ -251,6 +249,16 @@ public partial class MicroServiceApplicationsSingleModule
             options.DisableTransportSecurityRequirement = true;
         });
 
+        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
+        {
+            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
+            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
+        });
+
         Configure<OpenIddictServerOptions>(options =>
         {
             var lifetime = configuration.GetSection("OpenIddict:Lifetime");
@@ -261,15 +269,6 @@ public partial class MicroServiceApplicationsSingleModule
             options.RefreshTokenLifetime = lifetime.GetValue("RefreshToken", options.RefreshTokenLifetime);
             options.RefreshTokenReuseLeeway = lifetime.GetValue("RefreshTokenReuseLeeway", options.RefreshTokenReuseLeeway);
             options.UserCodeLifetime = lifetime.GetValue("UserCode", options.UserCodeLifetime);
-        });
-        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
-        {
-            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
-            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
         });
     }
 
@@ -510,35 +509,7 @@ public partial class MicroServiceApplicationsSingleModule
     {
         Configure<AbpDbConnectionOptions>(options =>
         {
-            options.Databases.Configure("Default", db =>
-            {
-                db.MappedConnections.Add("AbpIdentity");
-                db.MappedConnections.Add("AppPlatform");
-                db.MappedConnections.Add("TaskManagement");
-                db.MappedConnections.Add("Notifications");
-                db.MappedConnections.Add("MessageService");
-                db.MappedConnections.Add("AbpAuditLogging");
-                db.MappedConnections.Add("AbpOpenIddict");
-                db.MappedConnections.Add("AbpIdentityServer");
-                db.MappedConnections.Add("AbpFeatureManagement");
-                db.MappedConnections.Add("AbpSettingManagement");
-                db.MappedConnections.Add("AbpPermissionManagement");
-            });
-
-            options.Databases.Configure("HostOnly", db =>
-            {
-                db.MappedConnections.Add("AbpSaas");
-                db.MappedConnections.Add("AbpTextTemplating");
-                db.MappedConnections.Add("AbpLocalizationManagement");
-                db.MappedConnections.Add("Workflow");
-                db.MappedConnections.Add("Demo");
-
-                db.IsUsedByTenants = false;
-            });
-        });
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
+            // 
         });
     }
 
@@ -799,6 +770,29 @@ public partial class MicroServiceApplicationsSingleModule
             // options.IsEnabledForGetRequests = true;
             options.ApplicationName = ApplicationName;
         });
+    }
+
+    private void ConfigureSingleModule(IServiceCollection services)
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            // 允许第三方调用集成服务
+            options.ExposeIntegrationServices = true;
+        });
+
+        Configure<AbpIdentitySessionAspNetCoreOptions>(options =>
+        {
+            // abp 9.0版本可存储登录IP地域, 开启IP解析
+            options.IsParseIpLocation = true;
+        });
+
+        // 用于消息中心邮件集中发送
+        services.Replace<Volo.Abp.Emailing.IEmailSender, PlatformEmailSender>(ServiceLifetime.Transient);
+        services.AddKeyedTransient<Volo.Abp.Emailing.IEmailSender, MailKitSmtpEmailSender>("DefaultEmailSender");
+
+        // 用于消息中心短信集中发送
+        services.Replace<ISmsSender, PlatformSmsSender>(ServiceLifetime.Transient);
+        services.AddKeyedSingleton<ISmsSender, AliyunSmsSender>("DefaultSmsSender");
     }
 
     private void ConfigureUrls(IConfiguration configuration)

@@ -1,0 +1,14 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "PersonalData:UserName": "User Name",
+    "PersonalData:Name": "Name",
+    "PersonalData:Surname": "Surname",
+    "PersonalData:Email": "Email",
+    "PersonalData:PhoneNumber": "Phone Number",
+    "PersonalData:CreationTime": "Registration Time",
+    "PersonalData:AvatarUrl": "Avatar",
+    "PersonalData:Picture": "Picture",
+    "PersonalData:Website": "Website"
+  }
+}

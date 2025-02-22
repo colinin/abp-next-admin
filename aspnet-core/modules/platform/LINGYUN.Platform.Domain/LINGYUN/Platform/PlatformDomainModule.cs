@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Platform.Datas;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
+using LINGYUN.Platform.Messages;
 using LINGYUN.Platform.ObjectExtending;
 using LINGYUN.Platform.Packages;
 using LINGYUN.Platform.Routes;
@@ -8,16 +9,21 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Entities.Events.Distributed;
+using Volo.Abp.Emailing;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.Sms;
+using SmsMessage = LINGYUN.Platform.Messages.SmsMessage;
 
 namespace LINGYUN.Platform;
 
 [DependsOn(
-    typeof(PlatformDomainSharedModule),
+    typeof(AbpSmsModule),
+    typeof(AbpEmailingModule),
+    typeof(AbpEventBusModule),
     typeof(AbpBlobStoringModule),
-    typeof(AbpEventBusModule))]
+    typeof(PlatformDomainSharedModule))]
 public class PlatformDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -51,6 +57,12 @@ public class PlatformDomainModule : AbpModule
             options.EtoMappings.Add<RoleMenu, RoleMenuEto>(typeof(PlatformDomainModule));
 
             options.EtoMappings.Add<Package, PackageEto>(typeof(PlatformDomainModule));
+
+            options.EtoMappings.Add<EmailMessage, EmailMessageEto>(typeof(PlatformDomainModule));
+            options.EtoMappings.Add<SmsMessage, SmsMessageEto>(typeof(PlatformDomainModule));
+
+            options.AutoEventSelectors.Add<EmailMessage>();
+            options.AutoEventSelectors.Add<SmsMessage>();
         });
     }
     public override void PostConfigureServices(ServiceConfigurationContext context)

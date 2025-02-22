@@ -75,6 +75,7 @@ async function loadDayjsLocale(lang: SupportedLanguagesType) {
     }
   }
   if (locale) {
+    dayjs.extend(localizedFormat);
     dayjs.locale(locale);
     dayjs.extend(localizedFormat);
   } else {

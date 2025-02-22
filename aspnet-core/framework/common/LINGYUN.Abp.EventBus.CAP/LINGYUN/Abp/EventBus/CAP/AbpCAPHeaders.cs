@@ -9,4 +9,6 @@ public static class AbpCAPHeaders
     public static string TenantId { get; set; } = "cap-abp-tenant-id";
 
     public static string MessageId { get; set; } = "cap-abp-message-id";
+
+    public static string CorrelationId { get; set; } = "cap-abp-correlation-id";
 }
