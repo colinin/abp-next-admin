@@ -2,6 +2,7 @@
 using LINGYUN.Abp.Saas.Tenants;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -42,7 +43,18 @@ public class ProjectNameDbMigrationService : EfCoreRuntimeDbMigratorBase<Project
     {
         await base.LockAndApplyDatabaseMigrationsAsync();
 
-        var tenants = await TenantRepository.GetListAsync();
+        IList<Tenant> tenants;
+
+        try
+        {
+            tenants = await TenantRepository.GetListAsync();
+        }
+        catch
+        {
+            return;
+        }
+
+
         foreach (var tenant in tenants.Where(x => x.IsActive))
         {
             await LockAndApplyDatabaseWithTenantMigrationsAsync(tenant.Id);
