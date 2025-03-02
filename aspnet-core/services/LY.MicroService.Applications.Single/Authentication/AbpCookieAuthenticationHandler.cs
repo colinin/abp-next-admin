@@ -39,7 +39,7 @@ public class AbpCookieAuthenticationHandler : CookieAuthenticationHandler
                 }
                 else
                 {
-                    ctx.Response.Redirect(ctx.RedirectUri);
+                     ctx.Response.StatusCode = 401;
                 }
                 return Task.CompletedTask;
             },
@@ -52,7 +52,7 @@ public class AbpCookieAuthenticationHandler : CookieAuthenticationHandler
                 }
                 else
                 {
-                    ctx.Response.Redirect(ctx.RedirectUri);
+                     ctx.Response.StatusCode = 401;
                 }
                 return Task.CompletedTask;
             },
@@ -65,7 +65,7 @@ public class AbpCookieAuthenticationHandler : CookieAuthenticationHandler
                 }
                 else
                 {
-                    ctx.Response.Redirect(ctx.RedirectUri);
+                     ctx.Response.StatusCode = 401;
                 }
                 return Task.CompletedTask;
             },
@@ -78,7 +78,7 @@ public class AbpCookieAuthenticationHandler : CookieAuthenticationHandler
                 }
                 else
                 {
-                    ctx.Response.Redirect(ctx.RedirectUri);
+                     ctx.Response.StatusCode = 401;
                 }
                 return Task.CompletedTask;
             }
