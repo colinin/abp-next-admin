@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "LINGYUN.Abp.Auditing.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:62925;http://localhost:62926"
+    }
+  }
+}

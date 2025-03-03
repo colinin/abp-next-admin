@@ -42,7 +42,6 @@
 		<!-- 某些定时作业可能需要用到 Microsoft.Data.SqlClient, 直接引用需要面临运行时配置问题, 加入项目依赖让编译器来处理 -->
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" />
 		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" />
-		<PackageReference Include="Volo.Abp.MailKit" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
@@ -67,6 +66,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\migrations\LY.MicroService.TaskManagement.EntityFrameworkCore\LY.MicroService.TaskManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.HttpApi.Client\LINGYUN.Abp.OssManagement.HttpApi.Client.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Sms.Platform\LINGYUN.Abp.Sms.Platform.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.DistributedLocking\LINGYUN.Abp.BackgroundTasks.DistributedLocking.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.ExceptionHandling\LINGYUN.Abp.BackgroundTasks.ExceptionHandling.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Jobs\LINGYUN.Abp.BackgroundTasks.Jobs.csproj" />

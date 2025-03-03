@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@using Volo.Abp.Localization
+
+@inject IHtmlLocalizer<AccountResource> L
+
+@model LINGYUN.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.Authenticator.AccountProfileAuthenticatorManagementGroupViewComponent.AuthenticatorModel
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["Authenticator"]</abp-card-title>
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+</abp-card>

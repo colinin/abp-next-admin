@@ -93,9 +93,9 @@ public class PrivateFileAppService : FileAppServiceBase, IPrivateFileAppService
     }
 
     [Authorize]
-    public override async Task UploadAsync(UploadFileChunkInput input)
+    public override async Task UploadChunkAsync(UploadFileChunkInput input)
     {
-        await base.UploadAsync(input);
+        await base.UploadChunkAsync(input);
     }
 
     [Authorize]

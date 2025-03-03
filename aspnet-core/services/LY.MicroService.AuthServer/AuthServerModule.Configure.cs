@@ -1,4 +1,6 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.Account.Web;
+using LINGYUN.Abp.Account.Web.OpenIddict;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 using LINGYUN.Abp.OpenIddict.LinkUser;
@@ -23,6 +25,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.IdentityModel.Logging;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -48,6 +51,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
@@ -222,6 +226,14 @@ public partial class AuthServerModule
         Configure<FeatureManagementOptions>(options =>
         {
             options.IsDynamicFeatureStoreEnabled = true;
+        });
+    }
+
+    private void ConfigureSettingManagement()
+    {
+        Configure<SettingManagementOptions>(options =>
+        {
+            options.IsDynamicSettingStoreEnabled = true;
         });
     }
 

@@ -4,6 +4,7 @@
 	<Import Project="..\..\..\common.props" />
 
 	<PropertyGroup>
+		<IsPackable>false</IsPackable>
 		<TargetFramework>net9.0</TargetFramework>
 		<RootNamespace>LY.MicroService.LocalizationManagement.EntityFrameworkCore</RootNamespace>
 	</PropertyGroup>

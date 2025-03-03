@@ -11,7 +11,7 @@ public class AbpOssManagementHttpApiClientModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddHttpClientProxies(
+        context.Services.AddStaticHttpClientProxies(
                typeof(AbpOssManagementApplicationContractsModule).Assembly,
                OssManagementRemoteServiceConsts.RemoteServiceName
            );

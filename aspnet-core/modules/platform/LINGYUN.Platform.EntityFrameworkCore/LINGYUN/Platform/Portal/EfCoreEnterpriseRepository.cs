@@ -17,6 +17,15 @@ public class EfCoreEnterpriseRepository : EfCoreRepository<IPlatformDbContext, E
     {
     }
 
+    public async virtual Task<Enterprise> FindByNameAsync(
+        string name,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+           .Where(x => x.Name == name || x.EnglishName == name)
+           .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+    }
+
     public async virtual Task<Guid?> GetEnterpriseInTenantAsync(
         Guid id, 
         CancellationToken cancellationToken = default)

@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.Auditing.Logging;
 [RemoteService(Name = AuditingRemoteServiceConsts.RemoteServiceName)]
 [Area("auditing")]
 [ControllerName("logging")]
-[Route("api/auditing/logging")]
+[Route($"api/{AuditingRemoteServiceConsts.ModuleName}/logging")]
 [Authorize(AuditingPermissionNames.SystemLog.Default)]
 public class LogController : AbpControllerBase, ILogAppService
 {

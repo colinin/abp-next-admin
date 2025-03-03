@@ -118,7 +118,8 @@ namespace LINGYUN.Abp.Webhooks
         {
             var client = _httpClientFactory.CreateClient(AbpWebhooksModule.WebhooksClient);
             if (webhookSenderArgs.TimeoutDuration.HasValue && 
-                (webhookSenderArgs.TimeoutDuration >= 10 && webhookSenderArgs.TimeoutDuration <= 300))
+                (webhookSenderArgs.TimeoutDuration >= WebhooksDefinitionConsts.MinimumTimeoutDuration && 
+                 webhookSenderArgs.TimeoutDuration <= WebhooksDefinitionConsts.MaximumTimeoutDuration))
             {
                 client.Timeout = TimeSpan.FromSeconds(webhookSenderArgs.TimeoutDuration.Value);
             }

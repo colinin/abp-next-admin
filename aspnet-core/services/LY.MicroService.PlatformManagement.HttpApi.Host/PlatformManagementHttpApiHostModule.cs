@@ -19,6 +19,7 @@ using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
@@ -94,6 +95,7 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpHttpClientModule),
     typeof(AbpMailKitModule),
+    typeof(AbpAliyunSmsModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
@@ -137,6 +139,8 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+        ConfigurePlatformModule(context.Services);
     }
 
     public override void OnPostApplicationInitialization(ApplicationInitializationContext context)

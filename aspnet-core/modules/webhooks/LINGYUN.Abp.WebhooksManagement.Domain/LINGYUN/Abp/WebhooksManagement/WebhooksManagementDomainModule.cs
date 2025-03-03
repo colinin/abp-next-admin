@@ -21,6 +21,7 @@ public class WebhooksManagementDomainModule : AbpModule
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
     private readonly static OneTimeRunner OneTimeRunner = new();
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddAutoMapperObjectMapper<WebhooksManagementDomainModule>();
@@ -55,6 +56,9 @@ public class WebhooksManagementDomainModule : AbpModule
     {
         OneTimeRunner.Run(() =>
         {
+            WebhooksDefinitionConsts.MinimumTimeoutDuration = WebhookSubscriptionConsts.TimeoutDurationMinimum;
+            WebhooksDefinitionConsts.MaximumTimeoutDuration = WebhookSubscriptionConsts.TimeoutDurationMaximum;
+
             // 扩展实体配置
             ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
                 WebhooksManagementModuleExtensionConsts.ModuleName,

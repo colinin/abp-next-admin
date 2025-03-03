@@ -1,48 +1,41 @@
 ﻿using LINGYUN.Abp.Account;
+using LINGYUN.Abp.Account.Web.IdentityServer;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authentication.QQ;
 using LINGYUN.Abp.Authentication.WeChat;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
-using LINGYUN.Abp.Http.Client.Wrapper;
+using LINGYUN.Abp.Exporter.MiniExcel;
+using LINGYUN.Abp.Gdpr;
+using LINGYUN.Abp.Gdpr.Web;
 using LINGYUN.Abp.Identity.AspNetCore.Session;
-using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.IdentityServer;
-using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.IdentityServer.LinkUser;
 using LINGYUN.Abp.IdentityServer.Portal;
 using LINGYUN.Abp.IdentityServer.Session;
 using LINGYUN.Abp.IdentityServer.WeChat.Work;
 using LINGYUN.Abp.Localization.CultureMap;
-using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
-using LINGYUN.Abp.Sms.Aliyun;
-using LINGYUN.Platform.EntityFrameworkCore;
+using LINGYUN.Abp.Sms.Platform;
 using LY.MicroService.IdentityServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
-using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.FeatureManagement.EntityFrameworkCore;
-using Volo.Abp.Identity;
-using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace LY.MicroService.IdentityServer;
 
@@ -50,47 +43,36 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpSerilogEnrichersApplicationModule),
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpAccountWebIdentityServerModule),
     typeof(AbpAccountApplicationModule),
+    typeof(AbpAccountHttpApiModule),
+    typeof(AbpAccountWebIdentityServerModule),
+    typeof(AbpGdprApplicationModule),
+    typeof(AbpGdprHttpApiModule),
+    typeof(AbpGdprWebModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
-    typeof(AbpIdentityEntityFrameworkCoreModule),
-    typeof(AbpIdentityApplicationModule),
-
-    // 请勿混淆这两个模块, 他们各自都自己的职能
-    // 此模块仅用于认证中心
     typeof(AbpIdentityAspNetCoreSessionModule),
-    // 此模块可用于所有微服务
+    typeof(AbpIdentityServerSessionModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
-
-    typeof(AbpIdentityServerEntityFrameworkCoreModule),
-    typeof(AbpIdentityServerSmsValidatorModule),
+    typeof(AbpIdentityServerSmsModule),
     typeof(AbpIdentityServerLinkUserModule),
     typeof(AbpIdentityServerPortalModule),
     typeof(AbpIdentityServerWeChatWorkModule),
-    typeof(AbpIdentityServerSessionModule),
-    typeof(AbpAuthenticationWeChatModule),
     typeof(AbpAuthenticationQQModule),
+    typeof(AbpAuthenticationWeChatModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),
-    typeof(PlatformEntityFrameworkCoreModule),
-    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
-    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-    typeof(AbpSettingManagementEntityFrameworkCoreModule),
-    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(IdentityServerMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
-    //typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
     typeof(AbpLocalizationCultureMapModule),
-    typeof(AbpCAPEventBusModule),
-    typeof(AbpMailKitModule),
-    typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
-    typeof(AbpAliyunSmsModule)
+    typeof(AbpExporterMiniExcelModule),
+    typeof(AbpEmailingPlatformModule),
+    typeof(AbpSmsPlatformModule),
+    typeof(AbpCAPEventBusModule)
     )]
 public partial class IdentityServerModule : AbpModule
 {
@@ -115,8 +97,8 @@ public partial class IdentityServerModule : AbpModule
 
         ConfigureCaching(configuration);
         ConfigureIdentity(configuration);
-        ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
+        ConfigureSettingManagement();
         ConfigureLocalization();
         ConfigureAuditing(configuration);
         ConfigureDataSeeder();

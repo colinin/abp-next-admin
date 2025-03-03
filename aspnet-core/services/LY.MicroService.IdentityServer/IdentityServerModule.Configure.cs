@@ -1,4 +1,6 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.Account.Web;
+using LINGYUN.Abp.Account.Web.IdentityServer;
 using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -20,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.IdentityModel.Logging;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -47,6 +50,7 @@ using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -165,6 +169,14 @@ public partial class IdentityServerModule
         });
     }
 
+    private void ConfigureSettingManagement()
+    {
+        Configure<SettingManagementOptions>(options =>
+        {
+            options.IsDynamicSettingStoreEnabled = true;
+        });
+    }
+
     private void ConfigureJsonSerializer(IConfiguration configuration)
     {
         // 统一时间日期格式
@@ -272,12 +284,21 @@ public partial class IdentityServerModule
             options.IsRemoteRefreshEnabled = false;
         });
     }
-    private void ConfigureVirtualFileSystem()
+    private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<IdentityServerModule>("LY.MicroService.IdentityServer");
         });
+
+        if (hostingEnvironment.IsDevelopment())
+        {
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebModule>(hostingEnvironment.ContentRootPath);
+                options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebIdentityServerModule>(hostingEnvironment.ContentRootPath);
+            });
+        }
     }
 
     private void ConfigureMvcUiTheme()

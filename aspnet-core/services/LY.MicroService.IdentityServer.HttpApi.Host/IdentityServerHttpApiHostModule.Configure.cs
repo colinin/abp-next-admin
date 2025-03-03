@@ -33,6 +33,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
@@ -125,6 +126,36 @@ public partial class IdentityServerHttpApiHostModule
                     // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
                     mysql.TranslateParameterizedCollectionsToConstants();
                 });
+        });
+
+        Configure<AbpDbConnectionOptions>(options =>
+        {
+            options.Databases.Configure("Platform", database =>
+            {
+                database.MapConnection("AbpSaas");
+                database.MapConnection("Workflow");
+                database.MapConnection("AppPlatform");
+                database.MapConnection("TaskManagement");
+                database.MapConnection("AbpAuditLogging");
+                database.MapConnection("AbpTextTemplating");
+                database.MapConnection("AbpSettingManagement");
+                database.MapConnection("AbpFeatureManagement");
+                database.MapConnection("AbpPermissionManagement");
+                database.MapConnection("AbpLocalizationManagement");
+                database.MapConnection("AbpDataProtectionManagement");
+            });
+            options.Databases.Configure("Identity", database =>
+            {
+                database.MapConnection("AbpGdpr");
+                database.MapConnection("AbpIdentity");
+                database.MapConnection("AbpOpenIddict");
+                database.MapConnection("AbpIdentityServer");
+            });
+            options.Databases.Configure("Realtime", database =>
+            {
+                database.MapConnection("Notifications");
+                database.MapConnection("MessageService");
+            });
         });
     }
 

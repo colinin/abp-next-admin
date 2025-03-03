@@ -11,6 +11,8 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.OpenIddict.Applications;
+using Volo.Abp.OpenIddict.Scopes;
 
 namespace LY.MicroService.AuthServer.DataSeeder;
 
@@ -19,20 +21,28 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
     private readonly ICurrentTenant _currentTenant;
     private readonly IGuidGenerator _guidGenerator;
     private readonly IOpenIddictApplicationManager _applicationManager;
+    private readonly IOpenIddictApplicationRepository _applicationRepository;
+
     private readonly IOpenIddictScopeManager _scopeManager;
+    private readonly IOpenIddictScopeRepository _scopeRepository;
+
     private readonly IIdentityClaimTypeRepository _claimTypeRepository;
 
     public ServerDataSeedContributor(
         ICurrentTenant currentTenant,
         IGuidGenerator guidGenerator,
         IOpenIddictScopeManager scopeManager,
+        IOpenIddictScopeRepository scopeRepository,
         IOpenIddictApplicationManager applicationManager,
+        IOpenIddictApplicationRepository applicationRepository,
         IIdentityClaimTypeRepository identityClaimTypeRepository)
     {
         _currentTenant = currentTenant;
         _guidGenerator = guidGenerator;
         _scopeManager = scopeManager;
+        _scopeRepository = scopeRepository;
         _applicationManager = applicationManager;
+        _applicationRepository = applicationRepository;
         _claimTypeRepository = identityClaimTypeRepository;
     }
 
@@ -49,7 +59,7 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
             );
         }
 
-        if (await _scopeManager.FindByNameAsync("lingyun-abp-application") == null)
+        if (await _scopeRepository.FindByNameAsync("lingyun-abp-application") == null)
         {
             await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor()
             {
@@ -67,7 +77,7 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
             });
         }
 
-        if (await _applicationManager.FindByClientIdAsync("vue-admin-client") == null)
+        if (await _applicationRepository.FindByClientIdAsync("vue-admin-client") == null)
         {
             await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
             {
@@ -125,7 +135,7 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
             });
         }
 
-        if (await _applicationManager.FindByClientIdAsync("InternalServiceClient") == null)
+        if (await _applicationRepository.FindByClientIdAsync("InternalServiceClient") == null)
         {
             await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
             {

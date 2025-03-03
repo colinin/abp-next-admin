@@ -51,6 +51,7 @@
     "UnActived": "UnActived",
     "RecycleStrategy:Reserve": "Reserve",
     "RecycleStrategy:Recycle": "Recycle",
+    "ManageFeatures": "Manage Features",
     "IfUseCustomDataBaseDefaultConnectionStringIsRequiredMessage": "If you use a custom database, the default connection string must be required!"
   }
 }
