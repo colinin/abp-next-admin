@@ -7,11 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using System.Web;
 using Volo.Abp;
@@ -172,11 +170,13 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         var sender = LazyServiceProvider.LazyGetRequiredService<IAccountEmailConfirmSender>();
 
         await sender.SendEmailConfirmLinkAsync(
-            user,
+            user.Id,
+            user.Email,
             confirmToken,
             input.AppName,
             input.ReturnUrl,
-            input.ReturnUrlHash);
+            input.ReturnUrlHash,
+            user.TenantId);
     }
 
     public async virtual Task ConfirmEmailAsync(ConfirmEmailInput input)
@@ -186,7 +186,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
 
         // 字符编码错误
-        var confirmToken = WebUtility.UrlDecode(input.ConfirmToken.Replace("%20", "%2B"));
+        var confirmToken = HttpUtility.UrlDecode(input.ConfirmToken); ;
         (await UserManager.ConfirmEmailAsync(user, confirmToken)).CheckErrors();
 
         await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
@@ -196,7 +196,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         });
     }
 
-    public async virtual Task<AuthenticatorDto> GetAuthenticator()
+    public async virtual Task<AuthenticatorDto> GetAuthenticatorAsync()
     {
         await IdentityOptions.SetAsync();
 
@@ -228,7 +228,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         };
     }
 
-    public async virtual Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCode(VerifyAuthenticatorCodeInput input)
+    public async virtual Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCodeAsync(VerifyAuthenticatorCodeInput input)
     {
         await IdentityOptions.SetAsync();
 
@@ -257,7 +257,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         };
     }
 
-    public async virtual Task ResetAuthenticator()
+    public async virtual Task ResetAuthenticatorAsync()
     {
         await IdentityOptions.SetAsync();
 
