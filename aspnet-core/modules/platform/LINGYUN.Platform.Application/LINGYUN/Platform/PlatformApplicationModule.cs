@@ -17,7 +17,7 @@ public class PlatformApplicationModule : AbpModule
 
         Configure<AbpAutoMapperOptions>(options =>
         {
-            options.AddProfile<PlatformApplicationMappingProfile>(validate: true);
+            options.AddMaps<PlatformApplicationModule>(validate: true);
         });
     }
 }
