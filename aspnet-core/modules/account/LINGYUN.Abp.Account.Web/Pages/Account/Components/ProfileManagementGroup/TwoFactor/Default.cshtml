@@ -1,0 +1,17 @@
+@using Volo.Abp.Account.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<AccountResource> L
+@model LINGYUN.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.TwoFactor.AccountProfileTwoFactorManagementGroupViewComponent.ChangeTwoFactorModel
+
+@section scripts {
+    <abp-script src="/Pages/Account/Components/ProfileManagementGroup/TwoFactor/Default.js" />
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>@L["TwoFactor"]</abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-input id="TwoFactorEnabled" asp-for="TwoFactorEnabled" />
+    </abp-card-body>
+</abp-card>

@@ -20,6 +20,8 @@
 		<PackageVersion Include="Volo.Abp.Account.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.HttpApi" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.Account.HttpApi.Client" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.Account.Web" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Web.IdentityServer" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Web.OpenIddict" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore" Version="$(VoloAbpPackageVersion)" />
@@ -135,6 +137,7 @@
 		<PackageVersion Include="Volo.Abp.TextTemplating.Scriban" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Timing" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Threading" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.UI.Navigation" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Users.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Users.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Validation" Version="$(VoloAbpPackageVersion)" />
@@ -156,6 +159,7 @@
 		<PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="$(MicrosoftExtensionsPackageVersion)" />
+		<PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.FileProviders.Physical" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftExtensionsPackageVersion)" />
@@ -280,7 +284,7 @@
 		<PackageVersion Include="Polly" Version="8.4.2" />
 		<PackageVersion Include="QRCoder" Version="1.5.1" />
 		<PackageVersion Include="Quartz.Serialization.Json" Version="3.13.0" />
-		<PackageVersion Include="RulesEngine" Version="4.0.0" />
+		<PackageVersion Include="RulesEngine" Version="5.0.5" />
 		<PackageVersion Include="Scriban" Version="5.10.0" />
 		<PackageVersion Include="Senparc.Weixin.MP" Version="16.18.9" />
 		<PackageVersion Include="SixLabors.ImageSharp" Version="3.1.5" />
