@@ -1,11 +1,14 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.Wrapper;
 using LINGYUN.Platform.Localization;
+using LY.MicroService.PlatformManagement.Messages;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,6 +20,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Metrics;
@@ -42,8 +46,10 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
+using Volo.Abp.MailKit;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Sms;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
@@ -472,5 +478,22 @@ public partial class PlatformManagementHttpApiHostModule
                     client.DefaultRequestHeaders.TryAddWithoutValidation(AbpHttpWrapConsts.AbpDontWrapResult, "true");
                 });
         });
+    }
+
+    private void ConfigurePlatformModule(IServiceCollection services)
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            // 允许第三方调用集成服务
+            options.ExposeIntegrationServices = true;
+        });
+        // 用于消息中心邮件集中发送
+        services.Replace(ServiceDescriptor.Transient<Volo.Abp.Emailing.IEmailSender, PlatformEmailSender>());
+
+        services.AddKeyedTransient<Volo.Abp.Emailing.IEmailSender, MailKitSmtpEmailSender>("DefaultEmailSender");
+
+        // 用于消息中心短信集中发送
+        services.Replace(ServiceDescriptor.Transient<ISmsSender, PlatformSmsSender>());
+        services.AddKeyedSingleton<ISmsSender, AliyunSmsSender>("DefaultSmsSender");
     }
 }
