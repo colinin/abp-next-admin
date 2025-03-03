@@ -16,9 +16,9 @@ public class TencentQQSettingDefinitionProvider : SettingDefinitionProvider
         return new SettingDefinition[]
         {
             new SettingDefinition(
-                TencentQQSettingNames.QQConnect.AppId, "",
-                L("DisplayName:QQConnect.AppId"),
-                L("Description:QQConnect.AppId"),
+                TencentQQSettingNames.QQConnect.AppId,
+                displayName: L("DisplayName:QQConnect.AppId"),
+                description: L("Description:QQConnect.AppId"),
                 isVisibleToClients: false,
                 isEncrypted: true)
             .WithProviders(
@@ -27,9 +27,9 @@ public class TencentQQSettingDefinitionProvider : SettingDefinitionProvider
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName),
             new SettingDefinition(
-                TencentQQSettingNames.QQConnect.AppKey, "",
-                L("DisplayName:QQConnect.AppKey"),
-                L("Description:QQConnect.AppKey"),
+                TencentQQSettingNames.QQConnect.AppKey,
+                displayName: L("DisplayName:QQConnect.AppKey"),
+                description: L("Description:QQConnect.AppKey"),
                 isVisibleToClients: false,
                 isEncrypted: true)
             .WithProviders(
