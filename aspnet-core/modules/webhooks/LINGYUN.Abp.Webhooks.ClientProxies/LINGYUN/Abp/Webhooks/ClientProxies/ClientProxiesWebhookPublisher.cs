@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.WebhooksManagement;
+using LINGYUN.Abp.WebhooksManagement.Integration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ namespace LINGYUN.Abp.Webhooks.ClientProxies;
 [Dependency(ReplaceServices = true)]
 public class ClientProxiesWebhookPublisher : IWebhookPublisher, ITransientDependency
 {
-    protected IWebhookPublishAppService PublishAppService { get; }
+    protected IWebhookPublishIntegrationService PublishAppService { get; }
 
     public ClientProxiesWebhookPublisher(
-        IWebhookPublishAppService publishAppService)
+        IWebhookPublishIntegrationService publishAppService)
     {
         PublishAppService = publishAppService;
     }

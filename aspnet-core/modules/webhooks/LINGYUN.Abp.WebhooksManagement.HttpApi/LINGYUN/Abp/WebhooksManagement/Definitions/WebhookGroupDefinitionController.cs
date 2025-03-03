@@ -30,9 +30,9 @@ public class WebhookGroupDefinitionController : WebhooksManagementControllerBase
     [HttpDelete]
     [Route("{name}")]
     [Authorize(WebhooksManagementPermissions.WebhookGroupDefinition.Delete)]
-    public virtual Task DeleteAysnc(string name)
+    public virtual Task DeleteAsync(string name)
     {
-        return _service.DeleteAysnc(name);
+        return _service.DeleteAsync(name);
     }
 
     [HttpGet]

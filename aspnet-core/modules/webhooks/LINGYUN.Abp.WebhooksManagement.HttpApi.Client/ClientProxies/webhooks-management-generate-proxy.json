@@ -1,0 +1,1774 @@
+{
+  "modules": {
+    "webhooks-management": {
+      "rootPath": "webhooks-management",
+      "remoteServiceName": "WebhooksManagement",
+      "controllers": {
+        "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionController": {
+          "controllerName": "WebhookDefinition",
+          "controllerGroupName": "WebhookDefinition",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookDefinitionAppService",
+              "name": "IWebhookDefinitionAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionCreateDto, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionCreateDto",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionCreateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionUpdateDto, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionUpdateDto",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionUpdateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionGetListInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionGetListInput",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto>"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/webhooks/definitions",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionCreateDto, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionCreateDto",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionCreateDto",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookDefinitionAppService"
+            },
+            "DeleteAsyncByName": {
+              "uniqueName": "DeleteAsyncByName",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/webhooks/definitions/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookDefinitionAppService"
+            },
+            "GetAsyncByName": {
+              "uniqueName": "GetAsyncByName",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/webhooks/definitions/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookDefinitionAppService"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/webhooks/definitions",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionGetListInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionGetListInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionGetListInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "GroupName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookDefinitionAppService"
+            },
+            "UpdateAsyncByNameAndInput": {
+              "uniqueName": "UpdateAsyncByNameAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/webhooks/definitions/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionUpdateDto, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionUpdateDto",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionUpdateDto",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookDefinitionUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.Dto.WebhookDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookDefinitionAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionController": {
+          "controllerName": "WebhookGroupDefinition",
+          "controllerGroupName": "WebhookGroupDefinition",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookGroupDefinitionAppService",
+              "name": "IWebhookGroupDefinitionAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionCreateDto, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionCreateDto",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionCreateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionUpdateDto, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionUpdateDto",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionUpdateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto",
+                    "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionGetListInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionGetListInput",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto>"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/webhooks/definitions/groups",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionCreateDto, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionCreateDto",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionCreateDto",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookGroupDefinitionAppService"
+            },
+            "DeleteAsyncByName": {
+              "uniqueName": "DeleteAsyncByName",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/webhooks/definitions/groups/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookGroupDefinitionAppService"
+            },
+            "GetAsyncByName": {
+              "uniqueName": "GetAsyncByName",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/webhooks/definitions/groups/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookGroupDefinitionAppService"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/webhooks/definitions/groups",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionGetListInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionGetListInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionGetListInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookGroupDefinitionAppService"
+            },
+            "UpdateAsyncByNameAndInput": {
+              "uniqueName": "UpdateAsyncByNameAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/webhooks/definitions/groups/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionUpdateDto, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionUpdateDto",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionUpdateDto",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto",
+                "typeSimple": "LINGYUN.Abp.WebhooksManagement.Definitions.WebhookGroupDefinitionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.Definitions.IWebhookGroupDefinitionAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.WebhooksManagement.Integration.WebhookPublishIntegrationController": {
+          "controllerName": "WebhookPublishIntegration",
+          "controllerGroupName": "WebhookPublishIntegration",
+          "isRemoteService": true,
+          "isIntegrationService": true,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.WebhooksManagement.Integration.WebhookPublishIntegrationController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.WebhooksManagement.Integration.IWebhookPublishIntegrationService",
+              "name": "IWebhookPublishIntegrationService",
+              "methods": [
+                {
+                  "name": "PublishAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "PublishAsyncByInput": {
+              "uniqueName": "PublishAsyncByInput",
+              "name": "PublishAsync",
+              "httpMethod": "POST",
+              "url": "integration-api/webhooks-management/webhooks/publish",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.Integration.IWebhookPublishIntegrationService"
+            }
+          }
+        },
+        "LINGYUN.Abp.WebhooksManagement.WebhookPublishController": {
+          "controllerName": "WebhookPublish",
+          "controllerGroupName": "WebhookPublish",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.WebhooksManagement.WebhookPublishController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.WebhooksManagement.IWebhookPublishAppService",
+              "name": "IWebhookPublishAppService",
+              "methods": [
+                {
+                  "name": "PublishAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "PublishAsyncByInput": {
+              "uniqueName": "PublishAsyncByInput",
+              "name": "PublishAsync",
+              "httpMethod": "POST",
+              "url": "api/webhooks/publish",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookPublishInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.IWebhookPublishAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordController": {
+          "controllerName": "WebhookSendRecord",
+          "controllerGroupName": "WebhookSendRecord",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.WebhooksManagement.IWebhookSendRecordAppService",
+              "name": "IWebhookSendRecordAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDto",
+                    "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "DeleteManyAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDeleteManyInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDeleteManyInput",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDeleteManyInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ResendAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ResendManyAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordResendManyInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordResendManyInput",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordResendManyInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordGetListInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordGetListInput",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDto>"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/webhooks/send-attempts/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDto",
+                "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.IWebhookSendRecordAppService"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/webhooks/send-attempts/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.IWebhookSendRecordAppService"
+            },
+            "DeleteManyAsyncByInput": {
+              "uniqueName": "DeleteManyAsyncByInput",
+              "name": "DeleteManyAsync",
+              "httpMethod": "DELETE",
+              "url": "api/webhooks/send-attempts/delete-many",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDeleteManyInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDeleteManyInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDeleteManyInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDeleteManyInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDeleteManyInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.IWebhookSendRecordAppService"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/webhooks/send-attempts",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordGetListInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordGetListInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordGetListInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "TenantId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "State",
+                  "jsonName": null,
+                  "type": "System.Boolean?",
+                  "typeSimple": "boolean?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "WebhookEventId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SubscriptionId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ResponseStatusCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "BeginCreationTime",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "EndCreationTime",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.WebhooksManagement.WebhookSendRecordDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.IWebhookSendRecordAppService"
+            },
+            "ResendAsyncById": {
+              "uniqueName": "ResendAsyncById",
+              "name": "ResendAsync",
+              "httpMethod": "POST",
+              "url": "api/webhooks/send-attempts/{id}/resend",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.IWebhookSendRecordAppService"
+            },
+            "ResendManyAsyncByInput": {
+              "uniqueName": "ResendManyAsyncByInput",
+              "name": "ResendManyAsync",
+              "httpMethod": "POST",
+              "url": "api/webhooks/send-attempts/resend-many",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordResendManyInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordResendManyInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordResendManyInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordResendManyInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSendRecordResendManyInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.IWebhookSendRecordAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionController": {
+          "controllerName": "WebhookSubscription",
+          "controllerGroupName": "WebhookSubscription",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.WebhooksManagement.IWebhookSubscriptionAppService",
+              "name": "IWebhookSubscriptionAppService",
+              "methods": [
+                {
+                  "name": "DeleteManyAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDeleteManyInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDeleteManyInput",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDeleteManyInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetAllAvailableWebhooksAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.WebhookAvailableGroupDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.WebhookAvailableGroupDto>"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto",
+                    "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionGetListInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionGetListInput",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto>"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionCreateInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionCreateInput",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionCreateInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto",
+                    "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionUpdateInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionUpdateInput",
+                      "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionUpdateInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto",
+                    "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/webhooks/subscriptions",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionCreateInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionCreateInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionCreateInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionCreateInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionCreateInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto",
+                "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.ICreateAppService<LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto,LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionCreateInput>"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/webhooks/subscriptions/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IDeleteAppService<System.Guid>"
+            },
+            "DeleteManyAsyncByInput": {
+              "uniqueName": "DeleteManyAsyncByInput",
+              "name": "DeleteManyAsync",
+              "httpMethod": "DELETE",
+              "url": "api/webhooks/subscriptions/delete-many",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDeleteManyInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDeleteManyInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDeleteManyInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDeleteManyInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDeleteManyInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.IWebhookSubscriptionAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/webhooks/subscriptions/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto",
+                "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto,LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto,System.Guid,LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionGetListInput>"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/webhooks/subscriptions",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionGetListInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionGetListInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionGetListInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "TenantId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "WebhookUri",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Secret",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "IsActive",
+                  "jsonName": null,
+                  "type": "System.Boolean?",
+                  "typeSimple": "boolean?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Webhooks",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "BeginCreationTime",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "EndCreationTime",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto,LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto,System.Guid,LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionGetListInput>"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/webhooks/subscriptions/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionUpdateInput, LINGYUN.Abp.WebhooksManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionUpdateInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionUpdateInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionUpdateInput",
+                  "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionUpdateInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto",
+                "typeSimple": "LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IUpdateAppService<LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionDto,System.Guid,LINGYUN.Abp.WebhooksManagement.WebhookSubscriptionUpdateInput>"
+            },
+            "GetAllAvailableWebhooksAsync": {
+              "uniqueName": "GetAllAvailableWebhooksAsync",
+              "name": "GetAllAvailableWebhooksAsync",
+              "httpMethod": "GET",
+              "url": "api/webhooks/subscriptions/availables",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.WebhookAvailableGroupDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.WebhooksManagement.WebhookAvailableGroupDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.WebhooksManagement.IWebhookSubscriptionAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

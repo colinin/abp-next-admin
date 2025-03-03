@@ -14,6 +14,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="ClientProxies\webhooks-management-generate-proxy.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="ClientProxies\webhooks-management-generate-proxy.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Http.Client" />
 	</ItemGroup>
 

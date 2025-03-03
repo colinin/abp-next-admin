@@ -8,7 +8,7 @@ public interface IWebhookGroupDefinitionAppService : IApplicationService
 {
     Task<WebhookGroupDefinitionDto> GetAsync(string name);
 
-    Task DeleteAysnc(string name);
+    Task DeleteAsync(string name);
 
     Task<WebhookGroupDefinitionDto> CreateAsync(WebhookGroupDefinitionCreateDto input);
 
