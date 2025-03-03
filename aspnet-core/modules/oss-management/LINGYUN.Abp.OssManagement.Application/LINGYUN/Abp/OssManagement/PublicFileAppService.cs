@@ -28,12 +28,12 @@ public class PublicFileAppService : FileAppServiceBase, IPublicFileAppService
         await base.DeleteAsync(input);
     }
 
-    public override async Task UploadAsync(UploadFileChunkInput input)
+    public override async Task UploadChunkAsync(UploadFileChunkInput input)
     {
         await CheckPublicAccessAsync();
         await FeatureChecker.CheckEnabledAsync(AbpOssManagementFeatureNames.OssObject.UploadFile);
 
-        await base.UploadAsync(input);
+        await base.UploadChunkAsync(input);
     }
 
     [RequiresLimitFeature(
