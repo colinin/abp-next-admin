@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.Gdpr.HttpApi.Client</AssemblyName>
+		<PackageId>LINGYUN.Abp.Gdpr.HttpApi.Client</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="ClientProxies\gdpr-generate-proxy.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="ClientProxies\gdpr-generate-proxy.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Http.Client" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.Gdpr.Application.Contracts\LINGYUN.Abp.Gdpr.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>
