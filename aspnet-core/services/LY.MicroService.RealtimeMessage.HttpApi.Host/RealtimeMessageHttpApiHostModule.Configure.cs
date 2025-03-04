@@ -2,9 +2,9 @@
 using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.MessageService.Localization;
 using LINGYUN.Abp.Notifications;
-using LINGYUN.Abp.Notifications.Localization;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TextTemplating;
@@ -38,7 +38,6 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Client;
@@ -450,10 +449,6 @@ public partial class RealtimeMessageHttpApiHostModule
             options.Resources
                    .Get<MessageServiceResource>()
                    .AddVirtualJson("/Localization/Resources");
-
-            options.UsePersistences(
-                typeof(MessageServiceResource),
-                typeof(NotificationsResource));
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -466,6 +461,11 @@ public partial class RealtimeMessageHttpApiHostModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
 
