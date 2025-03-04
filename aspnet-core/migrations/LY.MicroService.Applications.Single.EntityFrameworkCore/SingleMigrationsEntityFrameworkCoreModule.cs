@@ -13,7 +13,6 @@ using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using LINGYUN.Abp.WeChat;
 using LINGYUN.Platform.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;

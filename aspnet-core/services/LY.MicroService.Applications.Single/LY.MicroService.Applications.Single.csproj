@@ -95,7 +95,6 @@
 		<ProjectReference Include="..\..\framework\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj" />
 		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
 		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
-		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.Localization.Persistence\LINGYUN.Abp.Localization.Persistence.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Logging.Serilog.Elasticsearch\LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
@@ -126,8 +125,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Emailing\LINGYUN.Abp.Account.Emailing.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
-		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Templates\LINGYUN.Abp.Account.Templates.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OpenIddict\LINGYUN.Abp.Account.Web.OpenIddict.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.Auditing.Application.Contracts\LINGYUN.Abp.Auditing.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.Auditing.Application\LINGYUN.Abp.Auditing.Application.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.Auditing.HttpApi\LINGYUN.Abp.Auditing.HttpApi.csproj" />
@@ -159,6 +159,7 @@
 		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.Domain.Identity\LINGYUN.Abp.Gdpr.Domain.Identity.csproj" />
 		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.EntityFrameworkCore\LINGYUN.Abp.Gdpr.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.HttpApi\LINGYUN.Abp.Gdpr.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.Web\LINGYUN.Abp.Gdpr.Web.csproj" />
 		<ProjectReference Include="..\..\modules\identityServer\LINGYUN.Abp.IdentityServer.Session\LINGYUN.Abp.IdentityServer.Session.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Application\LINGYUN.Abp.Identity.Application.csproj" />

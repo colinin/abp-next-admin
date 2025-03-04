@@ -3,6 +3,7 @@ using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Wrapper;
@@ -40,7 +41,6 @@ using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Identity.Localization;
-using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
@@ -439,10 +439,6 @@ public partial class IdentityServerHttpApiHostModule
             options.Resources
                    .Get<IdentityResource>()
                    .AddVirtualJson("/Localization/Resources");
-
-            options.UsePersistences(
-                typeof(IdentityResource),
-                typeof(AbpIdentityServerResource));
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -455,6 +451,11 @@ public partial class IdentityServerHttpApiHostModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
 

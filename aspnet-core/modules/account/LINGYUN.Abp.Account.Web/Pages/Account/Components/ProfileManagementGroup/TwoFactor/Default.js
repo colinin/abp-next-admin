@@ -9,8 +9,9 @@ $(function () {
             })
             .then(function () {
                 abp.notify.success(ul("SavedSuccessfully"));
+                abp.ui.clearBusy();
             })
-            .done(function () {
+            .catch(function () {
                 abp.ui.clearBusy();
             });
     });

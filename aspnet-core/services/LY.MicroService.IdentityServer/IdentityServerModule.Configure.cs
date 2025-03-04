@@ -1,9 +1,9 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.Account.Web;
 using LINGYUN.Abp.Account.Web.IdentityServer;
-using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LY.MicroService.IdentityServer.Authentication;
@@ -22,7 +22,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.IdentityModel.Logging;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -41,7 +40,6 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.IdentityServer;
@@ -324,8 +322,6 @@ public partial class IdentityServerModule
             options.Resources
                 .Get<AccountResource>()
                 .AddVirtualJson("/Localization/Resources");
-
-            options.UsePersistence<AccountResource>();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -338,6 +334,11 @@ public partial class IdentityServerModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
     private void ConfigureAuditing(IConfiguration configuration)

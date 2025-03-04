@@ -1,7 +1,6 @@
 ﻿using DotNetCore.CAP;
-using LINGYUN.Abp.Account.Web;
-using LINGYUN.Abp.Account.Web.OpenIddict;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Portal;
@@ -25,7 +24,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.IdentityModel.Logging;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -42,7 +40,6 @@ using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Json;
@@ -370,8 +367,6 @@ public partial class AuthServerModule
             options.Resources
                 .Get<AccountResource>()
                 .AddVirtualJson("/Localization/Resources");
-
-            options.UsePersistence<AccountResource>();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -384,6 +379,11 @@ public partial class AuthServerModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
     private void ConfigureTiming(IConfiguration configuration)

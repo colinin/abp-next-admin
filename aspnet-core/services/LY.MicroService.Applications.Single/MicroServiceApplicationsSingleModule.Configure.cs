@@ -1,3 +1,4 @@
+using LY.MicroService.Applications.Single.DataSeeder;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -715,8 +716,6 @@ public partial class MicroServiceApplicationsSingleModule
                 typeof(PlatformResource),
                 typeof(AbpOpenIddictResource),
                 typeof(AbpIdentityServerResource));
-
-            options.UseAllPersistence();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -729,6 +728,11 @@ public partial class MicroServiceApplicationsSingleModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
 
@@ -772,7 +776,7 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
-    private void ConfigureSingleModule(IServiceCollection services)
+    private void ConfigureSingleModule(IServiceCollection services, bool isDevelopment)
     {
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
@@ -793,6 +797,11 @@ public partial class MicroServiceApplicationsSingleModule
         // 用于消息中心短信集中发送
         services.Replace<ISmsSender, PlatformSmsSender>(ServiceLifetime.Transient);
         services.AddKeyedSingleton<ISmsSender, AliyunSmsSender>("DefaultSmsSender");
+
+        if (isDevelopment)
+        {
+            services.AddHostedService<DataSeederWorker>();
+        }
     }
 
     private void ConfigureUrls(IConfiguration configuration)

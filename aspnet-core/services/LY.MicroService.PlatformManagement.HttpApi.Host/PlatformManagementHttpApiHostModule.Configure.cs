@@ -1,13 +1,12 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.Wrapper;
-using LINGYUN.Platform.Localization;
 using LY.MicroService.PlatformManagement.Messages;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -39,7 +38,6 @@ using Volo.Abp.Auditing;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.Caching;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Client;
@@ -379,8 +377,6 @@ public partial class PlatformManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-
-            options.UsePersistence<PlatformResource>();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -393,6 +389,11 @@ public partial class PlatformManagementHttpApiHostModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
 
