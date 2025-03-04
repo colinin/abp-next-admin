@@ -1,37 +1,20 @@
+using LINGYUN.Abp.Account.Web.OpenIddict;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Gdpr.Identity;
+using LINGYUN.Abp.Gdpr.Web;
 
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
-    // 账户模块 应用服务
-    typeof(AbpAccountApplicationModule),
-    // 账户模块 控制器
-    typeof(AbpAccountHttpApiModule),
-    // 账户模块 OpenIddict集成
-    typeof(AbpAccountWebOpenIddictModule),
-    // 账户模块 模板
-    typeof(AbpAccountTemplatesModule),
-
-    // 审计日志模块 应用服务
-    typeof(AbpAuditingApplicationModule),
-    // 审计日志模块 控制器
-    typeof(AbpAuditingHttpApiModule),
-    // 审计日志模块 IP 地址定位
-    typeof(AbpAuditLoggingIPLocationModule),
-    // 审计日志模块 实体框架
-    typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-
-    // 缓存模块 Redis集成
-    typeof(AbpCachingStackExchangeRedisModule),
-    // 缓存管理模块 Redis集成
-    typeof(AbpCachingManagementStackExchangeRedisModule),
-    // 缓存管理模块 应用服务
-    typeof(AbpCachingManagementApplicationModule),
-    // 缓存管理模块 控制器
-    typeof(AbpCachingManagementHttpApiModule),
-
+    // CAP事件总线模块
+    typeof(AbpCAPEventBusModule),
+    // Serilog扩展模块 应用程序信息
+    typeof(AbpSerilogEnrichersApplicationModule),
+    // Serilog扩展模块 全局唯一Id
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    // Serilog模块
+    typeof(AbpAspNetCoreSerilogModule),
     // 身份认证模块 会话管理集成
     typeof(AbpIdentityAspNetCoreSessionModule),
     // 身份认证模块 会话中间件
@@ -51,6 +34,13 @@ namespace LY.MicroService.Applications.Single;
     // 身份认证模块 实体框架
     typeof(AbpIdentityEntityFrameworkCoreModule),
 
+    // 账户模块 应用服务
+    typeof(AbpAccountApplicationModule),
+    // 账户模块 控制器
+    typeof(AbpAccountHttpApiModule),
+    // 账户模块 OpenIddict集成
+    typeof(AbpAccountWebOpenIddictModule),
+
     // Gdpr 身份认证提供者模块
     typeof(AbpGdprDomainIdentityModule),
     // Gdpr 应用服务模块
@@ -59,6 +49,29 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpGdprHttpApiModule),
     // Gdpr 实体框架模块
     typeof(AbpGdprEntityFrameworkCoreModule),
+    // Gdpr Mvc页面
+    typeof(AbpGdprWebModule),
+
+    // MVC Theme
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+
+    // 审计日志模块 应用服务
+    typeof(AbpAuditingApplicationModule),
+    // 审计日志模块 控制器
+    typeof(AbpAuditingHttpApiModule),
+    // 审计日志模块 IP 地址定位
+    typeof(AbpAuditLoggingIPLocationModule),
+    // 审计日志模块 实体框架
+    typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+
+    // 缓存模块 Redis集成
+    typeof(AbpCachingStackExchangeRedisModule),
+    // 缓存管理模块 Redis集成
+    typeof(AbpCachingManagementStackExchangeRedisModule),
+    // 缓存管理模块 应用服务
+    typeof(AbpCachingManagementApplicationModule),
+    // 缓存管理模块 控制器
+    typeof(AbpCachingManagementHttpApiModule),
 
     // 多语言管理模块 领域服务
     typeof(AbpLocalizationManagementDomainModule),
@@ -69,10 +82,6 @@ namespace LY.MicroService.Applications.Single;
     // 多语言管理模块 实体框架
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
 
-    // Serilog扩展模块 应用程序信息
-    typeof(AbpSerilogEnrichersApplicationModule),
-    // Serilog扩展模块 全局唯一Id
-    typeof(AbpSerilogEnrichersUniqueIdModule),
 
     // 消息模块 领域服务
     typeof(AbpMessageServiceDomainModule),
@@ -284,8 +293,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAspNetCoreMvcLocalizationModule),
     // 多语言模块 语言映射
     typeof(AbpLocalizationCultureMapModule),
-    // 多语言模块 持久化
-    typeof(AbpLocalizationPersistenceModule),
 
     // OpenApi模块 授权
     typeof(AbpOpenApiAuthorizationModule),
@@ -352,19 +359,13 @@ namespace LY.MicroService.Applications.Single;
     // Elsa工作流模块 MySql集成
     typeof(AbpElsaEntityFrameworkCoreMySqlModule),
 
-    // CAP事件总线模块
-    typeof(AbpCAPEventBusModule),
-
     // 数据导出模块 MiniExcel集成
     typeof(AbpExporterMiniExcelModule),
 
-    typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-    typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreMvcIdempotentWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpMailKitModule),
     typeof(AbpAutofacModule)
     )]
@@ -425,16 +426,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 
-        ConfigureSingleModule(context.Services);
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        AsyncHelper.RunSync(async () => await OnApplicationInitializationAsync(context));
-    }
-
-    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
-    {
-        await context.ServiceProvider.GetRequiredService<IDataSeeder>().SeedAsync(); ;
+        ConfigureSingleModule(context.Services, hostingEnvironment.IsDevelopment());
     }
 }
