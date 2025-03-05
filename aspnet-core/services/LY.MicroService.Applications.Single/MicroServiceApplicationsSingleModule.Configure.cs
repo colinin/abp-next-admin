@@ -1,3 +1,4 @@
+using LINGYUN.Abp.Identity.QrCode;
 using LY.MicroService.Applications.Single.DataSeeder;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
@@ -258,6 +259,7 @@ public partial class MicroServiceApplicationsSingleModule
             options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
             options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
             options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(QrCodeLoginProviderConsts.GrantType);
         });
 
         Configure<OpenIddictServerOptions>(options =>

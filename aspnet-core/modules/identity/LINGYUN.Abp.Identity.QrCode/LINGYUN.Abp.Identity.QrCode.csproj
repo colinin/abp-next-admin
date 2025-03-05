@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>net9.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.Identity.QrCode</AssemblyName>
+		<PackageId>LINGYUN.Abp.Identity.QrCode</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Remove="LINGYUN\Abp\Identity\QrCode\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Identity\QrCode\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Identity.Domain" />
+	</ItemGroup>
+
+</Project>

@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.Account.Emailing;
 using LINGYUN.Abp.Account.Web.ProfileManagement;
 using LINGYUN.Abp.Identity;
+using LINGYUN.Abp.Identity.AspNetCore.QrCode;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Web.Pages.Account;
@@ -21,6 +22,7 @@ namespace LINGYUN.Abp.Account.Web;
     typeof(VoloAbpAccountWebModule),
     typeof(AbpIdentityDomainModule),
     typeof(AbpAccountEmailingModule),
+    typeof(AbpIdentityAspNetCoreQrCodeModule),
     typeof(AbpAccountApplicationContractsModule))]
 public class AbpAccountWebModule : AbpModule
 {
