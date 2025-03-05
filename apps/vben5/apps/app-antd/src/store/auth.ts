@@ -8,7 +8,12 @@ import { useRouter } from 'vue-router';
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@vben/constants';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
-import { useQrCodeLoginApi, useTokenApi, useUserInfoApi } from '@abp/account';
+import {
+  useProfileApi,
+  useQrCodeLoginApi,
+  useTokenApi,
+  useUserInfoApi,
+} from '@abp/account';
 import { Events, useAbpStore, useEventBus } from '@abp/core';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
@@ -22,6 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
   const { loginApi: qrcodeLoginApi } = useQrCodeLoginApi();
   const { getUserInfoApi } = useUserInfoApi();
   const { getConfigApi } = useAbpConfigApi();
+  const { getPictureApi } = useProfileApi();
   const accessStore = useAccessStore();
   const userStore = useUserStore();
   const abpStore = useAbpStore();
@@ -76,6 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
     let userInfo: null | (UserInfo & { [key: string]: any }) = null;
     const userInfoRes = await getUserInfoApi();
     const abpConfig = await getConfigApi();
+    const picture = await getPictureApi();
     userInfo = {
       userId: userInfoRes.sub ?? abpConfig.currentUser.id,
       username: userInfoRes.uniqueName ?? abpConfig.currentUser.userName,
@@ -83,7 +90,7 @@ export const useAuthStore = defineStore('auth', () => {
         userInfoRes.name ??
         abpConfig.currentUser.name ??
         abpConfig.currentUser.userName,
-      avatar: userInfoRes.avatarUrl ?? userInfoRes.picture ?? '',
+      avatar: URL.createObjectURL(picture) ?? '',
       desc: userInfoRes.uniqueName ?? userInfoRes.name,
       email: userInfoRes.email ?? userInfoRes.email,
       emailVerified:
@@ -148,6 +155,10 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function $reset() {
+    const userInfo = userStore.userInfo;
+    if (userInfo?.avatar) {
+      URL.revokeObjectURL(userInfo?.avatar);
+    }
     loginLoading.value = false;
   }
 

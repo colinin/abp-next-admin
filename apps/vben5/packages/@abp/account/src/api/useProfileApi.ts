@@ -2,6 +2,7 @@ import type {
   AuthenticatorDto,
   AuthenticatorRecoveryCodeDto,
   ChangePasswordInput,
+  ChangePictureInput,
   ConfirmEmailInput,
   ProfileDto,
   SendEmailConfirmCodeDto,
@@ -45,6 +46,31 @@ export function useProfileApi() {
     return request('/api/account/my-profile/change-password', {
       data: input,
       method: 'POST',
+    });
+  }
+
+  /**
+   * 修改头像
+   * @param input 参数
+   */
+  function changePictureApi(input: ChangePictureInput): Promise<void> {
+    return request('/api/account/my-profile/picture', {
+      data: input,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      method: 'POST',
+    });
+  }
+
+  /**
+   * 获取头像
+   * @returns 头像文件流
+   */
+  function getPictureApi(): Promise<Blob> {
+    return request('/api/account/my-profile/picture', {
+      method: 'GET',
+      responseType: 'blob',
     });
   }
 
@@ -132,10 +158,12 @@ export function useProfileApi() {
   return {
     cancel,
     changePasswordApi,
+    changePictureApi,
     changeTwoFactorEnabledApi,
     confirmEmailApi,
     getApi,
     getAuthenticatorApi,
+    getPictureApi,
     getTwoFactorEnabledApi,
     resetAuthenticatorApi,
     sendEmailConfirmLinkApi,
