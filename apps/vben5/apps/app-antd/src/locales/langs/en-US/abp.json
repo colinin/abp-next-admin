@@ -8,6 +8,9 @@
       "phoneNumber": "Phone Number",
       "getCode": "Get Code",
       "code": "Code"
+    },
+    "qrcodeLogin": {
+      "scaned": "Please confirm login on your phone."
     }
   },
   "manage": {

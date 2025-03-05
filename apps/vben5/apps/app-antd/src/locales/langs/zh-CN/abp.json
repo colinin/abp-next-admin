@@ -8,6 +8,9 @@
       "phoneNumber": "手机号码",
       "getCode": "获取验证码",
       "code": "验证码"
+    },
+    "qrcodeLogin": {
+      "scaned": "请在手机上确认登录."
     }
   },
   "manage": {

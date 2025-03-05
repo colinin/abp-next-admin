@@ -1,3 +1,5 @@
+import type { TokenResult } from '@abp/account';
+
 import type { Recordable, UserInfo } from '@vben/types';
 
 import { ref } from 'vue';
@@ -6,7 +8,7 @@ import { useRouter } from 'vue-router';
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@vben/constants';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
-import { useTokenApi, useUserInfoApi } from '@abp/account';
+import { useQrCodeLoginApi, useTokenApi, useUserInfoApi } from '@abp/account';
 import { Events, useAbpStore, useEventBus } from '@abp/core';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
@@ -17,6 +19,7 @@ import { $t } from '#/locales';
 export const useAuthStore = defineStore('auth', () => {
   const { publish } = useEventBus();
   const { loginApi } = useTokenApi();
+  const { loginApi: qrcodeLoginApi } = useQrCodeLoginApi();
   const { getUserInfoApi } = useUserInfoApi();
   const { getConfigApi } = useAbpConfigApi();
   const accessStore = useAccessStore();
@@ -25,6 +28,14 @@ export const useAuthStore = defineStore('auth', () => {
   const router = useRouter();
 
   const loginLoading = ref(false);
+
+  async function qrcodeLogin(
+    key: string,
+    onSuccess?: () => Promise<void> | void,
+  ) {
+    const result = await qrcodeLoginApi(key);
+    return await _loginSuccess(result, onSuccess);
+  }
 
   /**
    * 异步处理登录操作
@@ -35,46 +46,8 @@ export const useAuthStore = defineStore('auth', () => {
     params: Recordable<any>,
     onSuccess?: () => Promise<void> | void,
   ) {
-    // 异步处理用户登录操作并获取 accessToken
-    let userInfo: null | UserInfo = null;
-    try {
-      loginLoading.value = true;
-      const loginResult = await loginApi(params as any);
-      const { accessToken, tokenType, refreshToken } = loginResult;
-      // 如果成功获取到 accessToken
-      if (accessToken) {
-        accessStore.setAccessToken(`${tokenType} ${accessToken}`);
-        accessStore.setRefreshToken(refreshToken);
-
-        userInfo = await fetchUserInfo();
-
-        userStore.setUserInfo(userInfo);
-
-        publish(Events.UserLogin, userInfo);
-
-        if (accessStore.loginExpired) {
-          accessStore.setLoginExpired(false);
-        } else {
-          onSuccess
-            ? await onSuccess?.()
-            : await router.push(userInfo.homePath || DEFAULT_HOME_PATH);
-        }
-
-        if (userInfo?.realName) {
-          notification.success({
-            description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
-            duration: 3,
-            message: $t('authentication.loginSuccess'),
-          });
-        }
-      }
-    } finally {
-      loginLoading.value = false;
-    }
-
-    return {
-      userInfo,
-    };
+    const result = await loginApi(params as any);
+    return await _loginSuccess(result, onSuccess);
   }
 
   async function logout(redirect: boolean = true) {
@@ -129,6 +102,51 @@ export const useAuthStore = defineStore('auth', () => {
     return userInfo;
   }
 
+  async function _loginSuccess(
+    loginResult: TokenResult,
+    onSuccess?: () => Promise<void> | void,
+  ) {
+    // 异步处理用户登录操作并获取 accessToken
+    let userInfo: null | UserInfo = null;
+    try {
+      loginLoading.value = true;
+      const { accessToken, tokenType, refreshToken } = loginResult;
+      // 如果成功获取到 accessToken
+      if (accessToken) {
+        accessStore.setAccessToken(`${tokenType} ${accessToken}`);
+        accessStore.setRefreshToken(refreshToken);
+
+        userInfo = await fetchUserInfo();
+
+        userStore.setUserInfo(userInfo);
+
+        publish(Events.UserLogin, userInfo);
+
+        if (accessStore.loginExpired) {
+          accessStore.setLoginExpired(false);
+        } else {
+          onSuccess
+            ? await onSuccess?.()
+            : await router.push(userInfo.homePath || DEFAULT_HOME_PATH);
+        }
+
+        if (userInfo?.realName) {
+          notification.success({
+            description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
+            duration: 3,
+            message: $t('authentication.loginSuccess'),
+          });
+        }
+      }
+    } finally {
+      loginLoading.value = false;
+    }
+
+    return {
+      userInfo,
+    };
+  }
+
   function $reset() {
     loginLoading.value = false;
   }
@@ -136,6 +154,7 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     $reset,
     authLogin,
+    qrcodeLogin,
     fetchUserInfo,
     loginLoading,
     logout,
