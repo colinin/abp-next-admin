@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Localization;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Caching;
@@ -14,16 +15,19 @@ public class QrCodeLoginProvider : IQrCodeLoginProvider, ITransientDependency
 {
     protected IdentityUserManager UserManager { get; }
     protected IStringLocalizer<IdentityResource> L { get; }
+    protected IUserPictureProvider UserPicturePovider { get; }
     protected IDistributedCache<QrCodeCacheItem> QrCodeCache { get; }
 
     public QrCodeLoginProvider(
         IStringLocalizer<IdentityResource> stringLocalizer,
         IDistributedCache<QrCodeCacheItem> qrCodeCache,
+        IUserPictureProvider userPicturePovider,
         IdentityUserManager userManager)
     {
         L = stringLocalizer;
         QrCodeCache = qrCodeCache;
         UserManager = userManager;
+        UserPicturePovider = userPicturePovider;
     }
 
     public async virtual Task<QrCodeInfo> GenerateAsync()
@@ -74,9 +78,18 @@ public class QrCodeLoginProvider : IQrCodeLoginProvider, ITransientDependency
 
         cacheItem.UserId = @params.UserId;
         cacheItem.UserName = @params.UserName;
-        cacheItem.Picture = @params.Picture;
         cacheItem.TenantId = @params.TenantId;
         cacheItem.Status = QrCodeStatus.Scaned;
+
+        if (!@params.UserId.IsNullOrWhiteSpace())
+        {
+            using var pictureStream = await UserPicturePovider.GetPictureAsync(@params.UserId);
+            if (pictureStream != Stream.Null)
+            {
+                var fileBytes = await pictureStream.GetAllBytesAsync();
+                cacheItem.Picture = $"data:img/jpg;base64,{Convert.ToBase64String(fileBytes)}";
+            }
+        }
 
         await QrCodeCache.SetAsync(key, cacheItem,
             new DistributedCacheEntryOptions
