@@ -7,6 +7,7 @@ using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.Account;
 
@@ -100,5 +101,19 @@ public class MyProfileController : AbpControllerBase, IMyProfileAppService
     public virtual Task ResetAuthenticatorAsync()
     {
         return MyProfileAppService.ResetAuthenticatorAsync();
+    }
+
+    [HttpPost]
+    [Route("picture")]
+    public virtual Task ChangePictureAsync([FromForm] ChangePictureInput input)
+    {
+        return MyProfileAppService.ChangePictureAsync(input);
+    }
+
+    [HttpGet]
+    [Route("picture")]
+    public virtual Task<IRemoteStreamContent> GetPictureAsync()
+    {
+        return MyProfileAppService.GetPictureAsync();
     }
 }

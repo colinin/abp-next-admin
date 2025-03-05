@@ -5,6 +5,7 @@ using LINGYUN.Abp.WeChat.MiniProgram;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation.Urls;
@@ -17,6 +18,7 @@ namespace LINGYUN.Abp.Account;
     typeof(AbpAccountApplicationContractsModule),
     typeof(AbpAccountEmailingModule),
     typeof(AbpIdentityDomainModule),
+    typeof(AbpBlobStoringModule),
     typeof(AbpWeChatMiniProgramModule))]
 public class AbpAccountApplicationModule : AbpModule
 {

@@ -1,7 +1,9 @@
 ﻿using LINGYUN.Abp.Identity;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.Account;
 
@@ -73,4 +75,14 @@ public interface IMyProfileAppService : IApplicationService
     /// <param name="input"></param>
     /// <returns></returns>
     Task ConfirmEmailAsync(ConfirmEmailInput input);
+    /// <summary>
+    /// 变更用户头像
+    /// </summary>
+    /// <returns></returns>
+    Task ChangePictureAsync(ChangePictureInput input);
+    /// <summary>
+    /// 获取用户头像
+    /// </summary>
+    /// <returns></returns>
+    Task<IRemoteStreamContent> GetPictureAsync();
 }

@@ -15,6 +15,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Account.Application" />
+		<PackageReference Include="Volo.Abp.BlobStoring" />
 		<PackageReference Include="Volo.Abp.Sms" />
 	</ItemGroup>
 
