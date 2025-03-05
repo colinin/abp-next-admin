@@ -43,6 +43,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
+		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.AspNetCore.QrCode\LINGYUN.Abp.Identity.AspNetCore.QrCode.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Account.Emailing\LINGYUN.Abp.Account.Emailing.csproj" />
 	</ItemGroup>

@@ -1,11 +1,11 @@
-﻿using LINGYUN.Abp.Identity;
-using OpenIddict.Abstractions;
+﻿using OpenIddict.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Users;
 using VoloUserInfoController = Volo.Abp.OpenIddict.Controllers.UserInfoController;
 
 namespace LINGYUN.Abp.OpenIddict.AspNetCore.Controllers;
@@ -26,7 +26,8 @@ public class UserInfoController : VoloUserInfoController
         var claims = new Dictionary<string, object>(StringComparer.Ordinal)
         {
             // Note: the "sub" claim is a mandatory claim and must be included in the JSON response.
-            [OpenIddictConstants.Claims.Subject] = await UserManager.GetUserIdAsync(user)
+            [OpenIddictConstants.Claims.Subject] = await UserManager.GetUserIdAsync(user),
+            [AbpClaimTypes.SessionId] = CurrentUser.FindSessionId(),
         };
 
         if (User.HasScope(OpenIddictConstants.Scopes.Profile))
@@ -36,7 +37,7 @@ public class UserInfoController : VoloUserInfoController
             claims[OpenIddictConstants.Claims.FamilyName] = user.Surname;
             claims[OpenIddictConstants.Claims.GivenName] = user.Name;
             // 重写添加用户头像
-            var picture = user.Claims.FirstOrDefault(x => x.ClaimType == IdentityConsts.ClaimType.Avatar.Name);
+            var picture = user.Claims.FirstOrDefault(x => x.ClaimType == AbpClaimTypes.Picture);
             if (picture != null)
             {
                 claims[OpenIddictConstants.Claims.Picture] = picture.ClaimValue;

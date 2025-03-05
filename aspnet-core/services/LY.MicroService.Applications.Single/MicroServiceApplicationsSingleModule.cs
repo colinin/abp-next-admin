@@ -3,6 +3,7 @@ using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Gdpr.Identity;
 using LINGYUN.Abp.Gdpr.Web;
+using LINGYUN.Abp.OpenIddict.QrCode;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -123,6 +124,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpOpenIddictWeChatModule),
     // OpenIddict扩展模块 企业微信认证
     typeof(AbpOpenIddictWeChatWorkModule),
+    // OpenIddict扩展模块 扫码登录
+    typeof(AbpOpenIddictQrCodeModule),
 
     //typeof(AbpOssManagementMinioModule), // 取消注释以使用Minio
     // 对象存储模块 文件系统
