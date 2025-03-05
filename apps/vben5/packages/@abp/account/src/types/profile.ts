@@ -36,6 +36,10 @@ interface ChangePasswordInput {
   newPassword: string;
 }
 
+interface ChangePictureInput {
+  file: File;
+}
+
 interface TwoFactorEnabledDto {
   /** 是否启用二次认证 */
   enabled: boolean;
@@ -69,6 +73,7 @@ export type {
   AuthenticatorDto,
   AuthenticatorRecoveryCodeDto,
   ChangePasswordInput,
+  ChangePictureInput,
   ConfirmEmailInput,
   ProfileDto,
   SendEmailConfirmCodeDto,
