@@ -68,12 +68,11 @@ public class QrCodeLoginController : AbpControllerBase
     {
         var currentUser = await _userManager.GetByIdAsync(CurrentUser.GetId());
 
-        var picture = CurrentUser.FindClaim(AbpClaimTypes.Picture)?.Value;
         var userName = CurrentUser.FindClaim(AbpClaimTypes.Name)?.Value ?? currentUser.UserName;
         var userId = await _userManager.GetUserIdAsync(currentUser);
 
         var qrCodeInfo = await _qrCodeLoginProvider.ScanCodeAsync(key,
-            new QrCodeScanParams(userId, userName, picture, currentUser.TenantId));
+            new QrCodeScanParams(userId, userName, currentUser.TenantId));
 
         return new QrCodeUserInfoResult
         {

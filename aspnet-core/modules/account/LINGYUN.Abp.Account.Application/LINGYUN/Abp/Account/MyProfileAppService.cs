@@ -7,18 +7,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Volo.Abp;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
 using Volo.Abp.Content;
 using Volo.Abp.Data;
@@ -41,8 +38,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
     protected IIdentitySessionManager IdentitySessionManager => LazyServiceProvider.LazyGetRequiredService<IIdentitySessionManager>();
     protected IIdentitySessionRepository IdentitySessionRepository => LazyServiceProvider.LazyGetRequiredService<IIdentitySessionRepository>();
-
-    protected IBlobContainer<AccountContainer> AccountBlobContainer => LazyServiceProvider.LazyGetRequiredService<IBlobContainer<AccountContainer>>();
+    protected IUserPictureProvider UserPictureProvider => LazyServiceProvider.LazyGetRequiredService<IUserPictureProvider>();
 
     public MyProfileAppService(
         Identity.IIdentityUserRepository userRepository,
@@ -63,57 +59,16 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         var user = await GetCurrentUserAsync();
         var pictureId = input.File.FileName ?? $"{GuidGenerator.Create():n}.jpg";
 
-        var avatarClaims = user.Claims.Where(x => x.ClaimType.StartsWith(AbpClaimTypes.Picture))
-            .Select(x => x.ToClaim())
-            .Skip(0)
-            .Take(3)
-            .ToList();
-        if (avatarClaims.Any())
-        {
-            // 保留最多3个头像
-            if (avatarClaims.Count >= 3)
-            {
-                user.RemoveClaim(avatarClaims.First());
-                avatarClaims.RemoveAt(0);
-            }
-
-            // 历史头像加数字标识
-            for (var index = 1; index <= avatarClaims.Count; index++)
-            {
-                var avatarClaim = avatarClaims[index - 1];
-                var findClaim = user.FindClaim(avatarClaim);
-                if (findClaim != null)
-                {
-                    findClaim.SetClaim(new Claim(
-                        AbpClaimTypes.Picture + index.ToString(),
-                        findClaim.ClaimValue));
-                }
-            }
-        }
-
-        user.AddClaim(GuidGenerator, new Claim(AbpClaimTypes.Picture, pictureId));
-
-        (await UserManager.UpdateAsync(user)).CheckErrors();
-
-        var pictureName = $"{user.Id:n}/avatar/{pictureId}";
-
-        await AccountBlobContainer.SaveAsync(pictureName, input.File.GetStream(), true);
+        await UserPictureProvider.SetPictureAsync(user, input.File.GetStream(), pictureId);
 
         await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     public async virtual Task<IRemoteStreamContent> GetPictureAsync()
     {
-        var currentUser = await GetCurrentUserAsync();
-        var pictureCalim = currentUser.Claims.FirstOrDefault(x => x.ClaimType == AbpClaimTypes.Picture);
-        if (pictureCalim?.ClaimValue.IsNullOrWhiteSpace() == true)
-        {
-            return new RemoteStreamContent(Stream.Null);
-        }
+        var userId = CurrentUser.GetId().ToString("N");
 
-        var pictureName = $"{CurrentUser.GetId():n}/avatar/{pictureCalim.ClaimValue}";
-
-        var stream = await AccountBlobContainer.GetOrNullAsync(pictureName);
+        var stream = await UserPictureProvider.GetPictureAsync(userId);
 
         return new RemoteStreamContent(stream, contentType: "image/jpeg");
     }
