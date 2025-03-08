@@ -34,12 +34,14 @@ export function useSignalR() {
   }: SignalROptions) {
     const httpOptions: IHttpConnectionOptions = {};
     if (useAccessToken) {
-      const accessStore = useAccessStore();
-      const token = accessStore.accessToken;
-      if (token) {
-        httpOptions.accessTokenFactory = () =>
-          token.startsWith('Bearer ') ? token.slice(7) : token;
-      }
+      httpOptions.accessTokenFactory = () => {
+        const accessStore = useAccessStore();
+        const token = accessStore.accessToken;
+        if (!token) {
+          return '';
+        }
+        return token.startsWith('Bearer ') ? token.slice(7) : token;
+      };
     }
     const connectionBuilder = new HubConnectionBuilder()
       .withUrl(serverUrl, httpOptions)

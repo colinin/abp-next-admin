@@ -1,0 +1,44 @@
+image: mcr.microsoft.com/dotnet/sdk:9.0
+
+stages:
+ - build
+ - test
+ - tag 
+    
+build_job:
+ stage: build
+ script:
+  - echo "[ProjectName] - Build project..."
+  - dotnet build --configuration Release
+ only:
+  - dev
+
+test_job:
+ stage: test
+ script:
+  - echo "[ProjectName] - Unit testing..."
+  - dotnet test --no-build --configuration Release
+ dependencies:
+  - build_job
+ only:
+  - dev
+
+tag_job:
+  stage: tag
+  only:
+   - main
+  script:
+   - echo "[ProjectName] - Tag project..."
+   # 获取 common.props 中定义的版本号
+   - export VERSION=$(sed -n 's/.*<Version>\([0-9]*\.[0-9]*\.[0-9]*\)<\/Version>.*/\1/p' common.props)
+   - echo $VERSION
+   
+   # 此处 yougitlab.com 替换为自己的 gitlab 服务器
+   - git config --global user.email "ci@yougitlab.com"
+   - git config --global user.name "GitLab CI Bot"
+
+   - git tag -f $VERSION
+   # 此处 yougitlab.com 替换为自己的 gitlab 服务器, 如未启用 https, 变更为 http://oauth2:$GITLAB_TOKEN@yougitlab.com/$CI_PROJECT_PATH.git
+   # 此处 $GITLAB_TOKEN 需要在gitlab服务器中配置 GITLAB_TOKEN 变量
+   - git remote set-url origin https://oauth2:$GITLAB_TOKEN@yougitlab.com/$CI_PROJECT_PATH.git
+   - git push --force origin $VERSION

@@ -5,6 +5,27 @@ import type {
   PagedAndSortedResultRequestDto,
 } from '@abp/core';
 
+interface OpenIddictApplicationFeaturesDto {
+  requirePkce?: boolean;
+}
+
+interface OpenIddictApplicationRequirementsDto {
+  features: OpenIddictApplicationFeaturesDto;
+}
+
+interface OpenIddictApplicationTokenLifetimesDto {
+  accessToken?: number;
+  authorizationCode?: number;
+  deviceCode?: number;
+  identityToken?: number;
+  refreshToken?: number;
+  userCode?: number;
+}
+
+interface OpenIddictApplicationSettingsDto {
+  tokenLifetime: OpenIddictApplicationTokenLifetimesDto;
+}
+
 interface OpenIddictApplicationGetListInput
   extends PagedAndSortedResultRequestDto {
   filter?: string;
@@ -25,9 +46,10 @@ interface OpenIddictApplicationCreateOrUpdateDto extends ExtensibleObject {
   postLogoutRedirectUris?: string[];
   properties?: Dictionary<string, string>;
   redirectUris?: string[];
-  requirements?: string[];
+  requirements: OpenIddictApplicationRequirementsDto;
   responseTypes?: string[];
   scopes?: string[];
+  settings: OpenIddictApplicationSettingsDto;
 }
 
 type OpenIddictApplicationCreateDto = OpenIddictApplicationCreateOrUpdateDto;
@@ -49,9 +71,10 @@ interface OpenIddictApplicationDto extends ExtensibleAuditedEntityDto<string> {
   postLogoutRedirectUris?: string[];
   properties?: Dictionary<string, string>;
   redirectUris?: string[];
-  requirements?: string[];
+  requirements: OpenIddictApplicationRequirementsDto;
   responseTypes?: string[];
   scopes?: string[];
+  settings: OpenIddictApplicationSettingsDto;
 }
 
 export type {

@@ -858,7 +858,10 @@ public partial class MicroServiceApplicationsSingleModule
             options.AutoValidate = false;
         });
 
-        services.Replace<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>(ServiceLifetime.Scoped);
+        var originalDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(CookieAuthenticationHandler));
+        var originalLifetime = originalDescriptor?.Lifetime ?? ServiceLifetime.Transient; // 默认用 Transient
+
+        services.Replace<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>(originalLifetime);
 
         services.AddAuthentication()
                 .AddAbpJwtBearer(options =>

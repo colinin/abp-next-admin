@@ -1,10 +1,8 @@
 ﻿using LINGYUN.Abp.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
-using PackageName.CompanyName.ProjectName.ObjectExtending;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
-using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Threading;
 
 namespace PackageName.CompanyName.ProjectName;

@@ -5,12 +5,13 @@ import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 import type { DefaultOptionType } from 'ant-design-vue/es/select';
 import type { TransferItem } from 'ant-design-vue/es/transfer';
 
+import type { Component } from 'vue';
+
 import type { OpenIddictApplicationDto } from '../../types/applications';
 import type { DisplayNameInfo } from '../display-names/types';
 import type { PropertyInfo } from '../properties/types';
 
 import {
-  type Component,
   computed,
   defineAsyncComponent,
   defineEmits,
@@ -30,6 +31,7 @@ import {
   Dropdown,
   Form,
   Input,
+  InputNumber,
   InputPassword,
   Menu,
   message,
@@ -138,9 +140,6 @@ const getSupportScopes = computed((): TransferItem[] => {
       title: type,
     };
   });
-});
-const getPkceEnabled = computed(() => {
-  return formModel.value.requirements?.includes('pkce');
 });
 
 const { discoveryApi } = useOpenIdApi();
@@ -270,13 +269,6 @@ function onUriDelete(uri: string) {
     }
   }
 }
-function onPkceChange(checked: boolean) {
-  const requirements: string[] = [];
-  if (checked) {
-    requirements.push('pkce');
-  }
-  formModel.value.requirements = requirements;
-}
 </script>
 
 <template>
@@ -393,6 +385,75 @@ function onPkceChange(checked: boolean) {
             @delete="onUriDelete"
           />
         </TabPane>
+        <!-- 令牌 -->
+        <TabPane key="tokens" :tab="$t('AbpOpenIddict.Tokens')">
+          <FormItem
+            :label="$t('AbpOpenIddict.DisplayName:AccessTokenLifetime')"
+            :name="['settings', 'tokenLifetime', 'accessToken']"
+            :extra="$t('AbpOpenIddict.Description:AccessTokenLifetime')"
+          >
+            <InputNumber
+              class="w-full"
+              min="300"
+              v-model:value="formModel.settings.tokenLifetime.accessToken"
+            />
+          </FormItem>
+          <FormItem
+            :label="$t('AbpOpenIddict.DisplayName:AuthorizationCodeLifetime')"
+            :name="['settings', 'tokenLifetime', 'authorizationCode']"
+            :extra="$t('AbpOpenIddict.Description:AuthorizationCodeLifetime')"
+          >
+            <InputNumber
+              class="w-full"
+              min="300"
+              v-model:value="formModel.settings.tokenLifetime.authorizationCode"
+            />
+          </FormItem>
+          <FormItem
+            :label="$t('AbpOpenIddict.DisplayName:IdentityTokenLifetime')"
+            :name="['settings', 'tokenLifetime', 'identityToken']"
+            :extra="$t('AbpOpenIddict.Description:IdentityTokenLifetime')"
+          >
+            <InputNumber
+              class="w-full"
+              min="300"
+              v-model:value="formModel.settings.tokenLifetime.identityToken"
+            />
+          </FormItem>
+          <FormItem
+            :label="$t('AbpOpenIddict.DisplayName:RefreshTokenLifetime')"
+            :name="['settings', 'tokenLifetime', 'refreshToken']"
+            :extra="$t('AbpOpenIddict.Description:RefreshTokenLifetime')"
+          >
+            <InputNumber
+              class="w-full"
+              min="300"
+              v-model:value="formModel.settings.tokenLifetime.refreshToken"
+            />
+          </FormItem>
+          <FormItem
+            :label="$t('AbpOpenIddict.DisplayName:DeviceCodeLifetime')"
+            :name="['settings', 'tokenLifetime', 'deviceCode']"
+            :extra="$t('AbpOpenIddict.Description:DeviceCodeLifetime')"
+          >
+            <InputNumber
+              class="w-full"
+              min="300"
+              v-model:value="formModel.settings.tokenLifetime.deviceCode"
+            />
+          </FormItem>
+          <FormItem
+            :label="$t('AbpOpenIddict.DisplayName:UserCodeLifetime')"
+            :name="['settings', 'tokenLifetime', 'userCode']"
+            :extra="$t('AbpOpenIddict.Description:UserCodeLifetime')"
+          >
+            <InputNumber
+              class="w-full"
+              min="300"
+              v-model:value="formModel.settings.tokenLifetime.userCode"
+            />
+          </FormItem>
+        </TabPane>
         <!-- 范围 -->
         <TabPane key="scope" :tab="$t('AbpOpenIddict.Scopes')">
           <Transfer
@@ -414,11 +475,10 @@ function onPkceChange(checked: boolean) {
         <TabPane key="authorize" :tab="$t('AbpOpenIddict.Authorizations')">
           <FormItem
             :label="$t('AbpOpenIddict.Requirements:PKCE')"
-            name="requirements"
+            :name="['requirements', 'features', 'requirePkce']"
           >
             <Checkbox
-              :checked="getPkceEnabled"
-              @change="(e) => onPkceChange(e.target.checked)"
+              v-model:checked="formModel.requirements.features.requirePkce"
             >
               {{ $t('AbpOpenIddict.Requirements:PKCE') }}
             </Checkbox>

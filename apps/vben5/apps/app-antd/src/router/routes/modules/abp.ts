@@ -1,11 +1,9 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-import { BasicLayout } from '#/layouts';
 import { $t } from '#/locales';
 
 const routes: RouteRecordRaw[] = [
   {
-    component: BasicLayout,
     meta: {
       icon: 'https://abp.io/assets/favicon.ico/favicon-16x16.png',
       keepAlive: true,
@@ -181,6 +179,34 @@ const routes: RouteRecordRaw[] = [
       },
       {
         meta: {
+          title: $t('abp.saas.title'),
+          icon: 'ant-design:cloud-server-outlined',
+        },
+        name: 'Saas',
+        path: '/saas',
+        children: [
+          {
+            meta: {
+              title: $t('abp.saas.editions'),
+              icon: 'icon-park-outline:multi-rectangle',
+            },
+            name: 'SaasEditions',
+            path: '/saas/editions',
+            component: () => import('#/views/saas/editions/index.vue'),
+          },
+          {
+            meta: {
+              title: $t('abp.saas.tenants'),
+              icon: 'arcticons:tenantcloud-pro',
+            },
+            name: 'SaasTenants',
+            path: '/saas/tenants',
+            component: () => import('#/views/saas/tenants/index.vue'),
+          },
+        ],
+      },
+      {
+        meta: {
           title: $t('abp.openiddict.title'),
           icon: 'mdi:openid',
         },
@@ -244,6 +270,46 @@ const routes: RouteRecordRaw[] = [
             name: 'MySettings',
             path: '/account/my-settings',
             component: () => import('#/views/account/my-settings/index.vue'),
+          },
+        ],
+      },
+      {
+        name: 'Platform',
+        path: '/platform',
+        meta: {
+          title: $t('abp.platform.title'),
+          icon: 'ep:platform',
+        },
+        children: [
+          {
+            meta: {
+              title: $t('abp.platform.messages.title'),
+              icon: 'tabler:message-cog',
+            },
+            name: 'PlatformMessages',
+            path: '/platform/messages',
+            children: [
+              {
+                meta: {
+                  title: $t('abp.platform.messages.email'),
+                  icon: 'material-symbols:attach-email-outline',
+                },
+                name: 'PlatformEmailMessages',
+                path: '/platform/messages/email',
+                component: () =>
+                  import('#/views/platform/messages/email/index.vue'),
+              },
+              {
+                meta: {
+                  title: $t('abp.platform.messages.sms'),
+                  icon: 'material-symbols:sms-outline',
+                },
+                name: 'PlatformSmsMessages',
+                path: '/platform/messages/sms',
+                component: () =>
+                  import('#/views/platform/messages/sms/index.vue'),
+              },
+            ],
           },
         ],
       },

@@ -1,4 +1,5 @@
 ﻿using PackageName.CompanyName.ProjectName.Localization;
+using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
@@ -7,6 +8,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace PackageName.CompanyName.ProjectName;
 
 [DependsOn(
+    typeof(AbpFeaturesModule),
     typeof(AbpLocalizationModule))]
 public class ProjectNameDomainSharedModule : AbpModule
 {

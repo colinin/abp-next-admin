@@ -8,6 +8,9 @@
       "phoneNumber": "Phone Number",
       "getCode": "Get Code",
       "code": "Code"
+    },
+    "qrcodeLogin": {
+      "scaned": "Please confirm login on your phone."
     }
   },
   "manage": {
@@ -65,8 +68,22 @@
       "noticeSettings": "Notice Settings",
       "authenticatorSettings": "Authenticator Settings",
       "changeAvatar": "Change Avatar",
-      "sessionSettings": "Session Settings"
+      "sessionSettings": "Session Settings",
+      "personalDataSettings": "Personal Data Settings"
     },
     "profile": "My Profile"
+  },
+  "platform": {
+    "title": "Platform",
+    "messages": {
+      "title": "Message Manage",
+      "email": "Email Messages",
+      "sms": "Sms Messages"
+    }
+  },
+  "saas": {
+    "title": "Saas",
+    "editions": "Editions",
+    "tenants": "Tenants"
   }
 }
