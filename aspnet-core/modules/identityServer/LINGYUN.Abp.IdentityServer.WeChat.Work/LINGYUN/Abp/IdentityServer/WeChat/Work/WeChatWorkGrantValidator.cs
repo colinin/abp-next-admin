@@ -73,18 +73,17 @@ public class WeChatWorkGrantValidator : IExtensionGrantValidator
             return;
         }
 
-        var agentId = raw.Get(AbpWeChatWorkGlobalConsts.AgentId);
         var code = raw.Get(AbpWeChatWorkGlobalConsts.Code);
-        if (agentId.IsNullOrWhiteSpace() || code.IsNullOrWhiteSpace())
+        if (code.IsNullOrWhiteSpace())
         {
-            Logger.LogInformation("Invalid grant type: agentId or code not found");
+            Logger.LogInformation("Invalid grant type: code not found");
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, WeChatWorkLocalizer["InvalidGrant:AgentIdOrCodeNotFound"]);
             return;
         }
 
         try
         {
-            var userInfo = await WeChatWorkUserFinder.GetUserInfoAsync(agentId, code);
+            var userInfo = await WeChatWorkUserFinder.GetUserInfoAsync(code);
             var currentUser = await UserManager.FindByLoginAsync(AbpWeChatWorkGlobalConsts.ProviderName, userInfo.UserId);
 
             if (currentUser == null)

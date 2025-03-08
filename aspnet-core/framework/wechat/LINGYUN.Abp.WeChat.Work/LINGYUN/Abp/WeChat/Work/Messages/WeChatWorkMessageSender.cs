@@ -38,7 +38,7 @@ public class WeChatWorkMessageSender : IWeChatWorkMessageSender, ISingletonDepen
         LimitPolicy.Days)]
     public async virtual Task<WeChatWorkMessageResponse> SendAsync(WeChatWorkMessage message, CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(message.AgentId, cancellationToken);
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         var request = new WeChatWorkMessageRequest<WeChatWorkMessage>(
@@ -64,7 +64,7 @@ public class WeChatWorkMessageSender : IWeChatWorkMessageSender, ISingletonDepen
         LimitPolicy.Minute)]
     public async virtual Task<WeChatWorkResponse> SendAsync(WeChatWorkAppChatMessage message, CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(message.AgentId, cancellationToken);
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         var request = new WeChatWorkMessageRequest<WeChatWorkAppChatMessage>(

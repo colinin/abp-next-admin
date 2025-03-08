@@ -28,7 +28,7 @@ public class WeChatWorkAppChatManager : IWeChatWorkAppChatManager, ISingletonDep
         WeChatWorkAppChatCreateRequest request,
         CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(request.AgentId, cancellationToken);
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         using var response = await client.CreateAppChatAsync(token.AccessToken, request, cancellationToken);
@@ -40,7 +40,7 @@ public class WeChatWorkAppChatManager : IWeChatWorkAppChatManager, ISingletonDep
         string chatId,
         CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(agentId, cancellationToken);
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         using var response = await client.GetAppChatAsync(token.AccessToken, agentId, cancellationToken);
@@ -51,7 +51,7 @@ public class WeChatWorkAppChatManager : IWeChatWorkAppChatManager, ISingletonDep
         WeChatWorkAppChatUpdateRequest request, 
         CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(request.AgentId, cancellationToken);
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         using var response = await client.UpdateAppChatAsync(token.AccessToken, request, cancellationToken);

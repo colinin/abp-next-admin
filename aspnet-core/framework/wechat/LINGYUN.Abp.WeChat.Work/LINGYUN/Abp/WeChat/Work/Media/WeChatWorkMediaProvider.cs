@@ -23,11 +23,10 @@ public class WeChatWorkMediaProvider : IWeChatWorkMediaProvider, ISingletonDepen
     }
 
     public async virtual Task<IRemoteStreamContent> GetAsync(
-        string agentId,
         string mediaId,
         CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(agentId, cancellationToken);
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         using var response = await client.GetMediaAsync(
@@ -75,12 +74,11 @@ public class WeChatWorkMediaProvider : IWeChatWorkMediaProvider, ISingletonDepen
     }
 
     public async virtual Task<WeChatWorkMediaResponse> UploadAsync(
-        string agentId,
         string type, 
         IRemoteStreamContent media, 
         CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(agentId, cancellationToken);
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         var request = new WeChatWorkMediaRequest(
@@ -95,11 +93,10 @@ public class WeChatWorkMediaProvider : IWeChatWorkMediaProvider, ISingletonDepen
     }
 
     public async virtual Task<WeChatWorkImageResponse> UploadImageAsync(
-        string agentId,
         IRemoteStreamContent image,
         CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(agentId, cancellationToken);
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
         var request = new WeChatWorkMediaRequest(
             token.AccessToken,

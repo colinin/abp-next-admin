@@ -26,11 +26,10 @@ public class WeChatWorkUserFinder : IWeChatWorkUserFinder, ISingletonDependency
     }
 
     public async virtual Task<WeChatWorkUserInfo> GetUserInfoAsync(
-        string agentId,
         string code,
         CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(agentId, cancellationToken);
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         using var response = await client.GetUserInfoAsync(token.AccessToken, code, cancellationToken);
@@ -40,11 +39,10 @@ public class WeChatWorkUserFinder : IWeChatWorkUserFinder, ISingletonDependency
     }
 
     public async virtual Task<WeChatWorkUserDetail> GetUserDetailAsync(
-        string agentId,
         string userTicket,
         CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(agentId, cancellationToken);
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         var request = new WeChatWorkUserDetailRequest(userTicket);

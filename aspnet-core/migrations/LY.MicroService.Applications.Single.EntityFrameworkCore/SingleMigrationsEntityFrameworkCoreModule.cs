@@ -2,7 +2,6 @@ using LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
-using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications.EntityFrameworkCore;
@@ -32,7 +31,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
     typeof(PlatformEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
-    typeof(AbpIdentityServerEntityFrameworkCoreModule),
     typeof(AbpOpenIddictEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
     typeof(WebhooksManagementEntityFrameworkCoreModule),

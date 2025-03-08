@@ -20,6 +20,11 @@ public class AbpGdprIdentityUserAccountProvider : GdprUserAccountProviderBase
 
         var identityUser = await identityUserManager.GetByIdAsync(context.UserId);
 
-        (await identityUserManager.DeleteAsync(identityUser)).CheckErrors();
+        // 默认管理员账号保留
+        // TODO: 保留统一维护的地方?
+        if (identityUser.UserName == "admin")
+        {
+            (await identityUserManager.DeleteAsync(identityUser)).CheckErrors();
+        }
     }
 }

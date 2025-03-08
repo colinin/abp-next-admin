@@ -24,6 +24,7 @@ using LINGYUN.Abp.OpenIddict.WeChat.Work;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.WeChat.Work.AspNetCore;
 using LY.MicroService.AuthServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -60,6 +61,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpOpenIddictLinkUserModule),
     typeof(AbpOpenIddictPortalModule),
     typeof(AbpOpenIddictWeChatWorkModule),
+    typeof(AbpWeChatWorkAspNetCoreModule), // 实现企业微信登录
     typeof(AbpAuthenticationQQModule),
     typeof(AbpAuthenticationWeChatModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),
