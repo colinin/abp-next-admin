@@ -40,6 +40,47 @@ public class WeChatWorkSettingDefinitionProvider : SettingDefinitionProvider
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName),
+
+            new SettingDefinition(
+                WeChatWorkSettingNames.Connection.AgentId,
+                displayName: L("DisplayName:WeChatWork.Connection.AgentId"),
+                description: L("Description:WeChatWork.Connection.AgentId"),
+                isEncrypted: true)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName),
+            new SettingDefinition(
+                WeChatWorkSettingNames.Connection.Secret,
+                displayName: L("DisplayName:WeChatWork.Connection.Secret"),
+                description: L("Description:WeChatWork.Connection.Secret"),
+                isEncrypted: true)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName),
+            new SettingDefinition(
+                WeChatWorkSettingNames.Connection.Token,
+                displayName: L("DisplayName:WeChatWork.Connection.Token"),
+                description: L("Description:WeChatWork.Connection.Token"),
+                isEncrypted: true)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName),
+            new SettingDefinition(
+                WeChatWorkSettingNames.Connection.EncodingAESKey,
+                displayName: L("DisplayName:WeChatWork.Connection.EncodingAESKey"),
+                description: L("Description:WeChatWork.Connection.EncodingAESKey"),
+                isEncrypted: true)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName),
         };
     }
 

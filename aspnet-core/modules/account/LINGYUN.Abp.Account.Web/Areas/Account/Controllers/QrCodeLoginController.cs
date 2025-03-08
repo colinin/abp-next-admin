@@ -58,6 +58,7 @@ public class QrCodeLoginController : AbpControllerBase
             Picture = qrCodeInfo.Picture,
             UserId = qrCodeInfo.UserId,
             UserName = qrCodeInfo.UserName,
+            TenantId = qrCodeInfo.TenantId
         };
     }
 
@@ -66,22 +67,26 @@ public class QrCodeLoginController : AbpControllerBase
     [Authorize]
     public async Task<QrCodeUserInfoResult> ScanCodeAsync(string key)
     {
-        var currentUser = await _userManager.GetByIdAsync(CurrentUser.GetId());
-
-        var userName = CurrentUser.FindClaim(AbpClaimTypes.Name)?.Value ?? currentUser.UserName;
-        var userId = await _userManager.GetUserIdAsync(currentUser);
-
-        var qrCodeInfo = await _qrCodeLoginProvider.ScanCodeAsync(key,
-            new QrCodeScanParams(userId, userName, currentUser.TenantId));
-
-        return new QrCodeUserInfoResult
+        using (CurrentTenant.Change(CurrentUser.TenantId))
         {
-            Key = qrCodeInfo.Key,
-            Status = qrCodeInfo.Status,
-            Picture = qrCodeInfo.Picture,
-            UserId = qrCodeInfo.UserId,
-            UserName = qrCodeInfo.UserName
-        };
+            var currentUser = await _userManager.GetByIdAsync(CurrentUser.GetId());
+
+            var userName = CurrentUser.FindClaim(AbpClaimTypes.Name)?.Value ?? currentUser.UserName;
+            var userId = await _userManager.GetUserIdAsync(currentUser);
+
+            var qrCodeInfo = await _qrCodeLoginProvider.ScanCodeAsync(key,
+                new QrCodeScanParams(userId, userName, currentUser.TenantId));
+
+            return new QrCodeUserInfoResult
+            {
+                Key = qrCodeInfo.Key,
+                Status = qrCodeInfo.Status,
+                Picture = qrCodeInfo.Picture,
+                UserId = qrCodeInfo.UserId,
+                UserName = qrCodeInfo.UserName,
+                TenantId = qrCodeInfo.TenantId
+            };
+        }
     }
 
     [HttpPost]
@@ -89,15 +94,19 @@ public class QrCodeLoginController : AbpControllerBase
     [Authorize]
     public async Task<QrCodeUserInfoResult> ConfirmCodeAsync(string key)
     {
-        var qrCodeInfo = await _qrCodeLoginProvider.ConfirmCodeAsync(key);
-
-        return new QrCodeUserInfoResult
+        using (CurrentTenant.Change(CurrentUser.TenantId))
         {
-            Key = qrCodeInfo.Key,
-            Status = qrCodeInfo.Status,
-            Picture = qrCodeInfo.Picture,
-            UserId = qrCodeInfo.UserId,
-            UserName = qrCodeInfo.UserName
-        };
+            var qrCodeInfo = await _qrCodeLoginProvider.ConfirmCodeAsync(key);
+
+            return new QrCodeUserInfoResult
+            {
+                Key = qrCodeInfo.Key,
+                Status = qrCodeInfo.Status,
+                Picture = qrCodeInfo.Picture,
+                UserId = qrCodeInfo.UserId,
+                UserName = qrCodeInfo.UserName,
+                TenantId = qrCodeInfo.TenantId
+            };
+        }
     }
 }

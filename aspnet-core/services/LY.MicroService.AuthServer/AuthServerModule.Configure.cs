@@ -9,22 +9,24 @@ using LINGYUN.Abp.OpenIddict.WeChat;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.WeChat.Work;
-using LY.MicroService.AuthServer.Authentication;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
+using OpenIddict.Validation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -426,6 +428,8 @@ public partial class AuthServerModule
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
     {
+        services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+
         services
             .AddAuthentication()
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
@@ -435,6 +439,10 @@ public partial class AuthServerModule
             .AddJwtBearer(options =>
             {
                 configuration.GetSection("AuthServer").Bind(options);
+            })
+            .AddWeChatWork(options =>
+            {
+                options.SignInScheme = IdentityConstants.ExternalScheme;
             });
 
         if (!isDevelopment)
@@ -446,8 +454,6 @@ public partial class AuthServerModule
                 .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
         }
         services.AddSameSiteCookiePolicy();
-        // 处理cookie中过时的ajax请求判断
-        services.Replace(ServiceDescriptor.Scoped<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>());
     }
     private void ConfigureMultiTenancy(IConfiguration configuration)
     {

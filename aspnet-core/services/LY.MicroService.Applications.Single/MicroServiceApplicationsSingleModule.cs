@@ -1,10 +1,3 @@
-using LINGYUN.Abp.Account.Web.OpenIddict;
-using LINGYUN.Abp.Gdpr;
-using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
-using LINGYUN.Abp.Gdpr.Identity;
-using LINGYUN.Abp.Gdpr.Web;
-using LINGYUN.Abp.OpenIddict.QrCode;
-
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
@@ -100,11 +93,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsHttpApiModule),
     // 通知模块 实体框架
     typeof(AbpNotificationsEntityFrameworkCoreModule),
-
-    //typeof(AbpIdentityServerSessionModule),
-    //typeof(AbpIdentityServerApplicationModule),
-    //typeof(AbpIdentityServerHttpApiModule),
-    //typeof(AbpIdentityServerEntityFrameworkCoreModule),
 
     // OpenIddict扩展模块 自定义身份标识
     typeof(LINGYUN.Abp.OpenIddict.AspNetCore.AbpOpenIddictAspNetCoreModule),
@@ -341,6 +329,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpWeChatOfficialHandlersModule),
     // 微信模块 企业微信 事件处理
     typeof(AbpWeChatWorkHandlersModule),
+    // 认证模块 企业微信
+    typeof(AbpWeChatWorkAspNetCoreModule),
     // 微信模块 设置管理
     typeof(AbpWeChatSettingManagementModule),
 
@@ -403,7 +393,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureAuditing();
         ConfigureIdempotent();
         ConfigureMvcUiTheme();
-        ConfigureDataSeeder();
         ConfigureLocalization();
         ConfigureKestrelServer();
         ConfigureBackgroundTasks();

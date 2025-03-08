@@ -815,6 +815,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Exporter.Magico
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Auditing.HttpApi.Client", "modules\auditing\LINGYUN.Abp.Auditing.HttpApi.Client\LINGYUN.Abp.Auditing.HttpApi.Client.csproj", "{7C48C1CA-7E53-4261-A477-454DD3A8402C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.AspNetCore", "framework\wechat\LINGYUN.Abp.WeChat.Work.AspNetCore\LINGYUN.Abp.WeChat.Work.AspNetCore.csproj", "{A54344EB-05A7-A405-5368-4A9C0A60B078}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2105,6 +2107,10 @@ Global
 		{7C48C1CA-7E53-4261-A477-454DD3A8402C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C48C1CA-7E53-4261-A477-454DD3A8402C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C48C1CA-7E53-4261-A477-454DD3A8402C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A54344EB-05A7-A405-5368-4A9C0A60B078}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A54344EB-05A7-A405-5368-4A9C0A60B078}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A54344EB-05A7-A405-5368-4A9C0A60B078}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A54344EB-05A7-A405-5368-4A9C0A60B078}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2500,6 +2506,7 @@ Global
 		{ECE61F58-1AEC-1E4F-1543-76C2242B6F70} = {A4633711-7FB6-411A-8D08-BB9A0A778046}
 		{B7B63E08-8F62-34F6-FEA5-063267F1FC85} = {A4633711-7FB6-411A-8D08-BB9A0A778046}
 		{7C48C1CA-7E53-4261-A477-454DD3A8402C} = {67DAB2A0-D407-4CAB-8414-AE3D0AC52FC4}
+		{A54344EB-05A7-A405-5368-4A9C0A60B078} = {DD9BE9E7-F6BF-4869-BCD2-82F5072BDA21}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

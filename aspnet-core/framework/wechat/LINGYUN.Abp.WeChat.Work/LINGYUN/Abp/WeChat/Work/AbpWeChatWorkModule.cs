@@ -24,9 +24,6 @@ public class AbpWeChatWorkModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var configuration = context.Services.GetConfiguration();
-        Configure<WeChatWorkOptions>(configuration.GetSection("WeChat:Work"));
-
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<AbpWeChatWorkModule>();

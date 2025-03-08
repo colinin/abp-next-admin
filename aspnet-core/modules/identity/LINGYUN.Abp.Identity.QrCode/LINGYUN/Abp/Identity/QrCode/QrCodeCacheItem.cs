@@ -30,6 +30,7 @@ public class QrCodeCacheItem
             UserId = UserId,
             UserName = UserName,
             Picture = Picture,
+            TenantId = TenantId,
         };
         qrCodeInfo.SetToken(Token);
         qrCodeInfo.SetStatus(Status);

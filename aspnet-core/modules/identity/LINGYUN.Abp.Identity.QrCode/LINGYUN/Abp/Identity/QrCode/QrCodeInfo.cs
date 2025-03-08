@@ -8,6 +8,7 @@ public class QrCodeInfo
     public string Token { get; private set; }
     public QrCodeStatus Status { get; private set; }
     public string UserId { get; set; }
+    public Guid? TenantId { get; set; }
     public string UserName { get; set; }
     public string Picture { get; set; }
 

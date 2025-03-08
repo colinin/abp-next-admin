@@ -51,22 +51,24 @@ var app = builder.Build();
 
 await app.InitializeApplicationAsync();
 
+app.UseMapRequestLocalization();
+
+app.UseCookiePolicy();
 app.UseForwardedHeaders();
+app.UseAbpSecurityHeaders();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
 // app.UseAbpExceptionHandling();
-app.UseCookiePolicy();
-app.UseMapRequestLocalization();
 app.UseCorrelationId();
 app.MapAbpStaticAssets();
 app.UseRouting();
 app.UseCors();
 app.UseAuthentication();
+app.UseAbpOpenIddictValidation();
 app.UseMultiTenancy();
 app.UseUnitOfWork();
-app.UseAbpOpenIddictValidation();
 app.UseAbpSession();
 app.UseDynamicClaims();
 app.UseAuthorization();
