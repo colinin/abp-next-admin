@@ -110,16 +110,19 @@ onMounted(onGet);
 <template>
   <Card :title="$t('AbpSettingManagement.Settings')">
     <template #extra>
-      <Button
-        v-if="settingsUpdateInput.settings.length > 0"
-        :loading="submiting"
-        class="w-[100px]"
-        post-icon="ant-design:setting-outlined"
-        type="primary"
-        @click="onSubmit"
-      >
-        {{ $t('AbpUi.Submit') }}
-      </Button>
+      <div class="flex flex-row gap-1">
+        <slot name="toolbar"></slot>
+        <Button
+          v-if="settingsUpdateInput.settings.length > 0"
+          :loading="submiting"
+          class="w-[100px]"
+          post-icon="ant-design:setting-outlined"
+          type="primary"
+          @click="onSubmit"
+        >
+          {{ $t('AbpUi.Submit') }}
+        </Button>
+      </div>
     </template>
     <Form :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
       <Tabs v-model="activeTab">
