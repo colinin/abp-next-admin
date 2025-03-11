@@ -61,16 +61,12 @@ export function useNotifications() {
 
   /** 通知推送 */
   function _notification(notifier: Notification) {
-    let message = notifier.description;
+    let message = notifier.message;
     switch (notifier.contentType) {
-      case NotificationContentType.Html:
-      case NotificationContentType.Json:
-      case NotificationContentType.Markdown: {
-        message = notifier.title;
-        break;
-      }
       case NotificationContentType.Text: {
-        message = notifier.description;
+        if (notifier.description) {
+          message = notifier.description;
+        }
       }
     }
     switch (notifier.severity) {
