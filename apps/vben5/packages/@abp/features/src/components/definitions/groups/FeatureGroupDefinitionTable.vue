@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { FeatureGroupDefinitionDto } from '../../../types/groups';
 
 import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
 
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
+import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { useLocalization, useLocalizationSerializer } from '@abp/core';
@@ -13,16 +16,24 @@ import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
+  EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
 import { useFeatureGroupDefinitionsApi } from '../../../api/useFeatureGroupDefinitionsApi';
-import { GroupDefinitionsPermissions } from '../../../constants/permissions';
+import {
+  FeatureDefinitionsPermissions,
+  GroupDefinitionsPermissions,
+} from '../../../constants/permissions';
 
 defineOptions({
   name: 'FeatureGroupDefinitionTable',
 });
+
+const MenuItem = Menu.Item;
+
+const FeaturesOutlined = createIconifyIcon('pajamas:feature-flag');
 
 const permissionGroups = ref<FeatureGroupDefinitionDto[]>([]);
 const pageState = reactive({
@@ -32,6 +43,7 @@ const pageState = reactive({
 });
 
 const { Lr } = useLocalization();
+const { hasAccessByCodes } = useAccess();
 const { deserialize } = useLocalizationSerializer();
 const { deleteApi, getListApi } = useFeatureGroupDefinitionsApi();
 
@@ -108,6 +120,11 @@ const [FeatureGroupDefinitionModal, groupModalApi] = useVbenModal({
     () => import('./FeatureGroupDefinitionModal.vue'),
   ),
 });
+const [FeatureDefinitionModal, defineModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('../features/FeatureDefinitionModal.vue'),
+  ),
+});
 
 async function onGet(input?: Record<string, string>) {
   try {
@@ -156,6 +173,18 @@ function onCreate() {
 function onUpdate(row: FeatureGroupDefinitionDto) {
   groupModalApi.setData(row);
   groupModalApi.open();
+}
+
+function onMenuClick(row: FeatureGroupDefinitionDto, info: MenuInfo) {
+  switch (info.key) {
+    case 'features': {
+      defineModalApi.setData({
+        groupName: row.name,
+      });
+      defineModalApi.open();
+      break;
+    }
+  }
 }
 
 function onDelete(row: FeatureGroupDefinitionDto) {
@@ -208,10 +237,25 @@ onMounted(onGet);
         >
           {{ $t('AbpUi.Delete') }}
         </Button>
+        <Dropdown v-if="!row.isStatic">
+          <template #overlay>
+            <Menu @click="(info) => onMenuClick(row, info)">
+              <MenuItem
+                v-if="hasAccessByCodes([FeatureDefinitionsPermissions.Create])"
+                key="features"
+                :icon="h(FeaturesOutlined)"
+              >
+                {{ $t('AbpFeatureManagement.GroupDefinitions:AddNew') }}
+              </MenuItem>
+            </Menu>
+          </template>
+          <Button :icon="h(EllipsisOutlined)" type="link" />
+        </Dropdown>
       </div>
     </template>
   </Grid>
   <FeatureGroupDefinitionModal @change="() => onGet()" />
+  <FeatureDefinitionModal />
 </template>
 
 <style scoped></style>

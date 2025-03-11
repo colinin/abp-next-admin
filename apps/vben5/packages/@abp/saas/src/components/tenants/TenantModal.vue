@@ -214,6 +214,13 @@ onMounted(onSearchEditions);
           {{ $t('AbpSaas.DisplayName:IsActive') }}
         </Checkbox>
       </FormItem>
+      <FormItem name="name" :label="$t('AbpSaas.DisplayName:TenantName')">
+        <Input
+          v-model:value="tenant.name"
+          @change="(e) => onNameChange(e.target.value)"
+          autocomplete="off"
+        />
+      </FormItem>
       <FormItem
         v-if="!tenant.id"
         name="adminEmailAddress"
@@ -234,13 +241,6 @@ onMounted(onSearchEditions);
       >
         <InputPassword
           v-model:value="tenant.adminPassword"
-          autocomplete="off"
-        />
-      </FormItem>
-      <FormItem name="name" :label="$t('AbpSaas.DisplayName:TenantName')">
-        <Input
-          v-model:value="tenant.name"
-          @change="(e) => onNameChange(e.target.value)"
           autocomplete="off"
         />
       </FormItem>

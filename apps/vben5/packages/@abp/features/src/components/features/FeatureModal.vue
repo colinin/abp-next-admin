@@ -79,6 +79,10 @@ function mapFeatures(groups: FeatureGroupDto[]) {
         const valueType =
           feature.valueType as unknown as SelectionStringValueType;
         valueType.itemSource.items.forEach((valueItem) => {
+          if (valueItem.displayText.resourceName === 'Fixed') {
+            valueItem.displayName = valueItem.displayText.name;
+            return;
+          }
           valueItem.displayName = $t(
             `${valueItem.displayText.resourceName}.${valueItem.displayText.name}`,
           );
@@ -145,8 +149,8 @@ function createRules(field: string, validator: Validator) {
         }
         featureRules.push(
           ...fieldMustBeStringWithMinimumLengthAndMaximumLength({
-            maximum: Number(validator.properties.MaxValue),
-            minimum: Number(validator.properties.MinValue),
+            maximum: Number(validator.properties.MaxLength),
+            minimum: Number(validator.properties.MinLength),
             name: field,
             trigger: 'blur',
           }),
