@@ -27,16 +27,16 @@ public class WeChatWorkMessageAppService : ApplicationService, IWeChatWorkMessag
 
     public async virtual Task<string> Handle(MessageValidationInput input)
     {
-        var allSettings = await SettingProvider.GetAllAsync(
+        var settings = await SettingProvider.GetAllAsync(
             new[] { 
                 WeChatWorkSettingNames.Connection.CorpId, 
                 WeChatWorkSettingNames.Connection.Token, 
                 WeChatWorkSettingNames.Connection.EncodingAESKey,
-            } );
+            });
 
-        var corpId = allSettings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.CorpId)?.Value;
-        var token = allSettings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.Token)?.Value;
-        var aesKey = allSettings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.EncodingAESKey)?.Value;
+        var corpId = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.CorpId)?.Value;
+        var token = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.Token)?.Value;
+        var aesKey = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.EncodingAESKey)?.Value;
 
         Check.NotNullOrEmpty(corpId, nameof(corpId));
         Check.NotNullOrEmpty(token, nameof(token));
@@ -58,16 +58,16 @@ public class WeChatWorkMessageAppService : ApplicationService, IWeChatWorkMessag
 
     public async virtual Task<string> Handle(MessageHandleInput input)
     {
-        var allSettings = await SettingProvider.GetAllAsync(
+        var settings = await SettingProvider.GetAllAsync(
             new[] {
                 WeChatWorkSettingNames.Connection.CorpId,
                 WeChatWorkSettingNames.Connection.Token,
                 WeChatWorkSettingNames.Connection.EncodingAESKey,
             });
 
-        var corpId = allSettings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.CorpId)?.Value;
-        var token = allSettings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.Token)?.Value;
-        var aesKey = allSettings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.EncodingAESKey)?.Value;
+        var corpId = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.CorpId)?.Value;
+        var token = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.Token)?.Value;
+        var aesKey = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.EncodingAESKey)?.Value;
 
         Check.NotNullOrEmpty(corpId, nameof(corpId));
         Check.NotNullOrEmpty(token, nameof(token));

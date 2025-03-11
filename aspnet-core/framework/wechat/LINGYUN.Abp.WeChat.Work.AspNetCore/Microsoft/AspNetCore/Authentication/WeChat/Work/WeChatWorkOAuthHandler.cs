@@ -77,6 +77,10 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
             ? WeChatWorkOAuthConsts.UserInfoScope
             : WeChatWorkOAuthConsts.LoginScope;
 
+        var endpoint = isWeChatBrewserRequest
+            ? WeChatWorkOAuthConsts.AuthorizationEndpoint
+            : WeChatWorkOAuthConsts.AuthorizationSsoEndpoint;
+
         var parameters = new Dictionary<string, string>
         {
             { "appid", Options.CorpId },
@@ -91,7 +95,7 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
 
         parameters["state"] = state; ;
 
-        return $"{QueryHelpers.AddQueryString(Options.AuthorizationEndpoint, parameters)}";
+        return $"{QueryHelpers.AddQueryString(endpoint, parameters)}";
     }
 
     /// <summary>
@@ -143,7 +147,11 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
     /// <exception cref="HttpRequestException"></exception>
     protected async virtual Task<AuthenticationTicket> CreateTicketAsync(string code, ClaimsIdentity identity, AuthenticationProperties properties, OAuthTokenResponse tokens)
     {
-        var address = QueryHelpers.AddQueryString(Options.UserInformationEndpoint, new Dictionary<string, string>
+        var userInfoEndpoint = IsWeChatBrowser()
+            ? WeChatWorkOAuthConsts.UserDetailEndpoint
+            : WeChatWorkOAuthConsts.UserInfoEndpoint;
+
+        var address = QueryHelpers.AddQueryString(userInfoEndpoint, new Dictionary<string, string>
         {
             ["access_token"] = tokens.AccessToken,
             ["code"] = code

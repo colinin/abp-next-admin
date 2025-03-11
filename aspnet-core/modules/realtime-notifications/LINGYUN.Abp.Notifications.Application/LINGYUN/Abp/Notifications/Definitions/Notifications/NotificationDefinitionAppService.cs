@@ -213,7 +213,7 @@ public class NotificationDefinitionAppService : AbpNotificationsApplicationServi
         }
         if (!string.Equals(record.Providers, allowedProviders, StringComparison.InvariantCultureIgnoreCase))
         {
-            record.UseProviders(input.Providers.ToArray());
+            record.Providers = allowedProviders;
         }
         record.ExtraProperties.Clear();
         foreach (var property in input.ExtraProperties)

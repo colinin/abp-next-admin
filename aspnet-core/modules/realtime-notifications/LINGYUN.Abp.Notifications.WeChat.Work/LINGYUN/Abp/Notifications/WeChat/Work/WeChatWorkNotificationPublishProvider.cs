@@ -3,6 +3,7 @@ using LINGYUN.Abp.WeChat.Work.Authorize;
 using LINGYUN.Abp.WeChat.Work.Features;
 using LINGYUN.Abp.WeChat.Work.Messages;
 using LINGYUN.Abp.WeChat.Work.Messages.Models;
+using LINGYUN.Abp.WeChat.Work.Settings;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Features;
+using Volo.Abp.Settings;
 
 namespace LINGYUN.Abp.Notifications.WeChat.Work;
 public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
@@ -18,24 +20,12 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
 
     public const string ProviderName = NotificationProviderNames.WechatWork;
     public override string Name => ProviderName;
-    protected IFeatureChecker FeatureChecker { get; }
-    protected IStringLocalizerFactory LocalizerFactory { get; }
-    protected IWeChatWorkMessageSender WeChatWorkMessageSender { get; }
-    protected IWeChatWorkInternalUserFinder WeChatWorkInternalUserFinder { get; }
-    protected INotificationDefinitionManager NotificationDefinitionManager { get; }
-    public WeChatWorkNotificationPublishProvider(
-        IFeatureChecker featureChecker,
-        IStringLocalizerFactory localizerFactory,
-        IWeChatWorkMessageSender weChatWorkMessageSender,
-        IWeChatWorkInternalUserFinder weChatWorkInternalUserFinder,
-        INotificationDefinitionManager notificationDefinitionManager)
-    {
-        FeatureChecker = featureChecker;
-        LocalizerFactory = localizerFactory;
-        WeChatWorkMessageSender = weChatWorkMessageSender;
-        WeChatWorkInternalUserFinder = weChatWorkInternalUserFinder;
-        NotificationDefinitionManager = notificationDefinitionManager;
-    }
+    protected IFeatureChecker FeatureChecker => ServiceProvider.LazyGetRequiredService<IFeatureChecker>();
+    protected ISettingProvider SettingProvider => ServiceProvider.LazyGetRequiredService<ISettingProvider>();
+    protected IStringLocalizerFactory LocalizerFactory => ServiceProvider.LazyGetRequiredService<IStringLocalizerFactory>();
+    protected IWeChatWorkMessageSender WeChatWorkMessageSender => ServiceProvider.LazyGetRequiredService<IWeChatWorkMessageSender>();
+    protected IWeChatWorkInternalUserFinder WeChatWorkInternalUserFinder => ServiceProvider.LazyGetRequiredService<IWeChatWorkInternalUserFinder>();
+    protected INotificationDefinitionManager NotificationDefinitionManager => ServiceProvider.LazyGetRequiredService<INotificationDefinitionManager>();
 
     protected async override Task<bool> CanPublishAsync(NotificationInfo notification, CancellationToken cancellationToken = default)
     {
@@ -59,9 +49,10 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
     {
         var sendToAgentIds = new List<string>();
         var notificationDefine = await NotificationDefinitionManager.GetOrNullAsync(notification.Name);
-        var agentId = notification.Data.GetAgentIdOrNull() ?? notificationDefine?.GetAgentIdOrNull();
+        var agentId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.AgentId);
         if (agentId.IsNullOrWhiteSpace())
         {
+            Logger.LogWarning("Unable to send enterprise wechat messages because agentId is not set.");
             return;
         }
 
@@ -96,7 +87,7 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
         }
 
         var findUserList = await WeChatWorkInternalUserFinder
-                .FindUserIdentifierListAsync(agentId, identifiers.Select(id => id.UserId));
+                .FindUserIdentifierListAsync(identifiers.Select(id => id.UserId));
 
         if (!findUserList.Any())
         {
@@ -148,6 +139,7 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
             return;
         }
 
+        message.ToUser = toUser;
         message.ToTag = toTag;
         message.ToParty = toParty;
 

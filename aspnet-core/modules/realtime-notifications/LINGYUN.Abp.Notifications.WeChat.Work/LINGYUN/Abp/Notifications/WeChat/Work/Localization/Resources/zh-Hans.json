@@ -1,0 +1,8 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Notification:WeChatWork": "企业微信",
+    "Notification:WeChatWorkTest": "企业微信消息测试",
+    "Notification:WeChatWorkTestDesc": "用于测试企业微信消息发送"
+  }
+}
