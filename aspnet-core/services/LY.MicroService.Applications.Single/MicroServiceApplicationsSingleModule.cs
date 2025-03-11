@@ -1,3 +1,6 @@
+using LINGYUN.Abp.Identity.WeChat.Work;
+using LINGYUN.Abp.Notifications.WeChat.Work;
+
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
@@ -19,6 +22,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpIdentityOrganizaztionUnitsModule),
     // 身份认证模块 微信身份标识
     typeof(AbpIdentityWeChatModule),
+    // 身份认证模块 企业微信身份标识
+    typeof(AbpIdentityWeChatWorkModule),
     // 身份认证模块 领域服务
     typeof(AbpIdentityDomainModule),
     // 身份认证模块 应用服务
@@ -301,6 +306,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsEmailingModule),
     // 通知模块 微信小程序
     typeof(AbpNotificationsWeChatMiniProgramModule),
+    // 通知模块 企业微信
+    typeof(AbpNotificationsWeChatWorkModule),
     // 多租户模块 版本
     typeof(AbpMultiTenancyEditionsModule),
 

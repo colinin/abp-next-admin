@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.WeChat.Work;
-using Microsoft.AspNetCore.Authentication.WeChat.Work;
+﻿using Microsoft.AspNetCore.Authentication.WeChat.Work;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -14,8 +13,8 @@ public static class WeChatWorkAuthenticationExtensions
     {
         return builder
             .AddWeChatWork(
-                AbpWeChatWorkGlobalConsts.AuthenticationScheme,
-                AbpWeChatWorkGlobalConsts.DisplayName, 
+                WeChatWorkOAuthConsts.AuthenticationScheme,
+                WeChatWorkOAuthConsts.DisplayName, 
                 options => { });
     }
 
@@ -27,8 +26,8 @@ public static class WeChatWorkAuthenticationExtensions
     {
         return builder
             .AddWeChatWork(
-                AbpWeChatWorkGlobalConsts.AuthenticationScheme,
-                AbpWeChatWorkGlobalConsts.DisplayName,
+                WeChatWorkOAuthConsts.AuthenticationScheme,
+                WeChatWorkOAuthConsts.DisplayName,
                 configureOptions);
     }
 
@@ -42,7 +41,7 @@ public static class WeChatWorkAuthenticationExtensions
         return builder
             .AddWeChatWork(
                 authenticationScheme,
-                AbpWeChatWorkGlobalConsts.DisplayName, 
+                WeChatWorkOAuthConsts.DisplayName, 
                 configureOptions);
     }
 

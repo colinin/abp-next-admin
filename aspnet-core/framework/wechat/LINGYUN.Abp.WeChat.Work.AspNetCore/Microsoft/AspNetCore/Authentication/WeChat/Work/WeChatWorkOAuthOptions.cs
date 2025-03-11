@@ -12,6 +12,10 @@ public class WeChatWorkOAuthOptions : OAuthOptions
     /// 企业Id
     /// </summary>
     public string CorpId { get; set; }
+    /// <summary>
+    /// 访问用户敏感信息端点
+    /// </summary>
+    public string UserDetailEndpoint { get; set; }
     public WeChatWorkOAuthOptions()
     {
         // 用于防止初始化错误,会在OAuthHandler.InitializeHandlerAsync中进行重写
@@ -23,7 +27,9 @@ public class WeChatWorkOAuthOptions : OAuthOptions
 
         AuthorizationEndpoint = WeChatWorkOAuthConsts.AuthorizationEndpoint;
         TokenEndpoint = WeChatWorkOAuthConsts.TokenEndpoint;
-        UserInformationEndpoint = WeChatWorkOAuthConsts.UserInformationEndpoint;
+        UserInformationEndpoint = WeChatWorkOAuthConsts.UserInfoEndpoint;
+        UserDetailEndpoint = WeChatWorkOAuthConsts.UserDetailEndpoint;
+
 
         Scope.Add(WeChatWorkOAuthConsts.LoginScope);
         Scope.Add(WeChatWorkOAuthConsts.UserInfoScope);

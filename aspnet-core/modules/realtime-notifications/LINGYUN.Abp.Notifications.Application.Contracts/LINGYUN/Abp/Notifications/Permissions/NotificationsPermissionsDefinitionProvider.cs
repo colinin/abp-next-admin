@@ -47,6 +47,7 @@ public class NotificationsPermissionsDefinitionProvider : PermissionDefinitionPr
 
         var noticeGroup = group.AddPermission(NotificationsPermissions.Notification.Default, L("Permission:Notification"));
         noticeGroup.AddChild(NotificationsPermissions.Notification.Delete, L("Permission:Delete"));
+        noticeGroup.AddChild(NotificationsPermissions.Notification.Send, L("Permission:Send"));
     }
 
     private static LocalizableString L(string name)
