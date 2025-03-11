@@ -13,6 +13,7 @@ import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
 import { useFeatures } from '@abp/core';
+import { FeatureModal } from '@abp/features';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -30,6 +31,7 @@ defineOptions({
 
 const MenuItem = Menu.Item;
 const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
+const FeatureIcon = createIconifyIcon('pajamas:feature-flag');
 
 const { isEnabled } = useFeatures();
 const { hasAccessByCodes } = useAccess();
@@ -115,6 +117,9 @@ const [Grid, { query }] = useVbenVxeGrid({
 const [EditionChangeDrawer, entityChangeDrawerApi] = useVbenDrawer({
   connectedComponent: EntityChangeDrawer,
 });
+const [EditionFeatureModal, featureModalApi] = useVbenModal({
+  connectedComponent: FeatureModal,
+});
 
 const onCreate = () => {
   modalApi.setData({});
@@ -155,6 +160,14 @@ const onMenuClick = (row: EditionDto, info: MenuInfo) => {
       entityChangeDrawerApi.open();
       break;
     }
+    case 'features': {
+      featureModalApi.setData({
+        displayName: row.displayName,
+        providerKey: row.id,
+        providerName: 'E',
+      });
+      featureModalApi.open();
+    }
   }
 };
 </script>
@@ -191,15 +204,25 @@ const onMenuClick = (row: EditionDto, info: MenuInfo) => {
         >
           {{ $t('AbpUi.Delete') }}
         </Button>
-        <Dropdown v-if="isEnabled('AbpAuditing.Logging.AuditLog')">
+        <Dropdown>
           <template #overlay>
             <Menu @click="(info) => onMenuClick(row, info)">
               <MenuItem
-                v-if="hasAccessByCodes([AuditLogPermissions.Default])"
+                v-if="
+                  isEnabled(['AbpAuditing.Logging.AuditLog']) &&
+                  hasAccessByCodes([AuditLogPermissions.Default])
+                "
                 key="entity-changes"
                 :icon="h(AuditLogIcon)"
               >
                 {{ $t('AbpAuditLogging.EntitiesChanged') }}
+              </MenuItem>
+              <MenuItem
+                v-if="hasAccessByCodes([EditionsPermissions.ManageFeatures])"
+                key="features"
+                :icon="h(FeatureIcon)"
+              >
+                {{ $t('AbpSaas.ManageFeatures') }}
               </MenuItem>
             </Menu>
           </template>
@@ -210,6 +233,7 @@ const onMenuClick = (row: EditionDto, info: MenuInfo) => {
   </Grid>
   <EditionModal @change="() => query()" />
   <EditionChangeDrawer />
+  <EditionFeatureModal />
 </template>
 
 <style lang="scss" scoped></style>
