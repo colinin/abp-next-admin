@@ -23,6 +23,7 @@
     "@abp/core": "workspace:*",
     "@abp/gdpr": "workspace:*",
     "@abp/identity": "workspace:*",
+    "@abp/notifications": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/ui": "workspace:*",
     "@ant-design/icons-vue": "catalog:",
