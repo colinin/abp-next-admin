@@ -37,9 +37,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function qrcodeLogin(
     key: string,
+    tenantId?: string,
     onSuccess?: () => Promise<void> | void,
   ) {
-    const result = await qrcodeLoginApi(key);
+    const result = await qrcodeLoginApi({ key, tenantId });
     return await _loginSuccess(result, onSuccess);
   }
 

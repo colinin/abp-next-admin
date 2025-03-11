@@ -2,7 +2,7 @@ import type {
   GenerateQrCodeResult,
   QrCodeUserInfoResult,
 } from '../types/qrcode';
-import type { OAuthTokenResult } from '../types/token';
+import type { OAuthTokenResult, QrCodeTokenRequest } from '../types/token';
 
 import { useAppConfig } from '@vben/hooks';
 
@@ -37,7 +37,7 @@ export function useQrCodeLoginApi() {
    * @param key 二维码Key
    * @returns 用户token
    */
-  async function loginApi(key: string) {
+  async function loginApi(input: QrCodeTokenRequest) {
     const { audience, clientId, clientSecret } = useAppConfig(
       import.meta.env,
       import.meta.env.PROD,
@@ -47,8 +47,9 @@ export function useQrCodeLoginApi() {
         client_id: clientId,
         client_secret: clientSecret,
         grant_type: 'qr_code',
-        qrcode_key: key,
+        qrcode_key: input.key,
         scope: audience,
+        tenant_id: input.tenantId,
       },
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
