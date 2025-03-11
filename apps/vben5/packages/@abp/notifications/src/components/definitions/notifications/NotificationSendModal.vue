@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import type { FormInstance } from 'ant-design-vue';
 
-import type {
-  NotificationDefinitionDto,
-  NotificationSeverity,
-} from '../../../types';
+import type { NotificationDefinitionDto } from '../../../types';
 
-import { ref, toValue, useTemplateRef } from 'vue';
+import {
+  computed,
+  defineAsyncComponent,
+  ref,
+  toValue,
+  useTemplateRef,
+} from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -14,11 +17,17 @@ import { $t } from '@vben/locales';
 import { PropertyTable } from '@abp/ui';
 import { Form, Input, message, Select, Tabs, Textarea } from 'ant-design-vue';
 
+import { useNotificationDefinitionsApi } from '../../../api';
 import { useNotificationsApi } from '../../../api/useNotificationsApi';
+import { NotificationContentType, NotificationSeverity } from '../../../types';
 import { useEnumMaps } from './useEnumMaps';
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
+
+const MarkdownEditor = defineAsyncComponent(() =>
+  import('@abp/components/vditor').then((module) => module.MarkdownEditor),
+);
 
 const defaultModel: {
   culture?: string;
@@ -42,6 +51,21 @@ const notification = ref<NotificationDefinitionDto>();
 
 const { notificationSeverityOptions } = useEnumMaps();
 const { sendNotiferApi } = useNotificationsApi();
+const { getApi } = useNotificationDefinitionsApi();
+
+const getMarkdownToolbar = computed(() => {
+  if (
+    notification.value?.providers &&
+    notification.value.providers.some((x) =>
+      x.toLocaleLowerCase().includes('wechat'),
+    )
+  ) {
+    // 微信仅支持部分markdown语法
+    // see: https://developer.work.weixin.qq.com/document/path/96458#%E6%94%AF%E6%8C%81%E7%9A%84markdown%E8%AF%AD%E6%B3%95
+    return ['headings', 'bold', 'italic', 'strike', 'link', 'code', 'quote'];
+  }
+  return undefined;
+});
 
 const [Modal, modalApi] = useVbenModal({
   class: 'w-1/2',
@@ -58,7 +82,11 @@ const [Modal, modalApi] = useVbenModal({
 
 async function onInit() {
   const dto = modalApi.getData<NotificationDefinitionDto>();
-  notification.value = dto;
+  const notificationDto = await getApi(dto.name);
+  notification.value = {
+    ...notificationDto,
+    displayName: dto.displayName,
+  };
   formModel.value.name = dto.name;
 }
 
@@ -112,7 +140,15 @@ async function onSubmit() {
             :label="$t('Notifications.Notifications:Message')"
             required
           >
-            <Textarea v-model:value="formModel.message" />
+            <MarkdownEditor
+              v-if="
+                notification?.contentType === NotificationContentType.Markdown
+              "
+              v-model="formModel.message"
+              :height="300"
+              :toolbar="getMarkdownToolbar"
+            />
+            <Textarea v-else v-model:value="formModel.message" />
           </FormItem>
           <FormItem
             v-if="!notification?.template"
