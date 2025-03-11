@@ -22,6 +22,7 @@
   "dependencies": {
     "@abp/auditing": "workspace:*",
     "@abp/core": "workspace:*",
+    "@abp/features": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/ui": "workspace:*",
     "@ant-design/icons-vue": "catalog:",

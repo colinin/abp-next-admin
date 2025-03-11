@@ -1,1 +1,1 @@
-export * from './useGdprRequestsApi';
+export { useGdprRequestsApi } from './useGdprRequestsApi';

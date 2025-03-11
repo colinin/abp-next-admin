@@ -30,6 +30,11 @@
       "groups": "Groups",
       "definitions": "Definitions"
     },
+    "features": {
+      "title": "Features",
+      "groups": "Groups",
+      "definitions": "Definitions"
+    },
     "settings": {
       "title": "Settings",
       "definitions": "Definitions",

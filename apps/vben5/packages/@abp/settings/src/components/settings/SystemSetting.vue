@@ -3,9 +3,11 @@ import type { SettingsUpdateInput } from '../../types';
 
 import { ref } from 'vue';
 
+import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { isEmail, useAbpStore } from '@abp/core';
+import { FeatureModal } from '@abp/features';
 import { Button, Form, InputSearch, message, Modal } from 'ant-design-vue';
 
 import {
@@ -24,6 +26,9 @@ defineOptions({
 const FormItem = Form.Item;
 
 const abpStore = useAbpStore();
+const [HostFeatureModal, featureModalApi] = useVbenModal({
+  connectedComponent: FeatureModal,
+});
 
 const sending = ref(false);
 
@@ -61,10 +66,27 @@ async function onSendMail(email: string) {
     sending.value = false;
   }
 }
+
+function onFeatureManage() {
+  featureModalApi.setData({
+    providerName: 'T',
+  });
+  featureModalApi.open();
+}
 </script>
 
 <template>
   <SettingForm :get-api="onGet" :submit-api="onSubmit">
+    <template #toolbar>
+      <Button
+        ghost
+        post-icon="ant-design:setting-outlined"
+        type="primary"
+        @click="onFeatureManage"
+      >
+        {{ $t('AbpFeatureManagement.ManageHostFeatures') }}
+      </Button>
+    </template>
     <template #send-test-email="{ detail }">
       <FormItem
         :extra="detail.description"
@@ -86,6 +108,7 @@ async function onSendMail(email: string) {
       </FormItem>
     </template>
   </SettingForm>
+  <HostFeatureModal />
 </template>
 
 <style scoped></style>

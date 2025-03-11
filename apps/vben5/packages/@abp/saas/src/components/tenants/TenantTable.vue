@@ -13,6 +13,7 @@ import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
 import { useFeatures } from '@abp/core';
+import { FeatureModal } from '@abp/features';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -33,6 +34,7 @@ const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
 const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 const ConnectionIcon = createIconifyIcon('mdi:connection');
+const FeatureIcon = createIconifyIcon('pajamas:feature-flag');
 
 const { isEnabled } = useFeatures();
 const { hasAccessByCodes } = useAccess();
@@ -131,6 +133,9 @@ const [TenantConnectionStringsModal, connectionStringsModalApi] = useVbenModal({
 const [TenantChangeDrawer, entityChangeDrawerApi] = useVbenDrawer({
   connectedComponent: EntityChangeDrawer,
 });
+const [TenantFeatureModal, tenantFeatureModalApi] = useVbenModal({
+  connectedComponent: FeatureModal,
+});
 const [Grid, { query }] = useVbenVxeGrid({
   formOptions,
   gridEvents,
@@ -178,6 +183,14 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
       });
       entityChangeDrawerApi.open();
       break;
+    }
+    case 'features': {
+      tenantFeatureModalApi.setData({
+        displayName: row.name,
+        providerKey: row.id,
+        providerName: 'T',
+      });
+      tenantFeatureModalApi.open();
     }
   }
 };
@@ -234,6 +247,13 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
                 {{ $t('AbpSaas.ConnectionStrings') }}
               </MenuItem>
               <MenuItem
+                v-if="hasAccessByCodes([TenantsPermissions.ManageFeatures])"
+                key="features"
+                :icon="h(FeatureIcon)"
+              >
+                {{ $t('AbpSaas.ManageFeatures') }}
+              </MenuItem>
+              <MenuItem
                 v-if="
                   isEnabled('AbpAuditing.Logging.AuditLog') &&
                   hasAccessByCodes([AuditLogPermissions.Default])
@@ -252,6 +272,7 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
   </Grid>
   <TenantModal @change="() => query()" />
   <TenantConnectionStringsModal />
+  <TenantFeatureModal />
   <TenantChangeDrawer />
 </template>
 

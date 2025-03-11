@@ -30,6 +30,11 @@
       "groups": "权限分组",
       "definitions": "权限定义"
     },
+    "features": {
+      "title": "功能管理",
+      "groups": "功能分组",
+      "definitions": "功能定义"
+    },
     "settings": {
       "title": "设置管理",
       "definitions": "设置定义",

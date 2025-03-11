@@ -119,6 +119,35 @@ const routes: RouteRecordRaw[] = [
           },
           {
             meta: {
+              title: $t('abp.manage.features.title'),
+              icon: 'ant-design:gold-outlined',
+            },
+            name: 'FeatureManagement',
+            path: '/manage/features',
+            children: [
+              {
+                meta: {
+                  title: $t('abp.manage.features.groups'),
+                  icon: 'lucide:group',
+                },
+                name: 'FeatureGroupDefinitions',
+                path: '/manage/features/groups',
+                component: () => import('#/views/features/groups/index.vue'),
+              },
+              {
+                meta: {
+                  title: $t('abp.manage.features.definitions'),
+                  icon: 'pajamas:feature-flag',
+                },
+                name: 'FeatureDefinitions',
+                path: '/manage/features/definitions',
+                component: () =>
+                  import('#/views/features/definitions/index.vue'),
+              },
+            ],
+          },
+          {
+            meta: {
               title: $t('abp.manage.settings.title'),
               icon: 'ic:outline-settings',
             },

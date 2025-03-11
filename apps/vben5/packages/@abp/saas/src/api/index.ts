@@ -1,2 +1,2 @@
-export * from './useEditionsApi';
-export * from './useTenantsApi';
+export { useEditionsApi } from './useEditionsApi';
+export { useTenantsApi } from './useTenantsApi';
