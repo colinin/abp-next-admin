@@ -10,7 +10,7 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { LocalizableInput, PropertyTable } from '@abp/ui';
-import { Form, Input, message, Tabs } from 'ant-design-vue';
+import { Checkbox, Form, Input, message, Tabs } from 'ant-design-vue';
 
 import { useNotificationGroupDefinitionsApi } from '../../../api/useNotificationGroupDefinitionsApi';
 
@@ -47,9 +47,10 @@ const [Modal, modalApi] = useVbenModal({
   },
   onConfirm: async () => {
     await form.value?.validate();
+    const input = toValue(formModel);
     const api = isEditModel.value
-      ? updateApi(formModel.value.name, toValue(formModel))
-      : createApi(toValue(formModel));
+      ? updateApi(formModel.value.name, input)
+      : createApi(input);
     modalApi.setState({ confirmLoading: true, loading: true });
     api
       .then((res) => {
@@ -131,6 +132,27 @@ function onPropDelete(prop: PropertyInfo) {
               v-model:value="formModel.displayName"
               :disabled="formModel.isStatic"
             />
+          </FormItem>
+          <FormItem
+            :label="$t('Notifications.DisplayName:Description')"
+            name="description"
+          >
+            <LocalizableInput
+              v-model:value="formModel.description"
+              :disabled="formModel.isStatic"
+            />
+          </FormItem>
+          <FormItem
+            name="allowSubscriptionToClients"
+            :label="$t('Notifications.DisplayName:AllowSubscriptionToClients')"
+            :extra="$t('Notifications.Description:AllowSubscriptionToClients')"
+          >
+            <Checkbox
+              :disabled="formModel.isStatic"
+              v-model:checked="formModel.allowSubscriptionToClients"
+            >
+              {{ $t('Notifications.DisplayName:AllowSubscriptionToClients') }}
+            </Checkbox>
           </FormItem>
         </TabPane>
         <!-- 属性 -->

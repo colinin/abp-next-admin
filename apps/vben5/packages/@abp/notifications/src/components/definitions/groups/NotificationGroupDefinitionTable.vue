@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { NotificationGroupDefinitionDto } from '../../../types/groups';
 
 import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
 
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
+import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { useLocalization, useLocalizationSerializer } from '@abp/core';
@@ -13,16 +16,23 @@ import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
+  EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
 import { useNotificationGroupDefinitionsApi } from '../../../api/useNotificationGroupDefinitionsApi';
-import { GroupDefinitionsPermissions } from '../../../constants/permissions';
+import {
+  GroupDefinitionsPermissions,
+  NotificationDefinitionsPermissions,
+} from '../../../constants/permissions';
 
 defineOptions({
   name: 'NotificationGroupDefinitionTable',
 });
+
+const MenuItem = Menu.Item;
+const DefinitionIcon = createIconifyIcon('nimbus:notification');
 
 const permissionGroups = ref<NotificationGroupDefinitionDto[]>([]);
 const pageState = reactive({
@@ -32,6 +42,7 @@ const pageState = reactive({
 });
 
 const { Lr } = useLocalization();
+const { hasAccessByCodes } = useAccess();
 const { deserialize } = useLocalizationSerializer();
 const { deleteApi, getListApi } = useNotificationGroupDefinitionsApi();
 
@@ -108,6 +119,11 @@ const [NotificationGroupDefinitionModal, groupModalApi] = useVbenModal({
     () => import('./NotificationGroupDefinitionModal.vue'),
   ),
 });
+const [NotificationDefinitionModal, defineModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('../notifications/NotificationDefinitionModal.vue'),
+  ),
+});
 
 async function onGet(input?: Record<string, string>) {
   try {
@@ -171,6 +187,18 @@ function onDelete(row: NotificationGroupDefinitionDto) {
   });
 }
 
+function onMenuClick(row: NotificationGroupDefinitionDto, info: MenuInfo) {
+  switch (info.key) {
+    case 'definitions': {
+      defineModalApi.setData({
+        groupName: row.name,
+      });
+      defineModalApi.open();
+      break;
+    }
+  }
+}
+
 onMounted(onGet);
 </script>
 
@@ -208,10 +236,27 @@ onMounted(onGet);
         >
           {{ $t('AbpUi.Delete') }}
         </Button>
+        <Dropdown v-if="!row.isStatic">
+          <template #overlay>
+            <Menu @click="(info) => onMenuClick(row, info)">
+              <MenuItem
+                v-if="
+                  hasAccessByCodes([NotificationDefinitionsPermissions.Create])
+                "
+                key="definitions"
+                :icon="h(DefinitionIcon)"
+              >
+                {{ $t('Notifications.NotificationDefinitions:AddNew') }}
+              </MenuItem>
+            </Menu>
+          </template>
+          <Button :icon="h(EllipsisOutlined)" type="link" />
+        </Dropdown>
       </div>
     </template>
   </Grid>
   <NotificationGroupDefinitionModal @change="() => onGet()" />
+  <NotificationDefinitionModal />
 </template>
 
 <style scoped></style>

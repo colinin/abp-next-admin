@@ -43,7 +43,8 @@
     "notifications": {
       "title": "通知管理",
       "myNotifilers": "我的通知",
-      "groups": "通知分组"
+      "groups": "通知分组",
+      "definitions": "通知定义"
     }
   },
   "openiddict": {

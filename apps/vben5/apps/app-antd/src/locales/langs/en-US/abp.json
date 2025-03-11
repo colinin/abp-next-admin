@@ -43,7 +43,8 @@
     "notifications": {
       "title": "Notifications",
       "myNotifilers": "My Notifilers",
-      "groups": "Groups"
+      "groups": "Groups",
+      "definitions": "Definitions"
     }
   },
   "openiddict": {

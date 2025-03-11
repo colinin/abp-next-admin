@@ -212,6 +212,16 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                   import('#/views/notifications/groups/index.vue'),
               },
+              {
+                meta: {
+                  title: $t('abp.manage.notifications.definitions'),
+                  icon: 'nimbus:notification',
+                },
+                name: 'NotificationDefinitions',
+                path: '/manage/notifications/definitions',
+                component: () =>
+                  import('#/views/notifications/definitions/index.vue'),
+              },
             ],
           },
         ],
