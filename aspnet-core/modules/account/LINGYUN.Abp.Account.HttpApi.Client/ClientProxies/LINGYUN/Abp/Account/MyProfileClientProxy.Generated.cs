@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Content;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.ClientProxying;
@@ -95,5 +96,18 @@ public partial class MyProfileClientProxy : ClientProxyBase<IMyProfileAppService
     public virtual async Task ResetAuthenticatorAsync()
     {
         await RequestAsync(nameof(ResetAuthenticatorAsync));
+    }
+
+    public virtual async Task ChangePictureAsync(ChangePictureInput input)
+    {
+        await RequestAsync(nameof(ChangePictureAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(ChangePictureInput), input }
+        });
+    }
+
+    public virtual async Task<IRemoteStreamContent> GetPictureAsync()
+    {
+        return await RequestAsync<IRemoteStreamContent>(nameof(GetPictureAsync));
     }
 }

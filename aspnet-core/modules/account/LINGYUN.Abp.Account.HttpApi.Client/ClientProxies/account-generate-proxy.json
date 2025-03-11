@@ -768,6 +768,31 @@
                     "type": "System.Void",
                     "typeSimple": "System.Void"
                   }
+                },
+                {
+                  "name": "ChangePictureAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.ChangePictureInput, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.ChangePictureInput",
+                      "typeSimple": "LINGYUN.Abp.Account.ChangePictureInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetPictureAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
                 }
               ]
             }
@@ -1161,6 +1186,58 @@
               },
               "allowAnonymous": false,
               "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "ChangePictureAsyncByInput": {
+              "uniqueName": "ChangePictureAsyncByInput",
+              "name": "ChangePictureAsync",
+              "httpMethod": "POST",
+              "url": "api/account/my-profile/picture",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.ChangePictureInput, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.ChangePictureInput",
+                  "typeSimple": "LINGYUN.Abp.Account.ChangePictureInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "File",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Content.IRemoteStreamContent",
+                  "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "FormFile",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "GetPictureAsync": {
+              "uniqueName": "GetPictureAsync",
+              "name": "GetPictureAsync",
+              "httpMethod": "GET",
+              "url": "api/account/my-profile/picture",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
             }
           }
         },
@@ -1449,6 +1526,143 @@
               },
               "allowAnonymous": false,
               "implementFrom": "LINGYUN.Abp.Account.IMySecurityLogAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController": {
+          "controllerName": "QrCodeLogin",
+          "controllerGroupName": "QrCodeLogin",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController",
+          "interfaces": [],
+          "actions": {
+            "GenerateAsync": {
+              "uniqueName": "GenerateAsync",
+              "name": "GenerateAsync",
+              "httpMethod": "POST",
+              "url": "api/account/qrcode/generate",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.GenerateQrCodeResult",
+                "typeSimple": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.GenerateQrCodeResult"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController"
+            },
+            "CheckCodeAsyncByKey": {
+              "uniqueName": "CheckCodeAsyncByKey",
+              "name": "CheckCodeAsync",
+              "httpMethod": "GET",
+              "url": "api/account/qrcode/{key}/check",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "key",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "key",
+                  "name": "key",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult",
+                "typeSimple": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController"
+            },
+            "ScanCodeAsyncByKey": {
+              "uniqueName": "ScanCodeAsyncByKey",
+              "name": "ScanCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/qrcode/{key}/scan",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "key",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "key",
+                  "name": "key",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult",
+                "typeSimple": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController"
+            },
+            "ConfirmCodeAsyncByKey": {
+              "uniqueName": "ConfirmCodeAsyncByKey",
+              "name": "ConfirmCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/qrcode/{key}/confirm",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "key",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "key",
+                  "name": "key",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult",
+                "typeSimple": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController"
             }
           }
         },
@@ -1873,6 +2087,106 @@
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Abp.Account.IProfileAppService"
+            }
+          }
+        },
+        "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController": {
+          "controllerName": "Account",
+          "controllerGroupName": "Login",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController",
+          "interfaces": [],
+          "actions": {
+            "LoginByLogin": {
+              "uniqueName": "LoginByLogin",
+              "name": "Login",
+              "httpMethod": "POST",
+              "url": "api/account/login",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "login",
+                  "typeAsString": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo, Volo.Abp.Account.Web",
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "login",
+                  "name": "login",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
+                "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
+            },
+            "Logout": {
+              "uniqueName": "Logout",
+              "name": "Logout",
+              "httpMethod": "GET",
+              "url": "api/account/logout",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
+            },
+            "CheckPasswordByLogin": {
+              "uniqueName": "CheckPasswordByLogin",
+              "name": "CheckPassword",
+              "httpMethod": "POST",
+              "url": "api/account/check-password",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "login",
+                  "typeAsString": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo, Volo.Abp.Account.Web",
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "login",
+                  "name": "login",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
+                "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
             }
           }
         }
