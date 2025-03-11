@@ -202,6 +202,16 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                   import('#/views/notifications/my-notifilers/index.vue'),
               },
+              {
+                meta: {
+                  title: $t('abp.manage.notifications.groups'),
+                  icon: 'lucide:group',
+                },
+                name: 'NotificationGroupDefinitions',
+                path: '/manage/notifications/groups',
+                component: () =>
+                  import('#/views/notifications/groups/index.vue'),
+              },
             ],
           },
         ],
