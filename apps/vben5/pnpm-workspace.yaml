@@ -174,6 +174,7 @@ catalog:
   unbuild: ^3.3.1
   unplugin-element-plus: ^0.9.0
   vee-validate: ^4.15.0
+  vditor: ^3.10.9
   vite: ^6.0.11
   vite-plugin-compression: ^0.5.1
   vite-plugin-dts: ^4.5.0
