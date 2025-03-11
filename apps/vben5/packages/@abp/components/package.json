@@ -25,6 +25,10 @@
     "./tinymce": {
       "types": "./src/tinymce/index.ts",
       "default": "./src/tinymce/index.ts"
+    },
+    "./vditor": {
+      "types": "./src/vditor/index.ts",
+      "default": "./src/vditor/index.ts"
     }
   },
   "dependencies": {
@@ -46,6 +50,7 @@
     "codemirror": "catalog:",
     "lodash.isnumber": "catalog:",
     "tinymce": "catalog:",
+    "vditor": "catalog:",
     "vue": "catalog:*"
   },
   "devDependencies": {
