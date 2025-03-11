@@ -20,6 +20,7 @@ interface QrCodeInfoResult {
 
 interface QrCodeUserInfoResult extends QrCodeInfoResult {
   picture?: string;
+  tenantId?: string;
   userId?: string;
   userName?: string;
 }

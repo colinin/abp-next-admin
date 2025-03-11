@@ -10,8 +10,8 @@ defineOptions({ name: 'QrCodeLogin' });
 
 const authStore = useAuthStore();
 
-async function onConfirm(key: string) {
-  await authStore.qrcodeLogin(key);
+async function onConfirm(key: string, tenantId?: string) {
+  await authStore.qrcodeLogin(key, tenantId);
 }
 </script>
 

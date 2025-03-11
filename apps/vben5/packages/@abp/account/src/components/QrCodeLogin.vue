@@ -61,7 +61,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emits = defineEmits<{
-  (event: 'confirm', key: string): void;
+  (event: 'confirm', key: string, tenantId?: string): void;
 }>();
 
 let interval: NodeJS.Timeout;
@@ -125,7 +125,7 @@ async function onCheckCode() {
     interval && clearInterval(interval);
     localStorage.removeItem('login_qrocde');
     // 登录
-    emits('confirm', result.key);
+    emits('confirm', result.key, result.tenantId);
   }
 }
 

@@ -14,6 +14,13 @@ interface PasswordTokenRequest extends TokenRequest {
   /** 用户名 */
   userName: string;
 }
+/** 扫码登录授权请求数据模型 */
+interface QrCodeTokenRequest {
+  /** 二维码Key */
+  key: string;
+  /** 租户Id */
+  tenantId?: string;
+}
 /** 用户密码授权请求数据模型 */
 interface PasswordTokenRequestModel {
   /** 用户密码 */
@@ -68,6 +75,7 @@ export type {
   OAuthTokenResult,
   PasswordTokenRequest,
   PasswordTokenRequestModel,
+  QrCodeTokenRequest,
   TokenRequest,
   TokenResult,
   TwoFactorError,
