@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridProps } from '@abp/ui';
+import type { VxeGridProps } from '@abp/ui';
 import type { SelectValue } from 'ant-design-vue/es/select';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { OpenIddictApplicationDto } from '../../types';
 import type { OpenIddictTokenDto } from '../../types/tokens';
@@ -222,7 +224,7 @@ function onDelete(row: OpenIddictTokenDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessage')}`,
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

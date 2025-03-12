@@ -2,11 +2,12 @@ import type { VxeGridProps } from '../components/vxe-table/types';
 
 import { h } from 'vue';
 
+import { useVbenForm } from '@vben/common-ui';
+
 import { Button, Image } from 'ant-design-vue';
 
 import { setupVbenVxeTable } from '../components/vxe-table';
 import { useVbenVxeGrid as useVxeGrid } from '../components/vxe-table/use-vxe-grid';
-import { useVbenForm } from './form';
 
 function useVbenVxeGrid(options: VxeGridProps) {
   setupVbenVxeTable({

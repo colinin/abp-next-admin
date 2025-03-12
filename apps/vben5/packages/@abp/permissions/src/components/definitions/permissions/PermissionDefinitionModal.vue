@@ -82,7 +82,7 @@ const [Modal, modalApi] = useVbenModal({
     const api = isEditModel.value
       ? updateApi(formModel.value.name, toValue(formModel))
       : createApi(toValue(formModel));
-    modalApi.setState({ confirmLoading: true, loading: true });
+    modalApi.setState({ submitting: true });
     api
       .then((res) => {
         message.success($t('AbpUi.SavedSuccessfully'));
@@ -90,7 +90,7 @@ const [Modal, modalApi] = useVbenModal({
         modalApi.close();
       })
       .finally(() => {
-        modalApi.setState({ confirmLoading: false, loading: false });
+        modalApi.setState({ submitting: false });
       });
   },
   onOpenChange: async (isOpen: boolean) => {

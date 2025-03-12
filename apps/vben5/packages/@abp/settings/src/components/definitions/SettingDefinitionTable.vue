@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { SettingDefinitionDto } from '../../types/definitions';
 
@@ -17,7 +19,7 @@ import {
 } from '@ant-design/icons-vue';
 import { Button, message, Modal } from 'ant-design-vue';
 
-import { deleteApi, getListApi } from '../../api/definitions';
+import { useDefinitionsApi } from '../../api/useDefinitionsApi';
 import { SettingDefinitionsPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -33,6 +35,7 @@ const pageState = reactive({
 
 const { Lr } = useLocalization();
 const { deserialize } = useLocalizationSerializer();
+const { deleteApi, getListApi } = useDefinitionsApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -163,7 +166,7 @@ function onDelete(row: SettingDefinitionDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       onGet();
     },
     title: $t('AbpUi.AreYouSure'),

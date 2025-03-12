@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridProps } from '@abp/ui';
+import type { VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { OpenIddictApplicationDto } from '../../types/applications';
 
@@ -178,7 +180,7 @@ const onDelete = (row: OpenIddictApplicationDto) => {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.clientId])}`,
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       query();
     },
     title: $t('AbpUi.AreYouSure'),

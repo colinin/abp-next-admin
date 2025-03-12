@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { LanguageDto, ResourceDto } from '../../types';
 import type { TextDifferenceDto, TextDto } from '../../types/texts';
@@ -18,7 +20,7 @@ import { useLanguagesApi } from '../../api/useLanguagesApi';
 import { useLocalizationsApi } from '../../api/useLocalizationsApi';
 import { useResourcesApi } from '../../api/useResourcesApi';
 import { useTextsApi } from '../../api/useTextsApi';
-import { ResourcesPermissions } from '../../constants/permissions';
+import { TextsPermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'LocalizationTextTable',
@@ -291,7 +293,7 @@ onMounted(onInit);
       <Button
         :icon="h(PlusOutlined)"
         type="primary"
-        v-access:code="[ResourcesPermissions.Create]"
+        v-access:code="[TextsPermissions.Create]"
         @click="onCreate"
       >
         {{ $t('LocalizationManagement.Text:AddNew') }}
@@ -303,7 +305,7 @@ onMounted(onInit);
           :icon="h(EditOutlined)"
           block
           type="link"
-          v-access:code="[ResourcesPermissions.Update]"
+          v-access:code="[TextsPermissions.Update]"
           @click="onUpdate(row)"
         >
           {{ $t('AbpUi.Edit') }}

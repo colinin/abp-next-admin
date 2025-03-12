@@ -161,7 +161,7 @@ const onDelete = (row: GdprRequestDto) => {
       gridApi.setLoading(true);
       try {
         await deleteApi(row.id);
-        message.success($t('AbpUi.SuccessfullyDeleted'));
+        message.success($t('AbpUi.DeletedSuccessfully'));
         await gridApi.query();
       } finally {
         gridApi.setLoading(false);

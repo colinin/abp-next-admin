@@ -18,3 +18,13 @@ export const LanguagesPermissions = {
   /** 更新 */
   Update: 'LocalizationManagement.Language.Update',
 };
+/** 文本管理权限 */
+export const TextsPermissions = {
+  /** 新增 */
+  Create: 'LocalizationManagement.Text.Create',
+  Default: 'LocalizationManagement.Text',
+  /** 删除 */
+  Delete: 'LocalizationManagement.Text.Delete',
+  /** 更新 */
+  Update: 'LocalizationManagement.Text.Update',
+};

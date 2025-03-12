@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { NotificationDefinitionDto } from '../../../types/definitions';
 import type { NotificationGroupDefinitionDto } from '../../../types/groups';
@@ -317,7 +319,7 @@ function onDelete(row: NotificationDefinitionDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       onGet();
     },
     title: $t('AbpUi.AreYouSure'),

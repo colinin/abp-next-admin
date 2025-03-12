@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { ResourceDto } from '../../types/resources';
 

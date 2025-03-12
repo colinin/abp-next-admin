@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 
+import type { VbenFormProps } from '@vben/common-ui';
+
 import type { IdentityUserDto } from '../../types/users';
 
 import { defineEmits, defineOptions, nextTick, ref, toValue } from 'vue';
 
-import { useVbenModal, type VbenFormProps } from '@vben/common-ui';
+import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { useVbenVxeGrid } from '@abp/ui';

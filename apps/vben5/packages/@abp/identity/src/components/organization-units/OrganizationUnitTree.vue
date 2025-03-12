@@ -137,7 +137,7 @@ function onDelete(id: string) {
     maskClosable: false,
     onOk: async () => {
       await deleteApi(id);
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       onRefresh();
     },
     title: $t('AbpUi.AreYouSure'),
