@@ -177,6 +177,26 @@ const routes: RouteRecordRaw[] = [
           },
           {
             meta: {
+              title: $t('abp.manage.localization.title'),
+              icon: 'ion:globe-outline',
+            },
+            name: 'LocalizationManagement',
+            path: '/manage/localization',
+            children: [
+              {
+                meta: {
+                  title: $t('abp.manage.localization.resources'),
+                  icon: 'grommet-icons:resources',
+                },
+                name: 'LocalizationResources',
+                path: '/manage/localization/resources',
+                component: () =>
+                  import('#/views/localization/resources/index.vue'),
+              },
+            ],
+          },
+          {
+            meta: {
               title: $t('abp.manage.identity.auditLogs'),
               icon: 'fluent-mdl2:compliance-audit',
             },
