@@ -93,7 +93,7 @@ async function initAssignableClaims() {
 /** 提交声明类型变更 */
 async function onSubmit(values: Record<string, any>) {
   try {
-    modalApi.setState({ confirmLoading: true });
+    modalApi.setState({ submitting: true });
     const claimDto = modalApi.getData<IdentityClaimDto>();
     const api = claimDto.id
       ? updateApi({
@@ -109,7 +109,7 @@ async function onSubmit(values: Record<string, any>) {
     emits('change', values as IdentityClaimDto);
     modalApi.close();
   } finally {
-    modalApi.setState({ confirmLoading: false });
+    modalApi.setState({ submitting: false });
   }
 }
 </script>

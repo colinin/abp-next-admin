@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { NotificationGroupDefinitionDto } from '../../../types/groups';
 
@@ -34,7 +36,7 @@ defineOptions({
 const MenuItem = Menu.Item;
 const DefinitionIcon = createIconifyIcon('nimbus:notification');
 
-const permissionGroups = ref<NotificationGroupDefinitionDto[]>([]);
+const dataSource = ref<NotificationGroupDefinitionDto[]>([]);
 const pageState = reactive({
   current: 1,
   size: 10,
@@ -130,7 +132,7 @@ async function onGet(input?: Record<string, string>) {
     gridApi.setLoading(true);
     const { items } = await getListApi(input);
     pageState.total = items.length;
-    permissionGroups.value = items.map((item) => {
+    dataSource.value = items.map((item) => {
       const localizableString = deserialize(item.displayName);
       return {
         ...item,
@@ -150,7 +152,7 @@ async function onReset() {
 }
 
 function onPageChange() {
-  const items = permissionGroups.value.slice(
+  const items = dataSource.value.slice(
     (pageState.current - 1) * pageState.size,
     pageState.current * pageState.size,
   );
@@ -180,7 +182,7 @@ function onDelete(row: NotificationGroupDefinitionDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       onGet();
     },
     title: $t('AbpUi.AreYouSure'),

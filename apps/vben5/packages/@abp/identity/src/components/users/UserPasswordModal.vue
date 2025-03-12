@@ -70,10 +70,10 @@ const [Modal, modalApi] = useVbenModal({
   },
   onConfirm: async () => {
     try {
-      modalApi.setState({ confirmLoading: true });
+      modalApi.setState({ submitting: true });
       await formApi.validateAndSubmitForm();
     } finally {
-      modalApi.setState({ confirmLoading: false });
+      modalApi.setState({ submitting: false });
     }
   },
   onOpenChange(isOpen) {

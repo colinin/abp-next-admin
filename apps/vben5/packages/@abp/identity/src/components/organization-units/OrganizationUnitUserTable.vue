@@ -135,8 +135,7 @@ const onShowMember = () => {
 
 const onCreateMember = (users: IdentityUserDto[]) => {
   userModalApi.setState({
-    closable: false,
-    confirmLoading: true,
+    submitting: true,
   });
   addMembers(props.selectedKey!, {
     userIds: users.map((item) => item.id),
@@ -147,8 +146,7 @@ const onCreateMember = (users: IdentityUserDto[]) => {
     })
     .finally(() => {
       userModalApi.setState({
-        closable: true,
-        confirmLoading: false,
+        submitting: false,
       });
     });
 };

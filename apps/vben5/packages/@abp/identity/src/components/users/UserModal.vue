@@ -79,7 +79,7 @@ const [Modal, modalApi] = useVbenModal({
     const api = formModel.value.id
       ? updateApi(formModel.value.id, toValue(formModel))
       : createApi(toValue(formModel));
-    modalApi.setState({ confirmLoading: true });
+    modalApi.setState({ submitting: true });
     api
       .then((res) => {
         message.success($t('AbpUi.SavedSuccessfully'));
@@ -87,7 +87,7 @@ const [Modal, modalApi] = useVbenModal({
         modalApi.close();
       })
       .finally(() => {
-        modalApi.setState({ confirmLoading: false });
+        modalApi.setState({ submitting: false });
       });
   },
   onOpenChange: async (isOpen: boolean) => {
@@ -291,8 +291,8 @@ async function onLoadOuChildren(node: EventDataNode) {
             }"
             :render="(item) => item.title"
             :titles="[
-              $t('AbpIdentityServer.Assigned'),
-              $t('AbpIdentityServer.Available'),
+              $t('AbpOpenIddict.Assigned'),
+              $t('AbpOpenIddict.Available'),
             ]"
             class="tree-transfer"
           />

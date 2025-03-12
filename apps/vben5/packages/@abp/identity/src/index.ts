@@ -1,4 +1,4 @@
 export * from './api';
 export * from './components';
-export * from './constants';
+export { UserLookupPermissions } from './constants/permissions';
 export * from './types';

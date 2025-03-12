@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { PermissionDefinitionDto } from '../../../types/definitions';
 import type { PermissionGroupDefinitionDto } from '../../../types/groups';
@@ -259,7 +261,7 @@ function onDelete(row: PermissionDefinitionDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       onGet();
     },
     title: $t('AbpUi.AreYouSure'),

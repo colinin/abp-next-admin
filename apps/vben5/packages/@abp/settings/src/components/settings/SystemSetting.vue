@@ -10,13 +10,7 @@ import { isEmail, useAbpStore } from '@abp/core';
 import { FeatureModal } from '@abp/features';
 import { Button, Form, InputSearch, message, Modal } from 'ant-design-vue';
 
-import {
-  getGlobalSettingsApi,
-  getTenantSettingsApi,
-  sendTestEmailApi,
-  setGlobalSettingsApi,
-  setTenantSettingsApi,
-} from '../../api/settings';
+import { useSettingsApi } from '../../api/useSettingsApi';
 import SettingForm from './SettingForm.vue';
 
 defineOptions({
@@ -26,6 +20,13 @@ defineOptions({
 const FormItem = Form.Item;
 
 const abpStore = useAbpStore();
+const {
+  getGlobalSettingsApi,
+  getTenantSettingsApi,
+  sendTestEmailApi,
+  setGlobalSettingsApi,
+  setTenantSettingsApi,
+} = useSettingsApi();
 const [HostFeatureModal, featureModalApi] = useVbenModal({
   connectedComponent: FeatureModal,
 });

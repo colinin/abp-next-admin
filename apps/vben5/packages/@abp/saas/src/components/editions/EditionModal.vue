@@ -3,10 +3,9 @@ import type { EditionDto } from '../../types';
 
 import { ref } from 'vue';
 
-import { useVbenModal } from '@vben/common-ui';
+import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useVbenForm } from '@abp/ui';
 import { message } from 'ant-design-vue';
 
 import { useEditionsApi } from '../../api';

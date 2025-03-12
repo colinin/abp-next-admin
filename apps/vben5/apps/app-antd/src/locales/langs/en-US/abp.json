@@ -45,6 +45,12 @@
       "myNotifilers": "My Notifilers",
       "groups": "Groups",
       "definitions": "Definitions"
+    },
+    "localization": {
+      "title": "Localization",
+      "resources": "Resources",
+      "languages": "Languages",
+      "texts": "Texts"
     }
   },
   "openiddict": {

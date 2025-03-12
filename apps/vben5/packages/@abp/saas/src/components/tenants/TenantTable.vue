@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { TenantDto } from '../../types/tenants';
 
@@ -161,7 +163,7 @@ const onDelete = (row: TenantDto) => {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       query();
     },
     title: $t('AbpUi.AreYouSure'),

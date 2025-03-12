@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { SortOrder } from '@abp/core';
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { AuditLogDto } from '../../types/audit-logs';
 
@@ -273,7 +275,7 @@ async function onDelete(row: AuditLogDto) {
     content: $t('AbpUi.ItemWillBeDeletedMessage'),
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
@@ -289,7 +291,7 @@ function onBulkDelete() {
         ids: toValue(selectedKeys),
       });
       selectedKeys.value = [];
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
