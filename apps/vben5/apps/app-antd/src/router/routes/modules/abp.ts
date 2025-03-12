@@ -203,6 +203,15 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                   import('#/views/localization/languages/index.vue'),
               },
+              {
+                meta: {
+                  title: $t('abp.manage.localization.texts'),
+                  icon: 'mi:text',
+                },
+                name: 'LocalizationTexts',
+                path: '/manage/localization/texts',
+                component: () => import('#/views/localization/texts/index.vue'),
+              },
             ],
           },
           {

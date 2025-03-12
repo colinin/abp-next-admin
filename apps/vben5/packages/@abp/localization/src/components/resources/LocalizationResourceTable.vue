@@ -8,11 +8,7 @@ import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  useAbpStore,
-  useLocalization,
-  useLocalizationSerializer,
-} from '@abp/core';
+import { useAbpStore } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -29,7 +25,7 @@ defineOptions({
   name: 'LocalizationResourceTable',
 });
 
-const permissionGroups = ref<ResourceDto[]>([]);
+const dataSource = ref<ResourceDto[]>([]);
 const pageState = reactive({
   current: 1,
   size: 10,
@@ -37,8 +33,6 @@ const pageState = reactive({
 });
 
 const abpStore = useAbpStore();
-const { Lr } = useLocalization();
-const { deserialize } = useLocalizationSerializer();
 const { deleteApi, getListApi } = useResourcesApi();
 const { getLocalizationApi } = useLocalizationsApi();
 
@@ -121,13 +115,7 @@ async function onGet(input?: Record<string, string>) {
     gridApi.setLoading(true);
     const { items } = await getListApi(input);
     pageState.total = items.length;
-    permissionGroups.value = items.map((item) => {
-      const localizableString = deserialize(item.displayName);
-      return {
-        ...item,
-        displayName: Lr(localizableString.resourceName, localizableString.name),
-      };
-    });
+    dataSource.value = items;
     onPageChange();
   } finally {
     gridApi.setLoading(false);
@@ -141,7 +129,7 @@ async function onReset() {
 }
 
 function onPageChange() {
-  const items = permissionGroups.value.slice(
+  const items = dataSource.value.slice(
     (pageState.current - 1) * pageState.size,
     pageState.current * pageState.size,
   );
@@ -179,7 +167,8 @@ function onDelete(row: ResourceDto) {
 }
 
 async function onChange() {
-  gridApi.query();
+  const input = await gridApi.formApi.getValues();
+  onGet(input);
   // 资源变化刷新本地多语言缓存
   const cultureName = abpStore.localization!.currentCulture.cultureName;
   const localization = await getLocalizationApi({
