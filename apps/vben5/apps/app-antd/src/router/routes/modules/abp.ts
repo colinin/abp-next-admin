@@ -193,6 +193,16 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                   import('#/views/localization/resources/index.vue'),
               },
+              {
+                meta: {
+                  title: $t('abp.manage.localization.languages'),
+                  icon: 'cil:language',
+                },
+                name: 'LocalizationLanguages',
+                path: '/manage/localization/languages',
+                component: () =>
+                  import('#/views/localization/languages/index.vue'),
+              },
             ],
           },
           {

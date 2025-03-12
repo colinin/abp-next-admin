@@ -48,7 +48,8 @@
     },
     "localization": {
       "title": "本地化管理",
-      "resources": "资源管理"
+      "resources": "资源管理",
+      "languages": "语言管理"
     }
   },
   "openiddict": {

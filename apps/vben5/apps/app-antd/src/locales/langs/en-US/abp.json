@@ -48,7 +48,8 @@
     },
     "localization": {
       "title": "Localization",
-      "resources": "Resources"
+      "resources": "Resources",
+      "languages": "Languages"
     }
   },
   "openiddict": {
