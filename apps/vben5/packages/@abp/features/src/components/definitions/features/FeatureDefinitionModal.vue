@@ -259,7 +259,10 @@ function onValueTypeNameChange(valueTypeName: string) {
       break;
     }
     default: {
-      formModel.value.defaultValue ??= undefined;
+      formModel.value.defaultValue = undefined;
+      if (isBoolean(formModel.value.defaultValue)) {
+        formModel.value.defaultValue = 'false';
+      }
       break;
     }
   }
