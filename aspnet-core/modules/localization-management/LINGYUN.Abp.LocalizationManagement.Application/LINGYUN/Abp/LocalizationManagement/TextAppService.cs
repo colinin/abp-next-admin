@@ -1,10 +1,13 @@
-﻿using LINGYUN.Abp.LocalizationManagement.Permissions;
+﻿using LINGYUN.Abp.LocalizationManagement.Features;
+using LINGYUN.Abp.LocalizationManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.LocalizationManagement;
 
 [Authorize(LocalizationManagementPermissions.Text.Default)]
+[RequiresPreviewFeatures(LocalizationManagementFeatures.Enable)]
 public class TextAppService : LocalizationAppServiceBase, ITextAppService
 {
     private readonly ITextRepository _textRepository;

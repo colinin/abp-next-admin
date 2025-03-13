@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using LINGYUN.Abp.LocalizationManagement.External;
+using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
@@ -9,8 +10,12 @@ namespace LINGYUN.Abp.LocalizationManagement;
 public class LocalizationTextCacheInvalidator : ILocalEventHandler<EntityChangedEventData<Text>>, ITransientDependency
 {
     private readonly IDistributedCache<LocalizationTextCacheItem> _localizationTextCache;
-    public LocalizationTextCacheInvalidator(IDistributedCache<LocalizationTextCacheItem> localizationTextCache)
+    private readonly IExternalLocalizationTextStoreCache _externalLocalizationTextStoreCache;
+    public LocalizationTextCacheInvalidator(
+        IDistributedCache<LocalizationTextCacheItem> localizationTextCache,
+        IExternalLocalizationTextStoreCache externalLocalizationTextStoreCache)
     {
+        _externalLocalizationTextStoreCache = externalLocalizationTextStoreCache;
         _localizationTextCache = localizationTextCache;
     }
 
@@ -21,5 +26,7 @@ public class LocalizationTextCacheInvalidator : ILocalEventHandler<EntityChanged
             eventData.Entity.CultureName);
 
         await _localizationTextCache.RemoveAsync(cacheKey);
+
+        await _externalLocalizationTextStoreCache.RemoveAsync(eventData.Entity.ResourceName, eventData.Entity.CultureName);
     }
 }

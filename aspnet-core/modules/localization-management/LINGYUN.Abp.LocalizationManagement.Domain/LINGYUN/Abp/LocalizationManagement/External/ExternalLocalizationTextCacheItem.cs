@@ -3,25 +3,22 @@ using System.Collections.Generic;
 using Volo.Abp.Caching;
 using Volo.Abp.MultiTenancy;
 
-namespace LINGYUN.Abp.LocalizationManagement;
+namespace LINGYUN.Abp.LocalizationManagement.External;
 
 [Serializable]
 [IgnoreMultiTenancy]
-[CacheName("AbpLocalizationTexts")]
-public class LocalizationTextCacheItem
+[CacheName("AbpExternalLocalizationTexts")]
+public class ExternalLocalizationTextCacheItem
 {
     private const string CacheKeyFormat = "r:{0},c:{1}";
-    public string ResourceName { get; set; }
-    public string CultureName { get; set; }
+
     public Dictionary<string, string> Texts { get; set; }
-    public LocalizationTextCacheItem()
+    public ExternalLocalizationTextCacheItem()
     {
         Texts = new Dictionary<string, string>();
     }
-    public LocalizationTextCacheItem(string resourceName, string cultureName, Dictionary<string, string> texts)
+    public ExternalLocalizationTextCacheItem(Dictionary<string, string> texts)
     {
-        ResourceName = resourceName;
-        CultureName = cultureName;
         Texts = texts;
     }
 
