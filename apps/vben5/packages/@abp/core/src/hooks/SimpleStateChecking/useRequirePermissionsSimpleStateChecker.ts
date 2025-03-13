@@ -37,7 +37,7 @@ export interface RequirePermissionsStateChecker<
 export class RequirePermissionsSimpleStateChecker<
     TState extends IHasSimpleStateCheckers<TState>,
   >
-  implements RequirePermissionsStateChecker<TState>, ISimpleStateChecker<TState>
+  implements ISimpleStateChecker<TState>, RequirePermissionsStateChecker<TState>
 {
   _permissionChecker: IPermissionChecker;
   model: RequirePermissionsSimpleBatchStateCheckerModel<TState>;
