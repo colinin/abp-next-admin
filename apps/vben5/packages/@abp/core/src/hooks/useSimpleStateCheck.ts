@@ -11,8 +11,10 @@ import { useRequireFeaturesSimpleStateChecker } from './SimpleStateChecking/useR
 import { useRequireGlobalFeaturesSimpleStateChecker } from './SimpleStateChecking/useRequireGlobalFeaturesSimpleStateChecker';
 import { useRequirePermissionsSimpleStateChecker } from './SimpleStateChecking/useRequirePermissionsSimpleStateChecker';
 
-class SimpleStateCheckerSerializer implements ISimpleStateCheckerSerializer {
-  deserialize<TState extends IHasSimpleStateCheckers<TState>>(
+export function useSimpleStateCheck<
+  TState extends IHasSimpleStateCheckers<TState>,
+>(): ISimpleStateCheckerSerializer {
+  function deserialize<TState extends IHasSimpleStateCheckers<TState>>(
     jsonObject: any,
     state: TState,
   ): ISimpleStateChecker<TState> | undefined {
@@ -72,7 +74,7 @@ class SimpleStateCheckerSerializer implements ISimpleStateCheckerSerializer {
     }
   }
 
-  deserializeArray<TState extends IHasSimpleStateCheckers<TState>>(
+  function deserializeArray<TState extends IHasSimpleStateCheckers<TState>>(
     value: string,
     state: TState,
   ): ISimpleStateChecker<TState>[] {
@@ -82,22 +84,22 @@ class SimpleStateCheckerSerializer implements ISimpleStateCheckerSerializer {
     if (Array.isArray(jsonObject)) {
       if (jsonObject.length === 0) return [];
       return jsonObject
-        .map((json) => this.deserialize(json, state))
+        .map((json) => deserialize(json, state))
         .filter((checker) => !isNullOrUnDef(checker))
         .map((checker) => checker);
     }
-    const stateChecker = this.deserialize(jsonObject, state);
+    const stateChecker = deserialize(jsonObject, state);
     if (!stateChecker) return [];
     return [stateChecker];
   }
 
-  serialize<TState extends IHasSimpleStateCheckers<TState>>(
+  function serialize<TState extends IHasSimpleStateCheckers<TState>>(
     checker: ISimpleStateChecker<TState>,
   ): string | undefined {
     return checker.serialize();
   }
 
-  serializeArray<TState extends IHasSimpleStateCheckers<TState>>(
+  function serializeArray<TState extends IHasSimpleStateCheckers<TState>>(
     stateCheckers: ISimpleStateChecker<TState>[],
   ): string | undefined {
     if (stateCheckers.length === 0) return undefined;
@@ -124,10 +126,11 @@ class SimpleStateCheckerSerializer implements ISimpleStateCheckerSerializer {
       ? `[${serializedCheckers}]`
       : undefined;
   }
-}
 
-export function useSimpleStateCheck<
-  TState extends IHasSimpleStateCheckers<TState>,
->(): ISimpleStateCheckerSerializer {
-  return new SimpleStateCheckerSerializer();
+  return {
+    deserialize,
+    deserializeArray,
+    serialize,
+    serializeArray,
+  };
 }

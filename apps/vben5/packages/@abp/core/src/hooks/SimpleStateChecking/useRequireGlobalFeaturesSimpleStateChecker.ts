@@ -8,7 +8,7 @@ import type {
 import { useGlobalFeatures } from '../useGlobalFeatures';
 
 export interface RequireGlobalFeaturesStateChecker {
-  featureNames: string[];
+  globalFeatureNames: string[];
   name: string;
   requiresAll: boolean;
 }
@@ -16,24 +16,24 @@ export interface RequireGlobalFeaturesStateChecker {
 export class RequireGlobalFeaturesSimpleStateChecker<
     TState extends IHasSimpleStateCheckers<TState>,
   >
-  implements RequireGlobalFeaturesStateChecker, ISimpleStateChecker<TState>
+  implements ISimpleStateChecker<TState>, RequireGlobalFeaturesStateChecker
 {
   _globalFeatureChecker: IGlobalFeatureChecker;
-  featureNames: string[];
+  globalFeatureNames: string[];
   name: string = 'G';
   requiresAll: boolean;
   constructor(
     globalFeatureChecker: IGlobalFeatureChecker,
-    featureNames: string[],
+    globalFeatureNames: string[],
     requiresAll: boolean = false,
   ) {
     this._globalFeatureChecker = globalFeatureChecker;
-    this.featureNames = featureNames;
+    this.globalFeatureNames = globalFeatureNames;
     this.requiresAll = requiresAll;
   }
   isEnabled(_context: SimpleStateCheckerContext<TState>): boolean {
     return this._globalFeatureChecker.isEnabled(
-      this.featureNames,
+      this.globalFeatureNames,
       this.requiresAll,
     );
   }
@@ -41,7 +41,7 @@ export class RequireGlobalFeaturesSimpleStateChecker<
   serialize(): string {
     return JSON.stringify({
       A: this.requiresAll,
-      N: this.featureNames,
+      N: this.globalFeatureNames,
       T: this.name,
     });
   }
@@ -50,13 +50,13 @@ export class RequireGlobalFeaturesSimpleStateChecker<
 export function useRequireGlobalFeaturesSimpleStateChecker<
   TState extends IHasSimpleStateCheckers<TState>,
 >(
-  featureNames: string[],
+  globalFeatureNames: string[],
   requiresAll: boolean = false,
 ): ISimpleStateChecker<TState> {
   const globalFeatureChecker = useGlobalFeatures();
   return new RequireGlobalFeaturesSimpleStateChecker(
     globalFeatureChecker,
-    featureNames,
+    globalFeatureNames,
     requiresAll,
   );
 }
