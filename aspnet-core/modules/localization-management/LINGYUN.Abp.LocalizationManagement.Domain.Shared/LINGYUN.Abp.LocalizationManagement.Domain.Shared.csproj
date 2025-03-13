@@ -24,6 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Features" />
 		<PackageReference Include="Volo.Abp.Validation" />
 		<PackageReference Include="Volo.Abp.Localization" />
 	</ItemGroup>
