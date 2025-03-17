@@ -17,7 +17,7 @@ public interface IWeChatWorkTokenProvider
     /// <param name="agentId">应用标识</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<WeChatWorkToken> GetTokenAsync(string agentId, CancellationToken cancellationToken = default);
+    Task<WeChatWorkToken> GetTokenAsync(CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取应用Token
     /// </summary>
@@ -26,7 +26,8 @@ public interface IWeChatWorkTokenProvider
     /// </remarks>
     /// <param name="corpId">企业标识</param>
     /// <param name="agentId">应用标识</param>
+    /// <param name="secret">应用密钥</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<WeChatWorkToken> GetTokenAsync(string corpId, string agentId, CancellationToken cancellationToken = default);
+    Task<WeChatWorkToken> GetTokenAsync(string corpId, string agentId, string secret, CancellationToken cancellationToken = default);
 }

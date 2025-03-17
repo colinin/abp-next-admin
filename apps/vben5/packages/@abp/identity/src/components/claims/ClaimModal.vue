@@ -5,7 +5,7 @@ import type { ClaimEditModalProps } from './types';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getAssignableClaimsApi } from '../../api/claim-types';
+import { useClaimTypesApi } from '../../api/useClaimTypesApi';
 
 defineOptions({
   name: 'ClaimModal',
@@ -15,7 +15,7 @@ const { createApi, updateApi } = defineProps<ClaimEditModalProps>();
 const emits = defineEmits<{
   (event: 'change', data: IdentityClaimDto): void;
 }>();
-
+const { cancel, getAssignableClaimsApi } = useClaimTypesApi();
 const [Form, formApi] = useVbenForm({
   commonConfig: {
     // 所有表单项
@@ -43,6 +43,9 @@ const [Form, formApi] = useVbenForm({
 const [Modal, modalApi] = useVbenModal({
   draggable: true,
   fullscreenButton: false,
+  onClosed() {
+    cancel('Claim modal has closed!');
+  },
   async onConfirm() {
     await formApi.validateAndSubmitForm();
   },
@@ -90,7 +93,7 @@ async function initAssignableClaims() {
 /** 提交声明类型变更 */
 async function onSubmit(values: Record<string, any>) {
   try {
-    modalApi.setState({ confirmLoading: true });
+    modalApi.setState({ submitting: true });
     const claimDto = modalApi.getData<IdentityClaimDto>();
     const api = claimDto.id
       ? updateApi({
@@ -106,7 +109,7 @@ async function onSubmit(values: Record<string, any>) {
     emits('change', values as IdentityClaimDto);
     modalApi.close();
   } finally {
-    modalApi.setState({ confirmLoading: false });
+    modalApi.setState({ submitting: false });
   }
 }
 </script>

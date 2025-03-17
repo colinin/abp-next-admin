@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "LINGYUN.Abp.Gdpr.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:64471;http://localhost:64472"
+    }
+  }
+}

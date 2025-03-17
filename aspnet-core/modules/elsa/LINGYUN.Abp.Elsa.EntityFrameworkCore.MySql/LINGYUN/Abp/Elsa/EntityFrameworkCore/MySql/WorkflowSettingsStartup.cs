@@ -13,6 +13,7 @@ public class WorkflowSettingsStartup : WorkflowSettingsStartupBase
         options.UseMySql(
             connectionString,
             ServerVersion.AutoDetect(connectionString),
-            x => x.MigrationsHistoryTable("__EFMigrationsHistory_WorkflowSettings"));
+            mysql => mysql.MigrationsHistoryTable("__EFMigrationsHistory_WorkflowSettings")
+                .TranslateParameterizedCollectionsToConstants());
     }
 }

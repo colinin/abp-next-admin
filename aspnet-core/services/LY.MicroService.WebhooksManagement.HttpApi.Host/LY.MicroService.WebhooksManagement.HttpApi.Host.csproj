@@ -3,7 +3,7 @@
 	<Import Project="..\..\..\common.secrets.props" />
 	
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<RootNamespace>LY.MicroService.WebhooksManagement</RootNamespace>
 	</PropertyGroup>
 
@@ -38,7 +38,6 @@
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.DistributedLocking" />
 		<PackageReference Include="Volo.Abp.Swashbuckle" />
-		<PackageReference Include="Volo.Abp.MailKit" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
 		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
@@ -66,6 +65,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\migrations\LY.MicroService.WebhooksManagement.EntityFrameworkCore\LY.MicroService.WebhooksManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Sms.Platform\LINGYUN.Abp.Sms.Platform.csproj" />
 		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.EventBus\LINGYUN.Abp.Webhooks.EventBus.csproj" />
 		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.Identity\LINGYUN.Abp.Webhooks.Identity.csproj" />
 		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks.Saas\LINGYUN.Abp.Webhooks.Saas.csproj" />

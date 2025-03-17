@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LINGYUN.Abp.Notifications.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -14,15 +15,31 @@ public class NotificationAppService : AbpNotificationsApplicationServiceBase, IN
     protected ITemplateContentProvider TemplateContentProvider { get; }
     protected INotificationSender NotificationSender { get; }
     protected INotificationDefinitionManager NotificationDefinitionManager { get; }
+    protected INotificationPublishProviderManager NotificationPublishProviderManager { get; }
 
     public NotificationAppService(
         INotificationSender notificationSender,
         ITemplateContentProvider templateContentProvider,
-        INotificationDefinitionManager notificationDefinitionManager)
+        INotificationDefinitionManager notificationDefinitionManager,
+        INotificationPublishProviderManager notificationPublishProviderManager)
     {
         NotificationSender = notificationSender;
         TemplateContentProvider = templateContentProvider;
         NotificationDefinitionManager = notificationDefinitionManager;
+        NotificationPublishProviderManager = notificationPublishProviderManager;
+    }
+
+    public virtual Task<ListResultDto<NotificationProviderDto>> GetAssignableProvidersAsync()
+    {
+        var providers = NotificationPublishProviderManager
+            .Providers
+            .Select(x => new NotificationProviderDto
+            {
+                Name = x.Name
+            })
+            .ToList();
+
+        return Task.FromResult(new ListResultDto<NotificationProviderDto>(providers));
     }
 
     public async virtual Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync()
@@ -95,6 +112,7 @@ public class NotificationAppService : AbpNotificationsApplicationServiceBase, IN
         return new ListResultDto<NotificationTemplateDto>(templates);
     }
 
+    [Authorize(NotificationsPermissions.Notification.Send)]
     public async virtual Task SendAsync(NotificationSendDto input)
     {
         var notificationData = new NotificationData();

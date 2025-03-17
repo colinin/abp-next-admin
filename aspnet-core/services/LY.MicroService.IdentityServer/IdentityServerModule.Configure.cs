@@ -1,7 +1,9 @@
 ﻿using DotNetCore.CAP;
-using LINGYUN.Abp.Identity.Session;
+using LINGYUN.Abp.Account.Web;
+using LINGYUN.Abp.Account.Web.IdentityServer;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LY.MicroService.IdentityServer.Authentication;
@@ -38,7 +40,6 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.IdentityServer;
@@ -47,6 +48,7 @@ using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -149,14 +151,6 @@ public partial class IdentityServerModule
         services.AddHealthChecks();
     }
 
-    private void ConfigureDbContext()
-    {
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
-        });
-    }
-
     private void ConfigureDataSeeder()
     {
         Configure<CustomIdentityResourceDataSeederOptions>(options =>
@@ -170,6 +164,14 @@ public partial class IdentityServerModule
         Configure<FeatureManagementOptions>(options =>
         {
             options.IsDynamicFeatureStoreEnabled = true;
+        });
+    }
+
+    private void ConfigureSettingManagement()
+    {
+        Configure<SettingManagementOptions>(options =>
+        {
+            options.IsDynamicSettingStoreEnabled = true;
         });
     }
 
@@ -280,12 +282,21 @@ public partial class IdentityServerModule
             options.IsRemoteRefreshEnabled = false;
         });
     }
-    private void ConfigureVirtualFileSystem()
+    private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<IdentityServerModule>("LY.MicroService.IdentityServer");
         });
+
+        if (hostingEnvironment.IsDevelopment())
+        {
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebModule>(hostingEnvironment.ContentRootPath);
+                options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebIdentityServerModule>(hostingEnvironment.ContentRootPath);
+            });
+        }
     }
 
     private void ConfigureMvcUiTheme()
@@ -311,8 +322,6 @@ public partial class IdentityServerModule
             options.Resources
                 .Get<AccountResource>()
                 .AddVirtualJson("/Localization/Resources");
-
-            options.UsePersistence<AccountResource>();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -325,6 +334,11 @@ public partial class IdentityServerModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
     private void ConfigureAuditing(IConfiguration configuration)

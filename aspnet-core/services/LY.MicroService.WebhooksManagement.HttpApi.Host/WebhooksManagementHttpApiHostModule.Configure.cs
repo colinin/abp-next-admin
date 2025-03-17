@@ -3,12 +3,12 @@ using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Webhooks;
 using LINGYUN.Abp.Webhooks.BackgroundJobs;
 using LINGYUN.Abp.WebhooksManagement;
-using LINGYUN.Abp.WebhooksManagement.Localization;
 using LINGYUN.Abp.Wrapper;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -35,7 +35,6 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Client;
@@ -130,20 +129,6 @@ public partial class WebhooksManagementHttpApiHostModule
                     });
                 };
             }
-        });
-    }
-
-    private void ConfigureDbContext()
-    {
-        // 配置Ef
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
-            //options.Configure(cfg =>
-            //{
-            //    cfg.UseMySQL();
-            //    cfg.DbContextOptions.EnableSensitiveDataLogging();
-            //});
         });
     }
 
@@ -445,8 +430,6 @@ public partial class WebhooksManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-
-            options.UsePersistence<WebhooksManagementResource>();
         });
 
 
@@ -460,6 +443,11 @@ public partial class WebhooksManagementHttpApiHostModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
 

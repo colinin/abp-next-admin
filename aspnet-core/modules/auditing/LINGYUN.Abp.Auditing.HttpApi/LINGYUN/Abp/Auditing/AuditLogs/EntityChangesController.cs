@@ -13,7 +13,7 @@ namespace LINGYUN.Abp.Auditing.AuditLogs;
 [RemoteService(Name = AuditingRemoteServiceConsts.RemoteServiceName)]
 [Area("auditing")]
 [ControllerName("entity-changes")]
-[Route("api/auditing/entity-changes")]
+[Route($"api/{AuditingRemoteServiceConsts.ModuleName}/entity-changes")]
 [Authorize(AuditingPermissionNames.AuditLog.Default)]
 public class EntityChangesController : AbpControllerBase, IEntityChangesAppService
 {

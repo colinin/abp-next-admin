@@ -59,4 +59,10 @@ public class AuditLogAppService : AuditingApplicationServiceBase, IAuditLogAppSe
     {
         await AuditLogManager.DeleteAsync(id);
     }
+
+    [Authorize(AuditingPermissionNames.AuditLog.Delete)]
+    public async virtual Task DeleteManyAsync(AuditLogDeleteManyInput input)
+    {
+        await AuditLogManager.DeleteManyAsync(input.Ids);
+    }
 }

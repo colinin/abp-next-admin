@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Portal;
@@ -8,22 +9,24 @@ using LINGYUN.Abp.OpenIddict.WeChat;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.WeChat.Work;
-using LY.MicroService.AuthServer.Authentication;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
+using OpenIddict.Validation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -39,7 +42,6 @@ using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Json;
@@ -48,6 +50,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
@@ -212,14 +215,6 @@ public partial class AuthServerModule
         services.AddHealthChecks();
     }
 
-    private void ConfigureDbContext()
-    {
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
-        });
-    }
-
     private void ConfigureDataSeeder()
     {
 
@@ -230,6 +225,14 @@ public partial class AuthServerModule
         Configure<FeatureManagementOptions>(options =>
         {
             options.IsDynamicFeatureStoreEnabled = true;
+        });
+    }
+
+    private void ConfigureSettingManagement()
+    {
+        Configure<SettingManagementOptions>(options =>
+        {
+            options.IsDynamicSettingStoreEnabled = true;
         });
     }
 
@@ -366,8 +369,6 @@ public partial class AuthServerModule
             options.Resources
                 .Get<AccountResource>()
                 .AddVirtualJson("/Localization/Resources");
-
-            options.UsePersistence<AccountResource>();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -380,6 +381,11 @@ public partial class AuthServerModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
     private void ConfigureTiming(IConfiguration configuration)
@@ -422,6 +428,8 @@ public partial class AuthServerModule
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
     {
+        services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+
         services
             .AddAuthentication()
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
@@ -431,6 +439,10 @@ public partial class AuthServerModule
             .AddJwtBearer(options =>
             {
                 configuration.GetSection("AuthServer").Bind(options);
+            })
+            .AddWeChatWork(options =>
+            {
+                options.SignInScheme = IdentityConstants.ExternalScheme;
             });
 
         if (!isDevelopment)
@@ -442,8 +454,6 @@ public partial class AuthServerModule
                 .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
         }
         services.AddSameSiteCookiePolicy();
-        // 处理cookie中过时的ajax请求判断
-        services.Replace(ServiceDescriptor.Scoped<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>());
     }
     private void ConfigureMultiTenancy(IConfiguration configuration)
     {

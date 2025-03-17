@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { SortOrder } from '@abp/core';
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { AuditLogDto } from '../../types/audit-logs';
 
-import { defineAsyncComponent, h, nextTick } from 'vue';
+import { defineAsyncComponent, h, ref, toValue } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -12,9 +14,9 @@ import { $t } from '@vben/locales';
 import { formatToDateTime } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Button, Popconfirm, Tag } from 'ant-design-vue';
+import { Button, message, Modal, Tag } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/audit-logs';
+import { useAuditLogsApi } from '../../api/useAuditLogsApi';
 import { AuditLogPermissions } from '../../constants/permissions';
 import { useAuditlogs } from '../../hooks/useAuditlogs';
 import { httpMethodOptions, httpStatusCodeOptions } from './mapping';
@@ -22,7 +24,9 @@ import { httpMethodOptions, httpStatusCodeOptions } from './mapping';
 defineOptions({
   name: 'AuditLogTable',
 });
+const { deleteApi, deleteManyApi, getPagedListApi } = useAuditLogsApi();
 
+const selectedKeys = ref<string[]>([]);
 const formOptions: VbenFormProps = {
   // 默认展开
   collapsed: true,
@@ -122,6 +126,10 @@ const formOptions: VbenFormProps = {
 const gridOptions: VxeGridProps<AuditLogDto> = {
   columns: [
     {
+      align: 'center',
+      type: 'checkbox',
+    },
+    {
       align: 'left',
       field: 'url',
       slots: { default: 'url' },
@@ -163,6 +171,7 @@ const gridOptions: VxeGridProps<AuditLogDto> = {
     {
       align: 'left',
       field: 'clientIpAddress',
+      slots: { default: 'clientIpAddress' },
       sortable: true,
       title: $t('AbpAuditLogging.ClientIpAddress'),
       width: 150,
@@ -233,13 +242,21 @@ const gridOptions: VxeGridProps<AuditLogDto> = {
 };
 
 const gridEvents: VxeGridListeners<AuditLogDto> = {
+  checkboxAll: (params) => {
+    selectedKeys.value = params.records.map((x) => x.id);
+  },
+  checkboxChange: (params) => {
+    selectedKeys.value = params.records.map((x) => x.id);
+  },
   sortChange: onSort,
 };
-const [Grid, { formApi, query }] = useVbenVxeGrid({
+
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
   gridOptions,
 });
+
 const { getHttpMethodColor, getHttpStatusCodeColor } = useAuditlogs();
 const [AuditLogDrawer, logDrawerApi] = useVbenDrawer({
   connectedComponent: defineAsyncComponent(
@@ -253,34 +270,77 @@ function onUpdate(row: AuditLogDto) {
 }
 
 async function onDelete(row: AuditLogDto) {
-  await deleteApi(row.id).then(() => query());
+  Modal.confirm({
+    centered: true,
+    content: $t('AbpUi.ItemWillBeDeletedMessage'),
+    onOk: async () => {
+      await deleteApi(row.id);
+      message.success($t('AbpUi.DeletedSuccessfully'));
+      gridApi.query();
+    },
+    title: $t('AbpUi.AreYouSure'),
+  });
+}
+
+function onBulkDelete() {
+  Modal.confirm({
+    centered: true,
+    content: $t('component.table.selectedItemWellBeDeleted'),
+    onOk: async () => {
+      await deleteManyApi({
+        ids: toValue(selectedKeys),
+      });
+      selectedKeys.value = [];
+      message.success($t('AbpUi.DeletedSuccessfully'));
+      gridApi.query();
+    },
+    title: $t('AbpUi.AreYouSure'),
+  });
 }
 
 function onSort(params: { field: string; order: SortOrder }) {
   const sorting = params.order ? `${params.field} ${params.order}` : undefined;
-  query({ sorting });
+  gridApi.query({ sorting });
 }
 
 function onFilter(field: string, value: any) {
-  nextTick(() => {
-    formApi.setFieldValue(field, value);
-    formApi.validateAndSubmitForm();
-  });
+  gridApi.formApi.setFieldValue(field, value);
+  gridApi.formApi.validateAndSubmitForm();
 }
 </script>
 
 <template>
   <Grid :table-title="$t('AbpAuditLogging.AuditLog')">
+    <template #toolbar-tools>
+      <Button
+        v-if="selectedKeys.length > 0"
+        :icon="h(DeleteOutlined)"
+        danger
+        ghost
+        type="primary"
+        v-access:code="[AuditLogPermissions.Delete]"
+        @click="onBulkDelete"
+      >
+        {{ $t('AbpUi.Delete') }}
+      </Button>
+    </template>
+    <template #clientIpAddress="{ row }">
+      <Tag v-if="row.extraProperties?.Location" color="blue">
+        {{ row.extraProperties?.Location }}
+      </Tag>
+      <span>{{ row.clientIpAddress }}</span>
+    </template>
     <template #url="{ row }">
       <Tag
         :color="getHttpStatusCodeColor(row.httpStatusCode)"
+        class="cursor-pointer"
         @click="onFilter('httpStatusCode', row.httpStatusCode)"
       >
         {{ row.httpStatusCode }}
       </Tag>
       <Tag
         :color="getHttpMethodColor(row.httpMethod)"
-        style="margin-left: 5px"
+        class="ml-px cursor-pointer"
         @click="onFilter('httpMethod', row.httpMethod)"
       >
         {{ row.httpMethod }}
@@ -303,20 +363,16 @@ function onFilter(field: string, value: any) {
         >
           {{ $t('AbpAuditLogging.ShowLogDialog') }}
         </Button>
-        <Popconfirm
-          :title="$t('AbpUi.ItemWillBeDeletedMessage')"
-          @confirm="onDelete(row)"
+        <Button
+          :icon="h(DeleteOutlined)"
+          block
+          danger
+          type="link"
+          v-access:code="[AuditLogPermissions.Delete]"
+          @click="onDelete(row)"
         >
-          <Button
-            :icon="h(DeleteOutlined)"
-            block
-            danger
-            type="link"
-            v-access:code="[AuditLogPermissions.Delete]"
-          >
-            {{ $t('AbpUi.Delete') }}
-          </Button>
-        </Popconfirm>
+          {{ $t('AbpUi.Delete') }}
+        </Button>
       </div>
     </template>
   </Grid>

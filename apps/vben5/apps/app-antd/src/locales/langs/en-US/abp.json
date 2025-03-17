@@ -1,5 +1,18 @@
 {
   "title": "Abp Framework",
+  "oauth": {
+    "twoFactor": {
+      "title": "Two Factor",
+      "authenticator": "Authenticator",
+      "emailAddress": "Email Address",
+      "phoneNumber": "Phone Number",
+      "getCode": "Get Code",
+      "code": "Code"
+    },
+    "qrcodeLogin": {
+      "scaned": "Please confirm login on your phone."
+    }
+  },
   "manage": {
     "title": "Manage",
     "identity": {
@@ -9,7 +22,81 @@
       "claimTypes": "Claim Types",
       "securityLogs": "Security Logs",
       "organizationUnits": "Organization Units",
-      "auditLogs": "Audit Logs"
+      "auditLogs": "Audit Logs",
+      "sessions": "Sessions"
+    },
+    "permissions": {
+      "title": "Permissions",
+      "groups": "Groups",
+      "definitions": "Definitions"
+    },
+    "features": {
+      "title": "Features",
+      "groups": "Groups",
+      "definitions": "Definitions"
+    },
+    "settings": {
+      "title": "Settings",
+      "definitions": "Definitions",
+      "system": "System Settings"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "myNotifilers": "My Notifilers",
+      "groups": "Groups",
+      "definitions": "Definitions"
+    },
+    "localization": {
+      "title": "Localization",
+      "resources": "Resources",
+      "languages": "Languages",
+      "texts": "Texts"
     }
+  },
+  "openiddict": {
+    "title": "OpenIddict",
+    "applications": "Applications",
+    "authorizations": "Authorizations",
+    "scopes": "Scopes",
+    "tokens": "Tokens"
+  },
+  "account": {
+    "title": "Account",
+    "settings": {
+      "title": "My Settings",
+      "basic": {
+        "title": "Basic Settings"
+      },
+      "security": {
+        "title": "Security Settings",
+        "unSet": "Not Set",
+        "verified": "Verified",
+        "unVerified": "Not Verified",
+        "email": "Email",
+        "password": "Password",
+        "passwordDesc": "Reset My Password",
+        "phoneNumber": "PhoneNumber"
+      },
+      "bindSettings": "Bind Settings",
+      "noticeSettings": "Notice Settings",
+      "authenticatorSettings": "Authenticator Settings",
+      "changeAvatar": "Change Avatar",
+      "sessionSettings": "Session Settings",
+      "personalDataSettings": "Personal Data Settings"
+    },
+    "profile": "My Profile"
+  },
+  "platform": {
+    "title": "Platform",
+    "messages": {
+      "title": "Message Manage",
+      "email": "Email Messages",
+      "sms": "Sms Messages"
+    }
+  },
+  "saas": {
+    "title": "Saas",
+    "editions": "Editions",
+    "tenants": "Tenants"
   }
 }

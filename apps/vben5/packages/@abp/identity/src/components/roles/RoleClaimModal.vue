@@ -11,12 +11,7 @@ import { defineAsyncComponent } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  createClaimApi,
-  deleteClaimApi,
-  getClaimsApi,
-  updateClaimApi,
-} from '../../api/roles';
+import { useRolesApi } from '../../api/useRolesApi';
 import { IdentityRolePermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -27,13 +22,25 @@ const ClaimTable = defineAsyncComponent(
   () => import('../claims/ClaimTable.vue'),
 );
 
+const { cancel, createClaimApi, deleteClaimApi, getClaimsApi, updateClaimApi } =
+  useRolesApi();
 const [Modal, modalApi] = useVbenModal({
   draggable: true,
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
   },
-  onConfirm: async () => {},
+  onClosed() {
+    cancel('Role Claim modal has closed!');
+  },
+  onOpenChange(isOpen) {
+    let title = $t('AbpIdentity.ManageClaim');
+    if (isOpen) {
+      const { name } = modalApi.getData<IdentityRoleDto>();
+      title += ` - ${name}`;
+    }
+    modalApi.setState({ title });
+  },
   showCancelButton: false,
   showConfirmButton: false,
   title: $t('AbpIdentity.ManageClaim'),

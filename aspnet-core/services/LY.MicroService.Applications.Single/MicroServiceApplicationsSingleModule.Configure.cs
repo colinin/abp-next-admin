@@ -1,3 +1,7 @@
+using LINGYUN.Abp.Identity.QrCode;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
+using OpenIddict.Validation.AspNetCore;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -32,6 +36,30 @@ public partial class MicroServiceApplicationsSingleModule
         {
             IdentityModelEventSource.ShowPII = true;
         }
+    }
+
+    private void PreConfigureCAP(IConfiguration configuration)
+    {
+        PreConfigure<CapOptions>(options =>
+        {
+            options.UseDashboard();
+            if (!configuration.GetValue<bool>("CAP:IsEnabled"))
+            {
+                options
+                    .UseInMemoryStorage()
+                    .UseRedis(configuration["CAP:Redis:Configuration"]);
+                return;
+            }
+            options
+                .UseMySql(sqlOptions =>
+                {
+                    configuration.GetSection("CAP:MySql").Bind(sqlOptions);
+                })
+                .UseRabbitMQ(rabbitMQOptions =>
+                {
+                    configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
+                });
+        });
     }
 
     private void PreConfigureAuthServer(IConfiguration configuration)
@@ -71,38 +99,23 @@ public partial class MicroServiceApplicationsSingleModule
             {
                 var certificate = new X509Certificate2(cerPath, cerConfig["Password"]);
 
-                if (configuration.GetValue<bool>("AuthServer:UseOpenIddict"))
+                PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
                 {
-                    PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
-                    {
-                        //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-                        options.AddDevelopmentEncryptionAndSigningCertificate = false;
-                    });
+                    //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
+                    options.AddDevelopmentEncryptionAndSigningCertificate = false;
+                });
 
-                    PreConfigure<OpenIddictServerBuilder>(builder =>
-                    {
-                        builder.AddSigningCertificate(certificate);
-                        builder.AddEncryptionCertificate(certificate);
-
-                        builder.UseDataProtection();
-
-                        // 禁用https
-                        builder.UseAspNetCore()
-                            .DisableTransportSecurityRequirement();
-                    });
-                }
-                else
+                PreConfigure<OpenIddictServerBuilder>(builder =>
                 {
-                    PreConfigure<AbpIdentityServerBuilderOptions>(options =>
-                    {
-                        options.AddDeveloperSigningCredential = false;
-                    });
+                    builder.AddSigningCertificate(certificate);
+                    builder.AddEncryptionCertificate(certificate);
 
-                    PreConfigure<IIdentityServerBuilder>(builder =>
-                    {
-                        builder.AddSigningCredential(certificate);
-                    });
-                }
+                    builder.UseDataProtection();
+
+                    // 禁用https
+                    builder.UseAspNetCore()
+                        .DisableTransportSecurityRequirement();
+                });
             }
         }
         else
@@ -225,6 +238,17 @@ public partial class MicroServiceApplicationsSingleModule
             options.DisableTransportSecurityRequirement = true;
         });
 
+        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
+        {
+            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
+            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
+            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
+            options.PersistentSessionGrantTypes.Add(QrCodeLoginProviderConsts.GrantType);
+        });
+
         Configure<OpenIddictServerOptions>(options =>
         {
             var lifetime = configuration.GetSection("OpenIddict:Lifetime");
@@ -235,15 +259,6 @@ public partial class MicroServiceApplicationsSingleModule
             options.RefreshTokenLifetime = lifetime.GetValue("RefreshToken", options.RefreshTokenLifetime);
             options.RefreshTokenReuseLeeway = lifetime.GetValue("RefreshTokenReuseLeeway", options.RefreshTokenReuseLeeway);
             options.UserCodeLifetime = lifetime.GetValue("UserCode", options.UserCodeLifetime);
-        });
-        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
-        {
-            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
-            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
         });
     }
 
@@ -480,22 +495,11 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
-    private void ConfigureDbContext()
+    private void ConfigureDbContext(IConfiguration configuration)
     {
-        Configure<AbpDbContextOptions>(options =>
+        Configure<AbpDbConnectionOptions>(options =>
         {
-            // AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);//解决PostgreSql设置为utc时间后无法写入local时区的问题
-            // options.UseNpgsql();
-            
-            options.UseMySQL();
-        });
-    }
-
-    private void ConfigureDataSeeder()
-    {
-        Configure<CustomIdentityResourceDataSeederOptions>(options =>
-        {
-            options.Resources.Add(new CustomIdentityResources.AvatarUrl());
+            // 
         });
     }
 
@@ -644,6 +648,8 @@ public partial class MicroServiceApplicationsSingleModule
         Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.IsDynamicClaimsEnabled = true;
+
+            options.DynamicClaims.AddIfNotContains(AbpClaimTypes.Picture);
         });
         Configure<IdentitySessionCleanupOptions>(options =>
         {
@@ -691,10 +697,7 @@ public partial class MicroServiceApplicationsSingleModule
                 typeof(TencentCloudResource),
                 typeof(WeChatResource),
                 typeof(PlatformResource),
-                typeof(AbpOpenIddictResource),
-                typeof(AbpIdentityServerResource));
-
-            options.UseAllPersistence();
+                typeof(AbpOpenIddictResource));
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -708,6 +711,11 @@ public partial class MicroServiceApplicationsSingleModule
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
         });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
+        });
     }
 
     private void ConfigureWrapper()
@@ -717,6 +725,8 @@ public partial class MicroServiceApplicationsSingleModule
             options.IsEnabled = true;
             // options.IsWrapUnauthorizedEnabled = true;
             options.IgnoreNamespaces.Add("Elsa");
+            // 微信消息不能包装
+            options.IgnoreNamespaces.Add("LINGYUN.Abp.WeChat");
         });
     }
 
@@ -750,6 +760,29 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
+    private void ConfigureSingleModule(IServiceCollection services, bool isDevelopment)
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            // 允许第三方调用集成服务
+            options.ExposeIntegrationServices = true;
+        });
+
+        Configure<AbpIdentitySessionAspNetCoreOptions>(options =>
+        {
+            // abp 9.0版本可存储登录IP地域, 开启IP解析
+            options.IsParseIpLocation = true;
+        });
+
+        // 用于消息中心邮件集中发送
+        services.Replace<Volo.Abp.Emailing.IEmailSender, PlatformEmailSender>(ServiceLifetime.Transient);
+        services.AddKeyedTransient<Volo.Abp.Emailing.IEmailSender, MailKitSmtpEmailSender>("DefaultEmailSender");
+
+        // 用于消息中心短信集中发送
+        services.Replace<ISmsSender, PlatformSmsSender>(ServiceLifetime.Transient);
+        services.AddKeyedSingleton<ISmsSender, AliyunSmsSender>("DefaultSmsSender");
+    }
+
     private void ConfigureUrls(IConfiguration configuration)
     {
         Configure<AppUrlOptions>(options =>
@@ -773,26 +806,57 @@ public partial class MicroServiceApplicationsSingleModule
             options.AutoValidate = false;
         });
 
-        services.Replace<CookieAuthenticationHandler, AbpCookieAuthenticationHandler>(ServiceLifetime.Scoped);
+        services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 
         services.AddAuthentication()
-                .AddAbpJwtBearer(options =>
-                {
-                    configuration.GetSection("AuthServer").Bind(options);
+            .AddAbpJwtBearer(options =>
+            {
+                configuration.GetSection("AuthServer").Bind(options);
 
-                    options.Events ??= new JwtBearerEvents();
-                    options.Events.OnMessageReceived = context =>
+                options.Events ??= new JwtBearerEvents();
+                options.Events.OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+                    var path = context.HttpContext.Request.Path;
+                    if (!string.IsNullOrEmpty(accessToken) &&
+                        (path.StartsWithSegments("/api/files")))
                     {
-                        var accessToken = context.Request.Query["access_token"];
-                        var path = context.HttpContext.Request.Path;
-                        if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/api/files")))
-                        {
-                            context.Token = accessToken;
-                        }
-                        return Task.CompletedTask;
-                    };
-                });
+                        context.Token = accessToken;
+                    }
+                    return Task.CompletedTask;
+                };
+            })
+            .AddWeChatWork(options =>
+            {
+                options.SignInScheme = IdentityConstants.ExternalScheme;
+            });
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.Events.OnRedirectToLogin = (ctx) =>
+            {
+                if (ctx.Request.Path.Value.StartsWith("/api") ||
+                    ctx.Request.Path.Value.StartsWith("/connect"))
+                {
+                    ctx.Response.Clear();
+                    ctx.Response.StatusCode = 401;
+                    return Task.FromResult(0);
+                }
+
+                string authorization = ctx.Request.Headers.Authorization;
+                if (!authorization.IsNullOrWhiteSpace() &&
+                    authorization.StartsWith("Bearer ", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ctx.Response.Clear();
+                    ctx.Response.ContentType = "application/json";
+                    ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                }
+
+                ctx.Response.Redirect(ctx.RedirectUri);
+                return Task.CompletedTask;
+            };
+        });
 
         if (!isDevelopment)
         {
@@ -848,3 +912,4 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 }
+

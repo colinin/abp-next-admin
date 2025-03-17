@@ -71,7 +71,7 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
     }
 
     [Authorize(WebhooksManagementPermissions.WebhookGroupDefinition.Delete)]
-    public async virtual Task DeleteAysnc(string name)
+    public async virtual Task DeleteAsync(string name)
     {
         var webhookGroupDefinitionRecord = await _webhookGroupDefinitionRecordRepository.FindByNameAsync(name);
         if (webhookGroupDefinitionRecord != null)

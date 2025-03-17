@@ -53,11 +53,11 @@ public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBas
         }
         if (input.BeginCreationTime.HasValue)
         {
-            queryable = queryable.Where(x => x.CreationTime >= input.BeginCreationTime);
+            queryable = queryable.Where(x => x.CreationDate >= input.BeginCreationTime);
         }
         if (input.EndCreationTime.HasValue)
         {
-            queryable = queryable.Where(x => x.CreationTime <= input.EndCreationTime);
+            queryable = queryable.Where(x => x.CreationDate <= input.EndCreationTime);
         }
         if (!input.Status.IsNullOrWhiteSpace())
         {
@@ -83,7 +83,7 @@ public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBas
         var sorting = input.Sorting;
         if (sorting.IsNullOrWhiteSpace())
         {
-            sorting = $"{nameof(OpenIddictAuthorization.CreationTime)} DESC";
+            sorting = $"{nameof(OpenIddictAuthorization.CreationDate)} DESC";
         }
         queryable = queryable
             .OrderBy(sorting)

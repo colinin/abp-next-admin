@@ -2,7 +2,7 @@
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
-using LINGYUN.Abp.LocalizationManagement.Localization;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Wrapper;
@@ -30,7 +30,6 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Client;
@@ -95,15 +94,6 @@ public partial class LocalizationManagementHttpApiHostModule
                 configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
             })
             .UseDashboard();
-        });
-    }
-
-    private void ConfigureDbContext()
-    {
-        // 配置Ef
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.UseMySQL();
         });
     }
 
@@ -334,8 +324,6 @@ public partial class LocalizationManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-
-            options.UsePersistence<LocalizationManagementResource>();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -348,6 +336,11 @@ public partial class LocalizationManagementHttpApiHostModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
 

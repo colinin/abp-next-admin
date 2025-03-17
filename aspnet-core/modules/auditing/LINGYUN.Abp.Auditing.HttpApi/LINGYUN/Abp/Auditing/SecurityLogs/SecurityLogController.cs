@@ -13,7 +13,7 @@ namespace LINGYUN.Abp.Auditing.SecurityLogs;
 [RemoteService(Name = AuditingRemoteServiceConsts.RemoteServiceName)]
 [Area("auditing")]
 [ControllerName("security-log")]
-[Route("api/auditing/security-log")]
+[Route($"api/{AuditingRemoteServiceConsts.ModuleName}/security-log")]
 [Authorize(AuditingPermissionNames.SecurityLog.Default)]
 public class SecurityLogController : AbpControllerBase, ISecurityLogAppService
 {
@@ -30,6 +30,14 @@ public class SecurityLogController : AbpControllerBase, ISecurityLogAppService
     public async virtual Task DeleteAsync(Guid id)
     {
         await SecurityLogAppService.DeleteAsync(id);
+    }
+
+    [HttpDelete]
+    [Route("bulk")]
+    [Authorize(AuditingPermissionNames.SecurityLog.Delete)]
+    public async virtual Task DeleteManyAsync([FromBody] SecurityLogDeleteManyInput input)
+    {
+        await SecurityLogAppService.DeleteManyAsync(input);
     }
 
     [HttpGet]

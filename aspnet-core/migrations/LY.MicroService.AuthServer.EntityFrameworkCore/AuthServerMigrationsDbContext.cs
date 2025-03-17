@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -21,5 +22,7 @@ public class AuthServerMigrationsDbContext : AbpDbContext<AuthServerMigrationsDb
 
         modelBuilder.ConfigureIdentity();
         modelBuilder.ConfigureOpenIddict();
+
+        modelBuilder.ConfigureGdpr();
     }
 }

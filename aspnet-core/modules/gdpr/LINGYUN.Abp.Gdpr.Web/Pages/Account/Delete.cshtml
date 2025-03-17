@@ -1,0 +1,38 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@using LINGYUN.Abp.Gdpr.Localization
+@using LINGYUN.Abp.Gdpr.Web.Pages.Account
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@inject IThemeManager ThemeManager
+@inject IHtmlLocalizer<GdprResource> L
+@inject IHtmlLocalizer<AccountResource> AL
+@model DeleteModel
+@{
+    Layout = ThemeManager.CurrentTheme.GetApplicationLayout();
+}
+@section scripts {
+    <abp-script-bundle name="@typeof(DeleteModel).FullName" />
+}
+
+@if (!Model.ReturnUrl.IsNullOrWhiteSpace())
+{
+    <abp-row class="mb-2">
+        <abp-column>
+            <a class="btn btn-primary" href="@Model.ReturnUrl">
+                <i class="fa fa-chevron-left me-2"></i>@AL["ReturnToApplication"]
+            </a>
+        </abp-column>
+    </abp-row>
+}
+
+<div id="ProfileManagementWrapper">
+    <abp-card>
+        <abp-card-header>
+            <abp-button id="DeletePersonalAccountButton"
+                text="@L["DeletePersonalAccount"].Value"
+                icon="remove"
+                button-type="Outline_Danger" />
+        </abp-card-header>
+    </abp-card>
+</div>

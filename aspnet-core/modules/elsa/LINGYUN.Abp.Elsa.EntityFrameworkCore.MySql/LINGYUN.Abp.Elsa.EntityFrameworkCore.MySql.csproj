@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<AssemblyName>LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql</AssemblyName>
 		<PackageId>LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -17,6 +17,7 @@
 		<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" />
 		<PackageReference Include="Elsa.WorkflowSettings.Persistence.EntityFramework.MySql" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="9.0.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

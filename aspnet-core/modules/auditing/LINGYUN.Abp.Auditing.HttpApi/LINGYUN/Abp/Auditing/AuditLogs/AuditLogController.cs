@@ -13,7 +13,7 @@ namespace LINGYUN.Abp.Auditing.AuditLogs;
 [RemoteService(Name = AuditingRemoteServiceConsts.RemoteServiceName)]
 [Area("auditing")]
 [ControllerName("audit-log")]
-[Route("api/auditing/audit-log")]
+[Route($"api/{AuditingRemoteServiceConsts.ModuleName}/audit-log")]
 [Authorize(AuditingPermissionNames.AuditLog.Default)]
 public class AuditLogController : AbpControllerBase, IAuditLogAppService
 {
@@ -30,6 +30,14 @@ public class AuditLogController : AbpControllerBase, IAuditLogAppService
     public async virtual Task DeleteAsync(Guid id)
     {
         await AuditLogAppService.DeleteAsync(id);
+    }
+
+    [HttpDelete]
+    [Route("bulk")]
+    [Authorize(AuditingPermissionNames.AuditLog.Delete)]
+    public async virtual Task DeleteManyAsync([FromBody] AuditLogDeleteManyInput input)
+    {
+        await AuditLogAppService.DeleteManyAsync(input);
     }
 
     [HttpGet]

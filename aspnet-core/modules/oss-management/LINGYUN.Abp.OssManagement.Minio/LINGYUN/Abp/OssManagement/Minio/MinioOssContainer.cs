@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Minio;
+using Minio.ApiEndpoints;
+using Minio.DataModel;
 using Minio.DataModel.Args;
 using Minio.DataModel.ILM;
 using Minio.Exceptions;
@@ -18,6 +20,7 @@ using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LINGYUN.Abp.OssManagement.Minio;
 
@@ -66,19 +69,12 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
             .WithBucket(bucket)
             .WithObjects(request.Objects.Select((x) => path + x.RemovePreFix("/")).ToList());
 
-        var response = await client.RemoveObjectsAsync(args);
+        var errors = await client.RemoveObjectsAsync(args);
 
-        var tcs = new TaskCompletionSource<bool>();
-
-        using var _ = response.Subscribe(
-            onNext: (error) =>
-            {
-                Logger.LogWarning("Batch deletion of objects failed, error details {code}: {message}", error.Code, error.Message);
-            },
-            onError: tcs.SetException,
-            onCompleted: () => tcs.SetResult(true));
-
-        await tcs.Task;
+        foreach (var error in errors)
+        {
+            Logger.LogWarning("Batch deletion of objects failed, error details {code}: {message}", error.Code, error.Message);
+        }
     }
 
     public async override Task<OssContainer> CreateAsync(string name)
@@ -234,32 +230,25 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
             var listObjectArgs = new ListObjectsArgs()
                 .WithBucket(expiredBucket.Name);
 
-            var expiredObjectItem = client.ListObjectsAsync(listObjectArgs);
+            var expiredObjects = client.ListObjectsEnumAsync(listObjectArgs);
 
-            var tcs = new TaskCompletionSource<bool>();
-            using var _ = expiredObjectItem.Subscribe(
-                onNext: (item) =>
+            await foreach (var item in expiredObjects)
+            {
+                var lifecycleRule = new LifecycleRule
                 {
-                    var lifecycleRule = new LifecycleRule
-                    {
-                        Status = "Enabled",
-                        ID = item.Key,
-                        Expiration = new Expiration(Clock.Normalize(request.ExpirationTime.DateTime))
-                    };
-                    var lifecycleConfiguration = new LifecycleConfiguration();
-                    lifecycleConfiguration.Rules.Add(lifecycleRule);
+                    Status = "Enabled",
+                    ID = item.Key,
+                    Expiration = new Expiration(Clock.Normalize(request.ExpirationTime.DateTime))
+                };
+                var lifecycleConfiguration = new LifecycleConfiguration();
+                lifecycleConfiguration.Rules.Add(lifecycleRule);
 
-                    var lifecycleArgs = new SetBucketLifecycleArgs()
-                        .WithBucket(bucket)
-                        .WithLifecycleConfiguration(lifecycleConfiguration);
+                var lifecycleArgs = new SetBucketLifecycleArgs()
+                    .WithBucket(bucket)
+                    .WithLifecycleConfiguration(lifecycleConfiguration);
 
-                    var _ = client.SetBucketLifecycleAsync(lifecycleArgs);
-                },
-                onError: tcs.SetException,
-                onCompleted: () => tcs.SetResult(true)
-            );
-
-            await tcs.Task; 
+                await client.SetBucketLifecycleAsync(lifecycleArgs);
+            }
         }
     }
 
@@ -329,16 +318,13 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
             .WithBucket(bucket)
             .WithPrefix(objectPath);
 
-        var tcs = new TaskCompletionSource<bool>();
-
-        var listObjectResult = client.ListObjectsAsync(listObjectArgs);
-
         var resultObjects = new List<OssObject>();
 
-        using var _ = listObjectResult.Subscribe(
-            onNext: (item) =>
-            {
-                resultObjects.Add(new OssObject(
+        var listObjectResult = client.ListObjectsEnumAsync(listObjectArgs);
+
+        await foreach (var item in listObjectResult)
+        {
+            resultObjects.Add(new OssObject(
                     !objectPath.IsNullOrWhiteSpace()
                         ? item.Key.Replace(objectPath, "")
                         : item.Key,
@@ -349,18 +335,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
                     item.LastModifiedDateTime,
                     new Dictionary<string, string>(),
                     item.IsDir));
-            },
-            onError: (ex) =>
-            {
-                tcs.TrySetException(ex);
-            },
-            onCompleted: () =>
-            {
-                tcs.SetResult(true);
-            }
-        );
-
-        await tcs.Task;
+        }
 
         var totalCount = resultObjects.Count;
         resultObjects = resultObjects
@@ -390,22 +365,15 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
         }
 
         // 非空目录无法删除
-        var tcs = new TaskCompletionSource<bool>();
-        var listObjectObs = client.ListObjectsAsync(
+        var listObjects = new List<string>();
+
+        var listObjectObs = client.ListObjectsEnumAsync(
             new ListObjectsArgs()
                 .WithBucket(bucket));
-
-        var listObjects = new List<string>();
-        using var _ = listObjectObs.Subscribe(
-            (item) =>
-            {
-                listObjects.Add(item.Key);
-                tcs.TrySetResult(true);
-            },
-            (ex) => tcs.TrySetException(ex),
-            () => tcs.TrySetResult(true));
-
-        await tcs.Task;
+        await foreach (var item in listObjectObs)
+        {
+            listObjects.Add(item.Key);
+        }
 
         if (listObjects.Count > 0)
         {

@@ -4,6 +4,7 @@ using LINGYUN.Abp.Auditing.Logging;
 using LINGYUN.Abp.Auditing.SecurityLogs;
 using LINGYUN.Abp.AuditLogging;
 using LINGYUN.Abp.Logging;
+using Volo.Abp.ObjectExtending;
 
 namespace LINGYUN.Abp.Auditing;
 
@@ -12,16 +13,16 @@ public class AbpAuditingMapperProfile : Profile
     public AbpAuditingMapperProfile()
     {
         CreateMap<AuditLogAction, AuditLogActionDto>()
-            .MapExtraProperties();
+            .MapExtraProperties(MappingPropertyDefinitionChecks.None);
         CreateMap<EntityPropertyChange, EntityPropertyChangeDto>();
         CreateMap<EntityChangeWithUsername, EntityChangeWithUsernameDto>();
         CreateMap<EntityChange, EntityChangeDto>()
-            .MapExtraProperties();
+            .MapExtraProperties(MappingPropertyDefinitionChecks.None);
         CreateMap<AuditLog, AuditLogDto>()
-            .MapExtraProperties();
+            .MapExtraProperties(MappingPropertyDefinitionChecks.None);
 
-        CreateMap<SecurityLog, SecurityLogDto>()
-            .MapExtraProperties();
+        CreateMap<SecurityLog, SecurityLogDto>(MemberList.Destination)
+            .MapExtraProperties(MappingPropertyDefinitionChecks.None);
 
         CreateMap<LogField, LogFieldDto>();
         CreateMap<LogException, LogExceptionDto>();

@@ -1,11 +1,11 @@
 <!-- eslint-disable no-unused-vars -->
 <script setup lang="ts">
-import { useVbenModal } from '@vben/common-ui';
+import type { IdentityUserDto } from '../../types/users';
+
+import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useVbenForm } from '@abp/ui';
-
-import { lockApi } from '../../api/users';
+import { useUsersApi } from '../../api/useUsersApi';
 
 defineOptions({
   name: 'UserLockModal',
@@ -23,6 +23,7 @@ enum LockType {
   Years = 32_140_800, // 按31*12天计算
 }
 
+const { cancel, lockApi } = useUsersApi();
 const [Form, formApi] = useVbenForm({
   commonConfig: {
     // 所有表单项
@@ -52,12 +53,18 @@ const [Form, formApi] = useVbenForm({
       componentProps: {
         options: [
           // TODO: 本地化
-          { label: $t('LockType:Seconds'), value: LockType.Seconds },
-          { label: $t('LockType:Minutes'), value: LockType.Minutes },
-          { label: $t('LockType:Hours'), value: LockType.Hours },
-          { label: $t('LockType:Days'), value: LockType.Days },
-          { label: $t('LockType:Months'), value: LockType.Months },
-          { label: $t('LockType:Years'), value: LockType.Years },
+          {
+            label: $t('AbpIdentity.LockType:Seconds'),
+            value: LockType.Seconds,
+          },
+          {
+            label: $t('AbpIdentity.LockType:Minutes'),
+            value: LockType.Minutes,
+          },
+          { label: $t('AbpIdentity.LockType:Hours'), value: LockType.Hours },
+          { label: $t('AbpIdentity.LockType:Days'), value: LockType.Days },
+          { label: $t('AbpIdentity.LockType:Months'), value: LockType.Months },
+          { label: $t('AbpIdentity.LockType:Years'), value: LockType.Years },
         ],
       },
       defaultValue: LockType.Seconds,
@@ -77,16 +84,22 @@ const [Modal, modalApi] = useVbenModal({
   onCancel() {
     modalApi.close();
   },
+  onClosed() {
+    cancel('User lock modal has closed!');
+  },
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();
   },
   async onOpenChange(isOpen: boolean) {
+    let title = $t('AbpIdentity.Lock');
     if (isOpen) {
-      const { id } = modalApi.getData<Record<string, any>>();
+      const { id, userName } = modalApi.getData<IdentityUserDto>();
+      title += ` - ${userName}`;
       formApi.setValues({
         userId: id,
       });
     }
+    modalApi.setState({ title });
   },
   title: $t('AbpIdentity.Lock'),
 });
@@ -94,7 +107,7 @@ const [Modal, modalApi] = useVbenModal({
 async function onSubmit(input: Record<string, any>) {
   try {
     modalApi.setState({
-      confirmLoading: true,
+      submitting: true,
     });
     const lockSeconds = input.type * input.seconds;
     await lockApi(input.userId, lockSeconds);
@@ -102,7 +115,7 @@ async function onSubmit(input: Record<string, any>) {
     modalApi.close();
   } finally {
     modalApi.setState({
-      confirmLoading: false,
+      submitting: false,
     });
   }
 }

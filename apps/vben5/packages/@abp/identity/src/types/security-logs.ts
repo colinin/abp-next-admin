@@ -30,4 +30,12 @@ interface GetSecurityLogPagedRequest extends PagedAndSortedResultRequestDto {
   userName?: string;
 }
 
-export type { GetSecurityLogPagedRequest, SecurityLogDto };
+interface SecurityLogDeleteManyInput {
+  ids: string[];
+}
+
+export type {
+  GetSecurityLogPagedRequest,
+  SecurityLogDeleteManyInput,
+  SecurityLogDto,
+};

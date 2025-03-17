@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<AssemblyName>LINGYUN.Abp.Notifications.WeChat.Work</AssemblyName>
 		<PackageId>LINGYUN.Abp.Notifications.WeChat.Work</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -12,6 +12,11 @@
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace />
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\Notifications\WeChat\Work\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Notifications\WeChat\Work\Localization\Resources\*.json" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\framework\wechat\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj" />

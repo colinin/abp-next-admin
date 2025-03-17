@@ -45,9 +45,9 @@ interface IdentityUserOrganizationUnitUpdateDto {
 /** 用户实体数据传输对象 */
 interface IdentityUserDto
   extends FullAuditedEntityDto<string>,
-    IUser,
     IHasConcurrencyStamp,
-    IHasExtraProperties {
+    IHasExtraProperties,
+    IUser {
   [key: string]: any;
   /** 邮箱已验证 */
   emailConfirmed: boolean;
@@ -90,6 +90,14 @@ interface GetUserPagedListInput extends PagedAndSortedResultRequestDto {
 type IdentityUserCreateDto = IdentityUserCreateOrUpdateDto;
 type IdentityUserUpdateDto = IdentityUserCreateOrUpdateDto;
 
+interface UserLookupCountInput {
+  filter?: string;
+}
+
+interface UserLookupSearchInput
+  extends PagedAndSortedResultRequestDto,
+    UserLookupCountInput {}
+
 export type {
   ChangeMyPasswordInput,
   ChangeUserPasswordInput,
@@ -98,4 +106,6 @@ export type {
   IdentityUserDto,
   IdentityUserOrganizationUnitUpdateDto,
   IdentityUserUpdateDto,
+  UserLookupCountInput,
+  UserLookupSearchInput,
 };

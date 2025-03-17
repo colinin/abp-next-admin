@@ -1,10 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Platform;
 
-[DependsOn(typeof(PlatformApplicationContractModule))]
+[DependsOn(
+    typeof(PlatformApplicationContractModule),
+    typeof(PlatformDomainModule),
+    typeof(AbpDddApplicationModule))]
 public class PlatformApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -13,7 +17,7 @@ public class PlatformApplicationModule : AbpModule
 
         Configure<AbpAutoMapperOptions>(options =>
         {
-            options.AddProfile<PlatformApplicationMappingProfile>(validate: true);
+            options.AddMaps<PlatformApplicationModule>(validate: true);
         });
     }
 }

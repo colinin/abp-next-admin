@@ -50,6 +50,8 @@
     "Features:ExpiredRecoveryTimeDesc": "当资源超期多久没有处理, 将回收租户资源",
     "UnActived": "未启用",
     "RecycleStrategy:Reserve": "保留",
-    "RecycleStrategy:Recycle": "回收"
+    "RecycleStrategy:Recycle": "回收",
+    "ManageFeatures": "管理功能",
+    "IfUseCustomDataBaseDefaultConnectionStringIsRequiredMessage": "如果使用自定义数据库,默认连接字符串必须输入!"
   }
 }

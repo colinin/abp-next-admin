@@ -1,0 +1,15 @@
+services:
+  project-name-api:
+    hostname: project-name-api
+    container_name: project-name-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      # 时区问题自行修改
+      # - TZ=Asia/Shanghai
+    ports:
+      - "5000:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

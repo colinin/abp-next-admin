@@ -1,12 +1,14 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "Permission:Notification": "通知管理",
+    "Permission:Notifications": "通知管理",
     "Permission:GroupDefinitions": "分组定义",
     "Permission:NotificationDefinitions": "通知定义",
+    "Permission:Notification": "管理通知",
     "Permission:Create": "新增",
     "Permission:Edit": "编辑",
     "Permission:Delete": "删除",
+    "Permission:Send": "发送通知",
     "Notifications:001404": "通知模板不存在!",
     "Notifications:002400": "静态通知分组 {Name} 不允许变更!",
     "Notifications:002403": "通知分组 {Name} 已经存在!",
@@ -46,6 +48,7 @@
     "Properties": "属性",
     "TemplateContent": "模板内容",
     "ItemWillBeDeleteOrRestoreMessage": "如果已改变通知, 将还原到默认通知。否则会删除自定义通知.",
-    "Notifications:Send": "发送通知"
+    "Notifications:Send": "发送通知",
+    "SendSuccessfully": "发送成功"
   }
 }

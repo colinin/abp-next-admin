@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -7,10 +8,11 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace LINGYUN.Abp.Account;
 
-[RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
+[Authorize]
 [Area("account")]
 [ControllerName("Claim")]
-[Route("/api/account/my-claim")]
+[Route($"/api/{AccountRemoteServiceConsts.ModuleName}/my-claim")]
+[RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
 public class MyClaimController : AbpControllerBase, IMyClaimAppService
 {
     private readonly IMyClaimAppService _service;
@@ -23,8 +25,22 @@ public class MyClaimController : AbpControllerBase, IMyClaimAppService
 
     [HttpPost]
     [Route("change-avatar")]
-    public async virtual Task ChangeAvatarAsync(ChangeAvatarInput input)
+    public virtual Task ChangeAvatarAsync(ChangeAvatarInput input)
     {
-        await _service.ChangeAvatarAsync(input);
+        return _service.ChangeAvatarAsync(input);
+    }
+
+    [HttpGet]
+    [Route("state/{claimType}")]
+    public virtual Task<GetUserClaimStateDto> GetStateAsync(string claimType)
+    {
+        return _service.GetStateAsync(claimType);
+    }
+
+    [HttpDelete]
+    [Route("reset/{claimType}")]
+    public virtual Task ResetAsync(string claimType)
+    {
+        return _service.ResetAsync(claimType);
     }
 }

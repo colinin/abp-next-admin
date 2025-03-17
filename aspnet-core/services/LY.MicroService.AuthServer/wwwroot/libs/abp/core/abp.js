@@ -480,7 +480,11 @@ var abp = abp || {};
 
             var args = Array.prototype.slice.call(arguments, 1);
             for (var i = 0; i < callbacks.length; i++) {
-                callbacks[i].apply(this, args);
+                try {
+                    callbacks[i].apply(this, args);
+                } catch(e) {
+                    console.error(e);
+                }
             }
         };
 
@@ -748,52 +752,55 @@ var abp = abp || {};
         return abp.clock.kind === 'Utc';
     };
 
-    var toLocal = function (date) {
-        return new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            date.getHours(),
-            date.getMinutes(),
-            date.getSeconds(),
-            date.getMilliseconds()
-        );
-    };
-
-    var toUtc = function (date) {
-        return Date.UTC(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate(),
-            date.getUTCHours(),
-            date.getUTCMinutes(),
-            date.getUTCSeconds(),
-            date.getUTCMilliseconds()
-        );
-    };
-
-    abp.clock.now = function () {
-        if (abp.clock.kind === 'Utc') {
-            return toUtc(new Date());
-        }
-        return new Date();
-    };
-
-    abp.clock.normalize = function (date) {
-        var kind = abp.clock.kind;
-
-        if (kind === 'Unspecified') {
+    // Normalize Date object or date string to standard string format that will be sent to server
+    abp.clock.normalizeToString = function (date) {
+        if (!date) {
             return date;
         }
 
-        if (kind === 'Local') {
-            return toLocal(date);
+        var dateObj = date instanceof Date ? date : new Date(date);
+        if (isNaN(dateObj)) {
+            return date;
         }
 
-        if (kind === 'Utc') {
-            return toUtc(date);
+        if (abp.clock.kind === 'Utc') {
+            return dateObj.toISOString();
         }
+
+        function padZero(num) {
+            return num < 10 ? '0' + num : num;
+        }
+
+        function padMilliseconds(num) {
+            if (num < 10) return '00' + num;
+            if (num < 100) return '0' + num;
+            return num;
+        }
+        
+        // yyyy-MM-ddTHH:mm:ss.SSS
+        return dateObj.getFullYear() + '-' +
+                padZero(dateObj.getMonth() + 1) + '-' +
+                padZero(dateObj.getDate()) + 'T' +
+                padZero(dateObj.getHours()) + ':' +
+                padZero(dateObj.getMinutes()) + ':' +
+                padZero(dateObj.getSeconds()) + '.' +
+                padMilliseconds(dateObj.getMilliseconds());
     };
+
+    // Normalize date string to locale date string that will be displayed to user
+    abp.clock.normalizeToLocaleString = function (dateString) {
+        if (!dateString) {
+            return dateString;
+        }
+
+        var date = new Date(dateString);
+        if (isNaN(date)) {
+            return dateString;
+        }
+        
+        //TODO: Get timezone setting and pass it to toLocaleString
+        return date.toLocaleString();
+    }
 
     /* FEATURES *************************************************/
 

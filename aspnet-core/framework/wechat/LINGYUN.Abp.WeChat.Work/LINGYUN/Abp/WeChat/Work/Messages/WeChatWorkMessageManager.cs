@@ -26,9 +26,9 @@ public class WeChatWorkMessageManager : IWeChatWorkMessageManager, ISingletonDep
         Logger = NullLogger<WeChatWorkMessageManager>.Instance;
     }
 
-    public async virtual Task<bool> ReCallMessageAsync(string agentId, string messageId, CancellationToken cancellationToken = default)
+    public async virtual Task<bool> ReCallMessageAsync(string messageId, CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(agentId, cancellationToken);
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         var request = new WeChatWorkMessageReCallRequest(

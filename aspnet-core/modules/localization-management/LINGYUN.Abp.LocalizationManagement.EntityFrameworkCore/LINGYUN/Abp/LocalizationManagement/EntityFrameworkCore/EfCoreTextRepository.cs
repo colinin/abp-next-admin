@@ -62,29 +62,19 @@ public class EfCoreTextRepository : EfCoreRepository<LocalizationDbContext, Text
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual List<Text> GetList(string resourceName = null, string cultureName = null)
+    {
+        return DbSet
+            .WhereIf(!resourceName.IsNullOrWhiteSpace(), x => x.ResourceName.Equals(resourceName))
+            .WhereIf(!cultureName.IsNullOrWhiteSpace(), x => x.CultureName.Equals(cultureName))
+            .ToList();
+    }
+
     public async virtual Task<List<Text>> GetListAsync(
         string resourceName = null,
         string cultureName = null,
         CancellationToken cancellationToken = default)
     {
-        //var languages = (await GetDbContextAsync()).Set<Language>();
-        //var resources = (IQueryable<Resource>)(await GetDbContextAsync()).Set<Resource>();
-        //if (!resourceName.IsNullOrWhiteSpace())
-        //{
-        //    resources = resources.Where(x => x.Name.Equals(resourceName));
-        //}
-
-        //var texts = await GetDbSetAsync();
-
-        //return await (from txts in texts
-        //       join r in resources
-        //           on txts.ResourceName equals r.Name
-        //       join lg in languages
-        //           on txts.CultureName equals lg.CultureName
-        //       where r.Enable && lg.Enable
-        //       select txts)
-        //     .ToListAsync(GetCancellationToken(cancellationToken));
-
         return await (await GetDbSetAsync())
             .WhereIf(!resourceName.IsNullOrWhiteSpace(), x => x.ResourceName.Equals(resourceName))
             .WhereIf(!cultureName.IsNullOrWhiteSpace(), x => x.CultureName.Equals(cultureName))

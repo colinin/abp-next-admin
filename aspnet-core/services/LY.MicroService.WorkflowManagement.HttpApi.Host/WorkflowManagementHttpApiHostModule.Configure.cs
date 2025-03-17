@@ -8,6 +8,7 @@ using LINGYUN.Abp.Elsa.Localization;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Medallion.Threading;
@@ -294,7 +295,11 @@ public partial class WorkflowManagementHttpApiHostModule
         // 配置Ef
         Configure<AbpDbContextOptions>(options =>
         {
-            options.UseMySQL();
+            options.UseMySQL(mysql =>
+            {
+                // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
+                mysql.TranslateParameterizedCollectionsToConstants();
+            });
         });
     }
 
@@ -474,8 +479,6 @@ public partial class WorkflowManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-
-            options.UsePersistence<ElsaResource>();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -488,6 +491,11 @@ public partial class WorkflowManagementHttpApiHostModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
 

@@ -23,15 +23,8 @@ import {
   Tree,
 } from 'ant-design-vue';
 
-import { getChildrenApi, getRootListApi } from '../../api/organization-units';
-import {
-  createApi,
-  getApi,
-  getAssignableRolesApi,
-  getOrganizationUnitsApi,
-  getRolesApi,
-  updateApi,
-} from '../../api/users';
+import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
+import { useUsersApi } from '../../api/useUsersApi';
 
 defineOptions({
   name: 'UserModal',
@@ -62,18 +55,31 @@ const formModel = ref<IdentityUserDto>({ ...defaultModel });
 
 const { isTrue } = useSettings();
 const { hasAccessByCodes } = useAccess();
+const {
+  cancel,
+  createApi,
+  getApi,
+  getAssignableRolesApi,
+  getOrganizationUnitsApi,
+  getRolesApi,
+  updateApi,
+} = useUsersApi();
+const { getChildrenApi, getRootListApi } = useOrganizationUnitsApi();
 const [Modal, modalApi] = useVbenModal({
   draggable: true,
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
   },
+  onClosed() {
+    cancel('User modal has closed!');
+  },
   onConfirm: async () => {
     await form.value?.validate();
     const api = formModel.value.id
       ? updateApi(formModel.value.id, toValue(formModel))
       : createApi(toValue(formModel));
-    modalApi.setState({ confirmLoading: true });
+    modalApi.setState({ submitting: true });
     api
       .then((res) => {
         message.success($t('AbpUi.SavedSuccessfully'));
@@ -81,7 +87,7 @@ const [Modal, modalApi] = useVbenModal({
         modalApi.close();
       })
       .finally(() => {
-        modalApi.setState({ confirmLoading: false });
+        modalApi.setState({ submitting: false });
       });
   },
   onOpenChange: async (isOpen: boolean) => {
@@ -99,12 +105,16 @@ const [Modal, modalApi] = useVbenModal({
         const userDto = modalApi.getData<IdentityUserDto>();
         const manageRolePolicy = checkManageRolePolicy();
         if (userDto?.id) {
-          await initUserInfo(userDto.id);
-          manageRolePolicy && (await initUserRoles(userDto.id));
-          checkManageOuPolicy() && (await initOrganizationUnitTree(userDto.id));
+          await Promise.all([
+            initUserInfo(userDto.id),
+            manageRolePolicy && initUserRoles(userDto.id),
+            manageRolePolicy && initAssignableRoles(),
+            checkManageOuPolicy() && initOrganizationUnitTree(userDto.id),
+          ]);
           modalApi.setState({
             title: `${$t('AbpIdentity.Users')} - ${userDto.userName}`,
           });
+          return;
         }
         manageRolePolicy && (await initAssignableRoles());
       } finally {
@@ -165,7 +175,10 @@ async function initAssignableRoles() {
  * @param userId 用户id
  */
 async function initOrganizationUnitTree(userId: string) {
-  const ouResult = await getRootListApi();
+  const [ouResult, userOuResult] = await Promise.all([
+    getRootListApi(),
+    getOrganizationUnitsApi(userId),
+  ]);
   organizationUnits.value = ouResult.items.map((item) => {
     return {
       isLeaf: false,
@@ -174,7 +187,6 @@ async function initOrganizationUnitTree(userId: string) {
       children: [],
     };
   });
-  const userOuResult = await getOrganizationUnitsApi(userId);
   checkedOuKeys.value = userOuResult.items.map((item) => item.id);
 }
 
@@ -279,8 +291,8 @@ async function onLoadOuChildren(node: EventDataNode) {
             }"
             :render="(item) => item.title"
             :titles="[
-              $t('AbpIdentityServer.Assigned'),
-              $t('AbpIdentityServer.Available'),
+              $t('AbpOpenIddict.Assigned'),
+              $t('AbpOpenIddict.Available'),
             ]"
             class="tree-transfer"
           />

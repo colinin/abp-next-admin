@@ -50,6 +50,8 @@
     "Features:ExpiredRecoveryTimeDesc": "If the resource expiration is not handled for a long time, tenant resources will be reclaimed",
     "UnActived": "UnActived",
     "RecycleStrategy:Reserve": "Reserve",
-    "RecycleStrategy:Recycle": "Recycle"
+    "RecycleStrategy:Recycle": "Recycle",
+    "ManageFeatures": "Manage Features",
+    "IfUseCustomDataBaseDefaultConnectionStringIsRequiredMessage": "If you use a custom database, the default connection string must be required!"
   }
 }

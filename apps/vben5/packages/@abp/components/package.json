@@ -1,0 +1,60 @@
+{
+  "name": "@abp/components",
+  "version": "9.0.4",
+  "homepage": "https://github.com/colinin/abp-next-admin",
+  "bugs": "https://github.com/colinin/abp-next-admin/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colinin/abp-next-admin.git",
+    "directory": "packages/@abp/components"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    "./codeeditor": {
+      "types": "./src/codeeditor/index.ts",
+      "default": "./src/codeeditor/index.ts"
+    },
+    "./codemirror": {
+      "types": "./src/codemirror/index.ts",
+      "default": "./src/codemirror/index.ts"
+    },
+    "./tinymce": {
+      "types": "./src/tinymce/index.ts",
+      "default": "./src/tinymce/index.ts"
+    },
+    "./vditor": {
+      "types": "./src/vditor/index.ts",
+      "default": "./src/vditor/index.ts"
+    }
+  },
+  "dependencies": {
+    "@abp/core": "workspace:*",
+    "@vben-core/form-ui": "workspace:*",
+    "@vben-core/preferences": "workspace:*",
+    "@vben-core/shadcn-ui": "workspace:*",
+    "@vben-core/shared": "workspace:*",
+    "@vben-core/typings": "workspace:*",
+    "@vben/common-ui": "workspace:*",
+    "@vben/hooks": "workspace:*",
+    "@vben/icons": "workspace:*",
+    "@vben/locales": "workspace:*",
+    "@vben/preferences": "workspace:*",
+    "@vben/types": "workspace:*",
+    "@vben/utils": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "ant-design-vue": "catalog:",
+    "codemirror": "catalog:",
+    "lodash.isnumber": "catalog:",
+    "tinymce": "catalog:",
+    "vditor": "catalog:",
+    "vue": "catalog:*"
+  },
+  "devDependencies": {
+    "@types/codemirror": "catalog:",
+    "@types/lodash.isnumber": "catalog:"
+  }
+}

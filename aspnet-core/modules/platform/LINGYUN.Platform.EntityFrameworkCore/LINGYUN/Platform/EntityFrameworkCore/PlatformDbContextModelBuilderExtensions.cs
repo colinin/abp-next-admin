@@ -3,6 +3,7 @@ using LINGYUN.Platform.Datas;
 using LINGYUN.Platform.Feedbacks;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
+using LINGYUN.Platform.Messages;
 using LINGYUN.Platform.Packages;
 using LINGYUN.Platform.Portal;
 using LINGYUN.Platform.Routes;
@@ -329,6 +330,102 @@ public static class PlatformDbContextModelBuilderExtensions
                .IsRequired()
                .HasColumnName(nameof(FeedbackAttachment.Url))
                .HasMaxLength(FeedbackAttachmentConsts.MaxUrlLength);
+
+            x.ConfigureByConvention();
+        });
+        builder.Entity<EmailMessage>(x =>
+        {
+            x.ToTable(options.TablePrefix + "EmailMessages", options.Schema);
+
+            x.Property(p => p.Receiver)
+                .HasColumnName(nameof(EmailMessage.Receiver))
+                .HasMaxLength(MessageConsts.MaxReceiverLength)
+                .IsRequired(true);
+            x.Property(p => p.Content)
+                .HasColumnName(nameof(EmailMessage.Content))
+                .IsRequired(true);
+
+            x.Property(p => p.From)
+                .HasColumnName(nameof(EmailMessage.From))
+                .HasMaxLength(EmailMessageConsts.MaxFromLength);
+            x.Property(p => p.Subject)
+               .HasColumnName(nameof(EmailMessage.Subject))
+               .HasMaxLength(EmailMessageConsts.MaxSubjectLength);
+            x.Property(p => p.CC)
+               .HasColumnName(nameof(EmailMessage.CC))
+               .HasMaxLength(MessageConsts.MaxReceiverLength);
+
+            x.Property(p => p.Sender)
+               .HasColumnName(nameof(EmailMessage.Sender))
+               .HasMaxLength(MessageConsts.MaxSenderLength);
+            x.Property(p => p.Provider)
+               .HasColumnName(nameof(EmailMessage.Provider))
+               .HasMaxLength(MessageConsts.MaxProviderLength);
+            x.Property(p => p.Reason)
+               .HasColumnName(nameof(EmailMessage.Reason))
+               .HasMaxLength(MessageConsts.MaxReasonLength);
+
+            x.HasMany(p => p.Attachments)
+             .WithOne()
+             .HasForeignKey(fk => fk.MessageId);
+
+            x.HasMany(p => p.Headers)
+             .WithOne()
+             .HasForeignKey(fk => fk.MessageId);
+
+            x.ConfigureByConvention();
+        });
+        builder.Entity<EmailMessageAttachment>(x =>
+        {
+            x.ToTable(options.TablePrefix + "EmailMessageAttachments", options.Schema);
+
+            x.Property(p => p.Name)
+                .HasColumnName(nameof(EmailMessageAttachment.Name))
+                .HasMaxLength(EmailMessageAttachmentConsts.MaxNameLength)
+                .IsRequired(true);
+            x.Property(p => p.BlobName)
+                .HasColumnName(nameof(EmailMessageAttachment.BlobName))
+                .HasMaxLength(EmailMessageAttachmentConsts.MaxNameLength)
+                .IsRequired(true);
+
+            x.ConfigureByConvention();
+        });
+        builder.Entity<EmailMessageHeader>(x =>
+        {
+            x.ToTable(options.TablePrefix + "EmailMessageHeaders", options.Schema);
+
+            x.Property(p => p.Key)
+                .HasColumnName(nameof(EmailMessageHeader.Key))
+                .HasMaxLength(EmailMessageHeaderConsts.MaxKeyLength)
+                .IsRequired(true);
+            x.Property(p => p.Value)
+                .HasColumnName(nameof(EmailMessageHeader.Value))
+                .HasMaxLength(EmailMessageHeaderConsts.MaxValueLength)
+                .IsRequired(true);
+
+            x.ConfigureByConvention();
+        });
+        builder.Entity<SmsMessage>(x =>
+        {
+            x.ToTable(options.TablePrefix + "SmsMessages", options.Schema);
+
+            x.Property(p => p.Receiver)
+                .HasColumnName(nameof(SmsMessage.Receiver))
+                .HasMaxLength(MessageConsts.MaxReceiverLength)
+                .IsRequired(true);
+            x.Property(p => p.Content)
+                .HasColumnName(nameof(SmsMessage.Content))
+                .IsRequired(true);
+
+            x.Property(p => p.Sender)
+               .HasColumnName(nameof(SmsMessage.Sender))
+               .HasMaxLength(MessageConsts.MaxSenderLength);
+            x.Property(p => p.Provider)
+               .HasColumnName(nameof(SmsMessage.Provider))
+               .HasMaxLength(MessageConsts.MaxProviderLength);
+            x.Property(p => p.Reason)
+               .HasColumnName(nameof(SmsMessage.Reason))
+               .HasMaxLength(MessageConsts.MaxReasonLength);
 
             x.ConfigureByConvention();
         });

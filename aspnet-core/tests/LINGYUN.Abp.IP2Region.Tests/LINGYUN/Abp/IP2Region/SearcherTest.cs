@@ -1,4 +1,6 @@
 ﻿using IP2Region.Net.XDB;
+using LINGYUN.Abp.IP.Location;
+using Shouldly;
 using System;
 using System.IO;
 using System.Linq;
@@ -14,6 +16,18 @@ public class SearcherTest : AbpIP2RegionTestBase
     {
         var virtualFileProvider = GetRequiredService<IVirtualFileProvider>();
         _xdbStream = virtualFileProvider.GetFileInfo("/LINGYUN/Abp/IP2Region/Resources/ip2region.xdb").CreateReadStream();
+    }
+
+    [Theory]
+    [InlineData("8.8.8.8", "美国")]
+    [InlineData("36.133.108.1", "重庆市")]
+    [InlineData("111.26.31.1", "吉林省吉林市")]
+    [InlineData("220.246.0.1", "中国香港")]
+    public async void TestSearchLocation(string ip, string shouleBeRemarks)
+    {
+        var resolver = GetRequiredService<IIPLocationResolver>();
+        var result = await resolver.ResolveAsync(ip);
+        result.Location.Remarks.ShouldBe(shouleBeRemarks);
     }
 
     [Theory]

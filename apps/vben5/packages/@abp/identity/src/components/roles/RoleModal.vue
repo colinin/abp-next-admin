@@ -10,7 +10,7 @@ import { $t } from '@vben/locales';
 
 import { Checkbox, Form, Input, message } from 'ant-design-vue';
 
-import { createApi, getApi, updateApi } from '../../api/roles';
+import { useRolesApi } from '../../api/useRolesApi';
 
 defineOptions({
   name: 'RoleModal',
@@ -30,18 +30,22 @@ const defaultModel = {
 const form = ref<FormInstance>();
 const formModel = ref<IdentityRoleDto>({ ...defaultModel });
 
+const { cancel, createApi, getApi, updateApi } = useRolesApi();
 const [Modal, modalApi] = useVbenModal({
   draggable: true,
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
   },
+  onClosed() {
+    cancel('Role modal has closed!');
+  },
   onConfirm: async () => {
     await form.value?.validate();
     const api = formModel.value.id
       ? updateApi(formModel.value.id, toValue(formModel))
       : createApi(toValue(formModel));
-    modalApi.setState({ loading: true });
+    modalApi.setState({ submitting: true });
     api
       .then((res) => {
         message.success($t('AbpUi.Success'));
@@ -49,13 +53,14 @@ const [Modal, modalApi] = useVbenModal({
         modalApi.close();
       })
       .finally(() => {
-        modalApi.setState({ loading: false });
+        modalApi.setState({ submitting: false });
       });
   },
   onOpenChange: async (isOpen: boolean) => {
     if (isOpen) {
       formModel.value = { ...defaultModel };
       modalApi.setState({
+        showConfirmButton: false,
         title: $t('AbpIdentity.NewRole'),
       });
       const roleDto = modalApi.getData<IdentityRoleDto>();
@@ -65,11 +70,16 @@ const [Modal, modalApi] = useVbenModal({
           const dto = await getApi(roleDto.id);
           formModel.value = dto;
           modalApi.setState({
+            showConfirmButton: !dto.isStatic,
             title: $t('AbpIdentity.RoleSubject', [dto.name]),
           });
         } finally {
           modalApi.setState({ loading: false });
         }
+      } else {
+        modalApi.setState({
+          showConfirmButton: true,
+        });
       }
     }
   },
@@ -86,12 +96,18 @@ const [Modal, modalApi] = useVbenModal({
       :wrapper-col="{ span: 18 }"
     >
       <FormItem :label="$t('AbpIdentity.DisplayName:IsDefault')">
-        <Checkbox v-model:checked="formModel.isDefault">
+        <Checkbox
+          v-model:checked="formModel.isDefault"
+          :disabled="formModel.isStatic"
+        >
           {{ $t('AbpIdentity.DisplayName:IsDefault') }}
         </Checkbox>
       </FormItem>
       <FormItem :label="$t('AbpIdentity.DisplayName:IsPublic')">
-        <Checkbox v-model:checked="formModel.isPublic">
+        <Checkbox
+          v-model:checked="formModel.isPublic"
+          :disabled="formModel.isStatic"
+        >
           {{ $t('AbpIdentity.DisplayName:IsPublic') }}
         </Checkbox>
       </FormItem>
@@ -100,7 +116,7 @@ const [Modal, modalApi] = useVbenModal({
         name="name"
         required
       >
-        <Input v-model:value="formModel.name" />
+        <Input v-model:value="formModel.name" :disabled="formModel.isStatic" />
       </FormItem>
     </Form>
   </Modal>

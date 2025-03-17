@@ -2,6 +2,7 @@
 using LINGYUN.Platform.Feedbacks;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
+using LINGYUN.Platform.Messages;
 using LINGYUN.Platform.Packages;
 using LINGYUN.Platform.Portal;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,9 @@ public class PlatformEntityFrameworkCoreModule : AbpModule
             options.AddRepository<Enterprise, EfCoreEnterpriseRepository>();
 
             options.AddRepository<Feedback, EfCoreFeedbackRepository>();
+
+            options.AddRepository<SmsMessage, EfCoreSmsMessageRepository>();
+            options.AddRepository<EmailMessage, EfCoreEmailMessageRepository>();
 
             options.AddDefaultRepositories(includeAllEntities: true);
         });

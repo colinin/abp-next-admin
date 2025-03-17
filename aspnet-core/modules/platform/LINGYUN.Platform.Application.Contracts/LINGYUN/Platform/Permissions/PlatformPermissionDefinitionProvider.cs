@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Platform.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Platform.Permissions;
 
@@ -42,6 +43,19 @@ public class PlatformPermissionDefinitionProvider : PermissionDefinitionProvider
         feedback.AddChild(PlatformPermissions.Feedback.Delete, L("Permission:Delete"));
         feedback.AddChild(PlatformPermissions.Feedback.ManageAttachments, L("Permission:ManageAttachments"));
         feedback.AddChild(PlatformPermissions.Feedback.ManageComments, L("Permission:ManageComments"));
+
+        var enterprise = platform.AddPermission(PlatformPermissions.Enterprise.Default, L("Permission:Enterprise"));
+        enterprise.AddChild(PlatformPermissions.Enterprise.Create, L("Permission:Create"), MultiTenancySides.Host);
+        enterprise.AddChild(PlatformPermissions.Enterprise.Update, L("Permission:Update"), MultiTenancySides.Host);
+        enterprise.AddChild(PlatformPermissions.Enterprise.Delete, L("Permission:Delete"), MultiTenancySides.Host);
+
+        var emailMessage = platform.AddPermission(PlatformPermissions.EmailMessage.Default, L("Permission:EmailMessage"));
+        emailMessage.AddChild(PlatformPermissions.EmailMessage.SendMessage, L("Permission:SendMessage"));
+        emailMessage.AddChild(PlatformPermissions.EmailMessage.Delete, L("Permission:Delete"));
+
+        var smsMessage = platform.AddPermission(PlatformPermissions.SmsMessage.Default, L("Permission:SmsMessage"));
+        smsMessage.AddChild(PlatformPermissions.SmsMessage.SendMessage, L("Permission:SendMessage"));
+        smsMessage.AddChild(PlatformPermissions.SmsMessage.Delete, L("Permission:Delete"));
     }
 
     private static LocalizableString L(string name)

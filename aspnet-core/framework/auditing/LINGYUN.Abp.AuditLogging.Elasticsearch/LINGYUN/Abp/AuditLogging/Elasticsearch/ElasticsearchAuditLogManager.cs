@@ -188,6 +188,19 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             cancellationToken);
     }
 
+    public async virtual Task DeleteManyAsync(List<Guid> ids, CancellationToken cancellationToken = default)
+    {
+        var client = _clientFactory.Create();
+
+        await client.DeleteByQueryAsync<AuditLog>(
+            x => x.Index(CreateIndex())
+                  .Query(query =>
+                    query.Terms(terms =>
+                        terms.Field(field => field.Id)
+                            .Terms(ids))),
+            cancellationToken);
+    }
+
     public async virtual Task<string> SaveAsync(
         AuditLogInfo auditInfo,
         CancellationToken cancellationToken = default)

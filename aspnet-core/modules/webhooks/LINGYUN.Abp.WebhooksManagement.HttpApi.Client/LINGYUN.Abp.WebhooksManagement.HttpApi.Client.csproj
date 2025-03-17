@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
 		<AssemblyName>LINGYUN.Abp.WebhooksManagement.HttpApi.Client</AssemblyName>
 		<PackageId>LINGYUN.Abp.WebhooksManagement.HttpApi.Client</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -12,6 +12,14 @@
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace />
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="ClientProxies\webhooks-management-generate-proxy.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="ClientProxies\webhooks-management-generate-proxy.json" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Http.Client" />

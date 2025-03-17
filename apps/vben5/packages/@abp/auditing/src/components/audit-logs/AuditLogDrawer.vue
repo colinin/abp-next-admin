@@ -8,11 +8,12 @@ import { ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { CodeEditor, MODE } from '@abp/components/codeeditor';
 import { formatToDateTime } from '@abp/core';
-import { CodeEditor, MODE, useVbenVxeGrid } from '@abp/ui';
+import { useVbenVxeGrid } from '@abp/ui';
 import { Descriptions, Tabs, Tag } from 'ant-design-vue';
 
-import { getApi } from '../../api/audit-logs';
+import { useAuditLogsApi } from '../../api/useAuditLogsApi';
 import { useAuditlogs } from '../../hooks/useAuditlogs';
 import EntityChangeTable from '../entity-changes/EntityChangeTable.vue';
 
@@ -26,13 +27,16 @@ const DescriptionsItem = Descriptions.Item;
 const activedTab = ref('basic');
 const auditLogModel = ref<AuditLogDto>({} as AuditLogDto);
 
+const { getApi } = useAuditLogsApi();
 const { getHttpMethodColor, getHttpStatusCodeColor } = useAuditlogs();
 const [Drawer, drawerApi] = useVbenDrawer({
   class: 'w-auto',
   onCancel() {
     drawerApi.close();
   },
-  onConfirm: async () => {},
+  onConfirm: async () => {
+    drawerApi.close();
+  },
   onOpenChange: async (isOpen: boolean) => {
     if (isOpen) {
       try {

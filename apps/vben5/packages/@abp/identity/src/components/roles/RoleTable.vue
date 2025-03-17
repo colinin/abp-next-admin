@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { IdentityRoleDto } from '../../types/roles';
 
@@ -12,17 +14,17 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
-import { useAbpStore } from '@abp/core';
-import { PermissionModal } from '@abp/permission';
+import { Events, useAbpStore, useEventBus, useFeatures } from '@abp/core';
+import { PermissionModal } from '@abp/permissions';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, Modal, Tag } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal, Tag } from 'ant-design-vue';
 
-import { deleteApi, getPagedListApi } from '../../api/roles';
+import { useRolesApi } from '../../api/useRolesApi';
 import { IdentityRolePermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -37,8 +39,13 @@ const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 
 const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
 const ClaimModal = defineAsyncComponent(() => import('./RoleClaimModal.vue'));
+
 const abpStore = useAbpStore();
+const { publish } = useEventBus();
+const { isEnabled } = useFeatures();
 const { hasAccessByCodes } = useAccess();
+const { cancel, deleteApi, getPagedListApi } = useRolesApi();
+
 const [RolePermissionModal, permissionModalApi] = useVbenModal({
   connectedComponent: PermissionModal,
 });
@@ -134,8 +141,13 @@ const handleDelete = (row: IdentityRoleDto) => {
   Modal.confirm({
     centered: true,
     content: $t('AbpIdentity.RoleDeletionConfirmationMessage', [row.name]),
-    onOk: () => {
-      return deleteApi(row.id).then(() => query());
+    onCancel: () => {
+      cancel('User closed cancel delete modal.');
+    },
+    onOk: async () => {
+      await deleteApi(row.id);
+      message.success($t('AbpUi.DeletedSuccessfully'));
+      query();
     },
     title: $t('AbpUi.AreYouSure'),
   });
@@ -152,6 +164,7 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
       roleChangeDrawerApi.setData({
         entityId: row.id,
         entityTypeFullName: 'Volo.Abp.Identity.IdentityRole',
+        subject: row.name,
       });
       roleChangeDrawerApi.open();
       break;
@@ -169,6 +182,13 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
     }
   }
 };
+
+function onPermissionChange(_name: string, key: string) {
+  const roles = abpStore.application?.currentUser.roles ?? [];
+  if (roles.includes(key)) {
+    publish(Events.PermissionChange);
+  }
+}
 </script>
 
 <template>
@@ -196,78 +216,72 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
-        <div class="basis-1/3">
-          <Button
-            :icon="h(EditOutlined)"
-            block
-            type="link"
-            v-access:code="[IdentityRolePermissions.Update]"
-            @click="handleEdit(row)"
-          >
-            {{ $t('AbpUi.Edit') }}
-          </Button>
-        </div>
-        <div class="basis-1/3">
-          <Button
-            :icon="h(DeleteOutlined)"
-            block
-            danger
-            type="link"
-            v-access:code="[IdentityRolePermissions.Delete]"
-            @click="handleDelete(row)"
-          >
-            {{ $t('AbpUi.Delete') }}
-          </Button>
-        </div>
-        <div class="basis-1/3">
-          <Dropdown>
-            <template #overlay>
-              <Menu @click="(info) => handleMenuClick(row, info)">
-                <MenuItem
-                  v-if="
-                    hasAccessByCodes([
-                      IdentityRolePermissions.ManagePermissions,
-                    ])
-                  "
-                  key="permissions"
-                  :icon="h(PermissionsOutlined)"
-                >
-                  {{ $t('AbpPermissionManagement.Permissions') }}
-                </MenuItem>
-                <MenuItem
-                  v-if="
-                    hasAccessByCodes([IdentityRolePermissions.ManageClaims])
-                  "
-                  key="claims"
-                  :icon="h(ClaimOutlined)"
-                >
-                  {{ $t('AbpIdentity.ManageClaim') }}
-                </MenuItem>
-                <MenuItem
-                  v-if="hasAccessByCodes(['Platform.Menu.ManageRoles'])"
-                  key="menus"
-                  :icon="h(MenuOutlined)"
-                >
-                  {{ $t('AppPlatform.Menu:Manage') }}
-                </MenuItem>
-                <MenuItem
-                  v-if="hasAccessByCodes([AuditLogPermissions.Default])"
-                  key="entity-changes"
-                  :icon="h(AuditLogIcon)"
-                >
-                  {{ $t('AbpAuditLogging.EntitiesChanged') }}
-                </MenuItem>
-              </Menu>
-            </template>
-            <Button :icon="h(EllipsisOutlined)" type="link" />
-          </Dropdown>
-        </div>
+        <Button
+          :icon="h(EditOutlined)"
+          block
+          type="link"
+          v-access:code="[IdentityRolePermissions.Update]"
+          @click="handleEdit(row)"
+        >
+          {{ $t('AbpUi.Edit') }}
+        </Button>
+        <Button
+          v-if="row.isStatic === false"
+          :icon="h(DeleteOutlined)"
+          block
+          danger
+          type="link"
+          v-access:code="[IdentityRolePermissions.Delete]"
+          @click="handleDelete(row)"
+        >
+          {{ $t('AbpUi.Delete') }}
+        </Button>
+        <Dropdown>
+          <template #overlay>
+            <Menu @click="(info) => handleMenuClick(row, info)">
+              <MenuItem
+                v-if="
+                  hasAccessByCodes([IdentityRolePermissions.ManagePermissions])
+                "
+                key="permissions"
+                :icon="h(PermissionsOutlined)"
+              >
+                {{ $t('AbpPermissionManagement.Permissions') }}
+              </MenuItem>
+              <MenuItem
+                v-if="hasAccessByCodes([IdentityRolePermissions.ManageClaims])"
+                key="claims"
+                :icon="h(ClaimOutlined)"
+              >
+                {{ $t('AbpIdentity.ManageClaim') }}
+              </MenuItem>
+              <MenuItem
+                v-if="hasAccessByCodes(['Platform.Menu.ManageRoles'])"
+                key="menus"
+                :icon="h(MenuOutlined)"
+              >
+                {{ $t('AppPlatform.Menu:Manage') }}
+              </MenuItem>
+              <MenuItem
+                v-if="
+                  isEnabled('AbpAuditing.Logging.AuditLog') &&
+                  hasAccessByCodes([AuditLogPermissions.Default])
+                "
+                key="entity-changes"
+                :icon="h(AuditLogIcon)"
+              >
+                {{ $t('AbpAuditLogging.EntitiesChanged') }}
+              </MenuItem>
+            </Menu>
+          </template>
+          <Button :icon="h(EllipsisOutlined)" type="link" />
+        </Dropdown>
       </div>
     </template>
   </Grid>
   <RoleEditModal @change="() => query()" />
   <RoleClaimModal @change="query" />
-  <RolePermissionModal />
+  <RolePermissionModal @change="onPermissionChange" />
   <RoleChangeDrawer />
 </template>
 

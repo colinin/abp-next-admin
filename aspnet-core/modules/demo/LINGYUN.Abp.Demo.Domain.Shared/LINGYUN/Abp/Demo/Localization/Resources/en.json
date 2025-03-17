@@ -1,6 +1,7 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Permission:Demo": "Demo",
     "Permission:Books": "Books",
     "Permission:Books.Create": "Create Books",
     "Permission:Books.Edit": "Edit Books",

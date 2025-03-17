@@ -4,6 +4,7 @@
     "Permissions:Auditing": "Auditing",
     "Permissions:AuditLog": "Audit log",
     "Permissions:SecurityLog": "Security log",
+    "Permissions:SystemLog": "System Log",
     "Permissions:DeleteLog": "Delete",
     "Features:Auditing": "Auditing",
     "Features:AuditingDesc": "Enable the auditing function",

@@ -1,0 +1,1 @@
+export { useGdprRequestsApi } from './useGdprRequestsApi';

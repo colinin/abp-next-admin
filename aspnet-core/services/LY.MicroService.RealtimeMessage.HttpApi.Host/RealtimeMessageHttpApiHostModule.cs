@@ -8,6 +8,7 @@ using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
@@ -28,12 +29,14 @@ using LINGYUN.Abp.Notifications.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications.Jobs;
 using LINGYUN.Abp.Notifications.SignalR;
 using LINGYUN.Abp.Notifications.Sms;
+using LINGYUN.Abp.Notifications.Templating;
 using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
 using LINGYUN.Abp.Notifications.WeChat.Work;
 using LINGYUN.Abp.Notifications.WxPusher;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Sms.Platform;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.Scriban;
@@ -53,7 +56,6 @@ using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
-using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -101,6 +103,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpNotificationsWeChatMiniProgramModule),
     typeof(AbpNotificationsWeChatWorkModule),
     typeof(AbpNotificationsExceptionHandlingModule),
+    typeof(AbpNotificationsTemplatingModule),
     typeof(AbpWeChatWorkHandlersModule),
     typeof(AbpWeChatOfficialHandlersModule),
     typeof(AbpIdentityNotificationsModule),
@@ -113,8 +116,9 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
+    typeof(AbpEmailingPlatformModule),
+    typeof(AbpSmsPlatformModule),
     typeof(AbpHttpClientModule),
-    typeof(AbpMailKitModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
@@ -143,7 +147,6 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
-        ConfigureDbContext();
         ConfigureLocalization();
         ConfigureNotifications();
         ConfigureTextTemplating();
@@ -175,7 +178,7 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         // 路由
         app.UseRouting();
         // 跨域

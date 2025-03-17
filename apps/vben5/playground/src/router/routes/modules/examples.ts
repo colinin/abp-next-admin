@@ -1,11 +1,9 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-import { BasicLayout } from '#/layouts';
 import { $t } from '#/locales';
 
 const routes: RouteRecordRaw[] = [
   {
-    component: BasicLayout,
     meta: {
       icon: 'ion:layers-outline',
       keepAlive: true,
@@ -246,6 +244,15 @@ const routes: RouteRecordRaw[] = [
           badgeVariants: 'destructive',
           icon: 'material-symbols:horizontal-distribute',
           title: $t('examples.layout.col-page'),
+        },
+      },
+      {
+        name: 'TippyDemo',
+        path: '/examples/tippy',
+        component: () => import('#/views/examples/tippy/index.vue'),
+        meta: {
+          icon: 'mdi:message-settings-outline',
+          title: 'Tippy',
         },
       },
     ],

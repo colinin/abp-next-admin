@@ -1,18 +1,18 @@
 <script setup lang="ts">
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
+import type { VbenFormProps } from '@vben/common-ui';
+
 import type { IdentityRoleDto } from '../../types/roles';
 
 import { defineEmits, defineOptions, nextTick, ref, toValue } from 'vue';
 
-import { useVbenModal, type VbenFormProps } from '@vben/common-ui';
+import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  useVbenVxeGrid,
-  type VxeGridListeners,
-  type VxeGridProps,
-} from '@abp/ui';
+import { useVbenVxeGrid } from '@abp/ui';
 
-import { getUnaddedRoleListApi } from '../../api/organization-units';
+import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
 
 defineOptions({
   name: 'SelectRoleModal',
@@ -20,6 +20,7 @@ defineOptions({
 const emits = defineEmits<{
   (event: 'confirm', items: IdentityRoleDto[]): void;
 }>();
+const { cancel, getUnaddedRoleListApi } = useOrganizationUnitsApi();
 
 const selectedRoles = ref<IdentityRoleDto[]>([]);
 
@@ -53,6 +54,9 @@ const [Modal, modalApi] = useVbenModal({
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
+  },
+  onClosed() {
+    cancel();
   },
   onConfirm: async () => {
     emits('confirm', toValue(selectedRoles));

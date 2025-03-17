@@ -36,10 +36,9 @@ public class WeChatWorkMessageController : AbpControllerBase, IWeChatWorkMessage
     /// <param name="input">企业微信服务器传递的验证消息参数</param>
     /// <returns></returns>
     [HttpGet]
-    [Route("{agentId}")]
-    public virtual Task<string> Handle([FromRoute] string agentId, [FromQuery] MessageValidationInput input)
+    public virtual Task<string> Handle([FromQuery] MessageValidationInput input)
     {
-        return _service.Handle(agentId, input);
+        return _service.Handle(input);
     }
 
     /// <summary>
@@ -50,14 +49,13 @@ public class WeChatWorkMessageController : AbpControllerBase, IWeChatWorkMessage
     /// <param name="input">企业微信服务器传递的消息参数</param>
     /// <returns></returns>
     [HttpPost]
-    [Route("{agentId}")]
-    public async virtual Task<string> Handle([FromRoute] string agentId, [FromQuery] MessageHandleInput input)
+    public async virtual Task<string> Handle([FromQuery] MessageHandleInput input)
     {
         using var reader = new StreamReader(Request.Body, Encoding.UTF8);
         var content = await reader.ReadToEndAsync();
 
         input.Data = content;
 
-        return await _service.Handle(agentId, input);
+        return await _service.Handle(input);
     }
 }

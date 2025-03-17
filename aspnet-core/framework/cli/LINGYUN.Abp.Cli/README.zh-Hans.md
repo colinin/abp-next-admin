@@ -8,6 +8,13 @@
 dotnet tool install --global LINGYUN.Abp.Cli
 ```
 
+打包项目为LINGYUN.Abp.Cli.8.3.0.nupkg
+
+```shell
+dotnet pack -o ./nupkg
+dotnet tool install -g LINGYUN.Abp.Cli --version 8.3.0 --add-source ./nupkg
+```
+
 ## 使用方法
 
 ```shell

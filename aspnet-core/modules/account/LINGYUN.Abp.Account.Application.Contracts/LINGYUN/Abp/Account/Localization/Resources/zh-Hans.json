@@ -16,6 +16,7 @@
     "DisplayName:WeChatCode": "微信登录凭证",
     "DisplayName:AuthenticatorCode": "验证代码",
     "TwoFactor": "双因素身份验证",
+    "TwoFactor:Enabled": "启用双因素认证",
     "TwoFactor:Email": "邮箱验证",
     "TwoFactor:Phone": "手机验证",
     "TwoFactor:Authenticator": "验证码验证",
@@ -40,8 +41,14 @@
     "ResetAuthenticator": "重置验证器",
     "ResetAuthenticatorDesc": "如果你想更换身份验证程序,可以在这里重置验证器。",
     "ResetAuthenticatorWarning": "重置身份验证器密钥,在重新配置之前身份验证器代码将无法使用,如果你没有其他验证器,二次认证将被解除,这可能会使你的账号安全等级降低。",
+    "YourAuthenticatorIsSuccessfullyReset": "您的验证器重置成功.",
     "Steps:PreStep": "上一步",
     "Steps:NextStep": "下一步",
-    "Steps:Done": "完成"
+    "Steps:Done": "完成",
+    "PersonalSessions": "我的会话",
+    "ProfileTab:Session": "会话管理",
+    "ProfileTab:TwoFactor": "双因素身份验证",
+    "ProfileTab:Authenticator": "身份验证程序",
+    "ProfileTab:SecurityLog": "安全日志"
   }
 }

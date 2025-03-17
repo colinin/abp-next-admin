@@ -1,5 +1,7 @@
 <!-- eslint-disable no-unused-vars -->
 <script setup lang="ts">
+import type { IdentityUserDto } from '../../types/users';
+
 import { h } from 'vue';
 
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
@@ -7,7 +9,7 @@ import { $t } from '@vben/locales';
 
 import { Button, message } from 'ant-design-vue';
 
-import { changePasswordApi } from '../../api/users';
+import { useUsersApi } from '../../api/useUsersApi';
 import { useRandomPassword } from '../../hooks';
 
 defineOptions({
@@ -18,6 +20,7 @@ const emits = defineEmits<{
 }>();
 
 const { generatePassword } = useRandomPassword();
+const { cancel, changePasswordApi } = useUsersApi();
 
 const [Form, formApi] = useVbenForm({
   commonConfig: {
@@ -62,19 +65,30 @@ const [Modal, modalApi] = useVbenModal({
   onCancel() {
     modalApi.close();
   },
+  onClosed() {
+    cancel('User password modal has closed!');
+  },
   onConfirm: async () => {
     try {
-      modalApi.setState({ confirmLoading: true });
+      modalApi.setState({ submitting: true });
       await formApi.validateAndSubmitForm();
     } finally {
-      modalApi.setState({ confirmLoading: false });
+      modalApi.setState({ submitting: false });
     }
+  },
+  onOpenChange(isOpen) {
+    let title = $t('AbpIdentity.SetPassword');
+    if (isOpen) {
+      const { userName } = modalApi.getData<IdentityUserDto>();
+      title += ` - ${userName}`;
+    }
+    modalApi.setState({ title });
   },
   title: $t('AbpIdentity.SetPassword'),
 });
 
 async function onSubmit(input: Record<string, any>) {
-  const { id } = modalApi.getData<Record<string, any>>();
+  const { id } = modalApi.getData<IdentityUserDto>();
   await changePasswordApi(id, { password: input.password });
   message.success($t('AbpUi.SavedSuccessfully'));
   emits('change');

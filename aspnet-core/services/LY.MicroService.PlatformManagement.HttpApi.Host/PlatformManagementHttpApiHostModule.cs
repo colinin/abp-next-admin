@@ -19,6 +19,7 @@ using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
@@ -94,6 +95,7 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpHttpClientModule),
     typeof(AbpMailKitModule),
+    typeof(AbpAliyunSmsModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
@@ -118,7 +120,6 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
-        ConfigureDbContext();
         ConfigureBlobStoring();
         ConfigureLocalization();
         ConfigureKestrelServer();
@@ -138,6 +139,8 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+        ConfigurePlatformModule(context.Services);
     }
 
     public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
@@ -167,7 +170,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         // http调用链
         app.UseCorrelationId();
         // 虚拟文件系统
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         // 路由
         app.UseRouting();
         // 跨域

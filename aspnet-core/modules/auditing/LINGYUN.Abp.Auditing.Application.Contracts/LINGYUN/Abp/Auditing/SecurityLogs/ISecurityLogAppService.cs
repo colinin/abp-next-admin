@@ -12,4 +12,6 @@ public interface ISecurityLogAppService : IApplicationService
     Task<SecurityLogDto> GetAsync(Guid id);
 
     Task DeleteAsync(Guid id);
+
+    Task DeleteManyAsync(SecurityLogDeleteManyInput input);
 }

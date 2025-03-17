@@ -44,11 +44,10 @@ public class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
         var logger = GetRequiredService<ILogger<WeChatWorkTokenExtensionGrant>>(context);
         var localizer = GetRequiredService<IStringLocalizer<AbpOpenIddictResource>>(context);
 
-        var agentId = context.Request.GetParameter(AbpWeChatWorkGlobalConsts.AgentId)?.ToString();
         var code = context.Request.GetParameter(AbpWeChatWorkGlobalConsts.Code)?.ToString();
-        if (agentId.IsNullOrWhiteSpace() || code.IsNullOrWhiteSpace())
+        if (code.IsNullOrWhiteSpace())
         {
-            logger.LogWarning("Invalid grant type: agentId or code not found");
+            logger.LogWarning("Invalid grant type: code not found");
 
             var properties = new AuthenticationProperties(new Dictionary<string, string>
             {
@@ -63,7 +62,7 @@ public class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
 
         try
         {
-            var userInfo = await userFinder.GetUserInfoAsync(agentId, code);
+            var userInfo = await userFinder.GetUserInfoAsync(code);
 
             var userManager = GetRequiredService<IdentityUserManager>(context);
             var currentUser = await userManager.FindByLoginAsync(AbpWeChatWorkGlobalConsts.ProviderName, userInfo.UserId);

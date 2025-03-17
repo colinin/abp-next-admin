@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
 import type { IdentityRoleDto } from '../../types/roles';
 
 import { computed, defineAsyncComponent, h, nextTick, watch } from 'vue';
@@ -7,16 +9,12 @@ import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  useVbenVxeGrid,
-  type VxeGridListeners,
-  type VxeGridProps,
-} from '@abp/ui';
+import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import { Button, Modal } from 'ant-design-vue';
 
-import { addRoles, getRoleListApi } from '../../api/organization-units';
-import { removeOrganizationUnitApi } from '../../api/roles';
+import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
+import { useRolesApi } from '../../api/useRolesApi';
 import { OrganizationUnitPermissions } from '../../constants/permissions';
 
 defineOptions({
@@ -32,6 +30,8 @@ const SelectRoleModal = defineAsyncComponent(
 );
 
 const { hasAccessByCodes } = useAccess();
+const { addRoles, getRoleListApi } = useOrganizationUnitsApi();
+const { cancel, removeOrganizationUnitApi } = useRolesApi();
 
 const getAddRoleEnabled = computed(() => {
   return (
@@ -100,7 +100,7 @@ const [RoleModal, roleModalApi] = useVbenModal({
 });
 
 const onRefresh = () => {
-  nextTick(query);
+  return nextTick(query);
 };
 
 const onDelete = (row: IdentityRoleDto) => {
@@ -109,11 +109,17 @@ const onDelete = (row: IdentityRoleDto) => {
     content: $t('AbpIdentity.OrganizationUnit:AreYouSureRemoveRole', [
       row.name,
     ]),
-    onOk: () => {
-      setLoading(true);
-      return removeOrganizationUnitApi(row.id, props.selectedKey!)
-        .then(onRefresh)
-        .finally(() => setLoading(false));
+    onCancel: () => {
+      cancel('User closed cancel delete modal.');
+    },
+    onOk: async () => {
+      try {
+        setLoading(true);
+        await removeOrganizationUnitApi(row.id, props.selectedKey!);
+        await onRefresh();
+      } finally {
+        setLoading(false);
+      }
     },
     title: $t('AbpUi.AreYouSure'),
   });
@@ -126,24 +132,21 @@ const onShowRole = () => {
   roleModalApi.open();
 };
 
-const onCreateRole = (roles: IdentityRoleDto[]) => {
-  roleModalApi.setState({
-    closable: false,
-    confirmLoading: true,
-  });
-  addRoles(props.selectedKey!, {
-    roleIds: roles.map((item) => item.id),
-  })
-    .then(() => {
-      roleModalApi.close();
-      query();
-    })
-    .finally(() => {
-      roleModalApi.setState({
-        closable: true,
-        confirmLoading: false,
-      });
+const onCreateRole = async (roles: IdentityRoleDto[]) => {
+  try {
+    roleModalApi.setState({
+      submitting: true,
     });
+    await addRoles(props.selectedKey!, {
+      roleIds: roles.map((item) => item.id),
+    });
+    roleModalApi.close();
+    await query();
+  } finally {
+    roleModalApi.setState({
+      submitting: false,
+    });
+  }
 };
 watch(() => props.selectedKey, onRefresh);
 </script>

@@ -1,18 +1,18 @@
 {
-  "name": "@vben/app-antd",
-  "version": "5.5.1",
-  "homepage": "https://vben.pro",
-  "bugs": "https://github.com/vbenjs/vue-vben-admin/issues",
+  "name": "@abp/app-antd",
+  "version": "9.0.4",
+  "homepage": "https://github.com/colinin/abp-next-admin",
+  "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vbenjs/vue-vben-admin.git",
+    "url": "git+https://github.com/colinin/abp-next-admin.git",
     "directory": "apps/app-antd"
   },
   "license": "MIT",
   "author": {
-    "name": "vben",
-    "email": "ann.vben@gmail.com",
-    "url": "https://github.com/anncwb"
+    "name": "colin",
+    "email": "colin.in@foxmail.com",
+    "url": "https://github.com/colinin"
   },
   "type": "module",
   "scripts": {
@@ -29,8 +29,16 @@
     "@abp/account": "workspace:*",
     "@abp/auditing": "workspace:*",
     "@abp/core": "workspace:*",
+    "@abp/features": "workspace:*",
     "@abp/identity": "workspace:*",
+    "@abp/localization": "workspace:*",
+    "@abp/notifications": "workspace:*",
+    "@abp/openiddict": "workspace:*",
+    "@abp/permissions": "workspace:*",
+    "@abp/platform": "workspace:*",
     "@abp/request": "workspace:*",
+    "@abp/saas": "workspace:*",
+    "@abp/settings": "workspace:*",
     "@abp/ui": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",

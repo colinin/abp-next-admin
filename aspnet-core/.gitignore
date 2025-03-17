@@ -6,3 +6,4 @@ Publish
 nupkg
 consoles
 *.configs.cache
+appsettings.Staging.json
