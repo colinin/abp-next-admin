@@ -1,4 +1,5 @@
 using LINGYUN.Abp.Identity.WeChat.Work;
+using LINGYUN.Abp.Notifications.Templating;
 using LINGYUN.Abp.Notifications.WeChat.Work;
 
 namespace LY.MicroService.Applications.Single;
