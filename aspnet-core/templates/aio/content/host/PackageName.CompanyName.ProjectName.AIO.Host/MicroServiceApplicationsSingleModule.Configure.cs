@@ -1,8 +1,8 @@
 ﻿using Elsa;
 using Elsa.Options;
+using Hangfire;
+using Hangfire.Redis.StackExchange;
 using LINGYUN.Abp.Aliyun.Localization;
-using LINGYUN.Abp.BackgroundTasks;
-using LINGYUN.Abp.DataProtectionManagement;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Exporter.MiniExcel;
@@ -29,7 +29,6 @@ using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Abp.Wrapper;
 using LINGYUN.Platform.Localization;
 using PackageName.CompanyName.ProjectName.AIO.Host.Microsoft.Extensions.DependencyInjection;
-using PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -41,13 +40,11 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
-using MiniExcelLibs.Attributes;
 using OpenIddict.Server;
 using OpenIddict.Server.AspNetCore;
 using PackageName.CompanyName.ProjectName.AIO.Host.Authentication;
 using PackageName.CompanyName.ProjectName.AIO.Host.IdentityResources;
 using PackageName.CompanyName.ProjectName.AIO.Host.WeChat.Official.Messages;
-using Quartz;
 using StackExchange.Redis;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -56,9 +53,11 @@ using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
+using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.Caching;
@@ -77,7 +76,6 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.Localization;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.Quartz;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.Localization;
@@ -232,34 +230,6 @@ public partial class MicroServiceApplicationsSingleModule
         }
     }
 
-    private void PreConfigureQuartz(IConfiguration configuration)
-    {
-        PreConfigure<AbpQuartzOptions>(options =>
-        {
-            // 如果使用持久化存储, 则配置quartz持久层
-            if (configuration.GetSection("Quartz:UsePersistentStore").Get<bool>())
-            {
-                var settings = configuration.GetSection("Quartz:Properties").Get<Dictionary<string, string>>();
-                if (settings != null)
-                {
-                    foreach (var setting in settings)
-                    {
-                        options.Properties[setting.Key] = setting.Value;
-                    }
-                }
-
-                options.Configurator += (config) =>
-                {
-                    config.UsePersistentStore(store =>
-                    {
-                        store.UseProperties = false;
-                        store.UseNewtonsoftJsonSerializer();
-                    });
-                };
-            }
-        });
-    }
-
     private void PreConfigureElsa(IServiceCollection services, IConfiguration configuration)
     {
         var elsaSection = configuration.GetSection("Elsa");
@@ -403,17 +373,6 @@ public partial class MicroServiceApplicationsSingleModule
                 //    configuration.GetSection("Minio").Bind(minio);
                 //});
             });
-        });
-    }
-
-    private void ConfigureBackgroundTasks()
-    {
-        Configure<AbpBackgroundTasksOptions>(options =>
-        {
-            options.NodeName = ApplicationName;
-            options.JobCleanEnabled = true;
-            options.JobFetchEnabled = true;
-            options.JobCheckEnabled = true;
         });
     }
 
@@ -767,6 +726,28 @@ public partial class MicroServiceApplicationsSingleModule
             //    }
             //);
         });
+        
+        Configure<AbpMvcLibsOptions>(options =>
+        {
+            options.CheckLibs = false;
+        });
+    }
+    
+    private void ConfigureHangfire(IServiceCollection services, IConfiguration configuration)
+    {
+        // 配置Hangfire存储和设置
+        Configure<AbpBackgroundWorkerOptions>(options =>
+        {
+            options.IsEnabled = true;
+        });
+
+        var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+        // 配置Hangfire
+        services.AddHangfire(config =>
+        {
+            config.UseRedisStorage(redis);
+        });
+
     }
 
     private void ConfigureLocalization()

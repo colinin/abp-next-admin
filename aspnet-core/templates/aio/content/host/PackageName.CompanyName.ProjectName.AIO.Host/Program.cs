@@ -76,6 +76,7 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support App API");
 });
 app.UseAuditing();
+app.UseAbpHangfireDashboard();
 app.UseAbpSerilogEnrichers();
 app.UseConfiguredEndpoints();
 
