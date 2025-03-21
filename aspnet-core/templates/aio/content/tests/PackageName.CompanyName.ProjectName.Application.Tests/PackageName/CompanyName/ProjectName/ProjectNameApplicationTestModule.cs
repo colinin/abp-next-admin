@@ -45,6 +45,8 @@ public class ProjectNameApplicationTestModule : AbpModule
             options.Password.RequireLowercase = false;
             options.Password.RequireNonAlphanumeric = false;
             options.Password.RequireUppercase = false;
+            // 添加默认的双因素令牌提供者配置
+            options.Tokens.ProviderMap.Add("Default", new TokenProviderDescriptor(typeof(EmailTokenProvider<IdentityUser>)));
         });
         Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {

@@ -75,6 +75,17 @@ namespace PackageName.CompanyName.ProjectName.Users
                 input.Position,
                 input.IsActive);
 
+            // 确保更新后的用户状态与DTO中的一致
+            if (user.IdentityUser != null)
+            {
+                bool currentIsActive = user.IdentityUser.LockoutEnd == null || user.IdentityUser.LockoutEnd < DateTimeOffset.Now;
+                if (currentIsActive != input.IsActive)
+                {
+                    await _userManager.SetUserActiveStatusAsync(id, input.IsActive);
+                    user = await _userManager.GetAsync(id);
+                }
+            }
+
             // 返回DTO对象
             return await MapToUserDtoAsync(user);
         }
@@ -121,7 +132,7 @@ namespace PackageName.CompanyName.ProjectName.Users
             foreach (var user in users)
             {
                 var userDto = ObjectMapper.Map<User, UserItemDto>(user);
-                
+
                 // 填充角色信息
                 if (user.IdentityUser != null)
                 {
@@ -129,7 +140,7 @@ namespace PackageName.CompanyName.ProjectName.Users
                     userDto.RoleNames = string.Join("、", roles);
                     userDto.IsActive = user.IdentityUser.LockoutEnd == null || user.IdentityUser.LockoutEnd < DateTimeOffset.Now;
                 }
-                
+
                 userDtos.Add(userDto);
             }
 
@@ -182,17 +193,19 @@ namespace PackageName.CompanyName.ProjectName.Users
         /// <summary>
         /// 将User实体映射为UserDto，并填充权限信息
         /// </summary>
-        private Task<UserDto> MapToUserDtoAsync(User user)
+        private async Task<UserDto> MapToUserDtoAsync(User user)
         {
             var userDto = ObjectMapper.Map<User, UserDto>(user);
 
-            // 设置用户状态
+            // 设置用户状态和角色信息
             if (user.IdentityUser != null)
             {
+                var roles = await _identityUserManager.GetRolesAsync(user.IdentityUser);
+                userDto.RoleNames = string.Join("、", roles);
                 userDto.IsActive = user.IdentityUser.LockoutEnd == null || user.IdentityUser.LockoutEnd < DateTimeOffset.Now;
             }
 
-            return Task.FromResult(userDto);
+            return userDto;
         }
     }
 }

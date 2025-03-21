@@ -81,6 +81,17 @@ namespace PackageName.CompanyName.ProjectName.Users
                         string.Join(", ", lockoutResult.Errors.Select(e => e.Description)));
                 }
             }
+            else
+            {
+                // 确保用户处于活动状态
+                await _identityUserManager.SetLockoutEnabledAsync(identityUser, false);
+                var lockoutResult = await _identityUserManager.SetLockoutEndDateAsync(identityUser, null);
+                if (!lockoutResult.Succeeded)
+                {
+                    throw new UserFriendlyException("设置用户状态失败: " +
+                        string.Join(", ", lockoutResult.Errors.Select(e => e.Description)));
+                }
+            }
 
             // 创建业务用户
             var user = new User(
@@ -221,29 +232,61 @@ namespace PackageName.CompanyName.ProjectName.Users
         /// <returns>操作任务</returns>
         public async Task DeleteAsync(Guid id)
         {
-            // 获取用户
-            var user = await _userRepository.GetAsync(id);
-            if (user == null)
-            {
-                throw new UserFriendlyException("用户不存在");
-            }
+            // 最大重试次数
+            const int maxRetries = 3;
+            int retryCount = 0;
 
-            // 删除Identity用户
-            var identityUser = await _identityUserManager.FindByIdAsync(user.IdentityUserId.ToString());
-            if (identityUser != null)
+            while (true)
             {
-                var result = await _identityUserManager.DeleteAsync(identityUser);
-                if (!result.Succeeded)
+                try
                 {
-                    throw new UserFriendlyException("删除Identity用户失败: " +
-                        string.Join(", ", result.Errors.Select(e => e.Description)));
+                    // 每次尝试时重新获取最新的用户数据
+                    var user = await _userRepository.GetAsync(id);
+                    if (user == null)
+                    {
+                        _logger.LogWarning($"尝试删除不存在的用户，ID：{id}");
+                        return; // 如果用户不存在，就不再继续处理
+                    }
+
+                    // 删除Identity用户
+                    var identityUser = await _identityUserManager.FindByIdAsync(user.IdentityUserId.ToString());
+                    if (identityUser != null)
+                    {
+                        var result = await _identityUserManager.DeleteAsync(identityUser);
+                        if (!result.Succeeded)
+                        {
+                            throw new UserFriendlyException("删除Identity用户失败: " +
+                                string.Join(", ", result.Errors.Select(e => e.Description)));
+                        }
+                    }
+
+                    // 删除用户
+                    await _userRepository.DeleteAsync(user);
+
+                    _logger.LogInformation($"删除了用户，ID：{id}");
+                    return;
+                }
+                catch (Volo.Abp.Data.AbpDbConcurrencyException ex)
+                {
+                    // 增加重试计数
+                    retryCount++;
+
+                    // 如果达到最大重试次数，则抛出用户友好的异常
+                    if (retryCount >= maxRetries)
+                    {
+                        throw new UserFriendlyException(
+                            "删除用户失败：数据已被其他用户修改。请刷新页面后重试。",
+                            "409", ex.Message,
+                            ex);
+                    }
+
+                    // 短暂延迟后重试
+                    await Task.Delay(100 * retryCount); // 逐步增加延迟时间
+
+                    // 记录重试信息
+                    _logger.LogWarning($"检测到用户[{id}]删除时发生并发冲突，正在进行第{retryCount}次重试...");
                 }
             }
-
-            // 删除用户
-            await _userRepository.DeleteAsync(user);
-
-            _logger.LogInformation($"删除了用户，ID：{id}");
         }
 
         /// <summary>
