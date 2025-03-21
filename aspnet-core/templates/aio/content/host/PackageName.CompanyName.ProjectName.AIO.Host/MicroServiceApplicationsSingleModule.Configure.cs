@@ -82,6 +82,7 @@ using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace PackageName.CompanyName.ProjectName.AIO.Host;
