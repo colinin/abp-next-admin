@@ -2,12 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using PackageName.CompanyName.ProjectName.Users;
 using Volo.Abp.Data;
+using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 
 namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 
 [ConnectionStringName(ProjectNameDbProperties.ConnectionStringName)]
-public class ProjectNameDbContext : AbpDataProtectionDbContext<ProjectNameDbContext>, IProjectNameDbContext
+// public class ProjectNameDbContext : AbpDataProtectionDbContext<ProjectNameDbContext>, IProjectNameDbContext
+public class ProjectNameDbContext : AbpDbContext<ProjectNameDbContext>, IProjectNameDbContext
 {
     public virtual DbSet<User> Users { get; set; }
     
