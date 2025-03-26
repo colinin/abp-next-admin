@@ -4,6 +4,7 @@ using LY.MicroService.Applications.Single.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migrations
 {
     [DbContext(typeof(SingleMigrationsDbContext))]
-    partial class SingleMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250315064423_Add-Javascript-Type")]
+    partial class AddJavascriptType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,10 +169,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("AccessedProperties")
+                    b.Property<string>("AllowProperties")
                         .HasMaxLength(512)
                         .HasColumnType("varchar(512)")
-                        .HasColumnName("AccessedProperties");
+                        .HasColumnName("AllowProperties");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -241,10 +244,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("AccessedProperties")
+                    b.Property<string>("AllowProperties")
                         .HasMaxLength(512)
                         .HasColumnType("varchar(512)")
-                        .HasColumnName("AccessedProperties");
+                        .HasColumnName("AllowProperties");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
