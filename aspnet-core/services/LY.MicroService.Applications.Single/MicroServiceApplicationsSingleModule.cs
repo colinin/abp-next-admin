@@ -1,6 +1,7 @@
 using LINGYUN.Abp.Identity.WeChat.Work;
 using LINGYUN.Abp.Notifications.Templating;
 using LINGYUN.Abp.Notifications.WeChat.Work;
+using LINGYUN.Abp.OssManagement.Minio;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -121,7 +122,8 @@ namespace LY.MicroService.Applications.Single;
     // OpenIddict扩展模块 扫码登录
     typeof(AbpOpenIddictQrCodeModule),
 
-    //typeof(AbpOssManagementMinioModule), // 取消注释以使用Minio
+    // 对象存储模块 Minio
+    typeof(AbpOssManagementMinioModule),
     // 对象存储模块 文件系统
     typeof(AbpOssManagementFileSystemModule),
     // 对象存储模块 图片处理
@@ -415,7 +417,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureAuthServer(configuration);
         ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);
-        ConfigureBlobStoring(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureTextTemplating(configuration);
@@ -425,6 +426,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigurePermissionManagement(configuration);
         ConfigureNotificationManagement(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureOssManagement(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 

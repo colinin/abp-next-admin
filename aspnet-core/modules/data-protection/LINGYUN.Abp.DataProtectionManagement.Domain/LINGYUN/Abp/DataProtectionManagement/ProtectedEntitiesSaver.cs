@@ -24,6 +24,7 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
     protected DataProtectionManagementOptions ManagementOptions { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IAbpDistributedLock DistributedLock { get; }
+    protected IJavaScriptTypeConvert JavaScriptTypeConvert { get; }
     protected IEntityTypeInfoRepository EntityTypeInfoRepository { get; }
     protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
 
@@ -33,7 +34,8 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
         IOptions<AbpDataProtectionOptions> options, 
         IOptions<DataProtectionManagementOptions> managementOptions,
         IGuidGenerator guidGenerator,
-        IAbpDistributedLock distributedLock, 
+        IAbpDistributedLock distributedLock,
+        IJavaScriptTypeConvert javaScriptTypeConvert,
         IEntityTypeInfoRepository entityTypeInfoRepository,
         ILocalizableStringSerializer localizableStringSerializer)
     {
@@ -43,6 +45,7 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
         ManagementOptions = managementOptions.Value;
         GuidGenerator = guidGenerator;
         DistributedLock = distributedLock;
+        JavaScriptTypeConvert = javaScriptTypeConvert;
         EntityTypeInfoRepository = entityTypeInfoRepository;
         LocalizableStringSerializer = localizableStringSerializer;
     }
@@ -81,7 +84,8 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
                     var typeDisplayName = entityType.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
                     if (typeDisplayName.IsNullOrWhiteSpace())
                     {
-                        var typeDisplayNameString = LocalizableString.Create($"DisplayName:{entityType.Name}", resourceName);
+                        // 类型多语言表现形式为：LocalizationResource.TypeName
+                        var typeDisplayNameString = LocalizableString.Create(entityType.Name, resourceName);
                         typeDisplayName = LocalizableStringSerializer.Serialize(typeDisplayNameString);
                     }
                     var isDataAudited = entityType.GetCustomAttribute<DisableDataProtectedAttribute>() == null;
@@ -92,39 +96,65 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
                         entityType.FullName,
                         isDataAudited);
 
+                    var globalIgnoreProperties = Options.GlobalIgnoreProperties.Except(Options.AuditedObjectProperties);
+
                     var typeProperties = entityType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty)
-                        .Where(x => !Options.IgnoreAuditedProperties.Contains(x.Name));
+                        .Where(x => !globalIgnoreProperties.Contains(x.Name));
                     foreach (var typeProperty in typeProperties)
                     {
                         var propDisplayName = typeProperty.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
                         if (propDisplayName.IsNullOrWhiteSpace())
                         {
-                            var propDisplayNameString = LocalizableString.Create($"DisplayName:{entityType.Name}", resourceName);
+                            // 属性多语言表现形式为：LocalizationResource.DisplayName:PropertyName
+                            var propDisplayNameString = LocalizableString.Create($"DisplayName:{typeProperty.Name}", resourceName);
                             propDisplayName = LocalizableStringSerializer.Serialize(propDisplayNameString);
                         }
-                        var propTypeFullName = typeProperty.PropertyType.FullName;
-                        string valueRange = null;
-                        if (typeProperty.PropertyType.IsEnum)
-                        {
-                            propTypeFullName = typeof(int).FullName;
-                            var enumType = typeProperty.PropertyType;
-                            var enumValues = enumType.GetEnumValues().Cast<int>();
-                            valueRange = enumValues.JoinAsString(",");
-                        }
-                        entityTypeInfo.AddProperty(
+
+                        var javaScriptTypeResult = JavaScriptTypeConvert.Convert(typeProperty.PropertyType);
+
+                        var propertyInfo = entityTypeInfo.AddProperty(
                             GuidGenerator,
                             typeProperty.Name,
                             propDisplayName ?? typeProperty.Name,
                             typeProperty.PropertyType.FullName,
-                            valueRange);
+                            javaScriptTypeResult.Type);
+
+                        if (typeProperty.PropertyType.IsEnum)
+                        {
+                            var enumType = typeProperty.PropertyType;
+
+                            var enumNames = enumType.GetEnumNames();
+                            var enumValues = enumType.GetEnumValues().Cast<int>().ToArray();
+
+                            for (var index = 0; index < enumNames.Length; index++)
+                            {
+                                var enumName = enumNames[index];
+                                var enumValue = enumValues[index];
+                                var localizerEnumKey = $"{propertyInfo.Name}:{enumName}";
+
+                                // 枚举多语言表现形式为：LocalizationResource.EnumName:EnumValue
+                                var enumDisplayNameString = LocalizableString.Create($"{enumType.Name}:{enumName}", resourceName);
+                                var enumDisplayName = LocalizableStringSerializer.Serialize(enumDisplayNameString);
+
+                                propertyInfo.AddEnum(
+                                    GuidGenerator,
+                                    enumName,
+                                    enumDisplayName,
+                                    enumValue.ToString());
+                            }
+                        }
                     }
                     newRecords.Add(entityTypeInfo);
                 }
                 else
                 {
                     var hasChanged = false;
+
+                    var globalIgnoreProperties = Options.GlobalIgnoreProperties.Except(Options.AuditedObjectProperties);
+
                     var typeProperties = entityType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty)
-                        .Where(x => !Options.IgnoreAuditedProperties.Contains(x.Name));
+                        .Where(x => !globalIgnoreProperties.Contains(x.Name));
+
                     entityTypeInfo.Properties.RemoveAll(x => !typeProperties.Any(p => p.Name == x.Name));
                     foreach (var typeProperty in typeProperties)
                     {
@@ -134,24 +164,42 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
                             var propDisplayName = typeProperty.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
                             if (propDisplayName.IsNullOrWhiteSpace())
                             {
+                                // 属性多语言表现形式为：LocalizationResource.DisplayName:PropertyName
                                 var propDisplayNameString = LocalizableString.Create($"DisplayName:{typeProperty.Name}", resourceName);
                                 propDisplayName = LocalizableStringSerializer.Serialize(propDisplayNameString);
                             }
-                            var propTypeFullName = typeProperty.PropertyType.FullName;
-                            string valueRange = null;
+                            var javaScriptTypeResult = JavaScriptTypeConvert.Convert(typeProperty.PropertyType);
+                            var propertyInfo = entityTypeInfo.AddProperty(
+                            GuidGenerator,
+                            typeProperty.Name,
+                            propDisplayName ?? typeProperty.Name,
+                            typeProperty.PropertyType.FullName,
+                            javaScriptTypeResult.Type);
+
                             if (typeProperty.PropertyType.IsEnum)
                             {
-                                propTypeFullName = typeof(int).FullName;
                                 var enumType = typeProperty.PropertyType;
-                                var enumValues = enumType.GetEnumValues().Cast<int>();
-                                valueRange = enumValues.JoinAsString(",");
+
+                                var enumNames = enumType.GetEnumNames();
+                                var enumValues = enumType.GetEnumValues().Cast<int>().ToArray();
+
+                                for (var index = 0; index < enumNames.Length; index++)
+                                {
+                                    var enumName = enumNames[index];
+                                    var enumValue = enumValues[index];
+                                    var localizerEnumKey = $"{propertyInfo.Name}:{enumName}";
+
+                                    // 枚举多语言表现形式为：LocalizationResource.EnumName:EnumValue
+                                    var enumDisplayNameString = LocalizableString.Create($"{enumType.Name}:{enumName}", resourceName);
+                                    var enumDisplayName = LocalizableStringSerializer.Serialize(enumDisplayNameString);
+
+                                    propertyInfo.AddEnum(
+                                        GuidGenerator,
+                                        enumName,
+                                        enumDisplayName,
+                                        enumValue.ToString());
+                                }
                             }
-                            entityTypeInfo.AddProperty(
-                                GuidGenerator,
-                                typeProperty.Name,
-                                propDisplayName ?? typeProperty.Name,
-                                typeProperty.PropertyType.FullName,
-                                valueRange);
                         }
                     }
                     if (hasChanged)

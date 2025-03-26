@@ -1,9 +1,11 @@
-﻿namespace LINGYUN.Abp.DataProtection;
+﻿using System.Threading.Tasks;
+
+namespace LINGYUN.Abp.DataProtection;
 public interface IDataProtectedResourceStore
 {
-    void Set(DataAccessResource resource);
+    Task SetAsync(DataAccessResource resource);
 
-    void Remove(DataAccessResource resource);
+    Task RemoveAsync(DataAccessResource resource);
 
-    DataAccessResource Get(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation);
+    Task<DataAccessResource> GetAsync(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation);
 }

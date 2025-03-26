@@ -38,6 +38,7 @@ public class DataProtectedInterceptor : AbpInterceptor, ITransientDependency
             return true;
         }
 
+        // TODO: 使用一个范围标志来确定当前需要禁用的数据权限操作
         if (invocation.Method.IsDefined(typeof(DisableDataProtectedAttribute), true))
         {
             return true;

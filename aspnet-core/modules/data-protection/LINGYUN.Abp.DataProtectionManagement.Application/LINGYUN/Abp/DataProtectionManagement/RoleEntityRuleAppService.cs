@@ -1,15 +1,21 @@
-﻿using LINGYUN.Abp.DataProtectionManagement.Permissions;
+﻿using LINGYUN.Abp.DataProtection;
+using LINGYUN.Abp.DataProtectionManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.EventBus.Distributed;
 
 namespace LINGYUN.Abp.DataProtectionManagement;
 
 [Authorize(DataProtectionManagementPermissionNames.RoleEntityRule.Default)]
 public class RoleEntityRuleAppService : DataProtectionManagementApplicationServiceBase, IRoleEntityRuleAppService
 {
+    protected IDistributedEventBus EventBus => LazyServiceProvider.LazyGetRequiredService<IDistributedEventBus>();
+
     private readonly IEntityTypeInfoRepository _entityTypeInfoRepository;
     private readonly IRoleEntityRuleRepository _roleEntityRuleRepository;
 
@@ -47,7 +53,7 @@ public class RoleEntityRuleAppService : DataProtectionManagementApplicationServi
             entityTypeInfo.Id,
             entityTypeInfo.TypeFullName,
             input.Operation,
-            input.AllowProperties?.JoinAsString(","),
+            input.AccessedProperties?.JoinAsString(","),
             input.FilterGroup,
             CurrentTenant.Id)
         {
@@ -55,6 +61,18 @@ public class RoleEntityRuleAppService : DataProtectionManagementApplicationServi
         };
 
         entityRule = await _roleEntityRuleRepository.InsertAsync(entityRule);
+
+        await EventBus.PublishAsync(
+            new DataAccessResourceChangeEvent(
+                new DataAccessResource(
+                    RolePermissionValueProvider.ProviderName,
+                    entityRule.RoleName,
+                    entityRule.EntityTypeFullName,
+                    entityRule.Operation,
+                    entityRule.FilterGroup)
+                {
+                    AccessedProperties = input.AccessedProperties?.ToList()
+                }));
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
@@ -73,15 +91,27 @@ public class RoleEntityRuleAppService : DataProtectionManagementApplicationServi
         {
             entityRule.Operation = input.Operation;
         }
-        var allowPropertites = input.AllowProperties?.JoinAsString(",");
-        if (!string.Equals(entityRule.AllowProperties, allowPropertites, StringComparison.InvariantCultureIgnoreCase))
+        var allowPropertites = input.AccessedProperties?.JoinAsString(",");
+        if (!string.Equals(entityRule.AccessedProperties, allowPropertites, StringComparison.InvariantCultureIgnoreCase))
         {
-            entityRule.AllowProperties = allowPropertites;
+            entityRule.AccessedProperties = allowPropertites;
         }
 
         entityRule.FilterGroup = input.FilterGroup;
 
         entityRule = await _roleEntityRuleRepository.UpdateAsync(entityRule);
+
+        await EventBus.PublishAsync(
+            new DataAccessResourceChangeEvent(
+                new DataAccessResource(
+                    RolePermissionValueProvider.ProviderName,
+                    entityRule.RoleName,
+                    entityRule.EntityTypeFullName,
+                    entityRule.Operation,
+                    entityRule.FilterGroup)
+                {
+                    AccessedProperties = input.AccessedProperties?.ToList()
+                }));
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
