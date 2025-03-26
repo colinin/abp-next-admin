@@ -14,6 +14,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Volo.Abp.BackgroundJobs" />
 		<PackageReference Include="Volo.Abp.Ddd.Application" />
 		<PackageReference Include="LINGYUN.Abp.Dynamic.Queryable.Application" />
 	</ItemGroup>

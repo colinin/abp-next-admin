@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LINGYUN.Abp.Identity.Application" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.HangFire" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Hangfire.MemoryStorage" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.Application\PackageName.CompanyName.ProjectName.Application.csproj" />
     <ProjectReference Include="..\PackageName.CompanyName.ProjectName.Domain.Tests\PackageName.CompanyName.ProjectName.Domain.Tests.csproj" />
+    <ProjectReference Include="..\PackageName.CompanyName.ProjectName.EntityFrameworkCore.Tests\PackageName.CompanyName.ProjectName.EntityFrameworkCore.Tests.csproj" />
   </ItemGroup>
 
 </Project>
