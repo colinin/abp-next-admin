@@ -2,6 +2,7 @@ using LINGYUN.Abp.Identity.QrCode;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using OpenIddict.Validation.AspNetCore;
+using Volo.Abp.BlobStoring.Minio;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -316,23 +317,37 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
-    private void ConfigureBlobStoring(IConfiguration configuration)
+    private void ConfigureOssManagement(IServiceCollection services, IConfiguration configuration)
     {
-        Configure<AbpBlobStoringOptions>(options =>
+        var useMinio = configuration.GetValue<bool>("OssManagement:UseMinio");
+        if (useMinio)
         {
-            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+            Configure<AbpBlobStoringOptions>(options =>
             {
-                containerConfiguration.UseFileSystem(fileSystem =>
+                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
                 {
-                    fileSystem.BasePath = Path.Combine(Directory.GetCurrentDirectory(), "blobs");
+                    containerConfiguration.UseMinio(minio =>
+                    {
+                        configuration.GetSection("Minio").Bind(minio);
+                    });
                 });
-
-                //containerConfiguration.UseMinio(minio =>
-                //{
-                //    configuration.GetSection("Minio").Bind(minio);
-                //});
             });
-        });
+            services.AddMinioContainer();
+        }
+        else
+        {
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+                {
+                    containerConfiguration.UseFileSystem(fileSystem =>
+                    {
+                        fileSystem.BasePath = Path.Combine(Directory.GetCurrentDirectory(), "blobs");
+                    });
+                });
+            });
+            services.AddFileSystemContainer();
+        }
     }
 
     private void ConfigureBackgroundTasks()
