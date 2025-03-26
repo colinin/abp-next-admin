@@ -36,7 +36,11 @@ public class DataProtectedResourceCacheItem
     /// <summary>
     /// 允许操作的属性列表
     /// </summary>
-    public List<string> AllowProperties { get; set; }
+    public List<string> AccessdProperties { get; set; }
+    public DataProtectedResourceCacheItem()
+    {
+
+    }
 
     public DataProtectedResourceCacheItem(
         string subjectName, 
@@ -50,7 +54,7 @@ public class DataProtectedResourceCacheItem
         EntityTypeFullName = entityTypeFullName;
         Operation = operation;
         FilterGroup = filterGroup;
-        AllowProperties = new List<string>();
+        AccessdProperties = new List<string>();
     }
 
     public static string CalculateCacheKey(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation = DataAccessOperation.Read)

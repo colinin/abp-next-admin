@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Exporter;
+﻿using LINGYUN.Abp.DataProtection.Models;
+using LINGYUN.Abp.Exporter;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -15,4 +16,10 @@ public interface IBookAppService :
     IImporterAppService<BookImportInput>
 {
     Task<ListResultDto<AuthorLookupDto>> GetAuthorLookupAsync();
+    /// <summary>
+    /// 获取实体可访问规则
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task<EntityTypeInfoModel> GetEntityRuleAsync(EntityTypeInfoGetModel input);
 }

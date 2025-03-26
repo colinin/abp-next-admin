@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Demo.Permissions;
+﻿using LINGYUN.Abp.DataProtection.Models;
+using LINGYUN.Abp.Demo.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -77,5 +78,12 @@ public class BookController : AbpControllerBase, IBookAppService
     public virtual Task<BookDto> UpdateAsync(Guid id, CreateUpdateBookDto input)
     {
         return _service.UpdateAsync(id, input);
+    }
+
+    [HttpGet]
+    [Route("entity")]
+    public virtual Task<EntityTypeInfoModel> GetEntityRuleAsync(EntityTypeInfoGetModel input)
+    {
+        return _service.GetEntityRuleAsync(input);
     }
 }

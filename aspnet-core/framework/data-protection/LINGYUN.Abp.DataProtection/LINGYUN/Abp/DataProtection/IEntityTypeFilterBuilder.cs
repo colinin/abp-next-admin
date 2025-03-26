@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.DataProtection;
 /// <summary>
@@ -14,7 +15,7 @@ public interface IEntityTypeFilterBuilder
     /// <param name="group">查询条件组</param>
     /// <typeparam name="TEntity">实体类型</typeparam>
     /// <returns></returns>
-    Expression<Func<TEntity, bool>> Build<TEntity>(DataAccessOperation operation, DataAccessFilterGroup group = null);
+    Task<Expression<Func<TEntity, bool>>> Build<TEntity>(DataAccessOperation operation, DataAccessFilterGroup group = null);
 
-    LambdaExpression Build(Type entityType, DataAccessOperation operation, DataAccessFilterGroup group = null);
+    Task<LambdaExpression> Build(Type entityType, DataAccessOperation operation, DataAccessFilterGroup group = null);
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.DataProtectionManagement;
@@ -17,7 +18,11 @@ public class EntityPropertyInfoDto : EntityDto<Guid>
     /// </summary>
     public string TypeFullName { get; set; }
     /// <summary>
-    /// 数据值范围集合（主要针对枚举类型）
+    /// Js类型
     /// </summary>
-    public string[] ValueRange { get; set; }
+    public string JavaScriptType { get; set; }
+    /// <summary>
+    /// 枚举列表
+    /// </summary>
+    public virtual List<EntityEnumInfoDto> Enums { get; set; } = new List<EntityEnumInfoDto>();
 }

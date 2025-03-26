@@ -21,23 +21,28 @@ public abstract class EfCoreDataProtectionRepository<TDbContext, TEntity, TKey> 
 {
     private readonly IDataAuthorizationService _dataAuthorizationService;
     private readonly IEntityTypeFilterBuilder _entityTypeFilterBuilder;
+    private readonly IEntityPropertyResultBuilder _entityPropertyResultBuilder;
 
     protected EfCoreDataProtectionRepository(
         [NotNull] IDbContextProvider<TDbContext> dbContextProvider,
         [NotNull] IDataAuthorizationService dataAuthorizationService,
-        [NotNull] IEntityTypeFilterBuilder entityTypeFilterBuilder)
+        [NotNull] IEntityTypeFilterBuilder entityTypeFilterBuilder,
+        [NotNull] IEntityPropertyResultBuilder entityPropertyResultBuilder)
         : base(dbContextProvider)
     {
         _dataAuthorizationService = dataAuthorizationService;
         _entityTypeFilterBuilder = entityTypeFilterBuilder;
+        _entityPropertyResultBuilder = entityPropertyResultBuilder;
     }
 
     public async override Task<IQueryable<TEntity>> GetQueryableAsync()
     {
         var queryable = await base.GetQueryableAsync();
 
-        var dataAccessFilterExp = _entityTypeFilterBuilder.Build<TEntity>(DataAccessOperation.Read);
-        queryable = queryable.Where(dataAccessFilterExp);
+        var dataAccessFilterExp = await _entityTypeFilterBuilder.Build<TEntity>(DataAccessOperation.Read);
+        var accessFieldExp = await _entityPropertyResultBuilder.Build<TEntity>(DataAccessOperation.Read);
+
+        queryable = queryable.Where(dataAccessFilterExp).Select(accessFieldExp);
 
         return queryable;
     }
@@ -91,23 +96,28 @@ public abstract class EfCoreDataProtectionRepository<TDbContext, TEntity> : EfCo
 {
     private readonly IDataAuthorizationService _dataAuthorizationService;
     private readonly IEntityTypeFilterBuilder _entityTypeFilterBuilder;
+    private readonly IEntityPropertyResultBuilder _entityPropertyResultBuilder;
 
     protected EfCoreDataProtectionRepository(
         [NotNull] IDbContextProvider<TDbContext> dbContextProvider,
         [NotNull] IDataAuthorizationService dataAuthorizationService,
-        [NotNull] IEntityTypeFilterBuilder entityTypeFilterBuilder) 
+        [NotNull] IEntityTypeFilterBuilder entityTypeFilterBuilder,
+        [NotNull] IEntityPropertyResultBuilder entityPropertyResultBuilder) 
         : base(dbContextProvider)
     {
         _dataAuthorizationService = dataAuthorizationService;
         _entityTypeFilterBuilder = entityTypeFilterBuilder;
+        _entityPropertyResultBuilder = entityPropertyResultBuilder;
     }
 
     public async override Task<IQueryable<TEntity>> GetQueryableAsync()
     {
         var queryable = await base.GetQueryableAsync();
 
-        var dataAccessFilterExp = _entityTypeFilterBuilder.Build<TEntity>(DataAccessOperation.Read);
-        queryable = queryable.Where(dataAccessFilterExp);
+        var dataAccessFilterExp = await _entityTypeFilterBuilder.Build<TEntity>(DataAccessOperation.Read);
+        var accessFieldExp = await _entityPropertyResultBuilder.Build<TEntity>(DataAccessOperation.Read);
+
+        queryable = queryable.Where(dataAccessFilterExp).Select(accessFieldExp);
 
         return queryable;
     }
