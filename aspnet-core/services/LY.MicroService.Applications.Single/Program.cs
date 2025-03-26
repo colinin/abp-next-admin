@@ -2,6 +2,7 @@ using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LY.MicroService.Applications.Single;
 using Microsoft.AspNetCore.Cors;
 using Serilog;
+using TencentCloud.Tsf.V20180326.Models;
 using Volo.Abp.IO;
 using Volo.Abp.Modularity.PlugIns;
 
@@ -27,6 +28,15 @@ builder.Services.AddCors(options =>
 });
 builder.Host.AddAppSettingsSecretsJson()
     .UseAutofac()
+    .ConfigureAppConfiguration((context, config) =>
+    {
+        var configuration = config.Build();
+        var agileConfigEnabled = configuration["AgileConfig:IsEnabled"];
+        if (agileConfigEnabled.IsNullOrEmpty() || bool.Parse(agileConfigEnabled))
+        {
+            config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
+        }
+    })
     .UseSerilog((context, provider, config) =>
     {
         config.ReadFrom.Configuration(context.Configuration);
