@@ -14,6 +14,7 @@ import { $t } from '@vben/locales';
 
 import { FeatureStateCheck, GlobalFeatureStateCheck } from '@abp/features';
 import { PermissionStateCheck } from '@abp/permissions';
+import { TenantSelect } from '@abp/saas';
 import {
   AutoComplete,
   Button,
@@ -158,6 +159,7 @@ async function initComponentAdapter() {
     FeatureStateCheck,
     GlobalFeatureStateCheck,
     PermissionStateCheck,
+    TenantSelect,
   };
 
   // 将组件注册到全局共享状态中
