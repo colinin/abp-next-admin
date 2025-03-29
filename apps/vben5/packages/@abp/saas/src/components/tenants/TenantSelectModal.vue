@@ -53,7 +53,6 @@ async function onSubmit(values: Record<string, any>) {
   modalApi.setState({ submitting: true });
   try {
     tenant.value = undefined;
-    localStorage.removeItem('__tenant');
     if (values.name) {
       const result = await findTenantByNameApi(values.name);
       if (!result.success) {
@@ -69,7 +68,6 @@ async function onSubmit(values: Record<string, any>) {
         return;
       }
       tenant.value = { id: result.tenantId, name: result.normalizedName };
-      localStorage.setItem('__tenant', result.tenantId!);
     }
     emits('change', tenant.value);
     modalApi.close();
