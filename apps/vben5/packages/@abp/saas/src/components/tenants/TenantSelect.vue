@@ -34,6 +34,7 @@ function onSwitchClick() {
 }
 
 function onChange(tenant?: { id?: string; name?: string }) {
+  abpStore.setTenantId(tenant?.id);
   emits('change', tenant);
 }
 </script>
