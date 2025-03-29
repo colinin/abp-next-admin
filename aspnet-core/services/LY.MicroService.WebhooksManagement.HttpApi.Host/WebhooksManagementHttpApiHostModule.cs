@@ -19,6 +19,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.Webhooks.EventBus;
 using LINGYUN.Abp.Webhooks.Identity;
 using LINGYUN.Abp.Webhooks.Saas;
@@ -81,6 +82,7 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(AbpClaimsMappingModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
+    typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
@@ -121,7 +123,6 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureWebhooks(context.Services);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
-        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureBackgroundTasks(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());

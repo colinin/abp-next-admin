@@ -168,6 +168,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Emailing.Platfo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Sms.Platform", "modules\platform\LINGYUN.Abp.Sms.Platform\LINGYUN.Abp.Sms.Platform.csproj", "{8298C4A6-5275-D7A2-9A5C-99B5F2D0E7A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Telemetry.SkyWalking", "framework\telemetry\LINGYUN.Abp.Telemetry.SkyWalking\LINGYUN.Abp.Telemetry.SkyWalking.csproj", "{7CF83493-6AF5-9C6D-01A7-AC7FC11BC2CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -430,6 +432,10 @@ Global
 		{8298C4A6-5275-D7A2-9A5C-99B5F2D0E7A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8298C4A6-5275-D7A2-9A5C-99B5F2D0E7A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8298C4A6-5275-D7A2-9A5C-99B5F2D0E7A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CF83493-6AF5-9C6D-01A7-AC7FC11BC2CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CF83493-6AF5-9C6D-01A7-AC7FC11BC2CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CF83493-6AF5-9C6D-01A7-AC7FC11BC2CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CF83493-6AF5-9C6D-01A7-AC7FC11BC2CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -499,6 +505,7 @@ Global
 		{0EA7605E-3364-6EDC-3AC1-F21A9A984B9B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{8BAB6A91-865C-A599-BE2A-7C487129D83A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{8298C4A6-5275-D7A2-9A5C-99B5F2D0E7A0} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{7CF83493-6AF5-9C6D-01A7-AC7FC11BC2CE} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}
