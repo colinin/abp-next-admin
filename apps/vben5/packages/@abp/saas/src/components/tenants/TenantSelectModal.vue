@@ -4,7 +4,6 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useCookies } from '@vueuse/integrations/useCookies';
 import { message } from 'ant-design-vue';
 
 import { useMultiTenancyApi } from '../../api/useMultiTenancyApi';
@@ -19,7 +18,6 @@ const emits = defineEmits<{
 }>();
 
 const tenant = ref<Tenant>();
-const cookies = useCookies();
 const { findTenantByNameApi } = useMultiTenancyApi();
 
 const [Form, formApi] = useVbenForm({
@@ -55,10 +53,7 @@ async function onSubmit(values: Record<string, any>) {
   modalApi.setState({ submitting: true });
   try {
     tenant.value = undefined;
-    cookies.remove('__tenant', {
-      path: '/',
-    });
-    // localStorage.removeItem('__tenant');
+    localStorage.removeItem('__tenant');
     if (values.name) {
       const result = await findTenantByNameApi(values.name);
       if (!result.success) {
@@ -74,12 +69,7 @@ async function onSubmit(values: Record<string, any>) {
         return;
       }
       tenant.value = { id: result.tenantId, name: result.normalizedName };
-      if (result.tenantId) {
-        // localStorage.setItem('__tenant', result.tenantId);
-        cookies.set('__tenant', result.tenantId, {
-          path: '/',
-        });
-      }
+      localStorage.setItem('__tenant', result.tenantId!);
     }
     emits('change', tenant.value);
     modalApi.close();

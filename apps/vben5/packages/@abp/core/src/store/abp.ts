@@ -10,6 +10,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia';
 export const useAbpStore = defineStore(
   'abp',
   () => {
+    const tenantId = ref<string>();
     const application = ref<ApplicationConfigurationDto>();
     const localization = ref<ApplicationLocalizationDto>();
     /** 获取 i18n 格式本地化文本 */
@@ -44,6 +45,11 @@ export const useAbpStore = defineStore(
       });
       return abpLocales;
     }
+
+    function setTenantId(val?: string) {
+      tenantId.value = val;
+    }
+
     function setApplication(val: ApplicationConfigurationDto) {
       application.value = val;
     }
@@ -63,6 +69,8 @@ export const useAbpStore = defineStore(
       localization,
       setApplication,
       setLocalization,
+      setTenantId,
+      tenantId,
     };
   },
   {
