@@ -19,9 +19,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 using Quartz;
 using StackExchange.Redis;
 using System;
@@ -155,53 +152,6 @@ public partial class TaskManagementHttpApiHostModule
         {
             var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
             services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
-        }
-    }
-
-    private void ConfigureOpenTelemetry(IServiceCollection services, IConfiguration configuration)
-    {
-        var openTelemetryEnabled = configuration["OpenTelemetry:IsEnabled"];
-        if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
-        {
-            services.AddOpenTelemetry()
-                .ConfigureResource(resource =>
-                {
-                    resource.AddService(ApplicationName);
-                })
-                .WithTracing(tracing =>
-                {
-                    tracing.AddHttpClientInstrumentation();
-                    tracing.AddAspNetCoreInstrumentation();
-                    tracing.AddCapInstrumentation();
-                    tracing.AddEntityFrameworkCoreInstrumentation();
-                    tracing.AddSource(ApplicationName);
-
-                    var tracingOtlpEndpoint = configuration["OpenTelemetry:Otlp:Endpoint"];
-                    if (!tracingOtlpEndpoint.IsNullOrWhiteSpace())
-                    {
-                        tracing.AddOtlpExporter(otlpOptions =>
-                        {
-                            otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
-                        });
-                        return;
-                    }
-
-                    var zipkinEndpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-                    if (!zipkinEndpoint.IsNullOrWhiteSpace())
-                    {
-                        tracing.AddZipkinExporter(zipKinOptions =>
-                        {
-                            zipKinOptions.Endpoint = new Uri(zipkinEndpoint);
-                        });
-                        return;
-                    }
-                })
-                .WithMetrics(metrics =>
-                {
-                    metrics.AddRuntimeInstrumentation();
-                    metrics.AddHttpClientInstrumentation();
-                    metrics.AddAspNetCoreInstrumentation();
-                });
         }
     }
 

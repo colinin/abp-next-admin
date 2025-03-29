@@ -8,9 +8,9 @@ using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Exporter.MiniExcel;
+using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Gdpr.Identity;
-using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
@@ -18,6 +18,7 @@ using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.Telemetry.SkyWalking;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -74,6 +75,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpAutofacModule)
@@ -114,7 +116,6 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
-        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }

@@ -38,6 +38,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.Scriban;
 using LINGYUN.Abp.WeChat.Official.Handlers;
@@ -120,6 +121,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpSmsPlatformModule),
     typeof(AbpHttpClientModule),
     typeof(AbpClaimsMappingModule),
+    typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAutofacModule)
@@ -163,7 +165,6 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
-        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());

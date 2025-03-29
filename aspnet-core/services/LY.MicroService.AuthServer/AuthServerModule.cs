@@ -24,6 +24,7 @@ using LINGYUN.Abp.OpenIddict.WeChat.Work;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.WeChat.Work.AspNetCore;
 using LY.MicroService.AuthServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
@@ -72,6 +73,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
@@ -79,8 +81,6 @@ namespace LY.MicroService.AuthServer;
     )]
 public partial class AuthServerModule : AbpModule
 {
-    private const string DefaultCorsPolicyName = "Default";
-
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
@@ -113,7 +113,6 @@ public partial class AuthServerModule : AbpModule
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
-        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -140,11 +139,12 @@ public partial class AuthServerModule : AbpModule
         app.UseCorrelationId();
         app.MapAbpStaticAssets();
         app.UseRouting();
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
         app.UseMultiTenancy();
         app.UseAbpSession();
+        app.UseUnitOfWork();
         app.UseDynamicClaims();
         app.UseAuthorization();
         app.UseAuditing();

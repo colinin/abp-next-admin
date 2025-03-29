@@ -15,11 +15,13 @@ using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.OssManagement.FileSystem;
 using LINGYUN.Abp.OssManagement.Imaging;
+using LINGYUN.Abp.OssManagement.Minio;
 using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Aliyun;
+using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
@@ -64,8 +66,9 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpUINavigationVueVbenAdminModule),
     typeof(PlatformThemeVueVbenAdminModule),
     // typeof(AbpOssManagementAliyunModule),
+    typeof(AbpOssManagementMinioModule),           // Minio存储提供者模块
     typeof(AbpOssManagementFileSystemModule),           // 本地文件系统提供者模块
-    typeof(AbpOssManagementImagingModule), // 本地文件系统图形处理模块
+    typeof(AbpOssManagementImagingModule), // 对象存储图形处理模块
     typeof(AbpOssManagementApplicationModule),
     typeof(AbpOssManagementHttpApiModule),
     typeof(AbpOssManagementSettingManagementModule),
@@ -93,6 +96,7 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
+    typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpHttpClientModule),
     typeof(AbpMailKitModule),
     typeof(AbpAliyunSmsModule),
@@ -120,7 +124,6 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
-        ConfigureBlobStoring();
         ConfigureLocalization();
         ConfigureKestrelServer();
         ConfigureExceptionHandling();
@@ -135,7 +138,7 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
-        ConfigureOpenTelemetry(context.Services, configuration);
+        ConfigureOssManagement(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());

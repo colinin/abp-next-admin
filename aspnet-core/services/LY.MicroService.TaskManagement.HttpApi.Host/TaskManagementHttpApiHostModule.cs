@@ -22,6 +22,7 @@ using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
 using LINGYUN.Abp.TaskManagement;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Telemetry.SkyWalking;
 using LY.MicroService.TaskManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -80,6 +81,7 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpAutofacModule)
@@ -118,7 +120,6 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
-        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
