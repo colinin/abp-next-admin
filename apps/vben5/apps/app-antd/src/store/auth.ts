@@ -40,8 +40,13 @@ export const useAuthStore = defineStore('auth', () => {
     tenantId?: string,
     onSuccess?: () => Promise<void> | void,
   ) {
-    const result = await qrcodeLoginApi({ key, tenantId });
-    return await _loginSuccess(result, onSuccess);
+    try {
+      loginLoading.value = true;
+      const result = await qrcodeLoginApi({ key, tenantId });
+      return await _loginSuccess(result, onSuccess);
+    } finally {
+      loginLoading.value = false;
+    }
   }
 
   /**
@@ -53,8 +58,13 @@ export const useAuthStore = defineStore('auth', () => {
     params: Recordable<any>,
     onSuccess?: () => Promise<void> | void,
   ) {
-    const result = await loginApi(params as any);
-    return await _loginSuccess(result, onSuccess);
+    try {
+      loginLoading.value = true;
+      const result = await loginApi(params as any);
+      return await _loginSuccess(result, onSuccess);
+    } finally {
+      loginLoading.value = false;
+    }
   }
 
   async function logout(redirect: boolean = true) {
@@ -116,38 +126,34 @@ export const useAuthStore = defineStore('auth', () => {
   ) {
     // 异步处理用户登录操作并获取 accessToken
     let userInfo: null | UserInfo = null;
-    try {
-      loginLoading.value = true;
-      const { accessToken, tokenType, refreshToken } = loginResult;
-      // 如果成功获取到 accessToken
-      if (accessToken) {
-        accessStore.setAccessToken(`${tokenType} ${accessToken}`);
-        accessStore.setRefreshToken(refreshToken);
+    loginLoading.value = true;
+    const { accessToken, tokenType, refreshToken } = loginResult;
+    // 如果成功获取到 accessToken
+    if (accessToken) {
+      accessStore.setAccessToken(`${tokenType} ${accessToken}`);
+      accessStore.setRefreshToken(refreshToken);
 
-        userInfo = await fetchUserInfo();
+      userInfo = await fetchUserInfo();
 
-        userStore.setUserInfo(userInfo);
+      userStore.setUserInfo(userInfo);
 
-        publish(Events.UserLogin, userInfo);
+      publish(Events.UserLogin, userInfo);
 
-        if (accessStore.loginExpired) {
-          accessStore.setLoginExpired(false);
-        } else {
-          onSuccess
-            ? await onSuccess?.()
-            : await router.push(userInfo.homePath || DEFAULT_HOME_PATH);
-        }
-
-        if (userInfo?.realName) {
-          notification.success({
-            description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
-            duration: 3,
-            message: $t('authentication.loginSuccess'),
-          });
-        }
+      if (accessStore.loginExpired) {
+        accessStore.setLoginExpired(false);
+      } else {
+        onSuccess
+          ? await onSuccess?.()
+          : await router.push(userInfo.homePath || DEFAULT_HOME_PATH);
       }
-    } finally {
-      loginLoading.value = false;
+
+      if (userInfo?.realName) {
+        notification.success({
+          description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
+          duration: 3,
+          message: $t('authentication.loginSuccess'),
+        });
+      }
     }
 
     return {
