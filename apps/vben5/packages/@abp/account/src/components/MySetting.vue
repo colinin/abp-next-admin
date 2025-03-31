@@ -91,6 +91,11 @@ const [EmailConfirmModal, emailConfirmModalApi] = useVbenModal({
     () => import('./components/EmailConfirmModal.vue'),
   ),
 });
+const [ChangePasswordModal, changePasswordModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./components/ChangePasswordModal.vue'),
+  ),
+});
 function onEmailConfirm() {
   if (query?.confirmToken) {
     emailConfirmModalApi.setData({
@@ -120,8 +125,7 @@ async function onUpdateProfile(input: UpdateProfileDto) {
   });
 }
 function onChangePassword() {
-  // TODO: onChangePassword 暂时未实现!
-  console.warn('onChangePassword 暂时未实现!');
+  changePasswordModalApi.open();
 }
 function onChangePhoneNumber() {
   // TODO: onChangePhoneNumber 暂时未实现!
@@ -169,6 +173,7 @@ onMounted(async () => {
       </div>
     </Card>
     <EmailConfirmModal />
+    <ChangePasswordModal />
   </div>
 </template>
 
