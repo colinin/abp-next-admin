@@ -13,4 +13,5 @@ public abstract class EntityRuleBaseEto : EntityEto<Guid>, IMultiTenant
     public DataAccessOperation Operation { get; set; }
     public Guid EntityTypeId { get; set; }
     public string EntityTypeFullName { get; set; }
+    public DataAccessFilterGroup FilterGroup { get; set; }
 }

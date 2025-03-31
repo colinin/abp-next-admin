@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Identity.Session;
@@ -21,9 +22,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System;
 using System.Linq;
@@ -33,6 +31,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Events.Distributed;
@@ -56,7 +55,6 @@ namespace LY.MicroService.AuthServer;
 public partial class AuthServerHttpApiHostModule
 {
     public static string ApplicationName { get; set; } = "AuthService";
-    protected const string DefaultCorsPolicyName = "Default";
 
     private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
@@ -112,6 +110,22 @@ public partial class AuthServerHttpApiHostModule
         PreConfigure<IdentityBuilder>(builder =>
         {
             builder.AddDefaultTokenProviders();
+        });
+    }
+
+    private void ConfigureBlobStoring(IConfiguration configuration)
+    {
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            // all container use oss management
+            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+            {
+                // use oss management
+                containerConfiguration.UseOssManagement(config =>
+                {
+                    config.Bucket = configuration[OssManagementBlobProviderConfigurationNames.Bucket];
+                });
+            });
         });
     }
 
@@ -256,53 +270,6 @@ public partial class AuthServerHttpApiHostModule
         {
             var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
             services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
-        }
-    }
-
-    private void ConfigureOpenTelemetry(IServiceCollection services, IConfiguration configuration)
-    {
-        var openTelemetryEnabled = configuration["OpenTelemetry:IsEnabled"];
-        if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
-        {
-            services.AddOpenTelemetry()
-                .ConfigureResource(resource =>
-                {
-                    resource.AddService(ApplicationName);
-                })
-                .WithTracing(tracing =>
-                {
-                    tracing.AddHttpClientInstrumentation();
-                    tracing.AddAspNetCoreInstrumentation();
-                    tracing.AddCapInstrumentation();
-                    tracing.AddEntityFrameworkCoreInstrumentation();
-                    tracing.AddSource(ApplicationName);
-
-                    var tracingOtlpEndpoint = configuration["OpenTelemetry:Otlp:Endpoint"];
-                    if (!tracingOtlpEndpoint.IsNullOrWhiteSpace())
-                    {
-                        tracing.AddOtlpExporter(otlpOptions =>
-                        {
-                            otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
-                        });
-                        return;
-                    }
-
-                    var zipkinEndpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-                    if (!zipkinEndpoint.IsNullOrWhiteSpace())
-                    {
-                        tracing.AddZipkinExporter(zipKinOptions =>
-                        {
-                            zipKinOptions.Endpoint = new Uri(zipkinEndpoint);
-                        });
-                        return;
-                    }
-                })
-                .WithMetrics(metrics =>
-                {
-                    metrics.AddRuntimeInstrumentation();
-                    metrics.AddHttpClientInstrumentation();
-                    metrics.AddAspNetCoreInstrumentation();
-                });
         }
     }
 
@@ -458,7 +425,7 @@ public partial class AuthServerHttpApiHostModule
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            options.AddDefaultPolicy(builder =>
             {
                 builder
                     .WithOrigins(

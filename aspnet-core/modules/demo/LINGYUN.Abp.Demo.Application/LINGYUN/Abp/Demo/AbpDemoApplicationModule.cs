@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Exporter;
+﻿using LINGYUN.Abp.DataProtection;
+using LINGYUN.Abp.Exporter;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
@@ -8,6 +9,7 @@ namespace LINGYUN.Abp.Demo;
 
 [DependsOn(
     typeof(AbpDddApplicationModule),
+    typeof(AbpDataProtectionModule),
     typeof(AbpDemoDomainModule),
     typeof(AbpExporterApplicationModule),
     typeof(AbpDemoApplicationContractsModule))]

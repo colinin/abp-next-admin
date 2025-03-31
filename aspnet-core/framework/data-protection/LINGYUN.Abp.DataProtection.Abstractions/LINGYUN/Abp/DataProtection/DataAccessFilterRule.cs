@@ -14,6 +14,14 @@ public class DataAccessFilterRule
     /// </summary>
     public object Value { get; set; }
     /// <summary>
+    /// 类型全名
+    /// </summary>
+    public string TypeFullName { get; set; }
+    /// <summary>
+    /// Js类型
+    /// </summary>
+    public string JavaScriptType { get; set; }
+    /// <summary>
     /// 操作类型
     /// </summary>
     public DataAccessFilterOperate Operate { get; set; }
@@ -27,10 +35,18 @@ public class DataAccessFilterRule
 
     }
 
-    public DataAccessFilterRule(string field, object value, DataAccessFilterOperate operate = DataAccessFilterOperate.Equal, bool isLeft = false)
+    public DataAccessFilterRule(
+        string field,
+        object value,
+        string typeFullName,
+        string javaScriptType,
+        DataAccessFilterOperate operate = DataAccessFilterOperate.Equal, 
+        bool isLeft = false)
     {
         Field = field;
         Value = value;
+        TypeFullName = typeFullName;
+        JavaScriptType = javaScriptType;
         Operate = operate;
         IsLeft = isLeft;
     }

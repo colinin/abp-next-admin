@@ -37,11 +37,6 @@ public class AbpDataProtectionManagementDomainModule : AbpModule
             options.AutoEventSelectors.Add<OrganizationUnitEntityRule>();
         });
 
-        Configure<AbpDistributedCacheOptions>(options =>
-        {
-            options.ConfigureCache<DataProtectedResourceCacheItem>(new DistributedCacheEntryOptions());
-        });
-
         context.Services.AddHostedService<ProtectedEntitiesSaverService>();
     }
 }

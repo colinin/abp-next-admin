@@ -3,8 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Minio;
-using Minio.ApiEndpoints;
-using Minio.DataModel;
 using Minio.DataModel.Args;
 using Minio.DataModel.ILM;
 using Minio.Exceptions;
@@ -20,7 +18,6 @@ using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LINGYUN.Abp.OssManagement.Minio;
 
@@ -139,7 +136,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
         {
             var lifecycleRule = new LifecycleRule
             {
-                Status = "Enabled",
+                Status = LifecycleRule.LifecycleRuleStatusEnabled,
                 ID = putResponse.Etag,
                 Expiration = new Expiration(Clock.Now.Add(request.ExpirationTime.Value))
             };
@@ -236,7 +233,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
             {
                 var lifecycleRule = new LifecycleRule
                 {
-                    Status = "Enabled",
+                    Status = LifecycleRule.LifecycleRuleStatusEnabled,
                     ID = item.Key,
                     Expiration = new Expiration(Clock.Normalize(request.ExpirationTime.DateTime))
                 };

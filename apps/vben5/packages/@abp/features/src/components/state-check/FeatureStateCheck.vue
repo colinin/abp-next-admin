@@ -7,10 +7,12 @@ import type {
 import { computed, onMounted, ref } from 'vue';
 
 import {
+  isNullOrWhiteSpace,
   listToTree,
   useLocalization,
   useLocalizationSerializer,
 } from '@abp/core';
+import { valueTypeSerializer } from '@abp/ui';
 import { Checkbox, FormItemRest, TreeSelect } from 'ant-design-vue';
 
 import { useFeatureDefinitionsApi } from '../../api/useFeatureDefinitionsApi';
@@ -96,13 +98,24 @@ async function onInit() {
       displayName: Lr(displayName.resourceName, displayName.name),
     };
   });
-  features.value = featuresRes.items.map((item) => {
-    const displayName = deserialize(item.displayName);
-    return {
-      ...item,
-      displayName: Lr(displayName.resourceName, displayName.name),
-    };
-  });
+  features.value = featuresRes.items
+    .filter((item) => {
+      if (!isNullOrWhiteSpace(item.valueType)) {
+        const valueType = valueTypeSerializer.deserialize(item.valueType);
+        if (valueType.validator.name !== 'BOOLEAN') {
+          return false;
+        }
+      }
+      return true;
+    })
+    .map((item) => {
+      const displayName = deserialize(item.displayName);
+      const feature = {
+        ...item,
+        displayName: Lr(displayName.resourceName, displayName.name),
+      };
+      return feature;
+    });
 }
 
 onMounted(onInit);

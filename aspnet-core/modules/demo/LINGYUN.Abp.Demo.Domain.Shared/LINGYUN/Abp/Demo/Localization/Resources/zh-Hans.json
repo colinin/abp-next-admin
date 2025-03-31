@@ -12,6 +12,15 @@
     "Permission:Authors.Create": "新增作者",
     "Permission:Authors.Edit": "编辑作者",
     "Permission:Authors.Delete": "删除作者",
-    "Demo:00001": "作者 {Name} 已经存在!"
+    "Demo:00001": "作者 {Name} 已经存在!",
+    "Author": "作者",
+    "Book": "书籍",
+    "DisplayName:Name": "名称",
+    "DisplayName:Type": "类型",
+    "DisplayName:PublishDate": "出版日期",
+    "DisplayName:Price": "单价",
+    "DisplayName:AuthorId": "作者",
+    "DisplayName:BirthDate": "生日",
+    "DisplayName:ShortBio": "简介"
   }
 }

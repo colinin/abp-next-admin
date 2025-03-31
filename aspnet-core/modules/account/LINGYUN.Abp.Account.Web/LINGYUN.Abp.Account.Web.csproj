@@ -12,8 +12,8 @@
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 		<RootNamespace>LINGYUN.Abp.Account.Web</RootNamespace>
-		<IsPackable>true</IsPackable>
 		<OutputType>Library</OutputType>
+		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>

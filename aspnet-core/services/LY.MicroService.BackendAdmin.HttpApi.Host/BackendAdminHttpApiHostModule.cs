@@ -29,6 +29,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.Tencent.SettingManagement;
 using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
@@ -86,6 +87,7 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpAuditingHttpApiModule),
     typeof(AbpSaasApplicationModule),
     typeof(AbpSaasHttpApiModule),
+    typeof(AbpSaasDbCheckerModule),
     typeof(AbpTextTemplatingApplicationModule),
     typeof(AbpTextTemplatingHttpApiModule),
     typeof(AbpCachingManagementApplicationModule),
@@ -112,6 +114,7 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpHttpClientModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpEmailingPlatformModule),
@@ -157,7 +160,6 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
-        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());

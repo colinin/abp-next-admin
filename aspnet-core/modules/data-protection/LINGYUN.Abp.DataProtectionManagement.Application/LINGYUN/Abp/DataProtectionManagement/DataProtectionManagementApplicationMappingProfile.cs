@@ -7,13 +7,13 @@ public class DataProtectionManagementApplicationMappingProfile :Profile
 {
     public DataProtectionManagementApplicationMappingProfile()
     {
-        CreateMap<EntityPropertyInfo, EntityPropertyInfoDto>()
-            .ForMember(dto => dto.ValueRange, map => map.MapFrom(src => MapToArray(src.ValueRange)));
+        CreateMap<EntityEnumInfo, EntityEnumInfoDto>();
+        CreateMap<EntityPropertyInfo, EntityPropertyInfoDto>();
         CreateMap<EntityTypeInfo, EntityTypeInfoDto>();
         CreateMap<RoleEntityRule, RoleEntityRuleDto>()
-            .ForMember(dto => dto.AllowProperties, map => map.MapFrom(src => MapToArray(src.AllowProperties)));
+            .ForMember(dto => dto.AccessedProperties, map => map.MapFrom(src => MapToArray(src.AccessedProperties)));
         CreateMap<OrganizationUnitEntityRule, OrganizationUnitEntityRuleDto>()
-            .ForMember(dto => dto.AllowProperties, map => map.MapFrom(src => MapToArray(src.AllowProperties)));
+            .ForMember(dto => dto.AccessedProperties, map => map.MapFrom(src => MapToArray(src.AccessedProperties)));
     }
 
     private string[] MapToArray(string val)

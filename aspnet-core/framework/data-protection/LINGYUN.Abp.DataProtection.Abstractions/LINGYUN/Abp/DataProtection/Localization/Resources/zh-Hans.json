@@ -1,6 +1,10 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "DataProtection:010001": "未授予受保护资源的数据访问权限!"
+    "DataProtection:010001": "未授予受保护资源的数据访问权限!",
+    "DisplayName:LastModifierId": "上次修改人",
+    "DisplayName:LastModificationTime": "上次修改时间",
+    "DisplayName:CreatorId": "创建人",
+    "DisplayName:CreationTime": "创建时间"
   }
 }

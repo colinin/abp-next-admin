@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.DataProtection;
@@ -33,5 +34,24 @@ public class InMemoryDataProtectedResourceStore : IDataProtectedResourceStore
     private static string NormalizeKey(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation)
     {
         return $"{subjectName}_{subjectId}_{entityTypeFullName}_{operation}";
+    }
+
+    public Task SetAsync(DataAccessResource resource)
+    {
+        Set(resource);
+
+        return Task.CompletedTask;
+    }
+
+    public Task RemoveAsync(DataAccessResource resource)
+    {
+        Remove(resource);
+
+        return Task.CompletedTask;
+    }
+
+    public Task<DataAccessResource> GetAsync(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation)
+    {
+        return Task.FromResult(Get(subjectName, subjectId, entityTypeFullName, operation));
     }
 }

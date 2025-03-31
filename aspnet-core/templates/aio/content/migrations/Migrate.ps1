@@ -9,14 +9,75 @@ $env:FROM_MIGRATION = "true"
 # 定义项目路径
 $projectPath = Resolve-Path (Join-Path $PSScriptRoot "..")
 
-# 定义可用的DbContext
-$dbContexts = @{
-    "1" = @{
-        Name = "PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.DatabaseManagementName"
-        Context = "SingleMigrationsDbContext"
-        Factory = "SingleMigrationsDbContextFactory"
+# 定义函数来动态查找所有可用的DbContext
+function Get-AvailableDbContexts {
+    $migrationsPath = Join-Path $projectPath "migrations"
+    $dbContexts = @{}
+    $counter = 1
+
+    # 查找所有包含EntityFrameworkCore的目录
+    $efCoreDirectories = Get-ChildItem -Path $migrationsPath -Directory | Where-Object { $_.Name -like "*EntityFrameworkCore*" }
+    
+    foreach ($dir in $efCoreDirectories) {
+        # 优先查找 DbContextFactory 文件
+        $factoryFiles = Get-ChildItem -Path $dir.FullName -Filter "*DbContextFactory.cs" -Recurse -File
+        
+        # 如果找到了 Factory 文件
+        $foundFactory = $false
+        foreach ($factoryFile in $factoryFiles) {
+            $factoryContent = Get-Content $factoryFile.FullName -Raw
+            
+            # 查找 Factory 类名和对应的 DbContext 类
+            if ($factoryContent -match 'class\s+(\w+Factory)\s*:\s*IDesignTimeDbContextFactory<(\w+)>') {
+                $factoryName = $matches[1]
+                $contextName = $matches[2]
+                
+                # 如果找到了上下文和工厂，添加到列表中
+                $dbContexts["$counter"] = @{
+                    Name = $dir.Name
+                    Context = $contextName
+                    Factory = $factoryName
+                }
+                $counter++
+                $foundFactory = $true
+            }
+        }
+        
+        # 只有当没有找到 Factory 时，才查找 DbContext 文件作为备选
+        if (-not $foundFactory) {
+            $dbContextFiles = Get-ChildItem -Path $dir.FullName -Filter "*DbContext.cs" -Recurse -File
+            
+            foreach ($contextFile in $dbContextFiles) {
+                $contextContent = Get-Content $contextFile.FullName -Raw
+                if ($contextContent -match 'class\s+(\w+DbContext)') {
+                    $contextName = $matches[1]
+                    
+                    # 添加到列表中，但没有对应的 Factory
+                    $dbContexts["$counter"] = @{
+                        Name = $dir.Name
+                        Context = $contextName
+                        Factory = $null
+                    }
+                    $counter++
+                }
+            }
+        }
     }
+
+    # 如果没有找到任何上下文，使用默认的
+    if ($dbContexts.Count -eq 0) {
+        $dbContexts["1"] = @{
+            Name = "PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.DatabaseManagementName"
+            Context = "SingleMigrationsDbContext"
+            Factory = "SingleMigrationsDbContextFactory"
+        }
+    }
+
+    return $dbContexts
 }
+
+# 获取可用的DbContext
+$dbContexts = Get-AvailableDbContexts
 
 # 显示DbContext选择菜单
 function Show-DbContextMenu {

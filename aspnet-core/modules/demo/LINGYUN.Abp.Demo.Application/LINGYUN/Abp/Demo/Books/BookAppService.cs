@@ -1,4 +1,7 @@
-﻿using LINGYUN.Abp.Demo.Authors;
+﻿using LINGYUN.Abp.DataProtection;
+using LINGYUN.Abp.DataProtection.Models;
+using LINGYUN.Abp.Demo.Authors;
+using LINGYUN.Abp.Demo.Localization;
 using LINGYUN.Abp.Demo.Permissions;
 using LINGYUN.Abp.Exporter;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +10,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Content;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.Demo.Books;
 
@@ -26,6 +30,8 @@ public class BookAppService :
     private readonly IExporterProvider _exporterProvider;
     private readonly IImporterProvider _importerProvider;
 
+    protected IDataAccessEntityTypeInfoProvider EntityTypeInfoProvider => LazyServiceProvider.LazyGetRequiredService<IDataAccessEntityTypeInfoProvider>();
+
     public BookAppService(
         IExporterProvider exporterProvider,
         IImporterProvider importerProvider,
@@ -38,13 +44,29 @@ public class BookAppService :
         _importerProvider = importerProvider;
         _authorManager = authorManager;
         _authorRepository = authorRepository;
+
         GetPolicyName = DemoPermissions.Books.Default;
         GetListPolicyName = DemoPermissions.Books.Default;
         CreatePolicyName = DemoPermissions.Books.Create;
         UpdatePolicyName = DemoPermissions.Books.Edit;
         DeletePolicyName = DemoPermissions.Books.Delete;
+
+        LocalizationResource = typeof(DemoResource);
+        ObjectMapperContext = typeof(AbpDemoApplicationModule);
     }
     
+    [DisableDataProtected(DataAccessOperation.Read)]// 更新时禁用查询过滤
+    public override Task<BookDto> UpdateAsync(Guid id, CreateUpdateBookDto input)
+    {
+        return base.UpdateAsync(id, input);
+    }
+
+    [DisableDataProtected(DataAccessOperation.Read)]
+    public override Task DeleteAsync(Guid id)
+    {
+        return base.DeleteAsync(id);
+    }
+
     public async virtual Task ImportAsync(BookImportInput input)
     {
         await CheckCreatePolicyAsync();
@@ -202,5 +224,19 @@ public class BookAppService :
         }
 
         return $"book.{sorting}";
+    }
+
+    public async virtual Task<EntityTypeInfoModel> GetEntityRuleAsync(EntityTypeInfoGetModel input)
+    {
+        var entityType = typeof(Book);
+        var resourceType = LocalizationResource ?? typeof(DefaultResource);
+
+        var context = new DataAccessEntitTypeInfoContext(
+            entityType,
+            resourceType,
+            input.Operation,
+            LazyServiceProvider);
+
+        return await EntityTypeInfoProvider.GetEntitTypeInfoAsync(context);
     }
 }

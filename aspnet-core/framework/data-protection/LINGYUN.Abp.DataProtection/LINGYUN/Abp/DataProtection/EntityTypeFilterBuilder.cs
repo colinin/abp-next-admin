@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -30,7 +30,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         _serviceProvider = serviceProvider;
     }
 
-    public virtual LambdaExpression Build(Type entityType, DataAccessOperation operation, DataAccessFilterGroup group = null)
+    public async virtual Task<LambdaExpression> Build(Type entityType, DataAccessOperation operation, DataAccessFilterGroup group = null)
     {
         // Func<TEntity, bool>
         var func = typeof(Func<,>).MakeGenericType(entityType, typeof(bool));
@@ -56,7 +56,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         var subjectContext = new DataAccessSubjectContributorContext(typeName, operation, _serviceProvider);
         foreach (var contributor in _options.SubjectContributors)
         {
-            var subjectFilterGroup = contributor.GetFilterGroups(subjectContext);
+            var subjectFilterGroup = await contributor.GetFilterGroups(subjectContext);
             subjectFilterGroups.AddRange(subjectFilterGroup);
         }
 
@@ -87,7 +87,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         return exp;
     }
 
-    public virtual Expression<Func<TEntity, bool>> Build<TEntity>(DataAccessOperation operation, DataAccessFilterGroup group = null)
+    public async virtual Task<Expression<Func<TEntity, bool>>> Build<TEntity>(DataAccessOperation operation, DataAccessFilterGroup group = null)
     {
         var entityType = typeof(TEntity);
         Expression<Func<TEntity, bool>> exp = _ => true;
@@ -107,7 +107,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         var subjectContext = new DataAccessSubjectContributorContext(typeName, operation, _serviceProvider);
         foreach (var contributor in _options.SubjectContributors)
         {
-            var subjectFilterGroup = contributor.GetFilterGroups(subjectContext);
+            var subjectFilterGroup = await contributor.GetFilterGroups(subjectContext);
             subjectFilterGroups.AddRange(subjectFilterGroup);
         }
 
@@ -284,13 +284,20 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
 
     private bool ShouldApplyFilter(Type entityType, DataAccessOperation operation)
     {
+        // TODO: 使用一个范围标志来确定当前需要禁用的数据权限操作
         if (!_dataFilter.IsEnabled<IDataProtected>())
         {
             return false;
         }
 
-        if (entityType.IsDefined(typeof(DisableDataProtectedAttribute), true))
+        var disableAttr = entityType.GetCustomAttribute<DisableDataProtectedAttribute>();
+        if (disableAttr != null)
         {
+            if (disableAttr.Operation.HasValue && disableAttr.Operation != operation)
+            {
+                return true;
+            }
+
             return false;
         }
 

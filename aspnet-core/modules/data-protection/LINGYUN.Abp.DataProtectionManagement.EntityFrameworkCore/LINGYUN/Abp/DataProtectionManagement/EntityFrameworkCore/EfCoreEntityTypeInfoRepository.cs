@@ -52,6 +52,8 @@ public class EfCoreEntityTypeInfoRepository : EfCoreRepository<IAbpDataProtectio
 
     public async override Task<IQueryable<EntityTypeInfo>> WithDetailsAsync()
     {
-        return (await base.WithDetailsAsync()).Include(x => x.Properties);
+        return (await base.WithDetailsAsync())
+            .Include(x => x.Properties)
+            .ThenInclude(x => x.Enums);
     }
 }

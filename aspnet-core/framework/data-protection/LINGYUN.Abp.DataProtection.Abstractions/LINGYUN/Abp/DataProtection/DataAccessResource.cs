@@ -34,7 +34,7 @@ public class DataAccessResource
     /// <summary>
     /// 允许操作的属性列表
     /// </summary>
-    public List<string> AllowProperties { get; set; }
+    public List<string> AccessedProperties { get; set; }
 
     public DataAccessResource()
     {
@@ -53,6 +53,6 @@ public class DataAccessResource
         EntityTypeFullName = entityTypeFullName;
         Operation = operation;
         FilterGroup = filterGroup;
-        AllowProperties = new List<string>();
+        AccessedProperties = new List<string>();
     }
 }
