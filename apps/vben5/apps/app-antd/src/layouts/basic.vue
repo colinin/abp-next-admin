@@ -23,6 +23,8 @@ import { preferences } from '@vben/preferences';
 import { useAccessStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
 
+import { useAbpStore } from '@abp/core';
+
 import { useSessions } from '#/hooks/useSessions';
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
@@ -64,6 +66,7 @@ const notifications = ref<NotificationItem[]>([
 useSessions();
 
 const { replace } = useRouter();
+const abpStore = useAbpStore();
 const userStore = useUserStore();
 const authStore = useAuthStore();
 const accessStore = useAccessStore();
@@ -109,8 +112,19 @@ const menus = computed(() => [
   },
 ]);
 
+const userInfo = computed(() => {
+  return userStore.userInfo;
+});
+
+const description = computed(() => {
+  if (abpStore.application?.currentTenant.name && userInfo.value?.username) {
+    return `${abpStore.application.currentTenant.name}/${userInfo.value.username}`;
+  }
+  return userInfo.value?.username;
+});
+
 const avatar = computed(() => {
-  return userStore.userInfo?.avatar ?? preferences.app.defaultAvatar;
+  return userInfo.value?.avatar ?? preferences.app.defaultAvatar;
 });
 
 async function handleLogout() {
@@ -129,7 +143,7 @@ watch(
   async (enable) => {
     if (enable) {
       await updateWatermark({
-        content: `${userStore.userInfo?.username}`,
+        content: `${userInfo.value?.username}`,
       });
     } else {
       destroyWatermark();
@@ -146,10 +160,10 @@ watch(
     <template #user-dropdown>
       <UserDropdown
         :avatar
-        :description="userStore.userInfo?.email"
+        :description="description"
         :menus
-        :tag-text="userStore.userInfo?.username"
-        :text="userStore.userInfo?.realName"
+        :tag-text="userInfo?.email"
+        :text="userInfo?.realName"
         @logout="handleLogout"
       />
     </template>
