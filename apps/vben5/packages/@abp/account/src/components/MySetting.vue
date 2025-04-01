@@ -91,6 +91,16 @@ const [EmailConfirmModal, emailConfirmModalApi] = useVbenModal({
     () => import('./components/EmailConfirmModal.vue'),
   ),
 });
+const [ChangePasswordModal, changePasswordModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./components/ChangePasswordModal.vue'),
+  ),
+});
+const [ChangePhoneNumberModal, changePhoneNumberModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./components/ChangePhoneNumberModal.vue'),
+  ),
+});
 function onEmailConfirm() {
   if (query?.confirmToken) {
     emailConfirmModalApi.setData({
@@ -103,6 +113,11 @@ function onEmailConfirm() {
 async function onGetProfile() {
   const profile = await getApi();
   myProfile.value = profile;
+}
+async function onPhoneNumberChange(phoneNumber: string) {
+  userStore.$patch((state) => {
+    state.userInfo && (state.userInfo.phoneNumber = phoneNumber);
+  });
 }
 async function onUpdateProfile(input: UpdateProfileDto) {
   Modal.confirm({
@@ -120,12 +135,10 @@ async function onUpdateProfile(input: UpdateProfileDto) {
   });
 }
 function onChangePassword() {
-  // TODO: onChangePassword 暂时未实现!
-  console.warn('onChangePassword 暂时未实现!');
+  changePasswordModalApi.open();
 }
 function onChangePhoneNumber() {
-  // TODO: onChangePhoneNumber 暂时未实现!
-  console.warn('onChangePhoneNumber 暂时未实现!');
+  changePhoneNumberModalApi.open();
 }
 onMounted(async () => {
   await onGetProfile();
@@ -169,6 +182,8 @@ onMounted(async () => {
       </div>
     </Card>
     <EmailConfirmModal />
+    <ChangePasswordModal />
+    <ChangePhoneNumberModal @change="onPhoneNumberChange" />
   </div>
 </template>
 

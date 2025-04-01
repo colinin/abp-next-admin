@@ -78,7 +78,7 @@ async function onSubmit() {
 }
 
 function onCheckChange(setting: SettingDetail) {
-  setting.value = setting.value === 'true' ? 'false' : 'true';
+  setting.value = setting.value?.toLowerCase() === 'true' ? 'false' : 'true';
   onValueChange(setting);
 }
 
@@ -202,7 +202,7 @@ onMounted(onGet);
                   </Select>
                   <Checkbox
                     v-if="detail.valueType === ValueType.Boolean"
-                    :checked="detail.value === 'true'"
+                    :checked="detail.value?.toLowerCase() === 'true'"
                     @change="onCheckChange(detail)"
                   >
                     {{ detail.displayName }}
