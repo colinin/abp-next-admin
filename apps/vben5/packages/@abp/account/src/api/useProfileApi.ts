@@ -2,9 +2,11 @@ import type {
   AuthenticatorDto,
   AuthenticatorRecoveryCodeDto,
   ChangePasswordInput,
+  ChangePhoneNumberInput,
   ChangePictureInput,
   ConfirmEmailInput,
   ProfileDto,
+  SendChangePhoneNumberCodeInput,
   SendEmailConfirmCodeDto,
   TwoFactorEnabledDto,
   UpdateProfileDto,
@@ -46,6 +48,30 @@ export function useProfileApi() {
     return request('/api/account/my-profile/change-password', {
       data: input,
       method: 'POST',
+    });
+  }
+
+  /**
+   * 发送修改手机号验证码
+   * @param input 参数
+   */
+  function sendChangePhoneNumberCodeApi(
+    input: SendChangePhoneNumberCodeInput,
+  ): Promise<void> {
+    return request('/api/account/my-profile/send-phone-number-change-code', {
+      data: input,
+      method: 'POST',
+    });
+  }
+
+  /**
+   * 修改手机号
+   * @param input 参数
+   */
+  function changePhoneNumberApi(input: ChangePhoneNumberInput): Promise<void> {
+    return request('/api/account/my-profile/change-phone-number', {
+      data: input,
+      method: 'PUT',
     });
   }
 
@@ -158,6 +184,7 @@ export function useProfileApi() {
   return {
     cancel,
     changePasswordApi,
+    changePhoneNumberApi,
     changePictureApi,
     changeTwoFactorEnabledApi,
     confirmEmailApi,
@@ -166,6 +193,7 @@ export function useProfileApi() {
     getPictureApi,
     getTwoFactorEnabledApi,
     resetAuthenticatorApi,
+    sendChangePhoneNumberCodeApi,
     sendEmailConfirmLinkApi,
     updateApi,
     verifyAuthenticatorCodeApi,
