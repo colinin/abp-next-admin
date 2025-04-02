@@ -1,6 +1,7 @@
 using LINGYUN.Abp.Identity.WeChat.Work;
 using LINGYUN.Abp.Notifications.WeChat.Work;
 using LINGYUN.Abp.OssManagement.Minio;
+using LINGYUN.Abp.Quartz.MySqlInstaller;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -161,6 +162,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpSaasHttpApiModule),
     // Saas模块 实体框架
     typeof(AbpSaasEntityFrameworkCoreModule),
+    // Saas模块 数据库连接检查
+    typeof(AbpSaasDbCheckerModule),
 
     // 任务管理模块 领域服务
     typeof(TaskManagementDomainModule),
@@ -261,6 +264,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpBackgroundTasksNotificationsModule),
     // 后台任务模块 Quartz集成
     typeof(AbpBackgroundTasksQuartzModule),
+    // Quartz MySql数据库初始化模块
+    typeof(AbpQuartzMySqlInstallerModule),
 
     // 数据审计模块 应用服务
     typeof(AbpDataProtectionManagementApplicationModule),

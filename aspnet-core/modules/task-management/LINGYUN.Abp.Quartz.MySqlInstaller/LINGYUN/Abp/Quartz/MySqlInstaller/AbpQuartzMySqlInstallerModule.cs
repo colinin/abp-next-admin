@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Modularity;
@@ -22,9 +23,13 @@ public class AbpQuartzMySqlInstallerModule : AbpModule
 
     public async override Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        // 初始化 Quartz Mysql 数据库
-        await context.ServiceProvider
-            .GetRequiredService<QuartzMySqlInstaller>()
-            .InstallAsync();
+        var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
+        if (configuration.GetValue("Quartz:UsePersistentStore", false))
+        {
+            // 初始化 Quartz Mysql 数据库
+            await context.ServiceProvider
+                .GetRequiredService<QuartzMySqlInstaller>()
+                .InstallAsync();
+        }
     }
 }

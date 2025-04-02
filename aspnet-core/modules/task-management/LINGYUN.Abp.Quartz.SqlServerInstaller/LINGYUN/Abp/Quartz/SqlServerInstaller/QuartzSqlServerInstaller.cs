@@ -6,13 +6,14 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Data;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Quartz;
 using Volo.Abp.VirtualFileSystem;
 using static Quartz.SchedulerBuilder;
 
 namespace LINGYUN.Abp.Quartz.SqlServerInstaller;
 
-public class QuartzSqlServerInstaller
+public class QuartzSqlServerInstaller : ITransientDependency
 {
     public ILogger<QuartzSqlServerInstaller> Logger { protected get; set; }
 

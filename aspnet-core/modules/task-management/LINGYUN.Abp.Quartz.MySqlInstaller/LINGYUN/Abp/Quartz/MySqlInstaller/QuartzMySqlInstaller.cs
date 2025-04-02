@@ -6,13 +6,14 @@ using MySqlConnector;
 using System;
 using System.Data;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Quartz;
 using Volo.Abp.VirtualFileSystem;
 using static Quartz.SchedulerBuilder;
 
 namespace LINGYUN.Abp.Quartz.MySqlInstaller;
 
-public class QuartzMySqlInstaller
+public class QuartzMySqlInstaller : ITransientDependency
 {
     public ILogger<QuartzMySqlInstaller> Logger { protected get; set; }
 
