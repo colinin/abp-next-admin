@@ -1,4 +1,10 @@
-import type { NotificationLifetime, NotificationType } from './notifications';
+import type { ExtensibleObject, IHasExtraProperties } from '@abp/core';
+
+import type {
+  NotificationContentType,
+  NotificationLifetime,
+  NotificationType,
+} from './notifications';
 
 interface NotificationDto {
   description: string;
@@ -14,6 +20,10 @@ interface NotificationGroupDto {
   notifications: NotificationDto[];
 }
 
+interface NotificationProviderDto {
+  name: string;
+}
+
 interface NotificationTemplateDto {
   content?: string;
   culture?: string;
@@ -22,4 +32,56 @@ interface NotificationTemplateDto {
   title: string;
 }
 
-export type { NotificationDto, NotificationGroupDto, NotificationTemplateDto };
+interface NotificationDefinitionDto extends ExtensibleObject {
+  allowSubscriptionToClients: boolean;
+  contentType: NotificationContentType;
+  description?: string;
+  displayName: string;
+  groupName: string;
+  isStatic: boolean;
+  name: string;
+  notificationLifetime: NotificationLifetime;
+  notificationType: NotificationType;
+  providers?: string[];
+  template?: string;
+}
+
+interface NotificationDefinitionGetListInput {
+  allowSubscriptionToClients?: boolean;
+  contentType?: NotificationContentType;
+  filter?: string;
+  groupName?: string;
+  notificationLifetime?: NotificationLifetime;
+  notificationType?: NotificationType;
+  template?: string;
+}
+
+interface NotificationDefinitionCreateOrUpdateDto extends IHasExtraProperties {
+  allowSubscriptionToClients?: boolean;
+  contentType?: NotificationContentType;
+  description?: string;
+  displayName: string;
+  notificationLifetime?: NotificationLifetime;
+  notificationType?: NotificationType;
+  providers?: string[];
+  template?: string;
+}
+
+type NotificationDefinitionUpdateDto = NotificationDefinitionCreateOrUpdateDto;
+
+interface NotificationDefinitionCreateDto
+  extends NotificationDefinitionCreateOrUpdateDto {
+  groupName?: string;
+  name: string;
+}
+
+export type {
+  NotificationDefinitionCreateDto,
+  NotificationDefinitionDto,
+  NotificationDefinitionGetListInput,
+  NotificationDefinitionUpdateDto,
+  NotificationDto,
+  NotificationGroupDto,
+  NotificationProviderDto,
+  NotificationTemplateDto,
+};

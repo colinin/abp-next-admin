@@ -2,8 +2,11 @@ import type {
   AuthenticatorDto,
   AuthenticatorRecoveryCodeDto,
   ChangePasswordInput,
+  ChangePhoneNumberInput,
+  ChangePictureInput,
   ConfirmEmailInput,
   ProfileDto,
+  SendChangePhoneNumberCodeInput,
   SendEmailConfirmCodeDto,
   TwoFactorEnabledDto,
   UpdateProfileDto,
@@ -45,6 +48,55 @@ export function useProfileApi() {
     return request('/api/account/my-profile/change-password', {
       data: input,
       method: 'POST',
+    });
+  }
+
+  /**
+   * 发送修改手机号验证码
+   * @param input 参数
+   */
+  function sendChangePhoneNumberCodeApi(
+    input: SendChangePhoneNumberCodeInput,
+  ): Promise<void> {
+    return request('/api/account/my-profile/send-phone-number-change-code', {
+      data: input,
+      method: 'POST',
+    });
+  }
+
+  /**
+   * 修改手机号
+   * @param input 参数
+   */
+  function changePhoneNumberApi(input: ChangePhoneNumberInput): Promise<void> {
+    return request('/api/account/my-profile/change-phone-number', {
+      data: input,
+      method: 'PUT',
+    });
+  }
+
+  /**
+   * 修改头像
+   * @param input 参数
+   */
+  function changePictureApi(input: ChangePictureInput): Promise<void> {
+    return request('/api/account/my-profile/picture', {
+      data: input,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      method: 'POST',
+    });
+  }
+
+  /**
+   * 获取头像
+   * @returns 头像文件流
+   */
+  function getPictureApi(): Promise<Blob> {
+    return request('/api/account/my-profile/picture', {
+      method: 'GET',
+      responseType: 'blob',
     });
   }
 
@@ -132,12 +184,16 @@ export function useProfileApi() {
   return {
     cancel,
     changePasswordApi,
+    changePhoneNumberApi,
+    changePictureApi,
     changeTwoFactorEnabledApi,
     confirmEmailApi,
     getApi,
     getAuthenticatorApi,
+    getPictureApi,
     getTwoFactorEnabledApi,
     resetAuthenticatorApi,
+    sendChangePhoneNumberCodeApi,
     sendEmailConfirmLinkApi,
     updateApi,
     verifyAuthenticatorCodeApi,

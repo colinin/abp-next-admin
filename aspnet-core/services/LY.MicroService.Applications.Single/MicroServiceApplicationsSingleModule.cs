@@ -1,4 +1,5 @@
 using LINGYUN.Abp.Identity.WeChat.Work;
+using LINGYUN.Abp.Notifications.Templating;
 using LINGYUN.Abp.Notifications.WeChat.Work;
 using LINGYUN.Abp.OssManagement.Minio;
 using LINGYUN.Abp.Quartz.MySqlInstaller;
@@ -311,6 +312,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsSignalRModule),
     // 通知模块 邮件通知
     typeof(AbpNotificationsEmailingModule),
+    // 通知模块 模板解析
+    typeof(AbpNotificationsTemplatingModule),
     // 通知模块 微信小程序
     typeof(AbpNotificationsWeChatMiniProgramModule),
     // 通知模块 企业微信

@@ -3,14 +3,18 @@
  * 可用于 vben-form、vben-modal、vben-drawer 等组件使用,
  */
 
+import type { Component, SetupContext } from 'vue';
+
 import type { BaseFormComponentType } from '@vben/common-ui';
 
-import type { Component, SetupContext } from 'vue';
 import { h } from 'vue';
 
 import { ApiComponent, globalShareState, IconPicker } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { FeatureStateCheck, GlobalFeatureStateCheck } from '@abp/features';
+import { PermissionStateCheck } from '@abp/permissions';
+import { TenantSelect } from '@abp/saas';
 import {
   AutoComplete,
   Button,
@@ -18,6 +22,7 @@ import {
   CheckboxGroup,
   DatePicker,
   Divider,
+  Empty,
   Input,
   InputNumber,
   InputPassword,
@@ -123,6 +128,7 @@ async function initComponentAdapter() {
       return h(Button, { ...props, attrs, type: 'default' }, slots);
     },
     Divider,
+    Empty,
     IconPicker: (props, { attrs, slots }) => {
       return h(
         IconPicker,
@@ -150,6 +156,10 @@ async function initComponentAdapter() {
     TimePicker,
     TreeSelect: withDefaultPlaceholder(TreeSelect, 'select'),
     Upload,
+    FeatureStateCheck,
+    GlobalFeatureStateCheck,
+    PermissionStateCheck,
+    TenantSelect,
   };
 
   // 将组件注册到全局共享状态中

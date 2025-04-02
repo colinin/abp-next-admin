@@ -1,135 +1,133 @@
-# LINGYUN.Abp.Templates
+# PackageName.CompanyName.ProjectName
 
 [English](README.md) | [中文](README.zh-CN.md)
 
-## Introduction
+## Quick Start Guide
 
-LINGYUN.Abp.Templates provides two types of project templates based on ABP Framework:
+This guide will help you quickly set up and run the project. Follow these steps to get started.
 
-1. **Microservice Template**: A complete microservice architecture template with distributed services.
-2. **All-in-One Template**: A single-application template that combines all services into one project.
+### Prerequisites
 
-## Features
+- .NET SDK 9.0 or higher
+- A supported database (SQL Server, MySQL, PostgreSQL, Oracle, or SQLite)
+- PowerShell 7.0+ (recommended for running migration scripts)
 
-### Common Features
-
-- Integrated authentication (IdentityServer4/OpenIddict)
-- Database integration (multiple databases supported)
-- Unified configuration management
-- Distributed event bus support
-- Background job processing
-
-### Microservice Template Features
-
-- Complete microservice project structure
-- Service discovery and registration
-- Distributed deployment support
-
-### All-in-One Template Features
-
-- Simplified deployment
-- Easier maintenance
-- Lower resource requirements
-
-## How to Use
-
-### Install labp CLI Tool
+### Step 1: Restore and Build the Project
 
 ```bash
-dotnet tool install --global LINGYUN.Abp.Cli
+# Navigate to the project root directory
+cd /path/to/project
+
+# Restore dependencies
+dotnet restore
+
+# Build the solution
+dotnet build
 ```
 
-### Install Templates
+### Step 2: Create Database Schema
 
-```bash
-# Install Microservice Template
-dotnet new install LINGYUN.Abp.MicroService.Templates
-
-# Install All-in-One Template
-dotnet new install LINGYUN.Abp.AllInOne.Templates
-```
-
-### Create New Project
-
-#### For Microservice Project
-
-```bash
-# Short name: lam (LINGYUN Abp Microservice)
-labp create YourCompanyName.YourProjectName -pk YourPackageName -t lam -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None" --no-random-port
-```
-
-#### For All-in-One Project
-
-```bash
-# Short name: laa (LINGYUN Abp AllInOne)
-labp create YourCompanyName.YourProjectName -pk YourPackageName -t laa -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None" --no-random-port
-```
-
-## How to Run
-
-After creating your project, you can run it using the following command:
-
-### For Microservice Project
-
-```bash
-cd /path/to/output/host/YourPackageName.YourCompanyName.YourProjectName.HttpApi.Host
-dotnet run --launch-profile "YourPackageName.YourCompanyName.YourProjectName.Development"
-```
-
-### For All-in-One Project
-
-```bash
-cd /path/to/output/host/YourPackageName.YourCompanyName.YourProjectName.AIO.Host
-dotnet run --launch-profile "YourPackageName.YourCompanyName.YourProjectName.Development"
-```
-
-## How to Package and Publish
-
-1. Clone the Project
-
-```bash
-git clone <repository-url>
-cd <repository-path>/aspnet-core/templates/content
-```
-
-2. Modify Version
-   Edit the project files to update versions:
-   - For Microservice: `../PackageName.CompanyName.ProjectName.csproj`
-   - For All-in-One: `../PackageName.CompanyName.ProjectName.AIO.csproj`
-
-```xml
-<Version>8.3.0</Version>
-```
-
-3. Execute Packaging Script
+Use the Migrate.ps1 script to create the database tables structure:
 
 ```powershell
-# Windows PowerShell
-.\pack.ps1
+# Navigate to the migrations directory
+cd migrations
 
-# PowerShell Core (Windows/Linux/macOS)
-pwsh pack.ps1
+# Run the migration script
+./Migrate.ps1
 ```
 
-The script will prompt you to choose which template to package:
+The script will:
 
-1. Microservice Template
-2. All-in-One Template
-3. Both Templates
+1. Detect available DbContext classes in the project
+2. Ask you to select which DbContext to use for migration
+3. Prompt for a migration name
+4. Create the migration
+5. Optionally generate SQL scripts for the migration
 
-## Supported Databases
+### Step 3: Initialize Seed Data
 
-- SqlServer
-- MySQL
-- PostgreSQL
-- Oracle
-- SQLite
+Run the DbMigrator project to initialize seed data:
 
-## Notes
+```bash
+# Navigate to the DbMigrator project directory
+cd migrations/PackageName.CompanyName.ProjectName.AIO.DbMigrator
 
-- Ensure .NET SDK 8.0 or higher is installed
-- Choose the appropriate template based on your needs:
-  - Microservice Template: For large-scale distributed applications
-  - All-in-One Template: For smaller applications or simpler deployment requirements
-- Pay attention to NuGet publish address and key when packaging
-- Complete testing is recommended before publishing
+# Run the DbMigrator project
+dotnet run
+```
+
+The DbMigrator will:
+
+1. Apply all database migrations
+2. Seed initial data (users, roles, etc.)
+3. Set up tenant configurations if applicable
+
+### Step 4: Launch the Application
+
+After successfully setting up the database, you can run the host project:
+
+```bash
+# Navigate to the host project directory
+cd host/PackageName.CompanyName.ProjectName.AIO.Host
+
+# Run the host project
+dotnet run --launch-profile "PackageName.CompanyName.ProjectName.Development"
+```
+
+The application will start and be accessible at the configured URL (typically [https://localhost:44300](https://localhost:44300)).
+
+## Database-based Unit Testing
+
+To run database-based unit tests, follow these steps:
+
+### Step 1: Prepare Test Database
+
+Before running tests, make sure the test database exists. The test database connection string is defined in the `ProjectNameEntityFrameworkCoreTestModule.cs` file.
+
+The default connection string is:
+
+```csharp
+private const string DefaultPostgresConnectionString =
+    "Host=127.0.0.1;Port=5432;Database=test_db;User Id=postgres;Password=postgres;";
+```
+
+You can either create this database manually or modify the connection string to use an existing database.
+
+### Step 2: Configure Test Environment
+
+Modify the connection string in `ProjectNameEntityFrameworkCoreTestModule.cs` if needed:
+
+```csharp
+// You can also set an environment variable to override the default connection string
+var connectionString = Environment.GetEnvironmentVariable("TEST_CONNECTION_STRING") ??
+                       DefaultPostgresConnectionString;
+```
+
+### Step 3: Run Tests
+
+Run the Application.Tests project:
+
+```bash
+# Navigate to the test project directory
+cd tests/PackageName.CompanyName.ProjectName.Application.Tests
+
+# Run the tests
+dotnet test
+```
+
+The test framework will:
+
+1. Create a clean test database environment
+2. Run all unit tests
+3. Report test results
+
+## Note About Naming
+
+This is a template project, so all project names contain placeholders that will be replaced when the template is used to create a new project:
+
+- `PackageName` will be replaced with your package name
+- `CompanyName` will be replaced with your company name
+- `ProjectName` will be replaced with your project name
+
+When creating a new project from this template, you'll specify these values and they'll be substituted throughout the entire solution.

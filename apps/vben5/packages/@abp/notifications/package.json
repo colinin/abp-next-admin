@@ -1,6 +1,6 @@
 {
   "name": "@abp/notifications",
-  "version": "8.3.2",
+  "version": "9.0.4",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
@@ -20,6 +20,7 @@
     }
   },
   "dependencies": {
+    "@abp/components": "workspace:*",
     "@abp/core": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/signalr": "workspace:*",
@@ -33,6 +34,7 @@
     "@vben/locales": "workspace:*",
     "ant-design-vue": "catalog:",
     "dayjs": "catalog:",
-    "vue": "catalog:*"
+    "vue": "catalog:*",
+    "vxe-table": "catalog:"
   }
 }

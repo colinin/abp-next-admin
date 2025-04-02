@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import type { SettingsUpdateInput } from '../../types';
 
-import { getUserSettingsApi, setUserSettingsApi } from '../../api/settings';
+import { useSettingsApi } from '../../api/useSettingsApi';
 import SettingForm from './SettingForm.vue';
 
 defineOptions({
   name: 'UserSettingForm',
 });
+
+const { getUserSettingsApi, setUserSettingsApi } = useSettingsApi();
 
 async function onGet() {
   const { items } = await getUserSettingsApi();

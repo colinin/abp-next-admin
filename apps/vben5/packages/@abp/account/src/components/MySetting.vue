@@ -31,6 +31,9 @@ const SecuritySettings = defineAsyncComponent(
 const SessionSettings = defineAsyncComponent(
   () => import('./components/SessionSettings.vue'),
 );
+const PersonalDataSettings = defineAsyncComponent(
+  () => import('./components/PersonalDataSettings.vue'),
+);
 const { getApi, updateApi } = useProfileApi();
 const userStore = useUserStore();
 const { query } = useRoute();
@@ -62,6 +65,10 @@ const menuItems = reactive([
     key: 'authenticator',
     label: $t('abp.account.settings.authenticatorSettings'),
   },
+  {
+    key: 'personal-data',
+    label: $t('abp.account.settings.personalDataSettings'),
+  },
 ]);
 const getUserInfo = computed((): null | UserInfo => {
   if (!userStore.userInfo) {
@@ -84,6 +91,16 @@ const [EmailConfirmModal, emailConfirmModalApi] = useVbenModal({
     () => import('./components/EmailConfirmModal.vue'),
   ),
 });
+const [ChangePasswordModal, changePasswordModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./components/ChangePasswordModal.vue'),
+  ),
+});
+const [ChangePhoneNumberModal, changePhoneNumberModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./components/ChangePhoneNumberModal.vue'),
+  ),
+});
 function onEmailConfirm() {
   if (query?.confirmToken) {
     emailConfirmModalApi.setData({
@@ -96,6 +113,11 @@ function onEmailConfirm() {
 async function onGetProfile() {
   const profile = await getApi();
   myProfile.value = profile;
+}
+async function onPhoneNumberChange(phoneNumber: string) {
+  userStore.$patch((state) => {
+    state.userInfo && (state.userInfo.phoneNumber = phoneNumber);
+  });
 }
 async function onUpdateProfile(input: UpdateProfileDto) {
   Modal.confirm({
@@ -113,12 +135,10 @@ async function onUpdateProfile(input: UpdateProfileDto) {
   });
 }
 function onChangePassword() {
-  // TODO: onChangePassword 暂时未实现!
-  console.warn('onChangePassword 暂时未实现!');
+  changePasswordModalApi.open();
 }
 function onChangePhoneNumber() {
-  // TODO: onChangePhoneNumber 暂时未实现!
-  console.warn('onChangePhoneNumber 暂时未实现!');
+  changePhoneNumberModalApi.open();
 }
 onMounted(async () => {
   await onGetProfile();
@@ -155,10 +175,15 @@ onMounted(async () => {
             v-else-if="selectedMenuKeys[0] === 'authenticator'"
           />
           <SessionSettings v-else-if="selectedMenuKeys[0] === 'session'" />
+          <PersonalDataSettings
+            v-else-if="selectedMenuKeys[0] === 'personal-data'"
+          />
         </div>
       </div>
     </Card>
     <EmailConfirmModal />
+    <ChangePasswordModal />
+    <ChangePhoneNumberModal @change="onPhoneNumberChange" />
   </div>
 </template>
 

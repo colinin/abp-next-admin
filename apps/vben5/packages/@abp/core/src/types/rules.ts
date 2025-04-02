@@ -45,6 +45,11 @@ interface RuleCreator {
   fieldOnlyAcceptsFilesExtensions(field: FieldContains): Rule[];
   /** 字段{0}不可为空 */
   fieldRequired(field: Field): Rule[];
+  /** 获取一个错误枚举验证消息 */
+  mapEnumValidMessage(
+    enumName: string,
+    args?: any[] | Record<string, string> | undefined,
+  ): string;
 }
 
 export type { RuleCreator };

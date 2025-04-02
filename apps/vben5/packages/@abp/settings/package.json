@@ -1,6 +1,6 @@
 {
   "name": "@abp/settings",
-  "version": "8.3.2",
+  "version": "9.0.4",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@abp/core": "workspace:*",
+    "@abp/features": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/ui": "workspace:*",
     "@ant-design/icons-vue": "catalog:",

@@ -1,7 +1,9 @@
-import type { LocaleSetupOptions, SupportedLanguagesType } from '@vben/locales';
 import type { Locale } from 'ant-design-vue/es/locale';
 
 import type { App } from 'vue';
+
+import type { LocaleSetupOptions, SupportedLanguagesType } from '@vben/locales';
+
 import { ref } from 'vue';
 
 import {
@@ -12,12 +14,11 @@ import {
 import { preferences } from '@vben/preferences';
 
 import { useAbpStore } from '@abp/core';
+import { useLocalizationsApi } from '@abp/localization';
 import antdEnLocale from 'ant-design-vue/es/locale/en_US';
 import antdDefaultLocale from 'ant-design-vue/es/locale/zh_CN';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-
-import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
 
 const antdLocale = ref<Locale>(antdDefaultLocale);
 
@@ -75,6 +76,7 @@ async function loadDayjsLocale(lang: SupportedLanguagesType) {
   if (locale) {
     dayjs.extend(localizedFormat);
     dayjs.locale(locale);
+    dayjs.extend(localizedFormat);
   } else {
     console.error(`Failed to load dayjs locale for ${lang}`);
   }
@@ -103,7 +105,7 @@ async function loadAntdLocale(lang: SupportedLanguagesType) {
  */
 async function loadAbpLocale(lang: SupportedLanguagesType) {
   const abpStore = useAbpStore();
-  const { getLocalizationApi } = useAbpConfigApi();
+  const { getLocalizationApi } = useLocalizationsApi();
   let localization = abpStore.localization;
 
   if (lang !== localization?.currentCulture.cultureName) {
@@ -121,8 +123,7 @@ async function setupI18n(app: App, options: LocaleSetupOptions = {}) {
   await coreSetup(app, {
     defaultLocale: preferences.app.locale,
     loadMessages,
-    // missingWarn: !import.meta.env.PROD,
-    missingWarn: false,
+    missingWarn: !import.meta.env.PROD,
     ...options,
   });
 }

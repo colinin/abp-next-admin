@@ -12,7 +12,7 @@ namespace PackageName.CompanyName.ProjectName.SettingManagement;
 [RemoteService(Name = ProjectNameRemoteServiceConsts.RemoteServiceName)]
 [ApiVersion("2.0")]
 [Area(ProjectNameRemoteServiceConsts.ModuleName)]
-[Route("api/ProjectName/settings")]
+[Route($"api/{ProjectNameRemoteServiceConsts.ModuleName}/settings")]
 public class ProjectNameSettingController : AbpController, IProjectNameSettingAppService
 {
     private readonly IProjectNameSettingAppService _settingAppService;

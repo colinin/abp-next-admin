@@ -7,8 +7,8 @@ import { useAccess } from '@vben/access';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { CodeEditor } from '@abp/components/codeeditor';
 import { UserLookupPermissions, useUserLookupApi } from '@abp/identity';
-import { CodeEditor } from '@abp/ui';
 import { Select } from 'ant-design-vue';
 
 import { useApplicationsApi } from '../../api/useApplicationsApi';

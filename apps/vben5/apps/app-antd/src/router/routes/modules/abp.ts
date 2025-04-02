@@ -1,11 +1,9 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-import { BasicLayout } from '#/layouts';
 import { $t } from '#/locales';
 
 const routes: RouteRecordRaw[] = [
   {
-    component: BasicLayout,
     meta: {
       icon: 'https://abp.io/assets/favicon.ico/favicon-16x16.png',
       keepAlive: true,
@@ -121,6 +119,35 @@ const routes: RouteRecordRaw[] = [
           },
           {
             meta: {
+              title: $t('abp.manage.features.title'),
+              icon: 'ant-design:gold-outlined',
+            },
+            name: 'FeatureManagement',
+            path: '/manage/features',
+            children: [
+              {
+                meta: {
+                  title: $t('abp.manage.features.groups'),
+                  icon: 'lucide:group',
+                },
+                name: 'FeatureGroupDefinitions',
+                path: '/manage/features/groups',
+                component: () => import('#/views/features/groups/index.vue'),
+              },
+              {
+                meta: {
+                  title: $t('abp.manage.features.definitions'),
+                  icon: 'pajamas:feature-flag',
+                },
+                name: 'FeatureDefinitions',
+                path: '/manage/features/definitions',
+                component: () =>
+                  import('#/views/features/definitions/index.vue'),
+              },
+            ],
+          },
+          {
+            meta: {
               title: $t('abp.manage.settings.title'),
               icon: 'ic:outline-settings',
             },
@@ -145,6 +172,45 @@ const routes: RouteRecordRaw[] = [
                 name: 'SystemSettings',
                 path: '/manage/settings/system',
                 component: () => import('#/views/settings/system/index.vue'),
+              },
+            ],
+          },
+          {
+            meta: {
+              title: $t('abp.manage.localization.title'),
+              icon: 'ion:globe-outline',
+            },
+            name: 'LocalizationManagement',
+            path: '/manage/localization',
+            children: [
+              {
+                meta: {
+                  title: $t('abp.manage.localization.resources'),
+                  icon: 'grommet-icons:resources',
+                },
+                name: 'LocalizationResources',
+                path: '/manage/localization/resources',
+                component: () =>
+                  import('#/views/localization/resources/index.vue'),
+              },
+              {
+                meta: {
+                  title: $t('abp.manage.localization.languages'),
+                  icon: 'cil:language',
+                },
+                name: 'LocalizationLanguages',
+                path: '/manage/localization/languages',
+                component: () =>
+                  import('#/views/localization/languages/index.vue'),
+              },
+              {
+                meta: {
+                  title: $t('abp.manage.localization.texts'),
+                  icon: 'mi:text',
+                },
+                name: 'LocalizationTexts',
+                path: '/manage/localization/texts',
+                component: () => import('#/views/localization/texts/index.vue'),
               },
             ],
           },
@@ -175,7 +241,55 @@ const routes: RouteRecordRaw[] = [
                 component: () =>
                   import('#/views/notifications/my-notifilers/index.vue'),
               },
+              {
+                meta: {
+                  title: $t('abp.manage.notifications.groups'),
+                  icon: 'lucide:group',
+                },
+                name: 'NotificationGroupDefinitions',
+                path: '/manage/notifications/groups',
+                component: () =>
+                  import('#/views/notifications/groups/index.vue'),
+              },
+              {
+                meta: {
+                  title: $t('abp.manage.notifications.definitions'),
+                  icon: 'nimbus:notification',
+                },
+                name: 'NotificationDefinitions',
+                path: '/manage/notifications/definitions',
+                component: () =>
+                  import('#/views/notifications/definitions/index.vue'),
+              },
             ],
+          },
+        ],
+      },
+      {
+        meta: {
+          title: $t('abp.saas.title'),
+          icon: 'ant-design:cloud-server-outlined',
+        },
+        name: 'Saas',
+        path: '/saas',
+        children: [
+          {
+            meta: {
+              title: $t('abp.saas.editions'),
+              icon: 'icon-park-outline:multi-rectangle',
+            },
+            name: 'SaasEditions',
+            path: '/saas/editions',
+            component: () => import('#/views/saas/editions/index.vue'),
+          },
+          {
+            meta: {
+              title: $t('abp.saas.tenants'),
+              icon: 'arcticons:tenantcloud-pro',
+            },
+            name: 'SaasTenants',
+            path: '/saas/tenants',
+            component: () => import('#/views/saas/tenants/index.vue'),
           },
         ],
       },
@@ -244,6 +358,46 @@ const routes: RouteRecordRaw[] = [
             name: 'MySettings',
             path: '/account/my-settings',
             component: () => import('#/views/account/my-settings/index.vue'),
+          },
+        ],
+      },
+      {
+        name: 'Platform',
+        path: '/platform',
+        meta: {
+          title: $t('abp.platform.title'),
+          icon: 'ep:platform',
+        },
+        children: [
+          {
+            meta: {
+              title: $t('abp.platform.messages.title'),
+              icon: 'tabler:message-cog',
+            },
+            name: 'PlatformMessages',
+            path: '/platform/messages',
+            children: [
+              {
+                meta: {
+                  title: $t('abp.platform.messages.email'),
+                  icon: 'material-symbols:attach-email-outline',
+                },
+                name: 'PlatformEmailMessages',
+                path: '/platform/messages/email',
+                component: () =>
+                  import('#/views/platform/messages/email/index.vue'),
+              },
+              {
+                meta: {
+                  title: $t('abp.platform.messages.sms'),
+                  icon: 'material-symbols:sms-outline',
+                },
+                name: 'PlatformSmsMessages',
+                path: '/platform/messages/sms',
+                component: () =>
+                  import('#/views/platform/messages/sms/index.vue'),
+              },
+            ],
           },
         ],
       },

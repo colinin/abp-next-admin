@@ -5,10 +5,8 @@ import type {
   OrganizationUnitUpdateDto,
 } from '../../types/organization-units';
 
-import { useVbenModal } from '@vben/common-ui';
+import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
-
-import { useVbenForm } from '@abp/ui';
 
 import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
 
@@ -103,17 +101,16 @@ const [Modal, modalApi] = useVbenModal({
 async function onSubmit(input: Record<string, any>) {
   try {
     modalApi.setState({
-      confirmLoading: true,
+      submitting: true,
     });
-    const api = input.id
-      ? updateApi(input.id, input as OrganizationUnitUpdateDto)
-      : createApi(input as OrganizationUnitCreateDto);
-    const dto = await api;
+    const dto = input.id
+      ? await updateApi(input.id, input as OrganizationUnitUpdateDto)
+      : await createApi(input as OrganizationUnitCreateDto);
     emits('change', dto);
     modalApi.close();
   } finally {
     modalApi.setState({
-      confirmLoading: false,
+      submitting: false,
     });
   }
 }

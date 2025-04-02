@@ -8,10 +8,14 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" />
+		<PackageReference Include="LINGYUN.Abp.Identity.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Abp.DataProtection.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\migrations\PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore\PackageName.CompanyName.ProjectName.AIO.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.EntityFrameworkCore\PackageName.CompanyName.ProjectName.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\PackageName.CompanyName.ProjectName.Domain.Tests\PackageName.CompanyName.ProjectName.Domain.Tests.csproj" />
 	</ItemGroup>

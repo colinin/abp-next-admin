@@ -45,8 +45,8 @@ COPY . /app
 
 ## .NET 8.0 默认使用8080端口,变更为80端口需要环境变量ASPNETCORE_HTTP_PORTS=80
 ## .NET 8.0 defaults to port 8080, changing to port 80 requires the environment variable ASPNETCORE.HTTP-PORTS=80
-# EXPOSE 8080/tcp
-EXPOSE 80/tcp
+
+EXPOSE 8080/tcp
 
 VOLUME [ "./app/Logs" ]
 VOLUME [ "./app/Modules" ]

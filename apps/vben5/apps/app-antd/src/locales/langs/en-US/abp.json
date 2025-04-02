@@ -8,6 +8,9 @@
       "phoneNumber": "Phone Number",
       "getCode": "Get Code",
       "code": "Code"
+    },
+    "qrcodeLogin": {
+      "scaned": "Please confirm login on your phone."
     }
   },
   "manage": {
@@ -27,6 +30,11 @@
       "groups": "Groups",
       "definitions": "Definitions"
     },
+    "features": {
+      "title": "Features",
+      "groups": "Groups",
+      "definitions": "Definitions"
+    },
     "settings": {
       "title": "Settings",
       "definitions": "Definitions",
@@ -34,7 +42,15 @@
     },
     "notifications": {
       "title": "Notifications",
-      "myNotifilers": "My Notifilers"
+      "myNotifilers": "My Notifilers",
+      "groups": "Groups",
+      "definitions": "Definitions"
+    },
+    "localization": {
+      "title": "Localization",
+      "resources": "Resources",
+      "languages": "Languages",
+      "texts": "Texts"
     }
   },
   "openiddict": {
@@ -65,8 +81,22 @@
       "noticeSettings": "Notice Settings",
       "authenticatorSettings": "Authenticator Settings",
       "changeAvatar": "Change Avatar",
-      "sessionSettings": "Session Settings"
+      "sessionSettings": "Session Settings",
+      "personalDataSettings": "Personal Data Settings"
     },
     "profile": "My Profile"
+  },
+  "platform": {
+    "title": "Platform",
+    "messages": {
+      "title": "Message Manage",
+      "email": "Email Messages",
+      "sms": "Sms Messages"
+    }
+  },
+  "saas": {
+    "title": "Saas",
+    "editions": "Editions",
+    "tenants": "Tenants"
   }
 }

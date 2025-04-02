@@ -3,13 +3,15 @@
 		<LangVersion>latest</LangVersion>
 		<Version>8.2.1</Version>
 		<Authors>colin</Authors>
-		<NoWarn>$(NoWarn);CS1591;CS0436;CS8618;NU1803</NoWarn>
+		<NoWarn>$(NoWarn);CS1591;CS0436;CS8618;NU1803;NU1900</NoWarn>
 		<PackageProjectUrl>https://github.com/colinin/abp-next-admin</PackageProjectUrl>
-		<PackageOutputPath>$(SolutionDir)LocalNuget</PackageOutputPath>
 		<PackageVersion>8.2.1</PackageVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/colinin/abp-next-admin</RepositoryUrl>
+		<!-- 启用XML文档生成 -->
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
 		<GeneratePackageOnBuild Condition="$(AssemblyName.StartsWith('LINGYUN'))">true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
@@ -30,9 +32,4 @@
 		<EmbeddedResource Remove="Modules\**" />
 		<None Remove="Modules\**" />
 	</ItemGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<OutputPath>$(SolutionDir)LocalNuget</OutputPath>
-	</PropertyGroup>
-
 </Project>
