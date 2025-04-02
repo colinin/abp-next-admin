@@ -14,6 +14,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\Elsa\EntityFrameworkCore\MySql\Migrations\Initial.sql" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\Elsa\EntityFrameworkCore\MySql\Migrations\Initial.sql" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" />
 		<PackageReference Include="Elsa.WorkflowSettings.Persistence.EntityFramework.MySql" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
