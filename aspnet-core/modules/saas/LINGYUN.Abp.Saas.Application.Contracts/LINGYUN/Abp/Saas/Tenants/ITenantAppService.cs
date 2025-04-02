@@ -31,4 +31,6 @@ public interface ITenantAppService :
     Task DeleteConnectionStringAsync(
         Guid id,
         [Required] string connectionName);
+
+    Task CheckConnectionStringAsync(TenantConnectionStringCheckInput input);
 }

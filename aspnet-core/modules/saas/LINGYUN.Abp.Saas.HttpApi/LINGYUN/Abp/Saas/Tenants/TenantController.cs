@@ -95,4 +95,11 @@ public class TenantController : AbpSaasControllerBase, ITenantAppService
     {
         return TenantAppService.DeleteConnectionStringAsync(id, name);
     }
+    [HttpPost]
+    [Route("connection-string/check")]
+    [Authorize(AbpSaasPermissions.Tenants.ManageConnectionStrings)]
+    public virtual Task CheckConnectionStringAsync(TenantConnectionStringCheckInput input)
+    {
+        return TenantAppService.CheckConnectionStringAsync(input);
+    }
 }
