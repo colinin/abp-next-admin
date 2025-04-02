@@ -52,9 +52,9 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
         var agentId = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.AgentId)?.Value;
         var secret = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.Secret)?.Value;
 
-        Check.NotNullOrEmpty(corpId, nameof(corpId));
-        Check.NotNullOrEmpty(agentId, nameof(agentId));
-        Check.NotNullOrEmpty(secret, nameof(secret));
+        // Check.NotNullOrEmpty(corpId, nameof(corpId));
+        // Check.NotNullOrEmpty(agentId, nameof(agentId));
+        // Check.NotNullOrEmpty(secret, nameof(secret));
 
         // 用配置项重写
         Options.CorpId = corpId;
