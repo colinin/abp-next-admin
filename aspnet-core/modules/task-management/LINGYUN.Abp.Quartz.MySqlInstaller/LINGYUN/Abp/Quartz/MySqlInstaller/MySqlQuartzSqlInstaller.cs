@@ -17,16 +17,16 @@ using static Quartz.SchedulerBuilder;
 
 namespace LINGYUN.Abp.Quartz.MySqlInstaller;
 
-public class QuartzMySqlInstaller : ITransientDependency
+public class MySqlQuartzSqlInstaller : IQuartzSqlInstaller, ITransientDependency
 {
-    public ILogger<QuartzMySqlInstaller> Logger { protected get; set; }
+    public ILogger<MySqlQuartzSqlInstaller> Logger { protected get; set; }
 
     private readonly IVirtualFileProvider _virtualFileProvider;
     private readonly AbpQuartzSqlInstallerOptions _installerOptions;
     private readonly AbpQuartzOptions _quartzOptions;
     private readonly IConfiguration _configuration;
 
-    public QuartzMySqlInstaller(
+    public MySqlQuartzSqlInstaller(
         IConfiguration configuration,
         IVirtualFileProvider virtualFileProvider,
         IOptions<AbpQuartzOptions> quartzOptions,
@@ -37,7 +37,7 @@ public class QuartzMySqlInstaller : ITransientDependency
         _virtualFileProvider = virtualFileProvider;
         _installerOptions = installerOptions.Value;
 
-        Logger = NullLogger<QuartzMySqlInstaller>.Instance;
+        Logger = NullLogger<MySqlQuartzSqlInstaller>.Instance;
     }
 
     public async virtual Task InstallAsync()

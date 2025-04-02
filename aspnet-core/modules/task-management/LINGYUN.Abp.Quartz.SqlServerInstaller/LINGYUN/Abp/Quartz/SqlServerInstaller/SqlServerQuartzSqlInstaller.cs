@@ -16,15 +16,15 @@ using static Quartz.SchedulerBuilder;
 
 namespace LINGYUN.Abp.Quartz.SqlServerInstaller;
 
-public class QuartzSqlServerInstaller : ITransientDependency
+public class SqlServerQuartzSqlInstaller : IQuartzSqlInstaller, ITransientDependency
 {
-    public ILogger<QuartzSqlServerInstaller> Logger { protected get; set; }
+    public ILogger<SqlServerQuartzSqlInstaller> Logger { protected get; set; }
 
     private readonly IVirtualFileProvider _virtualFileProvider;
     private readonly AbpQuartzSqlInstallerOptions _installerOptions;
     private readonly AbpQuartzOptions _quartzOptions;
 
-    public QuartzSqlServerInstaller(
+    public SqlServerQuartzSqlInstaller(
         IVirtualFileProvider virtualFileProvider,
         IOptions<AbpQuartzOptions> quartzOptions,
         IOptions<AbpQuartzSqlInstallerOptions> installerOptions)
@@ -33,7 +33,7 @@ public class QuartzSqlServerInstaller : ITransientDependency
         _virtualFileProvider = virtualFileProvider;
         _installerOptions = installerOptions.Value;
 
-        Logger = NullLogger<QuartzSqlServerInstaller>.Instance;
+        Logger = NullLogger<SqlServerQuartzSqlInstaller>.Instance;
     }
 
     public async virtual Task InstallAsync()
