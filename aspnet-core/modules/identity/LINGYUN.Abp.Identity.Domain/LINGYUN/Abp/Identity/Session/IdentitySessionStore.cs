@@ -126,7 +126,7 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
         string sessionId,
         CancellationToken cancellationToken = default)
     {
-        await IdentitySessionRepository.DeleteAllAsync(sessionId, cancellationToken: cancellationToken);
+        await IdentitySessionRepository.DeleteAllSessionAsync(sessionId, cancellationToken: cancellationToken);
     }
 
     public async virtual Task RevokeAllAsync(
@@ -134,7 +134,7 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
         Guid? exceptSessionId = null,
         CancellationToken cancellationToken = default)
     {
-        await IdentitySessionRepository.DeleteAllAsync(userId, exceptSessionId, cancellationToken: cancellationToken);
+        await IdentitySessionRepository.DeleteAllAsync(userId: userId, exceptSessionId: exceptSessionId, cancellationToken: cancellationToken);
     }
 
     public async virtual Task RevokeAllAsync(
