@@ -1,15 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using LINGYUN.Abp.Quartz.SqlInstaller;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Modularity;
-using Volo.Abp.Quartz;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Quartz.MySqlInstaller;
 
 [DependsOn(
-    typeof(AbpQuartzModule),
+    typeof(AbpQuartzSqlInstallerModule),
     typeof(AbpVirtualFileSystemModule))]
 public class AbpQuartzMySqlInstallerModule : AbpModule
 {

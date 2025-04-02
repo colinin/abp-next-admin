@@ -1,10 +1,13 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using LINGYUN.Abp.Quartz.SqlInstaller;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Quartz;
@@ -18,14 +21,17 @@ public class QuartzSqlServerInstaller : ITransientDependency
     public ILogger<QuartzSqlServerInstaller> Logger { protected get; set; }
 
     private readonly IVirtualFileProvider _virtualFileProvider;
+    private readonly AbpQuartzSqlInstallerOptions _installerOptions;
     private readonly AbpQuartzOptions _quartzOptions;
 
     public QuartzSqlServerInstaller(
         IVirtualFileProvider virtualFileProvider,
-        IOptions<AbpQuartzOptions> quartzOptions)
+        IOptions<AbpQuartzOptions> quartzOptions,
+        IOptions<AbpQuartzSqlInstallerOptions> installerOptions)
     {
         _quartzOptions = quartzOptions.Value;
         _virtualFileProvider = virtualFileProvider;
+        _installerOptions = installerOptions.Value;
 
         Logger = NullLogger<QuartzSqlServerInstaller>.Instance;
     }
@@ -57,9 +63,15 @@ public class QuartzSqlServerInstaller : ITransientDependency
             await sqlConnection.OpenAsync();
         }
 
-        using (var sqlCommand = new SqlCommand("SELECT COUNT(1) FROM [sys].[objects] WHERE type=N'U'", sqlConnection))
+        var tableParams = _installerOptions.InstallTables.Select((_, index) => $"@Table_{index}").JoinAsString(",");
+        using (var sqlCommand = new SqlCommand($"SELECT COUNT(1) FROM [sys].[objects] WHERE type=N'U' AND name IN ({tableParams})", sqlConnection))
         {
             sqlCommand.Parameters.Add("@DataBaseName", SqlDbType.NVarChar).Value = dataBaseName;
+
+            for (var index = 0; index < _installerOptions.InstallTables.Count; index++)
+            {
+                sqlCommand.Parameters.Add($"@Table_{index}", SqlDbType.NVarChar).Value = $"{tablePrefix}{_installerOptions.InstallTables[index]}";
+            }
 
             var rowsAffects = await sqlCommand.ExecuteScalarAsync() as long?;
             if (rowsAffects > 0)

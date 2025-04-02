@@ -31,8 +31,7 @@ builder.Host.AddAppSettingsSecretsJson()
     .ConfigureAppConfiguration((context, config) =>
     {
         var configuration = config.Build();
-        var agileConfigEnabled = configuration["AgileConfig:IsEnabled"];
-        if (agileConfigEnabled.IsNullOrEmpty() || bool.Parse(agileConfigEnabled))
+        if (configuration.GetValue("AgileConfig:IsEnabled", false))
         {
             config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
         }

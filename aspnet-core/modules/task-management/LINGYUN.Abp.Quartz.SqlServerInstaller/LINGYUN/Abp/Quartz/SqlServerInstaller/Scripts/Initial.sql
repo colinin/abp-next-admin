@@ -144,7 +144,7 @@ CREATE TABLE [dbo].[${TablePrefix}JOB_DETAILS] (
   [JOB_NAME] nvarchar(150) NOT NULL,
   [JOB_GROUP] nvarchar(150) NOT NULL,
   [DESCRIPTION] nvarchar(250) NULL,
-  [JOB_CLASS_NAME] nvarchar(250) NOT NULL,
+  [JOB_CLASS_NAME] nvarchar(512) NOT NULL,
   [IS_DURABLE] bit NOT NULL,
   [IS_NONCONCURRENT] bit NOT NULL,
   [IS_UPDATE_DATA] bit NOT NULL,
