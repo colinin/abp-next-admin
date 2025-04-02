@@ -49,6 +49,7 @@
     "ProfileTab:Session": "会话管理",
     "ProfileTab:TwoFactor": "双因素身份验证",
     "ProfileTab:Authenticator": "身份验证程序",
-    "ProfileTab:SecurityLog": "安全日志"
+    "ProfileTab:SecurityLog": "安全日志",
+    "PhoneNumberChangedMessage": "您的手机号码已成功更改."
   }
 }

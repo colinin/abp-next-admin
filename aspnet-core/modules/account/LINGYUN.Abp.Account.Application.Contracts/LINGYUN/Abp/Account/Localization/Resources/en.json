@@ -49,6 +49,7 @@
     "ProfileTab:Session": "Sessions",
     "ProfileTab:TwoFactor": "TwoFactor",
     "ProfileTab:Authenticator": "Authenticator",
-    "ProfileTab:SecurityLog": "Security Log"
+    "ProfileTab:SecurityLog": "Security Log",
+    "PhoneNumberChangedMessage": "Your mobile number has been successfully changed."
   }
 }
