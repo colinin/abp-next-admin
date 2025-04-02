@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.OssManagement;
 
@@ -15,5 +16,10 @@ public class AbpOssManagementHttpApiClientModule : AbpModule
                typeof(AbpOssManagementApplicationContractsModule).Assembly,
                OssManagementRemoteServiceConsts.RemoteServiceName
            );
+
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpOssManagementHttpApiClientModule>();
+        });
     }
 }

@@ -499,10 +499,13 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
     {
         var configuration = ConfigurationProvider.Get<AbpOssManagementContainer>();
         var minioConfiguration = configuration.GetMinioConfiguration();
-
-        return bucket.IsNullOrWhiteSpace()
-            ? BlobNormalizeNamingService.NormalizeContainerName(configuration, minioConfiguration.BucketName!)
-            : BlobNormalizeNamingService.NormalizeContainerName(configuration, bucket);
+        var blobPath = minioConfiguration.BucketName;
+        if (string.Equals(bucket, blobPath, StringComparison.InvariantCultureIgnoreCase))
+        {
+            return bucket;
+        }
+        
+        return bucket;
     }
 
     protected virtual string GetPrefixPath()

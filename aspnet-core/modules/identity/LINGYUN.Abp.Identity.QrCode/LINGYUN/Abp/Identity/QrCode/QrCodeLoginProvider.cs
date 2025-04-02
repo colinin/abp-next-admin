@@ -153,4 +153,5 @@ public class QrCodeLoginProvider : IQrCodeLoginProvider, ITransientDependency
         return await UserManager.GenerateUserTokenAsync(user,
             QrCodeLoginProviderConsts.Name,
             QrCodeLoginProviderConsts.Purpose);
-    }}
+    }
+}

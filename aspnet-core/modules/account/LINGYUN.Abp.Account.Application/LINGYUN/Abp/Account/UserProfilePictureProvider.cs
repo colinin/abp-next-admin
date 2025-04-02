@@ -68,7 +68,7 @@ public class UserProfileUserPictureProvider : IUserPictureProvider
 
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
-        var pictureName = $"users/{userId}/avatar/{pictureBlobId}";
+        var pictureName = $"{userId}/avatar/{pictureBlobId}";
 
         await AccountBlobContainer.SaveAsync(pictureName, stream, true);
     }
@@ -90,7 +90,7 @@ public class UserProfileUserPictureProvider : IUserPictureProvider
             return Stream.Null;
         }
 
-        var pictureName = $"users/{user.Id:N}/avatar/{picture}";
+        var pictureName = $"{user.Id:N}/avatar/{picture}";
 
         return await AccountBlobContainer.ExistsAsync(pictureName)
             ? await AccountBlobContainer.GetAsync(pictureName)
