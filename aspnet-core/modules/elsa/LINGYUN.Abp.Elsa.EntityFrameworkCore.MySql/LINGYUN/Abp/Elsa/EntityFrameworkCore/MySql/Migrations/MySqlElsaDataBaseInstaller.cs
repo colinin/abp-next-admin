@@ -2,9 +2,12 @@
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using MySqlConnector;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -20,10 +23,14 @@ public class MySqlElsaDataBaseInstaller : IElsaDataBaseInstaller, ITransientDepe
     private readonly IVirtualFileProvider _virtualFileProvider;
     private readonly IConnectionStringResolver _connectionStringResolver;
 
+    private readonly AbpElsaDataBaseInstallerOptions _installerOptions;
+
     public MySqlElsaDataBaseInstaller(
         IVirtualFileProvider virtualFileProvider,
-        IConnectionStringResolver connectionStringResolver)
+        IConnectionStringResolver connectionStringResolver,
+        IOptions<AbpElsaDataBaseInstallerOptions> installerOptions)
     {
+        _installerOptions = installerOptions.Value;
         _virtualFileProvider = virtualFileProvider;
         _connectionStringResolver = connectionStringResolver;
 
@@ -52,9 +59,14 @@ public class MySqlElsaDataBaseInstaller : IElsaDataBaseInstaller, ITransientDepe
             await mySqlConnection.OpenAsync();
         }
 
-        using (var mySqlCommand = new MySqlCommand("SELECT COUNT(1) FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = @DataBaseName;", mySqlConnection))
+        var tableParams = _installerOptions.InstallTables.Select((_, index) => $"@Table_{index}").JoinAsString(",");
+        using (var mySqlCommand = new MySqlCommand($"SELECT COUNT(1) FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = @DataBaseName AND `TABLE_NAME` IN ({tableParams});", mySqlConnection))
         {
             mySqlCommand.Parameters.Add("@DataBaseName", MySqlDbType.String).Value = dataBaseName;
+            for (var index = 0; index < _installerOptions.InstallTables.Count; index++)
+            {
+                mySqlCommand.Parameters.Add($"@Table_{index}", MySqlDbType.String).Value = _installerOptions.InstallTables[index];
+            }
 
             var rowsAffects = await mySqlCommand.ExecuteScalarAsync() as long?;
             if (rowsAffects > 0)

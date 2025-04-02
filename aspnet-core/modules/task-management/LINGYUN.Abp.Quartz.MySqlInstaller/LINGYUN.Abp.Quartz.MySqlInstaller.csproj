@@ -22,9 +22,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Quartz" />
 		<PackageReference Include="Volo.Abp.VirtualFileSystem" />
 		<PackageReference Include="MySqlConnector" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LINGYUN.Abp.Quartz.SqlInstaller\LINGYUN.Abp.Quartz.SqlInstaller.csproj" />
 	</ItemGroup>
 
 </Project>

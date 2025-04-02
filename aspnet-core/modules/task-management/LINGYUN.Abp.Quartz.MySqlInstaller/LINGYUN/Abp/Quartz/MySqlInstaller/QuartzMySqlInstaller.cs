@@ -1,10 +1,14 @@
-﻿using Microsoft.Extensions.FileProviders;
+﻿using LINGYUN.Abp.Quartz.SqlInstaller;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using MySqlConnector;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Quartz;
@@ -18,14 +22,20 @@ public class QuartzMySqlInstaller : ITransientDependency
     public ILogger<QuartzMySqlInstaller> Logger { protected get; set; }
 
     private readonly IVirtualFileProvider _virtualFileProvider;
+    private readonly AbpQuartzSqlInstallerOptions _installerOptions;
     private readonly AbpQuartzOptions _quartzOptions;
+    private readonly IConfiguration _configuration;
 
     public QuartzMySqlInstaller(
+        IConfiguration configuration,
         IVirtualFileProvider virtualFileProvider,
-        IOptions<AbpQuartzOptions> quartzOptions)
+        IOptions<AbpQuartzOptions> quartzOptions,
+        IOptions<AbpQuartzSqlInstallerOptions> installerOptions)
     {
+        _configuration = configuration;
         _quartzOptions = quartzOptions.Value;
         _virtualFileProvider = virtualFileProvider;
+        _installerOptions = installerOptions.Value;
 
         Logger = NullLogger<QuartzMySqlInstaller>.Instance;
     }
@@ -33,7 +43,13 @@ public class QuartzMySqlInstaller : ITransientDependency
     public async virtual Task InstallAsync()
     {
         var dataSource = _quartzOptions.Properties["quartz.jobStore.dataSource"] ?? AdoProviderOptions.DefaultDataSourceName;
+
         var connectionString = _quartzOptions.Properties[$"quartz.dataSource.{dataSource}.connectionString"];
+        var connectionStringName = _quartzOptions.Properties[$"quartz.dataSource.{dataSource}.connectionStringName"];
+        if (connectionString.IsNullOrWhiteSpace() && !connectionStringName.IsNullOrWhiteSpace())
+        {
+            connectionString = _configuration.GetConnectionString(connectionStringName);
+        }
         var tablePrefix = _quartzOptions.Properties["quartz.jobStore.tablePrefix"] ?? "QRTZ_";
 
         if (connectionString.IsNullOrWhiteSpace())
@@ -57,9 +73,15 @@ public class QuartzMySqlInstaller : ITransientDependency
             await mySqlConnection.OpenAsync();
         }
 
-        using (var mySqlCommand = new MySqlCommand("SELECT COUNT(1) FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = @DataBaseName;", mySqlConnection))
+        var tableParams = _installerOptions.InstallTables.Select((_, index) => $"@Table_{index}").JoinAsString(",");
+        using (var mySqlCommand = new MySqlCommand($"SELECT COUNT(1) FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = @DataBaseName AND `TABLE_NAME` IN ({tableParams});", mySqlConnection))
         {
             mySqlCommand.Parameters.Add("@DataBaseName", MySqlDbType.String).Value = dataBaseName;
+
+            for (var index = 0; index < _installerOptions.InstallTables.Count; index++)
+            {
+                mySqlCommand.Parameters.Add($"@Table_{index}", MySqlDbType.String).Value = $"{tablePrefix}{_installerOptions.InstallTables[index]}";
+            }
 
             var rowsAffects = await mySqlCommand.ExecuteScalarAsync() as long?;
             if (rowsAffects > 0)
