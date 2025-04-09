@@ -14,6 +14,7 @@ import { VxeGrid } from 'vxe-table';
 
 const props = defineProps<{
   connectionStrings: TenantConnectionStringDto[];
+  dataBaseOptions: { label: string; value: string }[];
   delete?: (data: TenantConnectionStringDto) => Promise<void>;
   submit?: (data: TenantConnectionStringDto) => Promise<void>;
 }>();
@@ -107,7 +108,10 @@ async function onDelete(row: TenantConnectionStringDto) {
         </div>
       </template>
     </VxeGrid>
-    <ConnectionStringModal :submit="submit" />
+    <ConnectionStringModal
+      :data-base-options="dataBaseOptions"
+      :submit="submit"
+    />
   </div>
 </template>
 

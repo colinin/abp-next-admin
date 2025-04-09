@@ -11,6 +11,10 @@ import { message } from 'ant-design-vue';
 import { useTenantsApi } from '../../api/useTenantsApi';
 import ConnectionStringTable from './ConnectionStringTable.vue';
 
+defineProps<{
+  dataBaseOptions: { label: string; value: string }[];
+}>();
+
 const connectionStrings = ref<TenantConnectionStringDto[]>([]);
 
 const {
@@ -61,6 +65,7 @@ async function onDelete(data: TenantConnectionStringDto) {
 <template>
   <Modal :title="$t('AbpSaas.ConnectionStrings')">
     <ConnectionStringTable
+      :data-base-options="dataBaseOptions"
       :connection-strings="connectionStrings"
       :delete="onDelete"
       :submit="onChange"

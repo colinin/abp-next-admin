@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { NameValue } from '@abp/core';
 import type { FormExpose } from 'ant-design-vue/es/form/Form';
 
 import type { TenantConnectionStringDto } from '../../types';
@@ -8,17 +9,31 @@ import { ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { Form, Input, Textarea } from 'ant-design-vue';
+import { Form, Input, Select, Textarea } from 'ant-design-vue';
+
+import { useTenantsApi } from '../../api/useTenantsApi';
 
 const props = defineProps<{
+  dataBaseOptions: { label: string; value: string }[];
   submit?: (data: TenantConnectionStringDto) => Promise<void>;
 }>();
 
 const FormItem = Form.Item;
 
+interface TenantConnectionString extends NameValue<string> {
+  provider: string;
+}
+
 const isEditModal = ref(false);
 const form = useTemplateRef<FormExpose>('form');
-const formModel = ref({} as TenantConnectionStringDto);
+const formModel = ref<TenantConnectionString>({
+  name: '',
+  provider: 'MySql',
+  value: '',
+});
+
+const { checkConnectionString } = useTenantsApi();
+
 const [Modal, modalApi] = useVbenModal({
   async onConfirm() {
     await form.value?.validate();
@@ -30,7 +45,10 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       form.value?.resetFields();
       const dto = modalApi.getData<TenantConnectionStringDto>();
-      formModel.value = { ...dto };
+      formModel.value = {
+        provider: formModel.value.provider,
+        ...dto,
+      };
       if (dto.name) {
         isEditModal.value = true;
         title = `${$t('AbpSaas.ConnectionStrings')} - ${dto.name}`;
@@ -43,7 +61,13 @@ const [Modal, modalApi] = useVbenModal({
 async function onSubmit() {
   modalApi.setState({ submitting: true });
   try {
-    props.submit && (await props.submit(toValue(formModel)));
+    const input = toValue(formModel);
+    await checkConnectionString({
+      connectionString: input.value,
+      name: input.name,
+      provider: input.provider,
+    });
+    props.submit && (await props.submit(input));
     modalApi.close();
   } finally {
     modalApi.setState({ submitting: false });
@@ -59,6 +83,13 @@ async function onSubmit() {
       :wapper-col="{ span: 20 }"
       :model="formModel"
     >
+      <FormItem
+        required
+        name="provider"
+        :label="$t('AbpSaas.DisplayName:DataBaseProvider')"
+      >
+        <Select :options="dataBaseOptions" v-model:value="formModel.provider" />
+      </FormItem>
       <FormItem required name="name" :label="$t('AbpSaas.DisplayName:Name')">
         <Input
           :disabled="isEditModal"

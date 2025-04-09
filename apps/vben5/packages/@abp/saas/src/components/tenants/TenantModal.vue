@@ -32,10 +32,12 @@ import { useEditionsApi } from '../../api/useEditionsApi';
 import { useTenantsApi } from '../../api/useTenantsApi';
 import ConnectionStringTable from './ConnectionStringTable.vue';
 
+defineProps<{
+  dataBaseOptions: { label: string; value: string }[];
+}>();
 const emits = defineEmits<{
   (event: 'change', val: TenantDto): void;
 }>();
-
 const FormItem = Form.Item;
 
 const defaultModel = {
@@ -79,6 +81,11 @@ const getFormRules = computed(() => {
       prefix: 'DisplayName',
       resourceName: 'AbpSaas',
     }),
+    provider: fieldRequired({
+      name: 'DataBaseProvider',
+      prefix: 'DisplayName',
+      resourceName: 'AbpSaas',
+    }),
   };
 });
 /** 启用时间不可晚于禁用时间 */
@@ -99,7 +106,8 @@ const getDisabledDisableTime = (current: dayjs.Dayjs) => {
   return current && current < dayjs(tenant.value.enableTime).endOf('day');
 };
 
-const { cancel, createApi, getApi, updateApi } = useTenantsApi();
+const { cancel, checkConnectionString, createApi, getApi, updateApi } =
+  useTenantsApi();
 const { getPagedListApi: getEditions } = useEditionsApi();
 
 const [Modal, modalApi] = useVbenModal({
@@ -140,6 +148,12 @@ async function onGet() {
 async function onSubmit() {
   try {
     modalApi.setState({ submitting: true });
+    if (!tenant.value.useSharedDatabase) {
+      await checkConnectionString({
+        connectionString: tenant.value.defaultConnectionString,
+        provider: tenant.value.provider,
+      });
+    }
     const api = tenant.value.id
       ? updateApi(tenant.value.id, tenant.value as TenantUpdateDto)
       : createApi(tenant.value as unknown as TenantCreateDto);
@@ -285,6 +299,12 @@ onMounted(onSearchEditions);
       </FormItem>
       <template v-if="!tenant.id && !tenant.useSharedDatabase">
         <FormItem
+          name="provider"
+          :label="$t('AbpSaas.DisplayName:DataBaseProvider')"
+        >
+          <Select :options="dataBaseOptions" v-model:value="tenant.provider" />
+        </FormItem>
+        <FormItem
           name="defaultConnectionString"
           :label="$t('AbpSaas.DisplayName:DefaultConnectionString')"
         >
@@ -294,6 +314,7 @@ onMounted(onSearchEditions);
           />
         </FormItem>
         <ConnectionStringTable
+          :data-base-options="dataBaseOptions"
           :connection-strings="tenant.connectionStrings"
           :submit="onConnectionChange"
           :delete="onConnectionDelete"
