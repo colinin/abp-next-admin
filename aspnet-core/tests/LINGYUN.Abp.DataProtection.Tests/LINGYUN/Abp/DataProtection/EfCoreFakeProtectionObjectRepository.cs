@@ -8,7 +8,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LINGYUN.Abp.DataProtection
 {
     public class EfCoreFakeProtectionObjectRepository :
-        EfCoreDataProtectionRepository<AbpDataProtectionTestDbContext, FakeProtectionObject, int>,
+        EfCoreDataProtectionRepository<AbpDataProtectionTestDbContext, FakeProtectionObject, int, FakeProtectionObjectAuth>,
         IFakeProtectionObjectRepository
     {
         public EfCoreFakeProtectionObjectRepository(
