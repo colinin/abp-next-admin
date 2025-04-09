@@ -13,5 +13,5 @@ public interface INotificationAppService
 
     Task SendAsync(NotificationSendDto input);
 
-    Task SendAsync(NotificationTemplateSendDto input);
+    Task SendTemplateAsync(NotificationTemplateSendDto input);
 }

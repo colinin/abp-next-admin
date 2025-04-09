@@ -127,7 +127,7 @@ public class NotificationAppService : AbpNotificationsApplicationServiceBase, IN
                 severity: input.Severity);
     }
 
-    public async virtual Task SendAsync(NotificationTemplateSendDto input)
+    public async virtual Task SendTemplateAsync(NotificationTemplateSendDto input)
     {
         var notificationTemplate = new NotificationTemplate(
                 input.Name,
