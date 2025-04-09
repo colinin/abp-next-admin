@@ -234,7 +234,7 @@ export function useOrganizationUnitsApi() {
   ): Promise<void> {
     return request(`/api/identity/organization-units/${id}/roles`, {
       data: input,
-      method: 'GET',
+      method: 'POST',
     });
   }
 

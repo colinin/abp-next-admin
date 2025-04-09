@@ -29,6 +29,8 @@
     "@abp/account": "workspace:*",
     "@abp/auditing": "workspace:*",
     "@abp/core": "workspace:*",
+    "@abp/data-protection": "workspace:*",
+    "@abp/demo": "workspace:*",
     "@abp/features": "workspace:*",
     "@abp/identity": "workspace:*",
     "@abp/localization": "workspace:*",
