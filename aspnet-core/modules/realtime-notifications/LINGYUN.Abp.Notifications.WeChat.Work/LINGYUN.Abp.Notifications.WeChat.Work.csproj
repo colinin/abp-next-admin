@@ -14,6 +14,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="LINGYUN\Abp\Notifications\WeChat\Work\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Notifications\WeChat\Work\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\..\..\framework\wechat\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
 	</ItemGroup>

@@ -12,6 +12,7 @@ import { useTitle } from '@vueuse/core';
 import { $t, setupI18n } from '#/locales';
 
 import { initComponentAdapter } from './adapter/component';
+import { initVbenForm } from './adapter/form';
 import { initRequestClient } from './adapter/request';
 import App from './app.vue';
 import { router } from './router';
@@ -19,6 +20,7 @@ import { router } from './router';
 async function bootstrap(namespace: string) {
   // 初始化组件适配器
   await initComponentAdapter();
+  await initVbenForm();
   initRequestClient();
 
   const app = createApp(App);

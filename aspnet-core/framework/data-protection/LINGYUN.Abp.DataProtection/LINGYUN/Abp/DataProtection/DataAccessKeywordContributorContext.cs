@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Linq.Expressions;
 
 namespace LINGYUN.Abp.DataProtection;
 public class DataAccessKeywordContributorContext
 {
     public IServiceProvider ServiceProvider { get; }
-    public Type ConversionType { get; }
+    public LambdaExpression Expression { get; }
     public DataAccessKeywordContributorContext(
         IServiceProvider serviceProvider,
-        Type conversionType)
+        LambdaExpression expression)
     {
         ServiceProvider = serviceProvider;
-        ConversionType = conversionType;
+        Expression = expression;
     }
 }

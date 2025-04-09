@@ -21,5 +21,5 @@ public interface IIdentitySessionRepository : Volo.Abp.Identity.IIdentitySession
 
     Task<List<IdentitySession>> GetListAsync(Guid userId, CancellationToken cancellationToken = default);
 
-    Task DeleteAllAsync(string sessionId, Guid? exceptSessionId = null, CancellationToken cancellationToken = default);
+    Task DeleteAllSessionAsync(string sessionId, Guid? exceptSessionId = null, CancellationToken cancellationToken = default);
 }

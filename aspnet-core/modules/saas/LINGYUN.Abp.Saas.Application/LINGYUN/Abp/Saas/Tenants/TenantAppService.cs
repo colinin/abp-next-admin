@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.Saas.Features;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,18 +21,18 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     protected IDistributedEventBus EventBus { get; }
     protected ITenantRepository TenantRepository { get; }
     protected ITenantManager TenantManager { get; }
-    protected IConnectionStringChecker ConnectionStringChecker { get; }
+    protected AbpSaasConnectionStringCheckOptions ConnectionStringCheckOptions { get; }
 
     public TenantAppService(
         ITenantRepository tenantRepository,
         ITenantManager tenantManager,
         IDistributedEventBus eventBus,
-        IConnectionStringChecker connectionStringChecker)
+        IOptions<AbpSaasConnectionStringCheckOptions> connectionStringCheckOptions)
     {
         EventBus = eventBus;
         TenantRepository = tenantRepository;
         TenantManager = tenantManager;
-        ConnectionStringChecker = connectionStringChecker;
+        ConnectionStringCheckOptions = connectionStringCheckOptions.Value;
     }
 
     public async virtual Task<TenantDto> GetAsync(Guid id)
@@ -83,18 +84,16 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         tenant.SetDisableTime(input.DisableTime);
         input.MapExtraPropertiesTo(tenant);
 
-        if (!input.UseSharedDatabase && !input.DefaultConnectionString.IsNullOrWhiteSpace())
+        if (!input.UseSharedDatabase)
         {
-            await CheckConnectionString(input.DefaultConnectionString);
             tenant.SetDefaultConnectionString(input.DefaultConnectionString);
-        }
 
-        if (input.ConnectionStrings.Any())
-        {
-            foreach (var connectionString in input.ConnectionStrings)
+            if (input.ConnectionStrings.Any())
             {
-                await CheckConnectionString(connectionString.Value, connectionString.Key);
-                tenant.SetConnectionString(connectionString.Key, connectionString.Value);
+                foreach (var connectionString in input.ConnectionStrings)
+                {
+                    tenant.SetConnectionString(connectionString.Name, connectionString.Value);
+                }
             }
         }
 
@@ -213,10 +212,8 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     }
 
     [Authorize(AbpSaasPermissions.Tenants.ManageConnectionStrings)]
-    public async virtual Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdate input)
+    public async virtual Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringSetInput input)
     {
-        await CheckConnectionString(input.Value, input.Name);
-
         var tenant = await TenantRepository.GetAsync(id);
 
         var oldConnectionString = tenant.FindConnectionString(input.Name);
@@ -275,33 +272,34 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         await CurrentUnitOfWork.SaveChangesAsync();
     }
 
-    protected async virtual Task CheckConnectionString(string connectionString, string name = null)
+    public async virtual Task CheckConnectionStringAsync(TenantConnectionStringCheckInput input)
     {
-        try
+        if (!ConnectionStringCheckOptions.ConnectionStringCheckers.TryGetValue(input.Provider, out var connectionStringChecker))
         {
-            var checkResult = await ConnectionStringChecker.CheckAsync(connectionString);
-            // 检查连接是否可用
-            if (!checkResult.Connected)
-            {
-                throw name.IsNullOrWhiteSpace()
-                    ? new BusinessException(AbpSaasErrorCodes.InvalidDefaultConnectionString)
-                    : new BusinessException(AbpSaasErrorCodes.InvalidConnectionString)
-                        .WithData("Name", name);
-            }
-            // 默认连接字符串改变不能影响到现有数据库
-            if (checkResult.DatabaseExists && name.IsNullOrWhiteSpace())
-            {
-                throw new BusinessException(AbpSaasErrorCodes.DefaultConnectionStringDatabaseExists);
-            }
+            throw new BusinessException(AbpSaasErrorCodes.ConnectionStringProviderNotSupport)
+                 .WithData("Name", input.Provider);
         }
-        catch (Exception e)
+
+        var checkResult = await connectionStringChecker.CheckAsync(input.ConnectionString);
+
+        if (checkResult.Error != null)
         {
-            Logger.LogWarning("An error occurred while checking the validity of the connection string");
-            Logger.LogWarning(e.Message);
-            throw name.IsNullOrWhiteSpace() 
+            Logger.LogWarning(checkResult.Error, "An error occurred while checking the database connection.");
+        }
+
+        // 检查连接是否可用
+        if (!checkResult.Connected)
+        {
+            throw input.Name.IsNullOrWhiteSpace()
                 ? new BusinessException(AbpSaasErrorCodes.InvalidDefaultConnectionString)
                 : new BusinessException(AbpSaasErrorCodes.InvalidConnectionString)
-                    .WithData("Name", name);
+                    .WithData("Name", input.Name);
         }
+        // 默认连接字符串改变不能影响到现有数据库
+        // 移除此检查, 需要配合数据库迁移才有效
+        //if (checkResult.DatabaseExists && (input.Name.IsNullOrWhiteSpace() || "Default".Equals(input.Name, StringComparison.InvariantCultureIgnoreCase)))
+        //{
+        //    throw new BusinessException(AbpSaasErrorCodes.DefaultConnectionStringDatabaseExists);
+        //}
     }
 }

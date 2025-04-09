@@ -13,7 +13,7 @@ public interface IFileAppService : IApplicationService
 
     Task<ListResultDto<OssObjectDto>> GetListAsync(GetFilesInput input);
 
-    Task UploadAsync(UploadFileChunkInput input);
+    Task UploadChunkAsync(UploadFileChunkInput input);
 
     Task DeleteAsync(GetPublicFileInput input);
 }

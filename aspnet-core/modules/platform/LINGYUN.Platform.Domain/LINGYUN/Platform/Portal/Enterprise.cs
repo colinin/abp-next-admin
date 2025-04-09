@@ -10,7 +10,7 @@ namespace LINGYUN.Platform.Portal;
 public class Enterprise : FullAuditedAggregateRoot<Guid>
 {
     /// <summary>
-    /// 租户标识
+    /// 关联租户
     /// </summary>
     public virtual Guid? TenantId { get; protected set; }
     /// <summary>
@@ -60,6 +60,7 @@ public class Enterprise : FullAuditedAggregateRoot<Guid>
     }
 
     public Enterprise(
+        Guid id,
         string name,
         string address, 
         string taxCode, 
@@ -68,6 +69,7 @@ public class Enterprise : FullAuditedAggregateRoot<Guid>
         DateTime? registrationDate = null, 
         DateTime? expirationDate = null,
         Guid? tenantId = null)
+        : base(id)
     {
         Address = Check.Length(address, nameof(address), EnterpriseConsts.MaxAddressLength);
         TaxCode = Check.Length(taxCode, nameof(taxCode), EnterpriseConsts.MaxTaxCodeLength);

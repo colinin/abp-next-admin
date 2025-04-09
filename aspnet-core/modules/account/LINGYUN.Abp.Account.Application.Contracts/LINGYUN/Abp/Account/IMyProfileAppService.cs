@@ -1,7 +1,9 @@
 ﻿using LINGYUN.Abp.Identity;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.Account;
 
@@ -11,13 +13,13 @@ public interface IMyProfileAppService : IApplicationService
     /// 获取验证器信息
     /// </summary>
     /// <returns></returns>
-    Task<AuthenticatorDto> GetAuthenticator();
+    Task<AuthenticatorDto> GetAuthenticatorAsync();
     /// <summary>
     /// 验证验证器代码
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCode(VerifyAuthenticatorCodeInput input);
+    Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCodeAsync(VerifyAuthenticatorCodeInput input);
     /// <summary>
     /// 获取会话列表
     /// </summary>
@@ -34,7 +36,7 @@ public interface IMyProfileAppService : IApplicationService
     /// 重置验证器
     /// </summary>
     /// <returns></returns>
-    Task ResetAuthenticator();
+    Task ResetAuthenticatorAsync();
     /// <summary>
     /// 获取二次认证状态
     /// </summary>
@@ -73,4 +75,14 @@ public interface IMyProfileAppService : IApplicationService
     /// <param name="input"></param>
     /// <returns></returns>
     Task ConfirmEmailAsync(ConfirmEmailInput input);
+    /// <summary>
+    /// 变更用户头像
+    /// </summary>
+    /// <returns></returns>
+    Task ChangePictureAsync(ChangePictureInput input);
+    /// <summary>
+    /// 获取用户头像
+    /// </summary>
+    /// <returns></returns>
+    Task<IRemoteStreamContent> GetPictureAsync();
 }

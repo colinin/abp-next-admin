@@ -64,14 +64,41 @@ namespace LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore
                  .HasColumnName(nameof(EntityPropertyInfo.TypeFullName))
                  .HasMaxLength(EntityPropertyInfoConsts.MaxTypeFullNameLength)
                  .IsRequired();
+                b.Property(p => p.JavaScriptType)
+                 .HasColumnName(nameof(EntityPropertyInfo.JavaScriptType))
+                 .HasMaxLength(EntityPropertyInfoConsts.MaxTypeFullNameLength)
+                 .IsRequired();
+
+                b.HasMany(p => p.Enums)
+                 .WithOne(p => p.PropertyInfo)
+                 .HasForeignKey(f => f.PropertyInfoId)
+                 .IsRequired();
 
                 b.ConfigureByConvention();
 
-                b.Property(p => p.ValueRange)
-                 .HasColumnName(nameof(EntityPropertyInfo.ValueRange))
-                 .HasMaxLength(EntityPropertyInfoConsts.MaxValueRangeLength);
-
                 b.HasIndex(p => new { p.TypeInfoId, p.TypeFullName });
+            });
+
+            builder.Entity<EntityEnumInfo>(b =>
+            {
+                b.ToTable(options.TablePrefix + "EntityEnums", options.Schema);
+
+                b.Property(p => p.Name)
+                 .HasColumnName(nameof(EntityEnumInfo.Name))
+                 .HasMaxLength(EntityEnumInfoConsts.MaxNameLength)
+                 .IsRequired();
+                b.Property(p => p.DisplayName)
+                 .HasColumnName(nameof(EntityEnumInfo.DisplayName))
+                 .HasMaxLength(EntityEnumInfoConsts.MaxDisplayNameLength)
+                 .IsRequired();
+                b.Property(p => p.Value)
+                 .HasColumnName(nameof(EntityEnumInfo.Value))
+                 .HasMaxLength(EntityEnumInfoConsts.MaxValueLength)
+                 .IsRequired();
+
+                b.ConfigureByConvention();
+
+                b.HasIndex(p => new { p.PropertyInfoId, p.Name });
             });
 
             builder.Entity<RoleEntityRule>(b =>
@@ -82,9 +109,9 @@ namespace LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore
                  .HasColumnName(nameof(RoleEntityRule.RoleName))
                  .HasMaxLength(RoleEntityRuleConsts.MaxRuletNameLength)
                  .IsRequired();
-                b.Property(p => p.AllowProperties)
-                 .HasColumnName(nameof(RoleEntityRule.AllowProperties))
-                 .HasMaxLength(EntityRuleConsts.MaxAllowPropertiesLength);
+                b.Property(p => p.AccessedProperties)
+                 .HasColumnName(nameof(RoleEntityRule.AccessedProperties))
+                 .HasMaxLength(EntityRuleConsts.MaxAccessedPropertiesLength);
 
                 b.Property(p => p.FilterGroup)
                  .HasColumnName(nameof(RoleEntityRule.FilterGroup))
@@ -106,9 +133,9 @@ namespace LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore
                  .HasColumnName(nameof(OrganizationUnitEntityRule.OrgCode))
                  .HasMaxLength(OrganizationUnitEntityRuleConsts.MaxCodeLength)
                  .IsRequired();
-                b.Property(p => p.AllowProperties)
-                 .HasColumnName(nameof(RoleEntityRule.AllowProperties))
-                 .HasMaxLength(EntityRuleConsts.MaxAllowPropertiesLength);
+                b.Property(p => p.AccessedProperties)
+                 .HasColumnName(nameof(RoleEntityRule.AccessedProperties))
+                 .HasMaxLength(EntityRuleConsts.MaxAccessedPropertiesLength);
 
                 b.Property(p => p.FilterGroup)
                  .HasColumnName(nameof(RoleEntityRule.FilterGroup))
@@ -118,6 +145,21 @@ namespace LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore
                  .WithMany()
                  .HasForeignKey(f => f.EntityTypeId)
                  .IsRequired();
+
+                b.ConfigureByConvention();
+            });
+
+            builder.Entity<SubjectStrategy>(b =>
+            {
+                b.ToTable(options.TablePrefix + "SubjectStrategys", options.Schema);
+
+                b.Property(p => p.SubjectName)
+                 .HasColumnName(nameof(SubjectStrategy.SubjectName))
+                 .HasMaxLength(SubjectStrategyConsts.MaxSubjectNameLength)
+                 .IsRequired();
+                b.Property(p => p.SubjectId)
+                 .HasColumnName(nameof(SubjectStrategy.SubjectId))
+                 .HasMaxLength(SubjectStrategyConsts.MaxSubjectIdLength);
 
                 b.ConfigureByConvention();
             });

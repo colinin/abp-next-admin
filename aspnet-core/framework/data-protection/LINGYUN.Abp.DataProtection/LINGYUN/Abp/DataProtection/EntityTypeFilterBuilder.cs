@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -17,20 +17,23 @@ namespace LINGYUN.Abp.DataProtection;
 public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDependency
 {
     private readonly IDataFilter _dataFilter;
+    private readonly IDataAccessScope _dataAccessScope;
     private readonly IServiceProvider _serviceProvider;
     private readonly AbpDataProtectionOptions _options;
 
     public EntityTypeFilterBuilder(
         IDataFilter dataFilter,
+        IDataAccessScope dataAccessScope,
         IServiceProvider serviceProvider,
         IOptions<AbpDataProtectionOptions> options)
     {
         _options = options.Value;
         _dataFilter = dataFilter;
+        _dataAccessScope = dataAccessScope;
         _serviceProvider = serviceProvider;
     }
 
-    public virtual LambdaExpression Build(Type entityType, DataAccessOperation operation, DataAccessFilterGroup group = null)
+    public async virtual Task<LambdaExpression> Build(Type entityType, DataAccessOperation operation, DataAccessFilterGroup group = null)
     {
         // Func<TEntity, bool>
         var func = typeof(Func<,>).MakeGenericType(entityType, typeof(bool));
@@ -56,7 +59,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         var subjectContext = new DataAccessSubjectContributorContext(typeName, operation, _serviceProvider);
         foreach (var contributor in _options.SubjectContributors)
         {
-            var subjectFilterGroup = contributor.GetFilterGroups(subjectContext);
+            var subjectFilterGroup = await contributor.GetFilterGroups(subjectContext);
             subjectFilterGroups.AddRange(subjectFilterGroup);
         }
 
@@ -87,7 +90,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         return exp;
     }
 
-    public virtual Expression<Func<TEntity, bool>> Build<TEntity>(DataAccessOperation operation, DataAccessFilterGroup group = null)
+    public async virtual Task<Expression<Func<TEntity, bool>>> Build<TEntity>(DataAccessOperation operation, DataAccessFilterGroup group = null)
     {
         var entityType = typeof(TEntity);
         Expression<Func<TEntity, bool>> exp = _ => true;
@@ -107,7 +110,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         var subjectContext = new DataAccessSubjectContributorContext(typeName, operation, _serviceProvider);
         foreach (var contributor in _options.SubjectContributors)
         {
-            var subjectFilterGroup = contributor.GetFilterGroups(subjectContext);
+            var subjectFilterGroup = await contributor.GetFilterGroups(subjectContext);
             subjectFilterGroups.AddRange(subjectFilterGroup);
         }
 
@@ -195,10 +198,6 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
 
     private Expression GetExpressionBody(ParameterExpression param, DataAccessFilterRule rule)
     {
-        if (!_options.OperateContributors.TryGetValue(rule.Operate, out var contributor))
-        {
-            throw new InvalidOperationException($"Invalid data permission operator {rule.Operate}");
-        }
         if (rule == null)
         {
             return Expression.Constant(true);
@@ -208,9 +207,15 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         {
             return Expression.Constant(true);
         }
-        var constant = ChangeTypeToExpression(rule, expression.Body.Type);
 
-        return rule.IsLeft ? contributor.BuildExpression(constant, expression.Body) : contributor.BuildExpression(expression.Body, constant);
+        if (!_options.OperateContributors.TryGetValue(rule.Operate, out var operateContributor))
+        {
+            throw new InvalidOperationException($"Invalid data permission operator {rule.Operate}");
+        }
+
+        var constant = ChangeTypeToExpression(rule, expression);
+
+        return rule.IsLeft ? operateContributor.BuildExpression(constant, expression.Body) : operateContributor.BuildExpression(expression.Body, constant);
     }
 
     private static LambdaExpression GetPropertyLambdaExpression(ParameterExpression param, DataAccessFilterRule rule)
@@ -243,11 +248,12 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         return Expression.Lambda(propertyAccess, param);
     }
     
-    private Expression ChangeTypeToExpression(DataAccessFilterRule rule, Type conversionType)
+    private Expression ChangeTypeToExpression(DataAccessFilterRule rule, LambdaExpression expression)
     {
+        var conversionType = expression.Body.Type;
         if (_options.KeywordContributors.TryGetValue(rule.Value?.ToString() ?? "", out var contributor))
         {
-            var context = new DataAccessKeywordContributorContext(_serviceProvider, conversionType);
+            var context = new DataAccessKeywordContributorContext(_serviceProvider, expression);
             return contributor.Contribute(context);
         }
         else
@@ -284,6 +290,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
 
     private bool ShouldApplyFilter(Type entityType, DataAccessOperation operation)
     {
+        // TODO: 使用一个范围标志来确定当前需要禁用的数据权限操作
         if (!_dataFilter.IsEnabled<IDataProtected>())
         {
             return false;
@@ -294,9 +301,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
             return false;
         }
 
-        var dataProtected = entityType.GetCustomAttribute<DataProtectedAttribute>();
-
-        if (dataProtected != null && dataProtected.Operation != operation)
+        if (_dataAccessScope.Operations != null && !_dataAccessScope.Operations.Contains(operation))
         {
             return false;
         }

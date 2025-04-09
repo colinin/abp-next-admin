@@ -305,8 +305,8 @@
                     end = moment(val, this.locale.format);
                 }
                 if (start !== null && end !== null) {
-                    this.setStartDate(start);
-                    this.setEndDate(end);
+                    this.setStartDate(start.startOf('day'));
+                    this.setEndDate(end.startOf('day'));
                 }
             }
         }
@@ -370,10 +370,6 @@
             this.container.find('.calendar-time').hide();
         }
 
-        //can't be used together for now
-        if (this.timePicker && this.autoApply)
-            this.autoApply = false;
-
         if (this.autoApply) {
             this.container.addClass('auto-apply');
         }
@@ -386,9 +382,7 @@
             this.container.find('.drp-calendar.left').addClass('single');
             this.container.find('.drp-calendar.left').show();
             this.container.find('.drp-calendar.right').hide();
-            if (!this.timePicker && this.autoApply) {
-                this.container.addClass('auto-apply');
-            }
+           
         }
 
         if ((typeof options.ranges === 'undefined' && !this.singleDatePicker) || this.alwaysShowCalendars) {
@@ -898,6 +892,7 @@
             // hours
             //
 
+            
             html = '<select class="hourselect">';
 
             var start = this.timePicker24Hour ? 0 : 1;
@@ -1354,8 +1349,8 @@
 
             if (this.singleDatePicker) {
                 this.setEndDate(this.startDate);
-                if (!this.timePicker && this.autoApply)
-                    this.clickApply();
+                 if (this.autoApply)
+                     this.clickApply();
             }
 
             this.updateView();
@@ -1500,6 +1495,9 @@
             this.renderTimePicker('left');
             this.renderTimePicker('right');
 
+            if(this.autoApply) {
+                this.element.trigger('apply.daterangepicker', this);
+            }
         },
 
         elementChanged: function() {

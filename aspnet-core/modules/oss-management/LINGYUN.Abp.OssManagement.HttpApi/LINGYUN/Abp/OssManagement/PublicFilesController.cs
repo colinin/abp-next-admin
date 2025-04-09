@@ -32,9 +32,9 @@ public class PublicFilesController : AbpControllerBase, IPublicFileAppService
 
     [HttpPost]
     [Route("upload")]
-    public async virtual Task UploadAsync([FromForm] UploadFileChunkInput input)
+    public async virtual Task UploadChunkAsync([FromForm] UploadFileChunkInput input)
     {
-        await _publicFileAppService.UploadAsync(input);
+        await _publicFileAppService.UploadChunkAsync(input);
     }
 
     [HttpGet]

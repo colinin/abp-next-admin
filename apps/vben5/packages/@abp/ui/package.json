@@ -35,8 +35,12 @@
     "@vben/utils": "workspace:*",
     "@vueuse/core": "catalog:",
     "ant-design-vue": "catalog:",
+    "lodash.clonedeep": "catalog:",
     "vue": "catalog:*",
     "vxe-pc-ui": "catalog:",
     "vxe-table": "catalog:"
+  },
+  "devDependencies": {
+    "@types/lodash.clonedeep": "catalog:"
   }
 }

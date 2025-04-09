@@ -8,6 +8,9 @@
       "phoneNumber": "手机号码",
       "getCode": "获取验证码",
       "code": "验证码"
+    },
+    "qrcodeLogin": {
+      "scaned": "请在手机上确认登录."
     }
   },
   "manage": {
@@ -27,6 +30,11 @@
       "groups": "权限分组",
       "definitions": "权限定义"
     },
+    "features": {
+      "title": "功能管理",
+      "groups": "功能分组",
+      "definitions": "功能定义"
+    },
     "settings": {
       "title": "设置管理",
       "definitions": "设置定义",
@@ -34,7 +42,19 @@
     },
     "notifications": {
       "title": "通知管理",
-      "myNotifilers": "我的通知"
+      "myNotifilers": "我的通知",
+      "groups": "通知分组",
+      "definitions": "通知定义"
+    },
+    "localization": {
+      "title": "本地化管理",
+      "resources": "资源管理",
+      "languages": "语言管理",
+      "texts": "文档管理"
+    },
+    "dataProtection": {
+      "title": "数据权限",
+      "entityTypeInfos": "实体列表"
     }
   },
   "openiddict": {
@@ -65,7 +85,8 @@
       "noticeSettings": "新消息通知",
       "authenticatorSettings": "身份验证程序",
       "changeAvatar": "更改头像",
-      "sessionSettings": "会话管理"
+      "sessionSettings": "会话管理",
+      "personalDataSettings": "个人信息管理"
     },
     "profile": "个人中心"
   },
@@ -76,5 +97,14 @@
       "email": "邮件消息",
       "sms": "短信消息"
     }
+  },
+  "saas": {
+    "title": "Saas",
+    "editions": "版本管理",
+    "tenants": "租户管理"
+  },
+  "demo": {
+    "title": "演示",
+    "books": "书籍列表"
   }
 }

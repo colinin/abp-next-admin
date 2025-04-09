@@ -22,6 +22,7 @@
   "dependencies": {
     "@abp/auditing": "workspace:*",
     "@abp/core": "workspace:*",
+    "@abp/data-protection": "workspace:*",
     "@abp/permissions": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/ui": "workspace:*",

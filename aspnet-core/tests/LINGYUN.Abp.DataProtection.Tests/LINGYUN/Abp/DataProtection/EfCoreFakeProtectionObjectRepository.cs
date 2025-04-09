@@ -2,21 +2,21 @@
 using LINGYUN.Abp.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.DataProtection
 {
     public class EfCoreFakeProtectionObjectRepository :
-        EfCoreDataProtectionRepository<AbpDataProtectionTestDbContext, FakeProtectionObject, int>,
+        EfCoreDataProtectionRepository<AbpDataProtectionTestDbContext, FakeProtectionObject, int, FakeProtectionObjectAuth>,
         IFakeProtectionObjectRepository
     {
         public EfCoreFakeProtectionObjectRepository(
-            [NotNull] IDbContextProvider<AbpDataProtectionTestDbContext> dbContextProvider, 
+            [NotNull] IDbContextProvider<AbpDataProtectionTestDbContext> dbContextProvider,
             [NotNull] IDataAuthorizationService dataAuthorizationService, 
-            [NotNull] IEntityTypeFilterBuilder entityTypeFilterBuilder) 
-            : base(dbContextProvider, dataAuthorizationService, entityTypeFilterBuilder)
+            [NotNull] IEntityTypeFilterBuilder entityTypeFilterBuilder, 
+            [NotNull] IEntityPropertyResultBuilder entityPropertyResultBuilder)
+            : base(dbContextProvider, dataAuthorizationService, entityTypeFilterBuilder, entityPropertyResultBuilder)
         {
         }
 

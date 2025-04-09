@@ -9,6 +9,7 @@ public class NotificationsPermissions
         public const string Default = GroupName + ".Notification";
 
         public const string Delete = Default + ".Delete";
+        public const string Send = Default + ".Send";
     }
 
     public static class GroupDefinition

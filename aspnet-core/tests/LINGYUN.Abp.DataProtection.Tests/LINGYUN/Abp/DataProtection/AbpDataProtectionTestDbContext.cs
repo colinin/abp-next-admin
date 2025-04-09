@@ -18,5 +18,7 @@ public class AbpDataProtectionTestDbContext : AbpDataProtectionDbContext<AbpData
         {
             b.ConfigureByConvention();
         });
+
+        modelBuilder.ConfigureEntityAuth<FakeProtectionObject, int, FakeProtectionObjectAuth>();
     }
 }

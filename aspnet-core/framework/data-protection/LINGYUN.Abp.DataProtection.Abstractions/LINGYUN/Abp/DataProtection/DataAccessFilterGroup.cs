@@ -32,8 +32,13 @@ public class DataAccessFilterGroup
         return this;
     }
 
-    public DataAccessFilterGroup AddRule(string field, object value, DataAccessFilterOperate operate = DataAccessFilterOperate.Equal)
+    public DataAccessFilterGroup AddRule(
+        string field, 
+        object value,
+        string typeFullName,
+        string javaScriptType,
+        DataAccessFilterOperate operate = DataAccessFilterOperate.Equal)
     {
-        return AddRule(new DataAccessFilterRule(field, value, operate));
+        return AddRule(new DataAccessFilterRule(field, value, typeFullName, javaScriptType, operate));
     }
 }

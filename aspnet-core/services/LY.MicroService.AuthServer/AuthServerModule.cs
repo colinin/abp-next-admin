@@ -1,47 +1,43 @@
 ﻿using LINGYUN.Abp.Account;
+using LINGYUN.Abp.Account.Web.OpenIddict;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authentication.QQ;
 using LINGYUN.Abp.Authentication.WeChat;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.Exporter.MiniExcel;
+using LINGYUN.Abp.Gdpr;
+using LINGYUN.Abp.Gdpr.Web;
 using LINGYUN.Abp.Identity.AspNetCore.Session;
-using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
-using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Portal;
 using LINGYUN.Abp.OpenIddict.Sms;
 using LINGYUN.Abp.OpenIddict.WeChat;
 using LINGYUN.Abp.OpenIddict.WeChat.Work;
-using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
-using LINGYUN.Abp.Sms.Aliyun;
-using LINGYUN.Platform.EntityFrameworkCore;
+using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.Telemetry.SkyWalking;
+using LINGYUN.Abp.WeChat.Work.AspNetCore;
 using LY.MicroService.AuthServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
-using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.FeatureManagement.EntityFrameworkCore;
-using Volo.Abp.Identity;
-using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict.EntityFrameworkCore;
-using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace LY.MicroService.AuthServer;
 
@@ -49,45 +45,42 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpSerilogEnrichersApplicationModule),
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAccountApplicationModule),
+    typeof(AbpAccountHttpApiModule),
+    typeof(AbpAccountWebOpenIddictModule),
+    typeof(AbpGdprApplicationModule),
+    typeof(AbpGdprHttpApiModule),
+    typeof(AbpGdprWebModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
-    typeof(AbpIdentityEntityFrameworkCoreModule),
-    typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityAspNetCoreSessionModule),
     typeof(AbpOpenIddictAspNetCoreSessionModule),
-    typeof(AbpOpenIddictEntityFrameworkCoreModule),
+    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpOpenIddictSmsModule),
     typeof(AbpOpenIddictWeChatModule),
     typeof(AbpOpenIddictLinkUserModule),
     typeof(AbpOpenIddictPortalModule),
     typeof(AbpOpenIddictWeChatWorkModule),
+    typeof(AbpWeChatWorkAspNetCoreModule), // 实现企业微信登录
     typeof(AbpAuthenticationQQModule),
     typeof(AbpAuthenticationWeChatModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),
-    typeof(PlatformEntityFrameworkCoreModule),
-    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
-    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-    typeof(AbpSettingManagementEntityFrameworkCoreModule),
-    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AuthServerMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
-    typeof(AbpMailKitModule),
-    typeof(AbpCAPEventBusModule),
-    typeof(AbpAliyunSmsModule)
+    typeof(AbpTelemetrySkyWalkingModule),
+    typeof(AbpExporterMiniExcelModule),
+    typeof(AbpEmailingPlatformModule),
+    typeof(AbpSmsPlatformModule),
+    typeof(AbpCAPEventBusModule)
     )]
 public partial class AuthServerModule : AbpModule
 {
-    private const string DefaultCorsPolicyName = "Default";
-
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
@@ -110,6 +103,7 @@ public partial class AuthServerModule : AbpModule
         ConfigureIdentity(configuration);
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
+        ConfigureSettingManagement();
         ConfigureLocalization();
         ConfigureDataSeeder();
         ConfigureUrls(configuration);
@@ -119,7 +113,6 @@ public partial class AuthServerModule : AbpModule
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
-        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -146,11 +139,12 @@ public partial class AuthServerModule : AbpModule
         app.UseCorrelationId();
         app.MapAbpStaticAssets();
         app.UseRouting();
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
         app.UseMultiTenancy();
         app.UseAbpSession();
+        app.UseUnitOfWork();
         app.UseDynamicClaims();
         app.UseAuthorization();
         app.UseAuditing();

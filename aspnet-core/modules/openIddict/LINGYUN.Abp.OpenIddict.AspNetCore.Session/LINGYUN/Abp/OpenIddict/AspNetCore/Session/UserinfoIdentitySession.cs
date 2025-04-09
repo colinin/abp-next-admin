@@ -5,26 +5,26 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 using static OpenIddict.Abstractions.OpenIddictConstants;
-using static OpenIddict.Server.OpenIddictServerHandlers.Userinfo;
+using static OpenIddict.Server.OpenIddictServerHandlers.UserInfo;
 
 namespace LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 /// <summary>
 /// UserInfoEndpoint 检查用户会话
 /// </summary>
-public class UserinfoIdentitySession : IOpenIddictServerHandler<OpenIddictServerEvents.HandleUserinfoRequestContext>
+public class UserInfoIdentitySession : IOpenIddictServerHandler<OpenIddictServerEvents.HandleUserInfoRequestContext>
 {
     protected ICurrentTenant CurrentTenant { get; }
     protected IIdentitySessionChecker IdentitySessionChecker { get; }
 
     public static OpenIddictServerHandlerDescriptor Descriptor { get; }
-        = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.HandleUserinfoRequestContext>()
-            .AddFilter<OpenIddictServerHandlerFilters.RequireUserinfoRequest>()
-            .UseScopedHandler<UserinfoIdentitySession>()
-            .SetOrder(ValidateUserinfoRequest.Descriptor.Order + 2_000)
+        = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.HandleUserInfoRequestContext>()
+            .AddFilter<OpenIddictServerHandlerFilters.RequireUserInfoRequest>()
+            .UseScopedHandler<UserInfoIdentitySession>()
+            .SetOrder(ValidateUserInfoRequest.Descriptor.Order + 2_000)
             .SetType(OpenIddictServerHandlerType.Custom)
             .Build();
 
-    public UserinfoIdentitySession(
+    public UserInfoIdentitySession(
         ICurrentTenant currentTenant,
         IIdentitySessionChecker identitySessionChecker)
     {
@@ -32,7 +32,7 @@ public class UserinfoIdentitySession : IOpenIddictServerHandler<OpenIddictServer
         IdentitySessionChecker = identitySessionChecker;
     }
 
-    public async virtual ValueTask HandleAsync(OpenIddictServerEvents.HandleUserinfoRequestContext context)
+    public async virtual ValueTask HandleAsync(OpenIddictServerEvents.HandleUserInfoRequestContext context)
     {
         var tenantId = context.Principal.FindTenantId();
         using (CurrentTenant.Change(tenantId))

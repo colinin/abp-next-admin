@@ -16,6 +16,7 @@
     "Platform:05104": "附件 {Name} 已失效, 请重新上传!",
     "Platform:06101": "不能添加重复的标头 {Key}!",
     "Platform:06102": "不能添加重复的附件 {Name}!",
+    "Platform:07101": "已经存在名为 {Name} 的企业信息!",
     "UploadFileSizeBeyondLimit": "上传文件大小不能超过 {0} MB!",
     "NotAllowedFileExtensionName": "不被允许的文件扩展名: {0}!",
     "DisplayName:VersionFileLimitLength": "文件限制大小",

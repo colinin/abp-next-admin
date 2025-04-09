@@ -1,0 +1,8 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Notification:WeChatWork": "WeCom",
+    "Notification:WeChatWorkTest": "WeCom notification testing",
+    "Notification:WeChatWorkTestDesc": "Used to test wecom notification sending"
+  }
+}

@@ -1,0 +1,8 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "QrCode:Invalid": "Invalid qrcode!",
+    "QrCode:NotScaned": "Qrcode not scaned!",
+    "QrCode:Scaned": "Please confirm the QR code."
+  }
+}

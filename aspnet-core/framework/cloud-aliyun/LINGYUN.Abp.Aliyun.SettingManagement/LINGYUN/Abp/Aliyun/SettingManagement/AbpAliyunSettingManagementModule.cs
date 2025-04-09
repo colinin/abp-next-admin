@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Abp.Aliyun.Localization;
-using LINGYUN.Abp.Sms.Aliyun;
 using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
@@ -11,7 +10,6 @@ namespace LINGYUN.Abp.Aliyun.SettingManagement;
 
 [DependsOn(
     typeof(AbpAliyunModule),
-    typeof(AbpAliyunSmsModule),
     typeof(AbpAspNetCoreMvcModule))]
 public class AbpAliyunSettingManagementModule : AbpModule
 {

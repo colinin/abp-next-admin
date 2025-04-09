@@ -18,20 +18,28 @@ export function listToTree<T = any>(
   config: Partial<TreeHelperConfig> = {},
 ): T[] {
   const conf = getConfig(config) as TreeHelperConfig;
-  const nodeMap = new Map();
-  const result: T[] = [];
+  const map: { [key: string]: any } = {};
+  const roots: any[] = [];
   const { id, pid, children } = conf;
 
-  for (const node of list) {
-    node[children] = node[children] || [];
-    nodeMap.set(node[id], node);
-  }
-  for (const node of list) {
-    const parent = nodeMap.get(node[pid]);
-    (parent ? parent[children] : result).push(node);
-    if (parent) {
-      parent.hasChildren = true;
+  // 将每个元素放入map中，方便通过id查找
+  list.forEach((item) => {
+    map[item[id]] = { ...item, [children]: [] };
+  });
+
+  // 构建树形结构
+  list.forEach((item) => {
+    const parentId = item[pid];
+    if (parentId === null || parentId === undefined) {
+      // 根节点
+      roots.push(map[item[id]]);
+    } else {
+      // 非根节点，将其添加到父节点的children数组中
+      if (map[parentId]) {
+        map[parentId][children].push(map[item[id]]);
+      }
     }
-  }
-  return result;
+  });
+
+  return roots;
 }

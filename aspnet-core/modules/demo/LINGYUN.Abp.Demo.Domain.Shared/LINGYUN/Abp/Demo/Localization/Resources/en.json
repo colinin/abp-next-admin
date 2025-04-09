@@ -12,6 +12,15 @@
     "Permission:Authors.Create": "Create Authors",
     "Permission:Authors.Edit": "Edit Authors",
     "Permission:Authors.Delete": "Delete Authors",
-    "Demo:00001": "Author {Name} already exists!"
+    "Demo:00001": "Author {Name} already exists!",
+    "Author": "Authors",
+    "Book": "Books",
+    "DisplayName:Name": "Name",
+    "DisplayName:Type": "Type",
+    "DisplayName:PublishDate": "Publish Date",
+    "DisplayName:Price": "Price",
+    "DisplayName:AuthorId": "Author Id",
+    "DisplayName:BirthDate": "Birth Date",
+    "DisplayName:ShortBio": "Short Bio"
   }
 }

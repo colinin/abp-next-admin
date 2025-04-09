@@ -14,10 +14,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="LINGYUN.Abp.Identity.Domain" />
 		<PackageReference Include="Volo.Abp.AutoMapper" />
+		<PackageReference Include="Volo.Abp.BackgroundJobs.Abstractions" />
+		<PackageReference Include="Volo.Abp.BackgroundWorkers.Hangfire" />
 		<PackageReference Include="Volo.Abp.Caching" />
 		<PackageReference Include="Volo.Abp.Ddd.Domain" />
 		<PackageReference Include="LINGYUN.Abp.DataProtection" />
+		<PackageReference Include="Volo.Abp.Settings" />
 	</ItemGroup>
 
 	<ItemGroup>

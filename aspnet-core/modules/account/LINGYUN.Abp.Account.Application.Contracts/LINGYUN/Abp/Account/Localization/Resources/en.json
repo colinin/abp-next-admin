@@ -16,6 +16,7 @@
     "DisplayName:WeChatCode": "Wechat login code",
     "DisplayName:AuthenticatorCode": "Authenticator Code",
     "TwoFactor": "Two factor authentication",
+    "TwoFactor:Enabled": "TwoFactor Enabled",
     "TwoFactor:Email": "Email",
     "TwoFactor:Phone": "Phone",
     "TwoFactor:Authenticator": "Authenticator",
@@ -43,6 +44,12 @@
     "YourAuthenticatorIsSuccessfullyReset": "Your authenticator reset was successful.",
     "Steps:PreStep": "Pre Step",
     "Steps:NextStep": "Next Step",
-    "Steps:Done": "Done"
+    "Steps:Done": "Done",
+    "PersonalSessions": "Personal sessions",
+    "ProfileTab:Session": "Sessions",
+    "ProfileTab:TwoFactor": "TwoFactor",
+    "ProfileTab:Authenticator": "Authenticator",
+    "ProfileTab:SecurityLog": "Security Log",
+    "PhoneNumberChangedMessage": "Your mobile number has been successfully changed."
   }
 }

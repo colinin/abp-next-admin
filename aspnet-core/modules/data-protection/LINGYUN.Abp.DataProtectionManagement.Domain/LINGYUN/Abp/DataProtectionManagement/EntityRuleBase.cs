@@ -14,7 +14,7 @@ public abstract class EntityRuleBase : AuditedAggregateRoot<Guid>, IMultiTenant
     public virtual Guid EntityTypeId { get; protected set; }
     public virtual string EntityTypeFullName { get; protected set; }
     public virtual EntityTypeInfo EntityTypeInfo { get; protected set; }
-    public virtual string AllowProperties { get; set; }
+    public virtual string AccessedProperties { get; set; }
     protected EntityRuleBase()
     {
     }
@@ -24,7 +24,7 @@ public abstract class EntityRuleBase : AuditedAggregateRoot<Guid>, IMultiTenant
         Guid entityTypeId, 
         string enetityTypeFullName, 
         DataAccessOperation operation, 
-        string allowProperties = null,
+        string accessedProperties = null,
         DataAccessFilterGroup filterGroup = null, 
         Guid? tenantId = null)
         : base(id)
@@ -35,7 +35,7 @@ public abstract class EntityRuleBase : AuditedAggregateRoot<Guid>, IMultiTenant
 
         EntityTypeId = entityTypeId;
         EntityTypeFullName = Check.NotNullOrWhiteSpace(enetityTypeFullName, nameof(enetityTypeFullName), EntityRuleConsts.MaxEntityTypeFullNameLength);
-        AllowProperties = Check.Length(allowProperties, nameof(allowProperties), EntityRuleConsts.MaxAllowPropertiesLength);
+        AccessedProperties = Check.Length(accessedProperties, nameof(accessedProperties), EntityRuleConsts.MaxAccessedPropertiesLength);
     }
 
 

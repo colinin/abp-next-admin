@@ -1,14 +1,60 @@
+using LINGYUN.Abp.Identity.WeChat.Work;
+using LINGYUN.Abp.Notifications.Templating;
+using LINGYUN.Abp.Notifications.WeChat.Work;
+using LINGYUN.Abp.OssManagement.Minio;
+
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
+    // CAP事件总线模块
+    typeof(AbpCAPEventBusModule),
+    // Serilog扩展模块 应用程序信息
+    typeof(AbpSerilogEnrichersApplicationModule),
+    // Serilog扩展模块 全局唯一Id
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    // Serilog模块
+    typeof(AbpAspNetCoreSerilogModule),
+    // 身份认证模块 会话管理集成
+    typeof(AbpIdentityAspNetCoreSessionModule),
+    // 身份认证模块 会话中间件
+    typeof(AbpIdentitySessionAspNetCoreModule),
+    // 身份认证模块 通知集成
+    typeof(AbpIdentityNotificationsModule),
+    // 身份认证模块 组织机构集成
+    typeof(AbpIdentityOrganizaztionUnitsModule),
+    // 身份认证模块 微信身份标识
+    typeof(AbpIdentityWeChatModule),
+    // 身份认证模块 企业微信身份标识
+    typeof(AbpIdentityWeChatWorkModule),
+    // 身份认证模块 领域服务
+    typeof(AbpIdentityDomainModule),
+    // 身份认证模块 应用服务
+    typeof(AbpIdentityApplicationModule),
+    // 身份认证模块 控制器
+    typeof(AbpIdentityHttpApiModule),
+    // 身份认证模块 实体框架
+    typeof(AbpIdentityEntityFrameworkCoreModule),
+
     // 账户模块 应用服务
     typeof(AbpAccountApplicationModule),
     // 账户模块 控制器
     typeof(AbpAccountHttpApiModule),
     // 账户模块 OpenIddict集成
     typeof(AbpAccountWebOpenIddictModule),
-    // 账户模块 模板
-    typeof(AbpAccountTemplatesModule),
+
+    // Gdpr 身份认证提供者模块
+    typeof(AbpGdprDomainIdentityModule),
+    // Gdpr 应用服务模块
+    typeof(AbpGdprApplicationModule),
+    // Gdpr 控制器模块
+    typeof(AbpGdprHttpApiModule),
+    // Gdpr 实体框架模块
+    typeof(AbpGdprEntityFrameworkCoreModule),
+    // Gdpr Mvc页面
+    typeof(AbpGdprWebModule),
+
+    // MVC Theme
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
 
     // 审计日志模块 应用服务
     typeof(AbpAuditingApplicationModule),
@@ -28,25 +74,6 @@ namespace LY.MicroService.Applications.Single;
     // 缓存管理模块 控制器
     typeof(AbpCachingManagementHttpApiModule),
 
-    // 身份认证模块 会话管理集成
-    typeof(AbpIdentityAspNetCoreSessionModule),
-    // 身份认证模块 会话中间件
-    typeof(AbpIdentitySessionAspNetCoreModule),
-    // 身份认证模块 通知集成
-    typeof(AbpIdentityNotificationsModule),
-    // 身份认证模块 组织机构集成
-    typeof(AbpIdentityOrganizaztionUnitsModule),
-    // 身份认证模块 微信身份标识
-    typeof(AbpIdentityWeChatModule),
-    // 身份认证模块 领域服务
-    typeof(AbpIdentityDomainModule),
-    // 身份认证模块 应用服务
-    typeof(AbpIdentityApplicationModule),
-    // 身份认证模块 控制器
-    typeof(AbpIdentityHttpApiModule),
-    // 身份认证模块 实体框架
-    typeof(AbpIdentityEntityFrameworkCoreModule),
-
     // 多语言管理模块 领域服务
     typeof(AbpLocalizationManagementDomainModule),
     // 多语言管理模块 应用服务
@@ -56,10 +83,6 @@ namespace LY.MicroService.Applications.Single;
     // 多语言管理模块 实体框架
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
 
-    // Serilog扩展模块 应用程序信息
-    typeof(AbpSerilogEnrichersApplicationModule),
-    // Serilog扩展模块 全局唯一Id
-    typeof(AbpSerilogEnrichersUniqueIdModule),
 
     // 消息模块 领域服务
     typeof(AbpMessageServiceDomainModule),
@@ -77,11 +100,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsHttpApiModule),
     // 通知模块 实体框架
     typeof(AbpNotificationsEntityFrameworkCoreModule),
-
-    //typeof(AbpIdentityServerSessionModule),
-    //typeof(AbpIdentityServerApplicationModule),
-    //typeof(AbpIdentityServerHttpApiModule),
-    //typeof(AbpIdentityServerEntityFrameworkCoreModule),
 
     // OpenIddict扩展模块 自定义身份标识
     typeof(LINGYUN.Abp.OpenIddict.AspNetCore.AbpOpenIddictAspNetCoreModule),
@@ -101,8 +119,11 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpOpenIddictWeChatModule),
     // OpenIddict扩展模块 企业微信认证
     typeof(AbpOpenIddictWeChatWorkModule),
+    // OpenIddict扩展模块 扫码登录
+    typeof(AbpOpenIddictQrCodeModule),
 
-    //typeof(AbpOssManagementMinioModule), // 取消注释以使用Minio
+    // 对象存储模块 Minio
+    typeof(AbpOssManagementMinioModule),
     // 对象存储模块 文件系统
     typeof(AbpOssManagementFileSystemModule),
     // 对象存储模块 图片处理
@@ -141,6 +162,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpSaasHttpApiModule),
     // Saas模块 实体框架
     typeof(AbpSaasEntityFrameworkCoreModule),
+    // Saas模块 数据库连接检查
+    typeof(AbpSaasDbCheckerModule),
 
     // 任务管理模块 领域服务
     typeof(TaskManagementDomainModule),
@@ -207,10 +230,6 @@ namespace LY.MicroService.Applications.Single;
     // 权限管理模块 组织机构集成
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
 
-    typeof(SingleMigrationsEntityFrameworkCoreMySqlModule),
-    // 实体框架MySQL集成
-    // typeof(AbpEntityFrameworkCoreMySQLModule),
-
     // 短信模块 阿里云集成
     typeof(AbpAliyunSmsModule),
     // 阿里云模块 设置管理
@@ -271,8 +290,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAspNetCoreMvcLocalizationModule),
     // 多语言模块 语言映射
     typeof(AbpLocalizationCultureMapModule),
-    // 多语言模块 持久化
-    typeof(AbpLocalizationPersistenceModule),
 
     // OpenApi模块 授权
     typeof(AbpOpenApiAuthorizationModule),
@@ -292,6 +309,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsTemplatingModule),
     // 通知模块 微信小程序
     typeof(AbpNotificationsWeChatMiniProgramModule),
+    // 通知模块 企业微信
+    typeof(AbpNotificationsWeChatWorkModule),
     // 多租户模块 版本
     typeof(AbpMultiTenancyEditionsModule),
 
@@ -318,6 +337,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpWeChatOfficialHandlersModule),
     // 微信模块 企业微信 事件处理
     typeof(AbpWeChatWorkHandlersModule),
+    // 认证模块 企业微信
+    typeof(AbpWeChatWorkAspNetCoreModule),
     // 微信模块 设置管理
     typeof(AbpWeChatSettingManagementModule),
 
@@ -338,24 +359,21 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpElsaActivitiesModule),
     // Elsa工作流模块 实体框架
     typeof(AbpElsaEntityFrameworkCoreModule),
-    // Elsa工作流模块 MySql集成
-    typeof(AbpElsaEntityFrameworkCoreMySqlModule),
-
-    // CAP事件总线模块
-    typeof(AbpCAPEventBusModule),
 
     // 数据导出模块 MiniExcel集成
     typeof(AbpExporterMiniExcelModule),
 
-    typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-    typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreMvcIdempotentWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpMailKitModule),
-    typeof(AbpAutofacModule)
+    typeof(AbpAutofacModule),
+
+    // 取消注释使用MySql
+     typeof(SingleMigrationsEntityFrameworkCoreMySqlModule)
+    // 取消注释使用SqlServer
+    //typeof(SingleMigrationsEntityFrameworkCoreSqlServerModule)
     )]
 public partial class MicroServiceApplicationsSingleModule : AbpModule
 {
@@ -386,7 +404,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureAuditing();
         ConfigureIdempotent();
         ConfigureMvcUiTheme();
-        ConfigureDataSeeder();
         ConfigureLocalization();
         ConfigureKestrelServer();
         ConfigureBackgroundTasks();
@@ -401,7 +418,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureAuthServer(configuration);
         ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);
-        ConfigureBlobStoring(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureTextTemplating(configuration);
@@ -411,19 +427,10 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigurePermissionManagement(configuration);
         ConfigureNotificationManagement(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureOssManagement(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 
-        ConfigureSingleModule(context.Services);
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        AsyncHelper.RunSync(async () => await OnApplicationInitializationAsync(context));
-    }
-
-    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
-    {
-        await context.ServiceProvider.GetRequiredService<IDataSeeder>().SeedAsync(); ;
+        ConfigureSingleModule(context.Services, hostingEnvironment.IsDevelopment());
     }
 }

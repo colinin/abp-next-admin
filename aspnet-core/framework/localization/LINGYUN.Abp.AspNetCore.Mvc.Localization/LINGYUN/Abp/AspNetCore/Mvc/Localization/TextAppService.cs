@@ -99,7 +99,7 @@ public class TextAppService : ApplicationService, ITextAppService
 
         using (CultureHelper.Use(cultureName, cultureName))
         {
-            localizedStrings = (await localizer.GetAllStringsAsync(true))
+            localizedStrings = (await localizer.GetAllStringsAsync(true, false, true))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
                 .OrderBy(l => l.Name);
         }
@@ -112,7 +112,7 @@ public class TextAppService : ApplicationService, ITextAppService
         {
             using (CultureHelper.Use(targetCultureName, targetCultureName))
             {
-                targetLocalizedStrings = (await localizer.GetAllStringsAsync(true))
+                targetLocalizedStrings = (await localizer.GetAllStringsAsync(false, false, true))
                     .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
                     .OrderBy(l => l.Name);
             }

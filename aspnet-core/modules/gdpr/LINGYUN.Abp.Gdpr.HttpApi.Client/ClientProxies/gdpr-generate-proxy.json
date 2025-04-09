@@ -1,0 +1,362 @@
+{
+  "modules": {
+    "gdpr": {
+      "rootPath": "gdpr",
+      "remoteServiceName": "Gdpr",
+      "controllers": {
+        "LINGYUN.Abp.Gdpr.GdprRequestController": {
+          "controllerName": "GdprRequest",
+          "controllerGroupName": "GdprRequest",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Gdpr.GdprRequestController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.Gdpr.IGdprRequestAppService",
+              "name": "IGdprRequestAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Gdpr.GdprRequestDto",
+                    "typeSimple": "LINGYUN.Abp.Gdpr.GdprRequestDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Gdpr.GdprRequestGetListInput, LINGYUN.Abp.Gdpr.Application.Contracts",
+                      "type": "LINGYUN.Abp.Gdpr.GdprRequestGetListInput",
+                      "typeSimple": "LINGYUN.Abp.Gdpr.GdprRequestGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Gdpr.GdprRequestDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Gdpr.GdprRequestDto>"
+                  }
+                },
+                {
+                  "name": "DownloadPersonalDataAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "requestId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "PreparePersonalDataAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "DeletePersonalDataAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "DeletePersonalAccountAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/gdpr/requests/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Gdpr.IGdprRequestAppService"
+            },
+            "DeletePersonalAccountAsync": {
+              "uniqueName": "DeletePersonalAccountAsync",
+              "name": "DeletePersonalAccountAsync",
+              "httpMethod": "DELETE",
+              "url": "api/gdpr/requests/personal-account",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Gdpr.IGdprRequestAppService"
+            },
+            "DeletePersonalDataAsync": {
+              "uniqueName": "DeletePersonalDataAsync",
+              "name": "DeletePersonalDataAsync",
+              "httpMethod": "DELETE",
+              "url": "api/gdpr/requests/personal-data",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Gdpr.IGdprRequestAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/gdpr/requests/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Gdpr.GdprRequestDto",
+                "typeSimple": "LINGYUN.Abp.Gdpr.GdprRequestDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Gdpr.IGdprRequestAppService"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/gdpr/requests",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Gdpr.GdprRequestGetListInput, LINGYUN.Abp.Gdpr.Application.Contracts",
+                  "type": "LINGYUN.Abp.Gdpr.GdprRequestGetListInput",
+                  "typeSimple": "LINGYUN.Abp.Gdpr.GdprRequestGetListInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "CreationTime",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ReadyTime",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Gdpr.GdprRequestDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Gdpr.GdprRequestDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Gdpr.IGdprRequestAppService"
+            },
+            "DownloadPersonalDataAsyncByRequestId": {
+              "uniqueName": "DownloadPersonalDataAsyncByRequestId",
+              "name": "DownloadPersonalDataAsync",
+              "httpMethod": "GET",
+              "url": "api/gdpr/requests/personal-data/download/{requestId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "requestId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "requestId",
+                  "name": "requestId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Gdpr.IGdprRequestAppService"
+            },
+            "PreparePersonalDataAsync": {
+              "uniqueName": "PreparePersonalDataAsync",
+              "name": "PreparePersonalDataAsync",
+              "httpMethod": "POST",
+              "url": "api/gdpr/requests/personal-data/prepare",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Gdpr.IGdprRequestAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

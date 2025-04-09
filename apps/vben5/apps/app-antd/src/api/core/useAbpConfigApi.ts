@@ -1,7 +1,4 @@
-import type {
-  ApplicationConfigurationDto,
-  ApplicationLocalizationDto,
-} from '@abp/core';
+import type { ApplicationConfigurationDto } from '@abp/core';
 
 import { useRequest } from '@abp/request';
 
@@ -23,26 +20,8 @@ export function useAbpConfigApi() {
     );
   }
 
-  /**
-   * 获取应用程序语言
-   * @returns 本地化配置
-   */
-  function getLocalizationApi(options: {
-    cultureName: string;
-    onlyDynamics?: boolean;
-  }): Promise<ApplicationLocalizationDto> {
-    return request<ApplicationLocalizationDto>(
-      '/api/abp/application-localization',
-      {
-        params: options,
-        method: 'GET',
-      },
-    );
-  }
-
   return {
     cancel,
     getConfigApi,
-    getLocalizationApi,
   };
 }

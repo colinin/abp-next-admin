@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
 import type { IdentityRoleDto } from '../../types/roles';
 
 import { computed, defineAsyncComponent, h, nextTick, watch } from 'vue';
@@ -7,11 +9,7 @@ import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  useVbenVxeGrid,
-  type VxeGridListeners,
-  type VxeGridProps,
-} from '@abp/ui';
+import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import { Button, Modal } from 'ant-design-vue';
 
@@ -137,8 +135,7 @@ const onShowRole = () => {
 const onCreateRole = async (roles: IdentityRoleDto[]) => {
   try {
     roleModalApi.setState({
-      closable: false,
-      confirmLoading: true,
+      submitting: true,
     });
     await addRoles(props.selectedKey!, {
       roleIds: roles.map((item) => item.id),
@@ -147,8 +144,7 @@ const onCreateRole = async (roles: IdentityRoleDto[]) => {
     await query();
   } finally {
     roleModalApi.setState({
-      closable: true,
-      confirmLoading: false,
+      submitting: false,
     });
   }
 };

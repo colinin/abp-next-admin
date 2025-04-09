@@ -30,7 +30,7 @@ export function useOrganizationUnitsApi() {
   ): Promise<OrganizationUnitDto> {
     return request<OrganizationUnitDto>('/api/identity/organization-units', {
       data: input,
-      method: 'GET',
+      method: 'POST',
     });
   }
 
@@ -234,7 +234,7 @@ export function useOrganizationUnitsApi() {
   ): Promise<void> {
     return request(`/api/identity/organization-units/${id}/roles`, {
       data: input,
-      method: 'GET',
+      method: 'POST',
     });
   }
 

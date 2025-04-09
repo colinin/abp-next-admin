@@ -129,7 +129,7 @@ export function useValidation(): RuleCreator {
     required?: boolean,
   ): Rule {
     const message = field.name
-      ? L(useNameEnum, [_getFieldName(field), field.minimum, field.maximum])
+      ? L(useNameEnum, [_getFieldName(field), field.maximum, field.minimum])
       : L(notNameEnum, [field.minimum, field.maximum]);
     return {
       message,
@@ -396,6 +396,12 @@ export function useValidation(): RuleCreator {
           true,
         ),
       ];
+    },
+    mapEnumValidMessage(
+      enumName: string,
+      args?: any[] | Record<string, string> | undefined,
+    ) {
+      return L(enumName, args);
     },
   };
 

@@ -78,7 +78,7 @@ async function onSubmit() {
 }
 
 function onCheckChange(setting: SettingDetail) {
-  setting.value = setting.value === 'true' ? 'false' : 'true';
+  setting.value = setting.value?.toLowerCase() === 'true' ? 'false' : 'true';
   onValueChange(setting);
 }
 
@@ -110,16 +110,19 @@ onMounted(onGet);
 <template>
   <Card :title="$t('AbpSettingManagement.Settings')">
     <template #extra>
-      <Button
-        v-if="settingsUpdateInput.settings.length > 0"
-        :loading="submiting"
-        class="w-[100px]"
-        post-icon="ant-design:setting-outlined"
-        type="primary"
-        @click="onSubmit"
-      >
-        {{ $t('AbpUi.Submit') }}
-      </Button>
+      <div class="flex flex-row gap-1">
+        <slot name="toolbar"></slot>
+        <Button
+          v-if="settingsUpdateInput.settings.length > 0"
+          :loading="submiting"
+          class="w-[100px]"
+          post-icon="ant-design:setting-outlined"
+          type="primary"
+          @click="onSubmit"
+        >
+          {{ $t('AbpUi.Submit') }}
+        </Button>
+      </div>
     </template>
     <Form :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
       <Tabs v-model="activeTab">
@@ -199,7 +202,7 @@ onMounted(onGet);
                   </Select>
                   <Checkbox
                     v-if="detail.valueType === ValueType.Boolean"
-                    :checked="detail.value === 'true'"
+                    :checked="detail.value?.toLowerCase() === 'true'"
                     @change="onCheckChange(detail)"
                   >
                     {{ detail.displayName }}

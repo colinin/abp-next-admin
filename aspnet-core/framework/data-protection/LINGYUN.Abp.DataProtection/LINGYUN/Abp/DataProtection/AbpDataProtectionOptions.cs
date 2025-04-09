@@ -15,6 +15,10 @@ public class AbpDataProtectionOptions
     /// </summary>
     public bool IsEnabled { get; set; }
     /// <summary>
+    /// 数据权限策略
+    /// </summary>
+    public IList<IDataAccessStrategyContributor> StrategyContributors { get; }
+    /// <summary>
     /// 权限主体
     /// </summary>
     public IList<IDataAccessSubjectContributor> SubjectContributors { get; }
@@ -31,18 +35,28 @@ public class AbpDataProtectionOptions
     /// </summary>
     public IDictionary<Type, Func<IServiceProvider, Type, DataAccessOperation, LambdaExpression>> DefaultEntityFilters { get; }
     /// <summary>
-    /// 忽略审计字段列表
+    /// 实体忽略字段
     /// </summary>
-    public IList<string> IgnoreAuditedProperties { get; set; }
+    public IDictionary<Type, string[]> EntityIgnoreProperties { get; }
+    /// <summary>
+    /// 全局忽略字段列表(不参与字段级权限校验)
+    /// </summary>
+    public IList<string> GlobalIgnoreProperties { get; set; }
+    /// <summary>
+    /// 审计字段列表(这些字段写入受保护实体的属性列表中,用于前端过滤)
+    /// </summary>
+    public IList<string> AuditedObjectProperties { get; set; }
     public AbpDataProtectionOptions()
     {
         IsEnabled = true;
         SubjectContributors = new List<IDataAccessSubjectContributor>();
+        StrategyContributors = new List<IDataAccessStrategyContributor>();
         KeywordContributors = new Dictionary<string, IDataAccessKeywordContributor>();
         OperateContributors = new Dictionary<DataAccessFilterOperate, IDataAccessOperateContributor>();
         DefaultEntityFilters = new Dictionary<Type, Func<IServiceProvider, Type, DataAccessOperation, LambdaExpression>>();
+        EntityIgnoreProperties = new Dictionary<Type, string[]>();
 
-        IgnoreAuditedProperties = new List<string>
+        GlobalIgnoreProperties = new List<string>
         {
             nameof(IEntity<Guid>.Id),
             nameof(IAuditedObject.LastModifierId),
@@ -56,6 +70,14 @@ public class AbpDataProtectionOptions
             nameof(IHasEntityVersion.EntityVersion),
             nameof(IHasConcurrencyStamp.ConcurrencyStamp),
             nameof(IHasExtraProperties.ExtraProperties),
+        };
+
+        AuditedObjectProperties = new List<string>
+        {
+            nameof(IAuditedObject.LastModifierId),
+            nameof(IAuditedObject.LastModificationTime),
+            nameof(IAuditedObject.CreatorId),
+            nameof(IAuditedObject.CreationTime),
         };
     }
 }

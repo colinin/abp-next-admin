@@ -28,20 +28,30 @@ public class AbpDataProtectedWritePropertiesInterceptor : SaveChangesInterceptor
                 {
                     var allowProperties = new List<string>();
                     var entity = entry.Entity;
-                    var subjectContext = new DataAccessSubjectContributorContext(entity.GetType().FullName, DataAccessOperation.Write, LazyServiceProvider);
+                    var entityType = entry.Entity.GetType();
+                    var subjectContext = new DataAccessSubjectContributorContext(entityType.FullName, DataAccessOperation.Write, LazyServiceProvider);
                     foreach (var contributor in DataProtectionOptions.Value.SubjectContributors)
                     {
-                        var properties = contributor.GetAllowProperties(subjectContext);
+                        var properties = await contributor.GetAccessdProperties(subjectContext);
                         allowProperties.AddIfNotContains(properties);
                     }
 
-                    allowProperties.AddIfNotContains(DataProtectionOptions.Value.IgnoreAuditedProperties);
-
-                    foreach (var property in entry.Properties)
+                    // 仅配置了字段级控制才生效
+                    if (allowProperties.Count != 0)
                     {
-                        if (!allowProperties.Contains(property.Metadata.Name))
+                        if (DataProtectionOptions.Value.EntityIgnoreProperties.TryGetValue(entityType, out var entityIgnoreProps))
                         {
-                            property.IsModified = false;
+                            allowProperties.AddIfNotContains(entityIgnoreProps);
+                        }
+
+                        allowProperties.AddIfNotContains(DataProtectionOptions.Value.GlobalIgnoreProperties);
+
+                        foreach (var property in entry.Properties)
+                        {
+                            if (!allowProperties.Contains(property.Metadata.Name))
+                            {
+                                property.IsModified = false;
+                            }
                         }
                     }
                 }

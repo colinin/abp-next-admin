@@ -3,7 +3,7 @@ using LINGYUN.Abp.WeChat.Common.Crypto.Models;
 using LINGYUN.Abp.WeChat.Common.Messages;
 using LINGYUN.Abp.WeChat.Work.Settings;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Services;
@@ -13,33 +13,40 @@ namespace LINGYUN.Abp.WeChat.Work.Message;
 public class WeChatWorkMessageAppService : ApplicationService, IWeChatWorkMessageAppService
 {
     private readonly IWeChatCryptoService _cryptoService;
-    private readonly WeChatWorkOptions _options;
     private readonly IDistributedEventBus _distributedEventBus;
     private readonly IMessageResolver _messageResolver;
     public WeChatWorkMessageAppService(
         IMessageResolver messageResolver,
         IWeChatCryptoService cryptoService,
-        IDistributedEventBus distributedEventBus,
-        IOptionsMonitor<WeChatWorkOptions> options)
+        IDistributedEventBus distributedEventBus)
     {
         _cryptoService = cryptoService;
         _messageResolver = messageResolver;
         _distributedEventBus = distributedEventBus;
-        _options = options.CurrentValue;
     }
 
-    public async virtual Task<string> Handle(string agentId, MessageValidationInput input)
+    public async virtual Task<string> Handle(MessageValidationInput input)
     {
-        var corpId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.CorpId);
-        Check.NotNullOrEmpty(corpId, nameof(corpId));
+        var settings = await SettingProvider.GetAllAsync(
+            new[] { 
+                WeChatWorkSettingNames.Connection.CorpId, 
+                WeChatWorkSettingNames.Connection.Token, 
+                WeChatWorkSettingNames.Connection.EncodingAESKey,
+            });
 
-        var applicationConfiguration = _options.Applications.GetConfiguration(agentId);
-        var cryptoConfiguration = applicationConfiguration.GetCryptoConfiguration("Message");
+        var corpId = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.CorpId)?.Value;
+        var token = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.Token)?.Value;
+        var aesKey = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.EncodingAESKey)?.Value;
+
+        Check.NotNullOrEmpty(corpId, nameof(corpId));
+        Check.NotNullOrEmpty(token, nameof(token));
+        Check.NotNullOrEmpty(aesKey, nameof(aesKey));
+
         var echoData = new WeChatCryptoEchoData(
             input.EchoStr,
             corpId,
-            cryptoConfiguration.Token,
-            cryptoConfiguration.EncodingAESKey,
+            token,
+            aesKey,
             input.Msg_Signature,
             input.TimeStamp.ToString(),
             input.Nonce);
@@ -49,18 +56,27 @@ public class WeChatWorkMessageAppService : ApplicationService, IWeChatWorkMessag
         return echoStr;
     }
 
-    public async virtual Task<string> Handle(string agentId, MessageHandleInput input)
+    public async virtual Task<string> Handle(MessageHandleInput input)
     {
-        var corpId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.CorpId);
-        Check.NotNullOrEmpty(corpId, nameof(corpId));
+        var settings = await SettingProvider.GetAllAsync(
+            new[] {
+                WeChatWorkSettingNames.Connection.CorpId,
+                WeChatWorkSettingNames.Connection.Token,
+                WeChatWorkSettingNames.Connection.EncodingAESKey,
+            });
 
-        var applicationConfiguration = _options.Applications.GetConfiguration(agentId);
-        var cryptoConfiguration = applicationConfiguration.GetCryptoConfiguration("Message");
+        var corpId = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.CorpId)?.Value;
+        var token = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.Token)?.Value;
+        var aesKey = settings.FirstOrDefault(x => x.Name == WeChatWorkSettingNames.Connection.EncodingAESKey)?.Value;
+
+        Check.NotNullOrEmpty(corpId, nameof(corpId));
+        Check.NotNullOrEmpty(token, nameof(token));
+        Check.NotNullOrEmpty(aesKey, nameof(aesKey));
 
         var messageData = new MessageResolveData(
             corpId,
-            cryptoConfiguration.Token,
-            cryptoConfiguration.EncodingAESKey,
+            token,
+            aesKey,
             input.Msg_Signature,
             input.TimeStamp,
             input.Nonce,

@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@using Volo.Abp.Localization
+
+@inject IHtmlLocalizer<AccountResource> L
+
+@section scripts {
+    <abp-script src="/Pages/Account/Components/ProfileManagementGroup/Session/Index.js" />
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["PersonalSessions"]</abp-card-title>
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="SessionsTable"></abp-table>
+    </abp-card-body>
+</abp-card>

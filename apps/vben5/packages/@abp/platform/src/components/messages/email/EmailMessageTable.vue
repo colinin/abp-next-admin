@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridProps } from '@abp/ui';
+import type { VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { EmailMessageDto } from '../../../types/messages';
 
@@ -226,7 +228,7 @@ function onDelete(row: EmailMessageDto) {
       try {
         gridApi.setLoading(true);
         await deleteApi(row.id);
-        message.success($t('AbpUi.SuccessfullyDeleted'));
+        message.success($t('AbpUi.DeletedSuccessfully'));
         gridApi.query();
       } finally {
         gridApi.setLoading(false);

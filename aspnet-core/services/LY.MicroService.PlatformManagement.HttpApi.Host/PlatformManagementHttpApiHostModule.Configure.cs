@@ -2,10 +2,12 @@
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.Wrapper;
-using LINGYUN.Platform.Localization;
+using LY.MicroService.PlatformManagement.Messages;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,11 +19,9 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System;
 using System.IO;
@@ -34,16 +34,18 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
+using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.Caching;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
+using Volo.Abp.MailKit;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Sms;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
@@ -138,18 +140,39 @@ public partial class PlatformManagementHttpApiHostModule
         });
     }
 
-    private void ConfigureBlobStoring()
+    private void ConfigureOssManagement(IServiceCollection services, IConfiguration configuration)
     {
-        Configure<AbpBlobStoringOptions>(options =>
+        var useMinio = configuration.GetValue<bool>("OssManagement:UseMinio");
+        if (useMinio)
         {
-            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+            Configure<AbpBlobStoringOptions>(options =>
             {
-                containerConfiguration.UseFileSystem(fileSystem =>
+                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
                 {
-                    fileSystem.BasePath = Path.Combine(Directory.GetCurrentDirectory(), "blobs");
+                    containerConfiguration.UseMinio(minio =>
+                    {
+                        configuration.GetSection("Minio").Bind(minio);
+                    });
                 });
             });
-        });
+            services.AddMinioContainer();
+        }
+        else
+        {
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+                {
+                    containerConfiguration.UseFileSystem(fileSystem =>
+                    {
+                        fileSystem.BasePath = Path.Combine(
+                            Directory.GetCurrentDirectory(), 
+                            configuration["OssManagement:Bucket"] ?? "blobs");
+                    });
+                });
+            });
+            services.AddFileSystemContainer();
+        }
     }
 
     private void ConfigureExceptionHandling()
@@ -204,53 +227,6 @@ public partial class PlatformManagementHttpApiHostModule
         {
             var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
             services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
-        }
-    }
-
-    private void ConfigureOpenTelemetry(IServiceCollection services, IConfiguration configuration)
-    {
-        var openTelemetryEnabled = configuration["OpenTelemetry:IsEnabled"];
-        if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
-        {
-            services.AddOpenTelemetry()
-                .ConfigureResource(resource =>
-                {
-                    resource.AddService(ApplicationName);
-                })
-                .WithTracing(tracing =>
-                {
-                    tracing.AddHttpClientInstrumentation();
-                    tracing.AddAspNetCoreInstrumentation();
-                    tracing.AddCapInstrumentation();
-                    tracing.AddEntityFrameworkCoreInstrumentation();
-                    tracing.AddSource(ApplicationName);
-
-                    var tracingOtlpEndpoint = configuration["OpenTelemetry:Otlp:Endpoint"];
-                    if (!tracingOtlpEndpoint.IsNullOrWhiteSpace())
-                    {
-                        tracing.AddOtlpExporter(otlpOptions =>
-                        {
-                            otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
-                        });
-                        return;
-                    }
-
-                    var zipkinEndpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-                    if (!zipkinEndpoint.IsNullOrWhiteSpace())
-                    {
-                        tracing.AddZipkinExporter(zipKinOptions =>
-                        {
-                            zipKinOptions.Endpoint = new Uri(zipkinEndpoint);
-                        });
-                        return;
-                    }
-                })
-                .WithMetrics(metrics =>
-                {
-                    metrics.AddRuntimeInstrumentation();
-                    metrics.AddHttpClientInstrumentation();
-                    metrics.AddAspNetCoreInstrumentation();
-                });
         }
     }
 
@@ -373,8 +349,6 @@ public partial class PlatformManagementHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-
-            options.UsePersistence<PlatformResource>();
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -387,6 +361,11 @@ public partial class PlatformManagementHttpApiHostModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
 
@@ -472,5 +451,22 @@ public partial class PlatformManagementHttpApiHostModule
                     client.DefaultRequestHeaders.TryAddWithoutValidation(AbpHttpWrapConsts.AbpDontWrapResult, "true");
                 });
         });
+    }
+
+    private void ConfigurePlatformModule(IServiceCollection services)
+    {
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            // 允许第三方调用集成服务
+            options.ExposeIntegrationServices = true;
+        });
+        // 用于消息中心邮件集中发送
+        services.Replace(ServiceDescriptor.Transient<Volo.Abp.Emailing.IEmailSender, PlatformEmailSender>());
+
+        services.AddKeyedTransient<Volo.Abp.Emailing.IEmailSender, MailKitSmtpEmailSender>("DefaultEmailSender");
+
+        // 用于消息中心短信集中发送
+        services.Replace(ServiceDescriptor.Transient<ISmsSender, PlatformSmsSender>());
+        services.AddKeyedSingleton<ISmsSender, AliyunSmsSender>("DefaultSmsSender");
     }
 }

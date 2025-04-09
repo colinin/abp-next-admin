@@ -91,7 +91,7 @@ async function onDelete(row: IdentityClaimDto) {
     claimType: row.claimType,
     claimValue: row.claimValue,
   });
-  message.success($t('AbpUi.SuccessfullyDeleted'));
+  message.success($t('AbpUi.DeletedSuccessfully'));
   query();
   emits('onDelete');
 }

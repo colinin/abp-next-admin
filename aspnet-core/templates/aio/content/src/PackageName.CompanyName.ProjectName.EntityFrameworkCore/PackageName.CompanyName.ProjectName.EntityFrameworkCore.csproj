@@ -28,6 +28,7 @@
 		<PackageReference Include="LINGYUN.Abp.Data.DbMigrator" />
 		<PackageReference Include="LINGYUN.Abp.DataProtection.EntityFrameworkCore" />
 		<PackageReference Include="LINGYUN.Abp.Saas.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" />
 	</ItemGroup>
 
 	<ItemGroup>

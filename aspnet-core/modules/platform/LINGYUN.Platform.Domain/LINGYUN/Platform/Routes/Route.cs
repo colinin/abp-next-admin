@@ -1,6 +1,8 @@
 ﻿using JetBrains.Annotations;
 using System;
+using System.Collections.Generic;
 using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
@@ -56,6 +58,32 @@ public abstract class Route : FullAuditedAggregateRoot<Guid>, IMultiTenant
         Redirect = redirect;
         Description = description;
         TenantId = tenantId;
+    }
+
+    public void WithRequiredFeatures(string[] features)
+    {
+        var requiresFeatures = features?.JoinAsString(",") ?? "";
+
+        this.SetProperty("RequiredFeatures", requiresFeatures);
+    }
+
+    public string[] GetRequiredFeatures()
+    {
+        var requiresFeaturesObj = this.GetProperty("RequiredFeatures");
+        return requiresFeaturesObj?.ToString()?.Split(",") ?? Array.Empty<string>();
+    }
+
+    public void WithRequiredPermissions(string[] permissions)
+    {
+        var requiresPermissions = permissions?.JoinAsString(",") ?? "";
+
+        this.SetProperty("RequiredPermissions", requiresPermissions);
+    }
+
+    public string[] GetRequiredPermissions()
+    {
+        var requiresPermissionsObj = this.GetProperty("RequiredPermissions");
+        return requiresPermissionsObj?.ToString()?.Split(",") ?? Array.Empty<string>();
     }
 
     public override int GetHashCode()

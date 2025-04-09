@@ -21,21 +21,22 @@ public class WeChatWorkAuthorizeAppService : ApplicationService, IWeChatWorkAuth
         _authorizeGenerator = authorizeGenerator;
     }
 
-    public async virtual Task<string> GenerateOAuth2AuthorizeAsync(string agentid, string redirectUri, string responseType = "code", string scope = "snsapi_base")
+    public async virtual Task<string> GenerateOAuth2AuthorizeAsync(string redirectUri, string responseType = "code", string scope = "snsapi_base")
     {
-        var state = _encryptionService.Encrypt($"agentid={agentid}&redirectUri={redirectUri}&responseType={responseType}&scope={scope}&random={Guid.NewGuid():D}").ToMd5();
 
-        return await _authorizeGenerator.GenerateOAuth2AuthorizeAsync(agentid, redirectUri, state, responseType, scope);
+        var state = _encryptionService.Encrypt($"redirectUri={redirectUri}&responseType={responseType}&scope={scope}&random={Guid.NewGuid():D}").ToMd5();
+
+        return await _authorizeGenerator.GenerateOAuth2AuthorizeAsync(redirectUri, state, responseType, scope);
     }
 
-    public async virtual Task<string> GenerateOAuth2LoginAsync(string redirectUri, string loginType = "ServiceApp", string agentid = "")
+    public async virtual Task<string> GenerateOAuth2LoginAsync(string redirectUri, string loginType = "ServiceApp")
     {
-        var state = _encryptionService.Encrypt($"agentid={agentid}&redirectUri={redirectUri}&loginType={loginType}&agentid={agentid}&random={Guid.NewGuid():D}").ToMd5();
+        var state = _encryptionService.Encrypt($"redirectUri={redirectUri}&loginType={loginType}&random={Guid.NewGuid():D}").ToMd5();
 
         var corpId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.CorpId);
 
         Check.NotNullOrEmpty(corpId, nameof(corpId));
 
-        return await _authorizeGenerator.GenerateOAuth2LoginAsync(corpId, redirectUri, state, loginType, agentid);
+        return await _authorizeGenerator.GenerateOAuth2LoginAsync(corpId, redirectUri, state, loginType);
     }
 }

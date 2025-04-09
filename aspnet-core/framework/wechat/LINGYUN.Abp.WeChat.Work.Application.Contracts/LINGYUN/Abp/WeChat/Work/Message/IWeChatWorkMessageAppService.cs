@@ -13,18 +13,16 @@ public interface IWeChatWorkMessageAppService : IApplicationService
     /// <remarks>
     /// 参考文档：<see cref="https://developer.work.weixin.qq.com/document/path/90238"/>
     /// </remarks>
-    /// <param name="agentId"></param>
     /// <param name="input"></param>
     /// <returns></returns>
-    Task<string> Handle(string agentId, MessageValidationInput input);
+    Task<string> Handle(MessageValidationInput input);
     /// <summary>
     /// 处理企业微信消息
     /// </summary>
     /// <remarks>
     /// 参考文档：<see cref="https://developer.work.weixin.qq.com/document/path/90238"/>
     /// </remarks>
-    /// <param name="agentId"></param>
     /// <param name="input"></param>
     /// <returns></returns>
-    Task<string> Handle(string agentId, MessageHandleInput input);
+    Task<string> Handle(MessageHandleInput input);
 }

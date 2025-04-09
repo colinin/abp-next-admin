@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { SelectValue } from 'ant-design-vue/es/select';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { IdentityUserDto } from '../../types';
 import type { IdentitySessionDto } from '../../types/sessions';

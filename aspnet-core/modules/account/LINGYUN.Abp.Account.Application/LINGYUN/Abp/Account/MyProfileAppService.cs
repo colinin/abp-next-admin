@@ -7,19 +7,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using System.Web;
 using Volo.Abp;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
+using Volo.Abp.Content;
 using Volo.Abp.Data;
 using Volo.Abp.Identity;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
 using IIdentitySessionRepository = LINGYUN.Abp.Identity.IIdentitySessionRepository;
@@ -37,6 +38,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
     protected IIdentitySessionManager IdentitySessionManager => LazyServiceProvider.LazyGetRequiredService<IIdentitySessionManager>();
     protected IIdentitySessionRepository IdentitySessionRepository => LazyServiceProvider.LazyGetRequiredService<IIdentitySessionRepository>();
+    protected IUserPictureProvider UserPictureProvider => LazyServiceProvider.LazyGetRequiredService<IUserPictureProvider>();
 
     public MyProfileAppService(
         Identity.IIdentityUserRepository userRepository,
@@ -50,6 +52,25 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         SecurityTokenCache = securityTokenCache;
 
         LocalizationResource = typeof(AccountResource);
+    }
+
+    public async virtual Task ChangePictureAsync(ChangePictureInput input)
+    {
+        var user = await GetCurrentUserAsync();
+        var pictureId = input.File.FileName ?? $"{GuidGenerator.Create():n}.jpg";
+
+        await UserPictureProvider.SetPictureAsync(user, input.File.GetStream(), pictureId);
+
+        await CurrentUnitOfWork.SaveChangesAsync();
+    }
+
+    public async virtual Task<IRemoteStreamContent> GetPictureAsync()
+    {
+        var userId = CurrentUser.GetId().ToString("N");
+
+        var stream = await UserPictureProvider.GetPictureAsync(userId);
+
+        return new RemoteStreamContent(stream, contentType: "image/jpeg");
     }
 
     public async virtual Task<PagedResultDto<IdentitySessionDto>> GetSessionsAsync(GetMySessionsInput input)
@@ -172,11 +193,13 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         var sender = LazyServiceProvider.LazyGetRequiredService<IAccountEmailConfirmSender>();
 
         await sender.SendEmailConfirmLinkAsync(
-            user,
+            user.Id,
+            user.Email,
             confirmToken,
             input.AppName,
             input.ReturnUrl,
-            input.ReturnUrlHash);
+            input.ReturnUrlHash,
+            user.TenantId);
     }
 
     public async virtual Task ConfirmEmailAsync(ConfirmEmailInput input)
@@ -186,7 +209,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
 
         // 字符编码错误
-        var confirmToken = WebUtility.UrlDecode(input.ConfirmToken.Replace("%20", "%2B"));
+        var confirmToken = HttpUtility.UrlDecode(input.ConfirmToken); ;
         (await UserManager.ConfirmEmailAsync(user, confirmToken)).CheckErrors();
 
         await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
@@ -196,7 +219,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         });
     }
 
-    public async virtual Task<AuthenticatorDto> GetAuthenticator()
+    public async virtual Task<AuthenticatorDto> GetAuthenticatorAsync()
     {
         await IdentityOptions.SetAsync();
 
@@ -228,7 +251,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         };
     }
 
-    public async virtual Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCode(VerifyAuthenticatorCodeInput input)
+    public async virtual Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCodeAsync(VerifyAuthenticatorCodeInput input)
     {
         await IdentityOptions.SetAsync();
 
@@ -257,7 +280,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         };
     }
 
-    public async virtual Task ResetAuthenticator()
+    public async virtual Task ResetAuthenticatorAsync()
     {
         await IdentityOptions.SetAsync();
 

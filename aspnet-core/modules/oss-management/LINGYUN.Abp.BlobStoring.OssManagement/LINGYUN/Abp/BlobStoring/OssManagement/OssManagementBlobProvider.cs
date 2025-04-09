@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.OssManagement;
+using LINGYUN.Abp.OssManagement.Integration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
@@ -14,9 +15,9 @@ public class OssManagementBlobProvider : BlobProviderBase, ITransientDependency
 {
     public ILogger<OssManagementBlobProvider> Logger { protected get; set; }
 
-    private readonly IOssObjectAppService _ossObjectAppService;
+    private readonly IOssObjectIntegrationService _ossObjectAppService;
     public OssManagementBlobProvider(
-        IOssObjectAppService ossObjectAppService)
+        IOssObjectIntegrationService ossObjectAppService)
     {
         _ossObjectAppService = ossObjectAppService;
 
@@ -37,47 +38,27 @@ public class OssManagementBlobProvider : BlobProviderBase, ITransientDependency
 
     public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
     {
-        try
+        var configuration = args.Configuration.GetOssManagementConfiguration();
+        var result = await _ossObjectAppService.ExistsAsync(new GetOssObjectInput
         {
-            var configuration = args.Configuration.GetOssManagementConfiguration();
-            var oss = await _ossObjectAppService.GetAsync(new GetOssObjectInput
-            {
-                Bucket = configuration.Bucket,
-                Path = GetOssPath(args),
-                Object = GetOssName(args),
-            });
-            return oss != null;
-        }
-        catch (Exception ex)
-        {
-            Logger.LogWarning("An error occurred while getting the OSS object, always returning that the object does not exist");
-            Logger.LogWarning(ex.Message);
-
-            return false;
-        }
+            Bucket = configuration.Bucket,
+            Path = GetOssPath(args),
+            Object = GetOssName(args),
+        });
+        return result.IsExists;
     }
 
     public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
     {
-        try
+        var configuration = args.Configuration.GetOssManagementConfiguration();
+        var content = await _ossObjectAppService.GetAsync(new GetOssObjectInput
         {
-            var configuration = args.Configuration.GetOssManagementConfiguration();
-            var content = await _ossObjectAppService.GetContentAsync(new GetOssObjectInput
-            {
-                Bucket = configuration.Bucket,
-                Path = GetOssPath(args),
-                Object = GetOssName(args),
-            });
+            Bucket = configuration.Bucket,
+            Path = GetOssPath(args),
+            Object = GetOssName(args),
+        });
 
-            return content?.GetStream();
-        }
-        catch (Exception ex)
-        {
-            Logger.LogWarning("An error occurred while getting the OSS object and an empty data stream will be returned");
-            Logger.LogWarning(ex.Message);
-
-            return null;
-        }
+        return content?.GetStream();
     }
 
     public override async Task SaveAsync(BlobProviderSaveArgs args)

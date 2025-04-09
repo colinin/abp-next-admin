@@ -20,7 +20,7 @@ public class AbpOpenIddictAspNetCoreSessionModule : AbpModule
             builder.AddEventHandler(ProcessSignOutIdentitySession.Descriptor);
             builder.AddEventHandler(ProcessSignInIdentitySession.Descriptor);
             builder.AddEventHandler(RevocationIdentitySession.Descriptor);
-            builder.AddEventHandler(UserinfoIdentitySession.Descriptor);
+            builder.AddEventHandler(UserInfoIdentitySession.Descriptor);
         });
     }
 

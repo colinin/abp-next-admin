@@ -8,6 +8,8 @@
     "Permission:Create": "Create",
     "Permission:Update": "Update",
     "Permission:Delete": "Delete",
+    "Permission:Strategy": "Strategy",
+    "Permission:ChangeStrategy": "Change Strategy",
     "DataProtectionManagement:001100": "There already exists an entity type definition named {Name}!",
     "DataProtectionManagement:001200": "The entity type already has a property definition named {Name}!",
     "DataProtectionManagement:002100": "The {Operation} access rule for entity {Name} has been assigned to role {RoleName}!",

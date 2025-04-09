@@ -1,20 +1,16 @@
 ﻿using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.Authorization.Permissions;
 using LINGYUN.Abp.DataProtection.Keywords;
-using NSubstitute;
+using LINGYUN.Abp.DataProtection.Stores;
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.Security.Claims;
-using Volo.Abp.Uow;
 using Xunit;
 
 namespace LINGYUN.Abp.DataProtection
@@ -99,41 +95,41 @@ namespace LINGYUN.Abp.DataProtection
                 // role2规则
                 var rule2FilterGroup = new DataAccessFilterGroup();
                 // 只允许查询Num3小于等于400
-                rule2FilterGroup.AddRule(new DataAccessFilterRule(nameof(FakeProtectionObject.Num3), 400, DataAccessFilterOperate.LessOrEqual));
-                _store.Set(new DataAccessResource(RolePermissionValueProvider.ProviderName, "role2", typeof(FakeProtectionObject).FullName, DataAccessOperation.Read, rule2FilterGroup));
+                rule2FilterGroup.AddRule(new DataAccessFilterRule(nameof(FakeProtectionObject.Num3), 400, typeof(int).FullName, "number", DataAccessFilterOperate.LessOrEqual));
+                await _store.SetAsync(new DataAccessResource(RolePermissionValueProvider.ProviderName, "role2", typeof(FakeProtectionObject).FullName, DataAccessOperation.Read, rule2FilterGroup));
 
                 // role3编辑规则
                 var rule3WriteAccess = new DataAccessFilterGroup();
                 // 只允许编辑自己提交的数据
-                rule3WriteAccess.AddRule(new DataAccessFilterRule(nameof(FakeProtectionObject.CreatorId), DataAccessCurrentUserContributor.Name, DataAccessFilterOperate.Equal));
+                rule3WriteAccess.AddRule(new DataAccessFilterRule(nameof(FakeProtectionObject.CreatorId), DataAccessCurrentUserContributor.Name, typeof(Guid?).FullName, "string", DataAccessFilterOperate.Equal));
                 var rule3WriteAccessCacheItem = new DataAccessResource(RolePermissionValueProvider.ProviderName, "role3", typeof(FakeProtectionObject).FullName, DataAccessOperation.Write, rule3WriteAccess);
                 // 只允许编辑Num3字段
-                rule3WriteAccessCacheItem.AllowProperties.AddRange(new string[] { nameof(FakeProtectionObject.Num3) });
-                _store.Set(rule3WriteAccessCacheItem);
+                rule3WriteAccessCacheItem.AccessedProperties.AddRange(new string[] { nameof(FakeProtectionObject.Num3) });
+                await _store.SetAsync(rule3WriteAccessCacheItem);
 
                 // role1读取规则
                 var rule1ReadAccess = new DataAccessFilterGroup();
                 // 只允许读取自己提交的数据
-                rule1ReadAccess.AddRule(new DataAccessFilterRule(nameof(FakeProtectionObject.CreatorId), DataAccessCurrentUserContributor.Name, DataAccessFilterOperate.Equal));
+                rule1ReadAccess.AddRule(new DataAccessFilterRule(nameof(FakeProtectionObject.CreatorId), DataAccessCurrentUserContributor.Name, typeof(Guid?).FullName, "string", DataAccessFilterOperate.Equal));
                 var rule1ReadAccessCacheItem = new DataAccessResource(RolePermissionValueProvider.ProviderName, "role1", typeof(FakeProtectionObject).FullName, DataAccessOperation.Read, rule1ReadAccess);
                 // 只允许读取Num3字段
-                rule1ReadAccessCacheItem.AllowProperties.AddRange(new string[] { nameof(FakeProtectionObject.Id), nameof(FakeProtectionObject.Num3) });
-                _store.Set(rule1ReadAccessCacheItem);
+                rule1ReadAccessCacheItem.AccessedProperties.AddRange(new string[] { nameof(FakeProtectionObject.Id), nameof(FakeProtectionObject.Num3) });
+                await _store.SetAsync(rule1ReadAccessCacheItem);
 
 
                 // ou1读取规则
                 var ou1ReadAccess = new DataAccessFilterGroup();
                 // 允许读本部门及下级部门数据
                 // 获取部门树结构列表, 便利增加多个部门条件集
-                ou1ReadAccess.AddRule(new DataAccessFilterRule($"{nameof(FakeProtectionObject.CreatorId)}", new List<Guid?>() { validUser, Guid.NewGuid() }, DataAccessFilterOperate.Contains, true));
+                ou1ReadAccess.AddRule(new DataAccessFilterRule($"{nameof(FakeProtectionObject.CreatorId)}", new List<Guid?>() { validUser, Guid.NewGuid() }, typeof(Guid?).FullName, "string", DataAccessFilterOperate.Contains, true));
                 //ou1ReadAccess.AddRule(new DataAccessFilterRule($"{nameof(FakeProtectionObject.ExtraProperties)}.{DataAccessKeywords.AUTH_ORGS}", "[00001]", DataAccessFilterOperate.Contains));
                 //ou1ReadAccess.AddRule(new DataAccessFilterRule($"{nameof(FakeProtectionObject.ExtraProperties)}.{DataAccessKeywords.AUTH_ORGS}", "[00001.00002]", DataAccessFilterOperate.Contains));
 
                 var ou1ReadAccessCacheItem = new DataAccessResource(OrganizationUnitPermissionValueProvider.ProviderName, "00001", typeof(FakeProtectionObject).FullName, DataAccessOperation.Read, ou1ReadAccess);
 
                 // 只允许读取Num3字段
-                ou1ReadAccessCacheItem.AllowProperties.AddRange(new string[] { nameof(FakeProtectionObject.Id), nameof(FakeProtectionObject.Num3) });
-                _store.Set(ou1ReadAccessCacheItem);
+                ou1ReadAccessCacheItem.AccessedProperties.AddRange(new string[] { nameof(FakeProtectionObject.Id), nameof(FakeProtectionObject.Num3) });
+                await _store.SetAsync(ou1ReadAccessCacheItem);
             });
 
             await WithUnitOfWorkAsync(async () =>
@@ -213,7 +209,7 @@ namespace LINGYUN.Abp.DataProtection
                     var entity = await _repository.FindAsync(1);
 
                     var resultBuilder = GetRequiredService<IEntityPropertyResultBuilder>();
-                    var exp = resultBuilder.Build(typeof(FakeProtectionObject), DataAccessOperation.Read);
+                    var exp = await resultBuilder.Build(typeof(FakeProtectionObject), DataAccessOperation.Read);
                     var comp = exp.Compile();
                     // 使用非泛型接口编译表达式树，对返回结果进行替换
                     var resultEntity = comp.DynamicInvoke(entity).As<FakeProtectionObject>();

@@ -12,7 +12,17 @@ import { useUserStore } from '@vben/stores';
 
 import { useSettings } from '@abp/core';
 import { UploadOutlined } from '@ant-design/icons-vue';
-import { Avatar, Button, Card, Form, Input, Upload } from 'ant-design-vue';
+import {
+  Avatar,
+  Button,
+  Card,
+  Form,
+  Input,
+  message,
+  Upload,
+} from 'ant-design-vue';
+
+import { useProfileApi } from '../../api/useProfileApi';
 
 const props = defineProps<{
   profile: ProfileDto;
@@ -23,19 +33,40 @@ const emits = defineEmits<{
 const FormItem = Form.Item;
 
 const formModel = ref({} as ProfileDto);
+const pictureState = ref<{
+  file?: any;
+  uploading: boolean;
+}>({
+  uploading: false,
+});
 
 const userStore = useUserStore();
 const { isTrue } = useSettings();
+const { changePictureApi, getPictureApi } = useProfileApi();
 
 const avatar = computed(() => {
   return userStore.userInfo?.avatar ?? preferences.app.defaultAvatar;
 });
-function onAvatarChange(_param: UploadChangeParam) {
-  // TODO: oss模块集成后完成
-  console.warn('等待oss模块集成完成...');
+async function onAvatarChange(_param: UploadChangeParam) {
+  pictureState.value.uploading = true;
+  try {
+    await changePictureApi({
+      file: pictureState.value.file,
+    });
+    if (userStore.userInfo?.avatar) {
+      URL.revokeObjectURL(userStore.userInfo.avatar);
+    }
+    const picture = await getPictureApi();
+    userStore.$patch((state) => {
+      state.userInfo && (state.userInfo.avatar = URL.createObjectURL(picture));
+    });
+    message.success($t('AbpUi.SavedSuccessfully'));
+  } finally {
+    pictureState.value.uploading = false;
+  }
 }
-function onBeforeUpload(_file: FileType) {
-  console.warn('等待oss模块集成完成...');
+function onBeforeUpload(file: FileType) {
+  pictureState.value.file = file;
   return false;
 }
 function onSubmit() {
@@ -110,7 +141,7 @@ watchEffect(() => {
             name="file"
             @change="onAvatarChange"
           >
-            <Button class="mt-4">
+            <Button class="mt-4" :loading="pictureState.uploading">
               <UploadOutlined />
               {{ $t('abp.account.settings.changeAvatar') }}
             </Button>

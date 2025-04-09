@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application;
 using Volo.Abp.Authorization;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Modularity;
 
 namespace PackageName.CompanyName.ProjectName;
@@ -12,6 +13,7 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpDddApplicationModule),
     typeof(ProjectNameDomainModule),
     typeof(ProjectNameApplicationContractsModule),
+    typeof(AbpBackgroundJobsModule),
     typeof(AbpDynamicQueryableApplicationModule))]
 public class ProjectNameApplicationModule : AbpModule
 {

@@ -1,11 +1,13 @@
 ﻿using LINGYUN.Abp.Encryption.SM4;
 using System.Text;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security;
 using Volo.Abp.Security.Encryption;
 
 namespace LINGYUN.Abp.Encryption.Console;
 
-[DependsOn(typeof(AbpEncryptionSM4Module))]
+//[DependsOn(typeof(AbpEncryptionSM4Module))]
+[DependsOn(typeof(AbpSecurityModule))]
 public class AbpEncryptionConsoleModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

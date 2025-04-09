@@ -33,14 +33,14 @@ public class WeChatWorkInternalUserFinder : IWeChatWorkInternalUserFinder
         return userLogin?.ProviderKey;
     }
 
-    public async virtual Task<string> FindUserIdentifierAsync(string agentId, Guid userId, CancellationToken cancellationToken = default)
+    public async virtual Task<string> FindUserIdentifierAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         var user = await UserManager.FindByIdAsync(userId.ToString());
 
         return GetUserOpenIdOrNull(user, AbpWeChatWorkGlobalConsts.ProviderName);
     }
 
-    public async virtual Task<List<string>> FindUserIdentifierListAsync(string agentId, IEnumerable<Guid> userIdList, CancellationToken cancellationToken = default)
+    public async virtual Task<List<string>> FindUserIdentifierListAsync(IEnumerable<Guid> userIdList, CancellationToken cancellationToken = default)
     {
         var userIdentifiers = new List<string>();
         foreach (var userId in userIdList)

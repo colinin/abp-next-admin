@@ -1,8 +1,10 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.OpenIddict.Permissions;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -20,9 +22,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System;
 using System.Linq;
@@ -32,18 +31,18 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Client;
-using Volo.Abp.Identity.Localization;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.OpenIddict.Localization;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
@@ -56,7 +55,6 @@ namespace LY.MicroService.AuthServer;
 public partial class AuthServerHttpApiHostModule
 {
     public static string ApplicationName { get; set; } = "AuthService";
-    protected const string DefaultCorsPolicyName = "Default";
 
     private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
@@ -115,6 +113,22 @@ public partial class AuthServerHttpApiHostModule
         });
     }
 
+    private void ConfigureBlobStoring(IConfiguration configuration)
+    {
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            // all container use oss management
+            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+            {
+                // use oss management
+                containerConfiguration.UseOssManagement(config =>
+                {
+                    config.Bucket = configuration[OssManagementBlobProviderConfigurationNames.Bucket];
+                });
+            });
+        });
+    }
+
     private void ConfigureDbContext()
     {
         // 配置Ef
@@ -126,6 +140,36 @@ public partial class AuthServerHttpApiHostModule
                     // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
                     mysql.TranslateParameterizedCollectionsToConstants();
                 });
+        });
+
+        Configure<AbpDbConnectionOptions>(options =>
+        {
+            options.Databases.Configure("Platform", database =>
+            {
+                database.MapConnection("AbpSaas");
+                database.MapConnection("Workflow");
+                database.MapConnection("AppPlatform");
+                database.MapConnection("TaskManagement");
+                database.MapConnection("AbpAuditLogging");
+                database.MapConnection("AbpTextTemplating");
+                database.MapConnection("AbpSettingManagement");
+                database.MapConnection("AbpFeatureManagement");
+                database.MapConnection("AbpPermissionManagement");
+                database.MapConnection("AbpLocalizationManagement");
+                database.MapConnection("AbpDataProtectionManagement");
+            });
+            options.Databases.Configure("Identity", database =>
+            {
+                database.MapConnection("AbpGdpr");
+                database.MapConnection("AbpIdentity");
+                database.MapConnection("AbpOpenIddict");
+                database.MapConnection("AbpIdentityServer");
+            });
+            options.Databases.Configure("Realtime", database =>
+            {
+                database.MapConnection("Notifications");
+                database.MapConnection("MessageService");
+            });
         });
     }
 
@@ -226,53 +270,6 @@ public partial class AuthServerHttpApiHostModule
         {
             var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
             services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
-        }
-    }
-
-    private void ConfigureOpenTelemetry(IServiceCollection services, IConfiguration configuration)
-    {
-        var openTelemetryEnabled = configuration["OpenTelemetry:IsEnabled"];
-        if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
-        {
-            services.AddOpenTelemetry()
-                .ConfigureResource(resource =>
-                {
-                    resource.AddService(ApplicationName);
-                })
-                .WithTracing(tracing =>
-                {
-                    tracing.AddHttpClientInstrumentation();
-                    tracing.AddAspNetCoreInstrumentation();
-                    tracing.AddCapInstrumentation();
-                    tracing.AddEntityFrameworkCoreInstrumentation();
-                    tracing.AddSource(ApplicationName);
-
-                    var tracingOtlpEndpoint = configuration["OpenTelemetry:Otlp:Endpoint"];
-                    if (!tracingOtlpEndpoint.IsNullOrWhiteSpace())
-                    {
-                        tracing.AddOtlpExporter(otlpOptions =>
-                        {
-                            otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
-                        });
-                        return;
-                    }
-
-                    var zipkinEndpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-                    if (!zipkinEndpoint.IsNullOrWhiteSpace())
-                    {
-                        tracing.AddZipkinExporter(zipKinOptions =>
-                        {
-                            zipKinOptions.Endpoint = new Uri(zipkinEndpoint);
-                        });
-                        return;
-                    }
-                })
-                .WithMetrics(metrics =>
-                {
-                    metrics.AddRuntimeInstrumentation();
-                    metrics.AddHttpClientInstrumentation();
-                    metrics.AddAspNetCoreInstrumentation();
-                });
         }
     }
 
@@ -404,10 +401,6 @@ public partial class AuthServerHttpApiHostModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-
-            options.UsePersistences(
-                typeof(IdentityResource),
-                typeof(AbpOpenIddictResource));
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -421,13 +414,18 @@ public partial class AuthServerHttpApiHostModule
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
         });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
+        });
     }
 
     private void ConfigureCors(IServiceCollection services, IConfiguration configuration)
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            options.AddDefaultPolicy(builder =>
             {
                 builder
                     .WithOrigins(

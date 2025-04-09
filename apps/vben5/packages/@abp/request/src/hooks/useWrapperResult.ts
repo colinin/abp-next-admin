@@ -24,7 +24,15 @@ export function useWrapperResult(response: AxiosResponse) {
     const hasSuccess = data && Reflect.has(data, 'code') && code === '0';
     if (!hasSuccess) {
       const content = details || message;
-      throw Object.assign({}, response, { message: content, response });
+      throw Object.assign({}, response, {
+        response: {
+          ...response,
+          data: {
+            ...response.data,
+            message: content,
+          },
+        },
+      });
     }
   }
 

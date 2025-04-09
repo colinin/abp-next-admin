@@ -2,7 +2,9 @@
 using LINGYUN.Abp.DataProtection.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PackageName.CompanyName.ProjectName.Users;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 #if MySQL
 using Volo.Abp.EntityFrameworkCore.MySQL;
@@ -38,6 +40,7 @@ namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 #elif PostgreSql
     typeof(AbpEntityFrameworkCorePostgreSqlModule),
 #endif
+    typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule))]
 public class ProjectNameEntityFrameworkCoreModule : AbpModule
 {
@@ -70,7 +73,8 @@ public class ProjectNameEntityFrameworkCoreModule : AbpModule
 
         context.Services.AddAbpDbContext<ProjectNameDbContext>(options =>
         {
-            options.AddDefaultRepositories<IProjectNameDbContext>();
+            options.AddDefaultRepositories<IProjectNameDbContext>(true);
+            options.AddRepository<User, UserRepository>();
         });
     }
 }

@@ -19,6 +19,8 @@ public class AbpDataProtectionManagementEntityFrameworkCoreModule : AbpModule
             options.AddRepository<RoleEntityRule, EfCoreRoleEntityRuleRepository>();
             options.AddRepository<OrganizationUnitEntityRule, EfCoreOrganizationUnitEntityRuleRepository>();
 
+            options.AddRepository<SubjectStrategy, EfCoreSubjectStrategyRepository>();
+
             options.AddDefaultRepositories();
         });
     }

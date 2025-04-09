@@ -9,12 +9,10 @@ namespace LINGYUN.Abp.WeChat.Work.Authorize;
 public interface IWeChatWorkUserFinder
 {
     Task<WeChatWorkUserInfo> GetUserInfoAsync(
-        string agentId,
         string code,
         CancellationToken cancellationToken = default);
 
     Task<WeChatWorkUserDetail> GetUserDetailAsync(
-        string agentId,
         string userTicket,
         CancellationToken cancellationToken = default);
 }

@@ -3,6 +3,7 @@ using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Wrapper;
@@ -19,9 +20,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -33,13 +31,13 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Identity.Localization;
-using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
@@ -125,6 +123,36 @@ public partial class IdentityServerHttpApiHostModule
                     // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
                     mysql.TranslateParameterizedCollectionsToConstants();
                 });
+        });
+
+        Configure<AbpDbConnectionOptions>(options =>
+        {
+            options.Databases.Configure("Platform", database =>
+            {
+                database.MapConnection("AbpSaas");
+                database.MapConnection("Workflow");
+                database.MapConnection("AppPlatform");
+                database.MapConnection("TaskManagement");
+                database.MapConnection("AbpAuditLogging");
+                database.MapConnection("AbpTextTemplating");
+                database.MapConnection("AbpSettingManagement");
+                database.MapConnection("AbpFeatureManagement");
+                database.MapConnection("AbpPermissionManagement");
+                database.MapConnection("AbpLocalizationManagement");
+                database.MapConnection("AbpDataProtectionManagement");
+            });
+            options.Databases.Configure("Identity", database =>
+            {
+                database.MapConnection("AbpGdpr");
+                database.MapConnection("AbpIdentity");
+                database.MapConnection("AbpOpenIddict");
+                database.MapConnection("AbpIdentityServer");
+            });
+            options.Databases.Configure("Realtime", database =>
+            {
+                database.MapConnection("Notifications");
+                database.MapConnection("MessageService");
+            });
         });
     }
 
@@ -217,53 +245,6 @@ public partial class IdentityServerHttpApiHostModule
                 }
             }
         });
-    }
-
-    private void ConfigureOpenTelemetry(IServiceCollection services, IConfiguration configuration)
-    {
-        var openTelemetryEnabled = configuration["OpenTelemetry:IsEnabled"];
-        if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
-        {
-            services.AddOpenTelemetry()
-                .ConfigureResource(resource =>
-                {
-                    resource.AddService(ApplicationName);
-                })
-                .WithTracing(tracing =>
-                {
-                    tracing.AddHttpClientInstrumentation();
-                    tracing.AddAspNetCoreInstrumentation();
-                    tracing.AddCapInstrumentation();
-                    tracing.AddEntityFrameworkCoreInstrumentation();
-                    tracing.AddSource(ApplicationName);
-
-                    var tracingOtlpEndpoint = configuration["OpenTelemetry:Otlp:Endpoint"];
-                    if (!tracingOtlpEndpoint.IsNullOrWhiteSpace())
-                    {
-                        tracing.AddOtlpExporter(otlpOptions =>
-                        {
-                            otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
-                        });
-                        return;
-                    }
-
-                    var zipkinEndpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-                    if (!zipkinEndpoint.IsNullOrWhiteSpace())
-                    {
-                        tracing.AddZipkinExporter(zipKinOptions =>
-                        {
-                            zipKinOptions.Endpoint = new Uri(zipkinEndpoint);
-                        });
-                        return;
-                    }
-                })
-                .WithMetrics(metrics =>
-                {
-                    metrics.AddRuntimeInstrumentation();
-                    metrics.AddHttpClientInstrumentation();
-                    metrics.AddAspNetCoreInstrumentation();
-                });
-        }
     }
 
     private void ConfigureDistributedLocking(IServiceCollection services, IConfiguration configuration)
@@ -408,10 +389,6 @@ public partial class IdentityServerHttpApiHostModule
             options.Resources
                    .Get<IdentityResource>()
                    .AddVirtualJson("/Localization/Resources");
-
-            options.UsePersistences(
-                typeof(IdentityResource),
-                typeof(AbpIdentityServerResource));
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -424,6 +401,11 @@ public partial class IdentityServerHttpApiHostModule
 
             options.CulturesMaps.Add(zhHansCultureMapInfo);
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
+        });
+
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.SaveStaticLocalizationsToDatabase = true;
         });
     }
 

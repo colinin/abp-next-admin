@@ -27,7 +27,7 @@ import {
   Textarea,
 } from 'ant-design-vue';
 
-import { createApi, getApi, updateApi } from '../../api/definitions';
+import { useDefinitionsApi } from '../../api/useDefinitionsApi';
 
 defineOptions({
   name: 'SettingDefinitionModal',
@@ -55,6 +55,8 @@ const providerOptions = reactive([
   { label: $t('AbpSettingManagement.Providers:User'), value: 'U' },
 ]);
 
+const { createApi, getApi, updateApi } = useDefinitionsApi();
+
 const [Modal, modalApi] = useVbenModal({
   class: 'w-1/2',
   draggable: true,
@@ -67,7 +69,7 @@ const [Modal, modalApi] = useVbenModal({
     const api = isEditModel.value
       ? updateApi(formModel.value.name, toValue(formModel))
       : createApi(toValue(formModel));
-    modalApi.setState({ confirmLoading: true, loading: true });
+    modalApi.setState({ submitting: true });
     api
       .then((res) => {
         message.success($t('AbpUi.SavedSuccessfully'));
@@ -75,7 +77,7 @@ const [Modal, modalApi] = useVbenModal({
         modalApi.close();
       })
       .finally(() => {
-        modalApi.setState({ confirmLoading: false, loading: false });
+        modalApi.setState({ submitting: false });
       });
   },
   onOpenChange: async (isOpen: boolean) => {

@@ -20,6 +20,10 @@ namespace LINGYUN.Abp.LocalizationManagement
             CancellationToken cancellationToken = default
             );
 
+        List<Text> GetList(
+            string resourceName = null,
+            string cultureName = null);
+
         Task<List<Text>> GetListAsync(
             string resourceName = null,
             string cultureName = null,

@@ -1,0 +1,31 @@
+﻿@using LINGYUN.Abp.Gdpr.Web.Pages.Account.Components.ProfileManagementGroup.Gdpr
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LINGYUN.Abp.Gdpr.Localization
+@using Volo.Abp.Localization
+
+@inject IHtmlLocalizer<GdprResource> L
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["PersonalData"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                <abp-button-group>
+                    <abp-button id="RequestPersonalDataButton"
+                            text="@L["RequestPersonalData"].Value"
+                            icon="id-card"
+                            button-type="Primary" />
+                    <abp-button id="DeletePersonalDataButton"
+                            text="@L["DeletePersonalData"].Value"
+                            icon="remove"
+                            button-type="Outline_Danger" />
+                </abp-button-group>
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="PersonalDataTable"></abp-table>
+    </abp-card-body>
+</abp-card>

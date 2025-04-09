@@ -2,10 +2,8 @@
 <script setup lang="ts">
 import type { IdentityUserDto } from '../../types/users';
 
-import { useVbenModal } from '@vben/common-ui';
+import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
-
-import { useVbenForm } from '@abp/ui';
 
 import { useUsersApi } from '../../api/useUsersApi';
 
@@ -109,7 +107,7 @@ const [Modal, modalApi] = useVbenModal({
 async function onSubmit(input: Record<string, any>) {
   try {
     modalApi.setState({
-      confirmLoading: true,
+      submitting: true,
     });
     const lockSeconds = input.type * input.seconds;
     await lockApi(input.userId, lockSeconds);
@@ -117,7 +115,7 @@ async function onSubmit(input: Record<string, any>) {
     modalApi.close();
   } finally {
     modalApi.setState({
-      confirmLoading: false,
+      submitting: false,
     });
   }
 }

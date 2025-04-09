@@ -1,6 +1,16 @@
 ﻿{
   "culture": "en",
   "texts": {
-    "DataProtection:010001": "Data access permission not granted to protected resources!"
+    "DataProtection:010001": "Data access permission not granted to protected resources!",
+    "DisplayName:LastModifierId": "Last Modifier Id",
+    "DisplayName:LastModificationTime": "Last Modification Time",
+    "DisplayName:CreatorId": "Creator Id",
+    "DisplayName:CreationTime": "Creation Time",
+    "DataAccessStrategy:All": "All",
+    "DataAccessStrategy:Custom": "Custom",
+    "DataAccessStrategy:CurrentUser": "Current User",
+    "DataAccessStrategy:CurrentRoles": "Current Roles",
+    "DataAccessStrategy:CurrentOrganizationUnits": "Current Organization Units",
+    "DataAccessStrategy:CurrentAndSubOrganizationUnits": "Current And Sub Organization Units"
   }
 }

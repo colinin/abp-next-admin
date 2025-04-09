@@ -1,18 +1,21 @@
 ﻿using Asp.Versioning;
 using LINGYUN.Abp.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Content;
 
 namespace LINGYUN.Abp.Account;
 
-[RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
+[Authorize]
 [Area("account")]
 [ControllerName("Profile")]
-[Route("/api/account/my-profile")]
+[Route($"/api/{AccountRemoteServiceConsts.ModuleName}/my-profile")]
+[RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
 public class MyProfileController : AbpControllerBase, IMyProfileAppService
 {
     protected IMyProfileAppService MyProfileAppService { get; }
@@ -81,22 +84,36 @@ public class MyProfileController : AbpControllerBase, IMyProfileAppService
 
     [HttpGet]
     [Route("authenticator")]
-    public virtual Task<AuthenticatorDto> GetAuthenticator()
+    public virtual Task<AuthenticatorDto> GetAuthenticatorAsync()
     {
-        return MyProfileAppService.GetAuthenticator();
+        return MyProfileAppService.GetAuthenticatorAsync();
     }
 
     [HttpPost]
     [Route("verify-authenticator-code")]
-    public virtual Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCode(VerifyAuthenticatorCodeInput input)
+    public virtual Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCodeAsync(VerifyAuthenticatorCodeInput input)
     {
-        return MyProfileAppService.VerifyAuthenticatorCode(input);
+        return MyProfileAppService.VerifyAuthenticatorCodeAsync(input);
     }
 
     [HttpPost]
     [Route("reset-authenticator")]
-    public virtual Task ResetAuthenticator()
+    public virtual Task ResetAuthenticatorAsync()
     {
-        return MyProfileAppService.ResetAuthenticator();
+        return MyProfileAppService.ResetAuthenticatorAsync();
+    }
+
+    [HttpPost]
+    [Route("picture")]
+    public virtual Task ChangePictureAsync([FromForm] ChangePictureInput input)
+    {
+        return MyProfileAppService.ChangePictureAsync(input);
+    }
+
+    [HttpGet]
+    [Route("picture")]
+    public virtual Task<IRemoteStreamContent> GetPictureAsync()
+    {
+        return MyProfileAppService.GetPictureAsync();
     }
 }
