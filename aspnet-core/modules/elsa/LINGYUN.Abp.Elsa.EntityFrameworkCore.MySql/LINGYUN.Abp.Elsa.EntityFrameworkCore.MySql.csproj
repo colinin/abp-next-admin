@@ -25,7 +25,7 @@
 		<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" />
 		<PackageReference Include="Elsa.WorkflowSettings.Persistence.EntityFramework.MySql" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="9.0.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="9.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
