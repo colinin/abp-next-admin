@@ -2,7 +2,6 @@ using LINGYUN.Abp.Identity.WeChat.Work;
 using LINGYUN.Abp.Notifications.Templating;
 using LINGYUN.Abp.Notifications.WeChat.Work;
 using LINGYUN.Abp.OssManagement.Minio;
-using LINGYUN.Abp.Quartz.MySqlInstaller;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -231,10 +230,6 @@ namespace LY.MicroService.Applications.Single;
     // 权限管理模块 组织机构集成
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
 
-    typeof(SingleMigrationsEntityFrameworkCoreMySqlModule),
-    // 实体框架MySQL集成
-    // typeof(AbpEntityFrameworkCoreMySQLModule),
-
     // 短信模块 阿里云集成
     typeof(AbpAliyunSmsModule),
     // 阿里云模块 设置管理
@@ -265,8 +260,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpBackgroundTasksNotificationsModule),
     // 后台任务模块 Quartz集成
     typeof(AbpBackgroundTasksQuartzModule),
-    // Quartz MySql数据库初始化模块
-    typeof(AbpQuartzMySqlInstallerModule),
 
     // 数据审计模块 应用服务
     typeof(AbpDataProtectionManagementApplicationModule),
@@ -366,8 +359,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpElsaActivitiesModule),
     // Elsa工作流模块 实体框架
     typeof(AbpElsaEntityFrameworkCoreModule),
-    // Elsa工作流模块 MySql集成
-    typeof(AbpElsaEntityFrameworkCoreMySqlModule),
 
     // 数据导出模块 MiniExcel集成
     typeof(AbpExporterMiniExcelModule),
@@ -377,7 +368,12 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAspNetCoreMvcIdempotentWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpMailKitModule),
-    typeof(AbpAutofacModule)
+    typeof(AbpAutofacModule),
+
+    // 取消注释使用MySql
+     typeof(SingleMigrationsEntityFrameworkCoreMySqlModule)
+    // 取消注释使用SqlServer
+    //typeof(SingleMigrationsEntityFrameworkCoreSqlServerModule)
     )]
 public partial class MicroServiceApplicationsSingleModule : AbpModule
 {

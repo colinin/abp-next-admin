@@ -64,6 +64,7 @@ public class RoleEntityRuleAppService : DataProtectionManagementApplicationServi
 
         await EventBus.PublishAsync(
             new DataAccessResourceChangeEvent(
+                entityRule.IsEnabled,
                 new DataAccessResource(
                     RolePermissionValueProvider.ProviderName,
                     entityRule.RoleName,
@@ -103,6 +104,7 @@ public class RoleEntityRuleAppService : DataProtectionManagementApplicationServi
 
         await EventBus.PublishAsync(
             new DataAccessResourceChangeEvent(
+                entityRule.IsEnabled,
                 new DataAccessResource(
                     RolePermissionValueProvider.ProviderName,
                     entityRule.RoleName,

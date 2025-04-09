@@ -73,7 +73,7 @@ public class SqlServerQuartzSqlInstaller : IQuartzSqlInstaller, ITransientDepend
                 sqlCommand.Parameters.Add($"@Table_{index}", SqlDbType.NVarChar).Value = $"{tablePrefix}{_installerOptions.InstallTables[index]}";
             }
 
-            var rowsAffects = await sqlCommand.ExecuteScalarAsync() as long?;
+            var rowsAffects = await sqlCommand.ExecuteScalarAsync() as int?;
             if (rowsAffects > 0)
             {
                 Logger.LogInformation($"The `{dataBaseName}` tables has already exists.");

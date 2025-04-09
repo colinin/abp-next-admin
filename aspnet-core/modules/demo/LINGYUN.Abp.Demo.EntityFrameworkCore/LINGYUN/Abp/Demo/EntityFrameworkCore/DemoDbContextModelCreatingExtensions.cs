@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Demo.Authors;
+﻿using LINGYUN.Abp.DataProtection.EntityFrameworkCore;
+using LINGYUN.Abp.Demo.Authors;
 using LINGYUN.Abp.Demo.Books;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
@@ -41,5 +42,7 @@ public static class DemoDbContextModelCreatingExtensions
 
             b.HasIndex(x => x.Name);
         });
+
+        builder.ConfigureEntityAuth<Book, Guid, BookAuth>();
     }
 }

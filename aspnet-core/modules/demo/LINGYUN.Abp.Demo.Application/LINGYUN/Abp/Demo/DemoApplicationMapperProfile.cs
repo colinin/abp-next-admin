@@ -15,7 +15,7 @@ public class DemoApplicationMapperProfile : Profile
             .Ignore(dto => dto.Id)
             .Ignore(dto => dto.ExtraProperties)
             .Ignore(dto => dto.ConcurrencyStamp);
-        CreateMap<CreateUpdateBookDto, Book>()
+        CreateMap<UpdateBookDto, Book>()
             .IgnoreAuditedObjectProperties()
             .Ignore(dto => dto.Id)
             .Ignore(dto => dto.ExtraProperties)

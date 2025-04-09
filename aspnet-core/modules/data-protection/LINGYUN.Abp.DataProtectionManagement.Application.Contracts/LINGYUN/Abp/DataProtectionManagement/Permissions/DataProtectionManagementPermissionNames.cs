@@ -30,6 +30,12 @@ public static class DataProtectionManagementPermissionNames
         public const string Delete = Default + ".Delete";
     }
 
+    public static class SubjectStrategy
+    {
+        public const string Default = GroupName + ".SubjectStrategy";
+        public const string Change = Default + ".Change";
+    }
+
     public static string[] GetAll()
     {
         return ReflectionHelper.GetPublicConstantsRecursively(typeof(DataProtectionManagementPermissionNames));

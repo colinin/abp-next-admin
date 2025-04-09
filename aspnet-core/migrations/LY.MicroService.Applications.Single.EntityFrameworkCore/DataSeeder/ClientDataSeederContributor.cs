@@ -7,6 +7,8 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.OpenIddict.Applications;
+using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.PermissionManagement;
 
 namespace LY.MicroService.Applications.Single.EntityFrameworkCore.DataSeeder;
@@ -14,21 +16,28 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.DataSeeder;
 public class ClientDataSeederContributor : IDataSeedContributor, ITransientDependency
 {
     private readonly IOpenIddictApplicationManager _applicationManager;
+    private readonly IOpenIddictApplicationRepository _applicationRepository;
+
     private readonly IOpenIddictScopeManager _scopeManager;
+    private readonly IOpenIddictScopeRepository _scopeRepository;
 
     private readonly IPermissionDataSeeder _permissionDataSeeder;
     private readonly IConfiguration _configuration;
     private readonly ICurrentTenant _currentTenant;
 
     public ClientDataSeederContributor(
-        IOpenIddictApplicationManager applicationManager, 
+        IOpenIddictApplicationManager applicationManager,
+        IOpenIddictApplicationRepository applicationRepository,
         IOpenIddictScopeManager scopeManager, 
+        IOpenIddictScopeRepository scopeRepository,
         IPermissionDataSeeder permissionDataSeeder, 
         IConfiguration configuration, 
         ICurrentTenant currentTenant)
     {
         _applicationManager = applicationManager;
+        _applicationRepository = applicationRepository;
         _scopeManager = scopeManager;
+        _scopeRepository = scopeRepository;
         _permissionDataSeeder = permissionDataSeeder;
         _configuration = configuration;
         _currentTenant = currentTenant;
@@ -52,7 +61,7 @@ public class ClientDataSeederContributor : IDataSeedContributor, ITransientDepen
 
     private async Task CreateScopeAsync(string scope)
     {
-        if (await _scopeManager.FindByNameAsync(scope) == null)
+        if (await _scopeRepository.FindByNameAsync(scope) == null)
         {
             await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor()
             {
@@ -80,7 +89,7 @@ public class ClientDataSeederContributor : IDataSeedContributor, ITransientDepen
         {
             var vueClientRootUrl = configurationSection["VueAdmin:RootUrl"].EnsureEndsWith('/');
 
-            if (await _applicationManager.FindByClientIdAsync(vueClientId) == null)
+            if (await _applicationRepository.FindByClientIdAsync(vueClientId) == null)
             {
                 await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
                 {
@@ -103,10 +112,10 @@ public class ClientDataSeederContributor : IDataSeedContributor, ITransientDepen
                     {
                         OpenIddictConstants.Permissions.Endpoints.Authorization,
                         OpenIddictConstants.Permissions.Endpoints.Token,
-                        OpenIddictConstants.Permissions.Endpoints.Device,
+                        OpenIddictConstants.Permissions.Endpoints.DeviceAuthorization,
                         OpenIddictConstants.Permissions.Endpoints.Introspection,
                         OpenIddictConstants.Permissions.Endpoints.Revocation,
-                        OpenIddictConstants.Permissions.Endpoints.Logout,
+                        OpenIddictConstants.Permissions.Endpoints.EndSession,
 
                         OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
                         OpenIddictConstants.Permissions.GrantTypes.Implicit,
@@ -144,7 +153,7 @@ public class ClientDataSeederContributor : IDataSeedContributor, ITransientDepen
         var internalServiceClientId = configurationSection["InternalService:ClientId"];
         if (!internalServiceClientId.IsNullOrWhiteSpace())
         {
-            if (await _applicationManager.FindByClientIdAsync(internalServiceClientId) == null)
+            if (await _applicationRepository.FindByClientIdAsync(internalServiceClientId) == null)
             {
                 await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
                 {
@@ -158,10 +167,10 @@ public class ClientDataSeederContributor : IDataSeedContributor, ITransientDepen
                     {
                         OpenIddictConstants.Permissions.Endpoints.Authorization,
                         OpenIddictConstants.Permissions.Endpoints.Token,
-                        OpenIddictConstants.Permissions.Endpoints.Device,
+                        OpenIddictConstants.Permissions.Endpoints.DeviceAuthorization,
                         OpenIddictConstants.Permissions.Endpoints.Introspection,
                         OpenIddictConstants.Permissions.Endpoints.Revocation,
-                        OpenIddictConstants.Permissions.Endpoints.Logout,
+                        OpenIddictConstants.Permissions.Endpoints.EndSession,
 
                         OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
                         OpenIddictConstants.Permissions.GrantTypes.Implicit,
@@ -189,9 +198,9 @@ public class ClientDataSeederContributor : IDataSeedContributor, ITransientDepen
                 });
 
                 var internalServicePermissions = new string[2]
-            {
-                "AbpIdentity.UserLookup","AbpIdentity.Users"
-            };
+                {
+                    "AbpIdentity.UserLookup","AbpIdentity.Users"
+                };
                 await _permissionDataSeeder.SeedAsync(ClientPermissionValueProvider.ProviderName, internalServiceClientId, internalServicePermissions);
             }
         }

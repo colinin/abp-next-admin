@@ -53,6 +53,7 @@ public class DataAccessResource
         EntityTypeFullName = entityTypeFullName;
         Operation = operation;
         FilterGroup = filterGroup;
+
         AccessedProperties = new List<string>();
     }
 }

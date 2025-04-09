@@ -5,6 +5,12 @@
     "DisplayName:LastModifierId": "上次修改人",
     "DisplayName:LastModificationTime": "上次修改时间",
     "DisplayName:CreatorId": "创建人",
-    "DisplayName:CreationTime": "创建时间"
+    "DisplayName:CreationTime": "创建时间",
+    "DataAccessStrategy:All": "可以访问所有数据",
+    "DataAccessStrategy:Custom": "自定义规则",
+    "DataAccessStrategy:CurrentUser": "仅当前用户",
+    "DataAccessStrategy:CurrentRoles": "仅当前用户角色",
+    "DataAccessStrategy:CurrentOrganizationUnits": "仅当前用户组织机构",
+    "DataAccessStrategy:CurrentAndSubOrganizationUnits": "仅当前用户组织机构及下级机构"
   }
 }

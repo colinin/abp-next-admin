@@ -14,6 +14,8 @@ public class DataProtectionManagementApplicationMappingProfile :Profile
             .ForMember(dto => dto.AccessedProperties, map => map.MapFrom(src => MapToArray(src.AccessedProperties)));
         CreateMap<OrganizationUnitEntityRule, OrganizationUnitEntityRuleDto>()
             .ForMember(dto => dto.AccessedProperties, map => map.MapFrom(src => MapToArray(src.AccessedProperties)));
+
+        CreateMap<SubjectStrategy, SubjectStrategyDto>();
     }
 
     private string[] MapToArray(string val)

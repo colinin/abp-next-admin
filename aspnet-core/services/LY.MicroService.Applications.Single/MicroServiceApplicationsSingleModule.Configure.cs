@@ -52,10 +52,6 @@ public partial class MicroServiceApplicationsSingleModule
                 return;
             }
             options
-                .UseMySql(sqlOptions =>
-                {
-                    configuration.GetSection("CAP:MySql").Bind(sqlOptions);
-                })
                 .UseRabbitMQ(rabbitMQOptions =>
                 {
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
@@ -165,7 +161,7 @@ public partial class MicroServiceApplicationsSingleModule
         PreConfigure<AbpQuartzOptions>(options =>
         {
             // 如果使用持久化存储, 则配置quartz持久层
-            if (configuration.GetSection("Quartz:UsePersistentStore").Get<bool>())
+            if (configuration.GetValue("Quartz:UsePersistentStore", false))
             {
                 var settings = configuration.GetSection("Quartz:Properties").Get<Dictionary<string, string>>();
                 if (settings != null)

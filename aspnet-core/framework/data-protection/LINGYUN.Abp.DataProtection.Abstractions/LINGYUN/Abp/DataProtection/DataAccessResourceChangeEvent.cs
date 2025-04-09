@@ -7,14 +7,16 @@ namespace LINGYUN.Abp.DataProtection;
 [EventName("abp.data_protection.resource_changed")]
 public class DataAccessResourceChangeEvent
 {
+    public bool IsEnabled { get; set; }
     public DataAccessResource Resource { get; set; }
     public DataAccessResourceChangeEvent()
     {
 
     }
 
-    public DataAccessResourceChangeEvent(DataAccessResource resource)
+    public DataAccessResourceChangeEvent(bool isEnabled, DataAccessResource resource)
     {
+        IsEnabled = isEnabled;
         Resource = resource;
     }
 }

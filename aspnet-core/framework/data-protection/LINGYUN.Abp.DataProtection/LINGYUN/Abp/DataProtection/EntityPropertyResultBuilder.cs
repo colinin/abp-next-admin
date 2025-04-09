@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -12,16 +11,19 @@ namespace LINGYUN.Abp.DataProtection;
 public class EntityPropertyResultBuilder : IEntityPropertyResultBuilder, ITransientDependency
 {
     private readonly IDataFilter _dataFilter;
+    private readonly IDataAccessScope _dataAccessScope;
     private readonly IServiceProvider _serviceProvider;
     private readonly AbpDataProtectionOptions _options;
 
     public EntityPropertyResultBuilder(
         IDataFilter dataFilter,
+        IDataAccessScope dataAccessScope,
         IServiceProvider serviceProvider,
         IOptions<AbpDataProtectionOptions> options)
     {
         _options = options.Value;
         _dataFilter = dataFilter;
+        _dataAccessScope = dataAccessScope;
         _serviceProvider = serviceProvider;
     }
 
@@ -131,20 +133,12 @@ public class EntityPropertyResultBuilder : IEntityPropertyResultBuilder, ITransi
             return false;
         }
 
-        var disableAttr = entityType.GetCustomAttribute<DisableDataProtectedAttribute>();
-        if (disableAttr != null)
+        if (entityType.IsDefined(typeof(DisableDataProtectedAttribute), true))
         {
-            if (disableAttr.Operation.HasValue && disableAttr.Operation != operation)
-            {
-                return true;
-            }
-
             return false;
         }
 
-        var dataProtected = entityType.GetCustomAttribute<DataProtectedAttribute>();
-
-        if (dataProtected != null && dataProtected.Operation != operation)
+        if (_dataAccessScope.Operations != null && !_dataAccessScope.Operations.Contains(operation))
         {
             return false;
         }

@@ -1284,6 +1284,14 @@
               "name": "INotificationAppService",
               "methods": [
                 {
+                  "name": "GetAssignableProvidersAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationProviderDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationProviderDto>"
+                  }
+                },
+                {
                   "name": "GetAssignableNotifiersAsync",
                   "parametersOnMethod": [],
                   "returnValue": {
@@ -1317,7 +1325,7 @@
                   }
                 },
                 {
-                  "name": "SendAsync",
+                  "name": "SendTemplateAsync",
                   "parametersOnMethod": [
                     {
                       "name": "input",
@@ -1374,6 +1382,43 @@
               "allowAnonymous": false,
               "implementFrom": "LINGYUN.Abp.Notifications.INotificationAppService"
             },
+            "SendTemplateAsyncByInput": {
+              "uniqueName": "SendTemplateAsyncByInput",
+              "name": "SendTemplateAsync",
+              "httpMethod": "POST",
+              "url": "api/notifications/send/template",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Notifications.NotificationTemplateSendDto, LINGYUN.Abp.Notifications.Application.Contracts",
+                  "type": "LINGYUN.Abp.Notifications.NotificationTemplateSendDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.NotificationTemplateSendDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Notifications.NotificationTemplateSendDto",
+                  "typeSimple": "LINGYUN.Abp.Notifications.NotificationTemplateSendDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.INotificationAppService"
+            },
             "GetAssignableNotifiersAsync": {
               "uniqueName": "GetAssignableNotifiersAsync",
               "name": "GetAssignableNotifiersAsync",
@@ -1400,6 +1445,21 @@
               "returnValue": {
                 "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationTemplateDto>",
                 "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationTemplateDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Notifications.INotificationAppService"
+            },
+            "GetAssignableProvidersAsync": {
+              "uniqueName": "GetAssignableProvidersAsync",
+              "name": "GetAssignableProvidersAsync",
+              "httpMethod": "GET",
+              "url": "api/notifications/assignable-providers",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationProviderDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Notifications.NotificationProviderDto>"
               },
               "allowAnonymous": false,
               "implementFrom": "LINGYUN.Abp.Notifications.INotificationAppService"

@@ -36,18 +36,22 @@ public class AbpDataProtectedWritePropertiesInterceptor : SaveChangesInterceptor
                         allowProperties.AddIfNotContains(properties);
                     }
 
-                    if (DataProtectionOptions.Value.EntityIgnoreProperties.TryGetValue(entityType, out var entityIgnoreProps))
+                    // 仅配置了字段级控制才生效
+                    if (allowProperties.Count != 0)
                     {
-                        allowProperties.AddIfNotContains(entityIgnoreProps);
-                    }
-
-                    allowProperties.AddIfNotContains(DataProtectionOptions.Value.GlobalIgnoreProperties);
-
-                    foreach (var property in entry.Properties)
-                    {
-                        if (!allowProperties.Contains(property.Metadata.Name))
+                        if (DataProtectionOptions.Value.EntityIgnoreProperties.TryGetValue(entityType, out var entityIgnoreProps))
                         {
-                            property.IsModified = false;
+                            allowProperties.AddIfNotContains(entityIgnoreProps);
+                        }
+
+                        allowProperties.AddIfNotContains(DataProtectionOptions.Value.GlobalIgnoreProperties);
+
+                        foreach (var property in entry.Properties)
+                        {
+                            if (!allowProperties.Contains(property.Metadata.Name))
+                            {
+                                property.IsModified = false;
+                            }
                         }
                     }
                 }

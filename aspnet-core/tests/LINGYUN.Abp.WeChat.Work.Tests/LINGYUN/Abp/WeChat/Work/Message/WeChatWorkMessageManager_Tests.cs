@@ -26,7 +26,7 @@ public class WeChatWorkMessageManager_Tests : AbpWeChatWorkTestBase
         var response = await Sender.SendAsync(message);
         response.IsSuccessed.ShouldBeTrue();
 
-        var recallRet = await Manager.ReCallMessageAsync(agentId, response.MsgId);
+        var recallRet = await Manager.ReCallMessageAsync(response.MsgId);
         recallRet.ShouldBeTrue();
     }
 }
