@@ -3,6 +3,7 @@ using Elsa.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer;
 
@@ -24,6 +25,14 @@ public class AbpElsaEntityFrameworkCoreSqlServerModule : AbpModule
         PreConfigure<ElsaOptionsBuilder>(elsa =>
         {
             elsa.AddFeatures(startups, configuration);
+        });
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpElsaEntityFrameworkCoreSqlServerModule>();
         });
     }
 }

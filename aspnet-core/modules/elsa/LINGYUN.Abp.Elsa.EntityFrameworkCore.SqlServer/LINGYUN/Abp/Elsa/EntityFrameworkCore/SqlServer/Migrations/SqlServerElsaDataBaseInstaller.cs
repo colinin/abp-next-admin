@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.Quartz.SqlInstaller;
+﻿using LINGYUN.Abp.Elsa.EntityFrameworkCore.Migrations;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
@@ -9,46 +9,41 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Quartz;
 using Volo.Abp.VirtualFileSystem;
-using static Quartz.SchedulerBuilder;
 
-namespace LINGYUN.Abp.Quartz.SqlServerInstaller;
+namespace LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer.Migrations;
 
-public class SqlServerQuartzSqlInstaller : IQuartzSqlInstaller, ITransientDependency
+public class SqlServerElsaDataBaseInstaller : IElsaDataBaseInstaller, ITransientDependency
 {
-    public ILogger<SqlServerQuartzSqlInstaller> Logger { protected get; set; }
+    public ILogger<SqlServerElsaDataBaseInstaller> Logger { protected get; set; }
 
     private readonly IVirtualFileProvider _virtualFileProvider;
-    private readonly AbpQuartzSqlInstallerOptions _installerOptions;
-    private readonly AbpQuartzOptions _quartzOptions;
+    private readonly IConnectionStringResolver _connectionStringResolver;
 
-    public SqlServerQuartzSqlInstaller(
+    private readonly AbpElsaDataBaseInstallerOptions _installerOptions;
+
+    public SqlServerElsaDataBaseInstaller(
         IVirtualFileProvider virtualFileProvider,
-        IOptions<AbpQuartzOptions> quartzOptions,
-        IOptions<AbpQuartzSqlInstallerOptions> installerOptions)
+        IConnectionStringResolver connectionStringResolver,
+        IOptions<AbpElsaDataBaseInstallerOptions> installerOptions)
     {
-        _quartzOptions = quartzOptions.Value;
-        _virtualFileProvider = virtualFileProvider;
         _installerOptions = installerOptions.Value;
+        _virtualFileProvider = virtualFileProvider;
+        _connectionStringResolver = connectionStringResolver;
 
-        Logger = NullLogger<SqlServerQuartzSqlInstaller>.Instance;
+        Logger = NullLogger<SqlServerElsaDataBaseInstaller>.Instance;
     }
 
     public async virtual Task InstallAsync()
     {
-        var dataSource = _quartzOptions.Properties["quartz.jobStore.dataSource"] ?? AdoProviderOptions.DefaultDataSourceName;
-        var connectionString = _quartzOptions.Properties[$"quartz.dataSource.{dataSource}.connectionString"];
-        var tablePrefix = _quartzOptions.Properties["quartz.jobStore.tablePrefix"] ?? "QRTZ_";
-
+        var connectionString = await _connectionStringResolver.ResolveAsync("Workflow");
         if (connectionString.IsNullOrWhiteSpace())
         {
-            Logger.LogWarning($"Please configure the `{dataSource}` database connection string in `quartz.jobStore.dataSource`!");
+            Logger.LogWarning("Please configure the `Workflow` database connection string Workflow!");
             throw new ArgumentNullException(nameof(connectionString));
         }
-
-        Logger.LogInformation("Install Quartz SqlServer...");
 
         var builder = new SqlConnectionStringBuilder(connectionString);
 
@@ -64,13 +59,12 @@ public class SqlServerQuartzSqlInstaller : IQuartzSqlInstaller, ITransientDepend
         }
 
         var tableParams = _installerOptions.InstallTables.Select((_, index) => $"@Table_{index}").JoinAsString(",");
-        using (var sqlCommand = new SqlCommand($"SELECT COUNT(1) FROM [sys].[objects] WHERE type=N'U' AND name IN ({tableParams})", sqlConnection))
+        using (var sqlCommand = new SqlCommand($"SELECT COUNT(1) FROM [sys].[objects] WHERE type=N'U' AND name IN ({tableParams});", sqlConnection))
         {
             sqlCommand.Parameters.Add("@DataBaseName", SqlDbType.NVarChar).Value = dataBaseName;
-
             for (var index = 0; index < _installerOptions.InstallTables.Count; index++)
             {
-                sqlCommand.Parameters.Add($"@Table_{index}", SqlDbType.NVarChar).Value = $"{tablePrefix}{_installerOptions.InstallTables[index]}";
+                sqlCommand.Parameters.Add($"@Table_{index}", SqlDbType.NVarChar).Value = _installerOptions.InstallTables[index];
             }
 
             var rowsAffects = await sqlCommand.ExecuteScalarAsync() as int?;
@@ -83,15 +77,12 @@ public class SqlServerQuartzSqlInstaller : IQuartzSqlInstaller, ITransientDepend
 
         var sqlScript = await GetInitSqlScript();
 
-        // USE `${DataBase}`  ->  USE `Workflow`;
+        // USE `${DataBase}`  ->  USE `Workflow`;;
         sqlScript = sqlScript.ReplaceFirst("${DataBase}", dataBaseName);
-        // CREATE TABLE $(TablePrefix)JOB_DETAILS`  ->  CREATE TABLE QRTZ_JOB_DETAILS;
-        sqlScript = sqlScript.Replace("${TablePrefix}", tablePrefix);
 
         using (var sqlCommand = new SqlCommand(sqlScript, sqlConnection))
         {
             Logger.LogInformation("The database initialization script `Initial.sql` starts...");
-
             await sqlCommand.ExecuteNonQueryAsync();
         }
 
@@ -130,7 +121,7 @@ public class SqlServerQuartzSqlInstaller : IQuartzSqlInstaller, ITransientDepend
 
     public async virtual Task<string> GetInitSqlScript()
     {
-        var sqlScriptFileInfo = _virtualFileProvider.GetFileInfo("/LINGYUN/Abp/Quartz/SqlServerInstaller/Scripts/Initial.sql");
+        var sqlScriptFileInfo = _virtualFileProvider.GetFileInfo("/LINGYUN/Abp/Elsa/EntityFrameworkCore/SqlServer/Migrations/Initial.sql");
         if (!sqlScriptFileInfo.Exists || sqlScriptFileInfo.IsDirectory)
         {
             Logger.LogWarning("Please Check that the `Initial.sql` file exists!");
