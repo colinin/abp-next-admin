@@ -6,7 +6,7 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { TenantDto } from '../../types/tenants';
 
-import { defineAsyncComponent, h } from 'vue';
+import { defineAsyncComponent, h, reactive } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
@@ -41,6 +41,14 @@ const FeatureIcon = createIconifyIcon('pajamas:feature-flag');
 const { isEnabled } = useFeatures();
 const { hasAccessByCodes } = useAccess();
 const { cancel, deleteApi, getPagedListApi } = useTenantsApi();
+
+const dataBaseOptions = reactive([
+  { label: 'MySql', value: 'MySql' },
+  { label: 'Oracle', value: 'Oracle' },
+  { label: 'Postgres', value: 'Postgres' },
+  { label: 'Sqlite', value: 'Sqlite' },
+  { label: 'SqlServer', value: 'SqlServer' },
+]);
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -272,8 +280,8 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
       </div>
     </template>
   </Grid>
-  <TenantModal @change="() => query()" />
-  <TenantConnectionStringsModal />
+  <TenantModal :data-base-options="dataBaseOptions" @change="() => query()" />
+  <TenantConnectionStringsModal :data-base-options="dataBaseOptions" />
   <TenantFeatureModal />
   <TenantChangeDrawer />
 </template>

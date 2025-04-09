@@ -54,12 +54,19 @@ interface TenantCreateDto extends TenantCreateOrUpdateBase {
   useSharedDatabase: boolean;
 }
 
+interface TenantConnectionStringCheckInput {
+  connectionString: string;
+  name?: string;
+  provider: string;
+}
+
 interface TenantUpdateDto
   extends IHasConcurrencyStamp,
     TenantCreateOrUpdateBase {}
 
 export type {
   GetTenantPagedListInput,
+  TenantConnectionStringCheckInput,
   TenantConnectionStringDto,
   TenantConnectionStringSetInput,
   TenantCreateDto,

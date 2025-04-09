@@ -2,6 +2,7 @@ import type { ListResultDto, PagedResultDto } from '@abp/core';
 
 import type {
   GetTenantPagedListInput,
+  TenantConnectionStringCheckInput,
   TenantConnectionStringDto,
   TenantConnectionStringSetInput,
   TenantCreateDto,
@@ -139,8 +140,22 @@ export function useTenantsApi() {
     });
   }
 
+  /**
+   * 检查数据库连接字符串
+   * @param input 参数
+   */
+  function checkConnectionString(
+    input: TenantConnectionStringCheckInput,
+  ): Promise<void> {
+    return request(`/api/saas/tenants/connection-string/check`, {
+      data: input,
+      method: 'POST',
+    });
+  }
+
   return {
     cancel,
+    checkConnectionString,
     createApi,
     deleteApi,
     deleteConnectionStringApi,
