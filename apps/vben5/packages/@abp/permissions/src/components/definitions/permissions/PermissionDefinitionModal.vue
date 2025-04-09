@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { IHasSimpleStateCheckers, ISimpleStateChecker } from '@abp/core';
 import type { PropertyInfo } from '@abp/ui';
 import type { FormInstance } from 'ant-design-vue';
 
@@ -15,7 +16,7 @@ import {
   useLocalization,
   useLocalizationSerializer,
 } from '@abp/core';
-import { LocalizableInput, PropertyTable } from '@abp/ui';
+import { LocalizableInput, PropertyTable, SimpleStateChecking } from '@abp/ui';
 import {
   Checkbox,
   Form,
@@ -40,6 +41,13 @@ const emits = defineEmits<{
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
+interface PermissionStateChecker
+  extends IHasSimpleStateCheckers<PermissionStateChecker> {}
+
+class PermissionState implements PermissionStateChecker {
+  stateCheckers: ISimpleStateChecker<PermissionStateChecker>[] = [];
+}
+
 interface PermissionTreeVo {
   children: PermissionTreeVo[];
   displayName: string;
@@ -52,6 +60,7 @@ type TabKeys = 'basic' | 'props';
 const defaultModel = {
   isEnabled: true,
 } as PermissionDefinitionDto;
+const permissionState = new PermissionState();
 
 const isEditModel = ref(false);
 const activeTab = ref<TabKeys>('basic');
@@ -72,6 +81,7 @@ const {
 } = usePermissionDefinitionsApi();
 const [Modal, modalApi] = useVbenModal({
   class: 'w-1/2',
+  closeOnClickModal: false,
   draggable: true,
   fullscreenButton: false,
   onCancel() {
@@ -82,7 +92,7 @@ const [Modal, modalApi] = useVbenModal({
     const api = isEditModel.value
       ? updateApi(formModel.value.name, toValue(formModel))
       : createApi(toValue(formModel));
-    modalApi.setState({ confirmLoading: true, loading: true });
+    modalApi.setState({ submitting: true });
     api
       .then((res) => {
         message.success($t('AbpUi.SavedSuccessfully'));
@@ -90,7 +100,7 @@ const [Modal, modalApi] = useVbenModal({
         modalApi.close();
       })
       .finally(() => {
-        modalApi.setState({ confirmLoading: false, loading: false });
+        modalApi.setState({ submitting: false });
       });
   },
   onOpenChange: async (isOpen: boolean) => {
@@ -269,6 +279,26 @@ function onPropDelete(prop: PropertyInfo) {
             />
           </FormItem>
         </TabPane>
+        <!-- 状态检查 -->
+        <TabPane
+          key="stateCheckers"
+          :tab="$t('AbpPermissionManagement.StateCheckers')"
+        >
+          <FormItem
+            name="stateCheckers"
+            label=""
+            :label-col="{ span: 0 }"
+            :wrapper-col="{ span: 24 }"
+          >
+            <SimpleStateChecking
+              :disabled="formModel.isStatic"
+              :allow-delete="true"
+              :allow-edit="true"
+              v-model:value="formModel.stateCheckers"
+              :state="permissionState"
+            />
+          </FormItem>
+        </TabPane>
         <!-- 属性 -->
         <TabPane key="props" :tab="$t('AbpPermissionManagement.Properties')">
           <PropertyTable
@@ -284,4 +314,3 @@ function onPropDelete(prop: PropertyInfo) {
 </template>
 
 <style scoped></style>
-import { useLocalization, useLocalizationSerializer } from '@abp/core';

@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { IdentityRoleDto } from '../../types/roles';
 
@@ -12,7 +14,7 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
-import { useAbpStore, useFeatures } from '@abp/core';
+import { Events, useAbpStore, useEventBus, useFeatures } from '@abp/core';
 import { PermissionModal } from '@abp/permissions';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -37,8 +39,10 @@ const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 
 const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
 const ClaimModal = defineAsyncComponent(() => import('./RoleClaimModal.vue'));
+const RuleModal = defineAsyncComponent(() => import('./RoleRuleDrawer.vue'));
 
 const abpStore = useAbpStore();
+const { publish } = useEventBus();
 const { isEnabled } = useFeatures();
 const { hasAccessByCodes } = useAccess();
 const { cancel, deleteApi, getPagedListApi } = useRolesApi();
@@ -48,6 +52,9 @@ const [RolePermissionModal, permissionModalApi] = useVbenModal({
 });
 const [RoleClaimModal, claimModalApi] = useVbenModal({
   connectedComponent: ClaimModal,
+});
+const [RoleRuleDrawer, roleRuleDrawerApi] = useVbenDrawer({
+  connectedComponent: RuleModal,
 });
 const [RoleChangeDrawer, roleChangeDrawerApi] = useVbenDrawer({
   connectedComponent: EntityChangeDrawer,
@@ -143,7 +150,7 @@ const handleDelete = (row: IdentityRoleDto) => {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       query();
     },
     title: $t('AbpUi.AreYouSure'),
@@ -166,6 +173,11 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
       roleChangeDrawerApi.open();
       break;
     }
+    case 'entity-rules': {
+      roleRuleDrawerApi.setData(row);
+      roleRuleDrawerApi.open();
+      break;
+    }
     case 'permissions': {
       const roles = abpStore.application?.currentUser.roles ?? [];
       permissionModalApi.setData({
@@ -179,6 +191,13 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
     }
   }
 };
+
+function onPermissionChange(_name: string, key: string) {
+  const roles = abpStore.application?.currentUser.roles ?? [];
+  if (roles.includes(key)) {
+    publish(Events.PermissionChange);
+  }
+}
 </script>
 
 <template>
@@ -262,6 +281,9 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
               >
                 {{ $t('AbpAuditLogging.EntitiesChanged') }}
               </MenuItem>
+              <MenuItem key="entity-rules">
+                {{ '数据权限' }}
+              </MenuItem>
             </Menu>
           </template>
           <Button :icon="h(EllipsisOutlined)" type="link" />
@@ -271,8 +293,9 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
   </Grid>
   <RoleEditModal @change="() => query()" />
   <RoleClaimModal @change="query" />
-  <RolePermissionModal />
+  <RolePermissionModal @change="onPermissionChange" />
   <RoleChangeDrawer />
+  <RoleRuleDrawer />
 </template>
 
 <style lang="scss" scoped></style>

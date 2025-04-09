@@ -20,7 +20,7 @@ public static class AbpSaasErrorCodes
     /// </summary>
     public const string TenantIdOrNameNotFound = Namespace + ":020002";
     /// <summary>
-    /// 无效的默认连接字符串
+    /// 无法打开默认连接字符串指向的数据库连接
     /// </summary>
     public const string InvalidDefaultConnectionString = Namespace + ":020101";
     /// <summary>
@@ -31,4 +31,8 @@ public static class AbpSaasErrorCodes
     /// {Name} 的连接字符串无效
     /// </summary>
     public const string InvalidConnectionString = Namespace + ":020103";
+    /// <summary>
+    /// 不支持 {Name} 类型的数据库连接检查
+    /// </summary>
+    public const string ConnectionStringProviderNotSupport = Namespace + ":020104";
 }

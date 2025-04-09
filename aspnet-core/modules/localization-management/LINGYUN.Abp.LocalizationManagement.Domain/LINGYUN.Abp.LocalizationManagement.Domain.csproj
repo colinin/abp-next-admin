@@ -14,12 +14,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Polly" />
 		<PackageReference Include="Volo.Abp.AutoMapper" />
 		<PackageReference Include="Volo.Abp.Ddd.Domain" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\framework\localization\LINGYUN.Abp.Localization.Persistence\LINGYUN.Abp.Localization.Persistence.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.LocalizationManagement.Domain.Shared\LINGYUN.Abp.LocalizationManagement.Domain.Shared.csproj" />
 	</ItemGroup>
 

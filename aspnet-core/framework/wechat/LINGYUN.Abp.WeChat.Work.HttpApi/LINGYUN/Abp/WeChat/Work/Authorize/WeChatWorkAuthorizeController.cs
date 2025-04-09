@@ -42,12 +42,11 @@ public class WeChatWorkAuthorizeController : AbpControllerBase, IWeChatWorkAutho
     [HttpGet]
     [Route("oauth2")]
     public virtual Task<string> GenerateOAuth2AuthorizeAsync(
-        [FromQuery(Name = "agent_id")] string agentid,
         [FromQuery(Name = "redirect_uri")] string redirectUri,
         [FromQuery(Name = "response_type")] string responseType = "code",
         [FromQuery] string scope = "snsapi_base")
     {
-        return _service.GenerateOAuth2AuthorizeAsync(agentid, redirectUri, responseType, scope);
+        return _service.GenerateOAuth2AuthorizeAsync(redirectUri, responseType, scope);
     }
 
     /// <summary>
@@ -64,12 +63,11 @@ public class WeChatWorkAuthorizeController : AbpControllerBase, IWeChatWorkAutho
     [HttpGet]
     [Route("oauth2/authorize")]
     public async virtual Task<IActionResult> OAuth2AuthorizeAsync(
-        [FromQuery(Name = "agent_id")] string agentid,
         [FromQuery(Name = "redirect_uri")] string redirectUri,
         [FromQuery(Name = "response_type")] string responseType = "code",
         [FromQuery] string scope = "snsapi_base")
     {
-        var url = await _service.GenerateOAuth2AuthorizeAsync(agentid, redirectUri, responseType, scope);
+        var url = await _service.GenerateOAuth2AuthorizeAsync(redirectUri, responseType, scope);
 
         return Redirect(url);
     }
@@ -88,10 +86,9 @@ public class WeChatWorkAuthorizeController : AbpControllerBase, IWeChatWorkAutho
     [Route("oauth2/login")]
     public virtual Task<string> GenerateOAuth2LoginAsync(
         [FromQuery(Name = "redirect_uri")] string redirectUri,
-        [FromQuery(Name = "login_type")] string loginType = "ServiceApp",
-        [FromQuery(Name = "agent_id")] string agentid = "")
+        [FromQuery(Name = "login_type")] string loginType = "ServiceApp")
     {
-        return _service.GenerateOAuth2LoginAsync(redirectUri, loginType, agentid);
+        return _service.GenerateOAuth2LoginAsync(redirectUri, loginType);
     }
 
     /// <summary>
@@ -108,10 +105,9 @@ public class WeChatWorkAuthorizeController : AbpControllerBase, IWeChatWorkAutho
     [Route("oauth2/login/sso")]
     public async virtual Task<IActionResult> OAuth2LoginAsync(
         [FromQuery(Name = "redirect_uri")] string redirectUri,
-        [FromQuery(Name = "login_type")] string loginType = "ServiceApp",
-        [FromQuery(Name = "agent_id")] string agentid = "")
+        [FromQuery(Name = "login_type")] string loginType = "ServiceApp")
     {
-        var url = await _service.GenerateOAuth2LoginAsync(redirectUri, loginType, agentid);
+        var url = await _service.GenerateOAuth2LoginAsync(redirectUri, loginType);
 
         return Redirect(url);
     }

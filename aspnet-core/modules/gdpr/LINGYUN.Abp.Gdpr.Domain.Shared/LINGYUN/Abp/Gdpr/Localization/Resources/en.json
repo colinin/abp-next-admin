@@ -1,0 +1,31 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Gdpr:010001": "You have submitted a personal data download request, please try again after {RequestTimeInterval}.",
+    "Gdpr:010002": "Your personal data is being prepared, please try to download again after {ReadyTime}.",
+    "DisplayName:PersonalData": "Personal Data",
+    "DisplayName:Provider": "Provider",
+    "DisplayName:UserId": "User Id",
+    "DisplayName:CreationTime": "Creation Time",
+    "DisplayName:ReadyTime": "Ready Time",
+    "PersonalData:Empty": "None",
+    "Preparing": "Preparing",
+    "Download": "Download",
+    "RequestPersonalData": "Request Personal Data",
+    "DeletePersonalData": "Delete Personal Data",
+    "DeletePersonalAccount": "Delete Account",
+    "RequestedSuccessfully": "Requested Successfully",
+    "DeletePersonalAccountWarning": "This action will delete your account (including your personal data) and you will no longer be able to log in to the app!",
+    "PersonalAccountDeleteRequestReceived": "Your account deletion request is being processed and your personal data will be deleted at the end of the deletion process.",
+    "DeletePersonalDataWarning": "This action will delete your account personal data, and the deletion of some data may affect the page experience!",
+    "PersonalDataDeleteRequestReceived": "Your personal data deletion request is being processed, and you may need to log back into the app after the deletion process is complete.",
+    "PersonalDataPrepareRequestReceived": "Your personal data request is being processed and if the data is ready, you can download it on this page.",
+    "Accept": "Accept",
+    "PersonalData": "Personal Data",
+    "CookiePolicy": "Cookie Policy",
+    "PrivacyPolicy": "Privacy Policy",
+    "ThisWebsiteUsesCookie": "This website uses cookies to ensure you get the best experience on the website.",
+    "CookieConsentAgreePolicy": "If you continue to browse, then you agree to our {0}.",
+    "CookieConsentAgreePolicies": "If you continue to browse, then you agree to our {0} and {1}."
+  }
+}

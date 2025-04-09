@@ -8,22 +8,24 @@
     }
   },
   "profiles": {
-    "LY.MicroService.Applications.Single": {
+    "Single.MySql.Dev": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
       "applicationUrl": "http://0.0.0.0:30001",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APPLICATION_DATABASE_PROVIDER": "MySql"
       }
     },
-    "LY.MicroService.Applications.Single.Development": {
+    "Single.SqlServer.Dev": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
-      "applicationUrl": "http://0.0.0.0:30000",
+      "applicationUrl": "http://0.0.0.0:30001",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APPLICATION_DATABASE_PROVIDER": "SqlServer"
       }
     }
   }

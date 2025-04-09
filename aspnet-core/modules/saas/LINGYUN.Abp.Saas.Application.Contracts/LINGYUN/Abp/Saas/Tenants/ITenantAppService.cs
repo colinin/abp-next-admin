@@ -26,9 +26,11 @@ public interface ITenantAppService :
 
     Task<TenantConnectionStringDto> SetConnectionStringAsync(
         Guid id, 
-        TenantConnectionStringCreateOrUpdate input);
+        TenantConnectionStringSetInput input);
 
     Task DeleteConnectionStringAsync(
         Guid id,
         [Required] string connectionName);
+
+    Task CheckConnectionStringAsync(TenantConnectionStringCheckInput input);
 }

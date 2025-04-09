@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Guids;
 
 namespace LINGYUN.Abp.DataProtectionManagement;
 
@@ -19,9 +23,9 @@ public class EntityPropertyInfo : Entity<Guid>
     /// </summary>
     public virtual string TypeFullName { get; protected set; }
     /// <summary>
-    /// 数据值范围集合（主要针对枚举类型）
+    /// Js类型
     /// </summary>
-    public virtual string ValueRange { get; protected set; }
+    public virtual string JavaScriptType { get; protected set; }
     /// <summary>
     /// 所属类型
     /// </summary>
@@ -30,9 +34,14 @@ public class EntityPropertyInfo : Entity<Guid>
     /// 所属类型标识
     /// </summary>
     public virtual Guid TypeInfoId { get; protected set; }
+    /// <summary>
+    /// 枚举列表
+    /// </summary>
+    public virtual ICollection<EntityEnumInfo> Enums { get; protected set; }
 
     protected EntityPropertyInfo()
     {
+        Enums = new Collection<EntityEnumInfo>();
     }
 
     public EntityPropertyInfo(
@@ -41,13 +50,54 @@ public class EntityPropertyInfo : Entity<Guid>
         string name, 
         string displayName, 
         string typeFullName,
-        string valueRange = null)
+        string javaScriptType)
         : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), EntityPropertyInfoConsts.MaxNameLength);
         DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), EntityPropertyInfoConsts.MaxDisplayNameLength);
         TypeFullName = Check.NotNullOrWhiteSpace(typeFullName, nameof(typeFullName), EntityPropertyInfoConsts.MaxTypeFullNameLength);
-        ValueRange = Check.Length(valueRange, nameof(valueRange), EntityPropertyInfoConsts.MaxValueRangeLength);
+        JavaScriptType = Check.NotNullOrWhiteSpace(javaScriptType, nameof(javaScriptType), EntityPropertyInfoConsts.MaxTypeFullNameLength);
         TypeInfoId = typeInfoId;
+
+        Enums = new Collection<EntityEnumInfo>();
+    }
+
+    public EntityEnumInfo FindEnum(string name)
+    {
+        return Enums.FirstOrDefault(x => x.Name == name);
+    }
+
+    public void RemoveEnum(string name)
+    {
+        Enums.RemoveAll(x => x.Name == name);
+    }
+
+    public EntityEnumInfo AddEnum(
+        IGuidGenerator guidGenerator,
+        string name,
+        string displayName,
+        string value)
+    {
+        if (HasExistsEnum(name))
+        {
+            throw new BusinessException(DataProtectionManagementErrorCodes.EntityTypeInfo.DuplicateEnum)
+                .WithData(nameof(EntityEnumInfo.Name), name);
+        }
+
+        var enumInfo = new EntityEnumInfo(
+            guidGenerator.Create(),
+            Id,
+            name,
+            displayName,
+            value);
+
+        Enums.Add(enumInfo);
+
+        return enumInfo;
+    }
+
+    public bool HasExistsEnum(string name)
+    {
+        return Enums.Any(x => x.Name == name);
     }
 }

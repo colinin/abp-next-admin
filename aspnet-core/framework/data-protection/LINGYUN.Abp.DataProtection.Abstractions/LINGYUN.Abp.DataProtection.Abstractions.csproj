@@ -26,6 +26,7 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.ObjectExtending" />
 		<PackageReference Include="Volo.Abp.Localization" />
+		<PackageReference Include="Volo.Abp.MultiTenancy" />
 	</ItemGroup>
 
 </Project>

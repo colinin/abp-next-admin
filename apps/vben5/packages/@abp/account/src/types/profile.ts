@@ -36,6 +36,19 @@ interface ChangePasswordInput {
   newPassword: string;
 }
 
+interface ChangePhoneNumberInput {
+  code: string;
+  newPhoneNumber: string;
+}
+
+interface SendChangePhoneNumberCodeInput {
+  newPhoneNumber: string;
+}
+
+interface ChangePictureInput {
+  file: File;
+}
+
 interface TwoFactorEnabledDto {
   /** 是否启用二次认证 */
   enabled: boolean;
@@ -69,8 +82,11 @@ export type {
   AuthenticatorDto,
   AuthenticatorRecoveryCodeDto,
   ChangePasswordInput,
+  ChangePhoneNumberInput,
+  ChangePictureInput,
   ConfirmEmailInput,
   ProfileDto,
+  SendChangePhoneNumberCodeInput,
   SendEmailConfirmCodeDto,
   TwoFactorEnabledDto,
   UpdateProfileDto,

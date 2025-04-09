@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LINGYUN.Abp.DataProtection.Stores;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Users;
 
@@ -10,14 +12,14 @@ public class DataAccessUserIdContributor : IDataAccessSubjectContributor
 {
     public string Name => UserPermissionValueProvider.ProviderName;
 
-    public virtual List<DataAccessFilterGroup> GetFilterGroups(DataAccessSubjectContributorContext context)
+    public async virtual Task<List<DataAccessFilterGroup>> GetFilterGroups(DataAccessSubjectContributorContext context)
     {
         var groups = new List<DataAccessFilterGroup>();
         var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
         if (currentUser.IsAuthenticated)
         {
             var resourceStore = context.ServiceProvider.GetRequiredService<IDataProtectedResourceStore>();
-            var resource = resourceStore.Get(Name, currentUser.Id.ToString(), context.EntityTypeFullName, context.Operation);
+            var resource = await resourceStore.GetAsync(Name, currentUser.Id.ToString(), context.EntityTypeFullName, context.Operation);
             if (resource?.FilterGroup != null)
             {
                 groups.Add(resource.FilterGroup);
@@ -26,17 +28,17 @@ public class DataAccessUserIdContributor : IDataAccessSubjectContributor
         return groups;
     }
 
-    public virtual List<string> GetAllowProperties(DataAccessSubjectContributorContext context)
+    public async virtual Task<List<string>> GetAccessdProperties(DataAccessSubjectContributorContext context)
     {
         var allowProperties = new List<string>();
         var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
         if (currentUser.IsAuthenticated)
         {
             var resourceStore = context.ServiceProvider.GetRequiredService<IDataProtectedResourceStore>();
-            var resource = resourceStore.Get(Name, currentUser.Id.ToString(), context.EntityTypeFullName, context.Operation);
-            if (resource?.AllowProperties.Any() == true)
+            var resource = await resourceStore.GetAsync(Name, currentUser.Id.ToString(), context.EntityTypeFullName, context.Operation);
+            if (resource?.AccessedProperties.Any() == true)
             {
-                allowProperties.AddIfNotContains(resource.AllowProperties);
+                allowProperties.AddIfNotContains(resource.AccessedProperties);
             }
         }
         return allowProperties;

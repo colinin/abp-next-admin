@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { VbenFormProps, VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { SortOrder } from '@abp/core';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
+import type { VbenFormProps } from '@vben/common-ui';
 
 import type { SecurityLogDto } from '../../types/security-logs';
 
@@ -8,7 +11,7 @@ import { defineAsyncComponent, h, ref, toValue } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime, type SortOrder } from '@abp/core';
+import { formatToDateTime } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button, message, Modal, Tag } from 'ant-design-vue';
@@ -222,7 +225,7 @@ function onDelete(row: SecurityLogDto) {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
@@ -238,7 +241,7 @@ function onBulkDelete() {
         ids: toValue(selectedKeys),
       });
       selectedKeys.value = [];
-      message.success($t('AbpUi.SuccessfullyDeleted'));
+      message.success($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

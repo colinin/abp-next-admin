@@ -1,7 +1,7 @@
 using LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
-using LINGYUN.Abp.IdentityServer.EntityFrameworkCore;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications.EntityFrameworkCore;
@@ -11,8 +11,8 @@ using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using LINGYUN.Abp.WeChat;
 using LINGYUN.Platform.EntityFrameworkCore;
+using LY.MicroService.Applications.Single.EntityFrameworkCore.DataSeeder;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
@@ -32,11 +32,11 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
     typeof(PlatformEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
-    typeof(AbpIdentityServerEntityFrameworkCoreModule),
     typeof(AbpOpenIddictEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
     typeof(WebhooksManagementEntityFrameworkCoreModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
+    typeof(AbpGdprEntityFrameworkCoreModule),
     typeof(AbpWeChatModule),
     typeof(AbpDataDbMigratorModule)
     )]
@@ -45,5 +45,6 @@ public class SingleMigrationsEntityFrameworkCoreModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddAbpDbContext<SingleMigrationsDbContext>();
+        context.Services.AddHostedService<ApplicationSingleDataSeederWorker>();
     }
 }

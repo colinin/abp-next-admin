@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LINGYUN.Abp.Notifications.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -24,6 +25,7 @@ public class NotificationController : AbpControllerBase, INotificationAppService
 
     [HttpPost]
     [Route("send")]
+    [Authorize(NotificationsPermissions.Notification.Send)]
     public virtual Task SendAsync(NotificationSendDto input)
     {
         return NotificationAppService.SendAsync(input);
@@ -31,9 +33,9 @@ public class NotificationController : AbpControllerBase, INotificationAppService
 
     [HttpPost]
     [Route("send/template")]
-    public virtual Task SendAsync(NotificationTemplateSendDto input)
+    public virtual Task SendTemplateAsync(NotificationTemplateSendDto input)
     {
-        return NotificationAppService.SendAsync(input);
+        return NotificationAppService.SendTemplateAsync(input);
     }
 
     [HttpGet]
@@ -48,5 +50,12 @@ public class NotificationController : AbpControllerBase, INotificationAppService
     public virtual Task<ListResultDto<NotificationTemplateDto>> GetAssignableTemplatesAsync()
     {
         return NotificationAppService.GetAssignableTemplatesAsync();
+    }
+
+    [HttpGet]
+    [Route("assignable-providers")]
+    public virtual Task<ListResultDto<NotificationProviderDto>> GetAssignableProvidersAsync()
+    {
+        return NotificationAppService.GetAssignableProvidersAsync();
     }
 }

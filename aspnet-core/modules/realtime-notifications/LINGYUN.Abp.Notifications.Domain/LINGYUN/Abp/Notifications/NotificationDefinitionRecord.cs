@@ -53,7 +53,7 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
     /// <remarks>
     /// 多个之间用;分隔
     /// </remarks>
-    public virtual string Providers { get; protected set; }
+    public virtual string Providers { get; set; }
     /// <summary>
     /// 允许客户端订阅
     /// </summary>
@@ -91,23 +91,6 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
         this.SetDefaultsForExtraProperties();
 
         AllowSubscriptionToClients = true;
-    }
-
-    public void UseProviders(params string[] providers)
-    {
-        var currentProviders = Providers.IsNullOrWhiteSpace()
-            ? new List<string>()
-            : Providers.Split(';').ToList();
-
-        if (!providers.IsNullOrEmpty())
-        {
-            currentProviders.AddIfNotContains(providers);
-        }
-
-        if (currentProviders.Any())
-        {
-            Providers = currentProviders.JoinAsString(";");
-        }
     }
 
     public bool HasSameData(NotificationDefinitionRecord otherRecord)

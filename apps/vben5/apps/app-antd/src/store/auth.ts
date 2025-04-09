@@ -1,3 +1,5 @@
+import type { TokenResult } from '@abp/account';
+
 import type { Recordable, UserInfo } from '@vben/types';
 
 import { ref } from 'vue';
@@ -6,7 +8,12 @@ import { useRouter } from 'vue-router';
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@vben/constants';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
-import { useTokenApi, useUserInfoApi } from '@abp/account';
+import {
+  useProfileApi,
+  useQrCodeLoginApi,
+  useTokenApi,
+  useUserInfoApi,
+} from '@abp/account';
 import { Events, useAbpStore, useEventBus } from '@abp/core';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
@@ -17,14 +24,30 @@ import { $t } from '#/locales';
 export const useAuthStore = defineStore('auth', () => {
   const { publish } = useEventBus();
   const { loginApi } = useTokenApi();
+  const { loginApi: qrcodeLoginApi } = useQrCodeLoginApi();
   const { getUserInfoApi } = useUserInfoApi();
   const { getConfigApi } = useAbpConfigApi();
+  const { getPictureApi } = useProfileApi();
   const accessStore = useAccessStore();
   const userStore = useUserStore();
   const abpStore = useAbpStore();
   const router = useRouter();
 
   const loginLoading = ref(false);
+
+  async function qrcodeLogin(
+    key: string,
+    tenantId?: string,
+    onSuccess?: () => Promise<void> | void,
+  ) {
+    try {
+      loginLoading.value = true;
+      const result = await qrcodeLoginApi({ key, tenantId });
+      return await _loginSuccess(result, onSuccess);
+    } finally {
+      loginLoading.value = false;
+    }
+  }
 
   /**
    * 异步处理登录操作
@@ -35,46 +58,13 @@ export const useAuthStore = defineStore('auth', () => {
     params: Recordable<any>,
     onSuccess?: () => Promise<void> | void,
   ) {
-    // 异步处理用户登录操作并获取 accessToken
-    let userInfo: null | UserInfo = null;
     try {
       loginLoading.value = true;
-      const loginResult = await loginApi(params as any);
-      const { accessToken, tokenType, refreshToken } = loginResult;
-      // 如果成功获取到 accessToken
-      if (accessToken) {
-        accessStore.setAccessToken(`${tokenType} ${accessToken}`);
-        accessStore.setRefreshToken(refreshToken);
-
-        userInfo = await fetchUserInfo();
-
-        userStore.setUserInfo(userInfo);
-
-        publish(Events.UserLogin, userInfo);
-
-        if (accessStore.loginExpired) {
-          accessStore.setLoginExpired(false);
-        } else {
-          onSuccess
-            ? await onSuccess?.()
-            : await router.push(userInfo.homePath || DEFAULT_HOME_PATH);
-        }
-
-        if (userInfo?.realName) {
-          notification.success({
-            description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
-            duration: 3,
-            message: $t('authentication.loginSuccess'),
-          });
-        }
-      }
+      const result = await loginApi(params as any);
+      return await _loginSuccess(result, onSuccess);
     } finally {
       loginLoading.value = false;
     }
-
-    return {
-      userInfo,
-    };
   }
 
   async function logout(redirect: boolean = true) {
@@ -100,14 +90,18 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUserInfo() {
-    let userInfo: ({ [key: string]: any } & UserInfo) | null = null;
+    let userInfo: null | (UserInfo & { [key: string]: any }) = null;
     const userInfoRes = await getUserInfoApi();
     const abpConfig = await getConfigApi();
+    const picture = await getPictureApi();
     userInfo = {
       userId: userInfoRes.sub ?? abpConfig.currentUser.id,
       username: userInfoRes.uniqueName ?? abpConfig.currentUser.userName,
-      realName: userInfoRes.name ?? abpConfig.currentUser.name,
-      avatar: userInfoRes.avatarUrl ?? userInfoRes.picture,
+      realName:
+        userInfoRes.name ??
+        abpConfig.currentUser.name ??
+        abpConfig.currentUser.userName,
+      avatar: URL.createObjectURL(picture) ?? '',
       desc: userInfoRes.uniqueName ?? userInfoRes.name,
       email: userInfoRes.email ?? userInfoRes.email,
       emailVerified:
@@ -126,13 +120,59 @@ export const useAuthStore = defineStore('auth', () => {
     return userInfo;
   }
 
+  async function _loginSuccess(
+    loginResult: TokenResult,
+    onSuccess?: () => Promise<void> | void,
+  ) {
+    // 异步处理用户登录操作并获取 accessToken
+    let userInfo: null | UserInfo = null;
+    loginLoading.value = true;
+    const { accessToken, tokenType, refreshToken } = loginResult;
+    // 如果成功获取到 accessToken
+    if (accessToken) {
+      accessStore.setAccessToken(`${tokenType} ${accessToken}`);
+      accessStore.setRefreshToken(refreshToken);
+
+      userInfo = await fetchUserInfo();
+
+      userStore.setUserInfo(userInfo);
+
+      publish(Events.UserLogin, userInfo);
+
+      if (accessStore.loginExpired) {
+        accessStore.setLoginExpired(false);
+      } else {
+        onSuccess
+          ? await onSuccess?.()
+          : await router.push(userInfo.homePath || DEFAULT_HOME_PATH);
+      }
+
+      if (userInfo?.realName) {
+        notification.success({
+          description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
+          duration: 3,
+          message: $t('authentication.loginSuccess'),
+        });
+      }
+    }
+
+    return {
+      userInfo,
+    };
+  }
+
   function $reset() {
+    const userInfo = userStore.userInfo;
+    if (userInfo?.avatar) {
+      URL.revokeObjectURL(userInfo?.avatar);
+    }
     loginLoading.value = false;
   }
 
   return {
     $reset,
     authLogin,
+    qrcodeLogin,
     fetchUserInfo,
     loginLoading,
     logout,

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace LINGYUN.Abp.WeChat.Work.Token.Models;
 
@@ -11,11 +12,14 @@ public class WeChatWorkTokenResponse : WeChatWorkResponse
     /// 访问令牌
     /// </summary>
     [JsonProperty("access_token")]
+    [JsonPropertyName("access_token")]
     public string AccessToken { get; set; }
     /// <summary>
     /// 过期时间,单位(s)
     /// </summary>
     [JsonProperty("expires_in")]
+    [JsonPropertyName("expires_in")]
+    [System.Text.Json.Serialization.JsonConverter(typeof(NumberToStringConverter))]
     public int ExpiresIn { get; set; }
 
     public WeChatWorkToken ToWeChatWorkToken()

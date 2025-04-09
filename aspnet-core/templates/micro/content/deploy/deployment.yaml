@@ -1,0 +1,89 @@
+# ProjectName Pod
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-name-api
+  labels:
+    name: project-name-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: project-name-api
+  template:
+    metadata:
+      labels:
+        name: project-name-api
+    spec:
+      containers:
+      - name: project-name-api
+        image: project-name-api:latest
+        env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            # 时区问题自行修改
+            # - name: TZ
+            #   value: "Asia/Shanghai"
+        ports:
+            - containerPort: 8080
+        imagePullPolicy: Always
+        livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+        volumeMounts:
+            # appsettings挂载
+            # - mountPath: /app/appsettings.Production.json
+            #   name: volume-cmkw2z
+            #   subPath: appsettings.Production.json
+            - mountPath: /app/Logs
+              name: volume-xk3mds
+              subPath: ./logs
+            - mountPath: /app/Modules
+              name: volume-xk3mds
+              subPath: ./modules
+      volumes:
+        # 其他存储挂载自行处理
+        - hostPath:
+            path: /var/opt/project-name
+            type: DirectoryOrCreate
+          # 注意变更名称
+          name: volume-xk3mds
+        # appsettings挂载
+        # - configMap:
+        #     defaultMode: 420
+        #     name: project-name-api
+        #   name: volume-cmkw2z
+
+---
+# ProjectName Service
+kind: Service
+apiVersion: v1
+metadata:
+  name: project-name-api
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+  selector:
+    name: project-name-api
+
+---
+# ProjectName Ingress
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: project-name-api
+spec:
+  ingressClassName: nginx    
+  rules:
+  - host: "project-name-api.local"
+    http:
+        paths:
+        - path: /api/project-name
+          pathType: Prefix
+          backend:
+              service:
+                name: project-name-api
+                port:
+                  number: 8080

@@ -31,7 +31,7 @@ public abstract class FileAppServiceBase : OssManagementApplicationServiceBase, 
     }
 
     [RequiresFeature(AbpOssManagementFeatureNames.OssObject.UploadFile)]
-    public async virtual Task UploadAsync(UploadFileChunkInput input)
+    public async virtual Task UploadChunkAsync(UploadFileChunkInput input)
     {
         input.Bucket = GetCurrentBucket();
         input.Path = GetCurrentPath(HttpUtility.UrlDecode(input.Path));

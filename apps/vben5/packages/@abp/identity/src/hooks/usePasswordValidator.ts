@@ -14,7 +14,7 @@ import {
 
 export function usePasswordValidator() {
   const { getNumber, isTrue } = useSettings();
-  const { L } = useLocalization(['AbpIdentity', 'AbpUi']);
+  const { L } = useLocalization(['AbpIdentity', 'AbpValidation', 'AbpUi']);
 
   const passwordSetting = computed(() => {
     return {

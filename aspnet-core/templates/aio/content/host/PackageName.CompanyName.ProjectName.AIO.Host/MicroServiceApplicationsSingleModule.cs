@@ -10,22 +10,11 @@ using LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 using LINGYUN.Abp.Authentication.QQ;
 using LINGYUN.Abp.Authentication.WeChat;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
-using LINGYUN.Abp.BackgroundTasks;
-using LINGYUN.Abp.BackgroundTasks.Activities;
-using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
-using LINGYUN.Abp.BackgroundTasks.EventBus;
-using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
-using LINGYUN.Abp.BackgroundTasks.Jobs;
-using LINGYUN.Abp.BackgroundTasks.Notifications;
-using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.CachingManagement;
 using LINGYUN.Abp.CachingManagement.StackExchangeRedis;
-using LINGYUN.Abp.Dapr.Client;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.DataProtectionManagement;
 using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
-// using LINGYUN.Abp.Demo;
-// using LINGYUN.Abp.Demo.EntityFrameworkCore;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Exporter.MiniExcel;
@@ -66,7 +55,6 @@ using LINGYUN.Abp.OpenIddict.WeChat;
 using LINGYUN.Abp.OpenIddict.WeChat.Work;
 using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.OssManagement.FileSystem;
-// using LINGYUN.Abp.OssManagement.Imaging;
 using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Abp.PermissionManagement;
 using LINGYUN.Abp.PermissionManagement.HttpApi;
@@ -77,8 +65,6 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Aliyun;
-using LINGYUN.Abp.TaskManagement;
-using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Tencent.QQ;
 using LINGYUN.Abp.Tencent.SettingManagement;
 using LINGYUN.Abp.TextTemplating;
@@ -111,8 +97,11 @@ using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
+using Volo.Abp.BackgroundJobs.Hangfire;
+using Volo.Abp.BackgroundWorkers.Hangfire;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
+using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using Volo.Abp.EventBus;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Imaging;
@@ -124,20 +113,9 @@ using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
-#if MySQL
-using Volo.Abp.EntityFrameworkCore.MySQL;
-#elif SqlServer 
-using Volo.Abp.EntityFrameworkCore.SqlServer;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-#elif Sqlite 
-using Volo.Abp.EntityFrameworkCore.Sqlite;
-#elif Oracle 
-using Volo.Abp.EntityFrameworkCore.Oracle;
-#elif OracleDevart 
-using Volo.Abp.EntityFrameworkCore.Oracle.Devart;
-#elif PostgreSql 
-using Volo.Abp.EntityFrameworkCore.PostgreSql;
-#endif
+// using LINGYUN.Abp.Demo;
+// using LINGYUN.Abp.Demo.EntityFrameworkCore;
+// using LINGYUN.Abp.OssManagement.Imaging;
 
 namespace PackageName.CompanyName.ProjectName.AIO.Host;
 
@@ -172,12 +150,6 @@ namespace PackageName.CompanyName.ProjectName.AIO.Host;
     typeof(AbpNotificationsApplicationModule),
     typeof(AbpNotificationsHttpApiModule),
     typeof(AbpNotificationsEntityFrameworkCoreModule),
-
-    //typeof(AbpIdentityServerSessionModule),
-    //typeof(AbpIdentityServerApplicationModule),
-    //typeof(AbpIdentityServerHttpApiModule),
-    //typeof(AbpIdentityServerEntityFrameworkCoreModule),
-
     typeof(AbpOpenIddictAspNetCoreModule),
     typeof(AbpOpenIddictAspNetCoreSessionModule),
     typeof(AbpOpenIddictApplicationModule),
@@ -187,6 +159,9 @@ namespace PackageName.CompanyName.ProjectName.AIO.Host;
     typeof(AbpOpenIddictPortalModule),
     typeof(AbpOpenIddictWeChatModule),
     typeof(AbpOpenIddictWeChatWorkModule),
+
+    typeof(AbpBackgroundWorkersHangfireModule),
+    typeof(AbpBackgroundJobsHangfireModule),
 
     //typeof(AbpOssManagementMinioModule), // 取消注释以使用Minio
     typeof(AbpOssManagementFileSystemModule),
@@ -209,11 +184,6 @@ namespace PackageName.CompanyName.ProjectName.AIO.Host;
     typeof(AbpSaasApplicationModule),
     typeof(AbpSaasHttpApiModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
-
-    typeof(TaskManagementDomainModule),
-    typeof(TaskManagementApplicationModule),
-    typeof(TaskManagementHttpApiModule),
-    typeof(TaskManagementEntityFrameworkCoreModule),
 
     typeof(AbpTextTemplatingDomainModule),
     typeof(AbpTextTemplatingApplicationModule),
@@ -246,19 +216,7 @@ namespace PackageName.CompanyName.ProjectName.AIO.Host;
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
 
-#if MySQL
-    typeof(AbpEntityFrameworkCoreMySQLModule),
-#elif SqlServer
-    typeof(AbpEntityFrameworkCoreSqlServerModule),
-#elif Sqlite
-    typeof(AbpEntityFrameworkCoreSqliteModule),
-#elif Oracle
-    typeof(AbpEntityFrameworkCoreOracleModule),
-#elif OracleDevart
-    typeof(AbpEntityFrameworkCoreOracleDevartModule),
-#elif PostgreSql
     typeof(AbpEntityFrameworkCorePostgreSqlModule),
-#endif
 
     typeof(AbpAliyunSmsModule),
     typeof(AbpAliyunSettingManagementModule),
@@ -268,24 +226,9 @@ namespace PackageName.CompanyName.ProjectName.AIO.Host;
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),
 
-    typeof(AbpBackgroundTasksModule),
-    typeof(AbpBackgroundTasksActivitiesModule),
-    typeof(AbpBackgroundTasksDistributedLockingModule),
-    typeof(AbpBackgroundTasksEventBusModule),
-    typeof(AbpBackgroundTasksExceptionHandlingModule),
-    typeof(AbpBackgroundTasksJobsModule),
-    typeof(AbpBackgroundTasksNotificationsModule),
-    typeof(AbpBackgroundTasksQuartzModule),
-
     typeof(AbpDataProtectionManagementApplicationModule),
     typeof(AbpDataProtectionManagementHttpApiModule),
     typeof(AbpDataProtectionManagementEntityFrameworkCoreModule),
-
-    // typeof(AbpDemoApplicationModule),
-    // typeof(AbpDemoHttpApiModule),
-    // typeof(AbpDemoEntityFrameworkCoreModule),
-
-    typeof(AbpDaprClientModule),
     typeof(AbpExceptionHandlingModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpFeaturesLimitValidationModule),
@@ -327,17 +270,6 @@ namespace PackageName.CompanyName.ProjectName.AIO.Host;
     typeof(AbpAccountTemplatesModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpCachingStackExchangeRedisModule),
-    // typeof(AbpElsaModule),
-    // typeof(AbpElsaServerModule),
-    // typeof(AbpElsaActivitiesModule),
-    // typeof(AbpElsaEntityFrameworkCoreModule),
-    // typeof(AbpElsaEntityFrameworkCorePostgreSqlModule),
-    // typeof(AbpElsaModule),
-    // typeof(AbpElsaServerModule),
-    // typeof(AbpElsaActivitiesModule),
-    // typeof(AbpElsaEntityFrameworkCoreModule),
-    // typeof(AbpElsaEntityFrameworkCoreMySqlModule),
-
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpAspNetCoreSerilogModule),
@@ -348,7 +280,7 @@ namespace PackageName.CompanyName.ProjectName.AIO.Host;
     typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpEventBusModule),
     typeof(AbpAutofacModule),
-    
+
     typeof(ProjectNameApplicationModule),
     typeof(ProjectNameHttpApiModule),
     typeof(ProjectNameEntityFrameworkCoreModule),
@@ -365,7 +297,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         PreConfigureFeature();
         PreConfigureIdentity();
         PreConfigureApp(configuration);
-        PreConfigureQuartz(configuration);
         PreConfigureAuthServer(configuration);
         PreConfigureElsa(context.Services, configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
@@ -386,7 +317,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureDataSeeder();
         ConfigureLocalization();
         ConfigureKestrelServer();
-        ConfigureBackgroundTasks();
+        ConfigureHangfire(context.Services, configuration);
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureEntityDataProtected();

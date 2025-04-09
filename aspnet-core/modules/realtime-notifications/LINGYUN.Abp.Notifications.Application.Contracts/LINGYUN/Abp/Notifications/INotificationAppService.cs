@@ -5,11 +5,13 @@ namespace LINGYUN.Abp.Notifications;
 
 public interface INotificationAppService
 {
+    Task<ListResultDto<NotificationProviderDto>> GetAssignableProvidersAsync();
+
     Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync();
 
     Task<ListResultDto<NotificationTemplateDto>> GetAssignableTemplatesAsync();
 
     Task SendAsync(NotificationSendDto input);
 
-    Task SendAsync(NotificationTemplateSendDto input);
+    Task SendTemplateAsync(NotificationTemplateSendDto input);
 }

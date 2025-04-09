@@ -15,15 +15,17 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Account.Application" />
+		<PackageReference Include="Volo.Abp.BlobStoring" />
 		<PackageReference Include="Volo.Abp.Sms" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\auditing\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj" />
 		<ProjectReference Include="..\..\..\framework\settings\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
 		<ProjectReference Include="..\..\..\framework\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />
 		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
-		<ProjectReference Include="..\LINGYUN.Abp.Account.Templates\LINGYUN.Abp.Account.Templates.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Account.Emailing\LINGYUN.Abp.Account.Emailing.csproj" />
 	</ItemGroup>
 
 </Project>

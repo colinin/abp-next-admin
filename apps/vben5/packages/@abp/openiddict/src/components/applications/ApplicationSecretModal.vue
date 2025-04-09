@@ -71,13 +71,18 @@ async function onGet(id: string) {
   applicationModel.value = dto;
 }
 async function onSubmit(input: Record<string, any>) {
-  const dto = await updateApi(applicationModel.value!.id, {
-    ...applicationModel.value!,
-    clientSecret: input.clientSecret,
-  });
-  message.success($t('AbpUi.SavedSuccessfully'));
-  emits('change', dto);
-  modalApi.close();
+  try {
+    modalApi.setState({ submitting: true });
+    const dto = await updateApi(applicationModel.value!.id, {
+      ...applicationModel.value!,
+      clientSecret: input.clientSecret,
+    });
+    message.success($t('AbpUi.SavedSuccessfully'));
+    emits('change', dto);
+    modalApi.close();
+  } finally {
+    modalApi.setState({ submitting: false });
+  }
 }
 </script>
 

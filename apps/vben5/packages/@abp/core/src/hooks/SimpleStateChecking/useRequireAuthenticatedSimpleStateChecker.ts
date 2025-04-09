@@ -14,7 +14,7 @@ export interface RequireAuthenticatedStateChecker {
 export class RequireAuthenticatedSimpleStateChecker<
     TState extends IHasSimpleStateCheckers<TState>,
   >
-  implements RequireAuthenticatedStateChecker, ISimpleStateChecker<TState>
+  implements ISimpleStateChecker<TState>, RequireAuthenticatedStateChecker
 {
   _currentUser?: CurrentUser;
   name = 'A';

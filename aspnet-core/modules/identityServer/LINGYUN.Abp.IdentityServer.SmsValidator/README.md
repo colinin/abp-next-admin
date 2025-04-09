@@ -24,7 +24,7 @@ IdentityServer短信验证模块，提供基于手机号和短信验证码的身
 
 ```csharp
 [DependsOn(
-    typeof(AbpIdentityServerSmsValidatorModule)
+    typeof(AbpIdentityServerSmsModule)
 )]
 public class YourModule : AbpModule
 {

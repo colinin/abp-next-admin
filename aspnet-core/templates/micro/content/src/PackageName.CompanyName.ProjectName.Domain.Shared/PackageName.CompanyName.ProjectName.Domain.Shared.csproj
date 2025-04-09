@@ -24,6 +24,7 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Auditing" />
 		<PackageReference Include="Volo.Abp.EventBus" />
+		<PackageReference Include="Volo.Abp.Features" />
 		<PackageReference Include="Volo.Abp.Localization" />
 	</ItemGroup>
 

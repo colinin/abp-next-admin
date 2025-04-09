@@ -1,25 +1,38 @@
 <script lang="ts" setup>
 import type { TwoFactorError } from '@abp/account';
-import type { VbenFormSchema } from '@vben/common-ui';
+
+import type { ExtendedFormApi, VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
-import { computed } from 'vue';
+import { computed, nextTick, onMounted, useTemplateRef } from 'vue';
 
 import { AuthenticationLogin, useVbenModal, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { useAbpStore } from '@abp/core';
+
+import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
 import { useAuthStore } from '#/store';
 
 import TwoFactorLogin from './two-factor-login.vue';
 
+interface LoginInstance {
+  getFormApi(): ExtendedFormApi | undefined;
+}
+
 defineOptions({ name: 'Login' });
 
+const abpStore = useAbpStore();
 const authStore = useAuthStore();
 
+const { getConfigApi } = useAbpConfigApi();
+
+const login = useTemplateRef<LoginInstance>('login');
+
 const formSchema = computed((): VbenFormSchema[] => {
-  return [
+  let schemas: VbenFormSchema[] = [
     {
-      component: 'VbenInput',
+      component: 'Input',
       componentProps: {
         placeholder: $t('authentication.usernameTip'),
       },
@@ -28,7 +41,7 @@ const formSchema = computed((): VbenFormSchema[] => {
       rules: z.string().min(1, { message: $t('authentication.usernameTip') }),
     },
     {
-      component: 'VbenInputPassword',
+      component: 'InputPassword',
       componentProps: {
         placeholder: $t('authentication.password'),
       },
@@ -37,10 +50,31 @@ const formSchema = computed((): VbenFormSchema[] => {
       rules: z.string().min(1, { message: $t('authentication.passwordTip') }),
     },
   ];
+  if (abpStore.application?.multiTenancy.isEnabled) {
+    schemas = [
+      {
+        component: 'TenantSelect',
+        fieldName: 'tenant',
+        componentProps: {
+          onChange: onInit,
+        },
+      },
+      ...schemas,
+    ];
+  }
+  return schemas;
 });
 const [TwoFactorModal, twoFactorModalApi] = useVbenModal({
   connectedComponent: TwoFactorLogin,
 });
+async function onInit() {
+  const abpConfig = await getConfigApi();
+  abpStore.setApplication(abpConfig);
+  nextTick(() => {
+    const formApi = login.value?.getFormApi();
+    formApi?.setFieldValue('tenant', abpConfig.currentTenant.name);
+  });
+}
 async function onLogin(params: Recordable<any>) {
   try {
     await authStore.authLogin(params);
@@ -58,11 +92,14 @@ function onTwoFactorError(params: Recordable<any>, error: any) {
     twoFactorModalApi.open();
   }
 }
+
+onMounted(onInit);
 </script>
 
 <template>
   <div>
     <AuthenticationLogin
+      ref="login"
       :form-schema="formSchema"
       :loading="authStore.loginLoading"
       @submit="onLogin"

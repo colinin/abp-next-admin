@@ -49,6 +49,7 @@ catalog:
   '@types/lodash.clonedeep': ^4.5.9
   '@types/lodash.debounce': ^4.0.9
   '@types/lodash.get': ^4.4.9
+  '@types/lodash.groupby': ^4.6.9
   '@types/lodash.isequal': ^4.5.8
   '@types/lodash.isnumber': ^3.0.9
   '@types/lodash.merge': ^4.6.9
@@ -124,6 +125,7 @@ catalog:
   lodash.clonedeep: ^4.5.0
   lodash.debounce: ^4.0.8
   lodash.get: ^4.4.2
+  lodash.groupby: ^4.6.0
   lodash.isequal: ^4.5.0
   lodash.isnumber: ^3.0.3
   lodash.merge: ^4.6.2
@@ -172,8 +174,10 @@ catalog:
   turbo: ^2.4.0
   typescript: ^5.7.3
   unbuild: ^3.3.1
+  universal-cookie: ^7
   unplugin-element-plus: ^0.9.0
   vee-validate: ^4.15.0
+  vditor: ^3.10.9
   vite: ^6.0.11
   vite-plugin-compression: ^0.5.1
   vite-plugin-dts: ^4.5.0

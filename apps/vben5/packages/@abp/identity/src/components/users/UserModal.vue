@@ -79,7 +79,7 @@ const [Modal, modalApi] = useVbenModal({
     const api = formModel.value.id
       ? updateApi(formModel.value.id, toValue(formModel))
       : createApi(toValue(formModel));
-    modalApi.setState({ confirmLoading: true });
+    modalApi.setState({ submitting: true });
     api
       .then((res) => {
         message.success($t('AbpUi.SavedSuccessfully'));
@@ -87,7 +87,7 @@ const [Modal, modalApi] = useVbenModal({
         modalApi.close();
       })
       .finally(() => {
-        modalApi.setState({ confirmLoading: false });
+        modalApi.setState({ submitting: false });
       });
   },
   onOpenChange: async (isOpen: boolean) => {
@@ -107,7 +107,6 @@ const [Modal, modalApi] = useVbenModal({
         if (userDto?.id) {
           await Promise.all([
             initUserInfo(userDto.id),
-            manageRolePolicy && initUserRoles(userDto.id),
             manageRolePolicy && initAssignableRoles(),
             checkManageOuPolicy() && initOrganizationUnitTree(userDto.id),
           ]);
@@ -142,20 +141,17 @@ function checkManageOuPolicy() {
  * @param userId 用户id
  */
 async function initUserInfo(userId: string) {
-  const dto = await getApi(userId);
-  formModel.value = dto;
+  const [userInfo, userRoleResult] = await Promise.all([
+    getApi(userId),
+    getRolesApi(userId),
+  ]);
+  formModel.value = {
+    ...userInfo,
+    roleNames: userRoleResult.items.map((item) => item.name),
+  };
   modalApi.setState({
-    title: `${$t('AbpIdentity.Users')} - ${dto.userName}`,
+    title: `${$t('AbpIdentity.Users')} - ${userInfo.userName}`,
   });
-}
-
-/**
- * 初始化用户角色
- * @param userId 用户id
- */
-async function initUserRoles(userId: string) {
-  const { items } = await getRolesApi(userId);
-  formModel.value.roleNames = items.map((item) => item.name);
 }
 
 /** 初始化可用角色列表 */
@@ -291,8 +287,8 @@ async function onLoadOuChildren(node: EventDataNode) {
             }"
             :render="(item) => item.title"
             :titles="[
-              $t('AbpIdentityServer.Assigned'),
-              $t('AbpIdentityServer.Available'),
+              $t('AbpOpenIddict.Assigned'),
+              $t('AbpOpenIddict.Available'),
             ]"
             class="tree-transfer"
           />

@@ -34,9 +34,9 @@ public class PrivateFilesController : AbpControllerBase, IPrivateFileAppService
 
     [HttpPost]
     [Route("upload")]
-    public async virtual Task UploadAsync([FromForm] UploadFileChunkInput input)
+    public async virtual Task UploadChunkAsync([FromForm] UploadFileChunkInput input)
     {
-        await _service.UploadAsync(input);
+        await _service.UploadChunkAsync(input);
     }
 
     [HttpGet]

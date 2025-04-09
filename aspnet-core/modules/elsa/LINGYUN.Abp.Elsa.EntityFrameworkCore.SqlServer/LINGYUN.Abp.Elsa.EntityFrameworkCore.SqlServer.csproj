@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\..\configureawait.props" />
 	<Import Project="..\..\..\..\common.props" />
@@ -12,6 +12,14 @@
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace />
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="LINGYUN\Abp\Elsa\EntityFrameworkCore\SqlServer\Migrations\Initial.sql" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="LINGYUN\Abp\Elsa\EntityFrameworkCore\SqlServer\Migrations\Initial.sql" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.SqlServer" />

@@ -4,15 +4,21 @@ using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Exporter.MiniExcel;
+using LINGYUN.Abp.Gdpr;
+using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
+using LINGYUN.Abp.Gdpr.Identity;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
-using LINGYUN.Abp.Sms.Aliyun;
+using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.Telemetry.SkyWalking;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +32,6 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
-using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -39,6 +44,10 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcLocalizationModule),
+    typeof(AbpGdprApplicationModule),
+    typeof(AbpGdprHttpApiModule),
+    typeof(AbpGdprDomainIdentityModule),
+    typeof(AbpGdprEntityFrameworkCoreModule),
     typeof(LINGYUN.Abp.Account.AbpAccountApplicationModule),
     typeof(LINGYUN.Abp.Account.AbpAccountHttpApiModule),
     typeof(LINGYUN.Abp.Identity.AbpIdentityApplicationModule),
@@ -57,16 +66,18 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpEmailingPlatformModule),
+    typeof(AbpSmsPlatformModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpHttpClientModule),
-    typeof(AbpAliyunSmsModule),
-    typeof(AbpMailKitModule),
     typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpTelemetrySkyWalkingModule),
+    typeof(AbpExporterMiniExcelModule),
     typeof(AbpClaimsMappingModule),
-    typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAutofacModule)
     )]
 public partial class IdentityServerHttpApiHostModule : AbpModule
@@ -105,7 +116,6 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
-        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }

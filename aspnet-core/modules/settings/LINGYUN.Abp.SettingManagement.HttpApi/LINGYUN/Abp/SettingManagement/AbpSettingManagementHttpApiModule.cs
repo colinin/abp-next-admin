@@ -1,6 +1,8 @@
 ﻿using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Localization;
@@ -28,7 +30,9 @@ public class AbpSettingManagementHttpApiModule : AbpModule
             options.Resources
                 .Get<AbpSettingManagementResource>()
                 .AddBaseTypes(
-                    typeof(AbpUiResource)
+                    typeof(AbpUiResource),
+                    typeof(IdentityResource),
+                    typeof(AccountResource)
                 );
         });
     }

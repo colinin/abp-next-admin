@@ -125,17 +125,33 @@
             <param name="message"></param>
             <returns></returns>
         </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPMessageExtensions.TryGetCorrelationId(DotNetCore.CAP.Messages.Message,System.String@)">
+            <summary>
+            尝试获取消息标头中的链路标识
+            </summary>
+            <param name="message"></param>
+            <param name="correlationId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPMessageExtensions.GetCorrelationIdOrNull(DotNetCore.CAP.Messages.Message)">
+            <summary>
+            获取消息标头中的链路标识
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
         <member name="T:LINGYUN.Abp.EventBus.CAP.AbpCAPSubscribeInvoker">
             <summary>
             重写 ISubscribeInvoker 实现 Abp 租户集成
             </summary>
         </member>
-        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPSubscribeInvoker.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,System.IServiceProvider,DotNetCore.CAP.Serialization.ISerializer,Volo.Abp.MultiTenancy.ICurrentTenant)">
+        <member name="M:LINGYUN.Abp.EventBus.CAP.AbpCAPSubscribeInvoker.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,System.IServiceProvider,Volo.Abp.Tracing.ICorrelationIdProvider,DotNetCore.CAP.Serialization.ISerializer,Volo.Abp.MultiTenancy.ICurrentTenant)">
             <summary>
             AbpCAPSubscribeInvoker
             </summary>
             <param name="loggerFactory"></param>
             <param name="serviceProvider"></param>
+            <param name="correlationIdProvider"></param>
             <param name="serializer"></param>
             <param name="currentTenant"></param>
         </member>
@@ -179,7 +195,7 @@
             CAP分布式事件总线
             </summary>
         </member>
-        <member name="F:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.CapPublisher">
+        <member name="P:LINGYUN.Abp.EventBus.CAP.CAPDistributedEventBus.CapPublisher">
             <summary>
             CAP消息发布接口
             </summary>

@@ -12,7 +12,6 @@ public class NullWeChatWorkInternalUserFinder : IWeChatWorkInternalUserFinder
 {
     public readonly static IWeChatWorkInternalUserFinder Instance = new NullWeChatWorkInternalUserFinder(); 
     public Task<string> FindUserIdentifierAsync(
-        string agentId, 
         Guid userId, 
         CancellationToken cancellationToken = default)
     {
@@ -21,7 +20,6 @@ public class NullWeChatWorkInternalUserFinder : IWeChatWorkInternalUserFinder
     }
 
     public Task<List<string>> FindUserIdentifierListAsync(
-        string agentId,
         IEnumerable<Guid> userIdList,
         CancellationToken cancellationToken = default)
     {

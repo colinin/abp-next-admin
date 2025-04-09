@@ -1,5 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using LINGYUN.Abp.Saas.Localization;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.Saas.Tenants;
 
@@ -22,10 +28,31 @@ public class TenantCreateDto : TenantCreateOrUpdateBase
     /// <summary>
     /// 默认数据库连接字符串
     /// </summary>
+    [DynamicStringLength(typeof(TenantConnectionStringConsts), nameof(TenantConnectionStringConsts.MaxValueLength))]
     public string DefaultConnectionString { get; set; }
 
     /// <summary>
     /// 其他数据库连接
     /// </summary>
-    public Dictionary<string, string> ConnectionStrings { get; set; } = new Dictionary<string, string>();
+    public List<TenantConnectionStringSetInput> ConnectionStrings { get; set; } = new List<TenantConnectionStringSetInput>();
+
+    public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        var validationResults = base.Validate(validationContext);
+
+        if (!UseSharedDatabase && DefaultConnectionString.IsNullOrWhiteSpace())
+        {
+            var saasResource = validationContext.GetRequiredService<IStringLocalizer<AbpSaasResource>>();
+
+            var errors = new ValidationResult[1]
+            {
+                new ValidationResult(
+                    saasResource["IfUseCustomDataBaseDefaultConnectionStringIsRequiredMessage"],
+                    new string[1]{ nameof(DefaultConnectionString) })
+            };
+            return validationResults.Union(errors);
+        }
+
+        return validationResults;
+    }
 }

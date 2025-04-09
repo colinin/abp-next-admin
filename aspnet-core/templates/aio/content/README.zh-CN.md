@@ -1,135 +1,133 @@
-# LINGYUN.Abp.Templates
+# PackageName.CompanyName.ProjectName
 
 [English](README.md) | [中文](README.zh-CN.md)
 
-## 简介
+## 快速启动指南
 
-LINGYUN.Abp.Templates 基于 ABP Framework 提供两种项目模板：
+本指南将帮助您快速设置和运行项目。请按照以下步骤开始。
 
-1. **微服务模板**：完整的分布式微服务架构模板
-2. **单体应用模板**：将所有服务集成到一个项目中的单体应用模板
+### 前提条件
 
-## 特性
+- .NET SDK 9.0 或更高版本
+- 支持的数据库（SQL Server、MySQL、PostgreSQL、Oracle 或 SQLite）
+- PowerShell 7.0+（推荐用于运行迁移脚本）
 
-### 共同特性
-
-- 集成身份认证（支持 IdentityServer4/OpenIddict）
-- 数据库集成（支持多种数据库）
-- 统一配置管理
-- 分布式事件总线支持
-- 后台作业处理
-
-### 微服务模板特性
-
-- 完整的微服务项目结构
-- 服务发现与注册
-- 支持分布式部署
-
-### 单体应用模板特性
-
-- 简化的部署流程
-- 更容易的维护
-- 更低的资源需求
-
-## 使用方法
-
-### 安装模板
+### 第一步：还原和构建项目
 
 ```bash
-# 安装微服务模板:lam
-dotnet new install LINGYUN.Abp.MicroService.Templates
+# 导航到项目根目录
+cd /path/to/project
 
-# 安装单体应用模板:laa
-dotnet new install LINGYUN.Abp.AllInOne.Templates
+# 还原依赖项
+dotnet restore
+
+# 构建解决方案
+dotnet build
 ```
 
-### 安装 labp 命令行工具
+### 第二步：创建数据库结构
 
-```bash
-  dotnet tool install --global LINGYUN.Abp.Cli
-```
-
-### 创建新项目
-
-#### 创建微服务项目
-
-```bash
-# 简写名称：lam (LINGYUN Abp Microservice)
-labp create YourCompanyName.YourProjectName -pk YourPackageName -t lam -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None" --no-random-port
-```
-
-#### 创建单体应用项目
-
-```bash
-# 简写名称：laa (LINGYUN Abp AllInOne)
-labp create YourCompanyName.YourProjectName -pk YourPackageName -t laa -o /path/to/output --dbms MySql --cs "Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None" --no-random-port
-```
-
-## 运行项目
-
-创建项目后，可以使用以下命令运行：
-
-### 运行微服务项目
-
-```bash
-cd /path/to/output/host/YourPackageName.YourCompanyName.YourProjectName.HttpApi.Host
-dotnet run --launch-profile "YourPackageName.YourCompanyName.YourProjectName.Development"
-```
-
-### 运行单体应用项目
-
-```bash
-cd /path/to/output/host/YourPackageName.YourCompanyName.YourProjectName.AIO.Host
-dotnet run --launch-profile "YourPackageName.YourCompanyName.YourProjectName.Development"
-```
-
-## 打包与发布
-
-1. 克隆项目
-
-```bash
-git clone <repository-url>
-cd <repository-path>/aspnet-core/templates/content
-```
-
-2. 修改版本号
-   编辑项目文件更新版本号：
-   - 微服务模板：`../PackageName.CompanyName.ProjectName.csproj`
-   - 单体应用模板：`../PackageName.CompanyName.ProjectName.AIO.csproj`
-
-```xml
-<Version>8.3.0</Version>
-```
-
-3. 执行打包脚本
+使用 Migrate.ps1 脚本创建数据库表结构：
 
 ```powershell
-# Windows PowerShell
-.\pack.ps1
+# 导航到 migrations 目录
+cd migrations
 
-# PowerShell Core (Windows/Linux/macOS)
-pwsh pack.ps1
+# 运行迁移脚本
+./Migrate.ps1
 ```
 
-脚本会提示您选择要打包的模板：
+该脚本将：
 
-1. 微服务模板
-2. 单体应用模板
-3. 两种模板都打包
+1. 检测项目中可用的 DbContext 类
+2. 要求您选择用于迁移的 DbContext
+3. 提示输入迁移名称
+4. 创建迁移
+5. 可选地为迁移生成 SQL 脚本
 
-## 支持的数据库
+### 第三步：初始化种子数据
 
-- SqlServer
-- MySQL
-- PostgreSQL
-- Oracle
-- SQLite
+运行 DbMigrator 项目来初始化种子数据：
 
-## 注意事项
+```bash
+# 导航到 DbMigrator 项目目录
+cd migrations/PackageName.CompanyName.ProjectName.AIO.DbMigrator
 
-- 确保已安装 .NET SDK 8.0 或更高版本
-- 根据需求选择合适的模板：
-  - 微服务模板：适用于大规模分布式应用
-  - 单体应用模板：适用于小型应用或简单部署需求
-- 打包时注意 NuGet 发布地址和密钥
-- 发布前建议进行完整测试
+# 运行 DbMigrator 项目
+dotnet run
+```
+
+DbMigrator 将：
+
+1. 应用所有数据库迁移
+2. 初始化种子数据（用户、角色等）
+3. 如适用，设置租户配置
+
+### 第四步：启动应用程序
+
+成功设置数据库后，您可以运行 host 项目：
+
+```bash
+# 导航到 host 项目目录
+cd host/PackageName.CompanyName.ProjectName.AIO.Host
+
+# 运行 host 项目
+dotnet run --launch-profile "PackageName.CompanyName.ProjectName.Development"
+```
+
+应用程序将启动并可通过配置的 URL 访问（通常是 [https://localhost:44300](https://localhost:44300)）。
+
+## 基于数据库的单元测试
+
+要运行基于数据库的单元测试，请按照以下步骤操作：
+
+### 第一步：准备测试数据库
+
+在运行测试之前，确保测试数据库存在。测试数据库连接字符串在 `ProjectNameEntityFrameworkCoreTestModule.cs` 文件中定义。
+
+默认连接字符串是：
+
+```csharp
+private const string DefaultPostgresConnectionString =
+    "Host=127.0.0.1;Port=5432;Database=test_db;User Id=postgres;Password=postgres;";
+```
+
+您可以手动创建此数据库或修改连接字符串以使用现有数据库。
+
+### 第二步：配置测试环境
+
+如需修改 `ProjectNameEntityFrameworkCoreTestModule.cs` 中的连接字符串：
+
+```csharp
+// 您也可以设置环境变量来覆盖默认连接字符串
+var connectionString = Environment.GetEnvironmentVariable("TEST_CONNECTION_STRING") ??
+                       DefaultPostgresConnectionString;
+```
+
+### 第三步：运行测试
+
+运行 Application.Tests 项目：
+
+```bash
+# 导航到测试项目目录
+cd tests/PackageName.CompanyName.ProjectName.Application.Tests
+
+# 运行测试
+dotnet test
+```
+
+测试框架将：
+
+1. 创建清洁的测试数据库环境
+2. 运行所有单元测试
+3. 报告测试结果
+
+## 关于命名的说明
+
+这是一个模板项目，所以所有项目名称包含的占位符在使用模板创建新项目时将被替换：
+
+- `PackageName` 将被替换为您的包名
+- `CompanyName` 将被替换为您的公司名
+- `ProjectName` 将被替换为您的项目名
+
+当从此模板创建新项目时，您将指定这些值，它们将在整个解决方案中进行替换。

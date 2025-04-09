@@ -5,13 +5,14 @@ using LINGYUN.Abp.Demo.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.Demo.Books;
-public class EfCoreBookRepository : EfCoreDataProtectionRepository<DemoDbContext, Book, Guid>, IBookRepository
+public class EfCoreBookRepository : EfCoreDataProtectionRepository<DemoDbContext, Book, Guid, BookAuth>, IBookRepository
 {
     public EfCoreBookRepository(
-        [NotNull] IDbContextProvider<DemoDbContext> dbContextProvider, 
-        [NotNull] IDataAuthorizationService dataAuthorizationService, 
-        [NotNull] IEntityTypeFilterBuilder entityTypeFilterBuilder) 
-        : base(dbContextProvider, dataAuthorizationService, entityTypeFilterBuilder)
+        [NotNull] IDbContextProvider<DemoDbContext> dbContextProvider,
+        [NotNull] IDataAuthorizationService dataAuthorizationService,
+        [NotNull] IEntityTypeFilterBuilder entityTypeFilterBuilder,
+        [NotNull] IEntityPropertyResultBuilder entityPropertyResultBuilder) 
+        : base(dbContextProvider, dataAuthorizationService, entityTypeFilterBuilder, entityPropertyResultBuilder)
     {
     }
 }

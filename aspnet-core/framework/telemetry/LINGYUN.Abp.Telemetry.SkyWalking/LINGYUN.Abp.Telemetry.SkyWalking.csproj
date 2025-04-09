@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.Telemetry.SkyWalking</AssemblyName>
+		<PackageId>LINGYUN.Abp.Telemetry.SkyWalking</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Core" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="SkyAPM.Agent.Hosting" />
+		<PackageReference Include="SkyAPM.Diagnostics.AspNetCore" />
+		<PackageReference Include="SkyAPM.Diagnostics.CAP" />
+	</ItemGroup>
+
+</Project>

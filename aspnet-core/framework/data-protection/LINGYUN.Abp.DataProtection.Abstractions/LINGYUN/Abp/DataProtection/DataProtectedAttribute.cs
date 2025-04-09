@@ -2,16 +2,20 @@
 
 namespace LINGYUN.Abp.DataProtection;
 
-[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false)]
 public class DataProtectedAttribute : Attribute
 {
-    public DataAccessOperation Operation { get; }
-    public DataProtectedAttribute() : this(DataAccessOperation.Read)
+    public DataAccessOperation[] Operations { get; }
+
+    public DataProtectedAttribute() : this(
+        DataAccessOperation.Read,
+        DataAccessOperation.Write, 
+        DataAccessOperation.Delete)
     {
     }
 
-    public DataProtectedAttribute(DataAccessOperation operation)
+    public DataProtectedAttribute(params DataAccessOperation[] operations)
     {
-        Operation = operation;
+        Operations = operations;
     }
 }

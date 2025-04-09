@@ -52,7 +52,7 @@ public class EfCoreIdentitySessionRepository : Volo.Abp.Identity.EntityFramework
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task DeleteAllAsync(
+    public async virtual Task DeleteAllSessionAsync(
         string sessionId,
         Guid? exceptSessionId = null,
         CancellationToken cancellationToken = default)

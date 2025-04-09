@@ -11,6 +11,8 @@ public interface IResourceRepository : IRepository<Resource, Guid>
         string name,
         CancellationToken cancellationToken = default);
 
+    Resource FindByName(string name);
+
     Task<Resource> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default);

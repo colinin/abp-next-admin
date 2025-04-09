@@ -43,6 +43,7 @@ interface IHasExtraProperties {
 }
 /** 选择项 */
 interface ISelectionStringValueItem {
+  [key: string]: any;
   /** 选择项显示文本多语言对象 */
   displayText: LocalizableStringInfo;
   /** 选择项值 */

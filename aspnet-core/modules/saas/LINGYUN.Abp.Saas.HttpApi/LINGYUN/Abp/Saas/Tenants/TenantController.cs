@@ -83,7 +83,7 @@ public class TenantController : AbpSaasControllerBase, ITenantAppService
     [HttpPut]
     [Route("{id}/connection-string")]
     [Authorize(AbpSaasPermissions.Tenants.ManageConnectionStrings)]
-    public virtual Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringCreateOrUpdate input)
+    public virtual Task<TenantConnectionStringDto> SetConnectionStringAsync(Guid id, TenantConnectionStringSetInput input)
     {
         return TenantAppService.SetConnectionStringAsync(id, input);
     }
@@ -94,5 +94,12 @@ public class TenantController : AbpSaasControllerBase, ITenantAppService
     public virtual Task DeleteConnectionStringAsync(Guid id, string name)
     {
         return TenantAppService.DeleteConnectionStringAsync(id, name);
+    }
+    [HttpPost]
+    [Route("connection-string/check")]
+    [Authorize(AbpSaasPermissions.Tenants.ManageConnectionStrings)]
+    public virtual Task CheckConnectionStringAsync(TenantConnectionStringCheckInput input)
+    {
+        return TenantAppService.CheckConnectionStringAsync(input);
     }
 }

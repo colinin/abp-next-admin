@@ -17,7 +17,6 @@
 		<PackageReference Include="Volo.Abp.AutoMapper" />
 		<PackageReference Include="Volo.Abp.Caching" />
 		<PackageReference Include="Volo.Abp.Ddd.Domain" />
-		<PackageReference Include="Volo.Abp.Features" />
 		<PackageReference Include="LINGYUN.Abp.DataProtection" />
 	</ItemGroup>
 

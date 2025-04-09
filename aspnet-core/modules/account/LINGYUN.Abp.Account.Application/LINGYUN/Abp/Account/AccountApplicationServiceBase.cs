@@ -17,6 +17,7 @@ public abstract class AccountApplicationServiceBase : ApplicationService
     protected AccountApplicationServiceBase()
     {
         LocalizationResource = typeof(AccountResource);
+        ObjectMapperContext = typeof(AbpAccountApplicationModule);
     }
 
     protected async virtual Task<IdentityUser> GetCurrentUserAsync()

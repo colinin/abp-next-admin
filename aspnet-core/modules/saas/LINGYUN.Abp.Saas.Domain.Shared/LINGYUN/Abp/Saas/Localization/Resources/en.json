@@ -8,6 +8,7 @@
     "Saas:020101": "The default connection string cannot open a connection to the database!",
     "Saas:020102": "The database pointed to by the default connection string already exists!",
     "Saas:020103": "Unable to open the database connection pointed to by {Name}!",
+    "Saas:020104": "Database connection check of the {Name} type is not supported!",
     "Volo.AbpIo.MultiTenancy:010001": "The tenant is unavailable or restricted!",
     "Volo.AbpIo.MultiTenancy:010002": "Tenant unavailable!",
     "Menu:Saas": "Saas",
@@ -25,6 +26,7 @@
     "ConnectionStrings:AddNew": "New Connection",
     "DisplayName:DefaultConnectionString": "Default Connection String",
     "DisplayName:UseSharedDatabase": "Use the Shared Database",
+    "DisplayName:DataBaseProvider": "Data Base Provider",
     "DisplayName:Name": "Name",
     "DisplayName:Value": "Value",
     "DisplayName:IsActive": "Active",
@@ -50,6 +52,8 @@
     "Features:ExpiredRecoveryTimeDesc": "If the resource expiration is not handled for a long time, tenant resources will be reclaimed",
     "UnActived": "UnActived",
     "RecycleStrategy:Reserve": "Reserve",
-    "RecycleStrategy:Recycle": "Recycle"
+    "RecycleStrategy:Recycle": "Recycle",
+    "ManageFeatures": "Manage Features",
+    "IfUseCustomDataBaseDefaultConnectionStringIsRequiredMessage": "If you use a custom database, the default connection string must be required!"
   }
 }

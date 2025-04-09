@@ -36,6 +36,7 @@
     "Permission:ManageComments": "评论管理",
     "Permission:SmsMessage": "短信消息",
     "Permission:EmailMessage": "邮件消息",
-    "Permission:SendMessage": "发送消息"
+    "Permission:SendMessage": "发送消息",
+    "Permission:Enterprise": "企业关联"
   }
 }

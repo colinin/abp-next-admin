@@ -6,7 +6,7 @@ public static class PlatformPermissions
 {
     public const string GroupName = "Platform";
 
-    public class DataDictionary
+    public static class DataDictionary
     {
         public const string Default = GroupName + ".DataDictionary";
 
@@ -21,7 +21,7 @@ public static class PlatformPermissions
         public const string ManageItems = Default + ".ManageItems";
     }
 
-    public class Layout
+    public static class Layout
     {
         public const string Default = GroupName + ".Layout";
 
@@ -32,7 +32,7 @@ public static class PlatformPermissions
         public const string Delete = Default + ".Delete";
     }
 
-    public class Menu
+    public static class Menu
     {
         public const string Default = GroupName + ".Menu";
 
@@ -53,7 +53,7 @@ public static class PlatformPermissions
     /// <summary>
     /// 文件系统
     /// </summary>
-    public class FileSystem
+    public static class FileSystem
     {
         public const string Default = GroupName + ".FileSystem";
 
@@ -67,7 +67,7 @@ public static class PlatformPermissions
 
         public const string Move = Default + ".Move";
 
-        public class FileManager
+        public static class FileManager
         {
             public const string Default = FileSystem.Default + ".FileManager";
 
@@ -85,7 +85,7 @@ public static class PlatformPermissions
         }
     }
 
-    public class Package
+    public static class Package
     {
         public const string Default = GroupName + ".Package";
 
@@ -98,7 +98,7 @@ public static class PlatformPermissions
         public const string ManageBlobs = Default + ".ManageBlobs";
     }
 
-    public class Feedback
+    public static class Feedback
     {
         public const string Default = GroupName + ".Feedback";
 
@@ -113,7 +113,18 @@ public static class PlatformPermissions
         public const string ManageAttachments = Default + ".ManageAttachments";
     }
 
-    public class EmailMessage
+    public static class Enterprise
+    {
+        public const string Default = GroupName + ".Enterprise";
+
+        public const string Create = Default + ".Create";
+
+        public const string Delete = Default + ".Delete";
+
+        public const string Update = Default + ".Update";
+    }
+
+    public static class EmailMessage
     {
         public const string Default = GroupName + ".EmailMessage";
 
@@ -122,7 +133,7 @@ public static class PlatformPermissions
         public const string SendMessage = Default + ".SendMessage";
     }
 
-    public class SmsMessage
+    public static class SmsMessage
     {
         public const string Default = GroupName + ".SmsMessage";
 

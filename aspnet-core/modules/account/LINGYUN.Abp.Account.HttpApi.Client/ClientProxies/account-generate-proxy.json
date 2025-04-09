@@ -1,0 +1,2197 @@
+{
+  "modules": {
+    "account": {
+      "rootPath": "account",
+      "remoteServiceName": "AbpAccount",
+      "controllers": {
+        "LINGYUN.Abp.Account.AccountController": {
+          "controllerName": "Account",
+          "controllerGroupName": "Account",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Account.AccountController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.Account.IAccountAppService",
+              "name": "IAccountAppService",
+              "methods": [
+                {
+                  "name": "RegisterAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.PhoneRegisterDto, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.PhoneRegisterDto",
+                      "typeSimple": "LINGYUN.Abp.Account.PhoneRegisterDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "RegisterAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.WeChatRegisterDto, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.WeChatRegisterDto",
+                      "typeSimple": "LINGYUN.Abp.Account.WeChatRegisterDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ResetPasswordAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.PhoneResetPasswordDto, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.PhoneResetPasswordDto",
+                      "typeSimple": "LINGYUN.Abp.Account.PhoneResetPasswordDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "SendPhoneRegisterCodeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto",
+                      "typeSimple": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "SendPhoneSigninCodeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto",
+                      "typeSimple": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "SendEmailSigninCodeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.SendEmailSigninCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.SendEmailSigninCodeDto",
+                      "typeSimple": "LINGYUN.Abp.Account.SendEmailSigninCodeDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "SendPhoneResetPasswordCodeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto",
+                      "typeSimple": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetTwoFactorProvidersAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.GetTwoFactorProvidersInput, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.GetTwoFactorProvidersInput",
+                      "typeSimple": "LINGYUN.Abp.Account.GetTwoFactorProvidersInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.NameValue>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.NameValue>"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "RegisterAsyncByInput": {
+              "uniqueName": "RegisterAsyncByInput",
+              "name": "RegisterAsync",
+              "httpMethod": "POST",
+              "url": "api/account/wechat/register",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.WeChatRegisterDto, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.WeChatRegisterDto",
+                  "typeSimple": "LINGYUN.Abp.Account.WeChatRegisterDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.WeChatRegisterDto",
+                  "typeSimple": "LINGYUN.Abp.Account.WeChatRegisterDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+            },
+            "ResetPasswordAsyncByInput": {
+              "uniqueName": "ResetPasswordAsyncByInput",
+              "name": "ResetPasswordAsync",
+              "httpMethod": "PUT",
+              "url": "api/account/phone/reset-password",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.PhoneResetPasswordDto, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.PhoneResetPasswordDto",
+                  "typeSimple": "LINGYUN.Abp.Account.PhoneResetPasswordDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.PhoneResetPasswordDto",
+                  "typeSimple": "LINGYUN.Abp.Account.PhoneResetPasswordDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+            },
+            "SendPhoneSigninCodeAsyncByInput": {
+              "uniqueName": "SendPhoneSigninCodeAsyncByInput",
+              "name": "SendPhoneSigninCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/phone/send-signin-code",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+            },
+            "SendEmailSigninCodeAsyncByInput": {
+              "uniqueName": "SendEmailSigninCodeAsyncByInput",
+              "name": "SendEmailSigninCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/email/send-signin-code",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.SendEmailSigninCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.SendEmailSigninCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendEmailSigninCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.SendEmailSigninCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendEmailSigninCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+            },
+            "SendPhoneRegisterCodeAsyncByInput": {
+              "uniqueName": "SendPhoneRegisterCodeAsyncByInput",
+              "name": "SendPhoneRegisterCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/phone/send-register-code",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+            },
+            "SendPhoneResetPasswordCodeAsyncByInput": {
+              "uniqueName": "SendPhoneResetPasswordCodeAsyncByInput",
+              "name": "SendPhoneResetPasswordCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/phone/send-password-reset-code",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+            },
+            "GetTwoFactorProvidersAsyncByInput": {
+              "uniqueName": "GetTwoFactorProvidersAsyncByInput",
+              "name": "GetTwoFactorProvidersAsync",
+              "httpMethod": "GET",
+              "url": "api/account/two-factor-providers",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.GetTwoFactorProvidersInput, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.GetTwoFactorProvidersInput",
+                  "typeSimple": "LINGYUN.Abp.Account.GetTwoFactorProvidersInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "UserId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.NameValue>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.NameValue>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.Account.MyClaimController": {
+          "controllerName": "MyClaim",
+          "controllerGroupName": "Claim",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Account.MyClaimController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.Account.IMyClaimAppService",
+              "name": "IMyClaimAppService",
+              "methods": [
+                {
+                  "name": "ChangeAvatarAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.ChangeAvatarInput, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.ChangeAvatarInput",
+                      "typeSimple": "LINGYUN.Abp.Account.ChangeAvatarInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetStateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "claimType",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Account.GetUserClaimStateDto",
+                    "typeSimple": "LINGYUN.Abp.Account.GetUserClaimStateDto"
+                  }
+                },
+                {
+                  "name": "ResetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "claimType",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "ChangeAvatarAsyncByInput": {
+              "uniqueName": "ChangeAvatarAsyncByInput",
+              "name": "ChangeAvatarAsync",
+              "httpMethod": "POST",
+              "url": "api/account/my-claim/change-avatar",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.ChangeAvatarInput, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.ChangeAvatarInput",
+                  "typeSimple": "LINGYUN.Abp.Account.ChangeAvatarInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.ChangeAvatarInput",
+                  "typeSimple": "LINGYUN.Abp.Account.ChangeAvatarInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyClaimAppService"
+            },
+            "GetStateAsyncByClaimType": {
+              "uniqueName": "GetStateAsyncByClaimType",
+              "name": "GetStateAsync",
+              "httpMethod": "GET",
+              "url": "api/account/my-claim/state/{claimType}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "claimType",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "claimType",
+                  "name": "claimType",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.GetUserClaimStateDto",
+                "typeSimple": "LINGYUN.Abp.Account.GetUserClaimStateDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyClaimAppService"
+            },
+            "ResetAsyncByClaimType": {
+              "uniqueName": "ResetAsyncByClaimType",
+              "name": "ResetAsync",
+              "httpMethod": "DELETE",
+              "url": "api/account/my-claim/reset/{claimType}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "claimType",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "claimType",
+                  "name": "claimType",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyClaimAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.Account.MyProfileController": {
+          "controllerName": "MyProfile",
+          "controllerGroupName": "Profile",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Account.MyProfileController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "name": "IMyProfileAppService",
+              "methods": [
+                {
+                  "name": "GetAuthenticatorAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Account.AuthenticatorDto",
+                    "typeSimple": "LINGYUN.Abp.Account.AuthenticatorDto"
+                  }
+                },
+                {
+                  "name": "VerifyAuthenticatorCodeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput",
+                      "typeSimple": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto",
+                    "typeSimple": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto"
+                  }
+                },
+                {
+                  "name": "GetSessionsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Identity.GetMySessionsInput, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Identity.GetMySessionsInput",
+                      "typeSimple": "LINGYUN.Abp.Identity.GetMySessionsInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.IdentitySessionDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.IdentitySessionDto>"
+                  }
+                },
+                {
+                  "name": "RevokeSessionAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "sessionId",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ResetAuthenticatorAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetTwoFactorEnabledAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
+                    "typeSimple": "LINGYUN.Abp.Account.TwoFactorEnabledDto"
+                  }
+                },
+                {
+                  "name": "ChangeTwoFactorEnabledAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.TwoFactorEnabledDto, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
+                      "typeSimple": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "SendChangePhoneNumberCodeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput",
+                      "typeSimple": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ChangePhoneNumberAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.ChangePhoneNumberInput, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.ChangePhoneNumberInput",
+                      "typeSimple": "LINGYUN.Abp.Account.ChangePhoneNumberInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "SendEmailConfirmLinkAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto",
+                      "typeSimple": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ConfirmEmailAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.ConfirmEmailInput, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.ConfirmEmailInput",
+                      "typeSimple": "LINGYUN.Abp.Account.ConfirmEmailInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ChangePictureAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.ChangePictureInput, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.ChangePictureInput",
+                      "typeSimple": "LINGYUN.Abp.Account.ChangePictureInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetPictureAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetSessionsAsyncByInput": {
+              "uniqueName": "GetSessionsAsyncByInput",
+              "name": "GetSessionsAsync",
+              "httpMethod": "GET",
+              "url": "api/account/my-profile/sessions",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Identity.GetMySessionsInput, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Identity.GetMySessionsInput",
+                  "typeSimple": "LINGYUN.Abp.Identity.GetMySessionsInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Device",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ClientId",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.IdentitySessionDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.IdentitySessionDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "RevokeSessionAsyncBySessionId": {
+              "uniqueName": "RevokeSessionAsyncBySessionId",
+              "name": "RevokeSessionAsync",
+              "httpMethod": "DELETE",
+              "url": "api/account/my-profile/sessions/{sessionId}/revoke",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "sessionId",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "sessionId",
+                  "name": "sessionId",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "GetTwoFactorEnabledAsync": {
+              "uniqueName": "GetTwoFactorEnabledAsync",
+              "name": "GetTwoFactorEnabledAsync",
+              "httpMethod": "GET",
+              "url": "api/account/my-profile/two-factor",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
+                "typeSimple": "LINGYUN.Abp.Account.TwoFactorEnabledDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "ChangeTwoFactorEnabledAsyncByInput": {
+              "uniqueName": "ChangeTwoFactorEnabledAsyncByInput",
+              "name": "ChangeTwoFactorEnabledAsync",
+              "httpMethod": "PUT",
+              "url": "api/account/my-profile/change-two-factor",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.TwoFactorEnabledDto, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
+                  "typeSimple": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
+                  "typeSimple": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "SendChangePhoneNumberCodeAsyncByInput": {
+              "uniqueName": "SendChangePhoneNumberCodeAsyncByInput",
+              "name": "SendChangePhoneNumberCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/my-profile/send-phone-number-change-code",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput",
+                  "typeSimple": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput",
+                  "typeSimple": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "ChangePhoneNumberAsyncByInput": {
+              "uniqueName": "ChangePhoneNumberAsyncByInput",
+              "name": "ChangePhoneNumberAsync",
+              "httpMethod": "PUT",
+              "url": "api/account/my-profile/change-phone-number",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.ChangePhoneNumberInput, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.ChangePhoneNumberInput",
+                  "typeSimple": "LINGYUN.Abp.Account.ChangePhoneNumberInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.ChangePhoneNumberInput",
+                  "typeSimple": "LINGYUN.Abp.Account.ChangePhoneNumberInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "SendEmailConfirmLinkAsyncByInput": {
+              "uniqueName": "SendEmailConfirmLinkAsyncByInput",
+              "name": "SendEmailConfirmLinkAsync",
+              "httpMethod": "POST",
+              "url": "api/account/my-profile/send-email-confirm-link",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "ConfirmEmailAsyncByInput": {
+              "uniqueName": "ConfirmEmailAsyncByInput",
+              "name": "ConfirmEmailAsync",
+              "httpMethod": "PUT",
+              "url": "api/account/my-profile/confirm-email",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.ConfirmEmailInput, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.ConfirmEmailInput",
+                  "typeSimple": "LINGYUN.Abp.Account.ConfirmEmailInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.ConfirmEmailInput",
+                  "typeSimple": "LINGYUN.Abp.Account.ConfirmEmailInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "GetAuthenticatorAsync": {
+              "uniqueName": "GetAuthenticatorAsync",
+              "name": "GetAuthenticatorAsync",
+              "httpMethod": "GET",
+              "url": "api/account/my-profile/authenticator",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.AuthenticatorDto",
+                "typeSimple": "LINGYUN.Abp.Account.AuthenticatorDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "VerifyAuthenticatorCodeAsyncByInput": {
+              "uniqueName": "VerifyAuthenticatorCodeAsyncByInput",
+              "name": "VerifyAuthenticatorCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/my-profile/verify-authenticator-code",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput",
+                  "typeSimple": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput",
+                  "typeSimple": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto",
+                "typeSimple": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "ResetAuthenticatorAsync": {
+              "uniqueName": "ResetAuthenticatorAsync",
+              "name": "ResetAuthenticatorAsync",
+              "httpMethod": "POST",
+              "url": "api/account/my-profile/reset-authenticator",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "ChangePictureAsyncByInput": {
+              "uniqueName": "ChangePictureAsyncByInput",
+              "name": "ChangePictureAsync",
+              "httpMethod": "POST",
+              "url": "api/account/my-profile/picture",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.ChangePictureInput, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.ChangePictureInput",
+                  "typeSimple": "LINGYUN.Abp.Account.ChangePictureInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "File",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Content.IRemoteStreamContent",
+                  "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "FormFile",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            },
+            "GetPictureAsync": {
+              "uniqueName": "GetPictureAsync",
+              "name": "GetPictureAsync",
+              "httpMethod": "GET",
+              "url": "api/account/my-profile/picture",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.Account.MySecurityLogController": {
+          "controllerName": "MySecurityLog",
+          "controllerGroupName": "SecurityLog",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Account.MySecurityLogController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Abp.Account.IMySecurityLogAppService",
+              "name": "IMySecurityLogAppService",
+              "methods": [
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.SecurityLogGetListInput, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.SecurityLogGetListInput",
+                      "typeSimple": "LINGYUN.Abp.Account.SecurityLogGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.SecurityLogDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.SecurityLogDto>"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Account.SecurityLogDto",
+                    "typeSimple": "LINGYUN.Abp.Account.SecurityLogDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/account/security-logs/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMySecurityLogAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/account/security-logs/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.SecurityLogDto",
+                "typeSimple": "LINGYUN.Abp.Account.SecurityLogDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMySecurityLogAppService"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/account/security-logs",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.SecurityLogGetListInput, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.SecurityLogGetListInput",
+                  "typeSimple": "LINGYUN.Abp.Account.SecurityLogGetListInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "StartTime",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "EndTime",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ApplicationName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Identity",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ActionName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ClientId",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CorrelationId",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.SecurityLogDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.SecurityLogDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.IMySecurityLogAppService"
+            }
+          }
+        },
+        "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController": {
+          "controllerName": "QrCodeLogin",
+          "controllerGroupName": "QrCodeLogin",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController",
+          "interfaces": [],
+          "actions": {
+            "GenerateAsync": {
+              "uniqueName": "GenerateAsync",
+              "name": "GenerateAsync",
+              "httpMethod": "POST",
+              "url": "api/account/qrcode/generate",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.GenerateQrCodeResult",
+                "typeSimple": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.GenerateQrCodeResult"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController"
+            },
+            "CheckCodeAsyncByKey": {
+              "uniqueName": "CheckCodeAsyncByKey",
+              "name": "CheckCodeAsync",
+              "httpMethod": "GET",
+              "url": "api/account/qrcode/{key}/check",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "key",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "key",
+                  "name": "key",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult",
+                "typeSimple": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController"
+            },
+            "ScanCodeAsyncByKey": {
+              "uniqueName": "ScanCodeAsyncByKey",
+              "name": "ScanCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/qrcode/{key}/scan",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "key",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "key",
+                  "name": "key",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult",
+                "typeSimple": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController"
+            },
+            "ConfirmCodeAsyncByKey": {
+              "uniqueName": "ConfirmCodeAsyncByKey",
+              "name": "ConfirmCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/qrcode/{key}/confirm",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "key",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "key",
+                  "name": "key",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult",
+                "typeSimple": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models.QrCodeUserInfoResult"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.Account.Web.Areas.Account.Controllers.QrCodeLoginController"
+            }
+          }
+        },
+        "Volo.Abp.Account.AccountController": {
+          "controllerName": "Account",
+          "controllerGroupName": "Account",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Account.AccountController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Account.IAccountAppService",
+              "name": "IAccountAppService",
+              "methods": [
+                {
+                  "name": "RegisterAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.Account.RegisterDto, Volo.Abp.Account.Application.Contracts",
+                      "type": "Volo.Abp.Account.RegisterDto",
+                      "typeSimple": "Volo.Abp.Account.RegisterDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Identity.IdentityUserDto",
+                    "typeSimple": "Volo.Abp.Identity.IdentityUserDto"
+                  }
+                },
+                {
+                  "name": "SendPasswordResetCodeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.Account.SendPasswordResetCodeDto, Volo.Abp.Account.Application.Contracts",
+                      "type": "Volo.Abp.Account.SendPasswordResetCodeDto",
+                      "typeSimple": "Volo.Abp.Account.SendPasswordResetCodeDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "VerifyPasswordResetTokenAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.Account.VerifyPasswordResetTokenInput, Volo.Abp.Account.Application.Contracts",
+                      "type": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
+                      "typeSimple": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Boolean",
+                    "typeSimple": "boolean"
+                  }
+                },
+                {
+                  "name": "ResetPasswordAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.Account.ResetPasswordDto, Volo.Abp.Account.Application.Contracts",
+                      "type": "Volo.Abp.Account.ResetPasswordDto",
+                      "typeSimple": "Volo.Abp.Account.ResetPasswordDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "RegisterAsyncByInput": {
+              "uniqueName": "RegisterAsyncByInput",
+              "name": "RegisterAsync",
+              "httpMethod": "POST",
+              "url": "api/account/register",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Account.RegisterDto, Volo.Abp.Account.Application.Contracts",
+                  "type": "Volo.Abp.Account.RegisterDto",
+                  "typeSimple": "Volo.Abp.Account.RegisterDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.RegisterDto",
+                  "typeSimple": "Volo.Abp.Account.RegisterDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Identity.IdentityUserDto",
+                "typeSimple": "Volo.Abp.Identity.IdentityUserDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.IAccountAppService"
+            },
+            "SendPasswordResetCodeAsyncByInput": {
+              "uniqueName": "SendPasswordResetCodeAsyncByInput",
+              "name": "SendPasswordResetCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/send-password-reset-code",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Account.SendPasswordResetCodeDto, Volo.Abp.Account.Application.Contracts",
+                  "type": "Volo.Abp.Account.SendPasswordResetCodeDto",
+                  "typeSimple": "Volo.Abp.Account.SendPasswordResetCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.SendPasswordResetCodeDto",
+                  "typeSimple": "Volo.Abp.Account.SendPasswordResetCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.IAccountAppService"
+            },
+            "VerifyPasswordResetTokenAsyncByInput": {
+              "uniqueName": "VerifyPasswordResetTokenAsyncByInput",
+              "name": "VerifyPasswordResetTokenAsync",
+              "httpMethod": "POST",
+              "url": "api/account/verify-password-reset-token",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Account.VerifyPasswordResetTokenInput, Volo.Abp.Account.Application.Contracts",
+                  "type": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
+                  "typeSimple": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
+                  "typeSimple": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Boolean",
+                "typeSimple": "boolean"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.IAccountAppService"
+            },
+            "ResetPasswordAsyncByInput": {
+              "uniqueName": "ResetPasswordAsyncByInput",
+              "name": "ResetPasswordAsync",
+              "httpMethod": "POST",
+              "url": "api/account/reset-password",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Account.ResetPasswordDto, Volo.Abp.Account.Application.Contracts",
+                  "type": "Volo.Abp.Account.ResetPasswordDto",
+                  "typeSimple": "Volo.Abp.Account.ResetPasswordDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.ResetPasswordDto",
+                  "typeSimple": "Volo.Abp.Account.ResetPasswordDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.IAccountAppService"
+            }
+          }
+        },
+        "Volo.Abp.Account.DynamicClaimsController": {
+          "controllerName": "DynamicClaims",
+          "controllerGroupName": "DynamicClaims",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Account.DynamicClaimsController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Account.IDynamicClaimsAppService",
+              "name": "IDynamicClaimsAppService",
+              "methods": [
+                {
+                  "name": "RefreshAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "RefreshAsync": {
+              "uniqueName": "RefreshAsync",
+              "name": "RefreshAsync",
+              "httpMethod": "POST",
+              "url": "api/account/dynamic-claims/refresh",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.IDynamicClaimsAppService"
+            }
+          }
+        },
+        "Volo.Abp.Account.ProfileController": {
+          "controllerName": "Profile",
+          "controllerGroupName": "Profile",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Account.ProfileController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Account.IProfileAppService",
+              "name": "IProfileAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Account.ProfileDto",
+                    "typeSimple": "Volo.Abp.Account.ProfileDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.Account.UpdateProfileDto, Volo.Abp.Account.Application.Contracts",
+                      "type": "Volo.Abp.Account.UpdateProfileDto",
+                      "typeSimple": "Volo.Abp.Account.UpdateProfileDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Account.ProfileDto",
+                    "typeSimple": "Volo.Abp.Account.ProfileDto"
+                  }
+                },
+                {
+                  "name": "ChangePasswordAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.Account.ChangePasswordInput, Volo.Abp.Account.Application.Contracts",
+                      "type": "Volo.Abp.Account.ChangePasswordInput",
+                      "typeSimple": "Volo.Abp.Account.ChangePasswordInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/account/my-profile",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Account.ProfileDto",
+                "typeSimple": "Volo.Abp.Account.ProfileDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.IProfileAppService"
+            },
+            "UpdateAsyncByInput": {
+              "uniqueName": "UpdateAsyncByInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/account/my-profile",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Account.UpdateProfileDto, Volo.Abp.Account.Application.Contracts",
+                  "type": "Volo.Abp.Account.UpdateProfileDto",
+                  "typeSimple": "Volo.Abp.Account.UpdateProfileDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.UpdateProfileDto",
+                  "typeSimple": "Volo.Abp.Account.UpdateProfileDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Account.ProfileDto",
+                "typeSimple": "Volo.Abp.Account.ProfileDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.IProfileAppService"
+            },
+            "ChangePasswordAsyncByInput": {
+              "uniqueName": "ChangePasswordAsyncByInput",
+              "name": "ChangePasswordAsync",
+              "httpMethod": "POST",
+              "url": "api/account/my-profile/change-password",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Account.ChangePasswordInput, Volo.Abp.Account.Application.Contracts",
+                  "type": "Volo.Abp.Account.ChangePasswordInput",
+                  "typeSimple": "Volo.Abp.Account.ChangePasswordInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.ChangePasswordInput",
+                  "typeSimple": "Volo.Abp.Account.ChangePasswordInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.IProfileAppService"
+            }
+          }
+        },
+        "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController": {
+          "controllerName": "Account",
+          "controllerGroupName": "Login",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController",
+          "interfaces": [],
+          "actions": {
+            "LoginByLogin": {
+              "uniqueName": "LoginByLogin",
+              "name": "Login",
+              "httpMethod": "POST",
+              "url": "api/account/login",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "login",
+                  "typeAsString": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo, Volo.Abp.Account.Web",
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "login",
+                  "name": "login",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
+                "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
+            },
+            "Logout": {
+              "uniqueName": "Logout",
+              "name": "Logout",
+              "httpMethod": "GET",
+              "url": "api/account/logout",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
+            },
+            "CheckPasswordByLogin": {
+              "uniqueName": "CheckPasswordByLogin",
+              "name": "CheckPassword",
+              "httpMethod": "POST",
+              "url": "api/account/check-password",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "login",
+                  "typeAsString": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo, Volo.Abp.Account.Web",
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "login",
+                  "name": "login",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
+                "typeSimple": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Account.Web.Areas.Account.Controllers.AccountController"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

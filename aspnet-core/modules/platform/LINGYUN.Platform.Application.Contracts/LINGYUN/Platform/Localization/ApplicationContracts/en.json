@@ -36,6 +36,7 @@
     "Permission:ManageComments": "Manage Comments",
     "Permission:SmsMessage": "Sms Message",
     "Permission:EmailMessage": "Email Message",
-    "Permission:SendMessage": "Send Message"
+    "Permission:SendMessage": "Send Message",
+    "Permission:Enterprise": "Enterprise"
   }
 }

@@ -64,7 +64,7 @@ public class EntityTypeInfo : AuditedAggregateRoot<Guid>
         string name,
         string displayName,
         string typeFullName,
-        string valueRange = null)
+        string javaScriptType)
     {
         if (HasExistsProperty(name))
         {
@@ -78,7 +78,7 @@ public class EntityTypeInfo : AuditedAggregateRoot<Guid>
             name,
             displayName,
             typeFullName,
-            valueRange);
+            javaScriptType);
 
         Properties.Add(propertyInfo);
 

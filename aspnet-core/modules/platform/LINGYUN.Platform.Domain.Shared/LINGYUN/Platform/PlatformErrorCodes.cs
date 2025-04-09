@@ -61,4 +61,8 @@ public static class PlatformErrorCodes
     /// 不能添加重复的附件 {Name}!
     /// </summary>
     public const string DuplicateEmailMessageAttachment = Namespace + ":06102";
+    /// <summary>
+    /// 已经存在名为 {Name} 的企业信息!
+    /// </summary>
+    public const string DuplicateEnterpriseName = Namespace + ":07101";
 }

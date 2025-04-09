@@ -3,6 +3,7 @@ using Elsa.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
 
@@ -24,6 +25,14 @@ public class AbpElsaEntityFrameworkCoreMySqlModule : AbpModule
         PreConfigure<ElsaOptionsBuilder>(elsa =>
         {
             elsa.AddFeatures(startups, configuration);
+        });
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpElsaEntityFrameworkCoreMySqlModule>();
         });
     }
 }

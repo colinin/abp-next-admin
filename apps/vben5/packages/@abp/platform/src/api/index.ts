@@ -1,2 +1,2 @@
-export * from './useEmailMessagesApi';
-export * from './useSmsMessagesApi';
+export { useEmailMessagesApi } from './useEmailMessagesApi';
+export { useSmsMessagesApi } from './useSmsMessagesApi';

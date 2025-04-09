@@ -6,6 +6,7 @@ import {
 import { useAccessStore } from '@vben/stores';
 
 import { useOAuthError, useTokenApi } from '@abp/account';
+import { useAbpStore } from '@abp/core';
 import { requestClient, useWrapperResult } from '@abp/request';
 import { message } from 'ant-design-vue';
 
@@ -58,12 +59,16 @@ export function initRequestClient() {
   // 请求头处理
   requestClient.addRequestInterceptor({
     fulfilled: async (config) => {
+      const abpStore = useAbpStore();
       const accessStore = useAccessStore();
       if (accessStore.accessToken) {
         config.headers.Authorization = `${accessStore.accessToken}`;
       }
       config.headers['Accept-Language'] = preferences.app.locale;
       config.headers['X-Request-From'] = 'vben';
+      if (abpStore.tenantId) {
+        config.headers.__tenant = abpStore.tenantId;
+      }
       return config;
     },
   });

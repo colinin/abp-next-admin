@@ -31,6 +31,10 @@ defineOptions({
   name: 'PermissionModal',
 });
 
+const emits = defineEmits<{
+  (event: 'change', name: string, key?: string): void;
+}>();
+
 const TabPane = Tabs.TabPane;
 
 interface ModalState {
@@ -92,13 +96,14 @@ const [Modal, modalApi] = useVbenModal({
     const permissions = toPermissionList(permissionTree.value);
     try {
       modalApi.setState({
-        closable: false,
-        confirmLoading: true,
+        submitting: true,
       });
+      const providerName = modelState.value!.providerName;
+      const providerKey = modelState.value!.providerKey;
       await updateApi(
         {
-          providerKey: modelState.value!.providerKey,
-          providerName: modelState.value!.providerName,
+          providerKey,
+          providerName,
         },
         {
           permissions,
@@ -106,10 +111,10 @@ const [Modal, modalApi] = useVbenModal({
       );
       message.success($t('AbpUi.SavedSuccessfully'));
       modalApi.close();
+      emits('change', providerName, providerKey);
     } finally {
       modalApi.setState({
-        closable: true,
-        confirmLoading: false,
+        submitting: false,
       });
     }
   },

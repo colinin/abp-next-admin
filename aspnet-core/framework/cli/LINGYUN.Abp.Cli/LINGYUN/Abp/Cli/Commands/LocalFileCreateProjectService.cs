@@ -83,10 +83,11 @@ namespace LINGYUN.Abp.Cli.Commands
 
             Logger.LogInformation("Rewrite Package and company name.");
 
-            await TryReplacePackageAndCompanyNameWithProjectFile(
+            await TryReplacePackageAndCompanyAndProjectNameWithProjectFile(
                 projectFiles,
                 createArgs.PackageName,
                 createArgs.SolutionName.CompanyName,
+                createArgs.SolutionName.ProjectName,
                 dbm);
 
             Logger.LogInformation("Rewrite appsettings.json.");
@@ -231,15 +232,17 @@ namespace LINGYUN.Abp.Cli.Commands
         //     }
         // }
 
-        protected async virtual Task TryReplacePackageAndCompanyNameWithProjectFile(
+        protected async virtual Task TryReplacePackageAndCompanyAndProjectNameWithProjectFile(
             List<FindFile> projectFiles,
             string packageName,
             string companyName,
+            string projectName,
             string dbm = "MySQL")
         {
-            var canReplaceFiles = projectFiles.Where(f => !f.IsFolder && !f.Name.Contains("appsettings"));
-            foreach (var projectFile in canReplaceFiles)
+            var canReplaceWithNotProjectFiles = projectFiles.Where(f => !f.IsFolder && !f.Name.Contains("appsettings"));
+            foreach (var projectFile in canReplaceWithNotProjectFiles)
             {
+                await ReplaceFileTextAsync(projectFile, "project-name", projectName.ToKebabCase());
                 await ReplaceFileTextAsync(projectFile, "PackageName", packageName);
                 await ReplaceFileTextAsync(projectFile, "CompanyName", companyName);
                 await ReplaceFileTextAsync(projectFile, "DatabaseManagementName", dbm);

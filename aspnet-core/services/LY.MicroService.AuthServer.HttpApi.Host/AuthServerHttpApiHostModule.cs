@@ -4,9 +4,15 @@ using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
+using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Exporter.MiniExcel;
+using LINGYUN.Abp.Gdpr;
+using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
+using LINGYUN.Abp.Gdpr.Identity;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
@@ -16,7 +22,8 @@ using LINGYUN.Abp.OpenIddict;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
-using LINGYUN.Abp.Sms.Aliyun;
+using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.Telemetry.SkyWalking;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +37,6 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
-using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -52,6 +58,10 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpOpenIddictApplicationModule),
     typeof(AbpOpenIddictHttpApiModule),
     typeof(AbpOpenIddictEntityFrameworkCoreModule),
+    typeof(AbpGdprApplicationModule),
+    typeof(AbpGdprHttpApiModule),
+    typeof(AbpGdprDomainIdentityModule),
+    typeof(AbpGdprEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
@@ -61,16 +71,19 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpBlobStoringOssManagementModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpHttpClientModule),
-    typeof(AbpAliyunSmsModule),
-    typeof(AbpMailKitModule),
+    typeof(AbpSmsPlatformModule),
+    typeof(AbpEmailingPlatformModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpTelemetrySkyWalkingModule),
+    typeof(AbpExporterMiniExcelModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpAutofacModule)
     )]
@@ -101,6 +114,7 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         ConfigureVirtualFileSystem();
         ConfigureFeatureManagement();
         ConfigurePermissionManagement();
+        ConfigureBlobStoring(configuration);
         ConfigureUrls(configuration);
         ConfigureCaching(configuration);
         ConfigureTiming(configuration);
@@ -110,7 +124,6 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
-        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -128,10 +141,9 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         // 路由
         app.UseRouting();
         // 跨域
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         // 认证
         app.UseAuthentication();
-        app.UseJwtTokenMiddleware();
         // 多租户
         app.UseMultiTenancy();
         // 会话

@@ -1,6 +1,4 @@
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LY.MicroService.Applications.Single;
-using Microsoft.AspNetCore.Cors;
 using Serilog;
 using Volo.Abp.IO;
 using Volo.Abp.Modularity.PlugIns;
@@ -27,6 +25,20 @@ builder.Services.AddCors(options =>
 });
 builder.Host.AddAppSettingsSecretsJson()
     .UseAutofac()
+    .ConfigureAppConfiguration((context, config) =>
+    {
+        var dbProvider = Environment.GetEnvironmentVariable("APPLICATION_DATABASE_PROVIDER");
+        if (!dbProvider.IsNullOrWhiteSpace())
+        {
+            config.AddJsonFile($"appsettings.{dbProvider}.json", optional: true);
+        }
+
+        var configuration = config.Build();
+        if (configuration.GetValue("AgileConfig:IsEnabled", false))
+        {
+            config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
+        }
+    })
     .UseSerilog((context, provider, config) =>
     {
         config.ReadFrom.Configuration(context.Configuration);
@@ -39,34 +51,33 @@ await builder.AddApplicationAsync<MicroServiceApplicationsSingleModule>(options 
     options.ApplicationName = MicroServiceApplicationsSingleModule.ApplicationName;
     options.Configuration.UserSecretsId = Environment.GetEnvironmentVariable("APPLICATION_USER_SECRETS_ID");
     options.Configuration.UserSecretsAssembly = typeof(MicroServiceApplicationsSingleModule).Assembly;
-    var pluginFolder = Path.Combine(
-            Directory.GetCurrentDirectory(), "Modules");
+    var pluginFolder = Path.Combine(Directory.GetCurrentDirectory(), "Modules");
     DirectoryHelper.CreateIfNotExists(pluginFolder);
-    options.PlugInSources.AddFolder(
-        pluginFolder,
-        SearchOption.AllDirectories);
+    options.PlugInSources.AddFolder(pluginFolder,SearchOption.AllDirectories);
 });
 
 var app = builder.Build();
 
 await app.InitializeApplicationAsync();
 
+app.UseMapRequestLocalization();
+
+app.UseCookiePolicy();
 app.UseForwardedHeaders();
+app.UseAbpSecurityHeaders();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
 // app.UseAbpExceptionHandling();
-app.UseCookiePolicy();
-app.UseMapRequestLocalization();
 app.UseCorrelationId();
 app.MapAbpStaticAssets();
 app.UseRouting();
 app.UseCors();
 app.UseAuthentication();
+app.UseAbpOpenIddictValidation();
 app.UseMultiTenancy();
 app.UseUnitOfWork();
-app.UseAbpOpenIddictValidation();
 app.UseAbpSession();
 app.UseDynamicClaims();
 app.UseAuthorization();
