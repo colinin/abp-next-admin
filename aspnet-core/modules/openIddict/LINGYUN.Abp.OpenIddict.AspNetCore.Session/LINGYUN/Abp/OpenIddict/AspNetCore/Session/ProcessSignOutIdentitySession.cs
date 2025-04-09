@@ -14,7 +14,7 @@ public class ProcessSignOutIdentitySession : IOpenIddictServerHandler<OpenIddict
 
     public static OpenIddictServerHandlerDescriptor Descriptor { get; }
         = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ProcessSignOutContext>()
-            .AddFilter<OpenIddictServerHandlerFilters.RequireLogoutRequest>()
+            .AddFilter<OpenIddictServerHandlerFilters.RequireEndSessionRequest>()
             .UseScopedHandler<ProcessSignOutIdentitySession>()
             .SetOrder(OpenIddictServerHandlers.ValidateSignOutDemand.Descriptor.Order + 1_000)
             .SetType(OpenIddictServerHandlerType.Custom)

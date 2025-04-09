@@ -20,7 +20,7 @@
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="9.0.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="9.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -13,10 +13,12 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
+		<PackageReference Include="DotNetCore.CAP.MySql" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql\LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.Quartz.MySqlInstaller\LINGYUN.Abp.Quartz.MySqlInstaller.csproj" />
 		<ProjectReference Include="..\LY.MicroService.Applications.Single.EntityFrameworkCore\LY.MicroService.Applications.Single.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
