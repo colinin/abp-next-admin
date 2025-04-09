@@ -2,7 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace LINGYUN.Abp.Demo.Books;
-public class CreateUpdateBookDto
+
+public class CreateBookDto
 {
     [Required]
     [StringLength(128)]

@@ -25,7 +25,7 @@ public class BookController : AbpControllerBase, IBookAppService
 
     [HttpPost]
     [Authorize(DemoPermissions.Books.Create)]
-    public virtual Task<BookDto> CreateAsync(CreateUpdateBookDto input)
+    public virtual Task<BookDto> CreateAsync(CreateBookDto input)
     {
         return _service.CreateAsync(input);
     }
@@ -67,7 +67,7 @@ public class BookController : AbpControllerBase, IBookAppService
     }
 
     [HttpGet]
-    public virtual Task<PagedResultDto<BookDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+    public virtual Task<PagedResultDto<BookDto>> GetListAsync(BookGetListInput input)
     {
         return _service.GetListAsync(input);
     }
@@ -75,7 +75,7 @@ public class BookController : AbpControllerBase, IBookAppService
     [HttpPut]
     [Route("{id}")]
     [Authorize(DemoPermissions.Books.Edit)]
-    public virtual Task<BookDto> UpdateAsync(Guid id, CreateUpdateBookDto input)
+    public virtual Task<BookDto> UpdateAsync(Guid id, UpdateBookDto input)
     {
         return _service.UpdateAsync(id, input);
     }
