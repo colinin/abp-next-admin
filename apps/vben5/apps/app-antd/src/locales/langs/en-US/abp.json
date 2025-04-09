@@ -51,6 +51,10 @@
       "resources": "Resources",
       "languages": "Languages",
       "texts": "Texts"
+    },
+    "dataProtection": {
+      "title": "Data Protection",
+      "entityTypeInfos": "Entity Type Infos"
     }
   },
   "openiddict": {
@@ -98,5 +102,9 @@
     "title": "Saas",
     "editions": "Editions",
     "tenants": "Tenants"
+  },
+  "demo": {
+    "title": "Demo",
+    "books": "Books"
   }
 }

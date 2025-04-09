@@ -51,6 +51,10 @@
       "resources": "资源管理",
       "languages": "语言管理",
       "texts": "文档管理"
+    },
+    "dataProtection": {
+      "title": "数据权限",
+      "entityTypeInfos": "实体列表"
     }
   },
   "openiddict": {
@@ -98,5 +102,9 @@
     "title": "Saas",
     "editions": "版本管理",
     "tenants": "租户管理"
+  },
+  "demo": {
+    "title": "演示",
+    "books": "书籍列表"
   }
 }

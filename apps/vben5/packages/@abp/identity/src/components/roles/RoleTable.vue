@@ -39,6 +39,7 @@ const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 
 const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
 const ClaimModal = defineAsyncComponent(() => import('./RoleClaimModal.vue'));
+const RuleModal = defineAsyncComponent(() => import('./RoleRuleDrawer.vue'));
 
 const abpStore = useAbpStore();
 const { publish } = useEventBus();
@@ -51,6 +52,9 @@ const [RolePermissionModal, permissionModalApi] = useVbenModal({
 });
 const [RoleClaimModal, claimModalApi] = useVbenModal({
   connectedComponent: ClaimModal,
+});
+const [RoleRuleDrawer, roleRuleDrawerApi] = useVbenDrawer({
+  connectedComponent: RuleModal,
 });
 const [RoleChangeDrawer, roleChangeDrawerApi] = useVbenDrawer({
   connectedComponent: EntityChangeDrawer,
@@ -169,6 +173,11 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
       roleChangeDrawerApi.open();
       break;
     }
+    case 'entity-rules': {
+      roleRuleDrawerApi.setData(row);
+      roleRuleDrawerApi.open();
+      break;
+    }
     case 'permissions': {
       const roles = abpStore.application?.currentUser.roles ?? [];
       permissionModalApi.setData({
@@ -272,6 +281,9 @@ function onPermissionChange(_name: string, key: string) {
               >
                 {{ $t('AbpAuditLogging.EntitiesChanged') }}
               </MenuItem>
+              <MenuItem key="entity-rules">
+                {{ '数据权限' }}
+              </MenuItem>
             </Menu>
           </template>
           <Button :icon="h(EllipsisOutlined)" type="link" />
@@ -283,6 +295,7 @@ function onPermissionChange(_name: string, key: string) {
   <RoleClaimModal @change="query" />
   <RolePermissionModal @change="onPermissionChange" />
   <RoleChangeDrawer />
+  <RoleRuleDrawer />
 </template>
 
 <style lang="scss" scoped></style>

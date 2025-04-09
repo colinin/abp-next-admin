@@ -216,6 +216,27 @@ const routes: RouteRecordRaw[] = [
           },
           {
             meta: {
+              title: $t('abp.manage.dataProtection.title'),
+              icon: 'icon-park-outline:protect',
+            },
+            name: 'DataProtectionManagement',
+            path: '/manage/data-protection',
+            children: [
+              {
+                meta: {
+                  title: $t('abp.manage.dataProtection.entityTypeInfos'),
+                  icon: 'iconamoon:type',
+                  keepAlive: true,
+                },
+                name: 'EntityTypeInfos',
+                path: '/manage/data-protection/entity-type-infos',
+                component: () =>
+                  import('#/views/data-protection/entity-type-infos/index.vue'),
+              },
+            ],
+          },
+          {
+            meta: {
               title: $t('abp.manage.identity.auditLogs'),
               icon: 'fluent-mdl2:compliance-audit',
             },
@@ -398,6 +419,25 @@ const routes: RouteRecordRaw[] = [
                   import('#/views/platform/messages/sms/index.vue'),
               },
             ],
+          },
+        ],
+      },
+      {
+        name: 'AbpDemo',
+        path: '/abp/demos',
+        meta: {
+          title: $t('abp.demo.title'),
+          icon: 'carbon:demo',
+        },
+        children: [
+          {
+            meta: {
+              title: $t('abp.demo.books'),
+              icon: 'mingcute:book-line',
+            },
+            name: 'DemoBooks',
+            path: '/abp/demos/books',
+            component: () => import('#/views/demos/books/index.vue'),
           },
         ],
       },

@@ -1,12 +1,12 @@
 {
-  "name": "@abp/identity",
+  "name": "@abp/data-protection",
   "version": "9.0.4",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/colinin/abp-next-admin.git",
-    "directory": "packages/@abp/identity"
+    "directory": "packages/@abp/data-protection"
   },
   "license": "MIT",
   "type": "module",
@@ -20,24 +20,17 @@
     }
   },
   "dependencies": {
-    "@abp/auditing": "workspace:*",
     "@abp/core": "workspace:*",
-    "@abp/data-protection": "workspace:*",
-    "@abp/permissions": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/ui": "workspace:*",
     "@ant-design/icons-vue": "catalog:",
-    "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/hooks": "workspace:*",
     "@vben/icons": "workspace:*",
     "@vben/layouts": "workspace:*",
     "@vben/locales": "workspace:*",
     "ant-design-vue": "catalog:",
-    "lodash.debounce": "catalog:",
+    "dayjs": "catalog:",
     "vue": "catalog:*"
-  },
-  "devDependencies": {
-    "@types/lodash.debounce": "catalog:"
   }
 }

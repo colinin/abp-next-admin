@@ -53,6 +53,7 @@ interface ExtensibleObject {
 }
 /** 实体数据传输对象 */
 interface EntityDto<TPrimaryKey> {
+  [key: string]: any;
   /** 实体标识 */
   id: TPrimaryKey;
 }
