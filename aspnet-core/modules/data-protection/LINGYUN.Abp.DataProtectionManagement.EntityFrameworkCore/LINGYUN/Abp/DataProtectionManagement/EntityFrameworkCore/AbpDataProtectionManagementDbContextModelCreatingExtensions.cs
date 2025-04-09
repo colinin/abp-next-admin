@@ -148,6 +148,21 @@ namespace LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore
 
                 b.ConfigureByConvention();
             });
+
+            builder.Entity<SubjectStrategy>(b =>
+            {
+                b.ToTable(options.TablePrefix + "SubjectStrategys", options.Schema);
+
+                b.Property(p => p.SubjectName)
+                 .HasColumnName(nameof(SubjectStrategy.SubjectName))
+                 .HasMaxLength(SubjectStrategyConsts.MaxSubjectNameLength)
+                 .IsRequired();
+                b.Property(p => p.SubjectId)
+                 .HasColumnName(nameof(SubjectStrategy.SubjectId))
+                 .HasMaxLength(SubjectStrategyConsts.MaxSubjectIdLength);
+
+                b.ConfigureByConvention();
+            });
         }
     }
 }

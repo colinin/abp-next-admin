@@ -15,6 +15,10 @@ public class AbpDataProtectionOptions
     /// </summary>
     public bool IsEnabled { get; set; }
     /// <summary>
+    /// 数据权限策略
+    /// </summary>
+    public IList<IDataAccessStrategyContributor> StrategyContributors { get; }
+    /// <summary>
     /// 权限主体
     /// </summary>
     public IList<IDataAccessSubjectContributor> SubjectContributors { get; }
@@ -46,6 +50,7 @@ public class AbpDataProtectionOptions
     {
         IsEnabled = true;
         SubjectContributors = new List<IDataAccessSubjectContributor>();
+        StrategyContributors = new List<IDataAccessStrategyContributor>();
         KeywordContributors = new Dictionary<string, IDataAccessKeywordContributor>();
         OperateContributors = new Dictionary<DataAccessFilterOperate, IDataAccessOperateContributor>();
         DefaultEntityFilters = new Dictionary<Type, Func<IServiceProvider, Type, DataAccessOperation, LambdaExpression>>();

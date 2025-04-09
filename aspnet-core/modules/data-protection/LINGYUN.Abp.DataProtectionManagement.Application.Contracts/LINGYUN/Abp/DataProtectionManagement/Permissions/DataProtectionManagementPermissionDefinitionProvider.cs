@@ -26,6 +26,9 @@ public class DataProtectionManagementPermissionDefinitionProvider : PermissionDe
         ouEntityRule.AddChild(DataProtectionManagementPermissionNames.OrganizationUnitEntityRule.Create, L("Permission:Create"));
         ouEntityRule.AddChild(DataProtectionManagementPermissionNames.OrganizationUnitEntityRule.Update, L("Permission:Update"));
         ouEntityRule.AddChild(DataProtectionManagementPermissionNames.OrganizationUnitEntityRule.Delete, L("Permission:Delete"));
+
+        var subjectStrategy = group.AddPermission(DataProtectionManagementPermissionNames.SubjectStrategy.Default, L("Permission:Strategy"));
+        subjectStrategy.AddChild(DataProtectionManagementPermissionNames.SubjectStrategy.Change, L("Permission:ChangeStrategy"));
     }
 
     private static LocalizableString L(string name)

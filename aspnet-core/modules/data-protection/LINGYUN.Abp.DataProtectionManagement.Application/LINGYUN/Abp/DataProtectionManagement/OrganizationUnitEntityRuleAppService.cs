@@ -64,6 +64,7 @@ public class OrganizationUnitEntityRuleAppService : DataProtectionManagementAppl
 
         await EventBus.PublishAsync(
             new DataAccessResourceChangeEvent(
+                entityRule.IsEnabled,
                 new DataAccessResource(
                     OrganizationUnitPermissionValueProvider.ProviderName,
                     entityRule.OrgCode,
@@ -102,6 +103,7 @@ public class OrganizationUnitEntityRuleAppService : DataProtectionManagementAppl
 
         await EventBus.PublishAsync(
             new DataAccessResourceChangeEvent(
+                entityRule.IsEnabled,
                 new DataAccessResource(
                     OrganizationUnitPermissionValueProvider.ProviderName,
                     entityRule.OrgCode,

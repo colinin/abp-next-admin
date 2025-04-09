@@ -43,14 +43,14 @@ public abstract class AbpDataProtectionDbContext<TDbContext> : AbpDbContext<TDbC
         if (entry.Entity is IDataProtected data)
         {
             // TODO: 埋点, 以后可用EF.Functions查询
-            if (data.GetProperty(DataAccessKeywords.AUTH_ROLES) == null)
-            {
-                data.SetProperty(DataAccessKeywords.AUTH_ROLES, CurrentUser.Roles.Select(role => $"[{role}]").JoinAsString(","));
-            }
-            if (data.GetProperty(DataAccessKeywords.AUTH_ORGS) == null)
-            {
-                data.SetProperty(DataAccessKeywords.AUTH_ORGS, CurrentUser.FindOrganizationUnits().Select(ou => $"[{ou}]").JoinAsString(","));
-            }
+            //if (data.GetProperty(DataAccessKeywords.AUTH_ROLES) == null)
+            //{
+            //    data.SetProperty(DataAccessKeywords.AUTH_ROLES, CurrentUser.Roles);
+            //}
+            //if (data.GetProperty(DataAccessKeywords.AUTH_ORGS) == null)
+            //{
+            //    data.SetProperty(DataAccessKeywords.AUTH_ORGS, CurrentUser.FindOrganizationUnits());
+            //}
         }
     }
 }

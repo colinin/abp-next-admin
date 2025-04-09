@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Authorization.Permissions;
+using LINGYUN.Abp.DataProtection.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;

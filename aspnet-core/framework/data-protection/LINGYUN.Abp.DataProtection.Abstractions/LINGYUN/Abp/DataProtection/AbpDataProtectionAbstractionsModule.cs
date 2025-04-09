@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.DataProtection.Localization;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
@@ -12,6 +13,8 @@ public class AbpDataProtectionAbstractionsModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddSingleton<ICurrentDataAccessAccessor>(AsyncLocalCurrentDataAccessAccessor.Instance);
+
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<AbpDataProtectionAbstractionsModule>();
