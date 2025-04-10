@@ -25,7 +25,6 @@ jobs:
       working-directory: .\build
       shell: powershell
     - name: Publish Packages
-      run:
-        dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETKEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate --no-symbols
+      run: ..\..\build\package-aspnetcore-publish.ps1
       working-directory: .\aspnet-core\LocalNuget
  

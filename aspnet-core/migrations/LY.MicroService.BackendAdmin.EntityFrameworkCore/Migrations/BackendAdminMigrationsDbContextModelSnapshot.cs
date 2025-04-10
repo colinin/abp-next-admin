@@ -3,6 +3,7 @@ using System;
 using LY.MicroService.BackendAdmin.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -18,10 +19,12 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", b =>
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityEnumInfo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,6 +42,46 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(64)")
                         .HasColumnName("Name");
 
+                    b.Property<Guid>("PropertyInfoId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PropertyInfoId", "Name");
+
+                    b.ToTable("AbpAuthEntityEnums", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)")
+                        .HasColumnName("DisplayName");
+
+                    b.Property<string>("JavaScriptType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)")
+                        .HasColumnName("JavaScriptType");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)")
+                        .HasColumnName("Name");
+
                     b.Property<string>("TypeFullName")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -47,11 +90,6 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
 
                     b.Property<Guid>("TypeInfoId")
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("ValueRange")
-                        .HasMaxLength(512)
-                        .HasColumnType("varchar(512)")
-                        .HasColumnName("ValueRange");
 
                     b.HasKey("Id");
 
@@ -128,10 +166,10 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("AllowProperties")
+                    b.Property<string>("AccessedProperties")
                         .HasMaxLength(512)
                         .HasColumnType("varchar(512)")
-                        .HasColumnName("AllowProperties");
+                        .HasColumnName("AccessedProperties");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -203,10 +241,10 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("AllowProperties")
+                    b.Property<string>("AccessedProperties")
                         .HasMaxLength(512)
                         .HasColumnType("varchar(512)")
-                        .HasColumnName("AllowProperties");
+                        .HasColumnName("AccessedProperties");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -270,6 +308,66 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                     b.HasIndex("EntityTypeId");
 
                     b.ToTable("AbpAuthRoleEntityRules", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.SubjectStrategy", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<int>("Strategy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubjectId")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)")
+                        .HasColumnName("SubjectId");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("SubjectName");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AbpAuthSubjectStrategys", (string)null);
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.Saas.Editions.Edition", b =>
@@ -869,6 +967,17 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                     b.ToTable("AbpSettingDefinitions", (string)null);
                 });
 
+            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityEnumInfo", b =>
+                {
+                    b.HasOne("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", "PropertyInfo")
+                        .WithMany("Enums")
+                        .HasForeignKey("PropertyInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PropertyInfo");
+                });
+
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", b =>
                 {
                     b.HasOne("LINGYUN.Abp.DataProtectionManagement.EntityTypeInfo", "TypeInfo")
@@ -918,6 +1027,11 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore.Migrations
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", b =>
+                {
+                    b.Navigation("Enums");
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityTypeInfo", b =>
