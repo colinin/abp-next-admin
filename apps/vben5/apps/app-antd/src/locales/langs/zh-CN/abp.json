@@ -22,7 +22,6 @@
       "claimTypes": "身份标识",
       "securityLogs": "安全日志",
       "organizationUnits": "组织机构",
-      "auditLogs": "审计日志",
       "sessions": "会话管理"
     },
     "permissions": {
@@ -55,7 +54,9 @@
     "dataProtection": {
       "title": "数据权限",
       "entityTypeInfos": "实体列表"
-    }
+    },
+    "auditLogs": "审计日志",
+    "loggings": "系统日志"
   },
   "openiddict": {
     "title": "OpenIddict",

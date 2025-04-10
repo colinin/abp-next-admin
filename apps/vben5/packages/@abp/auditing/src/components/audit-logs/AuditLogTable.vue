@@ -41,6 +41,9 @@ const formOptions: VbenFormProps = {
   schema: [
     {
       component: 'RangePicker',
+      componentProps: {
+        showTime: true,
+      },
       fieldName: 'executionTime',
       formItemClass: 'col-span-2 items-baseline',
       label: $t('AbpAuditLogging.ExecutionTime'),
