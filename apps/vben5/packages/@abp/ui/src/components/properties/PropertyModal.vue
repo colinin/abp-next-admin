@@ -13,11 +13,15 @@ const emits = defineEmits<{
 }>();
 
 const [Form, formApi] = useVbenForm({
+  commonConfig: {
+    formItemClass: 'w-full',
+  },
   handleSubmit: onSubmit,
   schema: [
     {
       component: 'Input',
       componentProps: {
+        allowClear: true,
         autocomplete: 'off',
       },
       fieldName: 'key',
@@ -25,9 +29,15 @@ const [Form, formApi] = useVbenForm({
       rules: 'required',
     },
     {
-      component: 'Input',
+      component: 'Textarea',
       componentProps: {
+        allowClear: true,
         autocomplete: 'off',
+        autoSize: {
+          minRows: 2,
+        },
+        class: 'w-full',
+        showCount: true,
       },
       fieldName: 'value',
       label: $t('component.extra_property_dictionary.value'),
@@ -45,6 +55,14 @@ const [Modal, modalApi] = useVbenModal({
   },
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();
+  },
+  onOpenChange(isOpen) {
+    if (isOpen) {
+      const input = modalApi.getData();
+      if (input) {
+        formApi.setValues(input);
+      }
+    }
   },
   title: $t('component.extra_property_dictionary.title'),
 });

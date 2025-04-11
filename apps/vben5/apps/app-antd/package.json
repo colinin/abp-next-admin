@@ -41,6 +41,7 @@
     "@abp/request": "workspace:*",
     "@abp/saas": "workspace:*",
     "@abp/settings": "workspace:*",
+    "@abp/tasks": "workspace:*",
     "@abp/ui": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
