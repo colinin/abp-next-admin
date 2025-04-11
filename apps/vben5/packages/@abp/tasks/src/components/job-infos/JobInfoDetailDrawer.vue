@@ -277,7 +277,7 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
                   </Button>
                 </Popconfirm>
               </template>
-              <ListItemMeta :description="item.message">
+              <ListItemMeta :description="item.runTime">
                 <template #avatar>
                   <SuccessIcon
                     v-if="!item.exception"
@@ -287,10 +287,12 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
                   <FailedIcon v-else class="size-8" color="orangered" />
                 </template>
                 <template #title>
-                  <span>{{ item.runTime }}</span>
+                  <span>{{ jobInfo.name }}</span>
                 </template>
               </ListItemMeta>
-              {{ item.exception ?? item.message }}
+              <h3 style="word-wrap: break-word; white-space: pre-line">
+                {{ item.exception ?? item.message }}
+              </h3>
             </ListItem>
           </template>
         </List>
@@ -300,4 +302,8 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
   </Drawer>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+:deep(.ant-list-item-main) {
+  overflow: hidden;
+}
+</style>

@@ -200,6 +200,16 @@ function onDeleteParam(record: JobParamter) {
               </Checkbox>
             </FormItem>
             <FormItem
+              name="nodeName"
+              :label="$t('TaskManagement.DisplayName:NodeName')"
+            >
+              <Input
+                v-model:value="formModel.nodeName"
+                allow-clear
+                autocomplete="off"
+              />
+            </FormItem>
+            <FormItem
               name="group"
               required
               :label="$t('TaskManagement.DisplayName:Group')"
