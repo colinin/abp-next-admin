@@ -432,6 +432,25 @@ const routes: RouteRecordRaw[] = [
         ],
       },
       {
+        name: 'TaskManagement',
+        path: '/task-management',
+        meta: {
+          title: $t('abp.tasks.title'),
+          icon: 'eos-icons:background-tasks',
+        },
+        children: [
+          {
+            meta: {
+              title: $t('abp.tasks.jobInfo.title'),
+              icon: 'eos-icons:job',
+            },
+            name: 'TaskManagementJobInfos',
+            path: '/task-management/background-jobs',
+            component: () => import('#/views/tasks/job-infos/index.vue'),
+          },
+        ],
+      },
+      {
         name: 'AbpDemo',
         path: '/abp/demos',
         meta: {

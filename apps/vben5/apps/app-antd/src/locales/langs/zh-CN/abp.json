@@ -107,5 +107,11 @@
   "demo": {
     "title": "演示",
     "books": "书籍列表"
+  },
+  "tasks": {
+    "title": "后台作业",
+    "jobInfo": {
+      "title": "作业管理"
+    }
   }
 }
