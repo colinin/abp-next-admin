@@ -239,7 +239,9 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
             <span>{{ jobInfo.maxTryCount }}</span>
           </DescriptionsItem>
           <DescriptionsItem :label="$t('TaskManagement.DisplayName:Result')">
-            <span>{{ jobInfo.result }}</span>
+            <h3 style="word-wrap: break-word; white-space: pre-line">
+              {{ jobInfo.result }}
+            </h3>
           </DescriptionsItem>
         </Descriptions>
       </TabPane>
