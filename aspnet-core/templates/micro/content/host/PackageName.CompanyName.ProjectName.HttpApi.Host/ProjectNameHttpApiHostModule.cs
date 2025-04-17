@@ -4,6 +4,7 @@ using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Exporter.MiniExcel;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
@@ -68,6 +69,7 @@ namespace PackageName.CompanyName.ProjectName;
 #elif OpenTelemetry
     typeof(AbpTelemetryOpenTelemetryModule),
 #endif
+    typeof(AbpExporterMiniExcelModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpSwashbuckleModule),
@@ -91,6 +93,7 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
+        ConfigureMiniExcel();
         ConfigureLocalization();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();

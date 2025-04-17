@@ -17,6 +17,7 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Ddd.Application" />
 		<PackageReference Include="LINGYUN.Abp.Dynamic.Queryable.Application" />
+		<PackageReference Include="LINGYUN.Abp.Exporter.Application" />
 	</ItemGroup>
 
 	<ItemGroup>

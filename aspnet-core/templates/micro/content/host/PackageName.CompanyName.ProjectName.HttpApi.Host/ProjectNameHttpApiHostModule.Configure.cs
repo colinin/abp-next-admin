@@ -2,6 +2,7 @@
 using LINGYUN.Abp.Dapr.Client.ClientProxying;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Exporter.MiniExcel;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -224,6 +225,14 @@ public partial class ProjectNameHttpApiHostModule
         });
 
         services.AddHealthChecks();
+    }
+
+    private void ConfigureMiniExcel()
+    {
+        Configure<AbpExporterMiniExcelOptions>(options =>
+        {
+            // MiniExcel导入导出配置
+        });
     }
 
     private void ConfigureVirtualFileSystem()
