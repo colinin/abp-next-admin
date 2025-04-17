@@ -3,7 +3,7 @@
     <TargetFramework>net9.0</TargetFramework> <!-- 或其他适合的框架 -->
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>LINGYUN.Abp.MicroService.Templates</PackageId>
-    <Version>9.0.4</Version>
+    <Version>9.1.1</Version>
     <Authors>colin.in@foxmail.com</Authors>
     <Description>Abp framework micro-service template</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

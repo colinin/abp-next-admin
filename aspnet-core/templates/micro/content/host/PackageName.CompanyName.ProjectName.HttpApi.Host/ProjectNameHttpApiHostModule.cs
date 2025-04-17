@@ -1,6 +1,7 @@
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
@@ -8,6 +9,12 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Sms.Platform;
+#if SkyWalking
+using LINGYUN.Abp.Telemetry.SkyWalking;
+#elif OpenTelemetry
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
+#endif
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,7 +31,6 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
-using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -57,7 +63,13 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
-    typeof(AbpMailKitModule),
+#if SkyWalking
+    typeof(AbpTelemetrySkyWalkingModule),
+#elif OpenTelemetry
+    typeof(AbpTelemetryOpenTelemetryModule),
+#endif
+    typeof(AbpEmailingPlatformModule),
+    typeof(AbpSmsPlatformModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]
@@ -82,6 +94,7 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         ConfigureLocalization();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
+        ConfigureTiming(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
@@ -90,7 +103,6 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
-        ConfigureOpenTelemetry(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -103,13 +115,14 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         app.UseForwardedHeaders();
         app.UseMapRequestLocalization();
         app.UseCorrelationId();
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
         app.UseAbpSession();
+        app.UseUnitOfWork();
         app.UseDynamicClaims();
         app.UseAuthorization();
         app.UseSwagger();

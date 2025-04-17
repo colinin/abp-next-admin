@@ -15,7 +15,6 @@
 		<PackageReference Include="DotNetCore.CAP.PostgreSql" Condition="'$(PostgreSql)'=='true'" />
 		<PackageReference Include="DotNetCore.CAP.Sqlite" Condition="'$(Sqlite)'=='true'" />
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
-		<PackageReference Include="DotNetCore.CAP.OpenTelemetry" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.HttpOverrides" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Localization" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" />
@@ -31,16 +30,13 @@
 		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.Application" />
 		<PackageReference Include="LINGYUN.Abp.Serilog.Enrichers.UniqueId" />
 		<PackageReference Include="LINGYUN.Abp.TextTemplating.EntityFrameworkCore" />
+		<PackageReference Include="LINGYUN.Abp.Telemetry.SkyWalking" Condition="'$(SkyWalking)'=='true'" />
+		<PackageReference Include="LINGYUN.Abp.Telemetry.OpenTelemetry" Condition="'$(OpenTelemetry)'=='true'" />
+		<PackageReference Include="LINGYUN.Abp.Emailing.Platform" />
+		<PackageReference Include="LINGYUN.Abp.Sms.Platform" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
 		<PackageReference Include="DistributedLock.Redis" />
-		<PackageReference Include="OpenTelemetry.Extensions.Hosting" />
-		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
-		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.Http" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" />
 		<PackageReference Include="Serilog.AspNetCore" />
 		<PackageReference Include="Serilog.Enrichers.Environment" />
 		<PackageReference Include="Serilog.Enrichers.Assembly" />
@@ -55,7 +51,6 @@
 		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.DistributedLocking" />
-		<PackageReference Include="Volo.Abp.MailKit" />
 		<PackageReference Include="Volo.Abp.Swashbuckle" />
 		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />

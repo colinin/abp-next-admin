@@ -14,30 +14,37 @@ public class AbpTelemetryOpenTelemetryModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
-        var applicationName = context.Services.GetApplicationName();
 
         var openTelmetrySetup = context.Services.GetPreConfigureActions<OpenTelemetryBuilder>();
 
         var openTelemetryEnabled = configuration["OpenTelemetry:IsEnabled"];
-        if (openTelemetryEnabled.IsNullOrEmpty() || bool.Parse(openTelemetryEnabled))
+        if (openTelemetryEnabled.IsNullOrWhiteSpace() || "false".Equals(openTelemetryEnabled.ToLower()))
         {
-            var openTelmetryBuilder = context.Services.AddOpenTelemetry()
-                .ConfigureResource(resource =>
-                {
-                    resource.AddService(applicationName);
-                })
-                .WithTracing(tracing =>
-                {
-                    tracing.AddSource(applicationName);
-                    ConfigureTracing(tracing, configuration);
-                })
-                .WithMetrics(metrics =>
-                {
-                    ConfigureMetrics(metrics, configuration);
-                });
-
-            openTelmetrySetup.Configure(openTelmetryBuilder);
+            return;
         }
+
+        var applicationName = configuration["OpenTelemetry:ServiceName"];
+        if (applicationName.IsNullOrWhiteSpace())
+        {
+            applicationName = context.Services.GetApplicationName();
+        }
+        var openTelmetryBuilder = context.Services
+            .AddOpenTelemetry()
+            .ConfigureResource(resource =>
+            {
+                resource.AddService(applicationName);
+            })
+            .WithTracing(tracing =>
+            {
+                tracing.AddSource(applicationName);
+                ConfigureTracing(tracing, configuration);
+            })
+            .WithMetrics(metrics =>
+            {
+                ConfigureMetrics(metrics, configuration);
+            });
+
+        openTelmetrySetup.Configure(openTelmetryBuilder);
     }
 
     private static void ConfigureTracing(TracerProviderBuilder tracing, IConfiguration configuration)
