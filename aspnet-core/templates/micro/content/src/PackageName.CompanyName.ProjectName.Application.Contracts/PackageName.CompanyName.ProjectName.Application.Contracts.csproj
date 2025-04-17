@@ -10,6 +10,7 @@
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
 		<RootNamespace />
 	</PropertyGroup>
 
@@ -17,6 +18,7 @@
 		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" />
 		<PackageReference Include="Volo.Abp.Authorization" />
 		<PackageReference Include="LINGYUN.Abp.Dynamic.Queryable.Application.Contracts" />
+		<PackageReference Include="LINGYUN.Abp.Exporter.Application.Contracts" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -5,6 +5,12 @@
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
+		<AssemblyName>PackageName.CompanyName.ProjectName.Dapr.Client</AssemblyName>
+		<PackageId>PackageName.CompanyName.ProjectName.Dapr.Client</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
 		<RootNamespace />
 	</PropertyGroup>
 
