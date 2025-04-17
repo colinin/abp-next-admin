@@ -21,6 +21,7 @@
     "DisplayName:Group": "Group",
     "DisplayName:Name": "Name",
     "DisplayName:Description": "Description",
+    "DisplayName:NodeName": "Node Name",
     "DisplayName:Type": "Type",
     "Description:Type": "Type of job implementer, format: type full name, assembly, example: System.String, mscorlib",
     "DisplayName:Status": "Status",
@@ -88,6 +89,11 @@
     "BackgroundJobs:Copy": "Copy Jobs",
     "BasicInfo": "Basic",
     "Paramters": "Paramters",
-    "MultipleSelectJobsWillBeDeletedMessage": "Multiple jobs selected will be deleted!"
+    "MultipleSelectJobsWillBeDeletedMessage": "Multiple jobs selected will be deleted!",
+    "SelectJobWillBePauseMessage": "The selected job will be paused!",
+    "SelectJobWillBeResumeMessage": "The selected job will be resumed!",
+    "SelectJobWillBeTriggerMessage": "The selected job will be trigger!",
+    "SelectJobWillBeStartMessage": "The selected job will be started!",
+    "SelectJobWillBeStopMessage": "The selected job will be stopped!"
   }
 }

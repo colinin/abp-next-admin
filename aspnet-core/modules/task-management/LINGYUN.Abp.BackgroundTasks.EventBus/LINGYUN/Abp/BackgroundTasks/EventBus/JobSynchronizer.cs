@@ -10,6 +10,7 @@ public class JobSynchronizer :
     IDistributedEventHandler<JobTriggerEventData>,
     IDistributedEventHandler<JobPauseEventData>,
     IDistributedEventHandler<JobResumeEventData>,
+    IDistributedEventHandler<JobDeleteEventData>,
     ITransientDependency
 {
     protected IJobStore JobStore { get; }
@@ -112,6 +113,24 @@ public class JobSynchronizer :
                 }
 
                 await JobScheduler.ResumeAsync(jobInfo);
+            }
+        }
+    }
+
+    public async virtual Task HandleEventAsync(JobDeleteEventData eventData)
+    {
+        if (string.Equals(eventData.NodeName, BackgroundTasksOptions.NodeName))
+        {
+            foreach (var jobId in eventData.IdList)
+            {
+                var jobInfo = await JobStore.FindAsync(jobId);
+
+                if (jobInfo == null)
+                {
+                    continue;
+                }
+
+                await JobScheduler.RemoveAsync(jobInfo);
             }
         }
     }
