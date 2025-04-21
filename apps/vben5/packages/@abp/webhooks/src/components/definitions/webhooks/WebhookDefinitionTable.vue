@@ -1,0 +1,328 @@
+<script setup lang="ts">
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+
+import type { VbenFormProps } from '@vben/common-ui';
+
+import type { WebhookDefinitionDto } from '../../../types/definitions';
+import type { WebhookGroupDefinitionDto } from '../../../types/groups';
+
+import { h, onMounted, reactive, ref } from 'vue';
+
+import { $t } from '@vben/locales';
+
+import {
+  listToTree,
+  useLocalization,
+  useLocalizationSerializer,
+} from '@abp/core';
+import { useVbenVxeGrid } from '@abp/ui';
+import {
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  PlusOutlined,
+} from '@ant-design/icons-vue';
+import { Button, message, Modal, Tag } from 'ant-design-vue';
+import { VxeGrid } from 'vxe-table';
+
+import { useWebhookDefinitionsApi } from '../../../api/useWebhookDefinitionsApi';
+import { useWebhookGroupDefinitionsApi } from '../../../api/useWebhookGroupDefinitionsApi';
+import { WebhookDefinitionsPermissions } from '../../../constants/permissions';
+
+defineOptions({
+  name: 'WebhookDefinitionTable',
+});
+
+interface DefinitionItem {
+  children: DefinitionItem[];
+  description?: string;
+  displayName: string;
+  groupName: string;
+  isEnabled: boolean;
+  isStatic: boolean;
+  name: string;
+  requiredFeatures?: string[];
+}
+interface DefinitionGroup {
+  displayName: string;
+  items: DefinitionItem[];
+  name: string;
+}
+
+const { Lr } = useLocalization();
+const { deserialize } = useLocalizationSerializer();
+const { getListApi: getGroupsApi } = useWebhookGroupDefinitionsApi();
+const { deleteApi, getListApi: getDefinitionsApi } = useWebhookDefinitionsApi();
+
+const definitionGroups = ref<DefinitionGroup[]>([]);
+const pageState = reactive({
+  current: 1,
+  size: 10,
+  total: 0,
+});
+
+const formOptions: VbenFormProps = {
+  // 默认展开
+  collapsed: false,
+  handleReset: onReset,
+  async handleSubmit(params) {
+    pageState.current = 1;
+    await onGet(params);
+  },
+  schema: [
+    {
+      component: 'Input',
+      fieldName: 'filter',
+      formItemClass: 'col-span-2 items-baseline',
+      label: $t('AbpUi.Search'),
+    },
+  ],
+  // 控制表单是否显示折叠按钮
+  showCollapseButton: true,
+  // 按下回车时是否提交表单
+  submitOnEnter: true,
+};
+
+const gridOptions: VxeGridProps<WebhookGroupDefinitionDto> = {
+  columns: [
+    {
+      align: 'center',
+      type: 'seq',
+      width: 50,
+    },
+    {
+      align: 'left',
+      field: 'group',
+      slots: { content: 'group' },
+      type: 'expand',
+      width: 50,
+    },
+    {
+      align: 'left',
+      field: 'name',
+      minWidth: 150,
+      title: $t('WebhooksManagement.DisplayName:Name'),
+    },
+    {
+      align: 'left',
+      field: 'displayName',
+      minWidth: 150,
+      title: $t('WebhooksManagement.DisplayName:DisplayName'),
+    },
+  ],
+  expandConfig: {
+    padding: true,
+    trigger: 'row',
+  },
+  exportConfig: {},
+  keepSource: true,
+  toolbarConfig: {
+    custom: true,
+    export: true,
+    refresh: false,
+    zoom: true,
+  },
+};
+const subGridColumns: VxeGridProps<WebhookDefinitionDto>['columns'] = [
+  {
+    align: 'center',
+    type: 'seq',
+    width: 50,
+  },
+  {
+    align: 'left',
+    field: 'isEnabled',
+    minWidth: 120,
+    slots: { default: 'isEnabled' },
+    title: $t('WebhooksManagement.DisplayName:IsEnabled'),
+  },
+  {
+    align: 'left',
+    field: 'name',
+    minWidth: 150,
+    title: $t('WebhooksManagement.DisplayName:Name'),
+    treeNode: true,
+  },
+  {
+    align: 'left',
+    field: 'displayName',
+    minWidth: 120,
+    title: $t('WebhooksManagement.DisplayName:DisplayName'),
+  },
+  {
+    align: 'left',
+    field: 'description',
+    minWidth: 120,
+    title: $t('WebhooksManagement.DisplayName:Description'),
+  },
+  {
+    align: 'left',
+    field: 'features',
+    minWidth: 150,
+    slots: { default: 'features' },
+    title: $t('WebhooksManagement.DisplayName:RequiredFeatures'),
+  },
+  {
+    field: 'action',
+    fixed: 'right',
+    slots: { default: 'action' },
+    title: $t('AbpUi.Actions'),
+    width: 220,
+  },
+];
+
+const gridEvents: VxeGridListeners<WebhookGroupDefinitionDto> = {
+  pageChange(params) {
+    pageState.current = params.currentPage;
+    pageState.size = params.pageSize;
+    onPageChange();
+  },
+};
+
+const [GroupGrid, gridApi] = useVbenVxeGrid({
+  formOptions,
+  gridEvents,
+  gridOptions,
+});
+
+async function onGet(input?: Record<string, string>) {
+  try {
+    gridApi.setLoading(true);
+    const groupRes = await getGroupsApi(input);
+    const definitionRes = await getDefinitionsApi(input);
+    pageState.total = groupRes.items.length;
+    definitionGroups.value = groupRes.items.map((group) => {
+      const localizableGroup = deserialize(group.displayName);
+      const definitions = definitionRes.items
+        .filter((definition) => definition.groupName === group.name)
+        .map((definition) => {
+          const displayName = deserialize(definition.displayName);
+          const description = deserialize(definition.displayName);
+          return {
+            ...definition,
+            description: Lr(description.resourceName, description.name),
+            displayName: Lr(displayName.resourceName, displayName.name),
+          };
+        });
+      return {
+        ...group,
+        displayName: Lr(localizableGroup.resourceName, localizableGroup.name),
+        items: listToTree(definitions, {
+          id: 'name',
+          pid: 'parentName',
+        }),
+      };
+    });
+    onPageChange();
+  } finally {
+    gridApi.setLoading(false);
+  }
+}
+
+async function onReset() {
+  await gridApi.formApi.resetForm();
+  const input = await gridApi.formApi.getValues();
+  await onGet(input);
+}
+
+function onPageChange() {
+  const items = definitionGroups.value.slice(
+    (pageState.current - 1) * pageState.size,
+    pageState.current * pageState.size,
+  );
+  gridApi.setGridOptions({
+    data: items,
+    pagerConfig: {
+      currentPage: pageState.current,
+      pageSize: pageState.size,
+      total: pageState.total,
+    },
+  });
+}
+
+function onCreate() {}
+
+function onUpdate(_row: WebhookDefinitionDto) {}
+
+function onDelete(row: WebhookDefinitionDto) {
+  Modal.confirm({
+    centered: true,
+    content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
+    onOk: async () => {
+      await deleteApi(row.name);
+      message.success($t('AbpUi.DeletedSuccessfully'));
+      onGet();
+    },
+    title: $t('AbpUi.AreYouSure'),
+  });
+}
+
+onMounted(onGet);
+</script>
+
+<template>
+  <GroupGrid :table-title="$t('WebhooksManagement.WebhookDefinitions')">
+    <template #toolbar-tools>
+      <Button
+        :icon="h(PlusOutlined)"
+        type="primary"
+        v-access:code="[WebhookDefinitionsPermissions.Create]"
+        @click="onCreate"
+      >
+        {{ $t('WebhooksManagement.Webhooks:AddNew') }}
+      </Button>
+    </template>
+    <template #group="{ row: group }">
+      <VxeGrid
+        :columns="subGridColumns"
+        :data="group.items"
+        :tree-config="{
+          trigger: 'row',
+          rowField: 'name',
+          childrenField: 'children',
+        }"
+      >
+        <template #isEnabled="{ row }">
+          <div class="flex flex-row justify-center">
+            <CheckOutlined v-if="row.isEnabled" class="text-green-500" />
+            <CloseOutlined v-else class="text-red-500" />
+          </div>
+        </template>
+        <template #features="{ row }">
+          <div class="flex flex-row justify-center gap-1">
+            <template v-for="feature in row.features" :key="feature">
+              <Tag color="blue">{{ feature }}</Tag>
+            </template>
+          </div>
+        </template>
+        <template #action="{ row: definition }">
+          <div class="flex flex-row">
+            <Button
+              :icon="h(EditOutlined)"
+              block
+              type="link"
+              v-access:code="[WebhookDefinitionsPermissions.Update]"
+              @click="onUpdate(definition)"
+            >
+              {{ $t('AbpUi.Edit') }}
+            </Button>
+            <Button
+              v-if="!definition.isStatic"
+              :icon="h(DeleteOutlined)"
+              block
+              danger
+              type="link"
+              v-access:code="[WebhookDefinitionsPermissions.Delete]"
+              @click="onDelete(definition)"
+            >
+              {{ $t('AbpUi.Delete') }}
+            </Button>
+          </div>
+        </template>
+      </VxeGrid>
+    </template>
+  </GroupGrid>
+</template>
+
+<style scoped></style>

@@ -116,6 +116,7 @@
   },
   "webhooks": {
     "title": "Webhooks",
-    "groups": "Groups"
+    "groups": "Groups",
+    "definitions": "Definitions"
   }
 }

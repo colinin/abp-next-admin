@@ -8,3 +8,14 @@ export const GroupDefinitionsPermissions = {
   /** 更新 */
   Update: 'AbpWebhooks.GroupDefinitions.Update',
 };
+
+/** Webhook定义权限 */
+export const WebhookDefinitionsPermissions = {
+  /** 新增 */
+  Create: 'AbpWebhooks.Definitions.Create',
+  Default: 'AbpWebhooks.Definitions',
+  /** 删除 */
+  Delete: 'AbpWebhooks.Definitions.Delete',
+  /** 更新 */
+  Update: 'AbpWebhooks.Definitions.Update',
+};

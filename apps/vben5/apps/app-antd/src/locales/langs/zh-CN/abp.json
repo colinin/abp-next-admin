@@ -116,6 +116,7 @@
   },
   "webhooks": {
     "title": "Webhook管理",
-    "groups": "Webhook分组"
+    "groups": "Webhook分组",
+    "definitions": "Webhook定义"
   }
 }

@@ -467,6 +467,15 @@ const routes: RouteRecordRaw[] = [
             path: '/webhooks/groups',
             component: () => import('#/views/webhooks/groups/index.vue'),
           },
+          {
+            meta: {
+              title: $t('abp.webhooks.definitions'),
+              icon: 'material-symbols:webhook',
+            },
+            name: 'WebhookDefinitions',
+            path: '/webhooks/definitions',
+            component: () => import('#/views/webhooks/definitions/index.vue'),
+          },
         ],
       },
       {
