@@ -6,8 +6,9 @@ import type { VbenFormProps } from '@vben/common-ui';
 import type { WebhookDefinitionDto } from '../../../types/definitions';
 import type { WebhookGroupDefinitionDto } from '../../../types/groups';
 
-import { h, onMounted, reactive, ref } from 'vue';
+import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
 
+import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
@@ -158,9 +159,9 @@ const subGridColumns: VxeGridProps<WebhookDefinitionDto>['columns'] = [
   },
   {
     align: 'left',
-    field: 'features',
+    field: 'requiredFeatures',
     minWidth: 150,
-    slots: { default: 'features' },
+    slots: { default: 'requiredFeatures' },
     title: $t('WebhooksManagement.DisplayName:RequiredFeatures'),
   },
   {
@@ -184,6 +185,12 @@ const [GroupGrid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
   gridOptions,
+});
+
+const [WebhookDefinitionModal, groupModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./WebhookDefinitionModal.vue'),
+  ),
 });
 
 async function onGet(input?: Record<string, string>) {
@@ -241,9 +248,15 @@ function onPageChange() {
   });
 }
 
-function onCreate() {}
+function onCreate() {
+  groupModalApi.setData({});
+  groupModalApi.open();
+}
 
-function onUpdate(_row: WebhookDefinitionDto) {}
+function onUpdate(row: WebhookDefinitionDto) {
+  groupModalApi.setData(row);
+  groupModalApi.open();
+}
 
 function onDelete(row: WebhookDefinitionDto) {
   Modal.confirm({
@@ -289,9 +302,9 @@ onMounted(onGet);
             <CloseOutlined v-else class="text-red-500" />
           </div>
         </template>
-        <template #features="{ row }">
+        <template #requiredFeatures="{ row }">
           <div class="flex flex-row justify-center gap-1">
-            <template v-for="feature in row.features" :key="feature">
+            <template v-for="feature in row.requiredFeatures" :key="feature">
               <Tag color="blue">{{ feature }}</Tag>
             </template>
           </div>
@@ -323,6 +336,7 @@ onMounted(onGet);
       </VxeGrid>
     </template>
   </GroupGrid>
+  <WebhookDefinitionModal @change="() => onGet()" />
 </template>
 
 <style scoped></style>

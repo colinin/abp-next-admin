@@ -108,6 +108,11 @@ const [WebhookGroupDefinitionModal, groupModalApi] = useVbenModal({
     () => import('./WebhookGroupDefinitionModal.vue'),
   ),
 });
+const [WebhookDefinitionModal, defineModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('../webhooks/WebhookDefinitionModal.vue'),
+  ),
+});
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
@@ -164,9 +169,13 @@ function onUpdate(row: WebhookGroupDefinitionDto) {
   groupModalApi.open();
 }
 
-function onMenuClick(_row: WebhookGroupDefinitionDto, info: MenuInfo) {
+function onMenuClick(row: WebhookGroupDefinitionDto, info: MenuInfo) {
   switch (info.key) {
-    case 'permissions': {
+    case 'webhooks': {
+      defineModalApi.setData({
+        groupName: row.name,
+      });
+      defineModalApi.open();
       break;
     }
   }
@@ -243,6 +252,7 @@ onMounted(onGet);
     </template>
   </Grid>
   <WebhookGroupDefinitionModal @change="() => onGet()" />
+  <WebhookDefinitionModal />
 </template>
 
 <style scoped></style>
