@@ -6,8 +6,9 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { WebhookGroupDefinitionDto } from '../../../types/groups';
 
-import { h, onMounted, reactive, ref } from 'vue';
+import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
 
+import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
@@ -102,6 +103,12 @@ const gridEvents: VxeGridListeners<WebhookGroupDefinitionDto> = {
   },
 };
 
+const [WebhookGroupDefinitionModal, groupModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./WebhookGroupDefinitionModal.vue'),
+  ),
+});
+
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
@@ -147,9 +154,15 @@ function onPageChange() {
   });
 }
 
-function onCreate() {}
+function onCreate() {
+  groupModalApi.setData({});
+  groupModalApi.open();
+}
 
-function onUpdate(_row: WebhookGroupDefinitionDto) {}
+function onUpdate(row: WebhookGroupDefinitionDto) {
+  groupModalApi.setData(row);
+  groupModalApi.open();
+}
 
 function onMenuClick(_row: WebhookGroupDefinitionDto, info: MenuInfo) {
   switch (info.key) {
@@ -229,6 +242,7 @@ onMounted(onGet);
       </div>
     </template>
   </Grid>
+  <WebhookGroupDefinitionModal @change="() => gridApi.query()" />
 </template>
 
 <style scoped></style>
