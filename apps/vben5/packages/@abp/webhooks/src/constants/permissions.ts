@@ -30,3 +30,12 @@ export const WebhookSubscriptionPermissions = {
   /** 更新 */
   Update: 'AbpWebhooks.Subscriptions.Update',
 };
+
+/** Webhook发送记录权限 */
+export const WebhooksSendAttemptsPermissions = {
+  Default: 'AbpWebhooks.SendAttempts',
+  /** 删除 */
+  Delete: 'AbpWebhooks.SendAttempts.Delete',
+  /** 更新 */
+  Resend: 'AbpWebhooks.SendAttempts.Resend',
+};
