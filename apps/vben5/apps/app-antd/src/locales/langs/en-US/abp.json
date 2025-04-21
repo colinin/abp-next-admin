@@ -118,6 +118,7 @@
     "title": "Webhooks",
     "groups": "Groups",
     "definitions": "Definitions",
-    "subscriptions": "Subscriptions"
+    "subscriptions": "Subscriptions",
+    "sendAttempts": "Send Attempts"
   }
 }

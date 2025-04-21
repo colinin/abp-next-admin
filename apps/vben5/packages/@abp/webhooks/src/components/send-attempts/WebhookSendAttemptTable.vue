@@ -3,45 +3,43 @@ import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 
 import type { VbenFormProps } from '@vben/common-ui';
 
-import type { WebhookSubscriptionDto } from '../../types/subscriptions';
+import type { WebhookSendRecordDto } from '../../types/sendAttempts';
 
-import { defineAsyncComponent, h, ref } from 'vue';
+import { h, ref } from 'vue';
 
-import { useAccess } from '@vben/access';
-import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { formatToDateTime } from '@abp/core';
+import { useHttpStatusCodeMap } from '@abp/request';
 import { useTenantsApi } from '@abp/saas';
 import { useVbenVxeGrid } from '@abp/ui';
-import {
-  CheckOutlined,
-  CloseOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  PlusOutlined,
-} from '@ant-design/icons-vue';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button, message, Modal, Tag } from 'ant-design-vue';
 import debounce from 'lodash.debounce';
 
-import { useSubscriptionsApi } from '../../api/useSubscriptionsApi';
-import { WebhookSubscriptionPermissions } from '../../constants/permissions';
+import { useSendAttemptsApi } from '../../api/useSendAttemptsApi';
 
 defineOptions({
-  name: 'WebhookSubscriptionTable',
+  name: 'WebhookSendAttemptTable',
 });
 
-const { hasAccessByCodes } = useAccess();
 const { getPagedListApi: getTenantsApi } = useTenantsApi();
-const { cancel, deleteApi, getAllAvailableWebhooksApi, getPagedListApi } =
-  useSubscriptionsApi();
+const { cancel, deleteApi, getPagedListApi } = useSendAttemptsApi();
+const { getHttpStatusColor, httpStatusCodeMap } = useHttpStatusCodeMap();
 
 const tenantFilter = ref<string>();
 const selectedKeys = ref<string[]>([]);
 
+const httpStatusOptions = Object.keys(httpStatusCodeMap).map((key) => {
+  return {
+    label: httpStatusCodeMap[Number(key)],
+    value: key,
+  };
+});
+
 const formOptions: VbenFormProps = {
   collapsed: true,
-  collapsedRows: 2,
+  collapsedRows: 3,
   commonConfig: {
     componentProps: {
       class: 'w-full',
@@ -78,33 +76,35 @@ const formOptions: VbenFormProps = {
       label: $t('WebhooksManagement.DisplayName:TenantId'),
     },
     {
-      component: 'ApiSelect',
-      componentProps: {
-        allowClear: true,
-        api: onInitWebhooks,
-        filterOption: (onputValue: string, option: any) => {
-          return option.label.includes(onputValue);
-        },
-        showSearch: true,
-      },
-      fieldName: 'webhooks',
-      label: $t('WebhooksManagement.DisplayName:Webhooks'),
-    },
-    {
       component: 'RangePicker',
       fieldName: 'creationTime',
       label: $t('WebhooksManagement.DisplayName:CreationTime'),
     },
     {
-      component: 'Input',
-      fieldName: 'webhookUri',
-      formItemClass: 'col-span-2 items-baseline',
-      label: $t('WebhooksManagement.DisplayName:WebhookUri'),
+      component: 'Select',
+      componentProps: {
+        allowClear: true,
+        options: [
+          {
+            label: $t('WebhooksManagement.ResponseState:Successed'),
+            value: true,
+          },
+          {
+            label: $t('WebhooksManagement.ResponseState:Failed'),
+            value: false,
+          },
+        ],
+      },
+      fieldName: 'state',
+      label: $t('WebhooksManagement.DisplayName:State'),
     },
     {
-      component: 'Checkbox',
-      fieldName: 'isActive',
-      label: $t('WebhooksManagement.DisplayName:IsActive'),
+      component: 'Select',
+      componentProps: {
+        options: httpStatusOptions,
+      },
+      fieldName: 'responseStatusCode',
+      label: $t('WebhooksManagement.DisplayName:ResponseStatusCode'),
     },
     {
       component: 'Input',
@@ -112,7 +112,7 @@ const formOptions: VbenFormProps = {
         allowClear: true,
       },
       fieldName: 'filter',
-      formItemClass: 'col-span-3 items-baseline',
+      formItemClass: 'col-span-2 items-baseline',
       label: $t('AbpUi.Search'),
     },
   ],
@@ -122,41 +122,25 @@ const formOptions: VbenFormProps = {
   submitOnEnter: true,
 };
 
-const gridOptions: VxeGridProps<WebhookSubscriptionDto> = {
+const gridOptions: VxeGridProps<WebhookSendRecordDto> = {
   columns: [
     {
       align: 'center',
-      fixed: 'left',
       type: 'checkbox',
       width: 40,
     },
     {
       align: 'left',
-      field: 'isActive',
-      fixed: 'left',
-      minWidth: 150,
-      slots: { default: 'isActive' },
-      title: $t('WebhooksManagement.DisplayName:IsActive'),
-    },
-    {
-      align: 'left',
       field: 'tenantId',
-      fixed: 'left',
       minWidth: 150,
       title: $t('WebhooksManagement.DisplayName:TenantId'),
     },
     {
       align: 'left',
-      field: 'webhookUri',
-      fixed: 'left',
-      minWidth: 300,
-      title: $t('WebhooksManagement.DisplayName:WebhookUri'),
-    },
-    {
-      align: 'left',
-      field: 'description',
+      field: 'responseStatusCode',
       minWidth: 150,
-      title: $t('WebhooksManagement.DisplayName:Description'),
+      slots: { default: 'responseStatusCode' },
+      title: $t('WebhooksManagement.DisplayName:ResponseStatusCode'),
     },
     {
       align: 'left',
@@ -169,10 +153,9 @@ const gridOptions: VxeGridProps<WebhookSubscriptionDto> = {
     },
     {
       align: 'center',
-      field: 'webhooks',
+      field: 'response',
       minWidth: 300,
-      slots: { default: 'webhooks' },
-      title: $t('WebhooksManagement.DisplayName:Webhooks'),
+      title: $t('WebhooksManagement.DisplayName:Response'),
     },
     {
       field: 'action',
@@ -208,7 +191,7 @@ const gridOptions: VxeGridProps<WebhookSubscriptionDto> = {
   },
 };
 
-const gridEvents: VxeGridListeners<WebhookSubscriptionDto> = {
+const gridEvents: VxeGridListeners<WebhookSendRecordDto> = {
   checkboxAll: (params) => {
     selectedKeys.value = params.records.map((record) => record.id);
   },
@@ -223,42 +206,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions,
 });
 
-const [WebhookSubscriptionModal, modalApi] = useVbenModal({
-  connectedComponent: defineAsyncComponent(
-    () => import('./WebhookSubscriptionModal.vue'),
-  ),
-});
+function onUpdate(_row: WebhookSendRecordDto) {}
 
-async function onInitWebhooks() {
-  if (hasAccessByCodes([WebhookSubscriptionPermissions.Default])) {
-    const { items } = await getAllAvailableWebhooksApi();
-    return items.map((group) => {
-      return {
-        label: group.displayName,
-        options: group.webhooks.map((p) => {
-          return {
-            label: p.displayName,
-            value: p.name,
-          };
-        }),
-        value: group.name,
-      };
-    });
-  }
-  return [];
-}
-
-function onCreate() {
-  modalApi.setData({});
-  modalApi.open();
-}
-
-function onUpdate(row: WebhookSubscriptionDto) {
-  modalApi.setData(row);
-  modalApi.open();
-}
-
-function onDelete(row: WebhookSubscriptionDto) {
+function onDelete(row: WebhookSendRecordDto) {
   Modal.confirm({
     centered: true,
     content: $t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.title]),
@@ -276,24 +226,11 @@ function onDelete(row: WebhookSubscriptionDto) {
 </script>
 
 <template>
-  <Grid :table-title="$t('WebhooksManagement.Subscriptions')">
-    <template #toolbar-tools>
-      <Button :icon="h(PlusOutlined)" type="primary" @click="onCreate">
-        {{ $t('WebhooksManagement.Subscriptions:AddNew') }}
-      </Button>
-    </template>
-    <template #isActive="{ row }">
-      <div class="flex flex-row justify-center">
-        <CheckOutlined v-if="row.isActive" class="text-green-500" />
-        <CloseOutlined v-else class="text-red-500" />
-      </div>
-    </template>
-    <template #webhooks="{ row }">
-      <div class="flex flex-row justify-center gap-1">
-        <template v-for="webhook in row.webhooks" :key="webhook">
-          <Tag color="blue">{{ webhook }}</Tag>
-        </template>
-      </div>
+  <Grid :table-title="$t('WebhooksManagement.SendAttempts')">
+    <template #responseStatusCode="{ row }">
+      <Tag :color="getHttpStatusColor(row.responseStatusCode)">
+        {{ httpStatusCodeMap[row.responseStatusCode] }}
+      </Tag>
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
@@ -311,7 +248,6 @@ function onDelete(row: WebhookSubscriptionDto) {
       </div>
     </template>
   </Grid>
-  <WebhookSubscriptionModal @change="() => gridApi.query()" />
 </template>
 
 <style lang="scss" scoped></style>
