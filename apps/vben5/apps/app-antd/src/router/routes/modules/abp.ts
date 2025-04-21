@@ -476,6 +476,15 @@ const routes: RouteRecordRaw[] = [
             path: '/webhooks/definitions',
             component: () => import('#/views/webhooks/definitions/index.vue'),
           },
+          {
+            meta: {
+              title: $t('abp.webhooks.subscriptions'),
+              icon: 'material-symbols:subscriptions',
+            },
+            name: 'WebhookSubscriptions',
+            path: '/webhooks/subscriptions',
+            component: () => import('#/views/webhooks/subscriptions/index.vue'),
+          },
         ],
       },
       {

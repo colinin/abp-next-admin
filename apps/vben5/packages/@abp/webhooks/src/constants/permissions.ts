@@ -19,3 +19,14 @@ export const WebhookDefinitionsPermissions = {
   /** 更新 */
   Update: 'AbpWebhooks.Definitions.Update',
 };
+
+/** Webhook订阅权限 */
+export const WebhookSubscriptionPermissions = {
+  /** 新增 */
+  Create: 'AbpWebhooks.Subscriptions.Create',
+  Default: 'AbpWebhooks.Subscriptions',
+  /** 删除 */
+  Delete: 'AbpWebhooks.Subscriptions.Delete',
+  /** 更新 */
+  Update: 'AbpWebhooks.Subscriptions.Update',
+};
