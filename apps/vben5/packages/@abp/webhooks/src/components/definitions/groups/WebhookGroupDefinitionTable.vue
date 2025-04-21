@@ -242,7 +242,7 @@ onMounted(onGet);
       </div>
     </template>
   </Grid>
-  <WebhookGroupDefinitionModal @change="() => gridApi.query()" />
+  <WebhookGroupDefinitionModal @change="() => onGet()" />
 </template>
 
 <style scoped></style>

@@ -118,7 +118,7 @@ function onPropDelete(prop: PropertyInfo) {
           >
             <Input
               v-model:value="formModel.name"
-              :disabled="formModel.isStatic"
+              :disabled="formModel.isStatic || isEditModel"
               autocomplete="off"
             />
           </FormItem>
