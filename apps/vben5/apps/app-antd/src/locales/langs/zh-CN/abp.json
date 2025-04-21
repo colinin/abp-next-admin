@@ -113,5 +113,9 @@
     "jobInfo": {
       "title": "作业管理"
     }
+  },
+  "webhooks": {
+    "title": "Webhook管理",
+    "groups": "Webhook分组"
   }
 }
