@@ -497,6 +497,26 @@ const routes: RouteRecordRaw[] = [
         ],
       },
       {
+        meta: {
+          title: $t('abp.textTemplating.title'),
+          icon: 'tdesign:template',
+        },
+        name: 'TextTemplating',
+        path: '/text-templating',
+        children: [
+          {
+            meta: {
+              title: $t('abp.textTemplating.definitions'),
+              icon: 'qlementine-icons:template-16',
+            },
+            name: 'TemplateDefinitions',
+            path: '/text-templating/definitions',
+            component: () =>
+              import('#/views/text-templating/definitions/index.vue'),
+          },
+        ],
+      },
+      {
         name: 'AbpDemo',
         path: '/abp/demos',
         meta: {
