@@ -113,5 +113,12 @@
     "jobInfo": {
       "title": "Job Manage"
     }
+  },
+  "webhooks": {
+    "title": "Webhooks",
+    "groups": "Groups",
+    "definitions": "Definitions",
+    "subscriptions": "Subscriptions",
+    "sendAttempts": "Send Attempts"
   }
 }

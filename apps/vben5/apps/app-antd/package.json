@@ -43,6 +43,7 @@
     "@abp/settings": "workspace:*",
     "@abp/tasks": "workspace:*",
     "@abp/ui": "workspace:*",
+    "@abp/webhooks": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/constants": "workspace:*",

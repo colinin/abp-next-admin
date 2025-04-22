@@ -451,6 +451,52 @@ const routes: RouteRecordRaw[] = [
         ],
       },
       {
+        meta: {
+          title: $t('abp.webhooks.title'),
+          icon: 'material-symbols:webhook',
+        },
+        name: 'WebhooksManagement',
+        path: '/webhooks',
+        children: [
+          {
+            meta: {
+              title: $t('abp.webhooks.groups'),
+              icon: 'lucide:group',
+            },
+            name: 'WebhookGroupDefinitions',
+            path: '/webhooks/groups',
+            component: () => import('#/views/webhooks/groups/index.vue'),
+          },
+          {
+            meta: {
+              title: $t('abp.webhooks.definitions'),
+              icon: 'material-symbols:webhook',
+            },
+            name: 'WebhookDefinitions',
+            path: '/webhooks/definitions',
+            component: () => import('#/views/webhooks/definitions/index.vue'),
+          },
+          {
+            meta: {
+              title: $t('abp.webhooks.subscriptions'),
+              icon: 'material-symbols:subscriptions',
+            },
+            name: 'WebhookSubscriptions',
+            path: '/webhooks/subscriptions',
+            component: () => import('#/views/webhooks/subscriptions/index.vue'),
+          },
+          {
+            meta: {
+              title: $t('abp.webhooks.sendAttempts'),
+              icon: 'material-symbols:history',
+            },
+            name: 'WebhookSendAttempts',
+            path: '/webhooks/send-attempts',
+            component: () => import('#/views/webhooks/send-attempts/index.vue'),
+          },
+        ],
+      },
+      {
         name: 'AbpDemo',
         path: '/abp/demos',
         meta: {
