@@ -3,15 +3,15 @@ import type { EntityDto, PagedAndSortedResultRequestDto } from '@abp/core';
 import { HttpStatusCode } from '@abp/request';
 
 interface WebhookEventRecordDto extends EntityDto<string> {
-  creationTime: Date;
+  creationTime: string;
   data?: string;
   tenantId?: string;
   webhookName: string;
 }
 
 interface WebhookSendRecordDto extends EntityDto<string> {
-  creationTime: Date;
-  lastModificationTime?: Date;
+  creationTime: string;
+  lastModificationTime?: string;
   requestHeaders?: Record<string, string>;
   response?: string;
   responseHeaders?: Record<string, string>;

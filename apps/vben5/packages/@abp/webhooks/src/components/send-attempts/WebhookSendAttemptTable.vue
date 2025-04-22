@@ -6,9 +6,10 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { WebhookSendRecordDto } from '../../types/sendAttempts';
 
-import { h, ref } from 'vue';
+import { defineAsyncComponent, h, ref } from 'vue';
 
 import { useAccess } from '@vben/access';
+import { useVbenDrawer } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
@@ -106,11 +107,11 @@ const formOptions: VbenFormProps = {
         options: [
           {
             label: $t('WebhooksManagement.ResponseState:Successed'),
-            value: true,
+            value: 'true',
           },
           {
             label: $t('WebhooksManagement.ResponseState:Failed'),
-            value: false,
+            value: 'false',
           },
         ],
       },
@@ -225,12 +226,23 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions,
 });
 
-function onUpdate(_row: WebhookSendRecordDto) {}
+const [WebhookSendAttemptDrawer, drawerApi] = useVbenDrawer({
+  connectedComponent: defineAsyncComponent(
+    () => import('./WebhookSendAttemptDrawer.vue'),
+  ),
+});
+
+function onUpdate(row: WebhookSendRecordDto) {
+  drawerApi.setData(row);
+  drawerApi.open();
+}
 
 function onDelete(row: WebhookSendRecordDto) {
   Modal.confirm({
     centered: true,
-    content: $t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.title]),
+    content: $t('AbpUi.ItemWillBeDeletedMessageWithFormat', [
+      $t('WebhooksManagement.SelectedItems'),
+    ]),
     onCancel: () => {
       cancel();
     },
@@ -253,7 +265,9 @@ async function onMenuClick(row: WebhookSendRecordDto, info: MenuInfo) {
 async function onSend(row: WebhookSendRecordDto) {
   Modal.confirm({
     centered: true,
-    content: `${$t('WebhooksManagement.ItemWillBeResendMessageWithFormat', [$t('WebhooksManagement.SelectedItems')])}`,
+    content: $t('WebhooksManagement.ItemWillBeResendMessageWithFormat', [
+      $t('WebhooksManagement.SelectedItems'),
+    ]),
     onOk: async () => {
       try {
         gridApi.setLoading(true);
@@ -377,6 +391,7 @@ async function onDeleteMany(keys: string[]) {
       </div>
     </template>
   </Grid>
+  <WebhookSendAttemptDrawer />
 </template>
 
 <style lang="scss" scoped></style>
