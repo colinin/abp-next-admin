@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@abp/core": "workspace:*",
+    "@abp/localization": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/saas": "workspace:*",
     "@abp/ui": "workspace:*",

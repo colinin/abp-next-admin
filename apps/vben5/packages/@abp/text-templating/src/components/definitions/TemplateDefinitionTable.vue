@@ -6,9 +6,10 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { TextTemplateDefinitionDto } from '../../types/definitions';
 
-import { h, onMounted, reactive, ref } from 'vue';
+import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
 
 import { useAccess } from '@vben/access';
+import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { useLocalization, useLocalizationSerializer } from '@abp/core';
@@ -153,6 +154,12 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions,
 });
 
+const [TemplateDefinitionModal, modalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./TemplateDefinitionModal.vue'),
+  ),
+});
+
 async function onGet(input?: Record<string, string>) {
   try {
     gridApi.setLoading(true);
@@ -192,9 +199,15 @@ function onPageChange() {
   });
 }
 
-function onCreate() {}
+function onCreate() {
+  modalApi.setData({});
+  modalApi.open();
+}
 
-function onUpdate(_row: TextTemplateDefinitionDto) {}
+function onUpdate(row: TextTemplateDefinitionDto) {
+  modalApi.setData(row);
+  modalApi.open();
+}
 
 function onMenuClick(_row: TextTemplateDefinitionDto, info: MenuInfo) {
   switch (info.key) {
@@ -288,6 +301,7 @@ onMounted(onGet);
       </div>
     </template>
   </Grid>
+  <TemplateDefinitionModal @change="() => onGet()" />
 </template>
 
 <style scoped></style>
