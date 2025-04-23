@@ -120,5 +120,9 @@
     "definitions": "Definitions",
     "subscriptions": "Subscriptions",
     "sendAttempts": "Send Attempts"
+  },
+  "textTemplating": {
+    "title": "Text Templating",
+    "definitions": "Definitions"
   }
 }

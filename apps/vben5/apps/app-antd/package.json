@@ -42,6 +42,7 @@
     "@abp/saas": "workspace:*",
     "@abp/settings": "workspace:*",
     "@abp/tasks": "workspace:*",
+    "@abp/text-templating": "workspace:*",
     "@abp/ui": "workspace:*",
     "@abp/webhooks": "workspace:*",
     "@vben/access": "workspace:*",

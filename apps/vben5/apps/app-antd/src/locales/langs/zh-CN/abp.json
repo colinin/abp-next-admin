@@ -120,5 +120,9 @@
     "definitions": "Webhook定义",
     "subscriptions": "管理订阅",
     "sendAttempts": "发送记录"
+  },
+  "textTemplating": {
+    "title": "文本模板",
+    "definitions": "模板定义"
   }
 }
