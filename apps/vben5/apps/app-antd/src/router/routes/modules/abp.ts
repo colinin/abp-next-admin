@@ -401,6 +401,16 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             meta: {
+              title: $t('abp.platform.dataDictionaries'),
+              icon: 'material-symbols:dictionary-outline',
+            },
+            name: 'PlatformDataDictionaries',
+            path: '/platform/data-dictionaries',
+            component: () =>
+              import('#/views/platform/data-dictionaries/index.vue'),
+          },
+          {
+            meta: {
               title: $t('abp.platform.messages.title'),
               icon: 'tabler:message-cog',
             },
