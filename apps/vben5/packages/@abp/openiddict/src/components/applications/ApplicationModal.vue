@@ -64,11 +64,23 @@ type TabKeys =
   | 'props'
   | 'scope';
 
-const defaultModel = {
+const defaultModel: OpenIddictApplicationDto = {
   applicationType: 'web',
+  clientId: '',
   clientType: 'public',
   consentType: 'explicit',
-} as OpenIddictApplicationDto;
+  creationTime: new Date(),
+  extraProperties: {},
+  id: '',
+  requirements: {
+    features: {
+      requirePkce: false,
+    },
+  },
+  settings: {
+    tokenLifetime: {},
+  },
+};
 
 const form = ref<FormInstance>();
 const formModel = ref<OpenIddictApplicationDto>({ ...defaultModel });
