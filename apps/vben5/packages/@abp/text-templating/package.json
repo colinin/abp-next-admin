@@ -20,6 +20,7 @@
     }
   },
   "dependencies": {
+    "@abp/components": "workspace:*",
     "@abp/core": "workspace:*",
     "@abp/localization": "workspace:*",
     "@abp/request": "workspace:*",

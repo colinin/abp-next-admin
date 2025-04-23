@@ -159,6 +159,11 @@ const [TemplateDefinitionModal, modalApi] = useVbenModal({
     () => import('./TemplateDefinitionModal.vue'),
   ),
 });
+const [TemplateContentModal, contentModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./TemplateContentModal.vue'),
+  ),
+});
 
 async function onGet(input?: Record<string, string>) {
   try {
@@ -209,9 +214,11 @@ function onUpdate(row: TextTemplateDefinitionDto) {
   modalApi.open();
 }
 
-function onMenuClick(_row: TextTemplateDefinitionDto, info: MenuInfo) {
+function onMenuClick(row: TextTemplateDefinitionDto, info: MenuInfo) {
   switch (info.key) {
     case 'contents': {
+      contentModalApi.setData(row);
+      contentModalApi.open();
       break;
     }
   }
@@ -302,6 +309,7 @@ onMounted(onGet);
     </template>
   </Grid>
   <TemplateDefinitionModal @change="() => onGet()" />
+  <TemplateContentModal />
 </template>
 
 <style scoped></style>
