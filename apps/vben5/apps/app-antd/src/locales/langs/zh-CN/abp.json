@@ -97,7 +97,8 @@
       "title": "消息管理",
       "email": "邮件消息",
       "sms": "短信消息"
-    }
+    },
+    "dataDictionaries": "数据字典"
   },
   "saas": {
     "title": "Saas",

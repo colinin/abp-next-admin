@@ -97,7 +97,8 @@
       "title": "Message Manage",
       "email": "Email Messages",
       "sms": "Sms Messages"
-    }
+    },
+    "dataDictionaries": "Data Dictionaries"
   },
   "saas": {
     "title": "Saas",
