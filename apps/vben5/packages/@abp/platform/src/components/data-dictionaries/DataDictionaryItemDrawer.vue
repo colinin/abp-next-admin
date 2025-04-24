@@ -3,9 +3,9 @@ import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 
 import type { DataDto, DataItemDto } from '../../types/dataDictionaries';
 
-import { h, reactive, ref } from 'vue';
+import { defineAsyncComponent, h, reactive, ref } from 'vue';
 
-import { useVbenDrawer } from '@vben/common-ui';
+import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { isNullOrWhiteSpace } from '@abp/core';
@@ -17,12 +17,12 @@ import {
   EditOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button } from 'ant-design-vue';
+import { Button, message, Modal } from 'ant-design-vue';
 
 import { useDataDictionariesApi } from '../../api';
 import { ValueType } from '../../types/dataDictionaries';
 
-const { getApi } = useDataDictionariesApi();
+const { deleteItemApi, getApi } = useDataDictionariesApi();
 
 const dataItems = ref<DataItemDto[]>([]);
 const pageState = reactive({
@@ -140,6 +140,12 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions,
 });
 
+const [DataDictionaryItemModal, itemModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./DataDictionaryItemModal.vue'),
+  ),
+});
+
 async function onGet() {
   const { id } = drawerApi.getData<DataDto>();
   if (isNullOrWhiteSpace(id)) {
@@ -173,11 +179,39 @@ function onPageChange() {
   });
 }
 
-function onCreate() {}
+function onCreate() {
+  const data = drawerApi.getData<DataDto>();
+  itemModalApi.setData({ data });
+  itemModalApi.open();
+}
 
-function onUpdate(_row: DataItemDto) {}
+function onUpdate(row: DataItemDto) {
+  const data = drawerApi.getData<DataDto>();
+  itemModalApi.setData({ data, item: row });
+  itemModalApi.open();
+}
 
-function onDelete(_row: DataItemDto) {}
+function onDelete(row: DataItemDto) {
+  Modal.confirm({
+    afterClose: () => {
+      gridApi.setLoading(false);
+    },
+    centered: true,
+    content: `${$t('AbpUi.ItemWillBeDeletedMessage')}`,
+    onOk: async () => {
+      try {
+        gridApi.setLoading(true);
+        const { id } = drawerApi.getData<DataDto>();
+        await deleteItemApi(id, row.name);
+        message.success($t('AbpUi.DeletedSuccessfully'));
+        onGet();
+      } finally {
+        gridApi.setLoading(false);
+      }
+    },
+    title: $t('AbpUi.AreYouSure'),
+  });
+}
 </script>
 
 <template>
@@ -216,6 +250,7 @@ function onDelete(_row: DataItemDto) {}
         </div>
       </template>
     </Grid>
+    <DataDictionaryItemModal @change="onGet" />
   </Drawer>
 </template>
 
