@@ -6,10 +6,11 @@ import type { DataDto } from '../../types/dataDictionaries';
 
 import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
 
-import { useVbenDrawer } from '@vben/common-ui';
+import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { listToTree } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -17,7 +18,7 @@ import {
   EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
 import { useDataDictionariesApi } from '../../api/useDataDictionariesApi';
 
@@ -28,8 +29,9 @@ defineOptions({
 const MenuItem = Menu.Item;
 const ItemsIcon = createIconifyIcon('material-symbols:align-items-stretch');
 
-const { getAllApi } = useDataDictionariesApi();
+const { deleteApi, getAllApi } = useDataDictionariesApi();
 
+const expandRowKeys = ref<string[]>([]);
 const dataDictionaries = ref<DataDto[]>([]);
 const pageState = reactive({
   current: 1,
@@ -74,17 +76,22 @@ const gridOptions: VxeGridProps<DataDto> = {
   ],
   exportConfig: {},
   keepSource: true,
+  rowConfig: {
+    keyField: 'id',
+  },
   toolbarConfig: {
     custom: true,
     export: true,
-    refresh: false,
+    refresh: {
+      queryMethod: onGet,
+    },
     zoom: true,
   },
   treeConfig: {
     accordion: true,
     parentField: 'parentId',
     rowField: 'id',
-    transform: true,
+    transform: false,
   },
 };
 const gridEvents: VxeGridListeners<DataDto> = {
@@ -93,6 +100,16 @@ const gridEvents: VxeGridListeners<DataDto> = {
     pageState.size = params.pageSize;
     onPageChange();
   },
+  toggleTreeExpand(params) {
+    if (params.expanded) {
+      expandRowKeys.value.push(params.row.id);
+    } else {
+      expandRowKeys.value = expandRowKeys.value.filter(
+        (key) => key !== params.row.id,
+      );
+    }
+    onExpandChange();
+  },
 };
 
 const [Grid, gridApi] = useVbenVxeGrid({
@@ -100,6 +117,11 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions,
 });
 
+const [DataDictionaryModal, modalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./DataDictionaryModal.vue'),
+  ),
+});
 const [DataDictionaryItemDrawer, itemDrawerApi] = useVbenDrawer({
   connectedComponent: defineAsyncComponent(
     () => import('./DataDictionaryItemDrawer.vue'),
@@ -110,12 +132,24 @@ async function onGet() {
   try {
     gridApi.setLoading(true);
     const { items } = await getAllApi();
-    pageState.total = items.length;
-    dataDictionaries.value = items;
+    const treeItems = listToTree(items, {
+      id: 'id',
+      pid: 'parentId',
+    });
+    pageState.total = treeItems.length;
+    dataDictionaries.value = treeItems;
     onPageChange();
   } finally {
     gridApi.setLoading(false);
   }
+}
+
+function onExpandChange() {
+  gridApi.setGridOptions({
+    treeConfig: {
+      expandRowKeys: expandRowKeys.value,
+    },
+  });
 }
 
 function onPageChange() {
@@ -133,14 +167,47 @@ function onPageChange() {
   });
 }
 
-function onCreate() {}
+function onCreate() {
+  modalApi.setData({});
+  modalApi.open();
+}
 
-function onUpdate(_row: DataDto) {}
+function onUpdate(row: DataDto) {
+  modalApi.setData(row);
+  modalApi.open();
+}
 
-function onDelete(_row: DataDto) {}
+function onDelete(row: DataDto) {
+  Modal.confirm({
+    afterClose: () => {
+      gridApi.setLoading(false);
+    },
+    centered: true,
+    content: `${$t('AbpUi.ItemWillBeDeletedMessage')}`,
+    onOk: async () => {
+      try {
+        gridApi.setLoading(true);
+        await deleteApi(row.id);
+        message.success($t('AbpUi.DeletedSuccessfully'));
+        onGet();
+      } finally {
+        gridApi.setLoading(false);
+      }
+    },
+    title: $t('AbpUi.AreYouSure'),
+  });
+}
 
 function onMenuClick(row: DataDto, info: MenuInfo) {
   switch (info.key) {
+    case 'children': {
+      modalApi.setData({
+        displayName: row.displayName,
+        parentId: row.id,
+      });
+      modalApi.open();
+      break;
+    }
     case 'items': {
       onManageItems(row);
       break;
@@ -207,6 +274,7 @@ onMounted(onGet);
       </div>
     </template>
   </Grid>
+  <DataDictionaryModal @change="onGet" />
   <DataDictionaryItemDrawer />
 </template>
 
