@@ -411,6 +411,15 @@ const routes: RouteRecordRaw[] = [
           },
           {
             meta: {
+              title: $t('abp.platform.layouts'),
+              icon: 'material-symbols-light:responsive-layout',
+            },
+            name: 'PlatformLayouts',
+            path: '/platform/layouts',
+            component: () => import('#/views/platform/layouts/index.vue'),
+          },
+          {
+            meta: {
               title: $t('abp.platform.messages.title'),
               icon: 'tabler:message-cog',
             },

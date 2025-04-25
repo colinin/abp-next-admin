@@ -98,7 +98,8 @@
       "email": "Email Messages",
       "sms": "Sms Messages"
     },
-    "dataDictionaries": "Data Dictionaries"
+    "dataDictionaries": "Data Dictionaries",
+    "layouts": "Layouts"
   },
   "saas": {
     "title": "Saas",

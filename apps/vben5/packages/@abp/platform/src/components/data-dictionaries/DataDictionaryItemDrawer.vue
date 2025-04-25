@@ -41,7 +41,7 @@ const valueTypeMaps: { [key: number]: string } = {
 };
 
 const [Drawer, drawerApi] = useVbenDrawer({
-  class: 'w-1/2',
+  class: 'w-2/3',
   async onOpenChange(isOpen) {
     if (isOpen) {
       const { name } = drawerApi.getData<DataDto>();

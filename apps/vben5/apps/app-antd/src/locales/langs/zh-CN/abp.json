@@ -98,7 +98,8 @@
       "email": "邮件消息",
       "sms": "短信消息"
     },
-    "dataDictionaries": "数据字典"
+    "dataDictionaries": "数据字典",
+    "layouts": "布局管理"
   },
   "saas": {
     "title": "Saas",
