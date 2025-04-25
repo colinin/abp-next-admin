@@ -11,7 +11,7 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { listToTree } from '@abp/core';
+import { listToTree, useAuthorization } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -22,11 +22,13 @@ import { Button, message, Modal } from 'ant-design-vue';
 
 import { useLayoutsApi } from '../../api';
 import { useMenusApi } from '../../api/useMenusApi';
+import { MenuPermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'MenuTable',
 });
 
+const { isGranted } = useAuthorization();
 const { deleteApi, getAllApi } = useMenusApi();
 const { getPagedListApi: getLayoutsApi } = useLayoutsApi();
 
@@ -112,7 +114,16 @@ const gridOptions: VxeGridProps<MenuDto> = {
       fixed: 'right',
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
-      width: 350,
+      visible: isGranted(
+        [
+          MenuPermissions.Default,
+          MenuPermissions.Create,
+          MenuPermissions.Update,
+          MenuPermissions.Delete,
+        ],
+        false,
+      ),
+      width: 300,
     },
   ],
   exportConfig: {},
@@ -244,7 +255,12 @@ onMounted(onGet);
 <template>
   <Grid :table-title="$t('AppPlatform.DisplayName:DataDictionary')">
     <template #toolbar-tools>
-      <Button :icon="h(PlusOutlined)" type="primary" @click="onCreate()">
+      <Button
+        v-if="isGranted([MenuPermissions.Create])"
+        :icon="h(PlusOutlined)"
+        type="primary"
+        @click="onCreate()"
+      >
         {{ $t('AppPlatform.Menu:AddNew') }}
       </Button>
     </template>
@@ -257,6 +273,7 @@ onMounted(onGet);
     <template #action="{ row }">
       <div class="flex flex-row">
         <Button
+          v-if="isGranted([MenuPermissions.Create])"
           :icon="h(PlusOutlined)"
           block
           type="link"
@@ -265,6 +282,9 @@ onMounted(onGet);
           {{ $t('AppPlatform.Menu:AddChildren') }}
         </Button>
         <Button
+          v-if="
+            isGranted([MenuPermissions.Default, MenuPermissions.Update], false)
+          "
           :icon="h(EditOutlined)"
           block
           type="link"
@@ -273,6 +293,7 @@ onMounted(onGet);
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
+          v-if="isGranted([MenuPermissions.Delete])"
           :icon="h(DeleteOutlined)"
           block
           danger
