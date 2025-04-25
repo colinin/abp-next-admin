@@ -73,11 +73,14 @@ const gridOptions: VxeGridProps<DataDto> = {
       fixed: 'right',
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
-      visible: isGranted([
-        DataDictionaryPermissions.Default,
-        DataDictionaryPermissions.Update,
-        DataDictionaryPermissions.Delete,
-      ]),
+      visible: isGranted(
+        [
+          DataDictionaryPermissions.Default,
+          DataDictionaryPermissions.Update,
+          DataDictionaryPermissions.Delete,
+        ],
+        false,
+      ),
       width: 220,
     },
   ],
@@ -249,10 +252,13 @@ onMounted(onGet);
       <div class="flex flex-row">
         <Button
           v-if="
-            isGranted([
-              DataDictionaryPermissions.Default,
-              DataDictionaryPermissions.Update,
-            ])
+            isGranted(
+              [
+                DataDictionaryPermissions.Default,
+                DataDictionaryPermissions.Update,
+              ],
+              false,
+            )
           "
           :icon="h(EditOutlined)"
           block
@@ -273,10 +279,13 @@ onMounted(onGet);
         </Button>
         <Dropdown
           v-if="
-            isGranted([
-              DataDictionaryPermissions.Create,
-              DataDictionaryPermissions.ManageItems,
-            ])
+            isGranted(
+              [
+                DataDictionaryPermissions.Create,
+                DataDictionaryPermissions.ManageItems,
+              ],
+              false,
+            )
           "
         >
           <template #overlay>

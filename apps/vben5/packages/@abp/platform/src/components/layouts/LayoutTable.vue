@@ -105,11 +105,14 @@ const gridOptions: VxeGridProps<LayoutDto> = {
       fixed: 'right',
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
-      visible: isGranted([
-        LayoutPermissions.Default,
-        LayoutPermissions.Update,
-        LayoutPermissions.Delete,
-      ]),
+      visible: isGranted(
+        [
+          LayoutPermissions.Default,
+          LayoutPermissions.Update,
+          LayoutPermissions.Delete,
+        ],
+        false,
+      ),
       width: 220,
     },
   ],
@@ -195,7 +198,10 @@ function onDelete(row: LayoutDto) {
       <div class="flex flex-row">
         <Button
           v-if="
-            isGranted([LayoutPermissions.Default, LayoutPermissions.Update])
+            isGranted(
+              [LayoutPermissions.Default, LayoutPermissions.Update],
+              false,
+            )
           "
           :icon="h(EditOutlined)"
           block
