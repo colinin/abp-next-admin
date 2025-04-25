@@ -144,6 +144,9 @@ async function onGet() {
     modalApi.setState({ loading: true });
     const dto = await getApi(id);
     formApi.setValues(dto, false);
+    modalApi.setState({
+      title: `${$t('AppPlatform.Layout:Edit')} - ${dto.displayName}`,
+    });
   } finally {
     modalApi.setState({ loading: false });
   }

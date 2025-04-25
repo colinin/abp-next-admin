@@ -99,7 +99,8 @@
       "sms": "Sms Messages"
     },
     "dataDictionaries": "Data Dictionaries",
-    "layouts": "Layouts"
+    "layouts": "Layouts",
+    "menus": "Menus"
   },
   "saas": {
     "title": "Saas",
