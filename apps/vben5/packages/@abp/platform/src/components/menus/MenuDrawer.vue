@@ -300,9 +300,20 @@ function onInitMetaFormSchemas() {
           break;
         }
         case ValueType.String: {
-          componentProps = {
-            autocomplete: 'off',
-          };
+          // 约定名称包含icon时使用IconPicker组件
+          const itemNameLowerCase = dataItem.name.toLocaleLowerCase();
+          if (itemNameLowerCase.includes('icon')) {
+            component = 'IconPicker';
+            componentProps = {
+              style: {
+                width: '100%',
+              },
+            };
+          } else {
+            componentProps = {
+              autocomplete: 'off',
+            };
+          }
           defaultValue = dataItem.defaultValue;
           break;
         }
@@ -456,4 +467,14 @@ async function onSubmit() {
   </Drawer>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+:deep(.grid-cols-1) {
+  .flex-shrink-0 {
+    .relative {
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+</style>

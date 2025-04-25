@@ -10,7 +10,7 @@ import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { listToTree } from '@abp/core';
+import { listToTree, useAuthorization } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -21,6 +21,7 @@ import {
 import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
 import { useDataDictionariesApi } from '../../api/useDataDictionariesApi';
+import { DataDictionaryPermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'DataDictionaryTable',
@@ -29,6 +30,7 @@ defineOptions({
 const MenuItem = Menu.Item;
 const ItemsIcon = createIconifyIcon('material-symbols:align-items-stretch');
 
+const { isGranted } = useAuthorization();
 const { deleteApi, getAllApi } = useDataDictionariesApi();
 
 const expandRowKeys = ref<string[]>([]);
@@ -71,6 +73,14 @@ const gridOptions: VxeGridProps<DataDto> = {
       fixed: 'right',
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
+      visible: isGranted(
+        [
+          DataDictionaryPermissions.Default,
+          DataDictionaryPermissions.Update,
+          DataDictionaryPermissions.Delete,
+        ],
+        false,
+      ),
       width: 220,
     },
   ],
@@ -226,7 +236,12 @@ onMounted(onGet);
 <template>
   <Grid :table-title="$t('AppPlatform.DisplayName:DataDictionary')">
     <template #toolbar-tools>
-      <Button :icon="h(PlusOutlined)" type="primary" @click="onCreate">
+      <Button
+        v-if="isGranted([DataDictionaryPermissions.Create])"
+        :icon="h(PlusOutlined)"
+        type="primary"
+        @click="onCreate"
+      >
         {{ $t('AppPlatform.Data:AddNew') }}
       </Button>
     </template>
@@ -236,6 +251,15 @@ onMounted(onGet);
     <template #action="{ row }">
       <div class="flex flex-row">
         <Button
+          v-if="
+            isGranted(
+              [
+                DataDictionaryPermissions.Default,
+                DataDictionaryPermissions.Update,
+              ],
+              false,
+            )
+          "
           :icon="h(EditOutlined)"
           block
           type="link"
@@ -244,6 +268,7 @@ onMounted(onGet);
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
+          v-if="isGranted([DataDictionaryPermissions.Delete])"
           :icon="h(DeleteOutlined)"
           block
           danger
@@ -252,16 +277,32 @@ onMounted(onGet);
         >
           {{ $t('AbpUi.Delete') }}
         </Button>
-        <Dropdown>
+        <Dropdown
+          v-if="
+            isGranted(
+              [
+                DataDictionaryPermissions.Create,
+                DataDictionaryPermissions.ManageItems,
+              ],
+              false,
+            )
+          "
+        >
           <template #overlay>
             <Menu @click="(info) => onMenuClick(row, info)">
-              <MenuItem key="children">
+              <MenuItem
+                v-if="isGranted([DataDictionaryPermissions.Create])"
+                key="children"
+              >
                 <div class="flex flex-row items-center gap-[4px]">
                   <PlusOutlined />
                   {{ $t('AppPlatform.Data:AddChildren') }}
                 </div>
               </MenuItem>
-              <MenuItem key="items">
+              <MenuItem
+                v-if="isGranted([DataDictionaryPermissions.ManageItems])"
+                key="items"
+              >
                 <div class="flex flex-row items-center gap-[4px]">
                   <ItemsIcon />
                   {{ $t('AppPlatform.Data:Items') }}

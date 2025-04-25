@@ -10,6 +10,7 @@ import { defineAsyncComponent, h } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { useAuthorization } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -19,11 +20,13 @@ import {
 import { Button, message, Modal } from 'ant-design-vue';
 
 import { useLayoutsApi } from '../../api/useLayoutsApi';
+import { LayoutPermissions } from '../../constants/permissions';
 
 defineOptions({
   name: 'LayoutTable',
 });
 
+const { isGranted } = useAuthorization();
 const { deleteApi, getPagedListApi } = useLayoutsApi();
 
 const formOptions: VbenFormProps = {
@@ -102,6 +105,14 @@ const gridOptions: VxeGridProps<LayoutDto> = {
       fixed: 'right',
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
+      visible: isGranted(
+        [
+          LayoutPermissions.Default,
+          LayoutPermissions.Update,
+          LayoutPermissions.Delete,
+        ],
+        false,
+      ),
       width: 220,
     },
   ],
@@ -174,13 +185,24 @@ function onDelete(row: LayoutDto) {
 <template>
   <Grid :table-title="$t('AppPlatform.DisplayName:Layout')">
     <template #toolbar-tools>
-      <Button :icon="h(PlusOutlined)" type="primary" @click="onCreate">
+      <Button
+        v-if="isGranted([LayoutPermissions.Create])"
+        :icon="h(PlusOutlined)"
+        type="primary"
+        @click="onCreate"
+      >
         {{ $t('AppPlatform.Layout:AddNew') }}
       </Button>
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
         <Button
+          v-if="
+            isGranted(
+              [LayoutPermissions.Default, LayoutPermissions.Update],
+              false,
+            )
+          "
           :icon="h(EditOutlined)"
           block
           type="link"
@@ -189,6 +211,7 @@ function onDelete(row: LayoutDto) {
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
+          v-if="isGranted([LayoutPermissions.Delete])"
           :icon="h(DeleteOutlined)"
           block
           danger
