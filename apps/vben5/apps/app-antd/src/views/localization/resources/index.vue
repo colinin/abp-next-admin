@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { LocalizationResourceTable } from '@abp/localization';
 
 defineOptions({
-  name: 'LocalizationResources',
+  name: 'Vben5LocalizationsResources',
 });
 </script>
 

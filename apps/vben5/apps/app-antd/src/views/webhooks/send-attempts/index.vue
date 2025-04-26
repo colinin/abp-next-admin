@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { WebhookSendAttemptTable } from '@abp/webhooks';
 
 defineOptions({
-  name: 'WebhookSendAttempts',
+  name: 'Vben5WebhooksSendAttempts',
 });
 </script>
 

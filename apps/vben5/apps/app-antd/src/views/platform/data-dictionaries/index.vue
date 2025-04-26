@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { DataDictionaryTable } from '@abp/platform';
 
 defineOptions({
-  name: 'PlatformDataDictionaries',
+  name: 'Vben5PlatformDataDictionaries',
 });
 </script>
 

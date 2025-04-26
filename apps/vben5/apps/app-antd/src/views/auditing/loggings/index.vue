@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { LoggingTable } from '@abp/auditing';
 
 defineOptions({
-  name: 'AuditingLoggings',
+  name: 'Vben5AuditingLoggings',
 });
 </script>
 

@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { LayoutTable } from '@abp/platform';
 
 defineOptions({
-  name: 'PlatformLayouts',
+  name: 'Vben5PlatformLayouts',
 });
 </script>
 

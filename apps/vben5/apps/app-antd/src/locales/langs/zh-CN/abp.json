@@ -56,7 +56,9 @@
       "entityTypeInfos": "实体列表"
     },
     "auditLogs": "审计日志",
-    "loggings": "系统日志"
+    "loggings": "系统日志",
+    "openApi": "接口文档",
+    "cache": "缓存管理"
   },
   "openiddict": {
     "title": "OpenIddict",

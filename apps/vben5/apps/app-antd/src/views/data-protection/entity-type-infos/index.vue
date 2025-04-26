@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { EntityTypeInfoTable } from '@abp/data-protection';
 
 defineOptions({
-  name: 'EntityTypeInfos',
+  name: 'Vben5DataProtectionEntityTypeInfos',
 });
 </script>
 

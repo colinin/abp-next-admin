@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { OrganizationUnitPage } from '@abp/identity';
 
 defineOptions({
-  name: 'IdentityOrganizationUnits',
+  name: 'Vben5IdentityOrganizationUnits',
 });
 </script>
 

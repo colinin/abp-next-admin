@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { SystemSetting } from '@abp/settings';
 
 defineOptions({
-  name: 'SystemSettings',
+  name: 'Vben5SettingsSystem',
 });
 </script>
 

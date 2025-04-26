@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { LocalizationLanguageTable } from '@abp/localization';
 
 defineOptions({
-  name: 'LocalizationLanguages',
+  name: 'Vben5LocalizationsLanguages',
 });
 </script>
 

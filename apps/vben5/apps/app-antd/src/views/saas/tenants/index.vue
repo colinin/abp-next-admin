@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { TenantTable } from '@abp/saas';
 
 defineOptions({
-  name: 'SaasTenants',
+  name: 'Vben5SaasTenants',
 });
 </script>
 
