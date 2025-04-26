@@ -24,6 +24,7 @@
     "@abp/core": "workspace:*",
     "@abp/data-protection": "workspace:*",
     "@abp/permissions": "workspace:*",
+    "@abp/platform": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/ui": "workspace:*",
     "@ant-design/icons-vue": "catalog:",
