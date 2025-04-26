@@ -26,6 +26,44 @@ interface MenuCreateDto extends MenuCreateOrUpdateDto {
   layoutId: string;
 }
 
+interface MenuGetInput {
+  framework?: string;
+}
+
+interface MenuGetByUserInput {
+  framework: string;
+  userId: string;
+}
+
+interface MenuGetByRoleInput {
+  framework: string;
+  role: string;
+}
+
+interface SetUserMenuInput {
+  framework?: string;
+  menuIds: string[];
+  startupMenuId?: string;
+  userId: string;
+}
+
+interface SetUserMenuStartupInput {
+  framework?: string;
+  userId: string;
+}
+
+interface SetRoleMenuInput {
+  framework?: string;
+  menuIds: string[];
+  roleName: string;
+  startupMenuId?: string;
+}
+
+interface SetRoleMenuStartupInput {
+  framework?: string;
+  roleName: string;
+}
+
 type MenuUpdateDto = MenuCreateOrUpdateDto;
 
 interface MenuGetAllInput {
@@ -36,4 +74,16 @@ interface MenuGetAllInput {
   sorting?: string;
 }
 
-export type { MenuCreateDto, MenuDto, MenuGetAllInput, MenuUpdateDto };
+export type {
+  MenuCreateDto,
+  MenuDto,
+  MenuGetAllInput,
+  MenuGetByRoleInput,
+  MenuGetByUserInput,
+  MenuGetInput,
+  MenuUpdateDto,
+  SetRoleMenuInput,
+  SetRoleMenuStartupInput,
+  SetUserMenuInput,
+  SetUserMenuStartupInput,
+};
