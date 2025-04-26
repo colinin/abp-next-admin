@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -18,10 +19,31 @@ public class EfCoreRoleMenuRepository : EfCoreRepository<PlatformDbContext, Role
     {
     }
 
-    public async virtual Task<List<RoleMenu>> GetListByRoleNameAsync(string roleName, CancellationToken cancellationToken = default)
+    public async virtual Task<List<RoleMenu>> GetListByRoleNameAsync(
+        string roleName,
+        string framework = null,
+        CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync()).Where(x => x.RoleName.Equals(roleName))
-            .ToListAsync(GetCancellationToken(cancellationToken));
+        var dbContext = await GetDbContextAsync();
+
+        var menus = dbContext.Set<Menu>();
+        var roleMenus = dbContext.Set<RoleMenu>().Where(x => x.RoleName == roleName);
+
+        IQueryable<RoleMenu> queryable;
+        if (!framework.IsNullOrWhiteSpace())
+        {
+            queryable = from menu in menus
+                        join roleMenu in roleMenus
+                            on menu.Id equals roleMenu.MenuId
+                        where menu.Framework == framework
+                        select roleMenu;
+        }
+        else
+        {
+            queryable = roleMenus;
+        }
+
+        return await queryable.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<bool> RoleHasInMenuAsync(
@@ -40,8 +62,9 @@ public class EfCoreRoleMenuRepository : EfCoreRepository<PlatformDbContext, Role
                 GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Menu> GetStartupMenuAsync(
+    public async virtual Task<Menu> FindStartupMenuAsync(
         IEnumerable<string> roleNames,
+        string framework = null,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
@@ -54,6 +77,7 @@ public class EfCoreRoleMenuRepository : EfCoreRepository<PlatformDbContext, Role
              join menu in dbContext.Set<Menu>()
                   on roleMenu.MenuId equals menu.Id
              select menu)
+             .WhereIf(!framework.IsNullOrWhiteSpace(), x => x.Framework == framework)
              .OrderByDescending(x => x.CreationTime)
              .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
