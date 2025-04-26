@@ -126,16 +126,16 @@ public class MenuManager : DomainService
         return false;
     }
 
-    public async virtual Task SetUserStartupMenuAsync(Guid userId, Guid menuId)
+    public async virtual Task SetUserStartupMenuAsync(Guid userId, Guid? menuId = null, string framework = null)
     {
         using (var unitOfWork = UnitOfWorkManager.Begin())
         {
-            var userMenus = await UserMenuRepository.GetListByUserIdAsync(userId);
+            var userMenus = await UserMenuRepository.GetListByUserIdAsync(userId, framework);
 
             foreach (var menu in userMenus)
             {
                 menu.Startup = false;
-                if (menu.MenuId.Equals(menuId))
+                if (menuId.HasValue && menu.MenuId.Equals(menuId))
                 {
                     menu.Startup = true;
                 }
@@ -147,11 +147,11 @@ public class MenuManager : DomainService
         }
     }
 
-    public async virtual Task SetUserMenusAsync(Guid userId, IEnumerable<Guid> menuIds)
+    public async virtual Task SetUserMenusAsync(Guid userId, IEnumerable<Guid> menuIds, string framework = null)
     {
         using (var unitOfWork = UnitOfWorkManager.Begin())
         {
-            var userMenus = await UserMenuRepository.GetListByUserIdAsync(userId);
+            var userMenus = await UserMenuRepository.GetListByUserIdAsync(userId, framework);
 
             // 移除不存在的菜单
             // TODO: 升级框架版本解决未能删除不需要菜单的问题
@@ -173,16 +173,16 @@ public class MenuManager : DomainService
         }
     }
 
-    public async virtual Task SetRoleStartupMenuAsync(string roleName, Guid menuId)
+    public async virtual Task SetRoleStartupMenuAsync(string roleName, Guid? menuId = null, string framework = null)
     {
         using (var unitOfWork = UnitOfWorkManager.Begin())
         {
-            var roleMenus = await RoleMenuRepository.GetListByRoleNameAsync(roleName);
+            var roleMenus = await RoleMenuRepository.GetListByRoleNameAsync(roleName, framework);
 
             foreach (var menu in roleMenus)
             {
                 menu.Startup = false;
-                if (menu.MenuId.Equals(menuId))
+                if (menuId.HasValue && menu.MenuId.Equals(menuId))
                 {
                     menu.Startup = true;
                 }
@@ -194,11 +194,11 @@ public class MenuManager : DomainService
         }
     }
 
-    public async virtual Task SetRoleMenusAsync(string roleName, IEnumerable<Guid> menuIds)
+    public async virtual Task SetRoleMenusAsync(string roleName, IEnumerable<Guid> menuIds, string framework = null)
     {
         using (var unitOfWork = UnitOfWorkManager.Begin())
         {
-            var roleMenus = await RoleMenuRepository.GetListByRoleNameAsync(roleName);
+            var roleMenus = await RoleMenuRepository.GetListByRoleNameAsync(roleName, framework);
 
             // 移除不存在的菜单
             // TODO: 升级框架版本解决未能删除不需要菜单的问题
