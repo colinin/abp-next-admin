@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { WebhookSubscriptionTable } from '@abp/webhooks';
 
 defineOptions({
-  name: 'WebhookSubscriptions',
+  name: 'Vben5WebhooksSubscriptions',
 });
 </script>
 

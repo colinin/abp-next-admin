@@ -56,7 +56,9 @@
       "entityTypeInfos": "Entity Type Infos"
     },
     "auditLogs": "Audit Logs",
-    "loggings": "System Logs"
+    "loggings": "System Logs",
+    "openApi": "Api Document",
+    "cache": "Cache Management"
   },
   "openiddict": {
     "title": "OpenIddict",

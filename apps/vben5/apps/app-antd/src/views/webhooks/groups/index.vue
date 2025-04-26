@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { WebhookGroupDefinitionTable } from '@abp/webhooks';
 
 defineOptions({
-  name: 'WebhookGroupDefinitions',
+  name: 'Vben5WebhooksGroupDefinitions',
 });
 </script>
 

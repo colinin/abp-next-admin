@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { TokenTable } from '@abp/openiddict';
 
 defineOptions({
-  name: 'OpenIddictTokens',
+  name: 'Vben5OpenIddictTokens',
 });
 </script>
 

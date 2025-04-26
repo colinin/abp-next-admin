@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { TemplateDefinitionTable } from '@abp/text-templating';
 
 defineOptions({
-  name: 'TemplateDefinitions',
+  name: 'Vben5TextTemplatingDefinitions',
 });
 </script>
 

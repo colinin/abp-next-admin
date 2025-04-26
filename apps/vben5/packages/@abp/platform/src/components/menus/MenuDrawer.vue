@@ -252,6 +252,7 @@ async function onLayoutChange(layoutId?: string) {
 
 function onInitMetaFormSchemas() {
   metaFormApi.removeSchemaByFields(menuMetas.value.map((x) => x.name));
+  const metaValues: Record<string, any> = {};
   menuMetas.value.forEach((dataItem) => {
     metaFormApi.setState((pre) => {
       let component = 'Input';
@@ -318,13 +319,13 @@ function onInitMetaFormSchemas() {
           break;
         }
       }
+      metaValues[dataItem.name] = defaultValue;
       return {
         schema: [
           ...(pre?.schema ?? []),
           {
             component,
             componentProps,
-            defaultValue,
             fieldName: dataItem.name,
             help: dataItem.description,
             label: dataItem.displayName,
@@ -335,6 +336,7 @@ function onInitMetaFormSchemas() {
       };
     });
   });
+  metaFormApi.setValues(metaValues);
   showMetaForm.value = true;
 }
 
@@ -356,7 +358,7 @@ function onInitMetaFormValues(meta?: Record<string, any>) {
         break;
       }
       case ValueType.Boolean: {
-        values[dataItem.name] = Boolean(metaValue);
+        values[dataItem.name] = String(metaValue) === 'true';
         break;
       }
       case ValueType.Date: {
@@ -372,7 +374,7 @@ function onInitMetaFormValues(meta?: Record<string, any>) {
         break;
       }
       case ValueType.String: {
-        values[dataItem.name] = metaValue;
+        values[dataItem.name] = String(metaValue);
         break;
       }
     }

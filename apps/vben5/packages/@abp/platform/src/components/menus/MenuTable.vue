@@ -92,7 +92,7 @@ const gridOptions: VxeGridProps<MenuDto> = {
     {
       align: 'left',
       field: 'name',
-      minWidth: 150,
+      minWidth: 250,
       slots: { default: 'name' },
       title: $t('AppPlatform.DisplayName:Name'),
       treeNode: true,
@@ -253,7 +253,7 @@ onMounted(onGet);
 </script>
 
 <template>
-  <Grid :table-title="$t('AppPlatform.DisplayName:DataDictionary')">
+  <Grid :table-title="$t('AppPlatform.DisplayName:Menus')">
     <template #toolbar-tools>
       <Button
         v-if="isGranted([MenuPermissions.Create])"

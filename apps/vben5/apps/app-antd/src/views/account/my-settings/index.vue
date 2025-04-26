@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { MySetting } from '@abp/account';
 
 defineOptions({
-  name: 'MySettings',
+  name: 'Vben5AccountMySettings',
 });
 </script>
 

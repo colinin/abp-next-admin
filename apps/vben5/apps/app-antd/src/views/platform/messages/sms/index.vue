@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { SmsMessageTable } from '@abp/platform';
 
 defineOptions({
-  name: 'PlatformSmsMessages',
+  name: 'Vben5PlatformSmsMessages',
 });
 </script>
 

@@ -13,6 +13,7 @@ export interface VbenAdminProAppConfigRaw {
   VITE_GLOB_CLIENT_SECRET: string;
   VITE_GLOB_AUTHORITY: string;
   VITE_GLOB_AUDIENCE?: string;
+  VITE_GLOB_UI_FRAMEWORK: string;
 }
 
 export interface ApplicationConfig {
@@ -21,6 +22,7 @@ export interface ApplicationConfig {
   audience?: string;
   clientId: string;
   clientSecret: string;
+  uiFramework: string;
 }
 
 declare global {

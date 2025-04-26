@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { JobInfoTable } from '@abp/tasks';
 
 defineOptions({
-  name: 'TaskManagementJobInfos',
+  name: 'Vben5TasksJobInfos',
 });
 </script>
 
