@@ -1,0 +1,1 @@
+export { useContainesApi } from './useContainesApi';

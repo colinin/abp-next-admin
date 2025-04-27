@@ -129,5 +129,9 @@
   "textTemplating": {
     "title": "文本模板",
     "definitions": "模板定义"
+  },
+  "oss": {
+    "title": "对象存储",
+    "containers": "容器管理"
   }
 }

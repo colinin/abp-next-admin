@@ -36,6 +36,7 @@
     "@abp/localization": "workspace:*",
     "@abp/notifications": "workspace:*",
     "@abp/openiddict": "workspace:*",
+    "@abp/oss": "workspace:*",
     "@abp/permissions": "workspace:*",
     "@abp/platform": "workspace:*",
     "@abp/request": "workspace:*",
