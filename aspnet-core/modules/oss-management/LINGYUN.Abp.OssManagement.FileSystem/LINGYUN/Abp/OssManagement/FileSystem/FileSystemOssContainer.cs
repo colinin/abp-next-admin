@@ -122,6 +122,22 @@ internal class FileSystemOssContainer : OssContainerBase, IOssObjectExpireor
         return Task.CompletedTask;
     }
 
+    public override Task<bool> ObjectExistsAsync(GetOssObjectRequest request)
+    {
+        var objectPath = !request.Path.IsNullOrWhiteSpace()
+             ? request.Path.EnsureEndsWith('/')
+             : "";
+        var objectName = objectPath.IsNullOrWhiteSpace()
+            ? request.Object
+            : objectPath + request.Object;
+
+        var filePath = CalculateFilePath(request.Bucket, objectName);
+
+        var objectExists = File.Exists(filePath) || Directory.Exists(filePath);
+
+        return Task.FromResult(objectExists);
+    }
+
     public async override Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
     {
         var objectPath = !request.Path.IsNullOrWhiteSpace()

@@ -77,6 +77,22 @@ internal class NexusOssContainer : OssContainerBase, IOssObjectExpireor
             DateTime.Now);
     }
 
+    public async override Task<bool> ObjectExistsAsync(GetOssObjectRequest request)
+    {
+        var nexusConfiguration = GetNexusConfiguration();
+        var blobPath = GetBasePath(request.Bucket, request.Path, request.Object);
+
+        var searchBlobName = GetObjectName(request.Bucket, request.Path, request.Object);
+        var nexusSearchArgs = new NexusSearchArgs(
+           nexusConfiguration.Repository,
+           blobPath,
+           searchBlobName);
+
+        var nexusAssetListResult = await NexusLookupService.ListAssetAsync(nexusSearchArgs);
+
+        return nexusAssetListResult.Items.Count != 0;
+    }
+
     public async override Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
     {
         var nexusConfiguration = GetNexusConfiguration();

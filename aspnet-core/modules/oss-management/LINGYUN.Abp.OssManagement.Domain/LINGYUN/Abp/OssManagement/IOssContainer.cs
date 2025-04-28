@@ -60,6 +60,12 @@ public interface IOssContainer
     /// <returns></returns>
     Task<bool> ExistsAsync(string name);
     /// <summary>
+    /// Oss对象是否存在
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    Task<bool> ObjectExistsAsync(GetOssObjectRequest request);
+    /// <summary>
     /// 获取容器列表
     /// </summary>
     /// <param name="request"></param>
