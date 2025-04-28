@@ -132,6 +132,7 @@
   },
   "oss": {
     "title": "Object storage",
-    "containers": "Containers"
+    "containers": "Containers",
+    "objects": "Files"
   }
 }

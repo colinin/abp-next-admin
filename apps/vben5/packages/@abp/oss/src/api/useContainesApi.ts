@@ -1,8 +1,10 @@
 import type {
   GetOssContainersInput,
+  GetOssObjectsInput,
   OssContainerDto,
   OssContainersResultDto,
 } from '../types/containes';
+import type { OssObjectsResultDto } from '../types/objects';
 
 import { useRequest } from '@abp/request';
 
@@ -30,6 +32,18 @@ export function useContainesApi() {
     });
   }
 
+  function getObjectsApi(
+    input: GetOssObjectsInput,
+  ): Promise<OssObjectsResultDto> {
+    return request<OssObjectsResultDto>(
+      `/api/oss-management/containes/objects`,
+      {
+        method: 'GET',
+        params: input,
+      },
+    );
+  }
+
   function createApi(name: string): Promise<OssContainerDto> {
     return request<OssContainerDto>(`/api/oss-management/containes/${name}`, {
       method: 'POST',
@@ -42,5 +56,6 @@ export function useContainesApi() {
     deleteApi,
     getApi,
     getListApi,
+    getObjectsApi,
   };
 }

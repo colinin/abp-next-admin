@@ -17,6 +17,9 @@
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./global": {
+      "types": "./global.d.ts"
     }
   },
   "dependencies": {
@@ -32,8 +35,10 @@
     "@vben/icons": "workspace:*",
     "@vben/layouts": "workspace:*",
     "@vben/locales": "workspace:*",
+    "@vben/stores": "workspace:*",
     "ant-design-vue": "catalog:",
     "vue": "catalog:*",
+    "vue-simple-uploader": "catalog:",
     "vxe-table": "catalog:"
   }
 }

@@ -132,6 +132,7 @@
   },
   "oss": {
     "title": "对象存储",
-    "containers": "容器管理"
+    "containers": "容器管理",
+    "objects": "文件管理"
   }
 }
