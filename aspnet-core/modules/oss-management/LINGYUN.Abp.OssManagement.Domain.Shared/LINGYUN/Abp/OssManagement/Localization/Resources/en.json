@@ -8,6 +8,7 @@
     "Abp.OssManagement:020001": "An object that has more than one child cannot be deleted!",
     "Abp.OssManagement:020402": "The object name already exists!",
     "Abp.OssManagement:020404": "The queried object could not be found!",
+    "Abp.OssManagement:020405": "The download link has expired!",
     "Abp.OssManagement:000405": "The path object name has exceeded the allowable maximum length and cannot continue to create a new object!",
     "Permission:OssManagement": "Object Storage",
     "Permission:Container": "Containers",
