@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class TencentOssContainerServiceCollectionExtensions
 {
-    public static IServiceCollection AddMinioContainer(this IServiceCollection services)
+    public static IServiceCollection AddTencentContainer(this IServiceCollection services)
     {
         services.AddTransient<IOssContainerFactory, TencentOssContainerFactory>();
 
