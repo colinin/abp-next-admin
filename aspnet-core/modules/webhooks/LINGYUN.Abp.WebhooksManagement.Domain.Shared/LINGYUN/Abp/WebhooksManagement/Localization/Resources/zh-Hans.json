@@ -32,6 +32,7 @@
     "SelectedItems": "已选择项目",
     "SelectedItemsFormat": "已选择 {0}",
     "ItemWillBeResendMessageWithFormat": "{0} 将要重新发送.",
+    "SuccessfullySent": "发送成功",
     "DisplayName:Name": "名称",
     "DisplayName:DisplayName": "显示名称",
     "DisplayName:Description": "描述",
