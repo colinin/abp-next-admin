@@ -129,5 +129,10 @@
   "textTemplating": {
     "title": "Text Templating",
     "definitions": "Definitions"
+  },
+  "oss": {
+    "title": "Object storage",
+    "containers": "Containers",
+    "objects": "Files"
   }
 }
