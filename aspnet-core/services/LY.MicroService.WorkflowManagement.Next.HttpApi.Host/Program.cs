@@ -64,6 +64,7 @@ app.UseForwardedHeaders();
 app.UseCorrelationId();
 app.UseElsaLocalization();
 app.UseStaticFiles();
+app.UseResponseCompression();
 app.UseRouting(); // Required for SignalR.
 app.UseAuthentication();
 app.UseJwtTokenMiddleware();

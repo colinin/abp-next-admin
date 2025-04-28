@@ -1,8 +1,3 @@
-using LINGYUN.Abp.Identity.WeChat.Work;
-using LINGYUN.Abp.Notifications.Templating;
-using LINGYUN.Abp.Notifications.WeChat.Work;
-using LINGYUN.Abp.OssManagement.Minio;
-
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
@@ -151,8 +146,10 @@ namespace LY.MicroService.Applications.Single;
     typeof(PlatformSettingsVueVbenAdminModule),
     // 平台模块 VueVbenAdmin主题
     typeof(PlatformThemeVueVbenAdminModule),
-    // 平台模块 VueVbenAdmin导航
-    typeof(AbpUINavigationVueVbenAdminModule),
+    // 平台模块 Vben2路由
+    // typeof(AbpUINavigationVueVbenAdminModule),
+    // 平台模块 Vben5路由
+    typeof(AbpUINavigationVueVbenAdmin5Module),
 
     // Saas模块 领域服务
     typeof(AbpSaasDomainModule),
