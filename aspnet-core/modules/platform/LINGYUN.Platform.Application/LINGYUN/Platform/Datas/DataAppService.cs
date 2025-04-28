@@ -130,6 +130,10 @@ public class DataAppService : PlatformApplicationServiceBase, IDataAppService
 
         if (!string.Equals(data.Name, input.Name, StringComparison.InvariantCultureIgnoreCase))
         {
+            if (await DataRepository.FindByNameAsync(input.Name) != null)
+            {
+                throw new UserFriendlyException(L["DuplicateData", input.Name]);
+            }
             data.Name = input.Name;
         }
         if (!string.Equals(data.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
