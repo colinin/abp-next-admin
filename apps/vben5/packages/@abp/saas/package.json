@@ -34,6 +34,7 @@
     "ant-design-vue": "catalog:",
     "dayjs": "catalog:",
     "lodash.debounce": "catalog:",
+    "universal-cookie": "catalog:",
     "vue": "catalog:*",
     "vxe-table": "catalog:"
   },
