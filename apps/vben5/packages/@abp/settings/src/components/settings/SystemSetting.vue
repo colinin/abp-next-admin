@@ -80,6 +80,7 @@ function onFeatureManage() {
   <SettingForm :get-api="onGet" :submit-api="onSubmit">
     <template #toolbar>
       <Button
+        v-access:code="['FeatureManagement.ManageHostFeatures']"
         ghost
         post-icon="ant-design:setting-outlined"
         type="primary"
