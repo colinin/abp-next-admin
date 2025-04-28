@@ -4,8 +4,8 @@ using LINGYUN.Abp.OssManagement.Localization;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.Validation;
@@ -63,6 +63,25 @@ public class FileUploadMerger : ITransientDependency
             Overwrite = input.Overwrite
         };
         return await oss.CreateObjectAsync(createOssObjectRequest);
+    }
+
+    public async virtual Task ValidationAsync(ValidationOssObjectInput input)
+    {
+        await _fileValidater.ValidationAsync(new UploadFile
+        {
+            TotalSize = input.TotalSize,
+            FileName = input.FileName
+        });
+
+        var oss = CreateOssContainer();
+
+        if (!input.Overwrite && await oss.ObjectExistsAsync(new GetOssObjectRequest(
+            input.Bucket,
+            input.FileName,
+            input.Path)))
+        {
+            throw new BusinessException(OssManagementErrorCodes.ObjectAlreadyExists);
+        }
     }
 
     protected virtual IOssContainer CreateOssContainer()
