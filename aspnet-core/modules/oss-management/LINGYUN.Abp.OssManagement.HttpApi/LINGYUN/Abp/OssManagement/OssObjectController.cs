@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.OssManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
@@ -26,43 +27,64 @@ public class OssObjectController : AbpControllerBase, IOssObjectAppService
     }
 
     [HttpPost]
-    public async virtual Task<OssObjectDto> CreateAsync([FromForm] CreateOssObjectInput input)
+    [Authorize(AbpOssManagementPermissions.OssObject.Create)]
+    public virtual Task<OssObjectDto> CreateAsync([FromForm] CreateOssObjectInput input)
     {
-        return await OssObjectAppService.CreateAsync(input);
+        return OssObjectAppService.CreateAsync(input);
     }
 
     [HttpPost]
     [Route("upload")]
     [DisableAuditing]
     [Authorize(AbpOssManagementPermissions.OssObject.Create)]
-    public async virtual Task UploadAsync([FromForm] UploadFileChunkInput input)
+    public virtual Task UploadAsync([FromForm] UploadFileChunkInput input)
     {
-        await FileUploader.UploadAsync(input);
+        return FileUploader.UploadAsync(input);
     }
 
     [HttpPost]
     [Route("bulk-delete")]
-    public async virtual Task BulkDeleteAsync(BulkDeleteOssObjectInput input)
+    [Authorize(AbpOssManagementPermissions.OssObject.Delete)]
+    public virtual Task BulkDeleteAsync(BulkDeleteOssObjectInput input)
     {
-        await OssObjectAppService.BulkDeleteAsync(input);
+        return OssObjectAppService.BulkDeleteAsync(input);
     }
 
     [HttpDelete]
-    public async virtual Task DeleteAsync(GetOssObjectInput input)
+    [Authorize(AbpOssManagementPermissions.OssObject.Delete)]
+    public virtual Task DeleteAsync(GetOssObjectInput input)
     {
-        await OssObjectAppService.DeleteAsync(input);
+        return OssObjectAppService.DeleteAsync(input);
     }
 
     [HttpGet]
-    public async virtual Task<OssObjectDto> GetAsync(GetOssObjectInput input)
+    [Authorize(AbpOssManagementPermissions.OssObject.Default)]
+    public virtual Task<OssObjectDto> GetAsync(GetOssObjectInput input)
     {
-        return await OssObjectAppService.GetAsync(input);
+        return OssObjectAppService.GetAsync(input);
     }
 
     [HttpGet]
     [Route("download")]
-    public async virtual Task<IRemoteStreamContent> GetContentAsync(GetOssObjectInput input)
+    [Authorize(AbpOssManagementPermissions.OssObject.Download)]
+    [Obsolete("请使用 GenerateUrlAsync 与 DownloadAsync的组合")]
+    public virtual Task<IRemoteStreamContent> GetContentAsync(GetOssObjectInput input)
     {
-        return await OssObjectAppService.GetContentAsync(input);
+        return OssObjectAppService.GetContentAsync(input);
+    }
+
+    [HttpGet]
+    [Route("generate-url")]
+    [Authorize(AbpOssManagementPermissions.OssObject.Download)]
+    public virtual Task<string> GenerateUrlAsync(GetOssObjectInput input)
+    {
+        return OssObjectAppService.GenerateUrlAsync(input);
+    }
+
+    [HttpGet]
+    [Route("download/{urlKey}")]
+    public virtual Task<IRemoteStreamContent> DownloadAsync(string urlKey)
+    {
+        return OssObjectAppService.DownloadAsync(urlKey);
     }
 }
