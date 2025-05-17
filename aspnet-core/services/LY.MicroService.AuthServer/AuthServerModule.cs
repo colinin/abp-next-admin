@@ -5,6 +5,7 @@ using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authentication.QQ;
 using LINGYUN.Abp.Authentication.WeChat;
+using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
@@ -15,6 +16,7 @@ using LINGYUN.Abp.Identity.AspNetCore.Session;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.OpenIddict.AspNetCore;
 using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Portal;
@@ -48,6 +50,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
     typeof(AbpAccountWebOpenIddictModule),
+    typeof(AbpBlobStoringOssManagementModule),
     typeof(AbpGdprApplicationModule),
     typeof(AbpGdprHttpApiModule),
     typeof(AbpGdprWebModule),
@@ -87,6 +90,7 @@ public partial class AuthServerModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
 
         PreConfigureAuth();
+        PreConfigureWrapper();
         PreConfigureFeature();
         PreForwardedHeaders();
         PreConfigureApp(configuration);
@@ -99,6 +103,7 @@ public partial class AuthServerModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureBlobStoring(configuration);
         ConfigureCaching(configuration);
         ConfigureIdentity(configuration);
         ConfigureVirtualFileSystem();
