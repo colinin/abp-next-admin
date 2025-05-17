@@ -1,7 +1,6 @@
 ﻿using OpenIddict.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
@@ -36,12 +35,6 @@ public class UserInfoController : VoloUserInfoController
             claims[OpenIddictConstants.Claims.PreferredUsername] = user.UserName;
             claims[OpenIddictConstants.Claims.FamilyName] = user.Surname;
             claims[OpenIddictConstants.Claims.GivenName] = user.Name;
-            // 重写添加用户头像
-            var picture = user.Claims.FirstOrDefault(x => x.ClaimType == AbpClaimTypes.Picture);
-            if (picture != null)
-            {
-                claims[OpenIddictConstants.Claims.Picture] = picture.ClaimValue;
-            }
         }
 
         if (User.HasScope(OpenIddictConstants.Scopes.Email))
