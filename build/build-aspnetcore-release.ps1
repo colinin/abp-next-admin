@@ -4,7 +4,8 @@
 foreach ($service in $serviceArray) {    
     Set-Location $service.Path
     $publishPath = $rootFolder + "/../aspnet-core/services/Publish/" + $service.Service
-    dotnet publish -c Release -o $publishPath --no-cache --no-restore
+    dotnet build -c Release -o $publishPath --no-cache --no-restore
+    Remove-Item (Join-Path $publishPath "appsettings.Development.json")  -Recurse
     Copy-Item (Join-Path $service.Path "Dockerfile") -Destination $publishPath -Recurse
 }
 
