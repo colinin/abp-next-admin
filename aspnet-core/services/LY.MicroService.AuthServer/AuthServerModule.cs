@@ -34,7 +34,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
@@ -54,7 +54,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpGdprApplicationModule),
     typeof(AbpGdprHttpApiModule),
     typeof(AbpGdprWebModule),
-    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
+    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpIdentityAspNetCoreSessionModule),
@@ -103,6 +103,7 @@ public partial class AuthServerModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        ConfigureBranding(configuration);
         ConfigureBlobStoring(configuration);
         ConfigureCaching(configuration);
         ConfigureIdentity(configuration);

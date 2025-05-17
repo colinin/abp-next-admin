@@ -11,6 +11,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Abp.Wrapper;
+using LY.MicroService.AuthServer.Ui.Branding;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication;
@@ -214,6 +215,14 @@ public partial class AuthServerModule
             var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
             services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
         }
+    }
+
+    private void ConfigureBranding(IConfiguration configuration)
+    {
+        Configure<AccountBrandingOptions>(options =>
+        {
+            configuration.GetSection("App:Branding").Bind(options);
+        });
     }
 
     private void ConfigureBlobStoring(IConfiguration configuration)
