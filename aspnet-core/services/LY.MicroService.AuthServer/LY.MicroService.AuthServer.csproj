@@ -37,7 +37,7 @@
 		</PackageReference>-->
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
 		<PackageReference Include="Volo.Abp.Account.Web.OpenIddict" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" />
 		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.Identity.AspNetCore" />
