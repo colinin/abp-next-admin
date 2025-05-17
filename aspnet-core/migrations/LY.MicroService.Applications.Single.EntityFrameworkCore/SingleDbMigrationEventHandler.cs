@@ -84,7 +84,7 @@ public class SingleDbMigrationEventHandler :
             await QueueBackgroundJobAsync(eventData);
 
             await SeedTenantDefaultRoleAsync(eventData);
-            await SeedTenantAdminAsync(eventData);
+            // await SeedTenantAdminAsync(eventData);
         }
     }
 
