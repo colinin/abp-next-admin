@@ -98,7 +98,9 @@ public class OssObjectAppService : OssManagementApplicationServiceBase, IOssObje
     [Authorize(AbpOssManagementPermissions.OssObject.Download)]
     public async virtual Task<string> GenerateUrlAsync(GetOssObjectInput input)
     {
-        var cacheKey = JsonSerializer.Serialize(input).ToMd5();
+        // 以当前时间戳为盐, 尽量避免同一文件相同的url
+        var salt = Clock.Now.Ticks.ToString();
+        var cacheKey = $"{JsonSerializer.Serialize(input)}{salt}".ToMd5();
         var cacheItem = await UrlCache.GetAsync(cacheKey);
         if (cacheItem == null)
         {
