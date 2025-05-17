@@ -1,8 +1,8 @@
 <Project>
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.3.2</DotNetCoreCAPPackageVersion>
-		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
-		<ElsaNextPackageVersion>3.3.0-rc7</ElsaNextPackageVersion>
+		<ElsaPackageVersion>2.15.1</ElsaPackageVersion>
+		<ElsaNextPackageVersion>3.3.5</ElsaNextPackageVersion>
 		<VoloAbpPackageVersion>9.1.1</VoloAbpPackageVersion>
 		<LINGYUNAbpPackageVersion>9.1.1</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>9.0.2</MicrosoftExtensionsPackageVersion>
