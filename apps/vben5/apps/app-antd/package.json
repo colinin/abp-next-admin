@@ -1,6 +1,6 @@
 {
   "name": "@abp/app-antd",
-  "version": "9.0.4",
+  "version": "9.1.3",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
@@ -46,6 +46,7 @@
     "@abp/text-templating": "workspace:*",
     "@abp/ui": "workspace:*",
     "@abp/webhooks": "workspace:*",
+    "@vben-core/shadcn-ui": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/constants": "workspace:*",

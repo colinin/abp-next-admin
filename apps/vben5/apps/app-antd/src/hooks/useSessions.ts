@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { Notification as NotificationInfo } from '@abp/notifications';
 
 import { onMounted, onUnmounted } from 'vue';
@@ -27,7 +26,10 @@ export function useSessions() {
 
   /** 处理会话过期事件 */
   function _onSessionExpired(event?: NotificationInfo) {
-    const { data, title, message } = event!;
+    if (!event) {
+      return;
+    }
+    const { data, title, message } = event;
     const sessionId = data.SessionId;
     if (sessionId === abpStore.application?.currentUser?.sessionId) {
       _release();
