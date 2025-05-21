@@ -71,7 +71,9 @@ public class LocalizationTextStoreCache : ILocalizationTextStoreCache, ISingleto
             using (provider.Change(false))
             {
                 var repo = scope.ServiceProvider.GetRequiredService<ITextRepository>();
+#pragma warning disable CS0618
                 var texts = repo.GetList(resource.ResourceName, cultureName);
+#pragma warning restore CS0618
                 foreach (var text in texts)
                 {
                     setTexts[text.Key] = text.Value;
