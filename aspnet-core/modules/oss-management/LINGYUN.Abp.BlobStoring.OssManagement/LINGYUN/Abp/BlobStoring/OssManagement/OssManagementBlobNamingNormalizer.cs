@@ -1,5 +1,4 @@
-﻿using System;
-using Volo.Abp.BlobStoring;
+﻿using Volo.Abp.BlobStoring;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.BlobStoring.OssManagement;
@@ -13,8 +12,7 @@ public class OssManagementBlobNamingNormalizer : IBlobNamingNormalizer, ITransie
 
     public virtual string NormalizeContainerName(string containerName)
     {
-        // 尾部添加反斜杠
-        return NormalizeName(containerName).EnsureEndsWith('/');
+        return NormalizeName(containerName);
     }
 
     protected virtual string NormalizeName(string name)
