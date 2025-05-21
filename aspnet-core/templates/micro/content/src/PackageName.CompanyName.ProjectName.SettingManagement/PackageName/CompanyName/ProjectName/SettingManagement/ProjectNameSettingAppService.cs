@@ -1,7 +1,7 @@
 ﻿using LINGYUN.Abp.SettingManagement;
 using Microsoft.AspNetCore.Authorization;
-using PackageName.CompanyName.ProjectName.Permissions;
 using PackageName.CompanyName.ProjectName.Localization;
+using PackageName.CompanyName.ProjectName.Permissions;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Features;
@@ -54,8 +54,6 @@ public class ProjectNameSettingAppService : ApplicationService, IProjectNameSett
             {
                 await SettingManager.SetForTenantAsync(CurrentTenant.GetId(), setting.Name, setting.Value);
             }
-
-            await CurrentUnitOfWork.SaveChangesAsync();
         }
     }
 
@@ -69,8 +67,6 @@ public class ProjectNameSettingAppService : ApplicationService, IProjectNameSett
         {
             await SettingManager.SetForCurrentUserAsync(setting.Name, setting.Value);
         }
-
-        await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     [Authorize(ProjectNamePermissions.ManageSettings)]
@@ -83,8 +79,6 @@ public class ProjectNameSettingAppService : ApplicationService, IProjectNameSett
         {
             await SettingManager.SetGlobalAsync(setting.Name, setting.Value);
         }
-
-        await CurrentUnitOfWork.SaveChangesAsync();
     }
 
 
@@ -93,7 +87,7 @@ public class ProjectNameSettingAppService : ApplicationService, IProjectNameSett
         await FeatureChecker.CheckEnabledAsync(SettingManagementFeatures.Enable);
     }
 
-    protected virtual async Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+    protected virtual async Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string? providerKey = null)
     {
         var settingGroups = new SettingGroupResult();
 

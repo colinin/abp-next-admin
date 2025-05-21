@@ -32,6 +32,7 @@
     "SelectedItems": "Selected items",
     "SelectedItemsFormat": "Selected {0}",
     "ItemWillBeResendMessageWithFormat": "{0} will be resend.",
+    "SuccessfullySent": "Successfully Sent",
     "DisplayName:Name": "Name",
     "DisplayName:DisplayName": "Display Name",
     "DisplayName:Description": "Description",

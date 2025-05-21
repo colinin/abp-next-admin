@@ -885,6 +885,40 @@
                   }
                 },
                 {
+                  "name": "GenerateUrlAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.OssManagement.GetOssObjectInput, LINGYUN.Abp.OssManagement.Application.Contracts",
+                      "type": "LINGYUN.Abp.OssManagement.GetOssObjectInput",
+                      "typeSimple": "LINGYUN.Abp.OssManagement.GetOssObjectInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
+                },
+                {
+                  "name": "DownloadAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "urlKey",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                },
+                {
                   "name": "GetContentAsync",
                   "parametersOnMethod": [
                     {
@@ -1033,7 +1067,7 @@
                 "type": "LINGYUN.Abp.OssManagement.OssObjectDto",
                 "typeSimple": "LINGYUN.Abp.OssManagement.OssObjectDto"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "LINGYUN.Abp.OssManagement.IOssObjectAppService"
             },
             "UploadAsyncByInput": {
@@ -1203,7 +1237,7 @@
                 "type": "System.Void",
                 "typeSimple": "System.Void"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "LINGYUN.Abp.OssManagement.IOssObjectAppService"
             },
             "DeleteAsyncByInput": {
@@ -1276,7 +1310,7 @@
                 "type": "System.Void",
                 "typeSimple": "System.Void"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "LINGYUN.Abp.OssManagement.IOssObjectAppService"
             },
             "GetAsyncByInput": {
@@ -1349,7 +1383,7 @@
                 "type": "LINGYUN.Abp.OssManagement.OssObjectDto",
                 "typeSimple": "LINGYUN.Abp.OssManagement.OssObjectDto"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "LINGYUN.Abp.OssManagement.IOssObjectAppService"
             },
             "GetContentAsyncByInput": {
@@ -1416,6 +1450,116 @@
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
                   "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.OssManagement.IOssObjectAppService"
+            },
+            "GenerateUrlAsyncByInput": {
+              "uniqueName": "GenerateUrlAsyncByInput",
+              "name": "GenerateUrlAsync",
+              "httpMethod": "GET",
+              "url": "api/oss-management/objects/generate-url",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.OssManagement.GetOssObjectInput, LINGYUN.Abp.OssManagement.Application.Contracts",
+                  "type": "LINGYUN.Abp.OssManagement.GetOssObjectInput",
+                  "typeSimple": "LINGYUN.Abp.OssManagement.GetOssObjectInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Bucket",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Path",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Object",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MD5",
+                  "jsonName": null,
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "LINGYUN.Abp.OssManagement.IOssObjectAppService"
+            },
+            "DownloadAsyncByUrlKey": {
+              "uniqueName": "DownloadAsyncByUrlKey",
+              "name": "DownloadAsync",
+              "httpMethod": "GET",
+              "url": "api/oss-management/objects/download/{urlKey}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "urlKey",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "urlKey",
+                  "name": "urlKey",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
                 }
               ],
               "returnValue": {

@@ -22,7 +22,6 @@
       "claimTypes": "Claim Types",
       "securityLogs": "Security Logs",
       "organizationUnits": "Organization Units",
-      "auditLogs": "Audit Logs",
       "sessions": "Sessions"
     },
     "permissions": {
@@ -55,7 +54,11 @@
     "dataProtection": {
       "title": "Data Protection",
       "entityTypeInfos": "Entity Type Infos"
-    }
+    },
+    "auditLogs": "Audit Logs",
+    "loggings": "System Logs",
+    "openApi": "Api Document",
+    "cache": "Cache Management"
   },
   "openiddict": {
     "title": "OpenIddict",
@@ -96,7 +99,10 @@
       "title": "Message Manage",
       "email": "Email Messages",
       "sms": "Sms Messages"
-    }
+    },
+    "dataDictionaries": "Data Dictionaries",
+    "layouts": "Layouts",
+    "menus": "Menus"
   },
   "saas": {
     "title": "Saas",
@@ -106,5 +112,27 @@
   "demo": {
     "title": "Demo",
     "books": "Books"
+  },
+  "tasks": {
+    "title": "Task Management",
+    "jobInfo": {
+      "title": "Job Manage"
+    }
+  },
+  "webhooks": {
+    "title": "Webhooks",
+    "groups": "Groups",
+    "definitions": "Definitions",
+    "subscriptions": "Subscriptions",
+    "sendAttempts": "Send Attempts"
+  },
+  "textTemplating": {
+    "title": "Text Templating",
+    "definitions": "Definitions"
+  },
+  "oss": {
+    "title": "Object storage",
+    "containers": "Containers",
+    "objects": "Files"
   }
 }

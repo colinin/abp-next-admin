@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { BookTable } from '@abp/demo';
 
 defineOptions({
-  name: 'DemoBooks',
+  name: 'Vben5AbpDemoBooks',
 });
 </script>
 

@@ -21,6 +21,7 @@
     "DisplayName:Group": "分组",
     "DisplayName:Name": "名称",
     "DisplayName:Description": "描述",
+    "DisplayName:NodeName": "运行节点",
     "DisplayName:Type": "类型",
     "Description:Type": "作业实现者的类型,格式: 类型全名, 程序集名称, 示例: System.String, mscorlib",
     "DisplayName:Status": "状态",
@@ -88,6 +89,11 @@
     "BackgroundJobs:Copy": "复制作业",
     "BasicInfo": "基本信息",
     "Paramters": "参数列表",
-    "MultipleSelectJobsWillBeDeletedMessage": "选择的多个作业将被删除!"
+    "MultipleSelectJobsWillBeDeletedMessage": "选择的多个作业将被删除!",
+    "SelectJobWillBePauseMessage": "选择的作业将被暂停!",
+    "SelectJobWillBeResumeMessage": "选择的作业将被重启!",
+    "SelectJobWillBeTriggerMessage": "选择的作业将被触发!",
+    "SelectJobWillBeStartMessage": "选择的作业将被启动!",
+    "SelectJobWillBeStopMessage": "选择的作业将被停止!"
   }
 }

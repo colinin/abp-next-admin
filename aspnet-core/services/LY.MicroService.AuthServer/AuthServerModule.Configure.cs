@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
@@ -9,6 +10,8 @@ using LINGYUN.Abp.OpenIddict.WeChat;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.WeChat.Work;
+using LINGYUN.Abp.Wrapper;
+using LY.MicroService.AuthServer.Ui.Branding;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication;
@@ -34,9 +37,11 @@ using System.Text.Unicode;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
@@ -210,6 +215,28 @@ public partial class AuthServerModule
             var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
             services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
         }
+    }
+
+    private void ConfigureBranding(IConfiguration configuration)
+    {
+        Configure<AccountBrandingOptions>(options =>
+        {
+            configuration.GetSection("App:Branding").Bind(options);
+        });
+    }
+
+    private void ConfigureBlobStoring(IConfiguration configuration)
+    {
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+            {
+                containerConfiguration.UseOssManagement(config =>
+                {
+                    configuration.GetSection("OssManagement").Bind(config);
+                });
+            });
+        });
     }
 
     private void ConfigureCaching(IConfiguration configuration)
@@ -397,6 +424,19 @@ public partial class AuthServerModule
                     .AllowAnyMethod()
                     .AllowCredentials();
             });
+        });
+    }
+
+    private void PreConfigureWrapper()
+    {
+        PreConfigure<AbpHttpClientBuilderOptions>(options =>
+        {
+            // http服务间调用发送不需要包装结果的请求头
+            options.ProxyClientActions.Add(
+                (_, _, client) =>
+                {
+                    client.DefaultRequestHeaders.TryAddWithoutValidation(AbpHttpWrapConsts.AbpDontWrapResult, "true");
+                });
         });
     }
 }

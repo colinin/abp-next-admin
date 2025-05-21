@@ -62,6 +62,19 @@ internal class AliyunOssContainer : OssContainerBase, IOssObjectExpireor
             });
     }
 
+    public async override Task<bool> ObjectExistsAsync(GetOssObjectRequest request)
+    {
+        var ossClient = await CreateClientAsync();
+
+        var objectPath = GetBasePath(request.Path);
+
+        var objectName = objectPath.IsNullOrWhiteSpace()
+            ? request.Object
+            : objectPath + request.Object;
+
+        return ObjectExists(ossClient, request.Bucket, objectName);
+    }
+
     public async override Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
     {
         var ossClient = await CreateClientAsync();

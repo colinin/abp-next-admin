@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Dynamic.Queryable;
+using LINGYUN.Abp.Exporter;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application;
 using Volo.Abp.Authorization;
@@ -12,7 +13,8 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpDddApplicationModule),
     typeof(ProjectNameDomainModule),
     typeof(ProjectNameApplicationContractsModule),
-    typeof(AbpDynamicQueryableApplicationModule))]
+    typeof(AbpDynamicQueryableApplicationModule),
+    typeof(AbpExporterApplicationModule))]
 public class ProjectNameApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

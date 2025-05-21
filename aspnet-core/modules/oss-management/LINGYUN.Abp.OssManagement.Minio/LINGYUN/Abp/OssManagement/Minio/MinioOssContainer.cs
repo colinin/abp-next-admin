@@ -95,6 +95,20 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
             new Dictionary<string, string>());
     }
 
+    public async override Task<bool> ObjectExistsAsync(GetOssObjectRequest request)
+    {
+        var client = GetMinioClient();
+
+        var bucket = GetBucket(request.Bucket);
+        var prefixPath = GetPrefixPath();
+        var objectPath = GetBlobPath(prefixPath, request.Path);
+        var objectName = objectPath.IsNullOrWhiteSpace()
+            ? request.Object
+            : objectPath + request.Object;
+
+        return await ObjectExists(client, bucket, objectName);
+    }
+
     public async override Task<OssObject> CreateObjectAsync(CreateOssObjectRequest request)
     {
         var client = GetMinioClient();

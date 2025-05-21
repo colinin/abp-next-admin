@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { MyProfile } from '@abp/account';
 
 defineOptions({
-  name: 'MyProfiles',
+  name: 'Vben5AccountMyProfiles',
 });
 </script>
 

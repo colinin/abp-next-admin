@@ -8,6 +8,7 @@
     "Abp.OssManagement:020001": "不能删除存在多个子级的对象!",
     "Abp.OssManagement:020402": "对象名称已经存在!",
     "Abp.OssManagement:020404": "未能找到查询的对象!",
+    "Abp.OssManagement:020405": "下载链接已失效!",
     "Abp.OssManagement:000405": "此路径对象名称已超出允许的最大长度,无法继续创建新对象!",
     "Permission:OssManagement": "对象存储",
     "Permission:Container": "容器管理",

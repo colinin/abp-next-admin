@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { FeatureDefinitionTable } from '@abp/features';
 
 defineOptions({
-  name: 'FeatureDefinitions',
+  name: 'Vben5FeaturesDefinitions',
 });
 </script>
 

@@ -22,10 +22,10 @@
             public const string Long = "no-random-port";
         }
 
-        public static class AuthenticationScheme
+        public static class Telemetry
         {
-            public const string Short = "as";
-            public const string Long = "auth-scheme";
+            public const string Short = "tm";
+            public const string Long = "telemetry";
         }
     }
 }

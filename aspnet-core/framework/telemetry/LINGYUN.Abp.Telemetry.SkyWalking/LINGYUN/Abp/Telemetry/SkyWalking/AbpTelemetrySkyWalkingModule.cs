@@ -12,7 +12,7 @@ public class AbpTelemetrySkyWalkingModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
-        var isSkywalkingEnabled = configuration["SkyWalking:Enable"];
+        var isSkywalkingEnabled = configuration["SkyWalking:IsEnabled"];
         if (isSkywalkingEnabled.IsNullOrWhiteSpace() || "false".Equals(isSkywalkingEnabled.ToLower()))
         {
             return;

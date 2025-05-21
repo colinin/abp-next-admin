@@ -16,6 +16,7 @@ import { $t } from '@vben/locales';
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
 import { Events, useAbpStore, useEventBus, useFeatures } from '@abp/core';
 import { PermissionModal } from '@abp/permissions';
+import { MenuAllotModal } from '@abp/platform';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -52,6 +53,9 @@ const [RolePermissionModal, permissionModalApi] = useVbenModal({
 });
 const [RoleClaimModal, claimModalApi] = useVbenModal({
   connectedComponent: ClaimModal,
+});
+const [RoleMenuModal, menuModalApi] = useVbenModal({
+  connectedComponent: MenuAllotModal,
 });
 const [RoleRuleDrawer, roleRuleDrawerApi] = useVbenDrawer({
   connectedComponent: RuleModal,
@@ -178,13 +182,18 @@ const handleMenuClick = async (row: IdentityRoleDto, info: MenuInfo) => {
       roleRuleDrawerApi.open();
       break;
     }
+    case 'menus': {
+      menuModalApi.setData({
+        identity: row.name,
+      });
+      menuModalApi.open();
+      break;
+    }
     case 'permissions': {
-      const roles = abpStore.application?.currentUser.roles ?? [];
       permissionModalApi.setData({
         displayName: row.name,
         providerKey: row.name,
         providerName: 'R',
-        readonly: roles.includes(row.name),
       });
       permissionModalApi.open();
       break;
@@ -296,6 +305,7 @@ function onPermissionChange(_name: string, key: string) {
   <RolePermissionModal @change="onPermissionChange" />
   <RoleChangeDrawer />
   <RoleRuleDrawer />
+  <RoleMenuModal subject="role" />
 </template>
 
 <style lang="scss" scoped></style>

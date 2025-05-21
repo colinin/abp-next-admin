@@ -26,7 +26,7 @@ $(function () {
                                         labp.account.myProfile
                                             .revokeSession(data.record.sessionId)
                                             .then(function () {
-                                                abp.notify.info(
+                                                abp.notify.success(
                                                     il('SuccessfullyRevoked')
                                                 );
                                                 dataTable.ajax.reload();
@@ -47,13 +47,7 @@ $(function () {
                 {
                     title: il('DisplayName:SignedIn'),
                     data: "signedIn",
-                    render: function (data) {
-                        return luxon
-                            .DateTime
-                            .fromISO(data, {
-                                locale: abp.localization.currentCulture.name
-                            }).toLocaleString(luxon.DateTime.DATETIME_FULL_WITH_SECONDS);
-                    }
+                    dataFormat: "datetime",
                 }]
         })
     );

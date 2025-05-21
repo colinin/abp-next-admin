@@ -103,11 +103,13 @@ const [ChangePhoneNumberModal, changePhoneNumberModalApi] = useVbenModal({
 });
 function onEmailConfirm() {
   if (query?.confirmToken) {
-    emailConfirmModalApi.setData({
-      email: myProfile.value.email,
-      ...query,
-    });
-    emailConfirmModalApi.open();
+    setTimeout(() => {
+      emailConfirmModalApi.setData({
+        email: myProfile.value.email,
+        ...query,
+      });
+      emailConfirmModalApi.open();
+    }, 300);
   }
 }
 async function onGetProfile() {

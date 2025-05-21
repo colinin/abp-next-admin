@@ -1,6 +1,6 @@
 {
   "name": "@abp/saas",
-  "version": "9.0.4",
+  "version": "9.1.3",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
@@ -34,6 +34,7 @@
     "ant-design-vue": "catalog:",
     "dayjs": "catalog:",
     "lodash.debounce": "catalog:",
+    "universal-cookie": "catalog:",
     "vue": "catalog:*",
     "vxe-table": "catalog:"
   },

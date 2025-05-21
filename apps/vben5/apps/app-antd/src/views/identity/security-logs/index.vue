@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { SecurityLogTable } from '@abp/identity';
 
 defineOptions({
-  name: 'IdentitySecurityLogs',
+  name: 'Vben5IdentitySecurityLogs',
 });
 </script>
 

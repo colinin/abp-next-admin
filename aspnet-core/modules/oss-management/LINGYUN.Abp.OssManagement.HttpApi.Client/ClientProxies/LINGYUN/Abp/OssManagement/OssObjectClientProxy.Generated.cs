@@ -57,4 +57,20 @@ public partial class OssObjectClientProxy : ClientProxyBase<IOssObjectAppService
             { typeof(GetOssObjectInput), input }
         });
     }
+
+    public virtual async Task<string> GenerateUrlAsync(GetOssObjectInput input)
+    {
+        return await RequestAsync<string>(nameof(GenerateUrlAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(GetOssObjectInput), input }
+        });
+    }
+
+    public virtual async Task<IRemoteStreamContent> DownloadAsync(string urlKey)
+    {
+        return await RequestAsync<IRemoteStreamContent>(nameof(DownloadAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), urlKey }
+        });
+    }
 }

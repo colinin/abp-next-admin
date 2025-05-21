@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { LocalizationTextTable } from '@abp/localization';
 
 defineOptions({
-  name: 'LocalizationTexts',
+  name: 'Vben5LocalizationsTexts',
 });
 </script>
 

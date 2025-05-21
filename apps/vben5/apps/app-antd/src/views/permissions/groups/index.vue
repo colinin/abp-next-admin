@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { PermissionGroupDefinitionTable } from '@abp/permissions';
 
 defineOptions({
-  name: 'PermissionGroupDefinitions',
+  name: 'Vben5PermissionsGroupDefinitions',
 });
 </script>
 

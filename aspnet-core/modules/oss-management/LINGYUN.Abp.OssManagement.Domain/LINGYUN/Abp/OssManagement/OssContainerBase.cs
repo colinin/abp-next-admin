@@ -65,4 +65,6 @@ public abstract class OssContainerBase : IOssContainer
     {
         return true;
     }
+
+    public abstract Task<bool> ObjectExistsAsync(GetOssObjectRequest request);
 }

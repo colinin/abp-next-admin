@@ -37,7 +37,7 @@
 		</PackageReference>-->
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
 		<PackageReference Include="Volo.Abp.Account.Web.OpenIddict" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" />
 		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.Identity.AspNetCore" />
@@ -80,12 +80,19 @@
 		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.Sms\LINGYUN.Abp.OpenIddict.Sms.csproj" />
 		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.WeChat.Work\LINGYUN.Abp.OpenIddict.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.WeChat\LINGYUN.Abp.OpenIddict.WeChat.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.BlobStoring.OssManagement\LINGYUN.Abp.BlobStoring.OssManagement.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Sms.Platform\LINGYUN.Abp.Sms.Platform.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="wwwroot\libs\jquery\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="openiddict.pfx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

@@ -17,16 +17,19 @@ namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 /// </summary>
 /// <typeparam name="TEntity">实体类型</typeparam>
 /// <typeparam name="TKey">实体主键类型</typeparam>
-public abstract class EfCoreProjectNameRepository<TEntity, TKey> :
-    EfCoreDataProtectionRepository<IProjectNameDbContext, TEntity, TKey>,
+/// <typeparam name="TEntityAuth">实体数据权限类型/typeparam>
+public abstract class EfCoreProjectNameRepository<TEntity, TKey, TEntityAuth> :
+    EfCoreDataProtectionRepository<IProjectNameDbContext, TEntity, TKey, TEntityAuth>,
     IProjectNameBasicRepository<TEntity, TKey>
-    where TEntity : class, IEntity<TKey>
+    where TEntity : class, IEntity<TKey>, IDataProtected 
+    where TEntityAuth : DataAuthBase<TEntity, TKey>
 {
     protected EfCoreProjectNameRepository(
-        IDbContextProvider<IProjectNameDbContext> dbContextProvider, 
+        IDbContextProvider<IProjectNameDbContext> dbContextProvider,
         IDataAuthorizationService dataAuthorizationService, 
-        IEntityTypeFilterBuilder entityTypeFilterBuilder) 
-        : base(dbContextProvider, dataAuthorizationService, entityTypeFilterBuilder)
+        IEntityTypeFilterBuilder entityTypeFilterBuilder, 
+        IEntityPropertyResultBuilder entityPropertyResultBuilder) 
+        : base(dbContextProvider, dataAuthorizationService, entityTypeFilterBuilder, entityPropertyResultBuilder)
     {
     }
 
@@ -34,7 +37,7 @@ public abstract class EfCoreProjectNameRepository<TEntity, TKey> :
         ISpecification<TEntity> specification, 
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .Where(specification.ToExpression())
             .CountAsync(GetCancellationToken(cancellationToken));
     }
@@ -46,7 +49,7 @@ public abstract class EfCoreProjectNameRepository<TEntity, TKey> :
         int skipCount = 0, 
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
               .Where(specification.ToExpression())
               .OrderBy(GetSortingOrDefault(sorting))
               .PageBy(skipCount, maxResultCount)
@@ -59,7 +62,7 @@ public abstract class EfCoreProjectNameRepository<TEntity, TKey> :
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
               .Where(specification.ToExpression())
               .OrderBy(GetSortingOrDefault(sorting))
               .Take(maxResultCount)

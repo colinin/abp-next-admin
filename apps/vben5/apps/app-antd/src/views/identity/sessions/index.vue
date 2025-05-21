@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { SessionTable } from '@abp/identity';
 
 defineOptions({
-  name: 'IdentitySessions',
+  name: 'Vben5IdentitySessions',
 });
 </script>
 

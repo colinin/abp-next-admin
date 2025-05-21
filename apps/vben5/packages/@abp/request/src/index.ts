@@ -6,6 +6,7 @@ import type { RequestClientOptions } from '@vben/request';
 import { useAppConfig } from '@vben/hooks';
 import { RequestClient } from '@vben/request';
 
+export * from './constants';
 export * from './hooks';
 export * from './types';
 

@@ -25,6 +25,7 @@ const emits = defineEmits<{
   (event: 'delete', data: PropertyInfo): void;
 }>();
 const DeleteOutlined = createIconifyIcon('ant-design:delete-outlined');
+const EditOutlined = createIconifyIcon('ant-design:edit-outlined');
 const PlusOutlined = createIconifyIcon('ant-design:plus-outlined');
 
 const getDataResource = computed((): PropertyInfo[] => {
@@ -77,6 +78,11 @@ function onCreate() {
   modalApi.open();
 }
 
+function onEdit(prop: Record<string, string>) {
+  modalApi.setData(prop);
+  modalApi.open();
+}
+
 function onDelete(prop: Record<string, string>) {
   emits('delete', {
     key: prop.key!,
@@ -108,21 +114,40 @@ function onChange(prop: Record<string, string>) {
       </Button>
     </div>
     <div class="justify-center">
-      <Table :columns="getTableColumns" :data-source="getDataResource">
+      <Table bordered :columns="getTableColumns" :data-source="getDataResource">
         <template #bodyCell="{ record, column }">
           <template v-if="column.dataIndex === 'action'">
-            <Popconfirm
-              v-if="props.allowDelete"
-              :title="`${$t('component.extra_property_dictionary.itemWillBeDeleted', [record.key])}`"
-              @confirm="onDelete(record)"
-            >
-              <Button block class="flex items-center gap-2" danger type="link">
+            <div class="flex flex-row">
+              <Button
+                v-if="!props.disabled && props.allowEdit"
+                block
+                type="link"
+                class="flex items-center gap-2"
+                @click="onEdit(record)"
+              >
                 <template #icon>
-                  <DeleteOutlined class="inline" />
+                  <EditOutlined class="inline" />
                 </template>
-                {{ $t('component.extra_property_dictionary.actions.delete') }}
+                {{ $t('component.extra_property_dictionary.actions.update') }}
               </Button>
-            </Popconfirm>
+              <Popconfirm
+                v-if="props.allowDelete"
+                :title="`${$t('component.extra_property_dictionary.itemWillBeDeleted', [record.key])}`"
+                @confirm="onDelete(record)"
+              >
+                <Button
+                  block
+                  class="flex items-center gap-2"
+                  danger
+                  type="link"
+                >
+                  <template #icon>
+                    <DeleteOutlined class="inline" />
+                  </template>
+                  {{ $t('component.extra_property_dictionary.actions.delete') }}
+                </Button>
+              </Popconfirm>
+            </div>
           </template>
         </template>
       </Table>

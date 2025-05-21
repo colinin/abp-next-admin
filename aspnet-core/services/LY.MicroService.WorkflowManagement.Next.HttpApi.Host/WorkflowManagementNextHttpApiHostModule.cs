@@ -68,6 +68,8 @@ public class WorkflowManagementNextHttpApiHostModule : AbpModule
         // Register Razor services.
         context.Services.AddRazorPages();
 
+        context.Services.AddResponseCompression();
+
         context.Services.AddCoreInternal();
         context.Services.AddSharedServices();
         context.Services.AddTranslations();

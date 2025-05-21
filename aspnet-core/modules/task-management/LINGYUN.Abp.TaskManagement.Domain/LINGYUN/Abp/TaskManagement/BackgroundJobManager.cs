@@ -2,6 +2,7 @@
 using LINGYUN.Abp.BackgroundTasks.EventBus;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.EventBus.Distributed;
@@ -70,11 +71,33 @@ public class BackgroundJobManager : DomainService
     public async virtual Task DeleteAsync(BackgroundJobInfo jobInfo)
     {
         await BackgroundJobInfoRepository.DeleteAsync(jobInfo);
+
+        UnitOfWorkManager.Current.OnCompleted(async () =>
+        {
+            await EventBus.PublishAsync(
+                new JobDeleteEventData
+                {
+                    IdList = new List<string> { jobInfo.Id },
+                    TenantId = jobInfo.TenantId,
+                    NodeName = jobInfo.NodeName
+                });
+        });
     }
 
     public async virtual Task BulkDeleteAsync(IEnumerable<BackgroundJobInfo> jobInfos)
     {
         await BackgroundJobInfoRepository.DeleteManyAsync(jobInfos);
+
+        UnitOfWorkManager.Current.OnCompleted(async () =>
+        {
+            await EventBus.PublishAsync(
+                new JobDeleteEventData
+                {
+                    IdList = jobInfos.Select(x => x.Id).ToList(),
+                    TenantId = jobInfos.Select(x => x.TenantId).First(),
+                    NodeName = jobInfos.Select(x => x.NodeName).First()
+                });
+        });
     }
 
     public async virtual Task QueueAsync(BackgroundJobInfo jobInfo)

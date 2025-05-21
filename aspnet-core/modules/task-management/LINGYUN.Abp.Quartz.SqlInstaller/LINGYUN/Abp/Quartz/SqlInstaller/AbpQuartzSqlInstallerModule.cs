@@ -38,7 +38,7 @@ public class AbpQuartzSqlInstallerModule : AbpModule
     {
         var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
         if (configuration.GetValue("Quartz:UsePersistentStore", false) &&
-            !configuration[StdSchedulerFactory.PropertyJobStoreType].IsNullOrWhiteSpace())
+            !configuration[$"Quartz:Properties:{StdSchedulerFactory.PropertyJobStoreType}"].IsNullOrWhiteSpace())
         {
             // 初始化 Quartz 数据库
             await context.ServiceProvider

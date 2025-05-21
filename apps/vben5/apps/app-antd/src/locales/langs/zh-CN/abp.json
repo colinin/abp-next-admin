@@ -22,7 +22,6 @@
       "claimTypes": "身份标识",
       "securityLogs": "安全日志",
       "organizationUnits": "组织机构",
-      "auditLogs": "审计日志",
       "sessions": "会话管理"
     },
     "permissions": {
@@ -55,7 +54,11 @@
     "dataProtection": {
       "title": "数据权限",
       "entityTypeInfos": "实体列表"
-    }
+    },
+    "auditLogs": "审计日志",
+    "loggings": "系统日志",
+    "openApi": "接口文档",
+    "cache": "缓存管理"
   },
   "openiddict": {
     "title": "OpenIddict",
@@ -96,7 +99,10 @@
       "title": "消息管理",
       "email": "邮件消息",
       "sms": "短信消息"
-    }
+    },
+    "dataDictionaries": "数据字典",
+    "layouts": "布局管理",
+    "menus": "菜单管理"
   },
   "saas": {
     "title": "Saas",
@@ -106,5 +112,27 @@
   "demo": {
     "title": "演示",
     "books": "书籍列表"
+  },
+  "tasks": {
+    "title": "后台作业",
+    "jobInfo": {
+      "title": "作业管理"
+    }
+  },
+  "webhooks": {
+    "title": "Webhook管理",
+    "groups": "Webhook分组",
+    "definitions": "Webhook定义",
+    "subscriptions": "管理订阅",
+    "sendAttempts": "发送记录"
+  },
+  "textTemplating": {
+    "title": "文本模板",
+    "definitions": "模板定义"
+  },
+  "oss": {
+    "title": "对象存储",
+    "containers": "容器管理",
+    "objects": "文件管理"
   }
 }
