@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography;
-using System.Text;
+﻿using System.Text;
 
 namespace System.IO;
 
@@ -11,10 +10,10 @@ internal static class FileSystemExtensions
         {
             stream.Seek(0, SeekOrigin.Begin);
         }
-        using MD5 md5 = new MD5CryptoServiceProvider();
-        byte[] retVal = md5.ComputeHash(stream);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < retVal.Length; i++)
+        using var md5 = Security.Cryptography.MD5.Create();
+        var retVal = md5.ComputeHash(stream);
+        var sb = new StringBuilder();
+        for (var i = 0; i < retVal.Length; i++)
         {
             sb.Append(retVal[i].ToString("x2"));
         }

@@ -23,7 +23,7 @@ $(function () {
                                         labp.account.mySecurityLog
                                             .delete(data.record.id)
                                             .then(function () {
-                                                abp.notify.info(
+                                                abp.notify.success(
                                                     ul('DeletedSuccessfully')
                                                 );
                                                 dataTable.ajax.reload();
@@ -31,42 +31,44 @@ $(function () {
                                     }
                                 }
                             ]
-                    }
+                    },
+                    width: '100px'
                 },
                 {
-                    title: l('DisplayName:CreationTime'),
+                    title: l('CreationTime'),
                     data: "creationTime",
-                    render: function (data) {
-                        return luxon
-                            .DateTime
-                            .fromISO(data, {
-                                locale: abp.localization.currentCulture.name
-                            }).toLocaleString(luxon.DateTime.DATETIME_FULL_WITH_SECONDS);
-                    }
+                    dataFormat: "datetime",
+                    width: '180px'
                 },
                 {
-                    title: l('DisplayName:Identity'),
-                    data: "identity"
+                    title: l('Identity'),
+                    data: "identity",
+                    width: '150px'
                 },
                 {
-                    title: l('DisplayName:ClientId'),
-                    data: "clientId"
+                    title: l('ClientId'),
+                    data: "clientId",
+                    width: '150px'
                 },
                 {
-                    title: l('DisplayName:ClientIpAddress'),
-                    data: "clientIpAddress"
+                    title: l('ClientIpAddress'),
+                    data: "clientIpAddress",
+                    width: '150px'
                 },
                 {
-                    title: l('DisplayName:ApplicationName'),
-                    data: "applicationName"
+                    title: l('ApplicationName'),
+                    data: "applicationName",
+                    width: '150px'
                 },
                 {
-                    title: l('DisplayName:Actions'),
-                    data: "action"
+                    title: l('ActionName'),
+                    data: "action",
+                    width: '150px'
                 },
                 {
-                    title: l('DisplayName:BrowserInfo'),
-                    data: "browserInfo"
+                    title: l('BrowserInfo'),
+                    data: "browserInfo",
+                    width: '300px'
                 }]
         })
     );
