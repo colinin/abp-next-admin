@@ -119,6 +119,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
         var objectName = objectPath.IsNullOrWhiteSpace()
             ? request.Object
             : objectPath + request.Object;
+        var isDir = false;
 
         if (!request.Overwrite && await ObjectExists(client, bucket, objectName))
         {
@@ -137,12 +138,13 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
         }
         if (request.Content.IsNullOrEmpty())
         {
+            isDir = true;
             var emptyContent = "This is an OSS object that simulates a directory.".GetBytes();
             request.SetContent(new MemoryStream(emptyContent));
         }
         var putResponse = await client.PutObjectAsync(new PutObjectArgs()
            .WithBucket(bucket)
-           .WithObject(objectName)
+           .WithObject(isDir ? $"{objectName}/_dir" : objectName)
            .WithStreamData(request.Content)
            .WithObjectSize(request.Content.Length));
         
@@ -190,13 +192,6 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
 
     public async override Task DeleteObjectAsync(GetOssObjectRequest request)
     {
-        if (request.Object.EndsWith('/'))
-        {
-            // Minio系统设计并不支持目录的形式
-            // 如果是目录的形式,那必定有文件存在,抛出目录不为空即可
-            throw new BusinessException(code: OssManagementErrorCodes.ObjectDeleteWithNotEmpty);
-        }
-
         var client = GetMinioClient();
 
         var bucket = GetBucket(request.Bucket);
@@ -207,8 +202,34 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
             ? request.Object
             : objectPath + request.Object;
 
-        if (await BucketExists(client, bucket) &&
-            await ObjectExists(client, bucket, objectName))
+        if (objectName.EndsWith('/') && await BucketExists(client, bucket))
+        {
+            var objectNames = new List<string>();
+            var objects = client.ListObjectsEnumAsync(
+                new ListObjectsArgs()
+                    .WithBucket(bucket)
+                    .WithPrefix(objectName)
+                    .WithRecursive(true));
+
+            await foreach (var @object in objects)
+            {
+                objectNames.Add(@object.Key);
+            }
+
+            var errors = await client.RemoveObjectsAsync(
+                new RemoveObjectsArgs()
+                    .WithBucket(bucket)
+                    .WithObjects(objectNames));
+
+            foreach (var error in errors)
+            {
+                Logger.LogWarning("Batch deletion of objects failed, error details {code}: {message}", error.Code, error.Message);
+            }
+
+            return;
+        }
+
+        if (await ObjectExists(client, bucket, objectName))
         {
             var removeObjectArgs = new RemoveObjectArgs()
                 .WithBucket(bucket)
@@ -335,6 +356,11 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
 
         await foreach (var item in listObjectResult)
         {
+            // 作为目录占位,无需显示
+            if (item.Key.EndsWith("_dir"))
+            {
+                continue;
+            }
             resultObjects.Add(new OssObject(
                     !objectPath.IsNullOrWhiteSpace()
                         ? item.Key.Replace(objectPath, "")
@@ -407,7 +433,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
         var objectPath = GetBlobPath(prefixPath, request.Path);
         var objectName = objectPath.IsNullOrWhiteSpace()
             ? request.Object
-            : objectPath.EnsureEndsWith('/') + request.Object;
+            : objectPath + request.Object;
 
         if (!await ObjectExists(client, bucket, objectName))
         {
@@ -535,6 +561,6 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
             path.IsNullOrWhiteSpace() ? "" :
             path.Replace("./", "").RemovePreFix("/"))}";
 
-        return resultPath.Replace("//", "");
+        return resultPath.Replace("//", "").EnsureEndsWith('/');
     }
 }
