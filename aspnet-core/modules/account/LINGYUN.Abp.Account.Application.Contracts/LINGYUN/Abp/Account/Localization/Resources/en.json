@@ -50,6 +50,7 @@
     "ProfileTab:TwoFactor": "TwoFactor",
     "ProfileTab:Authenticator": "Authenticator",
     "ProfileTab:SecurityLog": "Security Log",
-    "PhoneNumberChangedMessage": "Your mobile number has been successfully changed."
+    "PhoneNumberChangedMessage": "Your mobile number has been successfully changed.",
+    "SecurityLogs": "Security Logs"
   }
 }

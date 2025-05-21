@@ -62,6 +62,7 @@ public class EfCoreTextRepository : EfCoreRepository<LocalizationDbContext, Text
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
+    [Obsolete("Use GetListAsync")]
     public virtual List<Text> GetList(string resourceName = null, string cultureName = null)
     {
         return DbSet

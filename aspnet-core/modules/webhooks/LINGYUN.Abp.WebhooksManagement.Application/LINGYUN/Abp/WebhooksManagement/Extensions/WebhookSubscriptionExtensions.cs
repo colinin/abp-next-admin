@@ -20,6 +20,7 @@ public static class WebhookSubscriptionExtensions
             CreatorId = webhookSubscription.CreatorId,
             Description = webhookSubscription.Description,
             ConcurrencyStamp = webhookSubscription.ConcurrencyStamp,
+            TimeoutDuration = webhookSubscription.TimeoutDuration,
         };
     }
 

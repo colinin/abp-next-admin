@@ -27,7 +27,7 @@ public class IdempotentKeyNormalizer : IIdempotentKeyNormalizer, ITransientDepen
         if (context.Method.IsDefined(typeof(IdempotentAttribute)))
         {
             var attr = context.Method.GetCustomAttribute<IdempotentAttribute>();
-            if (!attr.IdempotentKey.IsNullOrWhiteSpace())
+            if (!attr!.IdempotentKey.IsNullOrWhiteSpace())
             {
                 return attr.IdempotentKey!;
             }

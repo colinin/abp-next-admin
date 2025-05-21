@@ -12,7 +12,7 @@ public class ProjectNameDbContextFactory : IDesignTimeDbContextFactory<ProjectNa
         var configuration = BuildConfiguration();
         var connectionString = configuration.GetConnectionString("ProjectName");
 
-        DbContextOptionsBuilder<ProjectNameDbContext> builder = null;
+        DbContextOptionsBuilder<ProjectNameDbContext>? builder = null;
 
         try
         {

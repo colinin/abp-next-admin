@@ -38,6 +38,7 @@ import {
   Switch,
   Textarea,
   TimePicker,
+  Tree,
   TreeSelect,
   Upload,
 } from 'ant-design-vue';
@@ -78,6 +79,7 @@ export type ComponentType =
   | 'Switch'
   | 'Textarea'
   | 'TimePicker'
+  | 'Tree'
   | 'TreeSelect'
   | 'Upload'
   | BaseFormComponentType;
@@ -154,6 +156,7 @@ async function initComponentAdapter() {
     Switch,
     Textarea: withDefaultPlaceholder(Textarea, 'input'),
     TimePicker,
+    Tree,
     TreeSelect: withDefaultPlaceholder(TreeSelect, 'select'),
     Upload,
     FeatureStateCheck,

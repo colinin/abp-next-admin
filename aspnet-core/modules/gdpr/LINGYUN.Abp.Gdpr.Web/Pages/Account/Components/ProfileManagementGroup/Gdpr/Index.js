@@ -41,7 +41,7 @@ $(function () {
                                         labp.gdpr.gdprRequest
                                             .delete(data.record.id)
                                             .then(function () {
-                                                abp.notify.info(
+                                                abp.notify.success(
                                                     ul('DeletedSuccessfully')
                                                 );
                                                 dataTable.ajax.reload();
@@ -54,24 +54,12 @@ $(function () {
                 {
                     title: gl('DisplayName:ReadyTime'),
                     data: "readyTime",
-                    render: function (data) {
-                        return luxon
-                            .DateTime
-                            .fromISO(data, {
-                                locale: abp.localization.currentCulture.name
-                            }).toLocaleString(luxon.DateTime.DATETIME_FULL_WITH_SECONDS);
-                    }
+                    dataFormat: "datetime",
                 },
                 {
                     title: gl('DisplayName:CreationTime'),
                     data: "creationTime",
-                    render: function (data) {
-                        return luxon
-                            .DateTime
-                            .fromISO(data, {
-                                locale: abp.localization.currentCulture.name
-                            }).toLocaleString(luxon.DateTime.DATETIME_FULL_WITH_SECONDS);
-                    }
+                    dataFormat: "datetime",
                 }]
         })
     );

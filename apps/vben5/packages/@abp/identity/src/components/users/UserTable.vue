@@ -16,6 +16,7 @@ import { $t } from '@vben/locales';
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
 import { formatToDateTime, useAbpStore, useFeatures } from '@abp/core';
 import { PermissionModal } from '@abp/permissions';
+import { MenuAllotModal } from '@abp/platform';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -169,6 +170,9 @@ const [UserClaimModal, claimModalApi] = useVbenModal({
 const [UserPermissionModal, permissionModalApi] = useVbenModal({
   connectedComponent: PermissionModal,
 });
+const [UserMenuModal, menuModalApi] = useVbenModal({
+  connectedComponent: MenuAllotModal,
+});
 const [UserChangeDrawer, userChangeDrawerApi] = useVbenDrawer({
   connectedComponent: EntityChangeDrawer,
 });
@@ -233,6 +237,13 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
     case 'lock': {
       lockModalApi.setData(row);
       lockModalApi.open();
+      break;
+    }
+    case 'menus': {
+      menuModalApi.setData({
+        identity: row.id,
+      });
+      menuModalApi.open();
       break;
     }
     case 'password': {
@@ -401,6 +412,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
   <UserPermissionModal />
   <UserSessionDrawer />
   <UserChangeDrawer />
+  <UserMenuModal subject="user" />
 </template>
 
 <style lang="scss" scoped></style>

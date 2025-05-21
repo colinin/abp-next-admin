@@ -10,20 +10,22 @@ namespace LINGYUN.Abp.OssManagement;
 
 public class FileUploader : IFileUploader, ITransientDependency
 {
-    private readonly IFileValidater _fileValidater;
     private readonly FileUploadMerger _fileUploadMerger;
 
-    public FileUploader(
-        IFileValidater fileValidater,
-        FileUploadMerger fileUploadMerger)
+    public FileUploader(FileUploadMerger fileUploadMerger)
     {
-        _fileValidater = fileValidater;
         _fileUploadMerger = fileUploadMerger;
     }
 
     public async virtual Task UploadAsync(UploadFileChunkInput input, CancellationToken cancellationToken = default)
     {
-        await _fileValidater.ValidationAsync(input);
+        await _fileUploadMerger.ValidationAsync(new ValidationOssObjectInput
+        {
+            TotalSize = input.TotalSize,
+            FileName = input.FileName,
+            Bucket = input.Bucket,
+            Path = input.Path,
+        });
         // 以上传的文件名创建一个临时目录
         var tempFilePath = Path.Combine(
             Path.GetTempPath(),

@@ -14,6 +14,7 @@ import { useAbpStore } from '@abp/core';
 import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
 import { useAuthStore } from '#/store';
 
+import ThirdPartyLogin from './third-party-login.vue';
 import TwoFactorLogin from './two-factor-login.vue';
 
 interface LoginInstance {
@@ -103,7 +104,12 @@ onMounted(onInit);
       :form-schema="formSchema"
       :loading="authStore.loginLoading"
       @submit="onLogin"
-    />
+    >
+      <!-- 第三方登录 -->
+      <template #third-party-login>
+        <ThirdPartyLogin />
+      </template>
+    </AuthenticationLogin>
     <TwoFactorModal />
   </div>
 </template>

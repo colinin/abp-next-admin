@@ -5,6 +5,7 @@ import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { message } from 'ant-design-vue';
+import Cookies from 'universal-cookie';
 
 import { useMultiTenancyApi } from '../../api/useMultiTenancyApi';
 
@@ -19,6 +20,7 @@ const emits = defineEmits<{
 
 const tenant = ref<Tenant>();
 const { findTenantByNameApi } = useMultiTenancyApi();
+const cookies = new Cookies(null, { path: '/' });
 
 const [Form, formApi] = useVbenForm({
   handleSubmit: onSubmit,
@@ -53,6 +55,7 @@ async function onSubmit(values: Record<string, any>) {
   modalApi.setState({ submitting: true });
   try {
     tenant.value = undefined;
+    cookies.remove('__tenant');
     if (values.name) {
       const result = await findTenantByNameApi(values.name);
       if (!result.success) {

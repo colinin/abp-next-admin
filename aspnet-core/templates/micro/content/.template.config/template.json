@@ -30,20 +30,20 @@
   "sourceName": "ProjectName",
   "preferNameDirectory": true,
   "symbols": {
-    "AuthenticationScheme": {
+    "Telemetry": {
       "type": "parameter",
-      "description": "Authentication Scheme",
+      "description": "Distributed tracking provider",
       "datatype": "choice",
-      "defaultValue": "IdentityServer4",
+      "defaultValue": "OpenTelemetry",
       "isRequired": false,
       "choices": [
         {
-          "choice": "IdentityServer4",
-          "description": "IdentityServer4"
+          "choice": "SkyWalking",
+          "description": "Use SkyWalking"
         },
         {
-          "choice": "OpenIddict",
-          "description": "OpenIddict"
+          "choice": "OpenTelemetry",
+          "description": "Use OpenTelemetry"
         }
       ]
     },
@@ -104,13 +104,13 @@
       "type": "computed",
       "value": "(DatabaseManagement == \"PostgreSql\")"
     },
-    "IdentityServer4": {
+    "SkyWalking": {
       "type": "computed",
-      "value": "(AuthenticationScheme == \"IdentityServer4\")"
+      "value": "(Telemetry == \"SkyWalking\")"
     },
-    "OpenIddict": {
+    "OpenTelemetry": {
       "type": "computed",
-      "value": "(AuthenticationScheme == \"OpenIddict\")"
+      "value": "(Telemetry == \"OpenTelemetry\")"
     }
   }
 }

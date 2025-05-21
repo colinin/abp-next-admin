@@ -22,7 +22,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Aliyun;
 using LINGYUN.Abp.Telemetry.SkyWalking;
-using LINGYUN.Abp.UI.Navigation.VueVbenAdmin;
+using LINGYUN.Abp.UI.Navigation.VueVbenAdmin5;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
@@ -63,7 +63,7 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcLocalizationModule),
-    typeof(AbpUINavigationVueVbenAdminModule),
+    typeof(AbpUINavigationVueVbenAdmin5Module),
     typeof(PlatformThemeVueVbenAdminModule),
     // typeof(AbpOssManagementAliyunModule),
     typeof(AbpOssManagementMinioModule),           // Minio存储提供者模块

@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { AuthorizationTable } from '@abp/openiddict';
 
 defineOptions({
-  name: 'OpenIddictAuthorizations',
+  name: 'Vben5OpenIddictAuthorizations',
 });
 </script>
 

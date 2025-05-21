@@ -57,8 +57,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".deploy", ".deploy", "{46954769-3C8A-4E05-912A-91B896A91B97}"
 	ProjectSection(SolutionItems) = preProject
-		deploy\docker-compose.override.yml = deploy\docker-compose.override.yml
 		deploy\deployment.yaml = deploy\deployment.yaml
+		deploy\docker-compose.override.yml = deploy\docker-compose.override.yml
 		deploy\docker-compose.yml = deploy\docker-compose.yml
 	EndProjectSection
 EndProject

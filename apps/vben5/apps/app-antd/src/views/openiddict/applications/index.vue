@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { ApplicationTable } from '@abp/openiddict';
 
 defineOptions({
-  name: 'OpenIddictApplications',
+  name: 'Vben5OpenIddictApplications',
 });
 </script>
 

@@ -94,6 +94,10 @@ public class LayoutAppService : PlatformApplicationServiceBase, ILayoutAppServic
 
         if (!string.Equals(layout.Name, input.Name, StringComparison.InvariantCultureIgnoreCase))
         {
+            if (await LayoutRepository.FindByNameAsync(input.Name) != null)
+            {
+                throw new UserFriendlyException(L["DuplicateLayout", input.Name]);
+            }
             layout.Name = input.Name;
         }
         if (!string.Equals(layout.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))

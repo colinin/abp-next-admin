@@ -1,18 +1,18 @@
 <Project>
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.3.2</DotNetCoreCAPPackageVersion>
-		<ElsaPackageVersion>2.14.1</ElsaPackageVersion>
-		<ElsaNextPackageVersion>3.3.0-rc7</ElsaNextPackageVersion>
-		<VoloAbpPackageVersion>9.1.1</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>9.1.1</LINGYUNAbpPackageVersion>
-		<MicrosoftExtensionsPackageVersion>9.0.2</MicrosoftExtensionsPackageVersion>
-		<MicrosoftAspNetCorePackageVersion>9.0.2</MicrosoftAspNetCorePackageVersion>
-		<MicrosoftEntityFrameworkCorePackageVersion>9.0.2</MicrosoftEntityFrameworkCorePackageVersion>
+		<ElsaPackageVersion>2.15.1</ElsaPackageVersion>
+		<ElsaNextPackageVersion>3.3.5</ElsaNextPackageVersion>
+		<VoloAbpPackageVersion>9.1.3</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>9.1.3</LINGYUNAbpPackageVersion>
+		<MicrosoftExtensionsPackageVersion>9.0.0</MicrosoftExtensionsPackageVersion>
+		<MicrosoftAspNetCorePackageVersion>9.0.0</MicrosoftAspNetCorePackageVersion>
+		<MicrosoftEntityFrameworkCorePackageVersion>9.0.0</MicrosoftEntityFrameworkCorePackageVersion>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<!-- Abp Framework -->
 	<ItemGroup>
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="3.2.0" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.1.3" />
 		<PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -150,7 +150,7 @@
 		<PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.2" />
+		<PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0" />
 		<PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />

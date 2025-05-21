@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { ScopeTable } from '@abp/openiddict';
 
 defineOptions({
-  name: 'OpenIddictScopes',
+  name: 'Vben5OpenIddictScopes',
 });
 </script>
 

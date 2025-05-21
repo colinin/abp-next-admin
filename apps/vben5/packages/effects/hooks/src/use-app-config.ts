@@ -21,6 +21,7 @@ export function useAppConfig(
     VITE_GLOB_AUDIENCE,
     VITE_GLOB_CLIENT_ID,
     VITE_GLOB_CLIENT_SECRET,
+    VITE_GLOB_UI_FRAMEWORK,
   } = config;
 
   return {
@@ -29,5 +30,6 @@ export function useAppConfig(
     audience: VITE_GLOB_AUDIENCE,
     clientId: VITE_GLOB_CLIENT_ID,
     clientSecret: VITE_GLOB_CLIENT_SECRET,
+    uiFramework: VITE_GLOB_UI_FRAMEWORK,
   };
 }

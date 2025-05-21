@@ -37,15 +37,34 @@ public class EfCoreUserMenuRepository : EfCoreRepository<PlatformDbContext, User
 
     public async virtual Task<List<UserMenu>> GetListByUserIdAsync(
         Guid userId,
+        string framework = null,
         CancellationToken cancellationToken = default)
     {
-        var dbSet = await GetDbSetAsync();
-        return await dbSet.Where(x => x.UserId.Equals(userId))
-            .ToListAsync(GetCancellationToken(cancellationToken));
+        var dbContext = await GetDbContextAsync();
+
+        var menus = dbContext.Set<Menu>();
+        var userMenus = dbContext.Set<UserMenu>().Where(x => x.UserId == userId);
+
+        IQueryable<UserMenu> queryable;
+        if (!framework.IsNullOrWhiteSpace())
+        {
+            queryable = from menu in menus
+                        join userMenu in userMenus
+                            on menu.Id equals userMenu.MenuId
+                        where menu.Framework == framework
+                        select userMenu;
+        }
+        else
+        {
+            queryable = userMenus;
+        }
+
+        return await queryable.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Menu> GetStartupMenuAsync(
+    public async virtual Task<Menu> FindStartupMenuAsync(
         Guid userId,
+        string framework = null,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
@@ -58,6 +77,7 @@ public class EfCoreUserMenuRepository : EfCoreRepository<PlatformDbContext, User
              join menu in dbContext.Set<Menu>()
                   on userMenu.MenuId equals menu.Id
              select menu)
+             .WhereIf(!framework.IsNullOrWhiteSpace(), x => x.Framework == framework)
              .OrderByDescending(x => x.CreationTime)
              .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }

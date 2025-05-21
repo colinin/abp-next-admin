@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { ClaimTypeTable } from '@abp/identity';
 
 defineOptions({
-  name: 'IdentityClaimTypes',
+  name: 'Vben5IdentityClaimTypes',
 });
 </script>
 

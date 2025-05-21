@@ -22,9 +22,11 @@ public interface IUserMenuRepository : IBasicRepository<UserMenu, Guid>
 
     Task<List<UserMenu>> GetListByUserIdAsync(
         Guid userId,
+        string framework = null,
         CancellationToken cancellationToken = default);
 
-    Task<Menu> GetStartupMenuAsync(
+    Task<Menu> FindStartupMenuAsync(
         Guid userId,
+        string framework = null,
         CancellationToken cancellationToken = default);
 }

@@ -155,6 +155,7 @@ catalog:
   rollup: ^4.34.2
   rollup-plugin-visualizer: ^5.14.0
   sass: ^1.83.4
+  simple-uploader.js: "^0.6.0"
   sortablejs: ^1.15.6
   stylelint: ^16.14.1
   stylelint-config-recess-order: ^5.1.1
@@ -192,6 +193,7 @@ catalog:
   vue-eslint-parser: ^9.4.3
   vue-i18n: ^11.1.0
   vue-router: ^4.5.0
+  vue-simple-uploader: ^1.0.3
   vue-tippy: ^6.6.0
   vue-tsc: 2.1.10
   vxe-pc-ui: ^4.3.79

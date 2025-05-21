@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { EditionTable } from '@abp/saas';
 
 defineOptions({
-  name: 'SaasEditions',
+  name: 'Vben5SaasEditions',
 });
 </script>
 

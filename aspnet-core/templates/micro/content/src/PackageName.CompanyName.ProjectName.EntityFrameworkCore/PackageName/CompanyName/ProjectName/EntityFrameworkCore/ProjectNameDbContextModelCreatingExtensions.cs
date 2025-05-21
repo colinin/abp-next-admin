@@ -8,7 +8,7 @@ public static class ProjectNameDbContextModelCreatingExtensions
 {
     public static void ConfigureProjectName(
         this ModelBuilder builder,
-        Action<ProjectNameModelBuilderConfigurationOptions> optionsAction = null)
+        Action<ProjectNameModelBuilderConfigurationOptions>? optionsAction = null)
     {
         Check.NotNull(builder, nameof(builder));
 

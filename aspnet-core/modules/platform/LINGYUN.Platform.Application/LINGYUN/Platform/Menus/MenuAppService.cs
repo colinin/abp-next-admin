@@ -52,12 +52,12 @@ public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
 
         var menus = ObjectMapper.Map<List<Menu>, List<MenuDto>>(myMenus);
 
-        var startupMenu = await UserMenuRepository.GetStartupMenuAsync(
+        var startupMenu = await UserMenuRepository.FindStartupMenuAsync(
             CurrentUser.GetId());
 
         if (startupMenu == null && CurrentUser.Roles.Any())
         {
-            startupMenu = await RoleMenuRepository.GetStartupMenuAsync(CurrentUser.Roles);
+            startupMenu = await RoleMenuRepository.FindStartupMenuAsync(CurrentUser.Roles);
         }
 
         if (startupMenu != null)
@@ -240,11 +240,11 @@ public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
 
         var menuDtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus);
 
-        var startupMenu = await UserMenuRepository.GetStartupMenuAsync(input.UserId);
+        var startupMenu = await UserMenuRepository.FindStartupMenuAsync(input.UserId, input.Framework);
 
         if (startupMenu == null)
         {
-            startupMenu = await RoleMenuRepository.GetStartupMenuAsync(input.Roles);
+            startupMenu = await RoleMenuRepository.FindStartupMenuAsync(input.Roles, input.Framework);
         }
 
         if (startupMenu != null)
@@ -263,25 +263,27 @@ public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
     [Authorize(PlatformPermissions.Menu.ManageUsers)]
     public async virtual Task SetUserMenusAsync(UserMenuInput input)
     {
-        await MenuManager.SetUserMenusAsync(input.UserId, input.MenuIds);
+        await MenuManager.SetUserMenusAsync(input.UserId, input.MenuIds, input.Framework);
+        await MenuManager.SetUserStartupMenuAsync(input.UserId, input.StartupMenuId, input.Framework);
     }
 
     [Authorize(PlatformPermissions.Menu.ManageUsers)]
     public async virtual Task SetUserStartupAsync(Guid id, UserMenuStartupInput input)
     {
-        await MenuManager.SetUserStartupMenuAsync(input.UserId, id);
+        await MenuManager.SetUserStartupMenuAsync(input.UserId, id, input.Framework);
     }
 
     [Authorize(PlatformPermissions.Menu.ManageRoles)]
     public async virtual Task SetRoleMenusAsync(RoleMenuInput input)
     {
-        await MenuManager.SetRoleMenusAsync(input.RoleName, input.MenuIds);
+        await MenuManager.SetRoleMenusAsync(input.RoleName, input.MenuIds, input.Framework);
+        await MenuManager.SetRoleStartupMenuAsync(input.RoleName, input.StartupMenuId, input.Framework);
     }
 
     [Authorize(PlatformPermissions.Menu.ManageRoles)]
     public async virtual Task SetRoleStartupAsync(Guid id, RoleMenuStartupInput input)
     {
-        await MenuManager.SetRoleStartupMenuAsync(input.RoleName, id);
+        await MenuManager.SetRoleStartupMenuAsync(input.RoleName, id, input.Framework);
     }
 
     [Authorize(PlatformPermissions.Menu.ManageRoles)]
@@ -291,7 +293,7 @@ public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
 
         var menuDtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus);
 
-        var startupMenu = await RoleMenuRepository.GetStartupMenuAsync(new string[] { input.Role });
+        var startupMenu = await RoleMenuRepository.FindStartupMenuAsync(new string[] { input.Role }, input.Framework);
 
         if (startupMenu != null)
         {

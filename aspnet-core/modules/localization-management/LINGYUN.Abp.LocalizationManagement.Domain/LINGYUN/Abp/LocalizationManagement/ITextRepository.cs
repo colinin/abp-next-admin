@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
@@ -20,6 +21,7 @@ namespace LINGYUN.Abp.LocalizationManagement
             CancellationToken cancellationToken = default
             );
 
+        [Obsolete("Use GetListAsync")]
         List<Text> GetList(
             string resourceName = null,
             string cultureName = null);

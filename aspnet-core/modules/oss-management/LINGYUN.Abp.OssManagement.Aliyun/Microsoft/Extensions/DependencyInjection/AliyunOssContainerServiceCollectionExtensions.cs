@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class AliyunOssContainerServiceCollectionExtensions
 {
-    public static IServiceCollection AddMinioContainer(this IServiceCollection services)
+    public static IServiceCollection AddAliyunContainer(this IServiceCollection services)
     {
         services.AddTransient<IOssContainerFactory, AliyunOssContainerFactory>();
 

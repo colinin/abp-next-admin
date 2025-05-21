@@ -4,7 +4,7 @@ import { Page } from '@vben/common-ui';
 import { NotificationGroupDefinitionTable } from '@abp/notifications';
 
 defineOptions({
-  name: 'NotificationGroupDefinitions',
+  name: 'Vben5NotificationsGroupDefinitions',
 });
 </script>
 
