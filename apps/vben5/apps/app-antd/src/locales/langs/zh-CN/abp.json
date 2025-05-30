@@ -18,7 +18,7 @@
       "invalidUserNameOrPassword": "用户名或密码错误!",
       "tokenHasExpired": "您的请求会话已过期,请重新登录!",
       "requiresTwoFactor": "需要验证身份,请选择一种验证方式!",
-      "shouldChangePassword": "您的密码已失效,请修改密码后登录!"
+      "shouldChangePassword": "您的密码已过期,请修改密码后登录!"
     }
   },
   "manage": {

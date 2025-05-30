@@ -2,13 +2,14 @@ import type { TokenResult } from '@abp/account';
 
 import type { Recordable, UserInfo } from '@vben/types';
 
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@vben/constants';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
 import {
+  usePhoneLoginApi,
   useProfileApi,
   useQrCodeLoginApi,
   useTokenApi,
@@ -25,6 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
   const { publish } = useEventBus();
   const { loginApi } = useTokenApi();
   const { loginApi: qrcodeLoginApi } = useQrCodeLoginApi();
+  const { loginApi: phoneLoginApi } = usePhoneLoginApi();
   const { getUserInfoApi } = useUserInfoApi();
   const { getConfigApi } = useAbpConfigApi();
   const { getPictureApi } = useProfileApi();
@@ -35,6 +37,17 @@ export const useAuthStore = defineStore('auth', () => {
 
   const loginLoading = ref(false);
 
+  watch(
+    () => accessStore.accessToken,
+    (accessToken) => {
+      if (accessToken && !loginLoading.value) {
+        loginLoading.value = true;
+        fetchUserInfo();
+        loginLoading.value = false;
+      }
+    },
+  );
+
   async function qrcodeLogin(
     key: string,
     tenantId?: string,
@@ -43,6 +56,20 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       loginLoading.value = true;
       const result = await qrcodeLoginApi({ key, tenantId });
+      return await _loginSuccess(result, onSuccess);
+    } finally {
+      loginLoading.value = false;
+    }
+  }
+
+  async function phoneLogin(
+    phoneNumber: string,
+    code: string,
+    onSuccess?: () => Promise<void> | void,
+  ) {
+    try {
+      loginLoading.value = true;
+      const result = await phoneLoginApi({ phoneNumber, code });
       return await _loginSuccess(result, onSuccess);
     } finally {
       loginLoading.value = false;
@@ -126,7 +153,6 @@ export const useAuthStore = defineStore('auth', () => {
   ) {
     // 异步处理用户登录操作并获取 accessToken
     let userInfo: null | UserInfo = null;
-    loginLoading.value = true;
     const { accessToken, tokenType, refreshToken } = loginResult;
     // 如果成功获取到 accessToken
     if (accessToken) {
@@ -172,6 +198,7 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     $reset,
     authLogin,
+    phoneLogin,
     qrcodeLogin,
     fetchUserInfo,
     loginLoading,
