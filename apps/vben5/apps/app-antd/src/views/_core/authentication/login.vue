@@ -9,7 +9,7 @@ import { computed, nextTick, onMounted, useTemplateRef } from 'vue';
 import { AuthenticationLogin, useVbenModal, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useAbpStore } from '@abp/core';
+import { useAbpStore, useSettings } from '@abp/core';
 
 import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
 import { useAuthStore } from '#/store';
@@ -26,6 +26,8 @@ defineOptions({ name: 'Login' });
 
 const abpStore = useAbpStore();
 const authStore = useAuthStore();
+
+const { isTrue } = useSettings();
 
 const { getConfigApi } = useAbpConfigApi();
 
@@ -118,6 +120,7 @@ onMounted(onInit);
       ref="login"
       :form-schema="formSchema"
       :loading="authStore.loginLoading"
+      :show-register="isTrue('Abp.Account.IsSelfRegistrationEnabled')"
       @submit="onLogin"
     >
       <!-- 第三方登录 -->
