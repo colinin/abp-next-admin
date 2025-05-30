@@ -69,6 +69,11 @@ interface TwoFactorError extends OAuthError {
   userId: string;
 }
 
+interface ShouldChangePasswordError extends OAuthError {
+  changePasswordToken: string;
+  userId: string;
+}
+
 export type {
   OAuthError,
   OAuthTokenRefreshModel,
@@ -76,6 +81,7 @@ export type {
   PasswordTokenRequest,
   PasswordTokenRequestModel,
   QrCodeTokenRequest,
+  ShouldChangePasswordError,
   TokenRequest,
   TokenResult,
   TwoFactorError,
