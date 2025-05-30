@@ -13,13 +13,14 @@ export function useOAuthError() {
       case 'Invalid username or password!': {
         return $t('abp.oauth.errors.invalidUserNameOrPassword');
       }
+      // 需要更改密码
+      case 'PeriodicallyChangePassword':
+      case 'ShouldChangePasswordOnNextLogin': {
+        return $t('abp.oauth.errors.shouldChangePassword');
+      }
       // 需要二次认证
       case 'RequiresTwoFactor': {
         return $t('abp.oauth.errors.requiresTwoFactor');
-      }
-      // 需要更改密码
-      case 'ShouldChangePasswordOnNextLogin': {
-        return $t('abp.oauth.errors.shouldChangePassword');
       }
       // Token已失效
       case 'The token is no longer valid.': {
