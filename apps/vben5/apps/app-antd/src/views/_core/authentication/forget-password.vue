@@ -158,6 +158,7 @@ async function handleSubmit(values: Recordable<any>) {
   <AuthenticationForgetPassword
     ref="forgetPassword"
     :form-schema="formSchema"
+    :submit-button-text="$t('AbpAccount.ResetPassword')"
     :loading="loading"
     @submit="handleSubmit"
   />
