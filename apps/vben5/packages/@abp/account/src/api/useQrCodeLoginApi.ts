@@ -34,7 +34,7 @@ export function useQrCodeLoginApi() {
 
   /**
    * 二维码登录
-   * @param key 二维码Key
+   * @param input 登录参数
    * @returns 用户token
    */
   async function loginApi(input: QrCodeTokenRequest) {
