@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { TwoFactorError } from '@abp/account';
+import type { ShouldChangePasswordError, TwoFactorError } from '@abp/account';
 
 import type { ExtendedFormApi, VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
@@ -14,6 +14,7 @@ import { useAbpStore } from '@abp/core';
 import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
 import { useAuthStore } from '#/store';
 
+import ShouldChangePassword from './should-change-password.vue';
 import ThirdPartyLogin from './third-party-login.vue';
 import TwoFactorLogin from './two-factor-login.vue';
 
@@ -68,6 +69,9 @@ const formSchema = computed((): VbenFormSchema[] => {
 const [TwoFactorModal, twoFactorModalApi] = useVbenModal({
   connectedComponent: TwoFactorLogin,
 });
+const [ShouldChangePasswordModal, changePasswordModalApi] = useVbenModal({
+  connectedComponent: ShouldChangePassword,
+});
 async function onInit() {
   const abpConfig = await getConfigApi();
   abpStore.setApplication(abpConfig);
@@ -81,6 +85,7 @@ async function onLogin(params: Recordable<any>) {
     await authStore.authLogin(params);
   } catch (error) {
     onTwoFactorError(params, error);
+    onShouldChangePasswordError(params, error);
   }
 }
 function onTwoFactorError(params: Recordable<any>, error: any) {
@@ -91,6 +96,16 @@ function onTwoFactorError(params: Recordable<any>, error: any) {
       ...params,
     });
     twoFactorModalApi.open();
+  }
+}
+function onShouldChangePasswordError(params: Recordable<any>, error: any) {
+  const scpError = error as ShouldChangePasswordError;
+  if (scpError.changePasswordToken) {
+    changePasswordModalApi.setData({
+      ...scpError,
+      ...params,
+    });
+    changePasswordModalApi.open();
   }
 }
 
@@ -111,5 +126,6 @@ onMounted(onInit);
       </template>
     </AuthenticationLogin>
     <TwoFactorModal />
+    <ShouldChangePasswordModal />
   </div>
 </template>
