@@ -1,64 +1,57 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Web;
-using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
 
 namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
 {
-    /// <summary>
-    /// 重写登录模型,实现双因素登录
-    /// </summary>
     [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(LoginModel), typeof(OpenIddictSupportedLoginModel))]
-    public class TwoFactorSupportedLoginModel : OpenIddictSupportedLoginModel
+    [ExposeServices(
+        typeof(LINGYUN.Abp.Account.Web.Pages.Account.LoginModel),
+        typeof(TwoFactorSupportedLoginModel))]
+    public class TwoFactorSupportedLoginModel : LINGYUN.Abp.Account.Web.Pages.Account.LoginModel
     {
+        protected AbpOpenIddictRequestHelper OpenIddictRequestHelper { get; }
         public TwoFactorSupportedLoginModel(
             IAuthenticationSchemeProvider schemeProvider,
             IOptions<AbpAccountOptions> accountOptions,
             IOptions<IdentityOptions> identityOptions,
             IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
             AbpOpenIddictRequestHelper openIddictRequestHelper)
-            : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache, openIddictRequestHelper)
+            : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
         {
+            OpenIddictRequestHelper = openIddictRequestHelper;
         }
 
-        protected async override Task<List<ExternalProviderModel>> GetExternalProviders()
+        public async override Task<IActionResult> OnGetAsync()
         {
-            var providers = await base.GetExternalProviders();
+            LoginInput = new LoginInputModel();
 
-            foreach (var provider in providers)
+            var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
+            if (request?.ClientId != null)
             {
-                var localizedDisplayName = L[provider.DisplayName];
-                if (localizedDisplayName.ResourceNotFound)
-                {
-                    localizedDisplayName = L["AuthenticationScheme:" + provider.DisplayName];
-                }
+                // TODO: Find a proper cancel way.
+                // ShowCancelButton = true;
 
-                if (!localizedDisplayName.ResourceNotFound)
+                LoginInput.UserNameOrEmailAddress = request.LoginHint;
+
+                //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
+                var tenant = request.GetParameter(TenantResolverConsts.DefaultTenantKey)?.ToString();
+                if (!string.IsNullOrEmpty(tenant))
                 {
-                    provider.DisplayName = localizedDisplayName.Value;
+                    CurrentTenant.Change(Guid.Parse(tenant));
+                    Response.Cookies.Append(TenantResolverConsts.DefaultTenantKey, tenant);
                 }
             }
 
-            return providers;
-        }
-
-        protected override Task<IActionResult> TwoFactorLoginResultAsync()
-        {
-            // 重定向双因素认证页面
-            return Task.FromResult<IActionResult>(RedirectToPage("SendCode", new
-            {
-                returnUrl = ReturnUrl,
-                returnUrlHash = ReturnUrlHash,
-                rememberMe = LoginInput.RememberMe
-            })); 
+            return await base.OnGetAsync();
         }
     }
 }
