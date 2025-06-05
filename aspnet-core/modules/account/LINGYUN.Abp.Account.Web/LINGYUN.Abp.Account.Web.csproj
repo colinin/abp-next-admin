@@ -38,7 +38,6 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Sms" />
 		<PackageReference Include="Volo.Abp.Account.Web" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -46,6 +45,10 @@
 		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.AspNetCore.QrCode\LINGYUN.Abp.Identity.AspNetCore.QrCode.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Account.Emailing\LINGYUN.Abp.Account.Emailing.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
 	</ItemGroup>
 
 </Project>
