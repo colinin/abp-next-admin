@@ -134,6 +134,7 @@ catalog:
   naive-ui: ^2.41.0
   nitropack: ^2.10.4
   nprogress: ^0.2.0
+  oidc-client-ts: ^3.2.1
   ora: ^8.2.0
   pinia: ^2.3.1
   pinia-plugin-persistedstate: ^4.2.0
