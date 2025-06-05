@@ -10,7 +10,7 @@ using Volo.Abp.Account.Web.ProfileManagement;
 
 namespace LINGYUN.Abp.Account.Web.ProfileManagement;
 
-public class SessionManagementPageContributor : IProfileManagementPageContributor
+public class ProfileManagementPageContributor : IProfileManagementPageContributor
 {
     public virtual Task ConfigureAsync(ProfileManagementPageCreationContext context)
     {
