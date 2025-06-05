@@ -4,7 +4,10 @@
     "register": "Register",
     "codeLogin": "Code Login",
     "qrcodeLogin": "Qr Code Login",
-    "forgetPassword": "Forget Password"
+    "forgetPassword": "Forget Password",
+    "oidcLogin": "Open Connect",
+    "oidcLoginMessage": "Please click \"OK\" to jump to the Certification center for login.",
+    "processingLogin": "Processing Login..."
   },
   "dashboard": {
     "title": "Dashboard",

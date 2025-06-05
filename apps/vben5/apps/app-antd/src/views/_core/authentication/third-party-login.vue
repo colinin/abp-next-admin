@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { MdiGithub, MdiGoogle, MdiQqchat, MdiWechat } from '@vben/icons';
-import { $t } from '@vben/locales';
+import { Button } from 'ant-design-vue';
 
-import { VbenIconButton } from '@vben-core/shadcn-ui';
+import { useAuthStore } from '#/store/auth';
 
 defineOptions({
   name: 'ThirdPartyLogin',
 });
+
+const authStore = useAuthStore();
+
+async function login() {
+  await authStore.oidcLogin();
+}
 </script>
 
 <template>
@@ -20,18 +25,9 @@ defineOptions({
     </div>
 
     <div class="mt-4 flex flex-wrap justify-center">
-      <VbenIconButton class="mb-3">
-        <MdiWechat />
-      </VbenIconButton>
-      <VbenIconButton class="mb-3">
-        <MdiQqchat />
-      </VbenIconButton>
-      <VbenIconButton class="mb-3">
-        <MdiGithub />
-      </VbenIconButton>
-      <VbenIconButton class="mb-3">
-        <MdiGoogle />
-      </VbenIconButton>
+      <Button block type="primary" ghost @click="login">
+        {{ $t('page.auth.oidcLogin') }}
+      </Button>
     </div>
   </div>
 </template>

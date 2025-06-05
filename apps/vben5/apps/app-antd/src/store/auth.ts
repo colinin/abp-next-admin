@@ -2,7 +2,7 @@ import type { TokenResult } from '@abp/account';
 
 import type { Recordable, UserInfo } from '@vben/types';
 
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@vben/constants';
@@ -20,11 +20,12 @@ import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
 import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
+import authService from '#/auth/authService';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
   const { publish } = useEventBus();
-  const { loginApi } = useTokenApi();
+  const { loginApi, refreshTokenApi } = useTokenApi();
   const { loginApi: qrcodeLoginApi } = useQrCodeLoginApi();
   const { loginApi: phoneLoginApi } = usePhoneLoginApi();
   const { getUserInfoApi } = useUserInfoApi();
@@ -37,16 +38,45 @@ export const useAuthStore = defineStore('auth', () => {
 
   const loginLoading = ref(false);
 
-  watch(
-    () => accessStore.accessToken,
-    (accessToken) => {
-      if (accessToken && !loginLoading.value) {
-        loginLoading.value = true;
-        fetchUserInfo();
-        loginLoading.value = false;
+  async function refreshSession() {
+    if (await authService.getAccessToken()) {
+      const user = await authService.refreshToken();
+      const newToken = `${user?.token_type} ${user?.access_token}`;
+      accessStore.setAccessToken(newToken);
+      if (user?.refresh_token) {
+        accessStore.setRefreshToken(user.refresh_token);
       }
-    },
-  );
+      return newToken;
+    } else {
+      const { accessToken, tokenType, refreshToken } = await refreshTokenApi({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        refreshToken: accessStore.refreshToken!,
+      });
+      const newToken = `${tokenType} ${accessToken}`;
+      accessStore.setAccessToken(newToken);
+      accessStore.setRefreshToken(refreshToken);
+      return newToken;
+    }
+  }
+
+  async function oidcLogin() {
+    await authService.login();
+  }
+
+  async function oidcCallback() {
+    try {
+      const user = await authService.handleCallback();
+      return await _loginSuccess({
+        accessToken: user.access_token,
+        tokenType: user.token_type,
+        refreshToken: user.refresh_token ?? '',
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        expiresIn: user.expires_in!,
+      });
+    } finally {
+      loginLoading.value = false;
+    }
+  }
 
   async function qrcodeLogin(
     key: string,
@@ -96,7 +126,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout(redirect: boolean = true) {
     try {
-      // await logoutApi();
+      if (await authService.getAccessToken()) {
+        accessStore.setAccessToken(null);
+        await authService.logout();
+      }
     } catch {
       // 不做任何处理
     }
@@ -200,8 +233,11 @@ export const useAuthStore = defineStore('auth', () => {
     authLogin,
     phoneLogin,
     qrcodeLogin,
+    oidcLogin,
+    oidcCallback,
     fetchUserInfo,
     loginLoading,
     logout,
+    refreshSession,
   };
 });
