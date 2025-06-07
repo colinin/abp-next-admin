@@ -14,6 +14,7 @@ export interface VbenAdminProAppConfigRaw {
   VITE_GLOB_AUTHORITY: string;
   VITE_GLOB_AUDIENCE?: string;
   VITE_GLOB_ONLY_OIDC?: string;
+  VITE_GLOB_DISABLE_PKCE?: string;
   VITE_GLOB_UI_FRAMEWORK: string;
 }
 
@@ -24,6 +25,7 @@ export interface ApplicationConfig {
   clientId: string;
   clientSecret: string;
   onlyOidc?: boolean;
+  disablePKCE?: boolean;
   uiFramework: string;
 }
 
