@@ -8,5 +8,5 @@ public static class WeChatOfficialFeatures
 
     public const string Enable = GroupName + ".Enable";
 
-    public const string EnableAuthorization = GroupName + ".EnableAuthorization";
+    //public const string EnableAuthorization = GroupName + ".EnableAuthorization";
 }
