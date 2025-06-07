@@ -29,6 +29,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpIdentityHttpApiModule),
     // 身份认证模块 实体框架
     typeof(AbpIdentityEntityFrameworkCoreModule),
+    // 身份认证模块 Mvc视图
+    typeof(AbpIdentityWebModule),
 
     // 账户模块 应用服务
     typeof(AbpAccountApplicationModule),
@@ -36,6 +38,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAccountHttpApiModule),
     // 账户模块 OpenIddict集成
     typeof(AbpAccountWebOpenIddictModule),
+    // 账户模块 OAuth集成
+    typeof(AbpAccountWebOAuthModule),
 
     // Gdpr 身份认证提供者模块
     typeof(AbpGdprDomainIdentityModule),
@@ -49,7 +53,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpGdprWebModule),
 
     // MVC Theme
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    //typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
 
     // 审计日志模块 应用服务
     typeof(AbpAuditingApplicationModule),
@@ -212,6 +217,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpSettingManagementHttpApiModule),
     // 设置管理模块 实体框架
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    // 设置管理模块 Mvc视图
+    typeof(AbpSettingManagementWebModule),
 
     // 权限管理模块 应用服务
     typeof(LINGYUN.Abp.PermissionManagement.AbpPermissionManagementApplicationModule),
@@ -226,16 +233,14 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     // 权限管理模块 组织机构集成
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
+    // 权限管理模块 Mvc视图
+    typeof(AbpPermissionManagementWebModule),
 
     // 短信模块 阿里云集成
     typeof(AbpAliyunSmsModule),
     // 阿里云模块 设置管理
     typeof(AbpAliyunSettingManagementModule),
 
-    // 认证模块 腾讯QQ集成
-    typeof(AbpAuthenticationQQModule),
-    // 认证模块 微信集成
-    typeof(AbpAuthenticationWeChatModule),
     // 认证模块 JWT认证
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     // 授权模块 组织机构集成
@@ -283,6 +288,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpFeaturesLimitValidationModule),
     // 客户端功能限制模块 Redis集成
     typeof(AbpFeaturesValidationRedisClientModule),
+    // 功能管理模块 Mvc视图
+    typeof(AbpFeatureManagementWebModule),
     // 多语言模块
     typeof(AbpAspNetCoreMvcLocalizationModule),
     // 多语言模块 语言映射
@@ -334,8 +341,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpWeChatOfficialHandlersModule),
     // 微信模块 企业微信 事件处理
     typeof(AbpWeChatWorkHandlersModule),
-    // 认证模块 企业微信
-    typeof(AbpWeChatWorkAspNetCoreModule),
     // 微信模块 设置管理
     typeof(AbpWeChatSettingManagementModule),
 
@@ -360,6 +365,8 @@ namespace LY.MicroService.Applications.Single;
     // 数据导出模块 MiniExcel集成
     typeof(AbpExporterMiniExcelModule),
 
+    // 虚拟文件浏览器 Mvc视图
+    typeof(AbpVirtualFileExplorerWebModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreMvcIdempotentWrapperModule),
@@ -402,7 +409,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureIdempotent();
         ConfigureMvcUiTheme();
         ConfigureLocalization();
-        ConfigureKestrelServer();
         ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
@@ -426,6 +432,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureOssManagement(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
+        ConfigureKestrelServer(configuration, hostingEnvironment);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 
         ConfigureSingleModule(context.Services, hostingEnvironment.IsDevelopment());
