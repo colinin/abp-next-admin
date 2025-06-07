@@ -204,6 +204,68 @@ public class ClientDataSeederContributor : IDataSeedContributor, ITransientDepen
                 await _permissionDataSeeder.SeedAsync(ClientPermissionValueProvider.ProviderName, internalServiceClientId, internalServicePermissions);
             }
         }
+
+        var oauthClientId = configurationSection["OAuthClient:ClientId"];
+        if (!oauthClientId.IsNullOrWhiteSpace())
+        {
+            var oauthClientRootUrl = configurationSection["OAuthClient:RootUrl"].EnsureEndsWith('/');
+
+            if (await _applicationRepository.FindByClientIdAsync(oauthClientId) == null)
+            {
+                await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+                {
+                    ClientId = oauthClientId,
+                    ClientSecret = null,
+                    ApplicationType = OpenIddictConstants.ApplicationTypes.Web,
+                    ConsentType = OpenIddictConstants.ConsentTypes.Implicit,
+                    DisplayName = "OAuth Client",
+                    PostLogoutRedirectUris =
+                    {
+                        new Uri(oauthClientRootUrl + "signout-callback"),
+                        new Uri(oauthClientRootUrl)
+                    },
+                    RedirectUris =
+                    {
+                        new Uri(oauthClientRootUrl + "/signin-callback"),
+                        new Uri(oauthClientRootUrl)
+                    },
+                    Permissions =
+                    {
+                        OpenIddictConstants.Permissions.Endpoints.Authorization,
+                        OpenIddictConstants.Permissions.Endpoints.Token,
+                        OpenIddictConstants.Permissions.Endpoints.DeviceAuthorization,
+                        OpenIddictConstants.Permissions.Endpoints.Introspection,
+                        OpenIddictConstants.Permissions.Endpoints.Revocation,
+                        OpenIddictConstants.Permissions.Endpoints.EndSession,
+
+                        OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
+                        OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
+
+                        OpenIddictConstants.Permissions.ResponseTypes.Code,
+                        OpenIddictConstants.Permissions.ResponseTypes.CodeIdToken,
+                        OpenIddictConstants.Permissions.ResponseTypes.CodeIdTokenToken,
+                        OpenIddictConstants.Permissions.ResponseTypes.CodeToken,
+                        OpenIddictConstants.Permissions.ResponseTypes.IdToken,
+                        OpenIddictConstants.Permissions.ResponseTypes.IdTokenToken,
+                        OpenIddictConstants.Permissions.ResponseTypes.None,
+                        OpenIddictConstants.Permissions.ResponseTypes.Token,
+
+                        OpenIddictConstants.Permissions.Scopes.Roles,
+                        OpenIddictConstants.Permissions.Scopes.Profile,
+                        OpenIddictConstants.Permissions.Scopes.Email,
+                        OpenIddictConstants.Permissions.Scopes.Address,
+                        OpenIddictConstants.Permissions.Scopes.Phone,
+                        OpenIddictConstants.Permissions.Prefixes.Scope + scope
+                    }
+                });
+
+                var oauthClientPermissions = new string[1]
+                {
+                    "AbpIdentity.UserLookup"
+                };
+                await _permissionDataSeeder.SeedAsync(ClientPermissionValueProvider.ProviderName, oauthClientId, oauthClientPermissions);
+            }
+        }
     }
 
     #endregion
