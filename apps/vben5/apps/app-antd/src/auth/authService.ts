@@ -2,10 +2,8 @@ import { useAppConfig } from '@vben/hooks';
 
 import { UserManager, WebStorageStateStore } from 'oidc-client-ts';
 
-const { authority, audience, clientId, clientSecret } = useAppConfig(
-  import.meta.env,
-  import.meta.env.PROD,
-);
+const { authority, audience, clientId, clientSecret, disablePKCE } =
+  useAppConfig(import.meta.env, import.meta.env.PROD);
 
 const userManager = new UserManager({
   authority,
@@ -19,6 +17,7 @@ const userManager = new UserManager({
   automaticSilentRenew: true,
   loadUserInfo: true,
   userStore: new WebStorageStateStore({ store: window.localStorage }),
+  disablePKCE,
 });
 
 export default {
