@@ -1,9 +1,9 @@
 {
-  "version": "9.0.4",
+  "version": "9.1.3",
   "name": "my-app-authserver",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "9.0.4",
-    "@abp/qrcode": "9.0.4"
+    "@abp/aspnetcore.mvc.ui.theme.leptonxlite": "4.1.3",
+    "@abp/qrcode": "9.1.3"
   }
 }
