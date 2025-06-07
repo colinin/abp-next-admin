@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using LINGYUN.Abp.Account.Web.ExternalProviders;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
@@ -8,6 +9,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
+using static Volo.Abp.Account.Web.Pages.Account.LoginModel;
 using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
 
 namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
@@ -15,17 +17,18 @@ namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
     [Dependency(ReplaceServices = true)]
     [ExposeServices(
         typeof(LINGYUN.Abp.Account.Web.Pages.Account.LoginModel),
-        typeof(TwoFactorSupportedLoginModel))]
-    public class TwoFactorSupportedLoginModel : LINGYUN.Abp.Account.Web.Pages.Account.LoginModel
+        typeof(OpenIddictLoginModel))]
+    public class OpenIddictLoginModel : LINGYUN.Abp.Account.Web.Pages.Account.LoginModel
     {
         protected AbpOpenIddictRequestHelper OpenIddictRequestHelper { get; }
-        public TwoFactorSupportedLoginModel(
+        public OpenIddictLoginModel(
+            IExternalProviderService externalProviderService,
             IAuthenticationSchemeProvider schemeProvider,
             IOptions<AbpAccountOptions> accountOptions,
             IOptions<IdentityOptions> identityOptions,
             IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
             AbpOpenIddictRequestHelper openIddictRequestHelper)
-            : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
+            : base(externalProviderService, schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
         {
             OpenIddictRequestHelper = openIddictRequestHelper;
         }
