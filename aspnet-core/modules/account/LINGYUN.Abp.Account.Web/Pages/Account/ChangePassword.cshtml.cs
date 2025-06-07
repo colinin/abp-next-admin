@@ -90,6 +90,11 @@ public class ChangePasswordModel : AccountPageModel
             Alerts.Warning(L["NewPasswordSameAsOld"]);
             return Page();
         }
+        if (Input.NewPassword != Input.NewPasswordConfirm)
+        {
+            Alerts.Warning(L["NewPasswordConfirmFailed"]);
+            return Page();
+        }
 
         var userInfo = await GetCurrentUser();
         if (userInfo != null)

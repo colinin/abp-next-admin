@@ -1,0 +1,14 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@inject IHtmlLocalizer<AccountResource> L
+@model LINGYUN.Abp.Account.Web.Models.ExternalLoginProviderModel
+
+<button
+    type="submit"
+    class="btn btn-outline-secondary m-1"
+    name="provider"
+    value="@Model.AuthenticationScheme"
+    title="@L["LogInUsingYourProviderAccount", @Model.DisplayName]">
+    <i class="fa fa-github"></i>
+    <span>@Model.DisplayName</span>
+</button>
