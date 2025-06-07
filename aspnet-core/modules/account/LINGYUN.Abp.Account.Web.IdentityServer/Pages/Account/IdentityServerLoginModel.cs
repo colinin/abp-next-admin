@@ -2,11 +2,12 @@
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
+using LINGYUN.Abp.Account.Web.ExternalProviders;
+using LINGYUN.Abp.Account.Web.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.AspNetIdentity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
+using static Volo.Abp.Account.Web.Pages.Account.LoginModel;
 using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
 
 namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
@@ -29,12 +31,13 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
     [ExposeServices(
         typeof(LINGYUN.Abp.Account.Web.Pages.Account.LoginModel), 
         typeof(IdentityServerSupportedLoginModel))]
-    public class TwoFactorSupportedLoginModel : LINGYUN.Abp.Account.Web.Pages.Account.LoginModel
+    public class IdentityServerLoginModel : LINGYUN.Abp.Account.Web.Pages.Account.LoginModel
     {
         protected IIdentityServerInteractionService Interaction { get; }
         protected IEventService IdentityServerEvents { get; }
         protected IClientStore ClientStore { get; }
-        public TwoFactorSupportedLoginModel(
+        public IdentityServerLoginModel(
+            IExternalProviderService externalProviderService,
             IAuthenticationSchemeProvider schemeProvider, 
             IOptions<AbpAccountOptions> accountOptions, 
             IOptions<IdentityOptions> identityOptions,
@@ -42,7 +45,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             IIdentityServerInteractionService interaction,
             IEventService identityServerEvents,
             IClientStore clientStore) 
-            : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
+            : base(externalProviderService, schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
         {
             Interaction = interaction;
             ClientStore = clientStore;
@@ -74,7 +77,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             if (context?.IdP != null)
             {
                 LoginInput.UserNameOrEmailAddress = context.LoginHint;
-                ExternalProviders = new[] { new ExternalProviderModel { AuthenticationScheme = context.IdP } };
+                ExternalProviders = new[] { new ExternalLoginProviderModel { AuthenticationScheme = context.IdP } };
                 return Page();
             }
 
@@ -181,27 +184,6 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
             return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
-        }
-
-        protected async override Task<List<ExternalProviderModel>> GetExternalProviders()
-        {
-            var providers = await base.GetExternalProviders();
-
-            foreach (var provider in providers)
-            {
-                var localizedDisplayName = L[provider.DisplayName];
-                if (localizedDisplayName.ResourceNotFound)
-                {
-                    localizedDisplayName = L["AuthenticationScheme:" + provider.DisplayName];
-                }
-
-                if (!localizedDisplayName.ResourceNotFound)
-                {
-                    provider.DisplayName = localizedDisplayName.Value;
-                }
-            }
-
-            return providers;
         }
     }
 }
