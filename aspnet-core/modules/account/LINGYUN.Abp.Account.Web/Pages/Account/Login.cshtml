@@ -74,7 +74,20 @@
                 <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
                     @foreach (var provider in Model.VisibleExternalProviders)
                     {
-                        <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
+                        @* <button
+                            type="submit"
+                            class="btn btn-primary m-1"
+                            name="provider"
+                            value="@provider.AuthenticationScheme"
+                            title="@L["LogInUsingYourProviderAccount", provider.DisplayName]"
+                            >
+                            @if (provider.Icon != null)
+                            {
+                                <i class="@provider.Icon"></i>
+                            }
+                            <span>@provider.DisplayName</span>
+                        </button> *@
+                        @await Component.InvokeAsync(provider.ComponentType, provider);
                     }
                 </form>
             </div>

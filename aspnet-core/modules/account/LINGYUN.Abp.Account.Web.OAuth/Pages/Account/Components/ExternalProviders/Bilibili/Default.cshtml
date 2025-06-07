@@ -1,0 +1,14 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@inject IHtmlLocalizer<AccountResource> L
+@model LINGYUN.Abp.Account.Web.Models.ExternalLoginProviderModel
+
+<button
+    type="submit"
+    class="btn btn-outline-secondary m-1"
+    name="provider"
+    value="@Model.AuthenticationScheme"
+    title="@L["LogInUsingYourProviderAccount", @Model.DisplayName]">
+    <img src="~/images/bilibili_logo_18x18.png" />
+    <span>@Model.DisplayName</span>
+</button>

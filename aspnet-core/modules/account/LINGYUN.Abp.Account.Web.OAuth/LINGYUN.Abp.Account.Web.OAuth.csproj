@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.Account.Web.OAuth</AssemblyName>
+		<PackageId>LINGYUN.Abp.Account.Web.OAuth</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace>LINGYUN.Abp.Account.Web.OAuth</RootNamespace>
+		<OutputType>Library</OutputType>
+		<IsPackable>true</IsPackable>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="wwwroot\**\*.js" />
+		<EmbeddedResource Include="wwwroot\**\*.css" />
+		<EmbeddedResource Include="wwwroot\**\*.png" />
+		<Content Remove="wwwroot\**\*.js" />
+		<Content Remove="wwwroot\**\*.css" />
+		<Content Remove="wwwroot\**\*.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AspNet.Security.OAuth.Bilibili" />
+		<PackageReference Include="AspNet.Security.OAuth.GitHub" />
+		<PackageReference Include="AspNet.Security.OAuth.QQ" />
+		<PackageReference Include="AspNet.Security.OAuth.Weixin" />
+		<PackageReference Include="AspNet.Security.OAuth.WorkWeixin" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\cloud-tencent\LINGYUN.Abp.Tencent.QQ\LINGYUN.Abp.Tencent.QQ.csproj" />
+		<ProjectReference Include="..\..\..\framework\wechat\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj" />
+		<ProjectReference Include="..\..\..\framework\wechat\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Account.OAuth\LINGYUN.Abp.Account.OAuth.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Account.Web\LINGYUN.Abp.Account.Web.csproj" />
+	</ItemGroup>
+
+</Project>
