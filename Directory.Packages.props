@@ -33,6 +33,7 @@
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.NewtonsoftJson" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Serilog" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.SignalR" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.TestBase" Version="$(VoloAbpPackageVersion)" />
@@ -72,6 +73,7 @@
 		<PackageVersion Include="Volo.Abp.FeatureManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.FeatureManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.FeatureManagement.Web" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Emailing" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EventBus.Abstractions" Version="$(VoloAbpPackageVersion)" />
@@ -89,13 +91,14 @@
 		<PackageVersion Include="Volo.Abp.Identity.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Identity.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Identity.HttpApi" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.Identity.HttpApi.Client" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.Identity.Web" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.IdentityServer.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.IdentityServer.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.IdentityServer.Domain" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.IdentityServer.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.IdentityServer.HttpApi" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Identity.HttpApi.Client" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Imaging.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Imaging.ImageSharp" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
@@ -121,6 +124,7 @@
 		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.PermissionManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.PermissionManagement.Web" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Quartz" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Security" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Settings" Version="$(VoloAbpPackageVersion)" />
@@ -130,6 +134,7 @@
 		<PackageVersion Include="Volo.Abp.SettingManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.SettingManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.SettingManagement.Web" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Swashbuckle" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Sms" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.TestBase" Version="$(VoloAbpPackageVersion)" />
@@ -142,6 +147,7 @@
 		<PackageVersion Include="Volo.Abp.Users.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Validation" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.VirtualFileSystem" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.VirtualFileExplorer.Web" Version="$(VoloAbpPackageVersion)" />
 	</ItemGroup>
 	<!-- .NET -->
 	<ItemGroup>
@@ -150,6 +156,7 @@
 		<PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
+		<PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0" />
 		<PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
@@ -260,6 +267,14 @@
 	</ItemGroup>
 	<!-- Other -->
 	<ItemGroup>
+		<PackageVersion Include="AspNet.Security.OAuth.Bilibili" Version="9.4.0" />
+		<PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="9.4.0" />
+		<PackageVersion Include="AspNet.Security.OAuth.QQ" Version="9.4.0" />
+		<PackageVersion Include="AspNet.Security.OAuth.Weixin" Version="9.4.0" />
+		<PackageVersion Include="AspNet.Security.OAuth.WorkWeixin" Version="9.4.0" />
+		<PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="$(MicrosoftAspNetCorePackageVersion)" />
+		<PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAspNetCorePackageVersion)" />
+		<PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="aliyun-net-sdk-core" Version="1.5.10" />
 		<PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.14.1" />
 		<PackageVersion Include="AgileConfig.Client" Version="1.6.9" />
