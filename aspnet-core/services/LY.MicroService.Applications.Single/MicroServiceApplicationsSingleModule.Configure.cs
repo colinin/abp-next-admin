@@ -1,9 +1,3 @@
-using LINGYUN.Abp.Identity.QrCode;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
-using OpenIddict.Validation.AspNetCore;
-using Volo.Abp.BlobStoring.Minio;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -773,6 +767,15 @@ public partial class MicroServiceApplicationsSingleModule
 
     private void ConfigureSingleModule(IServiceCollection services, bool isDevelopment)
     {
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.ScriptBundles
+                .Configure(StandardBundles.Styles.Global, bundle =>
+                {
+                    bundle.AddContributors(typeof(SingleGlobalScriptContributor));
+                });
+        });
+
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
             // 允许第三方调用集成服务
