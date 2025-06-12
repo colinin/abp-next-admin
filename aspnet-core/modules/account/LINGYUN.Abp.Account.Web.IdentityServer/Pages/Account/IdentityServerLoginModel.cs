@@ -13,7 +13,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Account.Web;
-using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.AspNetIdentity;
@@ -30,7 +29,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
     [Dependency(ReplaceServices = true)]
     [ExposeServices(
         typeof(LINGYUN.Abp.Account.Web.Pages.Account.LoginModel), 
-        typeof(IdentityServerSupportedLoginModel))]
+        typeof(IdentityServerLoginModel))]
     public class IdentityServerLoginModel : LINGYUN.Abp.Account.Web.Pages.Account.LoginModel
     {
         protected IIdentityServerInteractionService Interaction { get; }
