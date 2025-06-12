@@ -25,13 +25,6 @@
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
         <h4>@L["Login"]</h4>
-        @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
-        {
-            <strong>
-                @L["AreYouANewUser"]
-                <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Register"]</a>
-            </strong>
-        }
         @if (Model.EnableLocalLogin)
         {
             <form method="post" class="mt-4">
@@ -57,6 +50,13 @@
                         <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
                     </abp-column>
                 </abp-row>
+                @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
+                {
+                    <strong>
+                        @L["AreYouANewUser"]
+                        <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Register"]</a>
+                    </strong>
+                }
                 <div class="d-grid gap-2">
                     <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
                     @if (Model.ShowCancelButton)

@@ -7,10 +7,6 @@
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
         <h4>@L["Register"]</h4>
-        <strong>
-            @L["AlreadyRegistered"]
-            <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Login"]</a>
-        </strong>
         <form method="post" class="mt-4">
             @if (Model.EnableLocalRegister || Model.IsExternalLogin)
             {
@@ -26,6 +22,11 @@
             {
                 <abp-input asp-for="Input.Password" />
             }
+
+            <strong>
+                @L["AlreadyRegistered"]
+                <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Login"]</a>
+            </strong>
 
             @if (Model.EnableLocalRegister || Model.IsExternalLogin)
             {
