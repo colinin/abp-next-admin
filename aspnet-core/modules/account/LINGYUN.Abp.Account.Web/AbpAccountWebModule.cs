@@ -1,14 +1,21 @@
 ﻿using LINGYUN.Abp.Account.Emailing;
+using LINGYUN.Abp.Account.Web.Bundling;
+using LINGYUN.Abp.Account.Web.Pages.Account;
 using LINGYUN.Abp.Account.Web.ProfileManagement;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.AspNetCore.QrCode;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Account.Web.ProfileManagement;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.QRCode;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Sms;
@@ -53,17 +60,35 @@ public class AbpAccountWebModule : AbpModule
         {
             options.AddMaps<AbpAccountWebModule>(validate: true);
         });
+
+        context.Services
+            .AddAuthentication()
+            .AddCookie(AbpAccountAuthenticationTypes.ShouldChangePassword, options =>
+            {
+                options.LoginPath = new PathString("/Account/Login");
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5.0);
+                options.Events = new CookieAuthenticationEvents
+                {
+                    OnValidatePrincipal = SecurityStampValidator.ValidatePrincipalAsync
+                };
+            });
     }
 
     private void ConfigureProfileManagementPage()
     {
         Configure<ProfileManagementPageOptions>(options =>
         {
-            options.Contributors.Add(new SessionManagementPageContributor());
+            options.Contributors.Add(new ProfileManagementPageContributor());
         });
 
         Configure<AbpBundlingOptions>(options =>
         {
+            options.StyleBundles
+                .Add(AccountBundles.Styles.UserLoginLink, bundle =>
+                {
+                    bundle.AddContributors(typeof(UserLoginLinkStyleContributor));
+                });
+
             options.ScriptBundles
                 .Configure(typeof(ManageModel).FullName,
                     configuration =>
@@ -86,6 +111,11 @@ public class AbpAccountWebModule : AbpModule
                         // QrCode
                         configuration.AddContributors(typeof(QRCodeScriptContributor));
                     });
+            options.ScriptBundles
+                .Configure(AccountBundles.Scripts.ChangePassword, bundle =>
+                {
+                    bundle.AddContributors(typeof(ChangePasswordScriptContributor));
+                });
         });
     }
 }

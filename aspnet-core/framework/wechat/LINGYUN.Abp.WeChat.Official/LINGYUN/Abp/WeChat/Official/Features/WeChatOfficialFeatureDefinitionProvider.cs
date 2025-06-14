@@ -19,12 +19,12 @@ public class WeChatOfficialFeatureDefinitionProvider : FeatureDefinitionProvider
             description: L("Features:WeChat.Official.EnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
 
-        officialEnableFeature.CreateChild(
-            name: WeChatOfficialFeatures.EnableAuthorization,
-            defaultValue: true.ToString(),
-            displayName: L("Features:WeChat.Official.EnableAuthorization"),
-            description: L("Features:WeChat.Official.EnableAuthorizationDesc"),
-            valueType: new ToggleStringValueType(new BooleanValueValidator()));
+        //officialEnableFeature.CreateChild(
+        //    name: WeChatOfficialFeatures.EnableAuthorization,
+        //    defaultValue: true.ToString(),
+        //    displayName: L("Features:WeChat.Official.EnableAuthorization"),
+        //    description: L("Features:WeChat.Official.EnableAuthorizationDesc"),
+        //    valueType: new ToggleStringValueType(new BooleanValueValidator()));
     }
 
     protected LocalizableString L(string name)

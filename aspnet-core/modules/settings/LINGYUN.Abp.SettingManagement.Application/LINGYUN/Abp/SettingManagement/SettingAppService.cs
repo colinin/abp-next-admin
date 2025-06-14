@@ -1,4 +1,6 @@
-﻿using LINGYUN.Abp.Identity;
+﻿using LINGYUN.Abp.Account.OAuth.Features;
+using LINGYUN.Abp.Account.OAuth.Settings;
+using LINGYUN.Abp.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System.Linq;
@@ -486,6 +488,48 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
 
             settingGroups.AddGroup(emailSettingGroup);
         }
+
+        #endregion
+
+        #region 外部登录
+
+        var oauthSettingDto = new SettingGroupDto(L["Settings:ExternalOAuthLogin"], L["Settings:ExternalOAuthLogin"]);
+
+        if (await FeatureChecker.IsEnabledAsync(true, AccountOAuthFeatureNames.GitHub.Enable))
+        {
+            var githubOAuthSetting = oauthSettingDto.AddSetting(L["Settings:GitHubAuth"], L["Settings:GitHubAuth"]);
+            githubOAuthSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(AccountOAuthSettingNames.GitHub.ClientId),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(AccountOAuthSettingNames.GitHub.ClientId, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            githubOAuthSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(AccountOAuthSettingNames.GitHub.ClientSecret),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(AccountOAuthSettingNames.GitHub.ClientSecret, providerName, providerKey),
+                ValueType.String,
+                providerName);
+        }
+
+        if (await FeatureChecker.IsEnabledAsync(true, AccountOAuthFeatureNames.Bilibili.Enable))
+        {
+            var bilibiliOAuthSetting = oauthSettingDto.AddSetting(L["Settings:BilibiliAuth"], L["Settings:BilibiliAuth"]);
+            bilibiliOAuthSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(AccountOAuthSettingNames.Bilibili.ClientId),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(AccountOAuthSettingNames.Bilibili.ClientId, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            bilibiliOAuthSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(AccountOAuthSettingNames.Bilibili.ClientSecret),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(AccountOAuthSettingNames.Bilibili.ClientSecret, providerName, providerKey),
+                ValueType.String,
+                providerName);
+        }
+
+        settingGroups.AddGroup(oauthSettingDto);
 
         #endregion
 

@@ -4,7 +4,10 @@
     "register": "注册",
     "codeLogin": "验证码登录",
     "qrcodeLogin": "二维码登录",
-    "forgetPassword": "忘记密码"
+    "forgetPassword": "忘记密码",
+    "oidcLogin": "认证中心登录",
+    "oidcLoginMessage": "请点击确定跳转认证中心登录",
+    "processingLogin": "登录成功,正在跳转中..."
   },
   "dashboard": {
     "title": "概览",

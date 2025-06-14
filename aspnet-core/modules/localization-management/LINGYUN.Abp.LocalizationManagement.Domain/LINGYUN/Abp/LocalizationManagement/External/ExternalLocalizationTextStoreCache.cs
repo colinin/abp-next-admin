@@ -84,14 +84,15 @@ public class ExternalLocalizationTextStoreCache : IExternalLocalizationTextStore
 
             var stampCacheKey = ExternalLocalizationTextStampCacheItem.CalculateCacheKey(resource.ResourceName, cultureName);
             var stampCacheItem = await StampCache.GetAsync(stampCacheKey);
-            if (memoryCacheItem != null && memoryCacheItem.CacheStamp == stampCacheItem.Stamp)
+
+            if (memoryCacheItem != null && memoryCacheItem.CacheStamp == stampCacheItem?.Stamp)
             {
                 memoryCacheItem.LastCheckTime = DateTime.Now;
                 return memoryCacheItem.Texts;
             }
 
             var distributeCacheItem = await DistributedCache.GetAsync(cacheKey);
-            if (distributeCacheItem != null)
+            if (stampCacheItem != null && distributeCacheItem != null)
             {
                 MemoryCache[cacheKey] = new LocalizationTextMemoryCacheItem(distributeCacheItem.Texts, stampCacheItem.Stamp);
 

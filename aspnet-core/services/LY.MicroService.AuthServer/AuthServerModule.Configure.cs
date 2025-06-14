@@ -28,9 +28,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Validation.AspNetCore;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -47,6 +49,7 @@ using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
+using Volo.Abp.OpenIddict.WildcardDomains;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
@@ -148,6 +151,16 @@ public partial class AuthServerModule
             builder.UseAspNetCore()
                 .DisableTransportSecurityRequirement();
         });
+
+        var wildcardDomains = configuration.GetSection("App:WildcardDomains").Get<List<string>>();
+        if (wildcardDomains?.Count > 0)
+        {
+            PreConfigure<AbpOpenIddictWildcardDomainOptions>(options =>
+            {
+                options.EnableWildcardDomainSupport = true;
+                options.WildcardDomainsFormat.AddIfNotContains(wildcardDomains);
+            });
+        }
     }
 
     private void ConfigureMvc(IServiceCollection services, IConfiguration configuration)
@@ -367,11 +380,18 @@ public partial class AuthServerModule
             .AddJwtBearer(options =>
             {
                 configuration.GetSection("AuthServer").Bind(options);
-            })
-            .AddWeChatWork(options =>
-            {
-                options.SignInScheme = IdentityConstants.ExternalScheme;
+
+                var validIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<List<string>>();
+                if (validIssuers?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidIssuers = validIssuers;
+                    options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                }
             });
+            //.AddWeChatWork(options =>
+            //{
+            //    options.SignInScheme = IdentityConstants.ExternalScheme;
+            //});
 
         if (!isDevelopment)
         {

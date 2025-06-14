@@ -9,6 +9,7 @@ import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@vben/constants';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
 import {
+  usePhoneLoginApi,
   useProfileApi,
   useQrCodeLoginApi,
   useTokenApi,
@@ -19,12 +20,14 @@ import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
 import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
+import authService from '#/auth/authService';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
   const { publish } = useEventBus();
-  const { loginApi } = useTokenApi();
+  const { loginApi, refreshTokenApi } = useTokenApi();
   const { loginApi: qrcodeLoginApi } = useQrCodeLoginApi();
+  const { loginApi: phoneLoginApi } = usePhoneLoginApi();
   const { getUserInfoApi } = useUserInfoApi();
   const { getConfigApi } = useAbpConfigApi();
   const { getPictureApi } = useProfileApi();
@@ -35,6 +38,46 @@ export const useAuthStore = defineStore('auth', () => {
 
   const loginLoading = ref(false);
 
+  async function refreshSession() {
+    if (await authService.getAccessToken()) {
+      const user = await authService.refreshToken();
+      const newToken = `${user?.token_type} ${user?.access_token}`;
+      accessStore.setAccessToken(newToken);
+      if (user?.refresh_token) {
+        accessStore.setRefreshToken(user.refresh_token);
+      }
+      return newToken;
+    } else {
+      const { accessToken, tokenType, refreshToken } = await refreshTokenApi({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        refreshToken: accessStore.refreshToken!,
+      });
+      const newToken = `${tokenType} ${accessToken}`;
+      accessStore.setAccessToken(newToken);
+      accessStore.setRefreshToken(refreshToken);
+      return newToken;
+    }
+  }
+
+  async function oidcLogin() {
+    await authService.login();
+  }
+
+  async function oidcCallback() {
+    try {
+      const user = await authService.handleCallback();
+      return await _loginSuccess({
+        accessToken: user.access_token,
+        tokenType: user.token_type,
+        refreshToken: user.refresh_token ?? '',
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        expiresIn: user.expires_in!,
+      });
+    } finally {
+      loginLoading.value = false;
+    }
+  }
+
   async function qrcodeLogin(
     key: string,
     tenantId?: string,
@@ -43,6 +86,20 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       loginLoading.value = true;
       const result = await qrcodeLoginApi({ key, tenantId });
+      return await _loginSuccess(result, onSuccess);
+    } finally {
+      loginLoading.value = false;
+    }
+  }
+
+  async function phoneLogin(
+    phoneNumber: string,
+    code: string,
+    onSuccess?: () => Promise<void> | void,
+  ) {
+    try {
+      loginLoading.value = true;
+      const result = await phoneLoginApi({ phoneNumber, code });
       return await _loginSuccess(result, onSuccess);
     } finally {
       loginLoading.value = false;
@@ -69,7 +126,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout(redirect: boolean = true) {
     try {
-      // await logoutApi();
+      if (await authService.getAccessToken()) {
+        accessStore.setAccessToken(null);
+        await authService.logout();
+      }
     } catch {
       // 不做任何处理
     }
@@ -126,7 +186,6 @@ export const useAuthStore = defineStore('auth', () => {
   ) {
     // 异步处理用户登录操作并获取 accessToken
     let userInfo: null | UserInfo = null;
-    loginLoading.value = true;
     const { accessToken, tokenType, refreshToken } = loginResult;
     // 如果成功获取到 accessToken
     if (accessToken) {
@@ -172,9 +231,13 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     $reset,
     authLogin,
+    phoneLogin,
     qrcodeLogin,
+    oidcLogin,
+    oidcCallback,
     fetchUserInfo,
     loginLoading,
     logout,
+    refreshSession,
   };
 });

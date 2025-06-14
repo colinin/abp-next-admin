@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
-using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.Applications;
 
 namespace LINGYUN.Abp.OpenIddict.Applications;
@@ -14,17 +13,14 @@ namespace LINGYUN.Abp.OpenIddict.Applications;
 [Authorize(AbpOpenIddictPermissions.Applications.Default)]
 public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase, IOpenIddictApplicationAppService
 {
-    private readonly IAbpApplicationManager _applicationManager;
-    private readonly AbpOpenIddictIdentifierConverter _identifierConverter;
+    private readonly AbpApplicationManager _applicationManager;
     private readonly IOpenIddictApplicationRepository _applicationRepository;
 
     public OpenIddictApplicationAppService(
-        IAbpApplicationManager applicationManager,
-        AbpOpenIddictIdentifierConverter identifierConverter,
+        AbpApplicationManager applicationManager,
         IOpenIddictApplicationRepository applicationRepository)
     {
         _applicationManager = applicationManager;
-        _identifierConverter = identifierConverter;
         _applicationRepository = applicationRepository;
     }
 
@@ -47,7 +43,7 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
     [Authorize(AbpOpenIddictPermissions.Applications.Create)]
     public async virtual Task<OpenIddictApplicationDto> CreateAsync(OpenIddictApplicationCreateDto input)
     {
-        if (await _applicationManager.FindByClientIdAsync(input.ClientId) != null)
+        if (await _applicationRepository.FindByClientIdAsync(input.ClientId) != null)
         {
             throw new BusinessException(OpenIddictApplicationErrorCodes.Applications.ClientIdExisted)
                 .WithData(nameof(OpenIddictApplication.ClientId), input.ClientId);
@@ -100,7 +96,7 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
     [Authorize(AbpOpenIddictPermissions.Applications.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
-        var application = await _applicationManager.FindByIdAsync(_identifierConverter.ToString(id));
-        await _applicationManager.DeleteAsync(application);
+        var application = await _applicationRepository.GetAsync(id);
+        await _applicationManager.DeleteAsync(application.ToModel());
     }
 }

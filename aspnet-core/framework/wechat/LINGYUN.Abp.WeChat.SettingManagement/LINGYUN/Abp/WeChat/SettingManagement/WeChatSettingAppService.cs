@@ -161,6 +161,30 @@ public class WeChatSettingAppService : ApplicationService, IWeChatSettingAppServ
                 await SettingManager.GetOrNullAsync(WeChatWorkSettingNames.Connection.CorpId, providerName, providerKey),
                 ValueType.String,
                 providerName);
+            workConnectionSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(WeChatWorkSettingNames.Connection.AgentId),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(WeChatWorkSettingNames.Connection.AgentId, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            workConnectionSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(WeChatWorkSettingNames.Connection.Secret),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(WeChatWorkSettingNames.Connection.Secret, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            workConnectionSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(WeChatWorkSettingNames.Connection.Token),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(WeChatWorkSettingNames.Connection.Token, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            workConnectionSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(WeChatWorkSettingNames.Connection.EncodingAESKey),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(WeChatWorkSettingNames.Connection.EncodingAESKey, providerName, providerKey),
+                ValueType.String,
+                providerName);
 
             settingGroups.AddGroup(wechatWorkSettingGroup);
             #endregion

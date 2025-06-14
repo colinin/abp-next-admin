@@ -17,9 +17,11 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -319,9 +321,16 @@ public partial class LocalizationManagementHttpApiHostModule
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+            .AddAbpJwtBearer(options =>
             {
                 configuration.GetSection("AuthServer").Bind(options);
+
+                var validIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<List<string>>();
+                if (validIssuers?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidIssuers = validIssuers;
+                    options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                }
             });
 
         if (isDevelopment)

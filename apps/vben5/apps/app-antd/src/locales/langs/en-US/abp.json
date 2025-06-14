@@ -11,6 +11,14 @@
     },
     "qrcodeLogin": {
       "scaned": "Please confirm login on your phone."
+    },
+    "errors": {
+      "accountLockedByInvalidLoginAttempts": "The user account has been locked out due to invalid login attempts. Please wait a while and try again.",
+      "accountInactive": "You are not allowed to login!  Your account is inactive.",
+      "invalidUserNameOrPassword": "Invalid username or password!",
+      "tokenHasExpired": "The token is no longer valid!",
+      "requiresTwoFactor": "Identity verification is required. Please select a verification method!",
+      "shouldChangePassword": "Your password has expired. Please change it and login!"
     }
   },
   "manage": {

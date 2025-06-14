@@ -16,6 +16,7 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Security" />
 		<PackageReference Include="IdentityModel" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" />
 	</ItemGroup>
 
 </Project>
