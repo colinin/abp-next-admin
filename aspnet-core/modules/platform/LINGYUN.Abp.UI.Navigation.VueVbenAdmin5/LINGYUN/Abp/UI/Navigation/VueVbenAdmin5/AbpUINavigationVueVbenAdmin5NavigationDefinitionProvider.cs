@@ -46,11 +46,11 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
         project.AddItem(
             new ApplicationMenu(
                 name: "VbenGithub",
-                displayName: "文档",
+                displayName: "Github",
                 url: "/vben-admin/github",
                 component: "",
                 icon: "mdi:github",
-                description: "文档")
+                description: "Github")
             .SetProperty("link", "https://github.com/vbenjs/vue-vben-admin")
             .SetProperty("title", "Github")
          );
@@ -500,6 +500,7 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
                 displayName: "Api 文档",
                 url: "/manage/openapi",
                 component: "IFrame",
+                icon: "material-icon-theme:swagger",
                 description: "Api 文档",
                 multiTenancySides: MultiTenancySides.Host)
             .SetProperty("title", "abp.manage.openApi")
@@ -512,6 +513,7 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
                 displayName: "缓存管理",
                 url: "/manage/cache",
                 component: "/caching/caches/index",
+                icon: "devicon:redis",
                 description: "缓存管理")
             .SetProperty("title", "abp.manage.cache"));
 
