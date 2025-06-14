@@ -425,7 +425,7 @@ public partial class PlatformManagementHttpApiHostModule
                 };
             });
 
-        services.AddAlwaysAllowAuthorization();
+        // services.AddAlwaysAllowAuthorization();
 
         if (!isDevelopment)
         {
