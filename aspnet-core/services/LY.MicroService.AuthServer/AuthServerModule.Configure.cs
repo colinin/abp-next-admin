@@ -380,6 +380,7 @@ public partial class AuthServerModule
             .AddJwtBearer(options =>
             {
                 configuration.GetSection("AuthServer").Bind(options);
+
                 var validIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<List<string>>();
                 if (validIssuers?.Count > 0)
                 {

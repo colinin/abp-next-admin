@@ -53,7 +53,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpGdprWebModule),
 
     // MVC Theme
-    //typeof(AbpAspNetCoreMvcUiBasicThemeModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
 
     // 审计日志模块 应用服务

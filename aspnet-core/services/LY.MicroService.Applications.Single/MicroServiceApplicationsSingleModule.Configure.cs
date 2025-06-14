@@ -47,6 +47,10 @@ public partial class MicroServiceApplicationsSingleModule
                 return;
             }
             options
+                .UseMySql(mySqlOptions =>
+                {
+                    configuration.GetSection("CAP:MySql").Bind(mySqlOptions);
+                })
                 .UseRabbitMQ(rabbitMQOptions =>
                 {
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
@@ -770,7 +774,7 @@ public partial class MicroServiceApplicationsSingleModule
         Configure<AbpBundlingOptions>(options =>
         {
             options.ScriptBundles
-                .Configure(StandardBundles.Styles.Global, bundle =>
+                .Configure(StandardBundles.Scripts.Global, bundle =>
                 {
                     bundle.AddContributors(typeof(SingleGlobalScriptContributor));
                 });
