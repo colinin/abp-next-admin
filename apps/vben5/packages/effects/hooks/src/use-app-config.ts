@@ -21,6 +21,8 @@ export function useAppConfig(
     VITE_GLOB_AUDIENCE,
     VITE_GLOB_CLIENT_ID,
     VITE_GLOB_CLIENT_SECRET,
+    VITE_GLOB_ONLY_OIDC,
+    VITE_GLOB_DISABLE_PKCE,
     VITE_GLOB_UI_FRAMEWORK,
   } = config;
 
@@ -30,6 +32,8 @@ export function useAppConfig(
     audience: VITE_GLOB_AUDIENCE,
     clientId: VITE_GLOB_CLIENT_ID,
     clientSecret: VITE_GLOB_CLIENT_SECRET,
+    onlyOidc: VITE_GLOB_ONLY_OIDC === 'true',
+    disablePKCE: VITE_GLOB_DISABLE_PKCE === 'true',
     uiFramework: VITE_GLOB_UI_FRAMEWORK,
   };
 }

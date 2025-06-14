@@ -1,10 +1,9 @@
 ﻿using LINGYUN.Abp.Account;
+using LINGYUN.Abp.Account.Web.OAuth;
 using LINGYUN.Abp.Account.Web.OpenIddict;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
-using LINGYUN.Abp.Authentication.QQ;
-using LINGYUN.Abp.Authentication.WeChat;
 using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Emailing.Platform;
@@ -16,7 +15,6 @@ using LINGYUN.Abp.Identity.AspNetCore.Session;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
-using LINGYUN.Abp.OpenIddict.AspNetCore;
 using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Portal;
@@ -27,14 +25,13 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
 using LINGYUN.Abp.Telemetry.SkyWalking;
-using LINGYUN.Abp.WeChat.Work.AspNetCore;
 using LY.MicroService.AuthServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
@@ -50,11 +47,12 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
     typeof(AbpAccountWebOpenIddictModule),
+    typeof(AbpAccountWebOAuthModule),
     typeof(AbpBlobStoringOssManagementModule),
     typeof(AbpGdprApplicationModule),
     typeof(AbpGdprHttpApiModule),
     typeof(AbpGdprWebModule),
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpIdentityAspNetCoreSessionModule),
@@ -65,9 +63,6 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpOpenIddictLinkUserModule),
     typeof(AbpOpenIddictPortalModule),
     typeof(AbpOpenIddictWeChatWorkModule),
-    typeof(AbpWeChatWorkAspNetCoreModule), // 实现企业微信登录
-    typeof(AbpAuthenticationQQModule),
-    typeof(AbpAuthenticationWeChatModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AuthServerMigrationsEntityFrameworkCoreModule),

@@ -1,0 +1,8 @@
+﻿@using Localization.Resources.AbpUi
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LINGYUN.Abp.Account.Web.Bundling;
+@inject IHtmlLocalizer<AbpUiResource> L
+
+<abp-style-bundle name="@AccountBundles.Styles.UserLoginLink" />
+
+<a class="nav-link fix-margin" role="button" href="~/Account/Login">@L["Login"]</a>

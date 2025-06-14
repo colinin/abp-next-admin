@@ -2,7 +2,7 @@
 
 public static class OpenIddictApplicationErrorCodes
 {
-    private const string Namespace = "OpenIddict:";
+    public const string Namespace = "OpenIddict:";
 
     public static class Applications
     {

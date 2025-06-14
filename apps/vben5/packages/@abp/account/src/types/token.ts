@@ -14,6 +14,13 @@ interface PasswordTokenRequest extends TokenRequest {
   /** 用户名 */
   userName: string;
 }
+/** 手机号授权请求数据模型 */
+interface PhoneNumberTokenRequest {
+  /** 验证码 */
+  code: string;
+  /** 手机号 */
+  phoneNumber: string;
+}
 /** 扫码登录授权请求数据模型 */
 interface QrCodeTokenRequest {
   /** 二维码Key */
@@ -69,13 +76,20 @@ interface TwoFactorError extends OAuthError {
   userId: string;
 }
 
+interface ShouldChangePasswordError extends OAuthError {
+  changePasswordToken: string;
+  userId: string;
+}
+
 export type {
   OAuthError,
   OAuthTokenRefreshModel,
   OAuthTokenResult,
   PasswordTokenRequest,
   PasswordTokenRequestModel,
+  PhoneNumberTokenRequest,
   QrCodeTokenRequest,
+  ShouldChangePasswordError,
   TokenRequest,
   TokenResult,
   TwoFactorError,

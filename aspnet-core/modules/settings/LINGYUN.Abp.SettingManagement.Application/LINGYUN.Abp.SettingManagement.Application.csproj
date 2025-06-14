@@ -28,6 +28,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\account\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\account\LINGYUN.Abp.Account.OAuth\LINGYUN.Abp.Account.OAuth.csproj" />
 		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain.Shared\LINGYUN.Abp.Identity.Domain.Shared.csproj" />
 		<ProjectReference Include="..\..\..\framework\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj" />
 	</ItemGroup>

@@ -5,7 +5,7 @@ import {
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
-import { useOAuthError, useTokenApi } from '@abp/account';
+import { useOAuthError } from '@abp/account';
 import { useAbpStore } from '@abp/core';
 import { requestClient, useWrapperResult } from '@abp/request';
 import { message } from 'ant-design-vue';
@@ -13,7 +13,6 @@ import { message } from 'ant-design-vue';
 import { useAuthStore } from '#/store';
 
 export function initRequestClient() {
-  const { refreshTokenApi } = useTokenApi();
   /**
    * 重新认证逻辑
    */
@@ -36,19 +35,11 @@ export function initRequestClient() {
    * 刷新token逻辑
    */
   async function doRefreshToken() {
-    const accessStore = useAccessStore();
-    if (accessStore.refreshToken) {
-      try {
-        const { accessToken, tokenType, refreshToken } = await refreshTokenApi({
-          refreshToken: accessStore.refreshToken,
-        });
-        const newToken = `${tokenType} ${accessToken}`;
-        accessStore.setAccessToken(newToken);
-        accessStore.setRefreshToken(refreshToken);
-        return newToken;
-      } catch {
-        console.warn('The refresh token has expired or is unavailable.');
-      }
+    const authStore = useAuthStore();
+    try {
+      return await authStore.refreshSession();
+    } catch {
+      console.warn('The refresh token has expired or is unavailable.');
     }
     return '';
   }

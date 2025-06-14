@@ -1,3 +1,47 @@
-/*! Select2 4.0.13 | https://github.com/select2/select2/blob/master/LICENSE.md */
+'use strict';
 
-!function(){if(jQuery&&jQuery.fn&&jQuery.fn.select2&&jQuery.fn.select2.amd)var n=jQuery.fn.select2.amd;n.define("select2/i18n/ru",[],function(){function n(n,e,r,u){return n%10<5&&n%10>0&&n%100<5||n%100>20?n%10>1?r:e:u}return{errorLoading:function(){return"Невозможно загрузить результаты"},inputTooLong:function(e){var r=e.input.length-e.maximum,u="Пожалуйста, введите на "+r+" символ";return u+=n(r,"","a","ов"),u+=" меньше"},inputTooShort:function(e){var r=e.minimum-e.input.length,u="Пожалуйста, введите ещё хотя бы "+r+" символ";return u+=n(r,"","a","ов")},loadingMore:function(){return"Загрузка данных…"},maximumSelected:function(e){var r="Вы можете выбрать не более "+e.maximum+" элемент";return r+=n(e.maximum,"","a","ов")},noResults:function(){return"Совпадений не найдено"},searching:function(){return"Поиск…"},removeAllItems:function(){return"Удалить все элементы"}}}),n.define,n.require}();
+const { SFTP } = require('./protocol/SFTP.js');
+
+const MAX_CHANNEL = 2 ** 32 - 1;
+
+function onChannelOpenFailure(self, recipient, info, cb) {
+  self._chanMgr.remove(recipient);
+  if (typeof cb !== 'function')
+    return;
+
+  let err;
+  if (info instanceof Error) {
+    err = info;
+  } else if (typeof info === 'object' && info !== null) {
+    err = new Error(`(SSH) Channel open failure: ${info.description}`);
+    err.reason = info.reason;
+  } else {
+    err = new Error(
+      '(SSH) Channel open failure: server closed channel unexpectedly'
+    );
+    err.reason = '';
+  }
+
+  cb(err);
+}
+
+function onCHANNEL_CLOSE(self, recipient, channel, err, dead) {
+  if (typeof channel === 'function') {
+    // We got CHANNEL_CLOSE instead of CHANNEL_OPEN_FAILURE when
+    // requesting to open a channel
+    onChannelOpenFailure(self, recipient, err, channel);
+    return;
+  }
+
+  if (typeof channel !== 'object' || channel === null)
+    return;
+
+  if (channel.incoming && channel.incoming.state === 'closed')
+    return;
+
+  self._chanMgr.remove(recipient);
+
+  if (channel.server && channel.constructor.name === 'Session')
+    return;
+
+  channel.incoming.state = 'clo

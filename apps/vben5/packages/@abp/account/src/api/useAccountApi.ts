@@ -2,7 +2,9 @@ import type { ListResultDto } from '@abp/core';
 
 import type {
   GetTwoFactorProvidersInput,
+  PhoneResetPasswordDto,
   SendEmailSigninCodeDto,
+  SendPhoneResetPasswordCodeDto,
   SendPhoneSigninCodeDto,
   TwoFactorProvider,
 } from '../types/account';
@@ -54,10 +56,36 @@ export function useAccountApi() {
     });
   }
 
+  /**
+   * 发送重置密码验证短信
+   * @param input 参数
+   */
+  function sendPhoneResetPasswordCodeApi(
+    input: SendPhoneResetPasswordCodeDto,
+  ): Promise<void> {
+    return request('/api/account/phone/send-password-reset-code', {
+      data: input,
+      method: 'POST',
+    });
+  }
+
+  /**
+   * 重置密码
+   * @param input 参数
+   */
+  function resetPasswordApi(input: PhoneResetPasswordDto): Promise<void> {
+    return request('/api/account/phone/reset-password', {
+      data: input,
+      method: 'PUT',
+    });
+  }
+
   return {
     cancel,
     getTwoFactorProvidersApi,
+    resetPasswordApi,
     sendEmailSigninCodeApi,
+    sendPhoneResetPasswordCodeApi,
     sendPhoneSigninCodeApi,
   };
 }

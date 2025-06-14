@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.Authorization;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.OpenIddict.Localization;
@@ -24,6 +25,11 @@ public class AbpOpenIddictApplicationContractsModule : AbpModule
             options.Resources
                 .Get<AbpOpenIddictResource>()
                 .AddVirtualJson("/LINGYUN/Abp/OpenIddict/Localization/Resources");
+        });
+
+        Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace(OpenIddictApplicationErrorCodes.Namespace, typeof(AbpOpenIddictResource));
         });
     }
 }

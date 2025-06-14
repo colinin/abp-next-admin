@@ -26,10 +26,9 @@ public class OssManagementBlobProvider : BlobProviderBase, ITransientDependency
 
     public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
     {
-        var configuration = args.Configuration.GetOssManagementConfiguration();
         await _ossObjectAppService.DeleteAsync(new GetOssObjectInput
         {
-            Bucket = configuration.Bucket,
+            Bucket = args.ContainerName,
             Path = GetOssPath(args),
             Object = GetOssName(args),
         });
@@ -38,10 +37,9 @@ public class OssManagementBlobProvider : BlobProviderBase, ITransientDependency
 
     public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
     {
-        var configuration = args.Configuration.GetOssManagementConfiguration();
         var result = await _ossObjectAppService.ExistsAsync(new GetOssObjectInput
         {
-            Bucket = configuration.Bucket,
+            Bucket = args.ContainerName,
             Path = GetOssPath(args),
             Object = GetOssName(args),
         });
@@ -50,10 +48,9 @@ public class OssManagementBlobProvider : BlobProviderBase, ITransientDependency
 
     public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
     {
-        var configuration = args.Configuration.GetOssManagementConfiguration();
         var content = await _ossObjectAppService.GetAsync(new GetOssObjectInput
         {
-            Bucket = configuration.Bucket,
+            Bucket = args.ContainerName,
             Path = GetOssPath(args),
             Object = GetOssName(args),
         });
@@ -63,10 +60,9 @@ public class OssManagementBlobProvider : BlobProviderBase, ITransientDependency
 
     public override async Task SaveAsync(BlobProviderSaveArgs args)
     {
-        var configuration = args.Configuration.GetOssManagementConfiguration();
         await _ossObjectAppService.CreateAsync(new CreateOssObjectInput
         {
-            Bucket = configuration.Bucket,
+            Bucket = args.ContainerName,
             Overwrite = args.OverrideExisting,
             Path = GetOssPath(args),
             FileName = GetOssName(args),
@@ -76,16 +72,14 @@ public class OssManagementBlobProvider : BlobProviderBase, ITransientDependency
 
     protected virtual string GetOssPath(BlobProviderArgs args)
     {
-        // ContainerName: blob
-        // path1/path2/path3/path3/path5/file.txt   =>  blob/path1/path2/path3/path3/path5/
-        var path = args.ContainerName;
+        // path1/path2/path3/path3/path5/file.txt   =>  path1/path2/path3/path3/path5/
         if (args.BlobName.Contains("/"))
         {
             var lastIndex = args.BlobName.LastIndexOf('/');
-            path += args.BlobName.Substring(0, lastIndex);
+            return args.BlobName.Substring(0, lastIndex);
         }
 
-        return path.EnsureEndsWith('/');
+        return args.BlobName.EnsureEndsWith('/');
     }
 
     protected virtual string GetOssName(BlobProviderArgs args)

@@ -1,8 +1,3 @@
-using LINGYUN.Abp.Identity.QrCode;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Extensions.DependencyInjection;
-using OpenIddict.Validation.AspNetCore;
-using Volo.Abp.BlobStoring.Minio;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -52,6 +47,10 @@ public partial class MicroServiceApplicationsSingleModule
                 return;
             }
             options
+                .UseMySql(mySqlOptions =>
+                {
+                    configuration.GetSection("CAP:MySql").Bind(mySqlOptions);
+                })
                 .UseRabbitMQ(rabbitMQOptions =>
                 {
                     configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
@@ -86,73 +85,59 @@ public partial class MicroServiceApplicationsSingleModule
 
     private void PreConfigureCertificate(IConfiguration configuration, IWebHostEnvironment environment)
     {
-        var cerConfig = configuration.GetSection("Certificates");
-        if (environment.IsProduction() && cerConfig.Exists())
+        if (!environment.IsDevelopment())
         {
-            // 开发环境下存在证书配置
-            // 且证书文件存在则使用自定义的证书文件来启动Ids服务器
-            var cerPath = Path.Combine(environment.ContentRootPath, cerConfig["CerPath"]);
-            if (File.Exists(cerPath))
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
             {
-                var certificate = new X509Certificate2(cerPath, cerConfig["Password"]);
+                options.AddDevelopmentEncryptionAndSigningCertificate = false;
+            });
 
-                PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
-                {
-                    //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-                    options.AddDevelopmentEncryptionAndSigningCertificate = false;
-                });
+            PreConfigure<OpenIddictServerBuilder>(builder =>
+            {
+                builder.UseDataProtection();
 
-                PreConfigure<OpenIddictServerBuilder>(builder =>
-                {
-                    builder.AddSigningCertificate(certificate);
-                    builder.AddEncryptionCertificate(certificate);
+                // 禁用https
+                builder.UseAspNetCore()
+                    .DisableTransportSecurityRequirement();
 
-                    builder.UseDataProtection();
-
-                    // 禁用https
-                    builder.UseAspNetCore()
-                        .DisableTransportSecurityRequirement();
-                });
-            }
+                builder.AddProductionEncryptionAndSigningCertificate(configuration["App:SslFile"], configuration["App:SslPassword"]);
+            });
         }
         else
         {
-            if (configuration.GetValue<bool>("AuthServer:UseOpenIddict"))
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
             {
-                PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+                //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
+                options.AddDevelopmentEncryptionAndSigningCertificate = false;
+            });
+
+            PreConfigure<OpenIddictServerBuilder>(builder =>
+            {
+                //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
+                using (var algorithm = RSA.Create(keySizeInBits: 2048))
                 {
-                    //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-                    options.AddDevelopmentEncryptionAndSigningCertificate = false;
-                });
+                    var subject = new X500DistinguishedName("CN=Fabrikam Encryption Certificate");
+                    var request = new CertificateRequest(subject, algorithm, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                    request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.DigitalSignature, critical: true));
+                    var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
+                    builder.AddSigningCertificate(certificate);
+                }
 
-                PreConfigure<OpenIddictServerBuilder>(builder =>
+                using (var algorithm = RSA.Create(keySizeInBits: 2048))
                 {
-                    //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-                    using (var algorithm = RSA.Create(keySizeInBits: 2048))
-                    {
-                        var subject = new X500DistinguishedName("CN=Fabrikam Encryption Certificate");
-                        var request = new CertificateRequest(subject, algorithm, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-                        request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.DigitalSignature, critical: true));
-                        var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
-                        builder.AddSigningCertificate(certificate);
-                    }
+                    var subject = new X500DistinguishedName("CN=Fabrikam Signing Certificate");
+                    var request = new CertificateRequest(subject, algorithm, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                    request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.KeyEncipherment, critical: true));
+                    var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
+                    builder.AddEncryptionCertificate(certificate);
+                }
 
-                    using (var algorithm = RSA.Create(keySizeInBits: 2048))
-                    {
-                        var subject = new X500DistinguishedName("CN=Fabrikam Signing Certificate");
-                        var request = new CertificateRequest(subject, algorithm, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-                        request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.KeyEncipherment, critical: true));
-                        var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
-                        builder.AddEncryptionCertificate(certificate);
-                    }
+                builder.UseDataProtection();
 
-                    builder.UseDataProtection();
-
-                    // 禁用https
-                    builder.UseAspNetCore()
-                        .DisableTransportSecurityRequirement();
-                });
-            }
+                // 禁用https
+                builder.UseAspNetCore()
+                    .DisableTransportSecurityRequirement();
+            });
         }
     }
 
@@ -304,13 +289,26 @@ public partial class MicroServiceApplicationsSingleModule
         //});
     }
 
-    private void ConfigureKestrelServer()
+    private void ConfigureKestrelServer(IConfiguration configuration, IWebHostEnvironment environment)
     {
         Configure<KestrelServerOptions>(options =>
         {
             options.Limits.MaxRequestBodySize = null;
             options.Limits.MaxRequestBufferSize = null;
         });
+
+        if (!environment.IsDevelopment())
+        {
+            Configure<KestrelServerOptions>(options =>
+            {
+                options.ConfigureHttpsDefaults(https =>
+                {
+                    https.ServerCertificate = X509CertificateLoader.LoadPkcs12FromFile(
+                        configuration["App:SslFile"], 
+                        configuration["App:SslPassword"]);
+                });
+            });
+        }
     }
 
     private void ConfigureOssManagement(IServiceCollection services, IConfiguration configuration)
@@ -773,6 +771,15 @@ public partial class MicroServiceApplicationsSingleModule
 
     private void ConfigureSingleModule(IServiceCollection services, bool isDevelopment)
     {
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.ScriptBundles
+                .Configure(StandardBundles.Scripts.Global, bundle =>
+                {
+                    bundle.AddContributors(typeof(SingleGlobalScriptContributor));
+                });
+        });
+
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
             // 允许第三方调用集成服务
@@ -824,6 +831,13 @@ public partial class MicroServiceApplicationsSingleModule
             {
                 configuration.GetSection("AuthServer").Bind(options);
 
+                var validIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<List<string>>();
+                if (validIssuers?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidIssuers = validIssuers;
+                    options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                }
+
                 options.Events ??= new JwtBearerEvents();
                 options.Events.OnMessageReceived = context =>
                 {
@@ -836,10 +850,6 @@ public partial class MicroServiceApplicationsSingleModule
                     }
                     return Task.CompletedTask;
                 };
-            })
-            .AddWeChatWork(options =>
-            {
-                options.SignInScheme = IdentityConstants.ExternalScheme;
             });
 
         services.ConfigureApplicationCookie(options =>
@@ -847,7 +857,7 @@ public partial class MicroServiceApplicationsSingleModule
             options.Events.OnRedirectToLogin = (ctx) =>
             {
                 if (ctx.Request.Path.Value.StartsWith("/api") ||
-                    ctx.Request.Path.Value.StartsWith("/connect"))
+                    ctx.Request.Path.Value.StartsWith("/connect/token"))
                 {
                     ctx.Response.Clear();
                     ctx.Response.StatusCode = 401;
