@@ -49,6 +49,8 @@ interface IdentityUserDto
     IHasExtraProperties,
     IUser {
   [key: string]: any;
+  /** 访问失败次数 */
+  accessFailedCount?: number;
   /** 邮箱已验证 */
   emailConfirmed: boolean;
   /** 已激活的用户 */
