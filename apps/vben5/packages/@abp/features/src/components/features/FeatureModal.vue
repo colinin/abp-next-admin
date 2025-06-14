@@ -11,6 +11,7 @@ import { $t } from '@vben/locales';
 
 import { useValidation } from '@abp/core';
 import {
+  Card,
   Checkbox,
   Form,
   Input,
@@ -204,59 +205,78 @@ async function onSubmit() {
 <template>
   <Modal :title="getModalTitle">
     <Form :model="formModel" ref="form">
-      <Tabs tab-position="left" v-model:active-key="activeTabKey">
+      <Tabs tab-position="left" type="card" v-model:active-key="activeTabKey">
         <TabPane
           v-for="(group, gi) in formModel.groups"
           :key="group.name"
           :tab="group.displayName"
         >
-          <template v-for="(feature, fi) in group.features" :key="feature.name">
-            <FormItem
-              v-if="feature.valueType !== null"
-              :name="['groups', gi, 'features', fi, 'value']"
-              :label="feature.displayName"
-              :extra="feature.description"
-              :rules="
-                createRules(feature.displayName, feature.valueType.validator)
-              "
+          <Card :bordered="false" :title="group.displayName">
+            <template
+              v-for="(feature, fi) in group.features"
+              :key="feature.name"
             >
-              <Checkbox
-                v-if="
-                  feature.valueType.name === 'ToggleStringValueType' &&
-                  feature.valueType.validator.name === 'BOOLEAN'
+              <FormItem
+                v-if="feature.valueType !== null"
+                :name="['groups', gi, 'features', fi, 'value']"
+                :label="feature.displayName"
+                :extra="feature.description"
+                :rules="
+                  createRules(feature.displayName, feature.valueType.validator)
                 "
-                v-model:checked="feature.value"
               >
-                {{ feature.displayName }}
-              </Checkbox>
-              <div
-                v-else-if="feature.valueType.name === 'FreeTextStringValueType'"
-              >
-                <InputNumber
-                  v-if="feature.valueType.validator.name === 'NUMERIC'"
-                  style="width: 100%"
+                <Checkbox
+                  v-if="
+                    feature.valueType.name === 'ToggleStringValueType' &&
+                    feature.valueType.validator.name === 'BOOLEAN'
+                  "
+                  v-model:checked="feature.value"
+                >
+                  {{ feature.displayName }}
+                </Checkbox>
+                <div
+                  v-else-if="
+                    feature.valueType.name === 'FreeTextStringValueType'
+                  "
+                >
+                  <InputNumber
+                    v-if="feature.valueType.validator.name === 'NUMERIC'"
+                    style="width: 100%"
+                    v-model:value="feature.value"
+                  />
+                  <Input
+                    v-else
+                    v-model:value="feature.value"
+                    autocomplete="off"
+                  />
+                </div>
+                <Select
+                  v-else-if="
+                    feature.valueType.name === 'SelectionStringValueType'
+                  "
                   v-model:value="feature.value"
+                  :options="feature.valueType.itemSource.items"
+                  :field-names="{ label: 'displayName', value: 'value' }"
                 />
-                <Input
-                  v-else
-                  v-model:value="feature.value"
-                  autocomplete="off"
-                />
-              </div>
-              <Select
-                v-else-if="
-                  feature.valueType.name === 'SelectionStringValueType'
-                "
-                v-model:value="feature.value"
-                :options="feature.valueType.itemSource.items"
-                :field-names="{ label: 'displayName', value: 'value' }"
-              />
-            </FormItem>
-          </template>
+              </FormItem>
+            </template>
+          </Card>
         </TabPane>
       </Tabs>
     </Form>
   </Modal>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+:deep(.ant-tabs) {
+  height: 34rem;
+
+  .ant-tabs-nav {
+    width: 14rem;
+  }
+
+  .ant-tabs-content-holder {
+    overflow: hidden auto !important;
+  }
+}
+</style>
