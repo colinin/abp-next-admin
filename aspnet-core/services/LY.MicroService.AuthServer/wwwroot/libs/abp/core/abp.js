@@ -81,7 +81,7 @@ var abp = abp || {};
         if (resource) {
             return resource;
         }
-        
+
         var legacySource = abp.localization.values[resourceName];
         if (legacySource) {
             return {
@@ -89,11 +89,11 @@ var abp = abp || {};
                 baseResources: []
             };
         }
-        
-        abp.log.warn('Could not find localization source: ' + resourceName);        
+
+        abp.log.warn('Could not find localization source: ' + resourceName);
         return null;
     };
-    
+
     abp.localization.internal.localize = function (key, sourceName) {
         var resource = abp.localization.internal.getResource(sourceName);
         if (!resource){
@@ -104,7 +104,7 @@ var abp = abp || {};
         }
 
         var value = resource.texts[key];
-        if (value === undefined) {            
+        if (value === undefined) {
             for (var i = 0; i < resource.baseResources.length; i++){
                 var basedArguments = Array.prototype.slice.call(arguments, 0);
                 basedArguments[1] = resource.baseResources[i];
@@ -114,7 +114,7 @@ var abp = abp || {};
                     return result;
                 }
             }
-            
+
             return {
                 value: key,
                 found: false
@@ -135,7 +135,7 @@ var abp = abp || {};
         if (sourceName === '_') { //A convention to suppress the localization
             return key;
         }
-        
+
         if (sourceName) {
             return abp.localization.internal.localize.apply(this, arguments).value;
         }
@@ -750,7 +750,11 @@ var abp = abp || {};
 
     abp.clock.supportsMultipleTimezone = function () {
         return abp.clock.kind === 'Utc';
-    };
+    }
+
+    abp.clock.timeZone = function () {
+        return abp.setting.get('Abp.Timing.TimeZone') || abp.clock.browserTimeZone();
+    }
 
     // Normalize Date object or date string to standard string format that will be sent to server
     abp.clock.normalizeToString = function (date) {
@@ -763,32 +767,42 @@ var abp = abp || {};
             return date;
         }
 
-        if (abp.clock.kind === 'Utc') {
-            return dateObj.toISOString();
-        }
-
         function padZero(num) {
             return num < 10 ? '0' + num : num;
         }
 
-        function padMilliseconds(num) {
-            if (num < 10) return '00' + num;
-            if (num < 100) return '0' + num;
-            return num;
+        var addZulu = false;
+        if (abp.clock.supportsMultipleTimezone()) {
+            var timeZone = abp.clock.timeZone();
+            var now = new Date();
+            var formattedDate = now.toLocaleString('en-US', { timeZone: timeZone, timeZoneName: 'longOffset' });
+            var match = formattedDate.match(/GMT([+-]\d+)/);
+            var targetOffsetHours = match ? parseInt(match[1], 10) : 0;
+            dateObj = new Date(dateObj.getTime() - (targetOffsetHours * 60 * 60 * 1000));
+            addZulu = true;
         }
-        
-        // yyyy-MM-ddTHH:mm:ss.SSS
+
+        // yyyy-MM-DDTHH:mm:ss
         return dateObj.getFullYear() + '-' +
-                padZero(dateObj.getMonth() + 1) + '-' +
-                padZero(dateObj.getDate()) + 'T' +
-                padZero(dateObj.getHours()) + ':' +
-                padZero(dateObj.getMinutes()) + ':' +
-                padZero(dateObj.getSeconds()) + '.' +
-                padMilliseconds(dateObj.getMilliseconds());
+            padZero(dateObj.getMonth() + 1) + '-' +
+            padZero(dateObj.getDate()) + 'T' +
+            padZero(dateObj.getHours()) + ':' +
+            padZero(dateObj.getMinutes()) + ':' +
+            padZero(dateObj.getSeconds()) + (addZulu ? 'Z' : '');
+    };
+
+    // Default options for toLocaleString
+    abp.clock.toLocaleStringOptions = abp.clock.toLocaleStringOptions || {
+        "year": "numeric",
+        "month": "long",
+        "day": "numeric",
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric"
     };
 
     // Normalize date string to locale date string that will be displayed to user
-    abp.clock.normalizeToLocaleString = function (dateString) {
+    abp.clock.normalizeToLocaleString = function (dateString, options) {
         if (!dateString) {
             return dateString;
         }
@@ -797,10 +811,35 @@ var abp = abp || {};
         if (isNaN(date)) {
             return dateString;
         }
-        
-        //TODO: Get timezone setting and pass it to toLocaleString
-        return date.toLocaleString();
+
+        var culture = abp.localization.currentCulture.cultureName;
+        options = options || abp.clock.toLocaleStringOptions;
+        if (abp.clock.supportsMultipleTimezone()) {
+            var timezone = abp.clock.timeZone();
+            if (timezone) {
+                return date.toLocaleString(culture, Object.assign({}, options, { timeZone: timezone }));
+            }
+        }
+        return date.toLocaleString(culture, options);
     }
+
+    abp.clock.browserTimeZone = function () {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    }
+
+    abp.clock.trySetBrowserTimeZoneToCookie = true;
+
+    abp.clock.setBrowserTimeZoneToCookie = function () {
+        if (!abp.clock.trySetBrowserTimeZoneToCookie || !abp.clock.supportsMultipleTimezone() || abp.currentUser.isAuthenticated) {
+            return;
+        }
+
+        abp.utils.setCookieValue('__timezone', abp.clock.browserTimeZone(), new Date(new Date().setFullYear(new Date().getFullYear() + 1)), '/');
+    }
+
+    abp.event.on('abp.configurationInitialized', function () {
+        abp.clock.setBrowserTimeZoneToCookie();
+    });
 
     /* FEATURES *************************************************/
 
