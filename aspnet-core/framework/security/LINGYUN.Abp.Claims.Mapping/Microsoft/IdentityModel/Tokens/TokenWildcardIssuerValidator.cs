@@ -1,5 +1,4 @@
 ﻿using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,9 +6,10 @@ using System.Linq;
 using System.Text;
 using Volo.Abp.Text.Formatting;
 
-namespace LY.MicroService.AuthServer;
+namespace Microsoft.IdentityModel.Tokens;
 
 /// <summary>
+/// Copy from: https://github.com/maliming/Owl.TokenWildcardIssuerValidator
 /// https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet/blob/dev/src/Microsoft.IdentityModel.Tokens/Validators.cs#L207
 /// </summary>
 public static class TokenWildcardIssuerValidator
@@ -128,3 +128,4 @@ public static class TokenWildcardIssuerValidator
         return first ? Utility.Empty : sb.ToString();
     }
 }
+
