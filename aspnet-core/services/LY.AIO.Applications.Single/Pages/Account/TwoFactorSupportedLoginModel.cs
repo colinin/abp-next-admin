@@ -20,12 +20,12 @@ namespace LY.AIO.Applications.Single.Pages.Account
         public TwoFactorSupportedLoginModel(
             IAuthenticationSchemeProvider schemeProvider,
             IOptions<AbpAccountOptions> accountOptions,
-            IOptions<IdentityOptions> identityOptions,
-            IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
-            AbpOpenIddictRequestHelper openIddictRequestHelper)
-            : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache, openIddictRequestHelper)
+            IOptions<IdentityOptions> identityOptions, 
+            IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache, 
+            AbpOpenIddictRequestHelper openIddictRequestHelper, 
+            IWebHostEnvironment webHostEnvironment)
+            : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache, openIddictRequestHelper, webHostEnvironment)
         {
-
         }
 
         protected async override Task<List<ExternalProviderModel>> GetExternalProviders()
