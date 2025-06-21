@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { EventDataNode } from 'ant-design-vue/es/vc-tree/interface';
+
 import type { MenuSubject } from './types';
 
 import { ref } from 'vue';
@@ -29,6 +31,7 @@ const props = defineProps<{
 }>();
 
 const checkedMenuIds = ref<string[]>([]);
+const expandMenuIds = ref<string[]>([]);
 
 const { getAllApi: getAllMenusApi } = useMenusApi();
 const { getAllApi: getUserMenusApi, setMenusApi: setUserMenusApi } =
@@ -96,6 +99,7 @@ const [Form, formApi] = useVbenForm({
           title: 'displayName',
         },
         onCheck: onMenuChecked,
+        onSelect: onExpandNode,
       },
       dependencies: {
         if(values) {
@@ -114,7 +118,29 @@ const [Modal, modalApi] = useVbenModal({
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();
   },
+  onOpenChange(isOpen) {
+    if (isOpen) {
+      expandMenuIds.value = [];
+    }
+  },
 });
+
+function onExpandNode(_keys: any, info: { node: EventDataNode }) {
+  const nodeKey = String(info.node.key);
+  const index = expandMenuIds.value.indexOf(nodeKey);
+  expandMenuIds.value =
+    index === -1
+      ? [...expandMenuIds.value, nodeKey]
+      : expandMenuIds.value.filter((key) => key !== nodeKey);
+  formApi.updateSchema([
+    {
+      fieldName: 'menuIds',
+      componentProps: {
+        expandedKeys: expandMenuIds.value,
+      },
+    },
+  ]);
+}
 
 function onMenuChecked(checkedKeys: { checked: string[] }) {
   checkedMenuIds.value = checkedKeys.checked;
@@ -126,6 +152,7 @@ async function onInitMenus(framework?: string) {
       {
         componentProps: {
           treeData: [],
+          expandedKeys: [],
         },
         fieldName: 'menuIds',
       },
@@ -164,6 +191,7 @@ async function onInitMenus(framework?: string) {
     {
       componentProps: {
         treeData,
+        expandedKeys: [],
       },
       fieldName: 'menuIds',
     },
