@@ -34,5 +34,9 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<OutputPath>$(SolutionDir)LocalNuget</OutputPath>
 	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<OutputPath>$(SolutionDir)LocalNuget</OutputPath>
+	</PropertyGroup>
 
 </Project>
