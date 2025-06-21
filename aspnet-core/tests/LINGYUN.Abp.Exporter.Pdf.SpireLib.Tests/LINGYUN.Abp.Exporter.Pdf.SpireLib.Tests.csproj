@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<RootNamespace />
+		<IsPackable>false</IsPackable>
+		<Configurations>Debug;Release</Configurations>
+		<Platforms>AnyCPU</Platforms>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\exporter\LINGYUN.Abp.Exporter.Pdf.SpireLib\LINGYUN.Abp.Exporter.Pdf.SpireLib.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Exporter.Pdf.Tests\LINGYUN.Abp.Exporter.Pdf.Tests.csproj" />
+	</ItemGroup>
+
+</Project>

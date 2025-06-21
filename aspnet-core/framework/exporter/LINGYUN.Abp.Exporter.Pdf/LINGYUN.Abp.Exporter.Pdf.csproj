@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
-		<AssemblyName>LINGYUN.Abp.Exporter.Core</AssemblyName>
-		<PackageId>LINGYUN.Abp.Exporter.Core</PackageId>
+		<AssemblyName>LINGYUN.Abp.Exporter.Pdf</AssemblyName>
+		<PackageId>LINGYUN.Abp.Exporter.Pdf</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -15,15 +15,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\Exporter\Localization\Resources\*.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="LINGYUN\Abp\Exporter\Localization\Resources\*.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Localization" />
+		<PackageReference Include="Volo.Abp.Core" />
 	</ItemGroup>
 
 </Project>

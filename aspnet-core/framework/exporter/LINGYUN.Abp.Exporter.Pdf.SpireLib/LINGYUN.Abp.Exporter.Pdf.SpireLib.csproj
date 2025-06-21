@@ -4,9 +4,9 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
-		<AssemblyName>LINGYUN.Abp.Exporter.Core</AssemblyName>
-		<PackageId>LINGYUN.Abp.Exporter.Core</PackageId>
+		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.Exporter.Pdf.SpireLib</AssemblyName>
+		<PackageId>LINGYUN.Abp.Exporter.Pdf.SpireLib</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -15,15 +15,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\Exporter\Localization\Resources\*.json" />
+		<PackageReference Include="Spire.XLS" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="LINGYUN\Abp\Exporter\Localization\Resources\*.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Localization" />
+	  <ProjectReference Include="..\LINGYUN.Abp.Exporter.Pdf\LINGYUN.Abp.Exporter.Pdf.csproj" />
 	</ItemGroup>
 
 </Project>
