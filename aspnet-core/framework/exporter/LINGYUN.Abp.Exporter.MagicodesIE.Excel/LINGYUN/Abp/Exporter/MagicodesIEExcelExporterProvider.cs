@@ -1,5 +1,4 @@
-﻿using Magicodes.ExporterAndImporter.Excel;
-using Magicodes.ExporterAndImporter.Excel.Utility;
+﻿using Magicodes.ExporterAndImporter.Excel.Utility;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +11,6 @@ namespace LINGYUN.Abp.Exporter.MagicodesIE.Excel;
 public class MagicodesIEExcelExporterProvider : IExporterProvider, ITransientDependency
 {
     private readonly AbpExporterMagicodesIEExcelOptions _options;
-    private readonly IExcelExporter _excelExporter;
 
     public MagicodesIEExcelExporterProvider(IOptions<AbpExporterMagicodesIEExcelOptions> options)
     {
