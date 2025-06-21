@@ -15,8 +15,8 @@
 		<PackageReference Include="DotNetCore.CAP.PostgreSql" Condition="'$(PostgreSql)'=='true'" />
 		<PackageReference Include="DotNetCore.CAP.Sqlite" Condition="'$(Sqlite)'=='true'" />
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
+		<PackageReference Include="LINGYUN.Abp.Claims.Mapping" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.HttpOverrides" />
-		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Localization" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" />
 		<PackageReference Include="LINGYUN.Abp.AuditLogging.Elasticsearch" />
 		<PackageReference Include="LINGYUN.Abp.Data.DbMigrator" />
@@ -60,8 +60,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\migrations\PackageName.CompanyName.ProjectName.DbMigrator.EntityFrameworkCore\PackageName.CompanyName.ProjectName.DbMigrator.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.Application\PackageName.CompanyName.ProjectName.Application.csproj" />
-	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.EntityFrameworkCore\PackageName.CompanyName.ProjectName.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.HttpApi\PackageName.CompanyName.ProjectName.HttpApi.csproj" />
 	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.SettingManagement\PackageName.CompanyName.ProjectName.SettingManagement.csproj" />
 	</ItemGroup>

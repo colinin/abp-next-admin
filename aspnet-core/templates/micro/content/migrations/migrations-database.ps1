@@ -12,4 +12,6 @@ Set-Location ../PackageName.CompanyName.ProjectName.DbMigrator
 
 dotnet run
 
+Set-Location ../
+
 Write-host "[ProjectName] - seed data successfuly completed."

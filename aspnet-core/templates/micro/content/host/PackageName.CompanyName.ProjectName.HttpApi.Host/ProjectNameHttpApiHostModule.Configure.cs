@@ -7,6 +7,7 @@ using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.Wrapper;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -18,10 +19,11 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using PackageName.CompanyName.ProjectName.Localization;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -30,13 +32,16 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
@@ -46,7 +51,6 @@ namespace PackageName.CompanyName.ProjectName;
 public partial class ProjectNameHttpApiHostModule
 {
     public static string ApplicationName { get; set; } = "ProjectNameService";
-    private const string DefaultCorsPolicyName = "Default";
     private static readonly OneTimeRunner OneTimeRunner = new();
 
     private void PreConfigureFeature()
@@ -235,6 +239,54 @@ public partial class ProjectNameHttpApiHostModule
         });
     }
 
+    private void ConfigureFeatureManagement(IConfiguration configuration)
+    {
+        if (configuration.GetValue("FeatureManagement:IsDynamicStoreEnabled", false))
+        {
+            Configure<FeatureManagementOptions>(options =>
+            {
+                options.SaveStaticFeaturesToDatabase = true;
+                options.IsDynamicFeatureStoreEnabled = true;
+            });
+        }
+    }
+
+    private void ConfigurePermissionManagement(IConfiguration configuration)
+    {
+        if (configuration.GetValue("PermissionManagement:IsDynamicStoreEnabled", false))
+        {
+            Configure<PermissionManagementOptions>(options =>
+            {
+                options.SaveStaticPermissionsToDatabase = true;
+                options.IsDynamicPermissionStoreEnabled = true;
+            });
+        }
+    }
+
+    private void ConfigureTextTemplatingManagement(IConfiguration configuration)
+    {
+        if (configuration.GetValue("TextTemplatingManagement:IsDynamicStoreEnabled", false))
+        {
+            Configure<AbpTextTemplatingCachingOptions>(options =>
+            {
+                options.SaveStaticTemplateDefinitionToDatabase = true;
+                options.IsDynamicTemplateDefinitionStoreEnabled = true;
+            });
+        }
+    }
+
+    private void ConfigureSettingManagement(IConfiguration configuration)
+    {
+        if (configuration.GetValue("SettingManagement:IsDynamicStoreEnabled", false))
+        {
+            Configure<SettingManagementOptions>(options =>
+            {
+                options.SaveStaticSettingsToDatabase = true;
+                options.IsDynamicSettingStoreEnabled = true;
+            });
+        }
+    }
+
     private void ConfigureVirtualFileSystem()
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
@@ -294,10 +346,11 @@ public partial class ProjectNameHttpApiHostModule
                         }
                 });
                 options.OperationFilter<TenantHeaderParamter>();
+                options.HideAbpEndpoints();
             });
     }
 
-    private void ConfigureLocalization()
+    private void ConfigureLocalization(IConfiguration configuration)
     {
         // 支持本地化语言类型
         Configure<AbpLocalizationOptions>(options =>
@@ -318,10 +371,13 @@ public partial class ProjectNameHttpApiHostModule
             options.UiCulturesMaps.Add(zhHansCultureMapInfo);
         });
 
-        Configure<AbpLocalizationManagementOptions>(options =>
+        if (configuration.GetValue("LocalizationManagement:IsDynamicStoreEnabled", false))
         {
-            options.SaveStaticLocalizationsToDatabase = true;
-        });
+            Configure<AbpLocalizationManagementOptions>(options =>
+            {
+                options.SaveStaticLocalizationsToDatabase = true;
+            });
+        }
     }
 
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
@@ -333,9 +389,16 @@ public partial class ProjectNameHttpApiHostModule
         });
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+            .AddAbpJwtBearer(options =>
             {
                 configuration.GetSection("AuthServer").Bind(options);
+
+                var validIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<List<string>>();
+                if (validIssuers?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidIssuers = validIssuers;
+                    options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                }
             });
 
         if (!isDevelopment)
@@ -352,7 +415,7 @@ public partial class ProjectNameHttpApiHostModule
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            options.AddDefaultPolicy(builder =>
             {
                 builder
                     .WithOrigins(
