@@ -164,6 +164,7 @@ onMounted(async () => {
             v-if="selectedMenuKeys[0] === 'basic'"
             :profile="myProfile"
             @submit="onUpdateProfile"
+            @picture-change="onGetProfile"
           />
           <BindSettings v-else-if="selectedMenuKeys[0] === 'bind'" />
           <SecuritySettings
