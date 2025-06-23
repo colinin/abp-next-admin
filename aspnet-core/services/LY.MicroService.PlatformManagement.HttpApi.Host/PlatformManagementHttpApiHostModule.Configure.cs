@@ -57,7 +57,6 @@ namespace LY.MicroService.PlatformManagement;
 public partial class PlatformManagementHttpApiHostModule
 {
     public static string ApplicationName { get; set; } = "PlatformService";
-    protected const string DefaultCorsPolicyName = "Default";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -376,7 +375,7 @@ public partial class PlatformManagementHttpApiHostModule
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            options.AddDefaultPolicy(builder =>
             {
                 builder
                     .WithOrigins(

@@ -145,7 +145,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         app.UseCorrelationId();
         app.MapAbpStaticAssets();
         app.UseRouting();
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         app.UseElsaFeatures();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();

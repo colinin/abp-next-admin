@@ -4,7 +4,6 @@ namespace LY.MicroService.Applications.Single;
 
 public partial class MicroServiceApplicationsSingleModule
 {
-    protected const string DefaultCorsPolicyName = "Default";
     public static string ApplicationName { get; set; } = "MicroService-Applications-Single";
     private readonly static OneTimeRunner OneTimeRunner = new();
 
@@ -895,7 +894,7 @@ public partial class MicroServiceApplicationsSingleModule
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            options.AddDefaultPolicy(builder =>
             {
                 builder
                     .WithOrigins(

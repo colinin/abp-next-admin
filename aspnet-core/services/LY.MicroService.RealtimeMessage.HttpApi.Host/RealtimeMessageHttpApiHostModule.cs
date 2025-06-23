@@ -128,8 +128,6 @@ namespace LY.MicroService.RealtimeMessage;
     )]
 public partial class RealtimeMessageHttpApiHostModule : AbpModule
 {
-    private const string DefaultCorsPolicyName = "Default";
-
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
@@ -183,7 +181,7 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         // 路由
         app.UseRouting();
         // 跨域
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         // 认证
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();

@@ -125,6 +125,7 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureWebhooks(context.Services);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
+        ConfigureCors(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureBackgroundTasks(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
