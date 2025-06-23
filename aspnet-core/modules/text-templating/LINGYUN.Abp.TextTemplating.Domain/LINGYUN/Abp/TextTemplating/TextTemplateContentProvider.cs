@@ -30,8 +30,12 @@ public class TextTemplateContentProvider : TemplateContentProvider, ITransientDe
         bool tryDefaults = true, 
         bool useCurrentCultureIfCultureNameIsNull = true)
     {
-        var template = await TemplateDefinitionStore.GetAsync(templateName);
+        var template = await TemplateDefinitionStore.GetOrNullAsync(templateName);
+        if (template != null)
+        {
+            return await GetContentOrNullAsync(template, cultureName);
+        }
 
-        return await GetContentOrNullAsync(template, cultureName);
+        return await base.GetContentOrNullAsync(templateName, cultureName, tryDefaults, useCurrentCultureIfCultureNameIsNull);
     }
 }

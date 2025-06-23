@@ -36,7 +36,7 @@ public class TextTemplateDefinitionInitializer : ITransientDependency
         using var scope = RootServiceProvider.CreateScope();
         var applicationLifetime = scope.ServiceProvider.GetService<IHostApplicationLifetime>();
         var token = applicationLifetime?.ApplicationStopping ?? cancellationToken;
-        using (CancellationTokenProvider.Use(cancellationToken))
+        using (CancellationTokenProvider.Use(token))
         {
             if (CancellationTokenProvider.Token.IsCancellationRequested)
             {
