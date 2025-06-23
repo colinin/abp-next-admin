@@ -55,7 +55,6 @@ namespace LY.MicroService.IdentityServer;
 public partial class IdentityServerHttpApiHostModule
 {
     public static string ApplicationName { get; set; }  = "IdentityService";
-    protected const string DefaultCorsPolicyName = "Default";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -414,7 +413,7 @@ public partial class IdentityServerHttpApiHostModule
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            options.AddDefaultPolicy(builder =>
             {
                 builder
                     .WithOrigins(

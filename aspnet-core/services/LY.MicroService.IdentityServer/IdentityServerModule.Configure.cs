@@ -381,7 +381,7 @@ public partial class IdentityServerModule
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            options.AddDefaultPolicy(builder =>
             {
                 builder
                     .WithOrigins(

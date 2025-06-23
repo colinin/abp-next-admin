@@ -78,8 +78,6 @@ namespace LY.MicroService.IdentityServer;
     )]
 public partial class IdentityServerModule : AbpModule
 {
-    private const string DefaultCorsPolicyName = "Default";
-
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
@@ -137,7 +135,7 @@ public partial class IdentityServerModule : AbpModule
         app.UseCorrelationId();
         app.MapAbpStaticAssets();
         app.UseRouting();
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();

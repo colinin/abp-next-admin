@@ -136,7 +136,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         app.MapAbpStaticAssets();
         app.UseCorrelationId();
         app.UseRouting();
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();

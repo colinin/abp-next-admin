@@ -54,7 +54,6 @@ namespace LY.MicroService.WorkflowManagement;
 public partial class WorkflowManagementHttpApiHostModule
 {
     public static string ApplicationName { get; set; } = "WorkflowService";
-    private const string DefaultCorsPolicyName = "Default";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -488,7 +487,7 @@ public partial class WorkflowManagementHttpApiHostModule
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            options.AddDefaultPolicy(builder =>
             {
                 builder
                     .WithOrigins(

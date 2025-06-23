@@ -46,7 +46,6 @@ namespace LY.MicroService.LocalizationManagement;
 public partial class LocalizationManagementHttpApiHostModule
 {
     public static string ApplicationName { get; set; } = "LocalizationService";
-    protected const string DefaultCorsPolicyName = "Default";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -299,7 +298,7 @@ public partial class LocalizationManagementHttpApiHostModule
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            options.AddDefaultPolicy(builder =>
             {
                 builder
                     .WithOrigins(

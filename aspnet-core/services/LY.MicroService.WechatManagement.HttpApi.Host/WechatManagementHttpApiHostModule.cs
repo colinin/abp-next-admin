@@ -108,6 +108,7 @@ public partial class WechatManagementHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
+        ConfigureCors(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }

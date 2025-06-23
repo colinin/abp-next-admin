@@ -133,7 +133,7 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         // 路由
         app.UseRouting();
         // 跨域
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         // 认证
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();

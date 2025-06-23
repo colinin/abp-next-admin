@@ -48,7 +48,6 @@ namespace LY.MicroService.TaskManagement;
 
 public partial class TaskManagementHttpApiHostModule
 {
-    protected const string DefaultCorsPolicyName = "Default";
     public static string ApplicationName { get; set; } = "TaskService";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
@@ -201,7 +200,7 @@ public partial class TaskManagementHttpApiHostModule
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            options.AddDefaultPolicy(builder =>
             {
                 builder
                     .WithOrigins(
