@@ -33,10 +33,9 @@ builder.Host.AddAppSettingsSecretsJson()
             config.AddJsonFile($"appsettings.{dbProvider}.json", optional: true);
         }
 
-        var configuration = config.Build();
-        if (configuration.GetValue("AgileConfig:IsEnabled", false))
+        if (context.Configuration.GetValue("AgileConfig:IsEnabled", false))
         {
-            config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
+            config.AddAgileConfig(new AgileConfig.Client.ConfigClient(context.Configuration));
         }
     })
     .UseSerilog((context, provider, config) =>

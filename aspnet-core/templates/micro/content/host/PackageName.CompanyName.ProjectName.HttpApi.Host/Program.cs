@@ -21,13 +21,9 @@ try
         .UseAutofac()
         .ConfigureAppConfiguration((context, config) =>
         {
-            var agileConfig = context.Configuration.GetSection("AgileConfig");//IsEnabled
-            if (agileConfig.Exists())
+            if (context.Configuration.GetValue("AgileConfig:IsEnabled", false))
             {
-                if (agileConfig.GetValue("IsEnabled", false))
-                {
-                    config.AddAgileConfig(new AgileConfig.Client.ConfigClient(context.Configuration));
-                }
+                config.AddAgileConfig(new AgileConfig.Client.ConfigClient(context.Configuration));
             }
         })
         .UseSerilog((context, provider, config) =>
