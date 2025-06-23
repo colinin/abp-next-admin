@@ -115,9 +115,9 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         ConfigurePermissionManagement(configuration);
         ConfigureTextTemplatingManagement(configuration);
 
-        ConfigureSwagger(context.Services);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -147,8 +147,7 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
 
             var configuration = context.GetConfiguration();
             options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-            options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-            options.OAuthScopes("ProjectName");
+            options.OAuthScopes(configuration["AuthServer:Audience"]);
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
