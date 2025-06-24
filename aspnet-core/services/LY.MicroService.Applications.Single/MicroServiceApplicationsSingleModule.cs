@@ -1,3 +1,5 @@
+using Volo.Abp.Swashbuckle;
+
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
@@ -370,6 +372,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreMvcIdempotentWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpSwashbuckleModule),
     typeof(AbpMailKitModule),
     typeof(AbpAutofacModule),
 
@@ -418,7 +421,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureIdentity(configuration);
         ConfigureDbContext(configuration);
         ConfigureAuthServer(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
@@ -429,6 +431,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigurePermissionManagement(configuration);
         ConfigureNotificationManagement(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureOssManagement(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureKestrelServer(configuration, hostingEnvironment);

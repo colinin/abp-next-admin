@@ -317,10 +317,15 @@ public partial class ProjectNameHttpApiHostModule
         }
     }
 
-    private void ConfigureSwagger(IServiceCollection services)
+    private void ConfigureSwagger(IServiceCollection services, IConfiguration configuration)
     {
         // Swagger
-        services.AddSwaggerGen(
+        services.AddAbpSwaggerGenWithOAuth(
+            configuration["AuthServer:Authority"],
+            new Dictionary<string, string>
+            {
+                { configuration["AuthServer:Audience"], "ProjectName API"}
+            },
             options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjectName API", Version = "v1" });
@@ -337,13 +342,13 @@ public partial class ProjectNameHttpApiHostModule
                 });
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
+                    {
+                        new OpenApiSecurityScheme
                         {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                            },
-                            new string[] { }
-                        }
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                        },
+                        new string[] { }
+                    }
                 });
                 options.OperationFilter<TenantHeaderParamter>();
                 options.HideAbpEndpoints();
@@ -417,12 +422,18 @@ public partial class ProjectNameHttpApiHostModule
         {
             options.AddDefaultPolicy(builder =>
             {
+                var corsOrigins = configuration.GetSection("App:CorsOrigins").Get<List<string>>();
+                if (corsOrigins == null || corsOrigins.Count == 0)
+                {
+                    corsOrigins = configuration["App:CorsOrigins"]?
+                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToList() ?? new List<string>();
+                }
                 builder
-                    .WithOrigins(
-                        configuration["App:CorsOrigins"]
-                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                            .Select(o => o.RemovePostFix("/"))
-                            .ToArray()
+                    .WithOrigins(corsOrigins
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToArray()
                     )
                     .WithAbpExposedHeaders()
                     .WithAbpWrapExposedHeaders()

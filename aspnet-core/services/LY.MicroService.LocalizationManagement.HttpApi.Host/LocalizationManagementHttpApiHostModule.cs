@@ -30,6 +30,7 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
 
 namespace LY.MicroService.LocalizationManagement;
 
@@ -61,6 +62,7 @@ namespace LY.MicroService.LocalizationManagement;
     typeof(AbpEmailingPlatformModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]
 public partial class LocalizationManagementHttpApiHostModule : AbpModule
@@ -90,11 +92,11 @@ public partial class LocalizationManagementHttpApiHostModule : AbpModule
         ConfigureCaching(configuration);
         ConfigureIdentity(configuration);
         ConfigureAuditing(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -129,9 +131,13 @@ public partial class LocalizationManagementHttpApiHostModule : AbpModule
         // Swagger
         app.UseSwagger();
         // Swagger可视化界面
-        app.UseSwaggerUI(options =>
+        app.UseAbpSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Localization Management API");
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Localization Service API");
+
+            var configuration = context.GetConfiguration();
+            options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+            options.OAuthScopes(configuration["AuthServer:Audience"]);
         });
         // 审计日志
         app.UseAuditing();
