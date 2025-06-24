@@ -33,7 +33,6 @@
 		<PackageReference Include="Serilog.Settings.Configuration" />
 		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
 		<PackageReference Include="Serilog.Sinks.File" />
-		<PackageReference Include="Swashbuckle.AspNetCore" />
 		<PackageReference Include="Quartz.Serialization.Json" />
 		<PackageReference Include="Volo.Abp.Account.Web.OpenIddict" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
@@ -55,6 +54,7 @@
 		<PackageReference Include="Volo.Abp.PermissionManagement.Web" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.SettingManagement.Web" />
+		<PackageReference Include="Volo.Abp.Swashbuckle" />
 		<PackageReference Include="Volo.Abp.Identity.AspNetCore" />
 		<PackageReference Include="Volo.Abp.Identity.Web" />
 		<PackageReference Include="Volo.Abp.VirtualFileExplorer.Web" />

@@ -5,6 +5,7 @@ using LINGYUN.Abp.OpenIddict.WeChat;
 using Microsoft.Extensions.Configuration;
 using OpenIddict.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
@@ -207,28 +208,19 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
         var oauthClientId = configurationSection["VueOAuthClient:ClientId"];
         if (!oauthClientId.IsNullOrWhiteSpace())
         {
-            var oauthClientRootUrl = configurationSection["VueOAuthClient:RootUrl"].EnsureEndsWith('/');
+            var oauthClientRootUrls = configurationSection.GetSection("VueOAuthClient:RootUrls").Get<List<string>>();
 
             if (await _applicationRepository.FindByClientIdAsync(oauthClientId) == null)
             {
-                await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+                var application = new OpenIddictApplicationDescriptor
                 {
                     ClientId = oauthClientId,
                     ClientSecret = null,
                     ApplicationType = OpenIddictConstants.ApplicationTypes.Web,
                     ConsentType = OpenIddictConstants.ConsentTypes.Implicit,
                     DisplayName = "OAuth Client",
-                    PostLogoutRedirectUris =
-                    {
-                        new Uri(oauthClientRootUrl + "signout-callback"),
-                        new Uri(oauthClientRootUrl)
-                    },
-                    RedirectUris =
-                    {
-                        new Uri(oauthClientRootUrl + "signin-callback"),
-                        new Uri(oauthClientRootUrl + "swagger/oauth2-redirect.html"),
-                        new Uri(oauthClientRootUrl)
-                    },
+                    PostLogoutRedirectUris = { },
+                    RedirectUris = { },
                     Permissions =
                     {
                         OpenIddictConstants.Permissions.Endpoints.Authorization,
@@ -257,7 +249,19 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                         OpenIddictConstants.Permissions.Scopes.Phone,
                         OpenIddictConstants.Permissions.Prefixes.Scope + scope
                     }
+                };
+
+                oauthClientRootUrls.ForEach(url =>
+                {
+                    application.PostLogoutRedirectUris.AddIfNotContains(new Uri(url.EnsureEndsWith('/')));
+                    application.PostLogoutRedirectUris.AddIfNotContains(new Uri(url.EnsureEndsWith('/') + "signout-callback"));
+
+                    application.RedirectUris.AddIfNotContains(new Uri(url));
+                    application.RedirectUris.AddIfNotContains(new Uri(url.EnsureEndsWith('/') + "signin-callback"));
+                    application.RedirectUris.AddIfNotContains(new Uri(url.EnsureEndsWith('/') + "swagger/oauth2-redirect.html"));
                 });
+
+                await _applicationManager.CreateAsync(application);
 
                 var oauthClientPermissions = new string[1]
                 {

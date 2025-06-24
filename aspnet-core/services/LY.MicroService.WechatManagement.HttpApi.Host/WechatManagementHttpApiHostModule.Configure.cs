@@ -256,15 +256,20 @@ public partial class WechatManagementHttpApiHostModule
         });
     }
 
-    private void ConfigureSwagger(IServiceCollection services)
+    private void ConfigureSwagger(IServiceCollection services, IConfiguration configuration)
     {
         // Swagger
-        services.AddSwaggerGen(
+        services.AddAbpSwaggerGenWithOAuth(
+            configuration["AuthServer:Authority"],
+            new Dictionary<string, string>
+            {
+                { configuration["AuthServer:Audience"], "Wechat Service API"}
+            },
             options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "WechatManagement API", Version = "v1",
+                    Title = "Wechat Service API", Version = "v1",
                     Contact = new OpenApiContact
                     {
                         Name = "colin",
@@ -360,12 +365,18 @@ public partial class WechatManagementHttpApiHostModule
         {
             options.AddDefaultPolicy(builder =>
             {
+                var corsOrigins = configuration.GetSection("App:CorsOrigins").Get<List<string>>();
+                if (corsOrigins == null || corsOrigins.Count == 0)
+                {
+                    corsOrigins = configuration["App:CorsOrigins"]?
+                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToList() ?? new List<string>();
+                }
                 builder
-                    .WithOrigins(
-                        configuration["App:CorsOrigins"]
-                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                            .Select(o => o.RemovePostFix("/"))
-                            .ToArray()
+                    .WithOrigins(corsOrigins
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToArray()
                     )
                     .WithAbpExposedHeaders()
                     .WithAbpWrapExposedHeaders()
