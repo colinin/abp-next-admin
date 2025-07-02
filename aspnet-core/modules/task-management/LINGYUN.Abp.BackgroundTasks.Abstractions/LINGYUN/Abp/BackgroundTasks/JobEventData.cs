@@ -59,6 +59,10 @@ public class JobEventData
     /// </summary>
     public DateTime RunTime { get; set; }
     /// <summary>
+    /// 执行时间(ms)
+    /// </summary>
+    public int? ExecutionDuration { get; set; }
+    /// <summary>
     /// 上次运行时间
     /// </summary>
     public DateTime? LastRunTime { get; set; }
@@ -66,7 +70,9 @@ public class JobEventData
     /// 下次运行时间
     /// </summary>
     public DateTime? NextRunTime { get; set; }
-
+    /// <summary>
+    /// 作业取消令牌
+    /// </summary>
     public CancellationToken CancellationToken { get; }
     public JobEventData(
         string key,
