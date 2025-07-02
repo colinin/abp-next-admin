@@ -129,6 +129,14 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
             }
             jobEventData.Description = context.JobDetail.Description;
             jobEventData.RunTime = Clock.Normalize(context.FireTimeUtc.LocalDateTime);
+
+            var runTimeCache = context.Get(nameof(JobEventData.RunTime));
+            if (runTimeCache != null && runTimeCache is DateTime runTime)
+            {
+                jobEventData.RunTime = runTime;
+                jobEventData.ExecutionDuration = (Clock.Now - runTime).Milliseconds;
+            }
+
             var lastRunTime = context.PreviousFireTimeUtc?.LocalDateTime ?? context.Trigger.GetPreviousFireTimeUtc()?.LocalDateTime;
             if (lastRunTime.HasValue)
             {

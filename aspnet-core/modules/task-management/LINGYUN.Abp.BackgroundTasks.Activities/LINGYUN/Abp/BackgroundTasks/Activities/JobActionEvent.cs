@@ -10,6 +10,17 @@ namespace LINGYUN.Abp.BackgroundTasks.Activities;
 
 public class JobActionEvent : JobEventBase<JobActionEvent>, ITransientDependency
 {
+    protected override Task<bool> CanAfterExecuted(JobEventContext context)
+    {
+        var filter = context.ServiceProvider.GetService<IJobActionFilter>();
+        if (filter != null)
+        {
+            return filter.CanAfterExecuted(context);
+        }
+
+        return base.CanAfterExecuted(context);
+    }
+
     protected async override Task OnJobAfterExecutedAsync(JobEventContext context)
     {
         if (context.EventData.Type.IsDefined(typeof(DisableJobActionAttribute), true))

@@ -1,7 +1,4 @@
 ﻿using LINGYUN.Abp.BackgroundTasks.Localization;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Volo.Abp.Localization;
 using Volo.Abp.TextTemplating;
 
@@ -17,13 +14,13 @@ public class BackgroundTasksNotificationTemplateDefinitionProvider : TemplateDef
     {
         return new[]
         {
-                new TemplateDefinition(
-                   BackgroundTasksNotificationTemplates.JobExecutedNotification,
-                   displayName: L("TextTemplate:JobExecutedNotification"),
-                   localizationResource: typeof(BackgroundTasksResource)
-                ).WithVirtualFilePath(
-                    "/LINGYUN/Abp/BackgroundTasks/Notifications/Templates/JobExecutedNotification.tpl",
-                    isInlineLocalized: true)
+            new TemplateDefinition(
+                BackgroundTasksNotificationTemplates.JobExecutedNotification,
+                displayName: L("TextTemplate:JobExecutedNotification"),
+                localizationResource: typeof(BackgroundTasksResource)
+            ).WithVirtualFilePath(
+                "/LINGYUN/Abp/BackgroundTasks/Notifications/Templates/JobExecutedNotification.tpl",
+                isInlineLocalized: true)
             };
     }
 
