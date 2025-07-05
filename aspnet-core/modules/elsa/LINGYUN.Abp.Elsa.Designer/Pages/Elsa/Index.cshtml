@@ -1,0 +1,46 @@
+﻿@page
+@using LINGYUN.Abp.Elsa.Localization;
+@using LINGYUN.Abp.Elsa.Designer.Bundling;
+@using LINGYUN.Abp.Elsa.Designer.Navigation;
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Configuration
+@inject IPageLayout PageLayout
+@inject IConfiguration Configuration;
+@inject IHtmlLocalizer<ElsaResource> L
+@{
+    var serverUrl = Configuration["Elsa:Server:BaseUrl"];
+    var basePath = Configuration["Hosting:BasePath"] ?? "";
+
+    PageLayout.Content.Title = L["Elsa:Designer"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Elsa:Designer"].Value);
+    PageLayout.Content.MenuItemName = AbpElsaDesignerMenuNames.Index;
+}
+
+@section styles {
+    <abp-style-bundle name="@AbpElsaBundles.Styles.Global" />
+}
+
+@section scripts {
+    <abp-script-bundle name="@AbpElsaBundles.Scripts.Global" />
+}
+
+<script type="module" src="@basePath/_content/Elsa.Designer.Components.Web/elsa-workflows-studio/elsa-workflows-studio.esm.js"></script>
+
+<elsa-studio-root server-url="@serverUrl" base-path="@basePath" monaco-lib-path="@basePath.TrimStart('/')/_content/Elsa.Designer.Components.Web/monaco-editor/min">
+    <elsa-studio-dashboard></elsa-studio-dashboard>
+</elsa-studio-root>
+
+<script type="module">
+    // Import publicly exposed services.
+    import { WebhooksPlugin } from "@basePath/_content/Elsa.Designer.Components.Web/elsa-workflows-studio/index.esm.js";
+
+    // Get a handle to the elsa-studio-root element.
+    const elsaStudioRoot = document.querySelector('elsa-studio-root');
+
+    // Configure Elsa during the 'initializing' event.
+    elsaStudioRoot.addEventListener('initializing', e => {
+        const elsa = e.detail;
+        elsa.pluginManager.registerPlugin(WebhooksPlugin);
+    });
+</script>

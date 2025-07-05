@@ -286,6 +286,8 @@ public partial class MicroServiceApplicationsSingleModule
         //    // can also be used to control the format of the API version in route templates
         //    options.SubstituteApiVersionInUrl = true;
         //});
+        services.AddRazorPages();
+        services.AddControllersWithViews().AddNewtonsoftJson();
     }
 
     private void ConfigureKestrelServer(IConfiguration configuration, IWebHostEnvironment environment)

@@ -201,6 +201,7 @@ global using Volo.Abp.SettingManagement.EntityFrameworkCore;
 global using Volo.Abp.SettingManagement.Localization;
 global using Volo.Abp.SettingManagement.Web;
 global using Volo.Abp.Sms;
+global using Volo.Abp.Swashbuckle;
 global using Volo.Abp.Threading;
 global using Volo.Abp.UI.Navigation.Urls;
 global using Volo.Abp.VirtualFileExplorer.Web;
