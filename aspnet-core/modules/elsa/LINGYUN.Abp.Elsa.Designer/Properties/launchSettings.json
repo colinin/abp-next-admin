@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "LINGYUN.Abp.Elsa.Designer": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:59137;http://localhost:59139"
+    }
+  }
+}

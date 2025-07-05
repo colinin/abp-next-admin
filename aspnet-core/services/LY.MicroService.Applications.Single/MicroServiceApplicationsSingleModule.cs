@@ -1,4 +1,4 @@
-using Volo.Abp.Swashbuckle;
+using LINGYUN.Abp.Elsa.Designer;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -362,6 +362,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpElsaActivitiesModule),
     // Elsa工作流模块 实体框架
     typeof(AbpElsaEntityFrameworkCoreModule),
+    // Elsa工作流设计器模块
+    typeof(AbpElsaDesignerModule),
 
     // 数据导出模块 MiniExcel集成
     typeof(AbpExporterMiniExcelModule),
@@ -438,5 +440,12 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 
         ConfigureSingleModule(context.Services, hostingEnvironment.IsDevelopment());
+    }
+
+    public async override Task OnPostApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        await context.ServiceProvider
+            .GetRequiredService<IDataSeeder>()
+            .SeedAsync();
     }
 }
