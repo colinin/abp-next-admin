@@ -20,6 +20,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
 using Yarp.ReverseProxy.Configuration;
@@ -83,6 +84,12 @@ public class OpenApiGatewayModule : AbpModule
             options.InstanceName = configuration["Redis:InstanceName"];
         });
 
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Languages.Add(new LanguageInfo("en", "en", "English"));
+            options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+        });
+
         context.Services.AddAbpSwaggerGenWithOAuth(
             authority: configuration["AuthServer:Authority"],
             scopes: new Dictionary<string, string>
@@ -99,9 +106,10 @@ public class OpenApiGatewayModule : AbpModule
             },
             options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiGateway", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "OpenApi Gateway", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
+                options.HideAbpEndpoints();
             });
         context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -124,7 +132,7 @@ public class OpenApiGatewayModule : AbpModule
             {
                 builder
                     .WithOrigins(
-                        configuration["App:CorsOrigins"]
+                        configuration["App:CorsOrigins"]?
                             .Split(",", StringSplitOptions.RemoveEmptyEntries)
                             .Select(o => o.Trim().RemovePostFix("/"))
                             .ToArray()
@@ -165,6 +173,7 @@ public class OpenApiGatewayModule : AbpModule
         app.UseCorrelationId();
         app.UseCors();
 
+        app.UseMapRequestLocalization();
         // api签名
         app.UseOpenApiAuthorization();
         // 认证
@@ -179,7 +188,7 @@ public class OpenApiGatewayModule : AbpModule
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Open API Document");
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "OpenApi Gateway Document");
 
             var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
             var logger = context.ServiceProvider.GetRequiredService<ILogger<ApplicationInitializationContext>>();
@@ -216,7 +225,6 @@ public class OpenApiGatewayModule : AbpModule
 
                 options.SwaggerEndpoint($"{swaggerEndpoint}/swagger/v1/swagger.json", $"{routeConfig.RouteId} API");
                 options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-                options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
             }
         });
 
