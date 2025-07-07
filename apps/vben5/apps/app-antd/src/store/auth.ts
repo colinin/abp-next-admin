@@ -10,6 +10,7 @@ import { preferences } from '@vben/preferences';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
 import {
+  useOidcClient,
   usePhoneLoginApi,
   useProfileApi,
   useQrCodeLoginApi,
@@ -21,7 +22,6 @@ import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
 import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
-import authService from '#/auth/authService';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -36,12 +36,13 @@ export const useAuthStore = defineStore('auth', () => {
   const userStore = useUserStore();
   const abpStore = useAbpStore();
   const router = useRouter();
+  const oidcClient = useOidcClient();
 
   const loginLoading = ref(false);
 
   async function refreshSession() {
-    if (await authService.getAccessToken()) {
-      const user = await authService.refreshToken();
+    if (await oidcClient.getAccessToken()) {
+      const user = await oidcClient.refreshToken();
       const newToken = `${user?.token_type} ${user?.access_token}`;
       accessStore.setAccessToken(newToken);
       if (user?.refresh_token) {
@@ -61,12 +62,12 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function oidcLogin() {
-    await authService.login();
+    await oidcClient.login();
   }
 
   async function oidcCallback() {
     try {
-      const user = await authService.handleCallback();
+      const user = await oidcClient.handleCallback();
       return await _loginSuccess({
         accessToken: user.access_token,
         tokenType: user.token_type,
@@ -127,9 +128,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout(redirect: boolean = true) {
     try {
-      if (await authService.getAccessToken()) {
+      if (await oidcClient.getAccessToken()) {
         accessStore.setAccessToken(null);
-        await authService.logout();
+        await oidcClient.logout();
       }
     } catch {
       // 不做任何处理
