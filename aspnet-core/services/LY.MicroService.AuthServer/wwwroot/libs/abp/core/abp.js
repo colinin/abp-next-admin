@@ -830,7 +830,7 @@ var abp = abp || {};
     abp.clock.trySetBrowserTimeZoneToCookie = true;
 
     abp.clock.setBrowserTimeZoneToCookie = function () {
-        if (!abp.clock.trySetBrowserTimeZoneToCookie || !abp.clock.supportsMultipleTimezone() || abp.currentUser.isAuthenticated) {
+        if (!abp.clock.trySetBrowserTimeZoneToCookie || !abp.clock.supportsMultipleTimezone()) {
             return;
         }
 
