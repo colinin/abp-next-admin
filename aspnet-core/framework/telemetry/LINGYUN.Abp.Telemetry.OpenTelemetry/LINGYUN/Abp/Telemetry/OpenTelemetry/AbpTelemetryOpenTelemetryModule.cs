@@ -5,23 +5,45 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System;
+using System.Collections.Generic;
+using Volo.Abp;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Telemetry.OpenTelemetry;
 
 public class AbpTelemetryOpenTelemetryModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        var configuration = context.Services.GetConfiguration();
+
+        PreConfigure<AbpTelemetryOpenTelemetryOptions>(options =>
+        {
+            var ignureRequestLocalUrlPrefixs = configuration.GetSection("OpenTelemetry:IgnoreUrls:Local").Get<List<string>>();
+            if (ignureRequestLocalUrlPrefixs != null)
+            {
+                options.IgnoreLocalRequestUrls = ignureRequestLocalUrlPrefixs;
+            }
+            var ignureRequestRemoteUrlPrefixs = configuration.GetSection("OpenTelemetry:IgnoreUrls:Remote").Get<List<string>>();
+            if (ignureRequestRemoteUrlPrefixs != null)
+            {
+                options.IgnoreRemoteRequestUrls = ignureRequestRemoteUrlPrefixs;
+            }
+        });
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
 
         var openTelmetrySetup = context.Services.GetPreConfigureActions<OpenTelemetryBuilder>();
 
-        var openTelemetryEnabled = configuration["OpenTelemetry:IsEnabled"];
-        if (openTelemetryEnabled.IsNullOrWhiteSpace() || "false".Equals(openTelemetryEnabled.ToLower()))
+        if (!configuration.GetValue("OpenTelemetry:IsEnabled", false))
         {
             return;
         }
+
+        var openTelemetyOptions = context.Services.ExecutePreConfiguredActions(new AbpTelemetryOpenTelemetryOptions());
 
         var applicationName = configuration["OpenTelemetry:ServiceName"];
         if (applicationName.IsNullOrWhiteSpace())
@@ -37,7 +59,7 @@ public class AbpTelemetryOpenTelemetryModule : AbpModule
             .WithTracing(tracing =>
             {
                 tracing.AddSource(applicationName);
-                ConfigureTracing(tracing, configuration);
+                ConfigureTracing(tracing, configuration, openTelemetyOptions);
             })
             .WithMetrics(metrics =>
             {
@@ -47,15 +69,38 @@ public class AbpTelemetryOpenTelemetryModule : AbpModule
         openTelmetrySetup.Configure(openTelmetryBuilder);
     }
 
-    private static void ConfigureTracing(TracerProviderBuilder tracing, IConfiguration configuration)
+    private static void ConfigureTracing(TracerProviderBuilder tracing, IConfiguration configuration, AbpTelemetryOpenTelemetryOptions openTelemetyOptions)
     {
-        tracing.AddHttpClientInstrumentation();
-        tracing.AddAspNetCoreInstrumentation();
+        tracing.AddHttpClientInstrumentation(options =>
+        {
+            options.FilterHttpRequestMessage += (request) =>
+            {
+                if (request.RequestUri != null &&
+                    openTelemetyOptions.IsIgnureRemoteRequestUrl(request.RequestUri.AbsolutePath))
+                {
+                    return false;
+                }
+
+                return true;
+            };
+        });
+        tracing.AddAspNetCoreInstrumentation(options =>
+        {
+            options.Filter += (ctx) =>
+            {
+                if (openTelemetyOptions.IsIgnureLocalRequestUrl(ctx.Request.Path))
+                {
+                    return false;
+                }
+
+                return true;
+            };
+        });
         tracing.AddCapInstrumentation();
         tracing.AddEntityFrameworkCoreInstrumentation(efcore =>
         {
             efcore.SetDbStatementForText = configuration.GetValue(
-                "OpenTelemetry:EntityFrameworkCore:SetDbStatementForText", 
+                "OpenTelemetry:EntityFrameworkCore:SetDbStatementForText",
                 efcore.SetDbStatementForText);
 
             efcore.SetDbStatementForStoredProcedure = configuration.GetValue(
@@ -68,24 +113,28 @@ public class AbpTelemetryOpenTelemetryModule : AbpModule
             tracing.AddConsoleExporter();
         }
 
-        var tracingOtlpEndpoint = configuration["OpenTelemetry:Otlp:Endpoint"];
-        if (!tracingOtlpEndpoint.IsNullOrWhiteSpace())
+        if (configuration.GetValue("OpenTelemetry:Otlp:IsEnabled", false))
         {
             tracing.AddOtlpExporter(otlpOptions =>
             {
-                otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
+                var otlpEndPoint = configuration["OpenTelemetry:Otlp:Endpoint"];
+                Check.NotNullOrWhiteSpace(otlpEndPoint, nameof(otlpEndPoint));
+
+                otlpOptions.Headers = configuration["OpenTelemetry:Otlp:Headers"];
+                otlpOptions.Endpoint = new Uri(otlpEndPoint.EnsureEndsWith('/') + "v1/traces");
+                otlpOptions.Protocol = configuration.GetValue("OpenTelemetry:Otlp:Protocol", otlpOptions.Protocol);
             });
-            return;
         }
 
-        var zipkinEndpoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-        if (!zipkinEndpoint.IsNullOrWhiteSpace())
+        if (configuration.GetValue("OpenTelemetry:ZipKin:IsEnabled", false))
         {
             tracing.AddZipkinExporter(zipKinOptions =>
             {
-                zipKinOptions.Endpoint = new Uri(zipkinEndpoint);
+                var zipkinEndPoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
+                Check.NotNullOrWhiteSpace(zipkinEndPoint, nameof(zipkinEndPoint));
+
+                zipKinOptions.Endpoint = new Uri(zipkinEndPoint);
             });
-            return;
         }
     }
 
@@ -95,19 +144,17 @@ public class AbpTelemetryOpenTelemetryModule : AbpModule
         metrics.AddHttpClientInstrumentation();
         metrics.AddAspNetCoreInstrumentation();
 
-        if (configuration.GetValue("OpenTelemetry:Console:IsEnabled", false))
-        {
-            metrics.AddConsoleExporter();
-        }
-
-        var tracingOtlpEndpoint = configuration["OpenTelemetry:Otlp:Endpoint"];
-        if (!tracingOtlpEndpoint.IsNullOrWhiteSpace())
+        if (configuration.GetValue("OpenTelemetry:Otlp:IsEnabled", false))
         {
             metrics.AddOtlpExporter(otlpOptions =>
             {
-                otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
+                var otlpEndPoint = configuration["OpenTelemetry:Otlp:Endpoint"];
+                Check.NotNullOrWhiteSpace(otlpEndPoint, nameof(otlpEndPoint));
+
+                otlpOptions.Headers = configuration["OpenTelemetry:Otlp:Headers"];
+                otlpOptions.Endpoint = new Uri(otlpEndPoint.EnsureEndsWith('/') + "v1/metrics");
+                otlpOptions.Protocol = configuration.GetValue("OpenTelemetry:Otlp:Protocol", otlpOptions.Protocol);
             });
-            return;
         }
     }
 }

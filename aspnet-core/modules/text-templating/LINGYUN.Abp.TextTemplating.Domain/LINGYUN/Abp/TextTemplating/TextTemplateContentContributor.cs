@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
@@ -41,6 +42,12 @@ public class TextTemplateContentContributor : ITemplateContentContributor, ITran
         var culture = context.TemplateDefinition.IsInlineLocalized ? null : context.Culture;
         var repository = context.ServiceProvider.GetRequiredService<ITextTemplateRepository>();
         var template = await repository.FindByNameAsync(context.TemplateDefinition.Name, culture);
+
+        // 2025/06/23 fixed 非内联本地化模板内容为空时,回退到默认文化
+        if (template == null && !culture.IsNullOrWhiteSpace())
+        {
+            template = await repository.FindByNameAsync(context.TemplateDefinition.Name, context.TemplateDefinition.DefaultCultureName);
+        }
 
         return new TextTemplateContentCacheItem(
             template?.Name,

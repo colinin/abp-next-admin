@@ -15,12 +15,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\Exporter\Localization\Resources\zh-Hans.json" />
+	  <None Remove="LINGYUN\Abp\Exporter\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="LINGYUN\Abp\Exporter\Localization\Resources\en.json" />
-		<EmbeddedResource Include="LINGYUN\Abp\Exporter\Localization\Resources\zh-Hans.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Exporter\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>

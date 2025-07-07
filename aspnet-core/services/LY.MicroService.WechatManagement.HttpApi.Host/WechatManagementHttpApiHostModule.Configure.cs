@@ -10,6 +10,7 @@ using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
@@ -21,6 +22,7 @@ using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
@@ -254,15 +256,20 @@ public partial class WechatManagementHttpApiHostModule
         });
     }
 
-    private void ConfigureSwagger(IServiceCollection services)
+    private void ConfigureSwagger(IServiceCollection services, IConfiguration configuration)
     {
         // Swagger
-        services.AddSwaggerGen(
+        services.AddAbpSwaggerGenWithOAuth(
+            configuration["AuthServer:Authority"],
+            new Dictionary<string, string>
+            {
+                { configuration["AuthServer:Audience"], "Wechat Service API"}
+            },
             options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "WechatManagement API", Version = "v1",
+                    Title = "Wechat Service API", Version = "v1",
                     Contact = new OpenApiContact
                     {
                         Name = "colin",
@@ -349,6 +356,35 @@ public partial class WechatManagementHttpApiHostModule
         Configure<AbpLocalizationManagementOptions>(options =>
         {
             options.SaveStaticLocalizationsToDatabase = true;
+        });
+    }
+
+    private void ConfigureCors(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                var corsOrigins = configuration.GetSection("App:CorsOrigins").Get<List<string>>();
+                if (corsOrigins == null || corsOrigins.Count == 0)
+                {
+                    corsOrigins = configuration["App:CorsOrigins"]?
+                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToList() ?? new List<string>();
+                }
+                builder
+                    .WithOrigins(corsOrigins
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToArray()
+                    )
+                    .WithAbpExposedHeaders()
+                    .WithAbpWrapExposedHeaders()
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
         });
     }
 

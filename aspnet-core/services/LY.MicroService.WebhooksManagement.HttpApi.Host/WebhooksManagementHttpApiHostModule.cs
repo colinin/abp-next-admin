@@ -121,10 +121,11 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
         ConfigureMultiTenancy(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureWebhooks(context.Services);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
+        ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureBackgroundTasks(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
@@ -151,12 +152,11 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Webhook Service API");
 
             var configuration = context.GetConfiguration();
             options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-            options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-            options.OAuthScopes("WebhooksManagement");
+            options.OAuthScopes(configuration["AuthServer:Audience"]);
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();

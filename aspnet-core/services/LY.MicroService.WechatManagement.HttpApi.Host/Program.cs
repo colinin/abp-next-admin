@@ -1,6 +1,7 @@
 using LY.MicroService.WechatManagement;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -19,11 +20,9 @@ try
         .UseAutofac()
         .ConfigureAppConfiguration((context, config) =>
         {
-            var configuration = config.Build();
-            var agileConfigEnabled = configuration["AgileConfig:IsEnabled"];
-            if (agileConfigEnabled.IsNullOrEmpty() || bool.Parse(agileConfigEnabled))
+            if (context.Configuration.GetValue("AgileConfig:IsEnabled", false))
             {
-                config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
+                config.AddAgileConfig(new AgileConfig.Client.ConfigClient(context.Configuration));
             }
         })
         .UseSerilog((context, provider, config) =>

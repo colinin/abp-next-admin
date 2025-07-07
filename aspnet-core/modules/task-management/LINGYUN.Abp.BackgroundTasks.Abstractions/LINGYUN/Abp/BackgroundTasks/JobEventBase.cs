@@ -19,12 +19,15 @@ public abstract class JobEventBase<TEvent> : IJobEvent
     {
         try
         {
-            var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
-            using (currentTenant.Change(context.EventData.TenantId))
+            if (await CanAfterExecuted(context))
             {
-                Logger.LogInformation("Job {Group}-{Name} after event with {Event} has executing.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
-                await OnJobAfterExecutedAsync(context);
-                Logger.LogInformation("Job {Group}-{Name} after event with {Event} was executed.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
+                var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
+                using (currentTenant.Change(context.EventData.TenantId))
+                {
+                    Logger.LogInformation("Job {Group}-{Name} after event with {Event} has executing.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
+                    await OnJobAfterExecutedAsync(context);
+                    Logger.LogInformation("Job {Group}-{Name} after event with {Event} was executed.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
+                }
             }
         }
         catch (Exception ex)
@@ -37,12 +40,15 @@ public abstract class JobEventBase<TEvent> : IJobEvent
     {
         try
         {
-            var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
-            using (currentTenant.Change(context.EventData.TenantId))
+            if (await CanBeforeExecuted(context))
             {
-                Logger.LogInformation("Job {Group}-{Name} before event with {Event} executing.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
-                await OnJobBeforeExecutedAsync(context);
-                Logger.LogInformation("Job {Group}-{Name} before event with {Event} was executed.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
+                var currentTenant = context.ServiceProvider.GetRequiredService<ICurrentTenant>();
+                using (currentTenant.Change(context.EventData.TenantId))
+                {
+                    Logger.LogInformation("Job {Group}-{Name} before event with {Event} executing.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
+                    await OnJobBeforeExecutedAsync(context);
+                    Logger.LogInformation("Job {Group}-{Name} before event with {Event} was executed.", context.EventData.Group, context.EventData.Name, typeof(TEvent).Name);
+                }
             }
         }
         catch (Exception ex)
@@ -51,9 +57,19 @@ public abstract class JobEventBase<TEvent> : IJobEvent
         }
     }
 
+    protected virtual Task<bool> CanAfterExecuted(JobEventContext context)
+    {
+        return Task.FromResult(true);
+    }
+
     protected virtual Task OnJobAfterExecutedAsync(JobEventContext context)
     {
         return Task.CompletedTask;
+    }
+
+    protected virtual Task<bool> CanBeforeExecuted(JobEventContext context)
+    {
+        return Task.FromResult(true);
     }
 
     protected virtual Task OnJobBeforeExecutedAsync(JobEventContext context)

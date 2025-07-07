@@ -20,10 +20,6 @@
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
 		<PackageReference Include="DistributedLock.Redis" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
-		<!--<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>-->
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" />
 		<PackageReference Include="Quartz.Serialization.Json" />
 		<PackageReference Include="Serilog.AspNetCore" />
@@ -34,7 +30,6 @@
 		<PackageReference Include="Serilog.Settings.Configuration" />
 		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
 		<PackageReference Include="Serilog.Sinks.File" />
-		<PackageReference Include="Swashbuckle.AspNetCore" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
 		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
 		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" />
@@ -45,6 +40,7 @@
 		<PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.Swashbuckle" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 	</ItemGroup>
 

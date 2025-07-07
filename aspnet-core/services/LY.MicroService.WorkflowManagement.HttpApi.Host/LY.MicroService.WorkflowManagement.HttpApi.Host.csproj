@@ -17,11 +17,11 @@
 		<PackageReference Include="Elsa.Activities.UserTask" />
 		<PackageReference Include="Elsa.Activities.Temporal.Quartz" />
 		<PackageReference Include="Elsa.Rebus.RabbitMq" />
-		<PackageReference Include="Elsa.Designer.Components.Web" />
 		<PackageReference Include="Elsa.Webhooks.Api" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
 		<PackageReference Include="DistributedLock.Redis" />
 		<PackageReference Include="Quartz.Serialization.Json" />
+		<PackageReference Include="Rebus.RabbitMq" VersionOverride="10.0.1" />
 		<PackageReference Include="Serilog.AspNetCore" />
 		<PackageReference Include="Serilog.Enrichers.Environment" />
 		<PackageReference Include="Serilog.Enrichers.Assembly" />

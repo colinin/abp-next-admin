@@ -38,10 +38,10 @@ using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
 
 namespace LY.MicroService.AuthServer;
 
@@ -86,6 +86,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpClaimsMappingModule),
+    typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]
 public partial class AuthServerHttpApiHostModule : AbpModule
@@ -120,11 +121,11 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         ConfigureCaching(configuration);
         ConfigureTiming(configuration);
         ConfigureAuditing(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -156,9 +157,13 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         // Swagger
         app.UseSwagger();
         // Swagger可视化界面
-        app.UseSwaggerUI(options =>
+        app.UseAbpSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support IdentityServer API");
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Identity Service API");
+
+            var configuration = context.GetConfiguration();
+            options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+            options.OAuthScopes(configuration["AuthServer:Audience"]);
         });
         // 审计日志
         app.UseAuditing();

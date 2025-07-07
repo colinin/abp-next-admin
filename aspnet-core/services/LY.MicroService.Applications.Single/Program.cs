@@ -4,25 +4,6 @@ using Volo.Abp.IO;
 using Volo.Abp.Modularity.PlugIns;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy
-            .WithOrigins(
-                builder.Configuration["App:CorsOrigins"]
-                    .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                    .Select(o => o.RemovePostFix("/"))
-                    .ToArray()
-            )
-            .WithAbpExposedHeaders()
-            .WithAbpWrapExposedHeaders()
-            .SetIsOriginAllowedToAllowWildcardSubdomains()
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-});
 builder.Host.AddAppSettingsSecretsJson()
     .UseAutofac()
     .ConfigureAppConfiguration((context, config) =>
@@ -33,10 +14,9 @@ builder.Host.AddAppSettingsSecretsJson()
             config.AddJsonFile($"appsettings.{dbProvider}.json", optional: true);
         }
 
-        var configuration = config.Build();
-        if (configuration.GetValue("AgileConfig:IsEnabled", false))
+        if (context.Configuration.GetValue("AgileConfig:IsEnabled", false))
         {
-            config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
+            config.AddAgileConfig(new AgileConfig.Client.ConfigClient(context.Configuration));
         }
     })
     .UseSerilog((context, provider, config) =>
@@ -82,9 +62,12 @@ app.UseAbpSession();
 app.UseDynamicClaims();
 app.UseAuthorization();
 app.UseSwagger();
-app.UseSwaggerUI(options =>
+app.UseAbpSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support App API");
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Single APP API");
+
+    options.OAuthClientId(app.Configuration["AuthServer:SwaggerClientId"]);
+    options.OAuthScopes(app.Configuration["AuthServer:Audience"]);
 });
 app.UseAuditing();
 app.UseAbpSerilogEnrichers();

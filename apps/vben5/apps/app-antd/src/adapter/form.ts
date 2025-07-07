@@ -8,7 +8,7 @@ import type { ComponentType } from './component';
 import { setupVbenForm, useVbenForm as useForm, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-async function initVbenForm() {
+async function initSetupVbenForm() {
   setupVbenForm<ComponentType>({
     config: {
       // ant design vue组件库默认都是 v-model:value
@@ -43,7 +43,7 @@ async function initVbenForm() {
 
 const useVbenForm = useForm<ComponentType>;
 
-export { initVbenForm, useVbenForm, z };
+export { initSetupVbenForm, useVbenForm, z };
 
 export type VbenFormSchema = FormSchema<ComponentType>;
 export type { VbenFormProps };

@@ -2,6 +2,7 @@
 using Quartz;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks.Quartz;
 
@@ -24,7 +25,10 @@ public class QuartzJobSearchJobAdapter : IJob
         var jobDefinition = JobDefinitionManager.Get(jobType);
 
         using var scope = ServiceScopeFactory.CreateScope();
+        var clock = scope.ServiceProvider.GetRequiredService<IClock>();
         var jobExecuter = scope.ServiceProvider.GetRequiredService<IJobRunnableExecuter>();
+
+        context.Put(nameof(JobEventData.RunTime), clock.Now);
 
         var jobContext = new JobRunnableContext(
             jobDefinition.JobType,

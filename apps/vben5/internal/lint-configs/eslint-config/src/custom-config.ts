@@ -29,6 +29,13 @@ const customConfig: Linter.Config[] = [
     },
   },
   {
+    files: ['**/**.vue'],
+    ignores: restrictedImportIgnores,
+    rules: {
+      'perfectionist/sort-objects': 'off',
+    },
+  },
+  {
     // apps内部的一些基础规则
     files: ['apps/**/**'],
     ignores: restrictedImportIgnores,
@@ -155,11 +162,6 @@ const customConfig: Linter.Config[] = [
     rules: {
       'no-console': 'off',
     },
-  },
-  {
-    // abp 包规则
-    files: ['packages/@abp/**'],
-    rules: {},
   },
 ];
 

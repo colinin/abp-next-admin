@@ -20,7 +20,6 @@
 		<PackageReference Include="Elsa.Activities.Http" />
 		<PackageReference Include="Elsa.Activities.UserTask" />
 		<PackageReference Include="Elsa.Activities.Temporal.Quartz" />
-		<!--<PackageReference Include="Elsa.Designer.Components.Web" />-->
 		<PackageReference Include="Elsa.Webhooks.Api" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
 		<PackageReference Include="OpenIddict.Validation.DataProtection" />
@@ -33,7 +32,6 @@
 		<PackageReference Include="Serilog.Settings.Configuration" />
 		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
 		<PackageReference Include="Serilog.Sinks.File" />
-		<PackageReference Include="Swashbuckle.AspNetCore" />
 		<PackageReference Include="Quartz.Serialization.Json" />
 		<PackageReference Include="Volo.Abp.Account.Web.OpenIddict" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
@@ -55,6 +53,7 @@
 		<PackageReference Include="Volo.Abp.PermissionManagement.Web" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.SettingManagement.Web" />
+		<PackageReference Include="Volo.Abp.Swashbuckle" />
 		<PackageReference Include="Volo.Abp.Identity.AspNetCore" />
 		<PackageReference Include="Volo.Abp.Identity.Web" />
 		<PackageReference Include="Volo.Abp.VirtualFileExplorer.Web" />
@@ -155,6 +154,7 @@
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.Sms\LINGYUN.Abp.Elsa.Activities.Sms.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.Webhooks\LINGYUN.Abp.Elsa.Activities.Webhooks.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities\LINGYUN.Abp.Elsa.Activities.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Designer\LINGYUN.Abp.Elsa.Designer.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore\LINGYUN.Abp.Elsa.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Server\LINGYUN.Abp.Elsa.Server.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj" />

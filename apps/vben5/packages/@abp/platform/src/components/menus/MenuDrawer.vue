@@ -183,6 +183,8 @@ async function onNextStep() {
 
 async function onInit() {
   metaFormApi.removeSchemaByFields(menuMetas.value.map((x) => x.name));
+  basicFormApi.resetForm();
+  metaFormApi.resetForm();
   activeTabKey.value = 'basic';
   parentMenu.value = undefined;
   showMetaForm.value = false;

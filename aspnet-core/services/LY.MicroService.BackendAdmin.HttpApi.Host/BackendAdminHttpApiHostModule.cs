@@ -54,6 +54,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
 
 namespace LY.MicroService.BackendAdmin;
 
@@ -123,6 +124,7 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpClaimsMappingModule),
+    typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]
 public partial class BackendAdminHttpApiHostModule : AbpModule
@@ -155,11 +157,11 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         ConfigureTiming(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -178,7 +180,7 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         // 路由
         app.UseRouting();
         // 跨域
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         // 认证
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
@@ -193,9 +195,13 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         // Swagger
         app.UseSwagger();
         // Swagger可视化界面
-        app.UseSwaggerUI(options =>
+        app.UseAbpSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support BackendAdmin API");
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Admin Service API");
+
+            var configuration = context.GetConfiguration();
+            options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+            options.OAuthScopes(configuration["AuthServer:Audience"]);
         });
         // 审计日志
         app.UseAuditing();

@@ -1,6 +1,6 @@
 {
   "name": "@abp/account",
-  "version": "9.1.3",
+  "version": "9.2.0",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
@@ -37,6 +37,8 @@
     "@vueuse/core": "catalog:",
     "@vueuse/integrations": "catalog:",
     "ant-design-vue": "catalog:",
+    "oidc-client-ts": "catalog:",
+    "secure-ls": "catalog:",
     "vue": "catalog:*",
     "vue-router": "catalog:"
   }
