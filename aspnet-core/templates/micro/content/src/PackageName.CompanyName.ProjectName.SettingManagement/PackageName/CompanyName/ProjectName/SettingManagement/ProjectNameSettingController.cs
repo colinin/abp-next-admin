@@ -41,7 +41,7 @@ public class ProjectNameSettingController : AbpController, IProjectNameSettingAp
     [Route("by-current-user")]
     public virtual async Task SetCurrentUserAsync(UpdateSettingsDto input)
     {
-        await _settingAppService.SetCurrentTenantAsync(input);
+        await _settingAppService.SetCurrentUserAsync(input);
     }
 
     [Authorize]
@@ -49,7 +49,7 @@ public class ProjectNameSettingController : AbpController, IProjectNameSettingAp
     [Route("by-current-user")]
     public virtual async Task<SettingGroupResult> GetAllForCurrentUserAsync()
     {
-        return await _settingAppService.GetAllForCurrentTenantAsync();
+        return await _settingAppService.GetAllForCurrentUserAsync();
     }
 
     [Authorize(ProjectNamePermissions.ManageSettings)]
