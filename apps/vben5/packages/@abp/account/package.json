@@ -37,6 +37,8 @@
     "@vueuse/core": "catalog:",
     "@vueuse/integrations": "catalog:",
     "ant-design-vue": "catalog:",
+    "oidc-client-ts": "catalog:",
+    "secure-ls": "catalog:",
     "vue": "catalog:*",
     "vue-router": "catalog:"
   }
