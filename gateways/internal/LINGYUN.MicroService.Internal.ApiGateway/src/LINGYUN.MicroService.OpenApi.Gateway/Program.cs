@@ -7,11 +7,13 @@
         .AddYarpJson()
         .ConfigureAppConfiguration((context, config) =>
         {
-            var configuration = config.Build();
-            var agileConfigEnabled = configuration["AgileConfig:IsEnabled"];
-            if (agileConfigEnabled.IsNullOrEmpty() || bool.Parse(agileConfigEnabled))
+            var agileConfig = context.Configuration.GetSection("AgileConfig");//IsEnabled
+            if (agileConfig.Exists())
             {
-                config.AddAgileConfig(new AgileConfig.Client.ConfigClient(configuration));
+                if (agileConfig.GetValue("IsEnabled", false))
+                {
+                    config.AddAgileConfig(new AgileConfig.Client.ConfigClient(context.Configuration));
+                }
             }
         })
         .UseSerilog((context, provider, config) =>

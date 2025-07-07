@@ -1,6 +1,7 @@
-﻿using DeviceDetectorNET;
-using LINGYUN.Abp.IP.Location;
+﻿using LINGYUN.Abp.IP.Location;
 using Microsoft.Extensions.Options;
+using MyCSharp.HttpUserAgentParser;
+using MyCSharp.HttpUserAgentParser.Providers;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.WebClientInfo;
@@ -11,15 +12,18 @@ public class HttpContextDeviceInfoProvider : IDeviceInfoProvider, ITransientDepe
 {
     protected IIPLocationResolver IPLocationResolver { get; }
     protected IWebClientInfoProvider WebClientInfoProvider { get; }
+    protected IHttpUserAgentParserProvider HttpUserAgentParser { get; }
     protected AbpIdentitySessionAspNetCoreOptions Options { get; }
 
     public HttpContextDeviceInfoProvider(
         IIPLocationResolver iPLocationResolver,
         IWebClientInfoProvider webClientInfoProvider,
+        IHttpUserAgentParserProvider httpUserAgentParserProvider,
         IOptions<AbpIdentitySessionAspNetCoreOptions> options)
     {
         IPLocationResolver = iPLocationResolver;
         WebClientInfoProvider = webClientInfoProvider;
+        HttpUserAgentParser = httpUserAgentParserProvider;
         Options = options.Value;
     }
 
@@ -27,7 +31,7 @@ public class HttpContextDeviceInfoProvider : IDeviceInfoProvider, ITransientDepe
 
     public async virtual Task<DeviceInfo> GetDeviceInfoAsync()
     {
-        var deviceInfo = BrowserDeviceInfo.Parse(WebClientInfoProvider.BrowserInfo);
+        var deviceInfo = BrowserDeviceInfo.Parse(HttpUserAgentParser, WebClientInfoProvider.BrowserInfo);
         var ipAddress = WebClientInfoProvider.ClientIpAddress;
         var ipRegion = "";
         if (!ipAddress.IsNullOrWhiteSpace())
@@ -66,44 +70,30 @@ public class HttpContextDeviceInfoProvider : IDeviceInfoProvider, ITransientDepe
             Description = description;
         }
 
-        public static BrowserDeviceInfo Parse(string browserInfo)
+        public static BrowserDeviceInfo Parse(IHttpUserAgentParserProvider httpUserAgentParserProvider, string browserInfo)
         {
             string device = null;
             string deviceInfo = null;
             if (!browserInfo.IsNullOrWhiteSpace())
             {
-                var deviceDetector = new DeviceDetector(browserInfo);
-                deviceDetector.Parse();
-                if (deviceDetector.IsParsed())
+                var httpUserAgentInformation = httpUserAgentParserProvider.Parse(browserInfo);
+                if (!httpUserAgentInformation.MobileDeviceType.IsNullOrWhiteSpace())
                 {
-                    var osInfo = deviceDetector.GetOs();
-                    if (deviceDetector.IsMobile())
-                    {
-                        // IdentitySessionDevices.Mobile
-                        device = osInfo.Success ? osInfo.Match.Name : "Mobile";
-                    }
-                    else if (deviceDetector.IsBrowser())
-                    {
-                        // IdentitySessionDevices.Web
-                        device = "Web";
-                    }
-                    else if (deviceDetector.IsDesktop())
-                    {
-                        // TODO: PC
-                        device = "Desktop";
-                    }
-
-                    if (osInfo.Success)
-                    {
-                        deviceInfo = osInfo.Match.Name + " " + osInfo.Match.Version;
-                    }
-
-                    var clientInfo = deviceDetector.GetClient();
-                    if (clientInfo.Success)
-                    {
-                        deviceInfo = deviceInfo.IsNullOrWhiteSpace() ? clientInfo.Match.Name : deviceInfo + " " + clientInfo.Match.Name;
-                    }
+                    device = httpUserAgentInformation.MobileDeviceType;
                 }
+                else if (!httpUserAgentInformation.Name.IsNullOrWhiteSpace())
+                {
+                    device = "Web";
+                }
+                else
+                {
+                    device = "OAuth";
+                }
+                deviceInfo = httpUserAgentInformation.Type switch
+                {
+                    HttpUserAgentType.Browser or HttpUserAgentType.Robot => (httpUserAgentInformation.Platform.HasValue ? httpUserAgentInformation.Platform.Value.Name + " " : string.Empty) + httpUserAgentInformation.Name,
+                    _ => httpUserAgentInformation.UserAgent,
+                };
             }
             return new BrowserDeviceInfo(device, deviceInfo);
         }
