@@ -9,13 +9,18 @@ namespace LINGYUN.Abp.BackgroundTasks.Internal;
 
 public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDependency
 {
-    protected override async Task OnJobAfterExecutedAsync(JobEventContext context)
+    protected override Task<bool> CanAfterExecuted(JobEventContext context)
     {
         if (context.EventData.Type.IsDefined(typeof(DisableJobStatusAttribute), true))
         {
             Logger.LogWarning("The job change event could not be processed because the job marked the DisableJobStatus attribute!");
-            return;
+            return Task.FromResult(false);
         }
+        return base.CanAfterExecuted(context);
+    }
+
+    protected override async Task OnJobAfterExecutedAsync(JobEventContext context)
+    {
         var store = context.ServiceProvider.GetRequiredService<IJobStore>();
         var job = await store.FindAsync(context.EventData.Key, context.EventData.CancellationToken);
         if (job == null)

@@ -1,3 +1,5 @@
+using LINGYUN.Abp.Elsa.Designer;
+
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
@@ -360,6 +362,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpElsaActivitiesModule),
     // Elsa工作流模块 实体框架
     typeof(AbpElsaEntityFrameworkCoreModule),
+    // Elsa工作流设计器模块
+    typeof(AbpElsaDesignerModule),
 
     // 数据导出模块 MiniExcel集成
     typeof(AbpExporterMiniExcelModule),
@@ -370,6 +374,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreMvcIdempotentWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpSwashbuckleModule),
     typeof(AbpMailKitModule),
     typeof(AbpAutofacModule),
 
@@ -418,7 +423,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureIdentity(configuration);
         ConfigureDbContext(configuration);
         ConfigureAuthServer(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
@@ -429,11 +433,19 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigurePermissionManagement(configuration);
         ConfigureNotificationManagement(configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureOssManagement(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureKestrelServer(configuration, hostingEnvironment);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 
         ConfigureSingleModule(context.Services, hostingEnvironment.IsDevelopment());
+    }
+
+    public async override Task OnPostApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        await context.ServiceProvider
+            .GetRequiredService<IDataSeeder>()
+            .SeedAsync();
     }
 }

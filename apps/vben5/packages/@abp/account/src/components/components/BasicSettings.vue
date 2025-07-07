@@ -28,6 +28,7 @@ const props = defineProps<{
   profile: ProfileDto;
 }>();
 const emits = defineEmits<{
+  (event: 'pictureChange'): void;
   (event: 'submit', profile: UpdateProfileDto): void;
 }>();
 const FormItem = Form.Item;
@@ -61,6 +62,7 @@ async function onAvatarChange(_param: UploadChangeParam) {
       state.userInfo && (state.userInfo.avatar = URL.createObjectURL(picture));
     });
     message.success($t('AbpUi.SavedSuccessfully'));
+    emits('pictureChange');
   } finally {
     pictureState.value.uploading = false;
   }

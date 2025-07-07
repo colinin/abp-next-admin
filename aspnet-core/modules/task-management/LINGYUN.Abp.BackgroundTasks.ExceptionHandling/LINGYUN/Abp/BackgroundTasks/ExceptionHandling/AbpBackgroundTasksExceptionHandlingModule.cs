@@ -7,6 +7,7 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 
+[System.Obsolete("Please use the `AbpBackgroundTasksNotificationsModule` module")]
 [DependsOn(typeof(AbpBackgroundTasksActivitiesModule))]
 [DependsOn(typeof(AbpEmailingModule))]
 public class AbpBackgroundTasksExceptionHandlingModule : AbpModule

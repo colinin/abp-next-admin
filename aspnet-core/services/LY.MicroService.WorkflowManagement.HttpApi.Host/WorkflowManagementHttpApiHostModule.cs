@@ -124,10 +124,10 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         ConfigureIdentity(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureBackgroundTasks(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureEndpoints(context.Services);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureBlobStoring(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
@@ -145,7 +145,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         app.UseCorrelationId();
         app.MapAbpStaticAssets();
         app.UseRouting();
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         app.UseElsaFeatures();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
@@ -160,8 +160,7 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
 
             var configuration = context.GetConfiguration();
             options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-            options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-            options.OAuthScopes(configuration["AuthServer:Scopes"]);
+            options.OAuthScopes(configuration["AuthServer:Audience"]);
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();

@@ -1,10 +1,10 @@
 <Project>
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.3.5</DotNetCoreCAPPackageVersion>
-		<ElsaPackageVersion>2.15.1</ElsaPackageVersion>
+		<ElsaPackageVersion>2.15.2</ElsaPackageVersion>
 		<ElsaNextPackageVersion>3.3.5</ElsaNextPackageVersion>
-		<VoloAbpPackageVersion>9.2.0</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>9.2.0</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>9.2.1</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>9.2.1</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>9.0.4</MicrosoftExtensionsPackageVersion>
 		<MicrosoftAspNetCorePackageVersion>9.0.4</MicrosoftAspNetCorePackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>9.0.4</MicrosoftEntityFrameworkCorePackageVersion>
@@ -12,7 +12,7 @@
 	</PropertyGroup>
 	<!-- Abp Framework -->
 	<ItemGroup>
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.2.0" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.2.1" />
 		<PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -188,6 +188,7 @@
 		<PackageVersion Include="Elsa.Designer.Components.Web" Version="$(ElsaPackageVersion)" />
 		<PackageVersion Include="Elsa.Rebus.RabbitMq" Version="$(ElsaPackageVersion)" />
 		<PackageVersion Include="Elsa.Server.Api" Version="$(ElsaPackageVersion)" />
+		<PackageVersion Include="Elsa.Server.Authentication" Version="$(ElsaPackageVersion)" />
 		<PackageVersion Include="Elsa.Webhooks.Api" Version="$(ElsaPackageVersion)" />
 		<PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.Core" Version="$(ElsaPackageVersion)" />
 		<PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.Core" Version="$(ElsaPackageVersion)" />
@@ -300,17 +301,18 @@
 		<PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
 		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="6.2.1" />
 		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="6.2.1" />
-		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.11.2" />
-		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.11.2" />
-		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.2" />
-		<PackageVersion Include="OpenTelemetry.Exporter.Zipkin" Version="1.11.2" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.11.1" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.11.1" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.0.0-beta.11" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.11.1" />
+		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
+		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.12.0" />
+		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
+		<PackageVersion Include="OpenTelemetry.Exporter.Zipkin" Version="1.12.0" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.12.0-beta.2" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.12.0" />
 		<PackageVersion Include="Polly" Version="8.5.2" />
 		<PackageVersion Include="QRCoder" Version="1.5.1" />
 		<PackageVersion Include="Quartz.Serialization.Json" Version="3.14.0" />
+		<PackageVersion Include="Rebus.RabbitMq" Version="10.0.1" />
 		<PackageVersion Include="RulesEngine" Version="5.0.5" />
 		<PackageVersion Include="Scriban" Version="6.2.1" />
 		<PackageVersion Include="Senparc.Weixin.MP" Version="16.18.9" />
@@ -320,6 +322,7 @@
 		<PackageVersion Include="SixLabors.ImageSharp" Version="3.1.8" />
 		<PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.1.6" />
 		<PackageVersion Include="StackExchange.Redis" Version="2.8.31" />
+		<PackageVersion Include="Spire.XLS" Version="15.5.1" />
 		<PackageVersion Include="Swashbuckle.AspNetCore" Version="8.1.1" />
 		<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
 		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />

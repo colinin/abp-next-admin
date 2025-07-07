@@ -11,7 +11,6 @@ using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using LINGYUN.Abp.WeChat;
 using LINGYUN.Platform.EntityFrameworkCore;
-using LY.MicroService.Applications.Single.EntityFrameworkCore.DataSeeder;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
@@ -45,6 +44,5 @@ public class SingleMigrationsEntityFrameworkCoreModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddAbpDbContext<SingleMigrationsDbContext>();
-        context.Services.AddHostedService<ApplicationSingleDataSeederWorker>();
     }
 }

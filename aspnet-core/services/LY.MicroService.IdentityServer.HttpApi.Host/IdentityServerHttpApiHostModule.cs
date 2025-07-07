@@ -35,6 +35,7 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
 
 namespace LY.MicroService.IdentityServer;
 
@@ -78,6 +79,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpClaimsMappingModule),
+    typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]
 public partial class IdentityServerHttpApiHostModule : AbpModule
@@ -111,11 +113,11 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         ConfigureTiming(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -133,7 +135,7 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         // 路由
         app.UseRouting();
         // 跨域
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         // 认证
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
@@ -147,9 +149,13 @@ public partial class IdentityServerHttpApiHostModule : AbpModule
         // Swagger
         app.UseSwagger();
         // Swagger可视化界面
-        app.UseSwaggerUI(options =>
+        app.UseAbpSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support IdentityServer API");
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Identity Service API");
+
+            var configuration = context.GetConfiguration();
+            options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+            options.OAuthScopes(configuration["AuthServer:Audience"]);
         });
         // 审计日志
         app.UseAuditing();

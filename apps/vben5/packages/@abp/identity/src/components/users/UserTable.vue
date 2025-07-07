@@ -26,7 +26,7 @@ import {
   PlusOutlined,
   UnlockOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal, Tag } from 'ant-design-vue';
 
 import { useUsersApi } from '../../api/useUsersApi';
 import {
@@ -104,13 +104,20 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
       title: $t('AbpIdentity.DisplayName:UserName'),
     },
     {
+      align: 'left',
       field: 'email',
       minWidth: '120px',
+      slots: { default: 'email' },
       title: $t('AbpIdentity.DisplayName:Email'),
     },
     { field: 'surname', title: $t('AbpIdentity.DisplayName:Surname') },
     { field: 'name', title: $t('AbpIdentity.DisplayName:Name') },
-    { field: 'phoneNumber', title: $t('AbpIdentity.DisplayName:PhoneNumber') },
+    {
+      align: 'left',
+      field: 'phoneNumber',
+      slots: { default: 'phoneNumber' },
+      title: $t('AbpIdentity.DisplayName:PhoneNumber'),
+    },
     {
       field: 'lockoutEnd',
       formatter: ({ cellValue }) => {
@@ -293,6 +300,30 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
           <CheckIcon v-if="row.isActive" />
           <CloseIcon v-else />
         </div>
+      </div>
+    </template>
+    <template #email="{ row }">
+      <div class="flex flex-row">
+        <Tag v-if="row.emailConfirmed" color="success">
+          {{ $t('abp.account.settings.security.verified') }}
+        </Tag>
+        <Tag v-else color="warning">
+          {{ $t('abp.account.settings.security.unVerified') }}
+        </Tag>
+        <span>{{ row.email }}</span>
+      </div>
+    </template>
+    <template #phoneNumber="{ row }">
+      <div class="flex flex-row">
+        <div v-if="row.phoneNumber">
+          <Tag v-if="row.phoneNumberConfirmed" color="success">
+            {{ $t('abp.account.settings.security.verified') }}
+          </Tag>
+          <Tag v-else color="warning">
+            {{ $t('abp.account.settings.security.unVerified') }}
+          </Tag>
+        </div>
+        <span>{{ row.phoneNumber }}</span>
       </div>
     </template>
     <template #action="{ row }">

@@ -105,9 +105,10 @@ public partial class WechatManagementHttpApiHostModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
         ConfigureMultiTenancy(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
+        ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -132,12 +133,11 @@ public partial class WechatManagementHttpApiHostModule : AbpModule
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Wechat Service API");
 
             var configuration = context.GetConfiguration();
             options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-            options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-            options.OAuthScopes("WechatManagement");
+            options.OAuthScopes(configuration["AuthServer:Audience"]);
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();

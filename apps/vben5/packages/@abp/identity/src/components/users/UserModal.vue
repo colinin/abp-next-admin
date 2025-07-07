@@ -11,9 +11,12 @@ import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useSettings } from '@abp/core';
+import { formatToDateTime, useSettings } from '@abp/core';
 import {
   Checkbox,
+  Descriptions,
+  DescriptionsItem,
+  Empty,
   Form,
   Input,
   InputPassword,
@@ -263,10 +266,7 @@ async function onLoadOuChildren(node: EventDataNode) {
           >
             <Input v-model:value="formModel.phoneNumber" />
           </FormItem>
-          <FormItem
-            :label="$t('AbpIdentity.DisplayName:LockoutEnabled')"
-            :label-col="{ span: 10 }"
-          >
+          <FormItem :label="$t('AbpIdentity.DisplayName:LockoutEnabled')">
             <Checkbox v-model:checked="formModel.lockoutEnabled">
               {{ $t('AbpIdentity.DisplayName:LockoutEnabled') }}
             </Checkbox>
@@ -285,7 +285,7 @@ async function onLoadOuChildren(node: EventDataNode) {
               width: '47%',
               height: '338px',
             }"
-            :render="(item) => item.title"
+            :render="(item: any) => item.title"
             :titles="[
               $t('AbpOpenIddict.Assigned'),
               $t('AbpOpenIddict.Available'),
@@ -300,6 +300,7 @@ async function onLoadOuChildren(node: EventDataNode) {
           :tab="$t('AbpIdentity.OrganizationUnits')"
         >
           <Tree
+            v-if="organizationUnits.length > 0"
             :checked-keys="checkedOuKeys"
             :load-data="onLoadOuChildren"
             :loaded-keys="loadedOuKeys"
@@ -309,6 +310,35 @@ async function onLoadOuChildren(node: EventDataNode) {
             checkable
             disabled
           />
+          <Empty v-else />
+        </TabPane>
+        <!-- 详细信息 -->
+        <TabPane
+          v-if="formModel.id"
+          key="details"
+          :tab="$t('AbpIdentity.Details')"
+        >
+          <Descriptions :column="1" bordered size="small">
+            <DescriptionsItem :label="$t('AbpIdentity.CreationTime')">
+              <span>{{ formatToDateTime(formModel.creationTime) }}</span>
+            </DescriptionsItem>
+            <DescriptionsItem :label="$t('AbpIdentity.ModificationTime')">
+              <span>{{
+                formatToDateTime(formModel.lastModificationTime)
+              }}</span>
+            </DescriptionsItem>
+            <DescriptionsItem :label="$t('AbpIdentity.PasswordUpdateTime')">
+              <span>{{
+                formatToDateTime(formModel.lastPasswordChangeTime)
+              }}</span>
+            </DescriptionsItem>
+            <DescriptionsItem :label="$t('AbpIdentity.FailedAccessCount')">
+              <span>{{ formModel.accessFailedCount }}</span>
+            </DescriptionsItem>
+            <DescriptionsItem :label="$t('AbpIdentity.LockoutEndTime')">
+              <span>{{ formatToDateTime(formModel.lockoutEnd) }}</span>
+            </DescriptionsItem>
+          </Descriptions>
         </TabPane>
       </Tabs>
     </Form>

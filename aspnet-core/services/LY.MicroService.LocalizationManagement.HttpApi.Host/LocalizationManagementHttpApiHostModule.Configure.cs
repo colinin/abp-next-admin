@@ -46,7 +46,6 @@ namespace LY.MicroService.LocalizationManagement;
 public partial class LocalizationManagementHttpApiHostModule
 {
     public static string ApplicationName { get; set; } = "LocalizationService";
-    protected const string DefaultCorsPolicyName = "Default";
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
     private void PreConfigureFeature()
@@ -236,13 +235,32 @@ public partial class LocalizationManagementHttpApiHostModule
         });
     }
 
-    private void ConfigureSwagger(IServiceCollection services)
+    private void ConfigureSwagger(IServiceCollection services, IConfiguration configuration)
     {
         // Swagger
-        services.AddSwaggerGen(
+        services.AddAbpSwaggerGenWithOAuth(
+            configuration["AuthServer:Authority"],
+            new Dictionary<string, string>
+            {
+                { configuration["AuthServer:Audience"], "Localization Service API"}
+            },
             options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Localization Management API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Localization Service API", Version = "v1",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "colin",
+                        Email = "colin.in@foxmail.com",
+                        Url = new Uri("https://github.com/colinin")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "MIT",
+                        Url = new Uri("https://github.com/colinin/abp-next-admin/blob/master/LICENSE")
+                    }
+                });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -299,14 +317,20 @@ public partial class LocalizationManagementHttpApiHostModule
     {
         services.AddCors(options =>
         {
-            options.AddPolicy(DefaultCorsPolicyName, builder =>
+            options.AddDefaultPolicy(builder =>
             {
+                var corsOrigins = configuration.GetSection("App:CorsOrigins").Get<List<string>>();
+                if (corsOrigins == null || corsOrigins.Count == 0)
+                {
+                    corsOrigins = configuration["App:CorsOrigins"]?
+                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToList() ?? new List<string>();
+                }
                 builder
-                    .WithOrigins(
-                        configuration["App:CorsOrigins"]
-                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                            .Select(o => o.RemovePostFix("/"))
-                            .ToArray()
+                    .WithOrigins(corsOrigins
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToArray()
                     )
                     .WithAbpExposedHeaders()
                     .WithAbpWrapExposedHeaders()

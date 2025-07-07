@@ -48,6 +48,11 @@ public class DefaultJobExceptionTypeFinder : IJobExceptionTypeFinder, ITransient
                 return JobExceptionType.Network;
             }
 
+            if (httpStatusCode.HttpStatusCode >= 500)
+            {
+                return JobExceptionType.System;
+            }
+
             return JobExceptionType.Application;
         }
 

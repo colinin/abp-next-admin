@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using MyCSharp.HttpUserAgentParser.Providers;
 using System;
 using System.Linq;
 using Volo.Abp.AspNetCore.WebClientInfo;
@@ -16,8 +17,9 @@ public class RequestForwardedHeaderWebClientInfoProvider : HttpContextWebClientI
     public RequestForwardedHeaderWebClientInfoProvider(
         ILogger<HttpContextWebClientInfoProvider> logger, 
         IOptions<ForwardedHeadersOptions> options,
-        IHttpContextAccessor httpContextAccessor) 
-        : base(logger, httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IHttpUserAgentParserProvider httpUserAgentParser) 
+        : base(logger, httpContextAccessor, httpUserAgentParser)
     {
         Options = options.Value;
     }

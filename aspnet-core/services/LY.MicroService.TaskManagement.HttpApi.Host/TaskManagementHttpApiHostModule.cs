@@ -118,10 +118,10 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
         ConfigureMultiTenancy(configuration);
-        ConfigureSwagger(context.Services);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -136,7 +136,7 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         app.MapAbpStaticAssets();
         app.UseCorrelationId();
         app.UseRouting();
-        app.UseCors(DefaultCorsPolicyName);
+        app.UseCors();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
@@ -145,12 +145,11 @@ public partial class TaskManagementHttpApiHostModule : AbpModule
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Task Management API");
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Task Service API");
 
             var configuration = context.GetConfiguration();
             options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-            options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-            options.OAuthScopes(configuration["AuthServer:Scopes"]);
+            options.OAuthScopes(configuration["AuthServer:Audience"]);
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();

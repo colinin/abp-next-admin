@@ -1,1 +1,32 @@
-Xx7DpUtVMwD+afuhCoxyQgRqq40hqxzt3RBpTuMTLUkON5gL25gXcpgZhzGOiho38eMsXCLPWW0fAf7cTGlxrIeNxn6IbtgK3D1wbbrz8wgf96IaJdBVwTsumL71rklSe5BNTUsfhCa0hjc401vfDvyL5Wgm8eyuLawquNVmvmlaFj3v30xU08Vt733a3HpcexECm1GFCl3L52CPTh7mqUK+3g0fZORlB4OKQ/8cAOU9ccCYgVetdIABtGmEkcoCVYfIvzQ==</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>lAi6wXhcWOjn1rN1aIy6z4YBcYlkdrxP9EEw7iiD0tg6i0aVOgZ/FS6IxiOgZXYwTgK/BHA7QN6/lvxnecZ2cETT7w7ZRByGUN1zTQKFwXdyQz/xdp5kZ81bmI3EQWLJBT6iW5K8HZr0qRsQRlExUrWZSOI449+Br2QgOMcBMS3FEMBS8XCBPgZ3z/V9ydztWjhopBB0ZngebWEjqwtlrXEB1M+WOPWUcljdJlp5pXNkiqCrJEzenMJ+tfTfD/8zv08LdhhIAmx1VLViItRqO9OD7l313X7bVyfTWTxGmf7D9YS5Sa0UCiOXM0qVZCVuQ5CzjLRLa13FaJurQ6SBhQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue></KeyInfo></Signature><r:details><r:timeOfIssue>2024-05-15T19:25:36Z</r:timeOfIssue></r:details></r:issuer><r:otherInfo xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS"><tm:infoTables xmlns:tm="http://www.microsoft.com/DRM/XrML2/TM/v2"><tm:infoList t
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['jquery'], factory);
+  } else if (typeof module === 'object' && typeof module.exports === 'object') {
+    factory(require('jquery'));
+  } else {
+    factory(jQuery);
+  }
+}(function (jQuery) {
+  /** 
+   * Dhivehi time in Thaana for timeago.js
+   **/
+  jQuery.timeago.settings.strings = {
+    prefixAgo: null,
+    prefixFromNow: null,
+    suffixAgo: "ކުރިން",
+    suffixFromNow: "ފަހުން",
+    seconds: "ސިކުންތުކޮޅެއް",
+    minute: "މިނިޓެއްވަރު",
+    minutes: "%d މިނިޓު",
+    hour: "ގަޑިއެއްވަރު",
+    hours: "ގާތްގަނޑަކަށް %d ގަޑިއިރު",
+    day: "އެއް ދުވަސް",
+    days: "މީގެ %d ދުވަސް",
+    month: "މަހެއްވަރު",
+    months: "މީގެ %d މަސް",
+    year: "އަހަރެއްވަރު",
+    years: "މީގެ %d އަހަރު",
+    wordSeparator: " ",
+    numbers: []
+  };
+}));

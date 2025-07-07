@@ -1,6 +1,7 @@
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -44,20 +45,24 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreSerilogModule),
+
     typeof(ProjectNameApplicationModule),
     typeof(ProjectNameHttpApiModule),
-    typeof(ProjectNameEntityFrameworkCoreModule),
     typeof(ProjectNameSettingManagementModule),
+    typeof(ProjectNameDbMigratorEntityFrameworkCoreModule),
+
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
+
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
+
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpDistributedLockingModule),
@@ -69,6 +74,7 @@ namespace PackageName.CompanyName.ProjectName;
 #elif OpenTelemetry
     typeof(AbpTelemetryOpenTelemetryModule),
 #endif
+    typeof(AbpClaimsMappingModule),
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
@@ -94,7 +100,6 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
 
         ConfigureWrapper();
         ConfigureMiniExcel();
-        ConfigureLocalization();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureTiming(configuration);
@@ -103,9 +108,16 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         ConfigureIdentity(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
-        ConfigureSwagger(context.Services);
+
+        ConfigureLocalization(configuration);
+        ConfigureFeatureManagement(configuration);
+        ConfigureSettingManagement(configuration);
+        ConfigurePermissionManagement(configuration);
+        ConfigureTextTemplatingManagement(configuration);
+
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
@@ -135,8 +147,7 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
 
             var configuration = context.GetConfiguration();
             options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-            options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-            options.OAuthScopes("ProjectName");
+            options.OAuthScopes(configuration["AuthServer:Audience"]);
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
