@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
@@ -14,6 +15,7 @@ namespace LINGYUN.Abp.Identity;
 
 [DependsOn(
     typeof(AbpIdentityDomainSharedModule),
+    typeof(AbpDistributedLockingAbstractionsModule),
     typeof(Volo.Abp.Identity.AbpIdentityDomainModule))]
 public class AbpIdentityDomainModule : AbpModule
 {
