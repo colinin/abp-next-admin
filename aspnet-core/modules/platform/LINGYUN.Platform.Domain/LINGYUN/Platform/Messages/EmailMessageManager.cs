@@ -65,27 +65,30 @@ public class EmailMessageManager : DomainService, IEmailMessageManager
             else
             {
                 var match = Regex.Match(message.From, FromAddressPattern);
-                if (match.Success)
-                {
-                    from = new MailAddress(match.Value);
-                }
-                else
-                {
-                    from = new MailAddress(message.From);
-                }
+                from = match.Success ? new MailAddress(match.Value) : new MailAddress(message.From);
             }
-            var to = new MailAddress(message.Receiver);
 
-            var mailMessage = new MailMessage(from, to)
+            var mailMessage = new MailMessage
             {
+                From = from,
                 Subject = message.Subject,
                 Body = message.Content,
                 IsBodyHtml = message.IsBodyHtml,
             };
 
+            var toAddresses = message.Receiver.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var address in toAddresses)
+            {
+                mailMessage.To.Add(address.Trim());
+            }
+
             if (!message.CC.IsNullOrWhiteSpace())
             {
-                mailMessage.CC.Add(message.CC);
+                var ccAddresses = message.CC.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var address in ccAddresses)
+                {
+                    mailMessage.CC.Add(address.Trim());
+                }
             }
 
             if (message.Priority.HasValue)
@@ -103,7 +106,8 @@ public class EmailMessageManager : DomainService, IEmailMessageManager
 
             foreach (var header in message.Headers)
             {
-                mailMessage.Headers.Add(header.Key, header.Value);
+                var sanitizedValue = header.Value?.Replace(",", "") ?? "";
+                mailMessage.Headers.Add(header.Key, sanitizedValue);
             }
 
             foreach (var attachment in message.Attachments)
