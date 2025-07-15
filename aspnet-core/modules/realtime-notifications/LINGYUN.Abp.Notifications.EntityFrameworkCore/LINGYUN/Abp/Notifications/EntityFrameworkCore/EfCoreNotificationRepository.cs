@@ -21,10 +21,11 @@ public class EfCoreNotificationRepository : EfCoreRepository<INotificationsDbCon
 
     public async Task<List<Notification>> GetExpritionAsync(
         int batchCount,
+        DateTime expritionTime,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .Where(x => x.ExpirationTime < DateTime.Now)
+            .Where(x => x.ExpirationTime < expritionTime)
             .OrderBy(x => x.ExpirationTime)
             .Take(batchCount)
             .ToListAsync(GetCancellationToken(cancellationToken));

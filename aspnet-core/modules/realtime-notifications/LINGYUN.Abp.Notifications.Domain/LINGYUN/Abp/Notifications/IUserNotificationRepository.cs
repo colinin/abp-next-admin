@@ -29,6 +29,10 @@ public interface IUserNotificationRepository : IBasicRepository<UserNotification
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);
 
+    Task<List<UserNotification>> GetListByNotificationIdssync(
+        IEnumerable<long> notificationIds,
+        CancellationToken cancellationToken = default);
+
     Task<int> GetCountAsync(
         Guid userId,
         string filter = "",
