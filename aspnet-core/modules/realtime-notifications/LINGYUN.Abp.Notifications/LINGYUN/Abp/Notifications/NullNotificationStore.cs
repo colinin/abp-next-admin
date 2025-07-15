@@ -46,8 +46,10 @@ public class NullNotificationStore : INotificationStore, ISingletonDependency
         return Task.CompletedTask;
     }
 
-    public Task DeleteNotificationAsync(
+    public Task DeleteExpritionNotificationAsync(
+        Guid? tenantId,
         int batchCount,
+        DateTime expritionTime,
         CancellationToken cancellationToken = default)
     {
         return Task.CompletedTask;
