@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus;
@@ -22,15 +23,18 @@ public class IdentitySessionCacheItemSynchronizer :
 {
     public ILogger<IdentitySessionCacheItemSynchronizer> Logger { protected get; set; }
     protected ISettingProvider SettingProvider { get; }
+    protected IAbpDistributedLock DistributedLock { get; }
     protected IIdentitySessionCache IdentitySessionCache { get; }
     protected IIdentitySessionStore IdentitySessionStore { get; }
 
     public IdentitySessionCacheItemSynchronizer(
         ISettingProvider settingProvider,
+        IAbpDistributedLock distributedLock,
         IIdentitySessionCache identitySessionCache, 
         IIdentitySessionStore identitySessionStore)
     {
         SettingProvider = settingProvider;
+        DistributedLock = distributedLock;
         IdentitySessionCache = identitySessionCache;
         IdentitySessionStore = identitySessionStore;
 
@@ -45,34 +49,71 @@ public class IdentitySessionCacheItemSynchronizer :
     [UnitOfWork]
     public async virtual Task HandleEventAsync(EntityCreatedEto<IdentitySessionEto> eventData)
     {
-        await RefreshSessionCache(eventData.Entity);
-        await CheckConcurrentLoginStrategy(eventData.Entity);
+        var lockKey = $"{nameof(IdentitySessionCacheItemSynchronizer)}_{nameof(EntityCreatedEto<IdentitySessionEto>)}";
+        await using (var handle = await DistributedLock.TryAcquireAsync(lockKey))
+        {
+            Logger.LogInformation($"Lock is acquired for {lockKey}");
+
+            if (handle == null)
+            {
+                Logger.LogInformation($"Handle is null because of the locking for : {lockKey}");
+                return;
+            }
+
+            await RefreshSessionCache(eventData.Entity);
+            await CheckConcurrentLoginStrategy(eventData.Entity);
+        }
     }
 
+    [UnitOfWork]
     public async virtual Task HandleEventAsync(IdentitySessionChangeAccessedEvent eventData)
     {
-        var idetitySession = await IdentitySessionStore.FindAsync(eventData.SessionId);
-        if (idetitySession != null)
+        var lockKey = $"{nameof(IdentitySessionCacheItemSynchronizer)}_{nameof(IdentitySessionChangeAccessedEvent)}";
+        await using (var handle = await DistributedLock.TryAcquireAsync(lockKey))
         {
-            if (!eventData.IpAddresses.IsNullOrWhiteSpace())
-            {
-                idetitySession.SetIpAddresses(eventData.IpAddresses.Split(","));
-            }
-            idetitySession.UpdateLastAccessedTime(eventData.LastAccessed);
+            Logger.LogInformation($"Lock is acquired for {lockKey}");
 
-            await IdentitySessionStore.UpdateAsync(idetitySession);
-        }
-        else
-        {
-            // 数据库中不存在会话, 清理缓存, 后续请求会话失效
-            await IdentitySessionCache.RemoveAsync(eventData.SessionId);
+            if (handle == null)
+            {
+                Logger.LogInformation($"Handle is null because of the locking for : {lockKey}");
+                return;
+            }
+
+            var idetitySession = await IdentitySessionStore.FindAsync(eventData.SessionId);
+            if (idetitySession != null)
+            {
+                if (!eventData.IpAddresses.IsNullOrWhiteSpace())
+                {
+                    idetitySession.SetIpAddresses(eventData.IpAddresses.Split(","));
+                }
+                idetitySession.UpdateLastAccessedTime(eventData.LastAccessed);
+
+                await IdentitySessionStore.UpdateAsync(idetitySession);
+            }
+            else
+            {
+                // 数据库中不存在会话, 清理缓存, 后续请求会话失效
+                await IdentitySessionCache.RemoveAsync(eventData.SessionId);
+            }
         }
     }
 
     public async virtual Task HandleEventAsync(EntityDeletedEventData<IdentityUser> eventData)
     {
-        // 用户被删除, 移除所有会话
-        await IdentitySessionStore.RevokeAllAsync(eventData.Entity.Id);
+        var lockKey = $"{nameof(IdentitySessionCacheItemSynchronizer)}_{nameof(EntityDeletedEventData<IdentityUser>)}";
+        await using (var handle = await DistributedLock.TryAcquireAsync(lockKey))
+        {
+            Logger.LogInformation($"Lock is acquired for {lockKey}");
+
+            if (handle == null)
+            {
+                Logger.LogInformation($"Handle is null because of the locking for : {lockKey}");
+                return;
+            }
+
+            // 用户被删除, 移除所有会话
+            await IdentitySessionStore.RevokeAllAsync(eventData.Entity.Id);
+        }
     }
 
     protected async virtual Task RefreshSessionCache(IdentitySessionEto session)

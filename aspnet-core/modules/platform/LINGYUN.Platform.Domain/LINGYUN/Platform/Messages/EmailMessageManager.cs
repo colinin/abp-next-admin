@@ -81,7 +81,11 @@ public class EmailMessageManager : DomainService, IEmailMessageManager
 
             if (!message.CC.IsNullOrWhiteSpace())
             {
-                mailMessage.CC.Add(message.CC);
+                var ccAddresses = message.CC.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var address in ccAddresses)
+                {
+                    mailMessage.CC.Add(address.Trim());
+                }
             }
 
             if (message.Priority.HasValue)
