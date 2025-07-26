@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -65,23 +66,18 @@ public class EmailMessageManager : DomainService, IEmailMessageManager
             else
             {
                 var match = Regex.Match(message.From, FromAddressPattern);
-                if (match.Success)
-                {
-                    from = new MailAddress(match.Value);
-                }
-                else
-                {
-                    from = new MailAddress(message.From);
-                }
+                from = match.Success ? new MailAddress(match.Value) : new MailAddress(message.From);
             }
-            var to = new MailAddress(message.Receiver);
 
-            var mailMessage = new MailMessage(from, to)
+            var mailMessage = new MailMessage
             {
+                From = from,
                 Subject = message.Subject,
                 Body = message.Content,
                 IsBodyHtml = message.IsBodyHtml,
             };
+
+            mailMessage.To.Add(message.Receiver);
 
             if (!message.CC.IsNullOrWhiteSpace())
             {
@@ -103,7 +99,8 @@ public class EmailMessageManager : DomainService, IEmailMessageManager
 
             foreach (var header in message.Headers)
             {
-                mailMessage.Headers.Add(header.Key, header.Value);
+                var sanitizedValue = header.Value?.Replace(",", "") ?? "";
+                mailMessage.Headers.Add(header.Key, sanitizedValue);
             }
 
             foreach (var attachment in message.Attachments)
@@ -119,7 +116,7 @@ public class EmailMessageManager : DomainService, IEmailMessageManager
 
             return null;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Logger.LogWarning("Failed to send a email message, error: {message}", ex.ToString());
 
