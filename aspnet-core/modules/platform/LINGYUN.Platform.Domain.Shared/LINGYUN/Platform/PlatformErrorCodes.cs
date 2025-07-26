@@ -22,6 +22,10 @@ public static class PlatformErrorCodes
     /// </summary>
     public const string MenuAchieveMaxDepth = Namespace + ":02003";
     /// <summary>
+    /// 当前菜单不能与上级菜单相同
+    /// </summary>
+    public const string CannotSetSelfParentMenu = Namespace + ":02004";
+    /// <summary>
     /// 菜单元数据缺少必要的元素
     /// </summary>
     public const string MenuMissingMetadata = Namespace + ":02101";
