@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -76,11 +77,7 @@ public class EmailMessageManager : DomainService, IEmailMessageManager
                 IsBodyHtml = message.IsBodyHtml,
             };
 
-            var toAddresses = message.Receiver.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var address in toAddresses)
-            {
-                mailMessage.To.Add(address.Trim());
-            }
+            mailMessage.To.Add(message.Receiver);
 
             if (!message.CC.IsNullOrWhiteSpace())
             {
@@ -123,7 +120,7 @@ public class EmailMessageManager : DomainService, IEmailMessageManager
 
             return null;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Logger.LogWarning("Failed to send a email message, error: {message}", ex.ToString());
 
