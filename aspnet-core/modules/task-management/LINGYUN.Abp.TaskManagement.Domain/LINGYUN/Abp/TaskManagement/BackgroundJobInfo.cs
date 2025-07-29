@@ -146,7 +146,10 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
         // TODO: 是否需要将参数挪到另一个实体? 
         // 任务参数的建议是尽量最小化, 仅存储关键信息
         Args = new ExtraPropertyDictionary();
-        Args.AddIfNotContains(args);
+        if (args != null)
+        {
+            Args.AddIfNotContains(args);
+        }
     }
 
     public void SetPeriodJob(string cron)
