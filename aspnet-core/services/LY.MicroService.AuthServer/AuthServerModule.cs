@@ -84,10 +84,10 @@ public partial class AuthServerModule : AbpModule
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-        PreConfigureAuth();
         PreConfigureWrapper();
         PreConfigureFeature();
         PreForwardedHeaders();
+        PreConfigureAuthServer();
         PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
@@ -110,6 +110,7 @@ public partial class AuthServerModule : AbpModule
         ConfigureUrls(configuration);
         ConfigureTiming(configuration);
         ConfigureAuditing(configuration);
+        ConfigureAuthServer(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
