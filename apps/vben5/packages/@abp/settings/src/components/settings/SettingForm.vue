@@ -142,8 +142,8 @@ onMounted(onGet);
                   v-if="detail.slot"
                   :change="
                     detail.valueType === ValueType.Boolean
-                      ? onCheckChange(detail)
-                      : onValueChange(detail)
+                      ? onCheckChange
+                      : onValueChange
                   "
                   :detail="detail"
                   :name="detail.slot"
