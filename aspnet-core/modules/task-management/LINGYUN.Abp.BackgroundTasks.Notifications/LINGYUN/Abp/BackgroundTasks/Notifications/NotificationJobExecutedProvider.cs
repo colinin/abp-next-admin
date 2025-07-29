@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using LINGYUN.Abp.BackgroundTasks.Activities;
 using LINGYUN.Abp.BackgroundTasks.Localization;
+using LINGYUN.Abp.BackgroundTasks.Notifications.Templates;
 using LINGYUN.Abp.Notifications;
 using Microsoft.Extensions.Localization;
 using System;
@@ -16,10 +17,13 @@ namespace LINGYUN.Abp.BackgroundTasks.Notifications;
 
 public abstract class NotificationJobExecutedProvider : JobExecutedProvider, ITransientDependency
 {
+    public abstract string DefaultNotificationName { get; }
+
     public readonly static IList<JobActionParamter> Paramters = new List<JobActionParamter>
     {
         new JobActionParamter(PropertyPushProvider, L("DisplayName:PushProvider"), L("Description:PushProvider")),
         new JobActionParamter(PropertyUseTemplate, L("DisplayName:Template"), L("Description:Template")),
+        new JobActionParamter(PropertyNotificationName, L("DisplayName:NotificationName"), L("Description:NotificationName")),
         new JobActionParamter(PropertyContent, L("DisplayName:Content"), L("Description:Content")),
         new JobActionParamter(PropertyCulture, L("DisplayName:Culture"), L("Description:Culture")),
     };
@@ -32,6 +36,10 @@ public abstract class NotificationJobExecutedProvider : JobExecutedProvider, ITr
     /// 使用通知模板
     /// </summary>
     public const string PropertyUseTemplate = "use-template";
+    /// <summary>
+    /// 使用自定义通知
+    /// </summary>
+    public const string PropertyNotificationName = "notification-name";
     /// <summary>
     /// 通知内容, 不使用模板时必须
     /// </summary>
@@ -66,7 +74,9 @@ public abstract class NotificationJobExecutedProvider : JobExecutedProvider, ITr
         var useProvider = context.Action.Paramters.GetOrDefault(PropertyPushProvider)?.ToString() ?? "";
         var content = context.Action.Paramters.GetOrDefault(PropertyContent)?.ToString() ?? "";
         var templateName = context.Action.Paramters.GetOrDefault(PropertyUseTemplate)?.ToString()
-            ?? BackgroundTasksNotificationNames.JobExecuteSucceeded;
+            ?? BackgroundTasksNotificationTemplates.JobExecutedNotification;
+        var notificationName = context.Action.Paramters.GetOrDefault(PropertyUseTemplate)?.ToString()
+            ?? DefaultNotificationName;
 
         if (content.IsNullOrWhiteSpace() && !templateName.IsNullOrWhiteSpace())
         {
@@ -97,14 +107,14 @@ public abstract class NotificationJobExecutedProvider : JobExecutedProvider, ITr
             formUser: "BackgroundTasks Engine");
 
         await NotificationSender.SendNofiterAsync(
-            BackgroundTasksNotificationNames.JobExecuteSucceeded,
+            notificationName,
             notificationData,
             tenantId: CurrentTenant.Id,
             severity: severity,
             useProviders: useProvider.Split(';'));
     }
 
-    protected string GetTitleColor(NotificationSeverity severity = NotificationSeverity.Info)
+    private static string GetTitleColor(NotificationSeverity severity = NotificationSeverity.Info)
     {
         return severity switch
         {
