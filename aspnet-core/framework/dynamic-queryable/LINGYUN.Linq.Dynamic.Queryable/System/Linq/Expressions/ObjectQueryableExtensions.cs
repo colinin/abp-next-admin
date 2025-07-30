@@ -41,38 +41,30 @@ public static class ObjectQueryableExtensions
                     // For example(MySql): 
                     // ...Other (Field <> Value)
                     exp = Expression.NotEqual(
-                        leftParamter, 
-                        Expression.Convert(Expression.Constant(paramter.Value), propertyType));
+                        leftParamter,
+                        GetValue(paramter, propertyType));
                     break;
                 case DynamicComparison.LessThan:
                     // For example(MySql): 
                     // ...Other (Field < Value)
-                    exp = Expression.LessThan(
-                        leftParamter,
-                        Expression.Convert(Expression.Constant(paramter.Value), propertyType));
+                    exp = BuildLessThanExpression(paramter, leftParamter, propertyType);
                     break;
                 case DynamicComparison.LessThanOrEqual:
                     // For example(MySql): 
                     // ...Other (Field <= Value)
 
-                    exp = Expression.LessThanOrEqual(
-                        leftParamter, 
-                        Expression.Convert(Expression.Constant(paramter.Value), propertyType));
+                    exp = BuildLessThanOrEqualExpression(paramter, leftParamter, propertyType);
                     break;
                 case DynamicComparison.GreaterThan:
                     // For example(MySql): 
                     // ...Other (Field > Value)
-                    exp = Expression.GreaterThan(
-                        leftParamter, 
-                        Expression.Convert(Expression.Constant(paramter.Value), propertyType));
+                    exp = BuildGreaterThanExpression(paramter, leftParamter, propertyType);
                     break;
                 case DynamicComparison.GreaterThanOrEqual:
                     // For example(MySql): 
                     // ...Other (Field >= Value)
 
-                    exp = Expression.GreaterThanOrEqual(
-                        leftParamter, 
-                        Expression.Convert(Expression.Constant(paramter.Value), propertyType));
+                    exp = BuildGreaterThanOrEqualExpression(paramter, leftParamter, propertyType);
                     break;
                 case DynamicComparison.StartsWith:
                     // For example(MySql): 
@@ -80,7 +72,7 @@ public static class ObjectQueryableExtensions
                     exp = Expression.Call(
                         leftParamter,
                         typeof(string).GetMethod(nameof(String.StartsWith), new[] { typeof(string) }),
-                        Expression.Convert(Expression.Constant(paramter.Value), propertyType));
+                        GetValue(paramter, propertyType));
 
                     // TODO: 单元测试通过
                     // For example(MySql): 
@@ -106,7 +98,7 @@ public static class ObjectQueryableExtensions
                         Expression.Call(
                             leftParamter,
                             typeof(string).GetMethod(nameof(String.StartsWith), new[] { typeof(string) }),
-                            Expression.Convert(Expression.Constant(paramter.Value), propertyType)));
+                            GetValue(paramter, propertyType)));
 
                     // TODO: 单元测试通过
                     // For example(MySql): 
@@ -129,7 +121,7 @@ public static class ObjectQueryableExtensions
                     exp = Expression.Call(
                         leftParamter,
                         typeof(string).GetMethod(nameof(String.EndsWith), new[] { typeof(string) }),
-                        Expression.Convert(Expression.Constant(paramter.Value), propertyType));
+                        GetValue(paramter, propertyType));
 
                     // TODO: 单元测试通过
                     // For example(MySql): 
@@ -153,7 +145,7 @@ public static class ObjectQueryableExtensions
                         Expression.Call(
                             leftParamter,
                             typeof(string).GetMethod(nameof(String.EndsWith), new[] { typeof(string) }),
-                            Expression.Convert(Expression.Constant(paramter.Value), propertyType)));
+                            GetValue(paramter, propertyType)));
 
                     // TODO: 单元测试通过
                     // For example(MySql): 
@@ -176,7 +168,7 @@ public static class ObjectQueryableExtensions
                     exp = Expression.Call(
                         leftParamter,
                         typeof(string).GetMethod(nameof(String.Contains), new[] { typeof(string) }),
-                        Expression.Convert(Expression.Constant(paramter.Value), propertyType));
+                        GetValue(paramter, propertyType));
 
                     // TODO: 单元测试通过
                     // For example(MySql): 
@@ -200,7 +192,7 @@ public static class ObjectQueryableExtensions
                        Expression.Call(
                            leftParamter,
                            typeof(string).GetMethod(nameof(String.Contains), new[] { typeof(string) }),
-                           Expression.Convert(Expression.Constant(paramter.Value), propertyType)));
+                           GetValue(paramter, propertyType)));
                     // TODO: 单元测试通过
                     // For example(MySql): 
                     // ...Other ((Field IS NULL) OR (Field NOT LIKE '%Value%'))
@@ -223,16 +215,14 @@ public static class ObjectQueryableExtensions
 
                     // 非空字段设定为比对默认值
                     exp = Expression.Equal(leftParamter,
-                        Expression.Convert(
-                            Expression.Constant(GetDefaultValue(propertyType)), propertyType));
+                        Expression.Constant(GetDefaultValue(propertyType)));
                     break;
                 case DynamicComparison.NotNull:
                     // For example(MySql): 
                     // ...Other (Field IS NOT NULL)
 
                     exp = Expression.NotEqual(leftParamter,
-                        Expression.Convert(
-                            Expression.Constant(GetDefaultValue(propertyType)), propertyType));
+                        Expression.Constant(GetDefaultValue(propertyType)));
                     break;
                 default:
                 case DynamicComparison.Equal:
@@ -240,8 +230,8 @@ public static class ObjectQueryableExtensions
                     // ...Other (Field = Value)
 
                     exp = Expression.Equal(
-                        leftParamter, 
-                        Expression.Convert(Expression.Constant(paramter.Value), propertyType));
+                        leftParamter,
+                        GetValue(paramter, propertyType));
                     break;
             }
             expressions.Push(exp);
@@ -265,6 +255,160 @@ public static class ObjectQueryableExtensions
         }
 
         return Expression.Lambda<T>(expressions.Pop(), condition.Parameters.ToArray());
+    }
+
+    private static Expression BuildLessThanExpression(DynamicParamter paramter, MemberExpression member, Type propertyType)
+    {
+        if (propertyType == typeof(string))
+        {
+            // 字符串比较: Field < Value
+            return Expression.LessThan(
+                Expression.Call(
+                    member,
+                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) }),
+                    Expression.Constant(Convert.ToString(paramter.Value))),
+                Expression.Constant(0));
+        }
+        if (propertyType.IsNullableType())
+        {
+            // 可空类型比较: Field < Value
+            var underlyingType = Nullable.GetUnderlyingType(propertyType);
+
+            var hasValue = Expression.Property(member, "HasValue");
+            var value = Expression.Property(member, "Value");
+
+            return Expression.AndAlso(
+                hasValue,
+                Expression.LessThan(
+                    value,
+                    GetValue(paramter, underlyingType)));
+        }
+        else
+        {
+            // 数值比较: Field < Value
+            return Expression.LessThan(
+                member,
+                GetValue(paramter, propertyType));
+        }
+    }
+
+    private static Expression BuildLessThanOrEqualExpression(DynamicParamter paramter, MemberExpression member, Type propertyType)
+    {
+        if (propertyType == typeof(string))
+        {
+            // 字符串比较: Field <= Value
+            return Expression.LessThanOrEqual(
+                Expression.Call(
+                    member,
+                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) }),
+                    Expression.Constant(Convert.ToString(paramter.Value))),
+                Expression.Constant(0));
+        }
+        if (propertyType.IsNullableType())
+        {
+            // 可空类型比较: Field <= Value
+            var underlyingType = Nullable.GetUnderlyingType(propertyType);
+
+            var hasValue = Expression.Property(member, "HasValue");
+            var value = Expression.Property(member, "Value");
+
+            return Expression.AndAlso(
+                hasValue,
+                Expression.LessThanOrEqual(
+                    value,
+                    GetValue(paramter, underlyingType)));
+        }
+        else
+        {
+            // 数值比较: Field <= Value
+            return Expression.LessThanOrEqual(
+                member,
+                GetValue(paramter, propertyType));
+        }
+    }
+
+    private static Expression BuildGreaterThanExpression(DynamicParamter paramter, MemberExpression member, Type propertyType)
+    {
+        if (propertyType == typeof(string))
+        {
+            // 字符串比较: Field > Value
+            return Expression.GreaterThan(
+                Expression.Call(
+                    member,
+                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) }),
+                    Expression.Constant(Convert.ToString(paramter.Value))),
+                Expression.Constant(0));
+        }
+        if (propertyType.IsNullableType())
+        {
+            // 可空类型比较: Field > Value
+            var underlyingType = Nullable.GetUnderlyingType(propertyType);
+
+            var hasValue = Expression.Property(member, "HasValue");
+            var value = Expression.Property(member, "Value");
+
+            return Expression.AndAlso(
+                hasValue,
+                Expression.GreaterThan(
+                    value,
+                    GetValue(paramter, underlyingType)));
+        }
+        else
+        {
+            // 数值比较: Field > Value
+            return Expression.GreaterThan(
+                member,
+                GetValue(paramter, propertyType));
+        }
+    }
+
+    private static Expression BuildGreaterThanOrEqualExpression(DynamicParamter paramter, MemberExpression member, Type propertyType)
+    {
+        if (propertyType == typeof(string))
+        {
+            // 字符串比较: Field >= Value
+            return Expression.GreaterThanOrEqual(
+                Expression.Call(
+                    member,
+                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) }),
+                    Expression.Constant(Convert.ToString(paramter.Value))),
+                Expression.Constant(0));
+        }
+
+        if (propertyType.IsNullableType())
+        {
+            // 可空类型比较: Field >= Value
+            var underlyingType = Nullable.GetUnderlyingType(propertyType);
+
+            var hasValue = Expression.Property(member, "HasValue");
+            var value = Expression.Property(member, "Value");
+
+            return Expression.AndAlso(
+                hasValue,
+                Expression.GreaterThanOrEqual(
+                    value,
+                    GetValue(paramter, underlyingType)));
+        }
+        else
+        {
+            // 数值比较: Field >= Value
+            return Expression.GreaterThanOrEqual(
+                member,
+                GetValue(paramter, propertyType));
+        }
+    }
+
+    private static ConstantExpression GetValue(DynamicParamter paramter, Type propertyType)
+    {
+        object typedValue;
+        if (propertyType.IsNullableType())
+        {
+            propertyType = Nullable.GetUnderlyingType(propertyType);
+        }
+
+        typedValue = Convert.ChangeType(paramter.Value, propertyType);
+
+        return Expression.Constant(typedValue, propertyType);
     }
 
     private static object GetDefaultValue(Type type)

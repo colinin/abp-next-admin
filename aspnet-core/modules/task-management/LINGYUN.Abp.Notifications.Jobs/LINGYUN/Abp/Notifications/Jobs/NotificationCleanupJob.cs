@@ -1,6 +1,8 @@
 ﻿using LINGYUN.Abp.BackgroundTasks;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.Notifications.Jobs;
 
@@ -24,8 +26,10 @@ public class NotificationCleanupJob : IJobRunnable
     public async virtual Task ExecuteAsync(JobRunnableContext context)
     {
         var count = context.GetJobData<int>(PropertyBatchCount);
+        var clock = context.GetRequiredService<IClock>();
         var store = context.GetRequiredService<INotificationStore>();
+        var currentTenant = context.GetRequiredService<ICurrentTenant>();
 
-        await store.DeleteNotificationAsync(count);
+        await store.DeleteExpritionNotificationAsync(currentTenant.Id, count, clock.Now);
     }
 }

@@ -6,6 +6,7 @@
     "Platform:02001": "The same menu exists in the sibling directory: {Name}!",
     "Platform:02002": "You are not allowed to delete menu nodes when there are other submenus!",
     "Platform:02003": "The menu level has reached the specified maximum: {Depth}!",
+    "Platform:02004": "The current menu cannot be the same as the upper-level menu!",
     "Platform:02101": "The menu metadata is missing the necessary element :{Name}, which is defined in the data dictionary :{DataName}!",
     "Platform:03001": "The metadata format does not match!",
     "Platform:04400": "The user favorites the menu repeatedly!",

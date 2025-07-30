@@ -432,6 +432,11 @@ public partial class PlatformManagementHttpApiHostModule
                     options.TokenValidationParameters.ValidIssuers = validIssuers;
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
                 }
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
+                if (validAudiences?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidAudiences = validAudiences;
+                }
 
                 options.Events = new JwtBearerEvents
                 {

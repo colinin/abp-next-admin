@@ -102,15 +102,24 @@ public class NotificationStore : INotificationStore
         }
     }
 
-    public async virtual Task DeleteNotificationAsync(
+    public async virtual Task DeleteExpritionNotificationAsync(
+        Guid? tenantId,
         int batchCount,
+        DateTime expritionTime,
         CancellationToken cancellationToken = default)
     {
         using (var unitOfWork = _unitOfWorkManager.Begin())
+        using (_currentTenant.Change(tenantId))
         {
-            var notitications = await _notificationRepository.GetExpritionAsync(batchCount, cancellationToken);
+            var notitications = await _notificationRepository.GetExpritionAsync(
+                batchCount, expritionTime, cancellationToken);
+            var userNotitications = await _userNotificationRepository.GetListByNotificationIdssync(
+                notitications.Select(notification => notification.Id));
 
+            // 清理过期通知
             await _notificationRepository.DeleteManyAsync(notitications);
+            // 清理用户通知
+            await _userNotificationRepository.DeleteManyAsync(userNotitications);
 
             await unitOfWork.CompleteAsync(cancellationToken);
         }

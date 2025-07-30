@@ -3,8 +3,8 @@
 		<DotNetCoreCAPPackageVersion>8.3.5</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.15.2</ElsaPackageVersion>
 		<ElsaNextPackageVersion>3.3.5</ElsaNextPackageVersion>
-		<VoloAbpPackageVersion>9.2.1</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>9.2.1</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>9.2.3</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>9.2.3</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>9.0.4</MicrosoftExtensionsPackageVersion>
 		<MicrosoftAspNetCorePackageVersion>9.0.4</MicrosoftAspNetCorePackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>9.0.4</MicrosoftEntityFrameworkCorePackageVersion>
@@ -12,7 +12,7 @@
 	</PropertyGroup>
 	<!-- Abp Framework -->
 	<ItemGroup>
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.2.1" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.2.3" />
 		<PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -309,6 +309,7 @@
 		<PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
 		<PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.12.0-beta.2" />
 		<PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.12.0" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.12.0-beta.1" />
 		<PackageVersion Include="Polly" Version="8.5.2" />
 		<PackageVersion Include="QRCoder" Version="1.5.1" />
 		<PackageVersion Include="Quartz.Serialization.Json" Version="3.14.0" />

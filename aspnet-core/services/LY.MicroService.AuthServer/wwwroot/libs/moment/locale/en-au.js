@@ -1,12 +1,79 @@
-:"2025-07-05 11:31:41 [DBG] [Microsoft.AspNetCore.Server.Kestrel.Connections] [1] [135] - Connection id \"0HNDQQATBSFQF\" completed keep alive response.\n","stream":"stderr","time":"2025-07-05T03:31:41.530579165Z"}
-{"log":"2025-07-05 11:31:41 [INF] [Microsoft.AspNetCore.Hosting.Diagnostics] [1] [135] - Request finished HTTP/1.1 GET http://localhost/healthz - 500 0 null 3.1038ms\n","stream":"stderr","time":"2025-07-05T03:31:41.530631619Z"}
-{"log":"2025-07-05 11:31:41 [DBG] [Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets] [1] [95] - Connection id \"0HNDQQATBSFQF\" received FIN.\n","stream":"stderr","time":"2025-07-05T03:31:41.530770288Z"}
-{"log":"2025-07-05 11:31:41 [DBG] [Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets] [1] [95] - Connection id \"0HNDQQATBSFQF\" sending FIN because: \"The Socket transport's send loop completed gracefully.\"\n","stream":"stderr","time":"2025-07-05T03:31:41.5309084Z"}
-{"log":"2025-07-05 11:31:41 [DBG] [Microsoft.AspNetCore.Server.Kestrel.Connections] [1] [95] - Connection id \"0HNDQQATBSFQF\" disconnecting.\n","stream":"stderr","time":"2025-07-05T03:31:41.530921423Z"}
-{"log":"2025-07-05 11:31:41 [DBG] [Microsoft.AspNetCore.Server.Kestrel.Connections] [1] [135] - Connection id \"0HNDQQATBSFQF\" stopped.\n","stream":"stderr","time":"2025-07-05T03:31:41.531023048Z"}
-{"log":"2025-07-05 11:31:51 [DBG] [Microsoft.AspNetCore.Server.Kestrel.Connections] [1] [100] - Connection id \"0HNDQQATBSFQG\" accepted.\n","stream":"stderr","time":"2025-07-05T03:31:51.593587844Z"}
-{"log":"2025-07-05 11:31:51 [DBG] [Microsoft.AspNetCore.Server.Kestrel.Connections] [1] [135] - Connection id \"0HNDQQATBSFQG\" started.\n","stream":"stderr","time":"2025-07-05T03:31:51.593608909Z"}
-{"log":"2025-07-05 11:31:51 [INF] [Microsoft.AspNetCore.Hosting.Diagnostics] [1] [135] - Request starting HTTP/1.1 HEAD http://localhost/healthz - null null\n","stream":"stderr","time":"2025-07-05T03:31:51.593735211Z"}
-{"log":"2025-07-05 11:31:51 [DBG] [Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware] [1] [135] - AbpCultureMapRequestCultureProvider returned the following unsupported cultures '[]'.\n","stream":"stderr","time":"2025-07-05T03:31:51.594228126Z"}
-{"log":"2025-07-05 11:31:51 [DBG] [Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware] [1] [135] - AbpCultureMapRequestCultureProvider returned the following unsupported UI Cultures '[]'.\n","stream":"stderr","time":"2025-07-05T03:31:51.594231565Z"}
-{"log":"2025-07-05 11:31:51 [DBG] [Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware] [1] [135] - The request path /healthz does not match a supported file type\n","stream":"st
+//! moment.js locale configuration
+//! locale : English (Australia) [en-au]
+//! author : Jared Morse : https://github.com/jarcoal
+
+;(function (global, factory) {
+   typeof exports === 'object' && typeof module !== 'undefined'
+       && typeof require === 'function' ? factory(require('../moment')) :
+   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+   factory(global.moment)
+}(this, (function (moment) { 'use strict';
+
+    //! moment.js locale configuration
+
+    var enAu = moment.defineLocale('en-au', {
+        months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split(
+            '_'
+        ),
+        monthsShort: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_'),
+        weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split(
+            '_'
+        ),
+        weekdaysShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),
+        weekdaysMin: 'Su_Mo_Tu_We_Th_Fr_Sa'.split('_'),
+        longDateFormat: {
+            LT: 'h:mm A',
+            LTS: 'h:mm:ss A',
+            L: 'DD/MM/YYYY',
+            LL: 'D MMMM YYYY',
+            LLL: 'D MMMM YYYY h:mm A',
+            LLLL: 'dddd, D MMMM YYYY h:mm A',
+        },
+        calendar: {
+            sameDay: '[Today at] LT',
+            nextDay: '[Tomorrow at] LT',
+            nextWeek: 'dddd [at] LT',
+            lastDay: '[Yesterday at] LT',
+            lastWeek: '[Last] dddd [at] LT',
+            sameElse: 'L',
+        },
+        relativeTime: {
+            future: 'in %s',
+            past: '%s ago',
+            s: 'a few seconds',
+            ss: '%d seconds',
+            m: 'a minute',
+            mm: '%d minutes',
+            h: 'an hour',
+            hh: '%d hours',
+            d: 'a day',
+            dd: '%d days',
+            M: 'a month',
+            MM: '%d months',
+            y: 'a year',
+            yy: '%d years',
+        },
+        dayOfMonthOrdinalParse: /\d{1,2}(st|nd|rd|th)/,
+        ordinal: function (number) {
+            var b = number % 10,
+                output =
+                    ~~((number % 100) / 10) === 1
+                        ? 'th'
+                        : b === 1
+                          ? 'st'
+                          : b === 2
+                            ? 'nd'
+                            : b === 3
+                              ? 'rd'
+                              : 'th';
+            return number + output;
+        },
+        week: {
+            dow: 0, // Sunday is the first day of the week.
+            doy: 4, // The week that contains Jan 4th is the first week of the year.
+        },
+    });
+
+    return enAu;
+
+})));

@@ -210,8 +210,15 @@ public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
         {
             menu.Component = input.Component;
         }
+        if (menu.ParentId != input.ParentId)
+        {
+            if (input.ParentId == menu.Id)
+            {
+                throw new BusinessException(PlatformErrorCodes.CannotSetSelfParentMenu, "The current menu cannot be the same as the upper-level menu!");
+            }
+            menu.ParentId = input.ParentId;
+        }
 
-        menu.ParentId = input.ParentId;
         menu.IsPublic = input.IsPublic;
 
         await MenuManager.UpdateAsync(menu);

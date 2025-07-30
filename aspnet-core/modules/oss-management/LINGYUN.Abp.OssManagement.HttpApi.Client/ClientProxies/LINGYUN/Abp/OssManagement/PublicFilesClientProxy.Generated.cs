@@ -15,8 +15,8 @@ using Volo.Abp.Http.Modeling;
 namespace LINGYUN.Abp.OssManagement;
 
 [Dependency(ReplaceServices = true)]
-[ExposeServices(typeof(IFileAppService), typeof(PublicFilesClientProxy))]
-public partial class PublicFilesClientProxy : ClientProxyBase<IFileAppService>, IFileAppService
+[ExposeServices(typeof(IPublicFileAppService), typeof(PublicFilesClientProxy))]
+public partial class PublicFilesClientProxy : ClientProxyBase<IPublicFileAppService>, IPublicFileAppService
 {
     public virtual async Task<OssObjectDto> UploadAsync(UploadFileInput input)
     {
