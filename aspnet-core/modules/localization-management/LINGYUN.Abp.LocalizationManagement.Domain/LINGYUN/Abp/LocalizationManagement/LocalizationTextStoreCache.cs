@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
@@ -24,12 +23,7 @@ public class LocalizationTextStoreCache : ILocalizationTextStoreCache, ISingleto
 
     public virtual void Fill(LocalizationResourceBase resource, string cultureName, Dictionary<string, LocalizedString> dictionary)
     {
-        var cacheItem = GetCacheItem(resource, cultureName);
-
-        foreach (var text in cacheItem.Texts)
-        {
-            dictionary[text.Key] = new LocalizedString(text.Key, text.Value);
-        }
+        // 同步本地化函数不执行, 阻塞线程影响性能
     }
 
     public async virtual Task FillAsync(LocalizationResourceBase resource, string cultureName, Dictionary<string, LocalizedString> dictionary)
@@ -44,52 +38,13 @@ public class LocalizationTextStoreCache : ILocalizationTextStoreCache, ISingleto
 
     public virtual LocalizedString GetOrNull(LocalizationResourceBase resource, string cultureName, string name)
     {
-        var cacheItem = GetCacheItem(resource, cultureName);
-
-        var value = cacheItem.Texts.GetOrDefault(name);
-        if (value.IsNullOrWhiteSpace())
-        {
-            return null;
-        }
-
-        return new LocalizedString(name, value);
-    }
-
-    protected virtual LocalizationTextCacheItem GetCacheItem(LocalizationResourceBase resource, string cultureName)
-    {
-        var cacheKey = LocalizationTextCacheItem.CalculateCacheKey(resource.ResourceName, cultureName);
-        var cacheItem = LocalizationTextCache.Get(cacheKey);
-        if (cacheItem != null)
-        {
-            return cacheItem;
-        }
-
-        var setTexts = new Dictionary<string, string>();
-        using (var scope = ServiceScopeFactory.CreateScope())
-        {
-            var provider = scope.ServiceProvider.GetRequiredService<IEntityChangeTrackingProvider>();
-            using (provider.Change(false))
-            {
-                var repo = scope.ServiceProvider.GetRequiredService<ITextRepository>();
-#pragma warning disable CS0618
-                var texts = repo.GetList(resource.ResourceName, cultureName);
-#pragma warning restore CS0618
-                foreach (var text in texts)
-                {
-                    setTexts[text.Key] = text.Value;
-                }
-            } 
-        }
-
-        cacheItem = new LocalizationTextCacheItem(resource.ResourceName, cultureName, setTexts);
-
-        LocalizationTextCache.Set(cacheKey, cacheItem);
-
-        return cacheItem;
+        // 同步本地化函数不执行, 阻塞线程影响性能
+        return null;
     }
 
     protected async virtual Task<LocalizationTextCacheItem> GetCacheItemAsync(LocalizationResourceBase resource, string cultureName)
     {
+        // 异步本地化函数不受影响
         var cacheKey = LocalizationTextCacheItem.CalculateCacheKey(resource.ResourceName, cultureName);
         var cacheItem = await LocalizationTextCache.GetAsync(cacheKey);
         if (cacheItem != null)
