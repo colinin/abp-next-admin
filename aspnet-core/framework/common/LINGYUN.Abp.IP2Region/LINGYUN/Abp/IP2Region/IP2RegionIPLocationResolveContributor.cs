@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.IP2Region;
-public class IP2RegionIPLocationResolveContributorBase : IPLocationResolveContributorBase
+public class IP2RegionIPLocationResolveContributor : IPLocationResolveContributorBase
 {
     public const string ContributorName = "IP2Region";
     public override string Name => ContributorName;
