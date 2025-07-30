@@ -355,6 +355,11 @@ public partial class LocalizationManagementHttpApiHostModule
                     options.TokenValidationParameters.ValidIssuers = validIssuers;
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
                 }
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
+                if (validAudiences?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidAudiences = validAudiences;
+                }
             });
 
         if (isDevelopment)

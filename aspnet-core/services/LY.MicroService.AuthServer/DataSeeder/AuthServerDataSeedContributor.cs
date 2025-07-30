@@ -1,8 +1,4 @@
-﻿using LINGYUN.Abp.Identity;
-using LINGYUN.Abp.OpenIddict.LinkUser;
-using LINGYUN.Abp.OpenIddict.Sms;
-using LINGYUN.Abp.OpenIddict.WeChat;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using OpenIddict.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -11,8 +7,6 @@ using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Guids;
-using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Scopes;
@@ -22,6 +16,30 @@ namespace LY.MicroService.AuthServer.DataSeeder;
 
 public class ServerDataSeedContributor : IDataSeedContributor, ITransientDependency
 {
+    public static HashSet<string> InitializeScopes = new HashSet<string>
+    {
+        // obsolete! microservice should be allocated separately
+        "lingyun-abp-application",
+        // admin service
+        "ams", 
+        // identity service
+        "ids", 
+        // localization service
+        "lts",
+        // platform service
+        "pts",
+        // message service
+        "mgs",
+        // task service
+        "tks",
+        // webhook service
+        "wks",
+        // workflow service
+        "wfs",
+        // wechat service
+        "was"
+    };
+
     private readonly IConfiguration _configuration;
     private readonly ICurrentTenant _currentTenant;
     private readonly IOpenIddictApplicationManager _applicationManager;
@@ -54,33 +72,37 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
     {
         using (_currentTenant.Change(context.TenantId))
         {
-            await CreateScopeAsync("lingyun-abp-application");
-            await CreateApplicationAsync("lingyun-abp-application");
+            await CreateScopeAsync(InitializeScopes);
+
+            await CreateApplicationAsync(InitializeScopes);
         }
     }
 
-    private async Task CreateScopeAsync(string scope)
+    private async Task CreateScopeAsync(IEnumerable<string> scopes)
     {
-        if (await _scopeRepository.FindByNameAsync(scope) == null)
+        foreach (var scope in scopes)
         {
-            await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor()
+            if (await _scopeRepository.FindByNameAsync(scope) == null)
             {
-                Name = scope,
-                DisplayName = scope + " access",
-                DisplayNames =
+                await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor()
                 {
-                    [CultureInfo.GetCultureInfo("zh-Hans")] = "Abp API 应用程序访问",
-                    [CultureInfo.GetCultureInfo("en")] = "Abp API Application Access"
-                },
-                Resources =
-                {
-                    scope
-                }
-            });
+                    Name = scope,
+                    DisplayName = scope + " access",
+                    DisplayNames =
+                    {
+                        [CultureInfo.GetCultureInfo("zh-Hans")] = "Abp API 应用程序访问",
+                        [CultureInfo.GetCultureInfo("en")] = "Abp API Application Access"
+                    },
+                    Resources =
+                    {
+                        scope
+                    }
+                });
+            }
         }
     }
 
-    private async Task CreateApplicationAsync(string scope)
+    private async Task CreateApplicationAsync(IEnumerable<string> scopes)
     {
         var configurationSection = _configuration.GetSection("OpenIddict:Applications");
 
@@ -91,7 +113,7 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
 
             if (await _applicationRepository.FindByClientIdAsync(vueClientId) == null)
             {
-                await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+                var application = new OpenIddictApplicationDescriptor
                 {
                     ClientId = vueClientId,
                     ClientSecret = configurationSection["VueAdmin:ClientSecret"],
@@ -138,9 +160,14 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                         OpenIddictConstants.Permissions.Scopes.Email,
                         OpenIddictConstants.Permissions.Scopes.Address,
                         OpenIddictConstants.Permissions.Scopes.Phone,
-                        OpenIddictConstants.Permissions.Prefixes.Scope + scope
                     }
-                });
+                };
+                foreach (var scope in scopes)
+                {
+                    application.Permissions.AddIfNotContains(OpenIddictConstants.Permissions.Prefixes.Scope + scope);
+                }
+
+                await _applicationManager.CreateAsync(application);
 
                 var vueClientPermissions = new string[1]
                 {
@@ -155,7 +182,7 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
         {
             if (await _applicationRepository.FindByClientIdAsync(internalServiceClientId) == null)
             {
-                await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+                var application = new OpenIddictApplicationDescriptor
                 {
                     ClientId = internalServiceClientId,
                     ClientSecret = configurationSection["InternalService:ClientSecret"],
@@ -193,9 +220,14 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                         OpenIddictConstants.Permissions.Scopes.Email,
                         OpenIddictConstants.Permissions.Scopes.Address,
                         OpenIddictConstants.Permissions.Scopes.Phone,
-                        OpenIddictConstants.Permissions.Prefixes.Scope + scope
                     }
-                });
+                };
+                foreach (var scope in scopes)
+                {
+                    application.Permissions.AddIfNotContains(OpenIddictConstants.Permissions.Prefixes.Scope + scope);
+                }
+
+                await _applicationManager.CreateAsync(application);
 
                 var internalServicePermissions = new string[2]
                 {
@@ -247,9 +279,12 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                         OpenIddictConstants.Permissions.Scopes.Email,
                         OpenIddictConstants.Permissions.Scopes.Address,
                         OpenIddictConstants.Permissions.Scopes.Phone,
-                        OpenIddictConstants.Permissions.Prefixes.Scope + scope
                     }
                 };
+                foreach (var scope in scopes)
+                {
+                    application.Permissions.AddIfNotContains(OpenIddictConstants.Permissions.Prefixes.Scope + scope);
+                }
 
                 oauthClientRootUrls.ForEach(url =>
                 {

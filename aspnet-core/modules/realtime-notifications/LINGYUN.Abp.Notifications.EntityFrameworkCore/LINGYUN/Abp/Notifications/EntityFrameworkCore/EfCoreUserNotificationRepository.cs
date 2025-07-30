@@ -74,6 +74,15 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public async virtual Task<List<UserNotification>> GetListByNotificationIdssync(
+        IEnumerable<long> notificationIds,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .Where(x => notificationIds.Contains(x.NotificationId))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
     public async virtual Task<List<UserNotificationInfo>> GetNotificationsAsync(
         Guid userId,
         NotificationReadState? readState = null,

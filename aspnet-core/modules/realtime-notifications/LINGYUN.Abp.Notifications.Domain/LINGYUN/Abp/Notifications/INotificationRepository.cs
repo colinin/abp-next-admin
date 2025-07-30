@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
@@ -13,5 +14,6 @@ public interface INotificationRepository : IBasicRepository<Notification, long>
 
     Task<List<Notification>> GetExpritionAsync(
         int batchCount,
+        DateTime expritionTime,
         CancellationToken cancellationToken = default);
 }

@@ -66,8 +66,10 @@ public interface INotificationStore
         NotificationInfo notification,
         CancellationToken cancellationToken = default);
 
-    Task DeleteNotificationAsync(
+    Task DeleteExpritionNotificationAsync(
+        Guid? tenantId,
         int batchCount,
+        DateTime expritionTime,
         CancellationToken cancellationToken = default);
 
     Task InsertUserNotificationAsync(
