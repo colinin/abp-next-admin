@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
-
 import { VbenAvatar } from '@vben-core/shadcn-ui';
-
-import { NotificationReadState, useMyNotifilersApi } from '@abp/notifications';
 
 interface Props {
   avatar?: string;
@@ -20,18 +16,6 @@ withDefaults(defineProps<Props>(), {
   text: '',
   notifierCount: 0,
 });
-const unReadNotifilerCount = ref(0);
-const { getMyNotifilersApi } = useMyNotifilersApi();
-
-async function onInit() {
-  const { totalCount } = await getMyNotifilersApi({
-    maxResultCount: 1,
-    readState: NotificationReadState.UnRead,
-  });
-  unReadNotifilerCount.value = totalCount;
-}
-
-onMounted(onInit);
 </script>
 <template>
   <div class="card-box p-4 py-6 lg:flex">
