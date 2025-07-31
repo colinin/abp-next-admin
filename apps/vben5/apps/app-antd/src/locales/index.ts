@@ -15,6 +15,7 @@ import { preferences } from '@vben/preferences';
 
 import { useAbpStore } from '@abp/core';
 import { useLocalizationsApi } from '@abp/localization';
+import { loadPaltformMessages } from '@abp/platform';
 import antdEnLocale from 'ant-design-vue/es/locale/en_US';
 import antdDefaultLocale from 'ant-design-vue/es/locale/zh_CN';
 import dayjs from 'dayjs';
@@ -34,13 +35,17 @@ const localesMap = loadLocalesMapFromDir(
  * @param lang
  */
 async function loadMessages(lang: SupportedLanguagesType) {
-  const [appLocaleMessages, _, abpLocales] = await Promise.all([
-    localesMap[lang]?.(),
-    loadThirdPartyMessage(lang),
-    loadAbpLocale(lang),
-  ]);
+  const [appLocaleMessages, platformLocales, _, abpLocales] = await Promise.all(
+    [
+      localesMap[lang]?.(),
+      loadPaltformMessages(lang),
+      loadThirdPartyMessage(lang),
+      loadAbpLocale(lang),
+    ],
+  );
   return {
     ...appLocaleMessages?.default,
+    ...platformLocales?.default,
     ...abpLocales,
   };
 }
