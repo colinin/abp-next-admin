@@ -2,6 +2,7 @@ export { useDataDictionariesApi } from './useDataDictionariesApi';
 export { useEmailMessagesApi } from './useEmailMessagesApi';
 export { useLayoutsApi } from './useLayoutsApi';
 export { useMenusApi } from './useMenusApi';
+export { useMyFavoriteMenusApi } from './useMyFavoriteMenusApi';
 export { useMyMenusApi } from './useMyMenusApi';
 export { useRoleMenusApi } from './useRoleMenusApi';
 export { useSmsMessagesApi } from './useSmsMessagesApi';
