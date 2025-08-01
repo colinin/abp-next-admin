@@ -39,6 +39,7 @@
     "ant-design-vue": "catalog:",
     "lodash.clonedeep": "catalog:",
     "vue": "catalog:*",
+    "vue3-colorpicker": "catalog:",
     "vxe-table": "catalog:"
   },
   "devDependencies": {

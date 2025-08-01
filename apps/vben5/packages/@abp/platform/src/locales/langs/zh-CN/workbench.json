@@ -18,7 +18,14 @@
       "dashboard": "仪表盘",
       "profile": "个人中心",
       "settings": "个人设置",
-      "notifiers": "通知消息"
+      "notifiers": "通知消息",
+      "manage": "管理菜单",
+      "create": "添加菜单",
+      "delete": "删除菜单",
+      "select": "选择菜单",
+      "color": "选择颜色",
+      "alias": "自定义别名",
+      "icon": "自定义图标"
     },
     "trends": {
       "title": "最新消息"
