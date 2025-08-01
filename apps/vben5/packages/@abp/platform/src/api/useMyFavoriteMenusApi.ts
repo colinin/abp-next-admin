@@ -15,7 +15,9 @@ export function useMyFavoriteMenusApi() {
    * @param input 参数
    * @returns 常用菜单
    */
-  function createApi(input: UserFavoriteMenuCreateDto) {
+  function createApi(
+    input: UserFavoriteMenuCreateDto,
+  ): Promise<UserFavoriteMenuDto> {
     return request<UserFavoriteMenuDto>(
       `/api/platform/menus/favorites/my-favorite-menus`,
       {
@@ -23,6 +25,16 @@ export function useMyFavoriteMenusApi() {
         method: 'POST',
       },
     );
+  }
+
+  /**
+   * 删除常用菜单
+   * @param id 菜单Id
+   */
+  function deleteApi(id: string): Promise<void> {
+    return request(`/api/platform/menus/favorites/my-favorite-menus/${id}`, {
+      method: 'DELETE',
+    });
   }
 
   /**
@@ -44,6 +56,7 @@ export function useMyFavoriteMenusApi() {
   return {
     cancel,
     createApi,
+    deleteApi,
     getListApi,
   };
 }

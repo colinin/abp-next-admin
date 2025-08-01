@@ -3,8 +3,9 @@ import type { WorkbenchTodoItem, WorkbenchTrendItem } from '@vben/common-ui';
 
 import type { FavoriteMenu } from './types';
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
 
+import { useVbenModal } from '@vben/common-ui';
 import { useAppConfig } from '@vben/hooks';
 import { $t } from '@vben/locales';
 import { preferences } from '@vben/preferences';
@@ -16,7 +17,7 @@ import {
   useMyNotifilersApi,
   useNotificationSerializer,
 } from '@abp/notifications';
-import { Empty } from 'ant-design-vue';
+import { Empty, message } from 'ant-design-vue';
 
 import { useMyFavoriteMenusApi } from '../../api/useMyFavoriteMenusApi';
 import WorkbenchHeader from './components/WorkbenchHeader.vue';
@@ -30,7 +31,8 @@ defineEmits<{
 
 const userStore = useUserStore();
 const { getMyNotifilersApi } = useMyNotifilersApi();
-const { getListApi: getFavoriteMenusApi } = useMyFavoriteMenusApi();
+const { getListApi: getFavoriteMenusApi, deleteApi: deleteFavoriteMenuApi } =
+  useMyFavoriteMenusApi();
 const { deserialize } = useNotificationSerializer();
 const { uiFramework } = useAppConfig(import.meta.env, import.meta.env.PROD);
 
@@ -107,6 +109,13 @@ const getWelcomeTitle = computed(() => {
   }
   return '';
 });
+
+const [WorkbenchQuickNavModal, quickNavModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./components/WorkbenchQuickNavModal.vue'),
+  ),
+});
+
 async function onInit() {
   await Promise.all([
     onInitFavoriteMenus(),
@@ -119,6 +128,7 @@ async function onInitFavoriteMenus() {
   favoriteMenus.value = items.map((item) => {
     return {
       ...item,
+      id: item.menuId,
       isDefault: false,
     };
   });
@@ -144,6 +154,16 @@ async function onInitTodoList() {
   todoList.value = [];
 }
 
+function onCreatingFavoriteMenu() {
+  quickNavModalApi.open();
+}
+
+async function onDeleteFavoriteMenu(menu: FavoriteMenu) {
+  await deleteFavoriteMenuApi(menu.id);
+  await onInitFavoriteMenus();
+  message.success($t('AbpUi.SuccessfullyDeleted'));
+}
+
 onMounted(onInit);
 </script>
 
@@ -166,6 +186,8 @@ onMounted(onInit);
           :items="getFavoriteMenus"
           class="mt-5 lg:mt-0"
           :title="$t('workbench.content.favoriteMenu.title')"
+          @add="onCreatingFavoriteMenu"
+          @delete="onDeleteFavoriteMenu"
           @click="(menu: FavoriteMenu) => $emit('navTo', menu)"
         />
         <WorkbenchTodo
@@ -189,6 +211,7 @@ onMounted(onInit);
         </WorkbenchTrends>
       </div>
     </div>
+    <WorkbenchQuickNavModal @change="onInitFavoriteMenus" />
   </div>
 </template>
 
