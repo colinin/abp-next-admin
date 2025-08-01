@@ -1,11 +1,29 @@
 import type { ListResultDto } from '@abp/core';
 
-import type { UserFavoriteMenuDto } from '../types/favorites';
+import type {
+  UserFavoriteMenuCreateDto,
+  UserFavoriteMenuDto,
+} from '../types/favorites';
 
 import { useRequest } from '@abp/request';
 
 export function useMyFavoriteMenusApi() {
   const { cancel, request } = useRequest();
+
+  /**
+   * 新增常用菜单
+   * @param input 参数
+   * @returns 常用菜单
+   */
+  function createApi(input: UserFavoriteMenuCreateDto) {
+    return request<UserFavoriteMenuDto>(
+      `/api/platform/menus/favorites/my-favorite-menus`,
+      {
+        data: input,
+        method: 'POST',
+      },
+    );
+  }
 
   /**
    * 获取常用菜单列表
@@ -25,6 +43,7 @@ export function useMyFavoriteMenusApi() {
 
   return {
     cancel,
+    createApi,
     getListApi,
   };
 }
