@@ -38,7 +38,7 @@ const ColorPicker = defineAsyncComponent(() =>
   }),
 );
 const CheckboxGroup = defineAsyncComponent(() =>
-  import('ant-design-vue/es').then((res) => res.CheckboxGroup),
+  import('ant-design-vue/es/checkbox').then((res) => res.CheckboxGroup),
 );
 const DatePicker = defineAsyncComponent(
   () => import('ant-design-vue/es/date-picker'),
