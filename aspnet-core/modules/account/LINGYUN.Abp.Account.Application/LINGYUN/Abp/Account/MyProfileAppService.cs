@@ -75,12 +75,12 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
     public async virtual Task<PagedResultDto<IdentitySessionDto>> GetSessionsAsync(GetMySessionsInput input)
     {
-        var user = await GetCurrentUserAsync();
+        var userId = CurrentUser.GetId();
         var totalCount = await IdentitySessionRepository.GetCountAsync(
-            user.Id, input.Device, input.ClientId);
+            userId, input.Device, input.ClientId);
         var identitySessions = await IdentitySessionRepository.GetListAsync(
             input.Sorting, input.MaxResultCount, input.SkipCount,
-            user.Id, input.Device, input.ClientId);
+            userId, input.Device, input.ClientId);
 
         return new PagedResultDto<IdentitySessionDto>(totalCount,
             identitySessions.Select(session => new IdentitySessionDto
@@ -90,6 +90,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
                 SignedIn = session.SignedIn,
                 ClientId = session.ClientId,
                 Device = session.Device,
+                UserId = session.UserId,
                 DeviceInfo = session.DeviceInfo,
                 IpAddresses = session.IpAddresses,
                 LastAccessed = session.LastAccessed,
