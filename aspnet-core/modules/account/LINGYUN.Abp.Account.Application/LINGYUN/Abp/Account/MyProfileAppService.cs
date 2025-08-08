@@ -90,6 +90,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
                 SignedIn = session.SignedIn,
                 ClientId = session.ClientId,
                 Device = session.Device,
+                UserId = session.UserId,
                 DeviceInfo = session.DeviceInfo,
                 IpAddresses = session.IpAddresses,
                 LastAccessed = session.LastAccessed,
