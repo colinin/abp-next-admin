@@ -44,6 +44,9 @@ public class AbpLocalizationManagementDomainModule : AbpModule
             options.EtoMappings.Add<Language, LanguageEto>();
             options.EtoMappings.Add<Resource, ResourceEto>();
         });
+
+        // 定期更新本地化缓存缓解措施
+        context.Services.AddHostedService<LocalizationTextCacheRefreshWorker>();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
