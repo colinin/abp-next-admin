@@ -24,17 +24,20 @@ const DescriptionItem = Descriptions.Item;
 
 const { hasAccessByCodes } = useAccess();
 const abpStore = useAbpStore();
-/** 获取登录用户会话Id */
-const getMySessionId = computed(() => {
-  return abpStore.application?.currentUser.sessionId;
+/** 获取登录用户 */
+const getCurrentUser = computed(() => {
+  return abpStore.application?.currentUser;
 });
 /** 获取是否允许撤销会话 */
 const getAllowRevokeSession = computed(() => {
   return (session: IdentitySessionDto) => {
-    if (getMySessionId.value === session.sessionId) {
+    if (getCurrentUser.value?.sessionId === session.sessionId) {
       return false;
     }
-    return hasAccessByCodes([IdentitySessionPermissions.Revoke]);
+    return (
+      getCurrentUser.value?.id === session.userId ||
+      hasAccessByCodes([IdentitySessionPermissions.Revoke])
+    );
   };
 });
 
@@ -106,7 +109,10 @@ function onDelete(session: IdentitySessionDto) {
       <div class="flex flex-row">
         <span>{{ row.device }}</span>
         <div class="pl-[5px]">
-          <Tag v-if="row.sessionId === getMySessionId" color="#87d068">
+          <Tag
+            v-if="row.sessionId === getCurrentUser?.sessionId"
+            color="#87d068"
+          >
             {{ $t('AbpIdentity.CurrentSession') }}
           </Tag>
         </div>

@@ -2,7 +2,7 @@
 import type { ProfileDto, UpdateProfileDto } from '../types/profile';
 import type { UserInfo } from '../types/user';
 
-import { computed, defineAsyncComponent, onMounted, reactive, ref } from 'vue';
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { useVbenModal } from '@vben/common-ui';
@@ -13,6 +13,19 @@ import { Card, Menu, message, Modal } from 'ant-design-vue';
 
 import { useProfileApi } from '../api/useProfileApi';
 
+interface MenuItem {
+  key: string;
+  label: string;
+}
+
+const props = defineProps<{
+  disableAuthenticator?: boolean;
+  disableBind?: boolean;
+  disableNotice?: boolean;
+  disablePersonalData?: boolean;
+  disableSecurity?: boolean;
+  disableSession?: boolean;
+}>();
 const AuthenticatorSettings = defineAsyncComponent(
   () => import('./components/AuthenticatorSettings.vue'),
 );
@@ -40,7 +53,7 @@ const { query } = useRoute();
 
 const selectedMenuKeys = ref<string[]>(['basic']);
 const myProfile = ref({} as ProfileDto);
-const menuItems = reactive([
+const basicMenuItems: MenuItem[] = [
   {
     key: 'basic',
     label: $t('abp.account.settings.basic.title'),
@@ -69,7 +82,19 @@ const menuItems = reactive([
     key: 'personal-data',
     label: $t('abp.account.settings.personalDataSettings'),
   },
-]);
+];
+const getEnabledMenus = computed(() => {
+  return basicMenuItems.filter((x) => {
+    if (x.key === 'basic') return true;
+    if (x.key === 'authenticator') return !props.disableAuthenticator;
+    if (x.key === 'bind') return !props.disableBind;
+    if (x.key === 'notice') return !props.disableNotice;
+    if (x.key === 'personal-data') return !props.disablePersonalData;
+    if (x.key === 'security') return !props.disableSecurity;
+    if (x.key === 'session') return !props.disableSession;
+    return true; // default case for any unexpected keys
+  });
+});
 const getUserInfo = computed((): null | UserInfo => {
   if (!userStore.userInfo) {
     return null;
@@ -155,7 +180,7 @@ onMounted(async () => {
         <div class="basis-1/6">
           <Menu
             v-model:selected-keys="selectedMenuKeys"
-            :items="menuItems"
+            :items="getEnabledMenus"
             mode="inline"
           />
         </div>
