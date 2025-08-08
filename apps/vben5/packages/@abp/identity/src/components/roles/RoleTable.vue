@@ -37,6 +37,7 @@ const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
 const ClaimOutlined = createIconifyIcon('la:id-card-solid');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
+const ProtectedIcon = createIconifyIcon('mdi:protected-outline');
 
 const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
 const ClaimModal = defineAsyncComponent(() => import('./RoleClaimModal.vue'));
@@ -290,7 +291,7 @@ function onPermissionChange(_name: string, key: string) {
               >
                 {{ $t('AbpAuditLogging.EntitiesChanged') }}
               </MenuItem>
-              <MenuItem key="entity-rules">
+              <MenuItem key="entity-rules" :icon="h(ProtectedIcon)">
                 {{ '数据权限' }}
               </MenuItem>
             </Menu>

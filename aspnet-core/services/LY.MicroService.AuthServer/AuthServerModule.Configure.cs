@@ -29,6 +29,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using OpenIddict.Server;
+using OpenIddict.Server.AspNetCore;
 using OpenIddict.Validation.AspNetCore;
 using StackExchange.Redis;
 using System;
@@ -111,7 +113,7 @@ public partial class AuthServerModule
         });
     }
 
-    private void PreConfigureAuth()
+    private void PreConfigureAuthServer()
     {
         PreConfigure<OpenIddictBuilder>(builder =>
         {
@@ -139,7 +141,7 @@ public partial class AuthServerModule
 
             PreConfigure<OpenIddictServerBuilder>(builder =>
             {
-                builder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "e1c48393-0c43-11f0-9582-4aecacda42db");
+                builder.AddProductionEncryptionAndSigningCertificate(configuration["App:SslFile"], configuration["App:SslPassword"]);
             });
         }
 
@@ -365,6 +367,31 @@ public partial class AuthServerModule
                     options.Applications[appConfig.Key].Urls[urlsConfig.Key] = urlsConfig.Value;
                 }
             }
+        });
+    }
+
+    private void ConfigureAuthServer(IConfiguration configuration)
+    {
+        Configure<OpenIddictServerAspNetCoreBuilder>(builder =>
+        {
+            builder.DisableTransportSecurityRequirement();
+        });
+
+        Configure<OpenIddictServerAspNetCoreOptions>(options =>
+        {
+            options.DisableTransportSecurityRequirement = true;
+        });
+
+        Configure<OpenIddictServerOptions>(options =>
+        {
+            var lifetime = configuration.GetSection("OpenIddict:Lifetime");
+            options.AuthorizationCodeLifetime = lifetime.GetValue("AuthorizationCode", options.AuthorizationCodeLifetime);
+            options.AccessTokenLifetime = lifetime.GetValue("AccessToken", options.AccessTokenLifetime);
+            options.DeviceCodeLifetime = lifetime.GetValue("DeviceCode", options.DeviceCodeLifetime);
+            options.IdentityTokenLifetime = lifetime.GetValue("IdentityToken", options.IdentityTokenLifetime);
+            options.RefreshTokenLifetime = lifetime.GetValue("RefreshToken", options.RefreshTokenLifetime);
+            options.RefreshTokenReuseLeeway = lifetime.GetValue("RefreshTokenReuseLeeway", options.RefreshTokenReuseLeeway);
+            options.UserCodeLifetime = lifetime.GetValue("UserCode", options.UserCodeLifetime);
         });
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)

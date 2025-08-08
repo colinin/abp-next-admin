@@ -14,7 +14,7 @@ using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.OssManagement;
 
-public abstract class FileAppServiceBase : OssManagementApplicationServiceBase, IFileAppService
+public abstract class FileAppServiceBase : OssManagementApplicationServiceBase
 {
     protected IFileUploader FileUploader { get; }
     protected IFileValidater FileValidater { get; }

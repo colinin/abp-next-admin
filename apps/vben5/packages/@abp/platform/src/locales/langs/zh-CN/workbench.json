@@ -1,0 +1,37 @@
+{
+  "header": {
+    "welcome": {
+      "atoon": "中午好, {0}, 注意休息哦~",
+      "afternoon": "下午好, {0}, 适时放松,可以提高工作效率~",
+      "evening": "晚上好, {0}, 还在工作么?该下班了~",
+      "morning": "早安, {0}, 开始您一天的工作吧~"
+    },
+    "notifier": {
+      "title": "通知",
+      "count": "({0})"
+    }
+  },
+  "content": {
+    "favoriteMenu": {
+      "title": "常用",
+      "home": "首页",
+      "dashboard": "仪表盘",
+      "profile": "个人中心",
+      "settings": "个人设置",
+      "notifiers": "通知消息",
+      "manage": "管理菜单",
+      "create": "添加菜单",
+      "delete": "删除菜单",
+      "select": "选择菜单",
+      "color": "选择颜色",
+      "alias": "自定义别名",
+      "icon": "自定义图标"
+    },
+    "trends": {
+      "title": "最新消息"
+    },
+    "todo": {
+      "title": "待办事项"
+    }
+  }
+}
