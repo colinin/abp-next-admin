@@ -28,6 +28,13 @@ interface QrCodeTokenRequest {
   /** 租户Id */
   tenantId?: string;
 }
+/** 令牌撤销请求数据类型 */
+interface RevokeTokenRequest {
+  /** 令牌 */
+  token: string;
+  /** 令牌类型 */
+  tokenType?: 'access_token' | 'refresh_token';
+}
 /** 用户密码授权请求数据模型 */
 interface PasswordTokenRequestModel {
   /** 用户密码 */
@@ -89,6 +96,7 @@ export type {
   PasswordTokenRequestModel,
   PhoneNumberTokenRequest,
   QrCodeTokenRequest,
+  RevokeTokenRequest,
   ShouldChangePasswordError,
   TokenRequest,
   TokenResult,

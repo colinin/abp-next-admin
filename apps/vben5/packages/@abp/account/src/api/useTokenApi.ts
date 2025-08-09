@@ -2,6 +2,7 @@ import type {
   OAuthTokenRefreshModel,
   OAuthTokenResult,
   PasswordTokenRequestModel,
+  RevokeTokenRequest,
   TokenResult,
 } from '../types';
 
@@ -75,9 +76,33 @@ export function useTokenApi() {
     };
   }
 
+  /**
+   * 注销登录
+   * @param input 参数
+   */
+  async function logoutApi(input: RevokeTokenRequest): Promise<void> {
+    const { clientId, clientSecret } = useAppConfig(
+      import.meta.env,
+      import.meta.env.PROD,
+    );
+    return await request('/connect/revocat', {
+      data: {
+        client_id: clientId,
+        client_secret: clientSecret,
+        token: input.token,
+        token_type_hint: input.tokenType,
+      },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      method: 'POST',
+    });
+  }
+
   return {
     cancel,
     loginApi,
+    logoutApi,
     refreshTokenApi,
   };
 }
