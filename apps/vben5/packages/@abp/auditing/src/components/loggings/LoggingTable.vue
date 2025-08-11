@@ -74,6 +74,11 @@ const formOptions: VbenFormProps = {
       ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD HH:mm:ss'],
     ],
   ],
+  commonConfig: {
+    componentProps: {
+      allowClear: true,
+    },
+  },
   schema: [
     {
       component: 'Select',
