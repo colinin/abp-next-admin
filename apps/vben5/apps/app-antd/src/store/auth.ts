@@ -26,7 +26,7 @@ import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
   const { publish } = useEventBus();
-  const { loginApi, refreshTokenApi } = useTokenApi();
+  const { loginApi, refreshTokenApi, logoutApi } = useTokenApi();
   const { loginApi: qrcodeLoginApi } = useQrCodeLoginApi();
   const { loginApi: phoneLoginApi } = usePhoneLoginApi();
   const { getUserInfoApi } = useUserInfoApi();
@@ -131,6 +131,25 @@ export const useAuthStore = defineStore('auth', () => {
       if (await oidcClient.getAccessToken()) {
         accessStore.setAccessToken(null);
         await oidcClient.logout();
+      } else {
+        const logoutTasks: Promise<void>[] = [];
+        if (accessStore.accessToken) {
+          logoutTasks.push(
+            logoutApi({
+              token: accessStore.accessToken,
+              tokenType: 'access_token',
+            }),
+          );
+        }
+        if (accessStore.refreshToken) {
+          logoutTasks.push(
+            logoutApi({
+              token: accessStore.refreshToken,
+              tokenType: 'refresh_token',
+            }),
+          );
+        }
+        await Promise.all(logoutTasks);
       }
     } catch {
       // 不做任何处理
