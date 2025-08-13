@@ -1,5 +1,5 @@
 /*!
-* sweetalert2 v11.22.2
+* sweetalert2 v11.22.3
 * Released under the MIT License.
 */
 function _assertClassBrand(e, t, n) {
@@ -4622,7 +4622,7 @@ Object.keys(instanceMethods).forEach(key => {
   };
 });
 SweetAlert.DismissReason = DismissReason;
-SweetAlert.version = '11.22.2';
+SweetAlert.version = '11.22.3';
 
 const Swal = SweetAlert;
 // @ts-ignore
