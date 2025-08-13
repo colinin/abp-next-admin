@@ -63,7 +63,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpGdprHttpApiModule),
     typeof(AbpGdprDomainIdentityModule),
     typeof(AbpGdprEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
