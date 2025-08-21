@@ -51,6 +51,10 @@
     "ProfileTab:Authenticator": "Authenticator",
     "ProfileTab:SecurityLog": "Security Log",
     "PhoneNumberChangedMessage": "Your mobile number has been successfully changed.",
-    "SecurityLogs": "Security Logs"
+    "SecurityLogs": "Security Logs",
+    "PasswordLogin": "Login with password",
+    "PhoneNumberLogin": "Login with phone",
+    "DisplayName:Abp.Account.EnablePhoneNumberLogin": "Authenticate with a phone number",
+    "Description:Abp.Account.EnablePhoneNumberLogin": "Indicates whether the server allows users to use mobile phone verification codes."
   }
 }

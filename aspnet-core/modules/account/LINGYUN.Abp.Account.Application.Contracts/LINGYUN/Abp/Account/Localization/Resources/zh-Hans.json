@@ -51,6 +51,10 @@
     "ProfileTab:Authenticator": "身份验证程序",
     "ProfileTab:SecurityLog": "安全日志",
     "PhoneNumberChangedMessage": "您的手机号码已成功更改.",
-    "SecurityLogs": "安全日志"
+    "SecurityLogs": "安全日志",
+    "PasswordLogin": "密码登录",
+    "PhoneNumberLogin": "验证码登录",
+    "DisplayName:Abp.Account.EnablePhoneNumberLogin": "使用手机验证码进行身份验证",
+    "Description:Abp.Account.EnablePhoneNumberLogin": "表示服务器是否允许用户使用手机验证码进行身份验证。"
   }
 }

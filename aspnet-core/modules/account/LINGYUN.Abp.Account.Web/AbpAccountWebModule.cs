@@ -7,6 +7,7 @@ using LINGYUN.Abp.Identity.AspNetCore.QrCode;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Volo.Abp.Account.Localization;
@@ -91,30 +92,36 @@ public class AbpAccountWebModule : AbpModule
 
             options.ScriptBundles
                 .Configure(typeof(ManageModel).FullName,
-                    configuration =>
+                    bundle =>
                     {
                         // Client Proxies
-                        configuration.AddFiles("/client-proxies/account-proxy.js");
+                        bundle.AddFiles("/client-proxies/account-proxy.js");
 
                         // Session
-                        configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Session/Index.js");
+                        bundle.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Session/Index.js");
 
                         // Authenticator
-                        configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Authenticator/Index.js");
+                        bundle.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Authenticator/Index.js");
 
                         // SecurityLog
-                        configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/SecurityLog/Index.js");
+                        bundle.AddFiles("/Pages/Account/Components/ProfileManagementGroup/SecurityLog/Index.js");
 
                         // TwoFactor
-                        configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/TwoFactor/Default.js");
+                        bundle.AddFiles("/Pages/Account/Components/ProfileManagementGroup/TwoFactor/Default.js");
 
                         // QrCode
-                        configuration.AddContributors(typeof(QRCodeScriptContributor));
+                        bundle.AddContributors(typeof(QRCodeScriptContributor));
                     });
             options.ScriptBundles
                 .Configure(AccountBundles.Scripts.ChangePassword, bundle =>
                 {
                     bundle.AddContributors(typeof(ChangePasswordScriptContributor));
+                });
+            options.ScriptBundles
+                .Configure(typeof(Pages.Account.LoginModel).FullName, bundle =>
+                {
+                    bundle.AddFiles("/client-proxies/account-proxy.js");
+                    bundle.AddContributors(typeof(QRCodeScriptContributor));
                 });
         });
     }
