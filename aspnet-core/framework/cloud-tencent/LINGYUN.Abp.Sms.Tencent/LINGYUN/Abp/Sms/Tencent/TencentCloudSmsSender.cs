@@ -48,6 +48,9 @@ public class TencentCloudSmsSender : ISmsSender, ITransientDependency
 
         Check.NotNullOrWhiteSpace(appId, TencentCloudSettingNames.Sms.AppId);
 
+        // 短信模板相关参数
+        List<string> templateParams = ["TemplateCode", "SignName"];
+
         // 统一使用 TemplateCode作为模板参数, 解决不一样的sms提供商参数差异
         if (!smsMessage.Properties.TryGetValue("TemplateCode", out var templateId))
         {
@@ -69,7 +72,8 @@ public class TencentCloudSmsSender : ISmsSender, ITransientDependency
 
         if (smsMessage.Properties.Any())
         {
-            request.TemplateParamSet = smsMessage.Properties.Select(x => x.Value.ToString()).ToArray();
+            // 去掉短信模板相关参数,只保留要用的变量
+            request.TemplateParamSet = smsMessage.Properties.Where(x => !templateParams.Contains(x.Key)).Select(x => x.Value.ToString()).ToArray();
         }
 
         var smsClient = await TencentCloudClientFactory.CreateAsync();
