@@ -15,6 +15,8 @@
     "DisplayName:EmailVerifyCode": "邮件验证码",
     "DisplayName:WeChatCode": "微信登录凭证",
     "DisplayName:AuthenticatorCode": "验证代码",
+    "DisplayName:PhoneNumber": "手机号码",
+    "DisplayName:Code": "验证码",
     "TwoFactor": "双因素身份验证",
     "TwoFactor:Enabled": "启用双因素认证",
     "TwoFactor:Email": "邮箱验证",
@@ -51,6 +53,11 @@
     "ProfileTab:Authenticator": "身份验证程序",
     "ProfileTab:SecurityLog": "安全日志",
     "PhoneNumberChangedMessage": "您的手机号码已成功更改.",
-    "SecurityLogs": "安全日志"
+    "SecurityLogs": "安全日志",
+    "PasswordLogin": "密码登录",
+    "PhoneNumberLogin": "验证码登录",
+    "ScanQrCodeLogin": "扫码登录",
+    "DisplayName:Abp.Account.EnablePhoneNumberLogin": "使用手机验证码进行身份验证",
+    "Description:Abp.Account.EnablePhoneNumberLogin": "表示服务器是否允许用户使用手机验证码进行身份验证。"
   }
 }
