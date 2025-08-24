@@ -28,9 +28,11 @@
 <div class="account-module-form">
     @if (Model.EnableLocalLogin)
     {
-        <abp-tabs>
-            <abp-tab title="@L["PasswordLogin"].Value" active="Model.LoginType == LoginType.Password">
+        <abp-tabs id="LoginFormTabs">
+            <abp-tab title="@L["PasswordLogin"].Value" active="Model.LoginType == LoginType.Password" header-name="PasswordLogin">
                 <form method="post" class="mt-4" asp-page-handler="PasswordLogin">
+                    <input asp-for="PasswordLoginInput.ReturnUrl" />
+                    <input asp-for="PasswordLoginInput.ReturnUrlHash" />
                     <div class="mb-3">
                         <label asp-for="PasswordLoginInput.UserNameOrEmailAddress" class="form-label"></label>
                         <input asp-for="PasswordLoginInput.UserNameOrEmailAddress" class="form-control" />
@@ -69,8 +71,10 @@
                     </div>
                 </form>
             </abp-tab>
-            <abp-tab title="@L["PhoneNumberLogin"].Value" active="Model.LoginType == LoginType.PhoneNumber">
+            <abp-tab title="@L["PhoneNumberLogin"].Value" active="Model.LoginType == LoginType.PhoneNumber" header-name="PhoneNumberLogin">
                 <form method="post" class="mt-4" asp-page-handler="PhoneNumberLogin" id="PhoneNumberForm">
+                    <input asp-for="PhoneLoginInput.ReturnUrl" />
+                    <input asp-for="PhoneLoginInput.ReturnUrlHash" />
                     <div class="mb-3">
                         <label asp-for="PhoneLoginInput.PhoneNumber" class="form-label"></label>
                         <input asp-for="PhoneLoginInput.PhoneNumber" class="form-control" id="PhoneNumberInput" />
@@ -96,6 +100,17 @@
                         {
                             <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
                         }
+                    </div>
+                </form>
+            </abp-tab>
+            <abp-tab title="@L["ScanQrCodeLogin"].Value" active="Model.LoginType == LoginType.QrCode" header-name="QrCodeLogin">
+                <form method="post" class="mt-4" asp-page-handler="QrCodeLogin" id="QrCodeForm">
+                    <input asp-for="QrCodeLoginInput.ReturnUrl" />
+                    <input asp-for="QrCodeLoginInput.ReturnUrlHash" />
+                    <input asp-for="QrCodeLoginInput.Key" id="QrCodeKey" />
+                    <div class="gap-2" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <div id="QrCode"></div>
+                        <div id="QrCodeStatus"></div>
                     </div>
                 </form>
             </abp-tab>

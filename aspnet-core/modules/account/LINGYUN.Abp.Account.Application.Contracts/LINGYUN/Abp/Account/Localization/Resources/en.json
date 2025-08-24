@@ -15,6 +15,8 @@
     "DisplayName:EmailVerifyCode": "Mail verification code",
     "DisplayName:WeChatCode": "Wechat login code",
     "DisplayName:AuthenticatorCode": "Authenticator Code",
+    "DisplayName:PhoneNumber": "Phone Number",
+    "DisplayName:Code": "Code",
     "TwoFactor": "Two factor authentication",
     "TwoFactor:Enabled": "TwoFactor Enabled",
     "TwoFactor:Email": "Email",
@@ -54,6 +56,7 @@
     "SecurityLogs": "Security Logs",
     "PasswordLogin": "Login with password",
     "PhoneNumberLogin": "Login with phone",
+    "ScanQrCodeLogin": "Login with scan",
     "DisplayName:Abp.Account.EnablePhoneNumberLogin": "Authenticate with a phone number",
     "Description:Abp.Account.EnablePhoneNumberLogin": "Indicates whether the server allows users to use mobile phone verification codes."
   }

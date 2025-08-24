@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Account.Web.ExternalProviders;
+using LINGYUN.Abp.Account.Web.Pages.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -9,7 +10,6 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
-using static Volo.Abp.Account.Web.Pages.Account.LoginModel;
 using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
 
 namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
@@ -35,7 +35,7 @@ namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
 
         public async override Task<IActionResult> OnGetAsync()
         {
-            LoginInput = new LoginInputModel();
+            PasswordLoginInput = new PasswordLoginInputModel();
 
             var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
             if (request?.ClientId != null)
@@ -43,7 +43,7 @@ namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
                 // TODO: Find a proper cancel way.
                 // ShowCancelButton = true;
 
-                LoginInput.UserNameOrEmailAddress = request.LoginHint;
+                PasswordLoginInput.UserNameOrEmailAddress = request.LoginHint;
 
                 //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
                 var tenant = request.GetParameter(TenantResolverConsts.DefaultTenantKey)?.ToString();

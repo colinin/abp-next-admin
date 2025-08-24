@@ -1,13 +1,11 @@
 ﻿using LINGYUN.Abp.Account.Emailing;
 using LINGYUN.Abp.Account.Web.Bundling;
-using LINGYUN.Abp.Account.Web.Pages.Account;
 using LINGYUN.Abp.Account.Web.ProfileManagement;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.AspNetCore.QrCode;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Volo.Abp.Account.Localization;
@@ -16,7 +14,6 @@ using Volo.Abp.Account.Web.ProfileManagement;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.QRCode;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Sms;
@@ -121,6 +118,7 @@ public class AbpAccountWebModule : AbpModule
                 .Configure(typeof(Pages.Account.LoginModel).FullName, bundle =>
                 {
                     bundle.AddFiles("/client-proxies/account-proxy.js");
+                    bundle.AddFiles("/client-proxies/qrcode-proxy.js");
                     bundle.AddContributors(typeof(QRCodeScriptContributor));
                 });
         });
