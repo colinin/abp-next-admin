@@ -1,12 +1,34 @@
+import type {
+  PasswordTokenRequestModel,
+  PhoneNumberTokenRequest,
+  QrCodeTokenRequest,
+} from '../types/token';
+
 import { userManager } from '../utils/auth';
 
-export function useOidcClient() {
+export function useOAuthService() {
   async function login() {
     return userManager.signinRedirect();
   }
 
+  async function loginByPassword(input: PasswordTokenRequestModel) {
+    return userManager.signinResourceOwnerCredentials(input);
+  }
+
+  async function loginBySmsCode(input: PhoneNumberTokenRequest) {
+    return userManager.signinSmsCode(input);
+  }
+
+  async function loginByQrCode(input: QrCodeTokenRequest) {
+    return userManager.signinQrCode(input);
+  }
+
   async function logout() {
     return userManager.signoutRedirect();
+  }
+
+  async function revokeTokens() {
+    return userManager.revokeTokens(['access_token', 'refresh_token']);
   }
 
   async function refreshToken() {
@@ -33,8 +55,12 @@ export function useOidcClient() {
 
   return {
     login,
+    loginByPassword,
+    loginBySmsCode,
+    loginByQrCode,
     logout,
     refreshToken,
+    revokeTokens,
     getAccessToken,
     isAuthenticated,
     handleCallback,
