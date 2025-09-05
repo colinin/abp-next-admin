@@ -24,7 +24,7 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
     protected ISettingProvider SettingProvider => ServiceProvider.LazyGetRequiredService<ISettingProvider>();
     protected IStringLocalizerFactory LocalizerFactory => ServiceProvider.LazyGetRequiredService<IStringLocalizerFactory>();
     protected IWeChatWorkMessageSender WeChatWorkMessageSender => ServiceProvider.LazyGetRequiredService<IWeChatWorkMessageSender>();
-    protected IWeChatWorkInternalUserFinder WeChatWorkInternalUserFinder => ServiceProvider.LazyGetRequiredService<IWeChatWorkInternalUserFinder>();
+    protected IWeChatWorkUserClaimProvider WeChatWorkInternalUserFinder => ServiceProvider.LazyGetRequiredService<IWeChatWorkUserClaimProvider>();
     protected INotificationDefinitionManager NotificationDefinitionManager => ServiceProvider.LazyGetRequiredService<INotificationDefinitionManager>();
 
     protected async override Task<bool> CanPublishAsync(NotificationInfo notification, CancellationToken cancellationToken = default)

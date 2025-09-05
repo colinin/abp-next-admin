@@ -3,4 +3,5 @@
 public static class AbpAccountAuthenticationTypes
 {
     public const string ShouldChangePassword = "Abp.Account.ShouldChangePassword";
+    public const string ConfirmUserScheme = "Abp.Account.ConfirmUser";
 }
