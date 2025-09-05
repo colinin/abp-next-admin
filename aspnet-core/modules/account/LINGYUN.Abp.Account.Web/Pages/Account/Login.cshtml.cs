@@ -361,13 +361,15 @@ public class LoginModel : AccountPageModel
         if (result.IsLockedOut)
         {
             Logger.LogWarning($"External login callback error: user is locked out!");
-            throw new UserFriendlyException("Cannot proceed because user is locked out!");
+
+            return await HandleUserLockedOut();
         }
 
         if (result.IsNotAllowed)
         {
             Logger.LogWarning($"External login callback error: user is not allowed!");
-            throw new UserFriendlyException("Cannot proceed because user is not allowed!");
+
+            return await HandleExternalLoginNotAllowed(loginInfo);
         }
 
         IdentityUser user;
@@ -525,14 +527,7 @@ public class LoginModel : AccountPageModel
             // 用户必须修改密码
             if (notAllowedUser.ShouldChangePasswordOnNextLogin || await UserManager.ShouldPeriodicallyChangePasswordAsync(notAllowedUser))
             {
-                var changePwdIdentity = new ClaimsIdentity(AbpAccountAuthenticationTypes.ShouldChangePassword);
-                changePwdIdentity.AddClaim(new Claim(AbpClaimTypes.UserId, notAllowedUser.Id.ToString()));
-                if (notAllowedUser.TenantId.HasValue)
-                {
-                    changePwdIdentity.AddClaim(new Claim(AbpClaimTypes.TenantId, notAllowedUser.TenantId.ToString()));
-                }
-
-                await HttpContext.SignInAsync(AbpAccountAuthenticationTypes.ShouldChangePassword, new ClaimsPrincipal(changePwdIdentity));
+                await StoreChangePasswordUserAsync(notAllowedUser);
 
                 return RedirectToPage("ChangePassword", new
                 {
@@ -544,6 +539,56 @@ public class LoginModel : AccountPageModel
         }
         Alerts.Warning(L["LoginIsNotAllowed"]);
         return Page();
+    }
+
+    protected async virtual Task<IActionResult> HandleExternalLoginNotAllowed(ExternalLoginInfo loginInfo)
+    {
+        Logger.LogWarning("External login callback error: User is Not Allowed!");
+
+        var user = await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
+        if (user == null)
+        {
+            Logger.LogWarning($"External login callback error: User is Not Found!");
+            return RedirectToPage("./Login");
+        }
+
+        if (user.ShouldChangePasswordOnNextLogin || await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+        {
+            await StoreChangePasswordUserAsync(user);
+            return RedirectToPage("./ChangePassword", new
+            {
+                ReturnUrl,
+                ReturnUrlHash
+            });
+        }
+
+        Alerts.Warning(L["LoginIsNotAllowed"]);
+        return Page();
+    }
+
+    protected virtual async Task StoreChangePasswordUserAsync(IdentityUser user)
+    {
+        var changePwdIdentity = new ClaimsIdentity(AbpAccountAuthenticationTypes.ShouldChangePassword);
+        changePwdIdentity.AddClaim(new Claim(AbpClaimTypes.UserId, user.Id.ToString()));
+        if (user.TenantId.HasValue)
+        {
+            changePwdIdentity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString()));
+        }
+
+        await HttpContext.SignInAsync(AbpAccountAuthenticationTypes.ShouldChangePassword, new ClaimsPrincipal(changePwdIdentity));
+    }
+
+    protected virtual async Task StoreConfirmUserAsync(IdentityUser user)
+    {
+        var identity = new ClaimsIdentity(AbpAccountAuthenticationTypes.ConfirmUserScheme);
+        identity.AddClaim(new Claim(AbpClaimTypes.UserId, user.Id.ToString()));
+
+        if (user.TenantId.HasValue)
+        {
+            identity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString()));
+        }
+
+        await HttpContext.SignInAsync(AbpAccountAuthenticationTypes.ConfirmUserScheme, new ClaimsPrincipal(identity));
     }
 
     protected virtual Task<IActionResult> HandleUserNameOrPasswordInvalid()
