@@ -8,16 +8,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
+using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.Identity.WeChat.Work;
 
 [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
-[ExposeServices(typeof(IWeChatWorkInternalUserFinder))]
-public class WeChatWorkInternalUserFinder : IWeChatWorkInternalUserFinder
+[ExposeServices(typeof(IWeChatWorkUserClaimProvider))]
+public class WeChatWorkUserClaimProvider : IWeChatWorkUserClaimProvider
 {
     protected IdentityUserManager UserManager { get; }
 
-    public WeChatWorkInternalUserFinder(
+    public WeChatWorkUserClaimProvider(
         IdentityUserManager userManager)
     {
         UserManager = userManager;
@@ -54,5 +55,23 @@ public class WeChatWorkInternalUserFinder : IWeChatWorkInternalUserFinder
         }
 
         return userIdentifiers;
+    }
+
+    [UnitOfWork]
+    public async virtual Task BindUserAsync(
+        Guid userId,
+        string weChatUserId,
+        CancellationToken cancellationToken = default)
+    {
+        var user = await UserManager.GetByIdAsync(userId);
+        var existsWeChatUserId = GetUserOpenIdOrNull(user, AbpWeChatWorkGlobalConsts.ProviderName);
+        if (!existsWeChatUserId.IsNullOrWhiteSpace())
+        {
+            user.RemoveLogin(AbpWeChatWorkGlobalConsts.ProviderName, existsWeChatUserId);
+        }
+        user.AddLogin(new Microsoft.AspNetCore.Identity.UserLoginInfo(
+            AbpWeChatWorkGlobalConsts.ProviderName,
+            weChatUserId,
+            AbpWeChatWorkGlobalConsts.DisplayName));
     }
 }

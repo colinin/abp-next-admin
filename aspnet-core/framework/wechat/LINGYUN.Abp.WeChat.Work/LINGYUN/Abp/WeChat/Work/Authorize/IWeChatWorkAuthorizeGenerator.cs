@@ -25,13 +25,13 @@ public interface IWeChatWorkAuthorizeGenerator
     /// <param name="redirectUri"></param>
     /// <param name="state"></param>
     /// <param name="loginType"></param>
-    /// <param name="agentid"></param>
+    /// <param name="agentId"></param>
     /// <param name="lang"></param>
     /// <returns></returns>
     Task<string> GenerateOAuth2LoginAsync(
         string redirectUri,
         string state,
         string loginType = "ServiceApp",
-        string agentid = "",
+        string agentId = "",
         string lang = "zh");
 }
