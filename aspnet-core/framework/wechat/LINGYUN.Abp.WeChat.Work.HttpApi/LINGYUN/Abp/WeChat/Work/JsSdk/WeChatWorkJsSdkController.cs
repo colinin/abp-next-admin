@@ -8,7 +8,7 @@ using Volo.Abp.Auditing;
 
 namespace LINGYUN.Abp.WeChat.Work.JsSdk;
 
-// [Authorize]
+[Authorize]
 [Controller]
 [DisableAuditing]
 [Route("api/wechat/work/jssdk")]

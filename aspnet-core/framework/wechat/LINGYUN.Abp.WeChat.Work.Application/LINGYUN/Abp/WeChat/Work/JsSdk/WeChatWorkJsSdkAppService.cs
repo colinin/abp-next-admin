@@ -9,7 +9,7 @@ using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.WeChat.Work.JsSdk;
 
-// [Authorize]
+[Authorize]
 [RequiresFeature(WeChatWorkFeatureNames.Enable)]
 public class WeChatWorkJsSdkAppService : ApplicationService, IWeChatWorkJsSdkAppService
 {
