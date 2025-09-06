@@ -58,6 +58,10 @@
     "PhoneNumberLogin": "验证码登录",
     "ScanQrCodeLogin": "扫码登录",
     "DisplayName:Abp.Account.EnablePhoneNumberLogin": "使用手机验证码进行身份验证",
-    "Description:Abp.Account.EnablePhoneNumberLogin": "表示服务器是否允许用户使用手机验证码进行身份验证。"
+    "Description:Abp.Account.EnablePhoneNumberLogin": "表示服务器是否允许用户使用手机验证码进行身份验证。",
+    "Bind": "绑定",
+    "UnBind": "未绑定",
+    "CancelBind": "解除绑定",
+    "CancelBindWarningMessage": "解除绑定后将无法使用外部身份,如果你通过此方式登录,你的会话将被注销!"
   }
 }

@@ -83,7 +83,7 @@ public class AccountController : AbpController
             await SignInManager.SignOutAsync();
         }
     }
-
+   
     [HttpGet]
     [Authorize]
     [Route("external-logins/bind")]

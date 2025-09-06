@@ -58,6 +58,10 @@
     "PhoneNumberLogin": "Login with phone",
     "ScanQrCodeLogin": "Login with scan",
     "DisplayName:Abp.Account.EnablePhoneNumberLogin": "Authenticate with a phone number",
-    "Description:Abp.Account.EnablePhoneNumberLogin": "Indicates whether the server allows users to use mobile phone verification codes."
+    "Description:Abp.Account.EnablePhoneNumberLogin": "Indicates whether the server allows users to use mobile phone verification codes.",
+    "Bind": "Bind",
+    "UnBind": "Unbound",
+    "CancelBind": "Cancel Bind",
+    "CancelBindWarningMessage": "After unbinding, you will not be able to use an external identity. If you log in through this method, your session will be logged out!"
   }
 }
