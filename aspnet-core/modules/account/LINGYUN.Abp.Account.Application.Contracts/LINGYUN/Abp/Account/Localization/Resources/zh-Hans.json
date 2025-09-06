@@ -62,6 +62,8 @@
     "Bind": "绑定",
     "UnBind": "未绑定",
     "CancelBind": "解除绑定",
+    "BindSuccessfully": "绑定成功!",
+    "CancelBindSuccessfully": "解除绑定成功!",
     "CancelBindWarningMessage": "解除绑定后将无法使用外部身份,如果你通过此方式登录,你的会话将被注销!"
   }
 }

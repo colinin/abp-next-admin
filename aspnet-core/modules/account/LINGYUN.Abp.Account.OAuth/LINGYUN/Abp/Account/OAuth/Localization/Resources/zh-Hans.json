@@ -31,6 +31,7 @@
     "OAuth:QQ": "QQ",
     "OAuth:Weixin": "微信",
     "OAuth:WorkWeixin": "企业微信",
-    "OAuth:Bilibili": "Bilibili"
+    "OAuth:Bilibili": "Bilibili",
+    "WorkWeixin:Code": "授权码"
   }
 }

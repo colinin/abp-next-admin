@@ -1,4 +1,5 @@
 ﻿using AspNet.Security.OAuth.WorkWeixin;
+using LINGYUN.Abp.Account.Web.OAuth.Areas.Account.Controllers.Dtos;
 using LINGYUN.Abp.WeChat.Work.Authorize;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -27,9 +28,9 @@ public class OAuthAccountController : AbpController
     [HttpPost]
     [Authorize]
     [Route("work-weixin/bind")]
-    public virtual async Task WorkWeixinLoginBindAsync(string code)
+    public virtual async Task WorkWeixinLoginBindAsync(WorkWeixinLoginBindInput input)
     {
-        var workWeixinUser = await WeChatWorkUserFinder.GetUserInfoAsync(code);
+        var workWeixinUser = await WeChatWorkUserFinder.GetUserInfoAsync(input.Code);
         var currentUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
         var userLogins = await UserManager.GetLoginsAsync(currentUser);
         var workWexinLogin = userLogins.FirstOrDefault(x => x.LoginProvider == WorkWeixinAuthenticationDefaults.AuthenticationScheme);
