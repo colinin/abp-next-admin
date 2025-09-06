@@ -62,6 +62,8 @@
     "Bind": "Bind",
     "UnBind": "Unbound",
     "CancelBind": "Cancel Bind",
+    "BindSuccessfully": "Binding successful!",
+    "CancelBindSuccessfully": "Unbinding successful!",
     "CancelBindWarningMessage": "After unbinding, you will not be able to use an external identity. If you log in through this method, your session will be logged out!"
   }
 }
