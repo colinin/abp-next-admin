@@ -52,7 +52,7 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
         var agentId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.AgentId);
         if (agentId.IsNullOrWhiteSpace())
         {
-            Logger.LogWarning("Unable to send enterprise wechat messages because agentId is not set.");
+            Logger.LogWarning("Unable to send work weixin messages because agentId is not set.");
             return;
         }
 
@@ -91,6 +91,7 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
 
         if (!findUserList.Any())
         {
+            Logger.LogWarning("Unable to send work weixin messages because findUserList is empty.");
             return;
         }
 
@@ -136,6 +137,7 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
 
         if (message == null)
         {
+            Logger.LogWarning("Unable to send work weixin messages because WeChatWorkMessage is null.");
             return;
         }
 
