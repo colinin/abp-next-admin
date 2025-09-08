@@ -73,6 +73,7 @@ catalog:
   '@vueuse/core': ^13.1.0
   '@vueuse/integrations': ^13.1.0
   '@vueuse/motion': ^3.0.3
+  '@wecom/jssdk': ^2.3.1
   ant-design-vue: ^4.2.6
   archiver: ^7.0.1
   autoprefixer: ^10.4.21

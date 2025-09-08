@@ -5,3 +5,4 @@ export * from './mitt';
 export * from './regex';
 export * from './string';
 export * from './tree';
+export * from './uuid';
