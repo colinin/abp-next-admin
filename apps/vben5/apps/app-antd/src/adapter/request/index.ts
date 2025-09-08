@@ -61,6 +61,9 @@ export function initRequestClient() {
       if (abpStore.tenantId) {
         config.headers.__tenant = abpStore.tenantId;
       }
+      if (abpStore.xsrfToken) {
+        config.headers.RequestVerificationToken = abpStore.xsrfToken;
+      }
       return config;
     },
   });
