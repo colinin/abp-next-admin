@@ -46,6 +46,7 @@
     "@abp/text-templating": "workspace:*",
     "@abp/ui": "workspace:*",
     "@abp/webhooks": "workspace:*",
+    "@abp/wechat": "workspace:*",
     "@vben-core/shadcn-ui": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",

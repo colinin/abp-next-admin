@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { BindItem } from '../types/bind';
 import type { ProfileDto, UpdateProfileDto } from '../types/profile';
 import type { UserInfo } from '../types/user';
 
@@ -17,14 +18,17 @@ interface MenuItem {
   key: string;
   label: string;
 }
-
 const props = defineProps<{
+  bindItems?: BindItem[];
   disableAuthenticator?: boolean;
   disableBind?: boolean;
   disableNotice?: boolean;
   disablePersonalData?: boolean;
   disableSecurity?: boolean;
   disableSession?: boolean;
+}>();
+const emits = defineEmits<{
+  (event: 'onBindInit'): void;
 }>();
 const AuthenticatorSettings = defineAsyncComponent(
   () => import('./components/AuthenticatorSettings.vue'),
@@ -191,7 +195,11 @@ onMounted(async () => {
             @submit="onUpdateProfile"
             @picture-change="onGetProfile"
           />
-          <BindSettings v-else-if="selectedMenuKeys[0] === 'bind'" />
+          <BindSettings
+            v-else-if="selectedMenuKeys[0] === 'bind'"
+            :items="bindItems"
+            @on-init="emits('onBindInit')"
+          />
           <SecuritySettings
             v-else-if="selectedMenuKeys[0] === 'security'"
             :user-info="getUserInfo"
