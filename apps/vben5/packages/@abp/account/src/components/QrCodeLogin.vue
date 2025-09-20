@@ -11,7 +11,7 @@ import { VbenButton } from '@vben-core/shadcn-ui';
 import { useQRCode } from '@vueuse/integrations/useQRCode';
 import { Spin } from 'ant-design-vue';
 
-import { useQrCodeLoginApi } from '../api';
+import { useScanQrCodeApi } from '../api';
 import { QrCodeStatus } from '../types/qrcode';
 import Title from './components/LoginTitle.vue';
 
@@ -66,7 +66,7 @@ const emits = defineEmits<{
 
 let interval: NodeJS.Timeout;
 const router = useRouter();
-const { checkCodeApi, generateApi } = useQrCodeLoginApi();
+const { checkCodeApi, generateApi } = useScanQrCodeApi();
 
 const qrcodeInfo = ref<QrCodeUserInfoResult>({
   key: '',

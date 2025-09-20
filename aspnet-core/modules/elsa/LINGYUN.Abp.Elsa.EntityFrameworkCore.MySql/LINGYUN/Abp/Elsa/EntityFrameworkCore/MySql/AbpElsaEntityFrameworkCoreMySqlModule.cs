@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
 
 [DependsOn(
     typeof(AbpElsaEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLModule))]
+    typeof(AbpEntityFrameworkCoreMySQLPomeloModule))]
 public class AbpElsaEntityFrameworkCoreMySqlModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

@@ -3,16 +3,16 @@
 		<DotNetCoreCAPPackageVersion>8.3.5</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.15.2</ElsaPackageVersion>
 		<ElsaNextPackageVersion>3.3.5</ElsaNextPackageVersion>
-		<VoloAbpPackageVersion>9.2.1</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>9.2.1</LINGYUNAbpPackageVersion>
-		<MicrosoftExtensionsPackageVersion>9.0.4</MicrosoftExtensionsPackageVersion>
-		<MicrosoftAspNetCorePackageVersion>9.0.4</MicrosoftAspNetCorePackageVersion>
-		<MicrosoftEntityFrameworkCorePackageVersion>9.0.4</MicrosoftEntityFrameworkCorePackageVersion>
+		<VoloAbpPackageVersion>9.3.1</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>9.3.1</LINGYUNAbpPackageVersion>
+		<MicrosoftExtensionsPackageVersion>9.0.5</MicrosoftExtensionsPackageVersion>
+		<MicrosoftAspNetCorePackageVersion>9.0.5</MicrosoftAspNetCorePackageVersion>
+		<MicrosoftEntityFrameworkCorePackageVersion>9.0.5</MicrosoftEntityFrameworkCorePackageVersion>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<!-- Abp Framework -->
 	<ItemGroup>
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.2.1" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.3.1" />
 		<PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -63,7 +63,8 @@
 		<PackageVersion Include="Volo.Abp.DistributedLocking.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.DistributedLocking" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySQL.Pomelo" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
@@ -157,7 +158,7 @@
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.4" />
+		<PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.5" />
 		<PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
@@ -174,8 +175,9 @@
 		<PackageVersion Include="Microsoft.Extensions.Options" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.5.0" />
 		<PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
-		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.3.efcore.9.0.0" />
-		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="9.0.0-preview.3.efcore.9.0.0" />
+		<PackageVersion Include="MySql.EntityFrameworkCore" Version="9.0.6" />
+		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-rc.1.efcore.9.0.0" />
+		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="9.0.0-rc.1.efcore.9.0.0" />
 	</ItemGroup>
 	<!-- Elsa -->
 	<ItemGroup>
@@ -264,7 +266,7 @@
 		<PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="23.6.1" />
 		<PackageVersion Include="Npgsql" Version="9.0.2" />
 		<PackageVersion Include="Microsoft.Data.SqlClient" Version="5.1.6" />
-		<PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="9.0.4" />
+		<PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="9.0.5" />
 	</ItemGroup>
 	<!-- Other -->
 	<ItemGroup>
@@ -276,7 +278,7 @@
 		<PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.9.0" />
+		<PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.12.0" />
 		<PackageVersion Include="aliyun-net-sdk-core" Version="1.5.10" />
 		<PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.14.1" />
 		<PackageVersion Include="AgileConfig.Client" Version="1.6.9" />
@@ -299,8 +301,8 @@
 		<PackageVersion Include="NEST" Version="7.17.5" />
 		<PackageVersion Include="NRules" Version="0.9.2" />
 		<PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
-		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="6.2.1" />
-		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="6.2.1" />
+		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="6.4.0" />
+		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="6.4.0" />
 		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
 		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.12.0" />
 		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
@@ -309,6 +311,7 @@
 		<PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
 		<PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.12.0-beta.2" />
 		<PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.12.0" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.12.0-beta.1" />
 		<PackageVersion Include="Polly" Version="8.5.2" />
 		<PackageVersion Include="QRCoder" Version="1.5.1" />
 		<PackageVersion Include="Quartz.Serialization.Json" Version="3.14.0" />

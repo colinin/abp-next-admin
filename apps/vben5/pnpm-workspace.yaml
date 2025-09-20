@@ -73,6 +73,7 @@ catalog:
   '@vueuse/core': ^13.1.0
   '@vueuse/integrations': ^13.1.0
   '@vueuse/motion': ^3.0.3
+  '@wecom/jssdk': ^2.3.1
   ant-design-vue: ^4.2.6
   archiver: ^7.0.1
   autoprefixer: ^10.4.21
@@ -205,8 +206,9 @@ catalog:
   vue-simple-uploader: ^1.0.3
   vue-tippy: ^6.7.0
   vue-tsc: 2.2.10
-  vxe-pc-ui: ^4.5.35
-  vxe-table: ^4.13.16
+  vue3-colorpicker: ^2.3.0
+  vxe-pc-ui: ^4.7.12
+  vxe-table: ^4.14.4
   watermark-js-plus: ^1.6.0
   zod: ^3.24.3
   zod-defaults: ^0.1.3

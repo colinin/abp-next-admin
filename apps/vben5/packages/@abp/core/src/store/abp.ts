@@ -6,11 +6,17 @@ import type {
 import { ref } from 'vue';
 
 import { acceptHMRUpdate, defineStore } from 'pinia';
+import Cookies from 'universal-cookie';
 
 export const useAbpStore = defineStore(
   'abp',
   () => {
+    const cookies = new Cookies(null, {
+      domain: window.location.host,
+      path: '/',
+    });
     const tenantId = ref<string>();
+    const xsrfToken = ref<string>();
     const application = ref<ApplicationConfigurationDto>();
     const localization = ref<ApplicationLocalizationDto>();
     /** 获取 i18n 格式本地化文本 */
@@ -52,6 +58,7 @@ export const useAbpStore = defineStore(
 
     function setApplication(val: ApplicationConfigurationDto) {
       application.value = val;
+      xsrfToken.value = cookies.get('XSRF-TOKEN');
     }
 
     function setLocalization(val: ApplicationLocalizationDto) {
@@ -59,12 +66,14 @@ export const useAbpStore = defineStore(
     }
 
     function $reset() {
+      xsrfToken.value = undefined;
       application.value = undefined;
     }
 
     return {
       $reset,
       application,
+      xsrfToken,
       getI18nLocales,
       localization,
       setApplication,

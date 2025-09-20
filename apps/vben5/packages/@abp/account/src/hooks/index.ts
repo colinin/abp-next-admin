@@ -1,2 +1,2 @@
 export * from './useOAuthError';
-export * from './useOidcClient';
+export * from './useOAuthService';

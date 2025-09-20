@@ -94,6 +94,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (isOpen) {
       try {
         formModel.value = {
+          args: {},
           beginTime: formatToDate(new Date()),
           isEnabled: true,
           jobType: JobType.Once,

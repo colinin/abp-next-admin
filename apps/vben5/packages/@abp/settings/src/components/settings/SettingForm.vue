@@ -71,7 +71,7 @@ async function onSubmit() {
     const input = toValue(settingsUpdateInput);
     await props.submitApi(input);
     emits('change', input);
-    message.success($t('AbpSettingManagement.SuccessfullySaved'));
+    message.success($t('AbpSettingManagement.SavedSuccessfully'));
   } finally {
     submiting.value = false;
   }
@@ -142,8 +142,8 @@ onMounted(onGet);
                   v-if="detail.slot"
                   :change="
                     detail.valueType === ValueType.Boolean
-                      ? onCheckChange(detail)
-                      : onValueChange(detail)
+                      ? onCheckChange
+                      : onValueChange
                   "
                   :detail="detail"
                   :name="detail.slot"

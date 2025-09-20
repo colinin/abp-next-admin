@@ -23,7 +23,8 @@ export function useOAuthError() {
         return $t('abp.oauth.errors.requiresTwoFactor');
       }
       // Token已失效
-      case 'The token is no longer valid.': {
+      case 'The token is no longer valid.':
+      case 'The user is no longer allowed to sign in.': {
         return $t('abp.oauth.errors.tokenHasExpired');
       }
       // 用户尝试登录次数太多,用户被锁定

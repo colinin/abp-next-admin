@@ -134,7 +134,7 @@ public class BookAppService : DemoApplicationServiceBase, IBookAppService //impl
 
         //Paging
         query = query
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.book.Name.Contains(input.Filter))
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.book.Name.Contains(input.Filter!))
             .OrderBy(NormalizeSorting(input.Sorting))
             .Skip(input.SkipCount)
             .Take(input.MaxResultCount);

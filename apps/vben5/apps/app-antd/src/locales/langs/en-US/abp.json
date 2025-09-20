@@ -142,5 +142,9 @@
     "title": "Object storage",
     "containers": "Containers",
     "objects": "Files"
+  },
+  "wechat": {
+    "title": "WeChat",
+    "settings": "Settings"
   }
 }

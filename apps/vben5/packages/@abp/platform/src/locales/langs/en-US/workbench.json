@@ -1,0 +1,37 @@
+{
+  "header": {
+    "welcome": {
+      "atoon": "Good afternoon, {0}, pay attention to rest oh~",
+      "afternoon": "Good afternoon, {0}, relax in time, can improve work efficiency~",
+      "evening": "Good evening, {0}. Still at work? The off work~",
+      "morning": "Good morning, {0}. Begin your day~"
+    },
+    "notifier": {
+      "title": "Notifier",
+      "count": "({0})"
+    }
+  },
+  "content": {
+    "favoriteMenu": {
+      "title": "Favorite Menus",
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "profile": "Personal Profile",
+      "settings": "Personal Settings",
+      "notifiers": "Notifiers",
+      "manage": "Manage menu",
+      "create": "New menu",
+      "delete": "Delete Menu",
+      "select": "Select Menu",
+      "color": "Select Color",
+      "alias": "Alias Name",
+      "icon": "Icon"
+    },
+    "trends": {
+      "title": "Latest News"
+    },
+    "todo": {
+      "title": "Todo List"
+    }
+  }
+}
