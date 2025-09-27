@@ -4,6 +4,7 @@ import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { VbenFormProps } from '@vben/common-ui';
 
 import type { MenuDto } from '../../types/menus';
+import type { MenuDrawerState } from './types';
 
 import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
 
@@ -33,7 +34,7 @@ const { deleteApi, getAllApi } = useMenusApi();
 const { getPagedListApi: getLayoutsApi } = useLayoutsApi();
 
 const expandRowKeys = ref<string[]>([]);
-const dataDictionaries = ref<MenuDto[]>([]);
+const menus = ref<MenuDto[]>([]);
 const pageState = reactive({
   current: 1,
   size: 10,
@@ -185,7 +186,7 @@ async function onGet() {
       pid: 'parentId',
     });
     pageState.total = treeItems.length;
-    dataDictionaries.value = treeItems;
+    menus.value = treeItems;
     onPageChange();
   } finally {
     gridApi.setLoading(false);
@@ -201,7 +202,7 @@ function onExpandChange() {
 }
 
 function onPageChange() {
-  const items = dataDictionaries.value.slice(
+  const items = menus.value.slice(
     (pageState.current - 1) * pageState.size,
     pageState.current * pageState.size,
   );
@@ -216,15 +217,21 @@ function onPageChange() {
 }
 
 function onCreate(row?: MenuDto) {
-  drawerApi.setData({
-    layoutId: row?.layoutId,
-    parentId: row?.id,
+  drawerApi.setData<MenuDrawerState>({
+    editMenu: {
+      layoutId: row?.layoutId,
+      parentId: row?.id,
+    },
+    rootMenus: menus.value,
   });
   drawerApi.open();
 }
 
 function onUpdate(row: MenuDto) {
-  drawerApi.setData(row);
+  drawerApi.setData<MenuDrawerState>({
+    editMenu: row,
+    rootMenus: menus.value,
+  });
   drawerApi.open();
 }
 
