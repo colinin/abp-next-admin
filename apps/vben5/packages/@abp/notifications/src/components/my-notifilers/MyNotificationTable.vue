@@ -107,6 +107,7 @@ const gridOptions: VxeGridProps<Notification> = {
         }
       },
       minWidth: 50,
+      sortable: true,
       title: $t('Notifications.Notifications:Type'),
     },
     {
@@ -116,6 +117,7 @@ const gridOptions: VxeGridProps<Notification> = {
         return cellValue ? formatToDateTime(cellValue) : '';
       },
       minWidth: 120,
+      sortable: true,
       title: $t('Notifications.Notifications:SendTime'),
     },
     {
@@ -144,8 +146,10 @@ const gridOptions: VxeGridProps<Notification> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         const { totalCount, items } = await getMyNotifilersApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -171,8 +175,9 @@ const gridOptions: VxeGridProps<Notification> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
@@ -183,6 +188,9 @@ const gridEvents: VxeGridListeners<Notification> = {
   },
   checkboxChange: (params) => {
     selectedKeys.value = params.records.map((record) => record.id);
+  },
+  sortChange: () => {
+    gridApi.query();
   },
 };
 

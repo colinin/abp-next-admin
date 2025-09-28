@@ -6,13 +6,13 @@ import type { VbenFormProps } from '@vben/common-ui';
 import type { MenuDto } from '../../types/menus';
 import type { MenuDrawerState } from './types';
 
-import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
+import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { listToTree, useAuthorization } from '@abp/core';
+import { listToTree, sortby, useAuthorization } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -35,11 +35,6 @@ const { getPagedListApi: getLayoutsApi } = useLayoutsApi();
 
 const expandRowKeys = ref<string[]>([]);
 const menus = ref<MenuDto[]>([]);
-const pageState = reactive({
-  current: 1,
-  size: 10,
-  total: 0,
-});
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -95,6 +90,7 @@ const gridOptions: VxeGridProps<MenuDto> = {
       field: 'name',
       minWidth: 250,
       slots: { default: 'name' },
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Name'),
       treeNode: true,
     },
@@ -102,12 +98,14 @@ const gridOptions: VxeGridProps<MenuDto> = {
       align: 'left',
       field: 'displayName',
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:DisplayName'),
     },
     {
       align: 'left',
       field: 'description',
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Description'),
     },
     {
@@ -132,6 +130,30 @@ const gridOptions: VxeGridProps<MenuDto> = {
   rowConfig: {
     keyField: 'id',
   },
+  proxyConfig: {
+    ajax: {
+      query: async ({ page, sort }) => {
+        let items = sortby(menus.value, sort.field);
+        if (sort.order === 'desc') {
+          items = items.reverse();
+        }
+        const result = {
+          totalCount: menus.value.length,
+          items: items.slice(
+            (page.currentPage - 1) * page.pageSize,
+            page.currentPage * page.pageSize,
+          ),
+        };
+        return new Promise((resolve) => {
+          resolve(result);
+        });
+      },
+    },
+    response: {
+      total: 'totalCount',
+      list: 'items',
+    },
+  },
   toolbarConfig: {
     custom: true,
     export: true,
@@ -149,10 +171,8 @@ const gridOptions: VxeGridProps<MenuDto> = {
 };
 
 const gridEvents: VxeGridListeners<MenuDto> = {
-  pageChange(params) {
-    pageState.current = params.currentPage;
-    pageState.size = params.pageSize;
-    onPageChange();
+  sortChange: () => {
+    gridApi.query();
   },
   toggleTreeExpand(params) {
     if (params.expanded) {
@@ -185,9 +205,8 @@ async function onGet() {
       id: 'id',
       pid: 'parentId',
     });
-    pageState.total = treeItems.length;
     menus.value = treeItems;
-    onPageChange();
+    setTimeout(() => gridApi.reload(), 100);
   } finally {
     gridApi.setLoading(false);
   }
@@ -197,21 +216,6 @@ function onExpandChange() {
   gridApi.setGridOptions({
     treeConfig: {
       expandRowKeys: expandRowKeys.value,
-    },
-  });
-}
-
-function onPageChange() {
-  const items = menus.value.slice(
-    (pageState.current - 1) * pageState.size,
-    pageState.current * pageState.size,
-  );
-  gridApi.setGridOptions({
-    data: items,
-    pagerConfig: {
-      currentPage: pageState.current,
-      pageSize: pageState.size,
-      total: pageState.total,
     },
   });
 }

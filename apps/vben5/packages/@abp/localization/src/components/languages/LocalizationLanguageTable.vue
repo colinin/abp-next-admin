@@ -5,12 +5,12 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { LanguageDto } from '../../types/languages';
 
-import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
+import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useAbpStore } from '@abp/core';
+import { sortby, useAbpStore } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -28,11 +28,6 @@ defineOptions({
 });
 
 const dataSource = ref<LanguageDto[]>([]);
-const pageState = reactive({
-  current: 1,
-  size: 10,
-  total: 0,
-});
 
 const abpStore = useAbpStore();
 const { deleteApi, getListApi } = useLanguagesApi();
@@ -43,7 +38,6 @@ const formOptions: VbenFormProps = {
   collapsed: false,
   handleReset: onReset,
   async handleSubmit(params) {
-    pageState.current = 1;
     await onGet(params);
   },
   schema: [
@@ -66,18 +60,21 @@ const gridOptions: VxeGridProps<LanguageDto> = {
       align: 'left',
       field: 'cultureName',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpLocalization.DisplayName:CultureName'),
     },
     {
       align: 'left',
       field: 'displayName',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpLocalization.DisplayName:DisplayName'),
     },
     {
       align: 'left',
       field: 'uiCultureName',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpLocalization.DisplayName:UiCultureName'),
     },
     {
@@ -90,6 +87,30 @@ const gridOptions: VxeGridProps<LanguageDto> = {
   ],
   exportConfig: {},
   keepSource: true,
+  proxyConfig: {
+    ajax: {
+      query: async ({ page, sort }) => {
+        let items = sortby(dataSource.value, sort.field);
+        if (sort.order === 'desc') {
+          items = items.reverse();
+        }
+        const result = {
+          totalCount: dataSource.value.length,
+          items: items.slice(
+            (page.currentPage - 1) * page.pageSize,
+            page.currentPage * page.pageSize,
+          ),
+        };
+        return new Promise((resolve) => {
+          resolve(result);
+        });
+      },
+    },
+    response: {
+      total: 'totalCount',
+      list: 'items',
+    },
+  },
   toolbarConfig: {
     custom: true,
     export: true,
@@ -99,10 +120,8 @@ const gridOptions: VxeGridProps<LanguageDto> = {
 };
 
 const gridEvents: VxeGridListeners<LanguageDto> = {
-  pageChange(params) {
-    pageState.current = params.currentPage;
-    pageState.size = params.pageSize;
-    onPageChange();
+  sortChange: () => {
+    gridApi.query();
   },
 };
 
@@ -122,9 +141,8 @@ async function onGet(input?: Record<string, string>) {
   try {
     gridApi.setLoading(true);
     const { items } = await getListApi(input);
-    pageState.total = items.length;
     dataSource.value = items;
-    onPageChange();
+    setTimeout(() => gridApi.reload(), 100);
   } finally {
     gridApi.setLoading(false);
   }
@@ -134,21 +152,6 @@ async function onReset() {
   await gridApi.formApi.resetForm();
   const input = await gridApi.formApi.getValues();
   await onGet(input);
-}
-
-function onPageChange() {
-  const items = dataSource.value.slice(
-    (pageState.current - 1) * pageState.size,
-    pageState.current * pageState.size,
-  );
-  gridApi.setGridOptions({
-    data: items,
-    pagerConfig: {
-      currentPage: pageState.current,
-      pageSize: pageState.size,
-      total: pageState.total,
-    },
-  });
 }
 
 function onCreate() {

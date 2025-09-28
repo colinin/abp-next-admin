@@ -4,5 +4,6 @@ export * from './is';
 export * from './mitt';
 export * from './regex';
 export * from './string';
+export * from './table';
 export * from './tree';
 export * from './uuid';
