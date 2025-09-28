@@ -1,5 +1,5 @@
-import isDateEx from 'lodash.isdate';
-import isNumberEx from 'lodash.isnumber';
+export { default as isDate } from 'lodash.isdate';
+export { default as isNumber } from 'lodash.isnumber';
 
 export function isNullAndUnDef(val: unknown): val is null | undefined {
   return isUnDef(val) && isNull(val);
@@ -19,12 +19,4 @@ export function isUnDef<T = unknown>(val?: T): val is T {
 
 export function isNull(value: any): value is null {
   return value === null;
-}
-
-export function isNumber(value?: any): value is number {
-  return isNumberEx(value);
-}
-
-export function isDate(value?: any): value is Date {
-  return isDateEx(value);
 }
