@@ -96,11 +96,13 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
     {
       field: 'isActive',
       slots: { default: 'active' },
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:IsActive'),
     },
     {
       field: 'userName',
       minWidth: '100px',
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:UserName'),
     },
     {
@@ -108,14 +110,24 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
       field: 'email',
       minWidth: '120px',
       slots: { default: 'email' },
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:Email'),
     },
-    { field: 'surname', title: $t('AbpIdentity.DisplayName:Surname') },
-    { field: 'name', title: $t('AbpIdentity.DisplayName:Name') },
+    {
+      field: 'surname',
+      sortable: true,
+      title: $t('AbpIdentity.DisplayName:Surname'),
+    },
+    {
+      field: 'name',
+      sortable: true,
+      title: $t('AbpIdentity.DisplayName:Name'),
+    },
     {
       align: 'left',
       field: 'phoneNumber',
       slots: { default: 'phoneNumber' },
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:PhoneNumber'),
     },
     {
@@ -123,6 +135,7 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
       formatter: ({ cellValue }) => {
         return cellValue ? formatToDateTime(cellValue) : '';
       },
+      sortable: true,
       title: $t('AbpIdentity.LockoutEnd'),
     },
     {
@@ -137,8 +150,10 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -153,14 +168,18 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
 
 const gridEvents: VxeGridListeners<IdentityUserDto> = {
   cellClick: () => {},
+  sortChange: () => {
+    gridApi.query();
+  },
 };
 const [UserEditModal, userModalApi] = useVbenModal({
   connectedComponent: UserModal,
@@ -188,7 +207,7 @@ const [UserSessionDrawer, userSessionDrawerApi] = useVbenDrawer({
     () => import('./UserSessionDrawer.vue'),
   ),
 });
-const [Grid, { query }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
   gridOptions,
@@ -214,7 +233,7 @@ const handleDelete = (row: IdentityUserDto) => {
     onOk: async () => {
       await deleteApi(row.id);
       message.success($t('AbpUi.DeletedSuccessfully'));
-      query();
+      await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
   });
@@ -222,7 +241,7 @@ const handleDelete = (row: IdentityUserDto) => {
 
 const handleUnlock = async (row: IdentityUserDto) => {
   await unLockApi(row.id);
-  await query();
+  await gridApi.query();
 };
 
 const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
@@ -436,10 +455,10 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
       </div>
     </template>
   </Grid>
-  <UserLockModal @change="query" />
-  <UserClaimModal @change="query" />
-  <UserEditModal @change="() => query()" />
-  <UserPasswordModal @change="query" />
+  <UserLockModal @change="() => gridApi.query()" />
+  <UserClaimModal @change="() => gridApi.query()" />
+  <UserEditModal @change="() => gridApi.query()" />
+  <UserPasswordModal @change="() => gridApi.query()" />
   <UserPermissionModal />
   <UserSessionDrawer />
   <UserChangeDrawer />

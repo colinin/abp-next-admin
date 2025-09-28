@@ -2,9 +2,12 @@ import type { RouteRecordStringComponent } from '@vben/types';
 
 import type { MenuDto } from '../types';
 
+import { useUserStore } from '@vben/stores';
+
 import { listToTree } from '@abp/core';
 
 export function useMenuTransform() {
+  const userStore = useUserStore();
   function mapMetaString(meta: Record<string, any>, key: string) {
     if (!meta[key]) {
       return undefined;
@@ -30,6 +33,16 @@ export function useMenuTransform() {
     return Array.isArray(meta[key]) ? meta[key] : String(meta[key]).split(',');
   }
   function transformRoutes(menus: MenuDto[]): RouteRecordStringComponent[] {
+    const startupMenus = menus.filter((x) => x.startup);
+    if (startupMenus.length > 0) {
+      userStore.$patch((state) => {
+        state.userInfo && (state.userInfo.homePath = startupMenus[0]?.path);
+      });
+    } else {
+      userStore.$patch((state) => {
+        state.userInfo && (state.userInfo.homePath = undefined);
+      });
+    }
     const combMenus = menus.map((item) => {
       return {
         component: item.component.includes('BasicLayout')
