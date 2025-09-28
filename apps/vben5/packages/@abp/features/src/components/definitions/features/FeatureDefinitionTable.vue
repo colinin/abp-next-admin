@@ -229,7 +229,7 @@ async function onGet(input?: Record<string, string>) {
         .filter((feature) => feature.groupName === group.name)
         .map((feature) => {
           const displayName = deserialize(feature.displayName);
-          const description = deserialize(feature.displayName);
+          const description = deserialize(feature.description);
           return {
             ...feature,
             description: Lr(description.resourceName, description.name),
