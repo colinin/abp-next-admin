@@ -66,6 +66,7 @@ const gridOptions: VxeGridProps<IdentityClaimTypeDto> = {
       align: 'left',
       field: 'name',
       minWidth: 120,
+      sortable: true,
       title: $t('AbpIdentity.IdentityClaim:Name'),
     },
     {
@@ -90,28 +91,33 @@ const gridOptions: VxeGridProps<IdentityClaimTypeDto> = {
           }
         }
       },
+      sortable: true,
       title: $t('AbpIdentity.IdentityClaim:ValueType'),
     },
     {
       align: 'left',
       field: 'regex',
+      sortable: true,
       title: $t('AbpIdentity.IdentityClaim:Regex'),
     },
     {
       align: 'center',
       field: 'required',
       slots: { default: 'required' },
+      sortable: true,
       title: $t('AbpIdentity.IdentityClaim:Required'),
     },
     {
       align: 'center',
       field: 'isStatic',
       slots: { default: 'static' },
+      sortable: true,
       title: $t('AbpIdentity.IdentityClaim:IsStatic'),
     },
     {
       align: 'left',
       field: 'description',
+      sortable: true,
       title: $t('AbpIdentity.IdentityClaim:Description'),
     },
     {
@@ -130,8 +136,10 @@ const gridOptions: VxeGridProps<IdentityClaimTypeDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -146,19 +154,22 @@ const gridOptions: VxeGridProps<IdentityClaimTypeDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
 
 const gridEvents: VxeGridListeners<IdentityClaimTypeDto> = {
-  cellClick: () => {},
+  sortChange: () => {
+    gridApi.query();
+  },
 };
 const [ClaimTypeEditModal, roleModalApi] = useVbenModal({
   connectedComponent: ClaimTypeModal,
 });
-const [Grid, { query }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
   gridOptions,
@@ -187,7 +198,7 @@ const onDelete = (row: IdentityClaimTypeDto) => {
     onOk: async () => {
       await deleteApi(row.id);
       message.success($t('AbpUi.DeletedSuccessfully'));
-      query();
+      gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
   });
@@ -270,7 +281,7 @@ const onMenuClick = (row: IdentityClaimTypeDto, info: MenuInfo) => {
       </div>
     </template>
   </Grid>
-  <ClaimTypeEditModal @change="() => query()" />
+  <ClaimTypeEditModal @change="() => gridApi.query()" />
   <ClaimTypeChangeDrawer />
 </template>
 

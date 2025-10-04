@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { VbenFormProps } from '@vben/common-ui';
@@ -64,18 +64,21 @@ const gridOptions: VxeGridProps<OpenIddictScopeDto> = {
       align: 'left',
       field: 'name',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:Name'),
     },
     {
       align: 'left',
       field: 'displayName',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:DisplayName'),
     },
     {
       align: 'center',
       field: 'description',
       minWidth: 200,
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:Description'),
     },
     {
@@ -85,6 +88,7 @@ const gridOptions: VxeGridProps<OpenIddictScopeDto> = {
         return cellValue ? formatToDateTime(cellValue) : cellValue;
       },
       minWidth: 120,
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:CreationDate'),
     },
     {
@@ -99,8 +103,10 @@ const gridOptions: VxeGridProps<OpenIddictScopeDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -115,9 +121,15 @@ const gridOptions: VxeGridProps<OpenIddictScopeDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
+  },
+};
+const gridEvents: VxeGridListeners<OpenIddictScopeDto> = {
+  sortChange: () => {
+    gridApi.query();
   },
 };
 
@@ -127,9 +139,10 @@ const [ScopeModal, modalApi] = useVbenModal({
 const [ScopeChangeDrawer, scopeChangeDrawerApi] = useVbenDrawer({
   connectedComponent: EntityChangeDrawer,
 });
-const [Grid, { query }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridOptions,
+  gridEvents,
 });
 
 const onCreate = () => {
@@ -149,7 +162,7 @@ const onDelete = (row: OpenIddictScopeDto) => {
     onOk: async () => {
       await deleteApi(row.id);
       message.success($t('AbpUi.DeletedSuccessfully'));
-      query();
+      await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
   });
@@ -231,7 +244,7 @@ const onMenuClick = (row: OpenIddictScopeDto, info: MenuInfo) => {
       </div>
     </template>
   </Grid>
-  <ScopeModal @change="() => query()" />
+  <ScopeModal @change="() => gridApi.query()" />
   <ScopeChangeDrawer />
 </template>
 

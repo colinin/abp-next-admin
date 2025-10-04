@@ -16,6 +16,7 @@ interface PasswordTokenRequest extends TokenRequest {
 }
 /** 手机号授权请求数据模型 */
 interface PhoneNumberTokenRequest {
+  [key: string]: any;
   /** 验证码 */
   code: string;
   /** 手机号 */
@@ -23,6 +24,7 @@ interface PhoneNumberTokenRequest {
 }
 /** 扫码登录授权请求数据模型 */
 interface QrCodeTokenRequest {
+  [key: string]: any;
   /** 二维码Key */
   key: string;
   /** 租户Id */
@@ -30,10 +32,18 @@ interface QrCodeTokenRequest {
 }
 /** 用户密码授权请求数据模型 */
 interface PasswordTokenRequestModel {
+  [key: string]: any;
   /** 用户密码 */
   password: string;
   /** 用户名 */
   username: string;
+}
+/** 令牌撤销请求数据类型 */
+interface RevokeTokenRequest {
+  /** 令牌 */
+  token: string;
+  /** 令牌类型 */
+  tokenType?: 'access_token' | 'refresh_token';
 }
 /** 令牌返回数据模型 */
 interface TokenResult {
@@ -89,6 +99,7 @@ export type {
   PasswordTokenRequestModel,
   PhoneNumberTokenRequest,
   QrCodeTokenRequest,
+  RevokeTokenRequest,
   ShouldChangePasswordError,
   TokenRequest,
   TokenResult,

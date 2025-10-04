@@ -2,30 +2,37 @@
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Saas.Tenants;
 
 public class TenantManager : DomainService, ITenantManager
 {
-    protected ITenantRepository TenantRepository { get; }
+    protected ITenantValidator TenantValidator { get; }
     protected ITenantNormalizer TenantNormalizer { get; }
+    protected ILocalEventBus LocalEventBus { get; }
 
     public TenantManager(
-        ITenantRepository tenantRepository,
-        ITenantNormalizer tenantNormalizer)
+        ITenantValidator tenantValidator,
+        ITenantNormalizer tenantNormalizer,
+        ILocalEventBus localEventBus)
     {
-        TenantRepository = tenantRepository;
+        TenantValidator = tenantValidator;
         TenantNormalizer = tenantNormalizer;
+        LocalEventBus = localEventBus;
     }
 
     public virtual async Task<Tenant> CreateAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
-        var normalizedName = TenantNormalizer.NormalizeName(name);
-        await ValidateNameAsync(normalizedName);
-        return new Tenant(GuidGenerator.Create(), name, normalizedName);
+        var tenant = new Tenant(
+            GuidGenerator.Create(),
+            name, 
+            TenantNormalizer.NormalizeName(name));
+        await TenantValidator.ValidateAsync(tenant);
+        return tenant;
     }
 
     public virtual async Task ChangeNameAsync(Tenant tenant, string name)
@@ -35,19 +42,11 @@ public class TenantManager : DomainService, ITenantManager
 
         var normalizedName = TenantNormalizer.NormalizeName(name);
 
-        await ValidateNameAsync(normalizedName, tenant.Id);
         tenant.SetName(name);
-        tenant.SetNormalizedName(normalizedName);
+        tenant.SetNormalizedName(TenantNormalizer.NormalizeName(name));
 
-    }
+        await TenantValidator.ValidateAsync(tenant);
 
-    protected virtual async Task ValidateNameAsync(string normalizeName, Guid? expectedId = null)
-    {
-        var tenant = await TenantRepository.FindByNameAsync(normalizeName);
-        if (tenant != null && tenant.Id != expectedId)
-        {
-            throw new BusinessException(AbpSaasErrorCodes.DuplicateTenantName)
-                .WithData("Name", normalizeName);
-        }
+        await LocalEventBus.PublishAsync(new TenantChangedEvent(tenant.Id, tenant.NormalizedName));
     }
 }

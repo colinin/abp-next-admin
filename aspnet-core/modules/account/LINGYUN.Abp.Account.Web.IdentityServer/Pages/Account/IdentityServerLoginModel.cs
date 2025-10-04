@@ -4,6 +4,7 @@ using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using LINGYUN.Abp.Account.Web.ExternalProviders;
 using LINGYUN.Abp.Account.Web.Models;
+using LINGYUN.Abp.Account.Web.Pages.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -18,7 +19,6 @@ using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.AspNetIdentity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
-using static Volo.Abp.Account.Web.Pages.Account.LoginModel;
 using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
 
 namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
@@ -53,7 +53,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
 
         public override async Task<IActionResult> OnGetAsync()
         {
-            LoginInput = new LoginInputModel();
+            PasswordLoginInput = new PasswordLoginInputModel();
 
             var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
 
@@ -62,7 +62,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 // TODO: Find a proper cancel way.
                 // ShowCancelButton = true;
 
-                LoginInput.UserNameOrEmailAddress = context.LoginHint;
+                PasswordLoginInput.UserNameOrEmailAddress = context.LoginHint;
 
                 //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
                 var tenant = context.Parameters[TenantResolverConsts.DefaultTenantKey];
@@ -75,7 +75,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
 
             if (context?.IdP != null)
             {
-                LoginInput.UserNameOrEmailAddress = context.LoginHint;
+                PasswordLoginInput.UserNameOrEmailAddress = context.LoginHint;
                 ExternalProviders = new[] { new ExternalLoginProviderModel { AuthenticationScheme = context.IdP } };
                 return Page();
             }
@@ -107,7 +107,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             return Page();
         }
 
-        public override async Task<IActionResult> OnPostAsync(string action)
+        public override async Task<IActionResult> OnPostPasswordLogin(string action)
         {
             var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
             if (action == "Cancel")
@@ -138,9 +138,9 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             await ReplaceEmailToUsernameOfInputIfNeeds();
 
             var result = await SignInManager.PasswordSignInAsync(
-                LoginInput.UserNameOrEmailAddress,
-                LoginInput.Password,
-                LoginInput.RememberMe,
+                PasswordLoginInput.UserNameOrEmailAddress,
+                PasswordLoginInput.Password,
+                PasswordLoginInput.RememberMe,
                 true
             );
 
@@ -148,7 +148,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             {
                 Identity = IdentitySecurityLogIdentityConsts.Identity,
                 Action = result.ToIdentitySecurityLogAction(),
-                UserName = LoginInput.UserNameOrEmailAddress,
+                UserName = PasswordLoginInput.UserNameOrEmailAddress,
                 ClientId = context?.Client?.ClientId
             });
 
@@ -173,8 +173,8 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             }
 
             //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
-            var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
-                       await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
+            var user = await UserManager.FindByNameAsync(PasswordLoginInput.UserNameOrEmailAddress) ??
+                       await UserManager.FindByEmailAsync(PasswordLoginInput.UserNameOrEmailAddress);
 
             Debug.Assert(user != null, nameof(user) + " != null");
             await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented

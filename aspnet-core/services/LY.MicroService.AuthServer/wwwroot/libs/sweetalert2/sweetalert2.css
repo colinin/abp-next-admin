@@ -29,6 +29,7 @@
   --swal2-footer-border-color: #eee;
   --swal2-footer-background: transparent;
   --swal2-footer-color: inherit;
+  --swal2-timer-progress-bar-background: rgba(0, 0, 0, 0.3);
   --swal2-close-button-position: initial;
   --swal2-close-button-inset: auto;
   --swal2-close-button-font-size: 2.5em;
@@ -80,6 +81,7 @@
     var(--swal2-dark-theme-white) 10%
   );
   --swal2-validation-message-color: var(--swal2-dark-theme-white);
+  --swal2-timer-progress-bar-background: rgba(255, 255, 255, 0.7);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -96,6 +98,7 @@
       var(--swal2-dark-theme-white) 10%
     );
     --swal2-validation-message-color: var(--swal2-dark-theme-white);
+    --swal2-timer-progress-bar-background: rgba(255, 255, 255, 0.7);
   }
 }
 body.swal2-shown:not(.swal2-no-backdrop, .swal2-toast-shown) {
@@ -293,7 +296,7 @@ div:where(.swal2-container) h2:where(.swal2-title) {
   font-weight: 600;
   text-align: center;
   text-transform: none;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   cursor: initial;
 }
 div:where(.swal2-container) div:where(.swal2-actions) {
@@ -408,7 +411,7 @@ div:where(.swal2-container) .swal2-timer-progress-bar-container {
 div:where(.swal2-container) div:where(.swal2-timer-progress-bar) {
   width: 100%;
   height: 0.25em;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--swal2-timer-progress-bar-background);
 }
 div:where(.swal2-container) img:where(.swal2-image) {
   max-width: 100%;
@@ -462,7 +465,7 @@ div:where(.swal2-container) div:where(.swal2-html-container) {
   font-weight: normal;
   line-height: normal;
   text-align: center;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   word-break: break-word;
   cursor: initial;
 }

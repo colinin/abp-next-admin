@@ -12,6 +12,7 @@ namespace LINGYUN.Abp.BackgroundTasks.Notifications;
 public class JobExecuteFailedNotificationProvider : NotificationJobExecutedProvider
 {
     public const string Name = "JobExecutedFailedNofiter";
+    public override string DefaultNotificationName => BackgroundTasksNotificationNames.JobExecuteFailed;
 
     public JobExecuteFailedNotificationProvider(
         ICurrentTenant currentTenant, 
@@ -24,7 +25,7 @@ public class JobExecuteFailedNotificationProvider : NotificationJobExecutedProvi
 
     public async override Task NotifyErrorAsync([NotNull] JobActionExecuteContext context)
     {
-        var title = StringLocalizer["JobExecutedFailed"].Value;
+        var title = StringLocalizer["Notifications:JobExecuteFailed"].Value;
 
         await SendNofiterAsync(context, title, NotificationSeverity.Error);
     }

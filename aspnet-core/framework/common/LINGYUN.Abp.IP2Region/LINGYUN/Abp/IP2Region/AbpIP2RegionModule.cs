@@ -29,7 +29,7 @@ public class AbpIP2RegionModule : AbpModule
 
         Configure<AbpIPLocationResolveOptions>(options =>
         {
-            options.IPLocationResolvers.Add(new IP2RegionIPLocationResolveContributorBase());
+            options.IPLocationResolvers.Add(new IP2RegionIPLocationResolveContributor());
         });
     }
 }

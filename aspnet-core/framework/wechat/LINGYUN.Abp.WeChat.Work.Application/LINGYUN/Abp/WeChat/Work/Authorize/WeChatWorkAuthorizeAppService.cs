@@ -1,42 +1,49 @@
-﻿using LINGYUN.Abp.WeChat.Work.Settings;
-using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Security.Encryption;
+using Volo.Abp.UI.Navigation.Urls;
+using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.WeChat.Work.Authorize;
 
 [IntegrationService]
 public class WeChatWorkAuthorizeAppService : ApplicationService, IWeChatWorkAuthorizeAppService
 {
+    private readonly IAppUrlProvider _appUrlProvider;
     private readonly IStringEncryptionService _encryptionService;
     private readonly IWeChatWorkAuthorizeGenerator _authorizeGenerator;
 
     public WeChatWorkAuthorizeAppService(
+        IAppUrlProvider appUrlProvider,
         IStringEncryptionService encryptionService,
         IWeChatWorkAuthorizeGenerator authorizeGenerator)
     {
+        _appUrlProvider = appUrlProvider;
         _encryptionService = encryptionService;
         _authorizeGenerator = authorizeGenerator;
     }
 
-    public async virtual Task<string> GenerateOAuth2AuthorizeAsync(string redirectUri, string responseType = "code", string scope = "snsapi_base")
+    public async virtual Task<string> GenerateOAuth2AuthorizeAsync(
+        string urlName,
+        string responseType = "code", 
+        string scope = "snsapi_base")
     {
-
-        var state = _encryptionService.Encrypt($"redirectUri={redirectUri}&responseType={responseType}&scope={scope}&random={Guid.NewGuid():D}").ToMd5();
+        var userId = CurrentUser.GetId().ToString("D");
+        var state = _encryptionService.Encrypt(userId);
+        var redirectUri = await _appUrlProvider.GetUrlAsync(AbpWeChatWorkGlobalConsts.ProviderName, urlName);
 
         return await _authorizeGenerator.GenerateOAuth2AuthorizeAsync(redirectUri, state, responseType, scope);
     }
 
-    public async virtual Task<string> GenerateOAuth2LoginAsync(string redirectUri, string loginType = "ServiceApp")
+    public async virtual Task<string> GenerateOAuth2LoginAsync(
+        string urlName,
+        string loginType = "CorpApp")
     {
-        var state = _encryptionService.Encrypt($"redirectUri={redirectUri}&loginType={loginType}&random={Guid.NewGuid():D}").ToMd5();
+        var userId = CurrentUser.GetId().ToString("D");
+        var state = _encryptionService.Encrypt(userId);
+        var redirectUri = await _appUrlProvider.GetUrlAsync(AbpWeChatWorkGlobalConsts.ProviderName, urlName);
 
-        var corpId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.CorpId);
-
-        Check.NotNullOrEmpty(corpId, nameof(corpId));
-
-        return await _authorizeGenerator.GenerateOAuth2LoginAsync(corpId, redirectUri, state, loginType);
+        return await _authorizeGenerator.GenerateOAuth2LoginAsync(redirectUri, state, loginType);
     }
 }

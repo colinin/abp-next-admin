@@ -30,5 +30,6 @@ public class WeComAuthHandlerOptionsProvider : OAuthHandlerOptionsProvider<WorkW
         {
             options.AgentId = agentId;
         }
+        await base.SetOptionsAsync(options);
     }
 }

@@ -21,6 +21,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
+  PlusOutlined,
 } from '@ant-design/icons-vue';
 import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
@@ -77,12 +78,14 @@ const gridOptions: VxeGridProps<TenantDto> = {
       align: 'center',
       field: 'isActive',
       slots: { default: 'isActive' },
+      sortable: true,
       title: $t('AbpSaas.DisplayName:IsActive'),
       width: 120,
     },
     {
       align: 'left',
       field: 'name',
+      sortable: true,
       title: $t('AbpSaas.DisplayName:Name'),
     },
     {
@@ -107,8 +110,10 @@ const gridOptions: VxeGridProps<TenantDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -123,14 +128,18 @@ const gridOptions: VxeGridProps<TenantDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
 
 const gridEvents: VxeGridListeners<TenantDto> = {
   cellClick: () => {},
+  sortChange: () => {
+    gridApi.query();
+  },
 };
 const [TenantModal, modalApi] = useVbenModal({
   connectedComponent: defineAsyncComponent(() => import('./TenantModal.vue')),
@@ -146,7 +155,7 @@ const [TenantChangeDrawer, entityChangeDrawerApi] = useVbenDrawer({
 const [TenantFeatureModal, tenantFeatureModalApi] = useVbenModal({
   connectedComponent: FeatureModal,
 });
-const [Grid, { query }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
   gridOptions,
@@ -172,7 +181,7 @@ const onDelete = (row: TenantDto) => {
     onOk: async () => {
       await deleteApi(row.id);
       message.success($t('AbpUi.DeletedSuccessfully'));
-      query();
+      await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
   });
@@ -213,6 +222,7 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
         type="primary"
         v-access:code="[TenantsPermissions.Create]"
         @click="onCreate"
+        :icon="h(PlusOutlined)"
       >
         {{ $t('AbpSaas.NewTenant') }}
       </Button>
@@ -280,7 +290,10 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
       </div>
     </template>
   </Grid>
-  <TenantModal :data-base-options="dataBaseOptions" @change="() => query()" />
+  <TenantModal
+    :data-base-options="dataBaseOptions"
+    @change="() => gridApi.query()"
+  />
   <TenantConnectionStringsModal :data-base-options="dataBaseOptions" />
   <TenantFeatureModal />
   <TenantChangeDrawer />

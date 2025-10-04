@@ -71,7 +71,7 @@ public class NotificationData : IHasExtraProperties
         TrySetData("formUser", formUser);
         TrySetData("createTime", createTime);
         TrySetData(LocalizerKey, true);
-        TrySetData(CultureKey, culture ?? "en");
+        TrySetData(CultureKey, culture ?? CultureInfo.CurrentCulture.Name);
         if (description != null)
         {
             TrySetData("description", description);

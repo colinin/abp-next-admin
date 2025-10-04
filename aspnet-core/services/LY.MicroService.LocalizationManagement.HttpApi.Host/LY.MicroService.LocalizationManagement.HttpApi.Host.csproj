@@ -29,7 +29,6 @@
 		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Volo.Abp.Autofac" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" />
 		<PackageReference Include="Volo.Abp.Http.Client" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import type { LogDto, LogLevel } from '../../types/loggings';
+import type { VxeGridProps } from '@abp/ui';
+
+import type { LogDto, LogExceptionDto, LogLevel } from '../../types/loggings';
 
 import { ref } from 'vue';
 
@@ -7,7 +9,8 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { formatToDateTime } from '@abp/core';
-import { Descriptions, Tabs, Tag } from 'ant-design-vue';
+import { useVbenVxeGrid } from '@abp/ui';
+import { Descriptions, Tabs, Tag, Textarea } from 'ant-design-vue';
 
 import { useLoggingsApi } from '../../api/useLoggingsApi';
 
@@ -46,6 +49,55 @@ const [Drawer, drawerApi] = useVbenDrawer({
     }
   },
   title: $t('AbpAuditLogging.AuditLog'),
+});
+/** 异常信息表格配置 */
+const exceptionsGridOptions: VxeGridProps<LogExceptionDto> = {
+  border: true,
+  columns: [
+    {
+      align: 'left',
+      field: 'parameters',
+      slots: {
+        content: 'parameters',
+      },
+      type: 'expand',
+      width: 80,
+    },
+    {
+      align: 'left',
+      field: 'class',
+      sortable: true,
+      title: $t('AbpAuditLogging.Class'),
+    },
+  ],
+  expandConfig: {
+    accordion: true,
+    padding: true,
+    trigger: 'row',
+  },
+  exportConfig: {},
+  keepSource: true,
+  pagerConfig: {
+    enabled: false,
+  },
+  proxyConfig: {
+    ajax: {
+      query: () => {
+        return Promise.resolve(logModel.value.exceptions);
+      },
+    },
+    response: {
+      list: ({ data }) => {
+        return data;
+      },
+    },
+  },
+  toolbarConfig: {
+    enabled: false,
+  },
+};
+const [ExceptionsGrid] = useVbenVxeGrid({
+  gridOptions: exceptionsGridOptions,
 });
 async function onGet(id: string) {
   const dto = await getApi(id);
@@ -129,6 +181,46 @@ async function onGet(id: string) {
               {{ logModel.fields.userId }}
             </DescriptionsItem>
           </Descriptions>
+        </TabPane>
+        <TabPane
+          v-if="logModel.exceptions?.length > 0"
+          key="exception"
+          :tab="$t('AbpAuditLogging.Exceptions')"
+        >
+          <ExceptionsGrid>
+            <template #parameters="{ row }">
+              <Descriptions
+                :label-style="{ minWidth: '100px' }"
+                :colon="false"
+                :column="1"
+                bordered
+                size="small"
+              >
+                <DescriptionsItem :label="$t('AbpAuditLogging.Class')">
+                  {{ row.class }}
+                </DescriptionsItem>
+                <DescriptionsItem :label="$t('AbpAuditLogging.Message')">
+                  {{ row.message }}
+                </DescriptionsItem>
+                <DescriptionsItem :label="$t('AbpAuditLogging.Source')">
+                  {{ row.source }}
+                </DescriptionsItem>
+                <DescriptionsItem :label="$t('AbpAuditLogging.StackTrace')">
+                  <Textarea
+                    readonly
+                    :auto-size="{ minRows: 10 }"
+                    :value="row.stackTrace"
+                  />
+                </DescriptionsItem>
+                <DescriptionsItem :label="$t('AbpAuditLogging.HResult')">
+                  {{ row.hResult }}
+                </DescriptionsItem>
+                <DescriptionsItem :label="$t('AbpAuditLogging.HelpURL')">
+                  {{ row.helpURL }}
+                </DescriptionsItem>
+              </Descriptions>
+            </template>
+          </ExceptionsGrid>
         </TabPane>
       </Tabs>
     </div>
