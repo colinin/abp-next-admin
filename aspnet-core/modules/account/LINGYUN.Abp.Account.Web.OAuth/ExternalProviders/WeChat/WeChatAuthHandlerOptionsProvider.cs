@@ -25,5 +25,6 @@ public class WeChatAuthHandlerOptionsProvider : OAuthHandlerOptionsProvider<Weix
         {
             options.ClientSecret = clientSecret;
         }
+        await base.SetOptionsAsync(options);
     }
 }

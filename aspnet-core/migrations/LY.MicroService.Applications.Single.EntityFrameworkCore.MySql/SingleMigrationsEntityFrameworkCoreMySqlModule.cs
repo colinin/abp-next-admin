@@ -11,7 +11,7 @@ using Volo.Abp.Modularity;
 namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql;
 
 [DependsOn(
-    typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
     // Quartz MySql数据库初始化模块
     typeof(AbpQuartzMySqlInstallerModule),
     // Elsa工作流模块 MySql集成

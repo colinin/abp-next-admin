@@ -9,14 +9,7 @@ import { LOGIN_PATH } from '@vben/constants';
 import { preferences } from '@vben/preferences';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
-import {
-  useOidcClient,
-  usePhoneLoginApi,
-  useProfileApi,
-  useQrCodeLoginApi,
-  useTokenApi,
-  useUserInfoApi,
-} from '@abp/account';
+import { useOAuthService, useProfileApi } from '@abp/account';
 import { Events, useAbpStore, useEventBus } from '@abp/core';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
@@ -26,48 +19,35 @@ import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
   const { publish } = useEventBus();
-  const { loginApi, refreshTokenApi } = useTokenApi();
-  const { loginApi: qrcodeLoginApi } = useQrCodeLoginApi();
-  const { loginApi: phoneLoginApi } = usePhoneLoginApi();
-  const { getUserInfoApi } = useUserInfoApi();
   const { getConfigApi } = useAbpConfigApi();
   const { getPictureApi } = useProfileApi();
   const accessStore = useAccessStore();
   const userStore = useUserStore();
   const abpStore = useAbpStore();
   const router = useRouter();
-  const oidcClient = useOidcClient();
+  const oAuthService = useOAuthService();
 
   const loginLoading = ref(false);
 
   async function refreshSession() {
-    if (await oidcClient.getAccessToken()) {
-      const user = await oidcClient.refreshToken();
+    if (await oAuthService.getAccessToken()) {
+      const user = await oAuthService.refreshToken();
       const newToken = `${user?.token_type} ${user?.access_token}`;
       accessStore.setAccessToken(newToken);
       if (user?.refresh_token) {
         accessStore.setRefreshToken(user.refresh_token);
       }
       return newToken;
-    } else {
-      const { accessToken, tokenType, refreshToken } = await refreshTokenApi({
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        refreshToken: accessStore.refreshToken!,
-      });
-      const newToken = `${tokenType} ${accessToken}`;
-      accessStore.setAccessToken(newToken);
-      accessStore.setRefreshToken(refreshToken);
-      return newToken;
     }
   }
 
   async function oidcLogin() {
-    await oidcClient.login();
+    await oAuthService.login();
   }
 
   async function oidcCallback() {
     try {
-      const user = await oidcClient.handleCallback();
+      const user = await oAuthService.handleCallback();
       return await _loginSuccess({
         accessToken: user.access_token,
         tokenType: user.token_type,
@@ -87,8 +67,17 @@ export const useAuthStore = defineStore('auth', () => {
   ) {
     try {
       loginLoading.value = true;
-      const result = await qrcodeLoginApi({ key, tenantId });
-      return await _loginSuccess(result, onSuccess);
+      const user = await oAuthService.loginByQrCode({ key, tenantId });
+      return await _loginSuccess(
+        {
+          accessToken: user.access_token,
+          tokenType: user.token_type,
+          refreshToken: user.refresh_token ?? '',
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          expiresIn: user.expires_in!,
+        },
+        onSuccess,
+      );
     } finally {
       loginLoading.value = false;
     }
@@ -101,8 +90,17 @@ export const useAuthStore = defineStore('auth', () => {
   ) {
     try {
       loginLoading.value = true;
-      const result = await phoneLoginApi({ phoneNumber, code });
-      return await _loginSuccess(result, onSuccess);
+      const user = await oAuthService.loginBySmsCode({ phoneNumber, code });
+      return await _loginSuccess(
+        {
+          accessToken: user.access_token,
+          tokenType: user.token_type,
+          refreshToken: user.refresh_token ?? '',
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          expiresIn: user.expires_in!,
+        },
+        onSuccess,
+      );
     } finally {
       loginLoading.value = false;
     }
@@ -119,8 +117,17 @@ export const useAuthStore = defineStore('auth', () => {
   ) {
     try {
       loginLoading.value = true;
-      const result = await loginApi(params as any);
-      return await _loginSuccess(result, onSuccess);
+      const user = await oAuthService.loginByPassword(params as any);
+      return await _loginSuccess(
+        {
+          accessToken: user.access_token,
+          tokenType: user.token_type,
+          refreshToken: user.refresh_token ?? '',
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          expiresIn: user.expires_in!,
+        },
+        onSuccess,
+      );
     } finally {
       loginLoading.value = false;
     }
@@ -128,9 +135,11 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout(redirect: boolean = true) {
     try {
-      if (await oidcClient.getAccessToken()) {
+      if (await oAuthService.getAccessToken()) {
         accessStore.setAccessToken(null);
-        await oidcClient.logout();
+        await oAuthService.logout();
+      } else {
+        await oAuthService.revokeTokens();
       }
     } catch {
       // 不做任何处理
@@ -153,7 +162,11 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchUserInfo() {
     let userInfo: null | (UserInfo & { [key: string]: any }) = null;
-    const userInfoRes = await getUserInfoApi();
+    let userInfoRes: { [key: string]: any } = {};
+    const user = await oAuthService.getUser();
+    if (user) {
+      userInfoRes = user.profile;
+    }
     const abpConfig = await getConfigApi();
     const picture = await getPictureApi();
     userInfo = {

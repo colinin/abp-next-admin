@@ -57,7 +57,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(LINGYUN.Abp.IdentityServer.AbpIdentityServerHttpApiModule),
     typeof(LINGYUN.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule),
     typeof(LINGYUN.Abp.IdentityServer.EntityFrameworkCore.AbpIdentityServerEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),

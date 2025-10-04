@@ -1,18 +1,21 @@
 ﻿@page
+@using LINGYUN.Abp.Account.Web.Pages.Account
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
 @using Volo.Abp.Account.Settings
-@using Volo.Abp.Account.Web.Pages.Account;
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 @using Volo.Abp.Identity;
-@using Volo.Abp.Settings
+@using Volo.Abp.Settings;
 @model LINGYUN.Abp.Account.Web.Pages.Account.LoginModel
 @inject IHtmlLocalizer<AccountResource> L
 @inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
 
 @{
     Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+    PageLayout.Content.Title = L["Login"].Value;
 }
 
 @section scripts
@@ -22,84 +25,117 @@
     </abp-script-bundle>
 }
 
-<div class="card mt-3 shadow-sm rounded">
-    <div class="card-body p-5">
-        <h4>@L["Login"]</h4>
-        @if (Model.EnableLocalLogin)
-        {
-            <form method="post" class="mt-4">
-                <div class="mb-3">
-                    <label asp-for="LoginInput.UserNameOrEmailAddress" class="form-label"></label>
-                    <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control" />
-                    <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="LoginInput.Password" class="form-label"></label>
-                    <div class="input-group">
-                        <input type="password" class="form-control" autocomplete="new-password" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="LoginInput.Password" />
-                        <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+<div class="account-module-form">
+    @if (Model.EnableLocalLogin)
+    {
+        <abp-tabs id="LoginFormTabs">
+            <abp-tab title="@L["PasswordLogin"].Value" active="Model.LoginType == LoginType.Password" header-name="PasswordLogin">
+                <form method="post" class="mt-4" asp-page-handler="PasswordLogin">
+                    <input asp-for="PasswordLoginInput.ReturnUrl" />
+                    <input asp-for="PasswordLoginInput.ReturnUrlHash" />
+                    <div class="mb-3">
+                        <label asp-for="PasswordLoginInput.UserNameOrEmailAddress" class="form-label"></label>
+                        <input asp-for="PasswordLoginInput.UserNameOrEmailAddress" class="form-control" />
+                        <span asp-validation-for="PasswordLoginInput.UserNameOrEmailAddress" class="text-danger"></span>
                     </div>
-                    <span asp-validation-for="LoginInput.Password"></span>
-                </div>
-                <abp-row>
-                    <abp-column>
-                        <abp-input asp-for="LoginInput.RememberMe" class="mb-4" />
-                    </abp-column>
-                    <abp-column class="text-end">
-                        <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
-                    </abp-column>
-                </abp-row>
-                @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
-                {
-                    <strong>
-                        @L["AreYouANewUser"]
-                        <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Register"]</a>
-                    </strong>
-                }
-                <div class="d-grid gap-2">
-                    <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
-                    @if (Model.ShowCancelButton)
-                    {
-                        <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
-                    }
-                </div>
-            </form>
-        }
 
-        @if (Model.VisibleExternalProviders.Any())
-        {
-            <div class="mt-2">
-                <h5>@L["OrLoginWith"]</h5>
-                <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
-                    @foreach (var provider in Model.VisibleExternalProviders)
+                    <div class="mb-3">
+                        <label asp-for="PasswordLoginInput.Password" class="form-label"></label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" autocomplete="new-password" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="PasswordLoginInput.Password" />
+                            <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                        </div>
+                        <span asp-validation-for="PasswordLoginInput.Password"></span>
+                    </div>
+                    <abp-row>
+                        <abp-column>
+                            <abp-input asp-for="PasswordLoginInput.RememberMe" class="mb-4" />
+                        </abp-column>
+                        <abp-column class="text-end">
+                            <a href="@Url.Page("./ForgotPassword", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">@L["ForgotPassword"]</a>
+                        </abp-column>
+                    </abp-row>
+                    @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
                     {
-                        @* <button
-                            type="submit"
-                            class="btn btn-primary m-1"
-                            name="provider"
-                            value="@provider.AuthenticationScheme"
-                            title="@L["LogInUsingYourProviderAccount", provider.DisplayName]"
-                            >
-                            @if (provider.Icon != null)
-                            {
-                                <i class="@provider.Icon"></i>
-                            }
-                            <span>@provider.DisplayName</span>
-                        </button> *@
-                        @await Component.InvokeAsync(provider.ComponentType, provider);
+                        <strong>
+                            @L["AreYouANewUser"]
+                            <a href="@Url.Page("./Register", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })" class="text-decoration-none">@L["Register"]</a>
+                        </strong>
                     }
+                    <div class="d-grid gap-2">
+                        <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
+                        @if (Model.ShowCancelButton)
+                        {
+                            <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
+                        }
+                    </div>
                 </form>
-            </div>
-        }
+            </abp-tab>
+            <abp-tab title="@L["PhoneNumberLogin"].Value" active="Model.LoginType == LoginType.PhoneNumber" header-name="PhoneNumberLogin">
+                <form method="post" class="mt-4" asp-page-handler="PhoneNumberLogin" id="PhoneNumberForm">
+                    <input asp-for="PhoneLoginInput.ReturnUrl" />
+                    <input asp-for="PhoneLoginInput.ReturnUrlHash" />
+                    <div class="mb-3">
+                        <label asp-for="PhoneLoginInput.PhoneNumber" class="form-label"></label>
+                        <input asp-for="PhoneLoginInput.PhoneNumber" class="form-control" id="PhoneNumberInput" />
+                        <span asp-validation-for="PhoneLoginInput.PhoneNumber" class="text-danger"></span>
+                    </div>
 
-        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
-        {
-            <div class="alert alert-warning">
-                <strong>@L["InvalidLoginRequest"]</strong>
-                @L["ThereAreNoLoginSchemesConfiguredForThisClient"]
-            </div>
-        }
+                    <div class="mb-3">
+                        <label asp-for="PhoneLoginInput.Code" class="form-label"></label>
+                        <div class="input-group">
+                            <input asp-for="PhoneLoginInput.Code" class="form-control" />
+                            <button class="btn btn-secondary" type="button" id="SendVerifyCodeButton">@L["SendVerifyCode"]</button>
+                        </div>
+                        <span asp-validation-for="PhoneLoginInput.Code" class="text-danger"></span>
+                    </div>
+                    <abp-row>
+                        <abp-column>
+                            <abp-input asp-for="PhoneLoginInput.RememberMe" class="mb-4" />
+                        </abp-column>
+                    </abp-row>
+                    <div class="d-grid gap-2">
+                        <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
+                        @if (Model.ShowCancelButton)
+                        {
+                            <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
+                        }
+                    </div>
+                </form>
+            </abp-tab>
+            <abp-tab title="@L["ScanQrCodeLogin"].Value" active="Model.LoginType == LoginType.QrCode" header-name="QrCodeLogin">
+                <form method="post" class="mt-4" asp-page-handler="QrCodeLogin" id="QrCodeForm">
+                    <input asp-for="QrCodeLoginInput.ReturnUrl" />
+                    <input asp-for="QrCodeLoginInput.ReturnUrlHash" />
+                    <input asp-for="QrCodeLoginInput.Key" id="QrCodeKey" />
+                    <div class="gap-2" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <div id="QrCode"></div>
+                        <div id="QrCodeStatus"></div>
+                    </div>
+                </form>
+            </abp-tab>
+        </abp-tabs>
+    }
 
-    </div>
+    @if (Model.VisibleExternalProviders.Any())
+    {
+        <div class="mt-2">
+            <h5>@L["OrLoginWith"]</h5>
+            <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                @foreach (var provider in Model.VisibleExternalProviders)
+                {
+                    @await Component.InvokeAsync(provider.ComponentType, provider)
+                                ;
+                }
+            </form>
+        </div>
+    }
+
+    @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+    {
+        <div class="alert alert-warning">
+            <strong>@L["InvalidLoginRequest"]</strong>
+            @L["ThereAreNoLoginSchemesConfiguredForThisClient"]
+        </div>
+    }
 </div>

@@ -81,9 +81,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="openiddict.pfx">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+	  <Folder Include="wwwroot\" />
 	</ItemGroup>
 
 </Project>

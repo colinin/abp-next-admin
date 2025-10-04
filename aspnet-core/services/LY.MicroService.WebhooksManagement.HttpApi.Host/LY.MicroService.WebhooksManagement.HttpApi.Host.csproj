@@ -30,7 +30,6 @@
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.DistributedLocking" />
 		<PackageReference Include="Volo.Abp.Swashbuckle" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
 		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />

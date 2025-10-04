@@ -17,7 +17,7 @@ public class AppDescriptor
     /// <summary>
     /// 应用token
     /// </summary>
-    public string AppToken { get; set; }
+    public string? AppToken { get; set; }
     /// <summary>
     /// 签名有效时间
     /// 单位: s
@@ -29,7 +29,7 @@ public class AppDescriptor
         string appName,
         string appKey,
         string appSecret,
-        string appToken = null,
+        string? appToken = null,
         int? signLifeTime = null)
     {
         AppName = appName;

@@ -15,7 +15,7 @@ namespace LY.MicroService.TaskManagement.EntityFrameworkCore;
 [DependsOn(
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),

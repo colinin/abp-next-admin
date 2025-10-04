@@ -18,18 +18,9 @@ public class WeChatMiniProgramNotificationPublishProvider : NotificationPublishP
 {
     public const string ProviderName = NotificationProviderNames.WechatMiniProgram;
     public override string Name => ProviderName;
-    protected IFeatureChecker FeatureChecker { get; }
-    protected ISubscribeMessager SubscribeMessager { get; }
-    protected AbpNotificationsWeChatMiniProgramOptions Options { get; }
-    public WeChatMiniProgramNotificationPublishProvider(
-        IFeatureChecker featureChecker,
-        ISubscribeMessager subscribeMessager,
-        IOptions<AbpNotificationsWeChatMiniProgramOptions> options)
-    {
-        Options = options.Value;
-        FeatureChecker = featureChecker;
-        SubscribeMessager = subscribeMessager;
-    }
+    protected IFeatureChecker FeatureChecker => ServiceProvider.LazyGetRequiredService<IFeatureChecker>();
+    protected ISubscribeMessager SubscribeMessager => ServiceProvider.LazyGetRequiredService<ISubscribeMessager>();
+    protected IOptions<AbpNotificationsWeChatMiniProgramOptions> Options => ServiceProvider.LazyGetRequiredService<IOptions<AbpNotificationsWeChatMiniProgramOptions>>();
 
     protected async override Task<bool> CanPublishAsync(NotificationInfo notification, CancellationToken cancellationToken = default)
     {
@@ -75,10 +66,10 @@ public class WeChatMiniProgramNotificationPublishProvider : NotificationPublishP
         var redirect = GetOrDefault(notification.Data, "RedirectPage", null);
         Logger.LogDebug($"Get wechat weapp redirect page: {redirect ?? "null"}");
 
-        var weAppState = GetOrDefault(notification.Data, "WeAppState", Options.DefaultState);
+        var weAppState = GetOrDefault(notification.Data, "WeAppState", Options.Value.DefaultState);
         Logger.LogDebug($"Get wechat weapp state: {weAppState ?? null}");
 
-        var weAppLang = GetOrDefault(notification.Data, "WeAppLanguage", Options.DefaultLanguage);
+        var weAppLang = GetOrDefault(notification.Data, "WeAppLanguage", Options.Value.DefaultLanguage);
         Logger.LogDebug($"Get wechat weapp language: {weAppLang ?? null}");
 
         // TODO: 如果微信端发布通知,请组装好 openid 字段在通知数据内容里面
@@ -107,7 +98,7 @@ public class WeChatMiniProgramNotificationPublishProvider : NotificationPublishP
 
     protected string GetOrDefaultTemplateId(NotificationData data)
     {
-        return GetOrDefault(data, "TemplateId", Options.DefaultTemplateId);
+        return GetOrDefault(data, "TemplateId", Options.Value.DefaultTemplateId);
     }
 
     protected string GetOrDefault(NotificationData data, string key, string defaultValue)

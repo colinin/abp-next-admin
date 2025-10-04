@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { VbenFormProps } from '@vben/common-ui';
@@ -67,41 +67,48 @@ const gridOptions: VxeGridProps<OpenIddictApplicationDto> = {
       align: 'left',
       field: 'clientId',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:ClientId'),
     },
     {
       align: 'left',
       field: 'displayName',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:DisplayName'),
     },
     {
       align: 'center',
       field: 'consentType',
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:ConsentType'),
       width: 200,
     },
     {
       align: 'center',
       field: 'clientType',
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:ClientType'),
       width: 120,
     },
     {
       align: 'center',
       field: 'applicationType',
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:ApplicationType'),
       width: 150,
     },
     {
       align: 'left',
       field: 'clientUri',
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:ClientUri'),
       width: 150,
     },
     {
       align: 'left',
       field: 'logoUri',
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:LogoUri'),
       width: 120,
     },
@@ -121,8 +128,10 @@ const gridOptions: VxeGridProps<OpenIddictApplicationDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -137,9 +146,15 @@ const gridOptions: VxeGridProps<OpenIddictApplicationDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
+  },
+};
+const gridEvents: VxeGridListeners<OpenIddictApplicationDto> = {
+  sortChange: () => {
+    gridApi.query();
   },
 };
 const [ApplicationModal, modalApi] = useVbenModal({
@@ -159,9 +174,10 @@ const [ApplicationChangeDrawer, applicationChangeDrawerApi] = useVbenDrawer({
   connectedComponent: EntityChangeDrawer,
 });
 
-const [Grid, { query }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridOptions,
+  gridEvents,
 });
 
 const onCreate = () => {
@@ -181,7 +197,7 @@ const onDelete = (row: OpenIddictApplicationDto) => {
     onOk: async () => {
       await deleteApi(row.id);
       message.success($t('AbpUi.DeletedSuccessfully'));
-      query();
+      await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
   });
@@ -309,8 +325,8 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
       </div>
     </template>
   </Grid>
-  <ApplicationModal @change="() => query()" />
-  <ApplicationSecretModal @change="() => query()" />
+  <ApplicationModal @change="() => gridApi.query()" />
+  <ApplicationSecretModal @change="() => gridApi.query()" />
   <ApplicationPermissionModal />
   <ApplicationChangeDrawer />
 </template>

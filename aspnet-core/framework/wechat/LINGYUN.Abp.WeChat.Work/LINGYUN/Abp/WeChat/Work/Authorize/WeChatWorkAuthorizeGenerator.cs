@@ -57,14 +57,19 @@ public class WeChatWorkAuthorizeGenerator : IWeChatWorkAuthorizeGenerator, ISing
     }
 
     public async virtual Task<string> GenerateOAuth2LoginAsync(
-        string appid,
         string redirectUri,
         string state,
         string loginType = "ServiceApp",
+        string agentId = "",
         string lang = "zh")
     {
-        var agentId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.AgentId);
+        if (agentId.IsNullOrWhiteSpace())
+        {
+            agentId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.AgentId);
+        }
+        var corpId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.CorpId);
 
+        Check.NotNullOrEmpty(corpId, nameof(corpId));
         Check.NotNullOrEmpty(agentId, nameof(agentId));
 
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.LoginClient);
@@ -75,7 +80,7 @@ public class WeChatWorkAuthorizeGenerator : IWeChatWorkAuthorizeGenerator, ISing
             .Append(client.BaseAddress.AbsoluteUri.EnsureEndsWith('/'))
             .Append("wwlogin/sso/login")
             .AppendFormat("?login_type={0}", loginType)
-            .AppendFormat("&appid={0}", appid)
+            .AppendFormat("&appid={0}", corpId)
             .AppendFormat("&agentid={0}", agentId)
             .AppendFormat("&redirect_uri={0}", HttpUtility.UrlEncode(redirectUri))
             .AppendFormat("&state={0}", state)

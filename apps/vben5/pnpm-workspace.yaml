@@ -51,10 +51,12 @@ catalog:
   '@types/lodash.debounce': ^4.0.9
   '@types/lodash.get': ^4.4.9
   '@types/lodash.groupby': ^4.6.9
+  '@types/lodash.isdate': ^4.0.9
   '@types/lodash.isequal': ^4.5.8
   '@types/lodash.isnumber': ^3.0.9
   '@types/lodash.merge': ^4.6.9
   '@types/lodash.set': ^4.3.9
+  '@types/lodash.sortby': ^4.7.9
   '@types/node': ^22.15.3
   '@types/nprogress': ^0.2.3
   '@types/postcss-import': ^14.0.3
@@ -73,6 +75,7 @@ catalog:
   '@vueuse/core': ^13.1.0
   '@vueuse/integrations': ^13.1.0
   '@vueuse/motion': ^3.0.3
+  '@wecom/jssdk': ^2.3.1
   ant-design-vue: ^4.2.6
   archiver: ^7.0.1
   autoprefixer: ^10.4.21
@@ -130,10 +133,12 @@ catalog:
   lodash.debounce: ^4.0.8
   lodash.get: ^4.4.2
   lodash.groupby: ^4.6.0
+  lodash.isdate: ^4.0.1
   lodash.isequal: ^4.5.0
   lodash.isnumber: ^3.0.3
   lodash.merge: ^4.6.2
   lodash.set: ^4.3.2
+  lodash.sortby: ^4.7.0
   lucide-vue-next: ^0.507.0
   medium-zoom: ^1.1.0
   naive-ui: ^2.41.0
@@ -205,8 +210,9 @@ catalog:
   vue-simple-uploader: ^1.0.3
   vue-tippy: ^6.7.0
   vue-tsc: 2.2.10
-  vxe-pc-ui: ^4.5.35
-  vxe-table: ^4.13.16
+  vue3-colorpicker: ^2.3.0
+  vxe-pc-ui: ^4.7.12
+  vxe-table: ^4.14.4
   watermark-js-plus: ^1.6.0
   zod: ^3.24.3
   zod-defaults: ^0.1.3

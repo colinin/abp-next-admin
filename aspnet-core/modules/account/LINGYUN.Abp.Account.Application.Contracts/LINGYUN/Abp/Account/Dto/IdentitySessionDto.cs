@@ -14,6 +14,8 @@ public class IdentitySessionDto : EntityDto<Guid>
 
     public string IpAddresses { get; set; }
 
+    public Guid UserId { get; set; }
+
     public DateTime SignedIn { get; set; }
 
     public DateTime? LastAccessed { get; set; }

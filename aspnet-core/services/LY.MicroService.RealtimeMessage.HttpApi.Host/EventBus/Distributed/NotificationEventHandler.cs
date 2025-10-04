@@ -17,6 +17,7 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Settings;
 using Volo.Abp.TextTemplating;
 using Volo.Abp.Uow;
 
@@ -42,6 +43,10 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// Reference to <see cref="AbpNotificationsPublishOptions"/>.
         /// </summary>
         protected AbpNotificationsPublishOptions Options { get; }
+        /// <summary>
+        /// Reference to <see cref="ISettingProvider"/>.
+        /// </summary>
+        protected ISettingProvider SettingProvider { get; }
         /// <summary>
         /// Reference to <see cref="ICurrentTenant"/>.
         /// </summary>
@@ -96,6 +101,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// </summary>
         public NotificationEventHandler(
             ICurrentTenant currentTenant,
+            ISettingProvider settingProvider,
             ITenantConfigurationCache tenantConfigurationCache,
             IJsonSerializer jsonSerializer,
             ITemplateRenderer templateRenderer,
@@ -112,6 +118,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             Options = options.Value;
             TenantConfigurationCache = tenantConfigurationCache;
             CurrentTenant = currentTenant;
+            SettingProvider = settingProvider;
             JsonSerializer = jsonSerializer;
             TemplateRenderer = templateRenderer;
             BackgroundJobManager = backgroundJobManager;
@@ -138,7 +145,8 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             var culture = eventData.Data.Culture;
             if (culture.IsNullOrWhiteSpace())
             {
-                culture = CultureInfo.CurrentCulture.Name;
+                var cultureSet = await SettingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
+                culture = cultureSet ?? CultureInfo.CurrentCulture.Name;
             }
             using (CultureHelper.Use(culture, culture))
             {
@@ -173,24 +181,32 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             {
                 return;
             }
-
-            if (notification.NotificationType == NotificationType.System)
+            var culture = eventData.Data.TryGetData(NotificationData.CultureKey)?.ToString();
+            if (culture.IsNullOrWhiteSpace())
             {
-                using (CurrentTenant.Change(null))
+                var cultureSet = await SettingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
+                culture = cultureSet ?? CultureInfo.CurrentCulture.Name;
+            }
+            using (CultureHelper.Use(culture, culture))
+            {
+                if (notification.NotificationType == NotificationType.System)
                 {
-                    await SendToTenantAsync(null, notification, eventData);
-
-                    var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
-
-                    foreach (var activeTenant in allActiveTenants)
+                    using (CurrentTenant.Change(null))
                     {
-                        await SendToTenantAsync(activeTenant.Id, notification, eventData);
+                        await SendToTenantAsync(null, notification, eventData);
+
+                        var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
+
+                        foreach (var activeTenant in allActiveTenants)
+                        {
+                            await SendToTenantAsync(activeTenant.Id, notification, eventData);
+                        }
                     }
                 }
-            }
-            else
-            {
-                await SendToTenantAsync(eventData.TenantId, notification, eventData);
+                else
+                {
+                    await SendToTenantAsync(eventData.TenantId, notification, eventData);
+                }
             }
         }
 
@@ -247,7 +263,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                             { NotificationKeywords.CreationTime, eventData.CreationTime.ToString(Options.DateTimeFormat) },
                         });
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logger.LogWarning("Formatting template notification failed, message will be discarded, cause :{message}", ex.Message);
                     return;
@@ -362,7 +378,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
 
                 return userSubscriptions.Select(us => new UserIdentifier(us.UserId, us.UserName));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.LogWarning("Failed to get user subscription, message will not be received by the user, reason: {message}", ex.Message);
             }
@@ -468,7 +484,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                         subscriptionUsers.ToList(),
                         notificationInfo.TenantId));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.LogWarning("Failed to push to background job, notification will be discarded, error cause: {message}", ex.Message);
             }

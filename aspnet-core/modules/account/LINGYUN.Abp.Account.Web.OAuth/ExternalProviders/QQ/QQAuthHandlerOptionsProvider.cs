@@ -25,5 +25,6 @@ public class QQAuthHandlerOptionsProvider : OAuthHandlerOptionsProvider<QQAuthen
         {
             options.ClientSecret = clientSecret;
         }
+        await base.SetOptionsAsync(options);
     }
 }

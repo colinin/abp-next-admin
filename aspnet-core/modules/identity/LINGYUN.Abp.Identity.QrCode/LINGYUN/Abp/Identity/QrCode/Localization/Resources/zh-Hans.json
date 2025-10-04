@@ -2,7 +2,7 @@
   "culture": "zh-Hans",
   "texts": {
     "QrCode:Invalid": "二维码已失效!",
-    "QrCode:NotScaned": "未扫描二维码!",
+    "QrCode:NotScaned": "请扫描二维码!",
     "QrCode:Scaned": "请确认二维码."
   }
 }

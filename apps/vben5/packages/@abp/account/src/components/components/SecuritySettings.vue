@@ -86,13 +86,8 @@ onMounted(onGet);
         </template>
         <ListItemMeta
           :description="$t('abp.account.settings.security.passwordDesc')"
-        >
-          <template #title>
-            <a href="https://www.antdv.com/">{{
-              $t('abp.account.settings.security.password')
-            }}</a>
-          </template>
-        </ListItemMeta>
+          :title="$t('abp.account.settings.security.password')"
+        />
       </ListItem>
       <!-- 手机号码 -->
       <ListItem>

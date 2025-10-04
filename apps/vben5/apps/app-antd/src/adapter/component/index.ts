@@ -31,6 +31,12 @@ const Button = defineAsyncComponent(() => import('ant-design-vue/es/button'));
 const Checkbox = defineAsyncComponent(
   () => import('ant-design-vue/es/checkbox'),
 );
+const ColorPicker = defineAsyncComponent(() =>
+  import('vue3-colorpicker').then((res) => {
+    import('vue3-colorpicker/style.css');
+    return res.ColorPicker;
+  }),
+);
 const CheckboxGroup = defineAsyncComponent(() =>
   import('ant-design-vue/es/checkbox').then((res) => res.CheckboxGroup),
 );
@@ -117,6 +123,7 @@ export type ComponentType =
   | 'AutoComplete'
   | 'Checkbox'
   | 'CheckboxGroup'
+  | 'ColorPicker'
   | 'DatePicker'
   | 'DefaultButton'
   | 'Divider'
@@ -182,6 +189,7 @@ async function initComponentAdapter() {
     AutoComplete,
     Checkbox,
     CheckboxGroup,
+    ColorPicker,
     DatePicker,
     // 自定义默认按钮
     DefaultButton: (props, { attrs, slots }) => {

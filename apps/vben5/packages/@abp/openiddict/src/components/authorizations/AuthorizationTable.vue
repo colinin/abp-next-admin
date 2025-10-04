@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { SelectValue } from 'ant-design-vue/es/select';
 
 import type { VbenFormProps } from '@vben/common-ui';
@@ -103,24 +103,28 @@ const gridOptions: VxeGridProps<OpenIddictAuthorizationDto> = {
       align: 'left',
       field: 'applicationId',
       minWidth: 300,
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:ApplicationId'),
     },
     {
       align: 'left',
       field: 'subject',
       minWidth: 300,
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:Subject'),
     },
     {
       align: 'left',
       field: 'type',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:Type'),
     },
     {
       align: 'left',
       field: 'status',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:Status'),
     },
     {
@@ -130,6 +134,7 @@ const gridOptions: VxeGridProps<OpenIddictAuthorizationDto> = {
         return cellValue ? formatToDateTime(cellValue) : cellValue;
       },
       minWidth: 200,
+      sortable: true,
       title: $t('AbpOpenIddict.DisplayName:CreationDate'),
     },
     {
@@ -145,8 +150,10 @@ const gridOptions: VxeGridProps<OpenIddictAuthorizationDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -161,9 +168,15 @@ const gridOptions: VxeGridProps<OpenIddictAuthorizationDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
+  },
+};
+const gridEvents: VxeGridListeners<OpenIddictAuthorizationDto> = {
+  sortChange: () => {
+    gridApi.query();
   },
 };
 const [AuthorizationModal, modalApi] = useVbenModal({
@@ -175,6 +188,7 @@ const [AuthorizationModal, modalApi] = useVbenModal({
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridOptions,
+  gridEvents,
 });
 
 const onSearchClient = debounce(async (filter?: string) => {

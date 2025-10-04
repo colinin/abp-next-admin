@@ -5,7 +5,7 @@ public class AbpWeChatWorkGlobalConsts
     /// <summary>
     ///  企业微信对应的Provider名称
     /// </summary>
-    public static string ProviderName { get; set; } = "WeCom";
+    public static string ProviderName { get; set; } = "WorkWeixin";
     /// <summary>
     /// 企业微信授权类型
     /// </summary>

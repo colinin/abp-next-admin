@@ -14,7 +14,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql.Pomelo" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
@@ -22,7 +22,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
-		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin\LINGYUN.Abp.UI.Navigation.VueVbenAdmin.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.EntityFrameworkCore\LINGYUN.Platform.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
 	</ItemGroup>

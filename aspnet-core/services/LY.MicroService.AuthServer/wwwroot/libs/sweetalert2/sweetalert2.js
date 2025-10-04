@@ -1,5 +1,5 @@
 /*!
-* sweetalert2 v11.22.2
+* sweetalert2 v11.23.0
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -813,7 +813,7 @@
   };
 
   /**
-   * Add modal + backdrop + no-war message for Russians to DOM
+   * Add modal + backdrop to DOM
    *
    * @param {SweetAlertOptions} params
    */
@@ -4571,28 +4571,6 @@
     }
   };
 
-  // Dear russian users visiting russian sites. Let's have fun.
-  if (typeof window !== 'undefined' && /^ru\b/.test(navigator.language) && location.host.match(/\.(ru|su|by|xn--p1ai)$/)) {
-    const now = new Date();
-    const initiationDate = localStorage.getItem('swal-initiation');
-    if (!initiationDate) {
-      localStorage.setItem('swal-initiation', `${now}`);
-    } else if ((now.getTime() - Date.parse(initiationDate)) / (1000 * 60 * 60 * 24) > 3) {
-      setTimeout(() => {
-        document.body.style.pointerEvents = 'none';
-        const ukrainianAnthem = document.createElement('audio');
-        ukrainianAnthem.src = 'https://flag-gimn.ru/wp-content/uploads/2021/09/Ukraina.mp3';
-        ukrainianAnthem.loop = true;
-        document.body.appendChild(ukrainianAnthem);
-        setTimeout(() => {
-          ukrainianAnthem.play().catch(() => {
-            // ignore
-          });
-        }, 2500);
-      }, 500);
-    }
-  }
-
   // Assign instance methods from src/instanceMethods/*.js to prototype
   SweetAlert.prototype.disableButtons = disableButtons;
   SweetAlert.prototype.enableButtons = enableButtons;
@@ -4628,7 +4606,7 @@
     };
   });
   SweetAlert.DismissReason = DismissReason;
-  SweetAlert.version = '11.22.2';
+  SweetAlert.version = '11.23.0';
 
   const Swal = SweetAlert;
   // @ts-ignore

@@ -12,6 +12,7 @@ namespace LINGYUN.Abp.BackgroundTasks.Notifications;
 public class JobExecutedSuccessedNotificationProvider : NotificationJobExecutedProvider
 {
     public const string Name = "JobExecutedSuccessedNofiter";
+    public override string DefaultNotificationName => BackgroundTasksNotificationNames.JobExecuteSucceeded;
 
     public JobExecutedSuccessedNotificationProvider(
         ICurrentTenant currentTenant, 
@@ -24,7 +25,7 @@ public class JobExecutedSuccessedNotificationProvider : NotificationJobExecutedP
 
     public async override Task NotifySuccessAsync([NotNull] JobActionExecuteContext context)
     {
-        var title = StringLocalizer["JobExecutedSucceeded"].Value;
+        var title = StringLocalizer["Notifications:JobExecuteSucceeded"].Value;
 
         await SendNofiterAsync(context, title, NotificationSeverity.Success);
     }

@@ -8,6 +8,8 @@
     "Notifications:JobExecuteFailedDesc": "后台作业执行失败后通知推送.",
     "Notifications:JobExecuteCompleted": "作业完成通知",
     "Notifications:JobExecuteCompletedDesc": "后台作业执行完成后通知推送.",
+    "DisplayName:NotificationName": "通知名称",
+    "Description:NotificationName": "如果指定通知名称,将使用对应通知名称发送消息.",
     "DisplayName:PushProvider": "推送程序",
     "Description:PushProvider": "如果指定推送程序,应用将选择它进行消息推送,多个提供者用;分隔,可选列表:SignalR(实时通知)、Sms(短信通知)、Emailing(邮件通知)、WeChat.MiniProgram(微信小程序)、WxPusher(WxPusher微信推送服务)、PushPlus(PushPlus多平台推送服务)",
     "DisplayName:Template": "模板名称",
