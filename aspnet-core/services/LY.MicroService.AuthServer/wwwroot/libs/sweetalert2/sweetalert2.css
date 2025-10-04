@@ -296,7 +296,7 @@ div:where(.swal2-container) h2:where(.swal2-title) {
   font-weight: 600;
   text-align: center;
   text-transform: none;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   cursor: initial;
 }
 div:where(.swal2-container) div:where(.swal2-actions) {
@@ -465,7 +465,7 @@ div:where(.swal2-container) div:where(.swal2-html-container) {
   font-weight: normal;
   line-height: normal;
   text-align: center;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   word-break: break-word;
   cursor: initial;
 }
