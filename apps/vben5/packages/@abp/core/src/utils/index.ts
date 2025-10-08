@@ -1,5 +1,6 @@
 export * from './array';
 export * from './date';
+export * from './file';
 export * from './is';
 export * from './mitt';
 export * from './regex';
