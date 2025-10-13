@@ -29,6 +29,7 @@ public class AbpWeChatWorkCommonModule : AbpModule
             options.MapEvent("location_select", context => context.GetWeChatMessage<GeoLocationSelectPushEevent>());
             options.MapEvent("batch_job_result", context => context.GetWeChatMessage<BatchJobResultEvent>());
             options.MapEvent("open_approval_change", context => context.GetWeChatMessage<ApprovalStatusChangeEvent>());
+            options.MapEvent("sys_approval_change", context => context.GetWeChatMessage<SysApprovalStatusChangeEvent>());
             options.MapEvent("share_agent_change", context => context.GetWeChatMessage<ShareAgentChangeEvent>());
             options.MapEvent("share_chain_change", context => context.GetWeChatMessage<ShareChainChangeEvent>());
             options.MapEvent("template_card_event", context => context.GetWeChatMessage<TemplateCardPushEvent>());
