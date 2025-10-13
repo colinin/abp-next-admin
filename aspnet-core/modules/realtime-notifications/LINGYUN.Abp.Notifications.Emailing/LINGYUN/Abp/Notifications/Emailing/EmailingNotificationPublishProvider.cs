@@ -26,7 +26,23 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
     {
         var userIds = identifiers.Select(x => x.UserId).ToList();
         var userList = await UserRepository.GetListByIdListAsync(userIds, cancellationToken: cancellationToken);
-        var emailAddress = userList.Where(x => x.EmailConfirmed).Select(x => x.Email).Distinct().JoinAsString(",");
+
+        var emailAddress = userList
+            .Where(x => x.EmailConfirmed)
+            .Select(x =>
+            {
+                var userEmail = x.Email;
+                if (!x.Name.IsNullOrWhiteSpace())
+                {
+                    // "admin"<admin@abp.io>
+                    return $"\"{x.Name}\"<{userEmail}>";
+                }
+
+                return $"\"{x.UserName}\"<{userEmail}>";
+            })
+            .Distinct()
+            .JoinAsString(",");
+
 
         if (emailAddress.IsNullOrWhiteSpace())
         {
