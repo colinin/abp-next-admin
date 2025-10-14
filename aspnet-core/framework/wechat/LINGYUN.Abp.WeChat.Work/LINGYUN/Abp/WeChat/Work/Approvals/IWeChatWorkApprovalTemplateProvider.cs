@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.WeChat.Work.Approvals;
 /// <remarks>
 /// 详情见: https://developer.work.weixin.qq.com/document/path/91854
 /// </remarks>
-public interface IApprovalTemplateProvider
+public interface IWeChatWorkApprovalTemplateProvider
 {
     /// <summary>
     /// 创建审批模板

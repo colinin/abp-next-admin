@@ -70,7 +70,7 @@ public interface IWeChatWorkTagProvider
         WeChatWorkTagChangeMemberRequest request,
         CancellationToken cancellationToken = default);
     /// <summary>
-    /// 增加标签成员
+    /// 删除标签成员
     /// </summary>
     /// <remarks>
     /// 详情见：https://developer.work.weixin.qq.com/document/path/90214
