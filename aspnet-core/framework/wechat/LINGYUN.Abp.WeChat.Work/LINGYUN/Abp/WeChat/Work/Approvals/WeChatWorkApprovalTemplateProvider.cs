@@ -11,12 +11,12 @@ using Volo.Abp.Features;
 namespace LINGYUN.Abp.WeChat.Work.Approvals;
 
 [RequiresFeature(WeChatWorkFeatureNames.Enable)]
-public class ApprovalTemplateProvider : IApprovalTemplateProvider, ISingletonDependency
+public class WeChatWorkApprovalTemplateProvider : IApprovalTemplateProvider, ISingletonDependency
 {
     protected IHttpClientFactory HttpClientFactory { get; }
     protected IWeChatWorkTokenProvider WeChatWorkTokenProvider { get; }
 
-    public ApprovalTemplateProvider(
+    public WeChatWorkApprovalTemplateProvider(
         IHttpClientFactory httpClientFactory,
         IWeChatWorkTokenProvider weChatWorkTokenProvider)
     {
