@@ -282,6 +282,7 @@
 		<PackageVersion Include="aliyun-net-sdk-core" Version="1.5.10" />
 		<PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.14.1" />
 		<PackageVersion Include="AgileConfig.Client" Version="1.6.9" />
+		<PackageVersion Include="CommonMark.NET" Version="0.15.1" />
 		<PackageVersion Include="Elastic.Apm.NetCoreAll" Version="1.31.0" />
 		<PackageVersion Include="BouncyCastle.Cryptography" Version="2.5.0" />
 		<PackageVersion Include="Dapr.Client" Version="1.15.4" />
