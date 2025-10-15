@@ -32,4 +32,18 @@ public interface IWeChatWorkMessageSender
     Task<WeChatWorkResponse> SendAsync(
         WeChatWorkAppChatMessage message,
         CancellationToken cancellationToken = default);
+    /// <summary>
+    /// 发送Webhook消息
+    /// </summary>
+    /// <remarks>
+    /// 参考：https://developer.work.weixin.qq.com/document/path/99110
+    /// </remarks>
+    /// <param name="webhookKey">消息推送的webhook Key</param>
+    /// <param name="message">继承自 <see cref="WeChatWorkWebhookMessage"/> 的企业微信Webhook消息载体</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<WeChatWorkResponse> SendAsync(
+        string webhookKey,
+        WeChatWorkWebhookMessage message,
+        CancellationToken cancellationToken = default);
 }
