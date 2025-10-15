@@ -6,6 +6,7 @@ using LINGYUN.Abp.Tencent.Features;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.BlobStoring;
@@ -19,15 +20,18 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
 {
     protected IFeatureChecker FeatureChecker { get; }
     protected ICosClientFactory CosClientFactory { get; }
+    protected IHttpClientFactory HttpClientFactory { get; }
     protected ITencentBlobNameCalculator TencentBlobNameCalculator { get; }
 
     public TencentCloudBlobProvider(
         IFeatureChecker featureChecker,
         ICosClientFactory cosClientFactory,
+        IHttpClientFactory httpClientFactory,
         ITencentBlobNameCalculator tencentBlobNameCalculator)
     {
         FeatureChecker = featureChecker;
         CosClientFactory = cosClientFactory;
+        HttpClientFactory = httpClientFactory;
         TencentBlobNameCalculator = tencentBlobNameCalculator;
     }
 
@@ -65,12 +69,13 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
 
         // TODO: 未经验证
 
-        var request = new GetObjectBytesRequest(GetBucketName(args), blobName);
-        var ossObject = ossClient.GetObject(request);
-        var memoryStream = new MemoryStream();
-        await memoryStream.WriteAsync(ossObject.content, 0, ossObject.content.Length);
-        memoryStream.Seek(0, SeekOrigin.Begin);
-        return memoryStream;
+        var ossDownloadUrl = ossClient.GetObjectUrl(GetBucketName(args), blobName); 
+        
+        var client = HttpClientFactory.CreateTenantOssClient();
+
+        var ossContent = await client.GetStreamAsync(ossDownloadUrl);
+
+        return ossContent;
     }
 
     public override async Task SaveAsync(BlobProviderSaveArgs args)

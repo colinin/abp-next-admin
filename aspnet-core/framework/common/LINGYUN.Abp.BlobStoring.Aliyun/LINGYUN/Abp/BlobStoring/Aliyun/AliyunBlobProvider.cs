@@ -56,9 +56,7 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
         }
 
         var ossObject = ossClient.GetObject(GetBucketName(args), blobName);
-        var memoryStream = new MemoryStream();
-        await ossObject.Content.CopyToAsync(memoryStream);
-        return memoryStream;
+        return ossObject.Content;
     }
 
     public override async Task SaveAsync(BlobProviderSaveArgs args)

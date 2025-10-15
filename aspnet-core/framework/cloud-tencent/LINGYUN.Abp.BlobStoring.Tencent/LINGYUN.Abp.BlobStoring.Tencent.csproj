@@ -15,20 +15,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="LINGYUN\Abp\BlobStoring\Tencent\Localization\*.json" />
+		<None Remove="LINGYUN\Abp\BlobStoring\Tencent\Localization\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="LINGYUN\Abp\BlobStoring\Tencent\Localization\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\BlobStoring\Tencent\Localization\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.BlobStoring" />
 		<PackageReference Include="Tencent.QCloud.Cos.Sdk" />
+		<PackageReference Include="Microsoft.Extensions.Http" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj" />
 	</ItemGroup>
 
 </Project>

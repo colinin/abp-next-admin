@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.MultiTenancy;
@@ -24,10 +25,12 @@ internal class TencentOssContainer : OssContainerBase, IOssObjectExpireor
     protected IClock Clock { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected ICosClientFactory CosClientFactory { get; }
+    protected IHttpClientFactory HttpClientFactory { get; }
     public TencentOssContainer(
         IClock clock,
         ICurrentTenant currentTenant,
         ICosClientFactory cosClientFactory,
+        IHttpClientFactory httpClientFactory,
         IServiceScopeFactory serviceScopeFactory,
         IOptions<AbpOssManagementOptions> options)
         : base(options, serviceScopeFactory)
@@ -35,6 +38,7 @@ internal class TencentOssContainer : OssContainerBase, IOssObjectExpireor
         Clock = clock;
         CurrentTenant = currentTenant;
         CosClientFactory = cosClientFactory;
+        HttpClientFactory = httpClientFactory;
     }
     public async override Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
     {
@@ -386,6 +390,11 @@ internal class TencentOssContainer : OssContainerBase, IOssObjectExpireor
             getObjectRequest.SetQueryParameter(request.Process, null);
         }
         var objectResult = ossClient.GetObject(getObjectRequest);
+        var objectDownloadUrl = ossClient.GetObjectUrl(request.Bucket, objectName);
+
+        var client = HttpClientFactory.CreateTenantOssClient();
+        var objectContent = await client.GetStreamAsync(objectDownloadUrl);
+
         var ossObject = new OssObject(
             !objectPath.IsNullOrWhiteSpace()
                 ? objectResult.Key.Replace(objectPath, "")
@@ -393,7 +402,7 @@ internal class TencentOssContainer : OssContainerBase, IOssObjectExpireor
             request.Path,
             objectResult.eTag,
             null,
-            objectResult.content.Length,
+            objectContent.Length,
             null,
             new Dictionary<string, string>(),
             objectResult.Key.EndsWith("/"))
@@ -401,12 +410,9 @@ internal class TencentOssContainer : OssContainerBase, IOssObjectExpireor
             FullName = objectResult.Key
         };
 
-        if (objectResult.content.Length > 0)
+        if (objectContent.Length > 0)
         {
-            var memoryStream = new MemoryStream();
-            await memoryStream.WriteAsync(objectResult.content, 0, objectResult.content.Length);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            ossObject.SetContent(memoryStream);
+            ossObject.SetContent(objectContent);
         }
 
         return ossObject;
