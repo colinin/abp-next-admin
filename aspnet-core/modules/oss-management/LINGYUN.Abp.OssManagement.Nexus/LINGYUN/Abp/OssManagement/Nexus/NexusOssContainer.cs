@@ -301,7 +301,7 @@ internal class NexusOssContainer : OssContainerBase, IOssObjectExpireor
             }
         }
 
-        return new OssObject(
+        var ossObject = new OssObject(
             blobName,
             blobPath,
             checksum?.GetOrDefault("md5")?.ToString(),
@@ -309,7 +309,13 @@ internal class NexusOssContainer : OssContainerBase, IOssObjectExpireor
             coreUIResponse.Result.Data.Size,
             coreUIResponse.Result.Data.BlobUpdated,
             metadata
-            );
+        );
+
+        var ossContent = await NexusAssetManager.GetContentOrNullAsync(nexusAssetItem);
+
+        ossObject.SetContent(ossContent);
+
+        return ossObject;
     }
 
     protected virtual NexusBlobProviderConfiguration GetNexusConfiguration()
