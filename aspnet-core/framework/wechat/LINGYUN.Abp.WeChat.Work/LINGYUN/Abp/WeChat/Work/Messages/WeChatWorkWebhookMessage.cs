@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
+using Volo.Abp;
 
 namespace LINGYUN.Abp.WeChat.Work.Messages;
 /// <summary>
@@ -17,6 +18,6 @@ public abstract class WeChatWorkWebhookMessage : WeChatWorkRequest
     public string MsgType { get; set; }
     protected WeChatWorkWebhookMessage(string msgType)
     {
-        MsgType = msgType;
+        MsgType = Check.NotNullOrWhiteSpace(msgType, nameof(msgType));
     }
 }

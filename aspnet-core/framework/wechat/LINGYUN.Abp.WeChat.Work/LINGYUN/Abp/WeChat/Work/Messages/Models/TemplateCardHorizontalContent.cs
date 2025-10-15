@@ -67,6 +67,18 @@ public class TemplateCardHorizontalContent
         UserId = userId;
     }
     /// <summary>
+    /// 创建一个默认二级标题+文本
+    /// </summary>
+    /// <param name="keyName">二级标题</param>
+    /// <param name="value">二级文本</param>
+    /// <returns></returns>
+    public static TemplateCardHorizontalContent Default(string keyName, string value = null)
+    {
+        Check.NotNullOrWhiteSpace(keyName, nameof(keyName));
+
+        return new TemplateCardHorizontalContent(keyName, value: value);
+    }
+    /// <summary>
     /// 创建一个跳转链接的二级标题+文本
     /// </summary>
     /// <param name="keyName">二级标题</param>
