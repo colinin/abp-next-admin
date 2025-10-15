@@ -55,40 +55,13 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
         }
         var notificationData = await NotificationDataSerializer.ToStandard(notification.Data);
         var toTag = notification.Data.GetTagOrNull() ?? notificationDefine?.GetTagOrNull();
-        if (!toTag.IsNullOrWhiteSpace())
-        {
-            // 指定发送标签
-            await PublishToAgentAsync(
-                agentId,
-                notification,
-                notificationData.Title,
-                notificationData.Message,
-                notificationData.Description,
-                toTag: toTag,
-                cancellationToken: cancellationToken);
-            return;
-        }
         var toParty = notification.Data.GetPartyOrNull() ?? notificationDefine?.GetPartyOrNull();
-        if (!toParty.IsNullOrWhiteSpace())
-        {
-            // 指定发送部门
-            await PublishToAgentAsync(
-                agentId,
-                notification,
-                notificationData.Title,
-                notificationData.Message,
-                notificationData.Description,
-                toParty: toParty,
-                cancellationToken: cancellationToken);
-            return;
-        }
+        var toUsers = await WeChatWorkInternalUserFinder.FindUserIdentifierListAsync(identifiers.Select(id => id.UserId));
 
-        var findUserList = await WeChatWorkInternalUserFinder
-                .FindUserIdentifierListAsync(identifiers.Select(id => id.UserId));
-
-        if (findUserList.Count == 0)
+        if (toUsers.IsNullOrEmpty() && toTag.IsNullOrWhiteSpace() && toParty.IsNullOrWhiteSpace())
         {
-            Logger.LogWarning("Unable to send work weixin messages because findUserList is empty.");
+            // touser、toparty、totag不能同时为空：https://developer.work.weixin.qq.com/document/path/90236
+            Logger.LogWarning("Unable to send work weixin messages because The recipient/department/label cannot be empty simultaneously.");
             return;
         }
 
@@ -99,7 +72,9 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
             notificationData.Title,
             notificationData.Message,
             notificationData.Description,
-            toUser: findUserList.JoinAsString("|"),
+            toTag: toTag,
+            toParty: toParty,
+            toUser: toUsers.JoinAsString("|"),
             cancellationToken: cancellationToken);
     }
 
@@ -134,13 +109,6 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
         if (message == null)
         {
             Logger.LogWarning("Unable to send work weixin messages because WeChatWorkMessage is null.");
-            return;
-        }
-
-        if (toUser.IsNullOrWhiteSpace() && toTag.IsNullOrWhiteSpace() && toParty.IsNullOrWhiteSpace())
-        {
-            // touser、toparty、totag不能同时为空：https://developer.work.weixin.qq.com/document/path/90236
-            Logger.LogWarning("Unable to send work weixin messages because The recipient/department/label cannot be empty simultaneously.");
             return;
         }
 
