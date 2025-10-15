@@ -91,7 +91,6 @@ public class WeChatWorkMessageSender : IWeChatWorkMessageSender, ISingletonDepen
     // 消息发送频率限制: https://developer.work.weixin.qq.com/document/path/99110#%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E9%A2%91%E7%8E%87%E9%99%90%E5%88%B6
     public async virtual Task<WeChatWorkResponse> SendAsync(string webhookKey, WeChatWorkWebhookMessage message, CancellationToken cancellationToken = default)
     {
-        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
 
         using var response = await client.SendMessageAsync(webhookKey, message, cancellationToken);
