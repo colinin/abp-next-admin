@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Identity;
+using Markdig;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,12 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
             return;
         }
         var notificationData = await NotificationDataSerializer.ToStandard(notification.Data);
+
+        // markdown进行处理
+        if (notification.ContentType == NotificationContentType.Markdown)
+        {
+            notificationData.Message = Markdown.ToHtml(notificationData.Message);
+        }
 
         await EmailSender.SendAsync(emailAddress, notificationData.Title, notificationData.Message);
     }
