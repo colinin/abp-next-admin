@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace LINGYUN.Abp.WeChat.Work.Messages.Templates;
+namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 
 public abstract class TemplateCard
 {

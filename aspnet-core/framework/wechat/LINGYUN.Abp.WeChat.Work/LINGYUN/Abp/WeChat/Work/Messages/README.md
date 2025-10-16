@@ -26,19 +26,19 @@ public class Demo
             "693a91f6-7xxx-4bc4-97a0-0ec2sifa5aaa",
             new WeChatWorkWebhookTemplateCardMessage(
                 new WebhookTextNoticeCardMessage(
-                    TemplateCardAction.Link("https://developer.work.weixin.qq.com/document/path/99110"),
-                    new TemplateCardMainTitle("请假通过通知", "您的请假申请已通过,请前往查看!"),
-                    source: TemplateCardSource.Black("https://wwcdn.weixin.qq.com/node/wework/images/wecom-logo.a61830413b.svg", "企业微信"),
-                    horizontalContents: new List<TemplateCardHorizontalContent>
+                    WebhookTemplateCardAction.Link("https://developer.work.weixin.qq.com/document/path/99110"),
+                    new WebhookTemplateCardMainTitle("请假通过通知", "您的请假申请已通过,请前往查看!"),
+                    source: WebhookTemplateCardSource.Black("https://wwcdn.weixin.qq.com/node/wework/images/wecom-logo.a61830413b.svg", "企业微信"),
+                    horizontalContents: new List<WebhookTemplateCardHorizontalContent>
                     {
-                        TemplateCardHorizontalContent.Default("审批单号", "QJ20251000000136"),
-                        TemplateCardHorizontalContent.Default("请假日期", "2025/10/01-2025/10/10"),
-                        TemplateCardHorizontalContent.Default("通过时间", "2025-10-01 15:30:00"),
-                        TemplateCardHorizontalContent.Default("审批备注", "做好考勤及交接事项"),
+                        WebhookTemplateCardHorizontalContent.Default("审批单号", "QJ20251000000136"),
+                        WebhookTemplateCardHorizontalContent.Default("请假日期", "2025/10/01-2025/10/10"),
+                        WebhookTemplateCardHorizontalContent.Default("通过时间", "2025-10-01 15:30:00"),
+                        WebhookTemplateCardHorizontalContent.Default("审批备注", "做好考勤及交接事项"),
                     },
-                    jumps: new List<TemplateCardJump>
+                    jumps: new List<WebhookTemplateCardJump>
                     {
-                        TemplateCardJump.Link("去OA查看", "https://developer.work.weixin.qq.com/document/path/99110")
+                        WebhookTemplateCardJump.Link("去OA查看", "https://developer.work.weixin.qq.com/document/path/99110")
                     })));
 	}
 }

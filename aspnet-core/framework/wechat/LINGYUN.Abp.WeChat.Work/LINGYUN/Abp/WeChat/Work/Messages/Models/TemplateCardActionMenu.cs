@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace LINGYUN.Abp.WeChat.Work.Messages.Templates;
+namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// <summary>
 /// 卡片右上角更多操作按钮
 /// </summary>

@@ -12,6 +12,27 @@ namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 public class WebhookNewsNoticeCardMessage : WebhookTemplateCardMessage
 {
     /// <summary>
+    /// 图片样式
+    /// </summary>
+    [NotNull]
+    [JsonProperty("aspect_ratio")]
+    [JsonPropertyName("aspect_ratio")]
+    public WebhookTemplateCardImage CardImage { get; set; }
+    /// <summary>
+    /// 左图右文样式
+    /// </summary>
+    [CanBeNull]
+    [JsonProperty("image_text_area")]
+    [JsonPropertyName("image_text_area")]
+    public WebhookTemplateCardImageTextArea ImageTextArea { get; set; }
+    /// <summary>
+    /// 卡片二级垂直内容，该字段可为空数组，但有数据的话需确认对应字段是否必填，列表长度不超过4
+    /// </summary>
+    [CanBeNull]
+    [JsonProperty("vertical_content_list")]
+    [JsonPropertyName("vertical_content_list")]
+    public List<WebhookTemplateCardVerticalContent> VerticalContents { get; set; }
+    /// <summary>
     /// 创建一个Webhook 图文展示模版卡片消息体
     /// </summary>
     /// <param name="cardImage">图片样式</param>
@@ -25,15 +46,15 @@ public class WebhookNewsNoticeCardMessage : WebhookTemplateCardMessage
     /// <param name="jumps">跳转指引样式的列表,列表长度不超过3</param>
     /// <exception cref="ArgumentException"></exception>
     public WebhookNewsNoticeCardMessage(
-        TemplateCardImage cardImage,
-        TemplateCardAction action, 
-        TemplateCardMainTitle mainTitle,
-        TemplateCardImageTextArea imageTextArea = null,
-        TemplateCardSource source = null, 
-        TemplateCardQuoteArea quoteArea = null, 
-        List<TemplateCardHorizontalContent> horizontalContents = null,
-        List<TemplateCardVerticalContent> verticalContents = null,
-        List<TemplateCardJump> jumps = null) 
+        WebhookTemplateCardImage cardImage,
+        WebhookTemplateCardAction action,
+        WebhookTemplateCardMainTitle mainTitle,
+        WebhookTemplateCardImageTextArea imageTextArea = null,
+        WebhookTemplateCardSource source = null,
+        WebhookTemplateCardQuoteArea quoteArea = null, 
+        List<WebhookTemplateCardHorizontalContent> horizontalContents = null,
+        List<WebhookTemplateCardVerticalContent> verticalContents = null,
+        List<WebhookTemplateCardJump> jumps = null) 
         : base("news_notice", action, mainTitle, source, quoteArea, horizontalContents, jumps)
     {
         Check.NotNull(mainTitle, nameof(mainTitle));
@@ -48,25 +69,4 @@ public class WebhookNewsNoticeCardMessage : WebhookTemplateCardMessage
             throw new ArgumentException("The length of the secondary vertical content list on the card cannot exceed 4!");
         }
     }
-    /// <summary>
-    /// 图片样式
-    /// </summary>
-    [NotNull]
-    [JsonProperty("aspect_ratio")]
-    [JsonPropertyName("aspect_ratio")]
-    public TemplateCardImage CardImage {  get; set; }
-    /// <summary>
-    /// 左图右文样式
-    /// </summary>
-    [CanBeNull]
-    [JsonProperty("image_text_area")]
-    [JsonPropertyName("image_text_area")]
-    public TemplateCardImageTextArea ImageTextArea { get; set; }
-    /// <summary>
-    /// 卡片二级垂直内容，该字段可为空数组，但有数据的话需确认对应字段是否必填，列表长度不超过4
-    /// </summary>
-    [CanBeNull]
-    [JsonProperty("vertical_content_list")]
-    [JsonPropertyName("vertical_content_list")]
-    public List<TemplateCardVerticalContent> VerticalContents { get; set; }
 }

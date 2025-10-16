@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// <summary>
 /// 左图右文样式
 /// </summary>
-public class TemplateCardImageTextArea
+public class WebhookTemplateCardImageTextArea
 {
     /// <summary>
     /// 左图右文样式区域点击事件，0或不填代表没有点击事件，1 代表跳转url，2 代表跳转小程序
@@ -58,7 +58,7 @@ public class TemplateCardImageTextArea
     [JsonProperty("desc")]
     [JsonPropertyName("desc")]
     public string Description { get; set; }
-    private TemplateCardImageTextArea(
+    private WebhookTemplateCardImageTextArea(
         string imageUrl,
         int? type = null, 
         string url = null,
@@ -83,7 +83,7 @@ public class TemplateCardImageTextArea
     /// <param name="title">左图右文样式的标题</param>
     /// <param name="description">左图右文样式的描述</param>
     /// <returns></returns>
-    public static TemplateCardImageTextArea Link(
+    public static WebhookTemplateCardImageTextArea Link(
         string imageUrl,
         string url,
         string title = null,
@@ -92,7 +92,7 @@ public class TemplateCardImageTextArea
         Check.NotNullOrWhiteSpace(imageUrl, nameof(imageUrl));
         Check.NotNullOrWhiteSpace(url, nameof(url));
 
-        return new TemplateCardImageTextArea(imageUrl, 1, url: url, title: title, description: description);
+        return new WebhookTemplateCardImageTextArea(imageUrl, 1, url: url, title: title, description: description);
     }
     /// <summary>
     /// 创建一个跳转小程序左图右文样式
@@ -103,7 +103,7 @@ public class TemplateCardImageTextArea
     /// <param name="title">左图右文样式的标题</param>
     /// <param name="description">左图右文样式的描述</param>
     /// <returns></returns>
-    public static TemplateCardImageTextArea MiniProgram(
+    public static WebhookTemplateCardImageTextArea MiniProgram(
         string imageUrl, 
         string appId, 
         string pagePath,
@@ -114,6 +114,6 @@ public class TemplateCardImageTextArea
         Check.NotNullOrWhiteSpace(appId, nameof(appId));
         Check.NotNullOrWhiteSpace(pagePath, nameof(pagePath));
 
-        return new TemplateCardImageTextArea(imageUrl, 2, appId: appId, pagePath: pagePath, title: title, description: description);
+        return new WebhookTemplateCardImageTextArea(imageUrl, 2, appId: appId, pagePath: pagePath, title: title, description: description);
     }
 }

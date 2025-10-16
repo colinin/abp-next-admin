@@ -23,7 +23,7 @@ public class WebhookTextNoticeCardMessage : WebhookTemplateCardMessage
     [CanBeNull]
     [JsonProperty("emphasis_content")]
     [JsonPropertyName("emphasis_content")]
-    public TemplateCardEmphasisContent EmphasisContent { get; set; }
+    public WebhookTemplateCardEmphasisContent EmphasisContent { get; set; }
     /// <summary>
     /// 创建一个Webhook 文本通知模版卡片消息体
     /// </summary>
@@ -37,14 +37,14 @@ public class WebhookTextNoticeCardMessage : WebhookTemplateCardMessage
     /// <param name="jumps">跳转指引样式的列表,列表长度不超过3</param>
     /// <exception cref="ArgumentException"></exception>
     public WebhookTextNoticeCardMessage(
-        TemplateCardAction action,
-        TemplateCardMainTitle mainTitle = null,
+        WebhookTemplateCardAction action,
+        WebhookTemplateCardMainTitle mainTitle = null,
         string subTitleText = null,
-        TemplateCardEmphasisContent emphasisContent = null,
-        TemplateCardSource source = null,
-        TemplateCardQuoteArea quoteArea = null,
-        List<TemplateCardHorizontalContent> horizontalContents = null,
-        List<TemplateCardJump> jumps = null) 
+        WebhookTemplateCardEmphasisContent emphasisContent = null,
+        WebhookTemplateCardSource source = null,
+        WebhookTemplateCardQuoteArea quoteArea = null,
+        List<WebhookTemplateCardHorizontalContent> horizontalContents = null,
+        List<WebhookTemplateCardJump> jumps = null) 
         : base("text_notice", action, mainTitle, source, quoteArea, horizontalContents, jumps)
     {
         MainTitle = mainTitle;
