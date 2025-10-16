@@ -56,6 +56,10 @@ public class AbpWeChatWorkTestModule : AbpModule
             {
                 return true.ToString();
             });
+            options.Map(WeChatWorkFeatureNames.Webhook.Enable, (feature) =>
+            {
+                return true.ToString();
+            });
         });
     }
 }

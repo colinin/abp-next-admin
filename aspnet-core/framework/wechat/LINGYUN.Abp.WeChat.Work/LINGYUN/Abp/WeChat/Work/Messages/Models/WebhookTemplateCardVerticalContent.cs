@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// <summary>
 /// 卡片二级垂直内容
 /// </summary>
-public class TemplateCardVerticalContent
+public class WebhookTemplateCardVerticalContent
 {
     /// <summary>
     /// 卡片二级标题，建议不超过26个字
@@ -27,7 +27,7 @@ public class TemplateCardVerticalContent
     /// </summary>
     /// <param name="title">卡片二级标题</param>
     /// <param name="description">二级普通文本</param>
-    public TemplateCardVerticalContent(string title, string description = null)
+    public WebhookTemplateCardVerticalContent(string title, string description = null)
     {
         Title = title;
         Description = description;

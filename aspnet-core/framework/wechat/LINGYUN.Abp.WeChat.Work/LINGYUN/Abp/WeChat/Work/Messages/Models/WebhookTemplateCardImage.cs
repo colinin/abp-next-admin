@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// <summary>
 /// 图片样式
 /// </summary>
-public class TemplateCardImage
+public class WebhookTemplateCardImage
 {
     /// <summary>
     /// 图片的url
@@ -27,7 +27,7 @@ public class TemplateCardImage
     /// </summary>
     /// <param name="url">图片的url</param>
     /// <param name="aspectRatio">图片的宽高比,不填该参数默认1.3</param>
-    public TemplateCardImage(string url, float? aspectRatio = 1.3f)
+    public WebhookTemplateCardImage(string url, float? aspectRatio = 1.3f)
     {
         Url = url;
         AspectRatio = aspectRatio;

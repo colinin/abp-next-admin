@@ -4,19 +4,39 @@ using System.Text.Json.Serialization;
 
 namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// <summary>
+/// 来源文字颜色
+/// </summary>
+public enum DescriptionColor
+{
+    Gray = 0,
+    Black = 1,
+    Red = 2,
+    Green = 3,
+}
+/// <summary>
 /// 卡片来源样式信息
 /// </summary>
 public class TemplateCardSource
 {
+    public TemplateCardSource(
+        string iconUrl = "", 
+        string description = "",
+        DescriptionColor descriptionColor = DescriptionColor.Gray)
+    {
+        IconUrl = iconUrl;
+        Description = description;
+        DescriptionColor = descriptionColor;
+    }
+
     /// <summary>
-    /// 来源图片的url
+    /// 来源图片的url，来源图片的尺寸建议为72*72
     /// </summary>
     [CanBeNull]
     [JsonProperty("icon_url")]
     [JsonPropertyName("icon_url")]
     public string IconUrl { get; set; }
     /// <summary>
-    /// 来源图片的描述，建议不超过13个字
+    /// 来源图片的描述，建议不超过20个字，（支持id转译）
     /// </summary>
     [CanBeNull]
     [JsonProperty("desc")]
@@ -28,54 +48,5 @@ public class TemplateCardSource
     [CanBeNull]
     [JsonProperty("desc_color")]
     [JsonPropertyName("desc_color")]
-    public int? DescriptionColor { get; set; }
-    private TemplateCardSource(
-        string iconUrl = null,
-        string description = null,
-        int? descriptionColor = 0)
-    {
-        IconUrl = iconUrl;
-        Description = description;
-        DescriptionColor = descriptionColor;
-    }
-    /// <summary>
-    /// 创建一个灰色卡片来源样式
-    /// </summary>
-    /// <param name="iconUrl">来源图片的url</param>
-    /// <param name="description">来源图片的描述</param>
-    /// <returns></returns>
-    public static TemplateCardSource Grey(string iconUrl, string description = null)
-    {
-        return new TemplateCardSource(iconUrl, description, 0);
-    }
-    /// <summary>
-    /// 创建一个黑色卡片来源样式
-    /// </summary>
-    /// <param name="iconUrl">来源图片的url</param>
-    /// <param name="description">来源图片的描述</param>
-    /// <returns></returns>
-    public static TemplateCardSource Black(string iconUrl, string description = null)
-    {
-        return new TemplateCardSource(iconUrl, description, 1);
-    }
-    /// <summary>
-    /// 创建一个红色卡片来源样式
-    /// </summary>
-    /// <param name="iconUrl">来源图片的url</param>
-    /// <param name="description">来源图片的描述</param>
-    /// <returns></returns>
-    public static TemplateCardSource Red(string iconUrl, string description = null)
-    {
-        return new TemplateCardSource(iconUrl, description, 2);
-    }
-    /// <summary>
-    /// 创建一个绿色卡片来源样式
-    /// </summary>
-    /// <param name="iconUrl">来源图片的url</param>
-    /// <param name="description">来源图片的描述</param>
-    /// <returns></returns>
-    public static TemplateCardSource Green(string iconUrl, string description = null)
-    {
-        return new TemplateCardSource(iconUrl, description, 3);
-    }
+    public DescriptionColor DescriptionColor { get; set; }
 }
