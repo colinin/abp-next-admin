@@ -21,6 +21,7 @@ public class WeChatWorkEventEventHandler :
     IDistributedEventHandler<WeChatWorkEventMessageEto<GeoLocationSelectPushEevent>>,
     IDistributedEventHandler<WeChatWorkEventMessageEto<BatchJobResultEvent>>,
     IDistributedEventHandler<WeChatWorkEventMessageEto<ApprovalStatusChangeEvent>>,
+    IDistributedEventHandler<WeChatWorkEventMessageEto<SysApprovalStatusChangeEvent>>,
     IDistributedEventHandler<WeChatWorkEventMessageEto<ShareAgentChangeEvent>>,
     IDistributedEventHandler<WeChatWorkEventMessageEto<ShareChainChangeEvent>>,
     IDistributedEventHandler<WeChatWorkEventMessageEto<TemplateCardPushEvent>>,
@@ -109,6 +110,11 @@ public class WeChatWorkEventEventHandler :
     }
 
     public async virtual Task HandleEventAsync(WeChatWorkEventMessageEto<ApprovalStatusChangeEvent> eventData)
+    {
+        await _messageHandler.HandleEventAsync(eventData.Event);
+    }
+
+    public async virtual Task HandleEventAsync(WeChatWorkEventMessageEto<SysApprovalStatusChangeEvent> eventData)
     {
         await _messageHandler.HandleEventAsync(eventData.Event);
     }

@@ -58,6 +58,7 @@
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official.HttpApi\LINGYUN.Abp.WeChat.Official.HttpApi.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.SettingManagement\LINGYUN.Abp.WeChat.SettingManagement.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Application\LINGYUN.Abp.WeChat.Work.Application.csproj" />
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Handlers\LINGYUN.Abp.WeChat.Work.Handlers.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.HttpApi\LINGYUN.Abp.WeChat.Work.HttpApi.csproj" />
 	</ItemGroup>
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.WeChat.Work.Common.Messages;
 /// <summary>
-/// 微信公众号事件处理器
+/// 企业微信事件处理器
 /// </summary>
 public class WeChatWorkEventResolveContributor : WeChatWorkMessageResolveContributorBase
 {
