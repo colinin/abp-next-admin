@@ -43,32 +43,58 @@ public class SelectorConfig
     [JsonProperty("options")]
     [JsonPropertyName("options")]
     public List<SelectorOption> Options {  get; set; }
+    /// <summary>
+    /// 关联控件
+    /// </summary>
+    [NotNull]
+    [JsonProperty("op_relations")]
+    [JsonPropertyName("op_relations")]
+    public List<SelectorOptionRelation> OptionRelations { get; set; }
+    /// <summary>
+    /// 关联外部选项
+    /// </summary>
+    [NotNull]
+    [JsonProperty("external_option")]
+    [JsonPropertyName("external_option")]
+    public SelectorOptionExternal ExternalOption { get; set; }
     public SelectorConfig()
     {
 
     }
 
-    private SelectorConfig(string type, List<SelectorOption> options)
+    private SelectorConfig(
+        string type,
+        List<SelectorOption> options,
+        List<SelectorOptionRelation> optionRelations = null,
+        SelectorOptionExternal optionExternal = null)
     {
         Type = type;
         Options = options;
+        OptionRelations = optionRelations;
+        ExternalOption = optionExternal;
     }
 
-    public static SelectorConfig Single(List<SelectorOption> options)
+    public static SelectorConfig Single(
+        List<SelectorOption> options,
+        List<SelectorOptionRelation> optionRelations = null, 
+        SelectorOptionExternal optionExternal = null)
     {
-        return new SelectorConfig("single", options);
+        return new SelectorConfig("single", options, optionRelations, optionExternal);
     }
 
-    public static SelectorConfig Multiple(List<SelectorOption> options)
+    public static SelectorConfig Multiple(
+        List<SelectorOption> options,
+        List<SelectorOptionRelation> optionRelations = null,
+        SelectorOptionExternal optionExternal = null)
     {
-        return new SelectorConfig("multi", options);
+        return new SelectorConfig("multi", options, optionRelations, optionExternal);
     }
 }
 
 public class SelectorOption
 {
     /// <summary>
-    /// 时间展示类型：day-日期；hour-日期+时间 ，和对应模板控件属性一致
+    /// 选项key
     /// </summary>
     [NotNull]
     [JsonProperty("key")]
@@ -118,5 +144,92 @@ public class SelectorOptionValue
     {
         Text = text;
         Lang = lang;
+    }
+}
+
+public class SelectorOptionRelation
+{
+    /// <summary>
+    /// 选项key
+    /// </summary>
+    [NotNull]
+    [JsonProperty("key")]
+    [JsonPropertyName("key")]
+    public string Key { get; set; }
+    /// <summary>
+    /// 关联控件列表
+    /// </summary>
+    [NotNull]
+    [JsonProperty("relation_list")]
+    [JsonPropertyName("relation_list")]
+    public List<SelectorRelation> Relations { get; set; }
+    public SelectorOptionRelation()
+    {
+
+    }
+
+    public SelectorOptionRelation(string key, List<SelectorRelation> relations)
+    {
+        Key = key;
+        Relations = relations;
+    }
+}
+
+public class SelectorRelation
+{
+    /// <summary>
+    /// 控件Id
+    /// </summary>
+    [NotNull]
+    [JsonProperty("related_control_id")]
+    [JsonPropertyName("related_control_id")]
+    public string ControlId { get; set; }
+    /// <summary>
+    /// 操作方法
+    /// </summary>
+    /// <remarks>
+    /// 1 - 显示对应控件
+    /// </remarks>
+    [NotNull]
+    [JsonProperty("action")]
+    [JsonPropertyName("action")]
+    public int Action { get; set; }
+    public SelectorRelation()
+    {
+
+    }
+
+    public SelectorRelation(string controlId, int action = 1)
+    {
+        ControlId = controlId;
+        Action = action;
+    }
+}
+
+public class SelectorOptionExternal
+{
+    /// <summary>
+    /// 关联外部选项
+    /// </summary>
+    [NotNull]
+    [JsonProperty("use_external_option")]
+    [JsonPropertyName("use_external_option")]
+    public bool UseExternalOption { get; set; }
+    /// <summary>
+    /// 外部选项页面地址
+    /// </summary>
+    [NotNull]
+    [JsonProperty("external_url")]
+    [JsonPropertyName("external_url")]
+    public string ExternalUrl { get; set; }
+    public SelectorOptionExternal()
+    {
+
+    }
+
+    public SelectorOptionExternal(string externalUrl)
+    {
+        ExternalUrl = externalUrl;
+        UseExternalOption = true;
     }
 }

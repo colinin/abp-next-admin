@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace LINGYUN.Abp.WeChat.Work.Approvals.Models;
@@ -83,13 +84,50 @@ public class SelectorValueOption
     [JsonProperty("key")]
     [JsonPropertyName("key")]
     public string Key { get; set; }
+    /// <summary>
+    /// 选项值，若配置了多语言则会包含中英文的选项值
+    /// </summary>
+    [NotNull]
+    [JsonProperty("key")]
+    [JsonPropertyName("key")]
+    public List<SelectorValueOptionValue> Value { get; set; }
     public SelectorValueOption()
     {
 
     }
 
-    public SelectorValueOption(string key)
+    public SelectorValueOption(string key, List<SelectorValueOptionValue> value)
     {
         Key = key;
+        Value = value;
+    }
+}
+
+public class SelectorValueOptionValue
+{
+    /// <summary>
+    /// 选项值
+    /// </summary>
+    [NotNull]
+    [StringLength(40)]
+    [JsonProperty("text")]
+    [JsonPropertyName("text")]
+    public string Text { get; set; }
+    /// <summary>
+    /// 多语言名称
+    /// </summary>
+    [NotNull]
+    [JsonProperty("lang")]
+    [JsonPropertyName("lang")]
+    public string Lang { get; set; }
+    public SelectorValueOptionValue()
+    {
+
+    }
+
+    public SelectorValueOptionValue(string text, string lang = "zh_CN")
+    {
+        Text = text;
+        Lang = lang;
     }
 }
