@@ -59,6 +59,13 @@ public class ApprovalControlValue
     [JsonPropertyName("children")]
     public List<ApprovalDataChildrenValue> Children { get; set; }
     /// <summary>
+    /// 选择内容
+    /// </summary>
+    [NotNull]
+    [JsonProperty("selector")]
+    [JsonPropertyName("selector")]
+    public SelectorControlValue Selector { get; set; }
+    /// <summary>
     /// 关联审批单
     /// </summary>
     [NotNull]
