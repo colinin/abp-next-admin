@@ -17,6 +17,7 @@ using LINGYUN.Abp.WeChat.MiniProgram;
 using LINGYUN.Abp.WeChat.Official;
 using LINGYUN.Abp.WeChat.SettingManagement;
 using LINGYUN.Abp.WeChat.Work;
+using LINGYUN.Abp.WeChat.Work.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -45,6 +46,7 @@ namespace LY.MicroService.WechatManagement;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpWeChatWorkApplicationModule),
     typeof(AbpWeChatWorkHttpApiModule),
+    typeof(AbpWeChatWorkHandlersModule),
     typeof(AbpWeChatOfficialApplicationModule),
     typeof(AbpWeChatOfficialHttpApiModule),
     typeof(AbpWeChatMiniProgramModule),

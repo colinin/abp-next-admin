@@ -111,6 +111,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LINGYUN.Abp.Identity.Sessio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Telemetry.SkyWalking", "framework\telemetry\LINGYUN.Abp.Telemetry.SkyWalking\LINGYUN.Abp.Telemetry.SkyWalking.csproj", "{7CF83493-6AF5-9C6D-01A7-AC7FC11BC2CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.Handlers", "framework\wechat\LINGYUN.Abp.WeChat.Work.Handlers\LINGYUN.Abp.WeChat.Work.Handlers.csproj", "{E0DFCAD9-8AFE-A816-10F7-B4CA6691E910}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -281,6 +283,10 @@ Global
 		{7CF83493-6AF5-9C6D-01A7-AC7FC11BC2CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CF83493-6AF5-9C6D-01A7-AC7FC11BC2CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CF83493-6AF5-9C6D-01A7-AC7FC11BC2CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0DFCAD9-8AFE-A816-10F7-B4CA6691E910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0DFCAD9-8AFE-A816-10F7-B4CA6691E910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0DFCAD9-8AFE-A816-10F7-B4CA6691E910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0DFCAD9-8AFE-A816-10F7-B4CA6691E910}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -337,6 +343,7 @@ Global
 		{CC8DDC8C-CC0C-4534-8D9F-2C345E065869} = {52701ECE-3EBD-45EC-AD2C-0AAB15322311}
 		{80EBBECC-EF11-4E5E-91DA-EEECED832F21} = {73ED64BB-7C39-42EA-B821-3DD697B9C36A}
 		{7CF83493-6AF5-9C6D-01A7-AC7FC11BC2CE} = {FFACB4F0-33E0-4F8B-A97E-8FFFA10C12E6}
+		{E0DFCAD9-8AFE-A816-10F7-B4CA6691E910} = {EDBB7BC1-46F0-4803-A572-7F8FEF433BE2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EC9D01C1-EA3C-48C7-A279-4D35C8AD312E}
