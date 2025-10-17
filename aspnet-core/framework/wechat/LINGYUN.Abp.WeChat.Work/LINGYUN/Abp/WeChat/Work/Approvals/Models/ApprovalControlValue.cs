@@ -61,7 +61,7 @@ public class ApprovalControlValue
     /// <summary>
     /// 选择内容
     /// </summary>
-    [NotNull]
+    [CanBeNull]
     [JsonProperty("selector")]
     [JsonPropertyName("selector")]
     public SelectorControlValue Selector { get; set; }
