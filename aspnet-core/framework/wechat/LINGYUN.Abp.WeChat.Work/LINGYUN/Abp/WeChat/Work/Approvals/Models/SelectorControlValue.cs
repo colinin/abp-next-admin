@@ -88,8 +88,8 @@ public class SelectorValueOption
     /// 选项值，若配置了多语言则会包含中英文的选项值
     /// </summary>
     [NotNull]
-    [JsonProperty("key")]
-    [JsonPropertyName("key")]
+    [JsonProperty("value")]
+    [JsonPropertyName("value")]
     public List<SelectorValueOptionValue> Value { get; set; }
     public SelectorValueOption()
     {
