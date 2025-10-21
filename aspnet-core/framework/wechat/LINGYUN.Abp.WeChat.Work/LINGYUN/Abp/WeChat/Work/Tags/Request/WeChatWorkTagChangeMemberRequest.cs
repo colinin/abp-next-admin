@@ -45,11 +45,11 @@ public class WeChatWorkTagChangeMemberRequest
         {
             throw new ArgumentNullException("users/parts", "userlist、partylist不能同时为空!");
         }
-        if (users.Count > 1000)
+        if (users?.Count > 1000)
         {
             throw new ArgumentOutOfRangeException(nameof(users), "企业成员ID列表单次请求个数不超过1000!");
         }
-        if (parts.Count > 100)
+        if (parts?.Count > 100)
         {
             throw new ArgumentOutOfRangeException(nameof(users), "企业部门ID列表单次请求个数不超过100!");
         }
