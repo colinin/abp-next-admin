@@ -17,5 +17,5 @@ public class WeChatWorkTagCreateResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("tagid")]
     [JsonPropertyName("tagid")]
-    public string TagId { get; set; }
+    public int TagId { get; set; }
 }
