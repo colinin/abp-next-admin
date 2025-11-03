@@ -34,6 +34,8 @@ public class AbpTextTemplatingDomainModule : AbpModule
         {
             options.EtoMappings.Add<TextTemplate, TextTemplateEto>();
             options.EtoMappings.Add<TextTemplateDefinition, TextTemplateDefinitionEto>();
+
+            options.AutoEventSelectors.Add<TextTemplate>();
         });
 
         if (context.Services.IsDataMigrationEnvironment())
