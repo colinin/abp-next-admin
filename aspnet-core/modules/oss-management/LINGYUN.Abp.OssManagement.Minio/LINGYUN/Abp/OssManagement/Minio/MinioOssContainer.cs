@@ -40,8 +40,8 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
         IClock clock,
         ICurrentTenant currentTenant,
         ILogger<MinioOssContainer> logger,
-        IMinioBlobNameCalculator minioBlobNameCalculator, 
-        IBlobNormalizeNamingService blobNormalizeNamingService, 
+        IMinioBlobNameCalculator minioBlobNameCalculator,
+        IBlobNormalizeNamingService blobNormalizeNamingService,
         IBlobContainerConfigurationProvider configurationProvider,
         IServiceScopeFactory serviceScopeFactory,
         IHttpClientFactory httpClientFactory,
@@ -151,7 +151,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
            .WithObject(isDir ? $"{objectName}/_dir" : objectName)
            .WithStreamData(request.Content)
            .WithObjectSize(request.Content.Length));
-        
+
         if (request.ExpirationTime.HasValue)
         {
             var lifecycleRule = new LifecycleRule
@@ -270,14 +270,15 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
 
             await foreach (var item in expiredObjects)
             {
-                var lifecycleRule = new LifecycleRule
+                var lifecycleConfiguration = new LifecycleConfiguration(new List<LifecycleRule>
                 {
-                    Status = LifecycleRule.LifecycleRuleStatusEnabled,
-                    ID = item.Key,
-                    Expiration = new Expiration(Clock.Normalize(request.ExpirationTime.DateTime))
-                };
-                var lifecycleConfiguration = new LifecycleConfiguration();
-                lifecycleConfiguration.Rules.Add(lifecycleRule);
+                    new LifecycleRule
+                    {
+                        ID = item.Key,
+                        Status = LifecycleRule.LifecycleRuleStatusEnabled,
+                        Expiration = new Expiration(Clock.Normalize(request.ExpirationTime.DateTime))
+                    }
+                });
 
                 var lifecycleArgs = new SetBucketLifecycleArgs()
                     .WithBucket(bucket)
@@ -542,7 +543,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
         {
             return bucket;
         }
-        
+
         return bucket;
     }
 
