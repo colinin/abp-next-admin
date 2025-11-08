@@ -34,6 +34,8 @@
     "Description:Policy": "生成STS Token时可以指定一个额外的权限策略，以进一步限制STS Token的权限",
     "DisplayName:Aliyun.Sms": "短信服务",
     "Description:Aliyun.Sms": "阿里云短信服务",
+    "DisplayName:Aliyun.SmsVerifyCode": "短信认证服务",
+    "Description:Aliyun.SmsVerifyCode": "阿里云短信认证服务",
     "DisplayName:ActionName": "发送短信方法",
     "Description:ActionName": "发送短信方法名称,详情见阿里云Sms服务",
     "DisplayName:DefaultSignName": "默认短信签名",

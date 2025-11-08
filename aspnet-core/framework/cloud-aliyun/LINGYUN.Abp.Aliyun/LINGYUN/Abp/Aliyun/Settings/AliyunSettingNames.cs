@@ -79,4 +79,20 @@ public static class AliyunSettingNames
         /// </summary>
         public const string VisableErrorToClient = Prefix + ".VisableErrorToClient";
     }
+
+    /// <summary>
+    /// 云通信号码认证服务
+    /// </summary>
+    public class SmsVerifyCode
+    {
+        public const string Prefix = AliyunSettingNames.Prefix + ".SmsVerifyCode";
+        /// <summary>
+        /// 默认签名
+        /// </summary>
+        public const string DefaultSignName = Prefix + ".DefaultSignName";
+        /// <summary>
+        /// 默认短信模板号
+        /// </summary>
+        public const string DefaultTemplateCode = Prefix + ".DefaultTemplateCode";
+    }
 }
