@@ -160,8 +160,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
                 ID = putResponse.Etag,
                 Expiration = new Expiration(Clock.Now.Add(request.ExpirationTime.Value))
             };
-            var lifecycleConfiguration = new LifecycleConfiguration();
-            lifecycleConfiguration.Rules.Add(lifecycleRule);
+            var lifecycleConfiguration = new LifecycleConfiguration([lifecycleRule]);
 
             var lifecycleArgs = new SetBucketLifecycleArgs()
                 .WithBucket(bucket)
