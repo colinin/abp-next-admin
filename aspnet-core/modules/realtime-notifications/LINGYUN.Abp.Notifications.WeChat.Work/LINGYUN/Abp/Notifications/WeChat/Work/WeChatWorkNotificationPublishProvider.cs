@@ -117,5 +117,7 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
         message.ToParty = toParty;
 
         await WeChatWorkMessageSender.SendAsync(message, cancellationToken);
+
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
     }
 }

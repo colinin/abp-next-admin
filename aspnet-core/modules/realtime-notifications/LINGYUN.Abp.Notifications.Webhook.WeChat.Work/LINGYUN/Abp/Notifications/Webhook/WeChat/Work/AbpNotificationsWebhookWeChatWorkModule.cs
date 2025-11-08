@@ -10,6 +10,11 @@ public class AbpNotificationsWebhookWeChatWorkModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<AbpNotificationsWebhookWeChatWorkOptions>(options =>
+        {
+            options.UseMarkdownV2 = true;
+        });
+
         Configure<AbpNotificationsWebhookOptions>(options =>
         {
             options.Contributors.Add(new WeChatWorkWebhookNotificationContributor());

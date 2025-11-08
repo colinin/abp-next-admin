@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -30,5 +31,7 @@ public class SmsNotificationPublishProvider : NotificationPublishProvider
             return;
         }
         await Sender.SendAsync(notification, sendToPhones.JoinAsString(","));
+
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
     }
 }

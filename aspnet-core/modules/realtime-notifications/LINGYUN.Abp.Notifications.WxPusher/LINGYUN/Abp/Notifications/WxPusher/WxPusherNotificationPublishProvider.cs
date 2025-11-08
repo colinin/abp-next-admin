@@ -64,5 +64,7 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
             uids: uids,
             url: url,
             cancellationToken: cancellationToken);
+
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
     }
 }
