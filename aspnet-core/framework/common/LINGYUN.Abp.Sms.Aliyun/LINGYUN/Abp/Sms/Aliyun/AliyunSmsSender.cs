@@ -51,6 +51,17 @@ public class AliyunSmsSender : ISmsSender, IAliyunSmsVerifyCodeSender
         AliyunFeatureNames.Sms.DefaultSendLimitInterval)]
     public async virtual Task SendAsync(SmsMessage smsMessage)
     {
+        if (smsMessage.Properties.ContainsKey("SmsVerifyCode") &&
+            smsMessage.Properties.TryGetValue("code", out var code))
+        {
+            // 调用短信验证码服务
+            await SendAsync(
+                new SmsVerifyCodeMessage(
+                    smsMessage.PhoneNumber,
+                    new SmsVerifyCodeMessageParam(code.ToString(), "5")));
+            return;
+        }
+
         var domain = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.Domain);
         var action = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.ActionName);
         var version = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.Version);
@@ -59,7 +70,7 @@ public class AliyunSmsSender : ISmsSender, IAliyunSmsVerifyCodeSender
         Check.NotNullOrWhiteSpace(action, AliyunSettingNames.Sms.ActionName);
         Check.NotNullOrWhiteSpace(version, AliyunSettingNames.Sms.Version);
 
-        CommonRequest request = new CommonRequest
+        var request = new CommonRequest
         {
             Method = MethodType.POST,
             Domain = domain,
@@ -75,7 +86,7 @@ public class AliyunSmsSender : ISmsSender, IAliyunSmsVerifyCodeSender
         try
         {
             var client = await AcsClientFactory.CreateAsync();
-            CommonResponse response = client.GetCommonResponse(request);
+            var response = client.GetCommonResponse(request);
             var responseContent = Encoding.Default.GetString(response.HttpResponse.Content);
             var aliyunResponse = JsonSerializer.Deserialize<AliyunSmsResponse>(responseContent);
             if (!aliyunResponse.IsSuccess())
