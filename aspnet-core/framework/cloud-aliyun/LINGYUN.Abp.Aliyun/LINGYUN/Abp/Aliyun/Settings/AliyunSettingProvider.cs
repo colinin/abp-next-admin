@@ -10,6 +10,7 @@ public class AliyunSettingProvider : SettingDefinitionProvider
     {
         context.Add(GetAuthorizationSettings());
         context.Add(GetSmsSettings());
+        context.Add(GetSmsVerifyCodeSettings());
     }
 
     private SettingDefinition[] GetAuthorizationSettings()
@@ -202,6 +203,37 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
+        };
+    }
+
+    private SettingDefinition[] GetSmsVerifyCodeSettings()
+    {
+        return new SettingDefinition[]
+        {
+            new SettingDefinition(
+                AliyunSettingNames.SmsVerifyCode.DefaultSignName,
+                displayName: L("DisplayName:DefaultSignName"),
+                description: L("Description:DefaultSignName"),
+                isVisibleToClients: false,
+                isEncrypted: true
+            )
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName),
+            new SettingDefinition(
+                AliyunSettingNames.SmsVerifyCode.DefaultTemplateCode,
+                displayName: L("DisplayName:DefaultTemplateCode"),
+                description: L("Description:DefaultTemplateCode"),
+                isVisibleToClients: false,
+                isEncrypted: true
+            )
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName),
         };
     }
     private ILocalizableString L(string name)

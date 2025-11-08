@@ -34,6 +34,8 @@
     "Description:Policy": "Policy",
     "DisplayName:Aliyun.Sms": "Sms",
     "Description:Aliyun.Sms": "Sms",
+    "DisplayName:Aliyun.SmsVerifyCode": "Sms Verify Code",
+    "Description:Aliyun.SmsVerifyCode": "Sms Verify Code",
     "DisplayName:ActionName": "Action Name",
     "Description:ActionName": "Action Name",
     "DisplayName:DefaultSignName": "Default Sign Name",

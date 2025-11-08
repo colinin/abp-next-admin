@@ -20,9 +20,12 @@ using Volo.Abp.Sms;
 namespace LINGYUN.Abp.Sms.Aliyun;
 
 [Dependency(ServiceLifetime.Singleton)]
-[ExposeServices(typeof(ISmsSender), typeof(AliyunSmsSender))]
+[ExposeServices(
+    typeof(ISmsSender), 
+    typeof(IAliyunSmsVerifyCodeSender),
+    typeof(AliyunSmsSender))]
 [RequiresFeature(AliyunFeatureNames.Sms.Enable)]
-public class AliyunSmsSender : ISmsSender
+public class AliyunSmsSender : ISmsSender, IAliyunSmsVerifyCodeSender
 {
     protected IJsonSerializer JsonSerializer { get; }
     protected ISettingProvider SettingProvider { get; }
@@ -89,6 +92,63 @@ public class AliyunSmsSender : ISmsSender
             throw new AliyunSmsException(se.ErrorCode, $"Sending text messages to aliyun server is abnormal,type: {se.ErrorType}, error: {se.ErrorMessage}");
         }
         catch(ClientException ce)
+        {
+            throw new AliyunSmsException(ce.ErrorCode, $"A client exception occurred in sending SMS messages,type: {ce.ErrorType}, error: {ce.ErrorMessage}");
+        }
+    }
+
+    [RequiresLimitFeature(
+        AliyunFeatureNames.Sms.SendLimit,
+        AliyunFeatureNames.Sms.SendLimitInterval,
+        LimitPolicy.Month,
+        AliyunFeatureNames.Sms.DefaultSendLimit,
+        AliyunFeatureNames.Sms.DefaultSendLimitInterval)]
+    public async virtual Task SendAsync(SmsVerifyCodeMessage message)
+    {
+        var domain = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.Domain);
+        var version = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.Version);
+        var signName = message.SignName ??
+            await SettingProvider.GetOrNullAsync(AliyunSettingNames.SmsVerifyCode.DefaultSignName);
+        var templateCode = message.TemplateCode ?? 
+            await SettingProvider.GetOrNullAsync(AliyunSettingNames.SmsVerifyCode.DefaultTemplateCode);
+
+        Check.NotNullOrWhiteSpace(domain, AliyunSettingNames.Sms.Domain);
+        Check.NotNullOrWhiteSpace(version, AliyunSettingNames.Sms.Version);
+        Check.NotNullOrWhiteSpace(signName, AliyunSettingNames.SmsVerifyCode.DefaultSignName);
+        Check.NotNullOrWhiteSpace(templateCode, AliyunSettingNames.SmsVerifyCode.DefaultTemplateCode);
+
+        var request = new CommonRequest
+        {
+            Domain = domain,
+            Version = version,
+            Method = MethodType.POST,
+            Action = "SendSmsVerifyCode",
+        };
+        request.AddBodyParameters("PhoneNumber", message.PhoneNumber);
+        request.AddBodyParameters("SignName", signName);
+        request.AddBodyParameters("TemplateCode", templateCode);
+        request.AddBodyParameters("TemplateParam", JsonSerializer.Serialize(message.TemplateParam));
+
+        try
+        {
+            var client = await AcsClientFactory.CreateAsync();
+            var response = client.GetCommonResponse(request);
+            var responseContent = Encoding.Default.GetString(response.HttpResponse.Content);
+            var aliyunResponse = JsonSerializer.Deserialize<AliyunSmsVerifyCodeResponse>(responseContent);
+            if (!aliyunResponse.Success)
+            {
+                if (await SettingProvider.IsTrueAsync(AliyunSettingNames.Sms.VisableErrorToClient))
+                {
+                    throw new UserFriendlyException(aliyunResponse.Code, aliyunResponse.Message);
+                }
+                throw new AliyunSmsException(aliyunResponse.Code, $"Text message sending failed, code:{aliyunResponse.Code}, message:{aliyunResponse.Message}!");
+            }
+        }
+        catch (ServerException se)
+        {
+            throw new AliyunSmsException(se.ErrorCode, $"Sending text messages to aliyun server is abnormal,type: {se.ErrorType}, error: {se.ErrorMessage}");
+        }
+        catch (ClientException ce)
         {
             throw new AliyunSmsException(ce.ErrorCode, $"A client exception occurred in sending SMS messages,type: {ce.ErrorType}, error: {ce.ErrorMessage}");
         }
