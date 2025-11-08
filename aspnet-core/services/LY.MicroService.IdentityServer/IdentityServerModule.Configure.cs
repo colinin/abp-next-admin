@@ -1,6 +1,7 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.Account.Web;
 using LINGYUN.Abp.Account.Web.IdentityServer;
+using LINGYUN.Abp.AspNetCore.MultiTenancy;
 using LINGYUN.Abp.IdentityServer.IdentityResources;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
@@ -372,7 +373,7 @@ public partial class IdentityServerModule
                 var domains = tenantResolveCfg.Get<string[]>();
                 foreach (var domain in domains)
                 {
-                    options.AddDomainTenantResolver(domain);
+                    options.AddOnlyDomainTenantResolver(domain);
                 }
             });
         }
