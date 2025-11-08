@@ -26,6 +26,7 @@ public class AccountSmsSecurityCodeSender : IAccountSmsSecurityCodeSender, ITran
         var smsMessage = new SmsMessage(phone, token);
         smsMessage.Properties.Add("code", token);
         smsMessage.Properties.Add("TemplateCode", template);
+        smsMessage.Properties.Add("SmsVerifyCode", true);
 
         await SmsSender.SendAsync(smsMessage);
     }
