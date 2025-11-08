@@ -64,5 +64,7 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
             webhook: webhook,
             callbackUrl: callbackUrl,
             cancellationToken: cancellationToken);
+
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
     }
 }

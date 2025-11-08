@@ -59,5 +59,7 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
         }
 
         await EmailSender.SendAsync(emailAddress, notificationData.Title, notificationData.Message);
+
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
     }
 }

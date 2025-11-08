@@ -93,6 +93,8 @@ public class WeChatMiniProgramNotificationPublishProvider : NotificationPublishP
 
             // 发送小程序订阅消息
             await SubscribeMessager.SendAsync(weChatWeAppNotificationData, cancellationToken);
+
+            Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
         }
     }
 

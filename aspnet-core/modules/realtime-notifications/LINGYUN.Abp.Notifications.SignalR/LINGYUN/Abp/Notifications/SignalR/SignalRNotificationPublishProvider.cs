@@ -40,6 +40,8 @@ public class SignalRNotificationPublishProvider : NotificationPublishProvider
                 // 租户通知群发
                 Logger.LogDebug($"Found a singalr group, begin senging notifications");
                 await singalRGroup.SendAsync(_options.MethodName, notification, cancellationToken);
+
+                Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
             }
             catch (Exception ex)
             {
