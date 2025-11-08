@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.Account.Security</AssemblyName>
+		<PackageId>LINGYUN.Abp.Account.Security</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\Account\Security\Templates\*.tpl" />
+		<None Remove="LINGYUN\Abp\Account\Security\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Account\Security\Templates\*.tpl" />
+		<EmbeddedResource Include="LINGYUN\Abp\Account\Security\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Emailing" />
+		<PackageReference Include="Volo.Abp.Sms" />
+		<PackageReference Include="Volo.Abp.UI.Navigation" />
+	</ItemGroup>
+
+</Project>
