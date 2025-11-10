@@ -1,8 +1,12 @@
 ﻿using DotNetCore.CAP;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading;
+using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.EventBus.CAP;
 
@@ -12,6 +16,7 @@ namespace LINGYUN.Abp.EventBus.CAP;
 [DependsOn(typeof(AbpEventBusModule))]
 public class AbpCAPEventBusModule : AbpModule
 {
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
     /// <summary>
     /// ConfigureServices
     /// </summary>
@@ -47,5 +52,25 @@ public class AbpCAPEventBusModule : AbpModule
                 };
             }
         });
+    }
+
+    public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
+    {
+        AsyncHelper.RunSync(() => OnPreApplicationInitializationAsync(context));
+    }
+
+    public async override Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        await context
+            .ServiceProvider
+            .GetRequiredService<IBootstrapper>()
+            .BootstrapAsync(_cancellationTokenSource.Token);
+    }
+
+    public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+    {
+        _cancellationTokenSource.Cancel();
+
+        return Task.CompletedTask;
     }
 }
