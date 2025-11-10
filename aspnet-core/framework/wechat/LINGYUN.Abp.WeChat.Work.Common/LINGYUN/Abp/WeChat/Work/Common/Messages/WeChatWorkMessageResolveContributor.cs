@@ -1,6 +1,4 @@
 ﻿using LINGYUN.Abp.WeChat.Common.Messages;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.WeChat.Work.Common.Messages;
@@ -11,9 +9,8 @@ public class WeChatWorkMessageResolveContributor : WeChatWorkMessageResolveContr
 {
     public override string Name => "WeChat.Work.Message";
 
-    protected override Task ResolveWeComMessageAsync(IMessageResolveContext context)
+    protected override Task ResolveMessageAsync(IMessageResolveContext context, AbpWeChatWorkMessageResolveOptions options)
     {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpWeChatWorkMessageResolveOptions>>().Value;
         var messageType = context.GetMessageData("MsgType");
         if (options.MessageMaps.TryGetValue(messageType, out var messageFactory))
         {
