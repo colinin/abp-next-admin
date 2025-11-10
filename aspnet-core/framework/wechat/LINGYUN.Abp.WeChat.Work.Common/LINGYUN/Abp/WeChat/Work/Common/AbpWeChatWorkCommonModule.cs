@@ -57,6 +57,8 @@ public class AbpWeChatWorkCommonModule : AbpModule
                     _ => throw new AbpWeChatException($"Contact change event {changeType} is not mounted!"),
                 };
             });
+            options.MapEvent("book_meeting_room", context => context.GetWeChatMessage<BookMeetingRoomEvent>());
+            options.MapEvent("cancel_meeting_room", context => context.GetWeChatMessage<CancelMeetingRoomEvent>());
 
             options.MapMessage("text", context => context.GetWeChatMessage<TextMessage>());
             options.MapMessage("image", context => context.GetWeChatMessage<PictureMessage>());
@@ -65,10 +67,7 @@ public class AbpWeChatWorkCommonModule : AbpModule
             options.MapMessage("shortvideo", context => context.GetWeChatMessage<VideoMessage>());
             options.MapMessage("location", context => context.GetWeChatMessage<GeoLocationMessage>());
             options.MapMessage("link", context => context.GetWeChatMessage<LinkMessage>());
-        });
 
-        Configure<AbpWeChatMessageResolveOptions>(options =>
-        {
             // 事件处理器
             options.MessageResolvers.AddIfNotContains(new WeChatWorkEventResolveContributor());
             // 消息处理器

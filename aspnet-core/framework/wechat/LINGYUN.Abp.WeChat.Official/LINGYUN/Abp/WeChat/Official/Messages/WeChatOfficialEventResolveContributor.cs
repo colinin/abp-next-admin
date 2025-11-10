@@ -1,6 +1,4 @@
 ﻿using LINGYUN.Abp.WeChat.Common.Messages;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
@@ -12,9 +10,8 @@ public class WeChatOfficialEventResolveContributor : WeChatOfficialMessageResolv
 {
     public override string Name => "WeChat.Official.Event";
 
-    protected override Task ResolveWeChatMessageAsync(IMessageResolveContext context)
+    protected override Task ResolveMessageAsync(IMessageResolveContext context, AbpWeChatOfficialMessageResolveOptions options)
     {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpWeChatOfficialMessageResolveOptions>>().Value;
         var messageType = context.GetMessageData("MsgType");
         var eventName = context.GetMessageData("Event");
         if ("event".Equals(messageType, StringComparison.InvariantCultureIgnoreCase) && 

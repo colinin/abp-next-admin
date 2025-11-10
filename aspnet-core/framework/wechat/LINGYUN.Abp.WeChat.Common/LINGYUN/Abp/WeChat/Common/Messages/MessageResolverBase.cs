@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.WeChat.Common.Crypto;
 using LINGYUN.Abp.WeChat.Common.Crypto.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,29 +8,25 @@ using System.Xml.Linq;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.WeChat.Common.Messages;
-public class MessageResolver : IMessageResolver, ITransientDependency
+public abstract class MessageResolverBase : ITransientDependency
 {
     private readonly IWeChatCryptoService _cryptoService;
     private readonly IServiceProvider _serviceProvider;
-    private readonly AbpWeChatMessageResolveOptions _options;
 
-    public MessageResolver(
-        IOptions<AbpWeChatMessageResolveOptions> options,
+    protected MessageResolverBase(
         IWeChatCryptoService cryptoService,
         IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
         _cryptoService = cryptoService;
-        _options = options.Value;
     }
     /// <summary>
     /// 解析微信服务器推送消息/事件
     /// </summary>
     /// <param name="messageData"></param>
     /// <returns></returns>
-    public async virtual Task<MessageResolveResult> ResolveMessageAsync(MessageResolveData messageData)
+    public async virtual Task<MessageResolveResult> ResolveAsync(MessageResolveData messageData)
     {
-        var result = new MessageResolveResult(messageData.Data);
         using (var serviceScope = _serviceProvider.CreateScope())
         {
             /* 明文数据格式
@@ -65,24 +60,17 @@ public class MessageResolver : IMessageResolver, ITransientDependency
                 // 经过解密函数得到如上真实数据
                 var decryptMessage = _cryptoService.Decrypt(cryptoDecryptData);
                 xmlDocument = XDocument.Parse(decryptMessage);
-                result.Input = decryptMessage;
             }
 
-            var context = new MessageResolveContext(result.Input, xmlDocument, serviceScope.ServiceProvider);
+            var context = new MessageResolveContext(messageData.Data, xmlDocument, serviceScope.ServiceProvider);
 
-            foreach (var messageResolver in _options.MessageResolvers)
-            {
-                await messageResolver.ResolveAsync(context);
-
-                result.AppliedResolvers.Add(messageResolver.Name);
-
-                if (context.HasResolvedMessage())
-                {
-                    result.Message = context.Message;
-                    break;
-                }
-            }
+            return await ResolveMessageAsync(context);
         }
-        return result;
     }
+    /// <summary>
+    /// 实现具体的解析微信服务器推送消息/事件方法
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    protected abstract Task<MessageResolveResult> ResolveMessageAsync(MessageResolveContext context);
 }
