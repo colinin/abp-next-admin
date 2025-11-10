@@ -155,6 +155,12 @@ public class AliyunSettingAppService : ApplicationService, IAliyunSettingAppServ
 
                 var smsVerifyCodeSetting = aliyunSettingGroup.AddSetting(L["DisplayName:Aliyun.SmsVerifyCode"], L["Description:Aliyun.SmsVerifyCode"]);
                 smsVerifyCodeSetting.AddDetail(
+                   await SettingDefinitionManager.GetAsync(AliyunSettingNames.SmsVerifyCode.Domain),
+                   StringLocalizerFactory,
+                   await SettingManager.GetOrNullAsync(AliyunSettingNames.SmsVerifyCode.Domain, providerName, providerKey),
+                   ValueType.String,
+                    providerName);
+                smsVerifyCodeSetting.AddDetail(
                    await SettingDefinitionManager.GetAsync(AliyunSettingNames.SmsVerifyCode.DefaultSignName),
                    StringLocalizerFactory,
                    await SettingManager.GetOrNullAsync(AliyunSettingNames.SmsVerifyCode.DefaultSignName, providerName, providerKey),

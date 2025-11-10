@@ -170,8 +170,8 @@ public class AliyunSettingProvider : SettingDefinitionProvider
             new SettingDefinition(
                 AliyunSettingNames.Sms.Domain,
                 defaultValue: "dysmsapi.aliyuncs.com",
-                displayName: L("DisplayName:Domain"),
-                description: L("Description:Domain"),
+                displayName: L("DisplayName:SmsDomain"),
+                description: L("Description:SmsDomain"),
                 isVisibleToClients: false
             )
             .WithProviders(
@@ -210,6 +210,18 @@ public class AliyunSettingProvider : SettingDefinitionProvider
     {
         return new SettingDefinition[]
         {
+            new SettingDefinition(
+                AliyunSettingNames.SmsVerifyCode.Domain,
+                defaultValue: "dypnsapi.aliyuncs.com",
+                displayName: L("DisplayName:SmsVerifyCodeDomain"),
+                description: L("Description:SmsVerifyCodeDomain"),
+                isVisibleToClients: false
+            )
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName),
             new SettingDefinition(
                 AliyunSettingNames.SmsVerifyCode.DefaultSignName,
                 displayName: L("DisplayName:DefaultSignName"),
