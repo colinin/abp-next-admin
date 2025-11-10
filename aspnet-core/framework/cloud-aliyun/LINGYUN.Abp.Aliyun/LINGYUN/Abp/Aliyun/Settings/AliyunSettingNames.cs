@@ -87,6 +87,10 @@ public static class AliyunSettingNames
     {
         public const string Prefix = AliyunSettingNames.Prefix + ".SmsVerifyCode";
         /// <summary>
+        /// 阿里云号码认证服务域名
+        /// </summary>
+        public const string Domain = Prefix + ".Domain";
+        /// <summary>
         /// 默认签名
         /// </summary>
         public const string DefaultSignName = Prefix + ".DefaultSignName";

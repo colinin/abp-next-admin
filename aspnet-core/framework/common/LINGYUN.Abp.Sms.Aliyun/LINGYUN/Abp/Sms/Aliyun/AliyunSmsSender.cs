@@ -54,11 +54,15 @@ public class AliyunSmsSender : ISmsSender, IAliyunSmsVerifyCodeSender
         if (smsMessage.Properties.ContainsKey("SmsVerifyCode") &&
             smsMessage.Properties.TryGetValue("code", out var code))
         {
+            smsMessage.Properties.TryGetValue("SignName", out var signName);
+            smsMessage.Properties.TryGetValue("TemplateCode", out var templateCode);
             // 调用短信验证码服务
             await SendAsync(
                 new SmsVerifyCodeMessage(
                     smsMessage.PhoneNumber,
-                    new SmsVerifyCodeMessageParam(code.ToString(), "5")));
+                    new SmsVerifyCodeMessageParam(code.ToString(), "5"),
+                    signName?.ToString(),
+                    templateCode?.ToString()));
             return;
         }
 
@@ -116,15 +120,15 @@ public class AliyunSmsSender : ISmsSender, IAliyunSmsVerifyCodeSender
         AliyunFeatureNames.Sms.DefaultSendLimitInterval)]
     public async virtual Task SendAsync(SmsVerifyCodeMessage message)
     {
-        var domain = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.Domain);
         var version = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Sms.Version);
+        var domain = await SettingProvider.GetOrNullAsync(AliyunSettingNames.SmsVerifyCode.Domain);
         var signName = message.SignName ??
             await SettingProvider.GetOrNullAsync(AliyunSettingNames.SmsVerifyCode.DefaultSignName);
         var templateCode = message.TemplateCode ?? 
             await SettingProvider.GetOrNullAsync(AliyunSettingNames.SmsVerifyCode.DefaultTemplateCode);
 
-        Check.NotNullOrWhiteSpace(domain, AliyunSettingNames.Sms.Domain);
         Check.NotNullOrWhiteSpace(version, AliyunSettingNames.Sms.Version);
+        Check.NotNullOrWhiteSpace(domain, AliyunSettingNames.SmsVerifyCode.Domain);
         Check.NotNullOrWhiteSpace(signName, AliyunSettingNames.SmsVerifyCode.DefaultSignName);
         Check.NotNullOrWhiteSpace(templateCode, AliyunSettingNames.SmsVerifyCode.DefaultTemplateCode);
 
@@ -132,6 +136,7 @@ public class AliyunSmsSender : ISmsSender, IAliyunSmsVerifyCodeSender
         {
             Domain = domain,
             Version = version,
+            Product = "Dypnsapi",
             Method = MethodType.POST,
             Action = "SendSmsVerifyCode",
         };
