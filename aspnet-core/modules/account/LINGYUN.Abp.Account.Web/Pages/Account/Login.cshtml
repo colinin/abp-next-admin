@@ -104,17 +104,20 @@
                     </div>
                 </form>
             </abp-tab>
-            <abp-tab title="@L["ScanQrCodeLogin"].Value" active="Model.LoginType == LoginType.QrCode" header-name="QrCodeLogin">
-                <form method="post" class="mt-4" asp-page-handler="QrCodeLogin" id="QrCodeForm">
-                    <input asp-for="QrCodeLoginInput.ReturnUrl" />
-                    <input asp-for="QrCodeLoginInput.ReturnUrlHash" />
-                    <input asp-for="QrCodeLoginInput.Key" id="QrCodeKey" />
-                    <div class="gap-2" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                        <div id="QrCode"></div>
-                        <div id="QrCodeStatus"></div>
-                    </div>
-                </form>
-            </abp-tab>
+            @if (Model.QrCodeLoginInput.IsEnabled)
+            {
+                <abp-tab title="@L["ScanQrCodeLogin"].Value" active="Model.LoginType == LoginType.QrCode" header-name="QrCodeLogin">
+                    <form method="post" class="mt-4" asp-page-handler="QrCodeLogin" id="QrCodeForm">
+                        <input asp-for="QrCodeLoginInput.ReturnUrl" />
+                        <input asp-for="QrCodeLoginInput.ReturnUrlHash" />
+                        <input asp-for="QrCodeLoginInput.Key" id="QrCodeKey" />
+                        <div class="gap-2" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <div id="QrCode"></div>
+                            <div id="QrCodeStatus"></div>
+                        </div>
+                    </form>
+                </abp-tab>
+            }
         </abp-tabs>
     }
 
