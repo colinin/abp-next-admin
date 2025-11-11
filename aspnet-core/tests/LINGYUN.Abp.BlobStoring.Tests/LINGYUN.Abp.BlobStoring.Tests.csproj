@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<RootNamespace />
+		<IsPackable>false</IsPackable>
+		<Configurations>Debug;Release;PostgreSQL</Configurations>
+		<Platforms>AnyCPU</Platforms>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="Volo.Abp.BlobStoring" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
+	</ItemGroup>
+
+</Project>
