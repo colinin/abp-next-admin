@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LINGYUN.Abp.WeChat.Work.Utils;
 
-internal static class HttpContentBuildHelper
+public static class WeChatWorkHttpContentBuildHelper
 {
     public static HttpContent BuildUploadMediaContent(
         string mediaName,
