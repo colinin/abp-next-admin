@@ -13,10 +13,13 @@ using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.OssManagement;
+using LINGYUN.Abp.OssManagement.Aliyun;
 using LINGYUN.Abp.OssManagement.FileSystem;
 using LINGYUN.Abp.OssManagement.Imaging;
 using LINGYUN.Abp.OssManagement.Minio;
+using LINGYUN.Abp.OssManagement.Nexus;
 using LINGYUN.Abp.OssManagement.SettingManagement;
+using LINGYUN.Abp.OssManagement.Tencent;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -67,9 +70,11 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpUINavigationVueVbenAdmin5Module),
     typeof(PlatformThemeVueVbenAdminModule),
-    // typeof(AbpOssManagementAliyunModule),
-    typeof(AbpOssManagementMinioModule),           // Minio存储提供者模块
-    typeof(AbpOssManagementFileSystemModule),           // 本地文件系统提供者模块
+    typeof(AbpOssManagementAliyunModule),    // 阿里云存储提供者模块
+    typeof(AbpOssManagementTencentModule),   // 腾讯云存储提供者模块
+    typeof(AbpOssManagementNexusModule),     // Nexus存储提供者模块
+    typeof(AbpOssManagementMinioModule),     // Minio存储提供者模块
+    typeof(AbpOssManagementFileSystemModule),// 本地文件系统提供者模块
     typeof(AbpOssManagementImagingModule), // 对象存储图形处理模块
     typeof(AbpOssManagementApplicationModule),
     typeof(AbpOssManagementHttpApiModule),
@@ -142,7 +147,6 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureSwagger(context.Services, configuration);
-        ConfigureOssManagement(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
