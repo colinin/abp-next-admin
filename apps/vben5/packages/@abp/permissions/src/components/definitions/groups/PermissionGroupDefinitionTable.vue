@@ -6,14 +6,14 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { PermissionGroupDefinitionDto } from '../../../types/groups';
 
-import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
+import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { useLocalization, useLocalizationSerializer } from '@abp/core';
+import { sortby, useLocalization, useLocalizationSerializer } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -38,11 +38,6 @@ const MenuItem = Menu.Item;
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 
 const permissionGroups = ref<PermissionGroupDefinitionDto[]>([]);
-const pageState = reactive({
-  current: 1,
-  size: 10,
-  total: 0,
-});
 
 const { Lr } = useLocalization();
 const { hasAccessByCodes } = useAccess();
@@ -54,7 +49,6 @@ const formOptions: VbenFormProps = {
   collapsed: false,
   handleReset: onReset,
   async handleSubmit(params) {
-    pageState.current = 1;
     await onGet(params);
   },
   schema: [
@@ -77,12 +71,14 @@ const gridOptions: VxeGridProps<PermissionGroupDefinitionDto> = {
       align: 'left',
       field: 'name',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpPermissionManagement.DisplayName:Name'),
     },
     {
       align: 'left',
       field: 'displayName',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpPermissionManagement.DisplayName:DisplayName'),
     },
     {
@@ -95,6 +91,30 @@ const gridOptions: VxeGridProps<PermissionGroupDefinitionDto> = {
   ],
   exportConfig: {},
   keepSource: true,
+  proxyConfig: {
+    ajax: {
+      query: async ({ page, sort }) => {
+        let items = sortby(permissionGroups.value, sort.field);
+        if (sort.order === 'desc') {
+          items = items.reverse();
+        }
+        const result = {
+          totalCount: permissionGroups.value.length,
+          items: items.slice(
+            (page.currentPage - 1) * page.pageSize,
+            page.currentPage * page.pageSize,
+          ),
+        };
+        return new Promise((resolve) => {
+          resolve(result);
+        });
+      },
+    },
+    response: {
+      total: 'totalCount',
+      list: 'items',
+    },
+  },
   toolbarConfig: {
     custom: true,
     export: true,
@@ -104,10 +124,8 @@ const gridOptions: VxeGridProps<PermissionGroupDefinitionDto> = {
 };
 
 const gridEvents: VxeGridListeners<PermissionGroupDefinitionDto> = {
-  pageChange(params) {
-    pageState.current = params.currentPage;
-    pageState.size = params.pageSize;
-    onPageChange();
+  sortChange: () => {
+    gridApi.query();
   },
 };
 
@@ -132,7 +150,6 @@ async function onGet(input?: Record<string, string>) {
   try {
     gridApi.setLoading(true);
     const { items } = await getListApi(input);
-    pageState.total = items.length;
     permissionGroups.value = items.map((item) => {
       const localizableString = deserialize(item.displayName);
       return {
@@ -140,7 +157,7 @@ async function onGet(input?: Record<string, string>) {
         displayName: Lr(localizableString.resourceName, localizableString.name),
       };
     });
-    onPageChange();
+    setTimeout(() => gridApi.reload(), 100);
   } finally {
     gridApi.setLoading(false);
   }
@@ -150,21 +167,6 @@ async function onReset() {
   await gridApi.formApi.resetForm();
   const input = await gridApi.formApi.getValues();
   await onGet(input);
-}
-
-function onPageChange() {
-  const items = permissionGroups.value.slice(
-    (pageState.current - 1) * pageState.size,
-    pageState.current * pageState.size,
-  );
-  gridApi.setGridOptions({
-    data: items,
-    pagerConfig: {
-      currentPage: pageState.current,
-      pageSize: pageState.size,
-      total: pageState.total,
-    },
-  });
 }
 
 function onCreate() {

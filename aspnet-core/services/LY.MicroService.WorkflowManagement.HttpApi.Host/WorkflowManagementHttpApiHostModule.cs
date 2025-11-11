@@ -38,7 +38,6 @@ using Volo.Abp.AspNetCore.Mvc.NewtonsoftJson;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.MailKit;
@@ -74,7 +73,6 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpElsaEntityFrameworkCoreMySqlModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),

@@ -67,7 +67,7 @@ export function useDefineSettings(): UserDefineSettingProvider {
     initlize,
     isTrue(name: string) {
       const value = getOrDefault(name, 'false');
-      return value.toLowerCase() === 'true';
+      return value?.toLowerCase() === 'true';
     },
   };
 }

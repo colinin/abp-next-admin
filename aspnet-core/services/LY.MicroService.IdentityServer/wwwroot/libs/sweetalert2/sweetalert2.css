@@ -1,23 +1,71 @@
 :root {
+  --swal2-outline: 0 0 0 3px rgba(100, 150, 200, 0.5);
   --swal2-container-padding: 0.625em;
   --swal2-backdrop: rgba(0, 0, 0, 0.4);
+  --swal2-backdrop-transition: background-color 0.1s;
   --swal2-width: 32em;
   --swal2-padding: 0 0 1.25em;
   --swal2-border: none;
   --swal2-border-radius: 0.3125rem;
   --swal2-background: white;
   --swal2-color: #545454;
-  --swal2-footer-border-color: #eee;
   --swal2-show-animation: swal2-show 0.3s;
   --swal2-hide-animation: swal2-hide 0.15s forwards;
+  --swal2-icon-zoom: 1;
+  --swal2-icon-animations: true;
+  --swal2-title-padding: 0.8em 1em 0;
+  --swal2-html-container-padding: 1em 1.6em 0.3em;
+  --swal2-input-border: 1px solid #d9d9d9;
+  --swal2-input-border-radius: 0.1875em;
+  --swal2-input-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px transparent;
   --swal2-input-background: transparent;
+  --swal2-input-transition: border-color 0.2s, box-shadow 0.2s;
+  --swal2-input-hover-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px transparent;
+  --swal2-input-focus-border: 1px solid #b4dbed;
+  --swal2-input-focus-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px $swal2-outline-color;
   --swal2-progress-step-background: #add8e6;
   --swal2-validation-message-background: #f0f0f0;
   --swal2-validation-message-color: #666;
+  --swal2-footer-border-color: #eee;
+  --swal2-footer-background: transparent;
+  --swal2-footer-color: inherit;
+  --swal2-timer-progress-bar-background: rgba(0, 0, 0, 0.3);
   --swal2-close-button-position: initial;
   --swal2-close-button-inset: auto;
   --swal2-close-button-font-size: 2.5em;
   --swal2-close-button-color: #ccc;
+  --swal2-close-button-transition: color 0.2s, box-shadow 0.2s;
+  --swal2-close-button-outline: initial;
+  --swal2-close-button-box-shadow: inset 0 0 0 3px transparent;
+  --swal2-close-button-focus-box-shadow: inset var(--swal2-outline);
+  --swal2-close-button-hover-transform: none;
+  --swal2-actions-justify-content: center;
+  --swal2-actions-width: auto;
+  --swal2-actions-margin: 1.25em auto 0;
+  --swal2-actions-padding: 0;
+  --swal2-actions-border-radius: 0;
+  --swal2-actions-background: transparent;
+  --swal2-action-button-transition: background-color 0.2s, box-shadow 0.2s;
+  --swal2-action-button-hover: black 10%;
+  --swal2-action-button-active: black 10%;
+  --swal2-confirm-button-box-shadow: none;
+  --swal2-confirm-button-border-radius: 0.25em;
+  --swal2-confirm-button-background-color: #7066e0;
+  --swal2-confirm-button-color: #fff;
+  --swal2-deny-button-box-shadow: none;
+  --swal2-deny-button-border-radius: 0.25em;
+  --swal2-deny-button-background-color: #dc3741;
+  --swal2-deny-button-color: #fff;
+  --swal2-cancel-button-box-shadow: none;
+  --swal2-cancel-button-border-radius: 0.25em;
+  --swal2-cancel-button-background-color: #6e7881;
+  --swal2-cancel-button-color: #fff;
+  --swal2-toast-show-animation: swal2-toast-show 0.5s;
+  --swal2-toast-hide-animation: swal2-toast-hide 0.1s forwards;
+  --swal2-toast-border: none;
+  --swal2-toast-box-shadow:
+    0 0 1px hsl(0deg 0% 0% / 0.075), 0 1px 2px hsl(0deg 0% 0% / 0.075), 1px 2px 4px hsl(0deg 0% 0% / 0.075),
+    1px 3px 8px hsl(0deg 0% 0% / 0.075), 2px 4px 16px hsl(0deg 0% 0% / 0.075);
 }
 
 [data-swal2-theme=dark] {
@@ -33,6 +81,7 @@
     var(--swal2-dark-theme-white) 10%
   );
   --swal2-validation-message-color: var(--swal2-dark-theme-white);
+  --swal2-timer-progress-bar-background: rgba(255, 255, 255, 0.7);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -49,6 +98,7 @@
       var(--swal2-dark-theme-white) 10%
     );
     --swal2-validation-message-color: var(--swal2-dark-theme-white);
+    --swal2-timer-progress-bar-background: rgba(255, 255, 255, 0.7);
   }
 }
 body.swal2-shown:not(.swal2-no-backdrop, .swal2-toast-shown) {
@@ -129,7 +179,7 @@ div:where(.swal2-container) {
   height: 100%;
   padding: var(--swal2-container-padding);
   overflow-x: hidden;
-  transition: background-color 0.1s;
+  transition: var(--swal2-backdrop-transition);
   -webkit-overflow-scrolling: touch;
 }
 div:where(.swal2-container).swal2-backdrop-show, div:where(.swal2-container).swal2-noanimation {
@@ -198,6 +248,10 @@ div:where(.swal2-container).swal2-grow-column > .swal2-popup, div:where(.swal2-c
 div:where(.swal2-container).swal2-no-transition {
   transition: none !important;
 }
+div:where(.swal2-container)[popover] {
+  width: auto;
+  border: 0;
+}
 div:where(.swal2-container) div:where(.swal2-popup) {
   display: none;
   position: relative;
@@ -212,6 +266,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
   color: var(--swal2-color);
   font-family: inherit;
   font-size: 1rem;
+  container-name: swal2-popup;
 }
 div:where(.swal2-container) div:where(.swal2-popup):focus {
   outline: none;
@@ -235,13 +290,13 @@ div:where(.swal2-container) h2:where(.swal2-title) {
   position: relative;
   max-width: 100%;
   margin: 0;
-  padding: 0.8em 1em 0;
+  padding: var(--swal2-title-padding);
   color: inherit;
   font-size: 1.875em;
   font-weight: 600;
   text-align: center;
   text-transform: none;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   cursor: initial;
 }
 div:where(.swal2-container) div:where(.swal2-actions) {
@@ -250,19 +305,12 @@ div:where(.swal2-container) div:where(.swal2-actions) {
   box-sizing: border-box;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  width: auto;
-  margin: 1.25em auto 0;
-  padding: 0;
-}
-div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled[disabled] {
-  opacity: 0.4;
-}
-div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled:hover {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
-}
-div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled:active {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  justify-content: var(--swal2-actions-justify-content);
+  width: var(--swal2-actions-width);
+  margin: var(--swal2-actions-margin);
+  padding: var(--swal2-actions-padding);
+  border-radius: var(--swal2-actions-border-radius);
+  background: var(--swal2-actions-background);
 }
 div:where(.swal2-container) div:where(.swal2-loader) {
   display: none;
@@ -280,7 +328,8 @@ div:where(.swal2-container) div:where(.swal2-loader) {
 div:where(.swal2-container) button:where(.swal2-styled) {
   margin: 0.3125em;
   padding: 0.625em 1.1em;
-  transition: box-shadow 0.1s;
+  transition: var(--swal2-action-button-transition);
+  border: none;
   box-shadow: 0 0 0 3px transparent;
   font-weight: 500;
 }
@@ -288,43 +337,53 @@ div:where(.swal2-container) button:where(.swal2-styled):not([disabled]) {
   cursor: pointer;
 }
 div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
-  border: 0;
-  border-radius: 0.25em;
+  border-radius: var(--swal2-confirm-button-border-radius);
   background: initial;
-  background-color: #7066e0;
-  color: #fff;
+  background-color: var(--swal2-confirm-button-background-color);
+  box-shadow: var(--swal2-confirm-button-box-shadow);
+  color: var(--swal2-confirm-button-color);
   font-size: 1em;
 }
-div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm):focus-visible {
-  box-shadow: 0 0 0 3px rgba(112, 102, 224, 0.5);
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm):hover {
+  background-color: color-mix(in srgb, var(--swal2-confirm-button-background-color), var(--swal2-action-button-hover));
+}
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm):active {
+  background-color: color-mix(in srgb, var(--swal2-confirm-button-background-color), var(--swal2-action-button-active));
 }
 div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny) {
-  border: 0;
-  border-radius: 0.25em;
+  border-radius: var(--swal2-deny-button-border-radius);
   background: initial;
-  background-color: #dc3741;
-  color: #fff;
+  background-color: var(--swal2-deny-button-background-color);
+  box-shadow: var(--swal2-deny-button-box-shadow);
+  color: var(--swal2-deny-button-color);
   font-size: 1em;
 }
-div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny):focus-visible {
-  box-shadow: 0 0 0 3px rgba(220, 55, 65, 0.5);
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny):hover {
+  background-color: color-mix(in srgb, var(--swal2-deny-button-background-color), var(--swal2-action-button-hover));
+}
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny):active {
+  background-color: color-mix(in srgb, var(--swal2-deny-button-background-color), var(--swal2-action-button-active));
 }
 div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel) {
-  border: 0;
-  border-radius: 0.25em;
+  border-radius: var(--swal2-cancel-button-border-radius);
   background: initial;
-  background-color: #6e7881;
-  color: #fff;
+  background-color: var(--swal2-cancel-button-background-color);
+  box-shadow: var(--swal2-cancel-button-box-shadow);
+  color: var(--swal2-cancel-button-color);
   font-size: 1em;
 }
-div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel):focus-visible {
-  box-shadow: 0 0 0 3px rgba(110, 120, 129, 0.5);
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel):hover {
+  background-color: color-mix(in srgb, var(--swal2-cancel-button-background-color), var(--swal2-action-button-hover));
 }
-div:where(.swal2-container) button:where(.swal2-styled).swal2-default-outline:focus-visible {
-  box-shadow: 0 0 0 3px rgba(100, 150, 200, 0.5);
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel):active {
+  background-color: color-mix(in srgb, var(--swal2-cancel-button-background-color), var(--swal2-action-button-active));
 }
 div:where(.swal2-container) button:where(.swal2-styled):focus-visible {
   outline: none;
+  box-shadow: var(--swal2-action-button-focus-box-shadow);
+}
+div:where(.swal2-container) button:where(.swal2-styled)[disabled]:not(.swal2-loading) {
+  opacity: 0.4;
 }
 div:where(.swal2-container) button:where(.swal2-styled)::-moz-focus-inner {
   border: 0;
@@ -333,7 +392,8 @@ div:where(.swal2-container) div:where(.swal2-footer) {
   margin: 1em 0 0;
   padding: 1em 1em 0;
   border-top: 1px solid var(--swal2-footer-border-color);
-  color: inherit;
+  background: var(--swal2-footer-background);
+  color: var(--swal2-footer-color);
   font-size: 1em;
   text-align: center;
   cursor: initial;
@@ -351,7 +411,7 @@ div:where(.swal2-container) .swal2-timer-progress-bar-container {
 div:where(.swal2-container) div:where(.swal2-timer-progress-bar) {
   width: 100%;
   height: 0.25em;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--swal2-timer-progress-bar-background);
 }
 div:where(.swal2-container) img:where(.swal2-image) {
   max-width: 100%;
@@ -371,9 +431,10 @@ div:where(.swal2-container) button:where(.swal2-close) {
   margin-bottom: -1.2em;
   padding: 0;
   overflow: hidden;
-  transition: color 0.1s, box-shadow 0.1s;
+  transition: var(--swal2-close-button-transition);
   border: none;
   border-radius: var(--swal2-border-radius);
+  outline: var(--swal2-close-button-outline);
   background: transparent;
   color: var(--swal2-close-button-color);
   font-family: monospace;
@@ -382,13 +443,13 @@ div:where(.swal2-container) button:where(.swal2-close) {
   justify-self: end;
 }
 div:where(.swal2-container) button:where(.swal2-close):hover {
-  transform: none;
+  transform: var(--swal2-close-button-hover-transform);
   background: transparent;
   color: #f27474;
 }
 div:where(.swal2-container) button:where(.swal2-close):focus-visible {
   outline: none;
-  box-shadow: inset 0 0 0 3px rgba(100, 150, 200, 0.5);
+  box-shadow: var(--swal2-close-button-focus-box-shadow);
 }
 div:where(.swal2-container) button:where(.swal2-close)::-moz-focus-inner {
   border: 0;
@@ -397,14 +458,14 @@ div:where(.swal2-container) div:where(.swal2-html-container) {
   z-index: 1;
   justify-content: center;
   margin: 0;
-  padding: 1em 1.6em 0.3em;
+  padding: var(--swal2-html-container-padding);
   overflow: auto;
   color: inherit;
   font-size: 1.125em;
   font-weight: normal;
   line-height: normal;
   text-align: center;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   word-break: break-word;
   cursor: initial;
 }
@@ -421,11 +482,11 @@ div:where(.swal2-container) input:where(.swal2-file),
 div:where(.swal2-container) textarea:where(.swal2-textarea) {
   box-sizing: border-box;
   width: auto;
-  transition: border-color 0.1s, box-shadow 0.1s;
-  border: 1px solid #d9d9d9;
-  border-radius: 0.1875em;
+  transition: var(--swal2-input-transition);
+  border: var(--swal2-input-border);
+  border-radius: var(--swal2-input-border-radius);
   background: var(--swal2-input-background);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px transparent;
+  box-shadow: var(--swal2-input-box-shadow);
   color: inherit;
   font-size: 1.125em;
 }
@@ -435,12 +496,17 @@ div:where(.swal2-container) textarea:where(.swal2-textarea).swal2-inputerror {
   border-color: #f27474 !important;
   box-shadow: 0 0 2px #f27474 !important;
 }
+div:where(.swal2-container) input:where(.swal2-input):hover,
+div:where(.swal2-container) input:where(.swal2-file):hover,
+div:where(.swal2-container) textarea:where(.swal2-textarea):hover {
+  box-shadow: var(--swal2-input-hover-box-shadow);
+}
 div:where(.swal2-container) input:where(.swal2-input):focus,
 div:where(.swal2-container) input:where(.swal2-file):focus,
 div:where(.swal2-container) textarea:where(.swal2-textarea):focus {
-  border: 1px solid #b4dbed;
+  border: var(--swal2-input-focus-border);
   outline: none;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px rgba(100, 150, 200, 0.5);
+  box-shadow: var(--swal2-input-focus-box-shadow);
 }
 div:where(.swal2-container) input:where(.swal2-input)::placeholder,
 div:where(.swal2-container) input:where(.swal2-file)::placeholder,
@@ -587,6 +653,7 @@ div:where(.swal2-icon) {
   width: 5em;
   height: 5em;
   margin: 2.5em auto 0.6em;
+  zoom: var(--swal2-icon-zoom);
   border: 0.25em solid transparent;
   border-radius: 50%;
   border-color: #000;
@@ -625,41 +692,49 @@ div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line][class$=right] {
   right: 1em;
   transform: rotate(-45deg);
 }
-div:where(.swal2-icon).swal2-error.swal2-icon-show {
-  animation: swal2-animate-error-icon 0.5s;
-}
-div:where(.swal2-icon).swal2-error.swal2-icon-show .swal2-x-mark {
-  animation: swal2-animate-error-x-mark 0.5s;
+@container swal2-popup style(--swal2-icon-animations:true) {
+  div:where(.swal2-icon).swal2-error.swal2-icon-show {
+    animation: swal2-animate-error-icon 0.5s;
+  }
+  div:where(.swal2-icon).swal2-error.swal2-icon-show .swal2-x-mark {
+    animation: swal2-animate-error-x-mark 0.5s;
+  }
 }
 div:where(.swal2-icon).swal2-warning {
   border-color: #f8bb86;
   color: #f8bb86;
 }
-div:where(.swal2-icon).swal2-warning.swal2-icon-show {
-  animation: swal2-animate-error-icon 0.5s;
-}
-div:where(.swal2-icon).swal2-warning.swal2-icon-show .swal2-icon-content {
-  animation: swal2-animate-i-mark 0.5s;
+@container swal2-popup style(--swal2-icon-animations:true) {
+  div:where(.swal2-icon).swal2-warning.swal2-icon-show {
+    animation: swal2-animate-error-icon 0.5s;
+  }
+  div:where(.swal2-icon).swal2-warning.swal2-icon-show .swal2-icon-content {
+    animation: swal2-animate-i-mark 0.5s;
+  }
 }
 div:where(.swal2-icon).swal2-info {
   border-color: #3fc3ee;
   color: #3fc3ee;
 }
-div:where(.swal2-icon).swal2-info.swal2-icon-show {
-  animation: swal2-animate-error-icon 0.5s;
-}
-div:where(.swal2-icon).swal2-info.swal2-icon-show .swal2-icon-content {
-  animation: swal2-animate-i-mark 0.8s;
+@container swal2-popup style(--swal2-icon-animations:true) {
+  div:where(.swal2-icon).swal2-info.swal2-icon-show {
+    animation: swal2-animate-error-icon 0.5s;
+  }
+  div:where(.swal2-icon).swal2-info.swal2-icon-show .swal2-icon-content {
+    animation: swal2-animate-i-mark 0.8s;
+  }
 }
 div:where(.swal2-icon).swal2-question {
   border-color: #87adbd;
   color: #87adbd;
 }
-div:where(.swal2-icon).swal2-question.swal2-icon-show {
-  animation: swal2-animate-error-icon 0.5s;
-}
-div:where(.swal2-icon).swal2-question.swal2-icon-show .swal2-icon-content {
-  animation: swal2-animate-question-mark 0.8s;
+@container swal2-popup style(--swal2-icon-animations:true) {
+  div:where(.swal2-icon).swal2-question.swal2-icon-show {
+    animation: swal2-animate-error-icon 0.5s;
+  }
+  div:where(.swal2-icon).swal2-question.swal2-icon-show .swal2-icon-content {
+    animation: swal2-animate-question-mark 0.8s;
+  }
 }
 div:where(.swal2-icon).swal2-success {
   border-color: #a5dc86;
@@ -725,14 +800,16 @@ div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=long] {
   width: 2.9375em;
   transform: rotate(-45deg);
 }
-div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-tip {
-  animation: swal2-animate-success-line-tip 0.75s;
-}
-div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-long {
-  animation: swal2-animate-success-line-long 0.75s;
-}
-div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-circular-line-right {
-  animation: swal2-rotate-success-circular-line 4.25s ease-in;
+@container swal2-popup style(--swal2-icon-animations:true) {
+  div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-tip {
+    animation: swal2-animate-success-line-tip 0.75s;
+  }
+  div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-long {
+    animation: swal2-animate-success-line-long 0.75s;
+  }
+  div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-circular-line-right {
+    animation: swal2-rotate-success-circular-line 4.25s ease-in;
+  }
 }
 
 [class^=swal2] {
@@ -775,8 +852,9 @@ div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-circular-lin
   grid-template-columns: min-content auto min-content;
   padding: 1em;
   overflow-y: hidden;
+  border: var(--swal2-toast-border);
   background: var(--swal2-background);
-  box-shadow: 0 0 1px hsla(0, 0%, 0%, 0.075), 0 1px 2px hsla(0, 0%, 0%, 0.075), 1px 2px 4px hsla(0, 0%, 0%, 0.075), 1px 3px 8px hsla(0, 0%, 0%, 0.075), 2px 4px 16px hsla(0, 0%, 0%, 0.075);
+  box-shadow: var(--swal2-toast-box-shadow);
   pointer-events: all;
 }
 .swal2-toast > * {
@@ -917,17 +995,19 @@ div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-circular-lin
   right: 0.1875em;
   width: 1.375em;
 }
-.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip {
-  animation: swal2-toast-animate-success-line-tip 0.75s;
-}
-.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long {
-  animation: swal2-toast-animate-success-line-long 0.75s;
+@container swal2-popup style(--swal2-icon-animations:true) {
+  .swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip {
+    animation: swal2-toast-animate-success-line-tip 0.75s;
+  }
+  .swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long {
+    animation: swal2-toast-animate-success-line-long 0.75s;
+  }
 }
 .swal2-toast.swal2-show {
-  animation: swal2-toast-show 0.5s;
+  animation: var(--swal2-toast-show-animation);
 }
 .swal2-toast.swal2-hide {
-  animation: swal2-toast-hide 0.1s forwards;
+  animation: var(--swal2-toast-hide-animation);
 }
 
 @keyframes swal2-show {

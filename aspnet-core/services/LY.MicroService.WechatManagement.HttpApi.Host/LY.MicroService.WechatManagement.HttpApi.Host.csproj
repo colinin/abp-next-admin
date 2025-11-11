@@ -31,13 +31,12 @@
 		<PackageReference Include="Volo.Abp.DistributedLocking" />
 		<PackageReference Include="Volo.Abp.Swashbuckle" />
 		<PackageReference Include="Volo.Abp.MailKit" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql.Pomelo" />
 		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" />
 		<PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,5 +1,5 @@
 /*!
-* sweetalert2 v11.21.1
+* sweetalert2 v11.23.0
 * Released under the MIT License.
 */
 function _assertClassBrand(e, t, n) {
@@ -807,7 +807,7 @@ const setupRTL = targetElement => {
 };
 
 /**
- * Add modal + backdrop + no-war message for Russians to DOM
+ * Add modal + backdrop to DOM
  *
  * @param {SweetAlertOptions} params
  */
@@ -982,8 +982,12 @@ function handleButtonsStyling(confirmButton, denyButton, cancelButton, params) {
  */
 function applyOutlineColor(button) {
   const buttonStyle = window.getComputedStyle(button);
+  if (buttonStyle.getPropertyValue('--swal2-action-button-focus-box-shadow')) {
+    // If the button already has a custom outline color, no need to change it
+    return;
+  }
   const outlineColor = buttonStyle.backgroundColor.replace(/rgba?\((\d+), (\d+), (\d+).*/, 'rgba($1, $2, $3, 0.5)');
-  button.style.setProperty('--swal2-action-button-outline', buttonStyle.getPropertyValue('--swal2-outline').replace(/ rgba\(.*/, ` ${outlineColor}`));
+  button.style.setProperty('--swal2-action-button-focus-box-shadow', buttonStyle.getPropertyValue('--swal2-outline').replace(/ rgba\(.*/, ` ${outlineColor}`));
 }
 
 /**
@@ -1507,11 +1511,18 @@ const adjustSuccessIconBackgroundColor = () => {
     successIconParts[i].style.backgroundColor = popupBackgroundColor;
   }
 };
-const successIconHtml = `
-  <div class="swal2-success-circular-line-left"></div>
+
+/**
+ *
+ * @param {SweetAlertOptions} params
+ * @returns {string}
+ */
+const successIconHtml = params => `
+  ${params.animation ? '<div class="swal2-success-circular-line-left"></div>' : ''}
   <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span>
-  <div class="swal2-success-ring"></div> <div class="swal2-success-fix"></div>
-  <div class="swal2-success-circular-line-right"></div>
+  <div class="swal2-success-ring"></div>
+  ${params.animation ? '<div class="swal2-success-fix"></div>' : ''}
+  ${params.animation ? '<div class="swal2-success-circular-line-right"></div>' : ''}
 `;
 const errorIconHtml = `
   <span class="swal2-x-mark">
@@ -1533,7 +1544,7 @@ const setContent = (icon, params) => {
   if (params.iconHtml) {
     newContent = iconContent(params.iconHtml);
   } else if (params.icon === 'success') {
-    newContent = successIconHtml;
+    newContent = successIconHtml(params);
     oldContent = oldContent.replace(/ style=".*?"/g, ''); // undo adjustSuccessIconBackgroundColor()
   } else if (params.icon === 'error') {
     newContent = errorIconHtml;
@@ -2100,8 +2111,8 @@ const handleArrows = key => {
  * @param {Function} dismissWith
  */
 const handleEsc = (event, innerParams, dismissWith) => {
+  event.preventDefault();
   if (callIfFunction(innerParams.allowEscapeKey)) {
-    event.preventDefault();
     dismissWith(DismissReason.esc);
   }
 };
@@ -3242,8 +3253,8 @@ const showWarningsForParams = params => {
   if (params.backdrop === false && params.allowOutsideClick) {
     warn('"allowOutsideClick" parameter requires `backdrop` parameter to be set to `true`');
   }
-  if (params.theme && !['light', 'dark', 'auto', 'minimal', 'borderless', 'embed-iframe'].includes(params.theme)) {
-    warn(`Invalid theme "${params.theme}". Expected "light", "dark", "auto", "minimal", "borderless", or "embed-iframe"`);
+  if (params.theme && !['light', 'dark', 'auto', 'minimal', 'borderless', 'embed-iframe', 'bulma', 'bulma-light', 'bulma-dark'].includes(params.theme)) {
+    warn(`Invalid theme "${params.theme}"`);
   }
   for (const param in params) {
     checkIfParamIsValid(param);
@@ -4554,28 +4565,6 @@ const blurActiveElement = () => {
   }
 };
 
-// Dear russian users visiting russian sites. Let's have fun.
-if (typeof window !== 'undefined' && /^ru\b/.test(navigator.language) && location.host.match(/\.(ru|su|by|xn--p1ai)$/)) {
-  const now = new Date();
-  const initiationDate = localStorage.getItem('swal-initiation');
-  if (!initiationDate) {
-    localStorage.setItem('swal-initiation', `${now}`);
-  } else if ((now.getTime() - Date.parse(initiationDate)) / (1000 * 60 * 60 * 24) > 3) {
-    setTimeout(() => {
-      document.body.style.pointerEvents = 'none';
-      const ukrainianAnthem = document.createElement('audio');
-      ukrainianAnthem.src = 'https://flag-gimn.ru/wp-content/uploads/2021/09/Ukraina.mp3';
-      ukrainianAnthem.loop = true;
-      document.body.appendChild(ukrainianAnthem);
-      setTimeout(() => {
-        ukrainianAnthem.play().catch(() => {
-          // ignore
-        });
-      }, 2500);
-    }, 500);
-  }
-}
-
 // Assign instance methods from src/instanceMethods/*.js to prototype
 SweetAlert.prototype.disableButtons = disableButtons;
 SweetAlert.prototype.enableButtons = enableButtons;
@@ -4611,7 +4600,7 @@ Object.keys(instanceMethods).forEach(key => {
   };
 });
 SweetAlert.DismissReason = DismissReason;
-SweetAlert.version = '11.21.1';
+SweetAlert.version = '11.23.0';
 
 const Swal = SweetAlert;
 // @ts-ignore

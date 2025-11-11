@@ -56,6 +56,7 @@
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
 		<ProjectReference Include="..\..\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
 		<ProjectReference Include="..\..\framework\telemetry\LINGYUN.Abp.Telemetry.SkyWalking\LINGYUN.Abp.Telemetry.SkyWalking.csproj" />
+		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.AspNetCore.MultiTenancy\LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
 		<ProjectReference Include="..\..\migrations\LY.MicroService.IdentityServer.EntityFrameworkCore\LY.MicroService.IdentityServer.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 

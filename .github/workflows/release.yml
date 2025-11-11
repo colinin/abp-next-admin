@@ -14,4 +14,4 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
-        automatic_release_tag: "9.2.1"
+        automatic_release_tag: "9.3.5"

@@ -37,7 +37,8 @@ export function initRequestClient() {
   async function doRefreshToken() {
     const authStore = useAuthStore();
     try {
-      return await authStore.refreshSession();
+      const token = await authStore.refreshSession();
+      return token ?? '';
     } catch {
       console.warn('The refresh token has expired or is unavailable.');
     }
@@ -59,6 +60,9 @@ export function initRequestClient() {
       config.headers['X-Request-From'] = 'vben';
       if (abpStore.tenantId) {
         config.headers.__tenant = abpStore.tenantId;
+      }
+      if (abpStore.xsrfToken) {
+        config.headers.RequestVerificationToken = abpStore.xsrfToken;
       }
       return config;
     },

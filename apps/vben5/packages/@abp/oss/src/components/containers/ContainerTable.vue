@@ -56,6 +56,7 @@ const gridOptions: VxeGridProps<OssContainerDto> = {
       align: 'left',
       field: 'name',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpOssManagement.DisplayName:Name'),
     },
     {
@@ -65,6 +66,7 @@ const gridOptions: VxeGridProps<OssContainerDto> = {
         return cellValue ? formatToDateTime(cellValue) : '';
       },
       minWidth: 120,
+      sortable: true,
       title: $t('AbpOssManagement.DisplayName:CreationDate'),
     },
     {
@@ -74,12 +76,14 @@ const gridOptions: VxeGridProps<OssContainerDto> = {
         return cellValue ? formatToDateTime(cellValue) : '';
       },
       minWidth: 120,
+      sortable: true,
       title: $t('AbpOssManagement.DisplayName:LastModifiedDate'),
     },
     {
       align: 'left',
       field: 'size',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpOssManagement.DisplayName:Size'),
     },
     {
@@ -94,8 +98,10 @@ const gridOptions: VxeGridProps<OssContainerDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         const res = await getListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -114,8 +120,9 @@ const gridOptions: VxeGridProps<OssContainerDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
@@ -126,6 +133,9 @@ const gridEvents: VxeGridListeners<OssContainerDto> = {
   },
   checkboxChange: (params) => {
     selectedKeys.value = params.records.map((record) => record.name);
+  },
+  sortChange: () => {
+    gridApi.query();
   },
 };
 
