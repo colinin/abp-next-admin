@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -38,7 +39,8 @@ public class AbpTelemetryOpenTelemetryModule : AbpModule
 
         var openTelmetrySetup = context.Services.GetPreConfigureActions<OpenTelemetryBuilder>();
 
-        if (!configuration.GetValue("OpenTelemetry:IsEnabled", false))
+        var isOpenTelmetryEnabled = configuration["OpenTelemetry:IsEnabled"];
+        if (isOpenTelmetryEnabled.IsNullOrWhiteSpace() || "false".Equals(isOpenTelmetryEnabled.ToLower()))
         {
             return;
         }
@@ -50,6 +52,12 @@ public class AbpTelemetryOpenTelemetryModule : AbpModule
         {
             applicationName = context.Services.GetApplicationName();
         }
+
+        if (applicationName.IsNullOrWhiteSpace())
+        {
+            return;
+        }
+
         var openTelmetryBuilder = context.Services
             .AddOpenTelemetry()
             .ConfigureResource(resource =>
@@ -64,6 +72,10 @@ public class AbpTelemetryOpenTelemetryModule : AbpModule
             .WithMetrics(metrics =>
             {
                 ConfigureMetrics(metrics, configuration);
+            })
+            .WithLogging(logging =>
+            {
+                ConfigureLogging(logging, configuration);
             });
 
         openTelmetrySetup.Configure(openTelmetryBuilder);
@@ -153,6 +165,22 @@ public class AbpTelemetryOpenTelemetryModule : AbpModule
 
                 otlpOptions.Headers = configuration["OpenTelemetry:Otlp:Headers"];
                 otlpOptions.Endpoint = new Uri(otlpEndPoint.EnsureEndsWith('/') + "v1/metrics");
+                otlpOptions.Protocol = configuration.GetValue("OpenTelemetry:Otlp:Protocol", otlpOptions.Protocol);
+            });
+        }
+    }
+
+    private static void ConfigureLogging(LoggerProviderBuilder logging, IConfiguration configuration)
+    {
+        if (configuration.GetValue("OpenTelemetry:Otlp:IsEnabled", false))
+        {
+            logging.AddOtlpExporter(otlpOptions =>
+            {
+                var otlpEndPoint = configuration["OpenTelemetry:Otlp:Endpoint"];
+                Check.NotNullOrWhiteSpace(otlpEndPoint, nameof(otlpEndPoint));
+
+                otlpOptions.Headers = configuration["OpenTelemetry:Otlp:Headers"];
+                otlpOptions.Endpoint = new Uri(otlpEndPoint.EnsureEndsWith('/') + "v1/logs");
                 otlpOptions.Protocol = configuration.GetValue("OpenTelemetry:Otlp:Protocol", otlpOptions.Protocol);
             });
         }

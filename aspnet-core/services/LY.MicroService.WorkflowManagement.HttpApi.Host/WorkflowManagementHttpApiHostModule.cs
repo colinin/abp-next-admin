@@ -25,6 +25,7 @@ using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
 using LINGYUN.Abp.Telemetry.SkyWalking;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -87,6 +88,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpMailKitModule),
     typeof(AbpClaimsMappingModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpAspNetCoreMvcNewtonsoftModule),
     typeof(AbpAspNetCoreHttpOverridesModule),

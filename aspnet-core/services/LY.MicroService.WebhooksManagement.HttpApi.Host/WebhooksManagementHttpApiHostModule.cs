@@ -20,6 +20,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
 using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.Webhooks.EventBus;
 using LINGYUN.Abp.Webhooks.Identity;
@@ -84,6 +85,7 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(AbpClaimsMappingModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),

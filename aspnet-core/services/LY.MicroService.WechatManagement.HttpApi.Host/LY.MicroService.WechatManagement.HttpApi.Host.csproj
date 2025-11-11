@@ -53,6 +53,7 @@
 		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
 		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
 		<ProjectReference Include="..\..\framework\telemetry\LINGYUN.Abp.Telemetry.OpenTelemetry\LINGYUN.Abp.Telemetry.OpenTelemetry.csproj" />
+		<ProjectReference Include="..\..\framework\telemetry\LINGYUN.Abp.Telemetry.SkyWalking\LINGYUN.Abp.Telemetry.SkyWalking.csproj" />
 		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.Identity.WeChat.Work\LINGYUN.Abp.Identity.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />

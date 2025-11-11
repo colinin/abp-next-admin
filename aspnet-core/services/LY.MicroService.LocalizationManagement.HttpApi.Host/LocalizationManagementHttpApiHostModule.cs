@@ -15,6 +15,7 @@ using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
 using LINGYUN.Abp.Telemetry.SkyWalking;
 using LY.MicroService.LocalizationManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
@@ -57,6 +58,7 @@ namespace LY.MicroService.LocalizationManagement;
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpHttpClientModule),
     typeof(AbpSmsPlatformModule),

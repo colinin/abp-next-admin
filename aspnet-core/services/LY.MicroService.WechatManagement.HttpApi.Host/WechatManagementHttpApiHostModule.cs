@@ -14,6 +14,7 @@ using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Telemetry.OpenTelemetry;
+using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.WeChat.MiniProgram;
 using LINGYUN.Abp.WeChat.Official;
 using LINGYUN.Abp.WeChat.SettingManagement;
@@ -77,6 +78,7 @@ namespace LY.MicroService.WechatManagement;
     typeof(AbpMailKitModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpTelemetryOpenTelemetryModule),
+    typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpIdentitySessionAspNetCoreModule),

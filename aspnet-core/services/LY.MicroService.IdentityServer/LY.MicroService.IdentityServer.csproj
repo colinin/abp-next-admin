@@ -28,10 +28,6 @@
 		<PackageReference Include="Serilog.Sinks.File" />
 		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
-		<!--<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>-->
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" />
@@ -55,6 +51,7 @@
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
 		<ProjectReference Include="..\..\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
+		<ProjectReference Include="..\..\framework\telemetry\LINGYUN.Abp.Telemetry.OpenTelemetry\LINGYUN.Abp.Telemetry.OpenTelemetry.csproj" />
 		<ProjectReference Include="..\..\framework\telemetry\LINGYUN.Abp.Telemetry.SkyWalking\LINGYUN.Abp.Telemetry.SkyWalking.csproj" />
 		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.AspNetCore.MultiTenancy\LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
 		<ProjectReference Include="..\..\migrations\LY.MicroService.IdentityServer.EntityFrameworkCore\LY.MicroService.IdentityServer.EntityFrameworkCore.csproj" />
