@@ -15,11 +15,14 @@ public class AbpNotificationsApplicationAutoMapperProfile : Profile
                 if (src != null)
                 {
                     var dataType = Type.GetType(src.NotificationTypeName);
-                    var data = Activator.CreateInstance(dataType);
-                    if (data is NotificationData notificationData)
+                    if (dataType != null)
                     {
-                        notificationData.ExtraProperties = src.ExtraProperties;
-                        return notificationData;
+                        var data = Activator.CreateInstance(dataType);
+                        if (data is NotificationData notificationData)
+                        {
+                            notificationData.ExtraProperties = src.ExtraProperties;
+                            return notificationData;
+                        }
                     }
                 }
                 return new NotificationData();
