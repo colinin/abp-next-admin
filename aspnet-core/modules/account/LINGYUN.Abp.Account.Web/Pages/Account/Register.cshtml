@@ -8,6 +8,8 @@
     <div class="card-body p-5">
         <h4>@L["Register"]</h4>
         <form method="post" class="mt-4">
+            <input asp-for="ReturnUrl" />
+            <input asp-for="ReturnUrlHash" />
             @if (Model.EnableLocalRegister || Model.IsExternalLogin)
             {
                 <abp-input asp-for="Input.UserName" auto-focus="true" />
