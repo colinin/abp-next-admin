@@ -2,6 +2,7 @@
 using LINGYUN.Abp.Account.Web.OAuth;
 using LINGYUN.Abp.Account.Web.OpenIddict;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.MultiTenancy;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobStoring.OssManagement;
@@ -69,6 +70,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpTelemetrySkyWalkingModule),
@@ -84,10 +86,10 @@ public partial class AuthServerModule : AbpModule
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-        PreConfigureAuth();
         PreConfigureWrapper();
         PreConfigureFeature();
         PreForwardedHeaders();
+        PreConfigureAuthServer();
         PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
@@ -110,6 +112,7 @@ public partial class AuthServerModule : AbpModule
         ConfigureUrls(configuration);
         ConfigureTiming(configuration);
         ConfigureAuditing(configuration);
+        ConfigureAuthServer(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);

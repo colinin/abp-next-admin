@@ -9,7 +9,15 @@ export const overridesPreferences = defineOverridesPreferences({
   // overrides
   app: {
     accessMode: 'backend',
+    defaultHomePath: '/workspace',
     enableRefreshToken: true,
     name: import.meta.env.VITE_APP_TITLE,
+  },
+  theme: {
+    mode: 'auto',
+    radius: '0.25',
+  },
+  widget: {
+    notification: false,
   },
 });

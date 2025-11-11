@@ -76,6 +76,7 @@ public class LocalizationTextStoreCache : ILocalizationTextStoreCache, ISingleto
 
     protected async virtual Task<LocalizationTextCacheItem> GetCacheItemAsync(LocalizationResourceBase resource, string cultureName)
     {
+        // 异步本地化函数不受影响
         var cacheKey = LocalizationTextCacheItem.CalculateCacheKey(resource.ResourceName, cultureName);
         var cacheItem = await LocalizationTextCache.GetAsync(cacheKey);
         if (cacheItem != null)

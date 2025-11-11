@@ -249,7 +249,7 @@ async function init() {
   const enableProxyConfig = options.value.proxyConfig?.enabled;
   if (enableProxyConfig && autoLoad) {
     props.api.grid.commitProxy?.(
-      '_init',
+      'initial',
       formOptions.value ? ((await formApi.getValues()) ?? {}) : {},
     );
     // props.api.reload(formApi.form?.values ?? {});

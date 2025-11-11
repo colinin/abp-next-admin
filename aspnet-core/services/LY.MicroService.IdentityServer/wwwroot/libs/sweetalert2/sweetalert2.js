@@ -1,5 +1,5 @@
 /*!
-* sweetalert2 v11.17.2
+* sweetalert2 v11.23.0
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -72,7 +72,7 @@
    */
 
   /** @type {SwalClass[]} */
-  const classNames = ['container', 'shown', 'height-auto', 'iosfix', 'popup', 'modal', 'no-backdrop', 'no-transition', 'toast', 'toast-shown', 'show', 'hide', 'close', 'title', 'html-container', 'actions', 'confirm', 'deny', 'cancel', 'default-outline', 'footer', 'icon', 'icon-content', 'image', 'input', 'file', 'range', 'select', 'radio', 'checkbox', 'label', 'textarea', 'inputerror', 'input-label', 'validation-message', 'progress-steps', 'active-progress-step', 'progress-step', 'progress-step-line', 'loader', 'loading', 'styled', 'top', 'top-start', 'top-end', 'top-left', 'top-right', 'center', 'center-start', 'center-end', 'center-left', 'center-right', 'bottom', 'bottom-start', 'bottom-end', 'bottom-left', 'bottom-right', 'grow-row', 'grow-column', 'grow-fullscreen', 'rtl', 'timer-progress-bar', 'timer-progress-bar-container', 'scrollbar-measure', 'icon-success', 'icon-warning', 'icon-info', 'icon-question', 'icon-error', 'draggable', 'dragging'];
+  const classNames = ['container', 'shown', 'height-auto', 'iosfix', 'popup', 'modal', 'no-backdrop', 'no-transition', 'toast', 'toast-shown', 'show', 'hide', 'close', 'title', 'html-container', 'actions', 'confirm', 'deny', 'cancel', 'footer', 'icon', 'icon-content', 'image', 'input', 'file', 'range', 'select', 'radio', 'checkbox', 'label', 'textarea', 'inputerror', 'input-label', 'validation-message', 'progress-steps', 'active-progress-step', 'progress-step', 'progress-step-line', 'loader', 'loading', 'styled', 'top', 'top-start', 'top-end', 'top-left', 'top-right', 'center', 'center-start', 'center-end', 'center-left', 'center-right', 'bottom', 'bottom-start', 'bottom-end', 'bottom-left', 'bottom-right', 'grow-row', 'grow-column', 'grow-fullscreen', 'rtl', 'timer-progress-bar', 'timer-progress-bar-container', 'scrollbar-measure', 'icon-success', 'icon-warning', 'icon-info', 'icon-question', 'icon-error', 'draggable', 'dragging'];
   const swalClasses = classNames.reduce((acc, className) => {
     acc[className] = swalPrefix + className;
     return acc;
@@ -139,8 +139,7 @@
    * @param {string} deprecatedParam
    * @param {string?} useInstead
    */
-  const warnAboutDeprecation = function (deprecatedParam) {
-    let useInstead = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  const warnAboutDeprecation = (deprecatedParam, useInstead = null) => {
     warnOnce(`"${deprecatedParam}" is deprecated and will be removed in the next major release.${useInstead ? ` Use "${useInstead}" instead.` : ''}`);
   };
 
@@ -561,8 +560,7 @@
    * @param {HTMLElement | null} elem
    * @param {string} display
    */
-  const show = function (elem) {
-    let display = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'flex';
+  const show = (elem, display = 'flex') => {
     if (!elem) {
       return;
     }
@@ -583,8 +581,7 @@
    * @param {HTMLElement | null} elem
    * @param {string} display
    */
-  const showWhenInnerHtmlPresent = function (elem) {
-    let display = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'block';
+  const showWhenInnerHtmlPresent = (elem, display = 'block') => {
     if (!elem) {
       return;
     }
@@ -615,8 +612,7 @@
    * @param {any} condition
    * @param {string} display
    */
-  const toggle = function (elem, condition) {
-    let display = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'flex';
+  const toggle = (elem, condition, display = 'flex') => {
     if (condition) {
       show(elem, display);
     } else {
@@ -644,6 +640,22 @@
   const isScrollable = elem => !!(elem.scrollHeight > elem.clientHeight);
 
   /**
+   * @param {HTMLElement} element
+   * @param {HTMLElement} stopElement
+   * @returns {boolean}
+   */
+  const selfOrParentIsScrollable = (element, stopElement) => {
+    let parent = element;
+    while (parent && parent !== stopElement) {
+      if (isScrollable(parent)) {
+        return true;
+      }
+      parent = parent.parentElement;
+    }
+    return false;
+  };
+
+  /**
    * borrowed from https://stackoverflow.com/a/46352119
    *
    * @param {HTMLElement} elem
@@ -660,8 +672,7 @@
    * @param {number} timer
    * @param {boolean} reset
    */
-  const animateTimerProgressBar = function (timer) {
-    let reset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  const animateTimerProgressBar = (timer, reset = false) => {
     const timerProgressBar = getTimerProgressBar();
     if (!timerProgressBar) {
       return;
@@ -802,7 +813,7 @@
   };
 
   /**
-   * Add modal + backdrop + no-war message for Russians to DOM
+   * Add modal + backdrop to DOM
    *
    * @param {SweetAlertOptions} params
    */
@@ -822,6 +833,10 @@
     container.dataset['swal2Theme'] = params.theme;
     const targetElement = getTarget(params.target);
     targetElement.appendChild(container);
+    if (params.topLayer) {
+      container.setAttribute('popover', '');
+      container.showPopover();
+    }
     setupAccessibility(params);
     setupRTL(targetElement);
     addInputChangeListeners();
@@ -951,19 +966,34 @@
     }
     addClass([confirmButton, denyButton, cancelButton], swalClasses.styled);
 
-    // Buttons background colors
+    // Apply custom background colors to action buttons
     if (params.confirmButtonColor) {
-      confirmButton.style.backgroundColor = params.confirmButtonColor;
-      addClass(confirmButton, swalClasses['default-outline']);
+      confirmButton.style.setProperty('--swal2-confirm-button-background-color', params.confirmButtonColor);
     }
     if (params.denyButtonColor) {
-      denyButton.style.backgroundColor = params.denyButtonColor;
-      addClass(denyButton, swalClasses['default-outline']);
+      denyButton.style.setProperty('--swal2-deny-button-background-color', params.denyButtonColor);
     }
     if (params.cancelButtonColor) {
-      cancelButton.style.backgroundColor = params.cancelButtonColor;
-      addClass(cancelButton, swalClasses['default-outline']);
+      cancelButton.style.setProperty('--swal2-cancel-button-background-color', params.cancelButtonColor);
     }
+
+    // Apply the outline color to action buttons
+    applyOutlineColor(confirmButton);
+    applyOutlineColor(denyButton);
+    applyOutlineColor(cancelButton);
+  }
+
+  /**
+   * @param {HTMLElement} button
+   */
+  function applyOutlineColor(button) {
+    const buttonStyle = window.getComputedStyle(button);
+    if (buttonStyle.getPropertyValue('--swal2-action-button-focus-box-shadow')) {
+      // If the button already has a custom outline color, no need to change it
+      return;
+    }
+    const outlineColor = buttonStyle.backgroundColor.replace(/rgba?\((\d+), (\d+), (\d+).*/, 'rgba($1, $2, $3, 0.5)');
+    button.style.setProperty('--swal2-action-button-focus-box-shadow', buttonStyle.getPropertyValue('--swal2-outline').replace(/ rgba\(.*/, ` ${outlineColor}`));
   }
 
   /**
@@ -1487,11 +1517,18 @@
       successIconParts[i].style.backgroundColor = popupBackgroundColor;
     }
   };
-  const successIconHtml = `
-  <div class="swal2-success-circular-line-left"></div>
+
+  /**
+   *
+   * @param {SweetAlertOptions} params
+   * @returns {string}
+   */
+  const successIconHtml = params => `
+  ${params.animation ? '<div class="swal2-success-circular-line-left"></div>' : ''}
   <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span>
-  <div class="swal2-success-ring"></div> <div class="swal2-success-fix"></div>
-  <div class="swal2-success-circular-line-right"></div>
+  <div class="swal2-success-ring"></div>
+  ${params.animation ? '<div class="swal2-success-fix"></div>' : ''}
+  ${params.animation ? '<div class="swal2-success-circular-line-right"></div>' : ''}
 `;
   const errorIconHtml = `
   <span class="swal2-x-mark">
@@ -1513,7 +1550,7 @@
     if (params.iconHtml) {
       newContent = iconContent(params.iconHtml);
     } else if (params.icon === 'success') {
-      newContent = successIconHtml;
+      newContent = successIconHtml(params);
       oldContent = oldContent.replace(/ style=".*?"/g, ''); // undo adjustSuccessIconBackgroundColor()
     } else if (params.icon === 'error') {
       newContent = errorIconHtml;
@@ -1929,6 +1966,11 @@
     if (focusableElements.length) {
       index = index + increment;
 
+      // shift + tab when .swal2-popup is focused
+      if (index === -2) {
+        index = focusableElements.length - 1;
+      }
+
       // rollover to first item
       if (index === focusableElements.length) {
         index = 0;
@@ -2075,8 +2117,8 @@
    * @param {Function} dismissWith
    */
   const handleEsc = (event, innerParams, dismissWith) => {
+    event.preventDefault();
     if (callIfFunction(innerParams.allowEscapeKey)) {
-      event.preventDefault();
       dismissWith(DismissReason.esc);
     }
   };
@@ -2186,7 +2228,9 @@
     if (target === container) {
       return true;
     }
-    if (!isScrollable(container) && target instanceof HTMLElement && target.tagName !== 'INPUT' &&
+    if (!isScrollable(container) && target instanceof HTMLElement && !selfOrParentIsScrollable(target, htmlContainer) &&
+    // #2823
+    target.tagName !== 'INPUT' &&
     // #1603
     target.tagName !== 'TEXTAREA' &&
     // #2266
@@ -3137,7 +3181,8 @@
     willClose: undefined,
     didClose: undefined,
     didDestroy: undefined,
-    scrollbarPadding: true
+    scrollbarPadding: true,
+    topLayer: false
   };
   const updatableParams = ['allowEscapeKey', 'allowOutsideClick', 'background', 'buttonsStyling', 'cancelButtonAriaLabel', 'cancelButtonColor', 'cancelButtonText', 'closeButtonAriaLabel', 'closeButtonHtml', 'color', 'confirmButtonAriaLabel', 'confirmButtonColor', 'confirmButtonText', 'currentProgressStep', 'customClass', 'denyButtonAriaLabel', 'denyButtonColor', 'denyButtonText', 'didClose', 'didDestroy', 'draggable', 'footer', 'hideClass', 'html', 'icon', 'iconColor', 'iconHtml', 'imageAlt', 'imageHeight', 'imageUrl', 'imageWidth', 'preConfirm', 'preDeny', 'progressSteps', 'returnFocus', 'reverseButtons', 'showCancelButton', 'showCloseButton', 'showConfirmButton', 'showDenyButton', 'text', 'title', 'titleText', 'theme', 'willClose'];
 
@@ -3214,8 +3259,8 @@
     if (params.backdrop === false && params.allowOutsideClick) {
       warn('"allowOutsideClick" parameter requires `backdrop` parameter to be set to `true`');
     }
-    if (params.theme && !['light', 'dark', 'auto', 'borderless'].includes(params.theme)) {
-      warn(`Invalid theme "${params.theme}". Expected "light", "dark", "auto", or "borderless"`);
+    if (params.theme && !['light', 'dark', 'auto', 'minimal', 'borderless', 'embed-iframe', 'bulma', 'bulma-light', 'bulma-dark'].includes(params.theme)) {
+      warn(`Invalid theme "${params.theme}"`);
     }
     for (const param in params) {
       checkIfParamIsValid(param);
@@ -3490,10 +3535,7 @@
    * @param  {...SweetAlertOptions} args
    * @returns {Promise<SweetAlertResult>}
    */
-  function fire() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+  function fire(...args) {
     return new this(...args);
   }
 
@@ -3606,8 +3648,7 @@
   /**
    * @param {string} attr
    */
-  function bindClickHandler() {
-    let attr = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'data-swal-template';
+  function bindClickHandler(attr = 'data-swal-template') {
     clickHandlers[attr] = this;
     if (!bodyClickListenerAdded) {
       document.body.addEventListener('click', bodyClickListener);
@@ -3665,16 +3706,12 @@
      * @param {EventHandler} eventHandler
      */
     once(eventName, eventHandler) {
-      var _this = this;
       /**
        * @param {Array} args
        */
-      const onceFn = function () {
-        _this.removeListener(eventName, onceFn);
-        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-          args[_key] = arguments[_key];
-        }
-        eventHandler.apply(_this, args);
+      const onceFn = (...args) => {
+        this.removeListener(eventName, onceFn);
+        eventHandler.apply(this, args);
       };
       this.on(eventName, onceFn);
     }
@@ -3683,10 +3720,7 @@
      * @param {string} eventName
      * @param {Array} args
      */
-    emit(eventName) {
-      for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-        args[_key2 - 1] = arguments[_key2];
-      }
+    emit(eventName, ...args) {
       this._getHandlersByEventName(eventName).forEach(
       /**
        * @param {EventHandler} eventHandler
@@ -4286,7 +4320,7 @@
      * @param {...any} args
      * @this {SweetAlert}
      */
-    constructor() {
+    constructor(...args) {
       /**
        * @type {Promise<SweetAlertResult>}
        */
@@ -4298,9 +4332,6 @@
       currentInstance = this;
 
       // @ts-ignore
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
       const outerParams = Object.freeze(this.constructor.argsToParams(args));
 
       /** @type {Readonly<SweetAlertOptions>} */
@@ -4310,8 +4341,7 @@
       this.isAwaitingPromise = false;
       _classPrivateFieldSet2(_promise, this, this._main(currentInstance.params));
     }
-    _main(userParams) {
-      let mixinParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    _main(userParams, mixinParams = {}) {
       showWarningsForParams(Object.assign({}, mixinParams, userParams));
       if (globalState.currentInstance) {
         const swalPromiseResolve = privateMethods.swalPromiseResolve.get(globalState.currentInstance);
@@ -4541,28 +4571,6 @@
     }
   };
 
-  // Dear russian users visiting russian sites. Let's have fun.
-  if (typeof window !== 'undefined' && /^ru\b/.test(navigator.language) && location.host.match(/\.(ru|su|by|xn--p1ai)$/)) {
-    const now = new Date();
-    const initiationDate = localStorage.getItem('swal-initiation');
-    if (!initiationDate) {
-      localStorage.setItem('swal-initiation', `${now}`);
-    } else if ((now.getTime() - Date.parse(initiationDate)) / (1000 * 60 * 60 * 24) > 3) {
-      setTimeout(() => {
-        document.body.style.pointerEvents = 'none';
-        const ukrainianAnthem = document.createElement('audio');
-        ukrainianAnthem.src = 'https://flag-gimn.ru/wp-content/uploads/2021/09/Ukraina.mp3';
-        ukrainianAnthem.loop = true;
-        document.body.appendChild(ukrainianAnthem);
-        setTimeout(() => {
-          ukrainianAnthem.play().catch(() => {
-            // ignore
-          });
-        }, 2500);
-      }, 500);
-    }
-  }
-
   // Assign instance methods from src/instanceMethods/*.js to prototype
   SweetAlert.prototype.disableButtons = disableButtons;
   SweetAlert.prototype.enableButtons = enableButtons;
@@ -4590,15 +4598,15 @@
      * @param {...any} args
      * @returns {any | undefined}
      */
-    SweetAlert[key] = function () {
+    SweetAlert[key] = function (...args) {
       if (currentInstance && currentInstance[key]) {
-        return currentInstance[key](...arguments);
+        return currentInstance[key](...args);
       }
       return null;
     };
   });
   SweetAlert.DismissReason = DismissReason;
-  SweetAlert.version = '11.17.2';
+  SweetAlert.version = '11.23.0';
 
   const Swal = SweetAlert;
   // @ts-ignore

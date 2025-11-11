@@ -29,24 +29,28 @@ const gridOptions: VxeGridProps<EntityTypeInfoDto> = {
       align: 'left',
       field: 'name',
       minWidth: 150,
+      sortable: true,
       title: $t('DataProtection.DisplayName:Name'),
     },
     {
       align: 'left',
       field: 'displayName',
       minWidth: 150,
+      sortable: true,
       title: $t('DataProtection.DisplayName:DisplayName'),
     },
     {
       align: 'left',
       field: 'typeFullName',
       minWidth: 200,
+      sortable: true,
       title: $t('DataProtection.DisplayName:TypeFullName'),
     },
     {
       align: 'left',
       field: 'isAuditEnabled',
       minWidth: 150,
+      sortable: true,
       title: $t('DataProtection.DisplayName:IsAuditEnabled'),
     },
     {
@@ -61,8 +65,10 @@ const gridOptions: VxeGridProps<EntityTypeInfoDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         const { totalCount, items } = await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -85,14 +91,19 @@ const gridOptions: VxeGridProps<EntityTypeInfoDto> = {
     },
   },
   toolbarConfig: {
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
   },
 };
 
 const gridEvents: VxeGridListeners<EntityTypeInfoDto> = {
   cellClick: () => {},
+  sortChange: () => {
+    gridApi.query();
+  },
 };
-const [Grid] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   gridEvents,
   gridOptions,
 });

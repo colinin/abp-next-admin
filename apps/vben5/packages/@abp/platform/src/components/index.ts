@@ -4,3 +4,5 @@ export { default as MenuAllotModal } from './menus/MenuAllotModal.vue';
 export { default as MenuTable } from './menus/MenuTable.vue';
 export { default as EmailMessageTable } from './messages/email/EmailMessageTable.vue';
 export { default as SmsMessageTable } from './messages/sms/SmsMessageTable.vue';
+export { default as Workbench } from './workbench/index.vue';
+export * from './workbench/types';

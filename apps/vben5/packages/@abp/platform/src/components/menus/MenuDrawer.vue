@@ -1,18 +1,14 @@
 <script setup lang="ts">
 import type { MenuDto } from '../../types';
 import type { DataItemDto } from '../../types/dataDictionaries';
+import type { MenuDrawerState } from './types';
 
 import { ref } from 'vue';
 
 import { useVbenDrawer, useVbenForm } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  formatToDate,
-  formatToDateTime,
-  isNullOrWhiteSpace,
-  listToTree,
-} from '@abp/core';
+import { formatToDate, formatToDateTime, isNullOrWhiteSpace } from '@abp/core';
 import { Button, Card, message, Steps } from 'ant-design-vue';
 
 import { useMenusApi } from '../../api';
@@ -38,7 +34,7 @@ const parentMenu = ref<MenuDto>();
 const menuMetas = ref<DataItemDto[]>([]);
 const activeTabKey = ref<TabKey>('basic');
 
-const { createApi, getAllApi, getApi, updateApi } = useMenusApi();
+const { createApi, getApi, updateApi } = useMenusApi();
 const { getApi: getLayoutApi, getPagedListApi: getLayoutsApi } =
   useLayoutsApi();
 const { getApi: getDataDictionaryApi } = useDataDictionariesApi();
@@ -85,20 +81,14 @@ const [BasicForm, basicFormApi] = useVbenForm({
       },
     },
     {
-      component: 'ApiTreeSelect',
+      component: 'TreeSelect',
       componentProps: {
         allowClear: true,
-        api: async () => {
-          const { items } = await getAllApi();
-          return listToTree(items, {
-            id: 'id',
-            pid: 'parentId',
-          });
+        fieldNames: {
+          label: 'displayName',
+          value: 'id',
         },
-        labelField: 'displayName',
         onChange: onParentIdChange,
-        valueField: 'id',
-        childrenField: 'children',
       },
       fieldName: 'parentId',
       label: $t('AppPlatform.DisplayName:ParentMenu'),
@@ -183,6 +173,7 @@ async function onNextStep() {
 
 async function onInit() {
   metaFormApi.removeSchemaByFields(menuMetas.value.map((x) => x.name));
+  const { editMenu, rootMenus } = drawerApi.getData<MenuDrawerState>();
   basicFormApi.resetForm();
   metaFormApi.resetForm();
   activeTabKey.value = 'basic';
@@ -191,18 +182,18 @@ async function onInit() {
   submiting.value = false;
   menuMetas.value = [];
   currentStep.value = 0;
-  const { id, layoutId, parentId } = drawerApi.getData<MenuDto>();
-  if (!isNullOrWhiteSpace(layoutId)) {
-    await onLayoutChange(layoutId);
-    await basicFormApi.setFieldValue('layoutId', layoutId);
+  onInitRootMenus(rootMenus);
+  if (!isNullOrWhiteSpace(editMenu?.layoutId)) {
+    await onLayoutChange(editMenu!.layoutId);
+    await basicFormApi.setFieldValue('layoutId', editMenu!.layoutId);
   }
-  if (isNullOrWhiteSpace(id)) {
-    await basicFormApi.setFieldValue('parentId', parentId);
-    await onParentIdChange(parentId);
+  if (isNullOrWhiteSpace(editMenu?.id)) {
+    await basicFormApi.setFieldValue('parentId', editMenu!.parentId);
+    await onParentIdChange(editMenu!.parentId);
     drawerApi.setState({ title: $t('AppPlatform.Menu:AddNew') });
     return;
   }
-  const dto = await getApi(id);
+  const dto = await getApi(editMenu!.id);
   await basicFormApi.setValues(dto);
   // 编辑模式无需使用前缀
   await onParentIdChange(undefined);
@@ -250,6 +241,17 @@ async function onLayoutChange(layoutId?: string) {
   } finally {
     drawerApi.setState({ loading: false });
   }
+}
+
+function onInitRootMenus(rootMenus: MenuDto[]) {
+  basicFormApi.updateSchema([
+    {
+      fieldName: 'parentId',
+      componentProps: {
+        treeData: rootMenus,
+      },
+    },
+  ]);
 }
 
 function onInitMetaFormSchemas() {

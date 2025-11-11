@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.WeChat.Work.Common.Messages;
 /// <summary>
-/// 微信公众号消息处理器
+/// 企业微信消息处理器
 /// </summary>
 public class WeChatWorkMessageResolveContributor : WeChatWorkMessageResolveContributorBase
 {

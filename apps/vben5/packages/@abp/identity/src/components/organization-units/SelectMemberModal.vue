@@ -68,22 +68,24 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 const gridOptions: VxeGridProps<IdentityUserDto> = {
-  checkboxConfig: {
-    highlight: true,
-    labelField: 'userName',
-  },
   columns: [
+    {
+      align: 'center',
+      type: 'checkbox',
+      width: 80,
+    },
     {
       align: 'left',
       field: 'userName',
       minWidth: '100px',
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:UserName'),
-      type: 'checkbox',
     },
     {
       align: 'left',
       field: 'email',
       minWidth: '120px',
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:Email'),
     },
   ],
@@ -91,12 +93,14 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         const state = modalApi.getData<Record<string, any>>();
         return await getUnaddedUserListApi({
           id: state.id,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
+          sorting,
           ...formValues,
         });
       },
@@ -107,7 +111,11 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
       list: 'items',
     },
   },
-  toolbarConfig: {},
+  toolbarConfig: {
+    refresh: {
+      code: 'query',
+    },
+  },
 };
 
 const gridEvents: VxeGridListeners<IdentityUserDto> = {
@@ -117,15 +125,18 @@ const gridEvents: VxeGridListeners<IdentityUserDto> = {
   checkboxChange: (e) => {
     selectedUsers.value = e.records;
   },
+  sortChange: () => {
+    gridApi.query();
+  },
 };
-const [Grid, { query }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
   gridOptions,
 });
 
 function onRefresh() {
-  nextTick(query);
+  nextTick(gridApi.query);
 }
 </script>
 

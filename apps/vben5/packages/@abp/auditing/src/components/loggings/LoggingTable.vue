@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { SortOrder } from '@abp/core';
 import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 
 import type { VbenFormProps } from '@vben/common-ui';
@@ -74,6 +73,11 @@ const formOptions: VbenFormProps = {
       ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD HH:mm:ss'],
     ],
   ],
+  commonConfig: {
+    componentProps: {
+      allowClear: true,
+    },
+  },
   schema: [
     {
       component: 'Select',
@@ -253,8 +257,10 @@ const gridOptions: VxeGridProps<LogDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -272,8 +278,9 @@ const gridOptions: VxeGridProps<LogDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
@@ -285,7 +292,9 @@ const gridEvents: VxeGridListeners<LogDto> = {
   checkboxChange: (params) => {
     selectedKeys.value = params.records.map((x) => x.fields.id);
   },
-  sortChange: onSort,
+  sortChange: () => {
+    gridApi.query();
+  },
 };
 
 const [Grid, gridApi] = useVbenVxeGrid({
@@ -300,11 +309,6 @@ const [LoggingDrawer, logDrawerApi] = useVbenDrawer({
 function onUpdate(row: LogDto) {
   logDrawerApi.setData(row);
   logDrawerApi.open();
-}
-
-function onSort(params: { field: string; order: SortOrder }) {
-  const sorting = params.order ? `${params.field} ${params.order}` : undefined;
-  gridApi.query({ sorting });
 }
 
 function onFilter(field: string, value: any) {

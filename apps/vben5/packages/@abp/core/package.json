@@ -38,13 +38,20 @@
     "@vueuse/core": "catalog:",
     "dayjs": "catalog:",
     "lodash.groupby": "catalog:",
+    "lodash.isdate": "catalog:",
+    "lodash.isnumber": "catalog:",
     "lodash.merge": "catalog:",
+    "lodash.sortby": "catalog:",
     "pinia": "catalog:",
     "pinia-plugin-persistedstate": "catalog:",
+    "universal-cookie": "catalog:",
     "vue": "catalog:"
   },
   "devDependencies": {
     "@types/lodash.groupby": "catalog:",
-    "@types/lodash.merge": "catalog:"
+    "@types/lodash.isdate": "catalog:",
+    "@types/lodash.isnumber": "catalog:",
+    "@types/lodash.merge": "catalog:",
+    "@types/lodash.sortby": "catalog:"
   }
 }
