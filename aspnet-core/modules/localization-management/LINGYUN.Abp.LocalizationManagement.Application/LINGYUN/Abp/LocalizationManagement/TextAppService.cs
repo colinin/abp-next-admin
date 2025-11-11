@@ -6,8 +6,8 @@ using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.LocalizationManagement;
 
-[Authorize(LocalizationManagementPermissions.Text.Default)]
 [RequiresFeature(LocalizationManagementFeatures.Enable)]
+[Authorize(LocalizationManagementPermissions.Text.Default)]
 public class TextAppService : LocalizationAppServiceBase, ITextAppService
 {
     private readonly ITextRepository _textRepository;
