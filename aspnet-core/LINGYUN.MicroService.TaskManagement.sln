@@ -186,6 +186,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Saas.EntityFram
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.MultiTenancy.Saas", "modules\saas\LINGYUN.Abp.MultiTenancy.Saas\LINGYUN.Abp.MultiTenancy.Saas.csproj", "{E09374FE-6B13-D69E-B171-94C63E6B80E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Telemetry.OpenTelemetry", "framework\telemetry\LINGYUN.Abp.Telemetry.OpenTelemetry\LINGYUN.Abp.Telemetry.OpenTelemetry.csproj", "{164E4514-4E84-F13A-E24E-2A743753CDB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -480,6 +482,10 @@ Global
 		{E09374FE-6B13-D69E-B171-94C63E6B80E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E09374FE-6B13-D69E-B171-94C63E6B80E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E09374FE-6B13-D69E-B171-94C63E6B80E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{164E4514-4E84-F13A-E24E-2A743753CDB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{164E4514-4E84-F13A-E24E-2A743753CDB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164E4514-4E84-F13A-E24E-2A743753CDB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{164E4514-4E84-F13A-E24E-2A743753CDB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -557,6 +563,7 @@ Global
 		{618C7EAF-8D6C-50B5-84E4-AE733CEA4A8C} = {DE7B8B71-635D-4113-AA49-B218D6998CEC}
 		{F58A7141-AC0D-26EC-F22A-DF0DB1BA6955} = {DE7B8B71-635D-4113-AA49-B218D6998CEC}
 		{E09374FE-6B13-D69E-B171-94C63E6B80E5} = {DE7B8B71-635D-4113-AA49-B218D6998CEC}
+		{164E4514-4E84-F13A-E24E-2A743753CDB3} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}
