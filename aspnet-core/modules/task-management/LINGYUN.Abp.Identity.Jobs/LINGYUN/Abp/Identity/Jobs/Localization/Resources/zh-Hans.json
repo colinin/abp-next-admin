@@ -1,0 +1,9 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "InactiveIdentitySessionCleanupJob": "不活跃会话清理作业",
+    "InactiveIdentityUserCleanupJob": "不活跃用户清理作业",
+    "DisplayName:SessionInactiveDays": "不活跃会话保持时长",
+    "Description:SessionInactiveDays": "不活跃会话保持时长,单位: 天."
+  }
+}
