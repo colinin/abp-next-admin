@@ -41,7 +41,7 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
             HttpMethod.Post,
             urlBuilder.ToString())
         {
-            Content = HttpContentBuildHelper.BuildUploadMediaContent("media", fileBytes, request.Content.FileName)
+            Content = WeChatWorkHttpContentBuildHelper.BuildUploadMediaContent("media", fileBytes, request.Content.FileName)
         };
 
         return await client.SendAsync(httpRequest, cancellationToken);
@@ -61,7 +61,7 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
             HttpMethod.Post,
             urlBuilder.ToString())
         {
-            Content = HttpContentBuildHelper.BuildUploadMediaContent("file", fileBytes, request.Content.FileName)
+            Content = WeChatWorkHttpContentBuildHelper.BuildUploadMediaContent("file", fileBytes, request.Content.FileName)
         };
 
         return await client.SendAsync(httpRequest, cancellationToken);
