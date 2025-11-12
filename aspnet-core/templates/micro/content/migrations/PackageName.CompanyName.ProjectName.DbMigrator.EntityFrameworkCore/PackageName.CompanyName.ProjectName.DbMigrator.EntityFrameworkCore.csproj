@@ -17,7 +17,7 @@
 		</PackageReference>
 		<PackageReference Include="LINGYUN.Abp.Data.DbMigrator" />
 		<PackageReference Include="LINGYUN.Abp.Saas.EntityFrameworkCore" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql" Condition="'$(MySQL)'=='true'" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySql.Pomelo" Condition="'$(MySQL)'=='true'" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Condition="'$(SqlServer)'=='true'" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Condition="'$(Sqlite)'=='true'" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Oracle" Condition="'$(Oracle)'=='true'" />

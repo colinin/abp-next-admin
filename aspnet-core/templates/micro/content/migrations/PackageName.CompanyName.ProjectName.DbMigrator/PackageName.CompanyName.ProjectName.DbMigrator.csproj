@@ -27,13 +27,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\PackageName.CompanyName.ProjectName.DbMigrator.EntityFrameworkCore\PackageName.CompanyName.ProjectName.DbMigrator.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\PackageName.CompanyName.ProjectName.DbMigrator.EntityFrameworkCore\PackageName.CompanyName.ProjectName.DbMigrator.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="appsettings.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>
