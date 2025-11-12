@@ -312,39 +312,6 @@ public partial class MicroServiceApplicationsSingleModule
         }
     }
 
-    private void ConfigureOssManagement(IServiceCollection services, IConfiguration configuration)
-    {
-        var useMinio = configuration.GetValue<bool>("OssManagement:UseMinio");
-        if (useMinio)
-        {
-            Configure<AbpBlobStoringOptions>(options =>
-            {
-                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
-                {
-                    containerConfiguration.UseMinio(minio =>
-                    {
-                        configuration.GetSection("Minio").Bind(minio);
-                    });
-                });
-            });
-            services.AddMinioContainer();
-        }
-        else
-        {
-            Configure<AbpBlobStoringOptions>(options =>
-            {
-                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
-                {
-                    containerConfiguration.UseFileSystem(fileSystem =>
-                    {
-                        fileSystem.BasePath = Path.Combine(Directory.GetCurrentDirectory(), "blobs");
-                    });
-                });
-            });
-            services.AddFileSystemContainer();
-        }
-    }
-
     private void ConfigureBackgroundTasks()
     {
         Configure<AbpBackgroundTasksOptions>(options =>

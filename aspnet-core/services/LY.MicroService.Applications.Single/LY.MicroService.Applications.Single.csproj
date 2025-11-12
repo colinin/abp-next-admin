@@ -115,6 +115,7 @@
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official.HttpApi\LINGYUN.Abp.WeChat.Official.HttpApi.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.SettingManagement\LINGYUN.Abp.WeChat.SettingManagement.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Application\LINGYUN.Abp.WeChat.Work.Application.csproj" />
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.ExternalContact\LINGYUN.Abp.WeChat.Work.ExternalContact.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Handlers\LINGYUN.Abp.WeChat.Work.Handlers.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.HttpApi\LINGYUN.Abp.WeChat.Work.HttpApi.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj" />
@@ -129,7 +130,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
-		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Emailing\LINGYUN.Abp.Account.Emailing.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OAuth\LINGYUN.Abp.Account.Web.OAuth.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OpenIddict\LINGYUN.Abp.Account.Web.OpenIddict.csproj" />
