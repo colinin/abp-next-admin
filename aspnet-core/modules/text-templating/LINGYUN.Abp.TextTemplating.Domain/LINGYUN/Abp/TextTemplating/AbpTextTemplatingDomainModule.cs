@@ -34,6 +34,9 @@ public class AbpTextTemplatingDomainModule : AbpModule
         {
             options.EtoMappings.Add<TextTemplate, TextTemplateEto>();
             options.EtoMappings.Add<TextTemplateDefinition, TextTemplateDefinitionEto>();
+
+            // TODO: CAP组件异常将导致应用无法启动, 临时禁用
+            // options.AutoEventSelectors.Add<TextTemplate>();
         });
 
         if (context.Services.IsDataMigrationEnvironment())

@@ -51,12 +51,13 @@ public class EfCoreBackgroundJobInfoRepository :
     public async virtual Task<List<BackgroundJobInfo>> GetExpiredJobsAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
+        string nodeName = null,
         CancellationToken cancellationToken = default)
     {
         var expiratime = Clock.Now.Subtract(jobExpiratime);
 
         return await (await GetDbSetAsync())
-            .Where(x => x.Status == JobStatus.Completed && x.LastRunTime <= expiratime)
+            .Where(x => x.NodeName == nodeName && x.Status == JobStatus.Completed && x.LastRunTime <= expiratime)
             .OrderBy(x => x.CreationTime)
             .Take(maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));

@@ -44,4 +44,21 @@ public static class WeChatWorkFeatureNames
             public const string LimitInterval = GroupName + ".LimitInterval";
         }
     }
+
+    public static class Webhook
+    {
+        public const string GroupName = WeChatWorkFeatureNames.GroupName + ".Webhook";
+        /// <summary>
+        /// 启用消息推送
+        /// </summary>
+        public const string Enable = GroupName + ".Enable";
+        /// <summary>
+        /// 发送次数上限
+        /// </summary>
+        public const string Limit = GroupName + ".Limit";
+        /// <summary>
+        /// 发送次数上限时长
+        /// </summary>
+        public const string LimitInterval = GroupName + ".LimitInterval";
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
+using Volo.Abp;
 
 namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// <summary>
@@ -10,7 +11,7 @@ public class TextMessage
 {
     public TextMessage(string content)
     {
-        Content = content;
+        Content = Check.NotNullOrWhiteSpace(content, nameof(content), 2048);
     }
 
     /// <summary>

@@ -42,6 +42,7 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LY.MicroService.WechatManagement;
@@ -177,6 +178,23 @@ public partial class WechatManagementHttpApiHostModule
             }
         });
     }
+
+    private void ConfigureUrls(IConfiguration configuration)
+    {
+        Configure<AppUrlOptions>(options =>
+        {
+            var applicationConfiguration = configuration.GetSection("App:Urls:Applications");
+            foreach (var appConfig in applicationConfiguration.GetChildren())
+            {
+                options.Applications[appConfig.Key].RootUrl = appConfig["RootUrl"];
+                foreach (var urlsConfig in appConfig.GetSection("Urls").GetChildren())
+                {
+                    options.Applications[appConfig.Key].Urls[urlsConfig.Key] = urlsConfig.Value;
+                }
+            }
+        });
+    }
+
     private void ConfigureTiming(IConfiguration configuration)
     {
         Configure<AbpClockOptions>(options =>

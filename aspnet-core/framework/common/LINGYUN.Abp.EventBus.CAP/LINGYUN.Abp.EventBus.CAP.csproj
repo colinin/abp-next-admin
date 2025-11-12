@@ -10,10 +10,9 @@
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-		<RootNamespace />
-		<Description>Cap分布式事件总线</Description>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<DocumentationFile>$(SolutionDir)framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.xml</DocumentationFile>
+		<Description>Cap分布式事件总线</Description>
+		<RootNamespace />
 	</PropertyGroup>
 
 	<ItemGroup>

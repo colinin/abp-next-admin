@@ -16,6 +16,7 @@ public class BackgroundJobInfoSpecification : Specification<BackgroundJobInfo>
         Expression<Func<BackgroundJobInfo, bool>> expression = _ => true;
 
         return expression
+            .AndIf(!Filter.NodeName.IsNullOrWhiteSpace(), x => x.NodeName == Filter.NodeName)
             .AndIf(!Filter.Type.IsNullOrWhiteSpace(), x => x.Type.Contains(Filter.Type))
             .AndIf(!Filter.Group.IsNullOrWhiteSpace(), x => x.Group.Equals(Filter.Group))
             .AndIf(!Filter.Name.IsNullOrWhiteSpace(), x => x.Name.Equals(Filter.Name))

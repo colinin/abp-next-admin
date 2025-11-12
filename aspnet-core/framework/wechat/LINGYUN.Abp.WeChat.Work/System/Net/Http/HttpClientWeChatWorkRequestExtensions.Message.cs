@@ -64,4 +64,24 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
 
         return await client.SendAsync(httpRequest, cancellationToken);
     }
+
+    public async static Task<HttpResponseMessage> SendMessageAsync(
+        this HttpMessageInvoker client,
+        string webhookKey,
+        WeChatWorkWebhookMessage request,
+        CancellationToken cancellationToken = default)
+    {
+        var urlBuilder = new StringBuilder();
+        urlBuilder.Append("/cgi-bin/webhook/send");
+        urlBuilder.AppendFormat("?key={0}", webhookKey);
+
+        var httpRequest = new HttpRequestMessage(
+            HttpMethod.Post,
+            urlBuilder.ToString())
+        {
+            Content = new StringContent(request.SerializeToJson())
+        };
+
+        return await client.SendAsync(httpRequest, cancellationToken);
+    }
 }

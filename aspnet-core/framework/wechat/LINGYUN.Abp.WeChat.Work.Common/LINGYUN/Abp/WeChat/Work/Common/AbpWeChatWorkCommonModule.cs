@@ -29,6 +29,7 @@ public class AbpWeChatWorkCommonModule : AbpModule
             options.MapEvent("location_select", context => context.GetWeChatMessage<GeoLocationSelectPushEevent>());
             options.MapEvent("batch_job_result", context => context.GetWeChatMessage<BatchJobResultEvent>());
             options.MapEvent("open_approval_change", context => context.GetWeChatMessage<ApprovalStatusChangeEvent>());
+            options.MapEvent("sys_approval_change", context => context.GetWeChatMessage<SysApprovalStatusChangeEvent>());
             options.MapEvent("share_agent_change", context => context.GetWeChatMessage<ShareAgentChangeEvent>());
             options.MapEvent("share_chain_change", context => context.GetWeChatMessage<ShareChainChangeEvent>());
             options.MapEvent("template_card_event", context => context.GetWeChatMessage<TemplateCardPushEvent>());
@@ -56,6 +57,8 @@ public class AbpWeChatWorkCommonModule : AbpModule
                     _ => throw new AbpWeChatException($"Contact change event {changeType} is not mounted!"),
                 };
             });
+            options.MapEvent("book_meeting_room", context => context.GetWeChatMessage<BookMeetingRoomEvent>());
+            options.MapEvent("cancel_meeting_room", context => context.GetWeChatMessage<CancelMeetingRoomEvent>());
 
             options.MapMessage("text", context => context.GetWeChatMessage<TextMessage>());
             options.MapMessage("image", context => context.GetWeChatMessage<PictureMessage>());
@@ -64,10 +67,7 @@ public class AbpWeChatWorkCommonModule : AbpModule
             options.MapMessage("shortvideo", context => context.GetWeChatMessage<VideoMessage>());
             options.MapMessage("location", context => context.GetWeChatMessage<GeoLocationMessage>());
             options.MapMessage("link", context => context.GetWeChatMessage<LinkMessage>());
-        });
 
-        Configure<AbpWeChatMessageResolveOptions>(options =>
-        {
             // 事件处理器
             options.MessageResolvers.AddIfNotContains(new WeChatWorkEventResolveContributor());
             // 消息处理器

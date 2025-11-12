@@ -1,0 +1,16 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "TextTemplate:Abp.Account.MailSecurityVerifyLink": "Mail security validation template",
+    "TextTemplate:Abp.Account.MailConfirmLink": "Mail confirm template",
+    "MailSecurityVerify": "Mail security verification",
+    "VerifyMyEmailAddress": "Hello {0}<br/><p>Your email security verification code is as follows. Please enter the verification code to proceed to the next step.</p><p>If not operated by you, please ignore this email.</p>",
+    "MailSecurityVerifyRemarks": "<p>(If it is not in the form of a link, copy the address to the browser address bar for further access)</p><p>Thank you for your visit and have a good time!</p>",
+    "ClickToValidation": "Click link verification",
+    "Validation": "Validation",
+    "EmailConfirm": "Email confirm",
+    "EmailConfirmInfo": "We received an email confirmation request! If you initiated this request, please click the link below to confirm the email address.",
+    "ConfirmMyEmail": "Bind my email address",
+    "YourEmailIsSuccessfullyConfirm": "Your email address was bound successfully."
+  }
+}

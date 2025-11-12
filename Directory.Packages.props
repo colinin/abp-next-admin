@@ -3,8 +3,8 @@
 		<DotNetCoreCAPPackageVersion>8.3.5</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.15.2</ElsaPackageVersion>
 		<ElsaNextPackageVersion>3.3.5</ElsaNextPackageVersion>
-		<VoloAbpPackageVersion>9.3.5</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>9.3.5</LINGYUNAbpPackageVersion>
+		<VoloAbpPackageVersion>9.3.6</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>9.3.6</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>9.0.5</MicrosoftExtensionsPackageVersion>
 		<MicrosoftAspNetCorePackageVersion>9.0.5</MicrosoftAspNetCorePackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>9.0.5</MicrosoftEntityFrameworkCorePackageVersion>
@@ -12,7 +12,7 @@
 	</PropertyGroup>
 	<!-- Abp Framework -->
 	<ItemGroup>
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.3.5" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.3.6" />
 		<PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -282,6 +282,7 @@
 		<PackageVersion Include="aliyun-net-sdk-core" Version="1.5.10" />
 		<PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.14.1" />
 		<PackageVersion Include="AgileConfig.Client" Version="1.6.9" />
+		<PackageVersion Include="CommonMark.NET" Version="0.15.1" />
 		<PackageVersion Include="Elastic.Apm.NetCoreAll" Version="1.31.0" />
 		<PackageVersion Include="BouncyCastle.Cryptography" Version="2.5.0" />
 		<PackageVersion Include="Dapr.Client" Version="1.15.4" />

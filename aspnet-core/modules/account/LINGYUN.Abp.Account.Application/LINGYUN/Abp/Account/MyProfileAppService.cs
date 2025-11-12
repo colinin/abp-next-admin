@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.Account.Emailing;
+﻿using LINGYUN.Abp.Account.Security;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.Security;
 using LINGYUN.Abp.Identity.Session;
@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -20,7 +19,6 @@ using Volo.Abp.Caching;
 using Volo.Abp.Content;
 using Volo.Abp.Data;
 using Volo.Abp.Identity;
-using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
 using IIdentitySessionRepository = LINGYUN.Abp.Identity.IIdentitySessionRepository;
@@ -31,23 +29,21 @@ namespace LINGYUN.Abp.Account;
 public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppService
 {
     protected IDistributedCache<SecurityTokenCacheItem> SecurityTokenCache { get; }
-    protected IAccountSmsSecurityCodeSender SecurityCodeSender { get; }
     protected Identity.IIdentityUserRepository UserRepository { get; }
     protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
+    protected IAccountSmsSecurityCodeSender SmsSecurityCodeSender => LazyServiceProvider.LazyGetRequiredService<IAccountSmsSecurityCodeSender>();
+    protected IAccountEmailSecurityCodeSender EmailSecurityCodeSender => LazyServiceProvider.LazyGetRequiredService<IAccountEmailSecurityCodeSender>();
     protected IAuthenticatorUriGenerator AuthenticatorUriGenerator => LazyServiceProvider.LazyGetRequiredService<IAuthenticatorUriGenerator>();
-
     protected IIdentitySessionManager IdentitySessionManager => LazyServiceProvider.LazyGetRequiredService<IIdentitySessionManager>();
     protected IIdentitySessionRepository IdentitySessionRepository => LazyServiceProvider.LazyGetRequiredService<IIdentitySessionRepository>();
     protected IUserPictureProvider UserPictureProvider => LazyServiceProvider.LazyGetRequiredService<IUserPictureProvider>();
 
     public MyProfileAppService(
         Identity.IIdentityUserRepository userRepository,
-        IAccountSmsSecurityCodeSender securityCodeSender,
         IdentitySecurityLogManager identitySecurityLogManager,
         IDistributedCache<SecurityTokenCacheItem> securityTokenCache)
     {
         UserRepository = userRepository;
-        SecurityCodeSender = securityCodeSender;
         IdentitySecurityLogManager = identitySecurityLogManager;
         SecurityTokenCache = securityTokenCache;
 
@@ -147,7 +143,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         var template = await SettingProvider.GetOrNullAsync(Identity.Settings.IdentitySettingNames.User.SmsPhoneNumberConfirmed);
         var token = await UserManager.GenerateChangePhoneNumberTokenAsync(user, input.NewPhoneNumber);
         // 发送验证码
-        await SecurityCodeSender.SendSmsCodeAsync(input.NewPhoneNumber, token, template);
+        await SmsSecurityCodeSender.SendAsync(input.NewPhoneNumber, token, template);
 
         securityTokenCacheItem = new SecurityTokenCacheItem(token, user.ConcurrencyStamp);
         await SecurityTokenCache
@@ -191,9 +187,8 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
         var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
         var confirmToken = WebUtility.UrlEncode(token);
-        var sender = LazyServiceProvider.LazyGetRequiredService<IAccountEmailConfirmSender>();
 
-        await sender.SendEmailConfirmLinkAsync(
+        await EmailSecurityCodeSender.SendConfirmLinkAsync(
             user.Id,
             user.Email,
             confirmToken,

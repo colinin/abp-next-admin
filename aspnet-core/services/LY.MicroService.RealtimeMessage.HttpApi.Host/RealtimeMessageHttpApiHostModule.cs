@@ -38,6 +38,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
 using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.Scriban;
@@ -122,6 +123,7 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpSmsPlatformModule),
     typeof(AbpHttpClientModule),
     typeof(AbpClaimsMappingModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -29,6 +30,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
     protected IMinioBlobNameCalculator MinioBlobNameCalculator { get; }
     protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
     protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
+    protected IHttpClientFactory HttpClientFactory { get; }
 
     protected IClock Clock { get; }
     protected ICurrentTenant CurrentTenant { get; }
@@ -38,16 +40,18 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
         IClock clock,
         ICurrentTenant currentTenant,
         ILogger<MinioOssContainer> logger,
-        IMinioBlobNameCalculator minioBlobNameCalculator, 
-        IBlobNormalizeNamingService blobNormalizeNamingService, 
+        IMinioBlobNameCalculator minioBlobNameCalculator,
+        IBlobNormalizeNamingService blobNormalizeNamingService,
         IBlobContainerConfigurationProvider configurationProvider,
         IServiceScopeFactory serviceScopeFactory,
+        IHttpClientFactory httpClientFactory,
         IOptions<AbpOssManagementOptions> options)
         : base(options, serviceScopeFactory)
     {
         Clock = clock;
         Logger = logger;
         CurrentTenant = currentTenant;
+        HttpClientFactory = httpClientFactory;
         MinioBlobNameCalculator = minioBlobNameCalculator;
         BlobNormalizeNamingService = blobNormalizeNamingService;
         ConfigurationProvider = configurationProvider;
@@ -147,7 +151,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
            .WithObject(isDir ? $"{objectName}/_dir" : objectName)
            .WithStreamData(request.Content)
            .WithObjectSize(request.Content.Length));
-        
+
         if (request.ExpirationTime.HasValue)
         {
             var lifecycleRule = new LifecycleRule
@@ -156,8 +160,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
                 ID = putResponse.Etag,
                 Expiration = new Expiration(Clock.Now.Add(request.ExpirationTime.Value))
             };
-            var lifecycleConfiguration = new LifecycleConfiguration();
-            lifecycleConfiguration.Rules.Add(lifecycleRule);
+            var lifecycleConfiguration = new LifecycleConfiguration([lifecycleRule]);
 
             var lifecycleArgs = new SetBucketLifecycleArgs()
                 .WithBucket(bucket)
@@ -266,14 +269,15 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
 
             await foreach (var item in expiredObjects)
             {
-                var lifecycleRule = new LifecycleRule
+                var lifecycleConfiguration = new LifecycleConfiguration(new List<LifecycleRule>
                 {
-                    Status = LifecycleRule.LifecycleRuleStatusEnabled,
-                    ID = item.Key,
-                    Expiration = new Expiration(Clock.Normalize(request.ExpirationTime.DateTime))
-                };
-                var lifecycleConfiguration = new LifecycleConfiguration();
-                lifecycleConfiguration.Rules.Add(lifecycleRule);
+                    new LifecycleRule
+                    {
+                        ID = item.Key,
+                        Status = LifecycleRule.LifecycleRuleStatusEnabled,
+                        Expiration = new Expiration(Clock.Normalize(request.ExpirationTime.DateTime))
+                    }
+                });
 
                 var lifecycleArgs = new SetBucketLifecycleArgs()
                     .WithBucket(bucket)
@@ -440,23 +444,10 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
             throw new BusinessException(code: OssManagementErrorCodes.ObjectNotFound);
         }
 
-        var memoryStream = new MemoryStream();
-        var getObjectArgs = new GetObjectArgs()
+        var getObjectResult = await client.StatObjectAsync(
+            new StatObjectArgs()
                 .WithBucket(bucket)
-                .WithObject(objectName)
-                .WithCallbackStream((stream) =>
-                {
-                    if (stream != null)
-                    {
-                        stream.CopyTo(memoryStream);
-                        memoryStream.Seek(0, SeekOrigin.Begin);
-                    }
-                    else
-                    {
-                        memoryStream = null;
-                    }
-                });
-        var getObjectResult = await client.GetObjectAsync(getObjectArgs);
+                .WithObject(objectName));
 
         var ossObject = new OssObject(
             !objectPath.IsNullOrWhiteSpace()
@@ -465,7 +456,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
             request.Path,
             getObjectResult.ETag,
             getObjectResult.LastModified,
-            memoryStream.Length,
+            getObjectResult.Size,
             getObjectResult.LastModified,
             getObjectResult.MetaData,
             getObjectResult.ObjectName.EndsWith("/"))
@@ -473,9 +464,16 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
             FullName = getObjectResult.ObjectName.Replace(prefixPath, "")
         };
 
-        if (memoryStream.Length > 0)
+        if (getObjectResult.Size > 0)
         {
-            ossObject.SetContent(memoryStream);
+            var objectUrl = await client.PresignedGetObjectAsync(
+                new PresignedGetObjectArgs()
+                    .WithBucket(bucket)
+                    .WithObject(objectName)
+                    .WithExpiry(3600));
+            var httpClient = HttpClientFactory.CreateMinioHttpClient();
+
+            ossObject.SetContent(await httpClient.GetStreamAsync(objectUrl));
         }
 
         return ossObject;
@@ -544,7 +542,7 @@ public class MinioOssContainer : OssContainerBase, IOssObjectExpireor
         {
             return bucket;
         }
-        
+
         return bucket;
     }
 
