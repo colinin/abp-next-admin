@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import type { UploadChangeParam } from 'ant-design-vue';
-import type { FileType } from 'ant-design-vue/es/upload/interface';
-
 import type { ProfileDto, UpdateProfileDto } from '../../types/profile';
 
 import { computed, ref, toValue, watchEffect } from 'vue';
@@ -10,19 +7,13 @@ import { $t } from '@vben/locales';
 import { preferences } from '@vben/preferences';
 import { useUserStore } from '@vben/stores';
 
-import { useSettings } from '@abp/core';
-import { UploadOutlined } from '@ant-design/icons-vue';
-import {
-  Avatar,
-  Button,
-  Card,
-  Form,
-  Input,
-  message,
-  Upload,
-} from 'ant-design-vue';
+import { CropperAvatar } from '@abp/components/cropper';
+import { buildUUID, useSettings } from '@abp/core';
+import { Button, Card, Form, Input, message } from 'ant-design-vue';
 
 import { useProfileApi } from '../../api/useProfileApi';
+
+type ApiFunParams = { file: Blob; fileName?: string; name: string };
 
 const props = defineProps<{
   profile: ProfileDto;
@@ -43,33 +34,32 @@ const pictureState = ref<{
 
 const userStore = useUserStore();
 const { isTrue } = useSettings();
-const { changePictureApi, getPictureApi } = useProfileApi();
+const { changePictureApi } = useProfileApi();
 
 const avatar = computed(() => {
   return userStore.userInfo?.avatar ?? preferences.app.defaultAvatar;
 });
-async function onAvatarChange(_param: UploadChangeParam) {
+async function onUploadAvatar(params: ApiFunParams) {
   pictureState.value.uploading = true;
   try {
-    await changePictureApi({
-      file: pictureState.value.file,
+    const fileName = `${buildUUID()}.${params.file.type.slice(6)}`;
+    const file = new File([params.file], fileName, {
+      type: params.file.type,
     });
+    await changePictureApi({ file });
     if (userStore.userInfo?.avatar) {
       URL.revokeObjectURL(userStore.userInfo.avatar);
     }
-    const picture = await getPictureApi();
-    userStore.$patch((state) => {
-      state.userInfo && (state.userInfo.avatar = URL.createObjectURL(picture));
-    });
     message.success($t('AbpUi.SavedSuccessfully'));
-    emits('pictureChange');
   } finally {
     pictureState.value.uploading = false;
   }
 }
-function onBeforeUpload(file: FileType) {
-  pictureState.value.file = file;
-  return false;
+async function onAvatarChange(url: string) {
+  userStore.$patch((state) => {
+    state.userInfo && (state.userInfo.avatar = url);
+  });
+  emits('pictureChange');
 }
 function onSubmit() {
   emits('submit', toValue(formModel));
@@ -132,7 +122,7 @@ watchEffect(() => {
       <div class="basis-2/4">
         <div class="flex flex-col items-center">
           <p>{{ $t('AbpUi.ProfilePicture') }}</p>
-          <Avatar :size="100">
+          <!-- <Avatar :size="100">
             <template #icon>
               <img :src="avatar" alt="" />
             </template>
@@ -147,7 +137,16 @@ watchEffect(() => {
               <UploadOutlined />
               {{ $t('abp.account.settings.changeAvatar') }}
             </Button>
-          </Upload>
+          </Upload> -->
+          <div class="mb-8 block rounded-[50%]">
+            <CropperAvatar
+              :value="avatar"
+              :btn-text="$t('AbpAccount.AvatarChanged')"
+              width="150"
+              :upload-api="onUploadAvatar"
+              @change="onAvatarChange"
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-using LINGYUN.Abp.Account.Emailing;
+using LINGYUN.Abp.Account.Security;
 using LINGYUN.Abp.Identity.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,14 +33,14 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
         protected ISmsSender SmsSender { get; }
 
-        protected IAccountEmailVerifySender AccountEmailVerifySender { get; }
+        protected IAccountEmailSecurityCodeSender EmailSecurityCodeSender { get; }
 
         public SendCodeModel(
             ISmsSender smsSender,
-            IAccountEmailVerifySender accountEmailVerifySender)
+            IAccountEmailSecurityCodeSender emailSecurityCodeSender)
         {
             SmsSender = smsSender;
-            AccountEmailVerifySender = accountEmailVerifySender;
+            EmailSecurityCodeSender = emailSecurityCodeSender;
 
             LocalizationResourceType = typeof(AccountResource);
         }
@@ -91,8 +91,8 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
             if (Input.SelectedProvider == "Email")
             {
-                await AccountEmailVerifySender
-                    .SendMailLoginVerifyCodeAsync(
+                await EmailSecurityCodeSender
+                    .SendLoginCodeAsync(
                         code,
                         user.UserName,
                         user.Email);

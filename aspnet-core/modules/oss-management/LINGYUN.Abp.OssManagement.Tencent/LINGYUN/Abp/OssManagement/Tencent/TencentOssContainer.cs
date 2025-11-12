@@ -1,7 +1,10 @@
 ﻿using COSXML;
+using COSXML.Common;
 using COSXML.Model.Bucket;
 using COSXML.Model.Object;
 using COSXML.Model.Service;
+using COSXML.Model.Tag;
+using COSXML.Transfer;
 using LINGYUN.Abp.BlobStoring.Tencent;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -9,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.MultiTenancy;
@@ -24,10 +28,12 @@ internal class TencentOssContainer : OssContainerBase, IOssObjectExpireor
     protected IClock Clock { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected ICosClientFactory CosClientFactory { get; }
+    protected IHttpClientFactory HttpClientFactory { get; }
     public TencentOssContainer(
         IClock clock,
         ICurrentTenant currentTenant,
         ICosClientFactory cosClientFactory,
+        IHttpClientFactory httpClientFactory,
         IServiceScopeFactory serviceScopeFactory,
         IOptions<AbpOssManagementOptions> options)
         : base(options, serviceScopeFactory)
@@ -35,6 +41,7 @@ internal class TencentOssContainer : OssContainerBase, IOssObjectExpireor
         Clock = clock;
         CurrentTenant = currentTenant;
         CosClientFactory = cosClientFactory;
+        HttpClientFactory = httpClientFactory;
     }
     public async override Task BulkDeleteObjectsAsync(BulkDeleteObjectRequest request)
     {
@@ -380,33 +387,51 @@ internal class TencentOssContainer : OssContainerBase, IOssObjectExpireor
             // throw new ContainerNotFoundException($"Can't not found object {objectName} in container {request.Bucket} with aliyun blob storing");
         }
 
-        var getObjectRequest = new GetObjectBytesRequest(request.Bucket, objectName);
-        if (!request.Process.IsNullOrWhiteSpace())
-        {
-            getObjectRequest.SetQueryParameter(request.Process, null);
-        }
-        var objectResult = ossClient.GetObject(getObjectRequest);
+        var headObjectRequest = new HeadObjectRequest(request.Bucket, objectName);
+        var headObjectResult = ossClient.HeadObject(headObjectRequest);
+
         var ossObject = new OssObject(
             !objectPath.IsNullOrWhiteSpace()
-                ? objectResult.Key.Replace(objectPath, "")
-                : objectResult.Key,
+                ? headObjectResult.Key.Replace(objectPath, "")
+                : headObjectResult.Key,
             request.Path,
-            objectResult.eTag,
+            headObjectResult.eTag,
             null,
-            objectResult.content.Length,
+            headObjectResult.size,
             null,
             new Dictionary<string, string>(),
-            objectResult.Key.EndsWith("/"))
+            headObjectResult.Key.EndsWith("/"))
         {
-            FullName = objectResult.Key
+            FullName = headObjectResult.Key
         };
 
-        if (objectResult.content.Length > 0)
+        if (headObjectResult.size > 0)
         {
-            var memoryStream = new MemoryStream();
-            await memoryStream.WriteAsync(objectResult.content, 0, objectResult.content.Length);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            ossObject.SetContent(memoryStream);
+            var configuration = await GetConfigurationAsync();
+            // See: https://cloud.tencent.com/document/product/436/47238
+            var preSignatureStruct = new PreSignatureStruct
+            {
+                appid = configuration.AppId,//"1250000000"; //腾讯云账号 APPID
+                region = configuration.Region,//"COS_REGION"; //存储桶地域
+                bucket = request.Bucket,//"examplebucket-1250000000"; //存储桶
+                key = objectName, //对象键
+                httpMethod = "GET", //HTTP 请求方法
+                isHttps = true, //生成 HTTPS 请求 URL
+                signDurationSecond = 600, //请求签名时间为600s
+                headers = null, //签名中需要校验的 header
+                queryParameters = null //签名中需要校验的 URL 中请求参数
+            };
+            if (!request.Process.IsNullOrWhiteSpace())
+            {
+                preSignatureStruct.queryParameters = new Dictionary<string, string>
+                {
+                    { request.Process, "" }
+                };
+            }
+            var requestSignURL = ossClient.GenerateSignURL(preSignatureStruct);
+            var client = HttpClientFactory.CreateTenantOssClient();
+
+            ossObject.SetContent(await client.GetStreamAsync(requestSignURL));
         }
 
         return ossObject;
@@ -439,6 +464,11 @@ internal class TencentOssContainer : OssContainerBase, IOssObjectExpireor
     {
         var request = new DoesObjectExistRequest(bucketName, objectName);
         return cos.DoesObjectExist(request);
+    }
+
+    protected async virtual Task<TencentBlobProviderConfiguration> GetConfigurationAsync()
+    {
+        return await CosClientFactory.GetConfigurationAsync<AbpOssManagementContainer>();
     }
 
     protected async virtual Task<CosXml> CreateClientAsync()

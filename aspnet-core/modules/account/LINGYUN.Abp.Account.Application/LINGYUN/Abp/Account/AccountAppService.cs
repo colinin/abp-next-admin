@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.Account.Emailing;
+﻿using LINGYUN.Abp.Account.Security;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.Security;
 using LINGYUN.Abp.Identity.Settings;
@@ -123,7 +123,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         var code = TotpService.GenerateCode(Encoding.Unicode.GetBytes(securityToken), securityTokenCacheKey);
         securityTokenCacheItem = new SecurityTokenCacheItem(code.ToString(), securityToken);
 
-        await SecurityCodeSender.SendSmsCodeAsync(
+        await SecurityCodeSender.SendAsync(
             input.PhoneNumber, securityTokenCacheItem.Token, template);
 
         await SecurityTokenCache
@@ -227,7 +227,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         // 生成二次认证码
         var code = await UserManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider);
         // 发送短信验证码
-        await SecurityCodeSender.SendSmsCodeAsync(input.PhoneNumber, code, template);
+        await SecurityCodeSender.SendAsync(input.PhoneNumber, code, template);
         // 缓存这个手机号的记录,防重复
         securityTokenCacheItem = new SecurityTokenCacheItem(code, user.SecurityStamp);
         await SecurityTokenCache
@@ -294,7 +294,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         var template = await SettingProvider.GetOrNullAsync(IdentitySettingNames.User.SmsUserSignin);
 
         // 发送登录验证码短信
-        await SecurityCodeSender.SendSmsCodeAsync(input.PhoneNumber, code, template);
+        await SecurityCodeSender.SendAsync(input.PhoneNumber, code, template);
         // 缓存登录验证码状态,防止同一手机号重复发送
         securityTokenCacheItem = new SecurityTokenCacheItem(code, user.SecurityStamp);
         await SecurityTokenCache
@@ -307,7 +307,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
 
     public async virtual Task SendEmailSigninCodeAsync(SendEmailSigninCodeDto input)
     {
-        var sender = LazyServiceProvider.LazyGetRequiredService<IAccountEmailVerifySender>();
+        var sender = LazyServiceProvider.LazyGetRequiredService<IAccountEmailSecurityCodeSender>();
 
         var user = await UserManager.FindByEmailAsync(input.EmailAddress);
 
@@ -322,7 +322,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
 
         var code = await UserManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
 
-        await sender.SendMailLoginVerifyCodeAsync(code, user.UserName, user.Email);
+        await sender.SendLoginCodeAsync(code, user.UserName, user.Email);
     }
 
     public async virtual Task<ListResultDto<NameValue>> GetTwoFactorProvidersAsync(GetTwoFactorProvidersInput input)

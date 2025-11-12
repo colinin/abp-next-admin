@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AspNetCore.MultiTenancy;
 using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
@@ -14,7 +15,6 @@ using LINGYUN.Abp.Wrapper;
 using LY.MicroService.AuthServer.Ui.Branding;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -446,7 +446,7 @@ public partial class AuthServerModule
                 var domains = tenantResolveCfg.Get<string[]>();
                 foreach (var domain in domains)
                 {
-                    options.AddDomainTenantResolver(domain);
+                    options.AddOnlyDomainTenantResolver(domain);
                 }
             });
         }

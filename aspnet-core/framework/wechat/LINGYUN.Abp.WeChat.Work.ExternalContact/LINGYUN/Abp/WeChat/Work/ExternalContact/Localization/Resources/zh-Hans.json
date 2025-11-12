@@ -1,0 +1,7 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Features:ExternalContactEnable": "启用客户联系",
+    "Features:ExternalContactEnableDesc": "启用以使应用拥有企业微信客户联系接口的能力."
+  }
+}

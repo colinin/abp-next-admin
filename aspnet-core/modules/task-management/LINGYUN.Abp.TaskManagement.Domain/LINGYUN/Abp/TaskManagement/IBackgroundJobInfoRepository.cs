@@ -30,11 +30,13 @@ public interface IBackgroundJobInfoRepository : IRepository<BackgroundJobInfo, s
     /// </summary>
     /// <param name="maxResultCount"></param>
     /// <param name="jobExpiratime"></param>
+    /// <param name="nodeName"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<List<BackgroundJobInfo>> GetExpiredJobsAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
+        string nodeName = null,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取所有周期性任务

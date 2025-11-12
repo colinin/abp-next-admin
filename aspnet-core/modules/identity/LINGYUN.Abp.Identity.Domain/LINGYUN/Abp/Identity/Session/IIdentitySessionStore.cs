@@ -22,6 +22,7 @@ public interface IIdentitySessionStore
     /// <param name="signedIn">登录时间</param>
     /// <param name="lastAccessed">上次访问时间</param>
     /// <param name="ipRegion">IP地域</param>
+    /// <param name="userName">用户名称</param>
     /// <param name="tenantId">租户id</param>
     /// <param name="cancellationToken"></param>
     /// <returns>创建完成的 <seealso cref="IdentitySession"/></returns>
@@ -35,6 +36,7 @@ public interface IIdentitySessionStore
         DateTime signedIn,
         DateTime? lastAccessed = null,
         string ipRegion = null,
+        string userName = null,
         Guid? tenantId = null,
         CancellationToken cancellationToken = default);
     /// <summary>

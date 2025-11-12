@@ -4,7 +4,7 @@ using Volo.Abp.EventBus;
 
 namespace LINGYUN.Abp.WeChat.Work.Common.Messages.Models;
 /// <summary>
-/// 进入应用事件
+/// 异步任务完成事件
 /// </summary>
 [EventName("batch_job_result")]
 public class BatchJobResultEvent : WeChatWorkEventMessage

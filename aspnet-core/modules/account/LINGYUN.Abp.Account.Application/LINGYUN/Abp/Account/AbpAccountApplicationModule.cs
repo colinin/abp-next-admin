@@ -1,5 +1,5 @@
-﻿using LINGYUN.Abp.Account.Emailing;
-using LINGYUN.Abp.Account.Emailing.Localization;
+﻿using LINGYUN.Abp.Account.Security;
+using LINGYUN.Abp.Account.Security.Localization;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.WeChat.MiniProgram;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +16,7 @@ namespace LINGYUN.Abp.Account;
 [DependsOn(
     typeof(Volo.Abp.Account.AbpAccountApplicationModule),
     typeof(AbpAccountApplicationContractsModule),
-    typeof(AbpAccountEmailingModule),
+    typeof(AbpAccountSecurityModule),
     typeof(AbpIdentityDomainModule),
     typeof(AbpBlobStoringModule),
     typeof(AbpWeChatMiniProgramModule))]
@@ -45,7 +45,7 @@ public class AbpAccountApplicationModule : AbpModule
         {
             options.Resources
                 .Get<AccountResource>()
-                .AddBaseTypes(typeof(AccountEmailingResource));
+                .AddBaseTypes(typeof(AccountSecurityResource));
         });
     }
 }

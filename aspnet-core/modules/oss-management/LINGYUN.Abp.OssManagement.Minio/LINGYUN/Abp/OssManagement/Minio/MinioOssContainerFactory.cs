@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Net.Http;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.MultiTenancy;
@@ -16,7 +17,7 @@ public class MinioOssContainerFactory : IOssContainerFactory
     protected IClock Clock { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected ILogger<MinioOssContainer> Logger { get; }
-
+    protected IHttpClientFactory HttpClientFactory { get; }
     protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected IOptions<AbpOssManagementOptions> Options { get; }
 
@@ -24,6 +25,7 @@ public class MinioOssContainerFactory : IOssContainerFactory
         IClock clock,
         ICurrentTenant currentTenant,
         ILogger<MinioOssContainer> logger,
+        IHttpClientFactory httpClientFactory,
         IMinioBlobNameCalculator minioBlobNameCalculator,
         IBlobNormalizeNamingService blobNormalizeNamingService,
         IBlobContainerConfigurationProvider configurationProvider,
@@ -34,6 +36,7 @@ public class MinioOssContainerFactory : IOssContainerFactory
         Logger = logger;
         CurrentTenant = currentTenant;
         Options = options;
+        HttpClientFactory = httpClientFactory;
         ServiceScopeFactory = serviceScopeFactory;
         MinioBlobNameCalculator = minioBlobNameCalculator;
         BlobNormalizeNamingService = blobNormalizeNamingService;
@@ -50,6 +53,7 @@ public class MinioOssContainerFactory : IOssContainerFactory
             BlobNormalizeNamingService,
             ConfigurationProvider,
             ServiceScopeFactory,
+            HttpClientFactory,
             Options);
     }
 }

@@ -8,15 +8,19 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
+using LINGYUN.Abp.Identity.WeChat.Work;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
 using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.WeChat.MiniProgram;
 using LINGYUN.Abp.WeChat.Official;
 using LINGYUN.Abp.WeChat.SettingManagement;
 using LINGYUN.Abp.WeChat.Work;
+using LINGYUN.Abp.WeChat.Work.ExternalContact;
+using LINGYUN.Abp.WeChat.Work.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,6 +34,7 @@ using Volo.Abp.DistributedLocking;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
+using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -45,11 +50,15 @@ namespace LY.MicroService.WechatManagement;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpWeChatWorkApplicationModule),
     typeof(AbpWeChatWorkHttpApiModule),
+    typeof(AbpWeChatWorkExternalContactModule),
+    typeof(AbpWeChatWorkHandlersModule),
     typeof(AbpWeChatOfficialApplicationModule),
     typeof(AbpWeChatOfficialHttpApiModule),
     typeof(AbpWeChatMiniProgramModule),
+    typeof(AbpIdentityWeChatWorkModule),
     typeof(AbpWeChatSettingManagementModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
@@ -68,6 +77,7 @@ namespace LY.MicroService.WechatManagement;
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpMailKitModule),
     typeof(AbpClaimsMappingModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
@@ -100,6 +110,7 @@ public partial class WechatManagementHttpApiHostModule : AbpModule
         ConfigureFeatureManagement();
         ConfigureSettingManagement();
         ConfigurePermissionManagement();
+        ConfigureUrls(configuration);
         ConfigureTiming(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);

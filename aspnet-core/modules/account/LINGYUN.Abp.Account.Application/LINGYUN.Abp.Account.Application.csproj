@@ -25,7 +25,7 @@
 		<ProjectReference Include="..\..\..\framework\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />
 		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
-		<ProjectReference Include="..\LINGYUN.Abp.Account.Emailing\LINGYUN.Abp.Account.Emailing.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Account.Security\LINGYUN.Abp.Account.Security.csproj" />
 	</ItemGroup>
 
 </Project>

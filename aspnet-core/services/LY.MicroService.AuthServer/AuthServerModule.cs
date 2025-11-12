@@ -2,6 +2,7 @@
 using LINGYUN.Abp.Account.Web.OAuth;
 using LINGYUN.Abp.Account.Web.OpenIddict;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.MultiTenancy;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobStoring.OssManagement;
@@ -24,6 +25,7 @@ using LINGYUN.Abp.OpenIddict.WeChat.Work;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
 using LINGYUN.Abp.Telemetry.SkyWalking;
 using LY.MicroService.AuthServer.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
@@ -69,8 +71,10 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpEmailingPlatformModule),

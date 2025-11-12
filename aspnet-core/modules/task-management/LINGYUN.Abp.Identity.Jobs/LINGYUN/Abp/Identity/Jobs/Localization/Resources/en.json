@@ -1,0 +1,9 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "InactiveIdentitySessionCleanupJob": "Inactive Session Cleanup Job",
+    "InactiveIdentityUserCleanupJob": "Inactive User Cleanup Job",
+    "DisplayName:SessionInactiveDays": "Duration of inactive conversation",
+    "Description:SessionInactiveDays": "Duration of inactive conversation, unit: days."
+  }
+}

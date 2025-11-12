@@ -52,4 +52,28 @@ public class DistributedJobDispatcher : IJobDispatcher, ITransientDependency
 
         return true;
     }
+
+    public async virtual Task CleanExpiredJobAsync(
+        Guid? tenantId = null,
+        CancellationToken cancellationToken = default)
+    {
+        var eventData = new JobCleanupExpiredEventData
+        {
+            TenantId = tenantId,
+        };
+
+        await EventBus.PublishAsync(eventData);
+    }
+
+    public async virtual Task CheckRuningJobAsync(
+        Guid? tenantId = null,
+        CancellationToken cancellationToken = default)
+    {
+        var eventData = new JobCheckRuningEventData
+        {
+            TenantId = tenantId,
+        };
+
+        await EventBus.PublishAsync(eventData);
+    }
 }

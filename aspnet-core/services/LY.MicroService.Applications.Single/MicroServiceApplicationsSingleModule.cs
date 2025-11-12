@@ -1,4 +1,5 @@
 using LINGYUN.Abp.Elsa.Designer;
+using LINGYUN.Abp.WeChat.Work.ExternalContact;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -334,6 +335,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpWeChatOfficialHttpApiModule),
     // 微信模块 企业微信
     typeof(AbpWeChatWorkModule),
+    // 微信模块 企业微信客户联系
+    typeof(AbpWeChatWorkExternalContactModule),
     // 微信模块 企业微信 应用服务
     typeof(AbpWeChatWorkApplicationModule),
     // 微信模块 企业微信 控制器
@@ -434,7 +437,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureNotificationManagement(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureSwagger(context.Services, configuration);
-        ConfigureOssManagement(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureKestrelServer(configuration, hostingEnvironment);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());

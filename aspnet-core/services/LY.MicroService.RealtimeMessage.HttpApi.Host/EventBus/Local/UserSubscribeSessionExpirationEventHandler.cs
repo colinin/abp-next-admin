@@ -19,10 +19,17 @@ public class UserSubscribeSessionExpirationEventHandler : ILocalEventHandler<Ent
 
     public async virtual Task HandleEventAsync(EntityCreatedEventData<UserEto> eventData)
     {
+        // 新用户订阅会话过期通知
         await _notificationSubscriptionManager
             .SubscribeAsync(
                 eventData.Entity.TenantId,
                 new UserIdentifier(eventData.Entity.Id, eventData.Entity.UserName),
                 IdentityNotificationNames.Session.ExpirationSession);
+        // 新用户订阅不活跃用户清理通知
+        await _notificationSubscriptionManager
+            .SubscribeAsync(
+                eventData.Entity.TenantId,
+                new UserIdentifier(eventData.Entity.Id, eventData.Entity.UserName),
+                IdentityNotificationNames.IdentityUser.CleaningUpInactiveUsers);
     }
 }

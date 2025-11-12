@@ -90,6 +90,7 @@ catalog:
   codemirror: ^5.65.3
   commitlint-plugin-function-rules: ^4.0.1
   consola: ^3.4.2
+  cropperjs: ^1.5.12
   cross-env: ^7.0.3
   cspell: ^8.19.3
   cssnano: ^7.0.6

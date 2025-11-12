@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.Account.Emailing;
+﻿using LINGYUN.Abp.Account.Security;
 using LINGYUN.Abp.Account.Web.Bundling;
 using LINGYUN.Abp.Account.Web.ProfileManagement;
 using LINGYUN.Abp.Identity;
@@ -25,8 +25,8 @@ namespace LINGYUN.Abp.Account.Web;
 [DependsOn(
     typeof(AbpSmsModule),
     typeof(VoloAbpAccountWebModule),
+    typeof(AbpAccountSecurityModule),
     typeof(AbpIdentityDomainModule),
-    typeof(AbpAccountEmailingModule),
     typeof(AbpIdentityAspNetCoreQrCodeModule),
     typeof(AbpAccountApplicationContractsModule))]
 public class AbpAccountWebModule : AbpModule

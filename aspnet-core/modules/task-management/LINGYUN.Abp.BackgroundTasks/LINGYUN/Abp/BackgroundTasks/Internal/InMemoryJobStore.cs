@@ -34,14 +34,14 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         return Task.FromResult(jobs);
     }
 
-    public virtual Task<List<JobInfo>> GetRuningListAsync(int maxResultCount, CancellationToken cancellationToken = default)
+    public virtual Task<List<JobInfo>> GetRuningListAsync(int maxResultCount, string nodeName = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         var status = new JobStatus[] { JobStatus.Running };
 
         var jobs = _memoryJobStore
-            .Where(x => status.Contains(x.Status))
+            .Where(x => x.NodeName == nodeName && status.Contains(x.Status))
             .Take(maxResultCount)
             .ToList();
 
@@ -130,7 +130,11 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         return Task.CompletedTask;
     }
 
-    public virtual Task<List<JobInfo>> CleanupAsync(int maxResultCount, TimeSpan jobExpiratime, CancellationToken cancellationToken = default)
+    public virtual Task<List<JobInfo>> CleanupAsync(
+        int maxResultCount, 
+        TimeSpan jobExpiratime,
+        string nodeName = null, 
+        CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -141,6 +145,7 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
             var expiratime = DateTime.Now - jobExpiratime;
 
             expriaJobs = _memoryJobStore
+                    .WhereIf(!nodeName.IsNullOrWhiteSpace(), x => x.NodeName == nodeName)
                     .Where(x => x.Status == JobStatus.Completed &&
                         expiratime.CompareTo(x.LastRunTime ?? x.EndTime ?? x.CreationTime) <= 0)
                     .Take(maxResultCount)
