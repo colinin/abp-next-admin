@@ -1,5 +1,4 @@
-﻿using Elsa;
-using LINGYUN.Abp.AspNetCore.HttpOverrides;
+﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
@@ -146,7 +145,6 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseCors();
-        app.UseElsaFeatures();
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
@@ -165,5 +163,6 @@ public partial class WorkflowManagementHttpApiHostModule : AbpModule
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
+        app.UseHttpActivities();
     }
 }

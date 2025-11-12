@@ -21,6 +21,7 @@ public class AbpElsaServerModule : AbpModule
             .AddSingleton<ActivityBlueprintConverter>()
             .AddScoped<IWorkflowBlueprintMapper, WorkflowBlueprintMapper>()
             .AddSingleton<IEndpointContentSerializerSettingsProvider, EndpointContentSerializerSettingsProvider>()
+            .AddElsaApiEndpoints()
             .AddSignalR();
 
         PreConfigure<IMvcBuilder>(mvcBuilder =>
