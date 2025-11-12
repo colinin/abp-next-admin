@@ -12,11 +12,8 @@ using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
-#if SkyWalking
 using LINGYUN.Abp.Telemetry.SkyWalking;
-#elif OpenTelemetry
 using LINGYUN.Abp.Telemetry.OpenTelemetry;
-#endif
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +42,7 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpCAPEventBusModule),
 
     typeof(ProjectNameApplicationModule),
     typeof(ProjectNameHttpApiModule),
@@ -52,7 +50,6 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(ProjectNameDbMigratorEntityFrameworkCoreModule),
 
     typeof(AbpEmailingExceptionHandlingModule),
-    typeof(AbpCAPEventBusModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
 
@@ -69,13 +66,10 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
-#if SkyWalking
     typeof(AbpTelemetrySkyWalkingModule),
-#elif OpenTelemetry
     typeof(AbpTelemetryOpenTelemetryModule),
-#endif
-    typeof(AbpClaimsMappingModule),
     typeof(AbpExporterMiniExcelModule),
+    typeof(AbpClaimsMappingModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpSwashbuckleModule),
