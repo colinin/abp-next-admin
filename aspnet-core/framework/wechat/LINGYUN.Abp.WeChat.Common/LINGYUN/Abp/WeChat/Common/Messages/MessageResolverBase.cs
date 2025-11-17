@@ -60,11 +60,15 @@ public abstract class MessageResolverBase : ITransientDependency
                 // 经过解密函数得到如上真实数据
                 var decryptMessage = _cryptoService.Decrypt(cryptoDecryptData);
                 xmlDocument = XDocument.Parse(decryptMessage);
+
+                var context = new MessageResolveContext(decryptMessage, xmlDocument, serviceScope.ServiceProvider);
+                return await ResolveMessageAsync(context);
             }
-
-            var context = new MessageResolveContext(messageData.Data, xmlDocument, serviceScope.ServiceProvider);
-
-            return await ResolveMessageAsync(context);
+            else
+            {
+                var context = new MessageResolveContext(messageData.Data, xmlDocument, serviceScope.ServiceProvider);
+                return await ResolveMessageAsync(context);
+            }
         }
     }
     /// <summary>
