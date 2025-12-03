@@ -5,6 +5,7 @@ using LINGYUN.Abp.WeChat.Work.Contacts.Messages.Models;
 using LINGYUN.Abp.WeChat.Work.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.WeChat.Work.Contacts;
 /// <summary>
@@ -33,6 +34,11 @@ public class AbpWeChatWorkContactModule : AbpModule
                 };
             });
             options.MapEvent("batch_job_result", context => context.GetWeChatMessage<BatchJobResultEvent>());
+        });
+
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpWeChatWorkContactModule>();
         });
 
         Configure<AbpLocalizationOptions>(options =>

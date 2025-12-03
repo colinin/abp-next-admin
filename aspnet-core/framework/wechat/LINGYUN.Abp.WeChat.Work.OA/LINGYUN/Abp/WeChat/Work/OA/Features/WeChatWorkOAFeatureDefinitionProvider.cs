@@ -15,9 +15,7 @@ public class WeChatWorkOAFeatureDefinitionProvider : FeatureDefinitionProvider
         {
             return;
         }
-
-        var group = weChatFeature.AddFeature(WeChatWorkOAFeatureNames.GroupName);
-        group.CreateChild(
+        weChatFeature.AddFeature(
             WeChatWorkOAFeatureNames.Enable,
             defaultValue: "false",
             displayName: L("Features:OAEnable"),

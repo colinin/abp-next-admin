@@ -15,8 +15,7 @@ public class WeChatWorkContactsFeatureDefinitionProvider : FeatureDefinitionProv
             return;
         }
 
-        var group = weChatFeature.AddFeature(WeChatWorkContactsFeatureNames.GroupName);
-        group.CreateChild(
+        weChatFeature.AddFeature(
             WeChatWorkContactsFeatureNames.Enable,
             defaultValue: "false",
             displayName: L("Features:ContactsEnable"),

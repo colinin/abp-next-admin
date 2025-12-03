@@ -1,6 +1,8 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Features:Contacts": "通讯录",
+    "Features:ContactsDesc": "企业微信通讯录应用集成.",
     "Features:ContactsEnable": "启用通讯录",
     "Features:ContactsEnableDesc": "启用以使应用拥有企业微信通讯录接口的能力.",
     "DisplayName:WeChatWorkContact.Secret": "通讯录访问密钥",

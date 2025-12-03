@@ -4,6 +4,7 @@ using LINGYUN.Abp.WeChat.Work.Localization;
 using LINGYUN.Abp.WeChat.Work.OA.Messages.Models;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.WeChat.Work.OA;
 /// <summary>
@@ -24,6 +25,11 @@ public class AbpWeChatWorkOAModule : AbpModule
             options.MapEvent("delete_schedule", context => context.GetWeChatMessage<DeleteScheduleEvent>());
             options.MapEvent("modify_schedule", context => context.GetWeChatMessage<UpdateScheduleEvent>());
             options.MapEvent("respond_schedule", context => context.GetWeChatMessage<RespondScheduleEvent>());
+        });
+
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpWeChatWorkOAModule>();
         });
 
         Configure<AbpLocalizationOptions>(options =>

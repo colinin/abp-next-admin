@@ -1,6 +1,8 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Features:ExternalContact": "External Contact",
+    "Features:ExternalContactDesc": "WeCom ExternalContact Application.",
     "Features:ExternalContactEnable": "Enable External Contact",
     "Features:ExternalContactEnableDesc": "Enable the ability to provide the application with an Enterprise wechat customer contact interface."
   }

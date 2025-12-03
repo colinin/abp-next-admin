@@ -1,6 +1,8 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Features:Contacts": "Contacts",
+    "Features:ContactsDesc": "WeCom Contacts Application.",
     "Features:ContactsEnable": "Enable Contacts",
     "Features:ContactsEnableDesc": "Enable the ability to provide the application with an Enterprise wechat contacts interface.",
     "DisplayName:WeChatWorkContact.Secret": "Contact Secret",
