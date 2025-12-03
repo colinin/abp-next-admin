@@ -15,6 +15,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\LINGYUN.Abp.WeChat.Work.Common\LINGYUN.Abp.WeChat.Work.Common.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.WeChat.Work.Contacts\LINGYUN.Abp.WeChat.Work.Contacts.csproj" />
 	</ItemGroup>
 
 </Project>

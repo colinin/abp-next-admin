@@ -5,6 +5,8 @@ using LINGYUN.Abp.WeChat.MiniProgram.Settings;
 using LINGYUN.Abp.WeChat.Official.Features;
 using LINGYUN.Abp.WeChat.Official.Settings;
 using LINGYUN.Abp.WeChat.Settings;
+using LINGYUN.Abp.WeChat.Work.Contacts.Features;
+using LINGYUN.Abp.WeChat.Work.Contacts.Settings;
 using LINGYUN.Abp.WeChat.Work.Features;
 using LINGYUN.Abp.WeChat.Work.Settings;
 using System.Threading.Tasks;
@@ -173,6 +175,17 @@ public class WeChatSettingAppService : ApplicationService, IWeChatSettingAppServ
                 await SettingManager.GetOrNullAsync(WeChatWorkSettingNames.Connection.Secret, providerName, providerKey),
                 ValueType.String,
                 providerName);
+
+            if (await FeatureChecker.IsEnabledAsync(WeChatWorkContactsFeatureNames.Enable))
+            {
+                workConnectionSetting.AddDetail(
+                    await SettingDefinitionManager.GetAsync(WeChatWorkContactSettingNames.Secret),
+                    StringLocalizerFactory,
+                    await SettingManager.GetOrNullAsync(WeChatWorkContactSettingNames.Secret, providerName, providerKey),
+                    ValueType.String,
+                    providerName);
+            }
+
             workConnectionSetting.AddDetail(
                 await SettingDefinitionManager.GetAsync(WeChatWorkSettingNames.Connection.Token),
                 StringLocalizerFactory,

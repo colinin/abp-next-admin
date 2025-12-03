@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{0B58AA48-665A-443F-A6A8-751FB9629DAF}"
 EndProject
@@ -695,6 +695,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.ExternalContact", "framework\wechat\LINGYUN.Abp.WeChat.Work.ExternalContact\LINGYUN.Abp.WeChat.Work.ExternalContact.csproj", "{B4311504-B0C8-AC8D-02A5-81AD43B4087B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Account.Security", "modules\account\LINGYUN.Abp.Account.Security\LINGYUN.Abp.Account.Security.csproj", "{5FA85E8E-3276-43DF-CC93-6A9847905166}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.Contacts", "framework\wechat\LINGYUN.Abp.WeChat.Work.Contacts\LINGYUN.Abp.WeChat.Work.Contacts.csproj", "{C996D147-5B81-49D9-949B-F3BC185B2CD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.OA", "framework\wechat\LINGYUN.Abp.WeChat.Work.OA\LINGYUN.Abp.WeChat.Work.OA.csproj", "{AB207B2A-C8E7-977D-98E6-66527CBB2B7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1854,6 +1858,14 @@ Global
 		{5FA85E8E-3276-43DF-CC93-6A9847905166}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FA85E8E-3276-43DF-CC93-6A9847905166}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FA85E8E-3276-43DF-CC93-6A9847905166}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C996D147-5B81-49D9-949B-F3BC185B2CD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C996D147-5B81-49D9-949B-F3BC185B2CD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C996D147-5B81-49D9-949B-F3BC185B2CD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C996D147-5B81-49D9-949B-F3BC185B2CD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB207B2A-C8E7-977D-98E6-66527CBB2B7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB207B2A-C8E7-977D-98E6-66527CBB2B7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB207B2A-C8E7-977D-98E6-66527CBB2B7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB207B2A-C8E7-977D-98E6-66527CBB2B7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2193,6 +2205,8 @@ Global
 		{C9756AD3-3AEA-4AA8-99E3-8305D37E0903} = {07DFEB1E-ED92-4E97-A801-FAB2D70F4F35}
 		{B4311504-B0C8-AC8D-02A5-81AD43B4087B} = {91867618-0D86-4410-91C6-B1166A9ACDF9}
 		{5FA85E8E-3276-43DF-CC93-6A9847905166} = {4F837B81-EA7D-472A-8482-3D5A730DF810}
+		{C996D147-5B81-49D9-949B-F3BC185B2CD4} = {91867618-0D86-4410-91C6-B1166A9ACDF9}
+		{AB207B2A-C8E7-977D-98E6-66527CBB2B7F} = {91867618-0D86-4410-91C6-B1166A9ACDF9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {711A43C0-A2F8-4E5C-9B9F-F2551E4B3FF1}

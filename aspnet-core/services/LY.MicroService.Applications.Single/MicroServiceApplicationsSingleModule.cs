@@ -1,5 +1,7 @@
 using LINGYUN.Abp.Elsa.Designer;
+using LINGYUN.Abp.WeChat.Work.Contacts;
 using LINGYUN.Abp.WeChat.Work.ExternalContact;
+using LINGYUN.Abp.WeChat.Work.OA;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -335,8 +337,12 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpWeChatOfficialHttpApiModule),
     // 微信模块 企业微信
     typeof(AbpWeChatWorkModule),
+    // 微信模块 企业微信通讯录
+    typeof(AbpWeChatWorkContactModule),
     // 微信模块 企业微信客户联系
     typeof(AbpWeChatWorkExternalContactModule),
+    // 微信模块 企业微信办公
+    typeof(AbpWeChatWorkOAModule),
     // 微信模块 企业微信 应用服务
     typeof(AbpWeChatWorkApplicationModule),
     // 微信模块 企业微信 控制器
