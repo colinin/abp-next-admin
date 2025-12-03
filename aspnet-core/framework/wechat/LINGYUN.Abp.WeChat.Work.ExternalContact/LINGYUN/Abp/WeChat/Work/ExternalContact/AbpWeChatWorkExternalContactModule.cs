@@ -7,7 +7,9 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.WeChat.Work.ExternalContact;
-
+/// <summary>
+/// 企业微信客户联系模块
+/// </summary>
 [DependsOn(typeof(AbpWeChatWorkModule))]
 public class AbpWeChatWorkExternalContactModule : AbpModule
 {

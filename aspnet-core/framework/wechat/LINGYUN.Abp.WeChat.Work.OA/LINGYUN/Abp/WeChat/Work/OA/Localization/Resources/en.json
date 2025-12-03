@@ -1,0 +1,7 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Features:OAEnable": "Enable OA",
+    "Features:OAEnableDesc": "Enable the ability to provide the application with an Enterprise wechat OA interface."
+  }
+}

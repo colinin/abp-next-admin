@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\..\configureawait.props" />
 	<Import Project="..\..\..\..\common.props" />
@@ -30,6 +30,7 @@
 	  <ProjectReference Include="..\..\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.Work.Contacts\LINGYUN.Abp.WeChat.Work.Contacts.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj" />
 	</ItemGroup>
 

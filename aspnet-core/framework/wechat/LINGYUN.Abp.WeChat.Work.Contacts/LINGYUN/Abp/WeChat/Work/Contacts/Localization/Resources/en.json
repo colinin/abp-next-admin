@@ -1,0 +1,9 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Features:ContactsEnable": "Enable Contacts",
+    "Features:ContactsEnableDesc": "Enable the ability to provide the application with an Enterprise wechat contacts interface.",
+    "DisplayName:WeChatWorkContact.Secret": "Contact Secret",
+    "Description:WeChatWorkContact.Secret": "Secretfor the address contact application. Some contact interfaces require a contact synchronization secret."
+  }
+}
