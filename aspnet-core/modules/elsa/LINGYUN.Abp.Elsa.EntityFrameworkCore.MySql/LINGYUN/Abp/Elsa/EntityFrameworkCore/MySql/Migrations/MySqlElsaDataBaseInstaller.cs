@@ -15,7 +15,6 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql.Migrations;
 
-[Dependency(ReplaceServices = true)]
 public class MySqlElsaDataBaseInstaller : IElsaDataBaseInstaller, ITransientDependency
 {
     public ILogger<MySqlElsaDataBaseInstaller> Logger { protected get; set; }

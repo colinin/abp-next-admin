@@ -14,6 +14,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Data" />
 		<PackageReference Include="Volo.Abp.Quartz" />
 	</ItemGroup>
 

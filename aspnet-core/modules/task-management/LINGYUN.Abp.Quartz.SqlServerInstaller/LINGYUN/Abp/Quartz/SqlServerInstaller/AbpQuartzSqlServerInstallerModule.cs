@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Quartz.SqlInstaller;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -15,5 +16,7 @@ public class AbpQuartzSqlServerInstallerModule : AbpModule
         {
             options.FileSets.AddEmbedded<AbpQuartzSqlServerInstallerModule>();
         });
+
+        context.Services.AddTransient<IQuartzSqlInstaller, SqlServerQuartzSqlInstaller>();
     }
 }

@@ -1,8 +1,3 @@
-using LINGYUN.Abp.Elsa.Designer;
-using LINGYUN.Abp.WeChat.Work.Contacts;
-using LINGYUN.Abp.WeChat.Work.ExternalContact;
-using LINGYUN.Abp.WeChat.Work.OA;
-
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
@@ -387,10 +382,12 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpMailKitModule),
     typeof(AbpAutofacModule),
 
-    // 取消注释使用MySql
-     typeof(SingleMigrationsEntityFrameworkCoreMySqlModule)
-    // 取消注释使用SqlServer
-    //typeof(SingleMigrationsEntityFrameworkCoreSqlServerModule)
+    // MySql
+     typeof(SingleMigrationsEntityFrameworkCoreMySqlModule),
+    // SqlServer
+    typeof(SingleMigrationsEntityFrameworkCoreSqlServerModule),
+    // PostgreSql
+    typeof(SingleMigrationsEntityFrameworkCorePostgreSqlModule)
     )]
 public partial class MicroServiceApplicationsSingleModule : AbpModule
 {

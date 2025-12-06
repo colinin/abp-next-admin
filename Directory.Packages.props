@@ -222,6 +222,7 @@
 		<PackageVersion Include="DotNetCore.CAP.Dashboard" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageVersion Include="DotNetCore.CAP.MySql" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageVersion Include="DotNetCore.CAP.SqlServer" Version="$(DotNetCoreCAPPackageVersion)" />
+		<PackageVersion Include="DotNetCore.CAP.PostgreSql" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageVersion Include="DotNetCore.CAP.OpenTelemetry" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageVersion Include="DotNetCore.CAP.RabbitMQ" Version="$(DotNetCoreCAPPackageVersion)" />
 		<PackageVersion Include="DotNetCore.CAP.InMemoryStorage" Version="$(DotNetCoreCAPPackageVersion)" />
@@ -264,7 +265,7 @@
 	<ItemGroup>
 		<PackageVersion Include="MySqlConnector" Version="2.4.0" />
 		<PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="23.6.1" />
-		<PackageVersion Include="Npgsql" Version="9.0.2" />
+		<PackageVersion Include="Npgsql" Version="9.0.3" />
 		<PackageVersion Include="Microsoft.Data.SqlClient" Version="5.1.6" />
 		<PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="9.0.5" />
 	</ItemGroup>

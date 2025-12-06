@@ -22,6 +22,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.Quartz.MySqlInstaller\LINGYUN.Abp.Quartz.MySqlInstaller.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.EntityFrameworkCore\LINGYUN.Abp.TaskManagement.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 

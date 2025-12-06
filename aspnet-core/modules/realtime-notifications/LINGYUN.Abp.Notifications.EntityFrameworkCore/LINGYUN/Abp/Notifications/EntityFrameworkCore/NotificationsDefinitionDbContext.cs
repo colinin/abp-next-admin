@@ -9,6 +9,9 @@ namespace LINGYUN.Abp.Notifications.EntityFrameworkCore;
 [ConnectionStringName(AbpNotificationsDbProperties.ConnectionStringName)]
 public class NotificationsDefinitionDbContext : AbpDbContext<NotificationsDefinitionDbContext>, INotificationsDefinitionDbContext
 {
+    public DbSet<NotificationDefinitionGroupRecord> NotificationDefinitionGroupRecords { get; set; }
+    public DbSet<NotificationDefinitionRecord> NotificationDefinitionRecords { get; set; }
+
     public NotificationsDefinitionDbContext(DbContextOptions<NotificationsDefinitionDbContext> options)
         : base(options)
     {

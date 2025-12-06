@@ -14,6 +14,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="LINGYUN\Abp\Elsa\EntityFrameworkCore\PostgreSql\Migrations\Initial.sql" />
+		<EmbeddedResource Include="LINGYUN\Abp\Elsa\EntityFrameworkCore\PostgreSql\Migrations\Initial.sql" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.PostgreSql" />
 		<PackageReference Include="Elsa.WorkflowSettings.Persistence.EntityFramework.PostgreSql" />
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" />

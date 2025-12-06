@@ -8,6 +8,16 @@
     }
   },
   "profiles": {
+    "Single.PostgreSql.Dev": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://0.0.0.0:30001",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APPLICATION_DATABASE_PROVIDER": "PostgreSql"
+      }
+    },
     "Single.MySql.Dev": {
       "commandName": "Project",
       "dotnetRunMessages": true,
