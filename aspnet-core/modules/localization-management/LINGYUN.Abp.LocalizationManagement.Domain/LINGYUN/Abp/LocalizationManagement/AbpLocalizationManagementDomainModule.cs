@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
@@ -56,7 +57,10 @@ public class AbpLocalizationManagementDomainModule : AbpModule
 
     public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        await SaveLocalizationAsync(context);
+        if (!context.ServiceProvider.IsDataMigrationEnvironment())
+        {
+            await SaveLocalizationAsync(context);
+        }
     }
 
     public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)

@@ -33,10 +33,26 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin\LINGYUN.Abp.UI.Navigation.VueVbenAdmin.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin5\LINGYUN.Abp.UI.Navigation.VueVbenAdmin5.csproj" />
 		<ProjectReference Include="..\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.csproj" />
 		<ProjectReference Include="..\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql\LY.MicroService.Applications.Single.EntityFrameworkCore.Mysql.csproj" />
 		<ProjectReference Include="..\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="appsettings.MySql.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="appsettings.PostgreSql.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="appsettings.SqlServer.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Properties\launchSettings.json">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

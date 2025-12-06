@@ -159,7 +159,7 @@ public class ClientDataSeederContributor : IDataSeedContributor, ITransientDepen
                 await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
                 {
                     ClientId = internalServiceClientId,
-                    ClientSecret = configurationSection["InternalService:ClientSecret"],
+                    ClientSecret = configurationSection["InternalService:ClientSecret"] ?? "1q2w3e*",
                     ClientType = OpenIddictConstants.ClientTypes.Confidential,
                     ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
                     ApplicationType = OpenIddictConstants.ApplicationTypes.Native,

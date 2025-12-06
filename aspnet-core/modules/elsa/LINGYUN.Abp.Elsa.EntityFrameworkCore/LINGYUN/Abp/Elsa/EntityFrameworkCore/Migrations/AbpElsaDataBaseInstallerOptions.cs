@@ -13,7 +13,10 @@ public class AbpElsaDataBaseInstallerOptions
             "WorkflowDefinitions",
             "WorkflowExecutionLogRecords",
             "WorkflowInstances",
-            "Triggers"
+            "Triggers",
+            "WorkflowSettings",
+            "Secrets",
+            "WebhookDefinitions"
         };
     }
 }

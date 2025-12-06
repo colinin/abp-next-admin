@@ -112,7 +112,7 @@ dotnet run --launch-profile "YourPackageName.YourCompanyName.YourProjectName.Dev
 # 使用Docker启动PostgreSQL
 docker run -d --name postgres \
     -p 5432:5432 \
-    -e POSTGRES_PASSWORD=postgres \
+    -e POSTGRES_PASSWORD=123456 \
     -e PGDATA=/var/lib/postgresql/data \
     postgres:latest
 ```
@@ -123,14 +123,8 @@ docker run -d --name postgres \
 # 使用Docker启动MySQL
 docker run -d --name mysql \
     -p 3306:3306 \
-    -e MYSQL_ROOT_PASSWORD=mysql \
+    -e MYSQL_ROOT_PASSWORD=123456 \
     mysql:latest
-```
-
-创建数据库：
-
-```sql
-CREATE DATABASE `Platform-V70`;
 ```
 
 ##### SQL Server
@@ -140,7 +134,7 @@ CREATE DATABASE `Platform-V70`;
 docker run -d --name sqlserver \
     -p 1433:1433 \
     -e "ACCEPT_EULA=Y" \
-    -e "SA_PASSWORD=yourStrong(!)Password" \
+    -e "SA_PASSWORD=123456" \
     mcr.microsoft.com/mssql/server:latest
 ```
 
@@ -148,13 +142,11 @@ docker run -d --name sqlserver \
 
 需要根据选择的数据库类型修改以下配置文件中的数据库连接字符串：
 
-- `migrations/LY.MicroService.Applications.Single.DbMigrator/appsettings.json`
-- `LY.MicroService.Applications.Single/appsettings.Development.json`
-
 数据库连接字符串示例：
 
 PostgreSQL:
 
+- `LY.MicroService.Applications.Single/appsettings.Development.PostgreSql.json`
 ```json
 {
   "ConnectionStrings": {
@@ -165,6 +157,7 @@ PostgreSQL:
 
 MySQL:
 
+- `LY.MicroService.Applications.Single/appsettings.Development.MySql.json`
 ```json
 {
   "ConnectionStrings": {
@@ -175,10 +168,11 @@ MySQL:
 
 SQL Server:
 
+- `LY.MicroService.Applications.Single/appsettings.Development.SqlServer.json`
 ```json
 {
   "ConnectionStrings": {
-    "Default": "Server=localhost,1433;Database=Platform-V70;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=True"
+    "Default": "Server=localhost,1433;Database=Platform-V70;User Id=sa;Password=123456;TrustServerCertificate=True"
   }
 }
 ```
@@ -249,7 +243,7 @@ Redis 配置示例：
 
 1. 运行数据库迁移脚本：
 
-方案一（推荐）：
+方案一：
 
 ```shell
 ./aspnet-core/migrations/Migrate.ps1
@@ -257,25 +251,23 @@ Redis 配置示例：
 
 根据命令行提示生成迁移文件和 sql 脚本，然后执行 sql 脚本来创建数据表
 
-方案二：
+方案二（推荐）：
 以 pgsql 为例
 
-- 修改 `LY.MicroService.Applications.Single.DbMigrator/appsettings.PostgreSql.json` 中的数据库连接信息
-- 进入`LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql`项目
-- 运行 `dotnet ef database update`
-- 等待数据迁移完成
+1. 选择启动配置
+   - 选择 `LY.MicroService.Applications.Single.DbMigrator/Properties/launchSettings.json` 中的 `Single.PostgreSql.Dev`
 
 2. 配置数据初始化：
 
-   - 修改 `LY.MicroService.Applications.Single.DbMigrator/appsettings.json` 中的数据库连接信息
-   - 确保选择了正确的数据库提供程序
+   - 修改 `LY.MicroService.Applications.Single.DbMigrator/appsettings.PostgreSql.json` 中的数据库连接信息
 
 3. 执行数据迁移：
    - 运行 `LY.MicroService.Applications.Single.DbMigrator` 项目
    - 等待数据迁移完成，基础表数据将被初始化
 
 ### 服务启动
-
+1. 选择启动配置
+   - 选择 `LY.MicroService.Applications.Single/Properties/launchSettings.json` 中的 `Single.PostgreSql.Dev`
 1. 运行 `LY.MicroService.Applications.Single` 项目
 2. 在浏览器中访问 Swagger 接口文档：
    - URL: http://127.0.0.1:30000/swagger

@@ -17,7 +17,7 @@ using static Quartz.SchedulerBuilder;
 
 namespace LINGYUN.Abp.Quartz.MySqlInstaller;
 
-public class MySqlQuartzSqlInstaller : IQuartzSqlInstaller, ITransientDependency
+public class MySqlQuartzSqlInstaller : IQuartzSqlInstaller
 {
     public ILogger<MySqlQuartzSqlInstaller> Logger { protected get; set; }
 
@@ -38,6 +38,11 @@ public class MySqlQuartzSqlInstaller : IQuartzSqlInstaller, ITransientDependency
         _installerOptions = installerOptions.Value;
 
         Logger = NullLogger<MySqlQuartzSqlInstaller>.Instance;
+    }
+
+    public bool CanInstall(string driverDelegateType)
+    {
+        return "Quartz.Impl.AdoJobStore.MySQLDelegate,Quartz".Equals(driverDelegateType);
     }
 
     public async virtual Task InstallAsync()

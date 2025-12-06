@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{8DA8A2EE-0B26-487E-A6C4-518906E92B1B}"
 EndProject
@@ -187,6 +187,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.MultiTenancy.Saas", "modules\saas\LINGYUN.Abp.MultiTenancy.Saas\LINGYUN.Abp.MultiTenancy.Saas.csproj", "{E09374FE-6B13-D69E-B171-94C63E6B80E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Telemetry.OpenTelemetry", "framework\telemetry\LINGYUN.Abp.Telemetry.OpenTelemetry\LINGYUN.Abp.Telemetry.OpenTelemetry.csproj", "{164E4514-4E84-F13A-E24E-2A743753CDB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Quartz.PostgresSqlInstaller", "modules\task-management\LINGYUN.Abp.Quartz.PostgresSqlInstaller\LINGYUN.Abp.Quartz.PostgresSqlInstaller.csproj", "{CD7B8501-57B7-6C0E-472F-4E9B894ED6C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -486,6 +488,10 @@ Global
 		{164E4514-4E84-F13A-E24E-2A743753CDB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{164E4514-4E84-F13A-E24E-2A743753CDB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{164E4514-4E84-F13A-E24E-2A743753CDB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD7B8501-57B7-6C0E-472F-4E9B894ED6C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD7B8501-57B7-6C0E-472F-4E9B894ED6C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD7B8501-57B7-6C0E-472F-4E9B894ED6C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD7B8501-57B7-6C0E-472F-4E9B894ED6C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -564,6 +570,7 @@ Global
 		{F58A7141-AC0D-26EC-F22A-DF0DB1BA6955} = {DE7B8B71-635D-4113-AA49-B218D6998CEC}
 		{E09374FE-6B13-D69E-B171-94C63E6B80E5} = {DE7B8B71-635D-4113-AA49-B218D6998CEC}
 		{164E4514-4E84-F13A-E24E-2A743753CDB3} = {5A41C31A-B966-418B-B446-5BA1D7E61A62}
+		{CD7B8501-57B7-6C0E-472F-4E9B894ED6C2} = {385578CC-C0F1-4377-A7A2-682B8F416234}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1FD1F4C-D344-408B-97CF-B6F1F6D7D293}

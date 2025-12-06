@@ -126,7 +126,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.csproj" />
-		<!--<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.csproj" />-->
+		<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.csproj" />
+		<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

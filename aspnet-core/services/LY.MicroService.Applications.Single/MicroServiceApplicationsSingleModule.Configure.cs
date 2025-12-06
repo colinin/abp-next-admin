@@ -45,15 +45,10 @@ public partial class MicroServiceApplicationsSingleModule
                     .UseRedis(configuration["CAP:Redis:Configuration"]);
                 return;
             }
-            options
-                .UseMySql(mySqlOptions =>
-                {
-                    configuration.GetSection("CAP:MySql").Bind(mySqlOptions);
-                })
-                .UseRabbitMQ(rabbitMQOptions =>
-                {
-                    configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
-                });
+            options.UseRabbitMQ(rabbitMQOptions =>
+            {
+                configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
+            });
         });
     }
 
