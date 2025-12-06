@@ -39,24 +39,24 @@ public class SelectorConfig
     /// <summary>
     /// 多选选项，多选属性的选择控件允许输入多个
     /// </summary>
-    [NotNull]
+    [CanBeNull]
     [JsonProperty("options")]
     [JsonPropertyName("options")]
     public List<SelectorOption> Options {  get; set; }
     /// <summary>
     /// 关联控件
     /// </summary>
-    [NotNull]
+    [CanBeNull]
     [JsonProperty("op_relations")]
     [JsonPropertyName("op_relations")]
-    public List<SelectorOptionRelation> OptionRelations { get; set; }
+    public List<SelectorOptionRelation>? OptionRelations { get; set; }
     /// <summary>
     /// 关联外部选项
     /// </summary>
-    [NotNull]
+    [CanBeNull]
     [JsonProperty("external_option")]
     [JsonPropertyName("external_option")]
-    public SelectorOptionExternal ExternalOption { get; set; }
+    public SelectorOptionExternal? ExternalOption { get; set; }
     public SelectorConfig()
     {
 
@@ -65,8 +65,8 @@ public class SelectorConfig
     private SelectorConfig(
         string type,
         List<SelectorOption> options,
-        List<SelectorOptionRelation> optionRelations = null,
-        SelectorOptionExternal optionExternal = null)
+        List<SelectorOptionRelation>? optionRelations = null,
+        SelectorOptionExternal? optionExternal = null)
     {
         Type = type;
         Options = options;
@@ -76,16 +76,16 @@ public class SelectorConfig
 
     public static SelectorConfig Single(
         List<SelectorOption> options,
-        List<SelectorOptionRelation> optionRelations = null, 
-        SelectorOptionExternal optionExternal = null)
+        List<SelectorOptionRelation>? optionRelations = null, 
+        SelectorOptionExternal? optionExternal = null)
     {
         return new SelectorConfig("single", options, optionRelations, optionExternal);
     }
 
     public static SelectorConfig Multiple(
         List<SelectorOption> options,
-        List<SelectorOptionRelation> optionRelations = null,
-        SelectorOptionExternal optionExternal = null)
+        List<SelectorOptionRelation>? optionRelations = null,
+        SelectorOptionExternal? optionExternal = null)
     {
         return new SelectorConfig("multi", options, optionRelations, optionExternal);
     }

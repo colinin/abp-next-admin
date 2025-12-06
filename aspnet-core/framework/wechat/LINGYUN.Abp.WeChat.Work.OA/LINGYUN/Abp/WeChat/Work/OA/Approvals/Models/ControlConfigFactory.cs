@@ -7,7 +7,7 @@ internal static class ControlConfigFactory
     /// <summary>
     /// 根据控件类型创建配置（System.Text.Json）
     /// </summary>
-    public static ControlConfig CreateConfig(string controlType, JsonElement configElement)
+    public static ControlConfig? CreateConfig(string controlType, JsonElement configElement)
     {
         return controlType switch
         {
@@ -29,7 +29,7 @@ internal static class ControlConfigFactory
     /// <summary>
     /// 根据控件类型创建配置（Newtonsoft.Json）
     /// </summary>
-    public static ControlConfig CreateConfig(string controlType, JToken configToken)
+    public static ControlConfig? CreateConfig(string controlType, JToken configToken)
     {
         return controlType switch
         {

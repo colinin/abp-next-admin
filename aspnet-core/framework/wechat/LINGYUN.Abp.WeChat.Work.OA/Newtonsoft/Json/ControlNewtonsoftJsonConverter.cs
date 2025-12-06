@@ -26,7 +26,7 @@ internal class ControlNewtonsoftJsonConverter : JsonConverter<Control>
         writer.WriteEndObject();
     }
 
-    public override Control? ReadJson(JsonReader reader, Type objectType, Control existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override Control? ReadJson(JsonReader reader, Type objectType, Control? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         var jObject = JObject.Load(reader);
 
@@ -39,7 +39,7 @@ internal class ControlNewtonsoftJsonConverter : JsonConverter<Control>
         // 根据 Control 类型动态反序列化 Config
         if (jObject.TryGetValue("config", out var configToken) && configToken.Type != JTokenType.Null)
         {
-            control.Config = ControlConfigFactory.CreateConfig(control.Property.Control, configToken);
+            control.Config = ControlConfigFactory.CreateConfig(control.Property.Control, configToken)!;
         }
 
         return control;

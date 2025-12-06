@@ -63,6 +63,7 @@ public abstract class WebhookTemplateCardMessage
     /// <summary>
     /// 创建一个Webhook模板卡片消息体
     /// </summary>
+    /// <param name="cardType">模版卡片的模版类型</param>
     /// <param name="action">整体卡片的点击跳转事件</param>
     /// <param name="mainTitle">模版卡片的主要内容</param>
     /// <param name="source">卡片来源样式信息</param>

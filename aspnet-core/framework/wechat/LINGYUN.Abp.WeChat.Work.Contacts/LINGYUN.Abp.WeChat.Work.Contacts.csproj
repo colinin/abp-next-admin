@@ -12,6 +12,8 @@
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Nullable>enable</Nullable>
+		<Version>9.3.6.3</Version>
+		<PackageVersion>9.3.6.3</PackageVersion>
 		<RootNamespace />
 	</PropertyGroup>
 

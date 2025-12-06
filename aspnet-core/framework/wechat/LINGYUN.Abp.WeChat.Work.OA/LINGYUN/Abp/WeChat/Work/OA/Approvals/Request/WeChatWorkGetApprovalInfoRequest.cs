@@ -34,7 +34,7 @@ public class WeChatWorkGetApprovalInfoRequest : WeChatWorkRequest
     [CanBeNull]
     [JsonProperty("new_cursor")]
     [JsonPropertyName("new_cursor")]
-    public string NewCursor { get; set; } = "";
+    public string? NewCursor { get; set; } = "";
     /// <summary>
     /// 一次请求拉取审批单数量，默认值为100，上限值为100。
     /// 若accesstoken为自建应用，仅允许获取在应用可见范围内申请人提交的表单，返回的sp_no_list个数可能和size不一致，开发者需用next_cursor判断表单记录是否拉取完
@@ -49,12 +49,12 @@ public class WeChatWorkGetApprovalInfoRequest : WeChatWorkRequest
     [CanBeNull]
     [JsonProperty("filters")]
     [JsonPropertyName("filters")]
-    public List<ApprovalInfoFilter> Filters { get; set; }
+    public List<ApprovalInfoFilter>? Filters { get; set; }
     public WeChatWorkGetApprovalInfoRequest(
         long sartTime,
         long endTime,
         int size = 100,
-        List<ApprovalInfoFilter> filters = null)
+        List<ApprovalInfoFilter>? filters = null)
     {
         StartTime = sartTime;
         EndTime = endTime;
