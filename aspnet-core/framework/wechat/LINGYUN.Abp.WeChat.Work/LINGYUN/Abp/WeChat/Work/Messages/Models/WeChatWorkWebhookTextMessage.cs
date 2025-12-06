@@ -18,7 +18,7 @@ public class WeChatWorkWebhookTextMessage : WeChatWorkWebhookMessage
     /// <summary>
     /// 创建一个企业微信Webhook文本消息
     /// </summary>
-    /// <param name="templateCard">文本消息体</param>
+    /// <param name="text">文本消息体</param>
     public WeChatWorkWebhookTextMessage(WebhookTextMessage text) 
         : base("text")
     {

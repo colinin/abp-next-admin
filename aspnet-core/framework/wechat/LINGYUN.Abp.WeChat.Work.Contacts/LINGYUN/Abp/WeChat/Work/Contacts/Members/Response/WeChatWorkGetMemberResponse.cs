@@ -159,6 +159,8 @@ public class WeChatWorkGetMemberResponse : WeChatWorkResponse
     [CanBeNull]
     [JsonProperty("extattr")]
     [JsonPropertyName("extattr")]
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.MemberExternalAttributeConverter))]
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.MemberExternalAttributeConverter))]
     public MemberExternalAttribute? ExternalAttribute { get; set; }
     /// <summary>
     /// 对外职务，如果设置了该值，则以此作为对外展示的职务，否则以position来展示。

@@ -18,7 +18,7 @@ internal class ControlSystemTextJsonConverter : JsonConverter<Control>
         // 根据 Control 类型动态反序列化 Config
         if (root.TryGetProperty("config", out var configElement) && configElement.ValueKind != JsonValueKind.Null)
         {
-            control.Config = ControlConfigFactory.CreateConfig(control.Property.Control, configElement);
+            control.Config = ControlConfigFactory.CreateConfig(control.Property.Control, configElement)!;
         }
 
         return control;

@@ -44,16 +44,16 @@ public class ControlData
     /// <remarks>
     /// 模板配置的控件属性为必填时，对应value值需要有值。
     /// </remarks>
-    [NotNull]
+    [CanBeNull]
     [JsonProperty("value")]
     [JsonPropertyName("value")]
-    public ControlValue Value { get; set; }
+    public ControlValue? Value { get; set; }
     public ControlData()
     {
 
     }
 
-    private ControlData(string id, string control, ControlValue value)
+    private ControlData(string id, string control, ControlValue? value = null)
     {
         Id = id;
         Control = control;

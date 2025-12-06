@@ -24,18 +24,18 @@ public class WeChatWorkTagChangeMemberRequest : WeChatWorkRequest
     [CanBeNull]
     [JsonProperty("userlist")]
     [JsonPropertyName("userlist")]
-    public List<string> Users { get; set; }
+    public List<string>? Users { get; set; }
     /// <summary>
     /// 	企业部门ID列表，注意：userlist、partylist不能同时为空，单次请求个数不超过100
     /// </summary>
     [CanBeNull]
     [JsonProperty("partylist")]
     [JsonPropertyName("partylist")]
-    public List<int> Parts { get; set; }
+    public List<int>? Parts { get; set; }
     public WeChatWorkTagChangeMemberRequest(
         int tagId,
-        List<string> users = null,
-        List<int> parts = null)
+        List<string>? users = null,
+        List<int>? parts = null)
     {
         TagId = Check.Positive(tagId, nameof(tagId));
         Users = users;

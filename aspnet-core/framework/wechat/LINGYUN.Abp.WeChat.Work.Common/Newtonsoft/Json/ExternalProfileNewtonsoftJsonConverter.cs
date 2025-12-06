@@ -59,9 +59,12 @@ internal class ExternalProfileNewtonsoftJsonConverter : JsonConverter<ExternalPr
                 var typeToken = externalAttrToken.SelectToken("type");
                 if (typeToken != null)
                 {
-                    var type = typeToken.Value<ExternalAttributeType>();
-                    externalProfile.ExternalAttributes.Add(
-                        ExternalAttributeDeserializeFactory.CreateExternalAttribute(type, externalAttrToken));
+                    var attributeType = typeToken.Value<int>();
+                    if (Enum.IsDefined(typeof(ExternalAttributeType), attributeType))
+                    {
+                        externalProfile.ExternalAttributes.Add(
+                            ExternalAttributeDeserializeFactory.CreateExternalAttribute((ExternalAttributeType)attributeType, externalAttrToken));
+                    }
                 }
             }
         }

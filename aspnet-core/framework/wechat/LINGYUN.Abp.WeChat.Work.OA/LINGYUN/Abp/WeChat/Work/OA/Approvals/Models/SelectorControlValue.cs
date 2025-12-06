@@ -67,7 +67,7 @@ public class SelectorValue
     /// <summary>
     /// 创建一个多选选项
     /// </summary>
-    /// <param name="option"></param>
+    /// <param name="options"></param>
     /// <returns></returns>
     public static SelectorValue Multiple(List<SelectorValueOption> options)
     {

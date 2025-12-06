@@ -31,8 +31,12 @@ internal class ExternalProfileSystemTextJsonConverter : JsonConverter<ExternalPr
                 {
                     var type = typeElement.Deserialize<ExternalAttributeType>();
 
-                    externalProfile.ExternalAttributes.Add(
-                        ExternalAttributeDeserializeFactory.CreateExternalAttribute(type, externalAttrElement));
+                    var attributeType = typeElement.GetInt32();
+                    if (Enum.IsDefined(typeof(ExternalAttributeType), attributeType))
+                    {
+                        externalProfile.ExternalAttributes.Add(
+                            ExternalAttributeDeserializeFactory.CreateExternalAttribute((ExternalAttributeType)attributeType, externalAttrElement));
+                    }
                 }
             }
         }

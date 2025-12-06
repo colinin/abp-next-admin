@@ -8,7 +8,6 @@ namespace LINGYUN.Abp.WeChat.Work.ExternalContact.Customers.Response;
 /// 获取规则组管理范围响应参数
 /// </summary>
 /// <remarks>
-/// <remarks>
 /// 详情见: <see href="https://developer.work.weixin.qq.com/document/path/94883" />
 /// </remarks>
 public class WeChatWorkGetCustomerStrategyRangeResponse : WeChatWorkResponse

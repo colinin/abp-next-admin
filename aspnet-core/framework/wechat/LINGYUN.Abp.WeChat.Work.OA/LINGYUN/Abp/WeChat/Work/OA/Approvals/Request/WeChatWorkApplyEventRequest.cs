@@ -22,7 +22,7 @@ public class WeChatWorkApplyEventRequest : WeChatWorkRequest
     [CanBeNull]
     [JsonProperty("process")]
     [JsonPropertyName("process")]
-    public ApprovalApplyProcess Process { get; set; }
+    public ApprovalApplyProcess? Process { get; set; }
     /// <summary>
     /// 摘要信息，用于显示在审批通知卡片、审批列表的摘要信息，最多3行
     /// </summary>
@@ -82,7 +82,7 @@ public class WeChatWorkApplyEventRequest : WeChatWorkRequest
         string templateId,
         string creatorUserid,
         ApprovalApplyData applyData,
-        ApprovalApplyProcess process = null,
+        ApprovalApplyProcess? process = null,
         byte? chooseDepartment = null)
     {
         TemplateId = templateId;
