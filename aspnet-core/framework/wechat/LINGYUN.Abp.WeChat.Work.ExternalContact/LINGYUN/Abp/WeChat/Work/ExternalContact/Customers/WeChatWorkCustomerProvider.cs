@@ -35,11 +35,7 @@ public class WeChatWorkCustomerProvider : IWeChatWorkCustomerProvider, ISingleto
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetCustomerListAsync(token.AccessToken, userId, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetCustomerListResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetCustomerListAsync(token.AccessToken, userId, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkBulkGetCustomerResponse> BulkGetCustomerAsync(
@@ -51,11 +47,7 @@ public class WeChatWorkCustomerProvider : IWeChatWorkCustomerProvider, ISingleto
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.BulkGetCustomerAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkBulkGetCustomerResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.BulkGetCustomerAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkGetCustomerResponse> GetCustomerAsync(
@@ -68,11 +60,7 @@ public class WeChatWorkCustomerProvider : IWeChatWorkCustomerProvider, ISingleto
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetCustomerAsync(token.AccessToken, externalUserid, cursor, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetCustomerResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetCustomerAsync(token.AccessToken, externalUserid, cursor, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkResponse> UpdateCustomerRemarkAsync(
@@ -84,10 +72,6 @@ public class WeChatWorkCustomerProvider : IWeChatWorkCustomerProvider, ISingleto
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.UpdateCustomerRemarkAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.UpdateCustomerRemarkAsync(token.AccessToken, request, cancellationToken);
     }
 }

@@ -13,6 +13,8 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Nullable>enable</Nullable>
 		<RootNamespace />
+		<!--<Version>9.3.6.3</Version>
+		<PackageVersion>9.3.6.3</PackageVersion>-->
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -32,11 +32,7 @@ public class WeChatWorkCustomerStrategyProvider : IWeChatWorkCustomerStrategyPro
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetCustomerStrategyListAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetCustomerStrategyListResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetCustomerStrategyListAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkGetCustomerStrategyResponse> GetCustomerStrategyAsync(
@@ -46,11 +42,7 @@ public class WeChatWorkCustomerStrategyProvider : IWeChatWorkCustomerStrategyPro
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetCustomerStrategyAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetCustomerStrategyResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetCustomerStrategyAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkGetCustomerStrategyRangeResponse> GetCustomerStrategyRangeAsync(
@@ -60,11 +52,7 @@ public class WeChatWorkCustomerStrategyProvider : IWeChatWorkCustomerStrategyPro
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetCustomerStrategyRangeAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetCustomerStrategyRangeResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetCustomerStrategyRangeAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkCreateCustomerStrategyResponse> CreateCustomerStrategyAsync(
@@ -74,11 +62,7 @@ public class WeChatWorkCustomerStrategyProvider : IWeChatWorkCustomerStrategyPro
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.CreateCustomerStrategyAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkCreateCustomerStrategyResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.CreateCustomerStrategyAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkResponse> UpdateCustomerStrategyAsync(
@@ -88,11 +72,7 @@ public class WeChatWorkCustomerStrategyProvider : IWeChatWorkCustomerStrategyPro
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.UpdateCustomerStrategyAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.UpdateCustomerStrategyAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkResponse> DeleteCustomerStrategyAsync(
@@ -102,10 +82,6 @@ public class WeChatWorkCustomerStrategyProvider : IWeChatWorkCustomerStrategyPro
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.DeleteCustomerStrategyAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.DeleteCustomerStrategyAsync(token.AccessToken, request, cancellationToken);
     }
 }

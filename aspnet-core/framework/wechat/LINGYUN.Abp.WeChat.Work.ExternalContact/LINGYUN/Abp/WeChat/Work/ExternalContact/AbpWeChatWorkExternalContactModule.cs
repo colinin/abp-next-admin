@@ -30,6 +30,7 @@ public class AbpWeChatWorkExternalContactModule : AbpModule
                     "del_external_contact" => context.GetWeChatMessage<ExternalContactDeleteEvent>(),
                     "del_follow_user" => context.GetWeChatMessage<ExternalContactDeleteFollowUserEvent>(),
                     "transfer_fail" => context.GetWeChatMessage<ExternalContactTransferFailEvent>(),
+                    "msg_audit_approved" => context.GetWeChatMessage<ExternalContactMsgAuditApprovedEvent>(),
                     _ => throw new AbpWeChatException($"Contact change event change_external_contact:{changeType} is not mounted!"),
                 };
             });
@@ -69,6 +70,8 @@ public class AbpWeChatWorkExternalContactModule : AbpModule
                     _ => throw new AbpWeChatException($"Contact change event change_external_tag:{changeType} is not mounted!"),
                 };
             });
+            // 产生会话回调事件
+            options.MapEvent("msgaudit_notify", context => context.GetWeChatMessage<ExternalContactMsgAuditNotifyEvent>());
         });
 
         Configure<AbpVirtualFileSystemOptions>(options =>

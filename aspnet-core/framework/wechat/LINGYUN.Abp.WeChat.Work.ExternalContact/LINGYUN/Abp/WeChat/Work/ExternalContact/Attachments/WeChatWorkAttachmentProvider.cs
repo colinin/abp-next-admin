@@ -32,10 +32,6 @@ public class WeChatWorkAttachmentProvider : IWeChatWorkAttachmentProvider, ISing
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.UploadAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkUploadAttachmentResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.UploadAsync(token.AccessToken, request, cancellationToken);
     }
 }

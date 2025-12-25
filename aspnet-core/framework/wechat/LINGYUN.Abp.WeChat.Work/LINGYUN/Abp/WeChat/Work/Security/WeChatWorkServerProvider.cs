@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.WeChat.Work.Security.Models;
 using LINGYUN.Abp.WeChat.Work.Token;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,14 +20,11 @@ public class WeChatWorkServerProvider : IWeChatWorkServerProvider, ISingletonDep
         WeChatWorkTokenProvider = weChatWorkTokenProvider;
     }
 
-    public async virtual Task<WeChatServerDomainModel> GetWeChatServerAsync(CancellationToken cancellationToken = default)
+    public async virtual Task<WeChatServerDomainResponse> GetWeChatServerAsync(CancellationToken cancellationToken = default)
     {
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetServerDomainIpAsync(token.AccessToken, cancellationToken);
-        var serverDomainResponse = await response.DeserializeObjectAsync<WeChatServerDomainResponse>();
-
-        return serverDomainResponse.ToServerDomain();
+        return await client.GetServerDomainIpAsync(token.AccessToken, cancellationToken);
     }
 }

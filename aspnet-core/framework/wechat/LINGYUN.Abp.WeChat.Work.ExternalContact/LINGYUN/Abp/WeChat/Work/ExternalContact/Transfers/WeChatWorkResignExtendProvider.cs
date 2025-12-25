@@ -35,11 +35,7 @@ public class WeChatWorkResignExtendProvider : IWeChatWorkResignExtendProvider, I
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetUnassignedListAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetUnassignedListResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetUnassignedListAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkResignedTransferCustomerResponse> ResignedTransferCustomerAsync(
@@ -51,11 +47,7 @@ public class WeChatWorkResignExtendProvider : IWeChatWorkResignExtendProvider, I
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.ResignedTransferCustomerAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkResignedTransferCustomerResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.ResignedTransferCustomerAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkGetResignedTransferResultResponse> GetResignedTransferResultAsync(
@@ -67,11 +59,7 @@ public class WeChatWorkResignExtendProvider : IWeChatWorkResignExtendProvider, I
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetResignedTransferResultAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetResignedTransferResultResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetResignedTransferResultAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkGroupChatTransferResponse> GroupChatTransferAsync(
@@ -83,10 +71,6 @@ public class WeChatWorkResignExtendProvider : IWeChatWorkResignExtendProvider, I
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GroupChatTransferAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGroupChatTransferResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GroupChatTransferAsync(token.AccessToken, request, cancellationToken);
     }
 }
