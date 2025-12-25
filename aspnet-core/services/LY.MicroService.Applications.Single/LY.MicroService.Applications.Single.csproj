@@ -7,6 +7,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>LY.MicroService.Applications.Single</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<Version>9.3.6.2</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -22,6 +23,7 @@
 		<PackageReference Include="Elsa.Activities.Temporal.Quartz" />
 		<PackageReference Include="Elsa.Webhooks.Api" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" />
 		<PackageReference Include="OpenIddict.Validation.DataProtection" />
 		<PackageReference Include="OpenIddict.Server.DataProtection" />
 		<PackageReference Include="Serilog.AspNetCore" />
@@ -247,6 +249,7 @@
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.HttpApi\LINGYUN.Abp.Saas.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\settings\LINGYUN.Abp.SettingManagement.Application\LINGYUN.Abp.SettingManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\settings\LINGYUN.Abp.SettingManagement.HttpApi\LINGYUN.Abp.SettingManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\system-info\LINGYUN.Abp.SystemInfo.HttpApi\LINGYUN.Abp.SystemInfo.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Activities\LINGYUN.Abp.BackgroundTasks.Activities.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.DistributedLocking\LINGYUN.Abp.BackgroundTasks.DistributedLocking.csproj" />
