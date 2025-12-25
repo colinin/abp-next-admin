@@ -13,5 +13,5 @@ public interface IWeChatWorkServerProvider
     /// </remarks>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<WeChatServerDomainModel> GetWeChatServerAsync(CancellationToken cancellationToken = default);
+    Task<WeChatServerDomainResponse> GetWeChatServerAsync(CancellationToken cancellationToken = default);
 }
