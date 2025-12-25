@@ -1,3 +1,5 @@
+using LINGYUN.Abp.SystemInfo;
+
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
@@ -382,6 +384,9 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpMailKitModule),
     typeof(AbpAutofacModule),
 
+    // 单体应用系统状态接口
+    typeof(AbpSystemInfoHttpApiModule),
+
     // MySql
      typeof(SingleMigrationsEntityFrameworkCoreMySqlModule),
     // SqlServer
@@ -402,6 +407,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
+        PreConfigureSignalR(configuration);
         PreConfigureAuthServer(configuration);
         PreConfigureElsa(context.Services, configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
@@ -424,7 +430,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureVirtualFileSystem();
         ConfigureEntityDataProtected();
         ConfigureUrls(configuration);
-        ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
         ConfigureDbContext(configuration);
@@ -440,6 +445,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureNotificationManagement(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureSwagger(context.Services, configuration);
+        ConfigureCaching(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureKestrelServer(configuration, hostingEnvironment);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
