@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<IsPackable>false</IsPackable>
+		<TargetFramework>net9.0</TargetFramework>
+		<RootNamespace>LINGYUN.Abp.MicroService.AuthServer</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Volo.Abp.Authorization" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" />
+		<PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
+		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.EntityFrameworkCore\LINGYUN.Abp.Gdpr.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.EntityFrameworkCore\LINGYUN.Platform.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\text-templating\LINGYUN.Abp.TextTemplating.EntityFrameworkCore\LINGYUN.Abp.TextTemplating.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+
+</Project>

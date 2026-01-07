@@ -8,6 +8,7 @@
 		<MicrosoftExtensionsPackageVersion>9.0.5</MicrosoftExtensionsPackageVersion>
 		<MicrosoftAspNetCorePackageVersion>9.0.5</MicrosoftAspNetCorePackageVersion>
 		<MicrosoftEntityFrameworkCorePackageVersion>9.0.5</MicrosoftEntityFrameworkCorePackageVersion>
+		<AspirePackageVersion>13.1.0</AspirePackageVersion>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<!-- Abp Framework -->
@@ -171,13 +172,29 @@
 		<PackageVersion Include="Microsoft.Extensions.FileProviders.Physical" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftExtensionsPackageVersion)" />
+		<PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Options" Version="$(MicrosoftExtensionsPackageVersion)" />
+		<PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.5.0" />
 		<PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
 		<PackageVersion Include="MySql.EntityFrameworkCore" Version="9.0.6" />
 		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
 		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="9.0.0" />
+	</ItemGroup>
+	<!-- Aspire -->
+	<ItemGroup>
+		<PackageVersion Include="Aspire.Hosting.Elasticsearch" Version="13.0.0" />
+		<PackageVersion Include="Aspire.Hosting.JavaScript" Version="$(AspirePackageVersion)" />
+		<PackageVersion Include="Aspire.Hosting.MySql" Version="$(AspirePackageVersion)" />
+		<PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="$(AspirePackageVersion)" />
+		<PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="$(AspirePackageVersion)" />
+		<PackageVersion Include="Aspire.Hosting.Redis" Version="$(AspirePackageVersion)" />
+		<PackageVersion Include="Aspire.MySqlConnector" Version="$(AspirePackageVersion)" />
+		<PackageVersion Include="Aspire.Pomelo.EntityFrameworkCore.MySql" Version="$(AspirePackageVersion)" />
+		<PackageVersion Include="Aspire.StackExchange.Redis" Version="$(AspirePackageVersion)" />
+		<PackageVersion Include="Aspire.RabbitMQ.Client" Version="$(AspirePackageVersion)" />
+		<PackageVersion Include="Aspire.Elastic.Clients.Elasticsearch" Version="13.0.0" />
 	</ItemGroup>
 	<!-- Elsa -->
 	<ItemGroup>
@@ -244,6 +261,7 @@
 		<PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
 		<PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
 		<PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
+		<PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0-dev-00313" />
 	</ItemGroup>
 	<!-- Test -->
 	<ItemGroup>
@@ -305,15 +323,15 @@
 		<PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
 		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="6.4.0" />
 		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="6.4.0" />
-		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
-		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.12.0" />
-		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
-		<PackageVersion Include="OpenTelemetry.Exporter.Zipkin" Version="1.12.0" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.12.0-beta.2" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.12.0" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.12.0-beta.1" />
+		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0" />
+		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.14.0" />
+		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0" />
+		<PackageVersion Include="OpenTelemetry.Exporter.Zipkin" Version="1.14.0" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.14.0-beta.2" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
+		<PackageVersion Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.14.0-beta.1" />
 		<PackageVersion Include="Polly" Version="8.5.2" />
 		<PackageVersion Include="QRCoder" Version="1.5.1" />
 		<PackageVersion Include="Quartz.Serialization.Json" Version="3.14.0" />
