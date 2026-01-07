@@ -19,44 +19,38 @@ public class AbpQuartzSqlInstallerModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        if (!context.Services.IsDataMigrationEnvironment())
+        var abpQuartzOptions = context.Services.ExecutePreConfiguredActions<AbpQuartzOptions>();
+        Configure<QuartzOptions>(options =>
         {
-            var abpQuartzOptions = context.Services.ExecutePreConfiguredActions<AbpQuartzOptions>();
-            Configure<QuartzOptions>(options =>
+            foreach (var settingKey in abpQuartzOptions.Properties.AllKeys)
             {
-                foreach (var settingKey in abpQuartzOptions.Properties.AllKeys)
-                {
-                    options[settingKey] = abpQuartzOptions.Properties[settingKey];
-                }
+                options[settingKey] = abpQuartzOptions.Properties[settingKey];
+            }
 
-                if (abpQuartzOptions.Properties[StdSchedulerFactory.PropertyJobStoreType] == null)
-                {
-                    var defaultJobStoreType = typeof(RAMJobStore).AssemblyQualifiedNameWithoutVersion();
+            if (abpQuartzOptions.Properties[StdSchedulerFactory.PropertyJobStoreType] == null)
+            {
+                var defaultJobStoreType = typeof(RAMJobStore).AssemblyQualifiedNameWithoutVersion();
 
-                    options[StdSchedulerFactory.PropertyJobStoreType] = defaultJobStoreType;
-                    abpQuartzOptions.Properties[StdSchedulerFactory.PropertyJobStoreType] = defaultJobStoreType;
-                }
-            });
-        }
+                options[StdSchedulerFactory.PropertyJobStoreType] = defaultJobStoreType;
+                abpQuartzOptions.Properties[StdSchedulerFactory.PropertyJobStoreType] = defaultJobStoreType;
+            }
+        });
     }
 
     public async override Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        if (!context.ServiceProvider.IsDataMigrationEnvironment())
+        var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
+        if (configuration.GetValue("Quartz:UsePersistentStore", false))
         {
-            var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
-            if (configuration.GetValue("Quartz:UsePersistentStore", false))
-            {
-                var driverDelegateType = configuration[$"Quartz:Properties:quartz.jobStore.driverDelegateType"];
-                // 初始化 Quartz 数据库
-                var installs = context.ServiceProvider.GetServices<IQuartzSqlInstaller>();
+            var driverDelegateType = configuration[$"Quartz:Properties:quartz.jobStore.driverDelegateType"];
+            // 初始化 Quartz 数据库
+            var installs = context.ServiceProvider.GetServices<IQuartzSqlInstaller>();
 
-                foreach (var install in installs)
+            foreach (var install in installs)
+            {
+                if (install.CanInstall(driverDelegateType))
                 {
-                    if (install.CanInstall(driverDelegateType))
-                    {
-                        await install.InstallAsync();
-                    }
+                    await install.InstallAsync();
                 }
             }
         }

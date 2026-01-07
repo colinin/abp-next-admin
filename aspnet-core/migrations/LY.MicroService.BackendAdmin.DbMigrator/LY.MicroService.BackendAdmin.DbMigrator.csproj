@@ -51,4 +51,10 @@
 		<ProjectReference Include="..\LY.MicroService.BackendAdmin.EntityFrameworkCore\LY.MicroService.BackendAdmin.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

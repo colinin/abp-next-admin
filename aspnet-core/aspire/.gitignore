@@ -1,0 +1,7 @@
+.aspire
+wwwroot
+node_modules
+blobs
+bin
+obj
+yarn.lock

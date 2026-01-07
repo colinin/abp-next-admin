@@ -1,0 +1,88 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>LINGYUN.Abp.MicroService.PlatformService</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AgileConfig.Client" />
+		<PackageReference Include="DotNetCore.CAP.Dashboard" />
+		<PackageReference Include="DotNetCore.CAP.PostgreSql" />
+		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
+		<PackageReference Include="DistributedLock.Redis" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
+		<PackageReference Include="Serilog.AspNetCore" />
+		<PackageReference Include="Serilog.Enrichers.Environment" />
+		<PackageReference Include="Serilog.Enrichers.Assembly" />
+		<PackageReference Include="Serilog.Enrichers.Process" />
+		<PackageReference Include="Serilog.Enrichers.Thread" />
+		<PackageReference Include="Serilog.Settings.Configuration" />
+		<PackageReference Include="Serilog.Sinks.Async" />
+		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
+		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
+		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
+		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" />
+		<PackageReference Include="Volo.Abp.Autofac" />
+		<PackageReference Include="Volo.Abp.BlobStoring.FileSystem" />
+		<PackageReference Include="Volo.Abp.Mailkit" />
+		<PackageReference Include="Volo.Abp.Identity.HttpApi.Client" />
+		<PackageReference Include="Volo.Abp.Imaging.ImageSharp" />
+		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" />
+		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.Swashbuckle" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
+		<ProjectReference Include="..\..\framework\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Features.LimitValidation.Redis.Client\LINGYUN.Abp.Features.LimitValidation.Redis.Client.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Sms.Aliyun\LINGYUN.Abp.Sms.Aliyun.csproj" />
+		<ProjectReference Include="..\..\framework\features\LINGYUN.Abp.Features.Client\LINGYUN.Abp.Features.Client.csproj" />
+		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
+		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
+		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
+		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
+		<ProjectReference Include="..\..\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
+		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.PlatformService.EntityFrameworkCore\LINGYUN.Abp.MicroService.PlatformService.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
+		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Aliyun\LINGYUN.Abp.OssManagement.Aliyun.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Application\LINGYUN.Abp.OssManagement.Application.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.FileSystem\LINGYUN.Abp.OssManagement.FileSystem.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.HttpApi\LINGYUN.Abp.OssManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Imaging\LINGYUN.Abp.OssManagement.Imaging.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Minio\LINGYUN.Abp.OssManagement.Minio.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Nexus\LINGYUN.Abp.OssManagement.Nexus.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.SettingManagement\LINGYUN.Abp.OssManagement.SettingManagement.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.Tencent\LINGYUN.Abp.OssManagement.Tencent.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Sms.Platform\LINGYUN.Abp.Sms.Platform.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin5\LINGYUN.Abp.UI.Navigation.VueVbenAdmin5.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Application\LINGYUN.Platform.Application.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.EntityFrameworkCore\LINGYUN.Platform.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.HttpApi\LINGYUN.Platform.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Theme.VueVbenAdmin\LINGYUN.Platform.Theme.VueVbenAdmin.csproj" />
+		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
+		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.ServiceDefaults\LINGYUN.Abp.MicroService.ServiceDefaults.csproj" />
+	</ItemGroup>
+
+</Project>
