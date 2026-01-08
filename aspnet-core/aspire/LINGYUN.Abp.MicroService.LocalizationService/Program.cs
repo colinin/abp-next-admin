@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.MicroService.LocalizationService;
+using LINGYUN.Abp.MicroService.ServiceDefaults;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +33,7 @@ try
         });
 
     builder.AddServiceDefaults();
-    builder.AddServiceHealthChecks();
+    builder.AddCustomHealthChecks<ServiceHealthCheck>("Service");
 
     await builder.AddApplicationAsync<LocalizationServiceModule>(options =>
     {
@@ -50,7 +51,7 @@ try
     await app.InitializeApplicationAsync();
 
     app.MapDefaultEndpoints();
-    app.MapServiceHealthChecks();
+    app.MapCustomHealthChecks("/health/service");
 
     app.UseForwardedHeaders();
     // 本地化

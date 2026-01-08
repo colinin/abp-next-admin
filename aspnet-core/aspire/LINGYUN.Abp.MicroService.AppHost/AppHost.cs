@@ -100,7 +100,7 @@ var localizationService = AddDotNetProject<
     migratorSuffix:     "Migrator",
     port:               30030,
     portName:           "localization")
-    .WithHttpHealthCheck("/service-health");
+    .WithHttpHealthCheck("/health/service");
 
 // AuthServer
 var authServer = AddDotNetProject<
@@ -149,7 +149,7 @@ var taskService = AddDotNetProject<
     port:               30040, 
     portName:           "task", 
     waitProject:        adminService)
-    .WithHttpHealthCheck("/service-health");
+    .WithHttpHealthCheck("/health/service");
 
 // MessageService
 AddDotNetProject<

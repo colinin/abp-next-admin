@@ -23,7 +23,7 @@ public class ServiceHealthCheck : IHealthCheck
         _factory = factory ?? throw new ArgumentNullException(nameof(factory));
     }
 
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    public async virtual Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
