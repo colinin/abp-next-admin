@@ -60,6 +60,7 @@ public class AbpCAPBootstrapper : IBootstrapper
 
 
             foreach (var item in _processors)
+            {
                 try
                 {
                     item.Dispose();
@@ -68,6 +69,7 @@ public class AbpCAPBootstrapper : IBootstrapper
                 {
                     _logger.LogWarning(ex, $"Expected an OperationCanceledException, but found '{ex.Message}'.");
                 }
+            }
         });
 
         await BootstrapCoreAsync().ConfigureAwait(false);
@@ -84,7 +86,7 @@ public class AbpCAPBootstrapper : IBootstrapper
             {
                 _cts!.Token.ThrowIfCancellationRequested();
 
-                await item.Start(_cts!.Token);
+                await item.StartAsync(_cts!.Token);
             }
             catch (OperationCanceledException)
             {
