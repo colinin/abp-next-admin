@@ -4,4 +4,5 @@ node_modules
 blobs
 bin
 obj
+aspire-output
 yarn.lock
