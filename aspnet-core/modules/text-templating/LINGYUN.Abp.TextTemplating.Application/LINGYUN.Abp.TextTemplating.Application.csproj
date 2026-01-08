@@ -15,7 +15,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Ddd.Application" />
-		<PackageReference Include="Volo.Abp.AutoMapper" />
 	</ItemGroup>
 
 	<ItemGroup>

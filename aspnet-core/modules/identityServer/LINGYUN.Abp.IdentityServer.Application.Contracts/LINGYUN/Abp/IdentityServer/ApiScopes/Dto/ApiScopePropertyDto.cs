@@ -1,9 +1,8 @@
-﻿using System;
-using Volo.Abp.Application.Dtos;
+﻿using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.IdentityServer.ApiScopes;
 
-public class ApiScopePropertyDto : EntityDto<Guid>
+public class ApiScopePropertyDto : EntityDto
 {
     public string Key { get; set; }
 

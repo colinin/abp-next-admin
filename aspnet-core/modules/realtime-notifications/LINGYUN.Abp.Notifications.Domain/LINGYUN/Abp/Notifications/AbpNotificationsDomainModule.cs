@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.Notifications;
 
 [DependsOn(
     typeof(AbpCachingModule),
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpNotificationsModule),
     typeof(AbpNotificationsDomainSharedModule))]
 public class AbpNotificationsDomainModule : AbpModule
@@ -21,6 +21,8 @@ public class AbpNotificationsDomainModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddMapperlyObjectMapper<AbpNotificationsDomainModule>();
+
         if (context.Services.IsDataMigrationEnvironment())
         {
             Configure<AbpNotificationsManagementOptions>(options =>
@@ -29,11 +31,6 @@ public class AbpNotificationsDomainModule : AbpModule
                 options.IsDynamicNotificationsStoreEnabled = false;
             });
         }
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpNotificationsDomainAutoMapperProfile>(validate: true);
-        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -1,7 +1,7 @@
 ﻿using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Json;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 [DependsOn(
     typeof(AbpLoggingModule),
     typeof(AbpElasticsearchModule),
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpJsonModule))]
 public class AbpLoggingSerilogElasticsearchModule : AbpModule
 {
@@ -19,11 +19,6 @@ public class AbpLoggingSerilogElasticsearchModule : AbpModule
 
         Configure<AbpLoggingSerilogElasticsearchOptions>(configuration.GetSection("Logging:Serilog:Elasticsearch"));
 
-        context.Services.AddAutoMapperObjectMapper<AbpLoggingSerilogElasticsearchModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpLoggingSerilogElasticsearchMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpLoggingSerilogElasticsearchModule>();
     }
 }

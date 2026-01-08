@@ -16,6 +16,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" />
 		<PackageReference Include="Volo.Abp.Account.Web.IdentityServer" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
 	</ItemGroup>

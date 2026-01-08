@@ -1,4 +1,4 @@
-﻿using Volo.Abp.AutoMapper;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.MessageService;
@@ -10,9 +10,6 @@ public class AbpMessageServiceApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpMessageServiceApplicationAutoMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpMessageServiceApplicationModule>();
     }
 }

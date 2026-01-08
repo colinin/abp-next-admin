@@ -3,9 +3,9 @@ using LINGYUN.Abp.Saas.Editions;
 using LINGYUN.Abp.Saas.ObjectExtending;
 using LINGYUN.Abp.Saas.Tenants;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Threading;
@@ -13,7 +13,7 @@ using Volo.Abp.Threading;
 namespace LINGYUN.Abp.Saas;
 
 [DependsOn(typeof(AbpSaasDomainSharedModule))]
-[DependsOn(typeof(AbpAutoMapperModule))]
+[DependsOn(typeof(AbpMapperlyModule))]
 [DependsOn(typeof(AbpDddDomainModule))]
 [DependsOn(typeof(AbpMultiTenancyEditionsModule))]
 public class AbpSaasDomainModule : AbpModule
@@ -22,12 +22,7 @@ public class AbpSaasDomainModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpSaasDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpSaasDomainMappingProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpSaasDomainModule>();
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {

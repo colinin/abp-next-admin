@@ -15,7 +15,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" />
-		<PackageReference Include="Volo.Abp.AutoMapper" />
+		<PackageReference Include="Volo.Abp.Mapperly" />
 		<PackageReference Include="Volo.Abp.BlobStoring" />
 		<PackageReference Include="Volo.Abp.Ddd.Domain" />
 		<PackageReference Include="Volo.Abp.Settings" />

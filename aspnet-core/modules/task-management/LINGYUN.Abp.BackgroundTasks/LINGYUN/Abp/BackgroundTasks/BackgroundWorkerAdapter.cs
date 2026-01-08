@@ -61,7 +61,7 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
 
         var jobArgs = new Dictionary<string, object>
         {
-            { "JobType", workerType.AssemblyQualifiedName },
+            { "JobType", workerType.AssemblyQualifiedName! },
         };
         return new JobInfo
         {

@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Events.Distributed;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Threading;
@@ -14,7 +14,7 @@ using Volo.Abp.Threading;
 namespace LINGYUN.Abp.WebhooksManagement;
 
 [DependsOn(
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpWebhooksModule),
     typeof(WebhooksManagementDomainSharedModule))]
 public class WebhooksManagementDomainModule : AbpModule
@@ -24,12 +24,7 @@ public class WebhooksManagementDomainModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<WebhooksManagementDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<WebhooksManagementDomainMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<WebhooksManagementDomainModule>();
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {

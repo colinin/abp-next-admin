@@ -277,6 +277,11 @@
 		<PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
 		<PackageVersion Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.14.0-beta.1" />
 	</ItemGroup>
+	<!-- Rebus-->
+	<ItemGroup>
+		<PackageVersion Include="Rebus.Microsoft.Extensions.Logging" Version="5.2.0" />
+		<PackageVersion Include="Rebus.ServiceProvider" Version="10.7.1" />
+	</ItemGroup>
 	<!-- Test -->
 	<ItemGroup>
 		<PackageVersion Include="coverlet.collector" Version="6.0.4" />

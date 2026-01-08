@@ -7,19 +7,19 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Localization;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.LocalizationManagement;
 
 [DependsOn(
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpDddDomainModule),
     typeof(AbpLocalizationManagementDomainSharedModule))]
 public class AbpLocalizationManagementDomainModule : AbpModule
@@ -27,12 +27,7 @@ public class AbpLocalizationManagementDomainModule : AbpModule
     private readonly CancellationTokenSource cancellationTokenSource = new();
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpLocalizationManagementDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<LocalizationManagementDomainMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpLocalizationManagementDomainModule>();
 
         Configure<AbpLocalizationOptions>(options =>
         {

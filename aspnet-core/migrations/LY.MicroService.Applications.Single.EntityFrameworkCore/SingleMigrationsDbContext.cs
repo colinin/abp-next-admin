@@ -155,6 +155,8 @@ public class SingleMigrationsDbContext :
 
     public DbSet<BackgroundJobAction> BackgroundJobAction { get; set; }
 
+    public DbSet<BackgroundJobLog> BackgroundJobLogs { get; set; }
+
     public DbSet<WebhookSendRecord> WebhookSendRecord { get; set; }
 
     public DbSet<WebhookGroupDefinitionRecord> WebhookGroupDefinitionRecords { get; set; }

@@ -34,10 +34,10 @@ public class UserInfoIdentitySession : IOpenIddictServerHandler<OpenIddictServer
 
     public async virtual ValueTask HandleAsync(OpenIddictServerEvents.HandleUserInfoRequestContext context)
     {
-        var tenantId = context.Principal.FindTenantId();
+        var tenantId = context.AccessTokenPrincipal.FindTenantId();
         using (CurrentTenant.Change(tenantId))
         {
-            if (!await IdentitySessionChecker.ValidateSessionAsync(context.Principal))
+            if (!await IdentitySessionChecker.ValidateSessionAsync(context.AccessTokenPrincipal))
             {
                 // Errors.InvalidToken --->  401
                 // Errors.ExpiredToken --->  400

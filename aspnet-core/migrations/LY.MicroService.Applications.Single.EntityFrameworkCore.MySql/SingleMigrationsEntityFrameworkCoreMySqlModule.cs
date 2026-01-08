@@ -53,7 +53,9 @@ public class SingleMigrationsEntityFrameworkCoreMySqlModule : AbpModule
                     mysql =>
                     {
                         // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
+#pragma warning disable CS0618 
                         mysql.TranslateParameterizedCollectionsToConstants();
+#pragma warning restore CS0618
                         mysql.MigrationsAssembly(GetType().Assembly);
                     });
             });
