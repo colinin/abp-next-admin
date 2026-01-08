@@ -79,13 +79,12 @@ IResourceBuilder<ProjectResource> AddDotNetProject<TDbMigrator, TProject>(
             .WaitFor(elasticsearch)
             .WaitFor(redis)
             .WaitFor(rabbitmq)
-            .WaitFor(abpDb)
-            .WithExplicitStart();
+            .WaitFor(abpDb);
     }
 
     if (waitProject != null)
     {
-        service.WaitFor(waitProject, WaitBehavior.WaitOnResourceUnavailable);
+        service.WaitFor(waitProject);
     }
 
     return service;
@@ -199,7 +198,8 @@ builder.AddProject<Projects.LINGYUN_Abp_MicroService_WeChatService>("WeChatServi
     .WaitFor(elasticsearch)
     .WaitFor(redis)
     .WaitFor(abpDb)
-    .WaitFor(rabbitmq);
+    .WaitFor(rabbitmq)
+    .WaitFor(localizationService);
 
 // WorkflowService
 builder.AddProject<Projects.LINGYUN_Abp_MicroService_WorkflowService>("WorkflowService")
@@ -226,7 +226,7 @@ var apigateway = builder.AddProject<Projects.LINGYUN_Abp_MicroService_ApiGateway
 
 // vben5
 builder.AddViteApp("Frontend", "../../../apps/vben5", "dev:app")
-    .WithHttpEndpoint(name: "frontend", env: "VITE_PORT")
+    .WithHttpEndpoint(port: 5666, targetPort: 5666, name: "frontend", env: "VITE_PORT", isProxied: false)
     .WithExternalHttpEndpoints()
     .WithEnvironment("BROWSER", "none")
     .WithArgs("--port", "5666")
