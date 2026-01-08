@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.MicroService.TaskService;
+﻿using LINGYUN.Abp.MicroService.ServiceDefaults;
+using LINGYUN.Abp.MicroService.TaskService;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,7 +32,7 @@ try
         });
 
     builder.AddServiceDefaults();
-    builder.AddServiceHealthChecks();
+    builder.AddCustomHealthChecks<ServiceHealthCheck>("Service");
 
     await builder.AddApplicationAsync<TaskServiceModule>(options =>
     {
@@ -49,7 +50,7 @@ try
     await app.InitializeApplicationAsync();
 
     app.MapDefaultEndpoints();
-    app.MapServiceHealthChecks();
+    app.MapCustomHealthChecks("/health/service");
 
     app.UseForwardedHeaders();
     app.UseAbpRequestLocalization();
