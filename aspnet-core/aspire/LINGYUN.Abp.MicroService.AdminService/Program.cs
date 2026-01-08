@@ -26,26 +26,6 @@ try
 
     builder.AddServiceDefaults();
 
-    void LogConfig(IConfiguration config, int index = 0)
-    {
-        var prefix = "";
-        for (var i = 0; i < index; i++)
-        {
-            prefix = "-" + prefix;
-        }
-        var children = config.GetChildren();
-        if (children.Any())
-        {
-            foreach (var childrenConfig in children)
-            {
-                Log.Logger.Information("{prefix}Config: {key}, Value: {value}", prefix, childrenConfig.Key, childrenConfig.Value);
-                LogConfig(childrenConfig, index + 1);
-            }
-        }
-    }
-
-    LogConfig(builder.Configuration);
-
     await builder.AddApplicationAsync<AdminServiceModule>(options =>
     {
         var applicationName = Environment.GetEnvironmentVariable("APPLICATION_NAME") ?? "AdminService";
