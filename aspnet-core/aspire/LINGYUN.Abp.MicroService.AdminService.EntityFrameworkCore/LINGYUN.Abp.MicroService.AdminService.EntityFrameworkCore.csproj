@@ -5,7 +5,7 @@
 
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<RootNamespace>LINGYUN.Abp.MicroService.AdminService</RootNamespace>
 	</PropertyGroup>
