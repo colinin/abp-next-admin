@@ -1,34 +1,37 @@
-// Copyright 2023 The Ip2Region Authors. All rights reserved.
+﻿// Copyright 2025 The Ip2Region Authors. All rights reserved.
 // Use of this source code is governed by a Apache2.0-style
 // license that can be found in the LICENSE file.
 // @Author Alan <lzh.shap@gmail.com>
 // @Date   2023/07/25
+// Updated by Wong <vcd.hai@outlook.com> at 2025/12/31
 
-using IP2Region.Net.Internal.Abstractions;
 using System;
 using System.IO;
 
 namespace IP2Region.Net.Internal;
 
-internal class ContentCacheStrategy : AbstractCacheStrategy
+class ContentCacheStrategy(Stream _xdbStream) : ICacheStrategy
 {
-    private readonly ReadOnlyMemory<byte> _cacheData;
+    // TODO: these constants can be moved to the interface as defaults when using .NET 10
+    private const int HeaderInfoLength = 256;
+    private const int VectorIndexSize = 8;
 
-    public ContentCacheStrategy(Stream xdbStream) : base(xdbStream)
+    private readonly ReadOnlyMemory<byte> _cacheData = _xdbStream.GetAllBytes();
+
+    public int IoCount => 0;
+
+    public void ResetIoCount()
     {
-        _cacheData = base.GetData(0, (int)XdbStream.Length);
-        XdbStream.Close();
-        XdbStream.Dispose();
+        // Do nothing
     }
 
-    internal override ReadOnlyMemory<byte> GetVectorIndex(uint ip)
-    {
-        int idx = GetVectorIndexStartPos(ip);
-        return _cacheData.Slice(HeaderInfoLength + idx, VectorIndexSize);
-    }
+    public ReadOnlyMemory<byte> GetVectorIndex(int offset)
+        => _cacheData.Slice(HeaderInfoLength + offset, VectorIndexSize);
 
-    internal override ReadOnlyMemory<byte> GetData(int offset, int length)
+    public ReadOnlyMemory<byte> GetData(long offset, int length) => _cacheData.Slice((int)offset, length);
+
+    public void Dispose()
     {
-        return _cacheData.Slice(offset, length);
+        // Do nothing
     }
 }
