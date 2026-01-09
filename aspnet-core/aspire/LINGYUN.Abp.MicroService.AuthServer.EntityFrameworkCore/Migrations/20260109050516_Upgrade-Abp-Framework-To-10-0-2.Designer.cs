@@ -3,6 +3,7 @@ using System;
 using LINGYUN.Abp.MicroService.AuthServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LINGYUN.Abp.MicroService.AuthServer.Migrations
 {
     [DbContext(typeof(AuthServerMigrationsDbContext))]
-    partial class AuthServerMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260109050516_Upgrade-Abp-Framework-To-10-0-2")]
+    partial class UpgradeAbpFrameworkTo1002
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
