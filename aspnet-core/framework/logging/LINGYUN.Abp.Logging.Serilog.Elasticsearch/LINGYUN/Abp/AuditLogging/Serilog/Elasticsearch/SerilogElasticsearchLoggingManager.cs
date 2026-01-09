@@ -26,19 +26,19 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     private readonly static Regex IndexFormatRegex = new Regex(@"^(.*)(?:\{0\:.+\})(.*)$");
 
     private readonly IClock _clock;
-    private readonly IObjectMapper _objectMapper;
     private readonly ICurrentTenant _currentTenant;
     private readonly AbpLoggingSerilogElasticsearchOptions _options;
     private readonly IElasticsearchClientFactory _clientFactory;
+    private readonly IObjectMapper<AbpLoggingSerilogElasticsearchModule> _objectMapper;
 
     public ILogger<SerilogElasticsearchLoggingManager> Logger { protected get; set; }
 
     public SerilogElasticsearchLoggingManager(
         IClock clock,
-        IObjectMapper objectMapper,
         ICurrentTenant currentTenant,
         IOptions<AbpLoggingSerilogElasticsearchOptions> options,
-        IElasticsearchClientFactory clientFactory)
+        IElasticsearchClientFactory clientFactory,
+        IObjectMapper<AbpLoggingSerilogElasticsearchModule> objectMapper)
     {
         _clock = clock;
         _objectMapper = objectMapper;

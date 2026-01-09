@@ -18,8 +18,6 @@ public class MessageStore : IMessageStore, ITransientDependency
 {
     private readonly IFriendStore _friendStore;
 
-    private readonly IObjectMapper _objectMapper;
-
     private readonly ICurrentTenant _currentTenant;
 
     private readonly IUnitOfWorkManager _unitOfWorkManager;
@@ -29,14 +27,16 @@ public class MessageStore : IMessageStore, ITransientDependency
     private readonly IMessageRepository _messageRepository;
 
     private readonly IUserChatSettingRepository _userChatSettingRepository;
+
+    private readonly IObjectMapper<AbpMessageServiceDomainModule> _objectMapper;
     public MessageStore(
         IFriendStore friendStore,
-        IObjectMapper objectMapper,
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         IGroupRepository groupRepository,
         IMessageRepository messageRepository,
-        IUserChatSettingRepository userChatSettingRepository)
+        IUserChatSettingRepository userChatSettingRepository,
+        IObjectMapper<AbpMessageServiceDomainModule> objectMapper)
     {
         _friendStore = friendStore;
         _objectMapper = objectMapper;
