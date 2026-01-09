@@ -21,9 +21,9 @@ public class AbpDataProtectionManagementDomainModule : AbpModule
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
-            options.EtoMappings.Add<EntityTypeInfo, EntityTypeInfoEto>();
-            options.EtoMappings.Add<RoleEntityRule, RoleEntityRuleEto>();
-            options.EtoMappings.Add<OrganizationUnitEntityRule, OrganizationUnitEntityRuleEto>();
+            options.EtoMappings.Add<EntityTypeInfo, EntityTypeInfoEto>(typeof(AbpDataProtectionManagementDomainModule));
+            options.EtoMappings.Add<RoleEntityRule, RoleEntityRuleEto>(typeof(AbpDataProtectionManagementDomainModule));
+            options.EtoMappings.Add<OrganizationUnitEntityRule, OrganizationUnitEntityRuleEto>(typeof(AbpDataProtectionManagementDomainModule));
 
             options.AutoEventSelectors.Add<EntityTypeInfo>();
             options.AutoEventSelectors.Add<RoleEntityRule>();

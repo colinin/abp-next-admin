@@ -24,10 +24,18 @@ namespace LINGYUN.Abp.LocalizationManagement;
     typeof(AbpLocalizationManagementDomainSharedModule))]
 public class AbpLocalizationManagementDomainModule : AbpModule
 {
-    private readonly CancellationTokenSource cancellationTokenSource = new();
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddMapperlyObjectMapper<AbpLocalizationManagementDomainModule>();
+
+        if (context.Services.IsDataMigrationEnvironment())
+        {
+            Configure<AbpLocalizationManagementOptions>(options =>
+            {
+                options.SaveStaticLocalizationsToDatabase = false;
+            });
+        }
 
         Configure<AbpLocalizationOptions>(options =>
         {
@@ -36,9 +44,9 @@ public class AbpLocalizationManagementDomainModule : AbpModule
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
-            options.EtoMappings.Add<Text, TextEto>();
-            options.EtoMappings.Add<Language, LanguageEto>();
-            options.EtoMappings.Add<Resource, ResourceEto>();
+            options.EtoMappings.Add<Text, TextEto>(typeof(AbpLocalizationManagementDomainModule));
+            options.EtoMappings.Add<Language, LanguageEto>(typeof(AbpLocalizationManagementDomainModule));
+            options.EtoMappings.Add<Resource, ResourceEto>(typeof(AbpLocalizationManagementDomainModule));
         });
 
         // 定期更新本地化缓存缓解措施
@@ -52,69 +60,14 @@ public class AbpLocalizationManagementDomainModule : AbpModule
 
     public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        if (!context.ServiceProvider.IsDataMigrationEnvironment())
-        {
-            await SaveLocalizationAsync(context);
-        }
+        var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
+        var initializer = rootServiceProvider.GetRequiredService<LocalizationDynamicInitializer>();
+        await initializer.InitializeAsync(true, _cancellationTokenSource.Token);
     }
 
     public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
     {
-        cancellationTokenSource.CancelAsync();
+        _cancellationTokenSource.CancelAsync();
         return Task.CompletedTask;
-    }
-
-    private async Task SaveLocalizationAsync(ApplicationInitializationContext context)
-    {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpLocalizationManagementOptions>>();
-        if (options.Value.SaveStaticLocalizationsToDatabase)
-        {
-            var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
-            await Task.Run(async () =>
-            {
-                using (var scope = rootServiceProvider.CreateScope())
-                {
-                    var applicationLifetime = scope.ServiceProvider.GetService<IHostApplicationLifetime>();
-                    var cancellationTokenProvider = scope.ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
-                    var cancellationToken = applicationLifetime?.ApplicationStopping ?? cancellationTokenSource.Token;
-                    try
-                    {
-                        using (cancellationTokenProvider.Use(cancellationToken))
-                        {
-                            if (cancellationTokenProvider.Token.IsCancellationRequested)
-                            {
-                                return;
-                            }
-
-                            await Policy.Handle<Exception>()
-                                .WaitAndRetryAsync(8, 
-                                    retryAttempt => TimeSpan.FromSeconds(
-                                        RandomHelper.GetRandom((int)Math.Pow(2.0, retryAttempt) * 8, (int)Math.Pow(2.0, retryAttempt) * 12)))
-                                .ExecuteAsync(async _ =>
-                                {
-                                    try
-                                    {
-                                        await scope.ServiceProvider
-                                            .GetRequiredService<IStaticLocalizationSaver>()
-                                            .SaveAsync();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        scope.ServiceProvider
-                                            .GetService<ILogger<AbpLocalizationModule>>()
-                                            ?.LogException(ex);
-
-                                        throw;
-                                    }
-                                },
-                                cancellationTokenProvider.Token);
-                        }
-                    }
-                    catch
-                    {
-                    }
-                }
-            });
-        }
     }
 }

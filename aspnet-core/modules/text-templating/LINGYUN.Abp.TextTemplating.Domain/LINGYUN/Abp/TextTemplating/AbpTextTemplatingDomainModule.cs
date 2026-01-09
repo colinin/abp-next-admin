@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
@@ -27,8 +28,8 @@ public class AbpTextTemplatingDomainModule : AbpModule
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
-            options.EtoMappings.Add<TextTemplate, TextTemplateEto>();
-            options.EtoMappings.Add<TextTemplateDefinition, TextTemplateDefinitionEto>();
+            options.EtoMappings.Add<TextTemplate, TextTemplateEto>(typeof(AbpTextTemplatingDomainModule));
+            options.EtoMappings.Add<TextTemplateDefinition, TextTemplateDefinitionEto>(typeof(AbpTextTemplatingDomainModule));
 
             // TODO: CAP组件异常将导致应用无法启动, 临时禁用
             // options.AutoEventSelectors.Add<TextTemplate>();
@@ -49,11 +50,11 @@ public class AbpTextTemplatingDomainModule : AbpModule
         AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 
-    public override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        return context.ServiceProvider
-            .GetRequiredService<TextTemplateDefinitionInitializer>()
-            .InitializeDynamicTemplates(_cancellationTokenSource.Token);
+        var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
+        var initializer = rootServiceProvider.GetRequiredService<TextTemplateDynamicInitializer>();
+        await initializer.InitializeAsync(true, _cancellationTokenSource.Token);
     }
 
     public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)

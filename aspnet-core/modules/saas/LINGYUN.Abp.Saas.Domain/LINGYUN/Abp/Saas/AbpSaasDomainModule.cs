@@ -26,8 +26,8 @@ public class AbpSaasDomainModule : AbpModule
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
-            options.EtoMappings.Add<Edition, EditionEto>();
-            options.EtoMappings.Add<Tenant, TenantEto>();
+            options.EtoMappings.Add<Edition, EditionEto>(typeof(AbpSaasDomainModule));
+            options.EtoMappings.Add<Tenant, TenantEto>(typeof(AbpSaasDomainModule));
 
             options.AutoEventSelectors.Add<Edition>();
             options.AutoEventSelectors.Add<Tenant>();

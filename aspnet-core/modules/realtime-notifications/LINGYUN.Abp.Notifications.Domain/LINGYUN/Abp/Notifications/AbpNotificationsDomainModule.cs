@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -38,11 +39,11 @@ public class AbpNotificationsDomainModule : AbpModule
         AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 
-    public override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        return context.ServiceProvider
-            .GetRequiredService<NotificationDefinitionInitializer>()
-            .InitializeDynamicNotifications(_cancellationTokenSource.Token);
+        var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
+        var initializer = rootServiceProvider.GetRequiredService<NotificationDynamicInitializer>();
+        await initializer.InitializeAsync(true, _cancellationTokenSource.Token);
     }
 
     public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
