@@ -23,5 +23,5 @@ public abstract class OpenIddictScopeCreateOrUpdateDto : ExtensibleObject
 
     public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
 
-    public List<string> Resources { get; set; } = new List<string>();
+    public HashSet<string> Resources { get; set; } = new HashSet<string>();
 }

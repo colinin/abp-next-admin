@@ -2,6 +2,7 @@
 using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using OpenIddict.Validation;
 using Volo.Abp.Modularity;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -20,7 +21,8 @@ public class AbpOpenIddictAspNetCoreSessionModule : AbpModule
             builder.AddEventHandler(ProcessSignOutIdentitySession.Descriptor);
             builder.AddEventHandler(ProcessSignInIdentitySession.Descriptor);
             builder.AddEventHandler(RevocationIdentitySession.Descriptor);
-            builder.AddEventHandler(UserInfoIdentitySession.Descriptor);
+            builder.AddEventHandler(ServerValidationTokenCheckIdentitySession.Descriptor);
+            // builder.AddEventHandler(UserInfoIdentitySession.Descriptor);
         });
     }
 
@@ -35,6 +37,13 @@ public class AbpOpenIddictAspNetCoreSessionModule : AbpModule
         Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
         {
             options.PersistentSessionGrantTypes.Add(GrantTypes.Password);
+        });
+
+        context.Services.Add(ValidationTokenCheckIdentitySession.Descriptor.ServiceDescriptor);
+
+        Configure<OpenIddictValidationOptions>(options =>
+        {
+            options.Handlers.Add(ValidationTokenCheckIdentitySession.Descriptor);
         });
     }
 }

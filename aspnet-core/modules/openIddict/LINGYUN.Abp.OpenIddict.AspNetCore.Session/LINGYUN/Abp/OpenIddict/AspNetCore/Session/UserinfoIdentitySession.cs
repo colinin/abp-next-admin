@@ -11,6 +11,7 @@ namespace LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 /// <summary>
 /// UserInfoEndpoint 检查用户会话
 /// </summary>
+[Obsolete("UserInfoIdentitySession is outdated, please use the CheckIdentitySessionOnServerValidationToken")]
 public class UserInfoIdentitySession : IOpenIddictServerHandler<OpenIddictServerEvents.HandleUserInfoRequestContext>
 {
     protected ICurrentTenant CurrentTenant { get; }
