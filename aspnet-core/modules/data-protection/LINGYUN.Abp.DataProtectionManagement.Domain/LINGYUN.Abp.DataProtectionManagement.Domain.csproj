@@ -14,7 +14,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AutoMapper" />
+		<PackageReference Include="Volo.Abp.Mapperly" />
 		<PackageReference Include="Volo.Abp.Ddd.Domain" />
 	</ItemGroup>
 
