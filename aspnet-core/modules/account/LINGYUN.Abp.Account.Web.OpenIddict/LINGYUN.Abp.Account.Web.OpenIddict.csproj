@@ -10,10 +10,18 @@
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 		<RootNamespace>LINGYUN.Abp.Account.Web.OpenIddict</RootNamespace>
 		<OutputType>Library</OutputType>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Localization\**\*.json" />
+		<EmbeddedResource Include="Views\**\*.js" />
+		<Content Remove="Localization\**\*.json" />
+		<Content Remove="Views\**\*.js" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Account.Web.OpenIddict" />

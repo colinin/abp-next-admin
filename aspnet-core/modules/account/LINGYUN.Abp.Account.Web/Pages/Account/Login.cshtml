@@ -18,12 +18,7 @@
     PageLayout.Content.Title = L["Login"].Value;
 }
 
-@section scripts
-{
-    <abp-script-bundle name="@typeof(LoginModel).FullName">
-        <abp-script src="/Pages/Account/Login.js" />
-    </abp-script-bundle>
-}
+<abp-script-bundle name="@typeof(LoginModel).FullName" />
 
 <div class="account-module-form">
     @if (Model.EnableLocalLogin)

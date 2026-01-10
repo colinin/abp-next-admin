@@ -37,6 +37,9 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.Auditing;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
@@ -165,6 +168,15 @@ public partial class AuthServerModule
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
             options.ExposeIntegrationServices = true;
+        });
+
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.StyleBundles
+                .Configure(LeptonXLiteThemeBundles.Styles.Global, bundle =>
+                {
+                    bundle.AddFiles("/css/global-styles.css");
+                });
         });
     }
 
@@ -392,10 +404,6 @@ public partial class AuthServerModule
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
                 }
             });
-        //.AddWeChatWork(options =>
-        //{
-        //    options.SignInScheme = IdentityConstants.ExternalScheme;
-        //});
 
         services
             .AddDataProtection()

@@ -64,15 +64,7 @@ public class ApiGatewayModule : AbpModule
             authority: configuration["AuthServer:Authority"],
             scopes: new Dictionary<string, string>
             {
-                {"Account", "Account API"},
-                {"Identity", "Identity API"},
-                {"IdentityServer", "Identity Server API"},
-                {"BackendAdmin", "Backend Admin API"},
-                {"Localization", "Localization API"},
-                {"Platform", "Platform API"},
-                {"RealtimeMessage", "RealtimeMessage API"},
-                {"TaskManagement", "Task Management API"},
-                {"Webhooks", "Webhooks API"},
+                { configuration["AuthServer:Audience"], "Api Gateway API"}
             },
             options =>
             {

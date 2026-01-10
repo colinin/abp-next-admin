@@ -114,6 +114,7 @@ public class AbpAccountWebModule : AbpModule
                 {
                     bundle.AddFiles("/client-proxies/account-proxy.js");
                     bundle.AddFiles("/client-proxies/qrcode-proxy.js");
+                    bundle.AddFiles("/Pages/Account/Login.js");
                     bundle.AddContributors(typeof(QRCodeScriptContributor));
                 });
         });

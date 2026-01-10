@@ -103,7 +103,7 @@ try
                 clusterGroup.Value.Metadata.TryGetValue("SwaggerEndpoint", out var address) &&
                 !address.IsNullOrWhiteSpace())
             {
-                options.SwaggerEndpoint($"{address}/swagger/v1/swagger.json", $"{routeConfig.RouteId} API");
+                options.SwaggerEndpoint($"{address}/swagger/v1/swagger.json", $"{routeConfig.ClusterId} API");
             }
             options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
             options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);

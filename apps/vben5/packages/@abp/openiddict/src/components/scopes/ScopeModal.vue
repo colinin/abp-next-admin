@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import type { OpenIdConfiguration } from '@abp/core';
 import type { FormInstance } from 'ant-design-vue';
-import type { TransferItem } from 'ant-design-vue/es/transfer';
 
 import type { OpenIddictScopeDto } from '../../types/scopes';
 import type { DisplayNameInfo } from '../display-names/types';
 import type { PropertyInfo } from '../properties/types';
 
-import { computed, defineEmits, defineOptions, ref, toValue } from 'vue';
+import { defineEmits, defineOptions, ref, toValue } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { Form, Input, message, Tabs, Transfer } from 'ant-design-vue';
+import { Form, Input, message, Select, Tabs } from 'ant-design-vue';
 
-import { useOpenIdApi } from '../../api/useOpenIdApi';
 import { useScopesApi } from '../../api/useScopesApi';
 import DisplayNameTable from '../display-names/DisplayNameTable.vue';
 import PropertyTable from '../properties/PropertyTable.vue';
@@ -41,20 +38,8 @@ const defaultModel = {} as OpenIddictScopeDto;
 
 const form = ref<FormInstance>();
 const formModel = ref<OpenIddictScopeDto>({ ...defaultModel });
-const openIdConfiguration = ref<OpenIdConfiguration>();
 const activeTab = ref<TabKeys>('basic');
 
-const getSupportClaims = computed((): TransferItem[] => {
-  const types = openIdConfiguration.value?.claims_supported ?? [];
-  return types.map((type) => {
-    return {
-      key: type,
-      title: type,
-    };
-  });
-});
-
-const { discoveryApi } = useOpenIdApi();
 const { cancel, createApi, getApi, updateApi } = useScopesApi();
 const [Modal, modalApi] = useVbenModal({
   class: 'w-1/2',
@@ -91,7 +76,6 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        await onDiscovery();
         const { id } = modalApi.getData<OpenIddictScopeDto>();
         id && (await onGet(id));
       } finally {
@@ -107,9 +91,6 @@ async function onGet(id: string) {
   modalApi.setState({
     title: `${$t('AbpOpenIddict.Scopes')} - ${dto.name}`,
   });
-}
-async function onDiscovery() {
-  openIdConfiguration.value = await discoveryApi();
 }
 function onDescriptionChange(displayName: DisplayNameInfo) {
   formModel.value.descriptions ??= {};
@@ -155,6 +136,16 @@ function onPropDelete(prop: PropertyInfo) {
           >
             <Input v-model:value="formModel.name" autocomplete="off" />
           </FormItem>
+          <FormItem
+            :label="$t('AbpOpenIddict.DisplayName:Resources')"
+            name="resources"
+          >
+            <Select
+              allow-clear
+              v-model:value="formModel.resources"
+              mode="tags"
+            />
+          </FormItem>
         </TabPane>
         <!-- 显示名称 -->
         <TabPane key="dispalyName" :tab="$t('AbpOpenIddict.DisplayNames')">
@@ -182,23 +173,6 @@ function onPropDelete(prop: PropertyInfo) {
             :data="formModel.descriptions"
             @change="onDescriptionChange"
             @delete="onDescriptionDelete"
-          />
-        </TabPane>
-        <!-- 资源 -->
-        <TabPane key="resource" :tab="$t('AbpOpenIddict.Resources')">
-          <Transfer
-            v-model:target-keys="formModel.resources"
-            :data-source="getSupportClaims"
-            :list-style="{
-              width: '47%',
-              height: '338px',
-            }"
-            :render="(item) => item.title"
-            :titles="[
-              $t('AbpOpenIddict.Assigned'),
-              $t('AbpOpenIddict.Available'),
-            ]"
-            class="tree-transfer"
           />
         </TabPane>
         <!-- 属性 -->

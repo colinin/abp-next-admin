@@ -1,367 +1,367 @@
 <Project>
-	<PropertyGroup>
-		<DotNetCoreCAPPackageVersion>10.0.0</DotNetCoreCAPPackageVersion>
-		<ElsaPackageVersion>2.15.2</ElsaPackageVersion>
-		<ElsaNextPackageVersion>3.3.5</ElsaNextPackageVersion>
-		<VoloAbpPackageVersion>10.0.2</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>10.0.2</LINGYUNAbpPackageVersion>
-		<MicrosoftExtensionsPackageVersion>10.0.0</MicrosoftExtensionsPackageVersion>
-		<MicrosoftAspNetCorePackageVersion>10.0.0</MicrosoftAspNetCorePackageVersion>
-		<MicrosoftEntityFrameworkCorePackageVersion>10.0.0</MicrosoftEntityFrameworkCorePackageVersion>
-		<AspirePackageVersion>13.1.0</AspirePackageVersion>
-		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-	</PropertyGroup>
-	<!-- Abp Framework -->
-	<ItemGroup>
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="5.0.2" />
-		<PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Account.Domain" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Account.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Account.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Account.HttpApi" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Account.HttpApi.Client" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Account.Web" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Account.Web.IdentityServer" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Account.Web.OpenIddict" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.Client.Common" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.Contracts" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.NewtonsoftJson" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.Serilog" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.SignalR" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AspNetCore.TestBase" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Auditing" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Auditing.Contracts" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AuditLogging.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AuditLogging.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Authorization" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Authorization.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.BackgroundJobs" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.BackgroundJobs.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.BackgroundWorkers" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.BlobStoring" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.BlobStoring.FileSystem" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.BlobStoring.Minio" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Caching.StackExchangeRedis" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Cli.Core" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Data" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Dapper" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Ddd.Application" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Ddd.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Ddd.Domain" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Ddd.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.DistributedLocking.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.DistributedLocking" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySQL.Pomelo" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.FeatureManagement.Application" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.FeatureManagement.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.FeatureManagement.Domain" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.FeatureManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.FeatureManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.FeatureManagement.Web" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Emailing" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.EventBus.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.ExceptionHandling" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Guids" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Gdpr.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.GlobalFeatures" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.HangFire" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Http.Client" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Identity.AspNetCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Identity.Application" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Identity.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Identity.Domain" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Identity.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Identity.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Identity.HttpApi" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Identity.HttpApi.Client" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Identity.Web" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.IdentityServer.Application" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.IdentityServer.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.IdentityServer.Domain" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.IdentityServer.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.IdentityServer.HttpApi" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Imaging.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Imaging.ImageSharp" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Json.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.MailKit" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Mapperly" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.MultiTenancy.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.ObjectExtending" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.OpenIddict.Application" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.OpenIddict.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.OpenIddict.AspNetCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.OpenIddict.Domain" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.OpenIddict.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.OpenIddict.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.OpenIddict.HttpApi" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Application" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.PermissionManagement.Web" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Quartz" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Security" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Settings" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.SettingManagement.Application" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.SettingManagement.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.SettingManagement.Domain" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.SettingManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.SettingManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.SettingManagement.Web" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Swashbuckle" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Sms" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.TestBase" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.TextTemplating.Core" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.TextTemplating.Scriban" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Timing" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Threading" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.UI.Navigation" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Users.Abstractions" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Users.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.Validation" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.VirtualFileSystem" Version="$(VoloAbpPackageVersion)" />
-		<PackageVersion Include="Volo.Abp.VirtualFileExplorer.Web" Version="$(VoloAbpPackageVersion)" />
-	</ItemGroup>
-	<!-- .NET -->
-	<ItemGroup>
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.0" />
-		<PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
-		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.FileProviders.Physical" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.Options" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.5.0" />
-		<PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
-		<PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.0-rc" />
-		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
-		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="9.0.0" />
-	</ItemGroup>
-	<!-- Aspire -->
-	<ItemGroup>
-		<PackageVersion Include="Aspire.Hosting.Elasticsearch" Version="13.0.0" />
-		<PackageVersion Include="Aspire.Hosting.JavaScript" Version="$(AspirePackageVersion)" />
-		<PackageVersion Include="Aspire.Hosting.MySql" Version="$(AspirePackageVersion)" />
-		<PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="$(AspirePackageVersion)" />
-		<PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="$(AspirePackageVersion)" />
-		<PackageVersion Include="Aspire.Hosting.Redis" Version="$(AspirePackageVersion)" />
-		<PackageVersion Include="Aspire.MySqlConnector" Version="$(AspirePackageVersion)" />
-		<PackageVersion Include="Aspire.Pomelo.EntityFrameworkCore.MySql" Version="$(AspirePackageVersion)" />
-		<PackageVersion Include="Aspire.StackExchange.Redis" Version="$(AspirePackageVersion)" />
-		<PackageVersion Include="Aspire.RabbitMQ.Client" Version="$(AspirePackageVersion)" />
-		<PackageVersion Include="Aspire.Elastic.Clients.Elasticsearch" Version="13.0.0" />
-	</ItemGroup>
-	<!-- Elsa -->
-	<ItemGroup>
-		<PackageVersion Include="Elsa" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Activities.Email" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Activities.Http" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Activities.UserTask" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Activities.Temporal.Quartz" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Core" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Designer.Components.Web" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Rebus.RabbitMq" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Server.Api" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Server.Authentication" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Webhooks.Api" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.Core" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.Core" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.PostgreSql" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.PostgreSql" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.SqlServer" Version="$(ElsaPackageVersion)" />
-		<PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.SqlServer" Version="$(ElsaPackageVersion)" />
-	</ItemGroup>
-	<!-- Elsa Next-->
-	<ItemGroup>
-		<PackageVersion Include="Elsa.Api.Client" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Core.BlazorServer" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Login.BlazorServer" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Localization.BlazorServer" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Core.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Login.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Translations" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Agents" Version="$(ElsaNextPackageVersion)"  />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(MicrosoftAspNetCorePackageVersion)" />
-	</ItemGroup>
-	<!-- DotNetCore.CAP -->
-	<ItemGroup>
-		<PackageVersion Include="DotNetCore.CAP" Version="$(DotNetCoreCAPPackageVersion)" />
-		<PackageVersion Include="DotNetCore.CAP.Dashboard" Version="$(DotNetCoreCAPPackageVersion)" />
-		<PackageVersion Include="DotNetCore.CAP.MySql" Version="$(DotNetCoreCAPPackageVersion)" />
-		<PackageVersion Include="DotNetCore.CAP.SqlServer" Version="$(DotNetCoreCAPPackageVersion)" />
-		<PackageVersion Include="DotNetCore.CAP.PostgreSql" Version="$(DotNetCoreCAPPackageVersion)" />
-		<PackageVersion Include="DotNetCore.CAP.OpenTelemetry" Version="$(DotNetCoreCAPPackageVersion)" />
-		<PackageVersion Include="DotNetCore.CAP.RabbitMQ" Version="$(DotNetCoreCAPPackageVersion)" />
-		<PackageVersion Include="DotNetCore.CAP.InMemoryStorage" Version="$(DotNetCoreCAPPackageVersion)" />
-		<PackageVersion Include="DotNetCore.CAP.RedisStreams" Version="$(DotNetCoreCAPPackageVersion)" />
-		<PackageVersion Include="Savorboard.CAP.InMemoryMessageQueue" Version="$(DotNetCoreCAPPackageVersion)" />
-	</ItemGroup>
-	<!-- Serilog -->
-	<ItemGroup>
-		<PackageVersion Include="Serilog" Version="4.3.0" />
-		<PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
-		<PackageVersion Include="Serilog.Enrichers.Environment" Version="3.0.1" />
-		<PackageVersion Include="Serilog.Enrichers.Assembly" Version="2.0.0" />
-		<PackageVersion Include="Serilog.Enrichers.Process" Version="3.0.0" />
-		<PackageVersion Include="Serilog.Enrichers.Thread" Version="4.0.0" />
-		<PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0" />
-		<PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.1" />
-		<PackageVersion Include="Serilog.Settings.Configuration" Version="9.0.0" />
-		<PackageVersion Include="Serilog.Sinks.Async" Version="2.1.0" />
-		<PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
-		<PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
-		<PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
-		<PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0-dev-00313" />
-	</ItemGroup>
-	<!-- OpenTelemetry -->
-	<ItemGroup>
-		<PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0" />
-		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.14.0" />
-		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0" />
-		<PackageVersion Include="OpenTelemetry.Exporter.Zipkin" Version="1.14.0" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.14.0-beta.2" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.Quartz" Version="1.14.0-beta.2" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
-		<PackageVersion Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.14.0-beta.1" />
-	</ItemGroup>
-	<!-- Rebus-->
-	<ItemGroup>
-		<PackageVersion Include="Rebus.Microsoft.Extensions.Logging" Version="5.2.0" />
-		<PackageVersion Include="Rebus.ServiceProvider" Version="10.7.1" />
-	</ItemGroup>
-	<!-- Test -->
-	<ItemGroup>
-		<PackageVersion Include="coverlet.collector" Version="6.0.4" />
-		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-		<PackageVersion Include="Moq.AutoMock" Version="3.5.0" />
-		<PackageVersion Include="NSubstitute" Version="5.3.0" />
-		<PackageVersion Include="Shouldly" Version="4.3.0" />
-		<PackageVersion Include="xunit" Version="2.9.3" />
-		<PackageVersion Include="xunit.extensibility.execution" Version="2.9.3" />
-		<PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
-	</ItemGroup>
-	<!-- Fody -->
-	<ItemGroup>
-		<PackageVersion Include="ConfigureAwait.Fody" Version="3.3.2" />
-		<PackageVersion Include="Fody" Version="6.9.3" />
-	</ItemGroup>
-	<!-- DataBase -->
-	<ItemGroup>
-		<PackageVersion Include="MySqlConnector" Version="2.4.0" />
-		<PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="23.6.1" />
-		<PackageVersion Include="Npgsql" Version="10.0.0" />
-		<PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.1" />
-		<PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="10.0.0" />
-	</ItemGroup>
-	<!-- Other -->
-	<ItemGroup>
-		<PackageVersion Include="AspNet.Security.OAuth.Bilibili" Version="10.0.0" />
-		<PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="10.0.0" />
-		<PackageVersion Include="AspNet.Security.OAuth.QQ" Version="10.0.0" />
-		<PackageVersion Include="AspNet.Security.OAuth.Weixin" Version="10.0.0" />
-		<PackageVersion Include="AspNet.Security.OAuth.WorkWeixin" Version="10.0.0" />
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
-		<PackageVersion Include="aliyun-net-sdk-core" Version="1.6.2" />
-		<PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.14.1" />
-		<PackageVersion Include="AgileConfig.Client" Version="1.8.0" />
-		<PackageVersion Include="CommonMark.NET" Version="0.15.1" />
-		<PackageVersion Include="Elastic.Apm.NetCoreAll" Version="1.34.1" />
-		<PackageVersion Include="BouncyCastle.Cryptography" Version="2.6.2" />
-		<PackageVersion Include="Dapr.Client" Version="1.16.0" />
-		<PackageVersion Include="Dapr.Actors" Version="1.16.0" />
-		<PackageVersion Include="Dapr.Actors.AspNetCore" Version="1.16.0" />
-		<PackageVersion Include="DistributedLock.Core" Version="1.0.8" />
-		<PackageVersion Include="DistributedLock.Redis" Version="1.1.0" />
-		<PackageVersion Include="Hangfire.MySqlStorage" Version="2.0.3" />
-		<PackageVersion Include="HangFire.SqlServer" Version="1.8.21" />
-		<PackageVersion Include="IdentityModel" Version="7.0.0" />
-		<PackageVersion Include="IP2Region.Net" Version="3.0.0" />
-		<PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
-		<PackageVersion Include="Magicodes.IE.Excel" Version="2.8.2" />
-		<PackageVersion Include="Markdig" Version="0.44.0" />
-		<PackageVersion Include="MiniExcel" Version="1.42.0" />
-		<PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
-		<PackageVersion Include="NEST" Version="7.17.5" />
-		<PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.19.4" />
-		<PackageVersion Include="NRules" Version="0.9.2" />
-		<PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
-		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="7.2.0" />
-		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="7.2.0" />
-		<PackageVersion Include="Polly" Version="8.6.3" />
-		<PackageVersion Include="QRCoder" Version="1.5.1" />
-		<PackageVersion Include="Quartz.Serialization.Json" Version="3.15.0" />
-		<PackageVersion Include="Rebus.RabbitMq" Version="10.0.1" />
-		<PackageVersion Include="RulesEngine" Version="5.0.5" />
-		<PackageVersion Include="Scriban" Version="6.3.0" />
-		<PackageVersion Include="Senparc.Weixin.MP" Version="16.18.9" />
-		<PackageVersion Include="SkyApm.Agent.Hosting" Version="2.2.0" />
-		<PackageVersion Include="SkyApm.Diagnostics.AspNetCore" Version="2.2.0" />
-		<PackageVersion Include="SkyAPM.Diagnostics.CAP" Version="2.2.0" />
-		<PackageVersion Include="SixLabors.ImageSharp" Version="3.1.11" />
-		<PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.1.7" />
-		<PackageVersion Include="StackExchange.Redis" Version="2.9.17" />
-		<PackageVersion Include="Spire.XLS" Version="15.12.0" />
-		<PackageVersion Include="Swashbuckle.AspNetCore" Version="9.0.4" />
-		<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
-		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
-		<PackageVersion Include="TencentCloudSDK" Version="3.0.1273" />
-		<PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />
-		<PackageVersion Include="Yarp.Telemetry.Consumption" Version="2.3.0" />
-	</ItemGroup>
+  <PropertyGroup>
+    <DotNetCoreCAPPackageVersion>10.0.0</DotNetCoreCAPPackageVersion>
+    <ElsaPackageVersion>2.15.2</ElsaPackageVersion>
+    <ElsaNextPackageVersion>3.3.5</ElsaNextPackageVersion>
+    <VoloAbpPackageVersion>10.0.2</VoloAbpPackageVersion>
+    <LINGYUNAbpPackageVersion>10.0.2</LINGYUNAbpPackageVersion>
+    <MicrosoftExtensionsPackageVersion>10.0.0</MicrosoftExtensionsPackageVersion>
+    <MicrosoftAspNetCorePackageVersion>10.0.0</MicrosoftAspNetCorePackageVersion>
+    <MicrosoftEntityFrameworkCorePackageVersion>10.0.0</MicrosoftEntityFrameworkCorePackageVersion>
+    <AspirePackageVersion>13.1.0</AspirePackageVersion>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <!-- Abp Framework -->
+  <ItemGroup>
+    <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="5.0.2" />
+    <PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Account.Domain" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Account.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Account.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Account.HttpApi" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Account.HttpApi.Client" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Account.Web" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Account.Web.IdentityServer" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Account.Web.OpenIddict" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.Client.Common" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.Contracts" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.NewtonsoftJson" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Serilog" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.SignalR" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.TestBase" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Auditing" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Auditing.Contracts" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AuditLogging.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AuditLogging.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Authorization" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Authorization.Abstractions" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.BackgroundJobs" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.BackgroundJobs.Abstractions" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.BackgroundWorkers" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.BlobStoring" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.BlobStoring.FileSystem" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.BlobStoring.Minio" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Caching" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Caching.StackExchangeRedis" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Cli.Core" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Data" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Dapper" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Ddd.Application" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Ddd.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Ddd.Domain" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Ddd.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.DistributedLocking.Abstractions" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.DistributedLocking" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySQL.Pomelo" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Features" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.FeatureManagement.Application" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.FeatureManagement.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.FeatureManagement.Domain" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.FeatureManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.FeatureManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.FeatureManagement.Web" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Emailing" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.EventBus" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.EventBus.Abstractions" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.ExceptionHandling" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Guids" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Gdpr.Abstractions" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.GlobalFeatures" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.HangFire" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Http.Client" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Http.Client.IdentityModel.Web" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Identity.AspNetCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Identity.Application" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Identity.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Identity.Domain" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Identity.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Identity.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Identity.HttpApi" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Identity.HttpApi.Client" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Identity.Web" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.IdentityServer.Application" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.IdentityServer.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.IdentityServer.Domain" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.IdentityServer.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.IdentityServer.HttpApi" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Imaging.Abstractions" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Imaging.ImageSharp" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Json.Abstractions" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.MailKit" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Mapperly" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.MultiTenancy.Abstractions" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.ObjectExtending" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.OpenIddict.Application" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.OpenIddict.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.OpenIddict.AspNetCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.OpenIddict.Domain" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.OpenIddict.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.OpenIddict.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.OpenIddict.HttpApi" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.Application" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.Domain" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.Web" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Quartz" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Security" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Settings" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.SettingManagement.Application" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.SettingManagement.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.SettingManagement.Domain" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.SettingManagement.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.SettingManagement.HttpApi" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.SettingManagement.Web" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Swashbuckle" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Sms" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.TestBase" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.TextTemplating.Core" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.TextTemplating.Scriban" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Timing" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Threading" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.UI.Navigation" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Users.Abstractions" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Users.Domain.Shared" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Validation" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.VirtualFileSystem" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.VirtualFileExplorer.Web" Version="$(VoloAbpPackageVersion)" />
+  </ItemGroup>
+  <!-- .NET -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.FileProviders.Physical" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.5.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
+    <PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.0-rc" />
+    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="9.0.0" />
+  </ItemGroup>
+  <!-- Aspire -->
+  <ItemGroup>
+    <PackageVersion Include="Aspire.Hosting.Elasticsearch" Version="13.0.0" />
+    <PackageVersion Include="Aspire.Hosting.JavaScript" Version="$(AspirePackageVersion)" />
+    <PackageVersion Include="Aspire.Hosting.MySql" Version="$(AspirePackageVersion)" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="$(AspirePackageVersion)" />
+    <PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="$(AspirePackageVersion)" />
+    <PackageVersion Include="Aspire.Hosting.Redis" Version="$(AspirePackageVersion)" />
+    <PackageVersion Include="Aspire.MySqlConnector" Version="$(AspirePackageVersion)" />
+    <PackageVersion Include="Aspire.Pomelo.EntityFrameworkCore.MySql" Version="$(AspirePackageVersion)" />
+    <PackageVersion Include="Aspire.StackExchange.Redis" Version="$(AspirePackageVersion)" />
+    <PackageVersion Include="Aspire.RabbitMQ.Client" Version="$(AspirePackageVersion)" />
+    <PackageVersion Include="Aspire.Elastic.Clients.Elasticsearch" Version="13.0.0" />
+  </ItemGroup>
+  <!-- Elsa -->
+  <ItemGroup>
+    <PackageVersion Include="Elsa" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Activities.Email" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Activities.Http" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Activities.UserTask" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Activities.Temporal.Quartz" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Core" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Designer.Components.Web" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Rebus.RabbitMq" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Server.Api" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Server.Authentication" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Webhooks.Api" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.Core" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.Core" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.MySql" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.PostgreSql" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.PostgreSql" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.Webhooks.Persistence.EntityFramework.SqlServer" Version="$(ElsaPackageVersion)" />
+    <PackageVersion Include="Elsa.WorkflowSettings.Persistence.EntityFramework.SqlServer" Version="$(ElsaPackageVersion)" />
+  </ItemGroup>
+  <!-- Elsa Next-->
+  <ItemGroup>
+    <PackageVersion Include="Elsa.Api.Client" Version="$(ElsaNextPackageVersion)" />
+    <PackageVersion Include="Elsa.Studio" Version="$(ElsaNextPackageVersion)" />
+    <PackageVersion Include="Elsa.Studio.Core.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+    <PackageVersion Include="Elsa.Studio.Login.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+    <PackageVersion Include="Elsa.Studio.Localization.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+    <PackageVersion Include="Elsa.Studio.Core.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
+    <PackageVersion Include="Elsa.Studio.Login.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
+    <PackageVersion Include="Elsa.Studio.Translations" Version="$(ElsaNextPackageVersion)" />
+    <PackageVersion Include="Elsa.Studio.Agents" Version="$(ElsaNextPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(MicrosoftAspNetCorePackageVersion)" />
+  </ItemGroup>
+  <!-- DotNetCore.CAP -->
+  <ItemGroup>
+    <PackageVersion Include="DotNetCore.CAP" Version="$(DotNetCoreCAPPackageVersion)" />
+    <PackageVersion Include="DotNetCore.CAP.Dashboard" Version="$(DotNetCoreCAPPackageVersion)" />
+    <PackageVersion Include="DotNetCore.CAP.MySql" Version="$(DotNetCoreCAPPackageVersion)" />
+    <PackageVersion Include="DotNetCore.CAP.SqlServer" Version="$(DotNetCoreCAPPackageVersion)" />
+    <PackageVersion Include="DotNetCore.CAP.PostgreSql" Version="$(DotNetCoreCAPPackageVersion)" />
+    <PackageVersion Include="DotNetCore.CAP.OpenTelemetry" Version="$(DotNetCoreCAPPackageVersion)" />
+    <PackageVersion Include="DotNetCore.CAP.RabbitMQ" Version="$(DotNetCoreCAPPackageVersion)" />
+    <PackageVersion Include="DotNetCore.CAP.InMemoryStorage" Version="$(DotNetCoreCAPPackageVersion)" />
+    <PackageVersion Include="DotNetCore.CAP.RedisStreams" Version="$(DotNetCoreCAPPackageVersion)" />
+    <PackageVersion Include="Savorboard.CAP.InMemoryMessageQueue" Version="$(DotNetCoreCAPPackageVersion)" />
+  </ItemGroup>
+  <!-- Serilog -->
+  <ItemGroup>
+    <PackageVersion Include="Serilog" Version="4.3.0" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageVersion Include="Serilog.Enrichers.Environment" Version="3.0.1" />
+    <PackageVersion Include="Serilog.Enrichers.Assembly" Version="2.0.0" />
+    <PackageVersion Include="Serilog.Enrichers.Process" Version="3.0.0" />
+    <PackageVersion Include="Serilog.Enrichers.Thread" Version="4.0.0" />
+    <PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0" />
+    <PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.1" />
+    <PackageVersion Include="Serilog.Settings.Configuration" Version="9.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Async" Version="2.1.0" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
+    <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0-dev-00313" />
+  </ItemGroup>
+  <!-- OpenTelemetry -->
+  <ItemGroup>
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.Zipkin" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.14.0-beta.2" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Quartz" Version="1.14.0-beta.2" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.14.0-beta.1" />
+  </ItemGroup>
+  <!-- Rebus-->
+  <ItemGroup>
+    <PackageVersion Include="Rebus.Microsoft.Extensions.Logging" Version="5.2.0" />
+    <PackageVersion Include="Rebus.ServiceProvider" Version="10.7.1" />
+  </ItemGroup>
+  <!-- Test -->
+  <ItemGroup>
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="Moq.AutoMock" Version="3.5.0" />
+    <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="Shouldly" Version="4.3.0" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.extensibility.execution" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+  <!-- Fody -->
+  <ItemGroup>
+    <PackageVersion Include="ConfigureAwait.Fody" Version="3.3.2" />
+    <PackageVersion Include="Fody" Version="6.9.3" />
+  </ItemGroup>
+  <!-- DataBase -->
+  <ItemGroup>
+    <PackageVersion Include="MySqlConnector" Version="2.4.0" />
+    <PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="23.6.1" />
+    <PackageVersion Include="Npgsql" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.1" />
+    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="10.0.0" />
+  </ItemGroup>
+  <!-- Other -->
+  <ItemGroup>
+    <PackageVersion Include="AspNet.Security.OAuth.Bilibili" Version="10.0.0" />
+    <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="10.0.0" />
+    <PackageVersion Include="AspNet.Security.OAuth.QQ" Version="10.0.0" />
+    <PackageVersion Include="AspNet.Security.OAuth.Weixin" Version="10.0.0" />
+    <PackageVersion Include="AspNet.Security.OAuth.WorkWeixin" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
+    <PackageVersion Include="aliyun-net-sdk-core" Version="1.6.2" />
+    <PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.14.1" />
+    <PackageVersion Include="AgileConfig.Client" Version="1.8.0" />
+    <PackageVersion Include="CommonMark.NET" Version="0.15.1" />
+    <PackageVersion Include="Elastic.Apm.NetCoreAll" Version="1.34.1" />
+    <PackageVersion Include="BouncyCastle.Cryptography" Version="2.6.2" />
+    <PackageVersion Include="Dapr.Client" Version="1.16.0" />
+    <PackageVersion Include="Dapr.Actors" Version="1.16.0" />
+    <PackageVersion Include="Dapr.Actors.AspNetCore" Version="1.16.0" />
+    <PackageVersion Include="DistributedLock.Core" Version="1.0.8" />
+    <PackageVersion Include="DistributedLock.Redis" Version="1.1.0" />
+    <PackageVersion Include="Hangfire.MySqlStorage" Version="2.0.3" />
+    <PackageVersion Include="HangFire.SqlServer" Version="1.8.21" />
+    <PackageVersion Include="IdentityModel" Version="7.0.0" />
+    <PackageVersion Include="IP2Region.Net" Version="3.0.0" />
+    <PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
+    <PackageVersion Include="Magicodes.IE.Excel" Version="2.8.2" />
+    <PackageVersion Include="Markdig" Version="0.44.0" />
+    <PackageVersion Include="MiniExcel" Version="1.42.0" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageVersion Include="NEST" Version="7.17.5" />
+    <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.19.4" />
+    <PackageVersion Include="NRules" Version="0.9.2" />
+    <PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
+    <PackageVersion Include="OpenIddict.Server.DataProtection" Version="7.2.0" />
+    <PackageVersion Include="OpenIddict.Validation.DataProtection" Version="7.2.0" />
+    <PackageVersion Include="Polly" Version="8.6.3" />
+    <PackageVersion Include="QRCoder" Version="1.5.1" />
+    <PackageVersion Include="Quartz.Serialization.Json" Version="3.15.0" />
+    <PackageVersion Include="Rebus.RabbitMq" Version="10.0.1" />
+    <PackageVersion Include="RulesEngine" Version="5.0.5" />
+    <PackageVersion Include="Scriban" Version="6.3.0" />
+    <PackageVersion Include="Senparc.Weixin.MP" Version="16.18.9" />
+    <PackageVersion Include="SkyApm.Agent.Hosting" Version="2.2.0" />
+    <PackageVersion Include="SkyApm.Diagnostics.AspNetCore" Version="2.2.0" />
+    <PackageVersion Include="SkyAPM.Diagnostics.CAP" Version="2.2.0" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.11" />
+    <PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.1.7" />
+    <PackageVersion Include="StackExchange.Redis" Version="2.9.17" />
+    <PackageVersion Include="Spire.XLS" Version="15.12.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+    <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
+    <PackageVersion Include="TencentCloudSDK" Version="3.0.1273" />
+    <PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />
+    <PackageVersion Include="Yarp.Telemetry.Consumption" Version="2.3.0" />
+  </ItemGroup>
 </Project>
