@@ -14,18 +14,19 @@ using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.PermissionManagement;
 
-namespace LY.MicroService.Applications.Single.EntityFrameworkCore.DataSeeder;
+namespace LINGYUN.Abp.MicroService.AuthServer.DataSeeder;
+
 public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase, IDataSeedContributor, ITransientDependency
 {
     public ILogger<OpenIddictDataSeederContributor> Logger { protected get; set; }
     protected IPermissionDataSeeder PermissionDataSeeder { get; }
     public OpenIddictDataSeederContributor(
-        IConfiguration configuration, 
-        IOpenIddictApplicationRepository openIddictApplicationRepository, 
-        IAbpApplicationManager applicationManager, 
-        IOpenIddictScopeRepository openIddictScopeRepository, 
+        IConfiguration configuration,
+        IOpenIddictApplicationRepository openIddictApplicationRepository,
+        IAbpApplicationManager applicationManager,
+        IOpenIddictScopeRepository openIddictScopeRepository,
         IOpenIddictScopeManager scopeManager,
-        IPermissionDataSeeder permissionDataSeeder) 
+        IPermissionDataSeeder permissionDataSeeder)
         : base(configuration, openIddictApplicationRepository, applicationManager, openIddictScopeRepository, scopeManager)
     {
         PermissionDataSeeder = permissionDataSeeder;
@@ -43,7 +44,7 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
 
         Logger.LogInformation("Seeding the default scope...");
         await CreateDefaultScopeAsync();
-        await CreateApiScopeAsync(scope, "all_in_one");
+        await CreateApiScopeAsync(scope);
 
         Logger.LogInformation("Seeding the default applications...");
         await CreateApplicationAsync(scope);
@@ -180,27 +181,36 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
         });
     }
 
-    private async Task CreateApiScopeAsync(string scope, string apiResource)
+    private async Task CreateApiScopeAsync(string scope)
     {
         await CreateScopesAsync(new OpenIddictScopeDescriptor
         {
             Name = scope,
-            DisplayName = "Single Applications",
+            DisplayName = "微服务访问授权",
             DisplayNames =
             {
-                [CultureInfo.GetCultureInfo("zh-Hans")] = "单体应用程序",
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "微服务访问授权",
                 [CultureInfo.GetCultureInfo("en")] = "Single Applications"
             },
-            Description = "适用于单体应用程序的接口授权",
+            Description = "适用于微服务体系的接口授权",
             Descriptions =
             {
-                [CultureInfo.GetCultureInfo("zh-Hans")] = "允许应用程序使用单体应用程序的接口",
-                [CultureInfo.GetCultureInfo("en")] = "Allow applications to use the interface of monolithic applications"
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "允许应用程序使用各微服务模块的接口",
+                [CultureInfo.GetCultureInfo("en")] = "Allow the application to use the interfaces of each microservice module"
             },
             Resources =
             {
-                apiResource,
-                "http://localhost:30000",
+                "api-gateway",
+                "auth-server",
+                "admin-service",
+                "identity-service",
+                "localization-service",
+                "message-service",
+                "platform-service",
+                "task-service",
+                "webhook-service",
+                "wechat-service",
+                "workflow-service",
             }
         });
     }

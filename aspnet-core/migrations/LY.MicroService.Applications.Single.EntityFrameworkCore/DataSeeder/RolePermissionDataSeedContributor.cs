@@ -48,6 +48,8 @@ public class RolePermissionDataSeedContributor : IDataSeedContributor, ITransien
                 "Users",
                 new string[] { "Platform.Feedback.Create" },
                 context.TenantId);
+
+            Logger.LogInformation("Seeding new tenant admin role permissions completed.");
         }
     }
 }
