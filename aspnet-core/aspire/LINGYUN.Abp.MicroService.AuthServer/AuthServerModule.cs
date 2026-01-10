@@ -108,6 +108,7 @@ public partial class AuthServerModule : AbpModule
         ConfigureTiming(configuration);
         ConfigureAuditing(configuration);
         ConfigureAuthServer(configuration);
+        ConfigureBlobStoring(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);

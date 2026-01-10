@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.MultiTenancy;
+using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.MicroService.AuthServer.Ui.Branding;
@@ -161,6 +162,22 @@ public partial class AuthServerModule
                 options.WildcardDomainsFormat.AddIfNotContains(wildcardDomains);
             });
         }
+    }
+
+    private void ConfigureBlobStoring(IConfiguration configuration)
+    {
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            // all container use oss management
+            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+            {
+                // use oss management
+                containerConfiguration.UseOssManagement(config =>
+                {
+                    config.Bucket = configuration[OssManagementBlobProviderConfigurationNames.Bucket];
+                });
+            });
+        });
     }
 
     private void ConfigureMvc(IServiceCollection services, IConfiguration configuration)
