@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -55,6 +56,19 @@ public class DataDictionaryDataSeeder : IDataDictionaryDataSeeder, ITransientDep
             }
 
             return data;
+        }
+    }
+
+    public async virtual Task<Data> SeedAsync(
+        Data data,
+        CancellationToken cancellationToken = default)
+    {
+        using (CurrentTenant.Change(data.TenantId))
+        {
+            var existsData = await DataRepository.FindByNameAsync(data.Name, cancellationToken: cancellationToken);
+            existsData ??= await DataRepository.InsertAsync(data, true, cancellationToken);
+            
+            return existsData;
         }
     }
 }

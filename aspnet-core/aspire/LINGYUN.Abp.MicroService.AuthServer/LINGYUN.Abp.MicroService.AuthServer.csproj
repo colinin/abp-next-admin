@@ -78,10 +78,6 @@
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.ServiceDefaults\LINGYUN.Abp.MicroService.ServiceDefaults.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="wwwroot\" />
-	</ItemGroup>
-
 	<Target Name="RestoreNpmPackages" BeforeTargets="BeforeBuild">
 		<Message Text="正在执行 abp install-libs ..." Importance="high" />
 
@@ -89,10 +85,7 @@
 			<PackageJsonPath>$(MSBuildProjectDirectory)\package.json</PackageJsonPath>
 		</PropertyGroup>
 		
-		<Exec Command="abp install-libs"
-			  Condition="Exists('$(PackageJsonPath)')"
-			  WorkingDirectory="$(MSBuildProjectDirectory)"
-			  IgnoreExitCode="false" />
+		<Exec Command="abp install-libs" Condition="Exists('$(PackageJsonPath)')" WorkingDirectory="$(MSBuildProjectDirectory)" IgnoreExitCode="false" />
 	</Target>
 
 </Project>

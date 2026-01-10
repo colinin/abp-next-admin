@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DistributedLocking;
@@ -11,7 +10,7 @@ using Volo.Abp.Uow;
 namespace LINGYUN.Abp.MicroService.AdminService;
 public class AdminServiceDbMigrationEventHandler : EfCoreDatabaseMigrationEventHandlerBase<AdminServiceMigrationsDbContext>
 {
-    protected IDataSeeder DataSeeder { get; }
+    protected AdminServiceDataSeeder DataSeeder { get; }
 
     public AdminServiceDbMigrationEventHandler(
         ICurrentTenant currentTenant,
@@ -20,7 +19,7 @@ public class AdminServiceDbMigrationEventHandler : EfCoreDatabaseMigrationEventH
         IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory,
-        IDataSeeder dataSeeder)
+        AdminServiceDataSeeder dataSeeder)
         : base(
             ConnectionStringNameAttribute.GetConnStringName<AdminServiceMigrationsDbContext>(),
             currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
@@ -28,8 +27,18 @@ public class AdminServiceDbMigrationEventHandler : EfCoreDatabaseMigrationEventH
         DataSeeder = dataSeeder;
     }
 
-    protected async override Task SeedAsync(Guid? tenantId)
+    protected async override Task AfterTenantCreated(TenantCreatedEto eventData, bool schemaMigrated)
     {
-        await DataSeeder.SeedAsync(tenantId);
+        // 新租户数据种子
+        var context = new DataSeedContext(eventData.Id);
+        if (eventData.Properties != null)
+        {
+            foreach (var property in eventData.Properties)
+            {
+                context.WithProperty(property.Key, property.Value);
+            }
+        }
+
+        await DataSeeder.SeedAsync(context);
     }
 }

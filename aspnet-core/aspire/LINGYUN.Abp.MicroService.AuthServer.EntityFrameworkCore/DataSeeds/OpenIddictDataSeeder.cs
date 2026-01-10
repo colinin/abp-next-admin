@@ -14,13 +14,12 @@ using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.PermissionManagement;
 
-namespace LINGYUN.Abp.MicroService.AuthServer.DataSeeder;
-
-public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase, IDataSeedContributor, ITransientDependency
+namespace LINGYUN.Abp.MicroService.AuthServer.DataSeeds;
+public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransientDependency
 {
-    public ILogger<OpenIddictDataSeederContributor> Logger { protected get; set; }
+    public ILogger<OpenIddictDataSeeder> Logger { protected get; set; }
     protected IPermissionDataSeeder PermissionDataSeeder { get; }
-    public OpenIddictDataSeederContributor(
+    public OpenIddictDataSeeder(
         IConfiguration configuration,
         IOpenIddictApplicationRepository openIddictApplicationRepository,
         IAbpApplicationManager applicationManager,
@@ -31,7 +30,7 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
     {
         PermissionDataSeeder = permissionDataSeeder;
 
-        Logger = NullLogger<OpenIddictDataSeederContributor>.Instance;
+        Logger = NullLogger<OpenIddictDataSeeder>.Instance;
     }
 
     public async virtual Task SeedAsync(DataSeedContext context)
@@ -54,17 +53,17 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
 
     private async Task CreateDefaultScopeAsync()
     {
-        // OpenID Connect核心scope - 用于标识这是一个OIDC请求
+        // OpenId Connect
         await CreateScopesAsync(new OpenIddictScopeDescriptor
         {
             Name = OpenIddictConstants.Scopes.OpenId,
-            DisplayName = "OpenID Connect", // 友好的显示名称
+            DisplayName = "OpenId Connect",
             DisplayNames =
             {
                 [CultureInfo.GetCultureInfo("zh-Hans")] = "身份认证",
-                [CultureInfo.GetCultureInfo("en")] = "OpenID Connect"
+                [CultureInfo.GetCultureInfo("en")] = "OpenId Connect"
             },
-            Description = "使用OpenID Connect协议进行身份验证",
+            Description = "OpenId Connect协议进行身份验证",
             Descriptions =
             {
                 [CultureInfo.GetCultureInfo("zh-Hans")] = "允许应用程序使用您的身份信息进行登录",
@@ -72,7 +71,7 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
             }
         });
 
-        // Profile scope - 用户基本信息
+        // Profile
         await CreateScopesAsync(new OpenIddictScopeDescriptor
         {
             Name = OpenIddictConstants.Scopes.Profile,
@@ -90,7 +89,7 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
             }
         });
 
-        // Email scope
+        // Email
         await CreateScopesAsync(new OpenIddictScopeDescriptor
         {
             Name = OpenIddictConstants.Scopes.Email,
@@ -108,7 +107,7 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
             }
         });
 
-        // Phone scope
+        // Phone
         await CreateScopesAsync(new OpenIddictScopeDescriptor
         {
             Name = OpenIddictConstants.Scopes.Phone,
@@ -126,7 +125,7 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
             }
         });
 
-        // Address scope
+        // Address
         await CreateScopesAsync(new OpenIddictScopeDescriptor
         {
             Name = OpenIddictConstants.Scopes.Address,
@@ -144,7 +143,7 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
             }
         });
 
-        // Roles scope
+        // Roles
         await CreateScopesAsync(new OpenIddictScopeDescriptor
         {
             Name = OpenIddictConstants.Scopes.Roles,
@@ -162,7 +161,7 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
             }
         });
 
-        // Offline Access scope - 用于获取刷新令牌
+        // OfflineAccess
         await CreateScopesAsync(new OpenIddictScopeDescriptor
         {
             Name = OpenIddictConstants.Scopes.OfflineAccess,
@@ -183,6 +182,7 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
 
     private async Task CreateApiScopeAsync(string scope)
     {
+        // 前端汇总授权范围
         await CreateScopesAsync(new OpenIddictScopeDescriptor
         {
             Name = scope,
@@ -210,6 +210,216 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
                 "task-service",
                 "webhook-service",
                 "wechat-service",
+                "workflow-service",
+            }
+        });
+        // ApiGateway Swagger
+        await CreateScopesAsync(new OpenIddictScopeDescriptor
+        {
+            Name = "api-gateway",
+            DisplayName = "Api Gateway",
+            DisplayNames =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "应用程序接口网关",
+                [CultureInfo.GetCultureInfo("en")] = "Api Gateway"
+            },
+            Description = "适用于应用程序接口网关Swagger授权",
+            Descriptions =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "适用于应用程序接口网关Swagger授权",
+                [CultureInfo.GetCultureInfo("en")] = "Applicable to application Programming interface gateway Swagger authorization"
+            },
+            Resources =
+            {
+                "api-gateway",
+            }
+        });
+        // Admin Service
+        await CreateScopesAsync(new OpenIddictScopeDescriptor
+        {
+            Name = "admin-service",
+            DisplayName = "Admin Service",
+            DisplayNames =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "后台管理服务",
+                [CultureInfo.GetCultureInfo("en")] = "Admin Service"
+            },
+            Description = "适用于后台管理服务Swagger授权",
+            Descriptions =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "适用于后台管理服务Swagger授权",
+                [CultureInfo.GetCultureInfo("en")] = "Applicable to the back-end management service Swagger authorization"
+            },
+            Resources =
+            {
+                "admin-service",
+            }
+        });
+        // Identity Service
+        await CreateScopesAsync(new OpenIddictScopeDescriptor
+        {
+            Name = "identity-service",
+            DisplayName = "Identity Service",
+            DisplayNames =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "身份认证服务",
+                [CultureInfo.GetCultureInfo("en")] = "Identity Service"
+            },
+            Description = "适用于身份认证服务Swagger授权",
+            Descriptions =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "适用于身份认证服务Swagger授权",
+                [CultureInfo.GetCultureInfo("en")] = "Applicable to the identity service Swagger authorization"
+            },
+            Resources =
+            {
+                "identity-service",
+            }
+        });
+        // Localization Service
+        await CreateScopesAsync(new OpenIddictScopeDescriptor
+        {
+            Name = "localization-service",
+            DisplayName = "Localization Service",
+            DisplayNames =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "本地化管理服务",
+                [CultureInfo.GetCultureInfo("en")] = "Localization Service"
+            },
+            Description = "适用于本地化管理服务Swagger授权",
+            Descriptions =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "适用于本地化管理服务Swagger授权",
+                [CultureInfo.GetCultureInfo("en")] = "Applicable to the Localization service Swagger authorization"
+            },
+            Resources =
+            {
+                "localization-service",
+            }
+        });
+        // Message Service
+        await CreateScopesAsync(new OpenIddictScopeDescriptor
+        {
+            Name = "message-service",
+            DisplayName = "Message Service",
+            DisplayNames =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "消息管理服务",
+                [CultureInfo.GetCultureInfo("en")] = "Message Service"
+            },
+            Description = "适用于消息管理服务Swagger授权",
+            Descriptions =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "适用于消息管理服务Swagger授权",
+                [CultureInfo.GetCultureInfo("en")] = "Applicable to the Message service Swagger authorization"
+            },
+            Resources =
+            {
+                "message-service",
+            }
+        });
+        // Platform Service
+        await CreateScopesAsync(new OpenIddictScopeDescriptor
+        {
+            Name = "platform-service",
+            DisplayName = "Platform Service",
+            DisplayNames =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "平台管理服务",
+                [CultureInfo.GetCultureInfo("en")] = "Platform Service"
+            },
+            Description = "适用于平台管理服务Swagger授权",
+            Descriptions =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "适用于平台管理服务Swagger授权",
+                [CultureInfo.GetCultureInfo("en")] = "Applicable to the Platform service Swagger authorization"
+            },
+            Resources =
+            {
+                "platform-service",
+            }
+        });
+        // Task Service
+        await CreateScopesAsync(new OpenIddictScopeDescriptor
+        {
+            Name = "task-service",
+            DisplayName = "Task Service",
+            DisplayNames =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "任务管理服务",
+                [CultureInfo.GetCultureInfo("en")] = "Task Service"
+            },
+            Description = "适用于任务管理服务Swagger授权",
+            Descriptions =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "适用于任务管理服务Swagger授权",
+                [CultureInfo.GetCultureInfo("en")] = "Applicable to the Task service Swagger authorization"
+            },
+            Resources =
+            {
+                "task-service",
+            }
+        });
+        // Webhook Service
+        await CreateScopesAsync(new OpenIddictScopeDescriptor
+        {
+            Name = "webhook-service",
+            DisplayName = "Webhook Service",
+            DisplayNames =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "Webhook管理服务",
+                [CultureInfo.GetCultureInfo("en")] = "Webhook Service"
+            },
+            Description = "适用于Webhook管理服务Swagger授权",
+            Descriptions =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "适用于Webhook管理服务Swagger授权",
+                [CultureInfo.GetCultureInfo("en")] = "Applicable to the Webhook service Swagger authorization"
+            },
+            Resources =
+            {
+                "webhook-service",
+            }
+        });
+        // Wechat Service
+        await CreateScopesAsync(new OpenIddictScopeDescriptor
+        {
+            Name = "wechat-service",
+            DisplayName = "Wechat Service",
+            DisplayNames =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "微信管理服务",
+                [CultureInfo.GetCultureInfo("en")] = "Wechat Service"
+            },
+            Description = "适用于微信管理服务Swagger授权",
+            Descriptions =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "适用于微信管理服务Swagger授权",
+                [CultureInfo.GetCultureInfo("en")] = "Applicable to the Wechat service Swagger authorization"
+            },
+            Resources =
+            {
+                "wechat-service",
+            }
+        });
+        // Workflow Service
+        await CreateScopesAsync(new OpenIddictScopeDescriptor
+        {
+            Name = "workflow-service",
+            DisplayName = "Workflow Service",
+            DisplayNames =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "工作流管理服务",
+                [CultureInfo.GetCultureInfo("en")] = "Workflow Service"
+            },
+            Description = "适用于工作流管理服务Swagger授权",
+            Descriptions =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "适用于工作流管理服务Swagger授权",
+                [CultureInfo.GetCultureInfo("en")] = "Applicable to the Workflow service Swagger authorization"
+            },
+            Resources =
+            {
                 "workflow-service",
             }
         });
@@ -316,7 +526,18 @@ public class OpenIddictDataSeederContributor : OpenIddictDataSeedContributorBase
                 OpenIddictConstants.Scopes.Phone,
                 OpenIddictConstants.Scopes.Profile,
                 OpenIddictConstants.Scopes.OfflineAccess,
-                 scope],
+                 scope,
+                 "api-gateway",
+                "auth-server",
+                "admin-service",
+                "identity-service",
+                "localization-service",
+                "message-service",
+                "platform-service",
+                "task-service",
+                "webhook-service",
+                "wechat-service",
+                "workflow-service"],
                 oauthClientRedirectUrls,
                 oauthClientPostLogoutRedirectUrls);
 
