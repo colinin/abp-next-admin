@@ -45,9 +45,17 @@
                         </div>
                         <span asp-validation-for="PasswordLoginInput.Password"></span>
                     </div>
-                    <abp-row>
+
+                    <abp-row class="mb-3">
                         <abp-column>
-                            <abp-input asp-for="PasswordLoginInput.RememberMe" class="mb-4" />
+                            <input type="checkbox" class="form-check-input"
+                                   name="PasswordLoginInput.RememberMe"
+                                   value="true"
+                                   @(Model.PasswordLoginInput?.RememberMe == true ? "checked" : "")
+                                   id="PasswordLoginInput_RememberMe" />
+                            <label class="form-check-label" for="PasswordLoginInput_RememberMe">
+                                @L["RememberMe"]
+                            </label>
                         </abp-column>
                         <abp-column class="text-end">
                             <a href="@Url.Page("./ForgotPassword", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">@L["ForgotPassword"]</a>
@@ -61,7 +69,6 @@
                         </strong>
                     }
                     <div class="d-grid gap-2">
-                        @* <abp-button type="submit" button-type="Primary" name="Action" value="PlatformLogin" class="btn-lg mt-3">@L["PlatformLogin"]</abp-button> *@
                         <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
                         @if (Model.ShowCancelButton)
                         {
@@ -88,9 +95,17 @@
                         </div>
                         <span asp-validation-for="PhoneLoginInput.Code" class="text-danger"></span>
                     </div>
-                    <abp-row>
+
+                    <abp-row class="mb-3">
                         <abp-column>
-                            <abp-input asp-for="PhoneLoginInput.RememberMe" class="mb-4" />
+                            <input type="checkbox" class="form-check-input"
+                                   name="PhoneLoginInput.RememberMe"
+                                   value="true"
+                                   @(Model.PhoneLoginInput?.RememberMe == true ? "checked" : "")
+                                   id="PhoneLoginInput_RememberMe" />
+                            <label class="form-check-label" for="PhoneLoginInput_RememberMe">
+                                @L["RememberMe"]
+                            </label>
                         </abp-column>
                     </abp-row>
                     <div class="d-grid gap-2">
