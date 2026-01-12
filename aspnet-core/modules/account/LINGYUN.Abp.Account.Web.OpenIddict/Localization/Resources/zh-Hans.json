@@ -1,6 +1,19 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "Required": "必须"
+    "Required": "必须",
+    "InvalidSelectAccountRequest": "无效的选择账户请求!",
+    "NoAvailableAccounts": "未找到可用账户!",
+    "InvalidSelectAccount": "选择的账户无效!",
+    "SelectAccount": "选择账户",
+    "CurrentAccount": "当前账户",
+    "SignedInAs": "选择登录到 {0} 的账户",
+    "LastLoginTime": "上次登录",
+    "Continue": "继续",
+    "SwitchToAnotherAccount": "使用其他账户",
+    "CreateNewAccount": "创建新账户",
+    "SelectedAccountId": "请选择一个账户",
+    "RememberSelection": "记住我的选择",
+    "RememberMe": "保持登录状态"
   }
 }

@@ -18,9 +18,13 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="Localization\**\*.json" />
+		<EmbeddedResource Include="Pages\**\*.js" />
 		<EmbeddedResource Include="Views\**\*.js" />
+		<EmbeddedResource Include="wwwroot\**\*.css" />
 		<Content Remove="Localization\**\*.json" />
+		<Content Remove="Pages\**\*.js" />
 		<Content Remove="Views\**\*.js" />
+		<Content Remove="wwwroot\**\*.css" />
 	</ItemGroup>
 
 	<ItemGroup>
