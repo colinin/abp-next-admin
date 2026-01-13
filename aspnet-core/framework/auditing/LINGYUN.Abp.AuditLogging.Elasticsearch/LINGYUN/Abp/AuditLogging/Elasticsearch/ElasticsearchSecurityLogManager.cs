@@ -21,6 +21,7 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
 {
     private readonly AbpSecurityLogOptions _securityLogOptions;
     private readonly AbpElasticsearchOptions _elasticsearchOptions;
+    private readonly AbpAuditLoggingElasticsearchOptions _loggingEsOptions;
     private readonly IIndexNameNormalizer _indexNameNormalizer;
     private readonly IGuidGenerator _guidGenerator;
     private readonly IElasticsearchClientFactory _clientFactory;
@@ -34,7 +35,8 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
         IIndexNameNormalizer indexNameNormalizer,
         IOptions<AbpSecurityLogOptions> securityLogOptions,
         IOptions<AbpElasticsearchOptions> elasticsearchOptions,
-        IElasticsearchClientFactory clientFactory)
+        IElasticsearchClientFactory clientFactory,
+        IOptionsMonitor<AbpAuditLoggingElasticsearchOptions> loggingEsOptions)
     {
         _clock = clock;
         _guidGenerator = guidGenerator;
@@ -42,6 +44,7 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
         _indexNameNormalizer = indexNameNormalizer;
         _securityLogOptions = securityLogOptions.Value;
         _elasticsearchOptions = elasticsearchOptions.Value;
+        _loggingEsOptions = loggingEsOptions.CurrentValue;
 
         Logger = NullLogger<ElasticsearchSecurityLogManager>.Instance;
     }
@@ -56,17 +59,37 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
             return;
         }
 
+
+        if (!_loggingEsOptions.IsSecurityLogEnabled)
+        {
+            Logger.LogInformation(securityLogInfo.ToString());
+            return;
+        }
+
         var client = _clientFactory.Create();
 
         var securityLog = new SecurityLog(
             _guidGenerator.Create(),
             securityLogInfo);
 
-        await client.IndexAsync(
+        var response = await client.IndexAsync(
             securityLog,
             (x) => x.Index(CreateIndex())
                     .Id(securityLog.Id),
             cancellationToken);
+
+        if (!response.IsValidResponse)
+        {
+            Logger.LogWarning("Could not save the security log object: " + Environment.NewLine + securityLogInfo.ToString());
+            if (response.TryGetOriginalException(out var ex))
+            {
+                Logger.LogWarning(ex, ex.Message);
+            }
+            else if (response.ElasticsearchServerError != null)
+            {
+                Logger.LogWarning(response.ElasticsearchServerError.ToString());
+            }
+        }
     }
 
     public async virtual Task<SecurityLog> GetAsync(

@@ -8,8 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
@@ -21,6 +23,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
 {
     private readonly AbpAuditingOptions _auditingOptions;
     private readonly AbpElasticsearchOptions _elasticsearchOptions;
+    private readonly AbpAuditLoggingElasticsearchOptions _loggingEsOptions;
     private readonly IIndexNameNormalizer _indexNameNormalizer;
     private readonly IElasticsearchClientFactory _clientFactory;
     private readonly IAuditLogInfoToAuditLogConverter _converter;
@@ -34,7 +37,8 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         IOptions<AbpElasticsearchOptions> elasticsearchOptions,
         IElasticsearchClientFactory clientFactory,
         IOptions<AbpAuditingOptions> auditingOptions,
-        IAuditLogInfoToAuditLogConverter converter)
+        IAuditLogInfoToAuditLogConverter converter,
+        IOptionsMonitor<AbpAuditLoggingElasticsearchOptions> loggingEsOptions)
     {
         _clock = clock;
         _converter = converter;
@@ -42,6 +46,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         _auditingOptions = auditingOptions.Value;
         _elasticsearchOptions = elasticsearchOptions.Value;
         _indexNameNormalizer = indexNameNormalizer;
+        _loggingEsOptions = loggingEsOptions.CurrentValue;
 
         Logger = NullLogger<ElasticsearchAuditLogManager>.Instance;
     }
@@ -175,7 +180,18 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
 
         var response = await client.GetAsync<AuditLog>(
             id.ToString(),
-            dsl => dsl.Index(CreateIndex()),
+            dsl =>
+            {
+                dsl.Index(CreateIndex());
+                if (!includeDetails)
+                {
+                    dsl.SourceExcludes(
+                        ex => ex.Actions,
+                        ex => ex.Comments,
+                        ex => ex.Exceptions,
+                        ex => ex.EntityChanges);
+                }
+            },
             cancellationToken);
 
         return response.Source;
@@ -209,6 +225,12 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         AuditLogInfo auditInfo,
         CancellationToken cancellationToken = default)
     {
+        if (!_loggingEsOptions.IsAuditLogEnabled)
+        {
+            Logger.LogInformation(auditInfo.ToString());
+            return "";
+        }
+
         if (!_auditingOptions.HideErrors)
         {
             return await SaveLogAsync(auditInfo, cancellationToken);
@@ -244,6 +266,32 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         var response = await client.BulkAsync(
             dsl => dsl.Index(CreateIndex())
                       .Create(auditLog, ct =>  ct.Id(auditLog.Id)));
+        if (!response.IsValidResponse)
+        {
+            if (response.TryGetOriginalException(out var ex))
+            {
+                throw ex;
+            }
+            else if (response.ElasticsearchServerError != null)
+            {
+                throw new AbpException(response.ElasticsearchServerError.ToString());
+            }
+            else if (response.ItemsWithErrors.Any())
+            {
+                var reasonBuilder = new StringBuilder();
+                foreach (var itemError in response.ItemsWithErrors)
+                {
+                    if (itemError.Error?.Reason.IsNullOrWhiteSpace() == false)
+                    {
+                        reasonBuilder.AppendLine(itemError.Error.Reason);
+                    }
+                }
+                if (reasonBuilder.Length > 0)
+                {
+                    throw new AbpException(reasonBuilder.ToString());
+                }
+            }
+        }
 
         return response.Items?.FirstOrDefault()?.Id;
     }

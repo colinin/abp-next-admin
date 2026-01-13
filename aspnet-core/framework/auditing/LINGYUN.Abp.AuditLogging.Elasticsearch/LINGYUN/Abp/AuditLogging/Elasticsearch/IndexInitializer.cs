@@ -52,60 +52,61 @@ public class IndexInitializer : IIndexInitializer, ISingletonDependency
         {
             var indexCreateResponse = await client.Indices.CreateAsync(indexName, c =>
             {
-                c.Settings(_elasticsearchOptions.IndexSettings);
+                c.Settings(_elasticsearchOptions.AuditLogSettings);
                 c.Mappings(mp => mp
+                    .Dynamic(DynamicMapping.False)
                     .Properties<AuditLog>(pd =>
                     {
-                        pd.Keyword(k => k.Id);
-                        pd.Keyword(k => k.ApplicationName);
-                        pd.Keyword(k => k.UserId);
-                        pd.Keyword(k => k.UserName);
-                        pd.Keyword(k => k.TenantId);
-                        pd.Keyword(k => k.TenantName);
-                        pd.Keyword(k => k.ImpersonatorUserId);
-                        pd.Keyword(k => k.ImpersonatorUserName);
-                        pd.Keyword(k => k.ImpersonatorTenantId);
-                        pd.Keyword(k => k.ImpersonatorTenantName);
+                        pd.Text(k => k.Id, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Text(t => t.ApplicationName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(64))));
+                        pd.Text(k => k.UserId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Text(t => t.UserName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                        pd.Text(k => k.TenantId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Text(t => t.TenantName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(64))));
+                        pd.Text(k => k.ImpersonatorUserId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Text(t => t.ImpersonatorUserName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                        pd.Text(k => k.ImpersonatorTenantId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Text(t => t.ImpersonatorTenantName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(64))));
                         pd.Date(d => d.ExecutionTime, d => d.Format(dateTimeFormat));
                         pd.IntegerNumber(n => n.ExecutionDuration);
-                        pd.Keyword(k => k.ClientIpAddress);
-                        pd.Keyword(k => k.ClientName);
-                        pd.Keyword(k => k.ClientId);
-                        pd.Keyword(k => k.CorrelationId);
-                        pd.Keyword(k => k.BrowserInfo);
-                        pd.Keyword(k => k.HttpMethod);
-                        pd.Keyword(k => k.Url);
-                        pd.Keyword(k => k.Exceptions);
-                        pd.Keyword(k => k.Comments);
+                        pd.Text(k => k.ClientIpAddress, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                        pd.Text(k => k.ClientName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                        pd.Text(k => k.ClientId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                        pd.Text(k => k.CorrelationId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(64))));
+                        pd.Text(k => k.BrowserInfo, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(512))));
+                        pd.Text(k => k.HttpMethod, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Text(k => k.Url, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(1024))));
+                        pd.Text(k => k.Exceptions, p => p.Store(true).Index(false));
+                        pd.Text(k => k.Comments, p => p.Store(true).Index(false));
                         pd.IntegerNumber(n => n.HttpStatusCode);
                         pd.Nested(n => n.EntityChanges, np =>
                         {
                             np.Dynamic(DynamicMapping.False);
                             np.Properties(npd =>
                              {
-                                 npd.Keyword(nameof(EntityChange.Id));
-                                 npd.Keyword(nameof(EntityChange.AuditLogId));
-                                 npd.Keyword(nameof(EntityChange.TenantId));
+                                 npd.Text(nameof(EntityChange.Id), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                 npd.Text(nameof(EntityChange.AuditLogId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                 npd.Text(nameof(EntityChange.TenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
                                  npd.Date(nameof(EntityChange.ChangeTime), d => d.Format(dateTimeFormat));
-                                 npd.IntegerNumber(nameof(EntityChange.ChangeType));
-                                 npd.Keyword(nameof(EntityChange.EntityTenantId));
-                                 npd.Keyword(nameof(EntityChange.EntityId));
-                                 npd.Keyword(nameof(EntityChange.EntityTypeFullName));
+                                 npd.ByteNumber(nameof(EntityChange.ChangeType));
+                                 npd.Text(nameof(EntityChange.EntityTenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                 npd.Text(nameof(EntityChange.EntityId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(128))));
+                                 npd.Text(nameof(EntityChange.EntityTypeFullName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
                                  npd.Nested(nameof(EntityChange.PropertyChanges), pc =>
                                  {
                                      pc.Dynamic(DynamicMapping.False);
                                      pc.Properties(pcn =>
                                        {
-                                           pcn.Keyword(nameof(EntityPropertyChange.Id));
-                                           pcn.Keyword(nameof(EntityPropertyChange.TenantId));
-                                           pcn.Keyword(nameof(EntityPropertyChange.EntityChangeId));
-                                           pcn.Keyword(nameof(EntityPropertyChange.NewValue));
-                                           pcn.Keyword(nameof(EntityPropertyChange.OriginalValue));
-                                           pcn.Keyword(nameof(EntityPropertyChange.PropertyName));
-                                           pcn.Keyword(nameof(EntityPropertyChange.PropertyTypeFullName));
+                                           pcn.Text(nameof(EntityPropertyChange.Id), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                           pcn.Text(nameof(EntityPropertyChange.TenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                           pcn.Text(nameof(EntityPropertyChange.EntityChangeId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                           pcn.Text(nameof(EntityPropertyChange.NewValue), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                                           pcn.Text(nameof(EntityPropertyChange.OriginalValue), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                                           pcn.Text(nameof(EntityPropertyChange.PropertyName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                                           pcn.Text(nameof(EntityPropertyChange.PropertyTypeFullName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
                                        });
                                  });
-                                 npd.Object(nameof(EntityChange.ExtraProperties));
+                                 npd.Flattened(nameof(EntityChange.ExtraProperties), f => f.DepthLimit(5).EagerGlobalOrdinals(false));
                              });
                         });
                         pd.Nested(n => n.Actions, np =>
@@ -113,18 +114,18 @@ public class IndexInitializer : IIndexInitializer, ISingletonDependency
                             np.Dynamic(DynamicMapping.False);
                             np.Properties(npd =>
                             {
-                                npd.Keyword(nameof(AuditLogAction.Id));
-                                npd.Keyword(nameof(AuditLogAction.TenantId));
-                                npd.Keyword(nameof(AuditLogAction.AuditLogId));
-                                npd.Keyword(nameof(AuditLogAction.ServiceName));
-                                npd.Keyword(nameof(AuditLogAction.MethodName));
-                                npd.Keyword(nameof(AuditLogAction.Parameters));
+                                npd.Text(nameof(AuditLogAction.Id), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                npd.Text(nameof(AuditLogAction.TenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                npd.Text(nameof(AuditLogAction.AuditLogId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                npd.Text(nameof(AuditLogAction.ServiceName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                                npd.Text(nameof(AuditLogAction.MethodName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                                npd.Text(nameof(AuditLogAction.Parameters), p => p.Store(true).Index(false));
                                 npd.Date(nameof(AuditLogAction.ExecutionTime), d => d.Format(dateTimeFormat));
                                 npd.IntegerNumber(nameof(AuditLogAction.ExecutionDuration));
-                                npd.Object(nameof(AuditLogAction.ExtraProperties));
+                                npd.Flattened(nameof(AuditLogAction.ExtraProperties), f => f.DepthLimit(5).EagerGlobalOrdinals(false));
                             });
                         });
-                        pd.Object(f => f.ExtraProperties);
+                        pd.Flattened(f => f.ExtraProperties, f => f.DepthLimit(5).EagerGlobalOrdinals(false));
                     }));
             });
 
@@ -149,25 +150,26 @@ public class IndexInitializer : IIndexInitializer, ISingletonDependency
         {
             var indexCreateResponse = await client.Indices.CreateAsync(indexName, c =>
             {
-                c.Settings(_elasticsearchOptions.IndexSettings);
+                c.Settings(_elasticsearchOptions.SecurityLogSettings);
                 c.Mappings(mp =>
                 {
+                    mp.Dynamic(DynamicMapping.False);
                     mp.Properties<SecurityLog>(pd =>
                     {
-                        pd.Keyword(k => k.Id);
-                        pd.Keyword(k => k.TenantId);
-                        pd.Keyword(k => k.ApplicationName);
-                        pd.Keyword(k => k.Identity);
-                        pd.Keyword(k => k.Action);
-                        pd.Keyword(k => k.UserId);
-                        pd.Keyword(k => k.UserName);
-                        pd.Keyword(k => k.TenantName);
-                        pd.Keyword(k => k.ClientId);
-                        pd.Keyword(k => k.CorrelationId);
-                        pd.Keyword(k => k.ClientIpAddress);
-                        pd.Keyword(k => k.BrowserInfo);
+                        pd.Text(k => k.Id, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Text(k => k.TenantId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Text(k => k.ApplicationName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                        pd.Text(k => k.Identity, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                        pd.Text(k => k.Action, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                        pd.Text(k => k.UserId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Text(k => k.UserName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(64))));
+                        pd.Text(k => k.TenantName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(64))));
+                        pd.Text(k => k.ClientId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                        pd.Text(k => k.CorrelationId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                        pd.Text(k => k.ClientIpAddress, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                        pd.Text(k => k.BrowserInfo, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(512))));
                         pd.Date(k => k.CreationTime, d => d.Format(dateTimeFormat));
-                        pd.Object(f => f.ExtraProperties);
+                        pd.Flattened(f => f.ExtraProperties, f => f.DepthLimit(5).EagerGlobalOrdinals(false));
                     });
                 });
             });

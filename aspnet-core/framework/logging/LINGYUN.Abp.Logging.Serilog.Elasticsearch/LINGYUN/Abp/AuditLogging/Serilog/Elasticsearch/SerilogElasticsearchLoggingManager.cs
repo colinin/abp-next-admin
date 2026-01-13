@@ -293,15 +293,27 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
         }
         if (!machineName.IsNullOrWhiteSpace())
         {
-            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.MachineName)), machineName));
+            // 模糊匹配
+            queries.Add(new WildcardQuery(GetField(nameof(SerilogInfo.Fields.MachineName)))
+            {
+                Value = $"*{machineName}*"
+            });
         }
         if (!environment.IsNullOrWhiteSpace())
         {
-            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.Environment)), environment));
+            // 模糊匹配
+            queries.Add(new WildcardQuery(GetField(nameof(SerilogInfo.Fields.Environment)))
+            {
+                Value = $"*{environment}*"
+            });
         }
         if (!application.IsNullOrWhiteSpace())
         {
-            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.Application)), application));
+            // 模糊匹配
+            queries.Add(new WildcardQuery(GetField(nameof(SerilogInfo.Fields.Application)))
+            {
+                Value = $"*{application}*"
+            });
         }
         if (!context.IsNullOrWhiteSpace())
         {
@@ -396,19 +408,19 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     private readonly static IDictionary<string, string> _fieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
     {
         { "timestamp", "@timestamp" },
-        { "level", "level.raw" },
-        { "machinename", $"fields.{AbpLoggingEnricherPropertyNames.MachineName}.raw" },
-        { "environment", $"fields.{AbpLoggingEnricherPropertyNames.EnvironmentName}.raw" },
-        { "application", $"fields.{AbpSerilogEnrichersConsts.ApplicationNamePropertyName}.raw" },
-        { "context", "fields.SourceContext.raw" },
-        { "actionid", "fields.ActionId.raw" },
-        { "actionname", "fields.ActionName.raw" },
-        { "requestid", "fields.RequestId.raw" },
+        { "level", "level.keyword" },
+        { "machinename", $"fields.{AbpLoggingEnricherPropertyNames.MachineName}.keyword" },
+        { "environment", $"fields.{AbpLoggingEnricherPropertyNames.EnvironmentName}.keyword" },
+        { "application", $"fields.{AbpSerilogEnrichersConsts.ApplicationNamePropertyName}.keyword" },
+        { "context", "fields.SourceContext.keyword" },
+        { "actionid", "fields.ActionId.keyword" },
+        { "actionname", "fields.ActionName.keyword" },
+        { "requestid", "fields.RequestId.keyword" },
         { "requestpath", "fields.RequestPath" },
         { "connectionid", "fields.ConnectionId" },
-        { "correlationid", "fields.CorrelationId.raw" },
-        { "clientid", "fields.ClientId.raw" },
-        { "userid", "fields.UserId.raw" },
+        { "correlationid", "fields.CorrelationId.keyword" },
+        { "clientid", "fields.ClientId.keyword" },
+        { "userid", "fields.UserId.keyword" },
         { "processid", "fields.ProcessId" },
         { "threadid", "fields.ThreadId" },
         { "id", $"fields.{AbpSerilogUniqueIdConsts.UniqueIdPropertyName}" },
