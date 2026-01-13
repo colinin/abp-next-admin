@@ -15,9 +15,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict.Localization;
-using Volo.Abp.Users;
 using Volo.Abp.Validation;
-using static LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account.SelectAccountModel;
 
 namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account;
 
@@ -25,6 +23,8 @@ namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account;
 public class SelectAccountModel : AccountPageModel
 {
     private const string LastLoginTimeFieldName = "LastLoginTime";
+    private const string AllowedTenantsFieldName = "AllowedTenants";
+    private const string DefaultDateFormat = "yyyy-MM-dd HH:mm:ss";
 
     [BindProperty(SupportsGet = true)]
     public string RedirectUri { get; set; }
@@ -37,6 +37,8 @@ public class SelectAccountModel : AccountPageModel
     public SelectAccountInput Input { get; set; }
 
     public List<UserAccountInfo> AvailableAccounts { get; set; } = new();
+
+    protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache => LazyServiceProvider.LazyGetRequiredService<IdentityDynamicClaimsPrincipalContributorCache>();
 
     protected IOpenIddictApplicationManager ApplicationManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictApplicationManager>();
 
@@ -66,6 +68,12 @@ public class SelectAccountModel : AccountPageModel
             Alerts.Warning(L["InvalidSelectAccountRequest"]);
             return Page();
         }
+
+        Input = new SelectAccountInput
+        {
+            RedirectUri = requestInfo.RedirectUri,
+            ClientId = requestInfo.ClientId,
+        };
 
         var application = await ApplicationManager.FindByClientIdAsync(requestInfo.ClientId);
         ClientName = await ApplicationManager.GetLocalizedDisplayNameAsync(application) ?? requestInfo.ClientId;
@@ -152,16 +160,27 @@ public class SelectAccountModel : AccountPageModel
             await SignInManager.SignInAsync(user, rememberMe);
 
             // TODO: date format
-            user.SetProperty(LastLoginTimeFieldName, Clock.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            user.SetProperty(LastLoginTimeFieldName, Clock.Now.ToString(DefaultDateFormat));
 
             // TODO: 实现 RememberSelection
             if (rememberSelection)
             {
-                await SaveAccountSelectionAsync(
-                    Input.ClientId,
-                    user.Id,
-                    user.TenantId);
+                await SaveAccountSelectionAsync(Input.ClientId, user);
             }
+
+            var logContext = new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogActionConsts.LoginSucceeded,
+                UserName = user.UserName,
+                ClientId = Input.ClientId,
+            };
+            logContext.WithProperty("prompt", "select_account");
+
+            await IdentitySecurityLogManager.SaveAsync(logContext);
+
+            // Clear the dynamic claims cache.
+            await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
         }
         
         // 重定向回原始授权请求
@@ -234,7 +253,7 @@ public class SelectAccountModel : AccountPageModel
         }
         catch (Exception ex)
         {
-            Logger.LogWarning(ex, "解析RedirectUri参数错误: {message}", ex.Message);
+            Logger.LogWarning(ex, "Parse the error of the RedirectUri parameter: {message}", ex.Message);
             return Task.FromResult<OriginalRequestInfo>(null);
         }
     }
@@ -319,7 +338,7 @@ public class SelectAccountModel : AccountPageModel
         }
 
         var properties = await ApplicationManager.GetPropertiesAsync(application);
-        if (properties.TryGetValue("AllowedTenants", out var allowedTenantsValue))
+        if (properties.TryGetValue(AllowedTenantsFieldName, out var allowedTenantsValue))
         {
             var tenantIds = allowedTenantsValue.ToString().Split(',', StringSplitOptions.RemoveEmptyEntries);
 
@@ -399,7 +418,7 @@ public class SelectAccountModel : AccountPageModel
         }
     }
 
-    protected virtual Task SaveAccountSelectionAsync(string clientId, Guid userId, Guid? tenantId)
+    protected virtual Task SaveAccountSelectionAsync(string clientId, IdentityUser user)
     {
         // TODO: 保存用户当前选择账户, 下次选择账户时默认选择此账户
         return Task.CompletedTask;
