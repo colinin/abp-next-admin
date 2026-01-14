@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.MultiTenancy;
+using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.MicroService.AuthServer.Ui.Branding;
@@ -37,6 +38,9 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.Auditing;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
@@ -160,11 +164,36 @@ public partial class AuthServerModule
         }
     }
 
+    private void ConfigureBlobStoring(IConfiguration configuration)
+    {
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            // all container use oss management
+            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+            {
+                // use oss management
+                containerConfiguration.UseOssManagement(config =>
+                {
+                    config.Bucket = configuration[OssManagementBlobProviderConfigurationNames.Bucket];
+                });
+            });
+        });
+    }
+
     private void ConfigureMvc(IServiceCollection services, IConfiguration configuration)
     {
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
             options.ExposeIntegrationServices = true;
+        });
+
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.StyleBundles
+                .Configure(LeptonXLiteThemeBundles.Styles.Global, bundle =>
+                {
+                    bundle.AddFiles("/css/global-styles.css");
+                });
         });
     }
 
@@ -392,10 +421,6 @@ public partial class AuthServerModule
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
                 }
             });
-        //.AddWeChatWork(options =>
-        //{
-        //    options.SignInScheme = IdentityConstants.ExternalScheme;
-        //});
 
         services
             .AddDataProtection()

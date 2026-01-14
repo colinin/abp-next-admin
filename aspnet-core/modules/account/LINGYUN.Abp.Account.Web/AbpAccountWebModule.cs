@@ -14,7 +14,6 @@ using Volo.Abp.Account.Web.ProfileManagement;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.QRCode;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Sms;
 using Volo.Abp.VirtualFileSystem;
@@ -53,11 +52,7 @@ public class AbpAccountWebModule : AbpModule
 
         ConfigureProfileManagementPage();
 
-        context.Services.AddAutoMapperObjectMapper<AbpAccountWebModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<AbpAccountWebModule>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpAccountWebModule>();
 
         context.Services
             .AddAuthentication()
@@ -119,6 +114,7 @@ public class AbpAccountWebModule : AbpModule
                 {
                     bundle.AddFiles("/client-proxies/account-proxy.js");
                     bundle.AddFiles("/client-proxies/qrcode-proxy.js");
+                    bundle.AddFiles("/Pages/Account/Login.js");
                     bundle.AddContributors(typeof(QRCodeScriptContributor));
                 });
         });

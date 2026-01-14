@@ -12,7 +12,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
-      "applicationUrl": "http://0.0.0.0:30001",
+      "applicationUrl": "http://0.0.0.0:30000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "APPLICATION_DATABASE_PROVIDER": "PostgreSql"
@@ -22,7 +22,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
-      "applicationUrl": "http://0.0.0.0:30001",
+      "applicationUrl": "http://0.0.0.0:30000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "APPLICATION_DATABASE_PROVIDER": "MySql"
@@ -32,7 +32,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
-      "applicationUrl": "http://0.0.0.0:30001",
+      "applicationUrl": "http://0.0.0.0:30000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "APPLICATION_DATABASE_PROVIDER": "SqlServer"

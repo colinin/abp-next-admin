@@ -1,10 +1,8 @@
 ﻿using LINGYUN.Abp.Saas.Tenants;
-using LINGYUN.Abp.UI.Navigation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +10,6 @@ using Volo.Abp.Data;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.EntityFrameworkCore.Migrations;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
@@ -21,9 +18,7 @@ public class PlatformServiceDbMigrationEventHandler :
     EfCoreDatabaseMigrationEventHandlerBase<PlatformServiceMigrationsDbContext>,
     IDistributedEventHandler<TenantDeletedEto>
 {
-    protected IEnumerable<INavigationSeedContributor> NavigationSeedContributors { get; }
-    protected INavigationProvider NavigationProvider { get; }
-    protected IFeatureChecker FeatureChecker { get; }
+    protected PlatformServiceDataSeeder DataSeeder { get; }
     protected IConfiguration Configuration { get; }
     public PlatformServiceDbMigrationEventHandler(
         ICurrentTenant currentTenant,
@@ -32,37 +27,29 @@ public class PlatformServiceDbMigrationEventHandler :
         IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory,
-        IFeatureChecker featureChecker,
         IConfiguration configuration,
-        INavigationProvider navigationProvider,
-        IEnumerable<INavigationSeedContributor> navigationSeedContributors)
+        PlatformServiceDataSeeder dataSeeder)
         : base(
             ConnectionStringNameAttribute.GetConnStringName<PlatformServiceMigrationsDbContext>(),
             currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
-        FeatureChecker = featureChecker;
         Configuration = configuration;
-        NavigationProvider = navigationProvider;
-        NavigationSeedContributors = navigationSeedContributors;
+        DataSeeder = dataSeeder;
     }
 
-    protected async override Task SeedAsync(Guid? tenantId)
+    protected async override Task AfterTenantCreated(TenantCreatedEto eventData, bool schemaMigrated)
     {
-        using (CurrentTenant.Change(tenantId))
+        // 新租户数据种子
+        var context = new DataSeedContext(eventData.Id);
+        if (eventData.Properties != null)
         {
-            var menus = await NavigationProvider.GetAllAsync();
-
-            var multiTenancySides = CurrentTenant.IsAvailable
-                ? MultiTenancySides.Tenant
-                : MultiTenancySides.Host;
-
-            var seedContext = new NavigationSeedContext(menus, multiTenancySides);
-
-            foreach (var contributor in NavigationSeedContributors)
+            foreach (var property in eventData.Properties)
             {
-                await contributor.SeedAsync(seedContext);
+                context.WithProperty(property.Key, property.Value);
             }
         }
+
+        await DataSeeder.SeedAsync(context);
     }
 
     public async virtual Task HandleEventAsync(TenantDeletedEto eventData)

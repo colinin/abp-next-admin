@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.MicroService.AuthServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.PostgreSql)
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -337,8 +337,8 @@ namespace LINGYUN.Abp.MicroService.AuthServer.Migrations
                         .HasColumnType("character varying(64)");
 
                     b.Property<string>("DeviceInfo")
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("text")
@@ -863,6 +863,9 @@ namespace LINGYUN.Abp.MicroService.AuthServer.Migrations
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
+                    b.Property<string>("FrontChannelLogoutUri")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
@@ -1083,8 +1086,8 @@ namespace LINGYUN.Abp.MicroService.AuthServer.Migrations
                         .HasColumnType("character varying(400)");
 
                     b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
 
                     b.HasKey("Id");
 

@@ -4,7 +4,7 @@
 	<Import Project="../../configureawait.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<AssemblyName>PackageName.CompanyName.ProjectName.Domain</AssemblyName>
 		<PackageId>PackageName.CompanyName.ProjectName.Domain</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>

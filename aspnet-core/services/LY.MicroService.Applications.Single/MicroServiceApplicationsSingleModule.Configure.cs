@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -59,7 +60,7 @@ public partial class MicroServiceApplicationsSingleModule
         {
             builder.AddValidation(options =>
             {
-                //options.AddAudiences("lingyun-abp-application");
+                options.AddAudiences("all_in_one");
 
                 options.UseLocalServer();
 
@@ -784,6 +785,12 @@ public partial class MicroServiceApplicationsSingleModule
                 .Configure(StandardBundles.Scripts.Global, bundle =>
                 {
                     bundle.AddContributors(typeof(SingleGlobalScriptContributor));
+                });
+
+            options.StyleBundles
+                .Configure(LeptonXLiteThemeBundles.Styles.Global, bundle =>
+                {
+                    bundle.AddFiles("/css/global-styles.css");
                 });
         });
 

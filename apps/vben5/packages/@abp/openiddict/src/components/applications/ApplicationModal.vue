@@ -125,6 +125,7 @@ const endpoints = reactive<DefaultOptionType[]>([
   { label: 'device', value: 'device' },
   { label: 'revocation', value: 'revocation' },
   { label: 'introspection', value: 'introspection' },
+  { label: 'pushed_authorization', value: 'pushed_authorization' },
 ]);
 const getGrantTypes = computed(() => {
   const types = openIdConfiguration.value?.grant_types_supported ?? [];

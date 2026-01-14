@@ -2,7 +2,7 @@
   "ReverseProxy": {
     "Routes": {
       "abp-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/abp/{**everything}"
         },
@@ -23,7 +23,7 @@
           }
         ]
       },
-      "auth-wellknown-route": {
+      "oidc-discovery-route": {
         "ClusterId": "auth-server-cluster",
         "Match": {
           "Path": "/.well-known/{**everything}"
@@ -38,7 +38,7 @@
           }
         ]
       },
-      "auth-server-route": {
+      "oidc-token-route": {
         "ClusterId": "auth-server-cluster",
         "Match": {
           "Path": "/connect/{**everything}"
@@ -53,7 +53,7 @@
           }
         ]
       },
-      "external-logins-route": {
+      "account-external-logins-route": {
         "ClusterId": "auth-server-cluster",
         "Match": {
           "Path": "/api/account/external-logins/{**everything}"
@@ -68,7 +68,7 @@
           }
         ]
       },
-      "oauth-route": {
+      "account-oauth-route": {
         "ClusterId": "auth-server-cluster",
         "Match": {
           "Path": "/api/account/oauth/{**everything}"
@@ -83,7 +83,7 @@
           }
         ]
       },
-      "qrcode-route": {
+      "account-qrcode-route": {
         "ClusterId": "auth-server-cluster",
         "Match": {
           "Path": "/api/account/qrcode/{**everything}"
@@ -99,7 +99,7 @@
         ]
       },
       "account-route": {
-        "ClusterId": "auth-server-api-cluster",
+        "ClusterId": "identity-service-cluster",
         "Match": {
           "Path": "/api/account/{**everything}"
         },
@@ -114,7 +114,7 @@
         ]
       },
       "identity-route": {
-        "ClusterId": "auth-server-api-cluster",
+        "ClusterId": "identity-service-cluster",
         "Match": {
           "Path": "/api/identity/{**everything}"
         },
@@ -129,7 +129,7 @@
         ]
       },
       "identity-server-route": {
-        "ClusterId": "auth-server-api-cluster",
+        "ClusterId": "identity-service-cluster",
         "Match": {
           "Path": "/api/identity-server/{**everything}"
         },
@@ -144,7 +144,7 @@
         ]
       },
       "openiddict-route": {
-        "ClusterId": "auth-server-api-cluster",
+        "ClusterId": "identity-service-cluster",
         "Match": {
           "Path": "/api/openiddict/{**everything}"
         },
@@ -159,7 +159,7 @@
         ]
       },
       "cache-management-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/caching-management/{**everything}"
         },
@@ -174,7 +174,7 @@
         ]
       },
       "saas-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/saas/{**everything}"
         },
@@ -189,7 +189,7 @@
         ]
       },
       "auditing-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/auditing/{**everything}"
         },
@@ -204,7 +204,7 @@
         ]
       },
       "data-protected-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/data-protection-management/{**everything}"
         },
@@ -219,7 +219,7 @@
         ]
       },
       "text-template-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/text-templating/{**everything}"
         },
@@ -234,7 +234,7 @@
         ]
       },
       "feature-management-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/feature-management/{**everything}"
         },
@@ -249,7 +249,7 @@
         ]
       },
       "permission-management-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/permission-management/{**everything}"
         },
@@ -264,7 +264,7 @@
         ]
       },
       "setting-management-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/setting-management/{**everything}"
         },
@@ -279,7 +279,7 @@
         ]
       },
       "localization-management-route": {
-        "ClusterId": "localization-api-cluster",
+        "ClusterId": "localization-service-cluster",
         "Match": {
           "Path": "/api/localization/{**everything}"
         },
@@ -294,7 +294,7 @@
         ]
       },
       "im-route": {
-        "ClusterId": "messages-api-cluster",
+        "ClusterId": "messages-service-cluster",
         "Match": {
           "Path": "/api/im/{**everything}"
         },
@@ -309,7 +309,7 @@
         ]
       },
       "notifications-route": {
-        "ClusterId": "messages-api-cluster",
+        "ClusterId": "messages-service-cluster",
         "Match": {
           "Path": "/api/notifications/{**everything}"
         },
@@ -323,8 +323,8 @@
           }
         ]
       },
-      "signalr-route": {
-        "ClusterId": "messages-api-cluster",
+      "signalr-hubs-route": {
+        "ClusterId": "messages-service-cluster",
         "Match": {
           "Path": "/signalr-hubs/{**everything}"
         },
@@ -344,8 +344,8 @@
           }
         ]
       },
-      "webhooks-management-route": {
-        "ClusterId": "webhooks-api-cluster",
+      "webhooks-route": {
+        "ClusterId": "webhooks-service-cluster",
         "Match": {
           "Path": "/api/webhooks/{**everything}"
         },
@@ -360,7 +360,7 @@
         ]
       },
       "task-management-route": {
-        "ClusterId": "tasks-api-cluster",
+        "ClusterId": "task-service-cluster",
         "Match": {
           "Path": "/api/task-management/{**everything}"
         },
@@ -375,7 +375,7 @@
         ]
       },
       "platform-route": {
-        "ClusterId": "platform-api-cluster",
+        "ClusterId": "platform-service-cluster",
         "Match": {
           "Path": "/api/platform/{**everything}"
         },
@@ -389,8 +389,8 @@
           }
         ]
       },
-      "oss-route": {
-        "ClusterId": "platform-api-cluster",
+      "oss-management-route": {
+        "ClusterId": "platform-service-cluster",
         "Match": {
           "Path": "/api/oss-management/{**everything}"
         },
@@ -405,7 +405,7 @@
         ]
       },
       "files-route": {
-        "ClusterId": "platform-api-cluster",
+        "ClusterId": "platform-service-cluster",
         "Match": {
           "Path": "/api/files/{**everything}"
         },
@@ -420,9 +420,24 @@
         ]
       },
       "wechat-route": {
-        "ClusterId": "wechat-api-cluster",
+        "ClusterId": "wechat-service-cluster",
         "Match": {
           "Path": "/api/wechat/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "elsa-route": {
+        "ClusterId": "workflow-service-cluster",
+        "Match": {
+          "Path": "/elsa/{**everything}"
         },
         "Transforms": [
           {
@@ -443,7 +458,7 @@
           }
         }
       },
-      "auth-server-api-cluster": {
+      "identity-service-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://localhost:30015",
@@ -453,7 +468,7 @@
           }
         }
       },
-      "admin-api-cluster": {
+      "admin-service-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://localhost:30010",
@@ -463,7 +478,7 @@
           }
         }
       },
-      "localization-api-cluster": {
+      "localization-service-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://localhost:30030",
@@ -473,7 +488,7 @@
           }
         }
       },
-      "messages-api-cluster": {
+      "messages-service-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://localhost:30020",
@@ -483,7 +498,7 @@
           }
         }
       },
-      "webhooks-api-cluster": {
+      "webhooks-service-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://localhost:30045",
@@ -493,7 +508,7 @@
           }
         }
       },
-      "tasks-api-cluster": {
+      "task-service-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://localhost:30040",
@@ -503,7 +518,7 @@
           }
         }
       },
-      "platform-api-cluster": {
+      "platform-service-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://localhost:30025",
@@ -513,7 +528,7 @@
           }
         }
       },
-      "workflow-api-cluster": {
+      "workflow-service-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://localhost:30050",
@@ -523,7 +538,7 @@
           }
         }
       },
-      "wechat-api-cluster": {
+      "wechat-service-cluster": {
         "Destinations": {
           "destination1": {
             "Address": "http://localhost:30060",

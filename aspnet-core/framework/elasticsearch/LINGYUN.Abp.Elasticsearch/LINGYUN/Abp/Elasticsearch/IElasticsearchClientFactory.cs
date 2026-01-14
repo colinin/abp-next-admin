@@ -1,9 +1,9 @@
-﻿using Nest;
+﻿using Elastic.Clients.Elasticsearch;
 
 namespace LINGYUN.Abp.Elasticsearch
 {
     public interface IElasticsearchClientFactory
     {
-        IElasticClient Create();
+        ElasticsearchClient Create();
     }
 }

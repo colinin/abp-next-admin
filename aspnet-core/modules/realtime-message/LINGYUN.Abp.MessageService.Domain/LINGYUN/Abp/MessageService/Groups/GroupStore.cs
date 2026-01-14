@@ -11,14 +11,14 @@ namespace LINGYUN.Abp.MessageService.Groups;
 
 public class GroupStore : IGroupStore, ITransientDependency
 {
-    private readonly IObjectMapper _objectMapper;
     private readonly ICurrentTenant _currentTenant;
     private readonly IGroupRepository _groupRepository;
+    private readonly IObjectMapper<AbpMessageServiceDomainModule> _objectMapper;
 
     public GroupStore(
-        IObjectMapper objectMapper,
         ICurrentTenant currentTenant,
-        IGroupRepository groupRepository)
+        IGroupRepository groupRepository,
+        IObjectMapper<AbpMessageServiceDomainModule> objectMapper)
     {
         _objectMapper = objectMapper;
         _currentTenant = currentTenant;

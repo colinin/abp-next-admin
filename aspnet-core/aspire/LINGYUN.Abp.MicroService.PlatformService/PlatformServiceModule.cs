@@ -25,11 +25,9 @@ using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Aliyun;
-using LINGYUN.Abp.UI.Navigation.VueVbenAdmin5;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
-using LINGYUN.Platform.Theme.VueVbenAdmin;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -38,7 +36,6 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.Data;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.IdentityModel.Web;
@@ -60,8 +57,6 @@ namespace LINGYUN.Abp.MicroService.PlatformService;
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcLocalizationModule),
-    typeof(AbpUINavigationVueVbenAdmin5Module),
-    typeof(PlatformThemeVueVbenAdminModule),
     typeof(AbpOssManagementAliyunModule),    // 阿里云存储提供者模块
     typeof(AbpOssManagementTencentModule),   // 腾讯云存储提供者模块
     typeof(AbpOssManagementNexusModule),     // Nexus存储提供者模块
@@ -151,10 +146,6 @@ public partial class PlatformServiceModule : AbpModule
 
     public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        await context.ServiceProvider
-            .GetRequiredService<IDataSeeder>()
-            .SeedAsync();
-
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpOssManagementOptions>>().Value;
         if (options.IsCleanupEnabled)
         {

@@ -36,13 +36,11 @@ using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.Data;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.Swashbuckle;
-using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.MicroService.AdminService;
 
@@ -142,16 +140,5 @@ public partial class AdminServiceModule : AbpModule
         ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
-    }
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
-    }
-
-    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
-    {
-        await context.ServiceProvider
-            .GetRequiredService<IDataSeeder>()
-            .SeedAsync();
     }
 }

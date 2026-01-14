@@ -2,24 +2,25 @@
 using Serilog.Formatting.Elasticsearch;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 
 [Serializable]
 public class SerilogInfo
 {
-    [Nest.PropertyName(ElasticsearchJsonFormatter.TimestampPropertyName)]
+    [JsonPropertyName(ElasticsearchJsonFormatter.TimestampPropertyName)]
     public DateTime TimeStamp { get; set; }
 
-    [Nest.PropertyName(ElasticsearchJsonFormatter.LevelPropertyName)]
+    [JsonPropertyName(ElasticsearchJsonFormatter.LevelPropertyName)]
     public LogEventLevel Level { get; set; }
 
-    [Nest.PropertyName(ElasticsearchJsonFormatter.RenderedMessagePropertyName)]
+    [JsonPropertyName(ElasticsearchJsonFormatter.RenderedMessagePropertyName)]
     public string Message { get; set; }
 
-    [Nest.PropertyName("fields")]
+    [JsonPropertyName("fields")]
     public SerilogField Fields { get; set; }
 
-    [Nest.PropertyName("exceptions")]
+    [JsonPropertyName("exceptions")]
     public List<SerilogException> Exceptions { get; set; }
 }

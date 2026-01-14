@@ -25,19 +25,15 @@ using LINGYUN.Abp.OpenIddict.WeChat.Work;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.MicroService.AuthServer;
 
@@ -112,23 +108,12 @@ public partial class AuthServerModule : AbpModule
         ConfigureTiming(configuration);
         ConfigureAuditing(configuration);
         ConfigureAuthServer(configuration);
+        ConfigureBlobStoring(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
-    }
-
-    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
-    {
-        await context.ServiceProvider
-            .GetRequiredService<IDataSeeder>()
-            .SeedAsync();
     }
 }

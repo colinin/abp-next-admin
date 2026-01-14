@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 [Dependency(ReplaceServices = true)]
 public class AuditLogManager : IAuditLogManager, ITransientDependency
 {
-    protected IObjectMapper ObjectMapper { get; }
+    protected IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> ObjectMapper { get; }
     protected IAuditLogRepository AuditLogRepository { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected AbpAuditingOptions Options { get; }
@@ -26,11 +26,11 @@ public class AuditLogManager : IAuditLogManager, ITransientDependency
     public ILogger<AuditLogManager> Logger { protected get; set; }
 
     public AuditLogManager(
-        IObjectMapper objectMapper,
         IAuditLogRepository auditLogRepository,
         IUnitOfWorkManager unitOfWorkManager,
         IOptions<AbpAuditingOptions> options,
-        IAuditLogInfoToAuditLogConverter converter)
+        IAuditLogInfoToAuditLogConverter converter,
+        IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> objectMapper)
     {
         ObjectMapper = objectMapper;
         AuditLogRepository = auditLogRepository;

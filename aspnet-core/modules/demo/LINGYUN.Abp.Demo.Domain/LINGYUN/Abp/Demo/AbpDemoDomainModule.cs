@@ -3,15 +3,15 @@ using LINGYUN.Abp.DataProtection.Localization;
 using LINGYUN.Abp.Demo.Books;
 using LINGYUN.Abp.Demo.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.Localization;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Demo;
 
 [DependsOn(
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpDddDomainModule),
     typeof(AbpDataProtectionModule),
     typeof(AbpDemoDomainSharedModule))]
@@ -19,12 +19,7 @@ public class AbpDemoDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpDemoDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<DemoDomainMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpDemoDomainModule>();
 
         Configure<AbpLocalizationOptions>(options =>
         {

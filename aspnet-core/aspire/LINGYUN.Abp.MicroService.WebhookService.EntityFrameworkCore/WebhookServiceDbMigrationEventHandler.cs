@@ -15,8 +15,7 @@ public class WebhookServiceDbMigrationEventHandler : EfCoreDatabaseMigrationEven
         ITenantStore tenantStore,
         IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
-        ILoggerFactory loggerFactory,
-        IDataSeeder dataSeeder)
+        ILoggerFactory loggerFactory)
         : base(
             ConnectionStringNameAttribute.GetConnStringName<WebhookServiceMigrationsDbContext>(),
             currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)

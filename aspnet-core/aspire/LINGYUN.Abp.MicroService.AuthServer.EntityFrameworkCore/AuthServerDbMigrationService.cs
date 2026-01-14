@@ -2,6 +2,7 @@
 using LINGYUN.Abp.Saas.Tenants;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
@@ -13,8 +14,8 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
 
 public class AuthServerDbMigrationService : EfCoreRuntimeDbMigratorBase<AuthServerMigrationsDbContext>, ITransientDependency
 {
+    protected AuthServerDataSeeder DataSeeder { get; }
     public AuthServerDbMigrationService(
-        IDataSeeder dataSeeder,
         IDbSchemaMigrator dbSchemaMigrator,
         ITenantRepository tenantRepository,
         ICurrentTenant currentTenant,
@@ -22,10 +23,18 @@ public class AuthServerDbMigrationService : EfCoreRuntimeDbMigratorBase<AuthServ
         IServiceProvider serviceProvider,
         IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,
+        AuthServerDataSeeder dataSeeder)
         : base(
             ConnectionStringNameAttribute.GetConnStringName<AuthServerMigrationsDbContext>(), 
             unitOfWorkManager, serviceProvider, currentTenant, abpDistributedLock, distributedEventBus, loggerFactory)
     {
+        DataSeeder = dataSeeder;
+    }
+
+    protected async override Task SeedAsync()
+    {
+        // DbMigrator迁移数据种子
+        await DataSeeder.SeedAsync(new DataSeedContext());
     }
 }

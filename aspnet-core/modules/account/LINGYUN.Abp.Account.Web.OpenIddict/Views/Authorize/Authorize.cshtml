@@ -1,0 +1,90 @@
+﻿@using Microsoft.Extensions.Primitives
+@using Volo.Abp.OpenIddict.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LINGYUN.Abp.Account.Web.OpenIddict.ViewModels.Authorize
+@inject IHtmlLocalizer<AbpOpenIddictResource> L
+@inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
+@model AuthorizeViewModel
+
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+    PageLayout.Content.Title = L["Authorization"].Value;
+}
+
+@section scripts
+{
+    <abp-script-bundle name="@typeof(AuthorizeViewModel).FullName">
+        <abp-script src="/Views/Authorize/Authorize.js" />
+    </abp-script-bundle>
+}
+
+<abp-card>
+    <abp-card-body>
+        <p class="lead text-left"><strong>@string.Format(L["DoYouWantToGrantAccessToYourData"].Value, @Model.ApplicationName)</strong></p>
+        <p class="fw-light">@L["ScopesRequested"]:</p>
+
+        <form method="post" action="~/connect/authorize/callback">
+            @Html.AntiForgeryToken()
+            @foreach (var parameter in Context.Request.HasFormContentType ? (IEnumerable<KeyValuePair<string, StringValues>>)Context.Request.Form : Context.Request.Query)
+            {
+                <input type="hidden" name="@parameter.Key" value="@parameter.Value" />
+            }
+            <input type="hidden" id="selected_scopes" name="selected_scopes" value="@Model.Scope" />
+
+            <div class="mb-4">
+                <div class="form-check">
+                    @foreach (var scope in Model.AvailableScopes)
+                    {
+                        <div class="list-group-item">
+                            <div class="form-check">
+                                @if (scope.IsRequired)
+                                {
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value="@scope.Value"
+                                           id="scope_@scope.Value"
+                                           checked
+                                           disabled />
+                                    <input type="hidden" name="selectedScopeValues" value="@scope.Value" />
+                                }
+                                else
+                                {
+                                    <input class="form-check-input scope-checkbox"
+                                           type="checkbox"
+                                           value="@scope.Value"
+                                           id="scope_@scope.Value"
+                                           checked
+                                           data-scope-value="@scope.Value" />
+                                }
+
+                                <label class="form-check-label w-100" for="scope_@scope.Value">
+                                    <div>
+                                        <strong>@scope.DisplayName</strong>
+                                        @if (scope.IsRequired)
+                                        {
+                                            <span class="badge bg-warning ms-2">@L["Required"]</span>
+                                        }
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(scope.Description))
+                                    {
+                                        <div class="text-muted mt-1">
+                                            <small>@scope.Description</small>
+                                        </div>
+                                    }
+                                </label>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <input class="btn btn-primary" name="accept" type="submit" value="@L["Accept"]" />
+                <input class="btn btn-danger" name="deny" type="submit" value="@L["Deny"]" />
+            </div>
+        </form>
+    </abp-card-body>
+</abp-card>

@@ -17,15 +17,14 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 public class SecurityLogManager : ISecurityLogManager, ITransientDependency
 {
     public ILogger<SecurityLogManager> Logger { get; set; }
-
-    protected IObjectMapper ObjectMapper { get; }
+    protected IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> ObjectMapper { get; }
     protected AbpSecurityLogOptions SecurityLogOptions { get; }
     protected IIdentitySecurityLogRepository IdentitySecurityLogRepository { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     public SecurityLogManager(
-        IObjectMapper objectMapper,
+        IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> objectMapper,
         ILogger<SecurityLogManager> logger,
         IOptions<AbpSecurityLogOptions> securityLogOptions,
         IIdentitySecurityLogRepository identitySecurityLogRepository,

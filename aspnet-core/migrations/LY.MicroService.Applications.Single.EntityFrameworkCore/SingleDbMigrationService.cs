@@ -29,7 +29,9 @@ public class SingleDbMigrationService : EfCoreRuntimeDatabaseMigratorBase<Single
         ILoggerFactory loggerFactory,
         IDataSeeder dataSeeder,
         ITenantRepository tenantRepository)
-        : base("Platform-V70", unitOfWorkManager, serviceProvider, currentTenant, abpDistributedLock, distributedEventBus, loggerFactory)
+        : base(
+            ConnectionStringNameAttribute.GetConnStringName<SingleMigrationsDbContext>(), 
+            unitOfWorkManager, serviceProvider, currentTenant, abpDistributedLock, distributedEventBus, loggerFactory)
     {
         DataSeeder = dataSeeder;
         TenantRepository = tenantRepository;
