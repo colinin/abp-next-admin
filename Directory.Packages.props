@@ -14,6 +14,7 @@
   <!-- Abp Framework -->
   <ItemGroup>
     <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="5.0.2" />
+    <PackageVersion Include="Volo.Abp.AI" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -105,6 +106,7 @@
     <PackageVersion Include="Volo.Abp.Imaging.ImageSharp" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.Json" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.Json.Abstractions" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.Localization.Abstractions" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.MailKit" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.Mapperly" Version="$(VoloAbpPackageVersion)" />
@@ -276,6 +278,10 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Quartz" Version="1.14.0-beta.2" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.14.0-beta.1" />
+  </ItemGroup>
+  <!-- AI -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Agents.AI" Version="1.0.0-preview.260108.1" />
   </ItemGroup>
   <!-- Rebus-->
   <ItemGroup>
