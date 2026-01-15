@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Guids;
@@ -18,6 +19,7 @@ public class EntityChange : IHasExtraProperties
 
     public DateTime ChangeTime { get; set; }
 
+    [JsonConverter(typeof(EntityChangeTypeConverter))]
     public EntityChangeType ChangeType { get; set; }
 
     public Guid? EntityTenantId { get; set; }

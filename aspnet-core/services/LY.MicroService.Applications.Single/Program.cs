@@ -6,17 +6,18 @@ using Volo.Abp.Modularity.PlugIns;
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.AddAppSettingsSecretsJson()
     .UseAutofac()
-    .ConfigureAppConfiguration((context, config) =>
+    .ConfigureAppConfiguration((context, builder) =>
     {
+        var env = context.HostingEnvironment.EnvironmentName;
         var dbProvider = Environment.GetEnvironmentVariable("APPLICATION_DATABASE_PROVIDER");
-        if (!dbProvider.IsNullOrWhiteSpace())
+        if (!dbProvider.IsNullOrWhiteSpace() && !env.IsNullOrWhiteSpace())
         {
-            config.AddJsonFile($"appsettings.{dbProvider}.json", optional: true);
+            builder.AddJsonFile($"appsettings.{env}.{dbProvider}.json", optional: true);
         }
 
         if (context.Configuration.GetValue("AgileConfig:IsEnabled", false))
         {
-            config.AddAgileConfig(new AgileConfig.Client.ConfigClient(context.Configuration));
+            builder.AddAgileConfig(new AgileConfig.Client.ConfigClient(context.Configuration));
         }
     })
     .UseSerilog((context, provider, config) =>

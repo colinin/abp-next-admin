@@ -18,10 +18,11 @@ public class AbpIP2RegionModule : AbpModule
             options.FileSets.AddEmbedded<AbpIP2RegionModule>();
         });
 
+        // TODO: ipv6 support?
         context.Services.AddSingleton<ISearcher, AbpSearcher>((serviceProvider) =>
         {
             var virtualFileProvider = serviceProvider.GetRequiredService<IVirtualFileProvider>();
-            var xdbFile = virtualFileProvider.GetFileInfo("/LINGYUN/Abp/IP2Region/Resources/ip2region.xdb");
+            var xdbFile = virtualFileProvider.GetFileInfo("/LINGYUN/Abp/IP2Region/Resources/ip2region_v4.xdb");
             var searcher = new AbpSearcher(CachePolicy.File, xdbFile.CreateReadStream());
 
             return searcher;

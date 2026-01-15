@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.Gdpr.Localization;
 using LINGYUN.Abp.Gdpr.Web.Pages.Account;
-using LINGYUN.Abp.Gdpr.Web.Pages.Account.Components.ProfileManagementGroup.Gdpr;
 using LINGYUN.Abp.Gdpr.Web.ProfileManagement;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account.Web;
@@ -8,7 +7,6 @@ using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Account.Web.ProfileManagement;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -47,12 +45,6 @@ public class AbpGdprWebModule : AbpModule
         });
 
         ConfigureProfileManagementPage();
-
-        context.Services.AddAutoMapperObjectMapper<AbpGdprWebModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<AbpGdprWebModule>(validate: true);
-        });
 
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {

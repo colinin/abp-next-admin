@@ -8,5 +8,6 @@ namespace LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 public interface ITaskManagementDbContext :IEfCoreDbContext
 {
     DbSet<BackgroundJobInfo> BackgroundJobInfos { get; }
+    DbSet<BackgroundJobLog> BackgroundJobLogs { get; }
     DbSet<BackgroundJobAction> BackgroundJobAction { get; }
 }

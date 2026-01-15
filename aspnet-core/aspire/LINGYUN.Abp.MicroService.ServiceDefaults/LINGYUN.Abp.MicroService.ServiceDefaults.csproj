@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsAspireSharedProject>true</IsAspireSharedProject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Aspire.RabbitMQ.Client" />
+		<PackageReference Include="Aspire.StackExchange.Redis" />
+		<PackageReference Include="Aspire.Elastic.Clients.Elasticsearch" />
+		
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+
+		<PackageReference Include="DotNetCore.CAP.OpenTelemetry" />
+		<PackageReference Include="Microsoft.Extensions.Http.Resilience" VersionOverride="9.1.0" />
+		<PackageReference Include="Microsoft.Extensions.ServiceDiscovery" VersionOverride="9.1.0" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Quartz" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" />
+	</ItemGroup>
+
+</Project>

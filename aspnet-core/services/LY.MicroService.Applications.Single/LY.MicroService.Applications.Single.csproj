@@ -3,10 +3,11 @@
 	<Import Project="..\..\..\common.secrets.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>LY.MicroService.Applications.Single</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<Version>9.3.6.2</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -22,6 +23,7 @@
 		<PackageReference Include="Elsa.Activities.Temporal.Quartz" />
 		<PackageReference Include="Elsa.Webhooks.Api" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" />
 		<PackageReference Include="OpenIddict.Validation.DataProtection" />
 		<PackageReference Include="OpenIddict.Server.DataProtection" />
 		<PackageReference Include="Serilog.AspNetCore" />
@@ -115,16 +117,19 @@
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official.HttpApi\LINGYUN.Abp.WeChat.Official.HttpApi.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.SettingManagement\LINGYUN.Abp.WeChat.SettingManagement.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Application\LINGYUN.Abp.WeChat.Work.Application.csproj" />
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Contacts\LINGYUN.Abp.WeChat.Work.Contacts.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.ExternalContact\LINGYUN.Abp.WeChat.Work.ExternalContact.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Handlers\LINGYUN.Abp.WeChat.Work.Handlers.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.HttpApi\LINGYUN.Abp.WeChat.Work.HttpApi.csproj" />
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.OA\LINGYUN.Abp.WeChat.Work.OA.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat\LINGYUN.Abp.WeChat.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql\LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.csproj" />
-		<!--<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.csproj" />-->
+		<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql\LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.csproj" />
+		<ProjectReference Include="..\..\migrations\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer\LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -244,6 +249,7 @@
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.HttpApi\LINGYUN.Abp.Saas.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\settings\LINGYUN.Abp.SettingManagement.Application\LINGYUN.Abp.SettingManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\settings\LINGYUN.Abp.SettingManagement.HttpApi\LINGYUN.Abp.SettingManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\system-info\LINGYUN.Abp.SystemInfo.HttpApi\LINGYUN.Abp.SystemInfo.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Activities\LINGYUN.Abp.BackgroundTasks.Activities.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.DistributedLocking\LINGYUN.Abp.BackgroundTasks.DistributedLocking.csproj" />

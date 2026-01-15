@@ -2,11 +2,11 @@
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>8.3.5</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.15.1</ElsaPackageVersion>
-		<VoloAbpPackageVersion>9.2.0</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>9.2.0</LINGYUNAbpPackageVersion>
-		<MicrosoftExtensionsPackageVersion>9.0.4</MicrosoftExtensionsPackageVersion>
-		<MicrosoftAspNetCorePackageVersion>9.0.4</MicrosoftAspNetCorePackageVersion>
-		<MicrosoftEntityFrameworkCorePackageVersion>9.0.4</MicrosoftEntityFrameworkCorePackageVersion>
+		<VoloAbpPackageVersion>9.3.6</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>9.3.6</LINGYUNAbpPackageVersion>
+		<MicrosoftExtensionsPackageVersion>9.0.5</MicrosoftExtensionsPackageVersion>
+		<MicrosoftAspNetCorePackageVersion>9.0.5</MicrosoftAspNetCorePackageVersion>
+		<MicrosoftEntityFrameworkCorePackageVersion>9.0.5</MicrosoftEntityFrameworkCorePackageVersion>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 
@@ -243,7 +243,7 @@
 
 	<!-- Abp Framework -->
 	<ItemGroup>
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.2.0" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.3.6" />
 		<PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -290,6 +290,7 @@
 		<PackageVersion Include="Volo.Abp.DistributedLocking" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySql" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySql.Pomelo" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.EntityFrameworkCore.Oracle" Version="$(VoloAbpPackageVersion)" />
@@ -391,8 +392,9 @@
 		<PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Options" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.3.efcore.9.0.0" />
-		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="9.0.0-preview.3.efcore.9.0.0" />
+		<PackageVersion Include="MySql.EntityFrameworkCore" Version="9.0.6" />
+		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="9.0.0" />
 	</ItemGroup>
 
 	<!-- Elsa -->

@@ -1,5 +1,4 @@
-﻿using AsyncKeyedLock;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -8,13 +7,13 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Localization;
+using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.LocalizationManagement.External;
 
 public class ExternalLocalizationTextStoreCache : IExternalLocalizationTextStoreCache, ISingletonDependency
 {
-    protected AsyncKeyedLocker<string> AsyncKeyedLocker;
     protected ConcurrentDictionary<string, LocalizationTextMemoryCacheItem> MemoryCache { get; }
 
     protected IAbpDistributedLock DistributedLock { get; }
@@ -33,11 +32,6 @@ public class ExternalLocalizationTextStoreCache : IExternalLocalizationTextStore
         DistributedCache = distributedCache;
         StampCache = stampCache;
 
-        AsyncKeyedLocker = new AsyncKeyedLocker<string>(o =>
-        {
-            o.PoolSize = 20;
-            o.PoolInitialFill = 1;
-        });
         MemoryCache = new ConcurrentDictionary<string, LocalizationTextMemoryCacheItem>();
     }
 
@@ -74,7 +68,7 @@ public class ExternalLocalizationTextStoreCache : IExternalLocalizationTextStore
             return memoryCacheItem.Texts;
         }
 
-        using (await AsyncKeyedLocker.LockAsync(cacheKey))
+        using (await KeyedLock.LockAsync(cacheKey))
         {
             memoryCacheItem = MemoryCache.GetOrDefault(cacheKey);
             if (memoryCacheItem != null && !IsShouldCheck(memoryCacheItem))

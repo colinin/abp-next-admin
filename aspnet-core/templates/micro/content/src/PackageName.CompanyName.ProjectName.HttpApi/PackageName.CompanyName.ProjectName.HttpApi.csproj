@@ -4,12 +4,13 @@
 	<Import Project="../../configureawait.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<AssemblyName>PackageName.CompanyName.ProjectName.HttpApi</AssemblyName>
 		<PackageId>PackageName.CompanyName.ProjectName.HttpApi</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Nullable>enable</Nullable>
 		<RootNamespace />
 	</PropertyGroup>

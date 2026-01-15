@@ -16,7 +16,6 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.OssManagement;
-using LINGYUN.Abp.Quartz.MySqlInstaller;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -65,7 +64,6 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpBackgroundTasksDistributedLockingModule),
     typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(AbpBackgroundTasksNotificationsModule),
-    typeof(AbpQuartzMySqlInstallerModule),
     typeof(TaskManagementApplicationModule),
     typeof(TaskManagementHttpApiModule),
     typeof(TaskManagementEntityFrameworkCoreModule),

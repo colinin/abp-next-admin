@@ -7,7 +7,7 @@ public interface IWeChatWorkAuthorizeGenerator
     /// 构造网页授权链接
     /// </summary>
     /// <remarks>
-    /// 参考：https://developer.work.weixin.qq.com/document/path/91022
+    /// 参考：<see href="https://developer.work.weixin.qq.com/document/path/91022"/>
     /// </remarks>
     /// <param name="redirectUri"></param>
     /// <param name="state"></param>

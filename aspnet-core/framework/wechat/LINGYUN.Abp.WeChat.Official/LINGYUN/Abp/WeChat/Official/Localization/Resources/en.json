@@ -1,6 +1,8 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Features:WeChat.Official.Enable": "WeChat Official",
+    "Features:WeChat.Official.EnableDesc": "Enable the ability to give the application a wechat official account.",
     "DisplayName:WeChat.Official": "WeChat Official",
     "Description:WeChat.Official": "WeChat Official",
     "DisplayName:WeChat.Official.AppId": "AppId",

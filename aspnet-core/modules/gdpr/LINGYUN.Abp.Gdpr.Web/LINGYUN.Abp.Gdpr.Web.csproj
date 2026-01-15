@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<AssemblyName>LINGYUN.Abp.Gdpr.Web</AssemblyName>
 		<PackageId>LINGYUN.Abp.Gdpr.Web</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>

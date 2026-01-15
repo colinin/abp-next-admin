@@ -73,7 +73,7 @@ public abstract class EfCoreRuntimeDbMigratorBase<TDbContext> : EfCoreRuntimeDat
                     new AppliedDatabaseMigrationsEto
                     {
                         DatabaseName = DatabaseName,
-                        TenantId = null
+                        TenantId = tenantId
                     }
                 );
             }

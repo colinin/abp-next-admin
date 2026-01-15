@@ -1,5 +1,5 @@
 ﻿using JetBrains.Annotations;
-using LINGYUN.Abp.WeChat.Work.ExternalContact.Models;
+using LINGYUN.Abp.WeChat.Work.Common.Members.Models;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 

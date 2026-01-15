@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<AssemblyName>LINGYUN.Abp.Notifications.Domain</AssemblyName>
 		<PackageId>LINGYUN.Abp.Notifications.Domain</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -16,7 +16,7 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Caching" />
 		<PackageReference Include="Volo.Abp.Ddd.Domain" />
-		<PackageReference Include="Volo.Abp.AutoMapper" />
+		<PackageReference Include="Volo.Abp.Mapperly" />
 		<PackageReference Include="Volo.Abp.BackgroundJobs" />
 		<PackageReference Include="Volo.Abp.Users.Abstractions" />
 		<PackageReference Include="Polly" />

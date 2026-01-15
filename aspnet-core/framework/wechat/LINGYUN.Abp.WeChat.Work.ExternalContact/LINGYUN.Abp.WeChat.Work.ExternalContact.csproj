@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
 		<AssemblyName>LINGYUN.Abp.WeChat.Work.ExternalContact</AssemblyName>
 		<PackageId>LINGYUN.Abp.WeChat.Work.ExternalContact</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -13,6 +13,8 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Nullable>enable</Nullable>
 		<RootNamespace />
+		<!--<Version>9.3.6.3</Version>
+		<PackageVersion>9.3.6.3</PackageVersion>-->
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -4,7 +4,6 @@ using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.WeChat.MiniProgram;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account.Localization;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -24,12 +23,7 @@ public class AbpAccountApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpAccountApplicationModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<AbpAccountApplicationModule>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpAccountApplicationModule>();
 
         Configure<AbpVirtualFileSystemOptions>(options =>
         {

@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Quartz.MySqlInstaller;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 namespace LY.MicroService.TaskManagement.EntityFrameworkCore;
 
 [DependsOn(
+    typeof(AbpQuartzMySqlInstallerModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreMySQLPomeloModule),

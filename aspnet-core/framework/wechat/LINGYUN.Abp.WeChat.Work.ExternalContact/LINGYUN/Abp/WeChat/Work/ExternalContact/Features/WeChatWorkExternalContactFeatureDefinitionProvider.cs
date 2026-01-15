@@ -14,9 +14,7 @@ public class WeChatWorkExternalContactFeatureDefinitionProvider : FeatureDefinit
         {
             return;
         }
-
-        var group = weChatFeature.AddFeature(WeChatWorkExternalContactFeatureNames.GroupName);
-        group.CreateChild(
+        weChatFeature.AddFeature(
             WeChatWorkExternalContactFeatureNames.Enable,
             defaultValue: "false",
             displayName: L("Features:ExternalContactEnable"),

@@ -37,15 +37,16 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
         if (claimsPrincipal != null)
         {
             var userId = claimsPrincipal.FindUserId();
+            var sessionId = claimsPrincipal.FindSessionId();
+            if (!userId.HasValue || sessionId.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
             var tenantId = claimsPrincipal.FindTenantId();
 
             using (CurrentTenant.Change(tenantId))
             {
-                var sessionId = claimsPrincipal.FindSessionId();
-                if (!userId.HasValue || sessionId.IsNullOrWhiteSpace())
-                {
-                    return;
-                }
                 if (await IdentitySessionStore.ExistAsync(sessionId, cancellationToken))
                 {
                     return;

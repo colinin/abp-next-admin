@@ -1,9 +1,11 @@
 ﻿using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 
@@ -72,6 +74,7 @@ public class RouteDataSeeder : IRouteDataSeeder, ITransientDependency
         Guid? parentId = null,
         Guid? tenantId = null,
         bool isPublic = false,
+        IDictionary<string, object> meta = null,
         CancellationToken cancellationToken = default)
     {
         if (parentId.HasValue)
@@ -102,6 +105,14 @@ public class RouteDataSeeder : IRouteDataSeeder, ITransientDependency
             {
                 IsPublic = isPublic
             };
+
+            if (meta != null)
+            {
+                foreach (var item in meta)
+                {
+                    menu.SetProperty(item.Key, item.Value);
+                }
+            }
 
             menu = await MenuRepository.InsertAsync(menu, cancellationToken: cancellationToken);
         }

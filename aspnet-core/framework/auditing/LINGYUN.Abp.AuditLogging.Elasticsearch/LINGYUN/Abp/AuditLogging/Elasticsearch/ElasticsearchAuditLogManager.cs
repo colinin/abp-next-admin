@@ -1,14 +1,17 @@
-﻿using LINGYUN.Abp.Elasticsearch;
+﻿using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.QueryDsl;
+using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Nest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
@@ -20,6 +23,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
 {
     private readonly AbpAuditingOptions _auditingOptions;
     private readonly AbpElasticsearchOptions _elasticsearchOptions;
+    private readonly AbpAuditLoggingElasticsearchOptions _loggingEsOptions;
     private readonly IIndexNameNormalizer _indexNameNormalizer;
     private readonly IElasticsearchClientFactory _clientFactory;
     private readonly IAuditLogInfoToAuditLogConverter _converter;
@@ -33,7 +37,8 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         IOptions<AbpElasticsearchOptions> elasticsearchOptions,
         IElasticsearchClientFactory clientFactory,
         IOptions<AbpAuditingOptions> auditingOptions,
-        IAuditLogInfoToAuditLogConverter converter)
+        IAuditLogInfoToAuditLogConverter converter,
+        IOptionsMonitor<AbpAuditLoggingElasticsearchOptions> loggingEsOptions)
     {
         _clock = clock;
         _converter = converter;
@@ -41,6 +46,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         _auditingOptions = auditingOptions.Value;
         _elasticsearchOptions = elasticsearchOptions.Value;
         _indexNameNormalizer = indexNameNormalizer;
+        _loggingEsOptions = loggingEsOptions.CurrentValue;
 
         Logger = NullLogger<ElasticsearchAuditLogManager>.Instance;
     }
@@ -82,8 +88,11 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             httpStatusCode);
 
         var response = await client.CountAsync<AuditLog>(dsl =>
-            dsl.Index(CreateIndex())
-               .Query(log => log.Bool(b => b.Must(querys.ToArray()))),
+            dsl.Indices(CreateIndex())
+               .Query(new BoolQuery
+               {
+                   Must = querys
+               }),
             cancellationToken);
 
         return response.Count;
@@ -113,7 +122,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         var client = _clientFactory.Create();
 
         var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
-            ? SortOrder.Ascending : SortOrder.Descending;
+            ? SortOrder.Asc : SortOrder.Desc;
         sorting = !sorting.IsNullOrWhiteSpace()
             ? sorting.Split()[0]
             : nameof(AuditLog.ExecutionTime);
@@ -134,31 +143,32 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             hasException,
             httpStatusCode);
 
-        SourceFilterDescriptor<AuditLog> SourceFilter(SourceFilterDescriptor<AuditLog> selector)
+        var searchResponse = await client.SearchAsync<AuditLog>(dsl =>
         {
-            selector.IncludeAll();
+            dsl.Indices(CreateIndex())
+                .Query(new BoolQuery
+                {
+                    Must = querys
+                })
+                .Sort(s => s.Field(new FieldSort(GetField(sorting))
+                {
+                    Order = sortOrder
+                }))
+               .From(skipCount)
+               .Size(maxResultCount);
+
+            // 字段过滤
             if (!includeDetails)
             {
-                selector.Excludes(field =>
-                    field.Field(f => f.Actions)
-                         .Field(f => f.Comments)
-                         .Field(f => f.Exceptions)
-                         .Field(f => f.EntityChanges));
+                dsl.SourceExcludes(
+                    ex => ex.Actions, 
+                    ex => ex.Comments,
+                    ex => ex.Exceptions,
+                    ex => ex.EntityChanges);
             }
+        }, cancellationToken);
 
-            return selector;
-        }
-
-        var response = await client.SearchAsync<AuditLog>(dsl =>
-            dsl.Index(CreateIndex())
-               .Query(log => log.Bool(b => b.Must(querys.ToArray())))
-               .Source(SourceFilter)
-               .Sort(log => log.Field(GetField(sorting), sortOrder))
-               .From(skipCount)
-               .Size(maxResultCount),
-            cancellationToken);
-
-        return response.Documents.ToList();
+        return searchResponse.Documents.ToList();
     }
 
     public async virtual Task<AuditLog> GetAsync(
@@ -169,9 +179,19 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         var client = _clientFactory.Create();
 
         var response = await client.GetAsync<AuditLog>(
-            id,
+            id.ToString(),
             dsl =>
-                dsl.Index(CreateIndex()),
+            {
+                dsl.Index(CreateIndex());
+                if (!includeDetails)
+                {
+                    dsl.SourceExcludes(
+                        ex => ex.Actions,
+                        ex => ex.Comments,
+                        ex => ex.Exceptions,
+                        ex => ex.EntityChanges);
+                }
+            },
             cancellationToken);
 
         return response.Source;
@@ -182,9 +202,8 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         var client = _clientFactory.Create();
 
         await client.DeleteAsync<AuditLog>(
-            id,
-            dsl =>
-                dsl.Index(CreateIndex()),
+            id.ToString(),
+            dsl => dsl.Index(CreateIndex()),
             cancellationToken);
     }
 
@@ -192,12 +211,13 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
     {
         var client = _clientFactory.Create();
 
+        var idValues = ids.Select(id => FieldValue.String(id.ToString())).ToList();
         await client.DeleteByQueryAsync<AuditLog>(
-            x => x.Index(CreateIndex())
+            x => x.Indices(CreateIndex())
                   .Query(query =>
                     query.Terms(terms =>
                         terms.Field(field => field.Id)
-                            .Terms(ids))),
+                            .Terms(new TermsQueryField(idValues)))),
             cancellationToken);
     }
 
@@ -205,6 +225,12 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         AuditLogInfo auditInfo,
         CancellationToken cancellationToken = default)
     {
+        if (!_loggingEsOptions.IsAuditLogEnabled)
+        {
+            Logger.LogInformation(auditInfo.ToString());
+            return "";
+        }
+
         if (!_auditingOptions.HideErrors)
         {
             return await SaveLogAsync(auditInfo, cancellationToken);
@@ -217,7 +243,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         catch (Exception ex)
         {
             Logger.LogWarning("Could not save the audit log object: " + Environment.NewLine + auditInfo.ToString());
-            Logger.LogException(ex, Microsoft.Extensions.Logging.LogLevel.Error);
+            Logger.LogException(ex, LogLevel.Error);
         }
         return "";
     }
@@ -239,14 +265,38 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         // 使用 Bulk 命令传输可能存在参数庞大的日志结构
         var response = await client.BulkAsync(
             dsl => dsl.Index(CreateIndex())
-                      .Create<AuditLog>(ct => 
-                        ct.Id(auditLog.Id)
-                          .Document(auditLog)));
+                      .Create(auditLog, ct =>  ct.Id(auditLog.Id)));
+        if (!response.IsValidResponse)
+        {
+            if (response.TryGetOriginalException(out var ex))
+            {
+                throw ex;
+            }
+            else if (response.ElasticsearchServerError != null)
+            {
+                throw new AbpException(response.ElasticsearchServerError.ToString());
+            }
+            else if (response.ItemsWithErrors.Any())
+            {
+                var reasonBuilder = new StringBuilder();
+                foreach (var itemError in response.ItemsWithErrors)
+                {
+                    if (itemError.Error?.Reason.IsNullOrWhiteSpace() == false)
+                    {
+                        reasonBuilder.AppendLine(itemError.Error.Reason);
+                    }
+                }
+                if (reasonBuilder.Length > 0)
+                {
+                    throw new AbpException(reasonBuilder.ToString());
+                }
+            }
+        }
 
         return response.Items?.FirstOrDefault()?.Id;
     }
 
-    protected virtual List<Func<QueryContainerDescriptor<AuditLog>, QueryContainer>> BuildQueryDescriptor(
+    protected virtual List<Query> BuildQueryDescriptor(
         DateTime? startTime = null,
         DateTime? endTime = null,
         string httpMethod = null,
@@ -262,55 +312,70 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         bool? hasException = null,
         HttpStatusCode? httpStatusCode = null)
     {
-        var querys = new List<Func<QueryContainerDescriptor<AuditLog>, QueryContainer>>();
+        var queries = new List<Query>();
 
         if (startTime.HasValue)
         {
-            querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(AuditLog.ExecutionTime))).GreaterThanOrEquals(_clock.Normalize(startTime.Value))));
+            queries.Add(new DateRangeQuery(GetField(nameof(AuditLog.ExecutionTime)))
+            {
+                Gte = _clock.Normalize(startTime.Value)
+            });
         }
         if (endTime.HasValue)
         {
-            querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(AuditLog.ExecutionTime))).LessThanOrEquals(_clock.Normalize(endTime.Value))));
+            queries.Add(new DateRangeQuery(GetField(nameof(AuditLog.ExecutionTime)))
+            {
+                Lte = _clock.Normalize(endTime.Value)
+            });
         }
         if (!httpMethod.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.HttpMethod))).Value(httpMethod)));
+            queries.Add(new TermQuery(GetField(nameof(AuditLog.HttpMethod)), httpMethod));
         }
         if (!url.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Wildcard((q) => q.Field(GetField(nameof(AuditLog.Url))).Value($"*{url}*")));
+            queries.Add(new WildcardQuery(GetField(nameof(AuditLog.Url)))
+            {
+                Value = $"*{url}*"
+            });
         }
         if (userId.HasValue)
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.UserId))).Value(userId)));
+            queries.Add(new TermQuery(GetField(nameof(AuditLog.UserId)), userId.Value.ToString()));
         }
         if (!userName.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.UserName))).Value(userName)));
+            queries.Add(new TermQuery(GetField(nameof(AuditLog.UserName)), userName));
         }
         if (!applicationName.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.ApplicationName))).Value(applicationName)));
+            queries.Add(new TermQuery(GetField(nameof(AuditLog.ApplicationName)), applicationName));
         }
         if (!correlationId.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.CorrelationId))).Value(correlationId)));
+            queries.Add(new TermQuery(GetField(nameof(AuditLog.CorrelationId)), correlationId));
         }
         if (!clientId.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.ClientId))).Value(clientId)));
+            queries.Add(new TermQuery(GetField(nameof(AuditLog.ClientId)), clientId));
         }
         if (!clientIpAddress.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.ClientIpAddress))).Value(clientIpAddress)));
+            queries.Add(new TermQuery(GetField(nameof(AuditLog.ClientIpAddress)), clientIpAddress));
         }
         if (maxExecutionDuration.HasValue)
         {
-            querys.Add((log) => log.Range((q) => q.Field(GetField(nameof(AuditLog.ExecutionDuration))).LessThanOrEquals(maxExecutionDuration)));
+            queries.Add(new NumberRangeQuery(GetField(nameof(AuditLog.ExecutionDuration)))
+            {
+                Lte = maxExecutionDuration.Value
+            });
         }
         if (minExecutionDuration.HasValue)
         {
-            querys.Add((log) => log.Range((q) => q.Field(GetField(nameof(AuditLog.ExecutionDuration))).GreaterThanOrEquals(minExecutionDuration)));
+            queries.Add(new NumberRangeQuery(GetField(nameof(AuditLog.ExecutionDuration)))
+            {
+                Gte = minExecutionDuration.Value
+            });
         }
 
 
@@ -318,33 +383,26 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         {
             if (hasException.Value)
             {
-                querys.Add(
-                    (q) => q.Bool(
-                        (b) => b.Must(
-                            (m) => m.Exists(
-                                (e) => e.Field((f) => f.Exceptions)))
-                    )
-                );
+                queries.Add(new ExistsQuery(GetField("Exceptions")));
             }
             else
             {
-                querys.Add(
-                    (q) => q.Bool(
-                        (b) => b.MustNot(
-                            (mn) => mn.Exists(
-                                (e) => e.Field(
-                                    (f) => f.Exceptions)))
-                    )
-                );
+                queries.Add(new BoolQuery
+                {
+                    MustNot = new List<Query>
+                    {
+                        new ExistsQuery(GetField("Exceptions"))
+                    }
+                });
             }
         }
 
         if (httpStatusCode.HasValue)
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(AuditLog.HttpStatusCode))).Value(httpStatusCode)));
+            queries.Add(new TermQuery(GetField(nameof(AuditLog.HttpStatusCode)), ((int)httpStatusCode.Value).ToString()));
         }
 
-        return querys;
+        return queries;
     }
 
     protected virtual string CreateIndex()

@@ -5,9 +5,12 @@ using LINGYUN.Abp.WeChat.Work.ExternalContact.Messages.Models;
 using LINGYUN.Abp.WeChat.Work.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.WeChat.Work.ExternalContact;
-
+/// <summary>
+/// 企业微信客户联系模块
+/// </summary>
 [DependsOn(typeof(AbpWeChatWorkModule))]
 public class AbpWeChatWorkExternalContactModule : AbpModule
 {
@@ -27,6 +30,7 @@ public class AbpWeChatWorkExternalContactModule : AbpModule
                     "del_external_contact" => context.GetWeChatMessage<ExternalContactDeleteEvent>(),
                     "del_follow_user" => context.GetWeChatMessage<ExternalContactDeleteFollowUserEvent>(),
                     "transfer_fail" => context.GetWeChatMessage<ExternalContactTransferFailEvent>(),
+                    "msg_audit_approved" => context.GetWeChatMessage<ExternalContactMsgAuditApprovedEvent>(),
                     _ => throw new AbpWeChatException($"Contact change event change_external_contact:{changeType} is not mounted!"),
                 };
             });
@@ -66,6 +70,13 @@ public class AbpWeChatWorkExternalContactModule : AbpModule
                     _ => throw new AbpWeChatException($"Contact change event change_external_tag:{changeType} is not mounted!"),
                 };
             });
+            // 产生会话回调事件
+            options.MapEvent("msgaudit_notify", context => context.GetWeChatMessage<ExternalContactMsgAuditNotifyEvent>());
+        });
+
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpWeChatWorkExternalContactModule>();
         });
 
         Configure<AbpLocalizationOptions>(options =>

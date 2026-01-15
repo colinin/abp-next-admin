@@ -14,18 +14,18 @@ namespace LINGYUN.Abp.TaskManagement;
 [Dependency(ReplaceServices = true)]
 public class BackgroundJobStore : IJobStore, ITransientDependency
 {
-    protected IObjectMapper ObjectMapper { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IBackgroundJobInfoRepository JobInfoRepository { get; }
     protected IBackgroundJobLogRepository JobLogRepository { get; }
+    protected IObjectMapper<TaskManagementDomainModule> ObjectMapper { get; }
 
     public BackgroundJobStore(
-        IObjectMapper objectMapper,
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         IBackgroundJobInfoRepository jobInfoRepository,
-        IBackgroundJobLogRepository jobLogRepository)
+        IBackgroundJobLogRepository jobLogRepository,
+        IObjectMapper<TaskManagementDomainModule> objectMapper)
     {
         ObjectMapper = objectMapper;
         CurrentTenant = currentTenant;

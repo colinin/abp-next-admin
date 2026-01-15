@@ -27,7 +27,6 @@ public class AbpWeChatWorkCommonModule : AbpModule
             options.MapEvent("enter_agent", context => context.GetWeChatMessage<EnterAgentEvent>());
             options.MapEvent("LOCATION", context => context.GetWeChatMessage<ReportingGeoLocationEvent>());
             options.MapEvent("location_select", context => context.GetWeChatMessage<GeoLocationSelectPushEevent>());
-            options.MapEvent("batch_job_result", context => context.GetWeChatMessage<BatchJobResultEvent>());
             options.MapEvent("open_approval_change", context => context.GetWeChatMessage<ApprovalStatusChangeEvent>());
             options.MapEvent("sys_approval_change", context => context.GetWeChatMessage<SysApprovalStatusChangeEvent>());
             options.MapEvent("share_agent_change", context => context.GetWeChatMessage<ShareAgentChangeEvent>());
@@ -36,29 +35,6 @@ public class AbpWeChatWorkCommonModule : AbpModule
             options.MapEvent("template_card_menu_event", context => context.GetWeChatMessage<TemplateCardMenuPushEvent>());
             options.MapEvent("close_inactive_agent", context => context.GetWeChatMessage<CloseInActiveAgentEvent>());
             options.MapEvent("reopen_inactive_agent", context => context.GetWeChatMessage<ReOpenInActiveAgentEevent>());
-            options.MapEvent("change_contact", context =>
-            {
-                //static UserChangeEvent CreateUserChangeEvent<TEvent>(string originXml) where TEvent : UserChangeEvent
-                //{
-                //    var events = new XmlDeserializationEvents();
-                //    return originXml.DeserializeWeChatMessage<TEvent>(events);
-                //}
-
-                var changeType = context.GetMessageData("ChangeType");
-                return changeType switch
-                {
-                    "create_user" => context.GetWeChatMessage<CreateUserEvent>(),
-                    "update_user" => context.GetWeChatMessage<UpdateUserEvent>(),
-                    "delete_user" => context.GetWeChatMessage<DeleteUserEvent>(),
-                    "create_party" => context.GetWeChatMessage<CreateDepartmentEvent>(),
-                    "update_party" => context.GetWeChatMessage<UpdateDepartmentEvent>(),
-                    "delete_party" => context.GetWeChatMessage<DeleteDepartmentEvent>(),
-                    "update_tag" => context.GetWeChatMessage<UserTagChangeEvent>(),
-                    _ => throw new AbpWeChatException($"Contact change event {changeType} is not mounted!"),
-                };
-            });
-            options.MapEvent("book_meeting_room", context => context.GetWeChatMessage<BookMeetingRoomEvent>());
-            options.MapEvent("cancel_meeting_room", context => context.GetWeChatMessage<CancelMeetingRoomEvent>());
 
             options.MapMessage("text", context => context.GetWeChatMessage<TextMessage>());
             options.MapMessage("image", context => context.GetWeChatMessage<PictureMessage>());

@@ -1,4 +1,6 @@
-﻿using LINGYUN.Abp.WeChat.Work.ExternalContact.Tags.Request;
+﻿using LINGYUN.Abp.WeChat.Work;
+using LINGYUN.Abp.WeChat.Work.ExternalContact.Tags.Request;
+using LINGYUN.Abp.WeChat.Work.ExternalContact.Tags.Response;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,7 +8,7 @@ using System.Threading.Tasks;
 namespace System.Net.Http;
 internal static partial class HttpClientWeChatWorkRequestExtensions
 {
-    public async static Task<HttpResponseMessage> GetCropTagListAsync(
+    public async static Task<WeChatWorkGetCropTagListResponse> GetCropTagListAsync(
         this HttpMessageInvoker client,
         string accessToken,
         WeChatWorkGetCropTagListRequest request,
@@ -16,17 +18,19 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/get_corp_tag_list");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Post,
            urlBuilder.ToString())
         {
             Content = new StringContent(request.SerializeToJson()),
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkGetCropTagListResponse>();
     }
 
-    public async static Task<HttpResponseMessage> CreateCropTagAsync(
+    public async static Task<WeChatWorkCreateCropTagResponse> CreateCropTagAsync(
         this HttpMessageInvoker client,
         string accessToken,
         WeChatWorkCreateCropTagRequest request,
@@ -36,17 +40,19 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/add_corp_tag");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Post,
            urlBuilder.ToString())
         {
             Content = new StringContent(request.SerializeToJson()),
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkCreateCropTagResponse>();
     }
 
-    public async static Task<HttpResponseMessage> UpdateCropTagAsync(
+    public async static Task<WeChatWorkResponse> UpdateCropTagAsync(
         this HttpMessageInvoker client,
         string accessToken,
         WeChatWorkUpdateCropTagRequest request,
@@ -56,17 +62,19 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/edit_corp_tag");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Post,
            urlBuilder.ToString())
         {
             Content = new StringContent(request.SerializeToJson()),
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkResponse>();
     }
 
-    public async static Task<HttpResponseMessage> DeleteCropTagAsync(
+    public async static Task<WeChatWorkResponse> DeleteCropTagAsync(
         this HttpMessageInvoker client,
         string accessToken,
         WeChatWorkDeleteCropTagRequest request,
@@ -76,17 +84,19 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/del_corp_tag");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Post,
            urlBuilder.ToString())
         {
             Content = new StringContent(request.SerializeToJson()),
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkResponse>();
     }
 
-    public async static Task<HttpResponseMessage> MarkCropTagAsync(
+    public async static Task<WeChatWorkResponse> MarkCropTagAsync(
         this HttpMessageInvoker client,
         string accessToken,
         WeChatWorkMarkCropTagRequest request,
@@ -96,17 +106,19 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/mark_tag");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Post,
            urlBuilder.ToString())
         {
             Content = new StringContent(request.SerializeToJson()),
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkResponse>();
     }
 
-    public async static Task<HttpResponseMessage> GetStrategyTagListAsync(
+    public async static Task<WeChatWorkGetStrategyTagListResponse> GetStrategyTagListAsync(
         this HttpMessageInvoker client,
         string accessToken,
         WeChatWorkGetStrategyTagListRequest request,
@@ -116,17 +128,19 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/get_strategy_tag_list");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Post,
            urlBuilder.ToString())
         {
             Content = new StringContent(request.SerializeToJson()),
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkGetStrategyTagListResponse>();
     }
 
-    public async static Task<HttpResponseMessage> CreateStrategyTagAsync(
+    public async static Task<WeChatWorkCreateStrategyTagResponse> CreateStrategyTagAsync(
         this HttpMessageInvoker client,
         string accessToken,
         WeChatWorkCreateStrategyTagRequest request,
@@ -136,17 +150,19 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/add_strategy_tag");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Post,
            urlBuilder.ToString())
         {
             Content = new StringContent(request.SerializeToJson()),
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkCreateStrategyTagResponse>();
     }
 
-    public async static Task<HttpResponseMessage> UpdateStrategyTagAsync(
+    public async static Task<WeChatWorkResponse> UpdateStrategyTagAsync(
         this HttpMessageInvoker client,
         string accessToken,
         WeChatWorkUpdateStrategyTagRequest request,
@@ -156,17 +172,19 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/edit_strategy_tag");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Post,
            urlBuilder.ToString())
         {
             Content = new StringContent(request.SerializeToJson()),
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkResponse>();
     }
 
-    public async static Task<HttpResponseMessage> DeleteStrategyTagAsync(
+    public async static Task<WeChatWorkResponse> DeleteStrategyTagAsync(
         this HttpMessageInvoker client,
         string accessToken,
         WeChatWorkDeleteStrategyTagRequest request,
@@ -176,13 +194,15 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/del_strategy_tag");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Post,
            urlBuilder.ToString())
         {
             Content = new StringContent(request.SerializeToJson()),
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkResponse>();
     }
 }

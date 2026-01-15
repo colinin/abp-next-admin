@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
 		<AssemblyName>LINGYUN.Abp.IP2Region</AssemblyName>
 		<PackageId>LINGYUN.Abp.IP2Region</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -15,8 +15,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="LINGYUN\Abp\IP2Region\Resources\ip2region.xdb" />
-		<EmbeddedResource Include="LINGYUN\Abp\IP2Region\Resources\ip2region.xdb" />
+		<None Remove="LINGYUN\Abp\IP2Region\Resources\ip2region_v4.xdb" />
+		<EmbeddedResource Include="LINGYUN\Abp\IP2Region\Resources\ip2region_v4.xdb" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\LINGYUN.Abp.IP.Location\LINGYUN.Abp.IP.Location.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.IP.Location\LINGYUN.Abp.IP.Location.csproj" />
 	</ItemGroup>
 
 </Project>

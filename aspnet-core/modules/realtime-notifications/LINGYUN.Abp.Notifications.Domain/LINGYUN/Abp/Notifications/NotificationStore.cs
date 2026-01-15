@@ -19,8 +19,6 @@ public class NotificationStore : INotificationStore
 {
     private readonly IClock _clock;
 
-    private readonly IObjectMapper _objectMapper;
-
     private readonly ICurrentTenant _currentTenant;
 
     private readonly IUnitOfWorkManager _unitOfWorkManager;
@@ -33,16 +31,17 @@ public class NotificationStore : INotificationStore
 
     private readonly AbpNotificationsPublishOptions _options;
 
+    private readonly IObjectMapper<AbpNotificationsDomainModule> _objectMapper;
+
     public NotificationStore(
         IClock clock,
-        IObjectMapper objectMapper,
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         INotificationRepository notificationRepository,
         IUserSubscribeRepository userSubscribeRepository,
         IUserNotificationRepository userNotificationRepository,
-        IOptions<AbpNotificationsPublishOptions> options
-        )
+        IOptions<AbpNotificationsPublishOptions> options,
+        IObjectMapper<AbpNotificationsDomainModule> objectMapper)
     {
         _clock = clock;
         _objectMapper = objectMapper;

@@ -35,11 +35,7 @@ public class WeChatWorkCropTagProvider : IWeChatWorkCropTagProvider, ISingletonD
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetCropTagListAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetCropTagListResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetCropTagListAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkCreateCropTagResponse> CreateCropTagAsync(
@@ -51,11 +47,7 @@ public class WeChatWorkCropTagProvider : IWeChatWorkCropTagProvider, ISingletonD
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.CreateCropTagAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkCreateCropTagResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.CreateCropTagAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkResponse> UpdateCropTagAsync(
@@ -67,11 +59,7 @@ public class WeChatWorkCropTagProvider : IWeChatWorkCropTagProvider, ISingletonD
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.UpdateCropTagAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.UpdateCropTagAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkResponse> DeleteCropTagAsync(
@@ -83,11 +71,7 @@ public class WeChatWorkCropTagProvider : IWeChatWorkCropTagProvider, ISingletonD
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.DeleteCropTagAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.DeleteCropTagAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkResponse> MarkCropTagAsync(
@@ -99,10 +83,6 @@ public class WeChatWorkCropTagProvider : IWeChatWorkCropTagProvider, ISingletonD
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.MarkCropTagAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.MarkCropTagAsync(token.AccessToken, request, cancellationToken);
     }
 }

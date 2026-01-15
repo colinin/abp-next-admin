@@ -58,19 +58,39 @@ public class SqlServerElsaDataBaseInstaller : IElsaDataBaseInstaller, ITransient
             await sqlConnection.OpenAsync();
         }
 
-        var tableParams = _installerOptions.InstallTables.Select((_, index) => $"@Table_{index}").JoinAsString(",");
-        using (var sqlCommand = new SqlCommand($"SELECT COUNT(1) FROM [sys].[objects] WHERE type=N'U' AND name IN ({tableParams});", sqlConnection))
+        // 检查 Elsa schema
+        using (var createSchemaCommand = new SqlCommand(@"
+            IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'elsa')
+            BEGIN
+                EXEC('CREATE SCHEMA elsa');
+            END", sqlConnection))
         {
-            sqlCommand.Parameters.Add("@DataBaseName", SqlDbType.NVarChar).Value = dataBaseName;
+            await createSchemaCommand.ExecuteNonQueryAsync();
+        }
+
+        // 检查表
+        var tableParams = _installerOptions.InstallTables
+            .Select((_, index) => $"@Table_{index}")
+            .JoinAsString(",");
+
+        using (var sqlCommand = new SqlCommand($@"
+            SELECT COUNT(1) 
+            FROM sys.tables t 
+            INNER JOIN sys.schemas s ON t.schema_id = s.schema_id 
+            WHERE s.name = 'elsa' 
+            AND t.name IN ({tableParams});",
+                sqlConnection))
+        {
             for (var index = 0; index < _installerOptions.InstallTables.Count; index++)
             {
-                sqlCommand.Parameters.Add($"@Table_{index}", SqlDbType.NVarChar).Value = _installerOptions.InstallTables[index];
+                sqlCommand.Parameters.Add($"@Table_{index}", SqlDbType.NVarChar, 128)
+                    .Value = _installerOptions.InstallTables[index];
             }
 
             var rowsAffects = await sqlCommand.ExecuteScalarAsync() as int?;
             if (rowsAffects > 0)
             {
-                Logger.LogInformation($"The `{dataBaseName}` tables has already exists.");
+                Logger.LogInformation($"The `{dataBaseName}` tables in elsa schema already exist.");
                 return;
             }
         }
@@ -100,7 +120,7 @@ public class SqlServerElsaDataBaseInstaller : IElsaDataBaseInstaller, ITransient
         }
 
         var checkDataBaseName = "";
-        using (var sqlCommand = new SqlCommand("SELECT [name] FROM [master].[dbo].[sysdatabases] WHERE [name] = @DataBaseName;", sqlConnection))
+        using (var sqlCommand = new SqlCommand("SELECT [name] FROM [sys].[databases] WHERE [name] = @DataBaseName;", sqlConnection))
         {
             var dataBaseParamter = sqlCommand.Parameters.Add("DataBaseName", SqlDbType.NVarChar);
             dataBaseParamter.Value = dataBase;

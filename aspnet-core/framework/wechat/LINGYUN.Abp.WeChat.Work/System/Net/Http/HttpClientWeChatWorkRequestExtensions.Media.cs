@@ -20,12 +20,12 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
         urlBuilder.AppendFormat("&media_id={0}", mediaId);
 
-        var httpRequest = new HttpRequestMessage(HttpMethod.Get, urlBuilder.ToString());
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Get, urlBuilder.ToString());
 
         return await client.SendAsync(httpRequest, cancellationToken);
     }
 
-    public async static Task<HttpResponseMessage> UploadMediaAsync(
+    public async static Task<WeChatWorkMediaResponse> UploadMediaAsync(
         this HttpMessageInvoker client,
         string type,
         WeChatWorkMediaRequest request,
@@ -37,17 +37,19 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.AppendFormat("&type={0}", type);
 
         var fileBytes = await request.Content.GetStream().GetAllBytesAsync();
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
             HttpMethod.Post,
             urlBuilder.ToString())
         {
             Content = WeChatWorkHttpContentBuildHelper.BuildUploadMediaContent("media", fileBytes, request.Content.FileName)
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkMediaResponse>();
     }
 
-    public async static Task<HttpResponseMessage> UploadImageAsync(
+    public async static Task<WeChatWorkImageResponse> UploadImageAsync(
         this HttpMessageInvoker client,
         WeChatWorkMediaRequest request,
         CancellationToken cancellationToken = default)
@@ -57,13 +59,15 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.AppendFormat("?access_token={0}", request.AccessToken);
 
         var fileBytes = await request.Content.GetStream().GetAllBytesAsync();
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
             HttpMethod.Post,
             urlBuilder.ToString())
         {
             Content = WeChatWorkHttpContentBuildHelper.BuildUploadMediaContent("file", fileBytes, request.Content.FileName)
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkImageResponse>();
     }
 }

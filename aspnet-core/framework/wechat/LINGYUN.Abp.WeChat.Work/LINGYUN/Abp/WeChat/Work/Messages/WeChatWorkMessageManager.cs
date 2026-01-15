@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.WeChat.Work.Messages.Request;
 using LINGYUN.Abp.WeChat.Work.Token;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Net.Http;
@@ -29,14 +30,13 @@ public class WeChatWorkMessageManager : IWeChatWorkMessageManager, ISingletonDep
     public async virtual Task<bool> ReCallMessageAsync(string messageId, CancellationToken cancellationToken = default)
     {
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
         var request = new WeChatWorkMessageReCallRequest(
             token.AccessToken,
             messageId);
 
-        using var response = await client.ReCallMessageAsync(request, cancellationToken);
-        var messageResponse = await response.DeserializeObjectAsync<WeChatWorkResponse>();
+        var messageResponse = await client.ReCallMessageAsync(request, cancellationToken);
 
         return messageResponse.IsSuccessed;
     }

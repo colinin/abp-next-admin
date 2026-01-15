@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<AssemblyName>LINGYUN.Abp.LocalizationManagement.Domain</AssemblyName>
 		<PackageId>LINGYUN.Abp.LocalizationManagement.Domain</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -15,7 +15,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Polly" />
-		<PackageReference Include="Volo.Abp.AutoMapper" />
+		<PackageReference Include="Volo.Abp.Mapperly" />
 		<PackageReference Include="Volo.Abp.Ddd.Domain" />
 	</ItemGroup>
 

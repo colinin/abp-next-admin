@@ -2,6 +2,8 @@
 using LINGYUN.Abp.WeChat.MiniProgram;
 using LINGYUN.Abp.WeChat.Official;
 using LINGYUN.Abp.WeChat.Work;
+using LINGYUN.Abp.WeChat.Work.Contacts;
+using LINGYUN.Abp.WeChat.Work.ExternalContact;
 using LINGYUN.Abp.WeChat.Work.Localization;
 using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,8 @@ namespace LINGYUN.Abp.WeChat.SettingManagement;
     typeof(AbpWeChatOfficialModule),
     typeof(AbpWeChatMiniProgramModule),
     typeof(AbpWeChatWorkModule),
+    typeof(AbpWeChatWorkContactModule),
+    typeof(AbpWeChatWorkExternalContactModule),
     typeof(AbpAspNetCoreMvcModule))]
 public class AbpWeChatSettingManagementModule : AbpModule
 {
