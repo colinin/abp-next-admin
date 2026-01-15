@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using Volo.Abp.AI;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.AI;
 
@@ -21,14 +23,26 @@ public class AbpAICoreModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpAICoreModule>();
+        });
+
         Configure<AbpLocalizationOptions>(options =>
         {
-            options.Resources.Add<AbpAIResource>();
+            options.Resources
+                .Add<AbpAIResource>()
+                .AddVirtualJson("/LINGYUN/Abp/AI/Localization/Resources");
         });
 
         Configure<AbpAICoreOptions>(options =>
         {
             options.ChatClientProviders.Add<OpenAIChatClientProvider>();
+        });
+
+        Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace(AbpAIErrorCodes.Namespace, typeof(AbpAIResource));
         });
     }
 

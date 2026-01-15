@@ -1,0 +1,6 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Abp.AI:110001": "Workspace is not enabled: {Workspace}!"
+  }
+}

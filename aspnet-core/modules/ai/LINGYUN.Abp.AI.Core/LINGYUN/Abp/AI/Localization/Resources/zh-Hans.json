@@ -1,0 +1,6 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Abp.AI:110001": "工作区不可用: {Workspace}!"
+  }
+}
