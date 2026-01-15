@@ -11,49 +11,49 @@ using System.Threading.Tasks;
 namespace LINGYUN.Abp.AI.Agent;
 public class WorkspaceAIAgent : AIAgent
 {
-    protected AIAgent InnerAIAgent { get; }
-    public WorkspaceDefinition? Workspace { get; }
-
-    public WorkspaceAIAgent(
-        AIAgent innerAIAgent, 
-        WorkspaceDefinition? workspace = null)
+    protected AIAgent InnerAgent { get; }
+    protected WorkspaceDefinition? Workspace { get; }
+    public WorkspaceAIAgent(AIAgent innerAgent, WorkspaceDefinition? workspace)
     {
-        InnerAIAgent = innerAIAgent;
+        InnerAgent = innerAgent;
         Workspace = workspace;
     }
 
     public override AgentThread DeserializeThread(JsonElement serializedThread, JsonSerializerOptions? jsonSerializerOptions = null)
     {
-        return InnerAIAgent.DeserializeThread(serializedThread, jsonSerializerOptions);
+        return InnerAgent.DeserializeThread(serializedThread, jsonSerializerOptions);
     }
 
     public override AgentThread GetNewThread()
     {
-        return InnerAIAgent.GetNewThread();
+        return InnerAgent.GetNewThread();
     }
 
     protected override Task<AgentRunResponse> RunCoreAsync(IEnumerable<ChatMessage> messages, AgentThread? thread = null, AgentRunOptions? options = null, CancellationToken cancellationToken = default)
     {
-        return InnerAIAgent.RunAsync(GetChatMessages(messages), thread, options, cancellationToken);
+        return InnerAgent.RunAsync(GetChatMessages(messages), thread, options, cancellationToken);
     }
 
     protected override IAsyncEnumerable<AgentRunResponseUpdate> RunCoreStreamingAsync(IEnumerable<ChatMessage> messages, AgentThread? thread = null, AgentRunOptions? options = null, CancellationToken cancellationToken = default)
     {
-        return InnerAIAgent.RunStreamingAsync(GetChatMessages(messages), thread, options, cancellationToken);
+        return InnerAgent.RunStreamingAsync(GetChatMessages(messages), thread, options, cancellationToken);
     }
 
     protected virtual IEnumerable<ChatMessage> GetChatMessages(IEnumerable<ChatMessage> messages)
     {
-        if (Workspace?.SystemPrompt?.IsNullOrWhiteSpace() == false &&
-            !messages.Any(msg => msg.Role == ChatRole.System))
-        {
-            // 加入系统提示词
-            messages = new List<ChatMessage>
-            {
-                new ChatMessage(ChatRole.System, Workspace.SystemPrompt)
-            }.Union(messages);
-        }
+        var unionMessages = new List<ChatMessage>();
 
-        return messages;
+        if (Workspace != null)
+        {
+            if (!Workspace.SystemPrompt.IsNullOrWhiteSpace())
+            {
+                unionMessages.Add(new ChatMessage(ChatRole.System, Workspace.SystemPrompt));
+            }
+            if (!Workspace.Instructions.IsNullOrWhiteSpace())
+            {
+                unionMessages.Add(new ChatMessage(ChatRole.System, Workspace.Instructions));
+            }
+        }
+        return unionMessages.Union(messages);
     }
 }

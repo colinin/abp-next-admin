@@ -1,19 +1,19 @@
 ﻿using LINGYUN.Abp.AI.Workspaces;
-using Microsoft.Extensions.AI;
+using Microsoft.SemanticKernel;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.AI;
-public abstract class ChatClientProvider : IChatClientProvider, ITransientDependency
+public abstract class KernelProvider : IKernelProvider, ITransientDependency
 {
     public abstract string Name { get; }
 
     protected IServiceProvider ServiceProvider { get; }
-    protected ChatClientProvider(IServiceProvider serviceProvider)
+    protected KernelProvider(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
     }
 
-    public abstract Task<IChatClient> CreateAsync(WorkspaceDefinition workspace);
+    public abstract Task<Kernel> CreateAsync(WorkspaceDefinition workspace);
 }

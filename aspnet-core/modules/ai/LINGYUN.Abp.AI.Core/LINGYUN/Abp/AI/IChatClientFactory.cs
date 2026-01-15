@@ -1,12 +1,13 @@
 ﻿using JetBrains.Annotations;
+using Microsoft.Extensions.AI;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.AI;
 public interface IChatClientFactory
 {
     [NotNull]
-    Task<IWorkspaceChatClient> CreateAsync<TWorkspace>();
+    Task<IChatClient> CreateAsync<TWorkspace>();
 
     [NotNull]
-    Task<IWorkspaceChatClient> CreateAsync(string workspace);
+    Task<IChatClient> CreateAsync(string workspace);
 }

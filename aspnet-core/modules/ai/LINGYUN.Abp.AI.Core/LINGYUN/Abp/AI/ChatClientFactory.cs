@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.AI.Workspaces;
 using Microsoft.Extensions.AI;
 using System;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AI;
@@ -10,9 +9,8 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
 
 namespace LINGYUN.Abp.AI;
-public class ChatClientFactory : IChatClientFactory, ISingletonDependency
+public class ChatClientFactory : IChatClientFactory, IScopedDependency
 {
-    private readonly static ConcurrentDictionary<string, IWorkspaceChatClient> _chatClientCache = new();
     protected ISimpleStateCheckerManager<WorkspaceDefinition> StateCheckerManager { get; }
     protected IWorkspaceDefinitionManager WorkspaceDefinitionManager { get; }
     protected IChatClientProviderManager ChatClientProviderManager { get; }
@@ -30,13 +28,9 @@ public class ChatClientFactory : IChatClientFactory, ISingletonDependency
         ServiceProvider = serviceProvider;
     }
 
-    public async virtual Task<IWorkspaceChatClient> CreateAsync<TWorkspace>()
+    public async virtual Task<IChatClient> CreateAsync<TWorkspace>()
     {
         var workspace = WorkspaceNameAttribute.GetWorkspaceName<TWorkspace>();
-        if (_chatClientCache.TryGetValue(workspace, out var chatClient))
-        {
-            return chatClient;
-        }
 
         var chatClientAccessorType = typeof(IChatClientAccessor<>).MakeGenericType(typeof(TWorkspace));
         var chatClientAccessor = ServiceProvider.GetService(chatClientAccessorType);
@@ -44,35 +38,22 @@ public class ChatClientFactory : IChatClientFactory, ISingletonDependency
             chatClientAccessor is IChatClientAccessor accessor && 
             accessor.ChatClient != null)
         {
-            chatClient = new WorkspaceChatClient(accessor.ChatClient);
-            _chatClientCache.TryAdd(workspace, chatClient);
+            return accessor.ChatClient;
         }
-        else
-        {
-            chatClient = await CreateAsync(workspace);
-        }
-        return chatClient;
+
+        return await CreateAsync(workspace);
     }
 
-    public async virtual Task<IWorkspaceChatClient> CreateAsync(string workspace)
+    public async virtual Task<IChatClient> CreateAsync(string workspace)
     {
-        if (_chatClientCache.TryGetValue(workspace, out var chatClient))
-        {
-            return chatClient;
-        }
-
         var workspaceDefine = await WorkspaceDefinitionManager.GetAsync(workspace);
 
         await CheckWorkspaceStateAsync(workspaceDefine);
 
-        chatClient = await CreateChatClientAsync(workspaceDefine);
-
-        _chatClientCache.TryAdd(workspace, chatClient);
-
-        return chatClient;
+        return await CreateChatClientAsync(workspaceDefine);
     }
 
-    protected async virtual Task<IWorkspaceChatClient> CreateChatClientAsync(WorkspaceDefinition workspace)
+    protected async virtual Task<IChatClient> CreateChatClientAsync(WorkspaceDefinition workspace)
     {
         foreach (var provider in ChatClientProviderManager.Providers)
         {

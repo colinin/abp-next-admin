@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.AI.Workspaces;
 using Microsoft.SemanticKernel;
 using System;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AI;
@@ -10,9 +9,8 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
 
 namespace LINGYUN.Abp.AI;
-public class KernelFactory : IKernelFactory, ISingletonDependency
+public class KernelFactory : IKernelFactory, IScopedDependency
 {
-    private readonly static ConcurrentDictionary<string, Kernel> _kernelCache = new();
     protected ISimpleStateCheckerManager<WorkspaceDefinition> StateCheckerManager { get; }
     protected IWorkspaceDefinitionManager WorkspaceDefinitionManager { get; }
     protected IKernelProviderManager KernelProviderManager { get; }
@@ -33,10 +31,6 @@ public class KernelFactory : IKernelFactory, ISingletonDependency
     public async virtual Task<Kernel> CreateAsync<TWorkspace>()
     {
         var workspace = WorkspaceNameAttribute.GetWorkspaceName<TWorkspace>();
-        if (_kernelCache.TryGetValue(workspace, out var kernel))
-        {
-            return kernel;
-        }
 
         var kernelAccessorType = typeof(IKernelAccessor<>).MakeGenericType(typeof(TWorkspace));
         var kernelAccessor = ServiceProvider.GetService(kernelAccessorType);
@@ -44,32 +38,18 @@ public class KernelFactory : IKernelFactory, ISingletonDependency
             kernelAccessor is IKernelAccessor accessor 
             && accessor.Kernel != null)
         {
-            kernel = accessor.Kernel;
-            _kernelCache.TryAdd(workspace, kernel);
+            return accessor.Kernel;
         }
-        else
-        {
-            kernel = await CreateAsync(workspace);
-        }
-        return kernel;
+        return await CreateAsync(workspace);
     }
 
     public async virtual Task<Kernel> CreateAsync(string workspace)
     {
-        if (_kernelCache.TryGetValue(workspace, out var kernel))
-        {
-            return kernel;
-        }
-
         var workspaceDefine = await WorkspaceDefinitionManager.GetAsync(workspace);
 
         await CheckWorkspaceStateAsync(workspaceDefine);
 
-        kernel = await CreateKernelAsync(workspaceDefine);
-
-        _kernelCache.TryAdd(workspace, kernel);
-
-        return kernel;
+        return await CreateKernelAsync(workspaceDefine);
     }
 
     protected async virtual Task<Kernel> CreateKernelAsync(WorkspaceDefinition workspace)

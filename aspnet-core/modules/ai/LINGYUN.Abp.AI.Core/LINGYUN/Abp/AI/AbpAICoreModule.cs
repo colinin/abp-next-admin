@@ -38,6 +38,7 @@ public class AbpAICoreModule : AbpModule
         Configure<AbpAICoreOptions>(options =>
         {
             options.ChatClientProviders.Add<OpenAIChatClientProvider>();
+            options.KernelProviders.Add<OpenAIKernelProvider>();
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>
