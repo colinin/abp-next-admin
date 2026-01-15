@@ -5,21 +5,26 @@ using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AI;
+using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.SimpleStateChecking;
 
 namespace LINGYUN.Abp.AI;
 public class ChatClientFactory : IChatClientFactory, ISingletonDependency
 {
     private readonly static ConcurrentDictionary<string, IChatClient> _chatClientCache = new();
+    protected ISimpleStateCheckerManager<WorkspaceDefinition> StateCheckerManager { get; }
     protected IWorkspaceDefinitionManager WorkspaceDefinitionManager { get; }
     protected IChatClientProviderManager ChatClientProviderManager { get; }
     protected IServiceProvider ServiceProvider { get; }
 
     public ChatClientFactory(
+        ISimpleStateCheckerManager<WorkspaceDefinition> stateCheckerManager,
         IWorkspaceDefinitionManager workspaceDefinitionManager,
         IChatClientProviderManager chatClientProviderManager,
         IServiceProvider serviceProvider)
     {
+        StateCheckerManager = stateCheckerManager;
         WorkspaceDefinitionManager = workspaceDefinitionManager;
         ChatClientProviderManager = chatClientProviderManager;
         ServiceProvider = serviceProvider;
@@ -58,6 +63,8 @@ public class ChatClientFactory : IChatClientFactory, ISingletonDependency
 
         var workspaceDefine = await WorkspaceDefinitionManager.GetAsync(workspace);
 
+        await CheckWorkspaceStateAsync(workspaceDefine);
+
         chatClient = await CreateChatClientAsync(workspaceDefine);
 
         _chatClientCache.TryAdd(workspace, chatClient);
@@ -77,6 +84,17 @@ public class ChatClientFactory : IChatClientFactory, ISingletonDependency
             return await provider.CreateAsync(workspace);
         }
 
-        throw new AbpException($"The ChatClient provider implementation named {workspace.Provider} was not found");
+        throw new AbpException($"The ChatClient provider implementation named {workspace.Provider} was not found!");
+    }
+
+    protected async virtual Task CheckWorkspaceStateAsync(WorkspaceDefinition workspace)
+    {
+        if (!await StateCheckerManager.IsEnabledAsync(workspace))
+        {
+            throw new AbpAuthorizationException(
+                $"Workspace is not enabled: {workspace.Name}!",
+                AbpAIErrorCodes.WorkspaceIsNotEnabled)
+                .WithData("Workspace", workspace.Name);
+        }
     }
 }

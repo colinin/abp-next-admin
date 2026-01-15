@@ -5,21 +5,26 @@ using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AI;
+using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.SimpleStateChecking;
 
 namespace LINGYUN.Abp.AI;
 public class KernelFactory : IKernelFactory, ISingletonDependency
 {
     private readonly static ConcurrentDictionary<string, Kernel> _kernelCache = new();
+    protected ISimpleStateCheckerManager<WorkspaceDefinition> StateCheckerManager { get; }
     protected IWorkspaceDefinitionManager WorkspaceDefinitionManager { get; }
     protected IKernelProviderManager KernelProviderManager { get; }
     protected IServiceProvider ServiceProvider { get; }
 
     public KernelFactory(
+        ISimpleStateCheckerManager<WorkspaceDefinition> stateCheckerManager,
         IWorkspaceDefinitionManager workspaceDefinitionManager,
         IKernelProviderManager kernelProviderManager,
         IServiceProvider serviceProvider)
     {
+        StateCheckerManager = stateCheckerManager;
         WorkspaceDefinitionManager = workspaceDefinitionManager;
         KernelProviderManager = kernelProviderManager;
         ServiceProvider = serviceProvider;
@@ -58,6 +63,8 @@ public class KernelFactory : IKernelFactory, ISingletonDependency
 
         var workspaceDefine = await WorkspaceDefinitionManager.GetAsync(workspace);
 
+        await CheckWorkspaceStateAsync(workspaceDefine);
+
         kernel = await CreateKernelAsync(workspaceDefine);
 
         _kernelCache.TryAdd(workspace, kernel);
@@ -77,6 +84,16 @@ public class KernelFactory : IKernelFactory, ISingletonDependency
             return await provider.CreateAsync(workspace);
         }
 
-        throw new AbpException($"The Kernel provider implementation named {workspace.Provider} was not found");
+        throw new AbpException($"The Kernel provider implementation named {workspace.Provider} was not found!");
+    }
+    protected async virtual Task CheckWorkspaceStateAsync(WorkspaceDefinition workspace)
+    {
+        if (!await StateCheckerManager.IsEnabledAsync(workspace))
+        {
+            throw new AbpAuthorizationException(
+                $"Workspace is not enabled: {workspace.Name}!",
+                AbpAIErrorCodes.WorkspaceIsNotEnabled)
+                .WithData("Workspace", workspace.Name);
+        }
     }
 }

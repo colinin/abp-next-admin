@@ -15,6 +15,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="LINGYUN\Abp\AI\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\AI\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Volo.Abp.AI" />
 		<PackageReference Include="Volo.Abp.Localization" />
 	</ItemGroup>

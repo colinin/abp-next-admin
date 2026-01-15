@@ -5,24 +5,29 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Volo.Abp.AI;
+using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.SimpleStateChecking;
 
 namespace LINGYUN.Abp.AI.Agent;
 public class ChatClientAgentFactory : IChatClientAgentFactory, ISingletonDependency
 {
     private readonly static ConcurrentDictionary<string, ChatClientAgent> _chatClientAgentCache = new();
 
-    private readonly IChatClientFactory _chatClientFactory;
-    private readonly IStringLocalizerFactory _stringLocalizerFactory;
-    private readonly IWorkspaceDefinitionManager _workspaceDefinitionManager;
+    protected IChatClientFactory ChatClientFactory { get; }
+    protected IStringLocalizerFactory StringLocalizerFactory { get; }
+    protected IWorkspaceDefinitionManager WorkspaceDefinitionManager { get; }
+    protected ISimpleStateCheckerManager<WorkspaceDefinition> StateCheckerManager { get; }
     public ChatClientAgentFactory(
         IChatClientFactory chatClientFactory,
         IStringLocalizerFactory stringLocalizerFactory,
-        IWorkspaceDefinitionManager workspaceDefinitionManager)
+        IWorkspaceDefinitionManager workspaceDefinitionManager,
+        ISimpleStateCheckerManager<WorkspaceDefinition> stateCheckerManager)
     {
-        _chatClientFactory = chatClientFactory;
-        _stringLocalizerFactory = stringLocalizerFactory;
-        _workspaceDefinitionManager = workspaceDefinitionManager;
+        ChatClientFactory = chatClientFactory;
+        StringLocalizerFactory = stringLocalizerFactory;
+        WorkspaceDefinitionManager = workspaceDefinitionManager;
+        StateCheckerManager = stateCheckerManager;
     }
 
     public async virtual Task<ChatClientAgent> CreateAsync<TWorkspace>()
@@ -33,14 +38,19 @@ public class ChatClientAgentFactory : IChatClientAgentFactory, ISingletonDepende
             return chatClientAgent;
         }
 
-        var chatClient = await _chatClientFactory.CreateAsync<TWorkspace>();
+        var chatClient = await ChatClientFactory.CreateAsync<TWorkspace>();
 
-        var workspaceDefine = await _workspaceDefinitionManager.GetOrNullAsync(workspace);
+        var workspaceDefine = await WorkspaceDefinitionManager.GetOrNullAsync(workspace);
+
+        if (workspaceDefine != null)
+        {
+            await CheckWorkspaceStateAsync(workspaceDefine);
+        }
 
         string? description = null;
         if (workspaceDefine?.Description != null)
         {
-            description = workspaceDefine.Description.Localize(_stringLocalizerFactory);
+            description = workspaceDefine.Description.Localize(StringLocalizerFactory);
         }
 
         chatClientAgent = chatClient.CreateAIAgent(
@@ -59,13 +69,16 @@ public class ChatClientAgentFactory : IChatClientAgentFactory, ISingletonDepende
         {
             return chatClientAgent;
         }
-        var workspaceDefine = await _workspaceDefinitionManager.GetAsync(workspace);
-        var chatClient = await _chatClientFactory.CreateAsync(workspace);
+        var workspaceDefine = await WorkspaceDefinitionManager.GetAsync(workspace);
+
+        await CheckWorkspaceStateAsync(workspaceDefine);
+
+        var chatClient = await ChatClientFactory.CreateAsync(workspace);
 
         string? description = null;
         if (workspaceDefine.Description != null)
         {
-            description = workspaceDefine.Description.Localize(_stringLocalizerFactory);
+            description = workspaceDefine.Description.Localize(StringLocalizerFactory);
         }
 
         chatClientAgent = chatClient.CreateAIAgent(
@@ -76,5 +89,16 @@ public class ChatClientAgentFactory : IChatClientAgentFactory, ISingletonDepende
         _chatClientAgentCache.TryAdd(workspace, chatClientAgent);
 
         return chatClientAgent;
+    }
+
+    protected async virtual Task CheckWorkspaceStateAsync(WorkspaceDefinition workspace)
+    {
+        if (!await StateCheckerManager.IsEnabledAsync(workspace))
+        {
+            throw new AbpAuthorizationException(
+                $"Workspace is not enabled: {workspace.Name}!",
+                AbpAIErrorCodes.WorkspaceIsNotEnabled)
+                .WithData("Workspace", workspace.Name);
+        }
     }
 }
