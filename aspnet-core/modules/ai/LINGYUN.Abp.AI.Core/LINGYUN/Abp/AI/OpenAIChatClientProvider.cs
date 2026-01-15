@@ -5,17 +5,20 @@ using System;
 using System.ClientModel;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.AI;
-public class OpenAIChatClientProvider : IChatClientProvider, ITransientDependency
+public class OpenAIChatClientProvider : ChatClientProvider
 {
     private const string DefaultEndpoint = "https://api.openai.com/v1";
     public const string ProviderName = "OpenAI";
 
-    public virtual string Name => ProviderName;
+    public override string Name => ProviderName;
+    public OpenAIChatClientProvider(IServiceProvider serviceProvider) 
+        : base(serviceProvider)
+    {
+    }
 
-    public virtual Task<IChatClient> CreateAsync(WorkspaceDefinition workspace)
+    public override Task<IWorkspaceChatClient> CreateAsync(WorkspaceDefinition workspace)
     {
         Check.NotNull(workspace, nameof(workspace));
         Check.NotNullOrWhiteSpace(workspace.ApiKey, nameof(WorkspaceDefinition.ApiKey));
@@ -29,8 +32,17 @@ public class OpenAIChatClientProvider : IChatClientProvider, ITransientDependenc
 
         var chatClient = openAIClient
             .GetChatClient(workspace.ModelName)
-            .AsIChatClient();
+            .AsIChatClient()
+            .AsBuilder()
+            .UseLogging()
+            .UseOpenTelemetry()
+            .UseFunctionInvocation()
+            .UseDistributedCache()
+            .UseChatReducer()
+            .Build(ServiceProvider);
 
-        return Task.FromResult(chatClient);
+        IWorkspaceChatClient workspaceChatClient = new WorkspaceChatClient(chatClient, workspace);
+
+        return Task.FromResult(workspaceChatClient);
     }
 }

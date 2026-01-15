@@ -12,7 +12,7 @@ using Volo.Abp.SimpleStateChecking;
 namespace LINGYUN.Abp.AI;
 public class ChatClientFactory : IChatClientFactory, ISingletonDependency
 {
-    private readonly static ConcurrentDictionary<string, IChatClient> _chatClientCache = new();
+    private readonly static ConcurrentDictionary<string, IWorkspaceChatClient> _chatClientCache = new();
     protected ISimpleStateCheckerManager<WorkspaceDefinition> StateCheckerManager { get; }
     protected IWorkspaceDefinitionManager WorkspaceDefinitionManager { get; }
     protected IChatClientProviderManager ChatClientProviderManager { get; }
@@ -30,7 +30,7 @@ public class ChatClientFactory : IChatClientFactory, ISingletonDependency
         ServiceProvider = serviceProvider;
     }
 
-    public async virtual Task<IChatClient> CreateAsync<TWorkspace>()
+    public async virtual Task<IWorkspaceChatClient> CreateAsync<TWorkspace>()
     {
         var workspace = WorkspaceNameAttribute.GetWorkspaceName<TWorkspace>();
         if (_chatClientCache.TryGetValue(workspace, out var chatClient))
@@ -44,7 +44,7 @@ public class ChatClientFactory : IChatClientFactory, ISingletonDependency
             chatClientAccessor is IChatClientAccessor accessor && 
             accessor.ChatClient != null)
         {
-            chatClient = accessor.ChatClient;
+            chatClient = new WorkspaceChatClient(accessor.ChatClient);
             _chatClientCache.TryAdd(workspace, chatClient);
         }
         else
@@ -54,7 +54,7 @@ public class ChatClientFactory : IChatClientFactory, ISingletonDependency
         return chatClient;
     }
 
-    public async virtual Task<IChatClient> CreateAsync(string workspace)
+    public async virtual Task<IWorkspaceChatClient> CreateAsync(string workspace)
     {
         if (_chatClientCache.TryGetValue(workspace, out var chatClient))
         {
@@ -72,7 +72,7 @@ public class ChatClientFactory : IChatClientFactory, ISingletonDependency
         return chatClient;
     }
 
-    protected async virtual Task<IChatClient> CreateChatClientAsync(WorkspaceDefinition workspace)
+    protected async virtual Task<IWorkspaceChatClient> CreateChatClientAsync(WorkspaceDefinition workspace)
     {
         foreach (var provider in ChatClientProviderManager.Providers)
         {
