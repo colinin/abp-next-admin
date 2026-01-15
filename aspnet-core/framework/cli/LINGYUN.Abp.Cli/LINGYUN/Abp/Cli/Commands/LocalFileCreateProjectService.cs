@@ -63,7 +63,6 @@ namespace LINGYUN.Abp.Cli.Commands
             commandBuilder.AppendFormat(" -n {0}", createArgs.SolutionName.ProjectName);
             commandBuilder.AppendFormat(" -o {0}", createArgs.OutputFolder);
             commandBuilder.AppendFormat(" --DatabaseManagement {0}", dbm);
-            commandBuilder.AppendFormat(" --Telemetry {0}", createArgs.TelemetryProvider);
 
             Logger.LogInformation("Execute command: " + commandBuilder.ToString());
 

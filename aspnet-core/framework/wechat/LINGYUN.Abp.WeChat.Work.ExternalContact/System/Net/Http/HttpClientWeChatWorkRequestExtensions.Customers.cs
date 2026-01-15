@@ -1,4 +1,6 @@
-﻿using LINGYUN.Abp.WeChat.Work.ExternalContact.Customers.Request;
+﻿using LINGYUN.Abp.WeChat.Work;
+using LINGYUN.Abp.WeChat.Work.ExternalContact.Customers.Request;
+using LINGYUN.Abp.WeChat.Work.ExternalContact.Customers.Response;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,7 +8,7 @@ using System.Threading.Tasks;
 namespace System.Net.Http;
 internal static partial class HttpClientWeChatWorkRequestExtensions
 {
-    public async static Task<HttpResponseMessage> GetCustomerListAsync(
+    public async static Task<WeChatWorkGetCustomerListResponse> GetCustomerListAsync(
         this HttpMessageInvoker client,
         string accessToken,
         string userId,
@@ -17,14 +19,16 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
         urlBuilder.AppendFormat("&userid={0}", userId);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Get,
            urlBuilder.ToString());
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkGetCustomerListResponse>();
     }
 
-    public async static Task<HttpResponseMessage> BulkGetCustomerAsync(
+    public async static Task<WeChatWorkBulkGetCustomerResponse> BulkGetCustomerAsync(
         this HttpMessageInvoker client,
         string accessToken,
         WeChatWorkBulkGetCustomerRequest request,
@@ -34,17 +38,19 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/batch/get_by_user");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Post,
            urlBuilder.ToString())
         {
             Content = new StringContent(request.SerializeToJson())
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkBulkGetCustomerResponse>();
     }
 
-    public async static Task<HttpResponseMessage> GetCustomerAsync(
+    public async static Task<WeChatWorkGetCustomerResponse> GetCustomerAsync(
         this HttpMessageInvoker client,
         string accessToken,
         string externalUserid,
@@ -60,14 +66,16 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
             urlBuilder.AppendFormat("&cursor={0}", cursor);
         }
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Get,
            urlBuilder.ToString());
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkGetCustomerResponse>();
     }
 
-    public async static Task<HttpResponseMessage> UpdateCustomerRemarkAsync(
+    public async static Task<WeChatWorkResponse> UpdateCustomerRemarkAsync(
         this HttpMessageInvoker client,
         string accessToken,
         WeChatWorkUpdateCustomerRemarkRequest request,
@@ -77,13 +85,15 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/remark");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Post,
            urlBuilder.ToString())
         {
             Content = new StringContent(request.SerializeToJson())
         };
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkResponse>();
     }
 }

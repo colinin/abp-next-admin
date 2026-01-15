@@ -35,11 +35,7 @@ public class WeChatWorkEmployExtendProvider : IWeChatWorkEmployExtendProvider, I
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.AssignCustomerAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkTransferCustomerResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.AssignCustomerAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkGetTransferResultResponse> GetTransferResultAsync(
@@ -51,11 +47,7 @@ public class WeChatWorkEmployExtendProvider : IWeChatWorkEmployExtendProvider, I
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetTransferResultAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetTransferResultResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetTransferResultAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkGroupChatOnjobTransferResponse> GroupChatOnjobTransferAsync(
@@ -67,10 +59,6 @@ public class WeChatWorkEmployExtendProvider : IWeChatWorkEmployExtendProvider, I
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.OnjobTransferAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGroupChatOnjobTransferResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GroupChatOnjobTransferAsync(token.AccessToken, request, cancellationToken);
     }
 }

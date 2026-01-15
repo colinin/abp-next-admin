@@ -789,6 +789,155 @@
             }
           }
         },
+        "LINGYUN.Platform.Datas.GlobalDataController": {
+          "controllerName": "GlobalData",
+          "controllerGroupName": "GlobalData",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Platform.Datas.GlobalDataController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Platform.Datas.IGlobalDataAppService",
+              "name": "IGlobalDataAppService",
+              "methods": [
+                {
+                  "name": "GetByNameAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Platform.Datas.DataDto",
+                    "typeSimple": "LINGYUN.Platform.Datas.DataDto"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Platform.Datas.DataDto",
+                    "typeSimple": "LINGYUN.Platform.Datas.DataDto"
+                  }
+                },
+                {
+                  "name": "GetAllAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Platform.Datas.DataDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Platform.Datas.DataDto>"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetByNameAsyncByName": {
+              "uniqueName": "GetByNameAsyncByName",
+              "name": "GetByNameAsync",
+              "httpMethod": "GET",
+              "url": "api/platform/global-datas/by-name/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Platform.Datas.DataDto",
+                "typeSimple": "LINGYUN.Platform.Datas.DataDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Platform.Datas.IGlobalDataAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/platform/global-datas/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Platform.Datas.DataDto",
+                "typeSimple": "LINGYUN.Platform.Datas.DataDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Platform.Datas.IGlobalDataAppService"
+            },
+            "GetAllAsync": {
+              "uniqueName": "GetAllAsync",
+              "name": "GetAllAsync",
+              "httpMethod": "GET",
+              "url": "api/platform/global-datas/all",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Platform.Datas.DataDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Platform.Datas.DataDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "LINGYUN.Platform.Datas.IGlobalDataAppService"
+            }
+          }
+        },
         "LINGYUN.Platform.Feedbacks.FeedbackAttachmentController": {
           "controllerName": "FeedbackAttachment",
           "controllerGroupName": "FeedbackAttachment",
@@ -3679,10 +3828,46 @@
                 },
                 {
                   "nameOnMethod": "input",
+                  "name": "Status",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
                   "name": "Priority",
                   "jsonName": null,
                   "type": "System.String",
                   "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "BeginSendTime",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "EndSendTime",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -4253,6 +4438,42 @@
                   "jsonName": null,
                   "type": "System.String",
                   "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Status",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "BeginSendTime",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "EndSendTime",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -5171,6 +5392,406 @@
               },
               "allowAnonymous": false,
               "implementFrom": "Volo.Abp.Application.Services.IUpdateAppService<LINGYUN.Platform.Packages.PackageDto,System.Guid,LINGYUN.Platform.Packages.PackageUpdateDto>"
+            }
+          }
+        },
+        "LINGYUN.Platform.Portal.EnterpriseController": {
+          "controllerName": "Enterprise",
+          "controllerGroupName": "Enterprise",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "LINGYUN.Platform.Portal.EnterpriseController",
+          "interfaces": [
+            {
+              "type": "LINGYUN.Platform.Portal.IEnterpriseAppService",
+              "name": "IEnterpriseAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Platform.Portal.EnterpriseDto",
+                    "typeSimple": "LINGYUN.Platform.Portal.EnterpriseDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Platform.Portal.EnterpriseGetListInput, LINGYUN.Platform.Application.Contracts",
+                      "type": "LINGYUN.Platform.Portal.EnterpriseGetListInput",
+                      "typeSimple": "LINGYUN.Platform.Portal.EnterpriseGetListInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Platform.Portal.EnterpriseDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Platform.Portal.EnterpriseDto>"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Platform.Portal.EnterpriseCreateDto, LINGYUN.Platform.Application.Contracts",
+                      "type": "LINGYUN.Platform.Portal.EnterpriseCreateDto",
+                      "typeSimple": "LINGYUN.Platform.Portal.EnterpriseCreateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Platform.Portal.EnterpriseDto",
+                    "typeSimple": "LINGYUN.Platform.Portal.EnterpriseDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Platform.Portal.EnterpriseUpdateDto, LINGYUN.Platform.Application.Contracts",
+                      "type": "LINGYUN.Platform.Portal.EnterpriseUpdateDto",
+                      "typeSimple": "LINGYUN.Platform.Portal.EnterpriseUpdateDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "LINGYUN.Platform.Portal.EnterpriseDto",
+                    "typeSimple": "LINGYUN.Platform.Portal.EnterpriseDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/platform/enterprise",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Platform.Portal.EnterpriseCreateDto, LINGYUN.Platform.Application.Contracts",
+                  "type": "LINGYUN.Platform.Portal.EnterpriseCreateDto",
+                  "typeSimple": "LINGYUN.Platform.Portal.EnterpriseCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Platform.Portal.EnterpriseCreateDto",
+                  "typeSimple": "LINGYUN.Platform.Portal.EnterpriseCreateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Platform.Portal.EnterpriseDto",
+                "typeSimple": "LINGYUN.Platform.Portal.EnterpriseDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.ICreateAppService<LINGYUN.Platform.Portal.EnterpriseDto,LINGYUN.Platform.Portal.EnterpriseCreateDto>"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/platform/enterprise/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IDeleteAppService<System.Guid>"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/platform/enterprise/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Platform.Portal.EnterpriseDto",
+                "typeSimple": "LINGYUN.Platform.Portal.EnterpriseDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<LINGYUN.Platform.Portal.EnterpriseDto,LINGYUN.Platform.Portal.EnterpriseDto,System.Guid,LINGYUN.Platform.Portal.EnterpriseGetListInput>"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/platform/enterprise",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Platform.Portal.EnterpriseGetListInput, LINGYUN.Platform.Application.Contracts",
+                  "type": "LINGYUN.Platform.Portal.EnterpriseGetListInput",
+                  "typeSimple": "LINGYUN.Platform.Portal.EnterpriseGetListInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "BeginRegistrationDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "EndRegistrationDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "BeginExpirationDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "EndExpirationDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Platform.Portal.EnterpriseDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Platform.Portal.EnterpriseDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<LINGYUN.Platform.Portal.EnterpriseDto,LINGYUN.Platform.Portal.EnterpriseDto,System.Guid,LINGYUN.Platform.Portal.EnterpriseGetListInput>"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/platform/enterprise/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Platform.Portal.EnterpriseUpdateDto, LINGYUN.Platform.Application.Contracts",
+                  "type": "LINGYUN.Platform.Portal.EnterpriseUpdateDto",
+                  "typeSimple": "LINGYUN.Platform.Portal.EnterpriseUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Platform.Portal.EnterpriseUpdateDto",
+                  "typeSimple": "LINGYUN.Platform.Portal.EnterpriseUpdateDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "LINGYUN.Platform.Portal.EnterpriseDto",
+                "typeSimple": "LINGYUN.Platform.Portal.EnterpriseDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IUpdateAppService<LINGYUN.Platform.Portal.EnterpriseDto,System.Guid,LINGYUN.Platform.Portal.EnterpriseUpdateDto>"
             }
           }
         }

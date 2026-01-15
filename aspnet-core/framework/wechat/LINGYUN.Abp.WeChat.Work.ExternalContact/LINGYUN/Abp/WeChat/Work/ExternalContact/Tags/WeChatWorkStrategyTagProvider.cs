@@ -35,11 +35,7 @@ public class WeChatWorkStrategyTagProvider : IWeChatWorkStrategyTagProvider, ISi
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetStrategyTagListAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetStrategyTagListResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetStrategyTagListAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkCreateStrategyTagResponse> CreateStrategyTagAsync(
@@ -51,11 +47,7 @@ public class WeChatWorkStrategyTagProvider : IWeChatWorkStrategyTagProvider, ISi
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.CreateStrategyTagAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkCreateStrategyTagResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.CreateStrategyTagAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkResponse> UpdateStrategyTagAsync(
@@ -67,11 +59,7 @@ public class WeChatWorkStrategyTagProvider : IWeChatWorkStrategyTagProvider, ISi
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.UpdateStrategyTagAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.UpdateStrategyTagAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkResponse> DeleteStrategyTagAsync(
@@ -83,10 +71,6 @@ public class WeChatWorkStrategyTagProvider : IWeChatWorkStrategyTagProvider, ISi
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.DeleteStrategyTagAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.DeleteStrategyTagAsync(token.AccessToken, request, cancellationToken);
     }
 }

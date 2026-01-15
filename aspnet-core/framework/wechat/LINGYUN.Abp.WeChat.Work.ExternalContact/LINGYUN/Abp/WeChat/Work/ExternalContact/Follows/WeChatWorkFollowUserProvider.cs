@@ -29,10 +29,6 @@ public class WeChatWorkFollowUserProvider : IWeChatWorkFollowUserProvider, ISing
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetFollowUserListAsync(token.AccessToken, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetFollowUserListResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetFollowUserListAsync(token.AccessToken, cancellationToken);
     }
 }

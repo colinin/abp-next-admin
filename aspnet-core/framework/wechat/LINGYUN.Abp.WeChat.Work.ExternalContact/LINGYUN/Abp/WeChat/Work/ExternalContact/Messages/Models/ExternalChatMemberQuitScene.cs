@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace LINGYUN.Abp.WeChat.Work.ExternalContact.Messages.Models;
 /// <summary>
@@ -10,11 +11,13 @@ public enum ExternalChatMemberQuitScene
     /// <summary>
     /// 自己退群
     /// </summary>
+    [XmlEnum("0")]
     [Description("自己退群")]
     UserSelf = 0,
     /// <summary>
     /// 群主/群管理员移出
     /// </summary>
+    [XmlEnum("1")]
     [Description("群主/群管理员移出")]
     Admin = 1
 }

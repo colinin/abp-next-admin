@@ -35,11 +35,7 @@ public class WeChatWorkGroupChatProvider : IWeChatWorkGroupChatProvider, ISingle
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetGroupChatListAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetGroupChatListResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetGroupChatListAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkGetGroupChatResponse> GetGroupChatAsync(
@@ -51,11 +47,7 @@ public class WeChatWorkGroupChatProvider : IWeChatWorkGroupChatProvider, ISingle
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetGroupChatAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkGetGroupChatResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.GetGroupChatAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkOpengIdToChatIdResponse> OpengIdToChatIdAsync(
@@ -67,10 +59,6 @@ public class WeChatWorkGroupChatProvider : IWeChatWorkGroupChatProvider, ISingle
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.OpengIdToChatIdAsync(token.AccessToken, request, cancellationToken);
-
-        var wechatResponse = await response.DeserializeObjectAsync<WeChatWorkOpengIdToChatIdResponse>();
-        wechatResponse.ThrowIfNotSuccess();
-        return wechatResponse;
+        return await client.OpengIdToChatIdAsync(token.AccessToken, request, cancellationToken);
     }
 }

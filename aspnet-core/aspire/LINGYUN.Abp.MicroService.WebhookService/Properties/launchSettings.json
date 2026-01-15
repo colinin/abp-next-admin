@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "LINGYUN.Abp.MicroService.WebhookService": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:61131;http://localhost:61132"
+    }
+  }
+}

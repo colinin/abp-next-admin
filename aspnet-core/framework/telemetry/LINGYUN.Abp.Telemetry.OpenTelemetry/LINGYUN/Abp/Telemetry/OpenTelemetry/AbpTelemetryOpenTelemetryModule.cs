@@ -109,16 +109,7 @@ public class AbpTelemetryOpenTelemetryModule : AbpModule
             };
         });
         tracing.AddCapInstrumentation();
-        tracing.AddEntityFrameworkCoreInstrumentation(efcore =>
-        {
-            efcore.SetDbStatementForText = configuration.GetValue(
-                "OpenTelemetry:EntityFrameworkCore:SetDbStatementForText",
-                efcore.SetDbStatementForText);
-
-            efcore.SetDbStatementForStoredProcedure = configuration.GetValue(
-                "OpenTelemetry:EntityFrameworkCore:SetDbStatementForStoredProcedure",
-                efcore.SetDbStatementForStoredProcedure);
-        });
+        tracing.AddEntityFrameworkCoreInstrumentation();
 
         if (configuration.GetValue("OpenTelemetry:Console:IsEnabled", false))
         {

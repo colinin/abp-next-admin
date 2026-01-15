@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.WeChat.Common.Messages.Handlers;
 using LINGYUN.Abp.WeChat.Work.Common.Messages;
 using LINGYUN.Abp.WeChat.Work.Common.Messages.Models;
+using LINGYUN.Abp.WeChat.Work.Contacts.Messages.Models;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;

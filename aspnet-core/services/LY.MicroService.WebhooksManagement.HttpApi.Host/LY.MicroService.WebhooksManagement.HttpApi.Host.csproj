@@ -3,7 +3,7 @@
 	<Import Project="..\..\..\common.secrets.props" />
 	
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace>LY.MicroService.WebhooksManagement</RootNamespace>
 	</PropertyGroup>
 

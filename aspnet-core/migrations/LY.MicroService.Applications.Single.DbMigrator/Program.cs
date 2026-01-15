@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Elsa.Activities.Compensation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -31,11 +32,14 @@ public class Program
     {
         return Host.CreateDefaultBuilder(args)
             .AddAppSettingsSecretsJson()
-            // .ConfigureAppConfiguration((context, builder) =>
-            // {
-            //     builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            //         .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
-            // }  )
+             .ConfigureAppConfiguration((context, builder) =>
+             {
+                 var dbProvider = Environment.GetEnvironmentVariable("APPLICATION_DATABASE_PROVIDER");
+                 if (!dbProvider.IsNullOrWhiteSpace())
+                 {
+                     builder.AddJsonFile($"appsettings.{dbProvider}.json", optional: true);
+                 }
+             })
             .ConfigureLogging((context, logging) => logging.ClearProviders())
             .ConfigureServices((hostContext, services) =>
             {

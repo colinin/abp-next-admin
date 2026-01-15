@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.SignalR;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -45,15 +47,10 @@ public partial class MicroServiceApplicationsSingleModule
                     .UseRedis(configuration["CAP:Redis:Configuration"]);
                 return;
             }
-            options
-                .UseMySql(mySqlOptions =>
-                {
-                    configuration.GetSection("CAP:MySql").Bind(mySqlOptions);
-                })
-                .UseRabbitMQ(rabbitMQOptions =>
-                {
-                    configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
-                });
+            options.UseRabbitMQ(rabbitMQOptions =>
+            {
+                configuration.GetSection("CAP:RabbitMQ").Bind(rabbitMQOptions);
+            });
         });
     }
 
@@ -63,7 +60,7 @@ public partial class MicroServiceApplicationsSingleModule
         {
             builder.AddValidation(options =>
             {
-                //options.AddAudiences("lingyun-abp-application");
+                options.AddAudiences("all_in_one");
 
                 options.UseLocalServer();
 
@@ -138,6 +135,28 @@ public partial class MicroServiceApplicationsSingleModule
                     .DisableTransportSecurityRequirement();
             });
         }
+    }
+
+    private void PreConfigureSignalR(IConfiguration configuration)
+    {
+        PreConfigure<ISignalRServerBuilder>(builder =>
+        {
+            var redisEnabled = configuration["SignalR:Redis:IsEnabled"];
+            if (redisEnabled.IsNullOrEmpty() || bool.Parse(redisEnabled))
+            {
+                builder.AddStackExchangeRedis(redis =>
+                {
+                    var redisConfiguration = configuration["SignalR:Redis:Configuration"];
+                    if (!redisConfiguration.IsNullOrEmpty())
+                    {
+                        redis.ConnectionFactory = async (writer) =>
+                        {
+                            return await ConnectionMultiplexer.ConnectAsync(redisConfiguration);
+                        };
+                    }
+                });
+            }
+        });
     }
 
     private void PreConfigureQuartz(IConfiguration configuration)
@@ -527,7 +546,7 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
-    private void ConfigureCaching(IConfiguration configuration)
+    private void ConfigureCaching(IServiceCollection services, IConfiguration configuration)
     {
         Configure<AbpDistributedCacheOptions>(options =>
         {
@@ -540,6 +559,8 @@ public partial class MicroServiceApplicationsSingleModule
             options.ConfigurationOptions = redisConfig;
             options.InstanceName = configuration["Redis:InstanceName"];
         });
+
+        services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]));
     }
 
     private void ConfigureMultiTenancy(IConfiguration configuration)
@@ -764,6 +785,12 @@ public partial class MicroServiceApplicationsSingleModule
                 .Configure(StandardBundles.Scripts.Global, bundle =>
                 {
                     bundle.AddContributors(typeof(SingleGlobalScriptContributor));
+                });
+
+            options.StyleBundles
+                .Configure(LeptonXLiteThemeBundles.Styles.Global, bundle =>
+                {
+                    bundle.AddFiles("/css/global-styles.css");
                 });
         });
 

@@ -2,9 +2,12 @@
 using LINGYUN.Abp.Demo.Authors;
 using LINGYUN.Abp.Demo.Books;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Data;
 
 namespace LINGYUN.Abp.Demo.EntityFrameworkCore;
-public class DemoDbContext : AbpDataProtectionDbContext<DemoDbContext>
+
+[ConnectionStringName(DemoDbProterties.ConnectionStringName)]
+public class DemoDbContext : AbpDataProtectionDbContext<DemoDbContext>, IDemoDbContext
 {
     public DbSet<Book> Books { get; set; }
 

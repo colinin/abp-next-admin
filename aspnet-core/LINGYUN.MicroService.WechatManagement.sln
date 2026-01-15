@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "framework", "framework", "{BD5616DF-D493-4170-8E78-46486BE77FC2}"
 EndProject
@@ -126,6 +126,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.ExternalContact.Tests", "tests\LINGYUN.Abp.WeChat.Work.ExternalContact.Tests\LINGYUN.Abp.WeChat.Work.ExternalContact.Tests.csproj", "{6628FB84-66C0-4023-9AA0-AAC4C0CC5917}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.Handlers", "framework\wechat\LINGYUN.Abp.WeChat.Work.Handlers\LINGYUN.Abp.WeChat.Work.Handlers.csproj", "{E0DFCAD9-8AFE-A816-10F7-B4CA6691E910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.Contacts", "framework\wechat\LINGYUN.Abp.WeChat.Work.Contacts\LINGYUN.Abp.WeChat.Work.Contacts.csproj", "{69419D6B-9DA5-D9BD-1D6C-61BBAE331057}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.Contacts.Tests", "tests\LINGYUN.Abp.WeChat.Work.Contacts.Tests\LINGYUN.Abp.WeChat.Work.Contacts.Tests.csproj", "{C3BEBB5D-EF3A-4387-8357-0C3829756E41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.OA", "framework\wechat\LINGYUN.Abp.WeChat.Work.OA\LINGYUN.Abp.WeChat.Work.OA.csproj", "{BA80572F-49BD-41E3-89D8-AE5BF15B00F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.WeChat.Work.OA.Tests", "tests\LINGYUN.Abp.WeChat.Work.OA.Tests\LINGYUN.Abp.WeChat.Work.OA.Tests.csproj", "{0209DBBA-CF63-4538-AB8D-452E9A591336}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -325,6 +333,22 @@ Global
 		{E0DFCAD9-8AFE-A816-10F7-B4CA6691E910}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0DFCAD9-8AFE-A816-10F7-B4CA6691E910}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0DFCAD9-8AFE-A816-10F7-B4CA6691E910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69419D6B-9DA5-D9BD-1D6C-61BBAE331057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69419D6B-9DA5-D9BD-1D6C-61BBAE331057}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69419D6B-9DA5-D9BD-1D6C-61BBAE331057}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69419D6B-9DA5-D9BD-1D6C-61BBAE331057}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3BEBB5D-EF3A-4387-8357-0C3829756E41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3BEBB5D-EF3A-4387-8357-0C3829756E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3BEBB5D-EF3A-4387-8357-0C3829756E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3BEBB5D-EF3A-4387-8357-0C3829756E41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA80572F-49BD-41E3-89D8-AE5BF15B00F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA80572F-49BD-41E3-89D8-AE5BF15B00F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA80572F-49BD-41E3-89D8-AE5BF15B00F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA80572F-49BD-41E3-89D8-AE5BF15B00F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0209DBBA-CF63-4538-AB8D-452E9A591336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0209DBBA-CF63-4538-AB8D-452E9A591336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0209DBBA-CF63-4538-AB8D-452E9A591336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0209DBBA-CF63-4538-AB8D-452E9A591336}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -388,6 +412,10 @@ Global
 		{9DC2A982-8FA2-93BE-5FE1-3D7F7C105C39} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{6628FB84-66C0-4023-9AA0-AAC4C0CC5917} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{E0DFCAD9-8AFE-A816-10F7-B4CA6691E910} = {EDBB7BC1-46F0-4803-A572-7F8FEF433BE2}
+		{69419D6B-9DA5-D9BD-1D6C-61BBAE331057} = {EDBB7BC1-46F0-4803-A572-7F8FEF433BE2}
+		{C3BEBB5D-EF3A-4387-8357-0C3829756E41} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{BA80572F-49BD-41E3-89D8-AE5BF15B00F9} = {EDBB7BC1-46F0-4803-A572-7F8FEF433BE2}
+		{0209DBBA-CF63-4538-AB8D-452E9A591336} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EC9D01C1-EA3C-48C7-A279-4D35C8AD312E}

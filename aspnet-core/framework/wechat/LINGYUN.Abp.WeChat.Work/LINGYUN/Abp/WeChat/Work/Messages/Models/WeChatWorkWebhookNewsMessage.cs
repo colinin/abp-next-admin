@@ -18,7 +18,7 @@ internal class WeChatWorkWebhookNewsMessage : WeChatWorkWebhookMessage
     /// <summary>
     /// 创建一个企业微信Webhook图文消息
     /// </summary>
-    /// <param name="markdown">图文消息体</param>
+    /// <param name="news">图文消息体</param>
     public WeChatWorkWebhookNewsMessage(WebhookNewsMessage news)
         : base("news")
     {

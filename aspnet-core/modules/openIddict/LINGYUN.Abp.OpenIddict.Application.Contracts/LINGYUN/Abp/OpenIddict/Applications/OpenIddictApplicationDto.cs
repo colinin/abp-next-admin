@@ -27,4 +27,5 @@ public class OpenIddictApplicationDto : ExtensibleAuditedEntityDto<Guid>, IHasCo
     public string LogoUri { get; set; }
     public string JsonWebKeySet { get; set; }
     public string ConcurrencyStamp { get; set; }
+    public string FrontChannelLogoutUri { get; set; }
 }

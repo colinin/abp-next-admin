@@ -1,11 +1,12 @@
-﻿using System.Text;
+﻿using LINGYUN.Abp.WeChat.Work.ExternalContact.Follows.Response;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Net.Http;
 internal static partial class HttpClientWeChatWorkRequestExtensions
 {
-    public async static Task<HttpResponseMessage> GetFollowUserListAsync(
+    public async static Task<WeChatWorkGetFollowUserListResponse> GetFollowUserListAsync(
         this HttpMessageInvoker client,
         string accessToken,
         CancellationToken cancellationToken = default)
@@ -14,10 +15,12 @@ internal static partial class HttpClientWeChatWorkRequestExtensions
         urlBuilder.Append("/cgi-bin/externalcontact/get_follow_user_list");
         urlBuilder.AppendFormat("?access_token={0}", accessToken);
 
-        var httpRequest = new HttpRequestMessage(
+        using var httpRequest = new HttpRequestMessage(
            HttpMethod.Get,
            urlBuilder.ToString());
 
-        return await client.SendAsync(httpRequest, cancellationToken);
+        using var httpResponse = await client.SendAsync(httpRequest, cancellationToken);
+
+        return await httpResponse.DeserializeObjectAsync<WeChatWorkGetFollowUserListResponse>();
     }
 }

@@ -76,7 +76,7 @@ public class VueVbenAdminNavigationSeedContributor : NavigationSeedContributor
                 continue;
             }
 
-            var menuMeta = new Dictionary<string, object>()
+            var menuMeta = new Dictionary<string, object>(menu.ExtraProperties)
             {
                 { "title", menu.DisplayName },
                 { "icon", menu.Icon ?? "" },
@@ -84,17 +84,6 @@ public class VueVbenAdminNavigationSeedContributor : NavigationSeedContributor
                 { "hideTab", false },
                 { "ignoreAuth", false },
             };
-            foreach (var prop in menu.ExtraProperties)
-            {
-                if (menuMeta.ContainsKey(prop.Key))
-                {
-                    menuMeta[prop.Key] = prop.Value;
-                }
-                else
-                {
-                    menuMeta.Add(prop.Key, prop.Value);
-                }
-            }
 
             var seedMenu = await SeedMenuAsync(
                 layout:         layout,
@@ -129,8 +118,7 @@ public class VueVbenAdminNavigationSeedContributor : NavigationSeedContributor
             {
                 continue;
             }
-
-            var menuMeta = new Dictionary<string, object>()
+            var menuMeta = new Dictionary<string, object>(item.ExtraProperties)
             {
                 { "title", item.DisplayName },
                 { "icon", item.Icon ?? "" },
@@ -138,17 +126,6 @@ public class VueVbenAdminNavigationSeedContributor : NavigationSeedContributor
                 { "hideTab", false },
                 { "ignoreAuth", false },
             };
-            foreach (var prop in item.ExtraProperties)
-            {
-                if (menuMeta.ContainsKey(prop.Key))
-                {
-                    menuMeta[prop.Key] = prop.Value;
-                }
-                else
-                {
-                    menuMeta.Add(prop.Key, prop.Value);
-                }
-            }
 
             var seedMenu = await SeedMenuAsync(
                 layout: layout,
@@ -189,6 +166,18 @@ public class VueVbenAdminNavigationSeedContributor : NavigationSeedContributor
         bool isPublic = false
         )
     {
+        var menuMeta = new Dictionary<string, object>();
+        foreach (var item in data.Items)
+        {
+            menuMeta[item.Name] = item.DefaultValue;
+        }
+        if (meta != null)
+        {
+            foreach (var item in meta)
+            {
+                menuMeta[item.Key] = item.Value;
+            }
+        }
         var menu = await RouteDataSeeder.SeedMenuAsync(
             layout,
             name,
@@ -200,19 +189,8 @@ public class VueVbenAdminNavigationSeedContributor : NavigationSeedContributor
             description,
             parentId,
             tenantId,
-            isPublic
-            );
-        foreach (var item in data.Items)
-        {
-            menu.SetProperty(item.Name, item.DefaultValue);
-        }
-        if (meta != null)
-        {
-            foreach (var item in meta)
-            {
-                menu.SetProperty(item.Key, item.Value);
-            }
-        }
+            isPublic,
+            menuMeta);
 
         if (roles != null)
         {
@@ -235,15 +213,17 @@ public class VueVbenAdminNavigationSeedContributor : NavigationSeedContributor
 
     private async Task<DataItem> SeedUIFrameworkDataAsync(Guid? tenantId)
     {
-        var data = await DataDictionaryDataSeeder
-            .SeedAsync(
-                "UI Framework",
-                CodeNumberGenerator.CreateCode(10),
-                "UI框架",
-                "UI Framework",
-                null,
-                tenantId,
-                true);
+        var data = new Data(
+            GuidGenerator.Create(),
+            "UI Framework",
+            CodeNumberGenerator.CreateCode(10),
+            "UI框架",
+            "UI Framework",
+            null,
+            tenantId)
+        {
+            IsStatic = true,
+        };
 
         data.AddItem(
             GuidGenerator,
@@ -253,6 +233,8 @@ public class VueVbenAdminNavigationSeedContributor : NavigationSeedContributor
             ValueType.String,
             Options.UI,
             isStatic: true);
+
+        await DataDictionaryDataSeeder.SeedAsync(data);
 
         return data.FindItem(Options.UI);
     }
@@ -275,15 +257,17 @@ public class VueVbenAdminNavigationSeedContributor : NavigationSeedContributor
 
     private async Task<Data> SeedLayoutDataAsync(Guid? tenantId)
     {
-        var data = await DataDictionaryDataSeeder
-            .SeedAsync(
-                Options.LayoutName,
-                CodeNumberGenerator.CreateCode(10),
-                "Vben Admin 布局约束",
-                "Vben Admin Layout Meta Dictionary",
-                null,
-                tenantId,
-                true);
+        var data = new Data(
+            GuidGenerator.Create(),
+            Options.LayoutName,
+            CodeNumberGenerator.CreateCode(10),
+            "Vben Admin 布局约束",
+            "Vben Admin Layout Meta Dictionary",
+            null,
+            tenantId)
+        {
+            IsStatic = true,
+        };
 
         data.AddItem(
             GuidGenerator,
@@ -445,6 +429,8 @@ public class VueVbenAdminNavigationSeedContributor : NavigationSeedContributor
             "false",
             ValueType.Boolean,
             "扩展的格式化frame，{token}: 在打开的iframe页面传递token请求头");
+
+        await DataDictionaryDataSeeder.SeedAsync(data);
 
         return data;
     }

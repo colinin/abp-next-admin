@@ -4,7 +4,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<AssemblyName>LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql</AssemblyName>
 		<PackageId>LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -12,6 +12,11 @@
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace />
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\Elsa\EntityFrameworkCore\PostgreSql\Migrations\Initial.sql" />
+		<EmbeddedResource Include="LINGYUN\Abp\Elsa\EntityFrameworkCore\PostgreSql\Migrations\Initial.sql" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.PostgreSql" />

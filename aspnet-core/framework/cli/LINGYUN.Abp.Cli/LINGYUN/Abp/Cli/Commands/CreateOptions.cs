@@ -21,11 +21,5 @@
             public const string Short = "nrp";
             public const string Long = "no-random-port";
         }
-
-        public static class Telemetry
-        {
-            public const string Short = "tm";
-            public const string Long = "telemetry";
-        }
     }
 }

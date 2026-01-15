@@ -14,14 +14,14 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 [Dependency(ReplaceServices = true)]
 public class EntityChangeStore : IEntityChangeStore, ITransientDependency
 {
-    protected IObjectMapper ObjectMapper { get; }
+    protected IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> ObjectMapper { get; }
     protected IAuditLogRepository AuditLogRepository { get; }
 
     public ILogger<EntityChangeStore> Logger { protected get; set; }
 
     public EntityChangeStore(
-        IObjectMapper objectMapper,
-        IAuditLogRepository auditLogRepository)
+        IAuditLogRepository auditLogRepository,
+        IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> objectMapper)
     {
         ObjectMapper = objectMapper;
         AuditLogRepository = auditLogRepository;
