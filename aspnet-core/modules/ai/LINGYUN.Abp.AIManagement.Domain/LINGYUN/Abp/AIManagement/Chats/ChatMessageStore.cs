@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.AI.Messages;
+﻿using LINGYUN.Abp.AI.Chats;
 using LINGYUN.Abp.AI.Models;
 using LINGYUN.Abp.AIManagement.Settings;
 using System;
@@ -10,23 +10,23 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Settings;
 
-namespace LINGYUN.Abp.AIManagement.Messages;
+namespace LINGYUN.Abp.AIManagement.Chats;
 
 [Dependency(ReplaceServices = true)]
-public class UserMessageStore : IUserMessageStore, ITransientDependency
+public class ChatMessageStore : IChatMessageStore, ITransientDependency
 {
     private readonly ICurrentTenant _currentTenant;
     private readonly IGuidGenerator _guidGenerator;
     private readonly ISettingProvider _settingProvider;
     private readonly IObjectMapper<AbpAIManagementDomainModule> _objectMapper;
-    private readonly IUserTextMessageRecordRepository _messageRecordRepository;
+    private readonly ITextChatMessageRecordRepository _messageRecordRepository;
 
-    public UserMessageStore(
+    public ChatMessageStore(
         ICurrentTenant currentTenant, 
         IGuidGenerator guidGenerator,
         ISettingProvider settingProvider,
         IObjectMapper<AbpAIManagementDomainModule> objectMapper,
-        IUserTextMessageRecordRepository messageRecordRepository)
+        ITextChatMessageRecordRepository messageRecordRepository)
     {
         _currentTenant = currentTenant;
         _guidGenerator = guidGenerator;
@@ -35,20 +35,21 @@ public class UserMessageStore : IUserMessageStore, ITransientDependency
         _messageRecordRepository = messageRecordRepository;
     }
 
-    public async virtual Task<IEnumerable<UserMessage>> GetHistoryMessagesAsync(string conversationId)
+    public async virtual Task<IEnumerable<ChatMessage>> GetHistoryMessagesAsync(string conversationId)
     {
-        var maxLatestHistoryMessagesToKeep = await _settingProvider.GetAsync(AIManagementSettingNames.UserMessage.MaxLatestHistoryMessagesToKeep, 0);
+        var maxLatestHistoryMessagesToKeep = await _settingProvider.GetAsync(
+            AIManagementSettingNames.ChatMessage.MaxLatestHistoryMessagesToKeep, 0);
         if (maxLatestHistoryMessagesToKeep < 1)
         {
-            return Array.Empty<UserMessage>();
+            return Array.Empty<ChatMessage>();
         }
 
         var userTextMessages = await _messageRecordRepository.GetHistoryMessagesAsync(conversationId, maxLatestHistoryMessagesToKeep);
 
-        return _objectMapper.Map<IEnumerable<UserTextMessageRecord>, IEnumerable<UserTextMessage>>(userTextMessages);
+        return _objectMapper.Map<IEnumerable<TextChatMessageRecord>, IEnumerable<TextChatMessage>>(userTextMessages);
     }
 
-    public async virtual Task<string> SaveMessageAsync(UserMessage message)
+    public async virtual Task<string> SaveMessageAsync(ChatMessage message)
     {
         var messageId = message.Id;
         if (messageId.IsNullOrWhiteSpace())
@@ -62,25 +63,27 @@ public class UserMessageStore : IUserMessageStore, ITransientDependency
         return messageId;
     }
 
-    protected async virtual Task StoreMessageAsync(Guid messageId, UserMessage message)
+    protected async virtual Task StoreMessageAsync(Guid messageId, ChatMessage message)
     {
         switch (message)
         {
-            case UserTextMessage textMessage:
+            case TextChatMessage textMessage:
                 await StoreUserTextMessageAsync(messageId, textMessage);
                 break;
         }
     }
 
-    protected async virtual Task StoreUserTextMessageAsync(Guid messageId, UserTextMessage textMessage)
+    protected async virtual Task StoreUserTextMessageAsync(Guid messageId, TextChatMessage textMessage)
     {
         var textMessageRecord = await _messageRecordRepository.FindAsync(messageId);
         if (textMessageRecord == null)
         {
-            textMessageRecord = new UserTextMessageRecord(
+            textMessageRecord = new TextChatMessageRecord(
                 messageId,
                 textMessage.Workspace,
                 textMessage.Content,
+                textMessage.Role,
+                textMessage.CreatedAt,
                 _currentTenant.Id);
 
             UpdateUserMessageRecord(textMessageRecord, textMessage);
@@ -89,7 +92,7 @@ public class UserMessageStore : IUserMessageStore, ITransientDependency
         }
         else
         {
-            textMessageRecord.WithContent(textMessage.Content);
+            textMessageRecord.SetContent(textMessage.Content);
 
             UpdateUserMessageRecord(textMessageRecord, textMessage);
 
@@ -97,15 +100,15 @@ public class UserMessageStore : IUserMessageStore, ITransientDependency
         }
     }
 
-    private static void UpdateUserMessageRecord(UserMessageRecord messageRecord, UserMessage message)
+    private static void UpdateUserMessageRecord(ChatMessageRecord messageRecord, ChatMessage message)
     {
         if (!message.ConversationId.IsNullOrWhiteSpace())
         {
-            messageRecord.WithConversationId(message.ConversationId);
+            messageRecord.SetConversationId(message.ConversationId);
         }
         if (!message.ReplyMessage.IsNullOrWhiteSpace())
         {
-            messageRecord.WithConversationId(message.ReplyMessage);
+            messageRecord.SetReply(message.ReplyMessage, message.ReplyAt);
         }
     }
 }

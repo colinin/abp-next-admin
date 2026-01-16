@@ -1,7 +1,11 @@
-﻿namespace LINGYUN.Abp.AI.Models;
+﻿using System.Text;
+
+namespace LINGYUN.Abp.AI.Models;
 public class TokenUsageInfo
 {
     public string Workspace { get; }
+    public string? MessageId { get; private set; }
+    public string? ConversationId { get; private set; }
     public long? InputTokenCount { get; set; }
     public long? OutputTokenCount { get; set; }
     public long? TotalTokenCount { get; set; }
@@ -10,5 +14,33 @@ public class TokenUsageInfo
     public TokenUsageInfo(string workspace)
     {
         Workspace = workspace;
+    }
+    public virtual TokenUsageInfo WithMessageId(string id)
+    {
+        MessageId = id;
+        return this;
+    }
+
+    public virtual TokenUsageInfo WithConversationId(string? conversationId)
+    {
+        ConversationId = conversationId;
+        return this;
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine("---------------------- TokenUsage Begin ----------------------");
+        sb.AppendLine($"====== Workspace           - {Workspace}");
+        sb.AppendLine($"====== MessageId           - {MessageId}");
+        sb.AppendLine($"====== ConversationId      - {ConversationId}");
+        sb.AppendLine($"====== InputTokenCount     - {InputTokenCount}");
+        sb.AppendLine($"====== OutputTokenCount    - {OutputTokenCount}");
+        sb.AppendLine($"====== TotalTokenCount     - {TotalTokenCount}");
+        sb.AppendLine($"====== ReasoningTokenCount - {ReasoningTokenCount}");
+        sb.AppendLine("---------------------- TokenUsage End ----------------------");
+
+        return sb.ToString();
     }
 }

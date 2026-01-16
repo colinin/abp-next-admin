@@ -8,8 +8,8 @@ namespace LINGYUN.Abp.AIManagement;
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 [MapExtraProperties(DefinitionChecks = MappingPropertyDefinitionChecks.None)]
-public partial class UserTextMessageRecordToUserTextMessageMapper : MapperBase<UserTextMessageRecord, UserTextMessage>
+public partial class UserTextMessageRecordToUserTextMessageMapper : MapperBase<UserTextMessageRecord, TextChatMessage>
 {
-    public override partial UserTextMessage Map(UserTextMessageRecord source);
-    public override partial void Map(UserTextMessageRecord source, UserTextMessage destination);
+    public override partial TextChatMessage Map(UserTextMessageRecord source);
+    public override partial void Map(UserTextMessageRecord source, TextChatMessage destination);
 }

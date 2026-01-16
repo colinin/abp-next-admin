@@ -9,7 +9,7 @@ public class AIManagementSettingDefinitionProvider : SettingDefinitionProvider
     {
         context.Add(
             new SettingDefinition(
-                AIManagementSettingNames.UserMessage.MaxLatestHistoryMessagesToKeep,
+                AIManagementSettingNames.ChatMessage.MaxLatestHistoryMessagesToKeep,
                 defaultValue: "5",
                 displayName: L("DisplayName:MaxLatestHistoryMessagesToKeep"),
                 description: L("Description:MaxLatestHistoryMessagesToKeep")));

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LINGYUN.Abp.AI.Models;
-internal class ChatMessageInfo
+namespace LINGYUN.Abp.AIManagement.Tokens;
+public class TokenUsageRecord
 {
 }
