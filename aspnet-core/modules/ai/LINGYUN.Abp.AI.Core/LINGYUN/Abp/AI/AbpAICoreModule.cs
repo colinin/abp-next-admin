@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AI.Localization;
+﻿using LINGYUN.Abp.AI.Internal;
+using LINGYUN.Abp.AI.Localization;
 using LINGYUN.Abp.AI.Workspaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -38,7 +39,10 @@ public class AbpAICoreModule : AbpModule
         Configure<AbpAICoreOptions>(options =>
         {
             options.ChatClientProviders.Add<OpenAIChatClientProvider>();
+            options.ChatClientProviders.Add<DeepSeekChatClientProvider>();
+
             options.KernelProviders.Add<OpenAIKernelProvider>();
+            options.KernelProviders.Add<DeepSeekKernelProvider>();
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>

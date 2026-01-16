@@ -25,15 +25,6 @@ public class InMemoryTokenUsageStore : ITokenUsageStore
                 ReasoningTokenCount = usageInfo.Sum(x => x.ReasoningTokenCount),
                 CachedInputTokenCount = usageInfo.Sum(x => x.CachedInputTokenCount),
             };
-            tokenUsageInfo.AdditionalCounts ??= new Dictionary<string, long>();
-            foreach (var item in usageInfo)
-            {
-                if (item.AdditionalCounts == null)
-                {
-                    continue;
-                }
-                tokenUsageInfo.AdditionalCounts.AddIfNotContains(item.AdditionalCounts);
-            }
 
             if (!_tokenUsageCache.ContainsKey(usageInfo.Key))
             {

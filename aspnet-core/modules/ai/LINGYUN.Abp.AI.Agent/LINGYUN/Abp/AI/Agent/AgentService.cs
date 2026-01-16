@@ -56,11 +56,11 @@ public class AgentService : IAgentService, IScopedDependency
 
             foreach (var chatMessage in historyMessages)
             {
-                messages.Add(new ChatMessage(ChatRole.System, chatMessage.Content));
+                messages.Add(new ChatMessage(ChatRole.System, chatMessage.GetMessagePrompt()));
             }
         }
 
-        messages.Add(new ChatMessage(ChatRole.User, message.Content));
+        messages.Add(new ChatMessage(ChatRole.User, message.GetMessagePrompt()));
 
         return messages;
     }
@@ -84,7 +84,6 @@ public class AgentService : IAgentService, IScopedDependency
                     TotalTokenCount = usage.Details.TotalTokenCount,
                     CachedInputTokenCount = usage.Details.CachedInputTokenCount,
                     InputTokenCount = usage.Details.InputTokenCount,
-                    AdditionalCounts = usage.Details.AdditionalCounts,
                     OutputTokenCount = usage.Details.OutputTokenCount,
                     ReasoningTokenCount = usage.Details.ReasoningTokenCount,
                 });

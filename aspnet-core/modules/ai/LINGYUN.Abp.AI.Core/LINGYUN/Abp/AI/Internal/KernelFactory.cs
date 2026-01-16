@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.AI.Workspaces;
-using Microsoft.Extensions.AI;
+using Microsoft.SemanticKernel;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -8,54 +8,53 @@ using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
 
-namespace LINGYUN.Abp.AI;
-public class ChatClientFactory : IChatClientFactory, IScopedDependency
+namespace LINGYUN.Abp.AI.Internal;
+public class KernelFactory : IKernelFactory, IScopedDependency
 {
     protected ISimpleStateCheckerManager<WorkspaceDefinition> StateCheckerManager { get; }
     protected IWorkspaceDefinitionManager WorkspaceDefinitionManager { get; }
-    protected IChatClientProviderManager ChatClientProviderManager { get; }
+    protected IKernelProviderManager KernelProviderManager { get; }
     protected IServiceProvider ServiceProvider { get; }
 
-    public ChatClientFactory(
+    public KernelFactory(
         ISimpleStateCheckerManager<WorkspaceDefinition> stateCheckerManager,
         IWorkspaceDefinitionManager workspaceDefinitionManager,
-        IChatClientProviderManager chatClientProviderManager,
+        IKernelProviderManager kernelProviderManager,
         IServiceProvider serviceProvider)
     {
         StateCheckerManager = stateCheckerManager;
         WorkspaceDefinitionManager = workspaceDefinitionManager;
-        ChatClientProviderManager = chatClientProviderManager;
+        KernelProviderManager = kernelProviderManager;
         ServiceProvider = serviceProvider;
     }
 
-    public async virtual Task<IChatClient> CreateAsync<TWorkspace>()
+    public async virtual Task<Kernel> CreateAsync<TWorkspace>()
     {
         var workspace = WorkspaceNameAttribute.GetWorkspaceName<TWorkspace>();
 
-        var chatClientAccessorType = typeof(IChatClientAccessor<>).MakeGenericType(typeof(TWorkspace));
-        var chatClientAccessor = ServiceProvider.GetService(chatClientAccessorType);
-        if (chatClientAccessor != null && 
-            chatClientAccessor is IChatClientAccessor accessor && 
-            accessor.ChatClient != null)
+        var kernelAccessorType = typeof(IKernelAccessor<>).MakeGenericType(typeof(TWorkspace));
+        var kernelAccessor = ServiceProvider.GetService(kernelAccessorType);
+        if (kernelAccessor != null && 
+            kernelAccessor is IKernelAccessor accessor 
+            && accessor.Kernel != null)
         {
-            return accessor.ChatClient;
+            return accessor.Kernel;
         }
-
         return await CreateAsync(workspace);
     }
 
-    public async virtual Task<IChatClient> CreateAsync(string workspace)
+    public async virtual Task<Kernel> CreateAsync(string workspace)
     {
         var workspaceDefine = await WorkspaceDefinitionManager.GetAsync(workspace);
 
         await CheckWorkspaceStateAsync(workspaceDefine);
 
-        return await CreateChatClientAsync(workspaceDefine);
+        return await CreateKernelAsync(workspaceDefine);
     }
 
-    protected async virtual Task<IChatClient> CreateChatClientAsync(WorkspaceDefinition workspace)
+    protected async virtual Task<Kernel> CreateKernelAsync(WorkspaceDefinition workspace)
     {
-        foreach (var provider in ChatClientProviderManager.Providers)
+        foreach (var provider in KernelProviderManager.Providers)
         {
             if (!string.Equals(provider.Name, workspace.Provider))
             {
@@ -65,9 +64,8 @@ public class ChatClientFactory : IChatClientFactory, IScopedDependency
             return await provider.CreateAsync(workspace);
         }
 
-        throw new AbpException($"The ChatClient provider implementation named {workspace.Provider} was not found!");
+        throw new AbpException($"The Kernel provider implementation named {workspace.Provider} was not found!");
     }
-
     protected async virtual Task CheckWorkspaceStateAsync(WorkspaceDefinition workspace)
     {
         if (!await StateCheckerManager.IsEnabledAsync(workspace))

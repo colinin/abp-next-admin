@@ -7,7 +7,7 @@ using System.Linq;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.AI;
+namespace LINGYUN.Abp.AI.Internal;
 public class ChatClientProviderManager : IChatClientProviderManager, ISingletonDependency
 {
     public List<IChatClientProvider> Providers => _lazyProviders.Value;

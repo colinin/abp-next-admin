@@ -1,12 +1,6 @@
-﻿using System.Linq;
-
-namespace LINGYUN.Abp.AI.Models;
-public class UserMessage
+﻿namespace LINGYUN.Abp.AI.Models;
+public abstract class UserMessage
 {
-    /// <summary>
-    /// 消息内容
-    /// </summary>
-    public string Content { get; }
     /// <summary>
     /// 工作区
     /// </summary>
@@ -29,44 +23,31 @@ public class UserMessage
     /// AI回复消息
     /// </summary>
     public string ReplyMessage { get; private set; }
-    /// <summary>
-    /// 媒体附件
-    /// </summary>
-    /// <remarks>
-    /// 暂未实现
-    /// </remarks>
-    public MediaMessage[]? Medias { get; private set; }
-    public UserMessage(
-        string workspace,
-        string content)
+    protected UserMessage(string workspace)
     {
         Workspace = workspace;
-        Content = content;
     }
 
-    public UserMessage WithMessageId(string id)
+    public virtual UserMessage WithMessageId(string id)
     {
         Id = id;
         return this;
     }
 
-    public UserMessage WithConversationId(string conversationId)
+    public virtual UserMessage WithConversationId(string conversationId)
     {
         ConversationId = conversationId;
         return this;
     }
 
-    public UserMessage WithMedia(MediaMessage media)
-    {
-        Medias ??= [];
-        Medias = Medias.Union([media]).ToArray();
-
-        return this;
-    }
-
-    public UserMessage WithReply(string replyMessage)
+    public virtual UserMessage WithReply(string replyMessage)
     {
         ReplyMessage = replyMessage;
         return this;
+    }
+
+    public virtual string GetMessagePrompt()
+    {
+        return string.Empty;
     }
 }

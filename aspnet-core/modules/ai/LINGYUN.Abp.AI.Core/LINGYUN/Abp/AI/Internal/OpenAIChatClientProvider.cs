@@ -6,12 +6,12 @@ using System.ClientModel;
 using System.Threading.Tasks;
 using Volo.Abp;
 
-namespace LINGYUN.Abp.AI;
+namespace LINGYUN.Abp.AI.Internal;
 public class OpenAIChatClientProvider : ChatClientProvider
 {
-    private const string DefaultEndpoint = "https://api.openai.com/v1";
-    public const string ProviderName = "OpenAI";
+    protected virtual string DefaultEndpoint => "https://api.openai.com/v1";
 
+    public const string ProviderName = "OpenAI";
     public override string Name => ProviderName;
     public OpenAIChatClientProvider(IServiceProvider serviceProvider) 
         : base(serviceProvider)

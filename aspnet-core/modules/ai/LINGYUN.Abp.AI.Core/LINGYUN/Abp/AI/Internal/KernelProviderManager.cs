@@ -6,7 +6,7 @@ using System.Linq;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.AI;
+namespace LINGYUN.Abp.AI.Internal;
 public class KernelProviderManager : IKernelProviderManager, ISingletonDependency
 {
     public List<IKernelProvider> Providers => _lazyProviders.Value;
