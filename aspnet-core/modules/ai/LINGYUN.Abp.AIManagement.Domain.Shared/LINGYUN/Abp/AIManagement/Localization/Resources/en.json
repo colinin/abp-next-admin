@@ -1,5 +1,7 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "DisplayName:MaxLatestHistoryMessagesToKeep": "Carry the recent conversation records",
+    "Description:MaxLatestHistoryMessagesToKeep": "When a user initiates a conversation with a large model, the upper limit of the user's recent conversation history that is carried along."
   }
 }

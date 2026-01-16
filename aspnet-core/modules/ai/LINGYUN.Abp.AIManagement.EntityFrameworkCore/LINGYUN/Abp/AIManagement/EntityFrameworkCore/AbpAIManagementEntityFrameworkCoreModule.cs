@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AIManagement.Workspaces;
+﻿using LINGYUN.Abp.AIManagement.Messages;
+using LINGYUN.Abp.AIManagement.Workspaces;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
@@ -15,6 +16,8 @@ public class AbpAIManagementEntityFrameworkCoreModule : AbpModule
         context.Services.AddAbpDbContext<AIManagementDbContext>(options =>
         {
             options.AddDefaultRepositories<IAIManagementDbContext>();
+
+            options.AddRepository<UserTextMessageRecord, EfCoreUserTextMessageRecordRepository>();
 
             options.AddRepository<WorkspaceDefinitionRecord, EfCoreWorkspaceDefinitionRecordRepository>();
         });

@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using LINGYUN.Abp.AIManagement.Messages;
 using LINGYUN.Abp.AIManagement.Workspaces;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
@@ -11,6 +12,21 @@ public static class AIManagementDbContextModelBuilderExtensions
         [NotNull] this ModelBuilder builder)
     {
         Check.NotNull(builder, nameof(builder));
+
+        builder.Entity<UserTextMessageRecord>(b =>
+        {
+            b.ToTable(AbpAIManagementDbProperties.DbTablePrefix + "UserTextMessages", AbpAIManagementDbProperties.DbSchema);
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.Workspace).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxNameLength).IsRequired();
+            b.Property(x => x.ConversationId).HasMaxLength(UserMessageRecordConsts.MaxConversationIdLength);
+            b.Property(x => x.Content).HasMaxLength(UserTextMessageRecordConsts.MaxContentLength).IsRequired();
+
+            b.HasIndex(x => new { x.TenantId, x.ConversationId });
+
+            b.ApplyObjectExtensionMappings();
+        });
 
         if (builder.IsHostDatabase())
         {
