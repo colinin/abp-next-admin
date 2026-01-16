@@ -12,32 +12,30 @@ public static class AIManagementDbContextModelBuilderExtensions
     {
         Check.NotNull(builder, nameof(builder));
 
-        if (builder.IsTenantOnlyDatabase())
+        if (builder.IsHostDatabase())
         {
-            return;
+            builder.Entity<WorkspaceDefinitionRecord>(b =>
+            {
+                b.ToTable(AbpAIManagementDbProperties.DbTablePrefix + "WorkspaceDefinitions", AbpAIManagementDbProperties.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Name).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxNameLength).IsRequired();
+                b.Property(x => x.Provider).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxProviderLength).IsRequired();
+                b.Property(x => x.ModelName).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxModelNameLength).IsRequired();
+                b.Property(x => x.DisplayName).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
+                b.Property(x => x.Description).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxDescriptionLength);
+                b.Property(x => x.ApiKey).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxApiKeyLength);
+                b.Property(x => x.ApiBaseUrl).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxApiKeyLength);
+                b.Property(x => x.SystemPrompt).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxSystemPromptLength);
+                b.Property(x => x.Instructions).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxInstructionsLength);
+                b.Property(x => x.StateCheckers).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxStateCheckersLength);
+
+                b.HasIndex(x => new { x.Name }).IsUnique();
+
+                b.ApplyObjectExtensionMappings();
+            });
         }
-
-        builder.Entity<WorkspaceDefinitionRecord>(b =>
-        {
-            b.ToTable(AbpAIManagementDbProperties.DbTablePrefix + "WorkspaceDefinitions", AbpAIManagementDbProperties.DbSchema);
-
-            b.ConfigureByConvention();
-
-            b.Property(x => x.Name).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxNameLength).IsRequired();
-            b.Property(x => x.Provider).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxProviderLength).IsRequired();
-            b.Property(x => x.ModelName).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxModelNameLength).IsRequired();
-            b.Property(x => x.DisplayName).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
-            b.Property(x => x.Description).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxDescriptionLength);
-            b.Property(x => x.ApiKey).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxApiKeyLength);
-            b.Property(x => x.ApiBaseUrl).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxApiKeyLength);
-            b.Property(x => x.SystemPrompt).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxSystemPromptLength);
-            b.Property(x => x.Instructions).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxInstructionsLength);
-            b.Property(x => x.StateCheckers).HasMaxLength(WorkspaceDefinitionRecordConsts.MaxStateCheckersLength);
-
-            b.HasIndex(x => new { x.Name }).IsUnique();
-
-            b.ApplyObjectExtensionMappings();
-        });
 
         builder.TryConfigureObjectExtensions<AIManagementDbContext>();
     }
