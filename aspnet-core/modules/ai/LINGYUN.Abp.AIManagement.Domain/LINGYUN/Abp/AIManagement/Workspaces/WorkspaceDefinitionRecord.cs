@@ -4,7 +4,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace LINGYUN.Abp.AIManagement.Workspaces;
-public class Workspace : AuditedAggregateRoot<Guid>
+public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
 {
     public string Name { get; private set; }
 
@@ -36,13 +36,13 @@ public class Workspace : AuditedAggregateRoot<Guid>
 
     public string? StateCheckers { get; set; }
 
-    protected Workspace()
+    protected WorkspaceDefinitionRecord()
     {
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
     }
 
-    public Workspace(
+    public WorkspaceDefinitionRecord(
         Guid id,
         string name, 
         string provider,
@@ -60,16 +60,16 @@ public class Workspace : AuditedAggregateRoot<Guid>
         string? stateCheckers = null)
         : base(id)
     {
-        Name = Check.NotNullOrWhiteSpace(name, nameof(name), WorkspaceConsts.MaxNameLength);
-        Provider = Check.NotNullOrWhiteSpace(provider, nameof(provider), WorkspaceConsts.MaxProviderLength);
-        ModelName = Check.NotNullOrWhiteSpace(modelName, nameof(modelName), WorkspaceConsts.MaxModelNameLength);
-        DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), WorkspaceConsts.MaxDisplayNameLength);
-        Description = Check.Length(description, nameof(description), WorkspaceConsts.MaxDescriptionLength);
-        ApiKey = Check.Length(apiKey, nameof(apiKey), WorkspaceConsts.MaxApiKeyLength);
-        ApiBaseUrl = Check.Length(apiBaseUrl, nameof(apiBaseUrl), WorkspaceConsts.MaxApiBaseUrlLength);
-        SystemPrompt = Check.Length(systemPrompt, nameof(systemPrompt), WorkspaceConsts.MaxSystemPromptLength);
-        Instructions = Check.Length(instructions, nameof(instructions), WorkspaceConsts.MaxInstructionsLength);
-        StateCheckers = Check.Length(stateCheckers, nameof(stateCheckers), WorkspaceConsts.MaxStateCheckersLength);
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name), WorkspaceDefinitionRecordConsts.MaxNameLength);
+        Provider = Check.NotNullOrWhiteSpace(provider, nameof(provider), WorkspaceDefinitionRecordConsts.MaxProviderLength);
+        ModelName = Check.NotNullOrWhiteSpace(modelName, nameof(modelName), WorkspaceDefinitionRecordConsts.MaxModelNameLength);
+        DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), WorkspaceDefinitionRecordConsts.MaxDisplayNameLength);
+        Description = Check.Length(description, nameof(description), WorkspaceDefinitionRecordConsts.MaxDescriptionLength);
+        ApiKey = Check.Length(apiKey, nameof(apiKey), WorkspaceDefinitionRecordConsts.MaxApiKeyLength);
+        ApiBaseUrl = Check.Length(apiBaseUrl, nameof(apiBaseUrl), WorkspaceDefinitionRecordConsts.MaxApiBaseUrlLength);
+        SystemPrompt = Check.Length(systemPrompt, nameof(systemPrompt), WorkspaceDefinitionRecordConsts.MaxSystemPromptLength);
+        Instructions = Check.Length(instructions, nameof(instructions), WorkspaceDefinitionRecordConsts.MaxInstructionsLength);
+        StateCheckers = Check.Length(stateCheckers, nameof(stateCheckers), WorkspaceDefinitionRecordConsts.MaxStateCheckersLength);
         Temperature = temperature;
         MaxOutputTokens = maxOutputTokens;
         FrequencyPenalty = frequencyPenalty;
@@ -80,7 +80,7 @@ public class Workspace : AuditedAggregateRoot<Guid>
         this.SetDefaultsForExtraProperties();
     }
 
-    public bool HasSameData(Workspace otherWorkspace)
+    public bool HasSameData(WorkspaceDefinitionRecord otherWorkspace)
     {
         if (Name != otherWorkspace.Name)
         {
@@ -165,7 +165,7 @@ public class Workspace : AuditedAggregateRoot<Guid>
         return true;
     }
 
-    public void Patch(Workspace otherWorkspace)
+    public void Patch(WorkspaceDefinitionRecord otherWorkspace)
     {
         if (Name != otherWorkspace.Name)
         {

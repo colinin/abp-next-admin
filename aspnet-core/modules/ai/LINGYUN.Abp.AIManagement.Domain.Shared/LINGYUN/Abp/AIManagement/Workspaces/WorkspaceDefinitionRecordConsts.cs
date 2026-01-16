@@ -1,5 +1,5 @@
 ﻿namespace LINGYUN.Abp.AIManagement.Workspaces;
-public static class WorkspaceConsts
+public static class WorkspaceDefinitionRecordConsts
 {
     public static int MaxNameLength { get; set; } = 64;
     public static int MaxProviderLength { get; set; } = 20;

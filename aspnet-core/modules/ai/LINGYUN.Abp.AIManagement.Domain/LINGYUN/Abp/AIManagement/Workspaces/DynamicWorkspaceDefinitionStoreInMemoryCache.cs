@@ -30,7 +30,7 @@ public class DynamicWorkspaceDefinitionStoreInMemoryCache : IDynamicWorkspaceDef
         WorkspaceDefinitions = new Dictionary<string, WorkspaceDefinition>();
     }
 
-    public Task FillAsync(List<Workspace> workspaces)
+    public Task FillAsync(List<WorkspaceDefinitionRecord> workspaces)
     {
         WorkspaceDefinitions.Clear();
 

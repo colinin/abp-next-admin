@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
 namespace LINGYUN.Abp.AIManagement.Workspaces;
-public interface IWorkspaceRepository : IBasicRepository<Workspace, Guid>
+public interface IWorkspaceDefinitionRecordRepository : IBasicRepository<WorkspaceDefinitionRecord, Guid>
 {
-    Task<Workspace?> FindByNameAsync(
+    Task<WorkspaceDefinitionRecord?> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default);
 }

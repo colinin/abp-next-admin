@@ -16,7 +16,7 @@ public class AbpAIManagementEntityFrameworkCoreModule : AbpModule
         {
             options.AddDefaultRepositories<IAIManagementDbContext>();
 
-            options.AddRepository<Workspace, EfCoreWorkspaceRepository>();
+            options.AddRepository<WorkspaceDefinitionRecord, EfCoreWorkspaceDefinitionRecordRepository>();
         });
     }
 }

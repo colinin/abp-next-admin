@@ -16,7 +16,7 @@ namespace LINGYUN.Abp.AIManagement.Workspaces;
 [Dependency(ReplaceServices = true)]
 public class DynamicWorkspaceDefinitionStore : IDynamicWorkspaceDefinitionStore, ITransientDependency
 {
-    protected IWorkspaceRepository WorkspaceRepository { get; }
+    protected IWorkspaceDefinitionRecordRepository WorkspaceDefinitionRecordRepository { get; }
     protected IWorkspaceDefinitionSerializer WorkspaceDefinitionSerializer { get; }
     protected IDynamicWorkspaceDefinitionStoreInMemoryCache StoreCache { get; }
     protected IDistributedCache DistributedCache { get; }
@@ -25,7 +25,7 @@ public class DynamicWorkspaceDefinitionStore : IDynamicWorkspaceDefinitionStore,
     protected AbpDistributedCacheOptions CacheOptions { get; }
 
     public DynamicWorkspaceDefinitionStore(
-        IWorkspaceRepository workspaceRepository,
+        IWorkspaceDefinitionRecordRepository workspaceRepository,
         IWorkspaceDefinitionSerializer workspaceDefinitionSerializer,
         IDynamicWorkspaceDefinitionStoreInMemoryCache storeCache,
         IDistributedCache distributedCache,
@@ -33,7 +33,7 @@ public class DynamicWorkspaceDefinitionStore : IDynamicWorkspaceDefinitionStore,
         IOptions<AIManagementOptions> aiManagementOptions,
         IAbpDistributedLock distributedLock)
     {
-        WorkspaceRepository = workspaceRepository;
+        WorkspaceDefinitionRecordRepository = workspaceRepository;
         WorkspaceDefinitionSerializer = workspaceDefinitionSerializer;
         StoreCache = storeCache;
         DistributedCache = distributedCache;
@@ -103,7 +103,7 @@ public class DynamicWorkspaceDefinitionStore : IDynamicWorkspaceDefinitionStore,
 
     protected virtual async Task UpdateInMemoryStoreCache()
     {
-        var workspaces = await WorkspaceRepository.GetListAsync();
+        var workspaces = await WorkspaceDefinitionRecordRepository.GetListAsync();
 
         await StoreCache.FillAsync(workspaces);
     }

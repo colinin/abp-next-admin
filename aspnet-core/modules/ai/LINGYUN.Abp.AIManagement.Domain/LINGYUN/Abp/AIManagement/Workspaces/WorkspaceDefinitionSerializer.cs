@@ -25,9 +25,9 @@ public class WorkspaceDefinitionSerializer : IWorkspaceDefinitionSerializer, ITr
         LocalizableStringSerializer = localizableStringSerializer;
     }
 
-    public async virtual Task<Workspace[]> SerializeAsync(IEnumerable<WorkspaceDefinition> definitions)
+    public async virtual Task<WorkspaceDefinitionRecord[]> SerializeAsync(IEnumerable<WorkspaceDefinition> definitions)
     {
-        var records = new List<Workspace>();
+        var records = new List<WorkspaceDefinitionRecord>();
         foreach (var workspaceDef in definitions)
         {
             records.Add(await SerializeAsync(workspaceDef));
@@ -36,11 +36,11 @@ public class WorkspaceDefinitionSerializer : IWorkspaceDefinitionSerializer, ITr
         return records.ToArray();
     }
 
-    public virtual Task<Workspace> SerializeAsync(WorkspaceDefinition definition)
+    public virtual Task<WorkspaceDefinitionRecord> SerializeAsync(WorkspaceDefinition definition)
     {
         using (CultureHelper.Use(CultureInfo.InvariantCulture))
         {
-            var workspace = new Workspace(
+            var workspace = new WorkspaceDefinitionRecord(
                 GuidGenerator.Create(),
                 definition.Name,
                 definition.Provider,

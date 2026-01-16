@@ -22,7 +22,7 @@ namespace LINGYUN.Abp.AIManagement.Workspaces;
 public class StaticWorkspaceSaver : IStaticWorkspaceSaver, ITransientDependency
 {
     protected IStaticWorkspaceDefinitionStore StaticStore { get; }
-    protected IWorkspaceRepository WorkspaceRepository { get; }
+    protected IWorkspaceDefinitionRecordRepository WorkspaceRepository { get; }
     protected IWorkspaceDefinitionSerializer WorkspaceSerializer { get; }
     protected IDistributedCache Cache { get; }
     protected IApplicationInfoAccessor ApplicationInfoAccessor { get; }
@@ -35,7 +35,7 @@ public class StaticWorkspaceSaver : IStaticWorkspaceSaver, ITransientDependency
 
     public StaticWorkspaceSaver(
         IStaticWorkspaceDefinitionStore staticStore,
-        IWorkspaceRepository workspaceRepository,
+        IWorkspaceDefinitionRecordRepository workspaceRepository,
         IWorkspaceDefinitionSerializer workspaceSerializer,
         IDistributedCache cache,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
@@ -140,10 +140,10 @@ public class StaticWorkspaceSaver : IStaticWorkspaceSaver, ITransientDependency
         );
     }
 
-    private async Task<bool> UpdateChangedWorkspacesAsync(Workspace[] workspaces)
+    private async Task<bool> UpdateChangedWorkspacesAsync(WorkspaceDefinitionRecord[] workspaces)
     {
-        var newRecords = new List<Workspace>();
-        var changedRecords = new List<Workspace>();
+        var newRecords = new List<WorkspaceDefinitionRecord>();
+        var changedRecords = new List<WorkspaceDefinitionRecord>();
 
         var workspaceRecordsInDatabase = (await WorkspaceRepository.GetListAsync()).ToDictionary(x => x.Name);
 
@@ -169,7 +169,7 @@ public class StaticWorkspaceSaver : IStaticWorkspaceSaver, ITransientDependency
         }
 
         /* Deleted */
-        var deletedRecords = new List<Workspace>();
+        var deletedRecords = new List<WorkspaceDefinitionRecord>();
 
         if (AIOptions.DeletedWorkspaces.Any())
         {
@@ -214,7 +214,7 @@ public class StaticWorkspaceSaver : IStaticWorkspaceSaver, ITransientDependency
         return $"{CacheOptions.KeyPrefix}_AbpInMemoryWorkspaceCacheStamp";
     }
 
-    private string CalculateHash(Workspace[] workspaces, IEnumerable<string> deletedWorkspaces)
+    private string CalculateHash(WorkspaceDefinitionRecord[] workspaces, IEnumerable<string> deletedWorkspaces)
     {
         var jsonSerializerOptions = new JsonSerializerOptions
         {
@@ -222,7 +222,7 @@ public class StaticWorkspaceSaver : IStaticWorkspaceSaver, ITransientDependency
             {
                 Modifiers =
                 {
-                    new AbpIgnorePropertiesModifiers<Workspace, Guid>().CreateModifyAction(x => x.Id),
+                    new AbpIgnorePropertiesModifiers<WorkspaceDefinitionRecord, Guid>().CreateModifyAction(x => x.Id),
                 }
             }
         };

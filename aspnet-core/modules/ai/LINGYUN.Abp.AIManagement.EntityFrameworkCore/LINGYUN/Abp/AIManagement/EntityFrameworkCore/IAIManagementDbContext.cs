@@ -8,5 +8,5 @@ namespace LINGYUN.Abp.AIManagement.EntityFrameworkCore;
 [ConnectionStringName(AbpAIManagementDbProperties.ConnectionStringName)]
 public interface IAIManagementDbContext : IEfCoreDbContext
 {
-    DbSet<Workspace> Workspaces { get; }
+    DbSet<WorkspaceDefinitionRecord> Workspaces { get; }
 }

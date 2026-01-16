@@ -14,7 +14,7 @@ public interface IDynamicWorkspaceDefinitionStoreInMemoryCache
 
     DateTime? LastCheckTime { get; set; }
 
-    Task FillAsync(List<Workspace> permissions);
+    Task FillAsync(List<WorkspaceDefinitionRecord> permissions);
 
     WorkspaceDefinition? GetWorkspaceOrNull(string name);
 
