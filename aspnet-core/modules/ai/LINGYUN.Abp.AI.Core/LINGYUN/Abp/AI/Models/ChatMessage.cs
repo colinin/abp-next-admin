@@ -8,7 +8,7 @@ public abstract class ChatMessage
 
     public string? Id { get; private set; }
 
-    public string? ConversationId { get; private set; }
+    public Guid? ConversationId { get; private set; }
 
     public string? ReplyMessage { get; private set; }
 
@@ -33,7 +33,7 @@ public abstract class ChatMessage
         return this;
     }
 
-    public virtual ChatMessage WithConversationId(string conversationId)
+    public virtual ChatMessage WithConversationId(Guid conversationId)
     {
         ConversationId = conversationId;
         return this;

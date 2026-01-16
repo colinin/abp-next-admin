@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.AI.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,5 +8,5 @@ public interface IChatMessageStore
 {
     Task<string> SaveMessageAsync(ChatMessage message);
 
-    Task<IEnumerable<ChatMessage>> GetHistoryMessagesAsync(string conversationId);
+    Task<IEnumerable<ChatMessage>> GetHistoryMessagesAsync(Guid conversationId);
 }

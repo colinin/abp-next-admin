@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.AI;
 using System;
-using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
@@ -16,7 +15,7 @@ public abstract class ChatMessageRecord : AuditedAggregateRoot<Guid>, IMultiTena
 
     public DateTime CreatedAt { get; private set; }
 
-    public string? ConversationId { get; private set; }
+    public Guid? ConversationId { get; private set; }
 
     public string? ReplyMessage { get; private set; }
 
@@ -42,9 +41,9 @@ public abstract class ChatMessageRecord : AuditedAggregateRoot<Guid>, IMultiTena
         TenantId = tenantId;
     }
 
-    public virtual ChatMessageRecord SetConversationId(string conversationId)
+    public virtual ChatMessageRecord SetConversationId(Guid conversationId)
     {
-        ConversationId = Check.NotNullOrWhiteSpace(conversationId, nameof(conversationId), ChatMessageRecordConsts.MaxConversationIdLength);
+        ConversationId = conversationId;
         return this;
     }
 

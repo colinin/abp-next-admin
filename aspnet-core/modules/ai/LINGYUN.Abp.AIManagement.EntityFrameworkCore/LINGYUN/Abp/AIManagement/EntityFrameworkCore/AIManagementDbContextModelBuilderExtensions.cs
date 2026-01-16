@@ -27,8 +27,6 @@ public static class AIManagementDbContextModelBuilderExtensions
                 .HasMaxLength(ChatMessageRecordConsts.MaxChatRoleLength)
                 .HasConversion(new ChatRoleValueConverter())
                 .IsRequired();
-            b.Property(x => x.ConversationId)
-                .HasMaxLength(ChatMessageRecordConsts.MaxConversationIdLength);
             b.Property(x => x.Content)
                 .HasMaxLength(TextChatMessageRecordConsts.MaxContentLength)
                 .IsRequired();

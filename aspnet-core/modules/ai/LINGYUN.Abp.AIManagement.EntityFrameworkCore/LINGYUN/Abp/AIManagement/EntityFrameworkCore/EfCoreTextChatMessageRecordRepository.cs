@@ -18,7 +18,7 @@ public class EfCoreTextChatMessageRecordRepository : EfCoreRepository<IAIManagem
     }
 
     public async virtual Task<IEnumerable<TextChatMessageRecord>> GetHistoryMessagesAsync(
-        string conversationId,
+        Guid conversationId,
         int maxResultCount = 0, 
         CancellationToken cancellationToken = default)
     {

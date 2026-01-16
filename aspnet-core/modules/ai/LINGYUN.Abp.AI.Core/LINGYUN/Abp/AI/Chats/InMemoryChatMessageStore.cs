@@ -14,7 +14,7 @@ public class InMemoryChatMessageStore : IChatMessageStore
 {
     private static readonly ConcurrentDictionary<string, List<ChatMessage>> _userMessageCache = new ConcurrentDictionary<string, List<ChatMessage>>();
 
-    public Task<IEnumerable<ChatMessage>> GetHistoryMessagesAsync(string conversationId)
+    public Task<IEnumerable<ChatMessage>> GetHistoryMessagesAsync(Guid conversationId)
     {
         var messages = new List<ChatMessage>();
 

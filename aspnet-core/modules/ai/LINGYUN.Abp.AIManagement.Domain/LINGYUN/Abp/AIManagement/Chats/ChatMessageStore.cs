@@ -35,7 +35,7 @@ public class ChatMessageStore : IChatMessageStore, ITransientDependency
         _messageRecordRepository = messageRecordRepository;
     }
 
-    public async virtual Task<IEnumerable<ChatMessage>> GetHistoryMessagesAsync(string conversationId)
+    public async virtual Task<IEnumerable<ChatMessage>> GetHistoryMessagesAsync(Guid conversationId)
     {
         var maxLatestHistoryMessagesToKeep = await _settingProvider.GetAsync(
             AIManagementSettingNames.ChatMessage.MaxLatestHistoryMessagesToKeep, 0);

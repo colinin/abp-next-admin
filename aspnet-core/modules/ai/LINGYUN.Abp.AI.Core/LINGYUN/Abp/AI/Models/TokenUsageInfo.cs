@@ -1,11 +1,12 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace LINGYUN.Abp.AI.Models;
 public class TokenUsageInfo
 {
     public string Workspace { get; }
     public string? MessageId { get; private set; }
-    public string? ConversationId { get; private set; }
+    public Guid? ConversationId { get; private set; }
     public long? InputTokenCount { get; set; }
     public long? OutputTokenCount { get; set; }
     public long? TotalTokenCount { get; set; }
@@ -21,7 +22,7 @@ public class TokenUsageInfo
         return this;
     }
 
-    public virtual TokenUsageInfo WithConversationId(string? conversationId)
+    public virtual TokenUsageInfo WithConversationId(Guid? conversationId)
     {
         ConversationId = conversationId;
         return this;

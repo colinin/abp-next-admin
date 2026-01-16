@@ -54,8 +54,10 @@ public class AgentService : IAgentService, IScopedDependency
         tokenUsageInfo.WithConversationId(message.ConversationId);
         tokenUsageInfo.WithMessageId(messageId);
 
+#if DEBUG
         Console.WriteLine();
-        Console.WriteLine($"消耗Token: {tokenUsageInfo}");
+        Console.WriteLine(tokenUsageInfo);
+#endif
 
         await StoreTokenUsageInfo(tokenUsageInfo);
     }
@@ -64,9 +66,9 @@ public class AgentService : IAgentService, IScopedDependency
     {
         var messages = new List<AIChatMessage>();
 
-        if (!message.ConversationId.IsNullOrWhiteSpace())
+        if (message.ConversationId.HasValue)
         {
-            var historyMessages = await _chatMessageStore.GetHistoryMessagesAsync(message.ConversationId);
+            var historyMessages = await _chatMessageStore.GetHistoryMessagesAsync(message.ConversationId.Value);
 
             foreach (var chatMessage in historyMessages)
             {
