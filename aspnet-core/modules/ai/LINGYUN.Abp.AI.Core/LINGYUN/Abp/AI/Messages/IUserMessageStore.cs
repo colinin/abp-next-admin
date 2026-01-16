@@ -7,5 +7,5 @@ public interface IUserMessageStore
 {
     Task<string> SaveMessageAsync(UserMessage message);
 
-    Task<IEnumerable<UserMessage>> GetHistoryMessagesAsync(string chatId);
+    Task<IEnumerable<UserMessage>> GetHistoryMessagesAsync(string conversationId);
 }

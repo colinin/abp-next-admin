@@ -38,7 +38,6 @@ public class OpenAIChatClientProvider : ChatClientProvider
             .UseOpenTelemetry()
             .UseFunctionInvocation()
             .UseDistributedCache()
-            .UseChatReducer()
             .Build(ServiceProvider);
 
         return Task.FromResult(chatClient);

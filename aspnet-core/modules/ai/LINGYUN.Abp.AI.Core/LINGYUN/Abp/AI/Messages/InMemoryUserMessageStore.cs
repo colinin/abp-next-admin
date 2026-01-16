@@ -14,9 +14,9 @@ public class InMemoryUserMessageStore : IUserMessageStore
 {
     private static readonly ConcurrentDictionary<string, List<UserMessage>> _userMessageCache = new ConcurrentDictionary<string, List<UserMessage>>();
 
-    public Task<IEnumerable<UserMessage>> GetHistoryMessagesAsync(string chatId)
+    public Task<IEnumerable<UserMessage>> GetHistoryMessagesAsync(string conversationId)
     {
-        if (_userMessageCache.TryGetValue(chatId, out var messages))
+        if (_userMessageCache.TryGetValue(conversationId, out var messages))
         {
             return Task.FromResult(messages.Take(5));
         }
@@ -26,15 +26,21 @@ public class InMemoryUserMessageStore : IUserMessageStore
 
     public Task<string> SaveMessageAsync(UserMessage message)
     {
-        if (_userMessageCache.ContainsKey(message.ChatId))
+        var messageId = message.Id;
+        if (messageId.IsNullOrWhiteSpace())
         {
-            _userMessageCache[message.ChatId].Add(message);
+            messageId = Guid.NewGuid().ToString();
+            message.WithMessageId(messageId);
+        }
+        if (_userMessageCache.ContainsKey(messageId))
+        {
+            _userMessageCache[messageId].Add(message);
         }
         else
         {
-            _userMessageCache[message.ChatId] = new List<UserMessage>() { message };
+            _userMessageCache[messageId] = new List<UserMessage>() { message };
         }
 
-        return Task.FromResult(message.Id);
+        return Task.FromResult(messageId);
     }
 }

@@ -2,6 +2,7 @@
 using LINGYUN.Abp.AI.Models;
 using LINGYUN.Abp.AI.Tokens;
 using Microsoft.Extensions.AI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,11 +50,14 @@ public class AgentService : IAgentService, IScopedDependency
     {
         var messages = new List<ChatMessage>();
 
-        var historyMessages = await _userMessageStore.GetHistoryMessagesAsync(message.ChatId);
-
-        foreach (var chatMessage in historyMessages)
+        if (!message.ConversationId.IsNullOrWhiteSpace())
         {
-            messages.Add(new ChatMessage(ChatRole.System, chatMessage.Content));
+            var historyMessages = await _userMessageStore.GetHistoryMessagesAsync(message.ConversationId);
+
+            foreach (var chatMessage in historyMessages)
+            {
+                messages.Add(new ChatMessage(ChatRole.System, chatMessage.Content));
+            }
         }
 
         messages.Add(new ChatMessage(ChatRole.User, message.Content));

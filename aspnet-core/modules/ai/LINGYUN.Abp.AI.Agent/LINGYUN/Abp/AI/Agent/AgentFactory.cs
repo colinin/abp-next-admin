@@ -80,7 +80,7 @@ public class AgentFactory : IAgentFactory, IScopedDependency
                 Tools = tools,
             },
             Name = workspace?.Name,
-            Description = description
+            Description = description,
         };
 
         var aiAgent = chatClient.CreateAIAgent(clientAgentOptions)
