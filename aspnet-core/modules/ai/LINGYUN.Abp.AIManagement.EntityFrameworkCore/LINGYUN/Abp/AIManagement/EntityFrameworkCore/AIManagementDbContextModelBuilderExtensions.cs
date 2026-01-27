@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using LINGYUN.Abp.AIManagement.Chats;
 using LINGYUN.Abp.AIManagement.EntityFrameworkCore.ValueConversions;
+using LINGYUN.Abp.AIManagement.Tokens;
 using LINGYUN.Abp.AIManagement.Workspaces;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
@@ -44,6 +45,14 @@ public static class AIManagementDbContextModelBuilderExtensions
             b.HasIndex(x => new { x.TenantId, x.ConversationId });
 
             b.ApplyObjectExtensionMappings();
+        });
+        builder.Entity<TokenUsageRecord>(b =>
+        {
+            b.ToTable(AbpAIManagementDbProperties.DbTablePrefix + "TokenUsages", AbpAIManagementDbProperties.DbSchema);
+
+            b.ConfigureByConvention();
+
+            b.HasIndex(x => new { x.TenantId, x.ConversationId });
         });
 
         if (builder.IsHostDatabase())

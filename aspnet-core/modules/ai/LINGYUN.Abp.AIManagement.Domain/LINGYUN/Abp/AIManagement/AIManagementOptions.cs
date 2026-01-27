@@ -1,4 +1,6 @@
-﻿namespace LINGYUN.Abp.AIManagement;
+﻿using System;
+
+namespace LINGYUN.Abp.AIManagement;
 public class AIManagementOptions
 {
     public bool IsDynamicWorkspaceStoreEnabled {  get; set; }
