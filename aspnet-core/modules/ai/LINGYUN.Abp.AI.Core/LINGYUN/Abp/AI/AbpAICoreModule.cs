@@ -5,15 +5,19 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using Volo.Abp.AI;
+using Volo.Abp.Guids;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
+using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.AI;
 
 [DependsOn(
     typeof(AbpAIModule),
+    typeof(AbpGuidsModule),
+    typeof(AbpTimingModule),
     typeof(AbpLocalizationModule))]
 public class AbpAICoreModule : AbpModule
 {

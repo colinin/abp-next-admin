@@ -15,6 +15,8 @@ public abstract class ChatMessageRecord : AuditedAggregateRoot<Guid>, IMultiTena
 
     public DateTime CreatedAt { get; private set; }
 
+    public Guid? UserId { get; private set; }
+
     public Guid? ConversationId { get; private set; }
 
     public string? ReplyMessage { get; private set; }
@@ -39,6 +41,12 @@ public abstract class ChatMessageRecord : AuditedAggregateRoot<Guid>, IMultiTena
         Role = role;
         CreatedAt = createdAt;
         TenantId = tenantId;
+    }
+
+    public virtual ChatMessageRecord SetUserId(Guid userId)
+    {
+        UserId = userId;
+        return this;
     }
 
     public virtual ChatMessageRecord SetConversationId(Guid conversationId)

@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.AI.Chats;
 [Dependency(ServiceLifetime.Singleton, TryRegister = true)]
 public class InMemoryChatMessageStore : IChatMessageStore
 {
-    private static readonly ConcurrentDictionary<string, List<ChatMessage>> _userMessageCache = new ConcurrentDictionary<string, List<ChatMessage>>();
+    private static readonly ConcurrentDictionary<Guid, List<ChatMessage>> _userMessageCache = new ConcurrentDictionary<Guid, List<ChatMessage>>();
 
     public Task<IEnumerable<ChatMessage>> GetHistoryMessagesAsync(Guid conversationId)
     {
@@ -30,23 +30,23 @@ public class InMemoryChatMessageStore : IChatMessageStore
             .OrderBy(x => x.CreatedAt));
     }
 
-    public Task<string> SaveMessageAsync(ChatMessage message)
+    public Task<Guid> SaveMessageAsync(ChatMessage message)
     {
         var messageId = message.Id;
-        if (messageId.IsNullOrWhiteSpace())
+        if (!messageId.HasValue)
         {
-            messageId = Guid.NewGuid().ToString();
-            message.WithMessageId(messageId);
+            messageId = Guid.NewGuid();
+            message.WithMessageId(messageId.Value);
         }
-        if (_userMessageCache.ContainsKey(messageId))
+        if (_userMessageCache.ContainsKey(messageId.Value))
         {
-            _userMessageCache[messageId].Add(message);
+            _userMessageCache[messageId.Value].Add(message);
         }
         else
         {
-            _userMessageCache[messageId] = new List<ChatMessage>() { message };
+            _userMessageCache[messageId.Value] = new List<ChatMessage>() { message };
         }
 
-        return Task.FromResult(messageId);
+        return Task.FromResult(messageId.Value);
     }
 }

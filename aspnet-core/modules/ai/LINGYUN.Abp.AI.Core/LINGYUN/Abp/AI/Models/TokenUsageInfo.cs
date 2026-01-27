@@ -5,26 +5,21 @@ namespace LINGYUN.Abp.AI.Models;
 public class TokenUsageInfo
 {
     public string Workspace { get; }
-    public string? MessageId { get; private set; }
-    public Guid? ConversationId { get; private set; }
+    public Guid? MessageId { get; private set; }
+    public Guid ConversationId { get; private set; }
     public long? InputTokenCount { get; set; }
     public long? OutputTokenCount { get; set; }
     public long? TotalTokenCount { get; set; }
     public long? CachedInputTokenCount { get; set; }
     public long? ReasoningTokenCount { get; set; }
-    public TokenUsageInfo(string workspace)
+    public TokenUsageInfo(string workspace, Guid conversationId)
     {
         Workspace = workspace;
+        ConversationId = conversationId;
     }
-    public virtual TokenUsageInfo WithMessageId(string id)
+    public virtual TokenUsageInfo WithMessageId(Guid id)
     {
         MessageId = id;
-        return this;
-    }
-
-    public virtual TokenUsageInfo WithConversationId(Guid? conversationId)
-    {
-        ConversationId = conversationId;
         return this;
     }
 

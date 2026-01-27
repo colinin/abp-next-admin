@@ -14,6 +14,16 @@ public static class AIManagementDbContextModelBuilderExtensions
     {
         Check.NotNull(builder, nameof(builder));
 
+        builder.Entity<ConversationRecord>(b =>
+        {
+            b.ToTable(AbpAIManagementDbProperties.DbTablePrefix + "Conversations", AbpAIManagementDbProperties.DbSchema);
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.Name)
+                .HasMaxLength(ConversationRecordConsts.MaxNameLength)
+                .IsRequired();
+        });
         builder.Entity<TextChatMessageRecord>(b =>
         {
             b.ToTable(AbpAIManagementDbProperties.DbTablePrefix + "TextChatMessages", AbpAIManagementDbProperties.DbSchema);

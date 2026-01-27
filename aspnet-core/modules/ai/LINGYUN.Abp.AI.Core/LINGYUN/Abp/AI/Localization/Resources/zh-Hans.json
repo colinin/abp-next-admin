@@ -1,6 +1,8 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "Abp.AI:110001": "工作区不可用: {Workspace}!"
+    "Abp.AI:110001": "工作区不可用: {Workspace}!",
+    "Abp.AI:110101": "对话已过期, 请重新创建会话!",
+    "NewConversation": "新对话"
   }
 }

@@ -3,6 +3,7 @@ using LINGYUN.Abp.AI.Models;
 using LINGYUN.Abp.AIManagement.Settings;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -46,21 +47,35 @@ public class ChatMessageStore : IChatMessageStore, ITransientDependency
 
         var userTextMessages = await _messageRecordRepository.GetHistoryMessagesAsync(conversationId, maxLatestHistoryMessagesToKeep);
 
-        return _objectMapper.Map<IEnumerable<TextChatMessageRecord>, IEnumerable<TextChatMessage>>(userTextMessages);
+        return userTextMessages.Select(msg =>
+        {
+            var chatMessage = new TextChatMessage(msg.Workspace, msg.Content, msg.Role, msg.CreatedAt);
+            chatMessage.WithMessageId(msg.Id);
+            if (msg.ConversationId.HasValue)
+            {
+                chatMessage.WithConversationId(msg.ConversationId.Value);
+            }
+            if (!msg.ReplyMessage.IsNullOrWhiteSpace() && msg.ReplyAt.HasValue)
+            {
+                chatMessage.WithReply(msg.ReplyMessage, msg.ReplyAt.Value);
+            }
+
+            return chatMessage;
+        });
     }
 
-    public async virtual Task<string> SaveMessageAsync(ChatMessage message)
+    public async virtual Task<Guid> SaveMessageAsync(ChatMessage message)
     {
         var messageId = message.Id;
-        if (messageId.IsNullOrWhiteSpace())
+        if (!messageId.HasValue)
         {
-            messageId = _guidGenerator.Create().ToString();
-            message.WithMessageId(messageId);
+            messageId = _guidGenerator.Create();
+            message.WithMessageId(messageId.Value);
         }
 
-        await StoreMessageAsync(Guid.Parse(messageId), message);
+        await StoreMessageAsync(messageId.Value, message);
 
-        return messageId;
+        return messageId.Value;
     }
 
     protected async virtual Task StoreMessageAsync(Guid messageId, ChatMessage message)
@@ -102,9 +117,9 @@ public class ChatMessageStore : IChatMessageStore, ITransientDependency
 
     private static void UpdateUserMessageRecord(ChatMessageRecord messageRecord, ChatMessage message)
     {
-        if (!message.ConversationId.IsNullOrWhiteSpace())
+        if (message.ConversationId.HasValue)
         {
-            messageRecord.SetConversationId(message.ConversationId);
+            messageRecord.SetConversationId(message.ConversationId.Value);
         }
         if (!message.ReplyMessage.IsNullOrWhiteSpace())
         {

@@ -17,6 +17,7 @@ public class AbpAIManagementEntityFrameworkCoreModule : AbpModule
         {
             options.AddDefaultRepositories<IAIManagementDbContext>();
 
+            options.AddRepository<ConversationRecord, EfCoreConversationRecordRepository>();
             options.AddRepository<TextChatMessageRecord, EfCoreTextChatMessageRecordRepository>();
 
             options.AddRepository<WorkspaceDefinitionRecord, EfCoreWorkspaceDefinitionRecordRepository>();

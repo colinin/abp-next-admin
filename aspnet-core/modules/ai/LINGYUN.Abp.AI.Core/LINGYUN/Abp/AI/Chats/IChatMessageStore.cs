@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace LINGYUN.Abp.AI.Chats;
 public interface IChatMessageStore
 {
-    Task<string> SaveMessageAsync(ChatMessage message);
+    Task<Guid> SaveMessageAsync(ChatMessage message);
 
     Task<IEnumerable<ChatMessage>> GetHistoryMessagesAsync(Guid conversationId);
 }

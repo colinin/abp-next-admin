@@ -6,7 +6,7 @@ public abstract class ChatMessage
 {
     public string Workspace { get; }
 
-    public string? Id { get; private set; }
+    public Guid? Id { get; private set; }
 
     public Guid? ConversationId { get; private set; }
 
@@ -27,7 +27,7 @@ public abstract class ChatMessage
         CreatedAt = createdAt ?? DateTime.Now;
     }
 
-    public virtual ChatMessage WithMessageId(string id)
+    public virtual ChatMessage WithMessageId(Guid id)
     {
         Id = id;
         return this;
