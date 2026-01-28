@@ -1,0 +1,7 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "DisplayName:MaxLatestHistoryMessagesToKeep": "携带最近对话记录",
+    "Description:MaxLatestHistoryMessagesToKeep": "用户发起与大模型对话时,携带用户最近对话记录的上限."
+  }
+}

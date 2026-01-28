@@ -1,0 +1,8 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Abp.AI:110001": "Workspace is not enabled: {Workspace}!",
+    "Abp.AI:110101": "The conversation has expired. Please create a new one!",
+    "NewConversation": "New Conversation"
+  }
+}

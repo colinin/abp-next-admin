@@ -215,6 +215,18 @@ builder.AddProject<Projects.LINGYUN_Abp_MicroService_WorkflowService>("WorkflowS
     .WaitFor(rabbitmq)
     .WaitFor(taskService);
 
+// AIService
+AddDotNetProject<
+    Projects.LINGYUN_Abp_MicroService_AIService_DbMigrator,
+    Projects.LINGYUN_Abp_MicroService_AIService>(
+    builder: builder,
+    servicePrefix: "AI",
+    serviceSuffix: "Service",
+    migratorSuffix: "Migrator",
+    port: 30070,
+    portName: "ai",
+    waitProject: localizationService);
+
 // ApiGateway
 var apigateway = builder.AddProject<Projects.LINGYUN_Abp_MicroService_ApiGateway>("ApiGateway")
     .WithHttpEndpoint(port: 30000, name: "gateway")
