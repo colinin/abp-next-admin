@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
-		<AssemblyName>LINGYUN.Abp.AIManagement.Domain</AssemblyName>
-		<PackageId>LINGYUN.Abp.AIManagement.Domain</PackageId>
+		<AssemblyName>LINGYUN.Abp.AIManagement.Application.Contracts</AssemblyName>
+		<PackageId>LINGYUN.Abp.AIManagement.Application.Contracts</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" />
+		<PackageReference Include="Volo.Abp.Authorization.Abstractions" />
 	</ItemGroup>
 
 	<ItemGroup>

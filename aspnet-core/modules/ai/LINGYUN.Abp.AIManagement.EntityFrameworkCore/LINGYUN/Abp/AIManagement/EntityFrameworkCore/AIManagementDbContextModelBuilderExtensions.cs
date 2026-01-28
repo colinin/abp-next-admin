@@ -80,7 +80,7 @@ public static class AIManagementDbContextModelBuilderExtensions
                 b.Property(x => x.ApiKey)
                     .HasMaxLength(WorkspaceDefinitionRecordConsts.MaxApiKeyLength);
                 b.Property(x => x.ApiBaseUrl)
-                    .HasMaxLength(WorkspaceDefinitionRecordConsts.MaxApiKeyLength);
+                    .HasMaxLength(WorkspaceDefinitionRecordConsts.MaxApiBaseUrlLength);
                 b.Property(x => x.SystemPrompt)
                     .HasMaxLength(WorkspaceDefinitionRecordConsts.MaxSystemPromptLength);
                 b.Property(x => x.Instructions)
