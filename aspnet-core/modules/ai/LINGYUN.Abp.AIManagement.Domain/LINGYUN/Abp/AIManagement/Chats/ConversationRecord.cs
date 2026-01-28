@@ -31,4 +31,9 @@ public class ConversationRecord : AuditedEntity<Guid>, IMultiTenant
 
         TenantId = tenantId;
     }
+
+    public void SetName(string name)
+    {
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name), ConversationRecordConsts.MaxNameLength);
+    }
 }
