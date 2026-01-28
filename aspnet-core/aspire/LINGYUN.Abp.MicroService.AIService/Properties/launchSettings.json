@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "LINGYUN.Abp.MicroService.AIService": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:49787;http://localhost:49788"
+    }
+  }
+}
