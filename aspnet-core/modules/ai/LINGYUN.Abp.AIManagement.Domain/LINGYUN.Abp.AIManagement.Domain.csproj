@@ -23,7 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\LINGYUN.Abp.AI.Core\LINGYUN.Abp.AI.Core.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.AI.Agent\LINGYUN.Abp.AI.Agent.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.AIManagement.Domain.Shared\LINGYUN.Abp.AIManagement.Domain.Shared.csproj" />
 	</ItemGroup>
 

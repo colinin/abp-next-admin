@@ -1,4 +1,6 @@
-﻿using LINGYUN.Abp.AI;
+﻿using LINGYUN.Abp.AI.Agent;
+using LINGYUN.Abp.AI.Localization;
+using LINGYUN.Abp.AIManagement.Localization;
 using LINGYUN.Abp.AIManagement.Workspaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading;
@@ -8,6 +10,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain;
+using Volo.Abp.Localization;
 using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -16,7 +19,7 @@ namespace LINGYUN.Abp.AIManagement;
 
 [DependsOn(
     typeof(AbpAIManagementDomainSharedModule),
-    typeof(AbpAICoreModule),
+    typeof(AbpAIAgentModule),
     typeof(AbpCachingModule),
     typeof(AbpMapperlyModule),
     typeof(AbpDddDomainModule))]
@@ -37,6 +40,13 @@ public class AbpAIManagementDomainModule : AbpModule
                 options.IsDynamicWorkspaceStoreEnabled = false;
             });
         }
+
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<AIManagementResource>()
+                .AddBaseTypes(typeof(AbpAIResource));
+        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
