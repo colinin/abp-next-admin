@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.AI.Workspaces;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -6,21 +7,25 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Localization;
+using Volo.Abp.Security.Encryption;
 using Volo.Abp.SimpleStateChecking;
 
 namespace LINGYUN.Abp.AIManagement.Workspaces;
 public class WorkspaceDefinitionSerializer : IWorkspaceDefinitionSerializer, ITransientDependency
 {
     protected IGuidGenerator GuidGenerator { get; }
+    protected IStringEncryptionService StringEncryptionService { get; }
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
     protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
 
     public WorkspaceDefinitionSerializer(
         IGuidGenerator guidGenerator,
+        IStringEncryptionService stringEncryptionService,
         ISimpleStateCheckerSerializer stateCheckerSerializer,
         ILocalizableStringSerializer localizableStringSerializer)
     {
         GuidGenerator = guidGenerator;
+        StringEncryptionService = stringEncryptionService;
         StateCheckerSerializer = stateCheckerSerializer;
         LocalizableStringSerializer = localizableStringSerializer;
     }
@@ -47,8 +52,6 @@ public class WorkspaceDefinitionSerializer : IWorkspaceDefinitionSerializer, ITr
                 definition.ModelName,
                 LocalizableStringSerializer.Serialize(definition.DisplayName)!,
                 definition.Description != null ? LocalizableStringSerializer.Serialize(definition.Description) : null,
-                definition.ApiKey,
-                definition.ApiBaseUrl,
                 definition.SystemPrompt,
                 definition.Instructions,
                 definition.Temperature,
@@ -56,6 +59,12 @@ public class WorkspaceDefinitionSerializer : IWorkspaceDefinitionSerializer, ITr
                 definition.FrequencyPenalty,
                 definition.PresencePenalty,
                 SerializeStateCheckers(definition.StateCheckers));
+
+            if (!definition.ApiKey.IsNullOrWhiteSpace())
+            {
+                var encryptApiKey = StringEncryptionService.Encrypt(definition.ApiKey);
+                workspace.SetApiKey(encryptApiKey, definition.ApiBaseUrl);
+            }
 
             foreach (var property in definition.Properties)
             {

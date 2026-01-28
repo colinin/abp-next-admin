@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
 namespace LINGYUN.Abp.AIManagement.Workspaces;
-public interface IWorkspaceDefinitionRecordRepository : IBasicRepository<WorkspaceDefinitionRecord, Guid>
+public interface IWorkspaceDefinitionRecordRepository : IRepository<WorkspaceDefinitionRecord, Guid>
 {
     Task<WorkspaceDefinitionRecord?> FindByNameAsync(
         string name,

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
+using Volo.Abp.Security.Encryption;
 using Volo.Abp.SimpleStateChecking;
 
 namespace LINGYUN.Abp.AIManagement.Workspaces;
@@ -13,6 +14,7 @@ public class DynamicWorkspaceDefinitionStoreInMemoryCache : IDynamicWorkspaceDef
 {
     public string CacheStamp { get; set; }
     protected IDictionary<string, WorkspaceDefinition> WorkspaceDefinitions { get; }
+    protected IStringEncryptionService StringEncryptionService { get; }
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
     protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
 
@@ -21,9 +23,11 @@ public class DynamicWorkspaceDefinitionStoreInMemoryCache : IDynamicWorkspaceDef
     public DateTime? LastCheckTime { get; set; }
 
     public DynamicWorkspaceDefinitionStoreInMemoryCache(
+        IStringEncryptionService stringEncryptionService,
         ISimpleStateCheckerSerializer stateCheckerSerializer,
         ILocalizableStringSerializer localizableStringSerializer)
     {
+        StringEncryptionService = stringEncryptionService;
         StateCheckerSerializer = stateCheckerSerializer;
         LocalizableStringSerializer = localizableStringSerializer;
 
@@ -51,7 +55,8 @@ public class DynamicWorkspaceDefinitionStoreInMemoryCache : IDynamicWorkspaceDef
 
             if (!workspace.ApiKey.IsNullOrWhiteSpace())
             {
-                workspaceDef.WithApiKey(workspace.ApiKey);
+                var decryptApiKey = StringEncryptionService.Decrypt(workspace.ApiKey);
+                workspaceDef.WithApiKey(decryptApiKey!);
             }
             if (!workspace.ApiBaseUrl.IsNullOrWhiteSpace())
             {

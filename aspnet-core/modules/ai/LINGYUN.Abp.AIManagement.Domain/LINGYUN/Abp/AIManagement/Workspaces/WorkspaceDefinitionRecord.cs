@@ -14,7 +14,7 @@ public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
 
     public string DisplayName { get; private set; }
 
-    public string? Description { get; private set; }
+    public string? Description { get; set; }
 
     public string? ApiKey { get; private set; }
 
@@ -49,8 +49,6 @@ public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
         string modelName,
         string displayName,
         string? description = null,
-        string? apiKey = null, 
-        string? apiBaseUrl = null,
         string? systemPrompt = null,
         string? instructions = null, 
         float? temperature = null, 
@@ -65,8 +63,6 @@ public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
         ModelName = Check.NotNullOrWhiteSpace(modelName, nameof(modelName), WorkspaceDefinitionRecordConsts.MaxModelNameLength);
         DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), WorkspaceDefinitionRecordConsts.MaxDisplayNameLength);
         Description = Check.Length(description, nameof(description), WorkspaceDefinitionRecordConsts.MaxDescriptionLength);
-        ApiKey = Check.Length(apiKey, nameof(apiKey), WorkspaceDefinitionRecordConsts.MaxApiKeyLength);
-        ApiBaseUrl = Check.Length(apiBaseUrl, nameof(apiBaseUrl), WorkspaceDefinitionRecordConsts.MaxApiBaseUrlLength);
         SystemPrompt = Check.Length(systemPrompt, nameof(systemPrompt), WorkspaceDefinitionRecordConsts.MaxSystemPromptLength);
         Instructions = Check.Length(instructions, nameof(instructions), WorkspaceDefinitionRecordConsts.MaxInstructionsLength);
         StateCheckers = Check.Length(stateCheckers, nameof(stateCheckers), WorkspaceDefinitionRecordConsts.MaxStateCheckersLength);
@@ -78,6 +74,23 @@ public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
         IsEnabled = true;
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
+    }
+
+    public void SetDisplayName(string displayName)
+    {
+        DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), WorkspaceDefinitionRecordConsts.MaxDisplayNameLength);
+    }
+
+    public void SetModel(string provider, string modelName)
+    {
+        Provider = Check.NotNullOrWhiteSpace(provider, nameof(provider), WorkspaceDefinitionRecordConsts.MaxProviderLength);
+        ModelName = Check.NotNullOrWhiteSpace(modelName, nameof(modelName), WorkspaceDefinitionRecordConsts.MaxModelNameLength);
+    }
+
+    public void SetApiKey(string? apiKey = null, string? apiBaseUrl = null)
+    {
+        ApiKey = Check.Length(apiKey, nameof(apiKey), WorkspaceDefinitionRecordConsts.MaxApiKeyLength);
+        ApiBaseUrl = Check.Length(apiBaseUrl, nameof(apiBaseUrl), WorkspaceDefinitionRecordConsts.MaxApiBaseUrlLength);
     }
 
     public bool HasSameData(WorkspaceDefinitionRecord otherWorkspace)

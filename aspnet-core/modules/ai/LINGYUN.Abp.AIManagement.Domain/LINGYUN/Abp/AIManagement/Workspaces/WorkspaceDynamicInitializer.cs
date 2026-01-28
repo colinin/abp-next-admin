@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using LINGYUN.Abp.AI.Workspaces;
+﻿using LINGYUN.Abp.AI.Workspaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -18,33 +17,17 @@ public class WorkspaceDynamicInitializer : ITransientDependency
     public ILogger<WorkspaceDynamicInitializer> Logger { get; set; }
 
     protected IServiceProvider ServiceProvider { get; }
-    protected IOptions<AIManagementOptions> Options { get; }
-    [CanBeNull]
-    protected IHostApplicationLifetime ApplicationLifetime { get; }
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
-    protected IDynamicWorkspaceDefinitionStore DynamicWorkspaceDefinitionStore { get; }
-    protected IStaticWorkspaceSaver StaticWorkspaceSaver { get; }
 
-    public WorkspaceDynamicInitializer(
-        IServiceProvider serviceProvider,
-        IOptions<AIManagementOptions> options,
-        ICancellationTokenProvider cancellationTokenProvider,
-        IDynamicWorkspaceDefinitionStore dynamicWorkspaceDefinitionStore,
-        IStaticWorkspaceSaver staticWorkspaceSaver)
+    public WorkspaceDynamicInitializer(IServiceProvider serviceProvider)
     {
         Logger = NullLogger<WorkspaceDynamicInitializer>.Instance;
 
         ServiceProvider = serviceProvider;
-        Options = options;
-        CancellationTokenProvider = cancellationTokenProvider;
-        DynamicWorkspaceDefinitionStore = dynamicWorkspaceDefinitionStore;
-        StaticWorkspaceSaver = staticWorkspaceSaver;
-        ApplicationLifetime = ServiceProvider.GetRequiredService<IHostApplicationLifetime>();
     }
 
     public virtual Task InitializeAsync(bool runInBackground, CancellationToken cancellationToken = default)
     {
-        var options = Options.Value;
+        var options = ServiceProvider.GetRequiredService<IOptions<AIManagementOptions>>().Value;
 
         if (!options.SaveStaticWorkspacesToDatabase && !options.IsDynamicWorkspaceStoreEnabled)
         {
@@ -53,11 +36,12 @@ public class WorkspaceDynamicInitializer : ITransientDependency
 
         if (runInBackground)
         {
+            var applicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
             Task.Run(async () =>
             {
-                if (cancellationToken == default && ApplicationLifetime?.ApplicationStopping != null)
+                if (cancellationToken == default && applicationLifetime?.ApplicationStopping != null)
                 {
-                    cancellationToken = ApplicationLifetime.ApplicationStopping;
+                    cancellationToken = applicationLifetime.ApplicationStopping;
                 }
                 await ExecuteInitializationAsync(options, cancellationToken);
             }, cancellationToken);
@@ -72,16 +56,17 @@ public class WorkspaceDynamicInitializer : ITransientDependency
     {
         try
         {
-            using (CancellationTokenProvider.Use(cancellationToken))
+            var cancellationTokenProvider = ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
+            using (cancellationTokenProvider.Use(cancellationToken))
             {
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
 
                 await SaveStaticWorkspacesToDatabaseAsync(options, cancellationToken);
 
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
@@ -104,6 +89,8 @@ public class WorkspaceDynamicInitializer : ITransientDependency
             return;
         }
 
+        var staticWorkspaceSaver = ServiceProvider.GetRequiredService<IStaticWorkspaceSaver>();
+
         await Policy
             .Handle<Exception>(ex => ex is not OperationCanceledException)
             .WaitAndRetryAsync(
@@ -118,7 +105,7 @@ public class WorkspaceDynamicInitializer : ITransientDependency
             {
                 try
                 {
-                    await StaticWorkspaceSaver.SaveAsync();
+                    await staticWorkspaceSaver.SaveAsync();
                 }
                 catch (Exception ex)
                 {
@@ -135,10 +122,12 @@ public class WorkspaceDynamicInitializer : ITransientDependency
             return;
         }
 
+        var dynamicWorkspaceDefinitionStore = ServiceProvider.GetRequiredService<IDynamicWorkspaceDefinitionStore>();
+
         try
         {
             // Pre-cache Workspaces, so first request doesn't wait
-            await DynamicWorkspaceDefinitionStore.GetAllAsync();
+            await dynamicWorkspaceDefinitionStore.GetAllAsync();
         }
         catch (Exception ex)
         {
