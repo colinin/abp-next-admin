@@ -1,26 +1,30 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Mapping;
+using Elastic.Transport.Products.Elasticsearch;
 using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
 
-public class IndexInitializer : IIndexInitializer, ISingletonDependency
+public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISingletonDependency
 {
     private readonly AbpJsonOptions _jsonOptions;
     private readonly AbpAuditLoggingElasticsearchOptions _elasticsearchOptions;
     private readonly IIndexNameNormalizer _nameNormalizer;
     private readonly IElasticsearchClientFactory _clientFactory;
 
-    public ILogger<IndexInitializer> Logger { protected get; set; }
+    public ILogger<AuditLoggingIndexInitializer> Logger { protected get; set; }
 
-    public IndexInitializer(
+    public AuditLoggingIndexInitializer(
         IOptions<AbpJsonOptions> jsonOptions,
         IOptions<AbpAuditLoggingElasticsearchOptions> elasticsearchOptions,
         IIndexNameNormalizer nameNormalizer,
@@ -31,29 +35,40 @@ public class IndexInitializer : IIndexInitializer, ISingletonDependency
         _nameNormalizer = nameNormalizer;
         _clientFactory = clientFactory;
 
-        Logger = NullLogger<IndexInitializer>.Instance;
+        Logger = NullLogger<AuditLoggingIndexInitializer>.Instance;
     }
 
-    public async virtual Task InitializeAsync()
+    public async virtual Task InitializeAsync(CancellationToken cancellationToken = default)
     {
         var client = _clientFactory.Create();
         var dateTimeFormat = !_jsonOptions.OutputDateTimeFormat.IsNullOrWhiteSpace()
             ? $"{_jsonOptions.OutputDateTimeFormat}||strict_date_optional_time||epoch_millis" 
             : "strict_date_optional_time||epoch_millis";
-        await InitlizeAuditLogIndex(client, dateTimeFormat);
-        await InitlizeSecurityLogIndex(client, dateTimeFormat);
+        await InitlizeAuditLogIndexTemplate(client, dateTimeFormat, cancellationToken);
+        await InitlizeSecurityLogIndexTemplate(client, dateTimeFormat, cancellationToken);
     }
 
-    protected async virtual Task InitlizeAuditLogIndex(ElasticsearchClient client, string dateTimeFormat)
+    protected async virtual Task InitlizeAuditLogIndexTemplate(ElasticsearchClient client, string dateTimeFormat, CancellationToken cancellationToken = default)
     {
         var indexName = _nameNormalizer.NormalizeIndex("audit-log");
-        var indexExists = await client.Indices.ExistsAsync(indexName);
-        if (!indexExists.Exists)
+        var indexPatterns = new[] { indexName + "-*" };
+        var indexTemplateName = indexName + "-generic";
+
+        var indexTemplateExists = await client.Indices.ExistsIndexTemplateAsync(indexTemplateName, cancellationToken);
+        if (indexTemplateExists.Exists)
         {
-            var indexCreateResponse = await client.Indices.CreateAsync(indexName, c =>
+            return;
+        }
+
+        var putTemplateResponse = await client.Indices.PutIndexTemplateAsync(indexTemplateName, setup =>
+        {
+            setup.IndexPatterns(indexPatterns);
+            setup.Priority(100);
+            setup.Version(1);
+            setup.Template(template =>
             {
-                c.Settings(_elasticsearchOptions.AuditLogSettings);
-                c.Mappings(mp => mp
+                template.Settings(_elasticsearchOptions.AuditLogSettings);
+                template.Mappings(mp => mp
                     .Dynamic(DynamicMapping.False)
                     .Properties<AuditLog>(pd =>
                     {
@@ -83,31 +98,31 @@ public class IndexInitializer : IIndexInitializer, ISingletonDependency
                         {
                             np.Dynamic(DynamicMapping.False);
                             np.Properties(npd =>
-                             {
-                                 npd.Text(nameof(EntityChange.Id), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                 npd.Text(nameof(EntityChange.AuditLogId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                 npd.Text(nameof(EntityChange.TenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                 npd.Date(nameof(EntityChange.ChangeTime), d => d.Format(dateTimeFormat));
-                                 npd.ByteNumber(nameof(EntityChange.ChangeType));
-                                 npd.Text(nameof(EntityChange.EntityTenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                 npd.Text(nameof(EntityChange.EntityId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(128))));
-                                 npd.Text(nameof(EntityChange.EntityTypeFullName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
-                                 npd.Nested(nameof(EntityChange.PropertyChanges), pc =>
-                                 {
-                                     pc.Dynamic(DynamicMapping.False);
-                                     pc.Properties(pcn =>
-                                       {
-                                           pcn.Text(nameof(EntityPropertyChange.Id), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                           pcn.Text(nameof(EntityPropertyChange.TenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                           pcn.Text(nameof(EntityPropertyChange.EntityChangeId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                           pcn.Text(nameof(EntityPropertyChange.NewValue), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
-                                           pcn.Text(nameof(EntityPropertyChange.OriginalValue), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
-                                           pcn.Text(nameof(EntityPropertyChange.PropertyName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
-                                           pcn.Text(nameof(EntityPropertyChange.PropertyTypeFullName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
-                                       });
-                                 });
-                                 npd.Flattened(nameof(EntityChange.ExtraProperties), f => f.DepthLimit(5).EagerGlobalOrdinals(false));
-                             });
+                            {
+                                npd.Text(nameof(EntityChange.Id), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                npd.Text(nameof(EntityChange.AuditLogId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                npd.Text(nameof(EntityChange.TenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                npd.Date(nameof(EntityChange.ChangeTime), d => d.Format(dateTimeFormat));
+                                npd.ByteNumber(nameof(EntityChange.ChangeType));
+                                npd.Text(nameof(EntityChange.EntityTenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                npd.Text(nameof(EntityChange.EntityId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(128))));
+                                npd.Text(nameof(EntityChange.EntityTypeFullName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                                npd.Nested(nameof(EntityChange.PropertyChanges), pc =>
+                                {
+                                    pc.Dynamic(DynamicMapping.False);
+                                    pc.Properties(pcn =>
+                                    {
+                                        pcn.Text(nameof(EntityPropertyChange.Id), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                        pcn.Text(nameof(EntityPropertyChange.TenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                        pcn.Text(nameof(EntityPropertyChange.EntityChangeId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                        pcn.Text(nameof(EntityPropertyChange.NewValue), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                                        pcn.Text(nameof(EntityPropertyChange.OriginalValue), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                                        pcn.Text(nameof(EntityPropertyChange.PropertyName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                                        pcn.Text(nameof(EntityPropertyChange.PropertyTypeFullName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
+                                    });
+                                });
+                                npd.Flattened(nameof(EntityChange.ExtraProperties), f => f.DepthLimit(5).EagerGlobalOrdinals(false));
+                            });
                         });
                         pd.Nested(n => n.Actions, np =>
                         {
@@ -128,30 +143,57 @@ public class IndexInitializer : IIndexInitializer, ISingletonDependency
                         pd.Flattened(f => f.ExtraProperties, f => f.DepthLimit(5).EagerGlobalOrdinals(false));
                     }));
             });
+        }, cancellationToken);
 
-            if (!indexCreateResponse.IsValidResponse)
+        if (!putTemplateResponse.IsValidResponse)
+        {
+            var errorBuilder = new StringBuilder();
+            if (putTemplateResponse.TryGetOriginalException(out var ex))
             {
-                if (indexCreateResponse.TryGetOriginalException(out var ex))
-                {
-                    Logger.LogWarning(ex, "Failed to initialize index and audit log may not be retrieved.");
-                    return;
-                }
-                Logger.LogWarning("Failed to initialize index and audit log may not be retrieved.");
-                Logger.LogWarning(indexCreateResponse.DebugInformation);
+                errorBuilder.AppendLine(ex.Message);
+                Logger.LogWarning(ex, "Failed to initialize index and audit log may not be retrieved.");
+                return;
             }
+            else if (putTemplateResponse.TryGetElasticsearchServerError(out var error))
+            {
+                errorBuilder.AppendLine(error.ToString());
+            }
+            else
+            {
+                errorBuilder.AppendLine(putTemplateResponse.DebugInformation);
+            }
+
+            if (_elasticsearchOptions.ThrowIfIndexInitFailed)
+            {
+                throw new AbpInitializationException($"Failed to initialize audit log index template, the error: {errorBuilder.ToString()}");
+            }
+
+            Logger.LogWarning("Failed to initialize index and audit log may not be retrieved.");
+            Logger.LogWarning("The error: {error}", errorBuilder.ToString());
         }
     }
 
-    protected async virtual Task InitlizeSecurityLogIndex(ElasticsearchClient client, string dateTimeFormat)
+    protected async virtual Task InitlizeSecurityLogIndexTemplate(ElasticsearchClient client, string dateTimeFormat, CancellationToken cancellationToken = default)
     {
         var indexName = _nameNormalizer.NormalizeIndex("security-log");
-        var indexExists = await client.Indices.ExistsAsync(indexName);
-        if (!indexExists.Exists)
+        var indexPatterns = new[] { indexName + "-*" };
+        var indexTemplateName = indexName + "-generic";
+
+        var indexTemplateExists = await client.Indices.ExistsIndexTemplateAsync(indexTemplateName, cancellationToken);
+        if (indexTemplateExists.Exists)
         {
-            var indexCreateResponse = await client.Indices.CreateAsync(indexName, c =>
+            return;
+        }
+
+        var putTemplateResponse = await client.Indices.PutIndexTemplateAsync(indexTemplateName, setup =>
+        {
+            setup.IndexPatterns(indexPatterns);
+            setup.Priority(100);
+            setup.Version(1);
+            setup.Template(template =>
             {
-                c.Settings(_elasticsearchOptions.SecurityLogSettings);
-                c.Mappings(mp =>
+                template.Settings(_elasticsearchOptions.SecurityLogSettings);
+                template.Mappings(mp =>
                 {
                     mp.Dynamic(DynamicMapping.False);
                     mp.Properties<SecurityLog>(pd =>
@@ -173,16 +215,33 @@ public class IndexInitializer : IIndexInitializer, ISingletonDependency
                     });
                 });
             });
-            if (!indexCreateResponse.IsValidResponse)
+        }, cancellationToken);
+
+        if (!putTemplateResponse.IsValidResponse)
+        {
+            var errorBuilder = new StringBuilder();
+            if (putTemplateResponse.TryGetOriginalException(out var ex))
             {
-                if (indexCreateResponse.TryGetOriginalException(out var ex))
-                {
-                    Logger.LogWarning(ex, "Failed to initialize index and audit log may not be retrieved.");
-                    return;
-                }
-                Logger.LogWarning("Failed to initialize index and audit log may not be retrieved.");
-                Logger.LogWarning(indexCreateResponse.DebugInformation);
+                errorBuilder.AppendLine(ex.Message);
+                Logger.LogWarning(ex, "Failed to initialize index and security log may not be retrieved.");
+                return;
             }
+            else if (putTemplateResponse.TryGetElasticsearchServerError(out var error))
+            {
+                errorBuilder.AppendLine(error.ToString());
+            }
+            else
+            {
+                errorBuilder.AppendLine(putTemplateResponse.DebugInformation);
+            }
+
+            if (_elasticsearchOptions.ThrowIfIndexInitFailed)
+            {
+                throw new AbpInitializationException($"Failed to initialize security log index template, the error: {errorBuilder.ToString()}");
+            }
+
+            Logger.LogWarning("Failed to initialize index and security log may not be retrieved.");
+            Logger.LogWarning("The error: {error}", errorBuilder.ToString());
         }
     }
 }
