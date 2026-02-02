@@ -7,6 +7,13 @@ public class AbpAuditLoggingElasticsearchOptions
     public const string DefaultIndexPrefix = "auditlogging";
     public string IndexPrefix { get; set; }
     /// <summary>
+    /// 索引初始化失败抛出异常
+    /// </summary>
+    /// <remarks>
+    /// 默认为: true, 索引初始化失败后应用程序停止运行
+    /// </remarks>
+    public bool ThrowIfIndexInitFailed { get; set; }
+    /// <summary>
     /// 是否启用审计日志记录
     /// </summary>
     public bool IsAuditLogEnabled { get; set; }
@@ -27,6 +34,7 @@ public class AbpAuditLoggingElasticsearchOptions
     {
         IndexPrefix = DefaultIndexPrefix;
         IsAuditLogEnabled = true;
+        ThrowIfIndexInitFailed = true;
         AuditLogSettings = new IndexSettings()
         {
             NumberOfReplicas = 1,
