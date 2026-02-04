@@ -17,6 +17,7 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             _manager = GetRequiredService<IAuditLogManager>();
         }
 
+        [Fact]
         public async Task Save_Audit_Log_Should_Be_Find_By_Id()
         {
             var mock = new AutoMocker();

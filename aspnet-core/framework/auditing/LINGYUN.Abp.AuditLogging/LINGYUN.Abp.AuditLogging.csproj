@@ -19,6 +19,7 @@
 		<PackageReference Include="Volo.Abp.Auditing" />
 		<PackageReference Include="Volo.Abp.Guids" />
 		<PackageReference Include="Volo.Abp.ExceptionHandling" />
+		<PackageReference Include="System.Threading.Channels" />
 	</ItemGroup>
 
 </Project>
