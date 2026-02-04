@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using LINGYUN.Abp.Webhooks;
+﻿using LINGYUN.Abp.Webhooks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -18,72 +17,60 @@ public class WebhookDynamicInitializer : ITransientDependency
     public ILogger<WebhookDynamicInitializer> Logger { get; set; }
 
     protected IServiceProvider ServiceProvider { get; }
-    protected IOptions<WebhooksManagementOptions> Options { get; }
-    [CanBeNull]
-    protected IHostApplicationLifetime ApplicationLifetime { get; }
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
-    protected IDynamicWebhookDefinitionStore DynamicWebhookDefinitionStore { get; }
-    protected IStaticWebhookSaver StaticWebhookSaver { get; }
 
-    public WebhookDynamicInitializer(
-        IServiceProvider serviceProvider,
-        IOptions<WebhooksManagementOptions> options,
-        ICancellationTokenProvider cancellationTokenProvider,
-        IDynamicWebhookDefinitionStore dynamicWebhookDefinitionStore,
-        IStaticWebhookSaver staticWebhookSaver)
+    public WebhookDynamicInitializer(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
-        Options = options;
-        ApplicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
-        CancellationTokenProvider = cancellationTokenProvider;
-        DynamicWebhookDefinitionStore = dynamicWebhookDefinitionStore;
-        StaticWebhookSaver = staticWebhookSaver;
 
         Logger = NullLogger<WebhookDynamicInitializer>.Instance;
     }
 
     public virtual Task InitializeAsync(bool runInBackground, CancellationToken cancellationToken = default)
     {
-        if (!Options.Value.SaveStaticWebhooksToDatabase && !Options.Value.IsDynamicWebhookStoreEnabled)
+        var options = ServiceProvider.GetRequiredService<IOptions<WebhooksManagementOptions>>().Value;
+
+        if (!options.SaveStaticWebhooksToDatabase && !options.IsDynamicWebhookStoreEnabled)
         {
             return Task.CompletedTask;
         }
 
         if (runInBackground)
         {
+            var applicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
             Task.Run(async () =>
             {
-                if (cancellationToken == default && ApplicationLifetime?.ApplicationStopping != null)
+                if (cancellationToken == default && applicationLifetime?.ApplicationStopping != null)
                 {
-                    cancellationToken = ApplicationLifetime.ApplicationStopping;
+                    cancellationToken = applicationLifetime.ApplicationStopping;
                 }
-                await ExecuteInitializationAsync(cancellationToken);
+                await ExecuteInitializationAsync(options, cancellationToken);
             }, cancellationToken);
             return Task.CompletedTask;
         }
 
-        return ExecuteInitializationAsync(cancellationToken);
+        return ExecuteInitializationAsync(options, cancellationToken);
     }
 
-    protected virtual async Task ExecuteInitializationAsync(CancellationToken cancellationToken)
+    protected virtual async Task ExecuteInitializationAsync(WebhooksManagementOptions options, CancellationToken cancellationToken)
     {
         try
         {
-            using (CancellationTokenProvider.Use(cancellationToken))
+            var cancellationTokenProvider = ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
+            using (cancellationTokenProvider.Use(cancellationToken))
             {
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
 
-                await SaveStaticWebhooksToDatabaseAsync(cancellationToken);
+                await SaveStaticWebhooksToDatabaseAsync(options, cancellationToken);
 
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
 
-                await PreCacheDynamicWebhooksAsync(cancellationToken);
+                await PreCacheDynamicWebhooksAsync(options, cancellationToken);
             }
         }
         catch
@@ -92,12 +79,14 @@ public class WebhookDynamicInitializer : ITransientDependency
         }
     }
 
-    protected virtual async Task SaveStaticWebhooksToDatabaseAsync(CancellationToken cancellationToken)
+    protected virtual async Task SaveStaticWebhooksToDatabaseAsync(WebhooksManagementOptions options, CancellationToken cancellationToken)
     {
-        if (!Options.Value.SaveStaticWebhooksToDatabase)
+        if (!options.SaveStaticWebhooksToDatabase)
         {
             return;
         }
+
+        var staticWebhookSaver = ServiceProvider.GetRequiredService<IStaticWebhookSaver>();
 
         await Policy
             .Handle<Exception>(e => e is not OperationCanceledException)
@@ -115,7 +104,7 @@ public class WebhookDynamicInitializer : ITransientDependency
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    await StaticWebhookSaver.SaveAsync();
+                    await staticWebhookSaver.SaveAsync();
                 }
                 catch (Exception ex)
                 {
@@ -126,19 +115,21 @@ public class WebhookDynamicInitializer : ITransientDependency
             }, cancellationToken);
     }
 
-    protected virtual async Task PreCacheDynamicWebhooksAsync(CancellationToken cancellationToken)
+    protected virtual async Task PreCacheDynamicWebhooksAsync(WebhooksManagementOptions options, CancellationToken cancellationToken)
     {
-        if (!Options.Value.IsDynamicWebhookStoreEnabled)
+        if (!options.IsDynamicWebhookStoreEnabled)
         {
             return;
         }
+
+        var dynamicWebhookDefinitionStore = ServiceProvider.GetRequiredService<IDynamicWebhookDefinitionStore>();
 
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             // Pre-cache webhoks, so first request doesn't wait
-            await DynamicWebhookDefinitionStore.GetGroupsAsync();
+            await dynamicWebhookDefinitionStore.GetGroupsAsync();
         }
         catch (Exception ex)
         {
