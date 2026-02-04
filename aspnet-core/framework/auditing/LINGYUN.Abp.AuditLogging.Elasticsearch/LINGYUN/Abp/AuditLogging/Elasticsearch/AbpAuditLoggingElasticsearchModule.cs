@@ -35,4 +35,10 @@ public class AbpAuditLoggingElasticsearchModule : AbpModule
         var initializer = rootServiceProvider.GetRequiredService<IAuditLoggingIndexInitializer>();
         await initializer.InitializeAsync(_cancellationTokenSource.Token);
     }
+
+    public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+    {
+        _cancellationTokenSource.Cancel();
+        return Task.CompletedTask;
+    }
 }
