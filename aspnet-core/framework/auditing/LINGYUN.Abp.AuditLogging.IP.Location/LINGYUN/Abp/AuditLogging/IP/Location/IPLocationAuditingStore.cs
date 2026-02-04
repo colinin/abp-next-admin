@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.IP.Location;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
@@ -12,8 +13,10 @@ public class IPLocationAuditingStore : AuditingStore
     public IPLocationAuditingStore(
         IOptionsMonitor<AbpAuditLoggingIPLocationOptions> options,
         IIPLocationResolver iPLocationResolver,
-        IAuditLogManager manager)
-        : base(manager)
+        IOptionsMonitor<AbpAuditLoggingOptions> loggingOptions,
+        IAuditLogQueue auditLogQueue,
+        ILogger<AuditingStore> logger)
+        : base(loggingOptions, auditLogQueue, logger)
     {
         _options = options.CurrentValue;
         _iPLocationResolver = iPLocationResolver;

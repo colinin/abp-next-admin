@@ -925,6 +925,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.MicroService.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.BackgroundTasks.Quartz", "modules\task-management\LINGYUN.Abp.BackgroundTasks.Quartz\LINGYUN.Abp.BackgroundTasks.Quartz.csproj", "{ABCAB030-29ED-8219-F1DB-39D16098805F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Elasticsearch.Jobs", "modules\task-management\LINGYUN.Abp.Elasticsearch.Jobs\LINGYUN.Abp.Elasticsearch.Jobs.csproj", "{C4F5372D-3127-A2CA-3B22-B343D5E54EB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2439,6 +2441,10 @@ Global
 		{ABCAB030-29ED-8219-F1DB-39D16098805F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABCAB030-29ED-8219-F1DB-39D16098805F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABCAB030-29ED-8219-F1DB-39D16098805F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4F5372D-3127-A2CA-3B22-B343D5E54EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4F5372D-3127-A2CA-3B22-B343D5E54EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4F5372D-3127-A2CA-3B22-B343D5E54EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4F5372D-3127-A2CA-3B22-B343D5E54EB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2889,6 +2895,7 @@ Global
 		{B856BFF0-8D0E-4C4A-97C7-5406E1B7613C} = {FAB71536-FCDB-4135-B61A-732B72FDA6A6}
 		{410E0FFF-705D-4471-9E52-FF495096A945} = {B856BFF0-8D0E-4C4A-97C7-5406E1B7613C}
 		{ABCAB030-29ED-8219-F1DB-39D16098805F} = {77ED7922-BF30-4436-8A85-78F812583913}
+		{C4F5372D-3127-A2CA-3B22-B343D5E54EB5} = {77ED7922-BF30-4436-8A85-78F812583913}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C95FDF91-16F2-4A8B-A4BE-0E62D1B66718}

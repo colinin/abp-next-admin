@@ -15,8 +15,11 @@
 
 ### 存储支持
 
-- EntityFrameworkCore 实现
-- Elasticsearch 实现
+- EntityFrameworkCore 实现  
+- Elasticsearch 实现  
+
+> 注意: Elastic库限制, 兼容8.x; 9.x版本, 如需使用10.x版本, 请切换 **Elastic.Clients.Elasticsearch** 为9.x版本 
+> 参考: https://www.nuget.org/packages/Elastic.Clients.Elasticsearch#readme-body-tab  
 
 ## 模块引用
 
@@ -62,6 +65,17 @@ public class YouProjectModule : AbpModule
     "IsEnabledForAnonymousUsers": true, // 是否为匿名用户启用审计日志
     "IsEnabledForGetRequests": false, // 是否为GET请求启用审计日志
     "ApplicationName": null // 应用程序名称
+  },
+  // 审计日志增强配置
+  "AuditLogging": {
+    "IsAuditLogEnabled": true, // 是否启用审计日志记录
+    "UseAuditLogQueue": true, // 使用审计日志队列, 不启用队列则直接写入到持久化设施
+    "MaxAuditLogQueueSize": 10000, // 审计日志最大队列大小, 默认10000
+    "BatchAuditLogSize": 100, // 一次处理审计日志队列大小, 队列中同时写入100条记录后立即写入到持久化设施中
+    "IsSecurityLogEnabled": true, // 是否启用安全日志记录
+    "UseSecurityLogQueue": true, // 使用安全日志队列, 不启用队列则直接写入到持久化设施
+    "MaxSecurityLogQueueSize": 10000, // 安全日志最大队列大小, 默认10000
+    "BatchSecurityLogSize": 100 // 一次处理安全日志队列大小, 队列中同时写入100条记录后立即写入到持久化设施中
   }
 }
 ```
@@ -72,7 +86,8 @@ public class YouProjectModule : AbpModule
 {
   "AuditLogging": {
     "Elasticsearch": {
-      "IndexPrefix": "auditlogging" // 索引前缀
+      "IndexPrefix": "auditlogging", // 索引前缀
+      "ThrowIfIndexInitFailed": true // 索引初始化失败抛出异常, 默认为: true, 索引初始化失败后应用程序停止运行
     }
   }
 }

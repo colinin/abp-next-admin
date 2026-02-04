@@ -10,8 +10,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Guids;
-using Volo.Abp.SecurityLog;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
@@ -19,11 +17,8 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
 [Dependency(ReplaceServices = true)]
 public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDependency
 {
-    private readonly AbpSecurityLogOptions _securityLogOptions;
     private readonly AbpElasticsearchOptions _elasticsearchOptions;
-    private readonly AbpAuditLoggingElasticsearchOptions _loggingEsOptions;
     private readonly IIndexNameNormalizer _indexNameNormalizer;
-    private readonly IGuidGenerator _guidGenerator;
     private readonly IElasticsearchClientFactory _clientFactory;
     private readonly IClock _clock;
 
@@ -31,65 +26,16 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
 
     public ElasticsearchSecurityLogManager(
         IClock clock,
-        IGuidGenerator guidGenerator,
         IIndexNameNormalizer indexNameNormalizer,
-        IOptions<AbpSecurityLogOptions> securityLogOptions,
         IOptions<AbpElasticsearchOptions> elasticsearchOptions,
-        IElasticsearchClientFactory clientFactory,
-        IOptionsMonitor<AbpAuditLoggingElasticsearchOptions> loggingEsOptions)
+        IElasticsearchClientFactory clientFactory)
     {
         _clock = clock;
-        _guidGenerator = guidGenerator;
         _clientFactory = clientFactory;
         _indexNameNormalizer = indexNameNormalizer;
-        _securityLogOptions = securityLogOptions.Value;
         _elasticsearchOptions = elasticsearchOptions.Value;
-        _loggingEsOptions = loggingEsOptions.CurrentValue;
 
         Logger = NullLogger<ElasticsearchSecurityLogManager>.Instance;
-    }
-
-    public async virtual Task SaveAsync(
-        SecurityLogInfo securityLogInfo,
-        CancellationToken cancellationToken = default)
-    {
-        // TODO: 框架不把这玩意儿放在 ISecurityLogManager?
-        if (!_securityLogOptions.IsEnabled)
-        {
-            return;
-        }
-
-
-        if (!_loggingEsOptions.IsSecurityLogEnabled)
-        {
-            Logger.LogInformation(securityLogInfo.ToString());
-            return;
-        }
-
-        var client = _clientFactory.Create();
-
-        var securityLog = new SecurityLog(
-            _guidGenerator.Create(),
-            securityLogInfo);
-
-        var response = await client.IndexAsync(
-            securityLog,
-            (x) => x.Index(CreateIndex())
-                    .Id(securityLog.Id),
-            cancellationToken);
-
-        if (!response.IsValidResponse)
-        {
-            Logger.LogWarning("Could not save the security log object: " + Environment.NewLine + securityLogInfo.ToString());
-            if (response.TryGetOriginalException(out var ex))
-            {
-                Logger.LogWarning(ex, ex.Message);
-            }
-            else if (response.ElasticsearchServerError != null)
-            {
-                Logger.LogWarning(response.ElasticsearchServerError.ToString());
-            }
-        }
     }
 
     public async virtual Task<SecurityLog> GetAsync(
