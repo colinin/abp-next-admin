@@ -10,7 +10,7 @@ import { $t } from '@vben/locales';
 
 import { formatToDateTime } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
-import { Descriptions, Tabs, Tag, Textarea } from 'ant-design-vue';
+import { Descriptions, Skeleton, Tabs, Tag, Textarea } from 'ant-design-vue';
 
 import { useLoggingsApi } from '../../api/useLoggingsApi';
 
@@ -25,7 +25,7 @@ const TabPane = Tabs.TabPane;
 const DescriptionsItem = Descriptions.Item;
 
 const activedTab = ref('basic');
-const logModel = ref<LogDto>({} as LogDto);
+const logModel = ref<Partial<LogDto>>({});
 
 const { getApi } = useLoggingsApi();
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -83,7 +83,7 @@ const exceptionsGridOptions: VxeGridProps<LogExceptionDto> = {
   proxyConfig: {
     ajax: {
       query: () => {
-        return Promise.resolve(logModel.value.exceptions);
+        return Promise.resolve(logModel.value.exceptions ?? []);
       },
     },
     response: {
@@ -108,7 +108,8 @@ async function onGet(id: string) {
 <template>
   <Drawer>
     <div style="width: 800px">
-      <Tabs v-model="activedTab">
+      <Skeleton v-if="!logModel" />
+      <Tabs v-else v-model="activedTab">
         <TabPane key="basic" :tab="$t('AbpAuditLogging.Operation')">
           <Descriptions
             :colon="false"
@@ -121,8 +122,8 @@ async function onGet(id: string) {
               {{ formatToDateTime(logModel.timeStamp) }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.Level')">
-              <Tag :color="logLevelOptions[logModel.level]?.color">
-                {{ logLevelOptions[logModel.level]?.label }}
+              <Tag :color="logLevelOptions[logModel!.level!]?.color">
+                {{ logLevelOptions[logModel!.level!]?.label }}
               </Tag>
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.Message')" :span="2">
@@ -130,7 +131,11 @@ async function onGet(id: string) {
             </DescriptionsItem>
           </Descriptions>
         </TabPane>
-        <TabPane key="fields" :tab="$t('AbpAuditLogging.Fields')">
+        <TabPane
+          v-if="logModel.fields"
+          key="fields"
+          :tab="$t('AbpAuditLogging.Fields')"
+        >
           <Descriptions
             :colon="false"
             :column="1"
@@ -183,7 +188,7 @@ async function onGet(id: string) {
           </Descriptions>
         </TabPane>
         <TabPane
-          v-if="logModel.exceptions?.length > 0"
+          v-if="logModel.exceptions && logModel.exceptions.length > 0"
           key="exception"
           :tab="$t('AbpAuditLogging.Exceptions')"
         >
