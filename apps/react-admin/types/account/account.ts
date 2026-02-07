@@ -14,4 +14,22 @@ interface SendPhoneSigninCodeDto {
 
 type TwoFactorProvider = NameValue<string>;
 
-export type { GetTwoFactorProvidersInput, SendEmailSigninCodeDto, SendPhoneSigninCodeDto, TwoFactorProvider };
+interface ExternalSignUpApiDto {
+	userName: string;
+	emailAddress: string;
+}
+
+interface PhoneResetPasswordDto {
+	code: string;
+	newPassword: string;
+	phoneNumber: string;
+}
+
+export type {
+	GetTwoFactorProvidersInput,
+	SendEmailSigninCodeDto,
+	SendPhoneSigninCodeDto,
+	PhoneResetPasswordDto,
+	TwoFactorProvider,
+	ExternalSignUpApiDto,
+};

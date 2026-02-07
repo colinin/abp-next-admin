@@ -10,7 +10,7 @@ import { ScopesPermissions } from "@/constants/openiddict/permissions";
 import { AuditLogPermissions } from "@/constants/management/auditing/permissions";
 import { Iconify } from "@/components/icon";
 import { deleteApi, getPagedListApi } from "@/api/openiddict/scopes";
-import { useFeatures } from "@/hooks/abp/use-abp-feature";
+import { useFeatures } from "@/hooks/abp/fake-hooks/use-abp-feature";
 import { toast } from "sonner";
 import ScopeModal from "./scope-modal";
 import { EntityChangeDrawer } from "@/components/abp/auditing/entity-change-drawer";

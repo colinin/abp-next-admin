@@ -115,7 +115,7 @@ const PermissionDefinitionTable: React.FC = () => {
 
 	const mainColumns: ProColumns<PermissionGroupVo>[] = [
 		{
-			title: $t("abp.sequence"),
+			title: "",
 			dataIndex: "index",
 			valueType: "index",
 			width: 50,

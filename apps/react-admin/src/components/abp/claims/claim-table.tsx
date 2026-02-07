@@ -1,6 +1,6 @@
 import type React from "react";
 import { useState, useRef } from "react";
-import { Button, Popconfirm, Space } from "antd";
+import { Button, Card, Popconfirm, Space } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { ProTable, type ActionType, type ProColumns } from "@ant-design/pro-table";
@@ -99,22 +99,24 @@ const ClaimTable: React.FC<ClaimModalProps> = ({
 
 	return (
 		<div>
-			<ProTable<IdentityClaimDto>
-				actionRef={actionRef}
-				columns={columns}
-				rowKey="id"
-				search={false}
-				dataSource={claimsData?.items}
-				pagination={false}
-				toolBarRender={() => [
-					withAccessChecker(
-						<Button type="primary" onClick={() => openModal()}>
-							{$t("AbpIdentity.AddClaim")}
-						</Button>,
-						[createPolicy],
-					),
-				]}
-			/>
+			<Card>
+				<ProTable<IdentityClaimDto>
+					actionRef={actionRef}
+					columns={columns}
+					rowKey="id"
+					search={false}
+					dataSource={claimsData?.items}
+					pagination={false}
+					toolBarRender={() => [
+						withAccessChecker(
+							<Button type="primary" onClick={() => openModal()}>
+								{$t("AbpIdentity.AddClaim")}
+							</Button>,
+							[createPolicy],
+						),
+					]}
+				/>
+			</Card>
 			<ClaimModal
 				visible={modalVisible}
 				claim={selectedClaim || undefined}

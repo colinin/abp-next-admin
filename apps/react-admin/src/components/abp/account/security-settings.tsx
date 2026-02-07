@@ -65,7 +65,7 @@ const SecuritySettings: React.FC<Props> = ({ userInfo, onChangePassword, onChang
 		if (sendMailInterval > 0) {
 			return `${sendMailInterval} s`;
 		}
-		return $t("AbpAccount.ClickToValidation");
+		return $t("AbpAccountSecurity.ClickToValidation");
 	};
 
 	return (

@@ -52,12 +52,12 @@ const UserLockModal: React.FC<Props> = ({ visible, onClose, onChange, userId }) 
 				<Form.Item name="type" label={$t("AbpIdentity.LockType")} rules={[{ required: true }]}>
 					<Select
 						options={[
-							{ label: $t("LockType:Seconds"), value: LockType.Seconds },
-							{ label: $t("LockType:Minutes"), value: LockType.Minutes },
-							{ label: $t("LockType:Hours"), value: LockType.Hours },
-							{ label: $t("LockType:Days"), value: LockType.Days },
-							{ label: $t("LockType:Months"), value: LockType.Months },
-							{ label: $t("LockType:Years"), value: LockType.Years },
+							{ label: $t("AbpIdentity.LockType:Seconds"), value: LockType.Seconds },
+							{ label: $t("AbpIdentity.LockType:Minutes"), value: LockType.Minutes },
+							{ label: $t("AbpIdentity.LockType:Hours"), value: LockType.Hours },
+							{ label: $t("AbpIdentity.LockType:Days"), value: LockType.Days },
+							{ label: $t("AbpIdentity.LockType:Months"), value: LockType.Months },
+							{ label: $t("AbpIdentity.LockType:Years"), value: LockType.Years },
 						]}
 					/>
 				</Form.Item>

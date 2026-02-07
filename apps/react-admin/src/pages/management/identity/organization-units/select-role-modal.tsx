@@ -15,15 +15,13 @@ interface Props {
 const SelectRoleModal: React.FC<Props> = ({ visible, onClose, onConfirm, organizationUnitId }) => {
 	const { t: $t } = useTranslation();
 	const [selectedRoles, setSelectedRoles] = useState<IdentityRoleDto[]>([]);
-	const [searchParams, setSearchParams] = useState<{ filter?: string }>({});
 
 	// 获取可添加的角色列表
 	const { data, isLoading } = useQuery({
-		queryKey: ["organizationUnitRoles", "unAdded", organizationUnitId, searchParams],
+		queryKey: ["organizationUnitRoles", "unAdded", organizationUnitId],
 		queryFn: () =>
 			getUnaddedRoleListApi({
 				id: organizationUnitId,
-				...searchParams,
 			}),
 		enabled: visible,
 	});
