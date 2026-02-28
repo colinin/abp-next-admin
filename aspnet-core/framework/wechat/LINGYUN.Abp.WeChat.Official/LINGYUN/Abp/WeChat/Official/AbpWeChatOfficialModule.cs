@@ -40,10 +40,7 @@ public class AbpWeChatOfficialModule : AbpModule
             options.MapMessage("shortvideo", context => context.GetWeChatMessage<VideoMessage>());
             options.MapMessage("location", context => context.GetWeChatMessage<GeoLocationMessage>());
             options.MapMessage("link", context => context.GetWeChatMessage<LinkMessage>());
-        });
 
-        Configure<AbpWeChatMessageResolveOptions>(options =>
-        {
             // 事件处理器
             options.MessageResolvers.AddIfNotContains(new WeChatOfficialEventResolveContributor());
             // 消息处理器

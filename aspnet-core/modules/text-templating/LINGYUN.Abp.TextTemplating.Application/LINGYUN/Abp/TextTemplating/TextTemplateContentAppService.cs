@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Localization;
 using Volo.Abp.TextTemplating;
 
 namespace LINGYUN.Abp.TextTemplating;
@@ -11,22 +13,41 @@ public class TextTemplateContentAppService : AbpTextTemplatingAppServiceBase, IT
     protected ITextTemplateRepository TextTemplateRepository { get; }
     protected ITemplateContentProvider TemplateContentProvider { get; }
     protected ITemplateDefinitionManager TemplateDefinitionManager { get; }
+    protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
 
     public TextTemplateContentAppService(
         ITextTemplateRepository textTemplateRepository,
         ITemplateContentProvider templateContentProvider,
-        ITemplateDefinitionManager templateDefinitionManager)
+        ITemplateDefinitionManager templateDefinitionManager,
+        ILocalizableStringSerializer localizableStringSerializer)
     {
         TextTemplateRepository = textTemplateRepository;
         TemplateContentProvider = templateContentProvider;
         TemplateDefinitionManager = templateDefinitionManager;
+        LocalizableStringSerializer = localizableStringSerializer;
     }
 
     public async virtual Task<TextTemplateContentDto> GetAsync(TextTemplateContentGetInput input)
     {
         var templateDefinition = await GetTemplateDefinition(input.Name);
+        string content = null;
 
-        var content = await TemplateContentProvider.GetContentOrNullAsync(templateDefinition.Name, input.Culture);
+        try
+        {
+            content = await TemplateContentProvider.GetContentOrNullAsync(templateDefinition.Name, input.Culture);
+        }
+        catch
+        {
+            // Ignore 
+            // 场景: 模板未在当前宿主服务中注册时, VirtualPath将抛出异常, 应忽略此异常
+            // See: https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.TextTemplating.Core/Volo/Abp/TextTemplating/VirtualFiles/LocalizedTemplateContentReaderFactory.cs#L66
+        }
+
+        if (content.IsNullOrWhiteSpace())
+        {
+            var textTemplate = await TextTemplateRepository.FindByNameAsync(templateDefinition.Name, input.Culture);
+            content = textTemplate?.Content;
+        }
 
         return new TextTemplateContentDto
         {
@@ -35,41 +56,6 @@ public class TextTemplateContentAppService : AbpTextTemplatingAppServiceBase, IT
             Content = content,
         };
     }
-
-    //public virtual Task<PagedResultDto<TextTemplateDefinitionDto>> GetListAsync(TextTemplateDefinitionGetListInput input)
-    //{
-    //    var templates = new List<TextTemplateDefinitionDto>();
-    //    var templateDefinitions = TemplateDefinitionManager.GetAll();
-    //    var filterTemplates = templateDefinitions
-    //        .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x =>
-    //            x.Name.Contains(input.Filter) || x.Layout.Contains(input.Filter))
-    //        .Skip(input.SkipCount)
-    //        .Take(input.MaxResultCount);
-
-    //    foreach (var templateDefinition in filterTemplates)
-    //    {
-    //        var layout = templateDefinition.Layout;
-    //        if (!layout.IsNullOrWhiteSpace())
-    //        {
-    //            var layoutDefinition = GetTemplateDefinition(templateDefinition.Layout);
-    //            layout = layoutDefinition.DisplayName.Localize(StringLocalizerFactory);
-    //        }
-
-    //        var result = new TextTemplateDefinitionDto
-    //        {
-    //            DefaultCultureName = templateDefinition.DefaultCultureName,
-    //            IsInlineLocalized = templateDefinition.IsInlineLocalized,
-    //            IsLayout = templateDefinition.IsLayout,
-    //            Layout = layout,
-    //            Name = templateDefinition.Name,
-    //            DisplayName = templateDefinition.DisplayName.Localize(StringLocalizerFactory),
-    //        };
-
-    //        templates.Add(result);
-    //    }
-
-    //    return Task.FromResult(new PagedResultDto<TextTemplateDefinitionDto>(templateDefinitions.Count, templates));
-    //}
 
     [Authorize(AbpTextTemplatingPermissions.TextTemplateContent.Delete)]
     public async virtual Task RestoreToDefaultAsync(string name, TextTemplateRestoreInput input)
@@ -89,13 +75,13 @@ public class TextTemplateContentAppService : AbpTextTemplatingAppServiceBase, IT
     {
         var templateDefinition = await GetTemplateDefinition(name);
 
-        var template = await TextTemplateRepository.FindByNameAsync(name, input.Culture);
+        var template = await TextTemplateRepository.FindByNameAsync(templateDefinition.Name, input.Culture);
         if (template == null)
         {
             template = new TextTemplate(
                 GuidGenerator.Create(),
                 templateDefinition.Name,
-                templateDefinition.DisplayName.Localize(StringLocalizerFactory),
+                LocalizableStringSerializer.Serialize(templateDefinition.DisplayName),
                 input.Content,
                 input.Culture);
 

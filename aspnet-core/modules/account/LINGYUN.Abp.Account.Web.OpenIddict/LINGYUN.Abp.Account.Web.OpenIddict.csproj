@@ -4,16 +4,28 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<AssemblyName>LINGYUN.Abp.Account.Web.OpenIddict</AssemblyName>
 		<PackageId>LINGYUN.Abp.Account.Web.OpenIddict</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 		<RootNamespace>LINGYUN.Abp.Account.Web.OpenIddict</RootNamespace>
 		<OutputType>Library</OutputType>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Localization\**\*.json" />
+		<EmbeddedResource Include="Pages\**\*.js" />
+		<EmbeddedResource Include="Views\**\*.js" />
+		<EmbeddedResource Include="wwwroot\**\*.css" />
+		<Content Remove="Localization\**\*.json" />
+		<Content Remove="Pages\**\*.js" />
+		<Content Remove="Views\**\*.js" />
+		<Content Remove="wwwroot\**\*.css" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Account.Web.OpenIddict" />

@@ -8,7 +8,8 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.WeChat.Common;
 
 [DependsOn(
-    typeof(AbpEventBusModule))]
+    typeof(AbpEventBusModule),
+    typeof(AbpLocalizationModule))]
 public class AbpWeChatCommonModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

@@ -1,10 +1,9 @@
-﻿using LINGYUN.Abp.Account.Emailing;
-using LINGYUN.Abp.Account.Emailing.Localization;
+﻿using LINGYUN.Abp.Account.Security;
+using LINGYUN.Abp.Account.Security.Localization;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.WeChat.MiniProgram;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account.Localization;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -16,7 +15,7 @@ namespace LINGYUN.Abp.Account;
 [DependsOn(
     typeof(Volo.Abp.Account.AbpAccountApplicationModule),
     typeof(AbpAccountApplicationContractsModule),
-    typeof(AbpAccountEmailingModule),
+    typeof(AbpAccountSecurityModule),
     typeof(AbpIdentityDomainModule),
     typeof(AbpBlobStoringModule),
     typeof(AbpWeChatMiniProgramModule))]
@@ -24,12 +23,7 @@ public class AbpAccountApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpAccountApplicationModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<AbpAccountApplicationModule>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpAccountApplicationModule>();
 
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
@@ -45,7 +39,7 @@ public class AbpAccountApplicationModule : AbpModule
         {
             options.Resources
                 .Get<AccountResource>()
-                .AddBaseTypes(typeof(AccountEmailingResource));
+                .AddBaseTypes(typeof(AccountSecurityResource));
         });
     }
 }

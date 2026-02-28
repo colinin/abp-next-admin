@@ -1,56 +1,57 @@
 ﻿using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using System;
+using System.Text.Json.Serialization;
 
 namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 
 public class SerilogField
 {
-    [Nest.PropertyName(AbpSerilogUniqueIdConsts.UniqueIdPropertyName)]
+    [JsonPropertyName(AbpSerilogUniqueIdConsts.UniqueIdPropertyName)]
     public long UniqueId { get; set; }
 
-    [Nest.PropertyName(AbpLoggingEnricherPropertyNames.MachineName)]
+    [JsonPropertyName(AbpLoggingEnricherPropertyNames.MachineName)]
     public string MachineName { get; set; }
 
-    [Nest.PropertyName(AbpLoggingEnricherPropertyNames.EnvironmentName)]
+    [JsonPropertyName(AbpLoggingEnricherPropertyNames.EnvironmentName)]
     public string Environment { get; set; }
 
-    [Nest.PropertyName(AbpSerilogEnrichersConsts.ApplicationNamePropertyName)]
+    [JsonPropertyName(AbpSerilogEnrichersConsts.ApplicationNamePropertyName)]
     public string Application { get; set; }
 
-    [Nest.PropertyName("SourceContext")]
+    [JsonPropertyName("SourceContext")]
     public string Context { get; set; }
 
-    [Nest.PropertyName("ActionId")]
+    [JsonPropertyName("ActionId")]
     public string ActionId { get; set; }
 
-    [Nest.PropertyName("ActionName")]
+    [JsonPropertyName("ActionName")]
     public string ActionName { get; set; }
 
-    [Nest.PropertyName("RequestId")]
+    [JsonPropertyName("RequestId")]
     public string RequestId { get; set; }
 
-    [Nest.PropertyName("RequestPath")]
+    [JsonPropertyName("RequestPath")]
     public string RequestPath { get; set; }
 
-    [Nest.PropertyName("ConnectionId")]
+    [JsonPropertyName("ConnectionId")]
     public string ConnectionId { get; set; }
 
-    [Nest.PropertyName("CorrelationId")]
+    [JsonPropertyName("CorrelationId")]
     public string CorrelationId { get; set; }
 
-    [Nest.PropertyName("ClientId")]
+    [JsonPropertyName("ClientId")]
     public string ClientId { get; set; }
 
-    [Nest.PropertyName("UserId")]
+    [JsonPropertyName("UserId")]
     public string UserId { get; set; }
 
-    [Nest.PropertyName("TenantId")]
+    [JsonPropertyName("TenantId")]
     public Guid? TenantId { get; set; }
 
-    [Nest.PropertyName("ProcessId")]
+    [JsonPropertyName("ProcessId")]
     public int ProcessId { get; set; }
 
-    [Nest.PropertyName("ThreadId")]
+    [JsonPropertyName("ThreadId")]
     public int ThreadId { get; set; }
 }

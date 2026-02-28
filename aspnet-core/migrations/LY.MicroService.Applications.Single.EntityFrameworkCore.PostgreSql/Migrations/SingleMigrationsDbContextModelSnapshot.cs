@@ -19,15 +19,14 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.PostgreSql)
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", b =>
+            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityEnumInfo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("DisplayName")
@@ -35,6 +34,45 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)")
                         .HasColumnName("DisplayName");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("Name");
+
+                    b.Property<Guid>("PropertyInfoId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PropertyInfoId", "Name");
+
+                    b.ToTable("AbpAuthEntityEnums", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("DisplayName");
+
+                    b.Property<string>("JavaScriptType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("JavaScriptType");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -51,11 +89,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     b.Property<Guid>("TypeInfoId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ValueRange")
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("ValueRange");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TypeInfoId", "TypeFullName");
@@ -66,7 +99,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityTypeInfo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -77,7 +109,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -99,7 +131,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -131,10 +163,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("AllowProperties")
+                    b.Property<string>("AccessedProperties")
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)")
-                        .HasColumnName("AllowProperties");
+                        .HasColumnName("AccessedProperties");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -144,7 +176,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -170,7 +202,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -206,10 +238,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("AllowProperties")
+                    b.Property<string>("AccessedProperties")
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)")
-                        .HasColumnName("AllowProperties");
+                        .HasColumnName("AccessedProperties");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -219,7 +251,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -245,7 +277,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -275,14 +307,11 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     b.ToTable("AbpAuthRoleEntityRules", (string)null);
                 });
 
-            modelBuilder.Entity("LINGYUN.Abp.Demo.Authors.Author", b =>
+            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.SubjectStrategy", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -292,7 +321,69 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<int>("Strategy")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SubjectId")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("SubjectId");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("SubjectName");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AbpAuthSubjectStrategys", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.Demo.Authors.Author", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -304,7 +395,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("ExtraProperties")
@@ -319,7 +410,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -344,7 +435,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.Demo.Books.Book", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("AuthorId")
@@ -358,7 +448,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -371,7 +461,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ExtraProperties");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -387,7 +477,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("real");
 
                     b.Property<DateTime>("PublishDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -399,14 +489,116 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     b.ToTable("Demo_Books", (string)null);
                 });
 
+            modelBuilder.Entity("LINGYUN.Abp.Demo.Books.BookAuth", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<Guid>("EntityId")
+                        .HasMaxLength(64)
+                        .HasColumnType("uuid")
+                        .HasColumnName("EntityId");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("EntityType");
+
+                    b.Property<string>("OrganizationUnit")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("OrganizationUnit");
+
+                    b.Property<string>("Role")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("Role");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityId");
+
+                    b.HasIndex("OrganizationUnit");
+
+                    b.HasIndex("Role");
+
+                    b.ToTable("Demo_BooksAuths", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("Data");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Provider");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("AbpGdprInfos", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<DateTime>("ReadyTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AbpGdprRequests", (string)null);
+                });
+
             modelBuilder.Entity("LINGYUN.Abp.LocalizationManagement.Language", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -431,7 +623,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasDefaultValue(true);
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -459,11 +651,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.LocalizationManagement.Resource", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -491,7 +682,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasDefaultValue(true);
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -562,7 +753,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("character varying(512)");
 
                     b.Property<DateTime?>("Birthday")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -572,7 +763,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -589,7 +780,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ExtraProperties");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -597,7 +788,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("LastModifierId");
 
                     b.Property<DateTime?>("LastOnlineTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("NickName")
                         .HasMaxLength(256)
@@ -651,7 +842,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -758,7 +949,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("character varying(1048576)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -827,7 +1018,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("character varying(128)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -842,7 +1033,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -885,7 +1076,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -930,7 +1121,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("character varying(1048576)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -982,7 +1173,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -1022,7 +1213,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -1038,7 +1229,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -1050,7 +1241,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("character varying(256)");
 
                     b.Property<DateTime?>("SilenceEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uuid")
@@ -1080,11 +1271,11 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasDefaultValue(0);
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<DateTime?>("ExpirationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("text")
@@ -1123,7 +1314,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.Notifications.NotificationDefinitionGroupRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<bool>("AllowSubscriptionToClients")
@@ -1154,7 +1344,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.Notifications.NotificationDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<bool>("AllowSubscriptionToClients")
@@ -1244,7 +1433,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<string>("NotificationName")
@@ -1278,7 +1467,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.Saas.Editions.Edition", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1289,7 +1477,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -1301,7 +1489,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("DisplayName")
@@ -1324,7 +1512,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -1341,7 +1529,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.Saas.Tenants.Tenant", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1352,7 +1539,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -1364,17 +1551,17 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<DateTime?>("DisableTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("EditionId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("EnableTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("EntityVersion")
                         .HasColumnType("integer");
@@ -1394,7 +1581,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -1443,7 +1630,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.TaskManagement.BackgroundJobAction", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1454,7 +1640,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -1476,7 +1662,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("JobId");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -1514,7 +1700,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("Args");
 
                     b.Property<DateTime>("BeginTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -1524,7 +1710,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -1542,7 +1728,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("Description");
 
                     b.Property<DateTime?>("EndTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .IsRequired()
@@ -1568,7 +1754,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -1576,7 +1762,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("LastModifierId");
 
                     b.Property<DateTime?>("LastRunTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("LockTimeOut")
                         .HasColumnType("integer");
@@ -1594,7 +1780,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("NextRunTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("NodeName")
                         .HasMaxLength(128)
@@ -1677,7 +1863,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("Message");
 
                     b.Property<DateTime>("RunTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uuid")
@@ -1693,7 +1879,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.TextTemplating.TextTemplate", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
@@ -1702,7 +1887,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("Content");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -1721,7 +1906,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DisplayName");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -1745,7 +1930,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.TextTemplating.TextTemplateDefinition", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1809,7 +1993,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
@@ -1855,11 +2038,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookEventRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<string>("Data")
@@ -1868,7 +2050,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("Data");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<bool>("IsDeleted")
@@ -1894,7 +2076,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookGroupDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("DisplayName")
@@ -1922,15 +2103,14 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookSendRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<string>("RequestHeaders")
@@ -1983,7 +2163,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -2033,7 +2213,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Platform.Datas.Data", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Code")
@@ -2050,7 +2229,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -2062,7 +2241,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("Description")
@@ -2091,7 +2270,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -2121,7 +2300,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Platform.Datas.DataItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<bool>("AllowBeNull")
@@ -2137,7 +2315,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -2157,7 +2335,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("Description")
@@ -2186,7 +2364,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -2215,10 +2393,172 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     b.ToTable("AppPlatformDataItems", (string)null);
                 });
 
-            modelBuilder.Entity("LINGYUN.Platform.Layouts.Layout", b =>
+            modelBuilder.Entity("LINGYUN.Platform.Feedbacks.Feedback", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("Category");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("Content");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppPlatformFeedbacks", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Feedbacks.FeedbackAttachment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid>("FeedbackId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("Name");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("Url");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FeedbackId");
+
+                    b.ToTable("AppPlatformFeedbackAttachments", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Feedbacks.FeedbackComment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Capacity")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("Capacity");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("Content");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid>("FeedbackId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FeedbackId");
+
+                    b.ToTable("AppPlatformFeedbackComments", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Layouts.Layout", b =>
+                {
+                    b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -2229,7 +2569,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -2244,7 +2584,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("Description")
@@ -2274,7 +2614,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -2309,7 +2649,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Platform.Menus.Menu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Code")
@@ -2332,7 +2671,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -2344,7 +2683,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("Description")
@@ -2377,7 +2716,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -2418,11 +2757,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Platform.Menus.RoleMenu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -2430,7 +2768,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("CreatorId");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -2463,7 +2801,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Platform.Menus.UserFavoriteMenu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("AliasName")
@@ -2477,7 +2814,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("Color");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -2502,7 +2839,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("Icon");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -2541,11 +2878,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Platform.Menus.UserMenu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -2553,7 +2889,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("CreatorId");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -2580,10 +2916,254 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     b.ToTable("AppPlatformUserMenus", (string)null);
                 });
 
+            modelBuilder.Entity("LINGYUN.Platform.Messages.EmailMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("BodyTransferEncoding")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CC")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
+                        .HasColumnName("CC");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("Content");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<int?>("DeliveryNotificationOptions")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("From")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("From");
+
+                    b.Property<bool>("IsBodyHtml")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<bool>("Normalize")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Provider")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("Provider");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Reason");
+
+                    b.Property<string>("Receiver")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
+                        .HasColumnName("Receiver");
+
+                    b.Property<int>("SendCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("SendTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Sender")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Sender");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Subject")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("Subject");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppPlatformEmailMessages", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Messages.EmailMessageAttachment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("BlobName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("BlobName");
+
+                    b.Property<Guid>("MessageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Name");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("AppPlatformEmailMessageAttachments", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Messages.EmailMessageHeader", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("Key");
+
+                    b.Property<Guid>("MessageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("AppPlatformEmailMessageHeaders", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Messages.SmsMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("Content");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Provider")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("Provider");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Reason");
+
+                    b.Property<string>("Receiver")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
+                        .HasColumnName("Receiver");
+
+                    b.Property<int>("SendCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("SendTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Sender")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Sender");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppPlatformSmsMessages", (string)null);
+                });
+
             modelBuilder.Entity("LINGYUN.Platform.Packages.Package", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Authors")
@@ -2599,7 +3179,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -2611,7 +3191,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("Description")
@@ -2634,7 +3214,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -2688,10 +3268,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ContentType");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -2733,7 +3313,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("Summary");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Url")
                         .HasMaxLength(512)
@@ -2750,7 +3330,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Platform.Portal.Enterprise", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Address")
@@ -2766,7 +3345,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -2778,7 +3357,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("EnglishName")
@@ -2787,7 +3366,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("EnglishName");
 
                     b.Property<DateTime?>("ExpirationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .IsRequired()
@@ -2801,7 +3380,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -2835,7 +3414,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("RegistrationCode");
 
                     b.Property<DateTime?>("RegistrationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("TaxCode")
                         .HasMaxLength(40)
@@ -2853,7 +3432,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ApplicationName")
@@ -2906,7 +3484,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ExecutionDuration");
 
                     b.Property<DateTime>("ExecutionTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .IsRequired()
@@ -2975,7 +3553,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("AuditLogId")
@@ -2987,7 +3564,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ExecutionDuration");
 
                     b.Property<DateTime>("ExecutionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("ExecutionTime");
 
                     b.Property<string>("ExtraProperties")
@@ -3022,10 +3599,36 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     b.ToTable("AbpAuditLogActions", (string)null);
                 });
 
+            modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogExcelFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("FileName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("FileName");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AbpAuditLogExcelFiles", (string)null);
+                });
+
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("AuditLogId")
@@ -3033,7 +3636,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("AuditLogId");
 
                     b.Property<DateTime>("ChangeTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("ChangeTime");
 
                     b.Property<byte>("ChangeType")
@@ -3074,7 +3677,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("EntityChangeId")
@@ -3116,7 +3718,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("AllowedProviders")
@@ -3177,7 +3778,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureGroupDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("DisplayName")
@@ -3205,7 +3805,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureValue", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -3237,7 +3836,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -3246,6 +3844,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
 
                     b.Property<string>("Description")
                         .HasMaxLength(256)
@@ -3286,7 +3888,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.Identity.IdentityLinkUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("SourceTenantId")
@@ -3312,7 +3913,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRole", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -3321,6 +3921,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)")
                         .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
 
                     b.Property<int>("EntityVersion")
                         .HasColumnType("integer");
@@ -3394,7 +3998,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.Identity.IdentitySecurityLog", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Action")
@@ -3429,7 +4032,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("character varying(64)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .IsRequired()
@@ -3471,7 +4074,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.Identity.IdentitySession", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ClientId")
@@ -3484,15 +4086,19 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("character varying(64)");
 
                     b.Property<string>("DeviceInfo")
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<string>("IpAddresses")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("IpAddresses")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
                     b.Property<DateTime?>("LastAccessed")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("SessionId")
                         .IsRequired()
@@ -3500,7 +4106,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("character varying(128)");
 
                     b.Property<DateTime>("SignedIn")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uuid")
@@ -3523,7 +4129,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<int>("AccessFailedCount")
@@ -3540,7 +4145,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -3552,7 +4157,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("Email")
@@ -3592,7 +4197,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("IsExternal");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -3718,17 +4323,16 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserDelegation", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("EndTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("SourceUserId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("StartTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("TargetUserId")
                         .HasColumnType("uuid");
@@ -3780,7 +4384,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -3845,7 +4449,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnit", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Code")
@@ -3862,7 +4465,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -3874,7 +4477,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("DisplayName")
@@ -3898,7 +4501,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -3930,7 +4533,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -3948,850 +4551,9 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     b.ToTable("AbpOrganizationUnitRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResource", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("AllowedAccessTokenSigningAlgorithms")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<string>("DisplayName")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("ExtraProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<bool>("ShowInDiscoveryDocument")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IdentityServerApiResources", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceClaim", b =>
-                {
-                    b.Property<Guid>("ApiResourceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Type")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("ApiResourceId", "Type");
-
-                    b.ToTable("IdentityServerApiResourceClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceProperty", b =>
-                {
-                    b.Property<Guid>("ApiResourceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Key")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("Value")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.HasKey("ApiResourceId", "Key", "Value");
-
-                    b.ToTable("IdentityServerApiResourceProperties", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceScope", b =>
-                {
-                    b.Property<Guid>("ApiResourceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Scope")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("ApiResourceId", "Scope");
-
-                    b.ToTable("IdentityServerApiResourceScopes", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceSecret", b =>
-                {
-                    b.Property<Guid>("ApiResourceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Type")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("Value")
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<DateTime?>("Expiration")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("ApiResourceId", "Type", "Value");
-
-                    b.ToTable("IdentityServerApiResourceSecrets", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiScopes.ApiScope", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<string>("DisplayName")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<bool>("Emphasize")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("ExtraProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<bool>("Required")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("ShowInDiscoveryDocument")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IdentityServerApiScopes", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiScopes.ApiScopeClaim", b =>
-                {
-                    b.Property<Guid>("ApiScopeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Type")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("ApiScopeId", "Type");
-
-                    b.ToTable("IdentityServerApiScopeClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiScopes.ApiScopeProperty", b =>
-                {
-                    b.Property<Guid>("ApiScopeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Key")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("Value")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.HasKey("ApiScopeId", "Key", "Value");
-
-                    b.ToTable("IdentityServerApiScopeProperties", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.Client", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("AbsoluteRefreshTokenLifetime")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("AccessTokenLifetime")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("AccessTokenType")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("AllowAccessTokensViaBrowser")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("AllowOfflineAccess")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("AllowPlainTextPkce")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("AllowRememberConsent")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("AllowedIdentityTokenSigningAlgorithms")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<bool>("AlwaysIncludeUserClaimsInIdToken")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("AlwaysSendClientClaims")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("AuthorizationCodeLifetime")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("BackChannelLogoutSessionRequired")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("BackChannelLogoutUri")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<string>("ClientClaimsPrefix")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("ClientName")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("ClientUri")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<int?>("ConsentLifetime")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<int>("DeviceCodeLifetime")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("EnableLocalLogin")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("ExtraProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("FrontChannelLogoutSessionRequired")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("FrontChannelLogoutUri")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<int>("IdentityTokenLifetime")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IncludeJwtId")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("LogoUri")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<string>("PairWiseSubjectSalt")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("ProtocolType")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<int>("RefreshTokenExpiration")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RefreshTokenUsage")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("RequireClientSecret")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireConsent")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequirePkce")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("RequireRequestObject")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("SlidingRefreshTokenLifetime")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserCodeType")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int?>("UserSsoLifetime")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("IdentityServerClients", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientClaim", b =>
-                {
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Type")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("Value")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.HasKey("ClientId", "Type", "Value");
-
-                    b.ToTable("IdentityServerClientClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientCorsOrigin", b =>
-                {
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Origin")
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
-                    b.HasKey("ClientId", "Origin");
-
-                    b.ToTable("IdentityServerClientCorsOrigins", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientGrantType", b =>
-                {
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("GrantType")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.HasKey("ClientId", "GrantType");
-
-                    b.ToTable("IdentityServerClientGrantTypes", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientIdPRestriction", b =>
-                {
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Provider")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("ClientId", "Provider");
-
-                    b.ToTable("IdentityServerClientIdPRestrictions", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientPostLogoutRedirectUri", b =>
-                {
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("PostLogoutRedirectUri")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.HasKey("ClientId", "PostLogoutRedirectUri");
-
-                    b.ToTable("IdentityServerClientPostLogoutRedirectUris", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientProperty", b =>
-                {
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Key")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("Value")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.HasKey("ClientId", "Key", "Value");
-
-                    b.ToTable("IdentityServerClientProperties", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientRedirectUri", b =>
-                {
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("RedirectUri")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.HasKey("ClientId", "RedirectUri");
-
-                    b.ToTable("IdentityServerClientRedirectUris", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientScope", b =>
-                {
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Scope")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("ClientId", "Scope");
-
-                    b.ToTable("IdentityServerClientScopes", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientSecret", b =>
-                {
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Type")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("Value")
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<DateTime?>("Expiration")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("ClientId", "Type", "Value");
-
-                    b.ToTable("IdentityServerClientSecrets", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Devices.DeviceFlowCodes", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<string>("Data")
-                        .IsRequired()
-                        .HasMaxLength(50000)
-                        .HasColumnType("character varying(50000)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("DeviceCode")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<DateTime?>("Expiration")
-                        .IsRequired()
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ExtraProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<string>("SessionId")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("SubjectId")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("UserCode")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceCode")
-                        .IsUnique();
-
-                    b.HasIndex("Expiration");
-
-                    b.HasIndex("UserCode");
-
-                    b.ToTable("IdentityServerDeviceFlowCodes", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Grants.PersistedGrant", b =>
-                {
-                    b.Property<string>("Key")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime?>("ConsumedTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Data")
-                        .IsRequired()
-                        .HasMaxLength(50000)
-                        .HasColumnType("character varying(50000)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<DateTime?>("Expiration")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ExtraProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("SessionId")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("SubjectId")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Key");
-
-                    b.HasIndex("Expiration");
-
-                    b.HasIndex("SubjectId", "ClientId", "Type");
-
-                    b.HasIndex("SubjectId", "SessionId", "Type");
-
-                    b.ToTable("IdentityServerPersistedGrants", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.IdentityResources.IdentityResource", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<string>("DisplayName")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<bool>("Emphasize")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("ExtraProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<bool>("Required")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("ShowInDiscoveryDocument")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IdentityServerIdentityResources", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.IdentityResources.IdentityResourceClaim", b =>
-                {
-                    b.Property<Guid>("IdentityResourceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Type")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("IdentityResourceId", "Type");
-
-                    b.ToTable("IdentityServerIdentityResourceClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.IdentityResources.IdentityResourceProperty", b =>
-                {
-                    b.Property<Guid>("IdentityResourceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Key")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<string>("Value")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.HasKey("IdentityResourceId", "Key", "Value");
-
-                    b.ToTable("IdentityServerIdentityResourceProperties", (string)null);
-                });
-
             modelBuilder.Entity("Volo.Abp.OpenIddict.Applications.OpenIddictApplication", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ApplicationType")
@@ -4824,7 +4586,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -4836,7 +4598,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("DisplayName")
@@ -4850,6 +4612,9 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
 
+                    b.Property<string>("FrontChannelLogoutUri")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
@@ -4860,7 +4625,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -4898,7 +4663,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("ApplicationId")
@@ -4912,42 +4676,12 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime?>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("DeletionTime");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("LastModifierId");
 
                     b.Property<string>("Properties")
                         .HasColumnType("text");
@@ -4977,7 +4711,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.OpenIddict.Scopes.OpenIddictScope", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -4988,7 +4721,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationTime");
 
                     b.Property<Guid?>("CreatorId")
@@ -5000,7 +4733,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("DeleterId");
 
                     b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("Description")
@@ -5027,7 +4760,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastModificationTime");
 
                     b.Property<Guid?>("LastModifierId")
@@ -5054,7 +4787,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.OpenIddict.Tokens.OpenIddictToken", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("ApplicationId")
@@ -5071,45 +4803,15 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime?>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("DeletionTime");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ExpirationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("LastModifierId");
 
                     b.Property<string>("Payload")
                         .HasColumnType("text");
@@ -5118,7 +4820,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("RedemptionDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ReferenceId")
                         .HasMaxLength(100)
@@ -5133,8 +4835,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasColumnType("character varying(400)");
 
                     b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
 
                     b.HasKey("Id");
 
@@ -5150,7 +4852,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("DisplayName")
@@ -5203,7 +4904,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionGrant", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -5236,7 +4936,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionGroupDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("DisplayName")
@@ -5264,7 +4963,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.SettingManagement.Setting", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -5296,7 +4994,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.SettingManagement.SettingDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("DefaultValue")
@@ -5342,6 +5039,17 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     b.ToTable("AbpSettingDefinitions", (string)null);
                 });
 
+            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityEnumInfo", b =>
+                {
+                    b.HasOne("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", "PropertyInfo")
+                        .WithMany("Enums")
+                        .HasForeignKey("PropertyInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PropertyInfo");
+                });
+
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", b =>
                 {
                     b.HasOne("LINGYUN.Abp.DataProtectionManagement.EntityTypeInfo", "TypeInfo")
@@ -5384,6 +5092,26 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("LINGYUN.Abp.Demo.Books.BookAuth", b =>
+                {
+                    b.HasOne("LINGYUN.Abp.Demo.Books.Book", "Entity")
+                        .WithMany()
+                        .HasForeignKey("EntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Entity");
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprInfo", b =>
+                {
+                    b.HasOne("LINGYUN.Abp.Gdpr.GdprRequest", null)
+                        .WithMany("Infos")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("LINGYUN.Abp.Saas.Tenants.Tenant", b =>
                 {
                     b.HasOne("LINGYUN.Abp.Saas.Editions.Edition", "Edition")
@@ -5418,6 +5146,42 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                     b.HasOne("LINGYUN.Platform.Datas.Data", null)
                         .WithMany("Items")
                         .HasForeignKey("DataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Feedbacks.FeedbackAttachment", b =>
+                {
+                    b.HasOne("LINGYUN.Platform.Feedbacks.Feedback", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("FeedbackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Feedbacks.FeedbackComment", b =>
+                {
+                    b.HasOne("LINGYUN.Platform.Feedbacks.Feedback", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("FeedbackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Messages.EmailMessageAttachment", b =>
+                {
+                    b.HasOne("LINGYUN.Platform.Messages.EmailMessage", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Messages.EmailMessageHeader", b =>
+                {
+                    b.HasOne("LINGYUN.Platform.Messages.EmailMessage", null)
+                        .WithMany("Headers")
+                        .HasForeignKey("MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -5548,159 +5312,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceClaim", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.ApiResources.ApiResource", null)
-                        .WithMany("UserClaims")
-                        .HasForeignKey("ApiResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceProperty", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.ApiResources.ApiResource", null)
-                        .WithMany("Properties")
-                        .HasForeignKey("ApiResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceScope", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.ApiResources.ApiResource", null)
-                        .WithMany("Scopes")
-                        .HasForeignKey("ApiResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceSecret", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.ApiResources.ApiResource", null)
-                        .WithMany("Secrets")
-                        .HasForeignKey("ApiResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiScopes.ApiScopeClaim", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.ApiScopes.ApiScope", null)
-                        .WithMany("UserClaims")
-                        .HasForeignKey("ApiScopeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiScopes.ApiScopeProperty", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.ApiScopes.ApiScope", null)
-                        .WithMany("Properties")
-                        .HasForeignKey("ApiScopeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientClaim", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.Clients.Client", null)
-                        .WithMany("Claims")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientCorsOrigin", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.Clients.Client", null)
-                        .WithMany("AllowedCorsOrigins")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientGrantType", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.Clients.Client", null)
-                        .WithMany("AllowedGrantTypes")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientIdPRestriction", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.Clients.Client", null)
-                        .WithMany("IdentityProviderRestrictions")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientPostLogoutRedirectUri", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.Clients.Client", null)
-                        .WithMany("PostLogoutRedirectUris")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientProperty", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.Clients.Client", null)
-                        .WithMany("Properties")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientRedirectUri", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.Clients.Client", null)
-                        .WithMany("RedirectUris")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientScope", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.Clients.Client", null)
-                        .WithMany("AllowedScopes")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientSecret", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.Clients.Client", null)
-                        .WithMany("ClientSecrets")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.IdentityResources.IdentityResourceClaim", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.IdentityResources.IdentityResource", null)
-                        .WithMany("UserClaims")
-                        .HasForeignKey("IdentityResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.IdentityResources.IdentityResourceProperty", b =>
-                {
-                    b.HasOne("Volo.Abp.IdentityServer.IdentityResources.IdentityResource", null)
-                        .WithMany("Properties")
-                        .HasForeignKey("IdentityResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization", b =>
                 {
                     b.HasOne("Volo.Abp.OpenIddict.Applications.OpenIddictApplication", null)
@@ -5719,9 +5330,19 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
                         .HasForeignKey("AuthorizationId");
                 });
 
+            modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", b =>
+                {
+                    b.Navigation("Enums");
+                });
+
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityTypeInfo", b =>
                 {
                     b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprRequest", b =>
+                {
+                    b.Navigation("Infos");
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.Saas.Tenants.Tenant", b =>
@@ -5732,6 +5353,20 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("LINGYUN.Platform.Datas.Data", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Feedbacks.Feedback", b =>
+                {
+                    b.Navigation("Attachments");
+
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("LINGYUN.Platform.Messages.EmailMessage", b =>
+                {
+                    b.Navigation("Attachments");
+
+                    b.Navigation("Headers");
                 });
 
             modelBuilder.Entity("LINGYUN.Platform.Packages.Package", b =>
@@ -5772,52 +5407,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql.Mig
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnit", b =>
                 {
                     b.Navigation("Roles");
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResource", b =>
-                {
-                    b.Navigation("Properties");
-
-                    b.Navigation("Scopes");
-
-                    b.Navigation("Secrets");
-
-                    b.Navigation("UserClaims");
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiScopes.ApiScope", b =>
-                {
-                    b.Navigation("Properties");
-
-                    b.Navigation("UserClaims");
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.Client", b =>
-                {
-                    b.Navigation("AllowedCorsOrigins");
-
-                    b.Navigation("AllowedGrantTypes");
-
-                    b.Navigation("AllowedScopes");
-
-                    b.Navigation("Claims");
-
-                    b.Navigation("ClientSecrets");
-
-                    b.Navigation("IdentityProviderRestrictions");
-
-                    b.Navigation("PostLogoutRedirectUris");
-
-                    b.Navigation("Properties");
-
-                    b.Navigation("RedirectUris");
-                });
-
-            modelBuilder.Entity("Volo.Abp.IdentityServer.IdentityResources.IdentityResource", b =>
-                {
-                    b.Navigation("Properties");
-
-                    b.Navigation("UserClaims");
                 });
 #pragma warning restore 612, 618
         }

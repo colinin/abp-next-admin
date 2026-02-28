@@ -29,10 +29,11 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account;
 
 public class RegisterModel : AccountPageModel
 {
-
+    [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string ReturnUrl { get; set; }
 
+    [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string ReturnUrlHash { get; set; }
 

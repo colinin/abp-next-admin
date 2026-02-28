@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.Identity.EntityFrameworkCore;
 
@@ -58,5 +59,28 @@ public class EfCoreIdentitySessionRepository : Volo.Abp.Identity.EntityFramework
         CancellationToken cancellationToken = default)
     {
         await DeleteAsync(x => x.SessionId == sessionId && x.Id != exceptSessionId, cancellationToken: cancellationToken);
+    }
+
+    public async virtual Task<int> GetCountAsync(
+        ISpecification<IdentitySession> specification,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .Where(specification.ToExpression())
+            .CountAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public async virtual Task<List<IdentitySession>> GetListAsync(
+        ISpecification<IdentitySession> specification,
+        string sorting = $"{nameof(IdentitySession.SignedIn)} DESC",
+        int maxResultCount = 10,
+        int skipCount = 0,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .Where(specification.ToExpression())
+            .OrderBy(!sorting.IsNullOrWhiteSpace() ? sorting : $"{nameof(IdentitySession.SignedIn)} DESC")
+            .PageBy(skipCount, maxResultCount)
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

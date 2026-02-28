@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Gdpr;
 
 [DependsOn(
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpDddDomainModule),
     typeof(AbpGdprDomainSharedModule)
     )]
@@ -19,11 +19,6 @@ public class AbpGdprDomainModule : AbpModule
         Configure<AbpGdprOptions>(configuration.GetSection("Gdpr"));
         Configure<AbpCookieConsentOptions>(configuration.GetSection("CookieConsent"));
 
-        context.Services.AddAutoMapperObjectMapper<AbpGdprDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<AbpGdprDomainModule>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpGdprDomainModule>();
     }
 }

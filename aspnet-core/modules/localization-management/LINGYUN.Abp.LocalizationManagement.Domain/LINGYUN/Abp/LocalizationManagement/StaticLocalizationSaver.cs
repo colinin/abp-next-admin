@@ -79,7 +79,9 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
 
         Logger.LogDebug("Waiting to acquire the distributed lock for saving static localizations...");
 
-        await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(GetApplicationDistributedLockKey());
+        await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
+            GetApplicationDistributedLockKey(),
+            TimeSpan.FromSeconds(5));
         if (applicationLockHandle == null)
         {
             return;

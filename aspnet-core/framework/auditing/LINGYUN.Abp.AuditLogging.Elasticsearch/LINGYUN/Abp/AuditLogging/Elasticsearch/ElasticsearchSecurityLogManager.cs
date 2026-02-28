@@ -1,16 +1,15 @@
-﻿using LINGYUN.Abp.Elasticsearch;
+﻿using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.QueryDsl;
+using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Nest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Guids;
-using Volo.Abp.SecurityLog;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
@@ -18,10 +17,8 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
 [Dependency(ReplaceServices = true)]
 public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDependency
 {
-    private readonly AbpSecurityLogOptions _securityLogOptions;
     private readonly AbpElasticsearchOptions _elasticsearchOptions;
     private readonly IIndexNameNormalizer _indexNameNormalizer;
-    private readonly IGuidGenerator _guidGenerator;
     private readonly IElasticsearchClientFactory _clientFactory;
     private readonly IClock _clock;
 
@@ -29,43 +26,16 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
 
     public ElasticsearchSecurityLogManager(
         IClock clock,
-        IGuidGenerator guidGenerator,
         IIndexNameNormalizer indexNameNormalizer,
-        IOptions<AbpSecurityLogOptions> securityLogOptions,
         IOptions<AbpElasticsearchOptions> elasticsearchOptions,
         IElasticsearchClientFactory clientFactory)
     {
         _clock = clock;
-        _guidGenerator = guidGenerator;
         _clientFactory = clientFactory;
         _indexNameNormalizer = indexNameNormalizer;
-        _securityLogOptions = securityLogOptions.Value;
         _elasticsearchOptions = elasticsearchOptions.Value;
 
         Logger = NullLogger<ElasticsearchSecurityLogManager>.Instance;
-    }
-
-    public async virtual Task SaveAsync(
-        SecurityLogInfo securityLogInfo,
-        CancellationToken cancellationToken = default)
-    {
-        // TODO: 框架不把这玩意儿放在 ISecurityLogManager?
-        if (!_securityLogOptions.IsEnabled)
-        {
-            return;
-        }
-
-        var client = _clientFactory.Create();
-
-        var securityLog = new SecurityLog(
-            _guidGenerator.Create(),
-            securityLogInfo);
-
-        await client.IndexAsync(
-            securityLog,
-            (x) => x.Index(CreateIndex())
-                    .Id(securityLog.Id),
-            cancellationToken);
     }
 
     public async virtual Task<SecurityLog> GetAsync(
@@ -99,12 +69,13 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
     {
         var client = _clientFactory.Create();
 
+        var idValues = ids.Select(x => FieldValue.String(x.ToString())).ToList();
         await client.DeleteByQueryAsync<SecurityLog>(
-            x => x.Index(CreateIndex())
+            x => x.Indices(CreateIndex())
                   .Query(query =>
                     query.Terms(terms =>
                         terms.Field(field => field.Id)
-                             .Terms(ids))),
+                             .Terms(new TermsQueryField(idValues)))),
             cancellationToken);
     }
 
@@ -128,7 +99,7 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
         var client = _clientFactory.Create();
 
         var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
-            ? SortOrder.Ascending : SortOrder.Descending;
+            ? SortOrder.Asc : SortOrder.Desc;
         sorting = !sorting.IsNullOrWhiteSpace()
             ? sorting.Split()[0]
             : nameof(SecurityLog.CreationTime);
@@ -146,9 +117,11 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
             correlationId);
 
         var response = await client.SearchAsync<SecurityLog>(dsl =>
-            dsl.Index(CreateIndex())
-               .Query(log => log.Bool(b => b.Must(querys.ToArray())))
-               .Source(log => log.IncludeAll())
+            dsl.Indices(CreateIndex())
+               .Query(new BoolQuery
+               {
+                   Must = querys
+               })
                .Sort(log => log.Field(GetField(sorting), sortOrder))
                .From(skipCount)
                .Size(maxResultCount),
@@ -186,14 +159,17 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
             correlationId);
 
         var response = await client.CountAsync<SecurityLog>(dsl =>
-            dsl.Index(CreateIndex())
-               .Query(log => log.Bool(b => b.Must(querys.ToArray()))),
+            dsl.Indices(CreateIndex())
+               .Query(new BoolQuery
+               {
+                   Must = querys
+               }),
             cancellationToken);
 
         return response.Count;
     }
 
-    protected virtual List<Func<QueryContainerDescriptor<SecurityLog>, QueryContainer>> BuildQueryDescriptor(
+    protected virtual List<Query> BuildQueryDescriptor(
         DateTime? startTime = null,
         DateTime? endTime = null,
         string applicationName = null,
@@ -205,50 +181,56 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
         string clientIpAddress = null,
         string correlationId = null)
     {
-        var querys = new List<Func<QueryContainerDescriptor<SecurityLog>, QueryContainer>>();
+        var queries = new List<Query>();
 
         if (startTime.HasValue)
         {
-            querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SecurityLog.CreationTime))).GreaterThanOrEquals(_clock.Normalize(startTime.Value))));
+            queries.Add(new DateRangeQuery(GetField(nameof(SecurityLog.CreationTime)))
+            {
+                Gte = _clock.Normalize(startTime.Value)
+            });
         }
         if (endTime.HasValue)
         {
-            querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SecurityLog.CreationTime))).LessThanOrEquals(_clock.Normalize(endTime.Value))));
+            queries.Add(new DateRangeQuery(GetField(nameof(SecurityLog.CreationTime)))
+            {
+                Lte = _clock.Normalize(endTime.Value)
+            });
         }
         if (!applicationName.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.ApplicationName))).Value(applicationName)));
+            queries.Add(new TermQuery(GetField(nameof(SecurityLog.ApplicationName)), applicationName));
         }
         if (!identity.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.Identity))).Value(identity)));
+            queries.Add(new TermQuery(GetField(nameof(SecurityLog.Identity)), identity));
         }
         if (!action.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.Action))).Value(action)));
+            queries.Add(new TermQuery(GetField(nameof(SecurityLog.Action)), action));
         }
         if (userId.HasValue)
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.UserId))).Value(userId)));
+            queries.Add(new TermQuery(GetField(nameof(SecurityLog.UserId)), userId.Value.ToString()));
         }
         if (!userName.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.UserName))).Value(userName)));
+            queries.Add(new TermQuery(GetField(nameof(SecurityLog.UserName)), userName));
         }
         if (!clientId.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.ClientId))).Value(clientId)));
+            queries.Add(new TermQuery(GetField(nameof(SecurityLog.ClientId)), clientId));
         }
         if (!clientIpAddress.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.ClientIpAddress))).Value(clientIpAddress)));
+            queries.Add(new TermQuery(GetField(nameof(SecurityLog.ClientIpAddress)), clientIpAddress));
         }
         if (!correlationId.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SecurityLog.CorrelationId))).Value(correlationId)));
+            queries.Add(new TermQuery(GetField(nameof(SecurityLog.CorrelationId)), correlationId));
         }
 
-        return querys;
+        return queries;
     }
 
     protected virtual string CreateIndex()

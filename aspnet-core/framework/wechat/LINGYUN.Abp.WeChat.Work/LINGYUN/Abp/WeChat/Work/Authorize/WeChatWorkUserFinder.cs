@@ -3,6 +3,7 @@ using LINGYUN.Abp.WeChat.Work.Authorize.Request;
 using LINGYUN.Abp.WeChat.Work.Authorize.Response;
 using LINGYUN.Abp.WeChat.Work.Features;
 using LINGYUN.Abp.WeChat.Work.Token;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,12 +31,11 @@ public class WeChatWorkUserFinder : IWeChatWorkUserFinder, ISingletonDependency
         CancellationToken cancellationToken = default)
     {
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetUserInfoAsync(token.AccessToken, code, cancellationToken);
-        var userInfoResponse = await response.DeserializeObjectAsync<WeChatWorkUserInfoResponse>();
+        var wechatWorkResponse = await client.GetUserInfoAsync(token.AccessToken, code, cancellationToken);
 
-        return userInfoResponse.ToUserInfo();
+        return wechatWorkResponse.ToUserInfo();
     }
 
     public async virtual Task<WeChatWorkUserDetail> GetUserDetailAsync(
@@ -43,12 +43,11 @@ public class WeChatWorkUserFinder : IWeChatWorkUserFinder, ISingletonDependency
         CancellationToken cancellationToken = default)
     {
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
         var request = new WeChatWorkUserDetailRequest(userTicket);
-        using var response = await client.GetUserDetailAsync(token.AccessToken, request, cancellationToken);
-        var userDetailResponse = await response.DeserializeObjectAsync<WeChatWorkUserDetailResponse>();
+        var wechatWorkResponse = await client.GetUserDetailAsync(token.AccessToken, request, cancellationToken);
 
-        return userDetailResponse.ToUserDetail();
+        return wechatWorkResponse.ToUserDetail();
     }
 }

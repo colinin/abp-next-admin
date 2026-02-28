@@ -1,4 +1,4 @@
-import type { TokenResult } from '@abp/account';
+import type { OAuthError, TokenResult } from '@abp/account';
 
 import type { Recordable, UserInfo } from '@vben/types';
 
@@ -45,7 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
     await oAuthService.login();
   }
 
-  async function oidcCallback() {
+  async function oidcCallback(onError?: (error: OAuthError) => void) {
     try {
       const user = await oAuthService.handleCallback();
       return await _loginSuccess({
@@ -55,6 +55,8 @@ export const useAuthStore = defineStore('auth', () => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         expiresIn: user.expires_in!,
       });
+    } catch (error: any) {
+      onError && onError(error as OAuthError);
     } finally {
       loginLoading.value = false;
     }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { VbenFormProps } from '@vben/common-ui';
@@ -98,6 +98,7 @@ const gridOptions: VxeGridProps<SmsMessageDto> = {
       align: 'left',
       field: 'provider',
       minWidth: 180,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Provider'),
     },
     {
@@ -105,6 +106,7 @@ const gridOptions: VxeGridProps<SmsMessageDto> = {
       field: 'status',
       minWidth: 150,
       slots: { default: 'status' },
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Status'),
     },
     {
@@ -114,24 +116,28 @@ const gridOptions: VxeGridProps<SmsMessageDto> = {
         return cellValue ? formatToDateTime(cellValue) : cellValue;
       },
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:SendTime'),
     },
     {
       align: 'left',
       field: 'content',
       minWidth: 220,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Content'),
     },
     {
       align: 'left',
       field: 'receiver',
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Receiver'),
     },
     {
       align: 'center',
       field: 'sendCount',
       minWidth: 100,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:SendCount'),
     },
     {
@@ -141,12 +147,14 @@ const gridOptions: VxeGridProps<SmsMessageDto> = {
         return cellValue ? formatToDateTime(cellValue) : cellValue;
       },
       minWidth: 200,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:CreationTime'),
     },
     {
       align: 'left',
       field: 'reason',
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Reason'),
     },
     {
@@ -162,8 +170,10 @@ const gridOptions: VxeGridProps<SmsMessageDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -178,15 +188,22 @@ const gridOptions: VxeGridProps<SmsMessageDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
+  },
+};
+const gridEvents: VxeGridListeners<SmsMessageDto> = {
+  sortChange: () => {
+    gridApi.query();
   },
 };
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridOptions,
+  gridEvents,
 });
 
 function onDelete(row: SmsMessageDto) {

@@ -18,7 +18,8 @@
       "invalidUserNameOrPassword": "Invalid username or password!",
       "tokenHasExpired": "The token is no longer valid!",
       "requiresTwoFactor": "Identity verification is required. Please select a verification method!",
-      "shouldChangePassword": "Your password has expired. Please change it and login!"
+      "shouldChangePassword": "Your password has expired. Please change it and login!",
+      "accessDenied": "You have refused the necessary authorization for the application. Please log in again!"
     }
   },
   "manage": {

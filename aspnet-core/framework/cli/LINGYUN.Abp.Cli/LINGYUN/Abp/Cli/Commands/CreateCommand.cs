@@ -114,12 +114,6 @@ namespace LINGYUN.Abp.Cli.Commands
                 Logger.LogInformation("DBMS: " + databaseManagementSystem);
             }
 
-            var telemetryProvider = GetTelemetryProvider(commandLineArgs);
-            if (!telemetryProvider.IsNullOrWhiteSpace())
-            {
-                Logger.LogInformation("Telemetry provider: " + telemetryProvider);
-            }
-
             var randomPort = string.IsNullOrWhiteSpace(
                 commandLineArgs.Options.GetOrNull(CreateOptions.NoRandomPort.Short, CreateOptions.NoRandomPort.Long));
             var applicationPort = randomPort ? RandomHelper.GetRandom(5001, 65535).ToString() : "5000";
@@ -172,8 +166,7 @@ namespace LINGYUN.Abp.Cli.Commands
                 commandLineArgs.Options,
                 connectionString,
                 applicationPort,
-                daprPort,
-                telemetryProvider
+                daprPort
             );
 
             await CreateProjectService.CreateAsync(projectArgs);
@@ -204,7 +197,6 @@ namespace LINGYUN.Abp.Cli.Commands
             sb.AppendLine("-csf|--create-solution-folder               (default: true)");
             sb.AppendLine("-cs|--connection-string <connection-string> (your database connection string)");
             sb.AppendLine("--dbms <database-management-system>         (your database management system)");
-            sb.AppendLine("--tm <telemetry>                            (your telemetry provider, optional: SkyWalking、OpenTelemetry, default: OpenTelemetry)");
             sb.AppendLine("--no-random-port                            (Use template's default ports)");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
@@ -217,7 +209,6 @@ namespace LINGYUN.Abp.Cli.Commands
             sb.AppendLine("  labp create Acme.BookStore -csf false");
             sb.AppendLine("  labp create Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
             sb.AppendLine("  labp create Acme.BookStore --dbms mysql");
-            sb.AppendLine("  labp create Acme.BookStore --tm SkyWalking");
             sb.AppendLine("  labp create Acme.BookStore --connection-string \"Server=myServerName\\myInstanceName;Database=myDatabase;User Id=myUsername;Password=myPassword\"");
             sb.AppendLine("");
             // TODO: 文档
@@ -230,14 +221,6 @@ namespace LINGYUN.Abp.Cli.Commands
         {
             return commandLineArgs.Options.ContainsKey(NewCommand.Options.CreateSolutionFolder.Long)
                 || commandLineArgs.Options.ContainsKey(NewCommand.Options.CreateSolutionFolder.Short);
-        }
-
-        protected virtual string GetTelemetryProvider(CommandLineArgs commandLineArgs)
-        {
-            var provider = commandLineArgs.Options.GetOrNull(
-                CreateOptions.Telemetry.Short,
-                CreateOptions.Telemetry.Long);
-            return string.IsNullOrWhiteSpace(provider) ? "OpenTelemetry" : provider;
         }
 
         protected virtual DatabaseProvider GetDatabaseProvider(CommandLineArgs commandLineArgs)

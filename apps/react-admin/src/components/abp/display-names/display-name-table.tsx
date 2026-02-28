@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Popconfirm } from "antd";
+import { Button, Card, Popconfirm } from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { ProTable, type ProColumns } from "@ant-design/pro-table";
@@ -48,18 +48,19 @@ const DisplayNameTable: React.FC<DisplayNameProps> = ({ data, onChange, onDelete
 
 	return (
 		<>
-			<ProTable<DisplayNameInfo>
-				columns={columns}
-				dataSource={dataSource}
-				search={false}
-				pagination={false}
-				toolBarRender={() => [
-					<Button key="add" type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
-						{$t("AbpOpenIddict.DisplayName:AddNew")}
-					</Button>,
-				]}
-			/>
-
+			<Card>
+				<ProTable<DisplayNameInfo>
+					columns={columns}
+					dataSource={dataSource}
+					search={false}
+					pagination={false}
+					toolBarRender={() => [
+						<Button key="add" type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
+							{$t("AbpOpenIddict.DisplayName:AddNew")}
+						</Button>,
+					]}
+				/>
+			</Card>
 			<DisplayNameModal
 				visible={modalVisible}
 				onClose={() => setModalVisible(false)}

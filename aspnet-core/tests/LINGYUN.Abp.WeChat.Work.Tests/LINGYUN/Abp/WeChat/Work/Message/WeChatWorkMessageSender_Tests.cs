@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.WeChat.Work.Messages;
 using LINGYUN.Abp.WeChat.Work.Messages.Models;
-using LINGYUN.Abp.WeChat.Work.Messages.Templates;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -102,6 +101,31 @@ public class WeChatWorkMessageSender_Tests : AbpWeChatWorkTestBase
         };
 
         var response = await Sender.SendAsync(message);
+        response.IsSuccessed.ShouldBeTrue();
+    }
+
+    [Theory]
+    [InlineData("cee71c5b-6e6a-478a-aafe-fe612198ffbd")]
+    public async Task Send_Webhook_Text_Template_Card_Message_Test(string webhookKey)
+    {
+        var message = new WeChatWorkWebhookTemplateCardMessage(
+            new WebhookTextNoticeCardMessage(
+                WebhookTemplateCardAction.Link("https://developer.work.weixin.qq.com/document/path/99110"),
+                new WebhookTemplateCardMainTitle("请假通过通知", "您的请假申请已通过,请前往查看!"),
+                source: WebhookTemplateCardSource.Black("https://wwcdn.weixin.qq.com/node/wework/images/wecom-logo.a61830413b.svg", "企业微信"),
+                horizontalContents: new List<WebhookTemplateCardHorizontalContent>
+                {
+                    WebhookTemplateCardHorizontalContent.Default("审批单号", "QJ20251000000136"),
+                    WebhookTemplateCardHorizontalContent.Default("请假日期", "2025/10/01-2025/10/10"),
+                    WebhookTemplateCardHorizontalContent.Default("通过时间", "2025-10-01 15:30:00"),
+                    WebhookTemplateCardHorizontalContent.Default("审批备注", "做好考勤及交接事项"),
+                },
+                jumps: new List<WebhookTemplateCardJump>
+                {
+                    WebhookTemplateCardJump.Link("去OA查看", "https://developer.work.weixin.qq.com/document/path/99110")
+                }));
+
+        var response = await Sender.SendAsync(webhookKey, message);
         response.IsSuccessed.ShouldBeTrue();
     }
 }

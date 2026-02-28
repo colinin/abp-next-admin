@@ -82,6 +82,7 @@ const gridOptions: VxeGridProps<IdentitySessionDto> = {
       align: 'left',
       field: 'sessionId',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:SessionId'),
     },
     {
@@ -89,11 +90,13 @@ const gridOptions: VxeGridProps<IdentitySessionDto> = {
       field: 'device',
       minWidth: 120,
       slots: { default: 'device' },
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:Device'),
     },
     {
       align: 'left',
       field: 'deviceInfo',
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:DeviceInfo'),
       width: 'auto',
     },
@@ -101,24 +104,28 @@ const gridOptions: VxeGridProps<IdentitySessionDto> = {
       align: 'left',
       field: 'clientId',
       minWidth: 120,
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:ClientId'),
     },
     {
       align: 'left',
       field: 'ipAddresses',
       minWidth: 120,
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:IpAddresses'),
     },
     {
       align: 'left',
       field: 'signedIn',
       minWidth: 120,
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:SignedIn'),
     },
     {
       align: 'left',
       field: 'lastAccessed',
       minWidth: 120,
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:LastAccessed'),
     },
     {
@@ -137,8 +144,10 @@ const gridOptions: VxeGridProps<IdentitySessionDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getSessionsApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -153,14 +162,18 @@ const gridOptions: VxeGridProps<IdentitySessionDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
 
 const gridEvents: VxeGridListeners<IdentitySessionDto> = {
   cellClick: () => {},
+  sortChange: () => {
+    gridApi.query();
+  },
 };
 
 const [Grid, gridApi] = useVbenVxeGrid({

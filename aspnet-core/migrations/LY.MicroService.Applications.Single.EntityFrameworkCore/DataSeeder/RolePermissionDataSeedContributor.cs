@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 
 namespace LY.MicroService.Applications.Single.EntityFrameworkCore.DataSeeder;
 
-public class RolePermissionDataSeedContributor : IDataSeedContributor
+public class RolePermissionDataSeedContributor : IDataSeedContributor, ITransientDependency
 {
     public ILogger<RolePermissionDataSeedContributor> Logger { protected get; set; }
 
@@ -47,6 +48,8 @@ public class RolePermissionDataSeedContributor : IDataSeedContributor
                 "Users",
                 new string[] { "Platform.Feedback.Create" },
                 context.TenantId);
+
+            Logger.LogInformation("Seeding new tenant admin role permissions completed.");
         }
     }
 }

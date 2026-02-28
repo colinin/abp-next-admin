@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Modularity;
 
@@ -7,7 +6,6 @@ namespace LINGYUN.Abp.Notifications.EntityFrameworkCore;
 
 [DependsOn(
     typeof(AbpCachingModule),
-    typeof(AbpAutoMapperModule),
     typeof(AbpNotificationsDomainModule))]
 public class AbpNotificationsEntityFrameworkCoreModule : AbpModule
 {

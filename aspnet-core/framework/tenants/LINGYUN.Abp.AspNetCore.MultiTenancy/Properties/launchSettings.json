@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "LINGYUN.Abp.AspNetCore.MultiTenancy": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:61811;http://localhost:61812"
+    }
+  }
+}

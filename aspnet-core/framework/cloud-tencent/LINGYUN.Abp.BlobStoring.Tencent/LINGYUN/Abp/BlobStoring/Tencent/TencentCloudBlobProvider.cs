@@ -2,10 +2,12 @@
 using COSXML.Common;
 using COSXML.Model.Bucket;
 using COSXML.Model.Object;
+using COSXML.Model.Tag;
 using LINGYUN.Abp.Tencent.Features;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.BlobStoring;
@@ -19,15 +21,18 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
 {
     protected IFeatureChecker FeatureChecker { get; }
     protected ICosClientFactory CosClientFactory { get; }
+    protected IHttpClientFactory HttpClientFactory { get; }
     protected ITencentBlobNameCalculator TencentBlobNameCalculator { get; }
 
     public TencentCloudBlobProvider(
         IFeatureChecker featureChecker,
         ICosClientFactory cosClientFactory,
+        IHttpClientFactory httpClientFactory,
         ITencentBlobNameCalculator tencentBlobNameCalculator)
     {
         FeatureChecker = featureChecker;
         CosClientFactory = cosClientFactory;
+        HttpClientFactory = httpClientFactory;
         TencentBlobNameCalculator = tencentBlobNameCalculator;
     }
 
@@ -63,28 +68,28 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
             return null;
         }
 
-        // TODO: 未经验证
+        var configuration = args.Configuration.GetTencentConfiguration();
+        // See: https://cloud.tencent.com/document/product/436/47238
+        var preSignatureStruct = new PreSignatureStruct
+        {
+            appid = configuration.AppId,//"1250000000"; //腾讯云账号 APPID
+            region = configuration.Region,//"COS_REGION"; //存储桶地域
+            bucket = GetBucketName(args),//"examplebucket-1250000000"; //存储桶
+            key = blobName, //对象键
+            httpMethod = "GET", //HTTP 请求方法
+            isHttps = true, //生成 HTTPS 请求 URL
+            signDurationSecond = 600, //请求签名时间为600s
+            headers = null, //签名中需要校验的 header
+            queryParameters = null //签名中需要校验的 URL 中请求参数
+        };
+        var requestSignURL = ossClient.GenerateSignURL(preSignatureStruct);
+        var client = HttpClientFactory.CreateTenantOssClient();
 
-        var request = new GetObjectBytesRequest(GetBucketName(args), blobName);
-        var ossObject = ossClient.GetObject(request);
-        var memoryStream = new MemoryStream();
-        await memoryStream.WriteAsync(ossObject.content, 0, ossObject.content.Length);
-        memoryStream.Seek(0, SeekOrigin.Begin);
-        return memoryStream;
+        return await client.GetStreamAsync(requestSignURL);
     }
 
     public override async Task SaveAsync(BlobProviderSaveArgs args)
     {
-        var maxStreamSizeString = await FeatureChecker.GetOrNullAsync(TencentCloudFeatures.BlobStoring.MaximumStreamSize);
-        if (!"0".Equals(maxStreamSizeString) ||
-            (int.TryParse(maxStreamSizeString, out var maxStreamSize)
-            && (maxStreamSize <= 0
-            || maxStreamSize < args.BlobStream.Length / 1024 / 1024)))
-        {
-            throw new BusinessException("TencentCloud:10101")
-                .WithData("Size", maxStreamSizeString);
-        }
-
         var ossClient = await GetOssClientAsync(args);
         var blobName = TencentBlobNameCalculator.Calculate(args);
         var configuration = args.Configuration.GetTencentConfiguration();
@@ -131,8 +136,8 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
             var bucketName = GetBucketName(args);
 
             var request = new PutBucketRequest(bucketName);
-            // TODO: good! 这很Java
-            request.SetCosACL(CosACL.PublicReadWrite);
+
+            request.SetCosACL(CosACL.Private);
 
             cos.PutBucket(request);
 

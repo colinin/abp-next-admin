@@ -1,10 +1,8 @@
-﻿using LINGYUN.Abp.RealTime.Localization;
-using LINGYUN.Abp.WeChat.Work.Authorize;
+﻿using LINGYUN.Abp.WeChat.Work.Authorize;
 using LINGYUN.Abp.WeChat.Work.Features;
 using LINGYUN.Abp.WeChat.Work.Messages;
 using LINGYUN.Abp.WeChat.Work.Messages.Models;
 using LINGYUN.Abp.WeChat.Work.Settings;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,8 +20,8 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
     public override string Name => ProviderName;
     protected IFeatureChecker FeatureChecker => ServiceProvider.LazyGetRequiredService<IFeatureChecker>();
     protected ISettingProvider SettingProvider => ServiceProvider.LazyGetRequiredService<ISettingProvider>();
-    protected IStringLocalizerFactory LocalizerFactory => ServiceProvider.LazyGetRequiredService<IStringLocalizerFactory>();
     protected IWeChatWorkMessageSender WeChatWorkMessageSender => ServiceProvider.LazyGetRequiredService<IWeChatWorkMessageSender>();
+    protected INotificationDataSerializer NotificationDataSerializer => ServiceProvider.LazyGetRequiredService<INotificationDataSerializer>();
     protected IWeChatWorkUserClaimProvider WeChatWorkInternalUserFinder => ServiceProvider.LazyGetRequiredService<IWeChatWorkUserClaimProvider>();
     protected INotificationDefinitionManager NotificationDefinitionManager => ServiceProvider.LazyGetRequiredService<INotificationDefinitionManager>();
 
@@ -55,65 +53,38 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
             Logger.LogWarning("Unable to send work weixin messages because agentId is not set.");
             return;
         }
-
-        var title = "";
-        var message = "";
-        var description = "";
+        var notificationData = await NotificationDataSerializer.ToStandard(notification.Data);
         var toTag = notification.Data.GetTagOrNull() ?? notificationDefine?.GetTagOrNull();
         var toParty = notification.Data.GetPartyOrNull() ?? notificationDefine?.GetPartyOrNull();
+        var toUsers = await WeChatWorkInternalUserFinder.FindUserIdentifierListAsync(identifiers.Select(id => id.UserId));
 
-        if (!notification.Data.NeedLocalizer())
+        if (toUsers.IsNullOrEmpty() && toTag.IsNullOrWhiteSpace() && toParty.IsNullOrWhiteSpace())
         {
-            title = notification.Data.TryGetData("title").ToString();
-            message = notification.Data.TryGetData("message").ToString();
-            description = notification.Data.TryGetData("description")?.ToString() ?? "";
-        }
-        else
-        {
-            var titleInfo = notification.Data.TryGetData("title").As<LocalizableStringInfo>();
-            var titleLocalizer = await LocalizerFactory.CreateByResourceNameAsync(titleInfo.ResourceName);
-            title = titleLocalizer[titleInfo.Name, titleInfo.Values].Value;
-
-            var messageInfo = notification.Data.TryGetData("message").As<LocalizableStringInfo>();
-            var messageLocalizer = await LocalizerFactory.CreateByResourceNameAsync(messageInfo.ResourceName);
-            message = messageLocalizer[messageInfo.Name, messageInfo.Values].Value;
-
-            var descriptionInfo = notification.Data.TryGetData("description")?.As<LocalizableStringInfo>();
-            if (descriptionInfo != null)
-            {
-                var descriptionLocalizer = await LocalizerFactory.CreateByResourceNameAsync(descriptionInfo.ResourceName);
-                description = descriptionLocalizer[descriptionInfo.Name, descriptionInfo.Values].Value;
-            }
-        }
-
-        var findUserList = await WeChatWorkInternalUserFinder
-                .FindUserIdentifierListAsync(identifiers.Select(id => id.UserId));
-
-        if (!findUserList.Any())
-        {
-            Logger.LogWarning("Unable to send work weixin messages because findUserList is empty.");
+            // touser、toparty、totag不能同时为空：https://developer.work.weixin.qq.com/document/path/90236
+            Logger.LogWarning("Unable to send work weixin messages because The recipient/department/label cannot be empty simultaneously.");
             return;
         }
 
+        // 发送到个人
         await PublishToAgentAsync(
             agentId,
             notification,
-            findUserList.JoinAsString("|"),
-            title,
-            message,
-            description,
-            toParty,
-            toTag,
-            cancellationToken);
+            notificationData.Title,
+            notificationData.Message,
+            notificationData.Description,
+            toTag: toTag,
+            toParty: toParty,
+            toUser: toUsers.JoinAsString("|"),
+            cancellationToken: cancellationToken);
     }
 
     protected async virtual Task PublishToAgentAsync(
         string agentId,
         NotificationInfo notification,
-        string toUser,
         string title,
         string content,
         string description = "",
+        string toUser = null,
         string toParty = null,
         string toTag = null,
         CancellationToken cancellationToken = default)
@@ -146,5 +117,7 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
         message.ToParty = toParty;
 
         await WeChatWorkMessageSender.SendAsync(message, cancellationToken);
+
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
     }
 }

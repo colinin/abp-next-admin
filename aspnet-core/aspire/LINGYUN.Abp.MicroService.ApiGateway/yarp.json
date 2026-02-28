@@ -1,0 +1,553 @@
+﻿{
+  "ReverseProxy": {
+    "Routes": {
+      "abp-route": {
+        "ClusterId": "admin-service-cluster",
+        "Match": {
+          "Path": "/api/abp/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          },
+          {
+            "ResponseHeadersCopy": true
+          },
+          {
+            "ResponseHeader": "Set-Cookie",
+            "Append": true
+          }
+        ]
+      },
+      "oidc-discovery-route": {
+        "ClusterId": "auth-server-cluster",
+        "Match": {
+          "Path": "/.well-known/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "oidc-token-route": {
+        "ClusterId": "auth-server-cluster",
+        "Match": {
+          "Path": "/connect/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "account-external-logins-route": {
+        "ClusterId": "auth-server-cluster",
+        "Match": {
+          "Path": "/api/account/external-logins/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "account-oauth-route": {
+        "ClusterId": "auth-server-cluster",
+        "Match": {
+          "Path": "/api/account/oauth/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "account-qrcode-route": {
+        "ClusterId": "auth-server-cluster",
+        "Match": {
+          "Path": "/api/account/qrcode/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "account-route": {
+        "ClusterId": "identity-service-cluster",
+        "Match": {
+          "Path": "/api/account/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "identity-route": {
+        "ClusterId": "identity-service-cluster",
+        "Match": {
+          "Path": "/api/identity/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "identity-server-route": {
+        "ClusterId": "identity-service-cluster",
+        "Match": {
+          "Path": "/api/identity-server/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "openiddict-route": {
+        "ClusterId": "identity-service-cluster",
+        "Match": {
+          "Path": "/api/openiddict/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "cache-management-route": {
+        "ClusterId": "admin-service-cluster",
+        "Match": {
+          "Path": "/api/caching-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "saas-route": {
+        "ClusterId": "admin-service-cluster",
+        "Match": {
+          "Path": "/api/saas/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "auditing-route": {
+        "ClusterId": "admin-service-cluster",
+        "Match": {
+          "Path": "/api/auditing/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "data-protected-route": {
+        "ClusterId": "admin-service-cluster",
+        "Match": {
+          "Path": "/api/data-protection-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "text-template-route": {
+        "ClusterId": "admin-service-cluster",
+        "Match": {
+          "Path": "/api/text-templating/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "feature-management-route": {
+        "ClusterId": "admin-service-cluster",
+        "Match": {
+          "Path": "/api/feature-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "permission-management-route": {
+        "ClusterId": "admin-service-cluster",
+        "Match": {
+          "Path": "/api/permission-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "setting-management-route": {
+        "ClusterId": "admin-service-cluster",
+        "Match": {
+          "Path": "/api/setting-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "localization-management-route": {
+        "ClusterId": "localization-service-cluster",
+        "Match": {
+          "Path": "/api/localization/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "im-route": {
+        "ClusterId": "messages-service-cluster",
+        "Match": {
+          "Path": "/api/im/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "notifications-route": {
+        "ClusterId": "messages-service-cluster",
+        "Match": {
+          "Path": "/api/notifications/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "signalr-hubs-route": {
+        "ClusterId": "messages-service-cluster",
+        "Match": {
+          "Path": "/signalr-hubs/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          },
+          {
+            "RequestHeadersCopy": true
+          },
+          {
+            "ResponseHeadersCopy": true
+          }
+        ]
+      },
+      "webhooks-route": {
+        "ClusterId": "webhooks-service-cluster",
+        "Match": {
+          "Path": "/api/webhooks/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "task-management-route": {
+        "ClusterId": "task-service-cluster",
+        "Match": {
+          "Path": "/api/task-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "platform-route": {
+        "ClusterId": "platform-service-cluster",
+        "Match": {
+          "Path": "/api/platform/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "oss-management-route": {
+        "ClusterId": "platform-service-cluster",
+        "Match": {
+          "Path": "/api/oss-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "files-route": {
+        "ClusterId": "platform-service-cluster",
+        "Match": {
+          "Path": "/api/files/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "wechat-route": {
+        "ClusterId": "wechat-service-cluster",
+        "Match": {
+          "Path": "/api/wechat/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "elsa-route": {
+        "ClusterId": "workflow-service-cluster",
+        "Match": {
+          "Path": "/elsa/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      }
+    },
+    "Clusters": {
+      "auth-server-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:44385"
+          }
+        }
+      },
+      "identity-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30015",
+            "Metadata": {
+              "SwaggerEndpoint": "http://localhost:30015"
+            }
+          }
+        }
+      },
+      "admin-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30010",
+            "Metadata": {
+              "SwaggerEndpoint": "http://localhost:30010"
+            }
+          }
+        }
+      },
+      "localization-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30030",
+            "Metadata": {
+              "SwaggerEndpoint": "http://localhost:30030"
+            }
+          }
+        }
+      },
+      "messages-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30020",
+            "Metadata": {
+              "SwaggerEndpoint": "http://localhost:30020"
+            }
+          }
+        }
+      },
+      "webhooks-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30045",
+            "Metadata": {
+              "SwaggerEndpoint": "http://localhost:30045"
+            }
+          }
+        }
+      },
+      "task-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30040",
+            "Metadata": {
+              "SwaggerEndpoint": "http://localhost:30040"
+            }
+          }
+        }
+      },
+      "platform-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30025",
+            "Metadata": {
+              "SwaggerEndpoint": "http://localhost:30025"
+            }
+          }
+        }
+      },
+      "workflow-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30050",
+            "Metadata": {
+              "SwaggerEndpoint": "http://localhost:30050"
+            }
+          }
+        }
+      },
+      "wechat-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30060",
+            "Metadata": {
+              "SwaggerEndpoint": "http://localhost:30060"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -13,6 +13,7 @@ import {
 } from '@vben/locales';
 import { preferences } from '@vben/preferences';
 
+import { loadComponentMessages } from '@abp/components/locales';
 import { useAbpStore } from '@abp/core';
 import { useLocalizationsApi } from '@abp/localization';
 import { loadPaltformMessages } from '@abp/platform';
@@ -35,16 +36,17 @@ const localesMap = loadLocalesMapFromDir(
  * @param lang
  */
 async function loadMessages(lang: SupportedLanguagesType) {
-  const [appLocaleMessages, platformLocales, _, abpLocales] = await Promise.all(
-    [
+  const [appLocaleMessages, compLocales, platformLocales, _, abpLocales] =
+    await Promise.all([
       localesMap[lang]?.(),
+      loadComponentMessages(lang),
       loadPaltformMessages(lang),
       loadThirdPartyMessage(lang),
       loadAbpLocale(lang),
-    ],
-  );
+    ]);
   return {
     ...appLocaleMessages?.default,
+    ...compLocales?.default,
     ...platformLocales?.default,
     ...abpLocales,
   };

@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "LY.MicroService.TaskManagement.HttpApi.Host": {
+    "Dev.Default": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,

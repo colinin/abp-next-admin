@@ -1,5 +1,5 @@
-﻿using Volo.Abp.Application;
-using Volo.Abp.AutoMapper;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.IdentityServer;
@@ -7,19 +7,12 @@ namespace LINGYUN.Abp.IdentityServer;
 [DependsOn(
     typeof(AbpIdentityServerApplicationContractsModule),
     typeof(AbpIdentityServerDomainModule),
-    typeof(AbpDddApplicationModule),
-    typeof(AbpAutoMapperModule)
+    typeof(AbpDddApplicationModule)
     )]
 public class AbpIdentityServerApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.Configurators.Add(ctx =>
-            {
-                ctx.MapperConfiguration.AddProfile<AbpIdentityServerAutoMapperProfile>();
-            });
-        });
+        context.Services.AddMapperlyObjectMapper<AbpIdentityServerApplicationModule>();
     }
 }

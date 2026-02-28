@@ -1,0 +1,19 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Required": "Required",
+    "InvalidSelectAccountRequest": "Invalid request for a selected account!",
+    "NoAvailableAccounts": "No Available Accounts!",
+    "InvalidSelectAccount": "Invalid Select Account!",
+    "SelectAccount": "Select Account",
+    "CurrentAccount": "Current",
+    "SignedInAs": "Select to login to the account of {0}",
+    "LastLoginTime": "Last Login",
+    "Continue": "Continue",
+    "SwitchToAnotherAccount": "Switch to another account",
+    "CreateNewAccount": "Create a new account",
+    "SelectedAccountId": "Selected a cccount",
+    "RememberSelection": "Remember selection",
+    "RememberMe": "Remember me"
+  }
+}

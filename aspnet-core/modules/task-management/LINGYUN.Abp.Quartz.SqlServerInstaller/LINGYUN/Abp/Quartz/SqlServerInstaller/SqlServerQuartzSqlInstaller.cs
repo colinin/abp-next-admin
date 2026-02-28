@@ -16,7 +16,7 @@ using static Quartz.SchedulerBuilder;
 
 namespace LINGYUN.Abp.Quartz.SqlServerInstaller;
 
-public class SqlServerQuartzSqlInstaller : IQuartzSqlInstaller, ITransientDependency
+public class SqlServerQuartzSqlInstaller : IQuartzSqlInstaller
 {
     public ILogger<SqlServerQuartzSqlInstaller> Logger { protected get; set; }
 
@@ -34,6 +34,11 @@ public class SqlServerQuartzSqlInstaller : IQuartzSqlInstaller, ITransientDepend
         _installerOptions = installerOptions.Value;
 
         Logger = NullLogger<SqlServerQuartzSqlInstaller>.Instance;
+    }
+
+    public bool CanInstall(string driverDelegateType)
+    {
+        return "Quartz.Impl.AdoJobStore.SqlServerDelegate,Quartz".Equals(driverDelegateType);
     }
 
     public async virtual Task InstallAsync()

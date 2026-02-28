@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -9,21 +10,10 @@ namespace LINGYUN.Abp.Notifications.Sms;
 public class SmsNotificationPublishProvider : NotificationPublishProvider
 {
     public const string ProviderName = NotificationProviderNames.Sms;
-
-    protected IUserPhoneFinder UserPhoneFinder => ServiceProvider.LazyGetRequiredService<IUserPhoneFinder>();
-    protected ISmsNotificationSender Sender { get; }
-
-    protected AbpNotificationsSmsOptions Options { get; }
-
-    public SmsNotificationPublishProvider(
-        ISmsNotificationSender sender,
-        IOptions<AbpNotificationsSmsOptions> options) 
-    {
-        Sender = sender;
-        Options = options.Value;
-    }
-
     public override string Name => ProviderName;
+    protected IUserPhoneFinder UserPhoneFinder => ServiceProvider.LazyGetRequiredService<IUserPhoneFinder>();
+    protected ISmsNotificationSender Sender => ServiceProvider.LazyGetRequiredService<ISmsNotificationSender>();
+    protected IOptions<AbpNotificationsSmsOptions> Options => ServiceProvider.LazyGetRequiredService<IOptions<AbpNotificationsSmsOptions>>();
 
     protected override async Task PublishAsync(
         NotificationInfo notification,
@@ -41,5 +31,7 @@ public class SmsNotificationPublishProvider : NotificationPublishProvider
             return;
         }
         await Sender.SendAsync(notification, sendToPhones.JoinAsString(","));
+
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
     }
 }

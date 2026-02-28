@@ -23,6 +23,8 @@ public class DaprAbpDistributedLockHandle : IAbpDistributedLockHandle
     }
     public async ValueTask DisposeAsync()
     {
+#pragma warning disable DAPR_DISTRIBUTEDLOCK
         await DaprClient.Unlock(StoreName, ResourceId, LockOwner);
+#pragma warning restore DAPR_DISTRIBUTEDLOCK
     }
 }

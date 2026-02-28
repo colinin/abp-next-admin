@@ -61,7 +61,7 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
 
         var jobArgs = new Dictionary<string, object>
         {
-            { "JobType", workerType.AssemblyQualifiedName },
+            { "JobType", workerType.AssemblyQualifiedName! },
         };
         return new JobInfo
         {
@@ -86,7 +86,7 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
     public async Task ExecuteAsync(JobRunnableContext context)
     {
         var worker = (IBackgroundWorker)context.GetService(typeof(TWorker));
-        var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider, context.CancellationToken);
+        var workerContext = new PeriodicBackgroundWorkerContext(context.ServiceProvider, context.CancellationToken);
 
         switch (worker)
         {

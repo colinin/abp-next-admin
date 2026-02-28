@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Abp.WeChat.Common.Messages;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.WeChat.Work.Common.Messages;
@@ -6,14 +8,10 @@ public abstract class WeChatWorkMessageResolveContributorBase : MessageResolveCo
 {
     public override Task ResolveAsync(IMessageResolveContext context)
     {
-        // 企业微信消息需要企业标识字段
-        if (context.HasMessageKey("AgentID"))
-        {
-            return ResolveWeComMessageAsync(context);
-        }
+        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpWeChatWorkMessageResolveOptions>>().Value;
 
-        return Task.CompletedTask;
+        return ResolveMessageAsync(context, options);
     }
 
-    protected abstract Task ResolveWeComMessageAsync(IMessageResolveContext context);
+    protected abstract Task ResolveMessageAsync(IMessageResolveContext context, AbpWeChatWorkMessageResolveOptions options);
 }

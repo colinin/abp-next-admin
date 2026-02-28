@@ -30,23 +30,6 @@
   "sourceName": "ProjectName",
   "preferNameDirectory": true,
   "symbols": {
-    "Telemetry": {
-      "type": "parameter",
-      "description": "Distributed tracking provider",
-      "datatype": "choice",
-      "defaultValue": "OpenTelemetry",
-      "isRequired": false,
-      "choices": [
-        {
-          "choice": "SkyWalking",
-          "description": "Use SkyWalking"
-        },
-        {
-          "choice": "OpenTelemetry",
-          "description": "Use OpenTelemetry"
-        }
-      ]
-    },
     "DatabaseManagement": {
       "type": "parameter",
       "description": "Database Management",
@@ -103,14 +86,6 @@
     "PostgreSql": {
       "type": "computed",
       "value": "(DatabaseManagement == \"PostgreSql\")"
-    },
-    "SkyWalking": {
-      "type": "computed",
-      "value": "(Telemetry == \"SkyWalking\")"
-    },
-    "OpenTelemetry": {
-      "type": "computed",
-      "value": "(Telemetry == \"OpenTelemetry\")"
     }
   }
 }

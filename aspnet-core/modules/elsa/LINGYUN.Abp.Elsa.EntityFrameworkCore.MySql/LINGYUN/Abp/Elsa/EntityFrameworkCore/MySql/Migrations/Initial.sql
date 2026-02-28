@@ -313,3 +313,39 @@ INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
 VALUES ('20210730112043_Initial', '5.0.10');
 
 COMMIT;
+
+
+-- secrets
+
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET utf8mb4;
+
+START TRANSACTION;
+
+ALTER DATABASE CHARACTER SET utf8mb4;
+
+CREATE TABLE `Secrets` (
+    `Id` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `Type` varchar(255) CHARACTER SET utf8mb4 NULL,
+    `Name` varchar(255) CHARACTER SET utf8mb4 NULL,
+    `DisplayName` varchar(255) CHARACTER SET utf8mb4 NULL,
+    `Data` longtext CHARACTER SET utf8mb4 NULL,
+    CONSTRAINT `PK_Secrets` PRIMARY KEY (`Id`)
+) CHARACTER SET utf8mb4;
+
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20220327173004_Initial', '5.0.10');
+
+COMMIT;
+
+START TRANSACTION;
+
+ALTER TABLE `Secrets` MODIFY COLUMN `Name` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '';
+
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20221209041917_RequireName', '5.0.10');
+
+COMMIT;

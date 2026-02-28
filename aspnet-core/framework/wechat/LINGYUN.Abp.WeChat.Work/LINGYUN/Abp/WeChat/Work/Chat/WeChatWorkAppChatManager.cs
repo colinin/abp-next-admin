@@ -2,6 +2,7 @@
 using LINGYUN.Abp.WeChat.Work.Chat.Response;
 using LINGYUN.Abp.WeChat.Work.Features;
 using LINGYUN.Abp.WeChat.Work.Token;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,10 +30,9 @@ public class WeChatWorkAppChatManager : IWeChatWorkAppChatManager, ISingletonDep
         CancellationToken cancellationToken = default)
     {
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.CreateAppChatAsync(token.AccessToken, request, cancellationToken);
-        return await response.DeserializeObjectAsync<WeChatWorkAppChatCreateResponse>();
+        return await client.CreateAppChatAsync(token.AccessToken, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkAppChatInfoResponse> GetAsync(
@@ -41,10 +41,9 @@ public class WeChatWorkAppChatManager : IWeChatWorkAppChatManager, ISingletonDep
         CancellationToken cancellationToken = default)
     {
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.GetAppChatAsync(token.AccessToken, agentId, cancellationToken);
-        return await response.DeserializeObjectAsync<WeChatWorkAppChatInfoResponse>();
+        return await client.GetAppChatAsync(token.AccessToken, agentId, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkResponse> UpdateAsync(
@@ -52,9 +51,8 @@ public class WeChatWorkAppChatManager : IWeChatWorkAppChatManager, ISingletonDep
         CancellationToken cancellationToken = default)
     {
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        using var response = await client.UpdateAppChatAsync(token.AccessToken, request, cancellationToken);
-        return await response.DeserializeObjectAsync<WeChatWorkAppChatCreateResponse>();
+        return await client.UpdateAppChatAsync(token.AccessToken, request, cancellationToken);
     }
 }

@@ -114,6 +114,11 @@ public class BackgroundJobInfoAppService : DynamicQueryableAppService<Background
     {
         var backgroundJobInfo = await BackgroundJobInfoRepository.GetAsync(id);
 
+        if (backgroundJobInfo.Status != JobStatus.Stopped)
+        {
+            throw new BusinessException(TaskManagementErrorCodes.OnlyDeletionOfStopJobsIsAllowed);
+        }
+
         await CheckIfChangeSystemJob(backgroundJobInfo);
 
         await BackgroundJobManager.DeleteAsync(backgroundJobInfo);
@@ -232,6 +237,10 @@ public class BackgroundJobInfoAppService : DynamicQueryableAppService<Background
         }
         var jobs = await GetListAsync(input);
 
+        if (jobs.Any(job => job.Status != JobStatus.Stopped))
+        {
+            throw new BusinessException(TaskManagementErrorCodes.OnlyDeletionOfStopJobsIsAllowed);
+        }
         if (jobs.Any(job => job.Source == JobSource.System))
         {
             await AuthorizationService.CheckAsync(TaskManagementPermissions.BackgroundJobs.ManageSystemJobs);

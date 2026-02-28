@@ -136,6 +136,7 @@ const gridOptions: VxeGridProps<WebhookSubscriptionDto> = {
       fixed: 'left',
       minWidth: 150,
       slots: { default: 'isActive' },
+      sortable: true,
       title: $t('WebhooksManagement.DisplayName:IsActive'),
     },
     {
@@ -143,6 +144,7 @@ const gridOptions: VxeGridProps<WebhookSubscriptionDto> = {
       field: 'tenantId',
       fixed: 'left',
       minWidth: 150,
+      sortable: true,
       title: $t('WebhooksManagement.DisplayName:TenantId'),
     },
     {
@@ -150,12 +152,14 @@ const gridOptions: VxeGridProps<WebhookSubscriptionDto> = {
       field: 'webhookUri',
       fixed: 'left',
       minWidth: 300,
+      sortable: true,
       title: $t('WebhooksManagement.DisplayName:WebhookUri'),
     },
     {
       align: 'left',
       field: 'description',
       minWidth: 150,
+      sortable: true,
       title: $t('WebhooksManagement.DisplayName:Description'),
     },
     {
@@ -165,6 +169,7 @@ const gridOptions: VxeGridProps<WebhookSubscriptionDto> = {
         return cellValue ? formatToDateTime(cellValue) : '';
       },
       minWidth: 120,
+      sortable: true,
       title: $t('WebhooksManagement.DisplayName:CreationTime'),
     },
     {
@@ -172,6 +177,7 @@ const gridOptions: VxeGridProps<WebhookSubscriptionDto> = {
       field: 'webhooks',
       minWidth: 300,
       slots: { default: 'webhooks' },
+      sortable: true,
       title: $t('WebhooksManagement.DisplayName:Webhooks'),
     },
     {
@@ -186,8 +192,10 @@ const gridOptions: VxeGridProps<WebhookSubscriptionDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -202,8 +210,9 @@ const gridOptions: VxeGridProps<WebhookSubscriptionDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
@@ -214,6 +223,9 @@ const gridEvents: VxeGridListeners<WebhookSubscriptionDto> = {
   },
   checkboxChange: (params) => {
     selectedKeys.value = params.records.map((record) => record.id);
+  },
+  sortChange: () => {
+    gridApi.query();
   },
 };
 

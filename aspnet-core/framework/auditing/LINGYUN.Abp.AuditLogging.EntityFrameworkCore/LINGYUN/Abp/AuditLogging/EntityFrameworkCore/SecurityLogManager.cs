@@ -1,14 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectMapping;
-using Volo.Abp.SecurityLog;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
@@ -16,27 +12,17 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 [Dependency(ReplaceServices = true)]
 public class SecurityLogManager : ISecurityLogManager, ITransientDependency
 {
-    public ILogger<SecurityLogManager> Logger { get; set; }
-
-    protected IObjectMapper ObjectMapper { get; }
-    protected AbpSecurityLogOptions SecurityLogOptions { get; }
+    protected IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> ObjectMapper { get; }
     protected IIdentitySecurityLogRepository IdentitySecurityLogRepository { get; }
-    protected IGuidGenerator GuidGenerator { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     public SecurityLogManager(
-        IObjectMapper objectMapper,
-        ILogger<SecurityLogManager> logger,
-        IOptions<AbpSecurityLogOptions> securityLogOptions,
+        IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> objectMapper,
         IIdentitySecurityLogRepository identitySecurityLogRepository,
-        IGuidGenerator guidGenerator,
         IUnitOfWorkManager unitOfWorkManager)
     {
-        Logger = logger;
         ObjectMapper = objectMapper;
-        SecurityLogOptions = securityLogOptions.Value;
         IdentitySecurityLogRepository = identitySecurityLogRepository;
-        GuidGenerator = guidGenerator;
         UnitOfWorkManager = unitOfWorkManager;
     }
 
@@ -46,25 +32,6 @@ public class SecurityLogManager : ISecurityLogManager, ITransientDependency
         {
             await IdentitySecurityLogRepository.DeleteManyAsync(ids,
                 cancellationToken: cancellationToken);
-            await uow.CompleteAsync();
-        }
-    }
-
-    public async virtual Task SaveAsync(
-        SecurityLogInfo securityLogInfo,
-        CancellationToken cancellationToken = default)
-    {
-        if (!SecurityLogOptions.IsEnabled)
-        {
-            return;
-        }
-
-        using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
-        {
-            await IdentitySecurityLogRepository.InsertAsync(
-                new IdentitySecurityLog(GuidGenerator, securityLogInfo),
-                false,
-                cancellationToken);
             await uow.CompleteAsync();
         }
     }

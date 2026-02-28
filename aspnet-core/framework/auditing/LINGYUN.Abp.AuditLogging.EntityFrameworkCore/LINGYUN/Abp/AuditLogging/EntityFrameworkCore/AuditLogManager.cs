@@ -1,12 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
@@ -17,28 +13,18 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 [Dependency(ReplaceServices = true)]
 public class AuditLogManager : IAuditLogManager, ITransientDependency
 {
-    protected IObjectMapper ObjectMapper { get; }
+    protected IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> ObjectMapper { get; }
     protected IAuditLogRepository AuditLogRepository { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
-    protected AbpAuditingOptions Options { get; }
-    protected IAuditLogInfoToAuditLogConverter Converter { get; }
-
-    public ILogger<AuditLogManager> Logger { protected get; set; }
 
     public AuditLogManager(
-        IObjectMapper objectMapper,
         IAuditLogRepository auditLogRepository,
         IUnitOfWorkManager unitOfWorkManager,
-        IOptions<AbpAuditingOptions> options,
-        IAuditLogInfoToAuditLogConverter converter)
+        IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> objectMapper)
     {
         ObjectMapper = objectMapper;
         AuditLogRepository = auditLogRepository;
         UnitOfWorkManager = unitOfWorkManager;
-        Converter = converter;
-        Options = options.Value;
-
-        Logger = NullLogger<AuditLogManager>.Instance;
     }
 
 
@@ -147,43 +133,6 @@ public class AuditLogManager : IAuditLogManager, ITransientDependency
         {
             await AuditLogRepository.DeleteManyAsync(ids);
             await uow.CompleteAsync();
-        }
-    }
-
-    public async virtual Task<string> SaveAsync(
-        AuditLogInfo auditInfo,
-        CancellationToken cancellationToken = default)
-    {
-        if (!Options.HideErrors)
-        {
-            return await SaveLogAsync(auditInfo, cancellationToken);
-        }
-
-        try
-        {
-            return await SaveLogAsync(auditInfo, cancellationToken);
-        }
-        catch (Exception ex)
-        {
-            Logger.LogWarning("Could not save the audit log object: " + Environment.NewLine + auditInfo.ToString());
-            Logger.LogException(ex, LogLevel.Error);
-        }
-        return "";
-    }
-
-    protected async virtual Task<string> SaveLogAsync(
-        AuditLogInfo auditInfo,
-        CancellationToken cancellationToken = default)
-    {
-        using (var uow = UnitOfWorkManager.Begin(true))
-        {
-            var auditLog = await AuditLogRepository.InsertAsync(
-                await Converter.ConvertAsync(auditInfo),
-                false,
-                cancellationToken);
-            await uow.CompleteAsync();
-
-            return auditLog.Id.ToString();
         }
     }
 }

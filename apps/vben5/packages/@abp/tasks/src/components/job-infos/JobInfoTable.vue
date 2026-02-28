@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { SortOrder } from '@abp/core';
 import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
@@ -372,8 +371,10 @@ const gridOptions: VxeGridProps<BackgroundJobInfoDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -386,7 +387,9 @@ const gridOptions: VxeGridProps<BackgroundJobInfoDto> = {
     },
   },
   toolbarConfig: {
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
   },
 };
 const gridEvents: VxeGridListeners<BackgroundJobInfoDto> = {
@@ -396,7 +399,9 @@ const gridEvents: VxeGridListeners<BackgroundJobInfoDto> = {
   checkboxChange: (params) => {
     selectedKeys.value = params.records.map((x) => x.id);
   },
-  sortChange: onSort,
+  sortChange: () => {
+    gridApi.query();
+  },
 };
 const [JobInfoDrawer, jobDrawerApi] = useVbenDrawer({
   connectedComponent: defineAsyncComponent(() => import('./JobInfoDrawer.vue')),
@@ -411,11 +416,6 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridEvents,
   gridOptions,
 });
-
-function onSort(params: { field: string; order: SortOrder }) {
-  const sorting = params.order ? `${params.field} ${params.order}` : undefined;
-  gridApi.query({ sorting });
-}
 
 function onShow(row: BackgroundJobInfoDto) {
   jobDetailDrawerApi.setData(row);

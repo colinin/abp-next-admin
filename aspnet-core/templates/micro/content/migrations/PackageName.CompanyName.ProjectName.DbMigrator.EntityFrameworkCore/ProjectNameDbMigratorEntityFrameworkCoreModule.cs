@@ -27,7 +27,7 @@ namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
     typeof(ProjectNameEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
 #if MySQL
-    typeof(AbpEntityFrameworkCoreMySQLModule),
+    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
 #elif SqlServer
     typeof(AbpEntityFrameworkCoreSqlServerModule),
 #elif Sqlite
@@ -45,30 +45,6 @@ public class ProjectNameDbMigratorEntityFrameworkCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        // 配置连接字符串
-        Configure<AbpDbConnectionOptions>(options =>
-        {
-            // 业务数据库
-            options.Databases.Configure("ProjectName", database =>
-            {
-                database.MapConnection(
-                    "ProjectName"
-                );
-            });
-            // abp框架数据库
-            options.Databases.Configure("Framework", database =>
-            {
-                database.MapConnection(
-                    "AbpSaas",
-                    "AbpTextTemplating",
-                    "AbpSettingManagement",
-                    "AbpFeatureManagement",
-                    "AbpPermissionManagement",
-                    "AbpLocalizationManagement"
-                );
-            });
-        });
-
         // 配置Ef
         Configure<AbpDbContextOptions>(options =>
         {

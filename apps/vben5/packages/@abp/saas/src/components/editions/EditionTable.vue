@@ -21,6 +21,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
+  PlusOutlined,
 } from '@ant-design/icons-vue';
 import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
@@ -65,6 +66,7 @@ const gridOptions: VxeGridProps<EditionDto> = {
     {
       align: 'left',
       field: 'displayName',
+      sortable: true,
       title: $t('AbpSaas.DisplayName:EditionName'),
     },
     {
@@ -83,8 +85,10 @@ const gridOptions: VxeGridProps<EditionDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -99,19 +103,23 @@ const gridOptions: VxeGridProps<EditionDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
 
 const gridEvents: VxeGridListeners<EditionDto> = {
   cellClick: () => {},
+  sortChange: () => {
+    gridApi.query();
+  },
 };
 const [EditionModal, modalApi] = useVbenModal({
   connectedComponent: defineAsyncComponent(() => import('./EditionModal.vue')),
 });
-const [Grid, { query }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
   gridOptions,
@@ -145,7 +153,7 @@ const onDelete = (row: EditionDto) => {
     onOk: async () => {
       await deleteApi(row.id);
       message.success($t('AbpUi.DeletedSuccessfully'));
-      query();
+      await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
   });
@@ -181,6 +189,7 @@ const onMenuClick = (row: EditionDto, info: MenuInfo) => {
         type="primary"
         v-access:code="[EditionsPermissions.Create]"
         @click="onCreate"
+        :icon="h(PlusOutlined)"
       >
         {{ $t('AbpSaas.NewEdition') }}
       </Button>
@@ -233,7 +242,7 @@ const onMenuClick = (row: EditionDto, info: MenuInfo) => {
       </div>
     </template>
   </Grid>
-  <EditionModal @change="() => query()" />
+  <EditionModal @change="() => gridApi.query()" />
   <EditionChangeDrawer />
   <EditionFeatureModal />
 </template>

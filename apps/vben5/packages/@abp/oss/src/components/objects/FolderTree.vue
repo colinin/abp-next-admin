@@ -185,7 +185,7 @@ onMounted(onInit);
 <style scoped lang="scss">
 :deep(.ant-tree) {
   .ant-tree-title {
-    word-break: break-word;
+    // word-break: break-word;
     white-space: normal;
   }
 }

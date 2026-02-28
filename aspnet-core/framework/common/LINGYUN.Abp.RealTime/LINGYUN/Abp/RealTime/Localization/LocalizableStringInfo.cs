@@ -24,6 +24,7 @@ public class LocalizableStringInfo
     /// </summary>
     public LocalizableStringInfo()
     {
+        Values = new Dictionary<object, object>();
     }
     /// <summary>
     /// Instantiate <see cref="LocalizableStringInfo"/>
@@ -38,6 +39,6 @@ public class LocalizableStringInfo
     {
         ResourceName = resourceName;
         Name = name;
-        Values = values;
+        Values = values ?? new Dictionary<object, object>();
     }
 }

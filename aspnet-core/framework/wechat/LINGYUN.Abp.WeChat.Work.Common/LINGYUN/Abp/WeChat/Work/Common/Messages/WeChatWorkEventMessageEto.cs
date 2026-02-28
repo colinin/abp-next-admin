@@ -3,7 +3,7 @@ using Volo.Abp.EventBus;
 
 namespace LINGYUN.Abp.WeChat.Work.Common.Messages;
 
-[GenericEventName(Prefix = "wechat.work.events")]
+[GenericEventName(Prefix = "wechat.work.events.")]
 public class WeChatWorkEventMessageEto<TEvent> : WeChatMessageEto
     where TEvent : WeChatWorkEventMessage
 {

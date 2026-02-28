@@ -44,7 +44,7 @@ public class OssObject
     public void SetContent(Stream stream)
     {
         _content = stream;
-        if (!_content.IsNullOrEmpty())
+        if (!_content.IsNullOrEmpty() && _content.CanSeek && _content.Position != 0)
         {
             _content.Seek(0, SeekOrigin.Begin);
         }

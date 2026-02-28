@@ -32,8 +32,8 @@ public class RevocationIdentitySession : IOpenIddictServerHandler<OpenIddictServ
 
     public async virtual ValueTask HandleAsync(OpenIddictServerEvents.HandleRevocationRequestContext context)
     {
-        var tenantId = context.Principal.FindTenantId();
-        var sessionId = context.Principal.FindSessionId();
+        var tenantId = context.GenericTokenPrincipal.FindTenantId();
+        var sessionId = context.GenericTokenPrincipal.FindSessionId();
         using (CurrentTenant.Change(tenantId))
         {
             if (!sessionId.IsNullOrWhiteSpace())

@@ -54,9 +54,11 @@ public class ChangePasswordModel : AccountPageModel
     [BindProperty]
     public ChangePasswordInputModel Input { get; set; }
 
+    [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string ReturnUrl { get; set; }
 
+    [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string ReturnUrlHash { get; set; }
 

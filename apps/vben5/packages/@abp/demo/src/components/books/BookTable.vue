@@ -60,24 +60,28 @@ const baseColumns = reactive<VxeGridPropTypes.Columns<BookDto>>([
     align: 'left',
     field: 'name',
     minWidth: 150,
+    sortable: true,
     title: $t('Demo.DisplayName:Name'),
   },
   {
     align: 'left',
     field: 'authorName',
     minWidth: 150,
+    sortable: true,
     title: $t('Demo.DisplayName:AuthorId'),
   },
   {
     align: 'left',
     field: 'publishDate',
     minWidth: 200,
+    sortable: true,
     title: $t('Demo.DisplayName:PublishDate'),
   },
   {
     align: 'left',
     field: 'price',
     minWidth: 150,
+    sortable: true,
     title: $t('Demo.DisplayName:Price'),
   },
 ]);
@@ -88,8 +92,10 @@ const gridOptions: VxeGridProps<BookDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -102,12 +108,17 @@ const gridOptions: VxeGridProps<BookDto> = {
     },
   },
   toolbarConfig: {
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
   },
 };
 
 const gridEvents: VxeGridListeners<BookDto> = {
   cellClick: () => {},
+  sortChange: () => {
+    gridApi.query();
+  },
 };
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,

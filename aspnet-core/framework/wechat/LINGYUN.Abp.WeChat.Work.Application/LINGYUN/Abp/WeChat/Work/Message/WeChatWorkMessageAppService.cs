@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.WeChat.Common.Crypto;
 using LINGYUN.Abp.WeChat.Common.Crypto.Models;
 using LINGYUN.Abp.WeChat.Common.Messages;
+using LINGYUN.Abp.WeChat.Work.Common.Messages;
 using LINGYUN.Abp.WeChat.Work.Settings;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -14,9 +15,9 @@ public class WeChatWorkMessageAppService : ApplicationService, IWeChatWorkMessag
 {
     private readonly IWeChatCryptoService _cryptoService;
     private readonly IDistributedEventBus _distributedEventBus;
-    private readonly IMessageResolver _messageResolver;
+    private readonly IWeChatWorkMessageResolver _messageResolver;
     public WeChatWorkMessageAppService(
-        IMessageResolver messageResolver,
+        IWeChatWorkMessageResolver messageResolver,
         IWeChatCryptoService cryptoService,
         IDistributedEventBus distributedEventBus)
     {
@@ -82,7 +83,7 @@ public class WeChatWorkMessageAppService : ApplicationService, IWeChatWorkMessag
             input.Nonce,
             input.Data);
 
-        var result = await _messageResolver.ResolveMessageAsync(messageData);
+        var result = await _messageResolver.ResolveAsync(messageData);
         if (result.Message == null)
         {
             Logger.LogWarning(input.Data);

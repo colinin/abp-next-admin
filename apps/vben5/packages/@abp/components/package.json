@@ -22,6 +22,14 @@
       "types": "./src/codemirror/index.ts",
       "default": "./src/codemirror/index.ts"
     },
+    "./locales": {
+      "types": "./src/locales/index.ts",
+      "default": "./src/locales/index.ts"
+    },
+    "./cropper": {
+      "types": "./src/cropper/index.ts",
+      "default": "./src/cropper/index.ts"
+    },
     "./tinymce": {
       "types": "./src/tinymce/index.ts",
       "default": "./src/tinymce/index.ts"
@@ -48,6 +56,7 @@
     "@vueuse/core": "catalog:",
     "ant-design-vue": "catalog:",
     "codemirror": "catalog:",
+    "cropperjs": "catalog:",
     "lodash.isnumber": "catalog:",
     "tinymce": "catalog:",
     "vditor": "catalog:",

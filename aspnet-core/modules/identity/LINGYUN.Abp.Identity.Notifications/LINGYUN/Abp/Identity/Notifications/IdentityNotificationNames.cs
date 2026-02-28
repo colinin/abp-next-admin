@@ -11,4 +11,13 @@ public static class IdentityNotificationNames
         /// </summary>
         public const string ExpirationSession = Prefix + ".Expiration";
     }
+
+    public static class IdentityUser
+    {
+        public const string Prefix = GroupName + ".IdentityUser";
+        /// <summary>
+        /// 不活跃用户清理通知
+        /// </summary>
+        public const string CleaningUpInactiveUsers = Prefix + ".CleaningUpInactiveUsers";
+    }
 }

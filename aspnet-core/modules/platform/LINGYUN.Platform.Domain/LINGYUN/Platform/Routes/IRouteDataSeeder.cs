@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,6 +32,7 @@ public interface IRouteDataSeeder
         Guid? parentId = null,
         Guid? tenantId = null,
         bool isPublic = false,
+        IDictionary<string, object> meta = null,
         CancellationToken cancellationToken = default);
 
     Task SeedUserMenuAsync(

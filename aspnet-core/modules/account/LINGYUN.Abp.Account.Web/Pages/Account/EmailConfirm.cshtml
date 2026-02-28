@@ -8,6 +8,8 @@
     <div class="card-body p-5">
         <h4>@L["EmailConfirm"]</h4>
         <form method="post">
+            <input asp-for="ReturnUrl" />
+            <input asp-for="ReturnUrlHash" />
             <abp-input asp-for="UserId"/>
             <abp-input asp-for="ConfirmToken"/>
             <a abp-button="Secondary" asp-page="./Login">@L["Cancel"]</a>

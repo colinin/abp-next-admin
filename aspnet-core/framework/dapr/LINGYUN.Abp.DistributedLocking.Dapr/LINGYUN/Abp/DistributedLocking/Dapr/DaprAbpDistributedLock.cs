@@ -38,12 +38,14 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
         var client = DaprClientFactory.CreateClient();
         var lockOwner = await LockOwnerFinder.FindAsync();
 
+#pragma warning disable DAPR_DISTRIBUTEDLOCK
         var res = await client.Lock(
             Options.StoreName, 
             name,
             lockOwner, 
             (int)timeout.TotalSeconds,
             GetCancellationToken(cancellationToken));
+#pragma warning restore DAPR_DISTRIBUTEDLOCK
 
         if (res == null || !res.Success)
         {

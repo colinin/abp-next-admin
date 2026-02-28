@@ -3,12 +3,12 @@ import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 
 import type { DataDto, DataItemDto } from '../../types/dataDictionaries';
 
-import { defineAsyncComponent, h, reactive, ref } from 'vue';
+import { defineAsyncComponent, h, ref } from 'vue';
 
 import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { isNullOrWhiteSpace } from '@abp/core';
+import { isNullOrWhiteSpace, sortby } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   CheckOutlined,
@@ -25,11 +25,6 @@ import { ValueType } from '../../types/dataDictionaries';
 const { deleteItemApi, getApi } = useDataDictionariesApi();
 
 const dataItems = ref<DataItemDto[]>([]);
-const pageState = reactive({
-  current: 1,
-  size: 10,
-  total: 0,
-});
 const valueTypeMaps: { [key: number]: string } = {
   [ValueType.Array]: 'Array',
   [ValueType.Boolean]: 'Boolean',
@@ -66,6 +61,7 @@ const gridOptions: VxeGridProps<DataItemDto> = {
       align: 'left',
       field: 'name',
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Name'),
       treeNode: true,
     },
@@ -73,6 +69,7 @@ const gridOptions: VxeGridProps<DataItemDto> = {
       align: 'left',
       field: 'displayName',
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:DisplayName'),
     },
     {
@@ -88,6 +85,7 @@ const gridOptions: VxeGridProps<DataItemDto> = {
         return valueTypeMaps[row.valueType] ?? row.valueType;
       },
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:ValueType'),
     },
     {
@@ -101,6 +99,7 @@ const gridOptions: VxeGridProps<DataItemDto> = {
       field: 'allowBeNull',
       minWidth: 150,
       slots: { default: 'allowBeNull' },
+      sortable: true,
       title: $t('AppPlatform.DisplayName:AllowBeNull'),
     },
     {
@@ -113,25 +112,46 @@ const gridOptions: VxeGridProps<DataItemDto> = {
   ],
   exportConfig: {},
   keepSource: true,
+  pagerConfig: {
+    pageSize: 15,
+    pageSizes: [10, 15, 30, 50, 100],
+  },
+  proxyConfig: {
+    ajax: {
+      query: async ({ page, sort }) => {
+        let items = sortby(dataItems.value, sort.field);
+        if (sort.order === 'desc') {
+          items = items.reverse();
+        }
+        const result = {
+          totalCount: dataItems.value.length,
+          items: items.slice(
+            (page.currentPage - 1) * page.pageSize,
+            page.currentPage * page.pageSize,
+          ),
+        };
+        return new Promise((resolve) => {
+          resolve(result);
+        });
+      },
+    },
+    response: {
+      total: 'totalCount',
+      list: 'items',
+    },
+  },
   toolbarConfig: {
     custom: true,
     export: true,
     refresh: false,
     zoom: true,
   },
-  treeConfig: {
-    accordion: true,
-    parentField: 'parentId',
-    rowField: 'id',
-    transform: true,
-  },
+  height: 'auto',
 };
 
 const gridEvents: VxeGridListeners<DataItemDto> = {
-  pageChange(params) {
-    pageState.current = params.currentPage;
-    pageState.size = params.pageSize;
-    onPageChange();
+  sortChange: () => {
+    gridApi.query();
   },
 };
 
@@ -155,28 +175,12 @@ async function onGet() {
     drawerApi.setState({ loading: true });
     const dto = await getApi(id);
     dataItems.value = dto.items;
-    pageState.total = dto.items.length;
-    onPageChange();
+    setTimeout(() => gridApi.reload(), 100);
   } finally {
     drawerApi.setState({
       loading: false,
     });
   }
-}
-
-function onPageChange() {
-  const items = dataItems.value.slice(
-    (pageState.current - 1) * pageState.size,
-    pageState.current * pageState.size,
-  );
-  gridApi.setGridOptions({
-    data: items,
-    pagerConfig: {
-      currentPage: pageState.current,
-      pageSize: pageState.size,
-      total: pageState.total,
-    },
-  });
 }
 
 function onCreate() {

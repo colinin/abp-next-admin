@@ -44,7 +44,8 @@ public static class WeChatXmlDataSerializeExtensions
         var objectType = message.GetType();
         var settings = new XmlWriterSettings
         {
-            Encoding = Encoding.UTF8,
+            // Encoding = Encoding.UTF8,
+            Encoding = new UTF8Encoding(false),
             Indent = false,
             OmitXmlDeclaration = true,
             WriteEndDocumentOnClose = false,

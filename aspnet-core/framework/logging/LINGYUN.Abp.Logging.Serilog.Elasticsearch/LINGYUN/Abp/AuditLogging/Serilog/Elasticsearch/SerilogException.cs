@@ -1,25 +1,27 @@
-﻿namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
+﻿using System.Text.Json.Serialization;
+
+namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 
 public class SerilogException
 {
-    [Nest.PropertyName("SourceContext")]
+    [JsonPropertyName("SourceContext")]
     public int Depth { get; set; }
 
-    [Nest.PropertyName("ClassName")]
+    [JsonPropertyName("ClassName")]
     public string Class { get; set; }
 
-    [Nest.PropertyName("Message")]
+    [JsonPropertyName("Message")]
     public string Message { get; set; }
 
-    [Nest.PropertyName("Source")]
+    [JsonPropertyName("Source")]
     public string Source { get; set; }
 
-    [Nest.PropertyName("StackTraceString")]
+    [JsonPropertyName("StackTraceString")]
     public string StackTrace { get; set; }
 
-    [Nest.PropertyName("HResult")]
+    [JsonPropertyName("HResult")]
     public int HResult { get; set; }
 
-    [Nest.PropertyName("HelpURL")]
+    [JsonPropertyName("HelpURL")]
     public string HelpURL { get; set; }
 }

@@ -1,0 +1,91 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<Import Project="..\..\..\common.secrets.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace>LINGYUN.Abp.MicroService.AuthServer</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AgileConfig.Client" />
+		<PackageReference Include="DotNetCore.CAP.Dashboard" />
+		<PackageReference Include="DotNetCore.CAP.PostgreSql" />
+		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
+		<PackageReference Include="DistributedLock.Redis" />
+		<PackageReference Include="OpenIddict.Validation.DataProtection" />
+		<PackageReference Include="OpenIddict.Server.DataProtection" />
+		<PackageReference Include="Serilog.AspNetCore" />
+		<PackageReference Include="Serilog.Enrichers.Assembly" />
+		<PackageReference Include="Serilog.Enrichers.Environment" />
+		<PackageReference Include="Serilog.Enrichers.Process" />
+		<PackageReference Include="Serilog.Enrichers.Thread" />
+		<PackageReference Include="Serilog.Settings.Configuration" />
+		<PackageReference Include="Serilog.Sinks.Async" />
+		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
+		<PackageReference Include="Volo.Abp.Account.Web.OpenIddict" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" />
+		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
+		<PackageReference Include="Volo.Abp.Autofac" />
+		<PackageReference Include="Volo.Abp.Identity.AspNetCore" />
+		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
+		<ProjectReference Include="..\..\framework\exporter\LINGYUN.Abp.Exporter.MiniExcel\LINGYUN.Abp.Exporter.MiniExcel.csproj" />
+		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
+		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
+		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
+		<ProjectReference Include="..\..\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
+		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
+		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.AspNetCore.MultiTenancy\LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AuthServer.EntityFrameworkCore\LINGYUN.Abp.MicroService.AuthServer.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OAuth\LINGYUN.Abp.Account.Web.OAuth.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OpenIddict\LINGYUN.Abp.Account.Web.OpenIddict.csproj" />
+		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.Application\LINGYUN.Abp.Gdpr.Application.csproj" />
+		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.HttpApi\LINGYUN.Abp.Gdpr.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.Web\LINGYUN.Abp.Gdpr.Web.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.AspNetCore.Session\LINGYUN.Abp.Identity.AspNetCore.Session.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.OrganizaztionUnits\LINGYUN.Abp.Identity.OrganizaztionUnits.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
+		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.AspNetCore.Session\LINGYUN.Abp.OpenIddict.AspNetCore.Session.csproj" />
+		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.LinkUser\LINGYUN.Abp.OpenIddict.LinkUser.csproj" />
+		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.Portal\LINGYUN.Abp.OpenIddict.Portal.csproj" />
+		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.Sms\LINGYUN.Abp.OpenIddict.Sms.csproj" />
+		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.WeChat.Work\LINGYUN.Abp.OpenIddict.WeChat.Work.csproj" />
+		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.WeChat\LINGYUN.Abp.OpenIddict.WeChat.csproj" />
+		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.BlobStoring.OssManagement\LINGYUN.Abp.BlobStoring.OssManagement.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Sms.Platform\LINGYUN.Abp.Sms.Platform.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.ServiceDefaults\LINGYUN.Abp.MicroService.ServiceDefaults.csproj" />
+	</ItemGroup>
+
+	<Target Name="RestoreNpmPackages" BeforeTargets="BeforeBuild">
+		<Message Text="正在执行 abp install-libs ..." Importance="high" />
+
+		<PropertyGroup>
+			<PackageJsonPath>$(MSBuildProjectDirectory)\package.json</PackageJsonPath>
+		</PropertyGroup>
+		
+		<Exec Command="abp install-libs" Condition="Exists('$(PackageJsonPath)')" WorkingDirectory="$(MSBuildProjectDirectory)" IgnoreExitCode="false" />
+	</Target>
+
+</Project>

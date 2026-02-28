@@ -129,7 +129,7 @@ public class WrapResultChecker : IWrapResultChecker, ISingletonDependency
             return true;
         }
         var url = BuildUrl(context.HttpContext);
-        return !Options.IgnorePrefixUrls.Any(urlPrefix => urlPrefix.StartsWith(url));
+        return !Options.IgnorePrefixUrls.Any(urlPrefix => url.StartsWith(urlPrefix));
     }
 
     protected virtual bool CheckForController(ControllerActionDescriptor controllerActionDescriptor)

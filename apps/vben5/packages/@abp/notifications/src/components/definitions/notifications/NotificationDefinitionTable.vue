@@ -7,7 +7,7 @@ import type { VbenFormProps } from '@vben/common-ui';
 import type { NotificationDefinitionDto } from '../../../types/definitions';
 import type { NotificationGroupDefinitionDto } from '../../../types/groups';
 
-import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
+import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
@@ -16,6 +16,7 @@ import { $t } from '@vben/locales';
 
 import {
   listToTree,
+  sortby,
   useLocalization,
   useLocalizationSerializer,
 } from '@abp/core';
@@ -79,18 +80,12 @@ const { deleteApi, getListApi: getDefinitionsApi } =
   useNotificationDefinitionsApi();
 
 const definitionGroups = ref<DefinitionGroup[]>([]);
-const pageState = reactive({
-  current: 1,
-  size: 10,
-  total: 0,
-});
 
 const formOptions: VbenFormProps = {
   // 默认展开
   collapsed: false,
   handleReset: onReset,
   async handleSubmit(params) {
-    pageState.current = 1;
     await onGet(params);
   },
   schema: [
@@ -125,12 +120,14 @@ const gridOptions: VxeGridProps<NotificationGroupDefinitionDto> = {
       align: 'left',
       field: 'name',
       minWidth: 150,
+      sortable: true,
       title: $t('Notifications.DisplayName:Name'),
     },
     {
       align: 'left',
       field: 'displayName',
       minWidth: 150,
+      sortable: true,
       title: $t('Notifications.DisplayName:DisplayName'),
     },
   ],
@@ -140,6 +137,30 @@ const gridOptions: VxeGridProps<NotificationGroupDefinitionDto> = {
   },
   exportConfig: {},
   keepSource: true,
+  proxyConfig: {
+    ajax: {
+      query: async ({ page, sort }) => {
+        let items = sortby(definitionGroups.value, sort.field);
+        if (sort.order === 'desc') {
+          items = items.reverse();
+        }
+        const result = {
+          totalCount: definitionGroups.value.length,
+          items: items.slice(
+            (page.currentPage - 1) * page.pageSize,
+            page.currentPage * page.pageSize,
+          ),
+        };
+        return new Promise((resolve) => {
+          resolve(result);
+        });
+      },
+    },
+    response: {
+      total: 'totalCount',
+      list: 'items',
+    },
+  },
   toolbarConfig: {
     custom: true,
     export: true,
@@ -157,6 +178,8 @@ const subGridColumns: VxeGridProps<NotificationDefinitionDto>['columns'] = [
     align: 'left',
     field: 'name',
     minWidth: 150,
+    resizable: true,
+    sortable: true,
     title: $t('Notifications.DisplayName:Name'),
     treeNode: true,
   },
@@ -164,12 +187,16 @@ const subGridColumns: VxeGridProps<NotificationDefinitionDto>['columns'] = [
     align: 'left',
     field: 'displayName',
     minWidth: 120,
+    resizable: true,
+    sortable: true,
     title: $t('Notifications.DisplayName:DisplayName'),
   },
   {
     align: 'left',
     field: 'description',
     minWidth: 120,
+    resizable: true,
+    sortable: true,
     title: $t('Notifications.DisplayName:Description'),
   },
   {
@@ -177,37 +204,49 @@ const subGridColumns: VxeGridProps<NotificationDefinitionDto>['columns'] = [
     field: 'allowSubscriptionToClients',
     minWidth: 120,
     slots: { default: 'allowSubscriptionToClients' },
+    resizable: true,
+    sortable: true,
     title: $t('Notifications.DisplayName:AllowSubscriptionToClients'),
   },
   {
     align: 'left',
     field: 'template',
     minWidth: 150,
+    resizable: true,
+    sortable: true,
     title: $t('Notifications.DisplayName:Template'),
   },
   {
     align: 'left',
     field: 'notificationLifetime',
     minWidth: 150,
+    resizable: true,
+    sortable: true,
     title: $t('Notifications.DisplayName:NotificationLifetime'),
   },
   {
     align: 'left',
     field: 'notificationType',
     minWidth: 150,
+    resizable: true,
+    sortable: true,
     title: $t('Notifications.DisplayName:NotificationType'),
   },
   {
     align: 'left',
     field: 'contentType',
     minWidth: 150,
+    resizable: true,
+    sortable: true,
     title: $t('Notifications.DisplayName:ContentType'),
   },
   {
     align: 'left',
     field: 'providers',
     minWidth: 150,
+    resizable: true,
     slots: { default: 'providers' },
+    sortable: true,
     title: $t('Notifications.DisplayName:Providers'),
   },
   {
@@ -220,10 +259,8 @@ const subGridColumns: VxeGridProps<NotificationDefinitionDto>['columns'] = [
 ];
 
 const gridEvents: VxeGridListeners<NotificationGroupDefinitionDto> = {
-  pageChange(params) {
-    pageState.current = params.currentPage;
-    pageState.size = params.pageSize;
-    onPageChange();
+  sortChange: () => {
+    gridApi.query();
   },
 };
 
@@ -249,7 +286,6 @@ async function onGet(input?: Record<string, string>) {
     gridApi.setLoading(true);
     const groupRes = await getGroupsApi(input);
     const definitionRes = await getDefinitionsApi(input);
-    pageState.total = groupRes.items.length;
     definitionGroups.value = groupRes.items.map((group) => {
       const localizableGroup = deserialize(group.displayName);
       const definitions = definitionRes.items
@@ -276,7 +312,7 @@ async function onGet(input?: Record<string, string>) {
         }),
       };
     });
-    onPageChange();
+    setTimeout(() => gridApi.reload(), 100);
   } finally {
     gridApi.setLoading(false);
   }
@@ -286,21 +322,6 @@ async function onReset() {
   await gridApi.formApi.resetForm();
   const input = await gridApi.formApi.getValues();
   await onGet(input);
-}
-
-function onPageChange() {
-  const items = definitionGroups.value.slice(
-    (pageState.current - 1) * pageState.size,
-    pageState.current * pageState.size,
-  );
-  gridApi.setGridOptions({
-    data: items,
-    pagerConfig: {
-      currentPage: pageState.current,
-      pageSize: pageState.size,
-      total: pageState.total,
-    },
-  });
 }
 
 function onCreate() {

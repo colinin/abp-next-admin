@@ -64,8 +64,8 @@ public class AbpImagingProcesserContributor : IOssObjectProcesserContributor
             !height.IsNullOrWhiteSpace())
         {
             resizeArgs = new ImageResizeArgs(
-                int.Parse(width),
-                int.Parse(height));
+                uint.Parse(width),
+                uint.Parse(height));
             return true;
         }
         resizeArgs = null;

@@ -45,6 +45,7 @@ const gridOptions: VxeGridProps<IdentityRoleDto> = {
     {
       field: 'name',
       minWidth: '100px',
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:RoleName'),
     },
     {
@@ -59,14 +60,16 @@ const gridOptions: VxeGridProps<IdentityRoleDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
         if (!props.selectedKey) {
           return {
             totalCount: 0,
             items: [],
           };
         }
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getRoleListApi(props.selectedKey!, {
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -81,16 +84,20 @@ const gridOptions: VxeGridProps<IdentityRoleDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
 
 const gridEvents: VxeGridListeners<IdentityRoleDto> = {
   cellClick: () => {},
+  sortChange: () => {
+    gridApi.query();
+  },
 };
-const [Grid, { query, setLoading }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   gridEvents,
   gridOptions,
 });
@@ -100,7 +107,7 @@ const [RoleModal, roleModalApi] = useVbenModal({
 });
 
 const onRefresh = () => {
-  return nextTick(query);
+  return nextTick(gridApi.query);
 };
 
 const onDelete = (row: IdentityRoleDto) => {
@@ -114,11 +121,11 @@ const onDelete = (row: IdentityRoleDto) => {
     },
     onOk: async () => {
       try {
-        setLoading(true);
+        gridApi.setLoading(true);
         await removeOrganizationUnitApi(row.id, props.selectedKey!);
         await onRefresh();
       } finally {
-        setLoading(false);
+        gridApi.setLoading(false);
       }
     },
     title: $t('AbpUi.AreYouSure'),
@@ -141,7 +148,7 @@ const onCreateRole = async (roles: IdentityRoleDto[]) => {
       roleIds: roles.map((item) => item.id),
     });
     roleModalApi.close();
-    await query();
+    await gridApi.query();
   } finally {
     roleModalApi.setState({
       submitting: false,

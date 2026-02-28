@@ -1,0 +1,28 @@
+{
+  "profiles": {
+    "Single.PostgreSql.Dev": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APPLICATION_DATABASE_PROVIDER": "PostgreSql"
+      }
+    },
+    "Single.MySql.Dev": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APPLICATION_DATABASE_PROVIDER": "MySql"
+      }
+    },
+    "Single.SqlServer.Dev": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APPLICATION_DATABASE_PROVIDER": "SqlServer"
+      }
+    }
+  }
+}

@@ -2,15 +2,15 @@
 using LINGYUN.Abp.LocalizationManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using System.Globalization;
-using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Features;
 using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.LocalizationManagement;
 
+[RequiresFeature(LocalizationManagementFeatures.Enable)]
 [Authorize(LocalizationManagementPermissions.Language.Default)]
-[RequiresPreviewFeatures(LocalizationManagementFeatures.Enable)]
 public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppService
 {
     private readonly ILanguageRepository _repository;

@@ -3,7 +3,7 @@ using Volo.Abp.EventBus;
 
 namespace LINGYUN.Abp.WeChat.Official.Messages;
 
-[GenericEventName(Prefix = "wechat.official.events")]
+[GenericEventName(Prefix = "wechat.official.events.")]
 public class WeChatOfficialEventMessageEto<TEvent> : WeChatMessageEto
     where TEvent : WeChatEventMessage
 {

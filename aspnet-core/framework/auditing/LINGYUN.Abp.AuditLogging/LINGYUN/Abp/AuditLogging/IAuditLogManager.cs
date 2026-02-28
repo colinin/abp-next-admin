@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.Auditing;
 
 namespace LINGYUN.Abp.AuditLogging;
 
@@ -20,10 +19,6 @@ public interface IAuditLogManager
 
     Task DeleteManyAsync(
         List<Guid> ids,
-        CancellationToken cancellationToken = default);
-
-    Task<string> SaveAsync(
-        AuditLogInfo auditInfo,
         CancellationToken cancellationToken = default);
 
     Task<long> GetCountAsync(

@@ -173,6 +173,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Quartz.SqlServe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Quartz.SqlInstaller", "modules\task-management\LINGYUN.Abp.Quartz.SqlInstaller\LINGYUN.Abp.Quartz.SqlInstaller.csproj", "{0EEA73CA-D8DD-F044-045D-F070F8831E26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINGYUN.Abp.Telemetry.OpenTelemetry", "framework\telemetry\LINGYUN.Abp.Telemetry.OpenTelemetry\LINGYUN.Abp.Telemetry.OpenTelemetry.csproj", "{164E4514-4E84-F13A-E24E-2A743753CDB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -447,6 +449,10 @@ Global
 		{0EEA73CA-D8DD-F044-045D-F070F8831E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EEA73CA-D8DD-F044-045D-F070F8831E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EEA73CA-D8DD-F044-045D-F070F8831E26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{164E4514-4E84-F13A-E24E-2A743753CDB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{164E4514-4E84-F13A-E24E-2A743753CDB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164E4514-4E84-F13A-E24E-2A743753CDB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{164E4514-4E84-F13A-E24E-2A743753CDB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -533,6 +539,7 @@ Global
 		{B6452D3F-E58C-C433-E52A-F65EE2657E01} = {8C3DF571-BAC3-48C4-B46A-AC0E0EAA9871}
 		{D613F393-9CEE-2D3B-33C9-90630F8348E7} = {8C3DF571-BAC3-48C4-B46A-AC0E0EAA9871}
 		{0EEA73CA-D8DD-F044-045D-F070F8831E26} = {8C3DF571-BAC3-48C4-B46A-AC0E0EAA9871}
+		{164E4514-4E84-F13A-E24E-2A743753CDB3} = {CE07B9F4-54E8-4E74-BE14-8E5C1FB7AFC8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80ED12A5-C899-459F-A181-ADCC9D680DE5}

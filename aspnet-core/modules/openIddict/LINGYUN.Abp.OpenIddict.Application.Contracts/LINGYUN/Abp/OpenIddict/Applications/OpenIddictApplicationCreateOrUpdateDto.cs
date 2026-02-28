@@ -42,4 +42,6 @@ public abstract class OpenIddictApplicationCreateOrUpdateDto : ExtensibleObject
     public string ClientUri { get; set; }
 
     public string LogoUri { get; set; }
+
+    public string FrontChannelLogoutUri { get; set; }
 }

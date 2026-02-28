@@ -21,6 +21,7 @@ public class WeChatWorkFeatureDefinitionProvider : FeatureDefinitionProvider
 
         AddMessageFeature(wechatWorkFeature);
         AddAppChatFeature(wechatWorkFeature);
+        AddWebhookFeature(wechatWorkFeature);
     }
 
     protected virtual void AddMessageFeature(FeatureDefinition wechatWorkFeature)
@@ -64,6 +65,28 @@ public class WeChatWorkFeatureDefinitionProvider : FeatureDefinitionProvider
             defaultValue: "1",
             displayName: L("Features:AppChatMessage.LimitInterval"),
             description: L("Features:AppChatMessage.LimitIntervalDesc"),
+            valueType: new FreeTextStringValueType(new NumericValueValidator(1, 1000)));
+    }
+
+    protected virtual void AddWebhookFeature(FeatureDefinition wechatWorkFeature)
+    {
+        var messageEnableFeature = wechatWorkFeature.CreateChild(
+            name: WeChatWorkFeatureNames.Webhook.Enable,
+            defaultValue: "false",
+            displayName: L("Features:WebhookMessageEnable"),
+            description: L("Features:WebhookMessageEnableDesc"),
+            valueType: new ToggleStringValueType(new BooleanValueValidator()));
+        messageEnableFeature.CreateChild(
+            name: WeChatWorkFeatureNames.Webhook.Limit,
+            defaultValue: "20",
+            displayName: L("Features:WebhookMessage.Limit"),
+            description: L("Features:WebhookMessage.LimitDesc"),
+            valueType: new FreeTextStringValueType(new NumericValueValidator(1, 20000)));
+        messageEnableFeature.CreateChild(
+            name: WeChatWorkFeatureNames.Webhook.LimitInterval,
+            defaultValue: "1",
+            displayName: L("Features:WebhookMessage.LimitInterval"),
+            description: L("Features:WebhookMessage.LimitIntervalDesc"),
             valueType: new FreeTextStringValueType(new NumericValueValidator(1, 1000)));
     }
 

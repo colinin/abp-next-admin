@@ -1,0 +1,29 @@
+/* 鼠标手型 */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* 账户列表项悬停效果增强 */
+.account-item:hover {
+    background-color: var(--bs-list-group-action-hover-bg);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+/* 当前账户特殊样式 */
+.account-item.active {
+    background-color: var(--bs-primary-bg-subtle);
+    border-left: 3px solid var(--bs-primary);
+}
+
+/* 响应式调整 */
+@media (max-width: 576px) {
+    .min-vh-100 {
+        min-height: auto;
+        padding: 1rem 0;
+    }
+
+    .card-body {
+        padding: 1rem !important;
+    }
+}

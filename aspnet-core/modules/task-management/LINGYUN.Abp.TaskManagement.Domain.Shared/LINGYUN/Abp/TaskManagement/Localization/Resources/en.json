@@ -17,6 +17,7 @@
     "Permissions:DeleteJobLogs": "Delete Job Logs",
     "TaskManagement:01000": "A job named {Name} already exists in the Group {Group}!",
     "TaskManagement:01001": "The queue did not find the job named {Name} in Group {Group}. Please join the job first!",
+    "TaskManagement:01002": "The job to be deleted contains an ongoing job. Please stop the job first and then try to delete it again!",
     "DisplayName:IsEnabled": "IsEnabled",
     "DisplayName:Group": "Group",
     "DisplayName:Name": "Name",

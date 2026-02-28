@@ -11,7 +11,6 @@ import { HelmetProvider } from "react-helmet-async";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "virtual:svg-icons-register";
 // mock api
-import worker from "./_mock";
 // i18n
 import "./locales/i18n";
 // css

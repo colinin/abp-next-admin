@@ -11,19 +11,24 @@ public class JobSynchronizer :
     IDistributedEventHandler<JobPauseEventData>,
     IDistributedEventHandler<JobResumeEventData>,
     IDistributedEventHandler<JobDeleteEventData>,
+    IDistributedEventHandler<JobCheckRuningEventData>,
+    IDistributedEventHandler<JobCleanupExpiredEventData>,
     ITransientDependency
 {
     protected IJobStore JobStore { get; }
     protected IJobScheduler JobScheduler { get; }
+    protected IJobStateChecker JobStateChecker { get; }
     protected AbpBackgroundTasksOptions BackgroundTasksOptions { get; }
 
     public JobSynchronizer(
         IJobStore jobStore,
         IJobScheduler jobScheduler,
+        IJobStateChecker jobStateChecker,
         IOptions<AbpBackgroundTasksOptions> options)
     {
         JobStore = jobStore;
         JobScheduler = jobScheduler;
+        JobStateChecker = jobStateChecker;
         BackgroundTasksOptions = options.Value;
     }
 
@@ -133,5 +138,15 @@ public class JobSynchronizer :
                 await JobScheduler.RemoveAsync(jobInfo);
             }
         }
+    }
+
+    public async virtual Task HandleEventAsync(JobCleanupExpiredEventData eventData)
+    {
+        await JobStateChecker.CleanExpiredJobAsync(eventData.TenantId);
+    }
+
+    public async virtual Task HandleEventAsync(JobCheckRuningEventData eventData)
+    {
+        await JobStateChecker.CheckRuningJobAsync(eventData.TenantId);
     }
 }

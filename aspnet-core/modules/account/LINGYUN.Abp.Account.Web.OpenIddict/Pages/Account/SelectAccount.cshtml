@@ -1,0 +1,133 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+@using Volo.Abp.OpenIddict.Localization
+@using LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
+@inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<AbpOpenIddictResource> L
+@model SelectAccountModel
+
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+    PageLayout.Content.Title = L["SelectAccount"].Value;
+}
+
+@section styles 
+{
+    <abp-style-bundle name="@typeof(SelectAccountModel).FullName" />
+}
+
+@section scripts 
+{
+    <abp-script-bundle name="@typeof(SelectAccountModel).FullName" />
+}
+
+<abp-card>
+    <abp-card-body>
+        @if (Model.AvailableAccounts.Any())
+        {
+            <form method="post" id="selectAccountForm">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="Input.ClientId" value="@Model.ClientName" />
+                <input type="hidden" asp-for="Input.RedirectUri" value="@Model.RedirectUri" />
+                <input type="hidden" asp-for="Input.RememberSelection" value="true" />
+                <input type="hidden" asp-for="Input.RememberMe" value="true" />
+
+                <div class="alert alert-info d-flex align-items-center mb-4">
+                    <i class="fas fa-user-check me-2"></i>
+                    <span>@string.Format(@L["SignedInAs"].Value, @Model.UserName)</span>
+                </div>
+
+                <div class="list-group list-group-flush rounded-3">
+                    @for (int i = 0; i < Model.AvailableAccounts.Count; i++)
+                    {
+                        var account = Model.AvailableAccounts[i];
+                        var accountId = $"{account.UserId}@{account.TenantId}";
+                        var accountName = $"{account.UserName}";
+                        if (!string.IsNullOrWhiteSpace(account.TenantName))
+                        {
+                            accountName += "/" + account.TenantName;
+                        }
+                        // TODO: Date format
+                        var lastLoginTime = account.LastLoginTime.HasValue ? account.LastLoginTime.Value.ToString("yyyy-MM:dd HH:mm:ss") : "";
+                        var isCurrent = account.IsCurrentAccount;
+                        // TODO: 实现用户头像
+                        var avatar = !string.IsNullOrWhiteSpace(account.UserName) ? account.UserName[0].ToString().ToUpper() : "U";
+
+                        <label class="list-group-item list-group-item-action border-0 cursor-pointer @(isCurrent ? "active" : "") account-item"
+                               for="account-@i">
+                            <div class="d-flex align-items-center">
+                                <!-- 头像 -->
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3"
+                                     style="width: 40px; height: 40px; font-size: 16px; font-weight: 500;">
+                                    @avatar
+                                </div>
+
+                                <!-- 账户信息 -->
+                                <div class="flex-grow-1 me-3">
+                                    <div class="d-flex align-items-center">
+                                        <span class="fw-semibold">@accountName</span>
+                                        @if (isCurrent)
+                                        {
+                                            <span class="badge bg-success ms-2">@L["CurrentAccount"].Value</span>
+                                        }
+                                    </div>
+                                    <div class="text-muted small">
+                                        @account.Email
+                                    </div>
+                                    @if (!string.IsNullOrWhiteSpace(lastLoginTime))
+                                    {
+                                        <div class="text-muted small">
+                                            @L["LastLoginTime"]: @lastLoginTime
+                                        </div>
+                                    }
+                                </div>
+
+                                <!-- 选择账户 -->
+                                <input type="radio"
+                                       asp-for="Input.SelectedAccountId"
+                                       value="@accountId"
+                                       id="account-@i"
+                                       class="form-check-input"
+                                       style="width: 1.2em; height: 1.2em;"
+                                       checked="@isCurrent" />
+                            </div>
+                        </label>
+                    }
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="d-grid gap-2 mt-2">
+                    <button type="submit" class="btn btn-primary" id="continueButton">
+                        @L["Continue"].Value
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-warning mb-4">
+                <i class="fas fa-info-circle me-2"></i>
+                @L["NoAccountsAvailable"].Value
+            </div>
+        }
+
+        <!-- 其他选项 -->
+        <div class="d-grid gap-2 mt-2">
+            <a href="@Url.Page("/Account/Login", new { ReturnUrl = Model.RedirectUri, prompt = "login" })"
+               class="btn btn-outline-primary">
+                <i class="fas fa-exchange-alt me-2"></i>
+                @L["SwitchToAnotherAccount"].Value
+            </a>
+            <a href="@Url.Page("/Account/Register", new { ReturnUrl = Model.RedirectUri })"
+               class="btn btn-outline-primary">
+                <i class="fas fa-user-plus me-2"></i>
+                @L["CreateNewAccount"].Value
+            </a>
+        </div>
+    </abp-card-body>
+</abp-card>

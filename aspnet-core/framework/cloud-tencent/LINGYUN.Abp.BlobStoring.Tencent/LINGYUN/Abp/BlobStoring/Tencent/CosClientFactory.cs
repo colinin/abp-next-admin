@@ -33,6 +33,13 @@ public class CosClientFactory : AbstractTencentCloudClientFactory<CosXml, Tencen
         return await CreateAsync(configuration.GetTencentConfiguration());
     }
 
+    public virtual Task<TencentBlobProviderConfiguration> GetConfigurationAsync<TContainer>()
+    {
+        var configuration = ConfigurationProvider.Get<TContainer>();
+
+        return Task.FromResult(configuration.GetTencentConfiguration());
+    }
+
     protected override CosXml CreateClient(TencentBlobProviderConfiguration configuration, TencentCloudClientCacheItem cloudCache)
     {
         // 推荐全局单个对象，需要解决缓存过期事件
@@ -46,8 +53,10 @@ public class CosClientFactory : AbstractTencentCloudClientFactory<CosXml, Tencen
                 {
                     var configBuilder = new CosXmlConfig.Builder();
                     configBuilder
+                        .IsHttps(true)
                         .SetAppid(configuration.AppId)
-                        .SetRegion(configuration.Region);
+                        .SetRegion(configuration.Region)
+                        .SetDebugLog(true);
 
                     var cred = new DefaultQCloudCredentialProvider(
                         cloudCache.SecretId,

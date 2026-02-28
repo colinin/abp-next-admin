@@ -8,15 +8,8 @@ public static class DaprClientBuilderExtensions
 {
     public static IDaprClientBuilder ConfigureDaprClient(this IDaprClientBuilder builder, Action<DaprClient> configureClient)
     {
-        if (builder == null)
-        {
-            throw new ArgumentNullException(nameof(builder));
-        }
-
-        if (configureClient == null)
-        {
-            throw new ArgumentNullException(nameof(configureClient));
-        }
+        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+        ArgumentNullException.ThrowIfNull(configureClient, nameof(configureClient));
 
         builder.Services.Configure<DaprClientFactoryOptions>(builder.Name, options =>
         {
@@ -28,15 +21,8 @@ public static class DaprClientBuilderExtensions
 
     public static IDaprClientBuilder ConfigureDaprClient(this IDaprClientBuilder builder, Action<DaprClientBuilder> configureBuilder)
     {
-        if (builder == null)
-        {
-            throw new ArgumentNullException(nameof(builder));
-        }
-
-        if (configureBuilder == null)
-        {
-            throw new ArgumentNullException(nameof(configureBuilder));
-        }
+        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+        ArgumentNullException.ThrowIfNull(configureBuilder, nameof(configureBuilder));
 
         builder.Services.Configure<DaprClientFactoryOptions>(builder.Name, options =>
         {
@@ -48,15 +34,8 @@ public static class DaprClientBuilderExtensions
 
     public static IDaprClientBuilder ConfigureDaprClient(this IDaprClientBuilder builder, Action<IServiceProvider, DaprClientBuilder> configureClientBuilder)
     {
-        if (builder == null)
-        {
-            throw new ArgumentNullException(nameof(builder));
-        }
-
-        if (configureClientBuilder == null)
-        {
-            throw new ArgumentNullException(nameof(configureClientBuilder));
-        }
+        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+        ArgumentNullException.ThrowIfNull(configureClientBuilder, nameof(configureClientBuilder));
 
         builder.Services.AddTransient<IConfigureOptions<DaprClientFactoryOptions>>(services =>
         {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 
 import type { VbenFormProps } from '@vben/common-ui';
 
@@ -68,36 +68,42 @@ const gridOptions: VxeGridProps<LayoutDto> = {
       field: 'name',
       fixed: 'left',
       minWidth: 180,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Name'),
     },
     {
       align: 'left',
       field: 'displayName',
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:DisplayName'),
     },
     {
       align: 'center',
       field: 'path',
       minWidth: 200,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Path'),
     },
     {
       align: 'left',
       field: 'framework',
       minWidth: 180,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:UIFramework'),
     },
     {
       align: 'left',
       field: 'description',
       minWidth: 220,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Description'),
     },
     {
       align: 'left',
       field: 'redirect',
       minWidth: 160,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Redirect'),
     },
     {
@@ -120,8 +126,10 @@ const gridOptions: VxeGridProps<LayoutDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -136,14 +144,22 @@ const gridOptions: VxeGridProps<LayoutDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
+  },
+};
+const gridEvents: VxeGridListeners<LayoutDto> = {
+  sortChange: () => {
+    gridApi.query();
   },
 };
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridOptions,
+  gridEvents,
 });
 
 const [LayoutModal, modalApi] = useVbenModal({

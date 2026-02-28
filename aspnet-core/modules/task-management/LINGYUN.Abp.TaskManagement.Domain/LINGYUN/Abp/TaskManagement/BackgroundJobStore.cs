@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Specifications;
 using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.TaskManagement;
@@ -13,18 +14,18 @@ namespace LINGYUN.Abp.TaskManagement;
 [Dependency(ReplaceServices = true)]
 public class BackgroundJobStore : IJobStore, ITransientDependency
 {
-    protected IObjectMapper ObjectMapper { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IBackgroundJobInfoRepository JobInfoRepository { get; }
     protected IBackgroundJobLogRepository JobLogRepository { get; }
+    protected IObjectMapper<TaskManagementDomainModule> ObjectMapper { get; }
 
     public BackgroundJobStore(
-        IObjectMapper objectMapper,
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         IBackgroundJobInfoRepository jobInfoRepository,
-        IBackgroundJobLogRepository jobLogRepository)
+        IBackgroundJobLogRepository jobLogRepository,
+        IObjectMapper<TaskManagementDomainModule> objectMapper)
     {
         ObjectMapper = objectMapper;
         CurrentTenant = currentTenant;
@@ -40,13 +41,10 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
 
-    public async virtual Task<List<JobInfo>> GetRuningListAsync(int maxResultCount, CancellationToken cancellationToken = default)
+    public async virtual Task<List<JobInfo>> GetRuningListAsync(int maxResultCount, string nodeName = null, CancellationToken cancellationToken = default)
     {
-        var filter = new BackgroundJobInfoFilter
-        {
-            Status = JobStatus.Running
-        };
-        var specification = new BackgroundJobInfoSpecification(filter);
+        var specification = new ExpressionSpecification<BackgroundJobInfo>(
+            x => x.NodeName == nodeName && x.Status == JobStatus.Running);
 
         var jobInfos = await JobInfoRepository.GetListAsync(
             specification, maxResultCount: maxResultCount, cancellationToken: cancellationToken);
@@ -175,12 +173,14 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
     public async virtual Task<List<JobInfo>> CleanupAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
+        string nodeName = null,
         CancellationToken cancellationToken = default)
     {
         using var unitOfWork = UnitOfWorkManager.Begin();
         var jobs = await JobInfoRepository.GetExpiredJobsAsync(
             maxResultCount,
             jobExpiratime,
+            nodeName,
             cancellationToken);
 
         var expiredJobs = ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobs);

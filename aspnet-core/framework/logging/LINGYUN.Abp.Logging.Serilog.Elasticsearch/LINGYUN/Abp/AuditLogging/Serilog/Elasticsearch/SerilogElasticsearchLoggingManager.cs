@@ -1,10 +1,11 @@
-﻿using LINGYUN.Abp.Elasticsearch;
+﻿using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.QueryDsl;
+using LINGYUN.Abp.Elasticsearch;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Nest;
 using Serilog.Events;
 using System;
 using System.Collections.Generic;
@@ -25,19 +26,19 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     private readonly static Regex IndexFormatRegex = new Regex(@"^(.*)(?:\{0\:.+\})(.*)$");
 
     private readonly IClock _clock;
-    private readonly IObjectMapper _objectMapper;
     private readonly ICurrentTenant _currentTenant;
     private readonly AbpLoggingSerilogElasticsearchOptions _options;
     private readonly IElasticsearchClientFactory _clientFactory;
+    private readonly IObjectMapper<AbpLoggingSerilogElasticsearchModule> _objectMapper;
 
     public ILogger<SerilogElasticsearchLoggingManager> Logger { protected get; set; }
 
     public SerilogElasticsearchLoggingManager(
         IClock clock,
-        IObjectMapper objectMapper,
         ICurrentTenant currentTenant,
         IOptions<AbpLoggingSerilogElasticsearchOptions> options,
-        IElasticsearchClientFactory clientFactory)
+        IElasticsearchClientFactory clientFactory,
+        IObjectMapper<AbpLoggingSerilogElasticsearchModule> objectMapper)
     {
         _clock = clock;
         _objectMapper = objectMapper;
@@ -60,7 +61,7 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     {
         var client = _clientFactory.Create();
 
-        ISearchResponse<SerilogInfo> response;
+        SearchResponse<SerilogInfo> response;
 
         if (_currentTenant.IsAvailable)
         {
@@ -88,14 +89,14 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
             */
             response = await client.SearchAsync<SerilogInfo>(
                 dsl =>
-                    dsl.Index(CreateIndex())
+                    dsl.Indices(CreateIndex())
                        .Query(
                             (q) => q.Bool(
                                 (b) => b.Must(
                                     (s) => s.Term(
                                         (t) => t.Field(GetField(nameof(SerilogInfo.Fields.UniqueId))).Value(id)),
                                     (s) => s.Term(
-                                        (t) => t.Field(GetField(nameof(SerilogInfo.Fields.TenantId))).Value(_currentTenant.GetId())))))
+                                        (t) => t.Field(GetField(nameof(SerilogInfo.Fields.TenantId))).Value(_currentTenant.GetId().ToString())))))
                        .Size(1),
                 cancellationToken);
         }
@@ -118,7 +119,7 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
             */
             response = await client.SearchAsync<SerilogInfo>(
                 dsl =>
-                    dsl.Index(CreateIndex())
+                    dsl.Indices(CreateIndex())
                        .Query(
                             (q) => q.Bool(
                                 (b) => b.Must(
@@ -134,7 +135,7 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     public async virtual Task<long> GetCountAsync(
         DateTime? startTime = null,
         DateTime? endTime = null,
-        Microsoft.Extensions.Logging.LogLevel? level = null,
+        LogLevel? level = null,
         string machineName = null,
         string environment = null,
         string application = null,
@@ -165,7 +166,7 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
             hasException);
 
         var response = await client.CountAsync<SerilogInfo>((dsl) =>
-            dsl.Index(CreateIndex())
+            dsl.Indices(CreateIndex())
                .Query(log => log.Bool(b => b.Must(querys.ToArray()))),
             cancellationToken);
 
@@ -200,7 +201,7 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
         int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
-        Microsoft.Extensions.Logging.LogLevel? level = null,
+        LogLevel? level = null,
         string machineName = null,
         string environment = null,
         string application = null,
@@ -217,7 +218,7 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
         var client = _clientFactory.Create();
 
         var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
-            ? SortOrder.Ascending : SortOrder.Descending;
+            ? SortOrder.Asc : SortOrder.Desc;
         sorting = !sorting.IsNullOrWhiteSpace()
             ? sorting.Split()[0]
             : nameof(SerilogInfo.TimeStamp);
@@ -237,24 +238,12 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
             threadId,
             hasException);
 
-        SourceFilterDescriptor<SerilogInfo> SourceFilter(SourceFilterDescriptor<SerilogInfo> selector)
-        {
-            selector.IncludeAll();
-            if (!includeDetails)
-            {
-                selector.Excludes(field =>
-                    field.Field("exceptions"));
-            }
-
-            return selector;
-        }
-
         var response = await client.SearchAsync<SerilogInfo>((dsl) =>
-            dsl.Index(CreateIndex())
+            dsl.Indices(CreateIndex())
                .Query(log =>
                     log.Bool(b =>
                         b.Must(querys.ToArray())))
-               .Source(SourceFilter)
+               .SourceExcludes(se => se.Exceptions)
                .Sort(log => log.Field(GetField(sorting), sortOrder))
                .From(skipCount)
                .Size(maxResultCount),
@@ -263,10 +252,10 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
         return _objectMapper.Map<List<SerilogInfo>, List<LogInfo>>(response.Documents.ToList());
     }
 
-    protected virtual List<Func<QueryContainerDescriptor<SerilogInfo>, QueryContainer>> BuildQueryDescriptor(
+    protected virtual List<Query> BuildQueryDescriptor(
         DateTime? startTime = null,
         DateTime? endTime = null,
-        Microsoft.Extensions.Logging.LogLevel? level = null,
+        LogLevel? level = null,
         string machineName = null,
         string environment = null,
         string application = null,
@@ -278,60 +267,82 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
         int? threadId = null,
         bool? hasException = null)
     {
-        var querys = new List<Func<QueryContainerDescriptor<SerilogInfo>, QueryContainer>>();
+        var queries = new List<Query>();
 
         if (_currentTenant.IsAvailable)
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.TenantId))).Value(_currentTenant.GetId())));
+            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.TenantId)), _currentTenant.GetId().ToString()));
         }
         if (startTime.HasValue)
         {
-            querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).GreaterThanOrEquals(_clock.Normalize(startTime.Value))));
+            queries.Add(new DateRangeQuery(GetField(nameof(SerilogInfo.TimeStamp)))
+            {
+                Gte = _clock.Normalize(startTime.Value),
+            });
         }
         if (endTime.HasValue)
         {
-            querys.Add((log) => log.DateRange((q) => q.Field(GetField(nameof(SerilogInfo.TimeStamp))).LessThanOrEquals(_clock.Normalize(endTime.Value))));
+            queries.Add(new DateRangeQuery(GetField(nameof(SerilogInfo.TimeStamp)))
+            {
+                Lte = _clock.Normalize(endTime.Value),
+            });
         }
         if (level.HasValue)
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Level))).Value(GetLogEventLevel(level.Value).ToString())));
+            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Level)), GetLogEventLevel(level.Value).ToString()));
         }
         if (!machineName.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.MachineName))).Value(machineName)));
+            // 模糊匹配
+            queries.Add(new WildcardQuery(GetField(nameof(SerilogInfo.Fields.MachineName)))
+            {
+                Value = $"*{machineName}*"
+            });
         }
         if (!environment.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Environment))).Value(environment)));
+            // 模糊匹配
+            queries.Add(new WildcardQuery(GetField(nameof(SerilogInfo.Fields.Environment)))
+            {
+                Value = $"*{environment}*"
+            });
         }
         if (!application.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Application))).Value(application)));
+            // 模糊匹配
+            queries.Add(new WildcardQuery(GetField(nameof(SerilogInfo.Fields.Application)))
+            {
+                Value = $"*{application}*"
+            });
         }
         if (!context.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.Context))).Value(context)));
+            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.Context)), context));
         }
         if (!requestId.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.RequestId))).Value(requestId)));
+            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.RequestId)), requestId));
         }
         if (!requestPath.IsNullOrWhiteSpace())
         {
-            // 模糊匹配
-            querys.Add((log) => log.MatchPhrasePrefix((q) => q.Field(f => f.Fields.RequestPath).Query(requestPath)));
+            // 前缀匹配
+            queries.Add(new MatchPhrasePrefixQuery(GetField(nameof(SerilogInfo.Fields.RequestPath)), requestPath));
         }
         if (!correlationId.IsNullOrWhiteSpace())
         {
-            querys.Add((log) => log.MatchPhrase((q) => q.Field(GetField(nameof(SerilogInfo.Fields.CorrelationId))).Query(correlationId)));
+            // 模糊匹配
+            queries.Add(new WildcardQuery(GetField(nameof(SerilogInfo.Fields.CorrelationId)))
+            {
+                Value = $"*{correlationId}*"
+            });
         }
         if (processId.HasValue)
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.ProcessId))).Value(processId)));
+            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.ProcessId)), FieldValue.FromValue(processId.Value)));
         }
         if (threadId.HasValue)
         {
-            querys.Add((log) => log.Term((q) => q.Field(GetField(nameof(SerilogInfo.Fields.ThreadId))).Value(threadId)));
+            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.ThreadId)), FieldValue.FromValue(threadId.Value)));
         }
 
         if (hasException.HasValue)
@@ -343,9 +354,7 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
                         "field": "exceptions"
                     }
                  */
-                querys.Add(
-                    (q) => q.Exists(
-                        (e) => e.Field("exceptions")));
+                queries.Add(new ExistsQuery(GetField("Exceptions")));
             }
             else
             {
@@ -361,15 +370,17 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
                         ]
                     }
                  */
-                querys.Add(
-                    (q) => q.Bool(
-                        (b) => b.MustNot(
-                            (m) => m.Exists(
-                                (e) => e.Field("exceptions")))));
+                queries.Add(new BoolQuery
+                {
+                    MustNot = new List<Query>
+                    {
+                        new ExistsQuery(GetField("Exceptions"))
+                    }
+                });
             }
         }
 
-        return querys;
+        return queries;
     }
 
     protected virtual string CreateIndex(DateTimeOffset? offset = null)
@@ -381,15 +392,15 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
         return string.Format(_options.IndexFormat, offset.Value).ToLowerInvariant();
     }
 
-    protected virtual LogEventLevel GetLogEventLevel(Microsoft.Extensions.Logging.LogLevel logLevel)
+    protected virtual LogEventLevel GetLogEventLevel(LogLevel logLevel)
     {
         return logLevel switch
         {
-            Microsoft.Extensions.Logging.LogLevel.None or Microsoft.Extensions.Logging.LogLevel.Critical => LogEventLevel.Fatal,
-            Microsoft.Extensions.Logging.LogLevel.Error => LogEventLevel.Error,
-            Microsoft.Extensions.Logging.LogLevel.Warning => LogEventLevel.Warning,
-            Microsoft.Extensions.Logging.LogLevel.Information => LogEventLevel.Information,
-            Microsoft.Extensions.Logging.LogLevel.Debug => LogEventLevel.Debug,
+            LogLevel.None or LogLevel.Critical => LogEventLevel.Fatal,
+            LogLevel.Error => LogEventLevel.Error,
+            LogLevel.Warning => LogEventLevel.Warning,
+            LogLevel.Information => LogEventLevel.Information,
+            LogLevel.Debug => LogEventLevel.Debug,
             _ => LogEventLevel.Verbose,
         };
     }
@@ -397,19 +408,19 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     private readonly static IDictionary<string, string> _fieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
     {
         { "timestamp", "@timestamp" },
-        { "level", "level.raw" },
-        { "machinename", $"fields.{AbpLoggingEnricherPropertyNames.MachineName}.raw" },
-        { "environment", $"fields.{AbpLoggingEnricherPropertyNames.EnvironmentName}.raw" },
-        { "application", $"fields.{AbpSerilogEnrichersConsts.ApplicationNamePropertyName}.raw" },
-        { "context", "fields.SourceContext.raw" },
-        { "actionid", "fields.ActionId.raw" },
-        { "actionname", "fields.ActionName.raw" },
-        { "requestid", "fields.RequestId.raw" },
+        { "level", "level.keyword" },
+        { "machinename", $"fields.{AbpLoggingEnricherPropertyNames.MachineName}.keyword" },
+        { "environment", $"fields.{AbpLoggingEnricherPropertyNames.EnvironmentName}.keyword" },
+        { "application", $"fields.{AbpSerilogEnrichersConsts.ApplicationNamePropertyName}.keyword" },
+        { "context", "fields.SourceContext.keyword" },
+        { "actionid", "fields.ActionId.keyword" },
+        { "actionname", "fields.ActionName.keyword" },
+        { "requestid", "fields.RequestId.keyword" },
         { "requestpath", "fields.RequestPath" },
         { "connectionid", "fields.ConnectionId" },
-        { "correlationid", "fields.CorrelationId.raw" },
-        { "clientid", "fields.ClientId.raw" },
-        { "userid", "fields.UserId.raw" },
+        { "correlationid", "fields.CorrelationId.keyword" },
+        { "clientid", "fields.ClientId.keyword" },
+        { "userid", "fields.UserId.keyword" },
         { "processid", "fields.ProcessId" },
         { "threadid", "fields.ThreadId" },
         { "id", $"fields.{AbpSerilogUniqueIdConsts.UniqueIdPropertyName}" },

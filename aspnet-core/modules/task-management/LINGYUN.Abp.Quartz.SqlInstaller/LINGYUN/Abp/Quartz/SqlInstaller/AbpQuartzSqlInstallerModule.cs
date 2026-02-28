@@ -6,12 +6,15 @@ using Quartz.Simpl;
 using Quartz.Util;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.Quartz;
 
 namespace LINGYUN.Abp.Quartz.SqlInstaller;
 
-[DependsOn(typeof(AbpQuartzModule))]
+[DependsOn(
+    typeof(AbpDataModule),
+    typeof(AbpQuartzModule))]
 public class AbpQuartzSqlInstallerModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -37,13 +40,19 @@ public class AbpQuartzSqlInstallerModule : AbpModule
     public async override Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
-        if (configuration.GetValue("Quartz:UsePersistentStore", false) &&
-            !configuration[$"Quartz:Properties:{StdSchedulerFactory.PropertyJobStoreType}"].IsNullOrWhiteSpace())
+        if (configuration.GetValue("Quartz:UsePersistentStore", false))
         {
+            var driverDelegateType = configuration[$"Quartz:Properties:quartz.jobStore.driverDelegateType"];
             // 初始化 Quartz 数据库
-            await context.ServiceProvider
-                .GetService<IQuartzSqlInstaller>()
-                ?.InstallAsync();
+            var installs = context.ServiceProvider.GetServices<IQuartzSqlInstaller>();
+
+            foreach (var install in installs)
+            {
+                if (install.CanInstall(driverDelegateType))
+                {
+                    await install.InstallAsync();
+                }
+            }
         }
     }
 }

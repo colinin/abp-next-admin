@@ -11,7 +11,7 @@ public interface IWeChatWorkMessageManager
     /// 撤回应用消息
     /// </summary>
     /// <remarks>
-    /// 参考：https://developer.work.weixin.qq.com/document/path/94867
+    /// 参考：<see href="https://developer.work.weixin.qq.com/document/path/94867"/>
     /// </remarks>
     /// <param name="messageId">消息ID。从应用发送消息接口 <see cref="IWeChatWorkMessageSender"/> 处获得。</param>
     /// <param name="cancellationToken"></param>

@@ -9,6 +9,18 @@
 				"phoneNumber": "Phone Number",
 				"getCode": "Get Code",
 				"code": "Code"
+			},
+			"qrcodeLogin": {
+				"scaned": "Please confirm login on your phone."
+			},
+			"errors": {
+				"accountLockedByInvalidLoginAttempts": "The user account has been locked out due to invalid login attempts. Please wait a while and try again.",
+				"accountInactive": "You are not allowed to login!  Your account is inactive.",
+				"invalidUserNameOrPassword": "Invalid username or password!",
+				"tokenHasExpired": "The token is no longer valid!",
+				"requiresTwoFactor": "Identity verification is required. Please select a verification method!",
+				"shouldChangePassword": "Your password has expired. Please change it and login!",
+				"accessDenied": "You have refused the necessary authorization for the application. Please log in again!"
 			}
 		},
 		"manage": {
@@ -20,11 +32,15 @@
 				"claimTypes": "Claim Types",
 				"securityLogs": "Security Logs",
 				"organizationUnits": "Organization Units",
-				"auditLogs": "Audit Logs",
 				"sessions": "Sessions"
 			},
 			"permissions": {
 				"title": "Permissions",
+				"groups": "Groups",
+				"definitions": "Definitions"
+			},
+			"features": {
+				"title": "Features",
 				"groups": "Groups",
 				"definitions": "Definitions"
 			},
@@ -35,8 +51,24 @@
 			},
 			"notifications": {
 				"title": "Notifications",
-				"myNotifilers": "My Notifilers"
-			}
+				"myNotifilers": "My Notifilers",
+				"groups": "Groups",
+				"definitions": "Definitions"
+			},
+			"localization": {
+				"title": "Localization",
+				"resources": "Resources",
+				"languages": "Languages",
+				"texts": "Texts"
+			},
+			"dataProtection": {
+				"title": "Data Protection",
+				"entityTypeInfos": "Entity Type Infos"
+			},
+			"auditLogs": "Audit Logs",
+			"loggings": "System Logs",
+			"openApi": "Api Document",
+			"cache": "Cache Management"
 		},
 		"openiddict": {
 			"title": "OpenIddict",
@@ -66,7 +98,8 @@
 				"noticeSettings": "Notice Settings",
 				"authenticatorSettings": "Authenticator Settings",
 				"changeAvatar": "Change Avatar",
-				"sessionSettings": "Session Settings"
+				"sessionSettings": "Session Settings",
+				"personalDataSettings": "Personal Data Settings"
 			},
 			"profile": "My Profile"
 		},
@@ -76,7 +109,45 @@
 				"title": "Message Manage",
 				"email": "Email Messages",
 				"sms": "Sms Messages"
+			},
+			"dataDictionaries": "Data Dictionaries",
+			"layouts": "Layouts",
+			"menus": "Menus"
+		},
+		"saas": {
+			"title": "Saas",
+			"editions": "Editions",
+			"tenants": "Tenants"
+		},
+		"demo": {
+			"title": "Demo",
+			"books": "Books"
+		},
+		"tasks": {
+			"title": "Task Management",
+			"jobInfo": {
+				"title": "Job Manage"
 			}
+		},
+		"webhooks": {
+			"title": "Webhooks",
+			"groups": "Groups",
+			"definitions": "Definitions",
+			"subscriptions": "Subscriptions",
+			"sendAttempts": "Send Attempts"
+		},
+		"textTemplating": {
+			"title": "Text Templating",
+			"definitions": "Definitions"
+		},
+		"oss": {
+			"title": "Object storage",
+			"containers": "Containers",
+			"objects": "Files"
+		},
+		"wechat": {
+			"title": "WeChat",
+			"settings": "Settings"
 		}
 	}
 }

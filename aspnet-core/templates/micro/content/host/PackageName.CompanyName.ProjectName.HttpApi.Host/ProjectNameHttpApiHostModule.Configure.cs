@@ -24,6 +24,7 @@ using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -328,9 +329,35 @@ public partial class ProjectNameHttpApiHostModule
             },
             options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjectName API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "ProjectName API",
+                    Version = "v1",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "anonymous", // your name
+                        Email = "anonymous@gmail.com", // your email
+                        Url = new Uri("http://localhost/profile") // your profile
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "MIT",
+                        Url = new Uri("https://licenses.nuget.org/MIT")
+                    }
+                });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
+                options.DescribeAllParametersInCamelCase();
+                options.TagActionsBy(api =>
+                {
+                    // 控制器分组显示
+                    var groupName = api.GroupName ?? "未分组";
+                    var controllerName = api.ActionDescriptor.RouteValues["controller"];
+
+                    // 使用控制器名称和摘要信息创建分组
+                    return new[] { $"{groupName}/{controllerName}" };
+                });
+
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -340,6 +367,7 @@ public partial class ProjectNameHttpApiHostModule
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT"
                 });
+
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -350,6 +378,15 @@ public partial class ProjectNameHttpApiHostModule
                         new string[] { }
                     }
                 });
+
+                var currentPath = AppContext.BaseDirectory;
+                var xmlDocFiles = Directory.GetFiles(currentPath, "PackageName.CompanyName.ProjectName.*.xml");
+
+                foreach (var xmlDocFile in xmlDocFiles)
+                {
+                    options.IncludeXmlComments(xmlDocFile);
+                }
+
                 options.OperationFilter<TenantHeaderParamter>();
                 options.HideAbpEndpoints();
             });
@@ -393,6 +430,14 @@ public partial class ProjectNameHttpApiHostModule
             // options.AutoValidateFilter = (type) => !type.Namespace.Contains("elsa", StringComparison.CurrentCultureIgnoreCase);
         });
 
+        if (isDevelopment)
+        {
+            // 开发环境可以取消注释禁用权限检查
+            // services.AddAlwaysAllowAuthorization();
+            // 开发环境可以取消注释禁用会话检查
+            // services.AddAlwaysAllowSession();
+        }
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddAbpJwtBearer(options =>
             {
@@ -403,6 +448,11 @@ public partial class ProjectNameHttpApiHostModule
                 {
                     options.TokenValidationParameters.ValidIssuers = validIssuers;
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                }
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
+                if (validAudiences?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidAudiences = validAudiences;
                 }
             });
 

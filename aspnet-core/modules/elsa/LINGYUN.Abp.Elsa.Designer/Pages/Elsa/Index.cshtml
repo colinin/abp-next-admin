@@ -10,7 +10,7 @@
 @inject IHtmlLocalizer<ElsaResource> L
 @{
     var serverUrl = Configuration["Elsa:Server:BaseUrl"];
-    var basePath = Configuration["Hosting:BasePath"] ?? "";
+    var basePath = Request.PathBase.Value;
 
     PageLayout.Content.Title = L["Elsa:Designer"].Value;
     PageLayout.Content.BreadCrumb.Add(L["Elsa:Designer"].Value);
@@ -25,9 +25,9 @@
     <abp-script-bundle name="@AbpElsaBundles.Scripts.Global" />
 }
 
-<script type="module" src="@basePath/_content/Elsa.Designer.Components.Web/elsa-workflows-studio/elsa-workflows-studio.esm.js"></script>
+<script type="module" src="/_content/Elsa.Designer.Components.Web/elsa-workflows-studio/elsa-workflows-studio.esm.js"></script>
 
-<elsa-studio-root server-url="@serverUrl" base-path="@basePath" monaco-lib-path="@basePath.TrimStart('/')/_content/Elsa.Designer.Components.Web/monaco-editor/min">
+<elsa-studio-root server-url="@serverUrl" monaco-lib-path="_content/Elsa.Designer.Components.Web/monaco-editor/min">
     <elsa-studio-dashboard></elsa-studio-dashboard>
 </elsa-studio-root>
 
@@ -43,4 +43,9 @@
         const elsa = e.detail;
         elsa.pluginManager.registerPlugin(WebhooksPlugin);
     });
+
+    // Some components publish DOM events that we can handle directly:
+    elsaStudioRoot.addEventListener('workflow-changed', e => {
+        console.log('Workflow model changed! New model: ${e.detail}');
+    })
 </script>

@@ -4,9 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events.Distributed;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Threading;
@@ -14,7 +15,7 @@ using Volo.Abp.Threading;
 namespace LINGYUN.Abp.WebhooksManagement;
 
 [DependsOn(
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpWebhooksModule),
     typeof(WebhooksManagementDomainSharedModule))]
 public class WebhooksManagementDomainModule : AbpModule
@@ -24,18 +25,13 @@ public class WebhooksManagementDomainModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<WebhooksManagementDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<WebhooksManagementDomainMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<WebhooksManagementDomainModule>();
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
-            options.EtoMappings.Add<WebhookEventRecord, WebhookEventEto>();
-            options.EtoMappings.Add<WebhookSendRecord, WebhookSendAttemptEto>();
-            options.EtoMappings.Add<WebhookSubscription, WebhookSubscriptionEto>();
+            options.EtoMappings.Add<WebhookEventRecord, WebhookEventEto>(typeof(WebhooksManagementDomainModule));
+            options.EtoMappings.Add<WebhookSendRecord, WebhookSendAttemptEto>(typeof(WebhooksManagementDomainModule));
+            options.EtoMappings.Add<WebhookSubscription, WebhookSubscriptionEto>(typeof(WebhooksManagementDomainModule));
 
             options.AutoEventSelectors.Add<WebhookEventRecord>();
             options.AutoEventSelectors.Add<WebhookSendRecord>();
@@ -93,11 +89,11 @@ public class WebhooksManagementDomainModule : AbpModule
         AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 
-    public override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        return context.ServiceProvider
-            .GetRequiredService<WebhookDefinitionInitializer>()
-            .InitializeDynamicWebhooks(_cancellationTokenSource.Token);
+        var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
+        var initializer = rootServiceProvider.GetRequiredService<WebhookDynamicInitializer>();
+        await initializer.InitializeAsync(true, _cancellationTokenSource.Token);
     }
 
     public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)

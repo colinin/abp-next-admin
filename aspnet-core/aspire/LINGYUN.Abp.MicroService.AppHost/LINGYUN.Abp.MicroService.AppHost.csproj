@@ -1,0 +1,40 @@
+﻿<Project Sdk="Aspire.AppHost.Sdk/13.1.0">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<UserSecretsId>13c67981-84b2-4284-81fc-61ede65252c3</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Aspire.Hosting.Elasticsearch" />
+		<PackageReference Include="Aspire.Hosting.JavaScript" />
+		<PackageReference Include="Aspire.Hosting.PostgreSQL" />
+		<PackageReference Include="Aspire.Hosting.RabbitMQ" />
+		<PackageReference Include="Aspire.Hosting.Redis" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AdminService.DbMigrator\LINGYUN.Abp.MicroService.AdminService.DbMigrator.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AdminService\LINGYUN.Abp.MicroService.AdminService.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AuthServer.DbMigrator\LINGYUN.Abp.MicroService.AuthServer.DbMigrator.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AuthServer\LINGYUN.Abp.MicroService.AuthServer.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.IdentityService\LINGYUN.Abp.MicroService.IdentityService.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.PlatformService.DbMigrator\LINGYUN.Abp.MicroService.PlatformService.DbMigrator.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.PlatformService\LINGYUN.Abp.MicroService.PlatformService.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.LocalizationService.DbMigrator\LINGYUN.Abp.MicroService.LocalizationService.DbMigrator.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.LocalizationService\LINGYUN.Abp.MicroService.LocalizationService.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.MessageService.DbMigrator\LINGYUN.Abp.MicroService.MessageService.DbMigrator.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.MessageService\LINGYUN.Abp.MicroService.MessageService.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.TaskService.DbMigrator\LINGYUN.Abp.MicroService.TaskService.DbMigrator.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.TaskService\LINGYUN.Abp.MicroService.TaskService.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.WebhookService.DbMigrator\LINGYUN.Abp.MicroService.WebhookService.DbMigrator.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.WebhookService\LINGYUN.Abp.MicroService.WebhookService.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.WeChatService\LINGYUN.Abp.MicroService.WeChatService.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.WorkflowService\LINGYUN.Abp.MicroService.WorkflowService.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.ApiGateway\LINGYUN.Abp.MicroService.ApiGateway.csproj" />
+	</ItemGroup>
+
+</Project>

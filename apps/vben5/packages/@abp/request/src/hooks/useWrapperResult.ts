@@ -8,7 +8,11 @@ export function useWrapperResult(response: AxiosResponse) {
   const { data, headers } = response;
   /** 是否已包装结果 */
   function hasWrapResult(): boolean {
-    return headers[_defaultWrapperHeaderKey] === 'true' || hasError();
+    const wrapperHeader = headers[_defaultWrapperHeaderKey];
+    if (!wrapperHeader) {
+      return false;
+    }
+    return String(wrapperHeader).includes('true') || hasError();
   }
 
   /** 获取包装结果 */

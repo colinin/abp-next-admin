@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Options;
-using Nest;
+﻿using Elastic.Clients.Elasticsearch;
+using Microsoft.Extensions.Options;
 using System;
 using Volo.Abp.DependencyInjection;
 
@@ -8,23 +8,23 @@ namespace LINGYUN.Abp.Elasticsearch
     public class ElasticsearchClientFactory : IElasticsearchClientFactory, ISingletonDependency
     {
         private readonly AbpElasticsearchOptions _options;
-        private readonly Lazy<IElasticClient> _lazyClient;
+        private readonly Lazy<ElasticsearchClient> _lazyClient;
 
         public ElasticsearchClientFactory(
             IOptions<AbpElasticsearchOptions> options)
         {
             _options = options.Value;
 
-            _lazyClient = new Lazy<IElasticClient>(CreateClient);
+            _lazyClient = new Lazy<ElasticsearchClient>(CreateClient);
         }
 
-        public IElasticClient Create() => _lazyClient.Value;
+        public ElasticsearchClient Create() => _lazyClient.Value;
 
-        protected virtual IElasticClient CreateClient()
+        protected virtual ElasticsearchClient CreateClient()
         {
-            var configuration = _options.CreateConfiguration();
+            var configuration = _options.CreateClientSettings();
 
-            var client = new ElasticClient(configuration);
+            var client = new ElasticsearchClient(configuration);
 
             return client;
         }

@@ -1,6 +1,10 @@
 using Elsa;
 using Elsa.Options;
+using LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer.Migrations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -34,5 +38,16 @@ public class AbpElsaEntityFrameworkCoreSqlServerModule : AbpModule
         {
             options.FileSets.AddEmbedded<AbpElsaEntityFrameworkCoreSqlServerModule>();
         });
+    }
+
+    public async override Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
+        if (configuration.GetValue<bool>("Elsa:Features:DefaultPersistence:EntityFrameworkCore:SqlServer:Enabled"))
+        {
+            await context.ServiceProvider
+                .GetService<SqlServerElsaDataBaseInstaller>()
+                ?.InstallAsync();
+        }
     }
 }

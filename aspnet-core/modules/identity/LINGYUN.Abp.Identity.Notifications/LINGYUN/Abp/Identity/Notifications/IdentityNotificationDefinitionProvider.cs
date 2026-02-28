@@ -19,7 +19,20 @@ public class IdentityNotificationDefinitionProvider : NotificationDefinitionProv
             NotificationType.ServiceCallback,
             NotificationLifetime.Persistent,
             NotificationContentType.Json,
-            allowSubscriptionToClients: true);
+            allowSubscriptionToClients: false) // 客户端禁用, 所有新用户必须订阅此通知
+            .WithProviders(
+                NotificationProviderNames.SignalR, // 实时通知处理会话过期事件
+                NotificationProviderNames.Emailing); // 邮件通知会话过期
+
+        group.AddNotification(
+            IdentityNotificationNames.IdentityUser.CleaningUpInactiveUsers,
+            L("Notifications:CleaningUpInactiveUsers"),
+            L("Notifications:CleaningUpInactiveUsers"),
+            NotificationType.Application,
+            NotificationLifetime.Persistent,
+            NotificationContentType.Markdown,
+            allowSubscriptionToClients: false) // 客户端禁用, 所有新用户必须订阅此通知
+            .WithProviders(NotificationProviderNames.Emailing);
     }
 
     private static ILocalizableString L(string name)

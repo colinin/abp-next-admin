@@ -38,13 +38,10 @@ public class QuartzJobCreator : IQuartzJobCreator, ISingletonDependency
             // 运行时搜寻本地作业
             jobType = typeof(QuartzJobSearchJobAdapter);
         }
-        else
+        else if (!typeof(IJob).IsAssignableFrom(jobType))
         {
-            if (!typeof(IJob).IsAssignableFrom(jobType))
-            {
-                var adapterType = typeof(QuartzJobSimpleAdapter<>);
-                jobType = adapterType.MakeGenericType(jobType);
-            }
+            var adapterType = typeof(QuartzJobSimpleAdapter<>);
+            jobType = adapterType.MakeGenericType(jobType);
         }
 
         if (jobType == null)

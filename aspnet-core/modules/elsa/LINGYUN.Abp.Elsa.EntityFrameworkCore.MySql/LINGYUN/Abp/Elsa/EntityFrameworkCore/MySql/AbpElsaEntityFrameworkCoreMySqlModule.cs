@@ -1,6 +1,10 @@
 ﻿using Elsa;
 using Elsa.Options;
+using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql.Migrations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -34,5 +38,16 @@ public class AbpElsaEntityFrameworkCoreMySqlModule : AbpModule
         {
             options.FileSets.AddEmbedded<AbpElsaEntityFrameworkCoreMySqlModule>();
         });
+    }
+
+    public async override Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
+        if (configuration.GetValue<bool>("Elsa:Features:DefaultPersistence:EntityFrameworkCore:MySql:Enabled"))
+        {
+            await context.ServiceProvider
+                .GetService<MySqlElsaDataBaseInstaller>()
+                ?.InstallAsync();
+        }
     }
 }

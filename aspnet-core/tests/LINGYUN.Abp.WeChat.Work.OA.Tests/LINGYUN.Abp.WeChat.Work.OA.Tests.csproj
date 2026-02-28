@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace />
+		<IsPackable>false</IsPackable>
+		<Configurations>Debug;Release;PostgreSQL</Configurations>
+		<Platforms>AnyCPU</Platforms>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.OA\LINGYUN.Abp.WeChat.Work.OA.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.WeChat.Work.Tests\LINGYUN.Abp.WeChat.Work.Tests.csproj" />
+	</ItemGroup>
+
+</Project>

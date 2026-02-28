@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { SortOrder } from '@abp/core';
 import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 
 import type { VbenFormProps } from '@vben/common-ui';
@@ -168,8 +167,10 @@ const gridOptions: VxeGridProps<SecurityLogDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -184,8 +185,9 @@ const gridOptions: VxeGridProps<SecurityLogDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
@@ -197,7 +199,9 @@ const gridEvents: VxeGridListeners<SecurityLogDto> = {
   checkboxChange: (params) => {
     selectedKeys.value = params.records.map((x) => x.id);
   },
-  sortChange: onSort,
+  sortChange: () => {
+    gridApi.query();
+  },
 };
 
 const [Grid, gridApi] = useVbenVxeGrid({
@@ -246,11 +250,6 @@ function onBulkDelete() {
     },
     title: $t('AbpUi.AreYouSure'),
   });
-}
-
-function onSort(params: { field: string; order: SortOrder }) {
-  const sorting = params.order ? `${params.field} ${params.order}` : undefined;
-  gridApi.query({ sorting });
 }
 </script>
 

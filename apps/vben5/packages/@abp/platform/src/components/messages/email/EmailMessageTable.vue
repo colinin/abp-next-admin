@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { VxeGridProps } from '@abp/ui';
+import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { VbenFormProps } from '@vben/common-ui';
@@ -103,6 +103,7 @@ const gridOptions: VxeGridProps<EmailMessageDto> = {
       align: 'left',
       field: 'provider',
       minWidth: 180,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Provider'),
     },
     {
@@ -110,6 +111,7 @@ const gridOptions: VxeGridProps<EmailMessageDto> = {
       field: 'status',
       minWidth: 150,
       slots: { default: 'status' },
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Status'),
     },
     {
@@ -119,36 +121,42 @@ const gridOptions: VxeGridProps<EmailMessageDto> = {
         return cellValue ? formatToDateTime(cellValue) : cellValue;
       },
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:SendTime'),
     },
     {
       align: 'center',
       field: 'sendCount',
       minWidth: 100,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:SendCount'),
     },
     {
       align: 'left',
       field: 'subject',
       minWidth: 180,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Subject'),
     },
     {
       align: 'left',
       field: 'content',
       minWidth: 220,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Content'),
     },
     {
       align: 'left',
       field: 'from',
       minWidth: 220,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:From'),
     },
     {
       align: 'left',
       field: 'receiver',
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Receiver'),
     },
     {
@@ -158,12 +166,14 @@ const gridOptions: VxeGridProps<EmailMessageDto> = {
         return cellValue ? formatToDateTime(cellValue) : cellValue;
       },
       minWidth: 200,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:CreationTime'),
     },
     {
       align: 'left',
       field: 'reason',
       minWidth: 150,
+      sortable: true,
       title: $t('AppPlatform.DisplayName:Reason'),
     },
     {
@@ -179,8 +189,10 @@ const gridOptions: VxeGridProps<EmailMessageDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -195,14 +207,22 @@ const gridOptions: VxeGridProps<EmailMessageDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
+  },
+};
+const gridEvents: VxeGridListeners<EmailMessageDto> = {
+  sortChange: () => {
+    gridApi.query();
   },
 };
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridOptions,
+  gridEvents,
 });
 
 const [EmailMessageModal, modalApi] = useVbenModal({

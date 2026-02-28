@@ -17,6 +17,7 @@
     "Permissions:DeleteJobLogs": "删除作业日志",
     "TaskManagement:01000": "分组 {Group} 中已经存在一个名称为 {Name} 的作业!",
     "TaskManagement:01001": "队列没有找到分组 {Group} 中名称为 {Name} 的作业, 请先将作业入队!",
+    "TaskManagement:01002": "即将删除的作业中包含未停止作业,请先停止作业运行后再次尝试删除作业!",
     "DisplayName:IsEnabled": "是否启用",
     "DisplayName:Group": "分组",
     "DisplayName:Name": "名称",

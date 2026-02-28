@@ -26,6 +26,7 @@ public class Program
                 .UseAutofac()
                 .ConfigureAppConfiguration((context, config) =>
                 {
+                    // AgileConfig 分布式配置平台, 顺序排在最后可覆盖所有本地配置文件
                     if (context.Configuration.GetValue("AgileConfig:IsEnabled", false))
                     {
                         config.AddAgileConfig(new AgileConfig.Client.ConfigClient(context.Configuration));

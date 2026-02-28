@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
@@ -9,16 +9,11 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
     typeof(Volo.Abp.AuditLogging.EntityFrameworkCore.AbpAuditLoggingEntityFrameworkCoreModule))]
 [DependsOn(
     typeof(AbpAuditLoggingModule),
-    typeof(AbpAutoMapperModule))]
+    typeof(AbpMapperlyModule))]
 public class AbpAuditLoggingEntityFrameworkCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpAuditingMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule>();
     }
 }

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "LINGYUN.Abp.MicroService.WorkflowService": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:50943;http://localhost:50944"
+    }
+  }
+}

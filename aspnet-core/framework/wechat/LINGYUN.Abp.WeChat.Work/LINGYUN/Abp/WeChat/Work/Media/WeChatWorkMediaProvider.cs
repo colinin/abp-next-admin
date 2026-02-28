@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.WeChat.Work.Media.Models;
 using LINGYUN.Abp.WeChat.Work.Token;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -27,7 +28,7 @@ public class WeChatWorkMediaProvider : IWeChatWorkMediaProvider, ISingletonDepen
         CancellationToken cancellationToken = default)
     {
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
         using var response = await client.GetMediaAsync(
             token.AccessToken,
@@ -79,17 +80,13 @@ public class WeChatWorkMediaProvider : IWeChatWorkMediaProvider, ISingletonDepen
         CancellationToken cancellationToken = default)
     {
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
         var request = new WeChatWorkMediaRequest(
             token.AccessToken,
             media);
 
-        using var response = await client.UploadMediaAsync(type, request, cancellationToken);
-        var mediaRespose = await response.DeserializeObjectAsync<WeChatWorkMediaResponse>();
-        mediaRespose.ThrowIfNotSuccess();
-
-        return mediaRespose;
+        return await client.UploadMediaAsync(type, request, cancellationToken);
     }
 
     public async virtual Task<WeChatWorkImageResponse> UploadImageAsync(
@@ -97,15 +94,12 @@ public class WeChatWorkMediaProvider : IWeChatWorkMediaProvider, ISingletonDepen
         CancellationToken cancellationToken = default)
     {
         var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
+
         var request = new WeChatWorkMediaRequest(
             token.AccessToken,
             image);
 
-        using var response = await client.UploadImageAsync(request, cancellationToken);
-        var mediaRespose = await response.DeserializeObjectAsync<WeChatWorkImageResponse>();
-        mediaRespose.ThrowIfNotSuccess();
-
-        return mediaRespose;
+        return await client.UploadImageAsync(request, cancellationToken);
     }
 }

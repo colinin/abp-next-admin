@@ -5,8 +5,10 @@ using LINGYUN.Abp.Quartz.SqlServerInstaller;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
+using System;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
+using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 
 namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer;
@@ -23,28 +25,45 @@ public class SingleMigrationsEntityFrameworkCoreSqlServerModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        var configuration = context.Services.GetConfiguration();
-
-        PreConfigure<CapOptions>(options =>
+        var dbProvider = Environment.GetEnvironmentVariable("APPLICATION_DATABASE_PROVIDER");
+        if ("SqlServer".Equals(dbProvider, StringComparison.InvariantCultureIgnoreCase))
         {
-            if (configuration.GetValue<bool>("CAP:IsEnabled"))
+            var configuration = context.Services.GetConfiguration();
+
+            PreConfigure<CapOptions>(options =>
             {
-                options.UseSqlServer(
-                    sqlOptions =>
-                    {
-                        configuration.GetSection("CAP:SqlServer").Bind(sqlOptions);
-                    });
-            }
-        });
+                if (configuration.GetValue<bool>("CAP:IsEnabled"))
+                {
+                    options.UseSqlServer(
+                        sqlOptions =>
+                        {
+                            configuration.GetSection("CAP:SqlServer").Bind(sqlOptions);
+                        });
+                }
+            });
+        }
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAbpDbContext<SingleMigrationsDbContext>();
-
-        Configure<AbpDbContextOptions>(options =>
+        var dbProvider = Environment.GetEnvironmentVariable("APPLICATION_DATABASE_PROVIDER");
+        if ("SqlServer".Equals(dbProvider, StringComparison.InvariantCultureIgnoreCase))
         {
-            options.UseSqlServer();
-        });
+            Configure<AbpDbContextOptions>(options =>
+            {
+                options.UseSqlServer(sqlServer =>
+                {
+                    sqlServer.MigrationsAssembly(GetType().Assembly);
+                });
+            });
+
+            Configure<AbpSequentialGuidGeneratorOptions>(options =>
+            {
+                if (options.DefaultSequentialGuidType == null)
+                {
+                    options.DefaultSequentialGuidType = SequentialGuidType.SequentialAtEnd;
+                }
+            });
+        }
     }
 }

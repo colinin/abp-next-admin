@@ -23,4 +23,18 @@ public class NullJobDispatcher : IJobDispatcher, ISingletonDependency
     {
         return Task.FromResult(false);
     }
+
+    public Task CleanExpiredJobAsync(
+        Guid? tenantId = null,
+        CancellationToken cancellationToken = default)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task CheckRuningJobAsync(
+        Guid? tenantId = null,
+        CancellationToken cancellationToken = default)
+    {
+        return Task.CompletedTask;
+    }
 }

@@ -14,7 +14,6 @@ public interface IWeChatWorkTokenProvider
     /// <remarks>
     /// 参考：https://developer.work.weixin.qq.com/document/path/91039
     /// </remarks>
-    /// <param name="agentId">应用标识</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<WeChatWorkToken> GetTokenAsync(CancellationToken cancellationToken = default);

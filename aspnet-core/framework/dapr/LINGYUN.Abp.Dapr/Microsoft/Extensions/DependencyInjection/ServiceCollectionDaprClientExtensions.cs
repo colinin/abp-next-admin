@@ -12,10 +12,7 @@ public static class ServiceCollectionDaprClientExtensions
     public static IServiceCollection AddDaprClient(
         [NotNull] this IServiceCollection services)
     {
-        if (services == null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
+        ArgumentNullException.ThrowIfNull(services, nameof(services));
 
         services.AddLogging();
         services.AddOptions();
@@ -30,10 +27,7 @@ public static class ServiceCollectionDaprClientExtensions
         [NotNull] this IServiceCollection services,
         string name)
     {
-        if (services == null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
+        ArgumentNullException.ThrowIfNull(services, nameof(services));
 
         services.AddDaprClient();
 
@@ -45,20 +39,9 @@ public static class ServiceCollectionDaprClientExtensions
        string name,
        Action<DaprClientBuilder> configureClient)
     {
-        if (services == null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        if (name == null)
-        {
-            throw new ArgumentNullException(nameof(name));
-        }
-
-        if (configureClient == null)
-        {
-            throw new ArgumentNullException(nameof(configureClient));
-        }
+        ArgumentNullException.ThrowIfNull(services, nameof(services));
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
+        ArgumentNullException.ThrowIfNull(configureClient, nameof(configureClient));
 
         services.AddDaprClient();
 
@@ -72,20 +55,9 @@ public static class ServiceCollectionDaprClientExtensions
         string name, 
         Action<IServiceProvider, DaprClientBuilder> configureClient)
     {
-        if (services == null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        if (name == null)
-        {
-            throw new ArgumentNullException(nameof(name));
-        }
-
-        if (configureClient == null)
-        {
-            throw new ArgumentNullException(nameof(configureClient));
-        }
+        ArgumentNullException.ThrowIfNull(services, nameof(services));
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
+        ArgumentNullException.ThrowIfNull(configureClient, nameof(configureClient));
 
         services.AddDaprClient();
         var builder = new DefaultDaprClientBuilder(services, name);

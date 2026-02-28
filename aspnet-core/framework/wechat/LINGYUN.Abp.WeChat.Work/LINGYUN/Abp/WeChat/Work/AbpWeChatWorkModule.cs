@@ -42,20 +42,8 @@ public class AbpWeChatWorkModule : AbpModule
             options.MapCodeNamespace(WeChatWorkErrorCodes.Namespace, typeof(WeChatWorkResource));
         });
 
-        context.Services.AddHttpClient(AbpWeChatWorkGlobalConsts.ApiClient,
-            options =>
-            {
-                options.BaseAddress = new Uri("https://qyapi.weixin.qq.com");
-            });
-        context.Services.AddHttpClient(AbpWeChatWorkGlobalConsts.OAuthClient,
-            options =>
-            {
-                options.BaseAddress = new Uri("https://open.weixin.qq.com");
-            });
-        context.Services.AddHttpClient(AbpWeChatWorkGlobalConsts.LoginClient,
-            options =>
-            {
-                options.BaseAddress = new Uri("https://login.work.weixin.qq.com");
-            });
+        context.Services.AddApiClient();
+        context.Services.AddOAuthClient();
+        context.Services.AddLoginClient();
     }
 }

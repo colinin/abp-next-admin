@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MyCSharp.HttpUserAgentParser.Providers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -65,6 +66,7 @@ public class LoginModel : AccountPageModel
 
     protected IIdentityUserRepository UserRepository => LazyServiceProvider.LazyGetRequiredService<IIdentityUserRepository>();
     protected IQrCodeLoginProvider QrCodeLoginProvider => LazyServiceProvider.LazyGetRequiredService<IQrCodeLoginProvider>();
+    protected IHttpUserAgentParserProvider HttpUserAgentParserProvider => LazyServiceProvider.LazyGetRequiredService<IHttpUserAgentParserProvider>();
 
     protected IExternalProviderService ExternalProviderService { get; }
     protected IAuthenticationSchemeProvider SchemeProvider { get; }
@@ -102,6 +104,8 @@ public class LoginModel : AccountPageModel
             ReturnUrl = ReturnUrl,
             ReturnUrlHash = ReturnUrlHash,
         };
+
+        AllowQrCodeLoginIfNotMobileDevice();
 
         ExternalProviders = await GetExternalProviders();
 
@@ -596,6 +600,18 @@ public class LoginModel : AccountPageModel
         Alerts.Danger(L["InvalidUserNameOrPassword"]);
         return Task.FromResult<IActionResult>(Page());
     }
+
+    protected virtual void AllowQrCodeLoginIfNotMobileDevice()
+    {
+        if (HttpContext?.Request?.Headers?.UserAgent.IsNullOrEmpty() == false)
+        {
+            var userAgentInfo = HttpUserAgentParserProvider.Parse(HttpContext.Request.Headers.UserAgent);
+            if (userAgentInfo.MobileDeviceType.IsNullOrWhiteSpace())
+            {
+                QrCodeLoginInput.IsEnabled = true;
+            }
+        }
+    }
 }
 
 public abstract class LoginInputModel
@@ -642,6 +658,9 @@ public class QrCodeLoginInputModel : LoginInputModel
 {
     [HiddenInput]
     public string Key { get; set; }
+
+    [HiddenInput]
+    public bool IsEnabled { get; set; }
 }
 
 public enum LoginType

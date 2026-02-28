@@ -40,7 +40,7 @@ public class TencentBlobProviderConfiguration
     /// 创建命名空间时防盗链列表
     /// </summary>
     public List<string> CreateBucketReferer {
-        get => _containerConfiguration.GetConfiguration<List<string>>(TencentBlobProviderConfigurationNames.CreateBucketReferer);
+        get => _containerConfiguration.GetConfigurationOrDefault(TencentBlobProviderConfigurationNames.CreateBucketReferer, new List<string>());
         set {
             if (value == null)
             {

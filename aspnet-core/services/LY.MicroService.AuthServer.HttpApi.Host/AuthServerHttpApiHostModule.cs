@@ -23,6 +23,7 @@ using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
 using LINGYUN.Abp.Telemetry.SkyWalking;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -83,6 +84,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpExporterMiniExcelModule),
     typeof(AbpClaimsMappingModule),

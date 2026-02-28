@@ -5,10 +5,12 @@ using System.Collections.Generic;
 namespace LINGYUN.Abp.WeChat.Official.Messages;
 public class AbpWeChatOfficialMessageResolveOptions
 {
+    public List<IMessageResolveContributor> MessageResolvers { get; }
     public IDictionary<string, Func<IMessageResolveContext, WeChatEventMessage>> EventMaps { get; }
     public IDictionary<string, Func<IMessageResolveContext, WeChatGeneralMessage>> MessageMaps { get; }
     public AbpWeChatOfficialMessageResolveOptions()
     {
+        MessageResolvers = new List<IMessageResolveContributor>();
         EventMaps = new Dictionary<string, Func<IMessageResolveContext, WeChatEventMessage>>();
         MessageMaps = new Dictionary<string, Func<IMessageResolveContext, WeChatGeneralMessage>>();
     }

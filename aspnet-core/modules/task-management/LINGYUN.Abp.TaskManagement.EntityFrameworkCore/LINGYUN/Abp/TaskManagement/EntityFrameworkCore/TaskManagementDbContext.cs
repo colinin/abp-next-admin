@@ -8,6 +8,7 @@ namespace LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 public class TaskManagementDbContext : AbpDbContext<TaskManagementDbContext>, ITaskManagementDbContext
 {
     public DbSet<BackgroundJobInfo> BackgroundJobInfos { get; set; }
+    public DbSet<BackgroundJobLog> BackgroundJobLogs { get; set; }
     public DbSet<BackgroundJobAction> BackgroundJobAction { get; set; }
 
     public TaskManagementDbContext(

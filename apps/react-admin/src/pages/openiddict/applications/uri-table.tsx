@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Popconfirm } from "antd";
+import { Button, Card, Popconfirm } from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { ProTable, type ProColumns } from "@ant-design/pro-table";
@@ -51,19 +51,20 @@ const UriTable: React.FC<UriTableProps> = ({ title, uris = [], onChange, onDelet
 
 	return (
 		<>
-			<ProTable<UriItem>
-				headerTitle={title}
-				columns={columns}
-				dataSource={dataSource}
-				search={false}
-				pagination={false}
-				toolBarRender={() => [
-					<Button key="add" type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
-						{$t("AbpOpenIddict.Uri:AddNew")}
-					</Button>,
-				]}
-			/>
-
+			<Card>
+				<ProTable<UriItem>
+					headerTitle={title}
+					columns={columns}
+					dataSource={dataSource}
+					search={false}
+					pagination={false}
+					toolBarRender={() => [
+						<Button key="add" type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
+							{$t("AbpOpenIddict.Uri:AddNew")}
+						</Button>,
+					]}
+				/>
+			</Card>
 			<UriModal
 				visible={modalVisible}
 				onClose={() => setModalVisible(false)}

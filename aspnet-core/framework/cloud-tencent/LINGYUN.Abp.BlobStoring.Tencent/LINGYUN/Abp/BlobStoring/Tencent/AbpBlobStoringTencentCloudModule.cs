@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Tencent;
 using LINGYUN.Abp.Tencent.Localization;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -25,5 +26,7 @@ public class AbpBlobStoringTencentCloudModule : AbpModule
                 .Get<TencentCloudResource>()
                 .AddVirtualJson("/LINGYUN/Abp/BlobStoring/Tencent/Localization");
         });
+
+        context.Services.AddTenantOssClient();
     }
 }

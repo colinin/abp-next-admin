@@ -4,6 +4,7 @@ using Shouldly;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.VirtualFileSystem;
 using Xunit;
 
@@ -15,7 +16,7 @@ public class SearcherTest : AbpIP2RegionTestBase
     public SearcherTest()
     {
         var virtualFileProvider = GetRequiredService<IVirtualFileProvider>();
-        _xdbStream = virtualFileProvider.GetFileInfo("/LINGYUN/Abp/IP2Region/Resources/ip2region.xdb").CreateReadStream();
+        _xdbStream = virtualFileProvider.GetFileInfo("/LINGYUN/Abp/IP2Region/Resources/ip2region_v4.xdb").CreateReadStream();
     }
 
     [Theory]
@@ -23,50 +24,52 @@ public class SearcherTest : AbpIP2RegionTestBase
     [InlineData("36.133.108.1", "重庆市")]
     [InlineData("111.26.31.1", "吉林省吉林市")]
     [InlineData("220.246.0.1", "中国香港")]
-    public async void TestSearchLocation(string ip, string shouleBeRemarks)
+    [InlineData("103.151.173.211", "日本")]
+    [InlineData("103.151.191.5", "印度尼西亚")]
+    public async Task TestSearchLocation(string ip, string shouldBeRemarks)
     {
         var resolver = GetRequiredService<IIPLocationResolver>();
         var result = await resolver.ResolveAsync(ip);
-        result.Location.Remarks.ShouldBe(shouleBeRemarks);
+        result.Location.Remarks.ShouldBe(shouldBeRemarks);
     }
 
     [Theory]
-    [InlineData("114.114.114.114")]
-    [InlineData("119.29.29.29")]
-    [InlineData("223.5.5.5")]
-    [InlineData("180.76.76.76")]
-    [InlineData("8.8.8.8")]
-    public void TestSearchCacheContent(string ip)
+    [InlineData("114.114.114.114", "中国|江苏省|南京市|0")]
+    [InlineData("119.29.29.29", "中国|北京|北京市|腾讯")]
+    [InlineData("223.5.5.5", "中国|浙江省|杭州市|阿里")]
+    [InlineData("180.76.76.76", "中国|北京|北京市|百度")]
+    [InlineData("8.8.8.8", "美国|0|0|谷歌")]
+    public void TestSearchCacheContent(string ip, string shouldBeRegion)
     {
         var contentSearcher = new AbpSearcher(CachePolicy.Content, _xdbStream);
         var region = contentSearcher.Search(ip);
-        Console.WriteLine(region);
+        region.ShouldBe(shouldBeRegion);
     }
 
     [Theory]
-    [InlineData("114.114.114.114")]
-    [InlineData("119.29.29.29")]
-    [InlineData("223.5.5.5")]
-    [InlineData("180.76.76.76")]
-    [InlineData("8.8.8.8")]
-    public void TestSearchCacheVector(string ip)
+    [InlineData("114.114.114.114", "中国|江苏省|南京市|0")]
+    [InlineData("119.29.29.29", "中国|北京|北京市|腾讯")]
+    [InlineData("223.5.5.5", "中国|浙江省|杭州市|阿里")]
+    [InlineData("180.76.76.76", "中国|北京|北京市|百度")]
+    [InlineData("8.8.8.8", "美国|0|0|谷歌")]
+    public void TestSearchCacheVector(string ip, string shouldBeRegion)
     {
         var vectorSearcher = new AbpSearcher(CachePolicy.VectorIndex, _xdbStream);
         var region = vectorSearcher.Search(ip);
-        Console.WriteLine(region);
+        region.ShouldBe(shouldBeRegion);
     }
 
     [Theory]
-    [InlineData("114.114.114.114")]
-    [InlineData("119.29.29.29")]
-    [InlineData("223.5.5.5")]
-    [InlineData("180.76.76.76")]
-    [InlineData("8.8.8.8")]
-    public void TestSearchCacheFile(string ip)
+    [InlineData("114.114.114.114", "中国|江苏省|南京市|0")]
+    [InlineData("119.29.29.29", "中国|北京|北京市|腾讯")]
+    [InlineData("223.5.5.5", "中国|浙江省|杭州市|阿里")]
+    [InlineData("180.76.76.76", "中国|北京|北京市|百度")]
+    [InlineData("8.8.8.8", "美国|0|0|谷歌")]
+    public void TestSearchCacheFile(string ip, string shouldBeRegion)
     {
         var fileSearcher = new AbpSearcher(CachePolicy.File, _xdbStream);
         var region = fileSearcher.Search(ip);
-        Console.WriteLine(region);
+        region.ShouldBe(shouldBeRegion);
     }
 
     [Theory]
@@ -76,7 +79,7 @@ public class SearcherTest : AbpIP2RegionTestBase
     public void TestBenchSearch(CachePolicy cachePolicy)
     {
         var searcher = new AbpSearcher(cachePolicy, _xdbStream);
-        var srcPath = Path.Combine(AppContext.BaseDirectory, "ip.merge.txt");
+        var srcPath = Path.Combine(AppContext.BaseDirectory, "ipv4_source.txt");
 
         foreach (var line in File.ReadLines(srcPath))
         {

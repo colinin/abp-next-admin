@@ -28,7 +28,7 @@ const coreRoutes: RouteRecordRaw[] = [
       hideInBreadcrumb: true,
       hideInMenu: true,
       hideInTab: true,
-      title: 'Processing login',
+      title: $t('page.auth.processingLogin'),
     },
     name: 'OidcFallback',
     path: '/signin-callback',

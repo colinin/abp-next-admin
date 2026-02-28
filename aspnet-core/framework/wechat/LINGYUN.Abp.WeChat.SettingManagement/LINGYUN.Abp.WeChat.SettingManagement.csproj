@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\..\configureawait.props" />
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<AssemblyName>LINGYUN.Abp.WeChat.SettingManagement</AssemblyName>
 		<PackageId>LINGYUN.Abp.WeChat.SettingManagement</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -30,6 +30,8 @@
 	  <ProjectReference Include="..\..\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.Official\LINGYUN.Abp.WeChat.Official.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.Work.Contacts\LINGYUN.Abp.WeChat.Work.Contacts.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.Work.ExternalContact\LINGYUN.Abp.WeChat.Work.ExternalContact.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.Work\LINGYUN.Abp.WeChat.Work.csproj" />
 	</ItemGroup>
 

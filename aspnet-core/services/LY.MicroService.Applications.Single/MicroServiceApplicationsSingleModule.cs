@@ -1,4 +1,4 @@
-using LINGYUN.Abp.Elsa.Designer;
+using LINGYUN.Abp.SystemInfo;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -334,6 +334,12 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpWeChatOfficialHttpApiModule),
     // 微信模块 企业微信
     typeof(AbpWeChatWorkModule),
+    // 微信模块 企业微信通讯录
+    typeof(AbpWeChatWorkContactModule),
+    // 微信模块 企业微信客户联系
+    typeof(AbpWeChatWorkExternalContactModule),
+    // 微信模块 企业微信办公
+    typeof(AbpWeChatWorkOAModule),
     // 微信模块 企业微信 应用服务
     typeof(AbpWeChatWorkApplicationModule),
     // 微信模块 企业微信 控制器
@@ -378,10 +384,15 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpMailKitModule),
     typeof(AbpAutofacModule),
 
-    // 取消注释使用MySql
-     typeof(SingleMigrationsEntityFrameworkCoreMySqlModule)
-    // 取消注释使用SqlServer
-    //typeof(SingleMigrationsEntityFrameworkCoreSqlServerModule)
+    // 单体应用系统状态接口
+    typeof(AbpSystemInfoHttpApiModule),
+
+    // MySql
+     typeof(SingleMigrationsEntityFrameworkCoreMySqlModule),
+    // SqlServer
+    typeof(SingleMigrationsEntityFrameworkCoreSqlServerModule),
+    // PostgreSql
+    typeof(SingleMigrationsEntityFrameworkCorePostgreSqlModule)
     )]
 public partial class MicroServiceApplicationsSingleModule : AbpModule
 {
@@ -396,6 +407,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
+        PreConfigureSignalR(configuration);
         PreConfigureAuthServer(configuration);
         PreConfigureElsa(context.Services, configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
@@ -418,7 +430,6 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureVirtualFileSystem();
         ConfigureEntityDataProtected();
         ConfigureUrls(configuration);
-        ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
         ConfigureDbContext(configuration);
@@ -434,7 +445,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureNotificationManagement(configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureSwagger(context.Services, configuration);
-        ConfigureOssManagement(context.Services, configuration);
+        ConfigureCaching(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureKestrelServer(configuration, hostingEnvironment);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());

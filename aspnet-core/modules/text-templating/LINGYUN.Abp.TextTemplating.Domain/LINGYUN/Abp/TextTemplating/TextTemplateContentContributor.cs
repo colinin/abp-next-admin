@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
@@ -11,6 +13,7 @@ namespace LINGYUN.Abp.TextTemplating;
 
 public class TextTemplateContentContributor : ITemplateContentContributor, ITransientDependency
 {
+    public ILogger<TextTemplateContentContributor> Logger { protected get; set; }
     protected AbpTextTemplatingCachingOptions TemplatingCachingOptions { get; }
     protected IDistributedCache<TextTemplateContentCacheItem> TextTemplateContentCache { get; }
 
@@ -20,39 +23,49 @@ public class TextTemplateContentContributor : ITemplateContentContributor, ITran
     {
         TextTemplateContentCache = textTemplateContentCache;
         TemplatingCachingOptions = templatingCachingOptions.Value;
+
+        Logger = NullLogger<TextTemplateContentContributor>.Instance;
     }
 
     public async virtual Task<string> GetOrNullAsync(TemplateContentContributorContext context)
     {
-        // 2024/05/27 fixed 内联本地化不需要多语言
-        var culture = context.TemplateDefinition.IsInlineLocalized ? null : context.Culture;
-
-        var cacheKey = TextTemplateContentCacheItem.CalculateCacheKey(context.TemplateDefinition.Name, culture);
-
-        var cacheItem = await TextTemplateContentCache.GetOrAddAsync(cacheKey,
-            () => CreateTemplateContentCache(context),
-            () => CreateTemplateContentCacheOptions());
-
-        return cacheItem?.Content;
+        return (await GetCacheItemAsync(context)).Content;
     }
 
-    protected async virtual Task<TextTemplateContentCacheItem> CreateTemplateContentCache(TemplateContentContributorContext context)
+    protected async virtual Task<TextTemplateContentCacheItem> GetCacheItemAsync(TemplateContentContributorContext context)
     {
-        // 2024/05/27 fixed 内联本地化不需要多语言
         var culture = context.TemplateDefinition.IsInlineLocalized ? null : context.Culture;
+        var cacheKey = TextTemplateContentCacheItem.CalculateCacheKey(context.TemplateDefinition.Name, culture);
+
+        Logger.LogDebug($"TextTemplateContentContributor.GetCacheItemAsync: {cacheKey}");
+
+        var cacheItem = await TextTemplateContentCache.GetAsync(cacheKey);
+
+        if (cacheItem != null)
+        {
+            Logger.LogDebug($"TextTemplateContent found in the cache: {cacheKey}");
+            return cacheItem;
+        }
+
+        Logger.LogDebug($"TextTemplateContent not found in the cache: {cacheKey}");
+
         var repository = context.ServiceProvider.GetRequiredService<ITextTemplateRepository>();
         var template = await repository.FindByNameAsync(context.TemplateDefinition.Name, culture);
-
-        // 2025/06/23 fixed 非内联本地化模板内容为空时,回退到默认文化
         if (template == null && !culture.IsNullOrWhiteSpace())
         {
             template = await repository.FindByNameAsync(context.TemplateDefinition.Name, context.TemplateDefinition.DefaultCultureName);
         }
 
-        return new TextTemplateContentCacheItem(
+        cacheItem = new TextTemplateContentCacheItem(
             template?.Name,
             template?.Content,
             template?.Culture);
+
+        Logger.LogDebug($"TextTemplateContent set cache item: {cacheKey}");
+
+        await TextTemplateContentCache.SetAsync(cacheKey, cacheItem, CreateTemplateContentCacheOptions());
+
+        return cacheItem;
     }
 
     protected DistributedCacheEntryOptions CreateTemplateContentCacheOptions()

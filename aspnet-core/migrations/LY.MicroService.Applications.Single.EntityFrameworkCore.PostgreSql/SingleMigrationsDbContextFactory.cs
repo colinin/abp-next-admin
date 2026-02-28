@@ -10,6 +10,9 @@ public class SingleMigrationsDbContextFactory : IDesignTimeDbContextFactory<Sing
 {
     public SingleMigrationsDbContext CreateDbContext(string[] args)
     {
+        // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
         var configuration = BuildConfiguration();
         var connectionString = configuration.GetConnectionString("Default");
 
@@ -26,9 +29,7 @@ public class SingleMigrationsDbContextFactory : IDesignTimeDbContextFactory<Sing
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(),
                 "../LY.MicroService.Applications.Single.DbMigrator/"))
             .AddJsonFile("appsettings.json", optional: false)
-            .AddJsonFile(
-                "appsettings.PostgreSql.json",
-                optional: false);
+            .AddJsonFile("appsettings.PostgreSql.json", optional: false);
 
         return builder.Build();
     }

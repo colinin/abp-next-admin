@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Account.Emailing.Localization;
+using System;
 using Volo.Abp.Emailing;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -10,6 +11,7 @@ namespace LINGYUN.Abp.Account.Emailing;
 [DependsOn(
     typeof(AbpEmailingModule),
     typeof(AbpUiNavigationModule))]
+[Obsolete("This module has been deprecated. Please use AbpAccountSecurityModule.")]
 public class AbpAccountEmailingModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

@@ -1,10 +1,6 @@
-import { $t } from '@vben/locales';
+import type { OAuthError } from '../types/token';
 
-interface OAuthError {
-  error: string;
-  error_description?: string;
-  error_uri?: string;
-}
+import { $t } from '@vben/locales';
 
 export function useOAuthError() {
   function formatError(error: OAuthError) {
@@ -21,6 +17,10 @@ export function useOAuthError() {
       // 需要二次认证
       case 'RequiresTwoFactor': {
         return $t('abp.oauth.errors.requiresTwoFactor');
+      }
+      // 用户拒绝授权
+      case 'The authorization was denied by the end user.': {
+        return $t('abp.oauth.errors.accessDenied');
       }
       // Token已失效
       case 'The token is no longer valid.':

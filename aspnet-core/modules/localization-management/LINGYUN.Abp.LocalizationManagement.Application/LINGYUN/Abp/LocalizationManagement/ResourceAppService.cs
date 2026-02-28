@@ -1,14 +1,14 @@
 ﻿using LINGYUN.Abp.LocalizationManagement.Features;
 using LINGYUN.Abp.LocalizationManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
-using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.LocalizationManagement;
 
+[RequiresFeature(LocalizationManagementFeatures.Enable)]
 [Authorize(LocalizationManagementPermissions.Resource.Default)]
-[RequiresPreviewFeatures(LocalizationManagementFeatures.Enable)]
 public class ResourceAppService : LocalizationAppServiceBase, IResourceAppService
 {
     private readonly IResourceRepository _repository;

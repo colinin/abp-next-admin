@@ -1,3 +1,6 @@
+export { default as isDate } from 'lodash.isdate';
+export { default as isNumber } from 'lodash.isnumber';
+
 export function isNullAndUnDef(val: unknown): val is null | undefined {
   return isUnDef(val) && isNull(val);
 }

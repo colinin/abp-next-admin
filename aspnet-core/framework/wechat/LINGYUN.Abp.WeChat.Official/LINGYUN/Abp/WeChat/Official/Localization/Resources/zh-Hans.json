@@ -1,6 +1,8 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Features:WeChat.Official.Enable": "启用微信公众号",
+    "Features:WeChat.Official.EnableDesc": "启用以使应用拥有微信公众号的能力",
     "DisplayName:WeChat.Official": "微信公众号",
     "Description:WeChat.Official": "微信公众号",
     "DisplayName:WeChat.Official.IsSandBox": "是否沙盒测试",

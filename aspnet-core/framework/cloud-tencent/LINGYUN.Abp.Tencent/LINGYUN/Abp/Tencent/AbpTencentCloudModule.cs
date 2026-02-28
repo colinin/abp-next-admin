@@ -5,11 +5,15 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Features;
+using Volo.Abp.Settings;
 
 namespace LINGYUN.Abp.Tencent;
 
 [DependsOn(
     typeof(AbpCachingModule),
+    typeof(AbpFeaturesModule),
+    typeof(AbpSettingsModule),
     typeof(AbpJsonModule),
     typeof(AbpLocalizationModule))]
 public class AbpTencentCloudModule : AbpModule

@@ -1,0 +1,16 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "TextTemplate:Abp.Account.MailSecurityVerifyLink": "邮件验证模板",
+    "TextTemplate:Abp.Account.MailConfirmLink": "邮件确认模板",
+    "MailSecurityVerify": "邮件安全验证",
+    "VerifyMyEmailAddress": "您好<br/><p>您此次邮件安全验证码如下，请输入验证码进行下一步操作。</p><p>如非你本人操作，请忽略此邮件。</p>",
+    "MailSecurityVerifyRemarks": "此邮件为系统所发，请勿直接回复。",
+    "ClickToValidation": "点击进行验证",
+    "Validation": "验证",
+    "EmailConfirm": "邮件确认",
+    "EmailConfirmInfo": "我们收到了邮件确认请求!如果你发起了此请求,请单击以下链接以确认邮件地址.",
+    "ConfirmMyEmail": "绑定我的邮箱地址",
+    "YourEmailIsSuccessfullyConfirm": "您的邮件地址绑定成功."
+  }
+}

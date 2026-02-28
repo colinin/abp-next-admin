@@ -19,7 +19,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -27,7 +27,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityEnumInfo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DisplayName")
@@ -61,7 +60,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DisplayName")
@@ -101,7 +99,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityTypeInfo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -373,7 +370,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.Demo.Authors.Author", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BirthDate")
@@ -439,7 +435,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.Demo.Books.Book", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AuthorId")
@@ -540,7 +535,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprInfo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Data")
@@ -567,7 +561,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprRequest", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -602,7 +595,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.LocalizationManagement.Language", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
@@ -659,7 +651,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.LocalizationManagement.Resource", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
@@ -1323,7 +1314,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.Notifications.NotificationDefinitionGroupRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("AllowSubscriptionToClients")
@@ -1354,7 +1344,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.Notifications.NotificationDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("AllowSubscriptionToClients")
@@ -1479,7 +1468,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.Saas.Editions.Edition", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1542,7 +1530,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.Saas.Tenants.Tenant", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1644,7 +1631,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.TaskManagement.BackgroundJobAction", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1894,7 +1880,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.TextTemplating.TextTemplate", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
@@ -1946,7 +1931,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.TextTemplating.TextTemplateDefinition", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -2010,7 +1994,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -2056,7 +2039,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookEventRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
@@ -2095,7 +2077,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookGroupDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DisplayName")
@@ -2123,7 +2104,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookSendRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
@@ -2234,7 +2214,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Platform.Datas.Data", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
@@ -2322,7 +2301,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Platform.Datas.DataItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("AllowBeNull")
@@ -2582,7 +2560,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Platform.Layouts.Layout", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -2673,7 +2650,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Platform.Menus.Menu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
@@ -2782,7 +2758,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Platform.Menus.RoleMenu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
@@ -2827,7 +2802,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Platform.Menus.UserFavoriteMenu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AliasName")
@@ -2905,7 +2879,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Platform.Menus.UserMenu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
@@ -2947,7 +2920,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Platform.Messages.EmailMessage", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("BodyTransferEncoding")
@@ -3117,7 +3089,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Platform.Messages.SmsMessage", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -3194,7 +3165,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Platform.Packages.Package", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Authors")
@@ -3361,7 +3331,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("LINGYUN.Platform.Portal.Enterprise", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
@@ -3464,7 +3433,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationName")
@@ -3586,7 +3554,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AuditLogId")
@@ -3633,10 +3600,36 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
                     b.ToTable("AbpAuditLogActions", (string)null);
                 });
 
+            modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogExcelFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("FileName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("FileName");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AbpAuditLogExcelFiles", (string)null);
+                });
+
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AuditLogId")
@@ -3685,7 +3678,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("EntityChangeId")
@@ -3727,7 +3719,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AllowedProviders")
@@ -3788,7 +3779,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureGroupDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DisplayName")
@@ -3816,7 +3806,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureValue", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -3849,7 +3838,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -3902,7 +3890,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.Identity.IdentityLinkUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SourceTenantId")
@@ -3929,7 +3916,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRole", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -4015,7 +4001,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.Identity.IdentitySecurityLog", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Action")
@@ -4092,7 +4077,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.Identity.IdentitySession", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ClientId")
@@ -4105,8 +4089,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("DeviceInfo")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
@@ -4148,7 +4132,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
@@ -4343,7 +4326,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserDelegation", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("EndTime")
@@ -4470,7 +4452,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnit", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
@@ -4576,7 +4557,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.OpenIddict.Applications.OpenIddictApplication", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationType")
@@ -4635,6 +4615,9 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
+                    b.Property<string>("FrontChannelLogoutUri")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -4683,7 +4666,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ApplicationId")
@@ -4732,7 +4714,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.OpenIddict.Scopes.OpenIddictScope", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -4809,7 +4790,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.OpenIddict.Tokens.OpenIddictToken", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ApplicationId")
@@ -4858,8 +4838,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
                         .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("Id");
 
@@ -4875,7 +4855,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DisplayName")
@@ -4928,7 +4907,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionGrant", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -4962,7 +4940,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionGroupDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DisplayName")
@@ -4990,7 +4967,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.SettingManagement.Setting", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -5023,7 +4999,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer.Migr
             modelBuilder.Entity("Volo.Abp.SettingManagement.SettingDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DefaultValue")

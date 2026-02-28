@@ -37,6 +37,7 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
         DateTime signedIn,
         DateTime? lastAccessed = null,
         string ipRegion = null,
+        string userName = null,
         Guid? tenantId = null,
         CancellationToken cancellationToken = default)
     {
@@ -55,9 +56,14 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
             signedIn,
             lastAccessed
         );
+        
         if (!ipRegion.IsNullOrWhiteSpace())
         {
             identitySession.SetProperty("Location", ipRegion);
+        }
+        if (!userName.IsNullOrWhiteSpace())
+        {
+            identitySession.SetProperty("UserName", userName);
         }
 
         identitySession = await IdentitySessionRepository.InsertAsync(identitySession, cancellationToken: cancellationToken);

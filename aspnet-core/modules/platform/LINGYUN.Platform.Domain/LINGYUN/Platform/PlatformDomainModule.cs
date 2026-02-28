@@ -6,11 +6,11 @@ using LINGYUN.Platform.ObjectExtending;
 using LINGYUN.Platform.Packages;
 using LINGYUN.Platform.Routes;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Emailing;
 using Volo.Abp.EventBus;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Sms;
@@ -22,22 +22,18 @@ namespace LINGYUN.Platform;
     typeof(AbpSmsModule),
     typeof(AbpEmailingModule),
     typeof(AbpEventBusModule),
-    typeof(AbpBlobStoringModule),
+    typeof(AbpEventBusModule),
+    typeof(AbpMapperlyModule),
     typeof(PlatformDomainSharedModule))]
 public class PlatformDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<PlatformDomainModule>();
+        context.Services.AddMapperlyObjectMapper<PlatformDomainModule>();
 
         Configure<DataItemMappingOptions>(options =>
         {
             options.SetDefaultMapping();
-        });
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<PlatformDomainMappingProfile>(validate: true);
         });
 
         Configure<AbpBlobStoringOptions>(options =>

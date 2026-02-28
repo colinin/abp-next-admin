@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity;
+using Volo.Abp.Security.Claims;
 
 namespace LINGYUN.Abp.Identity.Session;
 public class IdentitySessionManager : DomainService, IIdentitySessionManager
@@ -36,15 +37,16 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
         if (claimsPrincipal != null)
         {
             var userId = claimsPrincipal.FindUserId();
+            var sessionId = claimsPrincipal.FindSessionId();
+            if (!userId.HasValue || sessionId.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
             var tenantId = claimsPrincipal.FindTenantId();
 
             using (CurrentTenant.Change(tenantId))
             {
-                var sessionId = claimsPrincipal.FindSessionId();
-                if (!userId.HasValue || sessionId.IsNullOrWhiteSpace())
-                {
-                    return;
-                }
                 if (await IdentitySessionStore.ExistAsync(sessionId, cancellationToken))
                 {
                     return;
@@ -54,6 +56,7 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
                 var device = deviceInfo.Device ?? IdentitySessionDevices.OAuth;
                 var deviceDesc = deviceInfo.Description;
                 var clientIpAddress = deviceInfo.ClientIpAddress;
+                var userName = claimsPrincipal.FindFirstValue(AbpClaimTypes.UserName);
 
                 var clientId = claimsPrincipal.FindClientId();
 
@@ -69,6 +72,7 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
                     Clock.Now,
                     Clock.Now,
                     deviceInfo.IpRegion,
+                    userName,
                     tenantId,
                     cancellationToken);
 

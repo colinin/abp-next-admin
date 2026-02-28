@@ -45,11 +45,13 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
     {
       field: 'userName',
       minWidth: '100px',
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:UserName'),
     },
     {
       field: 'email',
       minWidth: '120px',
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:Email'),
     },
     {
@@ -64,14 +66,16 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
         if (!props.selectedKey) {
           return {
             totalCount: 0,
             items: [],
           };
         }
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getUserListApi(props.selectedKey!, {
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -86,16 +90,20 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
 
 const gridEvents: VxeGridListeners<IdentityUserDto> = {
   cellClick: () => {},
+  sortChange: () => {
+    gridApi.query();
+  },
 };
-const [Grid, { query, setLoading }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   gridEvents,
   gridOptions,
 });
@@ -104,7 +112,7 @@ const [MemberModal, userModalApi] = useVbenModal({
 });
 
 const onRefresh = () => {
-  nextTick(query);
+  nextTick(gridApi.query);
 };
 
 const onDelete = (row: IdentityUserDto) => {
@@ -116,11 +124,14 @@ const onDelete = (row: IdentityUserDto) => {
     onCancel: () => {
       cancel('User closed cancel delete modal.');
     },
-    onOk: () => {
-      setLoading(true);
-      return removeOrganizationUnitApi(row.id, props.selectedKey!)
-        .then(onRefresh)
-        .finally(() => setLoading(false));
+    onOk: async () => {
+      gridApi.setLoading(true);
+      try {
+        await removeOrganizationUnitApi(row.id, props.selectedKey!);
+        await gridApi.query();
+      } finally {
+        gridApi.setLoading(false);
+      }
     },
     title: $t('AbpUi.AreYouSure'),
   });
@@ -133,22 +144,21 @@ const onShowMember = () => {
   userModalApi.open();
 };
 
-const onCreateMember = (users: IdentityUserDto[]) => {
+const onCreateMember = async (users: IdentityUserDto[]) => {
   userModalApi.setState({
     submitting: true,
   });
-  addMembers(props.selectedKey!, {
-    userIds: users.map((item) => item.id),
-  })
-    .then(() => {
-      userModalApi.close();
-      query();
-    })
-    .finally(() => {
-      userModalApi.setState({
-        submitting: false,
-      });
+  try {
+    await addMembers(props.selectedKey!, {
+      userIds: users.map((item) => item.id),
     });
+    userModalApi.close();
+    await gridApi.query();
+  } finally {
+    userModalApi.setState({
+      submitting: false,
+    });
+  }
 };
 
 watch(() => props.selectedKey, onRefresh);

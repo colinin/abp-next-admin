@@ -29,6 +29,7 @@ using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
 using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.Tencent.SettingManagement;
 using LINGYUN.Abp.TextTemplating;
@@ -115,6 +116,7 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpHttpClientModule),
     typeof(AbpSmsPlatformModule),

@@ -37,7 +37,6 @@ const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
 const ClaimOutlined = createIconifyIcon('la:id-card-solid');
 const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
-const ProtectedIcon = createIconifyIcon('mdi:protected-outline');
 
 const RoleModal = defineAsyncComponent(() => import('./RoleModal.vue'));
 const ClaimModal = defineAsyncComponent(() => import('./RoleClaimModal.vue'));
@@ -88,6 +87,7 @@ const gridOptions: VxeGridProps<IdentityRoleDto> = {
       align: 'left',
       field: 'name',
       slots: { default: 'name' },
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:RoleName'),
     },
     {
@@ -102,8 +102,10 @@ const gridOptions: VxeGridProps<IdentityRoleDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -118,19 +120,23 @@ const gridOptions: VxeGridProps<IdentityRoleDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
 
 const gridEvents: VxeGridListeners<IdentityRoleDto> = {
   cellClick: () => {},
+  sortChange: () => {
+    gridApi.query();
+  },
 };
 const [RoleEditModal, roleModalApi] = useVbenModal({
   connectedComponent: RoleModal,
 });
-const [Grid, { query }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
   gridOptions,
@@ -156,7 +162,7 @@ const handleDelete = (row: IdentityRoleDto) => {
     onOk: async () => {
       await deleteApi(row.id);
       message.success($t('AbpUi.DeletedSuccessfully'));
-      query();
+      gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
   });
@@ -291,7 +297,7 @@ function onPermissionChange(_name: string, key: string) {
               >
                 {{ $t('AbpAuditLogging.EntitiesChanged') }}
               </MenuItem>
-              <MenuItem key="entity-rules" :icon="h(ProtectedIcon)">
+              <MenuItem key="entity-rules">
                 {{ '数据权限' }}
               </MenuItem>
             </Menu>
@@ -301,8 +307,8 @@ function onPermissionChange(_name: string, key: string) {
       </div>
     </template>
   </Grid>
-  <RoleEditModal @change="() => query()" />
-  <RoleClaimModal @change="query" />
+  <RoleEditModal @change="() => gridApi.query()" />
+  <RoleClaimModal @change="() => gridApi.query()" />
   <RolePermissionModal @change="onPermissionChange" />
   <RoleChangeDrawer />
   <RoleRuleDrawer />

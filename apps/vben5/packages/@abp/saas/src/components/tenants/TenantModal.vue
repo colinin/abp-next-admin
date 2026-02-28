@@ -148,7 +148,7 @@ async function onGet() {
 async function onSubmit() {
   try {
     modalApi.setState({ submitting: true });
-    if (!tenant.value.useSharedDatabase) {
+    if (!tenant.value.id && !tenant.value.useSharedDatabase) {
       await checkConnectionString({
         connectionString: tenant.value.defaultConnectionString,
         provider: tenant.value.provider,

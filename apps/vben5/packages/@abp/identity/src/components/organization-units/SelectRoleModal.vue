@@ -68,27 +68,30 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 const gridOptions: VxeGridProps<IdentityRoleDto> = {
-  checkboxConfig: {
-    highlight: true,
-    labelField: 'name',
-  },
   columns: [
+    {
+      align: 'center',
+      type: 'checkbox',
+      width: 80,
+    },
     {
       align: 'left',
       field: 'name',
+      sortable: true,
       title: $t('AbpIdentity.DisplayName:RoleName'),
-      type: 'checkbox',
     },
   ],
   exportConfig: {},
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         const state = modalApi.getData<Record<string, any>>();
         return await getUnaddedRoleListApi({
           id: state.id,
           maxResultCount: page.pageSize,
+          sorting,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
         });
@@ -100,7 +103,11 @@ const gridOptions: VxeGridProps<IdentityRoleDto> = {
       list: 'items',
     },
   },
-  toolbarConfig: {},
+  toolbarConfig: {
+    refresh: {
+      code: 'query',
+    },
+  },
 };
 
 const gridEvents: VxeGridListeners<IdentityRoleDto> = {
@@ -110,15 +117,18 @@ const gridEvents: VxeGridListeners<IdentityRoleDto> = {
   checkboxChange: (e) => {
     selectedRoles.value = e.records;
   },
+  sortChange: () => {
+    gridApi.query();
+  },
 };
-const [Grid, { query }] = useVbenVxeGrid({
+const [Grid, gridApi] = useVbenVxeGrid({
   formOptions,
   gridEvents,
   gridOptions,
 });
 
 function onRefresh() {
-  nextTick(query);
+  nextTick(gridApi.query);
 }
 </script>
 

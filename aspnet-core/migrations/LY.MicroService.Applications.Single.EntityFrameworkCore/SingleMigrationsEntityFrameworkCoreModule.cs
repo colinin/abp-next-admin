@@ -12,6 +12,7 @@ using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using LINGYUN.Abp.WeChat;
 using LINGYUN.Platform.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Data;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
@@ -43,6 +44,9 @@ public class SingleMigrationsEntityFrameworkCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAbpDbContext<SingleMigrationsDbContext>();
+        if (context.Services.IsDataMigrationEnvironment())
+        {
+            context.Services.AddAbpDbContext<SingleMigrationsDbContext>();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.WeChat.Work.JsSdk.Models;
 using LINGYUN.Abp.WeChat.Work.Token;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
@@ -79,7 +80,7 @@ public class JsApiTicketProvider : IJsApiTicketProvider, ISingletonDependency
 
         Logger.LogDebug($"Not found JsApiTicket in the cache, getting from the httpClient: {cacheKey}");
 
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
         using var response = await client.GetAsync(
             jsapiTicketUrl, 

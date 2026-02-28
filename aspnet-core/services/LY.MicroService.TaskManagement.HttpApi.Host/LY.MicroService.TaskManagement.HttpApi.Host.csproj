@@ -3,7 +3,7 @@
 	<Import Project="..\..\..\common.secrets.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace>LY.MicroService.TaskManagement</RootNamespace>
 	</PropertyGroup>
 
@@ -50,6 +50,7 @@
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
 		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
+		<ProjectReference Include="..\..\framework\telemetry\LINGYUN.Abp.Telemetry.OpenTelemetry\LINGYUN.Abp.Telemetry.OpenTelemetry.csproj" />
 		<ProjectReference Include="..\..\framework\telemetry\LINGYUN.Abp.Telemetry.SkyWalking\LINGYUN.Abp.Telemetry.SkyWalking.csproj" />
 		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj" />
 		<ProjectReference Include="..\..\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
@@ -65,7 +66,6 @@
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Jobs\LINGYUN.Abp.BackgroundTasks.Jobs.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Notifications\LINGYUN.Abp.BackgroundTasks.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Quartz\LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
-		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.Quartz.MySqlInstaller\LINGYUN.Abp.Quartz.MySqlInstaller.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.Application\LINGYUN.Abp.TaskManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.EntityFrameworkCore\LINGYUN.Abp.TaskManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.HttpApi\LINGYUN.Abp.TaskManagement.HttpApi.csproj" />

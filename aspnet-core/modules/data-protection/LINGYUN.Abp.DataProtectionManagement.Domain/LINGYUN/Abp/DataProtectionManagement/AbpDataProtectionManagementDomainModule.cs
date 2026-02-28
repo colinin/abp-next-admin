@@ -1,16 +1,14 @@
 ﻿using LINGYUN.Abp.DataProtection;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
-using Volo.Abp.Caching;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.DataProtectionManagement;
 
 [DependsOn(
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpDddDomainModule),
     typeof(AbpDataProtectionModule),
     typeof(AbpDataProtectionManagementDomainSharedModule)
@@ -19,18 +17,13 @@ public class AbpDataProtectionManagementDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpDataProtectionManagementDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<DataProtectionManagementDomainMappingProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpDataProtectionManagementDomainModule>();
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
-            options.EtoMappings.Add<EntityTypeInfo, EntityTypeInfoEto>();
-            options.EtoMappings.Add<RoleEntityRule, RoleEntityRuleEto>();
-            options.EtoMappings.Add<OrganizationUnitEntityRule, OrganizationUnitEntityRuleEto>();
+            options.EtoMappings.Add<EntityTypeInfo, EntityTypeInfoEto>(typeof(AbpDataProtectionManagementDomainModule));
+            options.EtoMappings.Add<RoleEntityRule, RoleEntityRuleEto>(typeof(AbpDataProtectionManagementDomainModule));
+            options.EtoMappings.Add<OrganizationUnitEntityRule, OrganizationUnitEntityRuleEto>(typeof(AbpDataProtectionManagementDomainModule));
 
             options.AutoEventSelectors.Add<EntityTypeInfo>();
             options.AutoEventSelectors.Add<RoleEntityRule>();

@@ -15,4 +15,8 @@ public interface IDataDictionaryDataSeeder
         Guid? tenantId = null,
         bool isStatic = false,
         CancellationToken cancellationToken = default);
+
+    Task<Data> SeedAsync(
+        Data data,
+        CancellationToken cancellationToken = default);
 }

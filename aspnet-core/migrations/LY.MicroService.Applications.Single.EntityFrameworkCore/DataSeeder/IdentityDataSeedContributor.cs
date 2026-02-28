@@ -48,6 +48,8 @@ public class IdentityDataSeedContributor : IDataSeedContributor, ITransientDepen
                         IsStatic = true,
                     });
             }
+
+            Logger.LogInformation("Seeding default role Users completed.");
         }
     }
 }

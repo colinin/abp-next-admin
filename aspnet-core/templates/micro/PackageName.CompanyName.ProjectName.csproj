@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>LINGYUN.Abp.MicroService.Templates</PackageId>
-    <Version>9.2.0</Version>
+    <Version>9.3.6</Version>
     <Authors>colin.in@foxmail.com</Authors>
     <Description>Abp framework micro-service template</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

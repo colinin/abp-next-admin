@@ -17,15 +17,14 @@ namespace LINGYUN.Abp.WeChat.Work;
     typeof(AbpTestsBaseModule))]
 public class AbpWeChatWorkTestModule : AbpModule
 {
+    private const string UserSecretsId = "5709C35E-27FF-4F5A-BBFD-F451285AA012";
+
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        var configurationOptions = new AbpConfigurationBuilderOptions
+        context.Services.ReplaceConfiguration(ConfigurationHelper.BuildConfiguration(builderAction: builder =>
         {
-            BasePath = @"D:\Projects\Development\Abp\WeChat\Work",
-            EnvironmentName = "Test"
-        };
-
-        context.Services.ReplaceConfiguration(ConfigurationHelper.BuildConfiguration(configurationOptions));
+            builder.AddUserSecrets(UserSecretsId);
+        }));
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -53,6 +52,10 @@ public class AbpWeChatWorkTestModule : AbpModule
                 return true.ToString();
             });
             options.Map(WeChatWorkFeatureNames.AppChat.Message.Enable, (feature) =>
+            {
+                return true.ToString();
+            });
+            options.Map(WeChatWorkFeatureNames.Webhook.Enable, (feature) =>
             {
                 return true.ToString();
             });

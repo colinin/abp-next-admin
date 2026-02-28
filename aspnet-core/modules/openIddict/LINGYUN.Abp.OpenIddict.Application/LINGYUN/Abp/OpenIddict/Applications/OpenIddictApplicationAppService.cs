@@ -13,11 +13,11 @@ namespace LINGYUN.Abp.OpenIddict.Applications;
 [Authorize(AbpOpenIddictPermissions.Applications.Default)]
 public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase, IOpenIddictApplicationAppService
 {
-    private readonly AbpApplicationManager _applicationManager;
+    private readonly IAbpApplicationManager _applicationManager;
     private readonly IOpenIddictApplicationRepository _applicationRepository;
 
     public OpenIddictApplicationAppService(
-        AbpApplicationManager applicationManager,
+        IAbpApplicationManager applicationManager,
         IOpenIddictApplicationRepository applicationRepository)
     {
         _applicationManager = applicationManager;

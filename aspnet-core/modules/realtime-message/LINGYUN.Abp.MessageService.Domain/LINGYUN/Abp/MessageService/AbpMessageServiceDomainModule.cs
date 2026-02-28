@@ -1,19 +1,19 @@
 ﻿using LINGYUN.Abp.IM.Localization;
 using LINGYUN.Abp.MessageService.Chat;
 using LINGYUN.Abp.MessageService.Localization;
-using LINGYUN.Abp.MessageService.Mapper;
 using LINGYUN.Abp.MessageService.ObjectExtending;
 using LINGYUN.Abp.Notifications;
-using Volo.Abp.AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Caching;
 using Volo.Abp.Localization;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending.Modularity;
 
 namespace LINGYUN.Abp.MessageService;
 
 [DependsOn(
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpCachingModule),
     typeof(AbpNotificationsModule),
     typeof(AbpMessageServiceDomainSharedModule))]
@@ -21,10 +21,7 @@ public class AbpMessageServiceDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<MessageServiceDomainAutoMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpMessageServiceDomainModule>();
 
         Configure<AbpLocalizationOptions>(options =>
         {

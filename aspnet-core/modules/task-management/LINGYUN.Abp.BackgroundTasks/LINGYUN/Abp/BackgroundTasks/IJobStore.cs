@@ -9,6 +9,7 @@ public interface IJobStore
 {
     Task<List<JobInfo>> GetRuningListAsync(
         int maxResultCount,
+        string nodeName = null,
         CancellationToken cancellationToken = default);
 
     Task<List<JobInfo>> GetWaitingListAsync(
@@ -35,5 +36,6 @@ public interface IJobStore
     Task<List<JobInfo>> CleanupAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
+        string nodeName = null,
         CancellationToken cancellationToken = default);
 }

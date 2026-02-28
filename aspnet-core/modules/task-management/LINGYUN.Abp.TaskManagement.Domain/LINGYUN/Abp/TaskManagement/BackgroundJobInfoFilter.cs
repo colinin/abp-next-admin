@@ -25,6 +25,10 @@ public class BackgroundJobInfoFilter
     /// </summary>
     public string Type { get; set; }
     /// <summary>
+    /// 节点名称
+    /// </summary>
+    public string NodeName { get; set; }
+    /// <summary>
     /// 任务状态
     /// </summary>
     public JobStatus? Status { get; set; }

@@ -35,11 +35,13 @@ const gridOptions: VxeGridProps<GdprRequestDto> = {
       align: 'left',
       field: 'readyTime',
       slots: { default: 'readly' },
+      sortable: true,
       title: $t('AbpGdpr.DisplayName:ReadyTime'),
     },
     {
       align: 'left',
       field: 'creationTime',
+      sortable: true,
       title: $t('AbpGdpr.DisplayName:CreationTime'),
     },
     {
@@ -54,8 +56,10 @@ const gridOptions: VxeGridProps<GdprRequestDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         const dto = await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -80,12 +84,17 @@ const gridOptions: VxeGridProps<GdprRequestDto> = {
     },
   },
   toolbarConfig: {
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
   },
 };
 
 const gridEvents: VxeGridListeners<GdprRequestDto> = {
   cellClick: () => {},
+  sortChange: () => {
+    gridApi.query();
+  },
 };
 const [Grid, gridApi] = useVbenVxeGrid({
   gridEvents,

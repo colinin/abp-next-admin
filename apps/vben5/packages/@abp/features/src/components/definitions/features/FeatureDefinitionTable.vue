@@ -6,13 +6,14 @@ import type { VbenFormProps } from '@vben/common-ui';
 import type { FeatureDefinitionDto } from '../../../types/definitions';
 import type { FeatureGroupDefinitionDto } from '../../../types/groups';
 
-import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
+import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
   listToTree,
+  sortby,
   useLocalization,
   useLocalizationSerializer,
 } from '@abp/core';
@@ -35,8 +36,8 @@ defineOptions({
   name: 'FeatureDefinitionTable',
 });
 
-interface PermissionVo {
-  children: PermissionVo[];
+interface FeatureVo {
+  children: FeatureVo[];
   displayName: string;
   groupName: string;
   isEnabled: boolean;
@@ -46,30 +47,24 @@ interface PermissionVo {
   providers: string[];
   stateCheckers: string[];
 }
-interface PermissionGroupVo {
+interface FeatureGroupVo {
   displayName: string;
+  features: FeatureVo[];
   name: string;
-  permissions: PermissionVo[];
 }
 
-const permissionGroups = ref<PermissionGroupVo[]>([]);
-const pageState = reactive({
-  current: 1,
-  size: 10,
-  total: 0,
-});
+const featureGroups = ref<FeatureGroupVo[]>([]);
 
 const { Lr } = useLocalization();
 const { deserialize } = useLocalizationSerializer();
 const { getListApi: getGroupsApi } = useFeatureGroupDefinitionsApi();
-const { deleteApi, getListApi: getPermissionsApi } = useFeatureDefinitionsApi();
+const { deleteApi, getListApi: getFeaturesApi } = useFeatureDefinitionsApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开
   collapsed: false,
   handleReset: onReset,
   async handleSubmit(params) {
-    pageState.current = 1;
     await onGet(params);
   },
   schema: [
@@ -104,12 +99,14 @@ const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
       align: 'left',
       field: 'name',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpFeatureManagement.DisplayName:Name'),
     },
     {
       align: 'left',
       field: 'displayName',
       minWidth: 150,
+      sortable: true,
       title: $t('AbpFeatureManagement.DisplayName:DisplayName'),
     },
   ],
@@ -119,6 +116,30 @@ const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
   },
   exportConfig: {},
   keepSource: true,
+  proxyConfig: {
+    ajax: {
+      query: async ({ page, sort }) => {
+        let items = sortby(featureGroups.value, sort.field);
+        if (sort.order === 'desc') {
+          items = items.reverse();
+        }
+        const result = {
+          totalCount: featureGroups.value.length,
+          items: items.slice(
+            (page.currentPage - 1) * page.pageSize,
+            page.currentPage * page.pageSize,
+          ),
+        };
+        return new Promise((resolve) => {
+          resolve(result);
+        });
+      },
+    },
+    response: {
+      total: 'totalCount',
+      list: 'items',
+    },
+  },
   toolbarConfig: {
     custom: true,
     export: true,
@@ -136,6 +157,7 @@ const subGridColumns: VxeGridProps<FeatureDefinitionDto>['columns'] = [
     align: 'left',
     field: 'name',
     minWidth: 150,
+    sortable: true,
     title: $t('AbpFeatureManagement.DisplayName:Name'),
     treeNode: true,
   },
@@ -143,12 +165,14 @@ const subGridColumns: VxeGridProps<FeatureDefinitionDto>['columns'] = [
     align: 'left',
     field: 'displayName',
     minWidth: 120,
+    sortable: true,
     title: $t('AbpFeatureManagement.DisplayName:DisplayName'),
   },
   {
     align: 'left',
     field: 'description',
     minWidth: 120,
+    sortable: true,
     title: $t('AbpFeatureManagement.DisplayName:Description'),
   },
   {
@@ -156,6 +180,7 @@ const subGridColumns: VxeGridProps<FeatureDefinitionDto>['columns'] = [
     field: 'isVisibleToClients',
     minWidth: 120,
     slots: { default: 'isVisibleToClients' },
+    sortable: true,
     title: $t('AbpFeatureManagement.DisplayName:IsVisibleToClients'),
   },
   {
@@ -163,6 +188,7 @@ const subGridColumns: VxeGridProps<FeatureDefinitionDto>['columns'] = [
     field: 'isAvailableToHost',
     minWidth: 120,
     slots: { default: 'isAvailableToHost' },
+    sortable: true,
     title: $t('AbpFeatureManagement.DisplayName:IsAvailableToHost'),
   },
   {
@@ -175,10 +201,8 @@ const subGridColumns: VxeGridProps<FeatureDefinitionDto>['columns'] = [
 ];
 
 const gridEvents: VxeGridListeners<FeatureGroupDefinitionDto> = {
-  pageChange(params) {
-    pageState.current = params.currentPage;
-    pageState.size = params.pageSize;
-    onPageChange();
+  sortChange: () => {
+    gridApi.query();
   },
 };
 
@@ -198,17 +222,16 @@ async function onGet(input?: Record<string, string>) {
   try {
     gridApi.setLoading(true);
     const groupRes = await getGroupsApi(input);
-    const permissionRes = await getPermissionsApi(input);
-    pageState.total = groupRes.items.length;
-    permissionGroups.value = groupRes.items.map((group) => {
+    const featureRes = await getFeaturesApi(input);
+    featureGroups.value = groupRes.items.map((group) => {
       const localizableGroup = deserialize(group.displayName);
-      const permissions = permissionRes.items
-        .filter((permission) => permission.groupName === group.name)
-        .map((permission) => {
-          const displayName = deserialize(permission.displayName);
-          const description = deserialize(permission.displayName);
+      const features = featureRes.items
+        .filter((feature) => feature.groupName === group.name)
+        .map((feature) => {
+          const displayName = deserialize(feature.displayName);
+          const description = deserialize(feature.description);
           return {
-            ...permission,
+            ...feature,
             description: Lr(description.resourceName, description.name),
             displayName: Lr(displayName.resourceName, displayName.name),
           };
@@ -216,13 +239,13 @@ async function onGet(input?: Record<string, string>) {
       return {
         ...group,
         displayName: Lr(localizableGroup.resourceName, localizableGroup.name),
-        permissions: listToTree(permissions, {
+        features: listToTree(features, {
           id: 'name',
           pid: 'parentName',
         }),
       };
     });
-    onPageChange();
+    setTimeout(() => gridApi.reload(), 100);
   } finally {
     gridApi.setLoading(false);
   }
@@ -232,21 +255,6 @@ async function onReset() {
   await gridApi.formApi.resetForm();
   const input = await gridApi.formApi.getValues();
   await onGet(input);
-}
-
-function onPageChange() {
-  const items = permissionGroups.value.slice(
-    (pageState.current - 1) * pageState.size,
-    pageState.current * pageState.size,
-  );
-  gridApi.setGridOptions({
-    data: items,
-    pagerConfig: {
-      currentPage: pageState.current,
-      pageSize: pageState.size,
-      total: pageState.total,
-    },
-  });
 }
 
 function onCreate() {
@@ -290,7 +298,7 @@ onMounted(onGet);
     <template #group="{ row: group }">
       <VxeGrid
         :columns="subGridColumns"
-        :data="group.permissions"
+        :data="group.features"
         :tree-config="{
           trigger: 'row',
           rowField: 'name',

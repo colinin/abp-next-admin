@@ -153,6 +153,7 @@ const gridOptions: VxeGridProps<WebhookSendRecordDto> = {
       align: 'left',
       field: 'tenantId',
       minWidth: 150,
+      sortable: true,
       title: $t('WebhooksManagement.DisplayName:TenantId'),
     },
     {
@@ -160,6 +161,7 @@ const gridOptions: VxeGridProps<WebhookSendRecordDto> = {
       field: 'responseStatusCode',
       minWidth: 150,
       slots: { default: 'responseStatusCode' },
+      sortable: true,
       title: $t('WebhooksManagement.DisplayName:ResponseStatusCode'),
     },
     {
@@ -169,12 +171,14 @@ const gridOptions: VxeGridProps<WebhookSendRecordDto> = {
         return cellValue ? formatToDateTime(cellValue) : '';
       },
       minWidth: 120,
+      sortable: true,
       title: $t('WebhooksManagement.DisplayName:CreationTime'),
     },
     {
       align: 'center',
       field: 'response',
       minWidth: 300,
+      sortable: true,
       title: $t('WebhooksManagement.DisplayName:Response'),
     },
     {
@@ -189,8 +193,10 @@ const gridOptions: VxeGridProps<WebhookSendRecordDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page }, formValues) => {
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
         return await getPagedListApi({
+          sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
           ...formValues,
@@ -205,8 +211,9 @@ const gridOptions: VxeGridProps<WebhookSendRecordDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
-    refresh: true,
+    refresh: {
+      code: 'query',
+    },
     zoom: true,
   },
 };
@@ -217,6 +224,9 @@ const gridEvents: VxeGridListeners<WebhookSendRecordDto> = {
   },
   checkboxChange: (params) => {
     selectedKeys.value = params.records.map((record) => record.id);
+  },
+  sortChange: () => {
+    gridApi.query();
   },
 };
 
@@ -273,7 +283,7 @@ async function onSend(row: WebhookSendRecordDto) {
         gridApi.setLoading(true);
         await reSendApi(row.id);
         message.success($t('WebhooksManagement.SuccessfullySent'));
-        gridApi.query();
+        await gridApi.query();
       } finally {
         gridApi.setLoading(false);
       }
@@ -291,7 +301,7 @@ async function onSendMany(keys: string[]) {
         await bulkReSendApi({ recordIds: keys });
         message.success($t('WebhooksManagement.SuccessfullySent'));
         // 重新查询
-        gridApi.query();
+        await gridApi.query();
       } finally {
         gridApi.setLoading(false);
       }
@@ -313,7 +323,7 @@ async function onDeleteMany(keys: string[]) {
           (key) => !keys.includes(key),
         );
         // 重新查询
-        gridApi.query();
+        await gridApi.query();
       } finally {
         gridApi.setLoading(false);
       }

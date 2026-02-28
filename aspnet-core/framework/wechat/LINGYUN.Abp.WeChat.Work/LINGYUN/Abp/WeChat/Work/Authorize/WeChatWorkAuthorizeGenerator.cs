@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.WeChat.Work.Features;
 using LINGYUN.Abp.WeChat.Work.Settings;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -38,7 +39,7 @@ public class WeChatWorkAuthorizeGenerator : IWeChatWorkAuthorizeGenerator, ISing
         Check.NotNullOrEmpty(corpId, nameof(corpId));
         Check.NotNullOrEmpty(agentId, nameof(agentId));
 
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.OAuthClient);
+        var client = HttpClientFactory.CreateWeChatWorkOAuthClient();
 
         var generatedUrlBuilder = new StringBuilder();
 
@@ -72,7 +73,7 @@ public class WeChatWorkAuthorizeGenerator : IWeChatWorkAuthorizeGenerator, ISing
         Check.NotNullOrEmpty(corpId, nameof(corpId));
         Check.NotNullOrEmpty(agentId, nameof(agentId));
 
-        var client = HttpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.LoginClient);
+        var client = HttpClientFactory.CreateWeChatWorkLoginClient();
 
         var generatedUrlBuilder = new StringBuilder();
 
