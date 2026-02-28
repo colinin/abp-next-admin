@@ -24,7 +24,7 @@ const SessionSettings: React.FC = () => {
 	const { mutateAsync: revokeSession } = useMutation({
 		mutationFn: revokeSessionApi,
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["mySessions"] });
+			queryClient.refetchQueries({ queryKey: ["mySessions"] });
 			toast.success($t("AbpIdentity.SuccessfullyRevoked"));
 		},
 	});

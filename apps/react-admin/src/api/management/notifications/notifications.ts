@@ -1,9 +1,21 @@
 import type { ListResultDto } from "#/abp-core";
 
-import type { NotificationGroupDto, NotificationTemplateDto } from "#/notifications/definitions";
+import type {
+	NotificationGroupDto,
+	NotificationProviderDto,
+	NotificationTemplateDto,
+} from "#/notifications/definitions";
 import type { NotificationSendInput, NotificationTemplateSendInput } from "#/notifications/notifications";
 
 import requestClient from "@/api/request";
+
+/**
+ * 获取可用通知提供者列表
+ * @returns {Promise<ListResultDto<NotificationProviderDto>>} 可用通知提供者列表
+ */
+export function getAssignableProvidersApi(): Promise<ListResultDto<NotificationProviderDto>> {
+	return requestClient.get<ListResultDto<NotificationProviderDto>>("/api/notifications/assignable-providers");
+}
 
 /**
  * 获取可用通知列表

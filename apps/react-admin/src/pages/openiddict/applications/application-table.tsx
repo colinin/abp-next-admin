@@ -10,7 +10,7 @@ import { ApplicationsPermissions } from "@/constants/openiddict/permissions";
 import { AuditLogPermissions } from "@/constants/management/auditing/permissions";
 import { Iconify } from "@/components/icon";
 import { deleteApi, getPagedListApi } from "@/api/openiddict/applications";
-import { useFeatures } from "@/hooks/abp/use-abp-feature";
+import { useFeatures } from "@/hooks/abp/fake-hooks/use-abp-feature";
 import { toast } from "sonner";
 import ApplicationModal from "./application-modal";
 import ApplicationSecretModal from "./application-secret-modal";

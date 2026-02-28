@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, Form, Tabs, Collapse, Input, InputNumber, DatePicker, Select, Checkbox, Button } from "antd";
+import { Card, Form, Tabs, Collapse, Input, InputNumber, DatePicker, Select, Checkbox, Button, Space } from "antd";
 import { useTranslation } from "react-i18next";
 import {
 	ValueType,
@@ -17,10 +17,7 @@ interface Props {
 	submitApi: (input: SettingsUpdateInput) => Promise<void>;
 	onChange: (data: SettingsUpdateInput) => void;
 	slots?: {
-		[key: string]: React.FC<{
-			detail: SettingDetail;
-			onChange: (setting: SettingDetail) => void;
-		}>;
+		[key: string]: React.FC<any>;
 	};
 }
 
@@ -171,22 +168,28 @@ const SettingForm: React.FC<Props> = ({ getApi, submitApi, onChange, slots }) =>
 				return null;
 		}
 	};
-
+	// const ToolbarSlot = slots?.["toolbar"];
+	const ToolbarSlot = slots?.toolbar;
 	return (
 		<Card
 			title={$t("AbpSettingManagement.Settings")}
 			extra={
-				settingsUpdateInput.settings.length > 0 && (
-					<Button
-						type="primary"
-						icon={<SettingOutlined />}
-						loading={submitting}
-						onClick={handleSubmit}
-						className="w-[100px]"
-					>
-						{$t("AbpUi.Submit")}
-					</Button>
-				)
+				<Space>
+					{/* Render the Toolbar Slot here */}
+					{ToolbarSlot && <ToolbarSlot />}
+
+					{settingsUpdateInput.settings.length > 0 && (
+						<Button
+							type="primary"
+							icon={<SettingOutlined />}
+							loading={submitting}
+							onClick={handleSubmit}
+							className="w-[100px]"
+						>
+							{$t("AbpUi.Submit")}
+						</Button>
+					)}
+				</Space>
 			}
 		>
 			<Form labelCol={{ span: 5 }} wrapperCol={{ span: 15 }}>
