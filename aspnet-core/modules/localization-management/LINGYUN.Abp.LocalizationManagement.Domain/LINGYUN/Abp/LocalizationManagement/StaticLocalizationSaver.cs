@@ -40,18 +40,18 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
 
     public StaticLocalizationSaver(
         ILogger<StaticLocalizationSaver> logger,
-        IDistributedCache cache, 
-        IGuidGenerator guidGenerator, 
+        IDistributedCache cache,
+        IGuidGenerator guidGenerator,
         IAbpDistributedLock distributedLock,
         IUnitOfWorkManager unitOfWorkManager,
         IApplicationInfoAccessor applicationInfoAccessor,
         ICancellationTokenProvider cancellationTokenProvider,
         IStringLocalizerFactory stringLocalizerFactory,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
-        IOptions<AbpLocalizationOptions> localizationOptions, 
-        IOptions<AbpLocalizationManagementOptions> localizationManagementOptions, 
-        ILanguageRepository languageRepository, 
-        IResourceRepository resourceRepository, 
+        IOptions<AbpLocalizationOptions> localizationOptions,
+        IOptions<AbpLocalizationManagementOptions> localizationManagementOptions,
+        ILanguageRepository languageRepository,
+        IResourceRepository resourceRepository,
         ITextRepository textRepository)
     {
         Logger = logger;
@@ -79,7 +79,9 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
 
         Logger.LogDebug("Waiting to acquire the distributed lock for saving static localizations...");
 
-        await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(GetApplicationDistributedLockKey());
+        await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
+            GetApplicationDistributedLockKey(),
+            TimeSpan.FromSeconds(5));
         if (applicationLockHandle == null)
         {
             return;
