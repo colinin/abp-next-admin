@@ -40,18 +40,18 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
 
     public StaticLocalizationSaver(
         ILogger<StaticLocalizationSaver> logger,
-        IDistributedCache cache, 
-        IGuidGenerator guidGenerator, 
+        IDistributedCache cache,
+        IGuidGenerator guidGenerator,
         IAbpDistributedLock distributedLock,
         IUnitOfWorkManager unitOfWorkManager,
         IApplicationInfoAccessor applicationInfoAccessor,
         ICancellationTokenProvider cancellationTokenProvider,
         IStringLocalizerFactory stringLocalizerFactory,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
-        IOptions<AbpLocalizationOptions> localizationOptions, 
-        IOptions<AbpLocalizationManagementOptions> localizationManagementOptions, 
-        ILanguageRepository languageRepository, 
-        IResourceRepository resourceRepository, 
+        IOptions<AbpLocalizationOptions> localizationOptions,
+        IOptions<AbpLocalizationManagementOptions> localizationManagementOptions,
+        ILanguageRepository languageRepository,
+        IResourceRepository resourceRepository,
         ITextRepository textRepository)
     {
         Logger = logger;
