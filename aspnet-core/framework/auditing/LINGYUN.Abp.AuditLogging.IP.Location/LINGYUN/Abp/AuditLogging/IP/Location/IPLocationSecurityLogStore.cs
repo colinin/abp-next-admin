@@ -16,9 +16,10 @@ public class IPLocationSecurityLogStore : SecurityLogStore
         IIPLocationResolver iPLocationResolver,
         IOptionsMonitor<AbpSecurityLogOptions> securityLogOptions,
         IOptionsMonitor<AbpAuditLoggingOptions> loggingOptions,
+        ISecurityLogWriter securityLogWriter,
         ISecurityLogQueue securityLogQueue,
         ILogger<SecurityLogStore> logger) 
-        : base(securityLogOptions, loggingOptions, securityLogQueue, logger)
+        : base(securityLogOptions, loggingOptions, securityLogWriter, securityLogQueue, logger)
     {
         _options = options.CurrentValue;
         _iPLocationResolver = iPLocationResolver;

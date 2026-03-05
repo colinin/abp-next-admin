@@ -14,44 +14,34 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 public class EfCoreSecurityLogWriter : ISecurityLogWriter, ITransientDependency
 {
     protected IIdentitySecurityLogRepository IdentitySecurityLogRepository { get; }
-    protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IGuidGenerator GuidGenerator { get; }
 
     public EfCoreSecurityLogWriter(
         IIdentitySecurityLogRepository identitySecurityLogRepository, 
-        IUnitOfWorkManager unitOfWorkManager, 
         IGuidGenerator guidGenerator)
     {
         IdentitySecurityLogRepository = identitySecurityLogRepository;
-        UnitOfWorkManager = unitOfWorkManager;
         GuidGenerator = guidGenerator;
     }
 
+    [UnitOfWork]
     public async virtual Task BulkWriteAsync(IEnumerable<SecurityLogInfo> securityLogInfos, CancellationToken cancellationToken = default)
     {
-        using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
-        {
-            var securityLogs = securityLogInfos.Select(securityLogInfo => 
+        var securityLogs = securityLogInfos.Select(securityLogInfo =>
                 new IdentitySecurityLog(GuidGenerator, securityLogInfo));
 
-            await IdentitySecurityLogRepository.InsertManyAsync(
-                securityLogs,
-                false,
-                cancellationToken);
-
-            await uow.CompleteAsync();
-        }
+        await IdentitySecurityLogRepository.InsertManyAsync(
+            securityLogs,
+            false,
+            cancellationToken);
     }
 
+    [UnitOfWork]
     public async virtual Task WriteAsync(SecurityLogInfo securityLogInfo, CancellationToken cancellationToken = default)
     {
-        using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
-        {
-            await IdentitySecurityLogRepository.InsertAsync(
-                new IdentitySecurityLog(GuidGenerator, securityLogInfo),
-                false,
-                cancellationToken);
-            await uow.CompleteAsync();
-        }
+        await IdentitySecurityLogRepository.InsertAsync(
+            new IdentitySecurityLog(GuidGenerator, securityLogInfo),
+            false,
+            cancellationToken);
     }
 }

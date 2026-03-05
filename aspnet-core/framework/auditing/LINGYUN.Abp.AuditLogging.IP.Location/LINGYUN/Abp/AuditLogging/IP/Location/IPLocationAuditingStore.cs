@@ -14,9 +14,10 @@ public class IPLocationAuditingStore : AuditingStore
         IOptionsMonitor<AbpAuditLoggingIPLocationOptions> options,
         IIPLocationResolver iPLocationResolver,
         IOptionsMonitor<AbpAuditLoggingOptions> loggingOptions,
+        IAuditLogWriter auditLogWriter,
         IAuditLogQueue auditLogQueue,
         ILogger<AuditingStore> logger)
-        : base(loggingOptions, auditLogQueue, logger)
+        : base(loggingOptions, auditLogWriter, auditLogQueue, logger)
     {
         _options = options.CurrentValue;
         _iPLocationResolver = iPLocationResolver;
