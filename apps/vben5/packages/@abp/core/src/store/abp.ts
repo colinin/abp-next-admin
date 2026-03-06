@@ -58,6 +58,7 @@ export const useAbpStore = defineStore(
 
     function setApplication(val: ApplicationConfigurationDto) {
       application.value = val;
+      setTenantId(val.currentTenant?.id);
       xsrfToken.value = cookies.get('XSRF-TOKEN');
     }
 
