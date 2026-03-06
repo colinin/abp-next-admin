@@ -34,7 +34,7 @@ public class AbpAccountWebOpenIddictModule : AbpModule
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<AbpAccountWebOpenIddictModule>();
+            options.FileSets.AddEmbedded<AbpAccountWebOpenIddictModule>("LINGYUN.Abp.Account.Web.OpenIddict");
         });
 
         Configure<RazorViewEngineOptions>(options =>
@@ -52,7 +52,7 @@ public class AbpAccountWebOpenIddictModule : AbpModule
         {
             options.Resources
                 .Get<AbpOpenIddictResource>()
-                .AddVirtualJson("/Localization/Resources");
+                .AddVirtualJson("/Localization/Resources/OpenIddict");
         });
 
         Configure<AbpBundlingOptions>(options =>
