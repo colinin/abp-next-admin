@@ -428,6 +428,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureBackgroundTasks();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
+        ConfigureIP2RegionIPLocation();
         ConfigureEntityDataProtected();
         ConfigureUrls(configuration);
         ConfigureAuditing(configuration);
