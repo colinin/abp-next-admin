@@ -34,14 +34,14 @@ public class AbpElsaDesignerModule : AbpModule
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<AbpElsaDesignerModule>();
+            options.FileSets.AddEmbedded<AbpElsaDesignerModule>("LINGYUN.Abp.Elsa.Designer");
         });
 
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
                 .Get<ElsaResource>()
-                .AddVirtualJson("/Localization/Resources");
+                .AddVirtualJson("/Localization/Resources/ElsaDesigner");
         });
 
         Configure<AbpNavigationOptions>(options =>
