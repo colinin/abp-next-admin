@@ -482,6 +482,23 @@ public partial class MicroServiceApplicationsSingleModule
         });
     }
 
+    private void ConfigureIP2RegionIPLocation()
+    {
+        Configure<AbpIP2RegionLocationResolveOptions>(options =>
+        {
+            // 仅中国IP不显示国家
+            options.UseCountry = (localtion) =>
+            {
+                return !string.Equals("中国", localtion.Country);
+            };
+            // 仅中国IP显示省份
+            options.UseProvince = (localtion) =>
+            {
+                return string.Equals("中国", localtion.Country);
+            };
+        });
+    }
+
     private void ConfigureIdempotent()
     {
         Configure<AbpIdempotentOptions>(options =>
