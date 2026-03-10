@@ -145,7 +145,12 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
             providerName)
             ?.AddOptions(LocalizationOptions.Languages.Select(l => new OptionDto(l.DisplayName, l.CultureName)));
         // 时区
-        var timezones = TimeZoneHelper.GetTimezones(TimezoneProvider.GetWindowsTimezones());
+        var timezones = TimeZoneHelper.GetTimezones(TimezoneProvider.GetIanaTimezones());
+        timezones.Insert(0, new NameValue
+        {
+            Name = L["DefaultTimeZone"],
+            Value = "Unspecified"
+        });
         var timingSetting = sysSettingGroup.AddSetting(L["DisplayName:System.Timing"], L["Description:System.Timing"]);
         timingSetting.AddDetail(
            await SettingDefinitionManager.GetAsync(TimingSettingNames.TimeZone),
