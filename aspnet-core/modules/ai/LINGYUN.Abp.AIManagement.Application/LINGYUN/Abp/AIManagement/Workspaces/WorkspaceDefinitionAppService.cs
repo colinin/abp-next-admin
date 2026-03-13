@@ -7,6 +7,7 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Data;
@@ -54,6 +55,21 @@ public class WorkspaceDefinitionAppService :
             });
 
         return Task.FromResult(new ListResultDto<ChatClientProviderDto>(providers.ToImmutableArray()));
+    }
+
+    protected async override Task DeleteByIdAsync(Guid id)
+    {
+        var workspace = await Repository.GetAsync(id);
+
+        if (workspace.IsSystem)
+        {
+            throw new BusinessException(
+                AIManagementErrorCodes.Workspace.SystemWorkspaceNotAllowedToBeDeleted,
+                $"System workspace {workspace.Name} is not allowed to be deleted!")
+                .WithData("Workspace", workspace.Name);
+        }
+
+        await Repository.DeleteAsync(workspace);
     }
 
     protected async override Task<IQueryable<WorkspaceDefinitionRecord>> CreateFilteredQueryAsync(WorkspaceDefinitionRecordGetListInput input)

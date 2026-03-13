@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.AIManagement.Localization;
 using Volo.Abp.Domain;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -20,6 +21,11 @@ public class AbpAIManagementDomainSharedModule : AbpModule
         {
             options.Resources.Add<AIManagementResource>()
                 .AddVirtualJson("/LINGYUN/Abp/AIManagement/Localization/Resources");
+        });
+
+        Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace(AIManagementErrorCodes.Namespace, typeof(AIManagementResource));
         });
     }
 }

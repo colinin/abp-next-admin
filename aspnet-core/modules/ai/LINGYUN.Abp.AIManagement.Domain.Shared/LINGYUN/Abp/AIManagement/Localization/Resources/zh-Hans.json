@@ -2,6 +2,7 @@
   "culture": "zh-Hans",
   "texts": {
     "AIManagement:111001": "工作区 {Workspace} 已存在!",
+    "AIManagement:111002": "系统工作区 {Workspace} 不允许删除!",
     "DisplayName:MaxLatestHistoryMessagesToKeep": "携带最近对话记录",
     "Description:MaxLatestHistoryMessagesToKeep": "用户发起与大模型对话时,携带用户最近对话记录的上限.",
     "Conversations:Delete": "删除对话",

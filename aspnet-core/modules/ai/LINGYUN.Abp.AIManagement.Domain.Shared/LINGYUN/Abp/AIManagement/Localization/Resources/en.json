@@ -2,6 +2,7 @@
   "culture": "en",
   "texts": {
     "AIManagement:111001": "Workspace {Workspace} already exists!",
+    "AIManagement:111002": "System workspace {Workspace} is not allowed to be deleted!",
     "DisplayName:MaxLatestHistoryMessagesToKeep": "Carry the recent conversation records",
     "Description:MaxLatestHistoryMessagesToKeep": "When a user initiates a conversation with a large model, the upper limit of the user's recent conversation history that is carried along.",
     "Conversations:Delete": "Delete Conversation",

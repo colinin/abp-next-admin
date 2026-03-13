@@ -33,6 +33,8 @@ public class WorkspaceDefinitionRecordDto : ExtensibleAuditedEntityDto<Guid>, IH
 
     public bool IsEnabled { get; set; }
 
+    public bool IsSystem { get; set; }
+
     public string? StateCheckers { get; set; }
 
     public string ConcurrencyStamp { get; set; }

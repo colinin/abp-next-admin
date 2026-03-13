@@ -71,6 +71,9 @@ public class WorkspaceDefinitionSerializer : IWorkspaceDefinitionSerializer, ITr
                 workspace.SetProperty(property.Key, property.Value);
             }
 
+            workspace.IsEnabled = definition.IsEnabled;
+            workspace.IsSystem = true;
+
             return Task.FromResult(workspace);
         }
     }

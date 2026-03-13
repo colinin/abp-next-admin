@@ -34,6 +34,8 @@ public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
 
     public bool IsEnabled { get; set; }
 
+    public bool IsSystem { get; set; }
+
     public string? StateCheckers { get; set; }
 
     protected WorkspaceDefinitionRecord()
