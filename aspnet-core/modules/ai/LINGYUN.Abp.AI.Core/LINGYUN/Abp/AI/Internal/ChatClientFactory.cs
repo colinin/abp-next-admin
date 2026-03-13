@@ -70,7 +70,7 @@ public class ChatClientFactory : IChatClientFactory, IScopedDependency
 
     protected async virtual Task CheckWorkspaceStateAsync(WorkspaceDefinition workspace)
     {
-        if (!await StateCheckerManager.IsEnabledAsync(workspace))
+        if (!workspace.IsEnabled || !await StateCheckerManager.IsEnabledAsync(workspace))
         {
             throw new AbpAuthorizationException(
                 $"Workspace is not enabled: {workspace.Name}!",

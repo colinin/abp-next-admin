@@ -5,7 +5,6 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.AI;
-using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
 
@@ -39,19 +38,12 @@ public class AgentFactory : IAgentFactory, IScopedDependency
 
         var workspaceDefine = await WorkspaceDefinitionManager.GetOrNullAsync(workspace);
 
-        if (workspaceDefine != null)
-        {
-            await CheckWorkspaceStateAsync(workspaceDefine);
-        }
-
         return await CreateAgentAsync(chatClient, workspaceDefine);
     }
 
     public async virtual Task<AIAgent> CreateAsync(string workspace)
     {
         var workspaceDefine = await WorkspaceDefinitionManager.GetAsync(workspace);
-
-        await CheckWorkspaceStateAsync(workspaceDefine);
 
         var chatClient = await ChatClientFactory.CreateAsync(workspace);
 
@@ -95,16 +87,5 @@ public class AgentFactory : IAgentFactory, IScopedDependency
     protected virtual Task<AITool[]> GetAgentToolsAsync(WorkspaceDefinition? workspace)
     {
         return Task.FromResult<AITool[]>([]);
-    }
-
-    protected async virtual Task CheckWorkspaceStateAsync(WorkspaceDefinition workspace)
-    {
-        if (!await StateCheckerManager.IsEnabledAsync(workspace))
-        {
-            throw new AbpAuthorizationException(
-                $"Workspace is not enabled: {workspace.Name}!",
-                AbpAIErrorCodes.WorkspaceIsNotEnabled)
-                .WithData("Workspace", workspace.Name);
-        }
     }
 }
