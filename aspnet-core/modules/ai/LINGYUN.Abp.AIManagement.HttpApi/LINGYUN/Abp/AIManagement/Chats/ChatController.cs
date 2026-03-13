@@ -1,7 +1,9 @@
 ﻿using LINGYUN.Abp.AIManagement.Chats.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace LINGYUN.Abp.AIManagement.Chats;
@@ -26,5 +28,11 @@ public class ChatController : AbpControllerBase, IChatAppService
         {
             yield return content;
         }
+    }
+
+    [HttpGet]
+    public virtual Task<PagedResultDto<TextChatMessageDto>> GetListAsync(TextChatMessageGetListInput input)
+    {
+        return _service.GetListAsync(input);
     }
 }

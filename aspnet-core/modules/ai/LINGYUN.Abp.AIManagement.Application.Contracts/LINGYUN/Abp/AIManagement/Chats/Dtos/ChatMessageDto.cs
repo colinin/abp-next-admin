@@ -8,7 +8,13 @@ public abstract class ChatMessageDto : ExtensibleAuditedEntityDto<Guid>
 
     public DateTime CreatedAt { get; set; }
 
+    public string Role { get; set; }
+
     public Guid? UserId { get; set; }
 
     public Guid? ConversationId { get; set; }
+
+    public string? ReplyMessage { get; set; }
+
+    public DateTime? ReplyAt { get; set; }
 }

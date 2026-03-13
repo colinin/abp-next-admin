@@ -7,11 +7,11 @@ namespace LINGYUN.Abp.AIManagement.Chats.Dtos;
 public class SendTextChatMessageDto
 {
     [Required]
-    [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxNameLength))]
-    public string Workspace { get; set; }
+    public Guid ConversationId { get; set; }
 
     [Required]
-    public Guid ConversationId { get; set; }
+    [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxNameLength))]
+    public string Workspace { get; set; }
 
     [Required]
     [DynamicStringLength(typeof(TextChatMessageRecordConsts), nameof(TextChatMessageRecordConsts.MaxContentLength))]
