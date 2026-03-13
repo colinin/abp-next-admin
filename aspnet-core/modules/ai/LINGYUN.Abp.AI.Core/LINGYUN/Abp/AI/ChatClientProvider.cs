@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AI.Workspaces;
+﻿using LINGYUN.Abp.AI.Models;
+using LINGYUN.Abp.AI.Workspaces;
 using Microsoft.Extensions.AI;
 using System;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ public abstract class ChatClientProvider : IChatClientProvider, ITransientDepend
     {
         ServiceProvider = serviceProvider;
     }
+
+    public abstract ChatModel[] GetModels();
 
     public abstract Task<IChatClient> CreateAsync(WorkspaceDefinition workspace);
 }

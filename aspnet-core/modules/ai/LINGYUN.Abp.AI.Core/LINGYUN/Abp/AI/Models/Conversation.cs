@@ -5,18 +5,21 @@ public class Conversation
 {
     public Guid Id { get; private set; }
     public string Name { get; private set; }
+    public string Workspace { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? ExpiredAt { get; set; }
     public DateTime? UpdateAt { get; set; }
     public Conversation(
         Guid id, 
-        string name, 
+        string name,
+        string workspace,
         DateTime createdAt)
     {
         Id = id;
         Name = name;
         CreatedAt = createdAt;
         UpdateAt = createdAt;
+        Workspace = workspace;
     }
 
     public Conversation WithName(string name)

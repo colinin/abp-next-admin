@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AI.Workspaces;
+﻿using LINGYUN.Abp.AI.Models;
+using LINGYUN.Abp.AI.Workspaces;
 using Microsoft.Extensions.AI;
 using OpenAI;
 using System;
@@ -16,6 +17,18 @@ public class OpenAIChatClientProvider : ChatClientProvider
     public OpenAIChatClientProvider(IServiceProvider serviceProvider) 
         : base(serviceProvider)
     {
+    }
+
+    public override ChatModel[] GetModels()
+    {
+        return [
+            new ChatModel("gpt-4.1", "GPT-4.1", "Smartest non-reasoning model"),
+            new ChatModel("gpt-5", "GPT-5", "Previous intelligent reasoning model for coding and agentic tasks with configurable reasoning effort"),
+            new ChatModel("gpt-5-nano", "GPT-5 nano", "Fastest, most cost-efficient version of GPT-5"),
+            new ChatModel("gpt-5-mini", "GPT-5 mini", "Near-frontier intelligence for cost sensitive, low latency, high volume workloads"),
+            new ChatModel("gpt-5.4", "GPT-5.4", "Best intelligence at scale for agentic, coding, and professional workflows"),
+            new ChatModel("gpt-5.4-pro", "GPT-5.4 pro", "Version of GPT-5.4 that produces smarter and more precise responses."),
+        ];
     }
 
     public override Task<IChatClient> CreateAsync(WorkspaceDefinition workspace)

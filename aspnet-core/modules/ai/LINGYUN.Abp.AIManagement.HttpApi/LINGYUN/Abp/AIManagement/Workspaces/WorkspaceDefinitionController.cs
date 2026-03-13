@@ -20,6 +20,12 @@ public class WorkspaceDefinitionController : AbpControllerBase, IWorkspaceDefini
         _service = service;
     }
 
+    [HttpGet("available-providers")]
+    public virtual Task<ListResultDto<ChatClientProviderDto>> GetAvailableProvidersAsync()
+    {
+        return _service.GetAvailableProvidersAsync();
+    }
+
     [HttpPost]
     public virtual Task<WorkspaceDefinitionRecordDto> CreateAsync(WorkspaceDefinitionRecordCreateDto input)
     {

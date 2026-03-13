@@ -1,8 +1,13 @@
-﻿using LINGYUN.Abp.AIManagement.Localization;
+﻿using LINGYUN.Abp.AI;
+using LINGYUN.Abp.AIManagement.Localization;
 using LINGYUN.Abp.AIManagement.Workspaces.Dtos;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Data;
 using Volo.Abp.Security.Encryption;
@@ -18,17 +23,37 @@ public class WorkspaceDefinitionAppService :
         WorkspaceDefinitionRecordUpdateDto>,
     IWorkspaceDefinitionAppService
 {
+    protected AbpAICoreOptions AIOptions { get; }
     protected IStringEncryptionService StringEncryptionService { get; }
     protected IWorkspaceDefinitionRecordRepository WorkspaceDefinitionRecordRepository { get; }
     public WorkspaceDefinitionAppService(
+        IOptions<AbpAICoreOptions> aiOptions,
         IStringEncryptionService stringEncryptionService,
         IWorkspaceDefinitionRecordRepository repository) : base(repository)
     {
+        AIOptions = aiOptions.Value;
         StringEncryptionService = stringEncryptionService;
         WorkspaceDefinitionRecordRepository = repository;
 
         LocalizationResource = typeof(AIManagementResource);
         ObjectMapperContext = typeof(AbpAIManagementApplicationModule);
+    }
+
+    public virtual Task<ListResultDto<ChatClientProviderDto>> GetAvailableProvidersAsync()
+    {
+        var providers = AIOptions.ChatClientProviders
+            .Select(LazyServiceProvider.GetRequiredService)
+            .OfType<IChatClientProvider>()
+            .Select(provider =>
+            {
+                var models = provider.GetModels();
+
+                return new ChatClientProviderDto(
+                    provider.Name,
+                    models.Select(model => model.Id).ToArray());
+            });
+
+        return Task.FromResult(new ListResultDto<ChatClientProviderDto>(providers.ToImmutableArray()));
     }
 
     protected async override Task<IQueryable<WorkspaceDefinitionRecord>> CreateFilteredQueryAsync(WorkspaceDefinitionRecordGetListInput input)
@@ -40,9 +65,9 @@ public class WorkspaceDefinitionAppService :
             .WhereIf(!input.ModelName.IsNullOrWhiteSpace(), x => x.ModelName == input.ModelName)
             .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Provider.Contains(input.Filter!) ||
                 x.ModelName.Contains(input.Filter!) || x.DisplayName.Contains(input.Filter!) ||
-                (!x.Description.IsNullOrWhiteSpace() && x.Description.Contains(input.Filter!)) || 
-                (!x.SystemPrompt.IsNullOrWhiteSpace() && x.SystemPrompt.Contains(input.Filter!)) ||
-                (!x.Instructions.IsNullOrWhiteSpace() && x.Instructions.Contains(input.Filter!)));
+                x.Description!.Contains(input.Filter!) || 
+                x.SystemPrompt!.Contains(input.Filter!) ||
+                x.Instructions!.Contains(input.Filter!));
     }
 
     protected async override Task<WorkspaceDefinitionRecord> MapToEntityAsync(WorkspaceDefinitionRecordCreateDto createInput)
