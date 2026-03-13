@@ -5,7 +5,7 @@ public static class AIManagementErrorCodes
 
     public static class Workspace
     {
-        public const string Prefix = Namespace + ":100";
+        public const string Prefix = Namespace + ":111";
 
         public const string NameAlreadyExists = Prefix + "001";
     }
