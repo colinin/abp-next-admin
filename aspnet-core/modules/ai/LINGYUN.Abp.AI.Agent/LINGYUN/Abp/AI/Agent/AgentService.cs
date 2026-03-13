@@ -90,6 +90,10 @@ public class AgentService : IAgentService, IScopedDependency
             foreach (var chatMessage in historyMessages)
             {
                 messages.Add(new AIChatMessage(chatMessage.Role, chatMessage.GetMessagePrompt()));
+                if (!chatMessage.ReplyMessage.IsNullOrWhiteSpace())
+                {
+                    messages.Add(new AIChatMessage(ChatRole.Assistant, chatMessage.ReplyMessage));
+                }
             }
         }
 
