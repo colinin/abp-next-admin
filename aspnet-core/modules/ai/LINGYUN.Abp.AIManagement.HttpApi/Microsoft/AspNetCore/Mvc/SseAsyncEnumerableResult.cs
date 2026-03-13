@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.Http;
@@ -49,6 +51,7 @@ public class SseAsyncEnumerableResult : IActionResult
         catch (Exception ex)
         {
             var exceptionHandlingOptions = context.HttpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
+
             var exceptionToErrorInfoConverter = context.HttpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
             var remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(ex, options =>
             {
@@ -56,6 +59,14 @@ public class SseAsyncEnumerableResult : IActionResult
                 options.SendExceptionDataToClientTypes = exceptionHandlingOptions.SendExceptionDataToClientTypes;
                 options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
             });
+
+            if (exceptionHandlingOptions.ShouldLogException(ex))
+            {
+                var logger = context.HttpContext.RequestServices.GetService<ILogger<SseAsyncEnumerableResult>>();
+                var logLevel = ex.GetLogLevel();
+                logger?.LogException(ex, logLevel);
+            }
+
 
             response.Headers.RemoveAll(x => x.Key == "Content-Type");
             response.Headers.Append("Content-Type", "application/json");
