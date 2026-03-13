@@ -127,6 +127,7 @@ public class AgentService : IAgentService, IScopedDependency
             var conversation = new Conversation(
                 _guidGenerator.Create(),
                 _localizerResource["NewConversation"],
+                message.Workspace,
                 _clock.Now);
 
             await _conversationStore.SaveAsync(conversation);

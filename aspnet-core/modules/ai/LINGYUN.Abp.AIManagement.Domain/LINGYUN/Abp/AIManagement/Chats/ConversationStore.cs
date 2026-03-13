@@ -3,7 +3,6 @@ using LINGYUN.Abp.AI.Models;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Specifications;
@@ -58,6 +57,7 @@ public class ConversationStore : IConversationStore, ITransientDependency
         var conversation = new Conversation(
             conversationRecord.Id,
             conversationRecord.Name,
+            conversationRecord.Workspace,
             conversationRecord.CreatedAt)
         {
             UpdateAt = conversationRecord.UpdateAt,
@@ -77,6 +77,7 @@ public class ConversationStore : IConversationStore, ITransientDependency
             conversationRecord = new ConversationRecord(
                 conversation.Id,
                 conversation.Name,
+                conversation.Workspace,
                 conversation.CreatedAt,
                 expiredTime,
                 _currentTenant.Id);

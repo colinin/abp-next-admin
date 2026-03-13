@@ -46,6 +46,7 @@ public class ConversationAppService :
         return new ConversationRecord(
             GuidGenerator.Create(),
             conversationName,
+            createInput.Workspace,
             createdAt,
             expiredTime,
             CurrentTenant.Id);
@@ -57,6 +58,8 @@ public class ConversationAppService :
         {
             entity.SetName(updateInput.Name);
         }
+
+        entity.ChangeTime(Clock.Now);
     }
 
     protected override ConversationDto MapToGetOutputDto(ConversationRecord entity)
@@ -72,6 +75,7 @@ public class ConversationAppService :
             LastModifierId = entity.LastModifierId,
             Name = entity.Name,
             UpdateAt = entity.UpdateAt,
+            Workspace = entity.Workspace,
         };
     }
 

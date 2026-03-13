@@ -24,6 +24,9 @@ public static class AIManagementDbContextModelBuilderExtensions
             b.Property(x => x.Name)
                 .HasMaxLength(ConversationRecordConsts.MaxNameLength)
                 .IsRequired();
+            b.Property(x => x.Workspace)
+                .HasMaxLength(WorkspaceDefinitionRecordConsts.MaxNameLength)
+                .IsRequired();
         });
         builder.Entity<TextChatMessageRecord>(b =>
         {
