@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.Http;
+using Volo.Abp.Json;
 
 namespace Microsoft.AspNetCore.Mvc;
 public class SseAsyncEnumerableResult : IActionResult
@@ -22,21 +27,45 @@ public class SseAsyncEnumerableResult : IActionResult
 
         try
         {
+            var jsonSerializer = context.HttpContext.RequestServices.GetRequiredService<IJsonSerializer>();
+
             await foreach (var content in _asyncEnumerable)
             {
                 if (!string.IsNullOrEmpty(content))
                 {
-                    await response.WriteAsync($"data: {content}\n\n");
+                    var sseResult = new SseResult(content);
+                    await response.WriteAsync($"data: {jsonSerializer.Serialize(sseResult)}\n\n");
                     await response.Body.FlushAsync();
                 }
             }
 
-            await response.WriteAsync("data: [DONE]\n\n");
+            await response.WriteAsync($"data: {jsonSerializer.Serialize(new SseResult("FINISHED"))}\n\n");
             await response.Body.FlushAsync();
         }
         catch (OperationCanceledException)
         {
             // ignore
+        }
+        catch (Exception ex)
+        {
+            var exceptionHandlingOptions = context.HttpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
+            var exceptionToErrorInfoConverter = context.HttpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
+            var remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(ex, options =>
+            {
+                options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
+                options.SendExceptionDataToClientTypes = exceptionHandlingOptions.SendExceptionDataToClientTypes;
+                options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+            });
+
+            response.Headers.RemoveAll(x => x.Key == "Content-Type");
+            response.Headers.Append("Content-Type", "application/json");
+            response.Headers.Append(AbpHttpConsts.AbpErrorFormat, "true");
+            response.StatusCode = (int)context.HttpContext.RequestServices
+                .GetRequiredService<IHttpExceptionStatusCodeFinder>()
+                .GetStatusCode(context.HttpContext, ex);
+
+            await response.WriteAsJsonAsync(remoteServiceErrorInfo);
+            await response.Body.FlushAsync();
         }
     }
 }

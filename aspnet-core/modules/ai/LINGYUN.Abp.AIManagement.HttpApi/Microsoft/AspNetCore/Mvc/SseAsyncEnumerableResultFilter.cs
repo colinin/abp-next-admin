@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Microsoft.AspNetCore.Mvc;
 public class SseAsyncEnumerableResultFilter : IAsyncActionFilter
 {
-    public async  Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public async virtual Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         var executedContext = await next();
 
