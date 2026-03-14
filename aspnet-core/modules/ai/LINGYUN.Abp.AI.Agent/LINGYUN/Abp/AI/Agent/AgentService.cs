@@ -2,10 +2,14 @@
 using LINGYUN.Abp.AI.Localization;
 using LINGYUN.Abp.AI.Models;
 using LINGYUN.Abp.AI.Tokens;
+using LINGYUN.Abp.AI.Workspaces;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
+using System.ClientModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +23,8 @@ using AIChatMessage = Microsoft.Extensions.AI.ChatMessage;
 namespace LINGYUN.Abp.AI.Agent;
 public class AgentService : IAgentService, IScopedDependency
 {
+    public ILogger<AgentService> Logger { protected get; set; }
+
     private readonly IClock _clock;
     private readonly IGuidGenerator _guidGenerator;
     private readonly IAgentFactory _agentFactory;
@@ -42,6 +48,8 @@ public class AgentService : IAgentService, IScopedDependency
         _chatMessageStore = chatMessageStore;
         _conversationStore = conversationStore;
         _localizerResource = localizerResource;
+
+        Logger = NullLogger<AgentService>.Instance;
     }
 
     public async virtual IAsyncEnumerable<string> SendMessageAsync(Models.ChatMessage message)
@@ -52,9 +60,29 @@ public class AgentService : IAgentService, IScopedDependency
 
         var messages = await BuildChatMessages(message);
 
-        var agent = await _agentFactory.CreateAsync(message.Workspace);
+        AIAgent agent = default!;
 
-        var agentRunRes = agent.RunStreamingAsync(messages);
+        try
+        {
+            agent = await _agentFactory.CreateAsync(message.Workspace);
+        }
+        catch (ArgumentException ae)
+        {
+            if (ae.ParamName == nameof(WorkspaceDefinition.ApiKey))
+            {
+                throw new BusinessException(AbpAIErrorCodes.MissingOrInvalidApiKey, innerException: ae);
+            }
+            throw;
+        }
+
+        var agentRunRes = agent.RunStreamingAsync(messages)
+            .WithErrorHandling((ex) =>
+            {
+                if (ex is ClientResultException cre && cre.Status == 401)
+                {
+                    throw new BusinessException(AbpAIErrorCodes.MissingOrInvalidApiKey, innerException: ex);
+                }
+            });
 
         var tokenUsageInfo = new TokenUsageInfo(message.Workspace, conversationId);
         var agentMessageBuilder = new StringBuilder();
@@ -70,10 +98,10 @@ public class AgentService : IAgentService, IScopedDependency
 
         tokenUsageInfo.WithMessageId(messageId);
 
-#if DEBUG
-        Console.WriteLine();
-        Console.WriteLine(tokenUsageInfo);
-#endif
+        if (Logger.IsEnabled(LogLevel.Debug))
+        {
+            Logger.LogDebug("TokenUsageInfo: {TokenUsageInfo}", tokenUsageInfo);
+        }
 
         await StoreTokenUsageInfo(tokenUsageInfo);
     }

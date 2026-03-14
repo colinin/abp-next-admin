@@ -7,6 +7,10 @@ public static class AbpAIErrorCodes
     /// </summary>
     public const string WorkspaceIsNotEnabled = Namespace + ":110001";
     /// <summary>
+    /// ApiKey缺失或无效!
+    /// </summary>
+    public const string MissingOrInvalidApiKey = Namespace + ":110002";
+    /// <summary>
     /// 对话已过期, 请重新创建会话!
     /// </summary>
     public const string ConversationHasExpired = Namespace + ":110101";
