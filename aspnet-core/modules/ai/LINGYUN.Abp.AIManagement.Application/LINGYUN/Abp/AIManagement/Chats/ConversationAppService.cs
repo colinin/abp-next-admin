@@ -35,6 +35,7 @@ public class ConversationAppService :
         var queryable = await base.CreateFilteredQueryAsync(input);
 
         return queryable
+            .Where(x => x.CreatorId == CurrentUser.Id)
             .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter!));
     }
 
