@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.AIManagement.Chats.Dtos;
 using LINGYUN.Abp.AIManagement.Localization;
+using LINGYUN.Abp.AIManagement.Permissions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
@@ -28,6 +29,12 @@ public class ConversationAppService :
 
         LocalizationResource = typeof(AIManagementResource);
         ObjectMapperContext = typeof(AbpAIManagementApplicationModule);
+
+        CreatePolicyName = AIManagementPermissionNames.Conversation.Create;
+        UpdatePolicyName = AIManagementPermissionNames.Conversation.Update;
+        DeletePolicyName = AIManagementPermissionNames.Conversation.Delete;
+        GetListPolicyName = AIManagementPermissionNames.Conversation.Default;
+        GetPolicyName = AIManagementPermissionNames.Conversation.Default;
     }
 
     protected async override Task<IQueryable<ConversationRecord>> CreateFilteredQueryAsync(ConversationGetListInput input)

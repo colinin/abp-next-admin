@@ -1,6 +1,11 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
+    "Permission:AIManagement": "人工智能",
+    "Permission:WorkspaceDefinition": "工作区管理",
+    "Permission:Conversation": "对话管理",
+    "Permission:Chat": "聊天管理",
+    "Permission:SendMessage": "发送消息",
     "AIManagement:111001": "工作区 {Workspace} 已存在!",
     "AIManagement:111002": "系统工作区 {Workspace} 不允许删除!",
     "DisplayName:MaxLatestHistoryMessagesToKeep": "携带最近对话记录",

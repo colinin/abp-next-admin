@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.AI;
 using LINGYUN.Abp.AIManagement.Localization;
+using LINGYUN.Abp.AIManagement.Permissions;
 using LINGYUN.Abp.AIManagement.Workspaces.Dtos;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -38,6 +39,12 @@ public class WorkspaceDefinitionAppService :
 
         LocalizationResource = typeof(AIManagementResource);
         ObjectMapperContext = typeof(AbpAIManagementApplicationModule);
+
+        CreatePolicyName = AIManagementPermissionNames.WorkspaceDefinition.Create;
+        UpdatePolicyName = AIManagementPermissionNames.WorkspaceDefinition.Update;
+        DeletePolicyName = AIManagementPermissionNames.WorkspaceDefinition.Delete;
+        GetListPolicyName = AIManagementPermissionNames.WorkspaceDefinition.Default;
+        GetPolicyName = AIManagementPermissionNames.WorkspaceDefinition.Default;
     }
 
     public virtual Task<ListResultDto<ChatClientProviderDto>> GetAvailableProvidersAsync()

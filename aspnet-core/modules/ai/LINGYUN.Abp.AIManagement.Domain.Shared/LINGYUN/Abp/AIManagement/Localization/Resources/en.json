@@ -1,6 +1,11 @@
 ﻿{
   "culture": "en",
   "texts": {
+    "Permission:AIManagement": "Artificia Intelligence",
+    "Permission:WorkspaceDefinition": "Workspaces",
+    "Permission:Conversation": "Conversations",
+    "Permission:Chat": "Chats",
+    "Permission:SendMessage": "Send Message",
     "AIManagement:111001": "Workspace {Workspace} already exists!",
     "AIManagement:111002": "System workspace {Workspace} is not allowed to be deleted!",
     "DisplayName:MaxLatestHistoryMessagesToKeep": "Carry the recent conversation records",
