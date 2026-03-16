@@ -41,15 +41,83 @@ public class WorkspaceDefinition : IHasSimpleStateCheckers<WorkspaceDefinition>
     /// <summary>
     /// API 身份验证密钥
     /// </summary>
-    public string? ApiKey { get; set; }
+    public string? ApiKey { get; private set; }
     /// <summary>
     /// 自定义端点 URL
     /// </summary>
-    public string? ApiBaseUrl { get; set; }
+    public string? ApiBaseUrl { get; private set; }
     /// <summary>
     /// 系统提示词
     /// </summary>
     public string? SystemPrompt { get; set; }
+    /// <summary>
+    /// 附加系统提示词
+    /// </summary>
+    public string? Instructions { get; set; }
+    /// <summary>
+    /// 聊天回复时所依据的温度值, 为空时由模型提供者决定默认值
+    /// </summary>
+    /// <remarks>
+    /// 范围在 0 到 2 之间, 数值越高（比如 0.8）会使输出更加随机，而数值越低（比如 0.2）则会使输出更加集中且更具确定性
+    /// </remarks>
+    public float? Temperature {
+        get => _temperature;
+        set {
+            if (value.HasValue)
+            {
+                _temperature = Check.Range(value.Value, nameof(value), 0, 2);
+            }
+            else
+            {
+                _temperature = value;
+            }
+        }
+    }
+    private float? _temperature;
+    /// <summary>
+    /// 限制一次请求中模型生成 completion 的最大 token 数
+    /// </summary>
+    public int? MaxOutputTokens { get; set; }
+    /// <summary>
+    /// 介于 -2.0 和 2.0 之间的数字
+    /// </summary>
+    /// <remarks>
+    /// 如果该值为正，那么新 token 会根据其在已有文本中的出现频率受到相应的惩罚，降低模型重复相同内容的可能性
+    /// </remarks>
+    public float? FrequencyPenalty {
+        get => _frequencyPenalty;
+        set {
+            if (value.HasValue)
+            {
+                _frequencyPenalty = Check.Range(value.Value, nameof(value), -2, 2);
+            }
+            else
+            {
+                _frequencyPenalty = value;
+            }
+        }
+    }
+    private float? _frequencyPenalty;
+    /// <summary>
+    /// 介于 -2.0 和 2.0 之间的数字
+    /// </summary>
+    /// <remarks>
+    /// 如果该值为正，那么新 token 会根据其是否已在已有文本中出现受到相应的惩罚，从而增加模型谈论新主题的可能性
+    /// </remarks>
+    public float? PresencePenalty {
+        get => _presencePenalty;
+        set {
+            if (value.HasValue)
+            {
+                _presencePenalty = Check.Range(value.Value, nameof(value), -2, 2);
+            }
+            else
+            {
+                _presencePenalty = value;
+            }
+        }
+    }
+    private float? _presencePenalty;
     /// <summary>
     /// 启用/禁用工作区
     /// </summary>
@@ -65,7 +133,13 @@ public class WorkspaceDefinition : IHasSimpleStateCheckers<WorkspaceDefinition>
         string provider,
         string modelName, 
         ILocalizableString displayName, 
-        ILocalizableString? description = null)
+        ILocalizableString? description = null,
+        string? systemPrompt = null,
+        string? instructions = null,
+        float? temperature = null,
+        int? maxOutputTokens = null,
+        float? frequencyPenalty = null,
+        float? presencePenalty = null)
     {
         Name = name;
         Provider = provider;
@@ -73,6 +147,12 @@ public class WorkspaceDefinition : IHasSimpleStateCheckers<WorkspaceDefinition>
         _displayName = displayName;
         _displayName = displayName;
         Description = description;
+        SystemPrompt = systemPrompt;
+        Instructions = instructions;
+        Temperature = temperature;
+        MaxOutputTokens = maxOutputTokens;
+        FrequencyPenalty = frequencyPenalty;
+        PresencePenalty = presencePenalty;
 
         IsEnabled = true;
         Properties = new Dictionary<string, object>();

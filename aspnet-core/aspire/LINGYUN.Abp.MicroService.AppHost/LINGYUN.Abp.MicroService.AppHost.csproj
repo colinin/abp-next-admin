@@ -17,6 +17,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AIService.DbMigrator\LINGYUN.Abp.MicroService.AIService.DbMigrator.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AIService\LINGYUN.Abp.MicroService.AIService.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AdminService.DbMigrator\LINGYUN.Abp.MicroService.AdminService.DbMigrator.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AdminService\LINGYUN.Abp.MicroService.AdminService.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AuthServer.DbMigrator\LINGYUN.Abp.MicroService.AuthServer.DbMigrator.csproj" />

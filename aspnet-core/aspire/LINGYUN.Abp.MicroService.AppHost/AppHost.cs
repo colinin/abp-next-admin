@@ -10,8 +10,17 @@ var redis = builder.AddRedis("redis")
 // Elasticsearch
 var elasticsearch = builder.AddElasticsearch("elasticsearch")
     .WithContainerName("elasticsearch")
+    .WithImageTag("8.17.3")
     .WithDataVolume("elasticsearch-dev")
-    .WithEnvironment("ES_JAVA_OPTS", "-Xms2g -Xmx2g");
+    .WithEnvironment("ES_JAVA_OPTS", "-Xms2g -Xmx2g")
+    // see: https://www.funkysi1701.com/posts/2025/adding-elasticsearch-with-aspire/
+    .WithEnvironment("xpack.security.enabled", "false");
+
+// Kibana
+builder.AddContainer("kibana", "kibana", "8.17.3")
+    .WithReference(elasticsearch)
+    .WithEndpoint(5601, 5601)
+    .WaitFor(elasticsearch);
 
 // Postgres
 var postgres = builder.AddPostgres("postgres")
@@ -215,9 +224,21 @@ builder.AddProject<Projects.LINGYUN_Abp_MicroService_WorkflowService>("WorkflowS
     .WaitFor(rabbitmq)
     .WaitFor(taskService);
 
+// AIService
+AddDotNetProject<
+    Projects.LINGYUN_Abp_MicroService_AIService_DbMigrator,
+    Projects.LINGYUN_Abp_MicroService_AIService>(
+    builder: builder,
+    servicePrefix: "AI",
+    serviceSuffix: "Service",
+    migratorSuffix: "Migrator",
+    port: 30070,
+    portName: "ai",
+    waitProject: localizationService);
+
 // ApiGateway
 var apigateway = builder.AddProject<Projects.LINGYUN_Abp_MicroService_ApiGateway>("ApiGateway")
-    .WithHttpEndpoint(port: 30000, name: "gateway")
+    // .WithHttpEndpoint(port: 30000, name: "gateway")
     .WithExternalHttpEndpoints()
     .WithReference(redis, "Redis")
     .WithReference(elasticsearch, "Elasticsearch")

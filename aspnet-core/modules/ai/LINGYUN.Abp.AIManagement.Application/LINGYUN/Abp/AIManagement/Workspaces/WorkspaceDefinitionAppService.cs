@@ -1,0 +1,200 @@
+﻿using LINGYUN.Abp.AI;
+using LINGYUN.Abp.AIManagement.Localization;
+using LINGYUN.Abp.AIManagement.Permissions;
+using LINGYUN.Abp.AIManagement.Workspaces.Dtos;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Data;
+using Volo.Abp.Security.Encryption;
+
+namespace LINGYUN.Abp.AIManagement.Workspaces;
+public class WorkspaceDefinitionAppService :
+    CrudAppService<
+        WorkspaceDefinitionRecord,
+        WorkspaceDefinitionRecordDto,
+        Guid,
+        WorkspaceDefinitionRecordGetListInput,
+        WorkspaceDefinitionRecordCreateDto,
+        WorkspaceDefinitionRecordUpdateDto>,
+    IWorkspaceDefinitionAppService
+{
+    protected AbpAICoreOptions AIOptions { get; }
+    protected IStringEncryptionService StringEncryptionService { get; }
+    protected IWorkspaceDefinitionRecordRepository WorkspaceDefinitionRecordRepository { get; }
+    public WorkspaceDefinitionAppService(
+        IOptions<AbpAICoreOptions> aiOptions,
+        IStringEncryptionService stringEncryptionService,
+        IWorkspaceDefinitionRecordRepository repository) : base(repository)
+    {
+        AIOptions = aiOptions.Value;
+        StringEncryptionService = stringEncryptionService;
+        WorkspaceDefinitionRecordRepository = repository;
+
+        LocalizationResource = typeof(AIManagementResource);
+        ObjectMapperContext = typeof(AbpAIManagementApplicationModule);
+
+        CreatePolicyName = AIManagementPermissionNames.WorkspaceDefinition.Create;
+        UpdatePolicyName = AIManagementPermissionNames.WorkspaceDefinition.Update;
+        DeletePolicyName = AIManagementPermissionNames.WorkspaceDefinition.Delete;
+        GetListPolicyName = AIManagementPermissionNames.WorkspaceDefinition.Default;
+        GetPolicyName = AIManagementPermissionNames.WorkspaceDefinition.Default;
+    }
+
+    public virtual Task<ListResultDto<ChatClientProviderDto>> GetAvailableProvidersAsync()
+    {
+        var providers = AIOptions.ChatClientProviders
+            .Select(LazyServiceProvider.GetRequiredService)
+            .OfType<IChatClientProvider>()
+            .Select(provider =>
+            {
+                var models = provider.GetModels();
+
+                return new ChatClientProviderDto(
+                    provider.Name,
+                    models.Select(model => model.Id).ToArray());
+            });
+
+        return Task.FromResult(new ListResultDto<ChatClientProviderDto>(providers.ToImmutableArray()));
+    }
+
+    protected async override Task DeleteByIdAsync(Guid id)
+    {
+        var workspace = await Repository.GetAsync(id);
+
+        if (workspace.IsSystem)
+        {
+            throw new BusinessException(
+                AIManagementErrorCodes.Workspace.SystemWorkspaceNotAllowedToBeDeleted,
+                $"System workspace {workspace.Name} is not allowed to be deleted!")
+                .WithData("Workspace", workspace.Name);
+        }
+
+        await Repository.DeleteAsync(workspace);
+    }
+
+    protected async override Task<IQueryable<WorkspaceDefinitionRecord>> CreateFilteredQueryAsync(WorkspaceDefinitionRecordGetListInput input)
+    {
+        var queryable = await base.CreateFilteredQueryAsync(input);
+
+        return queryable
+            .WhereIf(!input.Provider.IsNullOrWhiteSpace(), x => x.Provider == input.Provider)
+            .WhereIf(!input.ModelName.IsNullOrWhiteSpace(), x => x.ModelName == input.ModelName)
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Provider.Contains(input.Filter!) ||
+                x.ModelName.Contains(input.Filter!) || x.DisplayName.Contains(input.Filter!) ||
+                x.Description!.Contains(input.Filter!) || 
+                x.SystemPrompt!.Contains(input.Filter!) ||
+                x.Instructions!.Contains(input.Filter!));
+    }
+
+    protected async override Task<WorkspaceDefinitionRecord> MapToEntityAsync(WorkspaceDefinitionRecordCreateDto createInput)
+    {
+        if (await WorkspaceDefinitionRecordRepository.FindByNameAsync(createInput.Name) != null)
+        {
+            throw new WorkspaceAlreadyExistsException(createInput.Name);
+        }
+
+        var record = new WorkspaceDefinitionRecord(
+            GuidGenerator.Create(),
+            createInput.Name,
+            createInput.Provider,
+            createInput.ModelName,
+            createInput.DisplayName,
+            createInput.Description,
+            createInput.SystemPrompt,
+            createInput.Instructions,
+            createInput.Temperature,
+            createInput.MaxOutputTokens,
+            createInput.FrequencyPenalty,
+            createInput.PresencePenalty,
+            createInput.StateCheckers);
+
+        if (!createInput.ApiKey.IsNullOrWhiteSpace())
+        {
+            var encryptApiKey = StringEncryptionService.Encrypt(createInput.ApiKey);
+            record.SetApiKey(encryptApiKey, createInput.ApiBaseUrl);
+        }
+
+        return record;
+    }
+
+    protected override void MapToEntity(WorkspaceDefinitionRecordUpdateDto updateInput, WorkspaceDefinitionRecord entity)
+    {
+        if (entity.DisplayName != updateInput.DisplayName)
+        {
+            entity.SetDisplayName(updateInput.DisplayName);
+        }
+
+        if (entity.Description != updateInput.Description)
+        {
+            entity.Description = updateInput.Description;
+        }
+
+        if (entity.Provider != updateInput.Provider || entity.ModelName != updateInput.ModelName)
+        {
+            entity.SetModel(updateInput.Provider, updateInput.ModelName);
+        }
+
+        if (entity.SystemPrompt != updateInput.SystemPrompt)
+        {
+            entity.SystemPrompt = updateInput.SystemPrompt;
+        }
+
+        if (entity.Instructions != updateInput.Instructions)
+        {
+            entity.Instructions = updateInput.Instructions;
+        }
+
+        if (entity.IsEnabled != updateInput.IsEnabled)
+        {
+            entity.IsEnabled = updateInput.IsEnabled;
+        }
+
+        if (entity.Temperature != updateInput.Temperature)
+        {
+            entity.Temperature = updateInput.Temperature;
+        }
+
+        if (entity.MaxOutputTokens != updateInput.MaxOutputTokens)
+        {
+            entity.MaxOutputTokens = updateInput.MaxOutputTokens;
+        }
+
+        if (entity.FrequencyPenalty != updateInput.FrequencyPenalty)
+        {
+            entity.FrequencyPenalty = updateInput.FrequencyPenalty;
+        }
+
+        if (entity.PresencePenalty != updateInput.PresencePenalty)
+        {
+            entity.PresencePenalty = updateInput.PresencePenalty;
+        }
+
+        if (entity.StateCheckers != updateInput.StateCheckers)
+        {
+            entity.StateCheckers = updateInput.StateCheckers;
+        }
+
+        if (!updateInput.ApiKey.IsNullOrWhiteSpace())
+        {
+            var encryptApiKey = StringEncryptionService.Encrypt(updateInput.ApiKey);
+            entity.SetApiKey(encryptApiKey, updateInput.ApiBaseUrl);
+        }
+
+        if (!entity.HasSameExtraProperties(updateInput))
+        {
+            entity.ExtraProperties.Clear();
+
+            foreach (var property in updateInput.ExtraProperties)
+            {
+                entity.ExtraProperties.Add(property.Key, property.Value);
+            }
+        }
+    }
+}
