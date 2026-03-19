@@ -21,7 +21,7 @@ public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITime
     protected ISettingManager SettingManager { get; }
     protected ITimezoneProvider TimezoneProvider { get; }
 
-    internal const string UnspecifiedTimeZone = "Unspecified";
+    private const string UnspecifiedTimeZone = "Unspecified";
 
     public TimeZoneSettingsAppService(ISettingManager settingManager, ITimezoneProvider timezoneProvider)
     {
