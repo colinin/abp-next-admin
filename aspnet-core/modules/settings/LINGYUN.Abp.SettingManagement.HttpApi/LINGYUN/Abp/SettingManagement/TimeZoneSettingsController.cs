@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.SettingManagement;
 
 namespace LINGYUN.Abp.SettingManagement;
 
 [RemoteService(Name = AbpSettingManagementRemoteServiceConsts.RemoteServiceName)]
 [Area(AbpSettingManagementRemoteServiceConsts.ModuleName)]
 [Route("api/setting-management/timezone")]
-[Authorize(Volo.Abp.SettingManagement.SettingManagementPermissions.TimeZone)]
+[Authorize]
 public class TimeZoneSettingsController : AbpControllerBase, ITimeZoneSettingsAppService
 {
     private readonly ITimeZoneSettingsAppService _service;
@@ -22,9 +21,17 @@ public class TimeZoneSettingsController : AbpControllerBase, ITimeZoneSettingsAp
     }
 
     [HttpGet]
+    [Authorize(Volo.Abp.SettingManagement.SettingManagementPermissions.TimeZone)]
     public virtual Task<string> GetAsync()
     {
         return _service.GetAsync();
+    }
+
+    [HttpGet]
+    [Route("my-timezone")]
+    public virtual Task<string> GetMyTimezoneAsync()
+    {
+        return _service.GetMyTimezoneAsync();
     }
 
     [HttpGet]
@@ -35,6 +42,14 @@ public class TimeZoneSettingsController : AbpControllerBase, ITimeZoneSettingsAp
     }
 
     [HttpPost]
+    [Route("my-timezone")]
+    public virtual Task SetMyTimezoneAsync(string timezone)
+    {
+        return _service.SetMyTimezoneAsync(timezone);
+    }
+
+    [HttpPost]
+    [Authorize(Volo.Abp.SettingManagement.SettingManagementPermissions.TimeZone)]
     public virtual Task UpdateAsync(string timezone)
     {
         return _service.UpdateAsync(timezone);

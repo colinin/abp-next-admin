@@ -3,19 +3,25 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Timing;
+using IVoloTimeZoneSettingsAppService = Volo.Abp.SettingManagement.ITimeZoneSettingsAppService;
 
 namespace LINGYUN.Abp.SettingManagement;
 
-[Authorize(Volo.Abp.SettingManagement.SettingManagementPermissions.TimeZone)]
+[Authorize]
+[ExposeServices(
+    typeof(ITimeZoneSettingsAppService),
+    typeof(IUserTimeZoneSettingsAppService),
+    typeof(IVoloTimeZoneSettingsAppService))]
 public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITimeZoneSettingsAppService
 {
     protected ISettingManager SettingManager { get; }
     protected ITimezoneProvider TimezoneProvider { get; }
 
-    private const string UnspecifiedTimeZone = "Unspecified";
+    internal const string UnspecifiedTimeZone = "Unspecified";
 
     public TimeZoneSettingsAppService(ISettingManager settingManager, ITimezoneProvider timezoneProvider)
     {
@@ -23,7 +29,24 @@ public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITime
         TimezoneProvider = timezoneProvider;
     }
 
-    public virtual async Task<string> GetAsync()
+    public async virtual Task<string> GetMyTimezoneAsync()
+    {
+        return await SettingManager.GetOrNullForCurrentUserAsync(TimingSettingNames.TimeZone)
+            ?? UnspecifiedTimeZone;
+    }
+
+    public async virtual Task SetMyTimezoneAsync(string timezone)
+    {
+        if (timezone.Equals(UnspecifiedTimeZone, StringComparison.OrdinalIgnoreCase))
+        {
+            timezone = null;
+        }
+
+        await SettingManager.SetForCurrentUserAsync(TimingSettingNames.TimeZone, timezone);
+    }
+
+    [Authorize(Volo.Abp.SettingManagement.SettingManagementPermissions.TimeZone)]
+    public async virtual Task<string> GetAsync()
     {
         var timezone = CurrentTenant.GetMultiTenancySide() == MultiTenancySides.Host
             ? await SettingManager.GetOrNullGlobalAsync(TimingSettingNames.TimeZone)
@@ -48,7 +71,8 @@ public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITime
         return Task.FromResult(timezones);
     }
 
-    public virtual async Task UpdateAsync(string timezone)
+    [Authorize(Volo.Abp.SettingManagement.SettingManagementPermissions.TimeZone)]
+    public async virtual Task UpdateAsync(string timezone)
     {
         if (timezone.Equals(UnspecifiedTimeZone, StringComparison.OrdinalIgnoreCase))
         {
