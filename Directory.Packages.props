@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <DotNetCoreCAPPackageVersion>10.0.0</DotNetCoreCAPPackageVersion>
-    <ElsaPackageVersion>2.15.2</ElsaPackageVersion>
+    <ElsaPackageVersion>2.16.0</ElsaPackageVersion>
     <ElsaNextPackageVersion>3.3.5</ElsaNextPackageVersion>
     <VoloAbpPackageVersion>10.0.2</VoloAbpPackageVersion>
     <LINGYUNAbpPackageVersion>10.0.2</LINGYUNAbpPackageVersion>
@@ -252,7 +252,7 @@
   <!-- Serilog -->
   <ItemGroup>
     <PackageVersion Include="Serilog" Version="4.3.0" />
-    <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="3.0.1" />
     <PackageVersion Include="Serilog.Enrichers.Assembly" Version="2.0.0" />
     <PackageVersion Include="Serilog.Enrichers.AssemblyName" Version="2.0.0" />
@@ -260,12 +260,12 @@
     <PackageVersion Include="Serilog.Enrichers.Thread" Version="4.0.0" />
     <PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0" />
     <PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.1" />
-    <PackageVersion Include="Serilog.Settings.Configuration" Version="9.0.0" />
+    <PackageVersion Include="Serilog.Settings.Configuration" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.Async" Version="2.1.0" />
-    <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
-    <PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
+    <PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
-    <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0-dev-00313" />
+    <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
   </ItemGroup>
   <!-- OpenTelemetry -->
   <ItemGroup>

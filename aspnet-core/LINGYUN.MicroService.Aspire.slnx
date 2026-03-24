@@ -536,6 +536,23 @@
     <Project Path="modules/webhooks/LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore/LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore.csproj" />
     <Project Path="modules/webhooks/LINGYUN.Abp.WebhooksManagement.HttpApi/LINGYUN.Abp.WebhooksManagement.HttpApi.csproj" />
   </Folder>
+  <Folder Name="/modules/workflow/" />
+  <Folder Name="/modules/workflow/elsa2/">
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.BlobStoring/LINGYUN.Abp.Elsa.Activities.BlobStoring.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.Emailing/LINGYUN.Abp.Elsa.Activities.Emailing.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.IM/LINGYUN.Abp.Elsa.Activities.IM.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.Notifications/LINGYUN.Abp.Elsa.Activities.Notifications.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.Sms/LINGYUN.Abp.Elsa.Activities.Sms.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.Webhooks/LINGYUN.Abp.Elsa.Activities.Webhooks.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities/LINGYUN.Abp.Elsa.Activities.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Designer/LINGYUN.Abp.Elsa.Designer.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql/LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql/LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.EntityFrameworkCore/LINGYUN.Abp.Elsa.EntityFrameworkCore.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Notifications/LINGYUN.Abp.Elsa.Notifications.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Server/LINGYUN.Abp.Elsa.Server.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa/LINGYUN.Abp.Elsa.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/LINGYUN.Abp.Aliyun.Tests/LINGYUN.Abp.Aliyun.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests.csproj" />
