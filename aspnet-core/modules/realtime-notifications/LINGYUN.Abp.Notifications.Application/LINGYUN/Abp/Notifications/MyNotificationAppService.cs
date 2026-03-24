@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Users;
@@ -56,17 +59,34 @@ public class MyNotificationAppService : AbpNotificationsApplicationServiceBase, 
 
     public async virtual Task<PagedResultDto<UserNotificationDto>> GetListAsync(UserNotificationGetByPagedDto input)
     {
-        var totalCount = await UserNotificationRepository
-            .GetCountAsync(
-                CurrentUser.GetId(),
-                input.Filter,
-                input.ReadState);
+        Expression<Func<UserNotificationInfo, bool>> expression = _ => true;
+
+        if (input.ReadState.HasValue)
+        {
+            expression = expression.And(x => x.State == input.ReadState);
+        }
+        if (input.BeginCreationTime.HasValue)
+        {
+            expression = expression.And(x => x.CreationTime >= input.BeginCreationTime);
+        }
+        if (input.EndCreationTime.HasValue)
+        {
+            expression = expression.And(x => x.CreationTime <= input.EndCreationTime);
+        }
+        if (!input.Filter.IsNullOrWhiteSpace())
+        {
+            expression = expression.And(x => 
+                x.Name.Contains(input.Filter) ||
+                x.NotificationTypeName.Contains(input.Filter));
+        }
+
+        var specification = new Volo.Abp.Specifications.ExpressionSpecification<UserNotificationInfo>(expression);
+
+        var userId = CurrentUser.GetId();
+        var totalCount = await UserNotificationRepository.GetCountAsync(userId, specification);
 
         var notifications = await UserNotificationRepository
-            .GetListAsync(
-                CurrentUser.GetId(),
-                input.Filter, input.Sorting,
-                input.ReadState, input.SkipCount, input.MaxResultCount);
+            .GetListAsync(userId, specification, input.Sorting, input.SkipCount, input.MaxResultCount);
 
         return new PagedResultDto<UserNotificationDto>(totalCount,
             ObjectMapper.Map<List<UserNotificationInfo>, List<UserNotificationDto>>(notifications));
