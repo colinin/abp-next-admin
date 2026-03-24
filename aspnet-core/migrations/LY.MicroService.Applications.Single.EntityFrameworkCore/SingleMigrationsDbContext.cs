@@ -1,4 +1,8 @@
-﻿using LINGYUN.Abp.DataProtectionManagement;
+﻿using LINGYUN.Abp.AIManagement.Chats;
+using LINGYUN.Abp.AIManagement.EntityFrameworkCore;
+using LINGYUN.Abp.AIManagement.Tokens;
+using LINGYUN.Abp.AIManagement.Workspaces;
+using LINGYUN.Abp.DataProtectionManagement;
 using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Demo.Authors;
 using LINGYUN.Abp.Demo.Books;
@@ -68,6 +72,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
 [ReplaceDbContext(typeof(IAbpDataProtectionManagementDbContext))]
 [ReplaceDbContext(typeof(IGdprDbContext))]
 [ReplaceDbContext(typeof(IDemoDbContext))]
+[ReplaceDbContext(typeof(IAIManagementDbContext))]
 
 [ConnectionStringName("Default")]
 public class SingleMigrationsDbContext : 
@@ -89,7 +94,8 @@ public class SingleMigrationsDbContext :
     IMessageServiceDbContext,
     IAbpDataProtectionManagementDbContext,
     IGdprDbContext,
-    IDemoDbContext
+    IDemoDbContext,
+    IAIManagementDbContext
 {
     public SingleMigrationsDbContext(DbContextOptions<SingleMigrationsDbContext> options)
         : base(options)
@@ -199,6 +205,8 @@ public class SingleMigrationsDbContext :
 
     public DbSet<UserSubscribe> UserSubscribes { get; set; }
 
+    public DbSet<NotificationSendRecord> NotificationSendRecords { get; set; }
+
     public DbSet<NotificationDefinitionGroupRecord> NotificationDefinitionGroupRecords { get; set; }
 
     public DbSet<NotificationDefinitionRecord> NotificationDefinitionRecords { get; set; }
@@ -229,6 +237,14 @@ public class SingleMigrationsDbContext :
 
     public DbSet<Author> Authors { get; set; }
 
+    public DbSet<WorkspaceDefinitionRecord> WorkspaceDefinitions { get; set; }
+
+    public DbSet<TextChatMessageRecord> TextChatMessageRecords { get; set; }
+
+    public DbSet<ConversationRecord> ConversationRecords { get; set; }
+
+    public DbSet<TokenUsageRecord> TokenUsageRecords { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -252,5 +268,7 @@ public class SingleMigrationsDbContext :
         modelBuilder.ConfigureGdpr();
 
         modelBuilder.ConfigureDemo();
+
+        modelBuilder.ConfigureAIManagement();
     }
 }

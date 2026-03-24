@@ -35,13 +35,12 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
     }
 
     protected async override Task PublishAsync(
-        NotificationInfo notification, 
-        IEnumerable<UserIdentifier> identifiers, 
+        NotificationPublishContext context,
         CancellationToken cancellationToken = default)
     {
         var topic = "";
 
-        var notificationDefine = await NotificationDefinitionManager.GetOrNullAsync(notification.Name);
+        var notificationDefine = await NotificationDefinitionManager.GetOrNullAsync(context.Notification.Name);
         var topicDefine = notificationDefine?.GetTopicOrNull();
         if (!topicDefine.IsNullOrWhiteSpace())
         {
@@ -51,9 +50,9 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
              ?? PushPlusChannelType.Email;
         var template = notificationDefine?.GetTemplateOrDefault(PushPlusMessageTemplate.Text)
              ?? PushPlusMessageTemplate.Text;
-        var webhook = notification.Data.GetWebhookOrNull() ?? "";
-        var callbackUrl = notification.Data.GetCallbackUrlOrNull() ?? "";
-        var notificationData = await NotificationDataSerializer.ToStandard(notification.Data);
+        var webhook = context.Notification.Data.GetWebhookOrNull() ?? "";
+        var callbackUrl = context.Notification.Data.GetCallbackUrlOrNull() ?? "";
+        var notificationData = await NotificationDataSerializer.ToStandard(context.Notification.Data);
 
         await PushPlusMessageSender.SendWithChannelAsync(
             notificationData.Title,
@@ -65,6 +64,6 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
             callbackUrl: callbackUrl,
             cancellationToken: cancellationToken);
 
-        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", context.Notification.Name, Name);
     }
 }

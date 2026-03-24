@@ -10,9 +10,7 @@ public class NotificationsDbContext : AbpDbContext<NotificationsDbContext>, INot
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<UserNotification> UserNotifications { get; set; }
     public DbSet<UserSubscribe> UserSubscribes { get; set; }
-
-    public DbSet<NotificationDefinitionGroupRecord> NotificationDefinitionGroupRecords { get; set; }
-    public DbSet<NotificationDefinitionRecord> NotificationDefinitionRecords { get; set; }
+    public DbSet<NotificationSendRecord> NotificationSendRecords { get; set; }
 
     public NotificationsDbContext(DbContextOptions<NotificationsDbContext> options)
         : base(options)

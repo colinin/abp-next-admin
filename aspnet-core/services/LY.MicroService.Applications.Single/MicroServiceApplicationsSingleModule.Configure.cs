@@ -1,3 +1,4 @@
+using LINGYUN.Abp.AIManagement;
 using Microsoft.AspNetCore.SignalR;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
@@ -460,6 +461,18 @@ public partial class MicroServiceApplicationsSingleModule
             Configure<AbpNotificationsManagementOptions>(options =>
             {
                 options.IsDynamicNotificationsStoreEnabled = true;
+            });
+        }
+    }
+
+    private void ConfigureAIManagement(IConfiguration configuration)
+    {
+        if (configuration.GetValue<bool>("AIManagement:IsDynamicStoreEnabled"))
+        {
+            Configure<AIManagementOptions>(options =>
+            {
+                options.IsDynamicWorkspaceStoreEnabled = true;
+                options.SaveStaticWorkspacesToDatabase = true;
             });
         }
     }

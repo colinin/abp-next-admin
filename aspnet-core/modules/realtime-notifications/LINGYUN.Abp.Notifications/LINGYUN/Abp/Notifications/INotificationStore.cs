@@ -7,6 +7,10 @@ namespace LINGYUN.Abp.Notifications;
 
 public interface INotificationStore
 {
+    Task InsertSendStateAsync(
+        NotificationSendInfo notificationSendInfo,
+        CancellationToken cancellationToken = default);
+
     Task InsertUserSubscriptionAsync(
         Guid? tenantId, 
         UserIdentifier identifier, 

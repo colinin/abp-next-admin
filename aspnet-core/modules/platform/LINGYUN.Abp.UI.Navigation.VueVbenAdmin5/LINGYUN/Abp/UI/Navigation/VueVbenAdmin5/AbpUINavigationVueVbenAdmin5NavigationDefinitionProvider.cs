@@ -485,7 +485,7 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
                multiTenancySides: MultiTenancySides.Host)
             .SetProperty("title", "abp.manage.notifications.groups"));
         notificationManagement.AddItem(new ApplicationMenu(
-               name: "NotificationsDefinitions",
+               name: "Vben5NotificationsDefinitions",
                displayName: "通知定义",
                url: "/manage/notifications/definitions",
                component: "/notifications/definitions/index",
@@ -493,6 +493,15 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
                description: "通知定义",
                multiTenancySides: MultiTenancySides.Host)
             .SetProperty("title", "abp.manage.notifications.definitions"));
+        notificationManagement.AddItem(new ApplicationMenu(
+               name: "Vben5NotificationsSendRecords",
+               displayName: "发送记录",
+               url: "/manage/notifications/send-records",
+               component: "/notifications/send-records/index",
+               icon: "material-symbols:history",
+               description: "发送记录",
+               multiTenancySides: MultiTenancySides.Host)
+            .SetProperty("title", "abp.manage.notifications.sendRecords"));
 
         manage.AddItem(
             new ApplicationMenu(

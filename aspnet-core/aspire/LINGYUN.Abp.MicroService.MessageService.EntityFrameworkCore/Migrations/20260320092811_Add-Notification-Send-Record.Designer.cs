@@ -3,6 +3,7 @@ using System;
 using LINGYUN.Abp.MicroService.MessageService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace LINGYUN.Abp.MicroService.MessageService.Migrations
 {
     [DbContext(typeof(MessageServiceMigrationsDbContext))]
-    partial class MessageServiceMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260320092811_Add-Notification-Send-Record")]
+    partial class AddNotificationSendRecord
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

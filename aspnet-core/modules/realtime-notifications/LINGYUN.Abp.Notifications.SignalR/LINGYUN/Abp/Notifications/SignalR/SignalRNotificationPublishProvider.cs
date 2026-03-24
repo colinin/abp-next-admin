@@ -27,40 +27,43 @@ public class SignalRNotificationPublishProvider : NotificationPublishProvider
     }
 
     protected async override Task PublishAsync(
-        NotificationInfo notification, 
-        IEnumerable<UserIdentifier> identifiers, 
+        NotificationPublishContext context,
         CancellationToken cancellationToken = default)
     {
-        if (identifiers?.Count() == 0)
+        if (!context.Users.Any())
         {
-            var groupName = notification.TenantId?.ToString() ?? "Global";
+            var groupName = context.Notification.TenantId?.ToString() ?? "Global";
             try
             {
                 var singalRGroup = _hubContext.Clients.Group(groupName);
                 // 租户通知群发
                 Logger.LogDebug($"Found a singalr group, begin senging notifications");
-                await singalRGroup.SendAsync(_options.MethodName, notification, cancellationToken);
+                await singalRGroup.SendAsync(_options.MethodName, context.Notification, cancellationToken);
 
-                Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
+                Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", context.Notification.Name, Name);
             }
             catch (Exception ex)
             {
                 Logger.LogWarning("Could not send notifications to group {0}", groupName);
-                Logger.LogWarning("Send to user notifications error: {0}", ex.Message);
+
+                context.Cancel(string.Format("Send to user notifications error: {0}", ex.Message), ex);
+                Logger.LogWarning(context.Reason);
             }
         }
         else
         {
             try
             {
-                var onlineClients = _hubContext.Clients.Users(identifiers.Select(x => x.UserId.ToString()));
+                var onlineClients = _hubContext.Clients.Users(context.Users.Select(x => x.UserId.ToString()));
                 Logger.LogDebug($"Found a singalr client, begin senging notifications");
-                await onlineClients.SendAsync(_options.MethodName, notification, cancellationToken);
+                await onlineClients.SendAsync(_options.MethodName, context.Notification, cancellationToken);
             }
             catch (Exception ex)
             {
                 Logger.LogWarning("Could not send notifications to all users");
-                Logger.LogWarning("Send to user notifications error: {0}", ex.Message);
+
+                context.Cancel(string.Format("Send to user notifications error: {0}", ex.Message), ex);
+                Logger.LogWarning(context.Reason);
             }
         }
     }

@@ -1,3 +1,4 @@
+using LINGYUN.Abp.AIManagement;
 using LINGYUN.Abp.SystemInfo;
 
 namespace LY.MicroService.Applications.Single;
@@ -351,6 +352,11 @@ namespace LY.MicroService.Applications.Single;
     // 微信模块 设置管理
     typeof(AbpWeChatSettingManagementModule),
 
+    // AI管理模块 应用服务
+    typeof(AbpAIManagementApplicationModule),
+    // AI管理模块 控制器
+    typeof(AbpAIManagementHttpApiModule),
+
     // 数据迁移模块
     typeof(AbpDataDbMigratorModule),
     // IP解析模块 IP2Region集成
@@ -439,6 +445,7 @@ public partial class MicroServiceApplicationsSingleModule : AbpModule
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureTextTemplating(configuration);
+        ConfigureAIManagement(configuration);
         ConfigureFeatureManagement(configuration);
         ConfigureSettingManagement(configuration);
         ConfigureWebhooksManagement(configuration);

@@ -1,3 +1,4 @@
+using LINGYUN.Abp.AIManagement.EntityFrameworkCore;
 using LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
@@ -29,6 +30,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpNotificationsEntityFrameworkCoreModule),
     typeof(AbpMessageServiceEntityFrameworkCoreModule),
+    typeof(AbpAIManagementEntityFrameworkCoreModule),
     typeof(PlatformEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
