@@ -11,10 +11,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Platform.Menus;
 
-public class EfCoreRoleMenuRepository : EfCoreRepository<PlatformDbContext, RoleMenu, Guid>, IRoleMenuRepository
+public class EfCoreRoleMenuRepository : EfCoreRepository<IPlatformDbContext, RoleMenu, Guid>, IRoleMenuRepository
 {
     public EfCoreRoleMenuRepository(
-        IDbContextProvider<PlatformDbContext> dbContextProvider) 
+        IDbContextProvider<IPlatformDbContext> dbContextProvider) 
         : base(dbContextProvider)
     {
     }

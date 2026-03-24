@@ -9,11 +9,11 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 public class EfCoreBackgroundJobActionRepository :
-    EfCoreRepository<TaskManagementDbContext, BackgroundJobAction, Guid>,
+    EfCoreRepository<ITaskManagementDbContext, BackgroundJobAction, Guid>,
     IBackgroundJobActionRepository
 {
     public EfCoreBackgroundJobActionRepository(
-        IDbContextProvider<TaskManagementDbContext> dbContextProvider) 
+        IDbContextProvider<ITaskManagementDbContext> dbContextProvider) 
         : base(dbContextProvider)
     {
     }

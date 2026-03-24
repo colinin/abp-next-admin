@@ -6,11 +6,11 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.Demo.Authors;
 public class EfCoreAuthorRepository
-    : EfCoreRepository<DemoDbContext, Author, Guid>,
+    : EfCoreRepository<IDemoDbContext, Author, Guid>,
         IAuthorRepository
 {
     public EfCoreAuthorRepository(
-        IDbContextProvider<DemoDbContext> dbContextProvider)
+        IDbContextProvider<IDemoDbContext> dbContextProvider)
         : base(dbContextProvider)
     {
     }
