@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +10,11 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 
-public class EfCoreTextRepository : EfCoreRepository<LocalizationDbContext, Text, int>,
+public class EfCoreTextRepository : EfCoreRepository<ILocalizationDbContext, Text, int>,
     ITextRepository
 {
     public EfCoreTextRepository(
-        IDbContextProvider<LocalizationDbContext> dbContextProvider) : base(dbContextProvider)
+        IDbContextProvider<ILocalizationDbContext> dbContextProvider) : base(dbContextProvider)
     {
     }
 

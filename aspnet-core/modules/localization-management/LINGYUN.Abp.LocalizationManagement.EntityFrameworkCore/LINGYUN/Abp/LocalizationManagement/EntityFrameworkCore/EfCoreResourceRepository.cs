@@ -9,11 +9,11 @@ using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 
-public class EfCoreResourceRepository : EfCoreRepository<LocalizationDbContext, Resource, Guid>,
+public class EfCoreResourceRepository : EfCoreRepository<ILocalizationDbContext, Resource, Guid>,
     IResourceRepository
 {
     public EfCoreResourceRepository(
-        IDbContextProvider<LocalizationDbContext> dbContextProvider) : base(dbContextProvider)
+        IDbContextProvider<ILocalizationDbContext> dbContextProvider) : base(dbContextProvider)
     {
     }
 

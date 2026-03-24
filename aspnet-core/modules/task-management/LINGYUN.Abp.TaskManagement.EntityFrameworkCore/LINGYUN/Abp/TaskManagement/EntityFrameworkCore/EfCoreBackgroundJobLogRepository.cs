@@ -12,11 +12,11 @@ using Volo.Abp.Specifications;
 namespace LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 
 public class EfCoreBackgroundJobLogRepository :
-    EfCoreRepository<TaskManagementDbContext, BackgroundJobLog, long>,
+    EfCoreRepository<ITaskManagementDbContext, BackgroundJobLog, long>,
     IBackgroundJobLogRepository
 {
     public EfCoreBackgroundJobLogRepository(
-        IDbContextProvider<TaskManagementDbContext> dbContextProvider)
+        IDbContextProvider<ITaskManagementDbContext> dbContextProvider)
         : base(dbContextProvider)
     {
     }
