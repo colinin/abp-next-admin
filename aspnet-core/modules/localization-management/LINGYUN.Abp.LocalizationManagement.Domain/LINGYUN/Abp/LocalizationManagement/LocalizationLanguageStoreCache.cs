@@ -45,6 +45,8 @@ public class LocalizationLanguageStoreCache : ILocalizationLanguageStoreCache, I
                 new LanguageInfo(x.CultureName, x.UiCultureName, x.DisplayName))
             .ToList());
 
+        await LanguageCache.SetAsync(LocalizationLanguageCacheItem.CacheKey, cacheItem);
+
         return cacheItem;
     }
 }
