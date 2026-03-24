@@ -1,5 +1,4 @@
-﻿using System.Security.Principal;
-using Volo.Abp.Data;
+﻿using Volo.Abp.Data;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin5;
@@ -11,6 +10,7 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
         context.Add(GetDashboard());
         context.Add(GetAccount());
         context.Add(GetManage());
+        context.Add(GetAIManagement());
         context.Add(GetSaas());
         context.Add(GetPlatform());
         context.Add(GetOssManagement());
@@ -527,6 +527,38 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
             .SetProperty("title", "abp.manage.cache"));
 
         return new NavigationDefinition(manage);
+    }
+
+    private static NavigationDefinition GetAIManagement()
+    {
+        var aiManagement = new ApplicationMenu(
+            name: "Artificial Intelligence",
+            displayName: "人工智能",
+            url: "/artificia-intelligence",
+            component: "",
+            description: "人工智能",
+            icon: "hugeicons:artificial-intelligence-04")
+            .SetProperty("title", "abp.ai.title");
+        aiManagement.AddItem(
+          new ApplicationMenu(
+              name: "Vben5AIWorkspaceDefinitions",
+              displayName: "工作区管理",
+              url: "/artificia-intelligence/workspace",
+              component: "/ai-management/workspaces/index",
+              icon: "carbon:workspace",
+              description: "工作区管理")
+            .SetProperty("title", "abp.ai.workspaces"));
+        aiManagement.AddItem(
+          new ApplicationMenu(
+              name: "Vben5AIConversations",
+              displayName: "会话管理",
+              url: "/artificia-intelligence/conversations",
+              component: "/ai-management/conversations/index",
+              icon: "arcticons:conversations",
+              description: "会话管理")
+            .SetProperty("title", "abp.ai.conversations"));
+
+        return new NavigationDefinition(aiManagement);
     }
 
     private static NavigationDefinition GetSaas()
