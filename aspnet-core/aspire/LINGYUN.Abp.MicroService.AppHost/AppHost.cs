@@ -238,7 +238,7 @@ AddDotNetProject<
 
 // ApiGateway
 var apigateway = builder.AddProject<Projects.LINGYUN_Abp_MicroService_ApiGateway>("ApiGateway")
-    // .WithHttpEndpoint(port: 30000, name: "gateway")
+    .WithHttpEndpoint(port: 30000, name: "gateway")
     .WithExternalHttpEndpoints()
     .WithReference(redis, "Redis")
     .WithReference(elasticsearch, "Elasticsearch")
