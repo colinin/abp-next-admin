@@ -44,6 +44,8 @@ public class MessageServiceMigrationsDbContext :
 
     public DbSet<UserSubscribe> UserSubscribes { get; set; }
 
+    public DbSet<NotificationSendRecord> NotificationSendRecords { get; set; }
+
     public MessageServiceMigrationsDbContext(DbContextOptions<MessageServiceMigrationsDbContext> options)
         : base(options)
     {
