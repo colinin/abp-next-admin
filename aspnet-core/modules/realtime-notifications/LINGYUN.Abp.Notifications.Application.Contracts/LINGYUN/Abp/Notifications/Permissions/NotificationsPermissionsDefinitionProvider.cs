@@ -48,6 +48,11 @@ public class NotificationsPermissionsDefinitionProvider : PermissionDefinitionPr
         var noticeGroup = group.AddPermission(NotificationsPermissions.Notification.Default, L("Permission:Notification"));
         noticeGroup.AddChild(NotificationsPermissions.Notification.Delete, L("Permission:Delete"));
         noticeGroup.AddChild(NotificationsPermissions.Notification.Send, L("Permission:Send"));
+        var notificationSendPermission = noticeGroup.AddChild(
+            NotificationsPermissions.Notification.SendRecord.Default,
+            L("Permission:SendRecord"));
+        notificationSendPermission.AddChild(NotificationsPermissions.Notification.SendRecord.Delete, L("Permission:Delete"));
+        notificationSendPermission.AddChild(NotificationsPermissions.Notification.SendRecord.ReSend, L("Permission:ReSend"));
     }
 
     private static LocalizableString L(string name)

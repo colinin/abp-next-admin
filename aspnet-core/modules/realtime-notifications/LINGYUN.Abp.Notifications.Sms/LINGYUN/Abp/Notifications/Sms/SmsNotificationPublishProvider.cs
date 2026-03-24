@@ -16,22 +16,23 @@ public class SmsNotificationPublishProvider : NotificationPublishProvider
     protected IOptions<AbpNotificationsSmsOptions> Options => ServiceProvider.LazyGetRequiredService<IOptions<AbpNotificationsSmsOptions>>();
 
     protected override async Task PublishAsync(
-        NotificationInfo notification,
-        IEnumerable<UserIdentifier> identifiers,
+        NotificationPublishContext context,
         CancellationToken cancellationToken = default)
     {
-        if (!identifiers.Any())
+        if (!context.Users.Any())
         {
+            context.Cancel("The user who received the text message is empty.");
             return;
         }
 
-        var sendToPhones = await UserPhoneFinder.FindByUserIdsAsync(identifiers.Select(usr => usr.UserId), cancellationToken);
+        var sendToPhones = await UserPhoneFinder.FindByUserIdsAsync(context.Users.Select(usr => usr.UserId), cancellationToken);
         if (!sendToPhones.Any())
         {
+            context.Cancel("The user has not confirmed their mobile phone number, so the message cannot be sent.");
             return;
         }
-        await Sender.SendAsync(notification, sendToPhones.JoinAsString(","));
+        await Sender.SendAsync(context.Notification, sendToPhones.JoinAsString(","));
 
-        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", context.Notification.Name, Name);
     }
 }

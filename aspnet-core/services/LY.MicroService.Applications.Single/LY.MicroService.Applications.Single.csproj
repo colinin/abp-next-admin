@@ -28,7 +28,7 @@
 		<PackageReference Include="OpenIddict.Server.DataProtection" />
 		<PackageReference Include="Serilog.AspNetCore" />
 		<PackageReference Include="Serilog.Enrichers.Environment" />
-		<PackageReference Include="Serilog.Enrichers.Assembly" />
+		<PackageReference Include="Serilog.Enrichers.AssemblyName" />
 		<PackageReference Include="Serilog.Enrichers.Process" />
 		<PackageReference Include="Serilog.Enrichers.Thread" />
 		<PackageReference Include="Serilog.Settings.Configuration" />
@@ -138,6 +138,8 @@
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OAuth\LINGYUN.Abp.Account.Web.OAuth.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OpenIddict\LINGYUN.Abp.Account.Web.OpenIddict.csproj" />
+		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AIManagement.Application\LINGYUN.Abp.AIManagement.Application.csproj" />
+		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AIManagement.HttpApi\LINGYUN.Abp.AIManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.Auditing.Application.Contracts\LINGYUN.Abp.Auditing.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.Auditing.Application\LINGYUN.Abp.Auditing.Application.csproj" />
 		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.Auditing.HttpApi\LINGYUN.Abp.Auditing.HttpApi.csproj" />

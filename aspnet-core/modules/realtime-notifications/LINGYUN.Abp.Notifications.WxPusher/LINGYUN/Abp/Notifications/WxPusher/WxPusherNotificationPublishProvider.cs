@@ -2,7 +2,6 @@
 using LINGYUN.Abp.WxPusher.Messages;
 using LINGYUN.Abp.WxPusher.User;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,17 +35,16 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
     }
 
     protected async override Task PublishAsync(
-        NotificationInfo notification, 
-        IEnumerable<UserIdentifier> identifiers, 
+        NotificationPublishContext context,
         CancellationToken cancellationToken = default)
     {
-        var subscribeUserIds = identifiers.Select(x => x.UserId);
+        var subscribeUserIds = context.Users.Select(x => x.UserId);
 
         var topics = await WxPusherUserStore.GetSubscribeTopicsAsync(subscribeUserIds, cancellationToken);
         var uids = await WxPusherUserStore.GetBindUidsAsync(subscribeUserIds, cancellationToken);
 
-        var notificationDefine = await NotificationDefinitionManager.GetOrNullAsync(notification.Name);
-        var url = notification.Data.GetUrlOrNull() ?? notificationDefine?.GetUrlOrNull();
+        var notificationDefine = await NotificationDefinitionManager.GetOrNullAsync(context.Notification.Name);
+        var url = context.Notification.Data.GetUrlOrNull() ?? notificationDefine?.GetUrlOrNull();
         var topicDefine = notificationDefine?.GetTopics();
         if (topicDefine.Any())
         {
@@ -54,7 +52,7 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
         }
         var contentType = notificationDefine?.GetContentTypeOrDefault(MessageContentType.Text)
              ?? MessageContentType.Text;
-        var notificationData = await NotificationDataSerializer.ToStandard(notification.Data);
+        var notificationData = await NotificationDataSerializer.ToStandard(context.Notification.Data);
 
         await WxPusherMessageSender.SendAsync(
             content: notificationData.Message,
@@ -65,6 +63,6 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
             url: url,
             cancellationToken: cancellationToken);
 
-        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", context.Notification.Name, Name);
     }
 }
