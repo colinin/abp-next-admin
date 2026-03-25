@@ -21,7 +21,7 @@ public class AIManagementPermissionDefinitionProvider : PermissionDefinitionProv
             MultiTenancySides.Host);
         groupDefinition.AddChild(
             AIManagementPermissionNames.WorkspaceDefinition.Update,
-            L("Permission:Edit"),
+            L("Permission:Update"),
             MultiTenancySides.Host);
         groupDefinition.AddChild(
             AIManagementPermissionNames.WorkspaceDefinition.Delete,
