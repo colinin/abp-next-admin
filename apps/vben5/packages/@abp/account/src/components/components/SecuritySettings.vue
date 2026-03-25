@@ -75,7 +75,7 @@ onMounted(onGet);
 </script>
 
 <template>
-  <Card :bordered="false" :title="$t('abp.account.settings.security.title')">
+  <Card :title="$t('abp.account.settings.security.title')">
     <List item-layout="horizontal">
       <!-- 密码 -->
       <ListItem>

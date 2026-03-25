@@ -1,5 +1,5 @@
 import type { Arrayable } from '@vueuse/core';
-import type { FlattenedItem } from 'radix-vue';
+import type { FlattenedItem } from 'reka-ui';
 
 import type { Recordable } from '@vben-core/typings';
 
@@ -22,6 +22,8 @@ export interface TreeProps {
   defaultValue?: Arrayable<number | string>;
   /** 禁用 */
   disabled?: boolean;
+  /** 禁用字段名 */
+  disabledField?: string;
   /** 自定义节点类名 */
   getNodeClass?: (item: FlattenedItem<Recordable<any>>) => string;
   iconField?: string;
@@ -37,4 +39,24 @@ export interface TreeProps {
   treeData: Recordable<any>[];
   /** 值字段 */
   valueField?: string;
+}
+
+export function treePropsDefaults() {
+  return {
+    allowClear: false,
+    autoCheckParent: true,
+    bordered: false,
+    checkStrictly: false,
+    defaultExpandedKeys: () => [],
+    defaultExpandedLevel: 0,
+    disabled: false,
+    disabledField: 'disabled',
+    iconField: 'icon',
+    labelField: 'label',
+    multiple: false,
+    showIcon: true,
+    transition: true,
+    valueField: 'value',
+    childrenField: 'children',
+  };
 }

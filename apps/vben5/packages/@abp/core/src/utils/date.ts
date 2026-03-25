@@ -1,10 +1,25 @@
+import { formatDate, isNumber } from '@vben/utils';
+
 /**
  * Independent time operation tool to facilitate subsequent switch to dayjs
  */
 import dayjs from 'dayjs';
 
-const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
-const DATE_FORMAT = 'YYYY-MM-DD';
+const DATE_TIME_FORMAT: Format = 'YYYY-MM-DD HH:mm:ss';
+const DATE_FORMAT: Format = 'YYYY-MM-DD';
+
+type FormatDate = Date | dayjs.Dayjs | number | string;
+type Format =
+  | 'HH'
+  | 'HH:mm'
+  | 'HH:mm:ss'
+  | 'YYYY'
+  | 'YYYY-MM'
+  | 'YYYY-MM-DD'
+  | 'YYYY-MM-DD HH'
+  | 'YYYY-MM-DD HH:mm'
+  | 'YYYY-MM-DD HH:mm:ss'
+  | (string & {});
 
 /**
  * @zh_CN 格式化时间
@@ -13,10 +28,10 @@ const DATE_FORMAT = 'YYYY-MM-DD';
  * @returns 返回格式化后的时间字符串
  */
 export function formatToDateTime(
-  date?: dayjs.ConfigType,
-  format = DATE_TIME_FORMAT,
+  date?: FormatDate,
+  format: Format = DATE_TIME_FORMAT,
 ): string {
-  return dayjs(date).format(format);
+  return formatDate(date, format);
 }
 
 /**
@@ -26,11 +41,13 @@ export function formatToDateTime(
  * @returns 返回格式化后的日期字符串
  */
 export function formatToDate(
-  date?: dayjs.ConfigType,
-  format = DATE_FORMAT,
+  date?: FormatDate,
+  format: Format = DATE_FORMAT,
 ): string {
-  if (typeof date === 'number') date *= 1000;
-  return dayjs(date).format(format);
+  if (isNumber(date)) {
+    date *= 1000;
+  }
+  return formatDate(date, format);
 }
 /**
  * @zh_CN 获取指定日期

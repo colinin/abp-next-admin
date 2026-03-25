@@ -40,7 +40,7 @@ onMounted(getSessions);
 </script>
 
 <template>
-  <Card :bordered="false" :title="$t('abp.account.settings.sessionSettings')">
+  <Card :title="$t('abp.account.settings.sessionSettings')">
     <UserSessionTable :sessions="sessions" @revoke="onRevoke" />
   </Card>
 </template>

@@ -110,8 +110,10 @@ const gridOptions: VxeGridProps<WebhookGroupDefinitionDto> = {
     },
   ],
   expandConfig: {
+    accordion: true,
     padding: true,
     trigger: 'row',
+    height: 300,
   },
   exportConfig: {},
   keepSource: true,
@@ -120,7 +122,7 @@ const gridOptions: VxeGridProps<WebhookGroupDefinitionDto> = {
       query: async ({ page, sort }) => {
         let items = sortby(webhookGroups.value, sort.field);
         if (sort.order === 'desc') {
-          items = items.reverse();
+          items = items.toReversed();
         }
         const result = {
           totalCount: webhookGroups.value.length,

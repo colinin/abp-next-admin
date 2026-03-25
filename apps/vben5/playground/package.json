@@ -1,6 +1,6 @@
 {
   "name": "@vben/playground",
-  "version": "5.5.7",
+  "version": "5.6.0",
   "homepage": "https://vben.pro",
   "bugs": "https://github.com/vbenjs/vue-vben-admin/issues",
   "repository": {
@@ -31,6 +31,7 @@
   "dependencies": {
     "@tanstack/vue-query": "catalog:",
     "@vben-core/menu-ui": "workspace:*",
+    "@vben-core/shadcn-ui": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/constants": "workspace:*",

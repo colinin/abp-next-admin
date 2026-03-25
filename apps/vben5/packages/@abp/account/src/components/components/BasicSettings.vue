@@ -70,7 +70,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <Card :bordered="false" :title="$t('abp.account.settings.basic.title')">
+  <Card :title="$t('abp.account.settings.basic.title')">
     <div class="flex flex-row">
       <div class="basis-2/4">
         <Form

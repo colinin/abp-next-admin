@@ -15,11 +15,9 @@ interface FeatureGroupDefinitionCreateOrUpdateDto extends IHasExtraProperties {
 }
 
 interface FeatureGroupDefinitionUpdateDto
-  extends FeatureGroupDefinitionCreateOrUpdateDto,
-    IHasConcurrencyStamp {}
+  extends FeatureGroupDefinitionCreateOrUpdateDto, IHasConcurrencyStamp {}
 
-interface FeatureGroupDefinitionCreateDto
-  extends FeatureGroupDefinitionCreateOrUpdateDto {
+interface FeatureGroupDefinitionCreateDto extends FeatureGroupDefinitionCreateOrUpdateDto {
   name: string;
 }
 

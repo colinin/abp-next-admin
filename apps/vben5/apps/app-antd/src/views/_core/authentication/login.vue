@@ -26,7 +26,7 @@ interface LoginInstance {
 
 defineOptions({ name: 'Login' });
 
-const { onlyOidc } = useAppConfig(import.meta.env, import.meta.env.PROD);
+const { auth } = useAppConfig(import.meta.env, import.meta.env.PROD);
 
 const abpStore = useAbpStore();
 const authStore = useAuthStore();
@@ -38,7 +38,7 @@ const { getConfigApi } = useAbpConfigApi();
 const login = useTemplateRef<LoginInstance>('login');
 
 const formSchema = computed((): VbenFormSchema[] => {
-  if (onlyOidc) {
+  if (auth.onlyOidc) {
     return [];
   }
   let schemas: VbenFormSchema[] = [
@@ -82,22 +82,26 @@ const [ShouldChangePasswordModal, changePasswordModalApi] = useVbenModal({
   connectedComponent: ShouldChangePassword,
 });
 async function onInit() {
-  if (onlyOidc === true) {
-    setTimeout(() => {
-      Modal.confirm({
-        centered: true,
-        title: $t('page.auth.oidcLogin'),
-        content: $t('page.auth.oidcLoginMessage'),
-        maskClosable: false,
-        closable: false,
-        cancelButtonProps: {
-          disabled: true,
-        },
-        async onOk() {
-          await authStore.oidcLogin();
-        },
-      });
-    }, 300);
+  if (auth.onlyOidc === true) {
+    if (auth.onlyOidcHint) {
+      setTimeout(() => {
+        Modal.confirm({
+          centered: true,
+          title: $t('page.auth.oidcLogin'),
+          content: $t('page.auth.oidcLoginMessage'),
+          maskClosable: false,
+          closable: false,
+          cancelButtonProps: {
+            disabled: true,
+          },
+          async onOk() {
+            await authStore.oidcLogin();
+          },
+        });
+      }, 300);
+    } else {
+      await authStore.oidcLogin();
+    }
     return;
   }
   const abpConfig = await getConfigApi();
@@ -108,7 +112,7 @@ async function onInit() {
   });
 }
 async function onLogin(params: Recordable<any>) {
-  if (onlyOidc === true) {
+  if (auth.onlyOidc === true) {
     await authStore.oidcLogin();
     return;
   }
@@ -144,7 +148,7 @@ onMounted(onInit);
 </script>
 
 <template>
-  <div v-if="!onlyOidc">
+  <div v-if="!auth.onlyOidc">
     <AuthenticationLogin
       ref="login"
       :form-schema="formSchema"

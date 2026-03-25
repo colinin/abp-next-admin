@@ -132,8 +132,7 @@ class AbpUserManager extends UserManager {
   }
 }
 
-const { authority, audience, clientId, clientSecret, disablePKCE } =
-  useAppConfig(import.meta.env, import.meta.env.PROD);
+const { auth } = useAppConfig(import.meta.env, import.meta.env.PROD);
 
 const env = import.meta.env.PROD ? 'prod' : 'dev';
 const appVersion = import.meta.env.VITE_APP_VERSION;
@@ -147,17 +146,16 @@ const ls = new SecureLS({
   metaKey: `${namespace}-secure-oidc`,
 });
 const oidcSettings: UserManagerSettings = {
-  authority,
-  client_id: clientId,
-  client_secret: clientSecret,
+  authority: auth.authority,
+  client_id: auth.clientId,
+  client_secret: auth.clientSecret,
   redirect_uri: `${window.location.origin}/signin-callback`,
   response_type: 'code',
-  scope: audience,
+  scope: auth.audience,
   post_logout_redirect_uri: `${window.location.origin}/`,
   silent_redirect_uri: `${window.location.origin}/silent-renew.html`,
   automaticSilentRenew: true,
   loadUserInfo: true,
-  prompt: 'select_account',
   userStore: new WebStorageStateStore({
     store: import.meta.env.DEV
       ? localStorage
@@ -179,7 +177,7 @@ const oidcSettings: UserManagerSettings = {
           },
         },
   }),
-  disablePKCE,
+  disablePKCE: auth.disablePKCE,
 };
 const userManager = new AbpUserManager(oidcSettings);
 

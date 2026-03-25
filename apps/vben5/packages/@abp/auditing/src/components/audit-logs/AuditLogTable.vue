@@ -34,7 +34,7 @@ const formOptions: VbenFormProps = {
     [
       'executionTime',
       ['startTime', 'endTime'],
-      ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD HH:mm:ss'],
+      (value) => formatToDateTime(value),
     ],
   ],
   schema: [

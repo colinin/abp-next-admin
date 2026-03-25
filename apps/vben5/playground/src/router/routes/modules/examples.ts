@@ -85,6 +85,15 @@ const routes: RouteRecordRaw[] = [
               title: $t('examples.form.merge'),
             },
           },
+          {
+            name: 'FormScrollToErrorExample',
+            path: '/examples/form/scroll-to-error-test',
+            component: () =>
+              import('#/views/examples/form/scroll-to-error-test.vue'),
+            meta: {
+              title: $t('examples.form.scrollToError'),
+            },
+          },
         ],
       },
       {
@@ -194,6 +203,15 @@ const routes: RouteRecordRaw[] = [
               import('#/views/examples/captcha/slider-rotate-captcha.vue'),
             meta: {
               title: $t('examples.captcha.sliderRotateCaptcha'),
+            },
+          },
+          {
+            name: 'TranslateVerifyExample',
+            path: '/examples/captcha/slider-translate',
+            component: () =>
+              import('#/views/examples/captcha/slider-translate-captcha.vue'),
+            meta: {
+              title: $t('examples.captcha.sliderTranslateCaptcha'),
             },
           },
           {
@@ -308,6 +326,24 @@ const routes: RouteRecordRaw[] = [
         meta: {
           icon: 'mdi:check-circle',
           title: $t('examples.button-group.title'),
+        },
+      },
+      {
+        name: 'ContextMenu',
+        path: '/examples/context-menu',
+        component: () => import('#/views/examples/context-menu/index.vue'),
+        meta: {
+          icon: 'mdi:menu',
+          title: $t('examples.function.contentMenu'),
+        },
+      },
+      {
+        name: 'CropperDemo',
+        path: '/examples/cropper',
+        component: () => import('#/views/examples/cropper/index.vue'),
+        meta: {
+          icon: 'mdi:crop',
+          title: $t('examples.cropper.title'),
         },
       },
     ],

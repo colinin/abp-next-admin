@@ -4,7 +4,6 @@ import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { VbenFormProps } from '@vben/common-ui';
 
 import type { FeatureDefinitionDto } from '../../../types/definitions';
-import type { FeatureGroupDefinitionDto } from '../../../types/groups';
 
 import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
@@ -81,7 +80,7 @@ const formOptions: VbenFormProps = {
   submitOnEnter: true,
 };
 
-const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
+const gridOptions: VxeGridProps<FeatureGroupVo> = {
   columns: [
     {
       align: 'center',
@@ -111,8 +110,10 @@ const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
     },
   ],
   expandConfig: {
+    accordion: true,
     padding: true,
     trigger: 'row',
+    height: 300,
   },
   exportConfig: {},
   keepSource: true,
@@ -121,7 +122,7 @@ const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
       query: async ({ page, sort }) => {
         let items = sortby(featureGroups.value, sort.field);
         if (sort.order === 'desc') {
-          items = items.reverse();
+          items = items.toReversed();
         }
         const result = {
           totalCount: featureGroups.value.length,
@@ -147,7 +148,7 @@ const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
     zoom: true,
   },
 };
-const subGridColumns: VxeGridProps<FeatureDefinitionDto>['columns'] = [
+const subGridColumns: VxeGridProps<FeatureGroupVo>['columns'] = [
   {
     align: 'center',
     type: 'seq',
@@ -200,7 +201,7 @@ const subGridColumns: VxeGridProps<FeatureDefinitionDto>['columns'] = [
   },
 ];
 
-const gridEvents: VxeGridListeners<FeatureGroupDefinitionDto> = {
+const gridEvents: VxeGridListeners<FeatureGroupVo> = {
   sortChange: () => {
     gridApi.query();
   },

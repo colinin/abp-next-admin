@@ -1,6 +1,6 @@
 {
   "name": "@abp/account",
-  "version": "9.2.0",
+  "version": "10.0.2",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
@@ -26,6 +26,7 @@
     "@abp/identity": "workspace:*",
     "@abp/notifications": "workspace:*",
     "@abp/request": "workspace:*",
+    "@abp/settings": "workspace:*",
     "@abp/ui": "workspace:*",
     "@ant-design/icons-vue": "catalog:",
     "@vben-core/shadcn-ui": "workspace:*",
@@ -40,7 +41,7 @@
     "ant-design-vue": "catalog:",
     "oidc-client-ts": "catalog:",
     "secure-ls": "catalog:",
-    "vue": "catalog:*",
+    "vue": "catalog:",
     "vue-router": "catalog:"
   }
 }

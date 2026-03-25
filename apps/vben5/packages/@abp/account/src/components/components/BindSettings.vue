@@ -22,7 +22,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Card :bordered="false" :title="$t('abp.account.settings.bindSettings')">
+  <Card :title="$t('abp.account.settings.bindSettings')">
     <Empty v-if="items?.length === 0" />
     <List v-else item-layout="horizontal">
       <ListItem v-for="item in items" :key="item.title">
