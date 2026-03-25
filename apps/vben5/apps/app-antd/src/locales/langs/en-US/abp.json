@@ -52,7 +52,8 @@
       "title": "Notifications",
       "myNotifilers": "My Notifilers",
       "groups": "Groups",
-      "definitions": "Definitions"
+      "definitions": "Definitions",
+      "sendRecords": "Send Records"
     },
     "localization": {
       "title": "Localization",
@@ -98,7 +99,8 @@
       "authenticatorSettings": "Authenticator Settings",
       "changeAvatar": "Change Avatar",
       "sessionSettings": "Session Settings",
-      "personalDataSettings": "Personal Data Settings"
+      "personalDataSettings": "Personal Data Settings",
+      "systemSettings": "System Settings"
     },
     "profile": "My Profile"
   },
@@ -147,5 +149,10 @@
   "wechat": {
     "title": "WeChat",
     "settings": "Settings"
+  },
+  "ai": {
+    "title": "Artificial Intelligence",
+    "workspaces": "Workspaces",
+    "conversations": "Conversations"
   }
 }

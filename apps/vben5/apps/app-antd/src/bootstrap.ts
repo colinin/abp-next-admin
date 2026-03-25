@@ -16,6 +16,7 @@ import { initSetupVbenForm } from './adapter/form';
 import { initRequestClient } from './adapter/request';
 import App from './app.vue';
 import { router } from './router';
+import { initTimezone } from './timezone-init';
 
 async function bootstrap(namespace: string) {
   // 初始化组件适配器
@@ -49,6 +50,9 @@ async function bootstrap(namespace: string) {
 
   // 国际化 i18n 配置
   await setupI18n(app);
+
+  // 初始化时区HANDLER
+  initTimezone();
 
   // 安装权限指令
   registerAccessDirective(app);

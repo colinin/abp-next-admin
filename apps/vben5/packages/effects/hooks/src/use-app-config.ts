@@ -17,23 +17,37 @@ export function useAppConfig(
 
   const {
     VITE_GLOB_API_URL,
-    VITE_GLOB_AUTHORITY,
-    VITE_GLOB_AUDIENCE,
-    VITE_GLOB_CLIENT_ID,
-    VITE_GLOB_CLIENT_SECRET,
-    VITE_GLOB_ONLY_OIDC,
-    VITE_GLOB_DISABLE_PKCE,
+    VITE_GLOB_AUTH_CLIENT_ID,
+    VITE_GLOB_AUTH_CLIENT_SECRET,
+    VITE_GLOB_AUTH_AUTHORITY,
+    VITE_GLOB_AUTH_AUDIENCE,
+    VITE_GLOB_AUTH_ONLY_OIDC,
+    VITE_GLOB_AUTH_ONLY_OIDC_HINT,
+    VITE_GLOB_AUTH_DISABLE_PKCE,
+    VITE_GLOB_AUTH_DINGDING_CORP_ID,
+    VITE_GLOB_AUTH_DINGDING_CLIENT_ID,
     VITE_GLOB_UI_FRAMEWORK,
   } = config;
 
-  return {
+  const applicationConfig: ApplicationConfig = {
     apiURL: VITE_GLOB_API_URL,
-    authority: VITE_GLOB_AUTHORITY,
-    audience: VITE_GLOB_AUDIENCE,
-    clientId: VITE_GLOB_CLIENT_ID,
-    clientSecret: VITE_GLOB_CLIENT_SECRET,
-    onlyOidc: VITE_GLOB_ONLY_OIDC === 'true',
-    disablePKCE: VITE_GLOB_DISABLE_PKCE === 'true',
+    auth: {
+      clientId: VITE_GLOB_AUTH_CLIENT_ID,
+      clientSecret: VITE_GLOB_AUTH_CLIENT_SECRET,
+      authority: VITE_GLOB_AUTH_AUTHORITY,
+      audience: VITE_GLOB_AUTH_AUDIENCE,
+      onlyOidc: VITE_GLOB_AUTH_ONLY_OIDC === 'true',
+      onlyOidcHint: VITE_GLOB_AUTH_ONLY_OIDC_HINT === 'true',
+      disablePKCE: VITE_GLOB_AUTH_DISABLE_PKCE === 'true',
+    },
     uiFramework: VITE_GLOB_UI_FRAMEWORK,
   };
+  if (VITE_GLOB_AUTH_DINGDING_CORP_ID && VITE_GLOB_AUTH_DINGDING_CLIENT_ID) {
+    applicationConfig.auth.dingding = {
+      clientId: VITE_GLOB_AUTH_DINGDING_CLIENT_ID,
+      corpId: VITE_GLOB_AUTH_DINGDING_CORP_ID,
+    };
+  }
+
+  return applicationConfig;
 }

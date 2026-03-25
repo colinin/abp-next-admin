@@ -39,6 +39,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
   onOpenChange: async (isOpen: boolean) => {
     if (isOpen) {
       try {
+        activedTab.value = 'basic';
         logModel.value = {} as LogDto;
         drawerApi.setState({ loading: true });
         const dto = drawerApi.getData<LogDto>();
@@ -74,6 +75,7 @@ const exceptionsGridOptions: VxeGridProps<LogExceptionDto> = {
     accordion: true,
     padding: true,
     trigger: 'row',
+    height: 300,
   },
   exportConfig: {},
   keepSource: true,
@@ -109,7 +111,7 @@ async function onGet(id: string) {
   <Drawer>
     <div style="width: 800px">
       <Skeleton v-if="!logModel" />
-      <Tabs v-else v-model="activedTab">
+      <Tabs v-else v-model:active-key="activedTab">
         <TabPane key="basic" :tab="$t('AbpAuditLogging.Operation')">
           <Descriptions
             :colon="false"
@@ -122,8 +124,8 @@ async function onGet(id: string) {
               {{ formatToDateTime(logModel.timeStamp) }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.Level')">
-              <Tag :color="logLevelOptions[logModel!.level!]?.color">
-                {{ logLevelOptions[logModel!.level!]?.label }}
+              <Tag :color="logLevelOptions[logModel.level]?.color">
+                {{ logLevelOptions[logModel.level]?.label }}
               </Tag>
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.Message')" :span="2">
@@ -131,11 +133,7 @@ async function onGet(id: string) {
             </DescriptionsItem>
           </Descriptions>
         </TabPane>
-        <TabPane
-          v-if="logModel.fields"
-          key="fields"
-          :tab="$t('AbpAuditLogging.Fields')"
-        >
+        <TabPane key="fields" :tab="$t('AbpAuditLogging.Fields')">
           <Descriptions
             :colon="false"
             :column="1"
@@ -144,51 +142,51 @@ async function onGet(id: string) {
             :label-style="{ minWidth: '110px' }"
           >
             <DescriptionsItem :label="$t('AbpAuditLogging.ApplicationName')">
-              {{ logModel.fields.application }}
+              {{ logModel.fields?.application }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.MachineName')">
-              {{ logModel.fields.machineName }}
+              {{ logModel.fields?.machineName }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.Environment')">
-              {{ logModel.fields.environment }}
+              {{ logModel.fields?.environment }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.ProcessId')">
-              {{ logModel.fields.processId }}
+              {{ logModel.fields?.processId }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.ThreadId')">
-              {{ logModel.fields.threadId }}
+              {{ logModel.fields?.threadId }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.Context')">
-              {{ logModel.fields.context }}
+              {{ logModel.fields?.context }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.ActionId')">
-              {{ logModel.fields.actionId }}
+              {{ logModel.fields?.actionId }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.MethodName')">
-              {{ logModel.fields.actionName }}
+              {{ logModel.fields?.actionName }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.RequestId')">
-              {{ logModel.fields.requestId }}
+              {{ logModel.fields?.requestId }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.RequestPath')">
-              {{ logModel.fields.requestPath }}
+              {{ logModel.fields?.requestPath }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.ConnectionId')">
-              {{ logModel.fields.connectionId }}
+              {{ logModel.fields?.connectionId }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.CorrelationId')">
-              {{ logModel.fields.correlationId }}
+              {{ logModel.fields?.correlationId }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.ClientId')">
-              {{ logModel.fields.clientId }}
+              {{ logModel.fields?.clientId }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.UserId')">
-              {{ logModel.fields.userId }}
+              {{ logModel.fields?.userId }}
             </DescriptionsItem>
           </Descriptions>
         </TabPane>
         <TabPane
-          v-if="logModel.exceptions && logModel.exceptions.length > 0"
+          v-if="logModel.exceptions?.length > 0"
           key="exception"
           :tab="$t('AbpAuditLogging.Exceptions')"
         >

@@ -124,7 +124,11 @@ onMounted(onGet);
         </Button>
       </div>
     </template>
-    <Form :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
+    <Form
+      :label-col="{ span: 5 }"
+      :wrapper-col="{ span: 15 }"
+      class="h-[700px] overflow-y-scroll"
+    >
       <Tabs v-model="activeTab">
         <TabPane
           v-for="(group, index) in settingGroups"

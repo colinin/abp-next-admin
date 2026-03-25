@@ -8,11 +8,13 @@ export function useWrapperResult(response: AxiosResponse) {
   const { data, headers } = response;
   /** 是否已包装结果 */
   function hasWrapResult(): boolean {
-    const wrapperHeader = headers[_defaultWrapperHeaderKey];
-    if (!wrapperHeader) {
-      return false;
+    if (
+      typeof headers.has === 'function' &&
+      headers.has(_defaultWrapperHeaderKey)
+    ) {
+      return String(headers[_defaultWrapperHeaderKey]).includes('true');
     }
-    return String(wrapperHeader).includes('true') || hasError();
+    return hasError();
   }
 
   /** 获取包装结果 */
@@ -24,10 +26,9 @@ export function useWrapperResult(response: AxiosResponse) {
   /** 如果请求错误,抛出异常 */
   function throwIfError(): void {
     throwIfAbpError();
-    const { code, details, message } = data;
-    const hasSuccess = data && Reflect.has(data, 'code') && code === '0';
+    const hasSuccess = data && Reflect.has(data, 'code') && data.code === '0';
     if (!hasSuccess) {
-      const content = details || message;
+      const content = data.details || data.message;
       throw Object.assign({}, response, {
         response: {
           ...response,

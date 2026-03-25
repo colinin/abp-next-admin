@@ -7,7 +7,9 @@
     "length": "{0} must be {1} characters long",
     "alreadyExists": "{0} `{1}` already exists",
     "startWith": "{0} must start with `{1}`",
-    "invalidURL": "Please input a valid URL"
+    "invalidURL": "Please input a valid URL",
+    "sizeLimit": "The file size cannot exceed {0}MB",
+    "previewWarning": "Unable to open the file, there is no available URL or preview address"
   },
   "actionTitle": {
     "edit": "Modify {0}",
@@ -24,7 +26,8 @@
   },
   "placeholder": {
     "input": "Please enter",
-    "select": "Please select"
+    "select": "Please select",
+    "upload": "Click to upload"
   },
   "captcha": {
     "title": "Please complete the security verification",
@@ -32,8 +35,11 @@
     "sliderDefaultText": "Slider and drag",
     "alt": "Supports img tag src attribute value",
     "sliderRotateDefaultTip": "Click picture to refresh",
+    "sliderTranslateDefaultTip": "Click picture to refresh",
     "sliderRotateFailTip": "Validation failed",
     "sliderRotateSuccessTip": "Validation successful, time {0} seconds",
+    "sliderTranslateFailTip": "Validation failed",
+    "sliderTranslateSuccessTip": "Validation successful, time {0} seconds",
     "refreshAriaLabel": "Refresh captcha",
     "confirmAriaLabel": "Confirm selection",
     "confirm": "Confirm",
@@ -47,6 +53,13 @@
   "jsonViewer": {
     "copy": "Copy",
     "copied": "Copied"
+  },
+  "crop": {
+    "title": "Image Cropping",
+    "titleTip": "Cropping Ratio {0}",
+    "confirm": "Crop",
+    "cancel": "Cancel cropping",
+    "errorTip": "Cropping error"
   },
   "fallback": {
     "pageNotFound": "Oops! Page Not Found",
@@ -99,6 +112,10 @@
       "errorPasswordTip": "Password error, please re-enter",
       "backToLogin": "Back to login",
       "entry": "Enter the system"
+    },
+    "timezone": {
+      "setTimezone": "Set Timezone",
+      "setSuccess": "Timezone set successfully"
     }
   }
 }

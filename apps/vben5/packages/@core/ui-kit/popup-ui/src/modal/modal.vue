@@ -50,9 +50,11 @@ const props = withDefaults(defineProps<Props>(), {
 const components = globalShareState.getComponents();
 
 const contentRef = ref();
+// @ts-expect-error unused
 const wrapperRef = ref<HTMLElement>();
 const dialogRef = ref();
 const headerRef = ref();
+// @ts-expect-error unused
 const footerRef = ref();
 
 const id = useId();
@@ -94,21 +96,32 @@ const {
   submitting,
   title,
   titleTooltip,
+  animationType,
   zIndex,
 } = usePriorityValues(props, state);
 
-const shouldFullscreen = computed(
-  () => (fullscreen.value && header.value) || isMobile.value,
-);
+const shouldFullscreen = computed(() => fullscreen.value || isMobile.value);
 
 const shouldDraggable = computed(
   () => draggable.value && !shouldFullscreen.value && header.value,
 );
 
+const shouldCentered = computed(
+  () => centered.value && !shouldFullscreen.value,
+);
+
+const getAppendTo = computed(() => {
+  return appendToMain.value
+    ? `#${ELEMENT_ID_MAIN_CONTENT}>div:not(.absolute)>div`
+    : undefined;
+});
+
 const { dragging, transform } = useModalDraggable(
   dialogRef,
   headerRef,
   shouldDraggable,
+  getAppendTo,
+  shouldCentered,
 );
 
 const firstOpened = ref(false);
@@ -126,7 +139,9 @@ watch(
       dialogRef.value = innerContentRef.$el;
       // reopen modal reassign value
       const { offsetX, offsetY } = transform;
-      dialogRef.value.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      dialogRef.value.style.transform = shouldCentered.value
+        ? `translate(${offsetX}px, calc(-50% + ${offsetY}px))`
+        : `translate(${offsetX}px, ${offsetY}px)`;
     }
   },
   { immediate: true },
@@ -174,7 +189,7 @@ function escapeKeyDown(e: KeyboardEvent) {
   }
 }
 
-function handerOpenAutoFocus(e: Event) {
+function handleOpenAutoFocus(e: Event) {
   if (!openAutoFocus.value) {
     e?.preventDefault();
   }
@@ -198,15 +213,16 @@ function handleFocusOutside(e: Event) {
   e.preventDefault();
   e.stopPropagation();
 }
-const getAppendTo = computed(() => {
-  return appendToMain.value
-    ? `#${ELEMENT_ID_MAIN_CONTENT}>div:not(.absolute)>div`
-    : undefined;
-});
 
 const getForceMount = computed(() => {
   return !unref(destroyOnClose) && unref(firstOpened);
 });
+
+const handleOpened = () => {
+  requestAnimationFrame(() => {
+    props.modalApi?.onOpened();
+  });
+};
 
 function handleClosed() {
   isClosed.value = true;
@@ -224,14 +240,15 @@ function handleClosed() {
       :append-to="getAppendTo"
       :class="
         cn(
-          'left-0 right-0 top-[10vh] mx-auto flex max-h-[80%] w-[520px] flex-col p-0 sm:rounded-[var(--radius)]',
+          'left-0 right-0 top-[10vh] mx-auto flex max-h-[80%] w-[520px] flex-col p-0',
+          shouldFullscreen ? 'sm:rounded-none' : 'sm:rounded-[var(--radius)]',
           modalClass,
           {
-            'border-border border': bordered,
+            'border border-border': bordered,
             'shadow-3xl': !bordered,
             'left-0 top-0 size-full max-h-full !translate-x-0 !translate-y-0':
               shouldFullscreen,
-            'top-1/2 !-translate-y-1/2': centered && !shouldFullscreen,
+            'top-1/2': centered && !shouldFullscreen,
             'duration-300': !dragging,
             hidden: isClosed,
           },
@@ -241,6 +258,7 @@ function handleClosed() {
       :modal="modal"
       :open="state?.isOpen"
       :show-close="closable"
+      :animation-type="animationType"
       :z-index="zIndex"
       :overlay-blur="overlayBlur"
       close-class="top-3"
@@ -250,8 +268,8 @@ function handleClosed() {
       @escape-key-down="escapeKeyDown"
       @focus-outside="handleFocusOutside"
       @interact-outside="interactOutside"
-      @open-auto-focus="handerOpenAutoFocus"
-      @opened="() => modalApi?.onOpened()"
+      @open-auto-focus="handleOpenAutoFocus"
+      @opened="handleOpened"
       @pointer-down-outside="pointerDownOutside"
     >
       <DialogHeader
@@ -302,7 +320,7 @@ function handleClosed() {
       <VbenLoading v-if="showLoading || submitting" spinning />
       <VbenIconButton
         v-if="fullscreenButton"
-        class="hover:bg-accent hover:text-accent-foreground text-foreground/80 flex-center absolute right-10 top-3 hidden size-6 rounded-full px-1 text-lg opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none sm:block"
+        class="flex-center absolute right-10 top-3 hidden size-6 rounded-full px-1 text-lg text-foreground/80 opacity-70 transition-opacity hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus:outline-none disabled:pointer-events-none sm:block"
         @click="handleFullscreen"
       >
         <Shrink v-if="fullscreen" class="size-3.5" />
@@ -310,8 +328,8 @@ function handleClosed() {
       </VbenIconButton>
 
       <DialogFooter
-        v-if="showFooter"
         ref="footerRef"
+        v-if="showFooter"
         :class="
           cn(
             'flex-row items-center justify-end p-2',

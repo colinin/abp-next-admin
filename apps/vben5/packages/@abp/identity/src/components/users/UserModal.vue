@@ -3,7 +3,7 @@ import type { FormInstance } from 'ant-design-vue';
 import type { TransferItem } from 'ant-design-vue/es/transfer';
 import type { DataNode, EventDataNode } from 'ant-design-vue/es/tree';
 
-import type { IdentityUserDto } from '../../types/users';
+import type { IdentityUserDto, IdentityUserVto } from '../../types/users';
 
 import { defineEmits, defineOptions, ref, toValue } from 'vue';
 
@@ -39,9 +39,19 @@ const emits = defineEmits<{
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
-const defaultModel = {
+const defaultModel: IdentityUserVto = {
   isActive: true,
-} as IdentityUserDto;
+  email: '',
+  emailConfirmed: false,
+  phoneNumber: '',
+  phoneNumberConfirmed: false,
+  extraProperties: {},
+  name: '',
+  userName: '',
+  roleNames: [],
+  lockoutEnabled: true,
+  twoFactorEnabled: false,
+};
 
 const activedTab = ref('info');
 const form = ref<FormInstance>();
@@ -54,7 +64,7 @@ const loadedOuKeys = ref<string[]>([]);
 /** 用户拥有的组织机构节点keys */
 const checkedOuKeys = ref<string[]>([]);
 /** 表单数据 */
-const formModel = ref<IdentityUserDto>({ ...defaultModel });
+const formModel = ref<IdentityUserVto>({ ...defaultModel });
 
 const { isTrue } = useSettings();
 const { hasAccessByCodes } = useAccess();
@@ -230,7 +240,10 @@ async function onLoadOuChildren(node: EventDataNode) {
           >
             <Input
               v-model:value="formModel.userName"
-              :disabled="!isTrue('Abp.Identity.User.IsUserNameUpdateEnabled')"
+              :disabled="
+                !!formModel.id &&
+                !isTrue('Abp.Identity.User.IsUserNameUpdateEnabled')
+              "
             />
           </FormItem>
           <FormItem

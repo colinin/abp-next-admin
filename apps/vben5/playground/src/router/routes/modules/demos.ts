@@ -30,6 +30,7 @@ const routes: RouteRecordRaw[] = [
             meta: {
               icon: 'mdi:page-previous-outline',
               title: $t('demos.access.pageAccess'),
+              domCached: true,
             },
           },
           {
@@ -157,9 +158,7 @@ const routes: RouteRecordRaw[] = [
                 name: 'HideChildrenInMenuDemo',
                 path: '',
                 component: () =>
-                  import(
-                    '#/views/demos/features/hide-menu-children/parent.vue'
-                  ),
+                  import('#/views/demos/features/hide-menu-children/parent.vue'),
                 meta: {
                   // hideInMenu: true,
                   title: $t('demos.features.hideChildrenInMenu'),
@@ -169,9 +168,7 @@ const routes: RouteRecordRaw[] = [
                 name: 'HideChildrenInMenuChildrenDemo',
                 path: '/demos/features/hide-menu-children/children',
                 component: () =>
-                  import(
-                    '#/views/demos/features/hide-menu-children/children.vue'
-                  ),
+                  import('#/views/demos/features/hide-menu-children/children.vue'),
                 meta: {
                   activePath: '/demos/features/hide-menu-children',
                   title: $t('demos.features.hideChildrenInMenu'),
@@ -247,9 +244,7 @@ const routes: RouteRecordRaw[] = [
             name: 'RequestParamsSerializerDemo',
             path: '/demos/features/request-params-serializer',
             component: () =>
-              import(
-                '#/views/demos/features/request-params-serializer/index.vue'
-              ),
+              import('#/views/demos/features/request-params-serializer/index.vue'),
             meta: {
               icon: 'lucide:git-pull-request-arrow',
               title: $t('demos.features.requestParamsSerializer'),

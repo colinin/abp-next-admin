@@ -9,7 +9,7 @@ defineOptions({
 </script>
 
 <template>
-  <Page>
+  <Page auto-content-height>
     <ObjectPage />
   </Page>
 </template>

@@ -54,8 +54,7 @@ export interface PointSelectionCaptchaCardProps {
   width?: number | string;
 }
 
-export interface PointSelectionCaptchaProps
-  extends PointSelectionCaptchaCardProps {
+export interface PointSelectionCaptchaProps extends PointSelectionCaptchaCardProps {
   /**
    * 是否展示确定按钮
    * @default false
@@ -153,6 +152,42 @@ export interface SliderRotateCaptchaProps {
    * @description 图片的地址
    */
   src?: string;
+  /**
+   * @description 默认提示文本
+   */
+  defaultTip?: string;
+}
+
+export interface SliderTranslateCaptchaProps {
+  /**
+   * @description 拼图的宽度
+   * @default 420
+   */
+  canvasWidth?: number;
+  /**
+   * @description 拼图的高度
+   * @default 280
+   */
+  canvasHeight?: number;
+  /**
+   * @description 切块上正方形的长度
+   * @default 42
+   */
+  squareLength?: number;
+  /**
+   * @description 切块上圆形的半径
+   * @default 10
+   */
+  circleRadius?: number;
+  /**
+   * @description 图片的地址
+   */
+  src?: string;
+  /**
+   * @description 允许的最大差距
+   * @default 3
+   */
+  diffDistance?: number;
   /**
    * @description 默认提示文本
    */

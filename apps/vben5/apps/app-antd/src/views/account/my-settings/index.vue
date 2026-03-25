@@ -38,6 +38,11 @@ async function onBindWorkWeixin(code: string) {
   }
 }
 
+async function onBindComfirm(_params: Record<string, any>) {
+  message.success($t('AbpAccount.BindSuccessfully'));
+  window.close();
+}
+
 async function onRemoveBind(provider: string, key: string) {
   Modal.confirm({
     title: $t('AbpUi.AreYouSure'),
@@ -49,6 +54,7 @@ async function onRemoveBind(provider: string, key: string) {
         providerKey: key,
       });
       message.success($t('AbpAccount.CancelBindSuccessfully'));
+      refresh();
     },
   });
 }
@@ -57,11 +63,12 @@ function onBind(provider: string) {
   switch (provider.toLocaleLowerCase()) {
     case 'workweixin': {
       weComBindModal.open();
+      break;
     }
   }
 }
 
-async function onClick(provider: string, key?: string) {
+async function onExternalLoginClick(provider: string, key?: string) {
   if (key) {
     await onRemoveBind(provider, key);
     return;
@@ -70,9 +77,11 @@ async function onClick(provider: string, key?: string) {
 }
 
 async function onInit() {
-  const res = await getExternalLoginsApi();
-  externalLogins.value = res.externalLogins.map((item) => {
-    const userLogin = res.userLogins.find((x) => x.loginProvider === item.name);
+  const loginsRes = await getExternalLoginsApi();
+  const logins = loginsRes.externalLogins.map<BindItem>((item) => {
+    const userLogin = loginsRes.userLogins.find(
+      (x) => x.loginProvider === item.name,
+    );
     return {
       title: item.displayName,
       description: userLogin?.providerKey ?? $t('AbpAccount.UnBind'),
@@ -82,17 +91,22 @@ async function onInit() {
             ? $t('AbpAccount.CancelBind')
             : $t('AbpAccount.Bind'),
           type: 'link',
-          click: () => onClick(item.name, userLogin?.providerKey),
+          click: () => onExternalLoginClick(item.name, userLogin?.providerKey),
         },
       ],
     };
   });
+  externalLogins.value = logins;
 }
 </script>
 
 <template>
-  <Page>
-    <MySetting :bind-items="externalLogins" @on-bind-init="onInit" />
+  <Page auto-content-height>
+    <MySetting
+      :bind-items="externalLogins"
+      @on-bind-init="onInit"
+      @on-confirm="onBindComfirm"
+    />
     <WechatWorkUserBindModal @on-login="onBindWorkWeixin" />
   </Page>
 </template>

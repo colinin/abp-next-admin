@@ -4,9 +4,6 @@ import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { VbenFormProps } from '@vben/common-ui';
 
-import type { NotificationDefinitionDto } from '../../../types/definitions';
-import type { NotificationGroupDefinitionDto } from '../../../types/groups';
-
 import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
 import { useAccess } from '@vben/access';
@@ -102,7 +99,7 @@ const formOptions: VbenFormProps = {
   submitOnEnter: true,
 };
 
-const gridOptions: VxeGridProps<NotificationGroupDefinitionDto> = {
+const gridOptions: VxeGridProps<DefinitionGroup> = {
   columns: [
     {
       align: 'center',
@@ -132,8 +129,10 @@ const gridOptions: VxeGridProps<NotificationGroupDefinitionDto> = {
     },
   ],
   expandConfig: {
+    accordion: true,
     padding: true,
     trigger: 'row',
+    height: 300,
   },
   exportConfig: {},
   keepSource: true,
@@ -142,7 +141,7 @@ const gridOptions: VxeGridProps<NotificationGroupDefinitionDto> = {
       query: async ({ page, sort }) => {
         let items = sortby(definitionGroups.value, sort.field);
         if (sort.order === 'desc') {
-          items = items.reverse();
+          items = items.toReversed();
         }
         const result = {
           totalCount: definitionGroups.value.length,
@@ -168,7 +167,7 @@ const gridOptions: VxeGridProps<NotificationGroupDefinitionDto> = {
     zoom: true,
   },
 };
-const subGridColumns: VxeGridProps<NotificationDefinitionDto>['columns'] = [
+const subGridColumns: VxeGridProps<DefinitionItem>['columns'] = [
   {
     align: 'center',
     type: 'seq',
@@ -258,7 +257,7 @@ const subGridColumns: VxeGridProps<NotificationDefinitionDto>['columns'] = [
   },
 ];
 
-const gridEvents: VxeGridListeners<NotificationGroupDefinitionDto> = {
+const gridEvents: VxeGridListeners<DefinitionGroup> = {
   sortChange: () => {
     gridApi.query();
   },
@@ -329,12 +328,12 @@ function onCreate() {
   modalApi.open();
 }
 
-function onUpdate(row: NotificationDefinitionDto) {
+function onUpdate(row: DefinitionItem) {
   modalApi.setData(row);
   modalApi.open();
 }
 
-function onDelete(row: NotificationDefinitionDto) {
+function onDelete(row: DefinitionItem) {
   Modal.confirm({
     centered: true,
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
@@ -347,7 +346,7 @@ function onDelete(row: NotificationDefinitionDto) {
   });
 }
 
-function onMenuClick(row: NotificationDefinitionDto, info: MenuInfo) {
+function onMenuClick(row: DefinitionItem, info: MenuInfo) {
   switch (info.key) {
     case 'send': {
       sendModalApi.setData(row);

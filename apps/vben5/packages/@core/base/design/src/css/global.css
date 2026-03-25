@@ -14,14 +14,15 @@
   }
 
   html {
-    @apply text-foreground bg-background font-sans text-[100%];
+    @apply text-foreground bg-background font-sans;
 
-    font-variation-settings: normal;
-    line-height: 1.15;
-    text-size-adjust: 100%;
-    font-synthesis-weight: none;
     scroll-behavior: smooth;
+    font-size: var(--font-size-base, 16px);
+    font-variation-settings: normal;
+    font-synthesis-weight: none;
+    line-height: 1.15;
     text-rendering: optimizelegibility;
+    text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
 
     /* -webkit-font-smoothing: antialiased;

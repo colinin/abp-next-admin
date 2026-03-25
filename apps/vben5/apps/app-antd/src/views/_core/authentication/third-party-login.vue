@@ -17,11 +17,11 @@ async function login() {
 <template>
   <div class="w-full sm:mx-auto md:max-w-md">
     <div class="mt-4 flex items-center justify-between">
-      <span class="border-input w-[35%] border-b dark:border-gray-600"></span>
-      <span class="text-muted-foreground text-center text-xs uppercase">
+      <span class="w-[35%] border-b border-input dark:border-gray-600"></span>
+      <span class="text-center text-xs uppercase text-muted-foreground">
         {{ $t('authentication.thirdPartyLogin') }}
       </span>
-      <span class="border-input w-[35%] border-b dark:border-gray-600"></span>
+      <span class="w-[35%] border-b border-input dark:border-gray-600"></span>
     </div>
 
     <div class="mt-4 flex flex-wrap justify-center">
