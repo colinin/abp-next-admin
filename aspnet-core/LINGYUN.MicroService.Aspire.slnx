@@ -284,6 +284,7 @@
   <Folder Name="/modules/ai/">
     <Project Path="modules/ai/LINGYUN.Abp.AI.Agent/LINGYUN.Abp.AI.Agent.csproj" />
     <Project Path="modules/ai/LINGYUN.Abp.AI.Core/LINGYUN.Abp.AI.Core.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Ollama/LINGYUN.Abp.AI.Ollama.csproj" Id="d59e459c-7ca2-4c5b-b981-685af7ad2848" />
     <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Application.Contracts/LINGYUN.Abp.AIManagement.Application.Contracts.csproj" />
     <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Application/LINGYUN.Abp.AIManagement.Application.csproj" />
     <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Domain.Shared/LINGYUN.Abp.AIManagement.Domain.Shared.csproj" />
