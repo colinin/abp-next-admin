@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.AI.Workspaces;
+
+[Dependency(TryRegister = true)]
 public class NullDynamicWorkspaceDefinitionStore : IDynamicWorkspaceDefinitionStore, ISingletonDependency
 {
     private readonly static Task<WorkspaceDefinition?> CachedNullableWorkspaceResult = Task.FromResult((WorkspaceDefinition?)null);

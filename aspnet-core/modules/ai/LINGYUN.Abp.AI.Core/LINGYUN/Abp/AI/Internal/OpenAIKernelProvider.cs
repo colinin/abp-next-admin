@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Abp.AI.Workspaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using OpenAI;
 using System;
@@ -23,6 +25,8 @@ public class OpenAIKernelProvider : KernelProvider
         Check.NotNull(workspace, nameof(workspace));
         Check.NotNullOrWhiteSpace(workspace.ApiKey, nameof(WorkspaceDefinition.ApiKey));
 
+        var options = ServiceProvider.GetRequiredService<IOptions<AbpAICoreOptions>>().Value;
+
         var openAIClient = new OpenAIClient(
             new ApiKeyCredential(workspace.ApiKey),
             new OpenAIClientOptions
@@ -30,10 +34,14 @@ public class OpenAIKernelProvider : KernelProvider
                 Endpoint = new Uri(workspace.ApiBaseUrl ?? DefaultEndpoint),
             });
 
-        var kernel = Kernel.CreateBuilder()
-            .AddOpenAIChatClient(workspace.ModelName, openAIClient)
-            .Build();
+        var kernelBuilder = Kernel.CreateBuilder()
+            .AddOpenAIChatClient(workspace.ModelName, openAIClient);
 
-        return Task.FromResult(kernel);
+        foreach (var handlerAction in options.KernelBuildActions)
+        {
+            handlerAction(workspace, kernelBuilder);
+        }
+
+        return Task.FromResult(kernelBuilder.Build());
     }
 }
