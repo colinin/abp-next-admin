@@ -1,0 +1,10 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Tools": "工具列表",
+    "Tools:GetNowTime": "获取当前时间",
+    "Tools:GetUserInfo": "获取当前用户信息",
+    "Tools:GetSetting": "获取设置值",
+    "Tools:GetSettings": "获取所有设置"
+  }
+}

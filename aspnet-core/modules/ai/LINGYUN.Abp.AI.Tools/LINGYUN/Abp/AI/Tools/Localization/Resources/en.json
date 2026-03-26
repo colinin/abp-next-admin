@@ -1,0 +1,10 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Tools": "Tools",
+    "Tools:GetNowTime": "Get now time",
+    "Tools:GetUserInfo": "Get the current user information",
+    "Tools:GetSetting": "Get setting value",
+    "Tools:GetSettings": "Get all settings"
+  }
+}
