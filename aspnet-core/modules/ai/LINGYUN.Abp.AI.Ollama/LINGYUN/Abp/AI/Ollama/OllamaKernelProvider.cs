@@ -1,41 +1,33 @@
 ﻿using LINGYUN.Abp.AI.Workspaces;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
-using OpenAI;
+using OllamaSharp;
 using System;
-using System.ClientModel;
 using System.Threading.Tasks;
 using Volo.Abp;
 
-namespace LINGYUN.Abp.AI.Internal;
-public class OpenAIKernelProvider : KernelProvider
+namespace LINGYUN.Abp.AI.Ollama;
+public class OllamaKernelProvider : KernelProvider
 {
-    protected virtual string DefaultEndpoint { get; set; } = "https://api.openai.com/v1";
-
-    public const string ProviderName = "OpenAI";
+    public const string ProviderName = "Ollama";
     public override string Name => ProviderName;
-    public OpenAIKernelProvider(IServiceProvider serviceProvider) 
-        : base(serviceProvider)
+
+    public OllamaKernelProvider(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
 
     public override Task<Kernel> CreateAsync(WorkspaceDefinition workspace)
     {
         Check.NotNull(workspace, nameof(workspace));
-        Check.NotNullOrWhiteSpace(workspace.ApiKey, nameof(WorkspaceDefinition.ApiKey));
 
         var options = ServiceProvider.GetRequiredService<IOptions<AbpAICoreOptions>>().Value;
 
-        var openAIClient = new OpenAIClient(
-            new ApiKeyCredential(workspace.ApiKey),
-            new OpenAIClientOptions
-            {
-                Endpoint = new Uri(workspace.ApiBaseUrl ?? DefaultEndpoint),
-            });
+        var ollamaApiClient = new OllamaApiClient(workspace.ApiBaseUrl ?? OllamaChatClientProvider.DefaultEndpoint);
 
         var kernelBuilder = Kernel.CreateBuilder()
-            .AddOpenAIChatClient(workspace.ModelName, openAIClient);
+            .AddOllamaChatClient(ollamaApiClient);
 
         foreach (var handlerAction in options.KernelBuildActions)
         {

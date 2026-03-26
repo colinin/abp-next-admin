@@ -1,4 +1,6 @@
-﻿using LINGYUN.Abp.AIManagement;
+﻿using LINGYUN.Abp.AI.Ollama;
+using LINGYUN.Abp.AI.Tools;
+using LINGYUN.Abp.AIManagement;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
@@ -46,6 +48,8 @@ namespace LINGYUN.Abp.MicroService.AIService;
 
     typeof(AbpIdentitySessionAspNetCoreModule),
 
+    typeof(AbpAIOllamaModule),
+    typeof(AbpAIToolsModule),
     typeof(AbpAIManagementApplicationModule),
     typeof(AbpAIManagementHttpApiModule),
     typeof(AIServiceMigrationsEntityFrameworkCoreModule),

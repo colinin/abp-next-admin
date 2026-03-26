@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 namespace LINGYUN.Abp.AI.Workspaces;
 public interface IWorkspaceDefinitionManager
 {
-    [ItemNotNull]
+    [NotNull]
     Task<WorkspaceDefinition> GetAsync([NotNull] string name);
 
     [ItemNotNull]
     Task<IReadOnlyList<WorkspaceDefinition>> GetAllAsync();
 
-    [ItemCanBeNull]
+    [CanBeNull]
     Task<WorkspaceDefinition?> GetOrNullAsync([NotNull] string name);
 }

@@ -348,6 +348,8 @@
     <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.19.4" />
     <PackageVersion Include="NRules" Version="0.9.2" />
     <PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
+    <PackageVersion Include="OllamaSharp" Version="5.4.20" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Ollama" Version="1.74.0-alpha" />
     <PackageVersion Include="OpenIddict.Server.DataProtection" Version="7.2.0" />
     <PackageVersion Include="OpenIddict.Validation.DataProtection" Version="7.2.0" />
     <PackageVersion Include="Polly" Version="8.6.3" />

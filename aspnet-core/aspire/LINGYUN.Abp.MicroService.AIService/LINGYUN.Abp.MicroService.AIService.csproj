@@ -56,6 +56,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AIService.EntityFrameworkCore\LINGYUN.Abp.MicroService.AIService.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AI.Ollama\LINGYUN.Abp.AI.Ollama.csproj" />
+		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AI.Tools\LINGYUN.Abp.AI.Tools.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AIManagement.Application\LINGYUN.Abp.AIManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AIManagement.HttpApi\LINGYUN.Abp.AIManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />

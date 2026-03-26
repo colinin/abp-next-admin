@@ -1,6 +1,8 @@
 ﻿using LINGYUN.Abp.AI.Models;
 using LINGYUN.Abp.AI.Workspaces;
 using Microsoft.Extensions.AI;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using OpenAI;
 using System;
 using System.ClientModel;
@@ -31,7 +33,7 @@ public class OpenAIChatClientProvider : ChatClientProvider
         ];
     }
 
-    public override Task<IChatClient> CreateAsync(WorkspaceDefinition workspace)
+    public override async Task<IChatClient> CreateAsync(WorkspaceDefinition workspace)
     {
         Check.NotNull(workspace, nameof(workspace));
         Check.NotNullOrWhiteSpace(workspace.ApiKey, nameof(WorkspaceDefinition.ApiKey));
@@ -43,16 +45,23 @@ public class OpenAIChatClientProvider : ChatClientProvider
                 Endpoint = new Uri(workspace.ApiBaseUrl ?? DefaultEndpoint),
             });
 
-        var chatClient = openAIClient
+        var options = ServiceProvider.GetRequiredService<IOptions<AbpAICoreOptions>>().Value;
+
+        var chatClientBuilder = openAIClient
             .GetChatClient(workspace.ModelName)
             .AsIChatClient()
-            .AsBuilder()
+            .AsBuilder();
+
+        foreach (var handlerAction in options.ChatClientBuildActions)
+        {
+            await handlerAction(workspace, ServiceProvider, chatClientBuilder);
+        }
+
+        return chatClientBuilder
             .UseLogging()
             .UseOpenTelemetry()
             .UseFunctionInvocation()
             .UseDistributedCache()
             .Build(ServiceProvider);
-
-        return Task.FromResult(chatClient);
     }
 }

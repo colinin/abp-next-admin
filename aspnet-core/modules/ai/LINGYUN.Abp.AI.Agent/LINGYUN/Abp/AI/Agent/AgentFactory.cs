@@ -2,6 +2,7 @@
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.AI;
@@ -12,6 +13,7 @@ namespace LINGYUN.Abp.AI.Agent;
 public class AgentFactory : IAgentFactory, IScopedDependency
 {
     protected IServiceProvider ServiceProvider { get; }
+    protected AbpAIAgentOptions AgentOptions { get; }
     protected IChatClientFactory ChatClientFactory { get; }
     protected IStringLocalizerFactory StringLocalizerFactory { get; }
     protected IWorkspaceDefinitionManager WorkspaceDefinitionManager { get; }
@@ -19,10 +21,12 @@ public class AgentFactory : IAgentFactory, IScopedDependency
     public AgentFactory(
         IServiceProvider serviceProvider,
         IChatClientFactory chatClientFactory,
+        IOptions<AbpAIAgentOptions> agentOptions,
         IStringLocalizerFactory stringLocalizerFactory,
         IWorkspaceDefinitionManager workspaceDefinitionManager,
         ISimpleStateCheckerManager<WorkspaceDefinition> stateCheckerManager)
     {
+        AgentOptions = agentOptions.Value;
         ServiceProvider = serviceProvider;
         ChatClientFactory = chatClientFactory;
         StringLocalizerFactory = stringLocalizerFactory;
@@ -75,8 +79,21 @@ public class AgentFactory : IAgentFactory, IScopedDependency
             Description = description,
         };
 
-        var aiAgent = chatClient.CreateAIAgent(clientAgentOptions)
-            .AsBuilder()
+        foreach (var handlerAction in AgentOptions.AgentOptionActions)
+        {
+            handlerAction(workspace, clientAgentOptions);
+        }
+
+        var aiAgentBuilder = chatClient
+            .CreateAIAgent(clientAgentOptions)
+            .AsBuilder();
+
+        foreach (var handlerAction in AgentOptions.AgentBuildActions)
+        {
+            handlerAction(workspace, aiAgentBuilder);
+        }
+
+        var aiAgent = aiAgentBuilder
             .UseLogging()
             .UseOpenTelemetry()
             .Build(ServiceProvider);
