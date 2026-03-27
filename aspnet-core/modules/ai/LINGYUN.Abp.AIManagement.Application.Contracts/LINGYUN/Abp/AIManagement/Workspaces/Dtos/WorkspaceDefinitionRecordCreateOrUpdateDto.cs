@@ -42,6 +42,8 @@ public abstract class WorkspaceDefinitionRecordCreateOrUpdateDto : ExtensibleObj
 
     public bool IsEnabled { get; set; }
 
+    public string[]? Tools { get; set; }
+
     [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxStateCheckersLength))]
     public string? StateCheckers { get; set; }
 }

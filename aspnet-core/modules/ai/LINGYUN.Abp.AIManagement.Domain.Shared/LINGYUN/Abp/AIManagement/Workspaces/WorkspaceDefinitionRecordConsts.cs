@@ -10,5 +10,6 @@ public static class WorkspaceDefinitionRecordConsts
     public static int MaxApiBaseUrlLength { get; set; } = 128;
     public static int MaxSystemPromptLength { get; set; } = 512;
     public static int MaxInstructionsLength { get; set; } = 512;
+    public static int MaxToolsLength { get; set; } = 128;
     public static int MaxStateCheckersLength { get; set; } = 256;
 }

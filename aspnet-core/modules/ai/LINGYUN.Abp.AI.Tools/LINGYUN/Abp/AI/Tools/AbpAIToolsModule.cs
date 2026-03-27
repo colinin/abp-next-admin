@@ -3,6 +3,7 @@ using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -32,10 +33,27 @@ public class AbpAIToolsModule : AbpModule
 
         Configure<AbpAICoreOptions>(options =>
         {
-            options.ChatClientBuildActions.Add(async (_, sp, builder) =>
+            options.ChatClientBuildActions.Add(async (workspace, sp, builder) =>
             {
+                var useAITools = new List<AITool>();
                 var aiToolFactory = sp.GetRequiredService<IAIToolFactory>();
-                var aiTools = await aiToolFactory.CreateAllTools();
+
+                if (workspace.Tools.Count > 0)
+                {
+                    var aiToolDefinitionManager = sp.GetRequiredService<IAIToolDefinitionManager>();
+                    var aiToolDefinitions = await aiToolDefinitionManager.GetAllAsync();
+                    var useAIToolDefinitions = aiToolDefinitions.Where(aiTool => workspace.Tools.Contains(aiTool.Name));
+
+                    foreach (var aiToolDefinition in aiToolDefinitions)
+                    {
+                        var aiTools = await aiToolFactory.CreateTool(aiToolDefinition);
+                        useAITools.AddRange(aiTools);
+                    }
+                }
+                else
+                {
+                    useAITools.AddRange(await aiToolFactory.CreateAllTools());
+                }
 
                 builder.ConfigureOptions(ai =>
                 {
@@ -44,7 +62,7 @@ public class AbpAIToolsModule : AbpModule
 
                     ai.Tools ??= [];
 
-                    foreach (var aiTool in aiTools)
+                    foreach (var aiTool in useAITools)
                     {
                         ai.Tools.Add(aiTool);
                     }

@@ -14,8 +14,17 @@ namespace LINGYUN.Abp.AIManagement;
 [MapExtraProperties(DefinitionChecks = MappingPropertyDefinitionChecks.None)]
 public partial class WorkspaceDefinitionRecordToWorkspaceDefinitionRecordDtoMapper : MapperBase<WorkspaceDefinitionRecord, WorkspaceDefinitionRecordDto>
 {
+    [MapPropertyFromSource(nameof(WorkspaceDefinitionRecordDto.Tools), Use = nameof(ConvertTools))]
     public override partial WorkspaceDefinitionRecordDto Map(WorkspaceDefinitionRecord source);
+
+    [MapPropertyFromSource(nameof(WorkspaceDefinitionRecordDto.Tools), Use = nameof(ConvertTools))]
     public override partial void Map(WorkspaceDefinitionRecord source, WorkspaceDefinitionRecordDto destination);
+
+    [UserMapping(Default = false)]
+    private static string[]? ConvertTools(WorkspaceDefinitionRecord record)
+    {
+        return record.Tools?.Split(",");
+    }
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]

@@ -91,6 +91,8 @@ public static class AIManagementDbContextModelBuilderExtensions
                     .HasMaxLength(WorkspaceDefinitionRecordConsts.MaxInstructionsLength);
                 b.Property(x => x.StateCheckers)
                     .HasMaxLength(WorkspaceDefinitionRecordConsts.MaxStateCheckersLength);
+                b.Property(x => x.Tools)
+                    .HasMaxLength(WorkspaceDefinitionRecordConsts.MaxToolsLength);
 
                 b.HasIndex(x => new { x.Name }).IsUnique();
 

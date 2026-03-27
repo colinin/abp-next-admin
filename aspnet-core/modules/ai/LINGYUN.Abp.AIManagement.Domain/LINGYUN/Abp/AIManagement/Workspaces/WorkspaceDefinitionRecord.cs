@@ -36,6 +36,8 @@ public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
 
     public bool IsSystem { get; set; }
 
+    public string? Tools { get; set; }
+
     public string? StateCheckers { get; set; }
 
     protected WorkspaceDefinitionRecord()
@@ -57,6 +59,7 @@ public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
         int? maxOutputTokens = null, 
         float? frequencyPenalty = null,
         float? presencePenalty = null,
+        string? tools = null,
         string? stateCheckers = null)
         : base(id)
     {
@@ -67,6 +70,7 @@ public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
         Description = Check.Length(description, nameof(description), WorkspaceDefinitionRecordConsts.MaxDescriptionLength);
         SystemPrompt = Check.Length(systemPrompt, nameof(systemPrompt), WorkspaceDefinitionRecordConsts.MaxSystemPromptLength);
         Instructions = Check.Length(instructions, nameof(instructions), WorkspaceDefinitionRecordConsts.MaxInstructionsLength);
+        Tools = Check.Length(tools, nameof(tools), WorkspaceDefinitionRecordConsts.MaxToolsLength);
         StateCheckers = Check.Length(stateCheckers, nameof(stateCheckers), WorkspaceDefinitionRecordConsts.MaxStateCheckersLength);
         Temperature = temperature;
         MaxOutputTokens = maxOutputTokens;
@@ -143,6 +147,11 @@ public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
         }
 
         if (IsEnabled != otherWorkspace.IsEnabled)
+        {
+            return false;
+        }
+
+        if (IsSystem != otherWorkspace.IsSystem)
         {
             return false;
         }
@@ -230,6 +239,11 @@ public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
         if (IsEnabled != otherWorkspace.IsEnabled)
         {
             IsEnabled = otherWorkspace.IsEnabled;
+        }
+
+        if (IsSystem != otherWorkspace.IsSystem)
+        {
+            IsSystem = otherWorkspace.IsSystem;
         }
 
         if (Temperature != otherWorkspace.Temperature)

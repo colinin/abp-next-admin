@@ -5,6 +5,7 @@ using LINGYUN.Abp.AIManagement.Workspaces.Dtos;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
@@ -113,6 +114,7 @@ public class WorkspaceDefinitionAppService :
             createInput.MaxOutputTokens,
             createInput.FrequencyPenalty,
             createInput.PresencePenalty,
+            createInput.Tools?.JoinAsString(","),
             createInput.StateCheckers)
         {
             IsEnabled = createInput.IsEnabled,
@@ -182,6 +184,11 @@ public class WorkspaceDefinitionAppService :
         if (entity.StateCheckers != updateInput.StateCheckers)
         {
             entity.StateCheckers = updateInput.StateCheckers;
+        }
+
+        if (updateInput.Tools != null)
+        {
+            entity.Tools = updateInput.Tools.JoinAsString(",");
         }
 
         if (!updateInput.ApiKey.IsNullOrWhiteSpace())
