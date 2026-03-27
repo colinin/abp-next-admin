@@ -31,6 +31,7 @@
 		<PackageReference Include="Volo.Abp.FeatureManagement.Application" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" />
 		<PackageReference Include="Volo.Abp.Http.Client" />
+		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.Application" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" />
@@ -58,6 +59,7 @@
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AIService.EntityFrameworkCore\LINGYUN.Abp.MicroService.AIService.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AI.Ollama\LINGYUN.Abp.AI.Ollama.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AI.Tools\LINGYUN.Abp.AI.Tools.csproj" />
+		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AI.Tools.Http\LINGYUN.Abp.AI.Tools.Http.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AIManagement.Application\LINGYUN.Abp.AIManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AIManagement.HttpApi\LINGYUN.Abp.AIManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />

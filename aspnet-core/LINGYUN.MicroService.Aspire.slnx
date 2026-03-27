@@ -285,6 +285,8 @@
     <Project Path="modules/ai/LINGYUN.Abp.AI.Agent/LINGYUN.Abp.AI.Agent.csproj" />
     <Project Path="modules/ai/LINGYUN.Abp.AI.Core/LINGYUN.Abp.AI.Core.csproj" />
     <Project Path="modules/ai/LINGYUN.Abp.AI.Ollama/LINGYUN.Abp.AI.Ollama.csproj" Id="d59e459c-7ca2-4c5b-b981-685af7ad2848" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Tools.Http/LINGYUN.Abp.AI.Tools.Http.csproj" Id="d54a5812-80e1-4269-856b-672c23c0a49b" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Tools/LINGYUN.Abp.AI.Tools.csproj" Id="49756a42-07d5-4ddd-948e-1e99894a383a" />
     <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Application.Contracts/LINGYUN.Abp.AIManagement.Application.Contracts.csproj" />
     <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Application/LINGYUN.Abp.AIManagement.Application.csproj" />
     <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Domain.Shared/LINGYUN.Abp.AIManagement.Domain.Shared.csproj" />
