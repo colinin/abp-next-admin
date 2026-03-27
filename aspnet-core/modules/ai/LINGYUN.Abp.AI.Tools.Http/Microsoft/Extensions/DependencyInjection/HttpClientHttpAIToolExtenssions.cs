@@ -41,7 +41,7 @@ internal static class HttpClientHttpAIToolExtenssions
         return services;
     }
 
-    public static HttpClient GetHttpAIToolClient(this IHttpClientFactory httpClientFactory)
+    public static HttpClient CreateHttpAIToolClient(this IHttpClientFactory httpClientFactory)
     {
         return httpClientFactory.CreateClient(HttpAIToolClient);
     }

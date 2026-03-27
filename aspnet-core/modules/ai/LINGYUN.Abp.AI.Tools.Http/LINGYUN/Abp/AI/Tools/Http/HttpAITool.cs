@@ -61,7 +61,7 @@ public class HttpAITool
 
         var options = Context.ServiceProvider.GetRequiredService<IOptions<AbpAIToolsHttpOptiions>>().Value;
         var httpClientFactory = Context.ServiceProvider.GetRequiredService<IHttpClientFactory>();
-        var httpClient = httpClientFactory.GetHttpAIToolClient();
+        var httpClient = httpClientFactory.CreateHttpAIToolClient();
 
         var httpRequestMessage = new HttpRequestMessage(
             Context.ToolDefinition.GetHttpMethod(),

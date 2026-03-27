@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.AI.Ollama;
 using LINGYUN.Abp.AI.Tools;
 using LINGYUN.Abp.AI.Tools.Http;
+using LINGYUN.Abp.AI.Tools.Mcp;
 using LINGYUN.Abp.AIManagement;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Localization;
@@ -23,7 +24,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Identity;
@@ -53,6 +53,7 @@ namespace LINGYUN.Abp.MicroService.AIService;
     typeof(AbpAIOllamaModule),
     typeof(AbpAIToolsModule),
     typeof(AbpAIToolsHttpModule),
+    typeof(AbpAIToolsMcpModule),
     typeof(AbpAIManagementApplicationModule),
     typeof(AbpAIManagementHttpApiModule),
     typeof(AIServiceMigrationsEntityFrameworkCoreModule),

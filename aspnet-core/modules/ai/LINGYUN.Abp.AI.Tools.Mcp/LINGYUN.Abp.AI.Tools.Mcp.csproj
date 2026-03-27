@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.AI.Tools.Mcp</AssemblyName>
+		<PackageId>LINGYUN.Abp.AI.Tools.Mcp</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Http.Client" />
+		<PackageReference Include="ModelContextProtocol" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.AI.Tools\LINGYUN.Abp.AI.Tools.csproj" />
+	</ItemGroup>
+
+</Project>
