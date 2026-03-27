@@ -1,7 +1,7 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "Tools:GetApplicationConfiguration": "获取应用程序配置",
+    "Tools:GetApplicationConfiguration": "获取应用程序配置, 用户未明确要求时需要传递IncludeLocalizationResources参数,参数值为false.",
     "HttpAITool:Endpoint": "请求地址",
     "HttpAITool:Method": "请求方法",
     "HttpAITool:Headers": "请求头",
