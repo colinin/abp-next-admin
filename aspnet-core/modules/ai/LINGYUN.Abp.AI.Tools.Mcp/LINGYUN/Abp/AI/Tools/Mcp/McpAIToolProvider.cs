@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client.Authentication;
 
 namespace LINGYUN.Abp.AI.Tools.Mcp;
 public class McpAIToolProvider : IAIToolProvider, ITransientDependency
@@ -14,9 +15,13 @@ public class McpAIToolProvider : IAIToolProvider, ITransientDependency
     public const string ProviderName = "Mcp";
     public string Name => ProviderName;
 
+    protected IServiceProvider ServiceProvider { get; }
     protected IHttpClientFactory HttpClientFactory { get; }
-    public McpAIToolProvider(IHttpClientFactory httpClientFactory)
+    public McpAIToolProvider(
+        IServiceProvider serviceProvider,
+        IHttpClientFactory httpClientFactory)
     {
+        ServiceProvider = serviceProvider;
         HttpClientFactory = httpClientFactory;
     }
 
@@ -36,6 +41,18 @@ public class McpAIToolProvider : IAIToolProvider, ITransientDependency
         foreach (var header in headers)
         {
             httpClientTransportOptions.AdditionalHeaders.TryAdd(header.Key, header.Value);
+        }
+
+        if (definition.IsUseMcpCurrentAccessToken())
+        {
+            var accessTokenProvider = ServiceProvider.GetRequiredService<IAbpAccessTokenProvider>();
+
+            var token = await accessTokenProvider.GetTokenAsync();
+            if (!token.IsNullOrWhiteSpace())
+            {
+                // TODO: 使用OAuth配置?
+                httpClientTransportOptions.AdditionalHeaders.TryAdd("Authorization", $"Bearer {token}");
+            }
         }
 
         var mcpClient = await McpClient.CreateAsync(
