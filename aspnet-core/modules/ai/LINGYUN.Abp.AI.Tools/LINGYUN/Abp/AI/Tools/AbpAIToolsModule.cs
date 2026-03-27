@@ -3,6 +3,7 @@ using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -32,10 +33,35 @@ public class AbpAIToolsModule : AbpModule
 
         Configure<AbpAICoreOptions>(options =>
         {
-            options.ChatClientBuildActions.Add(async (_, sp, builder) =>
+            options.ChatClientBuildActions.Add(async (workspace, sp, builder) =>
             {
+                var useAITools = new List<AITool>();
+                var useAIToolDefinitions = new List<AIToolDefinition>();
                 var aiToolFactory = sp.GetRequiredService<IAIToolFactory>();
-                var aiTools = await aiToolFactory.CreateAllTools();
+                var aiToolDefinitionManager = sp.GetRequiredService<IAIToolDefinitionManager>();
+                var aiToolDefinitions = await aiToolDefinitionManager.GetAllAsync();
+
+                if (workspace.Tools.Count > 0)
+                {
+                    useAIToolDefinitions.AddRange(aiToolDefinitions.Where(aiTool => workspace.Tools.Contains(aiTool.Name)));
+                }
+
+                foreach (var globalAIToolDefinition in aiToolDefinitions.Where(aiTool => aiTool.IsGlobal))
+                {
+                    if (!useAIToolDefinitions.Any(tool => tool.Name == globalAIToolDefinition.Name))
+                    {
+                        useAIToolDefinitions.Add(globalAIToolDefinition);
+                    }
+                }
+
+                foreach (var aiToolDefinition in useAIToolDefinitions)
+                {
+                    var aiTools = await aiToolFactory.CreateTool(aiToolDefinition);
+                    if (aiTools.Length > 0)
+                    {
+                        useAITools.AddRange(aiTools);
+                    }
+                }
 
                 builder.ConfigureOptions(ai =>
                 {
@@ -44,7 +70,7 @@ public class AbpAIToolsModule : AbpModule
 
                     ai.Tools ??= [];
 
-                    foreach (var aiTool in aiTools)
+                    foreach (var aiTool in useAITools)
                     {
                         ai.Tools.Add(aiTool);
                     }

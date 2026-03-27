@@ -153,6 +153,7 @@
   "ai": {
     "title": "人工智能",
     "workspaces": "工作区管理",
-    "conversations": "会话管理"
+    "conversations": "会话管理",
+    "tools": "工具管理"
   }
 }

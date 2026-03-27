@@ -21,6 +21,6 @@ public class EfCoreWorkspaceDefinitionRecordRepository : EfCoreRepository<IAIMan
     {
         return await (await GetQueryableAsync())
             .Where(x => x.Name == name)
-            .FirstOrDefaultAsync(GetCancellationToken(cancellationToken)); ;
+            .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 }

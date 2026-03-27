@@ -50,7 +50,7 @@ public class WorkspaceDefinitionController : AbpControllerBase, IWorkspaceDefini
     }
 
     [HttpGet]
-    public virtual Task<PagedResultDto<WorkspaceDefinitionRecordDto>> GetListAsync(WorkspaceDefinitionRecordGetListInput input)
+    public virtual Task<PagedResultDto<WorkspaceDefinitionRecordDto>> GetListAsync(WorkspaceDefinitionRecordGetPagedListInput input)
     {
         return _service.GetListAsync(input);
     }

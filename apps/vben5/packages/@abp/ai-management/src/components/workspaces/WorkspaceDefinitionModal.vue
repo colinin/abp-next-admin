@@ -13,7 +13,11 @@ import { ref, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useAuthorization } from '@abp/core';
+import {
+  useAuthorization,
+  useLocalization,
+  useLocalizationSerializer,
+} from '@abp/core';
 import { useMessage } from '@abp/ui';
 import {
   AutoComplete,
@@ -25,7 +29,9 @@ import {
   Tabs,
   Textarea,
 } from 'ant-design-vue';
+import debounce from 'lodash.debounce';
 
+import { useAIToolsApi } from '../../api/useAIToolsApi';
 import { useWorkspaceDefinitionsApi } from '../../api/useWorkspaceDefinitionsApi';
 import { WorkspaceDefinitionPermissions } from '../../constants/permissions';
 
@@ -53,6 +59,10 @@ const defaultModel: WorkspaceDefinitionVto = {
 
 const message = useMessage();
 const { isGranted } = useAuthorization();
+const { Lr } = useLocalization();
+const { deserialize: deserializeLocalizableString } =
+  useLocalizationSerializer();
+const { getPagedListApi: getAIToolPagedListApi } = useAIToolsApi();
 const { createApi, updateApi, getApi, getAvailableProviderListApi } =
   useWorkspaceDefinitionsApi();
 // 表单允许编辑
@@ -65,6 +75,8 @@ const formModel = ref<WorkspaceDefinitionVto>({ ...defaultModel });
 const providerOptions = ref<NonNullable<SelectProps['options']>>([]);
 // 模型选项
 const modelOptions = ref<NonNullable<SelectProps['options']>>([]);
+// AI工具
+const aiToolOptions = ref<NonNullable<SelectProps['options']>>([]);
 
 // 工作区编辑模态框
 const [Modal, modalApi] = useVbenModal({
@@ -85,7 +97,7 @@ async function onInit() {
       loading: true,
       title: $t('AIManagement.Workspaces:New'),
     });
-    await onInitProviderOptions();
+    await Promise.all([onSearchAIToolOptions(), onInitProviderOptions()]);
     const { id } = modalApi.getData<WorkspaceDefinitionVto>();
     if (!id) {
       isAllowUpdate.value = isGranted(WorkspaceDefinitionPermissions.Create);
@@ -122,6 +134,27 @@ async function onInitProviderOptions() {
     };
   });
 }
+
+/** 初始化AI工具选项 */
+const onSearchAIToolOptions = debounce((filter?: string) => {
+  getAIToolPagedListApi({ isEnabled: true, filter }).then((res) => {
+    aiToolOptions.value = res.items.map((item) => {
+      let description = item.description;
+      if (description) {
+        const localizableString = deserializeLocalizableString(description);
+        description = Lr(
+          localizableString.resourceName,
+          localizableString.name,
+        );
+      }
+      return {
+        label: item.name,
+        value: item.name,
+        description,
+      };
+    });
+  });
+}, 500);
 
 function onProviderChange(_: SelectValue, option: DefaultOptionType) {
   modelOptions.value = option.models;
@@ -187,6 +220,21 @@ async function onSubmit() {
               v-model:value="formModel.description"
               :auto-size="{ minRows: 3 }"
             />
+          </FormItem>
+          <FormItem :label="$t('AIManagement.DisplayName:Tools')" name="tools">
+            <Select
+              :allow-clear="true"
+              :show-search="true"
+              :filter-option="false"
+              :options="aiToolOptions"
+              v-model:value="formModel.tools"
+              mode="multiple"
+              @search="onSearchAIToolOptions"
+            >
+              <template #option="{ label, description }">
+                {{ label }} ({{ description }})
+              </template>
+            </Select>
           </FormItem>
         </TabPane>
         <TabPane key="model" :tab="$t('AIManagement.ModelInfo')" force-render>
@@ -254,7 +302,7 @@ async function onSubmit() {
             >
               <InputNumber
                 v-model:value="formModel.temperature"
-                :max="1.0"
+                :max="2.0"
                 :min="0.0"
                 :step="0.1"
                 class="w-full"

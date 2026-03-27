@@ -6,5 +6,7 @@ public interface IAIToolProvider
 {
     string Name { get; }
 
+    AIToolPropertyDescriptor[] GetPropertites();
+
     Task<AITool[]> CreateToolsAsync(AIToolDefinition definition);
 }

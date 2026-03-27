@@ -5,6 +5,10 @@
     "Tools:GetNowTime": "获取当前时间",
     "Tools:GetUserInfo": "获取当前用户信息",
     "Tools:GetSetting": "获取设置值",
-    "Tools:GetSettings": "获取所有设置"
+    "Tools:GetSettings": "获取所有设置",
+    "FunctionAITool:FunctionType": "自定义函数类型",
+    "FunctionAITool:FunctionTypeDesc": "使用函数全名, 应使用Type.AssemblyQualifiedName获取.",
+    "FunctionAITool:FunctionName": "自定义函数名称",
+    "FunctionAITool:FunctionNameDesc": "调用的函数名称, 如未指定, 默认调用 Invoke(同步) 或 InvokeAsync(异步)函数."
   }
 }

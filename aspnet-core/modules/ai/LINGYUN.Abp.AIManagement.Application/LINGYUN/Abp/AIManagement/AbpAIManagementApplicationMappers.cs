@@ -1,8 +1,11 @@
 ﻿using LINGYUN.Abp.AIManagement.Chats;
 using LINGYUN.Abp.AIManagement.Chats.Dtos;
+using LINGYUN.Abp.AIManagement.Tools;
+using LINGYUN.Abp.AIManagement.Tools.Dtos;
 using LINGYUN.Abp.AIManagement.Workspaces;
 using LINGYUN.Abp.AIManagement.Workspaces.Dtos;
 using Riok.Mapperly.Abstractions;
+using System;
 using Volo.Abp.Mapperly;
 using Volo.Abp.ObjectExtending;
 
@@ -12,8 +15,17 @@ namespace LINGYUN.Abp.AIManagement;
 [MapExtraProperties(DefinitionChecks = MappingPropertyDefinitionChecks.None)]
 public partial class WorkspaceDefinitionRecordToWorkspaceDefinitionRecordDtoMapper : MapperBase<WorkspaceDefinitionRecord, WorkspaceDefinitionRecordDto>
 {
+    [MapPropertyFromSource(nameof(WorkspaceDefinitionRecordDto.Tools), Use = nameof(ConvertTools))]
     public override partial WorkspaceDefinitionRecordDto Map(WorkspaceDefinitionRecord source);
+
+    [MapPropertyFromSource(nameof(WorkspaceDefinitionRecordDto.Tools), Use = nameof(ConvertTools))]
     public override partial void Map(WorkspaceDefinitionRecord source, WorkspaceDefinitionRecordDto destination);
+
+    [UserMapping(Default = false)]
+    private static string[] ConvertTools(WorkspaceDefinitionRecord record)
+    {
+        return !record.Tools.IsNullOrWhiteSpace() ? record.Tools.Split(",") : [];
+    }
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -31,4 +43,12 @@ public partial class TextChatMessageRecordToTextChatMessageDtoMapper : MapperBas
     {
         return record.Role.Value;
     }
+}
+
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
+[MapExtraProperties(DefinitionChecks = MappingPropertyDefinitionChecks.None)]
+public partial class AIToolDefinitionRecordToAIToolDefinitionRecordDtoMapper : MapperBase<AIToolDefinitionRecord, AIToolDefinitionRecordDto>
+{
+    public override partial AIToolDefinitionRecordDto Map(AIToolDefinitionRecord source);
+    public override partial void Map(AIToolDefinitionRecord source, AIToolDefinitionRecordDto destination);
 }

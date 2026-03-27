@@ -3,6 +3,7 @@
   "texts": {
     "Permission:AIManagement": "Artificia Intelligence",
     "Permission:WorkspaceDefinition": "Workspaces",
+    "Permission:AIToolDefinition": "AI Tools",
     "Permission:Conversation": "Conversations",
     "Permission:Chats": "Chats",
     "Permission:SendMessage": "Send Message",
@@ -11,6 +12,8 @@
     "Permission:Delete": "Delete",
     "AIManagement:111001": "Workspace {Workspace} already exists!",
     "AIManagement:111002": "System workspace {Workspace} is not allowed to be deleted!",
+    "AIManagement:112001": "AITool {AITool} already exists!",
+    "AIManagement:112002": "System AITool {AITool} is not allowed to be deleted!",
     "DisplayName:MaxLatestHistoryMessagesToKeep": "Carry the recent conversation records",
     "Description:MaxLatestHistoryMessagesToKeep": "When a user initiates a conversation with a large model, the upper limit of the user's recent conversation history that is carried along.",
     "Conversations:Delete": "Delete Conversation",
@@ -48,6 +51,14 @@
     "DisplayName:PresencePenalty": "Presence Penalty",
     "Description:PresencePenalty": "Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.",
     "DisplayName:IsEnabled": "Is Enabled",
-    "DisplayName:Workspace": "Workspace"
+    "DisplayName:Workspace": "Workspace",
+    "DisplayName:Tools": "Tools",
+    "DisplayName:ToolProvider": "Tool Provider",
+    "DisplayName:IsGlobal": "Is Global",
+    "Description:IsGlobal": "The global tool is available in all workspaces and may result in a higher token value. Please exercise caution when choosing!",
+    "Tools": "Tools",
+    "Propertites": "Propertites",
+    "Tools:New": "New Tool",
+    "Tools:Edit": "Edit Tool"
   }
 }

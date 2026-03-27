@@ -273,7 +273,7 @@ function onUpdate(row: WebhookSubscriptionDto) {
 function onDelete(row: WebhookSubscriptionDto) {
   Modal.confirm({
     centered: true,
-    content: $t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.title]),
+    content: $t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.description]),
     onCancel: () => {
       cancel();
     },

@@ -15,6 +15,15 @@ public static class AIManagementPermissionNames
         public const string Delete = Default + ".Delete";
     }
 
+    public static class AIToolDefinition
+    {
+        public const string Default = GroupName + ".AIToolDefinitions";
+
+        public const string Create = Default + ".Create";
+        public const string Update = Default + ".Update";
+        public const string Delete = Default + ".Delete";
+    }
+
     public static class Conversation
     {
         public const string Default = GroupName + ".Conversations";

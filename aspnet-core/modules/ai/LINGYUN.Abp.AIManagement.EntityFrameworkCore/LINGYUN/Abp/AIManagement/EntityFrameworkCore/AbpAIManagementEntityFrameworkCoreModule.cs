@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.AIManagement.Chats;
 using LINGYUN.Abp.AIManagement.Tokens;
+using LINGYUN.Abp.AIManagement.Tools;
 using LINGYUN.Abp.AIManagement.Workspaces;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
@@ -23,6 +24,8 @@ public class AbpAIManagementEntityFrameworkCoreModule : AbpModule
             options.AddRepository<TokenUsageRecord, EfCoreTokenUsageRecordRepository>();
 
             options.AddRepository<WorkspaceDefinitionRecord, EfCoreWorkspaceDefinitionRecordRepository>();
+
+            options.AddRepository<AIToolDefinitionRecord, EfCoreAIToolDefinitionRecordRepository>();
         });
     }
 }

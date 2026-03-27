@@ -37,10 +37,12 @@
     "ant-design-vue": "catalog:",
     "ant-design-x-vue": "catalog:",
     "dayjs": "catalog:",
+    "lodash.debounce": "catalog:",
     "markdown-it": "catalog:",
     "vue": "catalog:"
   },
   "devDependencies": {
+    "@types/lodash.debounce": "catalog:",
     "@types/markdown-it": "catalog:"
   }
 }

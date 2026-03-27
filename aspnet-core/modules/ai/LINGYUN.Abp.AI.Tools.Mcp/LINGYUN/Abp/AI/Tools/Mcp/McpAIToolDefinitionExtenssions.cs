@@ -6,12 +6,12 @@ using Volo.Abp;
 namespace LINGYUN.Abp.AI.Tools.Mcp;
 public static class McpAIToolDefinitionExtenssions
 {
-    private const string Endpoint = "McpEndpoint";
-    private const string Headers = "McpHeaders";
-    private const string TransportMode = "McpTransportMode";
-    private const string ConnectionTimeout = "McpConnectionTimeout";
-    private const string MaxReconnectionAttempts = "McpMaxReconnectionAttempts";
-    private const string CurrentAccessToken = "UseMcpCurrentAccessToken";
+    public const string Endpoint = "McpEndpoint";
+    public const string Headers = "McpHeaders";
+    public const string TransportMode = "McpTransportMode";
+    public const string ConnectionTimeout = "McpConnectionTimeout";
+    public const string MaxReconnectionAttempts = "McpMaxReconnectionAttempts";
+    public const string CurrentAccessToken = "UseMcpCurrentAccessToken";
 
     public static AIToolDefinition UseMcpCurrentAccessToken(this AIToolDefinition definition, bool useCurrentAccessToken = true)
     {

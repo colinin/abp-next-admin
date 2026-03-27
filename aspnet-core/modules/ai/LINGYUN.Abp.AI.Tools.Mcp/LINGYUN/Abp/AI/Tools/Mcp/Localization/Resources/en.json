@@ -1,0 +1,14 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "McpAITool:Endpoint": "Endpoint",
+    "McpAITool:Headers": "Headers",
+    "McpAITool:TransportMode": "Transport Mode",
+    "McpAITool:TransportModeDesc": "The transport mode to use for the connection. The default is: Auto Detect.",
+    "McpAITool:ConnectionTimeout": "Connection Timeout",
+    "McpAITool:ConnectionTimeoutDesc": "The timeout used to establish the initial connection to the SSE server. The default is 30 seconds.",
+    "McpAITool:MaxReconnectionAttempts": "Max Reconnection Attempts",
+    "McpAITool:MaxReconnectionAttemptsDesc": "The maximum number of reconnection attempts. The default is 5.",
+    "McpAITool:CurrentAccessToken": "Use the current user token"
+  }
+}

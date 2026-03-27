@@ -11,20 +11,37 @@ public class AIManagementPermissionDefinitionProvider : PermissionDefinitionProv
     {
         var group = context.AddGroup(AIManagementPermissionNames.GroupName, L("Permission:AIManagement"));
 
-        var groupDefinition = group.AddPermission(
+        var workspaceDefinition = group.AddPermission(
             AIManagementPermissionNames.WorkspaceDefinition.Default,
             L("Permission:WorkspaceDefinition"),
             MultiTenancySides.Host);
-        groupDefinition.AddChild(
+        workspaceDefinition.AddChild(
             AIManagementPermissionNames.WorkspaceDefinition.Create,
             L("Permission:Create"),
             MultiTenancySides.Host);
-        groupDefinition.AddChild(
+        workspaceDefinition.AddChild(
             AIManagementPermissionNames.WorkspaceDefinition.Update,
             L("Permission:Update"),
             MultiTenancySides.Host);
-        groupDefinition.AddChild(
+        workspaceDefinition.AddChild(
             AIManagementPermissionNames.WorkspaceDefinition.Delete,
+            L("Permission:Delete"),
+            MultiTenancySides.Host);
+
+        var aiToolDefinition = group.AddPermission(
+            AIManagementPermissionNames.AIToolDefinition.Default,
+            L("Permission:AIToolDefinition"),
+            MultiTenancySides.Host);
+        aiToolDefinition.AddChild(
+            AIManagementPermissionNames.AIToolDefinition.Create,
+            L("Permission:Create"),
+            MultiTenancySides.Host);
+        aiToolDefinition.AddChild(
+            AIManagementPermissionNames.AIToolDefinition.Update,
+            L("Permission:Update"),
+            MultiTenancySides.Host);
+        aiToolDefinition.AddChild(
+            AIManagementPermissionNames.AIToolDefinition.Delete,
             L("Permission:Delete"),
             MultiTenancySides.Host);
 

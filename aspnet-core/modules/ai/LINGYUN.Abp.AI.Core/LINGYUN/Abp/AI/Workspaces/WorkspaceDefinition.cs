@@ -126,6 +126,9 @@ public class WorkspaceDefinition : IHasSimpleStateCheckers<WorkspaceDefinition>
     [NotNull]
     public Dictionary<string, object> Properties { get; }
 
+    [NotNull]
+    public List<string> Tools { get; }
+
     public List<ISimpleStateChecker<WorkspaceDefinition>> StateCheckers { get; }
 
     public WorkspaceDefinition(
@@ -155,6 +158,7 @@ public class WorkspaceDefinition : IHasSimpleStateCheckers<WorkspaceDefinition>
         PresencePenalty = presencePenalty;
 
         IsEnabled = true;
+        Tools = new List<string>();
         Properties = new Dictionary<string, object>();
         StateCheckers = new List<ISimpleStateChecker<WorkspaceDefinition>>();
     }
@@ -168,6 +172,12 @@ public class WorkspaceDefinition : IHasSimpleStateCheckers<WorkspaceDefinition>
     public virtual WorkspaceDefinition WithApiKey(string apiKey)
     {
         ApiKey = apiKey;
+        return this;
+    }
+
+    public virtual WorkspaceDefinition WithTools(params string[] tools)
+    {
+        Tools.AddIfNotContains(tools);
         return this;
     }
 

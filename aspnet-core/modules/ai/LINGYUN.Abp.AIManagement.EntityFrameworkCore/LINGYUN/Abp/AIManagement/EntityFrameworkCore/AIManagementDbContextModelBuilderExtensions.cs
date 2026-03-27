@@ -2,6 +2,7 @@
 using LINGYUN.Abp.AIManagement.Chats;
 using LINGYUN.Abp.AIManagement.EntityFrameworkCore.ValueConversions;
 using LINGYUN.Abp.AIManagement.Tokens;
+using LINGYUN.Abp.AIManagement.Tools;
 using LINGYUN.Abp.AIManagement.Workspaces;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
@@ -90,6 +91,29 @@ public static class AIManagementDbContextModelBuilderExtensions
                     .HasMaxLength(WorkspaceDefinitionRecordConsts.MaxInstructionsLength);
                 b.Property(x => x.StateCheckers)
                     .HasMaxLength(WorkspaceDefinitionRecordConsts.MaxStateCheckersLength);
+                b.Property(x => x.Tools)
+                    .HasMaxLength(WorkspaceDefinitionRecordConsts.MaxToolsLength);
+
+                b.HasIndex(x => new { x.Name }).IsUnique();
+
+                b.ApplyObjectExtensionMappings();
+            });
+            builder.Entity<AIToolDefinitionRecord>(b =>
+            {
+                b.ToTable(AbpAIManagementDbProperties.DbTablePrefix + "AIToolDefinitionRecords", AbpAIManagementDbProperties.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Name)
+                    .HasMaxLength(AIToolDefinitionRecordConsts.MaxNameLength)
+                    .IsRequired();
+                b.Property(x => x.Provider)
+                    .HasMaxLength(AIToolDefinitionRecordConsts.MaxProviderLength)
+                    .IsRequired();
+                b.Property(x => x.Description)
+                    .HasMaxLength(AIToolDefinitionRecordConsts.MaxDescriptionLength);
+                b.Property(x => x.StateCheckers)
+                    .HasMaxLength(AIToolDefinitionRecordConsts.MaxStateCheckersLength);
 
                 b.HasIndex(x => new { x.Name }).IsUnique();
 

@@ -58,6 +58,7 @@ public class WorkspaceDefinitionSerializer : IWorkspaceDefinitionSerializer, ITr
                 definition.MaxOutputTokens,
                 definition.FrequencyPenalty,
                 definition.PresencePenalty,
+                definition.Tools.JoinAsString(","),
                 SerializeStateCheckers(definition.StateCheckers));
 
             if (!definition.ApiKey.IsNullOrWhiteSpace())

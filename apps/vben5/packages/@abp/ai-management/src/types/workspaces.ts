@@ -21,6 +21,7 @@ interface WorkspaceDefinitionRecordDto
   stateCheckers?: string;
   systemPrompt?: string;
   temperature?: number;
+  tools?: string[];
 }
 
 interface WorkspaceDefinitionRecordCreateOrUpdateDto extends ExtensibleObject {
@@ -38,6 +39,7 @@ interface WorkspaceDefinitionRecordCreateOrUpdateDto extends ExtensibleObject {
   stateCheckers?: string;
   systemPrompt?: string;
   temperature?: number;
+  tools?: string[];
 }
 
 interface WorkspaceDefinitionRecordCreateDto extends WorkspaceDefinitionRecordCreateOrUpdateDto {

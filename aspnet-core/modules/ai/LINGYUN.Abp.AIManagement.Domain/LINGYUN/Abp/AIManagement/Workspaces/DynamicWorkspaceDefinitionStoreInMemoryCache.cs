@@ -62,6 +62,10 @@ public class DynamicWorkspaceDefinitionStoreInMemoryCache : IDynamicWorkspaceDef
             {
                 workspaceDef.WithApiBaseUrl(workspace.ApiBaseUrl);
             }
+            if (!workspace.Tools.IsNullOrWhiteSpace())
+            {
+                workspaceDef.WithTools(workspace.Tools.Split(","));
+            }
             workspaceDef.IsEnabled = workspace.IsEnabled;
 
             if (!workspace.StateCheckers.IsNullOrWhiteSpace())

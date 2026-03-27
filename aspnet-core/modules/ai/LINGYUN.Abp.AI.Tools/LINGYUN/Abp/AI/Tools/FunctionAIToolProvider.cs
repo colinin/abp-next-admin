@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.AI;
+﻿using LINGYUN.Abp.AI.Localization;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.AI.Tools;
 public class FunctionAIToolProvider : IAIToolProvider, ITransientDependency
@@ -16,6 +18,20 @@ public class FunctionAIToolProvider : IAIToolProvider, ITransientDependency
     public FunctionAIToolProvider(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
+    }
+
+    public virtual AIToolPropertyDescriptor[] GetPropertites()
+    {
+        return [
+            AIToolPropertyDescriptor.CreateStringProperty(
+                FunctionAIToolDefinitionExtenssions.FunctionType,
+                LocalizableString.Create<AbpAIResource>("FunctionAITool:FunctionType"),
+                LocalizableString.Create<AbpAIResource>("FunctionAITool:FunctionTypeDesc"),
+                required: true),
+        AIToolPropertyDescriptor.CreateStringProperty(
+                FunctionAIToolDefinitionExtenssions.FunctionName,
+                LocalizableString.Create<AbpAIResource>("FunctionAITool:FunctionName"),
+                LocalizableString.Create<AbpAIResource>("FunctionAITool:FunctionNameDesc"))];
     }
 
     public virtual Task<AITool[]> CreateToolsAsync(AIToolDefinition definition)
