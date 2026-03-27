@@ -44,7 +44,7 @@ public class AIToolFactory : IAIToolFactory, IScopedDependency
 
         foreach (var toolDefine in toolDefines)
         {
-            if (await StateCheckerManager.IsEnabledAsync(toolDefine))
+            if (toolDefine.IsEnabled && await StateCheckerManager.IsEnabledAsync(toolDefine))
             {
                 aiTools.AddRange(await CreateTool(toolDefine));
             }

@@ -26,6 +26,10 @@ public class AIToolDefinition : IHasSimpleStateCheckers<AIToolDefinition>
     /// </summary>
     [NotNull]
     public Dictionary<string, object?> Properties { get; }
+    /// <summary>
+    /// 启用/禁用工具
+    /// </summary>
+    public bool IsEnabled { get; set; }
 
     public List<ISimpleStateChecker<AIToolDefinition>> StateCheckers { get; }
 
@@ -38,6 +42,7 @@ public class AIToolDefinition : IHasSimpleStateCheckers<AIToolDefinition>
         Provider = provider;
         Description = description;
 
+        IsEnabled = true;
         Properties = new Dictionary<string, object?>();
         StateCheckers = new List<ISimpleStateChecker<AIToolDefinition>>();
     }

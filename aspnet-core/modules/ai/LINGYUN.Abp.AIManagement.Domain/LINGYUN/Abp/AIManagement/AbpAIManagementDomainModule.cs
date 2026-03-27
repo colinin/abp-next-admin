@@ -1,6 +1,8 @@
 ﻿using LINGYUN.Abp.AI.Agent;
 using LINGYUN.Abp.AI.Localization;
+using LINGYUN.Abp.AI.Tools;
 using LINGYUN.Abp.AIManagement.Localization;
+using LINGYUN.Abp.AIManagement.Tools;
 using LINGYUN.Abp.AIManagement.Workspaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading;
@@ -20,6 +22,7 @@ namespace LINGYUN.Abp.AIManagement;
 [DependsOn(
     typeof(AbpAIManagementDomainSharedModule),
     typeof(AbpAIAgentModule),
+    typeof(AbpAIToolsModule),
     typeof(AbpCachingModule),
     typeof(AbpMapperlyModule),
     typeof(AbpDddDomainModule))]
@@ -57,8 +60,13 @@ public class AbpAIManagementDomainModule : AbpModule
     public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
-        var initializer = rootServiceProvider.GetRequiredService<WorkspaceDynamicInitializer>();
-        await initializer.InitializeAsync(true, _cancellationTokenSource.Token);
+        var workspaceDynamicInitializer = rootServiceProvider.GetRequiredService<WorkspaceDynamicInitializer>();
+        var aIToolDynamicInitializer = rootServiceProvider.GetRequiredService<AIToolDynamicInitializer>();
+
+        await Task.WhenAll([
+            workspaceDynamicInitializer.InitializeAsync(true, _cancellationTokenSource.Token),
+            aIToolDynamicInitializer.InitializeAsync(true, _cancellationTokenSource.Token)
+        ]);
     }
 
     public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
