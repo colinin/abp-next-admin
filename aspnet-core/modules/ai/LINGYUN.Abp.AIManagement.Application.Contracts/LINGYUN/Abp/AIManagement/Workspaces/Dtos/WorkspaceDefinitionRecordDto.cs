@@ -35,7 +35,7 @@ public class WorkspaceDefinitionRecordDto : ExtensibleAuditedEntityDto<Guid>, IH
 
     public bool IsSystem { get; set; }
 
-    public string[]? Tools { get; set; }
+    public string[] Tools { get; set; }
 
     public string? StateCheckers { get; set; }
 

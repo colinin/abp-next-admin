@@ -8,5 +8,7 @@ public class AIToolDefinitionRecordGetPagedListInput : PagedAndSortedResultReque
 {
     public string? Filter { get; set; }
 
+    public bool? IsEnabled { get; set; }
+
     public string? Provider { get; set; }
 }

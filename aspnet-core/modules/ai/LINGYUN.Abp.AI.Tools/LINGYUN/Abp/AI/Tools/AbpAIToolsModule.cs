@@ -45,12 +45,16 @@ public class AbpAIToolsModule : AbpModule
                 {
                     useAIToolDefinitions.AddRange(aiToolDefinitions.Where(aiTool => workspace.Tools.Contains(aiTool.Name)));
                 }
-                else
+
+                foreach (var globalAIToolDefinition in aiToolDefinitions.Where(aiTool => aiTool.IsGlobal))
                 {
-                    useAIToolDefinitions.AddRange(aiToolDefinitions.Where(aiTool => aiTool.IsGlobal));
+                    if (!useAIToolDefinitions.Any(tool => tool.Name == globalAIToolDefinition.Name))
+                    {
+                        useAIToolDefinitions.Add(globalAIToolDefinition);
+                    }
                 }
 
-                foreach (var aiToolDefinition in aiToolDefinitions)
+                foreach (var aiToolDefinition in useAIToolDefinitions)
                 {
                     var aiTools = await aiToolFactory.CreateTool(aiToolDefinition);
                     if (aiTools.Length > 0)

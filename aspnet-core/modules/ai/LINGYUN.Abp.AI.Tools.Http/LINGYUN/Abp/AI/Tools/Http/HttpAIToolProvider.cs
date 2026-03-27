@@ -24,7 +24,8 @@ public class HttpAIToolProvider : IAIToolProvider, ITransientDependency
         return [
             AIToolPropertyDescriptor.CreateStringProperty(
                 HttpAIToolDefinitionExtenssions.Endpoint,
-                LocalizableString.Create<AbpAIResource>("HttpAITool:Endpoint")),
+                LocalizableString.Create<AbpAIResource>("HttpAITool:Endpoint"),
+                required: true),
             AIToolPropertyDescriptor.CreateSelectProperty(
                 HttpAIToolDefinitionExtenssions.Method,
                 LocalizableString.Create<AbpAIResource>("HttpAITool:Method"),

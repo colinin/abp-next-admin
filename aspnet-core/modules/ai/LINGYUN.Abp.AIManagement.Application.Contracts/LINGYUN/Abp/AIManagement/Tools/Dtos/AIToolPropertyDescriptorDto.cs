@@ -5,6 +5,7 @@ namespace LINGYUN.Abp.AIManagement.Tools.Dtos;
 public class AIToolPropertyDescriptorDto
 {
     public string Name { get; set; }
+    public bool Required { get; set; }
     public string ValueType { get; set; }
     public List<NameValue<object>> Options { get; set; }
     public string DisplayName { get; set; }

@@ -5,6 +5,7 @@ using LINGYUN.Abp.AIManagement.Tools.Dtos;
 using LINGYUN.Abp.AIManagement.Workspaces;
 using LINGYUN.Abp.AIManagement.Workspaces.Dtos;
 using Riok.Mapperly.Abstractions;
+using System;
 using Volo.Abp.Mapperly;
 using Volo.Abp.ObjectExtending;
 
@@ -21,9 +22,9 @@ public partial class WorkspaceDefinitionRecordToWorkspaceDefinitionRecordDtoMapp
     public override partial void Map(WorkspaceDefinitionRecord source, WorkspaceDefinitionRecordDto destination);
 
     [UserMapping(Default = false)]
-    private static string[]? ConvertTools(WorkspaceDefinitionRecord record)
+    private static string[] ConvertTools(WorkspaceDefinitionRecord record)
     {
-        return record.Tools?.Split(",");
+        return !record.Tools.IsNullOrWhiteSpace() ? record.Tools.Split(",") : [];
     }
 }
 

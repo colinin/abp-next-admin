@@ -13,6 +13,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Security.Encryption;
 
 namespace LINGYUN.Abp.AIManagement.Workspaces;
@@ -101,7 +102,7 @@ public class WorkspaceDefinitionAppService :
             throw new WorkspaceAlreadyExistsException(createInput.Name);
         }
 
-        var record = new WorkspaceDefinitionRecord(
+        var entity = new WorkspaceDefinitionRecord(
             GuidGenerator.Create(),
             createInput.Name,
             createInput.Provider,
@@ -123,10 +124,20 @@ public class WorkspaceDefinitionAppService :
         if (!createInput.ApiKey.IsNullOrWhiteSpace())
         {
             var encryptApiKey = StringEncryptionService.Encrypt(createInput.ApiKey);
-            record.SetApiKey(encryptApiKey, createInput.ApiBaseUrl);
+            entity.SetApiKey(encryptApiKey, createInput.ApiBaseUrl);
         }
 
-        return record;
+        if (!entity.HasSameExtraProperties(createInput))
+        {
+            entity.ExtraProperties.Clear();
+
+            foreach (var property in createInput.ExtraProperties)
+            {
+                entity.ExtraProperties.Add(property.Key, property.Value);
+            }
+        }
+
+        return entity;
     }
 
     protected override void MapToEntity(WorkspaceDefinitionRecordUpdateDto updateInput, WorkspaceDefinitionRecord entity)

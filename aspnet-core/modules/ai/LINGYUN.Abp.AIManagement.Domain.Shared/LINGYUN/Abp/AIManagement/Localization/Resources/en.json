@@ -51,6 +51,14 @@
     "DisplayName:PresencePenalty": "Presence Penalty",
     "Description:PresencePenalty": "Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.",
     "DisplayName:IsEnabled": "Is Enabled",
-    "DisplayName:Workspace": "Workspace"
+    "DisplayName:Workspace": "Workspace",
+    "DisplayName:Tools": "Tools",
+    "DisplayName:ToolProvider": "Tool Provider",
+    "DisplayName:IsGlobal": "Is Global",
+    "Description:IsGlobal": "The global tool is available in all workspaces and may result in a higher token value. Please exercise caution when choosing!",
+    "Tools": "Tools",
+    "Propertites": "Propertites",
+    "Tools:New": "New Tool",
+    "Tools:Edit": "Edit Tool"
   }
 }

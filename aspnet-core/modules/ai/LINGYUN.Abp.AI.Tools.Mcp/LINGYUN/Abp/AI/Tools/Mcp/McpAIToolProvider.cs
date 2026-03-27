@@ -32,19 +32,20 @@ public class McpAIToolProvider : IAIToolProvider, ITransientDependency
         return [
             AIToolPropertyDescriptor.CreateStringProperty(
                 McpAIToolDefinitionExtenssions.Endpoint,
-                LocalizableString.Create<AbpAIResource>("McpAITool:Endpoint")),
+                LocalizableString.Create<AbpAIResource>("McpAITool:Endpoint"),
+                required: true),
             AIToolPropertyDescriptor.CreateDictionaryProperty(
                 McpAIToolDefinitionExtenssions.Headers,
                 LocalizableString.Create<AbpAIResource>("McpAITool:Headers")),
             AIToolPropertyDescriptor.CreateSelectProperty(
                 McpAIToolDefinitionExtenssions.TransportMode,
-                LocalizableString.Create<AbpAIResource>("HttpAITool:TransportMode"),
+                LocalizableString.Create<AbpAIResource>("McpAITool:TransportMode"),
                 [
                     new("Auto Detect", HttpTransportMode.AutoDetect),
                     new("Streamable Http", HttpTransportMode.StreamableHttp),
                     new("Sse", HttpTransportMode.Sse),
                 ],
-                LocalizableString.Create<AbpAIResource>("HttpAITool:TransportModeDesc")),
+                LocalizableString.Create<AbpAIResource>("McpAITool:TransportModeDesc")),
             AIToolPropertyDescriptor.CreateNumberProperty(
                 McpAIToolDefinitionExtenssions.ConnectionTimeout,
                 LocalizableString.Create<AbpAIResource>("McpAITool:ConnectionTimeout"),

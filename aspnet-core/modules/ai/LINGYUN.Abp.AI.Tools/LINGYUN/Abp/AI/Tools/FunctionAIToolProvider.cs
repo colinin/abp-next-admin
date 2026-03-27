@@ -26,7 +26,8 @@ public class FunctionAIToolProvider : IAIToolProvider, ITransientDependency
             AIToolPropertyDescriptor.CreateStringProperty(
                 FunctionAIToolDefinitionExtenssions.FunctionType,
                 LocalizableString.Create<AbpAIResource>("FunctionAITool:FunctionType"),
-                LocalizableString.Create<AbpAIResource>("FunctionAITool:FunctionTypeDesc")),
+                LocalizableString.Create<AbpAIResource>("FunctionAITool:FunctionTypeDesc"),
+                required: true),
         AIToolPropertyDescriptor.CreateStringProperty(
                 FunctionAIToolDefinitionExtenssions.FunctionName,
                 LocalizableString.Create<AbpAIResource>("FunctionAITool:FunctionName"),

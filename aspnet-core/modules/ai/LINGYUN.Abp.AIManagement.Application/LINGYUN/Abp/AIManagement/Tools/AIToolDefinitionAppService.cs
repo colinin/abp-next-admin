@@ -12,6 +12,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 
 namespace LINGYUN.Abp.AIManagement.Tools;
 public class AIToolDefinitionAppService :
@@ -62,6 +63,7 @@ public class AIToolDefinitionAppService :
                         {
                             Name = prop.Name,
                             Options = prop.Options,
+                            Required = prop.Required,
                             ValueType = prop.ValueType.ToString(),
                             DisplayName = prop.DisplayName.Localize(StringLocalizerFactory),
                         };
@@ -97,6 +99,7 @@ public class AIToolDefinitionAppService :
         var queryable = await base.CreateFilteredQueryAsync(input);
 
         return queryable
+            .WhereIf(input.IsEnabled.HasValue, x => x.IsEnabled == input.IsEnabled)
             .WhereIf(!input.Provider.IsNullOrWhiteSpace(), x => x.Provider == input.Provider)
             .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Provider.Contains(input.Filter!) ||
                 x.Name.Contains(input.Filter!) || x.Description!.Contains(input.Filter!));
@@ -109,7 +112,7 @@ public class AIToolDefinitionAppService :
             throw new AIToolAlreadyExistsException(createInput.Name);
         }
 
-        var record = new AIToolDefinitionRecord(
+        var entity = new AIToolDefinitionRecord(
             GuidGenerator.Create(),
             createInput.Name,
             createInput.Provider,
@@ -120,7 +123,17 @@ public class AIToolDefinitionAppService :
             IsGlobal = createInput.IsGlobal,
         };
 
-        return record;
+        if (!entity.HasSameExtraProperties(createInput))
+        {
+            entity.ExtraProperties.Clear();
+
+            foreach (var property in createInput.ExtraProperties)
+            {
+                entity.ExtraProperties.Add(property.Key, property.Value);
+            }
+        }
+
+        return entity;
     }
 
     protected override void MapToEntity(AIToolDefinitionRecordUpdateDto updateInput, AIToolDefinitionRecord entity)
