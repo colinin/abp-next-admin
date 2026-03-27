@@ -5,7 +5,7 @@ using LINGYUN.Abp.AI.Tools.Users;
 using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.AI.Tools;
-public class GlobalAIToolDefinitionProvider : AIToolDefinitionProvider
+public class GlobalFunctionAIToolDefinitionProvider : AIToolDefinitionProvider
 {
     public override void Define(IAIToolDefinitionContext context)
     {

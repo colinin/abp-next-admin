@@ -15,7 +15,7 @@ public static class FunctionAIToolDefinitionExtenssions
     {
         Check.NotNull(funcType, nameof(funcType));
 
-        definition.WithProperty(FunctionType, funcType);
+        definition.WithProperty(FunctionType, funcType.AssemblyQualifiedName);
 
         return definition;
     }
