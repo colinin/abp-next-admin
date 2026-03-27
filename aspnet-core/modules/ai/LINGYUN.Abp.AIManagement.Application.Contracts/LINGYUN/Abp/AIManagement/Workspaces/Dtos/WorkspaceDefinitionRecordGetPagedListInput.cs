@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 namespace LINGYUN.Abp.AIManagement.Workspaces.Dtos;
 
 [Serializable]
-public class WorkspaceDefinitionRecordGetListInput : PagedAndSortedResultRequestDto
+public class WorkspaceDefinitionRecordGetPagedListInput : PagedAndSortedResultRequestDto
 {
     public string? Filter { get; set; }
 

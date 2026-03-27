@@ -20,7 +20,7 @@ public class WorkspaceDefinitionAppService :
         WorkspaceDefinitionRecord,
         WorkspaceDefinitionRecordDto,
         Guid,
-        WorkspaceDefinitionRecordGetListInput,
+        WorkspaceDefinitionRecordGetPagedListInput,
         WorkspaceDefinitionRecordCreateDto,
         WorkspaceDefinitionRecordUpdateDto>,
     IWorkspaceDefinitionAppService
@@ -79,7 +79,7 @@ public class WorkspaceDefinitionAppService :
         await Repository.DeleteAsync(workspace);
     }
 
-    protected async override Task<IQueryable<WorkspaceDefinitionRecord>> CreateFilteredQueryAsync(WorkspaceDefinitionRecordGetListInput input)
+    protected async override Task<IQueryable<WorkspaceDefinitionRecord>> CreateFilteredQueryAsync(WorkspaceDefinitionRecordGetPagedListInput input)
     {
         var queryable = await base.CreateFilteredQueryAsync(input);
 
@@ -113,7 +113,10 @@ public class WorkspaceDefinitionAppService :
             createInput.MaxOutputTokens,
             createInput.FrequencyPenalty,
             createInput.PresencePenalty,
-            createInput.StateCheckers);
+            createInput.StateCheckers)
+        {
+            IsEnabled = createInput.IsEnabled,
+        };
 
         if (!createInput.ApiKey.IsNullOrWhiteSpace())
         {
@@ -196,5 +199,7 @@ public class WorkspaceDefinitionAppService :
                 entity.ExtraProperties.Add(property.Key, property.Value);
             }
         }
+
+        entity.SetConcurrencyStampIfNotNull(updateInput.ConcurrencyStamp);
     }
 }

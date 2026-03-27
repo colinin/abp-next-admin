@@ -1,5 +1,7 @@
 ﻿using LINGYUN.Abp.AIManagement.Chats;
 using LINGYUN.Abp.AIManagement.Chats.Dtos;
+using LINGYUN.Abp.AIManagement.Tools;
+using LINGYUN.Abp.AIManagement.Tools.Dtos;
 using LINGYUN.Abp.AIManagement.Workspaces;
 using LINGYUN.Abp.AIManagement.Workspaces.Dtos;
 using Riok.Mapperly.Abstractions;
@@ -31,4 +33,12 @@ public partial class TextChatMessageRecordToTextChatMessageDtoMapper : MapperBas
     {
         return record.Role.Value;
     }
+}
+
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
+[MapExtraProperties(DefinitionChecks = MappingPropertyDefinitionChecks.None)]
+public partial class AIToolDefinitionRecordToAIToolDefinitionRecordDtoMapper : MapperBase<AIToolDefinitionRecord, AIToolDefinitionRecordDto>
+{
+    public override partial AIToolDefinitionRecordDto Map(AIToolDefinitionRecord source);
+    public override partial void Map(AIToolDefinitionRecord source, AIToolDefinitionRecordDto destination);
 }

@@ -9,7 +9,7 @@ public interface IWorkspaceDefinitionAppService :
     ICrudAppService<
         WorkspaceDefinitionRecordDto,
         Guid,
-        WorkspaceDefinitionRecordGetListInput,
+        WorkspaceDefinitionRecordGetPagedListInput,
         WorkspaceDefinitionRecordCreateDto,
         WorkspaceDefinitionRecordUpdateDto>
 {

@@ -1,0 +1,138 @@
+﻿using LINGYUN.Abp.AI.Tools;
+using LINGYUN.Abp.AIManagement.Tools.Dtos;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Data;
+
+namespace LINGYUN.Abp.AIManagement.Tools;
+public class AIToolDefinitionAppService :
+    CrudAppService<
+        AIToolDefinitionRecord,
+        AIToolDefinitionRecordDto,
+        Guid,
+        AIToolDefinitionRecordGetPagedListInput,
+        AIToolDefinitionRecordCreateDto,
+        AIToolDefinitionRecordUpdateDto>,
+    IAIToolDefinitionAppService
+{
+    protected AbpAIToolsOptions AIToolsOptions { get; }
+    protected IAIToolDefinitionRecordRepository AIToolDefinitionRecordRepository { get; }
+
+    public AIToolDefinitionAppService(
+        IOptions<AbpAIToolsOptions> aiToolsOptions,
+        IAIToolDefinitionRecordRepository repository) 
+        : base(repository)
+    {
+        AIToolsOptions = aiToolsOptions.Value;
+        AIToolDefinitionRecordRepository = repository;
+    }
+
+    public virtual Task<ListResultDto<AIToolProviderDto>> GetAvailableProvidersAsync()
+    {
+        var providers = AIToolsOptions.AIToolProviders
+            .Select(LazyServiceProvider.GetRequiredService)
+            .OfType<IAIToolProvider>()
+            .Select(provider =>
+            {
+                var properties = provider.GetPropertites();
+
+                return new AIToolProviderDto(
+                    provider.Name,
+                    properties.Select(prop =>
+                    {
+                        var property = new AIToolPropertyDescriptorDto
+                        {
+                            Name = prop.Name,
+                            Options = prop.Options,
+                            ValueType = prop.ValueType.ToString(),
+                            DisplayName = prop.DisplayName.Localize(StringLocalizerFactory),
+                        };
+                        if (prop.Description != null)
+                        {
+                            property.Description = prop.Description.Localize(StringLocalizerFactory);
+                        }
+
+                        return property;
+                    }).ToArray());
+            });
+
+        return Task.FromResult(new ListResultDto<AIToolProviderDto>(providers.ToImmutableArray()));
+    }
+
+    protected async override Task DeleteByIdAsync(Guid id)
+    {
+        var aiTool = await Repository.GetAsync(id);
+
+        if (aiTool.IsSystem)
+        {
+            throw new BusinessException(
+                AIManagementErrorCodes.AITool.SystemAIToolNotAllowedToBeDeleted,
+                $"System AITool {aiTool.Name} is not allowed to be deleted!")
+                .WithData("AITool", aiTool.Name);
+        }
+
+        await Repository.DeleteAsync(aiTool);
+    }
+
+    protected async override Task<IQueryable<AIToolDefinitionRecord>> CreateFilteredQueryAsync(AIToolDefinitionRecordGetPagedListInput input)
+    {
+        var queryable = await base.CreateFilteredQueryAsync(input);
+
+        return queryable
+            .WhereIf(!input.Provider.IsNullOrWhiteSpace(), x => x.Provider == input.Provider)
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Provider.Contains(input.Filter!) ||
+                x.Name.Contains(input.Filter!) || x.Description!.Contains(input.Filter!));
+    }
+
+    protected async override Task<AIToolDefinitionRecord> MapToEntityAsync(AIToolDefinitionRecordCreateDto createInput)
+    {
+        if (await AIToolDefinitionRecordRepository.FindByNameAsync(createInput.Name) != null)
+        {
+            throw new AIToolAlreadyExistsException(createInput.Name);
+        }
+
+        var record = new AIToolDefinitionRecord(
+            GuidGenerator.Create(),
+            createInput.Name,
+            createInput.Provider,
+            createInput.Description,
+            createInput.StateCheckers)
+        {
+            IsEnabled = createInput.IsEnabled,
+        };
+
+        return record;
+    }
+
+    protected override void MapToEntity(AIToolDefinitionRecordUpdateDto updateInput, AIToolDefinitionRecord entity)
+    {
+        if (entity.Description != updateInput.Description)
+        {
+            entity.Description = updateInput.Description;
+        }
+
+        if (entity.IsEnabled != updateInput.IsEnabled)
+        {
+            entity.IsEnabled = updateInput.IsEnabled;
+        }
+
+        if (!entity.HasSameExtraProperties(updateInput))
+        {
+            entity.ExtraProperties.Clear();
+
+            foreach (var property in updateInput.ExtraProperties)
+            {
+                entity.ExtraProperties.Add(property.Key, property.Value);
+            }
+        }
+
+        entity.SetConcurrencyStampIfNotNull(updateInput.ConcurrencyStamp);
+    }
+}
