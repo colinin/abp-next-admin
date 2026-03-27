@@ -117,6 +117,7 @@ public class AIToolDefinitionAppService :
             createInput.StateCheckers)
         {
             IsEnabled = createInput.IsEnabled,
+            IsGlobal = createInput.IsGlobal,
         };
 
         return record;
@@ -132,6 +133,11 @@ public class AIToolDefinitionAppService :
         if (entity.IsEnabled != updateInput.IsEnabled)
         {
             entity.IsEnabled = updateInput.IsEnabled;
+        }
+
+        if (entity.IsGlobal != updateInput.IsGlobal)
+        {
+            entity.IsGlobal = updateInput.IsGlobal;
         }
 
         if (!entity.HasSameExtraProperties(updateInput))

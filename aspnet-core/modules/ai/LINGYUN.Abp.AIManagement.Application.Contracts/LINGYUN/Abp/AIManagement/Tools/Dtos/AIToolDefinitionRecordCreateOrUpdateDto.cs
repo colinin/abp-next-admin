@@ -14,6 +14,8 @@ public abstract class AIToolDefinitionRecordCreateOrUpdateDto : ExtensibleObject
 
     public bool IsEnabled { get; set; }
 
+    public bool IsGlobal { get; set; }
+
     [DynamicStringLength(typeof(AIToolDefinitionRecordConsts), nameof(AIToolDefinitionRecordConsts.MaxStateCheckersLength))]
     public string? StateCheckers { get; set; }
 }

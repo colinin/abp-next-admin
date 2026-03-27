@@ -17,6 +17,8 @@ public class AIToolDefinitionRecord : AuditedAggregateRoot<Guid>
 
     public bool IsSystem { get; set; }
 
+    public bool IsGlobal { get; set; }
+
     public string? StateCheckers { get; set; }
     protected AIToolDefinitionRecord()
     {
@@ -59,6 +61,16 @@ public class AIToolDefinitionRecord : AuditedAggregateRoot<Guid>
             return false;
         }
 
+        if (IsSystem != otherAITool.IsSystem)
+        {
+            return false;
+        }
+
+        if (IsGlobal != otherAITool.IsGlobal)
+        {
+            return false;
+        }
+
         if (StateCheckers != otherAITool.StateCheckers)
         {
             return false;
@@ -92,6 +104,16 @@ public class AIToolDefinitionRecord : AuditedAggregateRoot<Guid>
         if (IsEnabled != otherAITool.IsEnabled)
         {
             IsEnabled = otherAITool.IsEnabled;
+        }
+
+        if (IsSystem != otherAITool.IsSystem)
+        {
+            IsSystem = otherAITool.IsSystem;
+        }
+
+        if (IsGlobal != otherAITool.IsGlobal)
+        {
+            IsGlobal = otherAITool.IsGlobal;
         }
 
         if (StateCheckers != otherAITool.StateCheckers)

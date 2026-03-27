@@ -45,16 +45,17 @@ public class AIToolDefinitionSerializer : IAIToolDefinitionSerializer, ITransien
                 definition.Name,
                 definition.Provider,
                 definition.Description != null ? LocalizableStringSerializer.Serialize(definition.Description) : null,
-                SerializeStateCheckers(definition.StateCheckers));
-
+                SerializeStateCheckers(definition.StateCheckers))
+            {
+                IsGlobal = definition.IsGlobal,
+                IsEnabled = definition.IsEnabled,
+                IsSystem = true,
+            };
 
             foreach (var property in definition.Properties)
             {
                 aiToolRecord.SetProperty(property.Key, property.Value);
             }
-
-            aiToolRecord.IsEnabled = definition.IsEnabled;
-            aiToolRecord.IsSystem = true;
 
             return Task.FromResult(aiToolRecord);
         }

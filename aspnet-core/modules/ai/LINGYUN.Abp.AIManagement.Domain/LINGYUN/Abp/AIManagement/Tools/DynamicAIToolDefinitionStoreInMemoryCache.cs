@@ -39,9 +39,11 @@ public class DynamicAIToolDefinitionStoreInMemoryCache : IDynamicAIToolDefinitio
             var toolDef = new AIToolDefinition(
                 tool.Name,
                 tool.Provider,
-                !tool.Description.IsNullOrWhiteSpace() ? LocalizableStringSerializer.Deserialize(tool.Description) : null);
-
-            toolDef.IsEnabled = tool.IsEnabled;
+                !tool.Description.IsNullOrWhiteSpace() ? LocalizableStringSerializer.Deserialize(tool.Description) : null)
+            {
+                IsEnabled = tool.IsEnabled,
+                IsGlobal = tool.IsGlobal,
+            };
 
             if (!tool.StateCheckers.IsNullOrWhiteSpace())
             {

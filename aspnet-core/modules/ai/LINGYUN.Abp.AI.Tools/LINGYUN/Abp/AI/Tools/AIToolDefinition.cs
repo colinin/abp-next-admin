@@ -30,6 +30,10 @@ public class AIToolDefinition : IHasSimpleStateCheckers<AIToolDefinition>
     /// 启用/禁用工具
     /// </summary>
     public bool IsEnabled { get; set; }
+    /// <summary>
+    /// 全局工具
+    /// </summary>
+    public bool IsGlobal { get; set; }
 
     public List<ISimpleStateChecker<AIToolDefinition>> StateCheckers { get; }
 

@@ -17,6 +17,8 @@ public class AIToolDefinitionRecordDto : ExtensibleAuditedEntityDto<Guid>, IHasC
 
     public bool IsSystem { get; set; }
 
+    public bool IsGlobal { get; set; }
+
     public string? StateCheckers { get; set; }
 
     public string ConcurrencyStamp { get; set; }

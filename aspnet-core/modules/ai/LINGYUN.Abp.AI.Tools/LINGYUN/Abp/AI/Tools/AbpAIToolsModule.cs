@@ -36,23 +36,27 @@ public class AbpAIToolsModule : AbpModule
             options.ChatClientBuildActions.Add(async (workspace, sp, builder) =>
             {
                 var useAITools = new List<AITool>();
+                var useAIToolDefinitions = new List<AIToolDefinition>();
                 var aiToolFactory = sp.GetRequiredService<IAIToolFactory>();
+                var aiToolDefinitionManager = sp.GetRequiredService<IAIToolDefinitionManager>();
+                var aiToolDefinitions = await aiToolDefinitionManager.GetAllAsync();
 
                 if (workspace.Tools.Count > 0)
                 {
-                    var aiToolDefinitionManager = sp.GetRequiredService<IAIToolDefinitionManager>();
-                    var aiToolDefinitions = await aiToolDefinitionManager.GetAllAsync();
-                    var useAIToolDefinitions = aiToolDefinitions.Where(aiTool => workspace.Tools.Contains(aiTool.Name));
-
-                    foreach (var aiToolDefinition in aiToolDefinitions)
-                    {
-                        var aiTools = await aiToolFactory.CreateTool(aiToolDefinition);
-                        useAITools.AddRange(aiTools);
-                    }
+                    useAIToolDefinitions.AddRange(aiToolDefinitions.Where(aiTool => workspace.Tools.Contains(aiTool.Name)));
                 }
                 else
                 {
-                    useAITools.AddRange(await aiToolFactory.CreateAllTools());
+                    useAIToolDefinitions.AddRange(aiToolDefinitions.Where(aiTool => aiTool.IsGlobal));
+                }
+
+                foreach (var aiToolDefinition in aiToolDefinitions)
+                {
+                    var aiTools = await aiToolFactory.CreateTool(aiToolDefinition);
+                    if (aiTools.Length > 0)
+                    {
+                        useAITools.AddRange(aiTools);
+                    }
                 }
 
                 builder.ConfigureOptions(ai =>

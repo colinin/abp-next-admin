@@ -22,8 +22,12 @@ public class AIToolFactory : IAIToolFactory, IScopedDependency
         AIToolProviderManager = aIToolProviderManager;
     }
 
-    public virtual Task<AITool[]> CreateTool(AIToolDefinition definition)
+    public async virtual Task<AITool[]> CreateTool(AIToolDefinition definition)
     {
+        if (!definition.IsEnabled)
+        {
+            return [];
+        }
         foreach (var provider in AIToolProviderManager.Providers)
         {
             if (!string.Equals(provider.Name, definition.Provider))
@@ -31,7 +35,7 @@ public class AIToolFactory : IAIToolFactory, IScopedDependency
                 continue;
             }
 
-            return provider.CreateToolsAsync(definition);
+            return await provider.CreateToolsAsync(definition);
         }
 
         throw new AbpException($"The AITool provider implementation named {definition.Provider} was not found!");
