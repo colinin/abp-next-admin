@@ -3,6 +3,7 @@ using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
@@ -36,9 +37,19 @@ public class FunctionAIToolProvider : IAIToolProvider, ITransientDependency
 
     public virtual Task<AITool[]> CreateToolsAsync(AIToolDefinition definition)
     {
-        var aiToolType = definition.GetFunction();
-        // 框架约定, 自定义Tool只需要定义同步方法（Invoke）或异步方法（InvokeAsync）即可
-        var aiToolMethodInfo = aiToolType.GetMethod("Invoke") ?? aiToolType.GetMethod("InvokeAsync");
+        var aiToolType = definition.GetFunctionType();
+        var aiToolMethod = definition.GetFunctionNameOrNull();
+
+        MethodInfo? aiToolMethodInfo = default!;
+        if (!aiToolMethod.IsNullOrWhiteSpace())
+        {
+            aiToolMethodInfo = aiToolType.GetMethod(aiToolMethod);
+        }
+        else
+        {
+            // 框架约定, 自定义Tool只需要定义同步方法（Invoke）或异步方法（InvokeAsync）即可
+            aiToolMethodInfo = aiToolType.GetMethod("Invoke") ?? aiToolType.GetMethod("InvokeAsync");
+        }
 
         Check.NotNull(aiToolMethodInfo, nameof(aiToolMethodInfo));
 

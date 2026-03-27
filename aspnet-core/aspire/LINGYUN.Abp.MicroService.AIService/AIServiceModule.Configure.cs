@@ -125,6 +125,9 @@ public partial class AIServiceModule
         {
             options.IsDynamicWorkspaceStoreEnabled = true;
             options.SaveStaticWorkspacesToDatabase = true;
+
+            options.IsDynamicAIToolStoreEnabled = true;
+            options.SaveStaticAIToolsToDatabase = true;
         });
     }
 

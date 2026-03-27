@@ -25,7 +25,7 @@ public static class FunctionAIToolDefinitionExtenssions
         return definition;
     }
 
-    public static Type GetFunction(this AIToolDefinition definition)
+    public static Type GetFunctionType(this AIToolDefinition definition)
     {
         var funcTypeSet = definition.Properties.GetOrDefault(FunctionType);
         Check.NotNull(funcTypeSet, nameof(FunctionType));
@@ -35,5 +35,12 @@ public static class FunctionAIToolDefinitionExtenssions
         Check.NotNull(funcType, nameof(funcType));
 
         return funcType;
+    }
+
+    public static string? GetFunctionNameOrNull(this AIToolDefinition definition)
+    {
+        var funcNameSet = definition.Properties.GetOrDefault(FunctionName);
+
+        return funcNameSet?.ToString();
     }
 }
