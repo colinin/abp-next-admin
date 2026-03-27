@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.AIManagement.Chats;
 using LINGYUN.Abp.AIManagement.Tokens;
+using LINGYUN.Abp.AIManagement.Tools;
 using LINGYUN.Abp.AIManagement.Workspaces;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -11,6 +12,7 @@ namespace LINGYUN.Abp.AIManagement.EntityFrameworkCore;
 public class AIManagementDbContext : AbpDbContext<AIManagementDbContext>, IAIManagementDbContext
 {
     public DbSet<WorkspaceDefinitionRecord> WorkspaceDefinitions { get; set; }
+    public DbSet<AIToolDefinitionRecord> AIToolDefinitions { get; set; }
     public DbSet<TextChatMessageRecord> TextChatMessageRecords { get; set; }
     public DbSet<ConversationRecord> ConversationRecords { get; set; }
     public DbSet<TokenUsageRecord> TokenUsageRecords { get; set; }

@@ -1,23 +1,24 @@
-﻿using LINGYUN.Abp.AIManagement.Workspaces;
+﻿using LINGYUN.Abp.AIManagement.Tools;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.AIManagement.EntityFrameworkCore;
-public class EfCoreWorkspaceDefinitionRecordRepository : EfCoreRepository<IAIManagementDbContext, WorkspaceDefinitionRecord, Guid>, IWorkspaceDefinitionRecordRepository
+public class EfCoreAIToolDefinitionRecordRepository :
+    EfCoreRepository<IAIManagementDbContext, AIToolDefinitionRecord, Guid>,
+    IAIToolDefinitionRecordRepository
 {
-    public EfCoreWorkspaceDefinitionRecordRepository(
+    public EfCoreAIToolDefinitionRecordRepository(
         IDbContextProvider<IAIManagementDbContext> dbContextProvider) 
         : base(dbContextProvider)
     {
     }
 
-    public async virtual Task<WorkspaceDefinitionRecord?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
+    public async virtual Task<AIToolDefinitionRecord?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync())
             .Where(x => x.Name == name)
