@@ -3,6 +3,7 @@
   "texts": {
     "Permission:AIManagement": "Artificia Intelligence",
     "Permission:WorkspaceDefinition": "Workspaces",
+    "Permission:AIToolDefinition": "AI Tools",
     "Permission:Conversation": "Conversations",
     "Permission:Chats": "Chats",
     "Permission:SendMessage": "Send Message",

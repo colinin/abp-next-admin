@@ -1,4 +1,6 @@
-﻿using LINGYUN.Abp.AIManagement.Tools.Dtos;
+﻿using LINGYUN.Abp.AIManagement.Permissions;
+using LINGYUN.Abp.AIManagement.Tools.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -12,6 +14,7 @@ namespace LINGYUN.Abp.AIManagement.Tools;
 [RemoteService(Name = AIManagementRemoteServiceConsts.RemoteServiceName)]
 [Area(AIManagementRemoteServiceConsts.ModuleName)]
 [Route($"api/{AIManagementRemoteServiceConsts.ModuleName}/tools")]
+[Authorize(AIManagementPermissionNames.AIToolDefinition.Default)]
 public class AIToolDefinitionController : AbpControllerBase, IAIToolDefinitionAppService
 {
     private readonly IAIToolDefinitionAppService _service;
@@ -21,12 +24,14 @@ public class AIToolDefinitionController : AbpControllerBase, IAIToolDefinitionAp
     }
 
     [HttpPost]
+    [Authorize(AIManagementPermissionNames.AIToolDefinition.Create)]
     public virtual Task<AIToolDefinitionRecordDto> CreateAsync(AIToolDefinitionRecordCreateDto input)
     {
         return _service.CreateAsync(input);
     }
 
     [HttpDelete("{id}")]
+    [Authorize(AIManagementPermissionNames.AIToolDefinition.Delete)]
     public virtual Task DeleteAsync(Guid id)
     {
         return _service.DeleteAsync(id);
@@ -51,6 +56,7 @@ public class AIToolDefinitionController : AbpControllerBase, IAIToolDefinitionAp
     }
 
     [HttpPut("{id}")]
+    [Authorize(AIManagementPermissionNames.AIToolDefinition.Update)]
     public virtual Task<AIToolDefinitionRecordDto> UpdateAsync(Guid id, AIToolDefinitionRecordUpdateDto input)
     {
         return _service.UpdateAsync(id, input);

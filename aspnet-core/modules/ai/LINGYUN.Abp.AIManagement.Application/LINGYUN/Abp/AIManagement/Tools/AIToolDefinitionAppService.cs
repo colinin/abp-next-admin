@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Abp.AI.Tools;
+using LINGYUN.Abp.AIManagement.Localization;
+using LINGYUN.Abp.AIManagement.Permissions;
 using LINGYUN.Abp.AIManagement.Tools.Dtos;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -32,6 +34,15 @@ public class AIToolDefinitionAppService :
     {
         AIToolsOptions = aiToolsOptions.Value;
         AIToolDefinitionRecordRepository = repository;
+
+        LocalizationResource = typeof(AIManagementResource);
+        ObjectMapperContext = typeof(AbpAIManagementApplicationModule);
+
+        CreatePolicyName = AIManagementPermissionNames.AIToolDefinition.Create;
+        UpdatePolicyName = AIManagementPermissionNames.AIToolDefinition.Update;
+        DeletePolicyName = AIManagementPermissionNames.AIToolDefinition.Delete;
+        GetListPolicyName = AIManagementPermissionNames.AIToolDefinition.Default;
+        GetPolicyName = AIManagementPermissionNames.AIToolDefinition.Default;
     }
 
     public virtual Task<ListResultDto<AIToolProviderDto>> GetAvailableProvidersAsync()

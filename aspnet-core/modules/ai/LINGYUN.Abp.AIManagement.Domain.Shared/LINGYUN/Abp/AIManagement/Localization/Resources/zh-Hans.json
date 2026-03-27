@@ -3,6 +3,7 @@
   "texts": {
     "Permission:AIManagement": "人工智能",
     "Permission:WorkspaceDefinition": "工作区管理",
+    "Permission:AIToolDefinition": "AI工具管理",
     "Permission:Conversation": "对话管理",
     "Permission:Chats": "聊天管理",
     "Permission:SendMessage": "发送消息",
