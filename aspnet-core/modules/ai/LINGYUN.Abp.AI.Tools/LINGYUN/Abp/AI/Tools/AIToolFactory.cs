@@ -6,7 +6,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
 
 namespace LINGYUN.Abp.AI.Tools;
-public class AIToolFactory : IAIToolFactory, ITransientDependency
+public class AIToolFactory : IAIToolFactory, IScopedDependency
 {
     protected ISimpleStateCheckerManager<AIToolDefinition> StateCheckerManager { get; }
     protected IAIToolDefinitionManager AIToolDefinitionManager { get; }
@@ -22,7 +22,7 @@ public class AIToolFactory : IAIToolFactory, ITransientDependency
         AIToolProviderManager = aIToolProviderManager;
     }
 
-    public virtual AITool CreateTool(AIToolDefinition definition)
+    public virtual Task<AITool[]> CreateTool(AIToolDefinition definition)
     {
         foreach (var provider in AIToolProviderManager.Providers)
         {
@@ -31,7 +31,7 @@ public class AIToolFactory : IAIToolFactory, ITransientDependency
                 continue;
             }
 
-            return provider.CreateTool(definition);
+            return provider.CreateToolsAsync(definition);
         }
 
         throw new AbpException($"The AITool provider implementation named {definition.Provider} was not found!");
@@ -46,7 +46,7 @@ public class AIToolFactory : IAIToolFactory, ITransientDependency
         {
             if (await StateCheckerManager.IsEnabledAsync(toolDefine))
             {
-                aiTools.Add(CreateTool(toolDefine));
+                aiTools.AddRange(await CreateTool(toolDefine));
             }
         }
 

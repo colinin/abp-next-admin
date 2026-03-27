@@ -59,7 +59,7 @@ public class NowTimeAIToolDefinitionProvider : AIToolDefinitionProvider
 ```csharp
 public class McpAIToolProvider : IAIToolProvider, ITransientDependency
 {
-    public virtual AITool CreateTool(AIToolDefinition definition)
+    public virtual Task<AITool[]> CreateToolsAsync(AIToolDefinition definition)
     {
         // 你的具体实现
     }

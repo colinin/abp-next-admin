@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
@@ -17,7 +18,7 @@ public class FunctionAIToolProvider : IAIToolProvider, ITransientDependency
         ServiceProvider = serviceProvider;
     }
 
-    public virtual AITool CreateTool(AIToolDefinition definition)
+    public virtual Task<AITool[]> CreateToolsAsync(AIToolDefinition definition)
     {
         var aiToolType = definition.GetFunction();
         // 框架约定, 自定义Tool只需要定义同步方法（Invoke）或异步方法（InvokeAsync）即可
@@ -32,7 +33,7 @@ public class FunctionAIToolProvider : IAIToolProvider, ITransientDependency
             description = definition.Description.Localize(localizerFactory)?.Value;
         }
 
-        return AIFunctionFactory.Create(
+        var functionAITool = AIFunctionFactory.Create(
             method: aiToolMethodInfo,
             createInstanceFunc: (AIFunctionArguments args) => 
             {
@@ -44,5 +45,7 @@ public class FunctionAIToolProvider : IAIToolProvider, ITransientDependency
                 Description = description,
                 AdditionalProperties = definition.Properties,
             });
+
+        return Task.FromResult<AITool[]>([functionAITool]);
     }
 }
