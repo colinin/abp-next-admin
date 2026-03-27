@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.MultiTenancy;
@@ -20,7 +22,7 @@ public class HttpAITool
         Context = context;
     }
 
-    public async virtual Task<object?> InvokeAsync()
+    public async virtual Task<object?> InvokeAsync(IDictionary<string, object?>? paramters = null)
     {
         // Abp远程服务适配
         //var remoteService = Context.ToolDefinition.GetRemoteServiceOrNull();
@@ -63,14 +65,35 @@ public class HttpAITool
         var httpClientFactory = Context.ServiceProvider.GetRequiredService<IHttpClientFactory>();
         var httpClient = httpClientFactory.CreateHttpAIToolClient();
 
+        var requestUri = Context.ToolDefinition.GetHttpEndpoint();
+
+        if (paramters?.Count > 0)
+        {
+            var isFirstParam = true;
+            var urlBuilder = new StringBuilder();
+            foreach (var paramter in paramters)
+            {
+                if (paramter.Value == null)
+                {
+                    continue;
+                }
+                urlBuilder.Append(isFirstParam ? "?" : "&");
+                urlBuilder.Append(paramter.Key + $"=" + System.Net.WebUtility.UrlEncode(paramter.Value.ToString()));
+
+                isFirstParam = false;
+            }
+
+            requestUri = requestUri.RemovePostFix("/") + urlBuilder.ToString();
+        }
+
         var httpRequestMessage = new HttpRequestMessage(
             Context.ToolDefinition.GetHttpMethod(),
-            Context.ToolDefinition.GetHttpEndpoint());
+            requestUri);
 
         var headers = Context.ToolDefinition.GetHttpHeaders();
         foreach (var header in headers)
         {
-            httpRequestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value);
+            httpRequestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToString());
         }
 
         if (Context.ToolDefinition.IsUseHttpCurrentAccessToken())
