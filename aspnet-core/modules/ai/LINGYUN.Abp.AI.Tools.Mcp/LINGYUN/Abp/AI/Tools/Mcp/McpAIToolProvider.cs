@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.AI;
+﻿using LINGYUN.Abp.AI.Localization;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using ModelContextProtocol.Client;
 using System;
@@ -8,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;
+using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.AI.Tools.Mcp;
 public class McpAIToolProvider : IAIToolProvider, ITransientDependency
@@ -23,6 +25,37 @@ public class McpAIToolProvider : IAIToolProvider, ITransientDependency
     {
         ServiceProvider = serviceProvider;
         HttpClientFactory = httpClientFactory;
+    }
+
+    public virtual AIToolPropertyDescriptor[] GetPropertites()
+    {
+        return [
+            AIToolPropertyDescriptor.CreateStringProperty(
+                McpAIToolDefinitionExtenssions.Endpoint,
+                LocalizableString.Create<AbpAIResource>("McpAITool:Endpoint")),
+            AIToolPropertyDescriptor.CreateDictionaryProperty(
+                McpAIToolDefinitionExtenssions.Headers,
+                LocalizableString.Create<AbpAIResource>("McpAITool:Headers")),
+            AIToolPropertyDescriptor.CreateSelectProperty(
+                McpAIToolDefinitionExtenssions.TransportMode,
+                LocalizableString.Create<AbpAIResource>("HttpAITool:TransportMode"),
+                [
+                    new("Auto Detect", HttpTransportMode.AutoDetect),
+                    new("Streamable Http", HttpTransportMode.StreamableHttp),
+                    new("Sse", HttpTransportMode.Sse),
+                ],
+                LocalizableString.Create<AbpAIResource>("HttpAITool:TransportModeDesc")),
+            AIToolPropertyDescriptor.CreateNumberProperty(
+                McpAIToolDefinitionExtenssions.ConnectionTimeout,
+                LocalizableString.Create<AbpAIResource>("McpAITool:ConnectionTimeout"),
+                LocalizableString.Create<AbpAIResource>("McpAITool:ConnectionTimeoutDesc")),
+            AIToolPropertyDescriptor.CreateNumberProperty(
+                McpAIToolDefinitionExtenssions.MaxReconnectionAttempts,
+                LocalizableString.Create<AbpAIResource>("McpAITool:MaxReconnectionAttempts"),
+                LocalizableString.Create<AbpAIResource>("McpAITool:MaxReconnectionAttemptsDesc")),
+            AIToolPropertyDescriptor.CreateBoolProperty(
+                McpAIToolDefinitionExtenssions.CurrentAccessToken,
+                LocalizableString.Create<AbpAIResource>("McpAITool:CurrentAccessToken"))];
     }
 
     public async virtual Task<AITool[]> CreateToolsAsync(AIToolDefinition definition)

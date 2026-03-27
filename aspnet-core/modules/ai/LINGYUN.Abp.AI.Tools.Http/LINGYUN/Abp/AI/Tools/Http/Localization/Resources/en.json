@@ -1,6 +1,10 @@
 ﻿{
   "culture": "en",
   "texts": {
-    "Tools:GetApplicationConfiguration": "Get Application Configuration"
+    "Tools:GetApplicationConfiguration": "Get Application Configuration",
+    "HttpAITool:Endpoint": "Endpoint",
+    "HttpAITool:Method": "Method",
+    "HttpAITool:Headers": "Headers",
+    "HttpAITool:CurrentAccessToken": "Use the current user token"
   }
 }

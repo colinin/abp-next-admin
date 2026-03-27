@@ -5,17 +5,22 @@ using Volo.Abp;
 namespace LINGYUN.Abp.AI.Tools;
 public static class FunctionAIToolDefinitionExtenssions
 {
-    private const string FunctionType = "Function";
-    public static AIToolDefinition WithFunction<TFunc>(this AIToolDefinition definition)
+    public const string FunctionType = "FunctionType";
+    public const string FunctionName = "FunctionName";
+    public static AIToolDefinition WithFunction<TFunc>(this AIToolDefinition definition, string? funcName = null)
     {
-        return definition.WithFunction(typeof(TFunc));
+        return definition.WithFunction(typeof(TFunc), funcName);
     }
 
-    public static AIToolDefinition WithFunction(this AIToolDefinition definition, Type funcType)
+    public static AIToolDefinition WithFunction(this AIToolDefinition definition, Type funcType, string? funcName = null)
     {
         Check.NotNull(funcType, nameof(funcType));
 
         definition.WithProperty(FunctionType, funcType.AssemblyQualifiedName);
+        if (!funcName.IsNullOrWhiteSpace())
+        {
+            definition.WithProperty(FunctionName, funcName);
+        }
 
         return definition;
     }

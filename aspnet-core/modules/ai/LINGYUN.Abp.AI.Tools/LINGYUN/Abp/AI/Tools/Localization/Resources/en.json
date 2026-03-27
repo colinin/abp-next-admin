@@ -5,6 +5,10 @@
     "Tools:GetNowTime": "Get now time",
     "Tools:GetUserInfo": "Get the current user information",
     "Tools:GetSetting": "Get setting value",
-    "Tools:GetSettings": "Get all settings"
+    "Tools:GetSettings": "Get all settings",
+    "FunctionAITool:FunctionType": "Custom function type",
+    "FunctionAITool:FunctionTypeDesc": "To use the full name of the function, use Type.AssemblyQualifiedName for retrieval.",
+    "FunctionAITool:FunctionName": "Custom function name",
+    "FunctionAITool:FunctionNameDesc": "The name of the called function, if not specified, will default to Invoke (synchronous) or InvokeAsync (asynchronous) function."
   }
 }

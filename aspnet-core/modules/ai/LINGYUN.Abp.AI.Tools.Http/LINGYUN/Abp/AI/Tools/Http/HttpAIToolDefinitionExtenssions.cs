@@ -5,15 +5,15 @@ using Volo.Abp;
 namespace LINGYUN.Abp.AI.Tools.Http;
 public static class HttpAIToolDefinitionExtenssions
 {
-    private const string RemoteService = "RemoteService";
-    private const string RemoteController = "RemoteController";
-    private const string RemoteMethod = "RemoteMethod";
+    public const string RemoteService = "RemoteService";
+    public const string RemoteController = "RemoteController";
+    public const string RemoteMethod = "RemoteMethod";
 
-    private const string Endpoint = "HttpEndpoint";
-    private const string Method = "HttpMethod";
-    private const string Headers = "HttpHeaders";
+    public const string Endpoint = "HttpEndpoint";
+    public const string Method = "HttpMethod";
+    public const string Headers = "HttpHeaders";
 
-    private const string CurrentAccessToken = "UseHttpCurrentAccessToken";
+    public const string CurrentAccessToken = "UseHttpCurrentAccessToken";
 
     public static AIToolDefinition UseHttpCurrentAccessToken(this AIToolDefinition definition, bool useCurrentAccessToken = true)
     {

@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.AI;
+﻿using LINGYUN.Abp.AI.Localization;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.AI.Tools.Http;
 public class HttpAIToolProvider : IAIToolProvider, ITransientDependency
@@ -14,6 +17,27 @@ public class HttpAIToolProvider : IAIToolProvider, ITransientDependency
     public HttpAIToolProvider(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
+    }
+
+    public virtual AIToolPropertyDescriptor[] GetPropertites()
+    {
+        return [
+            AIToolPropertyDescriptor.CreateStringProperty(
+                HttpAIToolDefinitionExtenssions.Endpoint,
+                LocalizableString.Create<AbpAIResource>("HttpAITool:Endpoint")),
+            AIToolPropertyDescriptor.CreateSelectProperty(
+                HttpAIToolDefinitionExtenssions.Method,
+                LocalizableString.Create<AbpAIResource>("HttpAITool:Method"),
+                [
+                    new(HttpMethod.Get.Method, HttpMethod.Get.Method),
+                    new(HttpMethod.Post.Method, HttpMethod.Post.Method),
+                ]),
+            AIToolPropertyDescriptor.CreateDictionaryProperty(
+                HttpAIToolDefinitionExtenssions.Headers,
+                LocalizableString.Create<AbpAIResource>("HttpAITool:Headers")),
+            AIToolPropertyDescriptor.CreateBoolProperty(
+                HttpAIToolDefinitionExtenssions.CurrentAccessToken,
+                LocalizableString.Create<AbpAIResource>("HttpAITool:CurrentAccessToken"))];
     }
 
     public virtual Task<AITool[]> CreateToolsAsync(AIToolDefinition definition)

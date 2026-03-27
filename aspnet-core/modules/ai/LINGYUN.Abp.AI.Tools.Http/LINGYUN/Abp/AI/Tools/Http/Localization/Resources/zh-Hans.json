@@ -1,6 +1,10 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "Tools:GetApplicationConfiguration": "获取应用程序配置"
+    "Tools:GetApplicationConfiguration": "获取应用程序配置",
+    "HttpAITool:Endpoint": "请求地址",
+    "HttpAITool:Method": "请求方法",
+    "HttpAITool:Headers": "请求头",
+    "HttpAITool:CurrentAccessToken": "使用当前用户Token"
   }
 }
