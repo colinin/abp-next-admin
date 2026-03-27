@@ -153,6 +153,7 @@
   "ai": {
     "title": "Artificial Intelligence",
     "workspaces": "Workspaces",
-    "conversations": "Conversations"
+    "conversations": "Conversations",
+    "tools": "AI Tools"
   }
 }

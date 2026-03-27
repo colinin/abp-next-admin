@@ -16,3 +16,10 @@ export const ChatPermissions = {
   Default: 'AIManagement.Chats',
   SendMessage: 'AIManagement.Chats.SendMessage',
 };
+
+export const AIToolDefinitionPermissions = {
+  Default: 'AIManagement.AIToolDefinitions',
+  Create: 'AIManagement.AIToolDefinitions.Create',
+  Update: 'AIManagement.AIToolDefinitions.Update',
+  Delete: 'AIManagement.AIToolDefinitions.Delete',
+};

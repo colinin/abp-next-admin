@@ -5,8 +5,7 @@ import type {
 } from '@abp/core';
 
 interface WebhookSubscriptionDto
-  extends CreationAuditedEntityDto<string>,
-    IHasConcurrencyStamp {
+  extends CreationAuditedEntityDto<string>, IHasConcurrencyStamp {
   description?: string;
   headers?: Record<string, string>;
   isActive: boolean;
@@ -31,15 +30,13 @@ interface WebhookSubscriptionCreateOrUpdateDto {
 type WebhookSubscriptionCreateDto = WebhookSubscriptionCreateOrUpdateDto;
 
 interface WebhookSubscriptionUpdateDto
-  extends IHasConcurrencyStamp,
-    WebhookSubscriptionCreateOrUpdateDto {}
+  extends IHasConcurrencyStamp, WebhookSubscriptionCreateOrUpdateDto {}
 
 interface WebhookSubscriptionDeleteManyInput {
   recordIds: string[];
 }
 
-interface WebhookSubscriptionGetListInput
-  extends PagedAndSortedResultRequestDto {
+interface WebhookSubscriptionGetListInput extends PagedAndSortedResultRequestDto {
   beginCreationTime?: Date;
   endCreationTime?: Date;
   filter?: string;

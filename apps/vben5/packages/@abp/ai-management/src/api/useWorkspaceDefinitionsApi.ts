@@ -87,7 +87,7 @@ export function useWorkspaceDefinitionsApi() {
   }
 
   /**
-   * 新增工作区
+   * 编辑工作区
    * @param id 工作区id
    * @param input 参数
    * @returns 工作区详情
