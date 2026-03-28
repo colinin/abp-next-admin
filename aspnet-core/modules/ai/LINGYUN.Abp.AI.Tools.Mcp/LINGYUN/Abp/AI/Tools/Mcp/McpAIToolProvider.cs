@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.AI.Localization;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using ModelContextProtocol.Client;
 using System;
 using System.Collections.Generic;
@@ -61,37 +62,47 @@ public class McpAIToolProvider : IAIToolProvider, ITransientDependency
 
     public async virtual Task<AITool[]> CreateToolsAsync(AIToolDefinition definition)
     {
-        var httpClient = HttpClientFactory.CreateMcpAIToolClient();
-        var httpClientTransportOptions = new HttpClientTransportOptions
+        try
         {
-            Endpoint = new Uri(definition.GetMcpEndpoint()),
-            AdditionalHeaders = new Dictionary<string, string>(),
-            TransportMode = definition.GetMcpTransportMode(),
-            ConnectionTimeout = definition.GetMcpConnectionTimeout(),
-            MaxReconnectionAttempts = definition.GetMcpMaxReconnectionAttempts(),
-        };
-
-        var headers = definition.GetMcpHeaders();
-        foreach (var header in headers)
-        {
-            httpClientTransportOptions.AdditionalHeaders.TryAdd(header.Key, header.Value);
-        }
-
-        if (definition.IsUseMcpCurrentAccessToken())
-        {
-            var accessTokenProvider = ServiceProvider.GetRequiredService<IAbpAccessTokenProvider>();
-
-            var token = await accessTokenProvider.GetTokenAsync();
-            if (!token.IsNullOrWhiteSpace())
+            var httpClient = HttpClientFactory.CreateMcpAIToolClient();
+            var httpClientTransportOptions = new HttpClientTransportOptions
             {
-                // TODO: 使用OAuth配置?
-                httpClientTransportOptions.AdditionalHeaders.TryAdd("Authorization", $"Bearer {token}");
+                Endpoint = new Uri(definition.GetMcpEndpoint()),
+                AdditionalHeaders = new Dictionary<string, string>(),
+                TransportMode = definition.GetMcpTransportMode(),
+                ConnectionTimeout = definition.GetMcpConnectionTimeout(),
+                MaxReconnectionAttempts = definition.GetMcpMaxReconnectionAttempts(),
+            };
+
+            var headers = definition.GetMcpHeaders();
+            foreach (var header in headers)
+            {
+                httpClientTransportOptions.AdditionalHeaders.TryAdd(header.Key, header.Value);
             }
+
+            if (definition.IsUseMcpCurrentAccessToken())
+            {
+                var accessTokenProvider = ServiceProvider.GetRequiredService<IAbpAccessTokenProvider>();
+
+                var token = await accessTokenProvider.GetTokenAsync();
+                if (!token.IsNullOrWhiteSpace())
+                {
+                    // TODO: 使用OAuth配置?
+                    httpClientTransportOptions.AdditionalHeaders.TryAdd("Authorization", $"Bearer {token}");
+                }
+            }
+
+            var mcpClient = await McpClient.CreateAsync(
+                new HttpClientTransport(httpClientTransportOptions, httpClient));
+
+            return (await mcpClient.ListToolsAsync()).ToArray();
         }
-
-        var mcpClient = await McpClient.CreateAsync(
-            new HttpClientTransport(httpClientTransportOptions, httpClient));
-
-        return (await mcpClient.ListToolsAsync()).ToArray();
+        catch (Exception ex)
+        {
+            ServiceProvider
+                .GetService<ILogger<McpAIToolProvider>>()
+                ?.LogWarning(ex, "Mcp tool connection failed: {message}", ex.Message);
+            return [];
+        }
     }
 }
