@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PropertyInfo } from '@abp/ui';
+import type { CheckboxChangeEvent } from 'ant-design-vue/es/checkbox/interface';
 import type { FormInstance } from 'ant-design-vue/lib/form';
 import type {
   DefaultOptionType,
@@ -152,6 +153,13 @@ function onProviderChange(_: SelectValue, option: DefaultOptionType) {
   }
 }
 
+function onBoolPropChange(key: string, e: CheckboxChangeEvent) {
+  const propertites = formModel.value.extraProperties ?? {};
+  propertites[key] = {};
+  propertites[key] = e.target.checked;
+  formModel.value.extraProperties = propertites;
+}
+
 function onPropChange(key: string, prop: PropertyInfo) {
   const propertites = formModel.value.extraProperties ?? {};
   propertites[key] = {};
@@ -277,7 +285,8 @@ async function onSubmit() {
                 :required="prop.required"
               >
                 <Checkbox
-                  v-model:checked="formModel.extraProperties[prop.name]"
+                  :checked="formModel.extraProperties[prop.name] === true"
+                  @change="onBoolPropChange(prop.name, $event)"
                 >
                   {{ prop.displayName }}
                 </Checkbox>
@@ -305,8 +314,8 @@ async function onSubmit() {
                 <FormItemRest>
                   <PropertyTable
                     :data="formModel.extraProperties[prop.name]"
-                    @change="(data) => onPropChange(prop.name, data)"
-                    @delete="(data) => onPropDelete(prop.name, data)"
+                    @change="onPropChange(prop.name, $event)"
+                    @delete="onPropDelete(prop.name, $event)"
                   />
                 </FormItemRest>
               </FormItem>
