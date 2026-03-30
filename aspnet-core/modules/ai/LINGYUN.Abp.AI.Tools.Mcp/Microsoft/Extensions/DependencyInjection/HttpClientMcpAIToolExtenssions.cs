@@ -6,7 +6,14 @@ internal static class HttpClientMcpAIToolExtenssions
     private const string McpAIToolClient = "__AbpAIMcpToolClient";
     public static IServiceCollection AddMcpAIToolClient(this IServiceCollection services)
     {
-        services.AddHttpClient(McpAIToolClient);
+        services.AddHttpClient(McpAIToolClient)
+            .ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                return new HttpClientHandler()
+                {
+                    AllowAutoRedirect = false,
+                };
+            });
 
         return services;
     }

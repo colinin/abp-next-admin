@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { PropertyInfo } from '@abp/ui';
-import type { CheckboxChangeEvent } from 'ant-design-vue/es/checkbox/interface';
 import type { FormInstance } from 'ant-design-vue/lib/form';
 import type {
   DefaultOptionType,
@@ -10,25 +8,25 @@ import type {
 
 import type {
   AIToolDefinitionRecordDto,
+  AIToolPropertyDescriptorDto,
   AIToolProviderDto,
 } from '../../types/tools';
 
-import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
+import {
+  computed,
+  defineAsyncComponent,
+  nextTick,
+  ref,
+  useTemplateRef,
+  watch,
+} from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { useAuthorization } from '@abp/core';
-import { LocalizableInput, PropertyTable, useMessage } from '@abp/ui';
-import {
-  Checkbox,
-  Form,
-  FormItemRest,
-  Input,
-  InputNumber,
-  Select,
-  Tabs,
-} from 'ant-design-vue';
+import { LocalizableInput, useMessage } from '@abp/ui';
+import { Checkbox, Form, Input, Select, Tabs } from 'ant-design-vue';
 
 import { useAIToolsApi } from '../../api/useAIToolsApi';
 import { AIToolDefinitionPermissions } from '../../constants/permissions';
@@ -36,6 +34,11 @@ import { AIToolDefinitionPermissions } from '../../constants/permissions';
 const emit = defineEmits<{
   (event: 'change', data: AIToolDefinitionVto): void;
 }>();
+
+const AIToolProperty = defineAsyncComponent(
+  () => import('./AIToolProperty.vue'),
+);
+
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
@@ -83,6 +86,31 @@ const getIsAllowUpdate = computed<boolean>(() => {
     return isGranted(AIToolDefinitionPermissions.Update);
   }
   return isGranted(AIToolDefinitionPermissions.Create);
+});
+const getParentProperties = computed<AIToolPropertyDescriptorDto[]>(() => {
+  if (!currentAIToolProvider.value) {
+    return [];
+  }
+  return currentAIToolProvider.value.properties.filter(
+    (p) => p.dependencies.length === 0,
+  );
+});
+const getDependencyProperties = computed<AIToolPropertyDescriptorDto[]>(() => {
+  if (!currentAIToolProvider.value || !formModel.value.extraProperties) {
+    return [];
+  }
+  const properties = currentAIToolProvider.value.properties.filter(
+    (p) => p.dependencies.length,
+  );
+  return properties.filter((p) => {
+    for (let index = 0; index < p.dependencies.length; index++) {
+      const depend = p.dependencies[index]!;
+      if (formModel.value.extraProperties[depend.name] === depend.value) {
+        return true;
+      }
+    }
+    return false;
+  });
 });
 
 watch(
@@ -146,31 +174,26 @@ function onProviderChange(_: SelectValue, option: DefaultOptionType) {
   if (provider) {
     const propertites: Record<string, any> = {};
     provider.properties.forEach((prop) => {
-      propertites[prop.name] = '';
+      switch (prop.valueType) {
+        case 'Boolean': {
+          propertites[prop.name] = false;
+          break;
+        }
+        case 'Dictionary': {
+          propertites[prop.name] = {};
+          break;
+        }
+        case 'Number':
+        case 'Select':
+        case 'String': {
+          propertites[prop.name] = undefined;
+          break;
+        }
+      }
     });
     formModel.value.extraProperties ??= {};
     formModel.value.extraProperties = propertites;
   }
-}
-
-function onBoolPropChange(key: string, e: CheckboxChangeEvent) {
-  const propertites = formModel.value.extraProperties ?? {};
-  propertites[key] = {};
-  propertites[key] = e.target.checked;
-  formModel.value.extraProperties = propertites;
-}
-
-function onPropChange(key: string, prop: PropertyInfo) {
-  const propertites = formModel.value.extraProperties ?? {};
-  propertites[key] = {};
-  propertites[key][prop.key] = prop.value;
-  formModel.value.extraProperties = propertites;
-}
-function onPropDelete(key: string, prop: PropertyInfo) {
-  const propertites = formModel.value.extraProperties ?? {};
-  propertites[key] = {};
-  delete propertites[key][prop.key];
-  formModel.value.extraProperties = propertites;
 }
 
 /** 提交表单 */
@@ -251,73 +274,30 @@ async function onSubmit() {
           force-render
         >
           <div class="h-[500px] overflow-y-auto rounded bg-gray-50 p-4">
-            <template
-              v-for="prop in currentAIToolProvider.properties"
-              :key="prop.name"
-            >
+            <template v-for="prop in getParentProperties" :key="prop.name">
               <FormItem
-                v-if="prop.valueType === 'String'"
                 :extra="prop.description"
                 :label="prop.displayName"
                 :name="['extraProperties', prop.name]"
                 :required="prop.required"
               >
-                <Input v-model:value="formModel.extraProperties[prop.name]" />
-              </FormItem>
-              <FormItem
-                v-if="prop.valueType === 'Number'"
-                :extra="prop.description"
-                :label="prop.displayName"
-                :name="['extraProperties', prop.name]"
-                :required="prop.required"
-              >
-                <InputNumber
-                  class="w-full"
-                  :min="0"
-                  v-model:value="formModel.extraProperties[prop.name]"
+                <AIToolProperty
+                  :property="prop"
+                  v-model:model="formModel.extraProperties"
                 />
               </FormItem>
+            </template>
+            <template v-for="prop in getDependencyProperties" :key="prop.name">
               <FormItem
-                v-else-if="prop.valueType === 'Boolean'"
                 :extra="prop.description"
                 :label="prop.displayName"
                 :name="['extraProperties', prop.name]"
                 :required="prop.required"
               >
-                <Checkbox
-                  :checked="formModel.extraProperties[prop.name] === true"
-                  @change="onBoolPropChange(prop.name, $event)"
-                >
-                  {{ prop.displayName }}
-                </Checkbox>
-              </FormItem>
-              <FormItem
-                v-else-if="prop.valueType === 'Select'"
-                :extra="prop.description"
-                :label="prop.displayName"
-                :name="['extraProperties', prop.name]"
-                :required="prop.required"
-              >
-                <Select
-                  class="w-full"
-                  :options="prop.options"
-                  :field-names="{ label: 'name', value: 'value' }"
-                  v-model:value="formModel.extraProperties[prop.name]"
+                <AIToolProperty
+                  :property="prop"
+                  v-model:model="formModel.extraProperties"
                 />
-              </FormItem>
-              <FormItem
-                v-else-if="prop.valueType === 'Dictionary'"
-                :extra="prop.description"
-                :label="prop.displayName"
-                :name="['extraProperties', prop.name]"
-              >
-                <FormItemRest>
-                  <PropertyTable
-                    :data="formModel.extraProperties[prop.name]"
-                    @change="onPropChange(prop.name, $event)"
-                    @delete="onPropDelete(prop.name, $event)"
-                  />
-                </FormItemRest>
               </FormItem>
             </template>
           </div>

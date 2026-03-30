@@ -39,6 +39,7 @@ interface AIToolDefinitionRecordGetPagedListInput extends PagedAndSortedResultRe
 }
 
 interface AIToolPropertyDescriptorDto {
+  dependencies: NameValue<any>[];
   description?: string;
   displayName: string;
   name: string;
@@ -57,5 +58,6 @@ export type {
   AIToolDefinitionRecordDto,
   AIToolDefinitionRecordGetPagedListInput,
   AIToolDefinitionRecordUpdateDto,
+  AIToolPropertyDescriptorDto,
   AIToolProviderDto,
 };

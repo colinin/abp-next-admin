@@ -9,6 +9,14 @@
     "McpAITool:ConnectionTimeoutDesc": "The timeout used to establish the initial connection to the SSE server. The default is 30 seconds.",
     "McpAITool:MaxReconnectionAttempts": "Max Reconnection Attempts",
     "McpAITool:MaxReconnectionAttemptsDesc": "The maximum number of reconnection attempts. The default is 5.",
-    "McpAITool:CurrentAccessToken": "Use the current user token"
+    "McpAITool:CurrentAccessToken": "Use the current user token",
+    "McpAITool:UseOAuth": "OAuth Authorization",
+    "McpAITool:RedirectUri": "Redirect Uri",
+    "McpAITool:ClientId": "Client Id",
+    "McpAITool:ClientSecret": "Client Secret",
+    "McpAITool:ClientMetadataDocumentUri": "Client Metadata Uri",
+    "McpAITool:Scopes": "Scopes",
+    "McpAITool:ScopesDesc": "Multiple authorization scopes are separated by spaces.",
+    "McpAITool:AdditionalParameters": "Additional Parameters"
   }
 }

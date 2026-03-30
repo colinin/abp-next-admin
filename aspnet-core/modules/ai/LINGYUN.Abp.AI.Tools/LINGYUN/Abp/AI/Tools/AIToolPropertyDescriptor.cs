@@ -21,6 +21,7 @@ public class AIToolPropertyDescriptor
     public List<NameValue<object>> Options { get; }
     public ILocalizableString DisplayName { get; }
     public ILocalizableString? Description { get; }
+    public List<NameValue<object>> Dependencies { get; }
     private AIToolPropertyDescriptor(
         string name,
         PropertyValueType valueType, 
@@ -35,6 +36,7 @@ public class AIToolPropertyDescriptor
         Required = required;
 
         Options = new List<NameValue<object>>();
+        Dependencies = new List<NameValue<object>>();
     }
 
     public static AIToolPropertyDescriptor CreateStringProperty(
@@ -113,8 +115,17 @@ public class AIToolPropertyDescriptor
         return propertyDescriptor;
     }
 
-    public void WithOption(string name, object value)
+    public AIToolPropertyDescriptor WithOption(string name, object value)
     {
         Options.Add(new NameValue<object>(name, value));
+
+        return this;
+    }
+
+    public AIToolPropertyDescriptor DependsOn(string name, object value)
+    {
+        Dependencies.Add(new NameValue<object>(name, value));
+
+        return this;
     }
 }
