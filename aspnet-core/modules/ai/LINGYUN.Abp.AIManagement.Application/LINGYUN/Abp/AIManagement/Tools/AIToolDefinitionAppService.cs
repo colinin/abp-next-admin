@@ -66,6 +66,7 @@ public class AIToolDefinitionAppService :
                             Required = prop.Required,
                             ValueType = prop.ValueType.ToString(),
                             DisplayName = prop.DisplayName.Localize(StringLocalizerFactory),
+                            Dependencies = prop.Dependencies,
                         };
                         if (prop.Description != null)
                         {

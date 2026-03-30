@@ -1,4 +1,5 @@
-﻿using ModelContextProtocol.Client;
+﻿using ModelContextProtocol.Authentication;
+using ModelContextProtocol.Client;
 using System;
 using System.Collections.Generic;
 using Volo.Abp;
@@ -147,4 +148,88 @@ public static class McpAIToolDefinitionExtenssions
 
         return new Dictionary<string, string>();
     }
+
+    #region OAuth
+
+    public const string UseOAuth = "McpUseOAuth";
+    public const string RedirectUri = "McpRedirectUri";
+    public const string ClientId = "McpClientId";
+    public const string ClientSecret = "McpClientSecret";
+    public const string ClientMetadataDocumentUri = "McpClientMetadataDocumentUri";
+    public const string Scopes = "McpScopes";
+    public const string AuthorizationParameters = "McpAuthorizationParameters";
+
+    public static AIToolDefinition WithMcpOAuth(this AIToolDefinition definition, ClientOAuthOptions oAuthOptions)
+    {
+        Check.NotNull(oAuthOptions, nameof(oAuthOptions));
+
+        definition.WithProperty(UseOAuth, true);
+        definition.WithProperty(RedirectUri, oAuthOptions.RedirectUri.ToString());
+        if (!oAuthOptions.ClientId.IsNullOrWhiteSpace())
+        {
+            definition.WithProperty(ClientId, oAuthOptions.ClientId);
+        }
+        if (!oAuthOptions.ClientSecret.IsNullOrWhiteSpace())
+        {
+            definition.WithProperty(ClientSecret, oAuthOptions.ClientSecret);
+        }
+        if (oAuthOptions.ClientMetadataDocumentUri != null)
+        {
+            definition.WithProperty(ClientMetadataDocumentUri, oAuthOptions.ClientMetadataDocumentUri.ToString());
+        }
+        if (oAuthOptions.Scopes != null)
+        {
+            definition.WithProperty(Scopes, oAuthOptions.Scopes.JoinAsString(" "));
+        }
+        if (oAuthOptions.AdditionalAuthorizationParameters != null)
+        {
+            definition.WithProperty(AuthorizationParameters, oAuthOptions.AdditionalAuthorizationParameters);
+        }
+
+        return definition;
+    }
+
+    public static ClientOAuthOptions? GetMcpOAuth(this AIToolDefinition definition)
+    {
+        if (definition.Properties.TryGetValue(UseOAuth, out var useOAuthObj) && useOAuthObj is true &&
+            definition.Properties.TryGetValue(RedirectUri, out var redirectUriObj) && redirectUriObj != null)
+        {
+            var oAuthOptions = new ClientOAuthOptions
+            {
+                RedirectUri = new Uri(redirectUriObj.ToString()!)
+            };
+            if (definition.Properties.TryGetValue(ClientId, out var clientIdObj) && clientIdObj != null)
+            {
+                oAuthOptions.ClientId = clientIdObj.ToString();
+            }
+            if (definition.Properties.TryGetValue(ClientSecret, out var clientSecretObj) && clientSecretObj != null)
+            {
+                oAuthOptions.ClientSecret = clientSecretObj.ToString();
+            }
+            if (definition.Properties.TryGetValue(ClientMetadataDocumentUri, out var clientMetadataDocumentUriObj) && clientMetadataDocumentUriObj != null)
+            {
+                var clientMetadataDocumentUri = clientMetadataDocumentUriObj.ToString();
+                if (!clientMetadataDocumentUri.IsNullOrWhiteSpace())
+                {
+                    oAuthOptions.ClientMetadataDocumentUri = new Uri(clientMetadataDocumentUri);
+                }
+            }
+            if (definition.Properties.TryGetValue(Scopes, out var scopesObj) && scopesObj != null)
+            {
+                oAuthOptions.Scopes = scopesObj.ToString()?.Split(" ");
+            }
+            if (definition.Properties.TryGetValue(AuthorizationParameters, out var parametersObj) && parametersObj != null)
+            {
+                if (parametersObj is IDictionary<string, string> parameters)
+                {
+                    oAuthOptions.AdditionalAuthorizationParameters = parameters;
+                }
+            }
+            return oAuthOptions;
+        }
+
+        return null;
+    }
+
+    #endregion
 }

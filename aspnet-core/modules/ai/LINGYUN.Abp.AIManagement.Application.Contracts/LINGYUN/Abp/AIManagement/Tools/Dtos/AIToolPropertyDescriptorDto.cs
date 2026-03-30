@@ -10,4 +10,5 @@ public class AIToolPropertyDescriptorDto
     public List<NameValue<object>> Options { get; set; }
     public string DisplayName { get; set; }
     public string? Description { get; set; }
+    public List<NameValue<object>> Dependencies { get; set; }
 }

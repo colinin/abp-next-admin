@@ -2,12 +2,15 @@
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ModelContextProtocol.Authentication;
 using ModelContextProtocol.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Localization;
@@ -57,7 +60,37 @@ public class McpAIToolProvider : IAIToolProvider, ITransientDependency
                 LocalizableString.Create<AbpAIResource>("McpAITool:MaxReconnectionAttemptsDesc")),
             AIToolPropertyDescriptor.CreateBoolProperty(
                 McpAIToolDefinitionExtenssions.CurrentAccessToken,
-                LocalizableString.Create<AbpAIResource>("McpAITool:CurrentAccessToken"))];
+                LocalizableString.Create<AbpAIResource>("McpAITool:CurrentAccessToken")),
+
+            AIToolPropertyDescriptor.CreateBoolProperty(
+                McpAIToolDefinitionExtenssions.UseOAuth,
+                LocalizableString.Create<AbpAIResource>("McpAITool:UseOAuth")),
+            AIToolPropertyDescriptor.CreateStringProperty(
+                McpAIToolDefinitionExtenssions.RedirectUri,
+                LocalizableString.Create<AbpAIResource>("McpAITool:RedirectUri"),
+                required: true)
+                .DependsOn(McpAIToolDefinitionExtenssions.UseOAuth, true),
+            AIToolPropertyDescriptor.CreateStringProperty(
+                McpAIToolDefinitionExtenssions.ClientId,
+                LocalizableString.Create<AbpAIResource>("McpAITool:ClientId"))
+                .DependsOn(McpAIToolDefinitionExtenssions.UseOAuth, true),
+            AIToolPropertyDescriptor.CreateStringProperty(
+                McpAIToolDefinitionExtenssions.ClientSecret,
+                LocalizableString.Create<AbpAIResource>("McpAITool:ClientSecret"))
+                .DependsOn(McpAIToolDefinitionExtenssions.UseOAuth, true),
+            AIToolPropertyDescriptor.CreateStringProperty(
+                McpAIToolDefinitionExtenssions.ClientMetadataDocumentUri,
+                LocalizableString.Create<AbpAIResource>("McpAITool:ClientMetadataDocumentUri"))
+                .DependsOn(McpAIToolDefinitionExtenssions.UseOAuth, true),
+            AIToolPropertyDescriptor.CreateStringProperty(
+                McpAIToolDefinitionExtenssions.Scopes,
+                LocalizableString.Create<AbpAIResource>("McpAITool:Scopes"),
+                LocalizableString.Create<AbpAIResource>("McpAITool:ScopesDesc"))
+                .DependsOn(McpAIToolDefinitionExtenssions.UseOAuth, true),
+            AIToolPropertyDescriptor.CreateDictionaryProperty(
+                McpAIToolDefinitionExtenssions.AuthorizationParameters,
+                LocalizableString.Create<AbpAIResource>("McpAITool:AdditionalParameters"))
+                .DependsOn(McpAIToolDefinitionExtenssions.UseOAuth, true)];
     }
 
     public async virtual Task<AITool[]> CreateToolsAsync(AIToolDefinition definition)
@@ -80,14 +113,41 @@ public class McpAIToolProvider : IAIToolProvider, ITransientDependency
                 httpClientTransportOptions.AdditionalHeaders.TryAdd(header.Key, header.Value);
             }
 
-            if (definition.IsUseMcpCurrentAccessToken())
+            var oAuthOptions = definition.GetMcpOAuth();
+            if (oAuthOptions != null)
+            {
+                httpClientTransportOptions.OAuth = new ClientOAuthOptions 
+                { 
+                    RedirectUri = oAuthOptions.RedirectUri,
+                    ClientId = oAuthOptions.ClientId,
+                    ClientSecret = oAuthOptions.ClientSecret,
+                    ClientMetadataDocumentUri = oAuthOptions.ClientMetadataDocumentUri,
+                    Scopes = oAuthOptions.Scopes,
+                    AdditionalAuthorizationParameters = oAuthOptions.AdditionalAuthorizationParameters,
+                };
+                var authCodeProvider = ServiceProvider.GetService<IMcpAuthorizationCodeProvider>();
+                if (authCodeProvider != null)
+                {
+                    httpClientTransportOptions.OAuth.AuthorizationRedirectDelegate = async (Uri authorizationUrl, Uri redirectUri, CancellationToken cancellationToken) =>
+                    {
+                        var authCodeHandleContext = new McpAuthorizationCodeHandleContext(
+                            ServiceProvider,
+                            httpClient,
+                            authorizationUrl,
+                            redirectUri,
+                            cancellationToken);
+
+                        return await authCodeProvider.HandleAsync(authCodeHandleContext);
+                    };
+                }
+            }
+            else if (definition.IsUseMcpCurrentAccessToken())
             {
                 var accessTokenProvider = ServiceProvider.GetRequiredService<IAbpAccessTokenProvider>();
 
                 var token = await accessTokenProvider.GetTokenAsync();
                 if (!token.IsNullOrWhiteSpace())
                 {
-                    // TODO: 使用OAuth配置?
                     httpClientTransportOptions.AdditionalHeaders.TryAdd("Authorization", $"Bearer {token}");
                 }
             }
