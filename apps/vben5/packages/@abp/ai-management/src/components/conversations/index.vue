@@ -7,19 +7,26 @@ import type {
 
 import type { ConversationDto } from '../../types/conversations';
 
-import { computed, h, onMounted, ref, watch } from 'vue';
+import { computed, h, nextTick, onMounted, ref, useTemplateRef } from 'vue';
 
 import { confirm, useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 import { preferences } from '@vben/preferences';
 
-import { useAuthorization } from '@abp/core';
+import { isFunction } from '@vben-core/shared/utils';
+
+import {
+  useAuthorization,
+  useLocalization,
+  useLocalizationSerializer,
+} from '@abp/core';
 import { useMessage } from '@abp/ui';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons-vue';
-import { useDebounceFn, useWindowSize } from '@vueuse/core';
+import { useDebounceFn, useInterval, useWindowSize } from '@vueuse/core';
 import { Button, Space, theme, Typography } from 'ant-design-vue';
 import {
   Bubble,
+  BubbleList,
   Conversations,
   Sender,
   useXAgent,
@@ -57,6 +64,10 @@ const messageApi = useMessage();
 const { token } = theme.useToken();
 const { height } = useWindowSize();
 const { isGranted } = useAuthorization();
+const { Lr } = useLocalization();
+const { deserialize: deserializeLocalizableString } =
+  useLocalizationSerializer();
+
 const md = markdownit({ html: true, breaks: true });
 
 const styles = computed(() => {
@@ -147,10 +158,12 @@ const bubbleRoles: BubbleListProps['roles'] = {
     variant: 'shadow',
   },
 };
-
+type BubbleListRef = InstanceType<typeof BubbleList>;
 // ==================== State ====================
 // const headerOpen = ref(false);
 const content = ref('');
+
+const bubbleRef = useTemplateRef<BubbleListRef>('bubbleRef');
 const activeConversation = ref<ConversationDto>();
 // const attachedFiles = ref<AttachmentsProps['items']>([]);
 const agentRequestLoading = ref(false);
@@ -177,7 +190,10 @@ const conversationsMenuConfig: NonNullable<ConversationsProps['menu']> = (
           beforeClose: async ({ isConfirm }) => {
             if (isConfirm) {
               await deleteConversationApi(conversation.key);
+              activeConversation.value = undefined;
+              updateConversationFn.pause();
               await onInit();
+              setMessages([]);
             }
             return true;
           },
@@ -187,7 +203,7 @@ const conversationsMenuConfig: NonNullable<ConversationsProps['menu']> = (
     }
   },
 });
-const conversationsItems = ref<Conversation[]>([]);
+const conversations = ref<ConversationDto[]>([]);
 const conversationsCount = ref(0);
 // 定义分组优先级
 const priorityMap: Record<string, number> = {
@@ -196,6 +212,63 @@ const priorityMap: Record<string, number> = {
   '7天内': 3,
   '30天内': 4,
 };
+
+const updateConversationFn = useInterval(10_000, {
+  controls: true,
+  callback: async () => {
+    if (activeConversation.value) {
+      const conversation = await getConversationApi(
+        activeConversation.value.id,
+      );
+      const updateConversations = conversations.value.map((item) => {
+        if (item.id === conversation.id) {
+          return {
+            ...item,
+            expiredAt: conversation.expiredAt,
+            updateAt: conversation.updateAt,
+            name: conversation.name,
+          };
+        }
+        return item;
+      });
+      conversations.value = updateConversations;
+      if (dayJs(conversation.expiredAt).isBefore(dayJs())) {
+        agentRequestDisabled.value = true;
+      }
+    }
+  },
+});
+
+const conversationsItems = computed<Conversation[]>(() => {
+  const nowTime = dayJs();
+  return conversations.value.map((item) => {
+    const targetDate = dayJs(item.createdAt);
+    const conversation: Conversation = {
+      label: item.name,
+      key: item.id,
+    };
+    if (targetDate.format('YYYY-MM-DD') === nowTime.format('YYYY-MM-DD')) {
+      conversation.group = '今天';
+    } else if (
+      targetDate.format('YYYY-MM-DD') ===
+      nowTime.subtract(1, 'day').format('YYYY-MM-DD')
+    ) {
+      conversation.group = '昨天';
+    } else {
+      const diffDays = nowTime
+        .startOf('day')
+        .diff(targetDate.startOf('day'), 'day');
+      if (diffDays <= 7) {
+        conversation.group = '7天内';
+      } else if (diffDays <= 30) {
+        conversation.group = '30天内';
+      } else {
+        conversation.group = targetDate.format('YYYY-MM');
+      }
+    }
+    return conversation;
+  });
+});
 
 const conversationsGroupable = computed<ConversationsProps['groupable']>(() => {
   return {
@@ -240,8 +313,9 @@ const searchWorkspaces = useDebounceFn((filter?: string) => {
         fieldName: 'workspace',
         componentProps: {
           options: res.items.map((item) => {
+            const l = deserializeLocalizableString(item.displayName);
             return {
-              label: item.displayName,
+              label: Lr(l.resourceName, l.name),
               value: item.name,
             };
           }),
@@ -340,16 +414,6 @@ const { onRequest, messages, setMessages } = useXChat({
   agent: agent!.value,
 });
 
-watch(
-  activeConversation,
-  () => {
-    if (activeConversation.value !== undefined) {
-      setMessages([]);
-    }
-  },
-  { immediate: true },
-);
-
 // ==================== Event ====================
 async function onSubmit(nextContent: string) {
   if (!nextContent) return;
@@ -397,10 +461,22 @@ const onConversationClick: ConversationsProps['onActiveChange'] = async (
     }
   });
   setMessages(messageInfos);
+  nextTick(() => {
+    if (bubbleRef.value && isFunction(bubbleRef.value.scrollTo)) {
+      bubbleRef.value.scrollTo({
+        offset: bubbleRef.value.nativeElement.scrollHeight,
+      });
+    }
+  });
   if (dayJs(conversation.expiredAt).isBefore(dayJs())) {
     content.value = $t('AIManagement.ConversationsExpiredWarnMessage');
   } else {
     agentRequestDisabled.value = false;
+    if (updateConversationFn.isActive) {
+      updateConversationFn.resume();
+    } else {
+      updateConversationFn.reset();
+    }
   }
 };
 
@@ -458,34 +534,7 @@ const onInit = async (activeConversationId?: string) => {
   const { items, totalCount } = await getConversationsApi({
     maxResultCount: 25,
   });
-  const nowTime = dayJs();
-  conversationsItems.value = items.map((item) => {
-    const targetDate = dayJs(item.createdAt);
-    const conversation: Conversation = {
-      label: item.name,
-      key: item.id,
-    };
-    if (targetDate.format('YYYY-MM-DD') === nowTime.format('YYYY-MM-DD')) {
-      conversation.group = '今天';
-    } else if (
-      targetDate.format('YYYY-MM-DD') ===
-      nowTime.subtract(1, 'day').format('YYYY-MM-DD')
-    ) {
-      conversation.group = '昨天';
-    } else {
-      const diffDays = nowTime
-        .startOf('day')
-        .diff(targetDate.startOf('day'), 'day');
-      if (diffDays <= 7) {
-        conversation.group = '7天内';
-      } else if (diffDays <= 30) {
-        conversation.group = '30天内';
-      } else {
-        conversation.group = targetDate.format('YYYY-MM');
-      }
-    }
-    return conversation;
-  });
+  conversations.value = items;
   conversationsCount.value = totalCount;
   activeConversationId && onConversationClick(activeConversationId);
 };
@@ -533,6 +582,7 @@ onMounted(onInit);
     <div :style="styles.chat">
       <!-- 🌟 消息列表 -->
       <Bubble.List
+        ref="bubbleRef"
         :items="bubbleItems"
         :roles="bubbleRoles"
         :style="styles.messages"

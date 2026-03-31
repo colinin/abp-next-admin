@@ -13,3 +13,12 @@ public partial class TextChatMessageRecordToUserTextMessageMapper : MapperBase<T
     public override partial TextChatMessage Map(TextChatMessageRecord source);
     public override partial void Map(TextChatMessageRecord source, TextChatMessage destination);
 }
+
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
+[MapExtraProperties(DefinitionChecks = MappingPropertyDefinitionChecks.None)]
+public partial class TextChatMessageRecordToTextChatMessageRecordEtoMapper : MapperBase<TextChatMessageRecord, TextChatMessageRecordEto>
+{
+    public override partial TextChatMessageRecordEto Map(TextChatMessageRecord source);
+    public override partial void Map(TextChatMessageRecord source, TextChatMessageRecordEto destination);
+}
+
