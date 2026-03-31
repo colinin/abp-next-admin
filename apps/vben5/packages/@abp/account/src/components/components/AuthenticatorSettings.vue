@@ -37,10 +37,7 @@ onMounted(onGet);
 </script>
 
 <template>
-  <Card
-    :bordered="false"
-    :title="$t('abp.account.settings.authenticatorSettings')"
-  >
+  <Card :title="$t('abp.account.settings.authenticatorSettings')">
     <AuthenticatorSteps
       v-if="authenticator?.isAuthenticated === false"
       :authenticator="authenticator"

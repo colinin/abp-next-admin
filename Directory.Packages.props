@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <DotNetCoreCAPPackageVersion>10.0.0</DotNetCoreCAPPackageVersion>
-    <ElsaPackageVersion>2.15.2</ElsaPackageVersion>
+    <ElsaPackageVersion>2.16.0</ElsaPackageVersion>
     <ElsaNextPackageVersion>3.3.5</ElsaNextPackageVersion>
     <VoloAbpPackageVersion>10.0.2</VoloAbpPackageVersion>
     <LINGYUNAbpPackageVersion>10.0.2</LINGYUNAbpPackageVersion>
@@ -252,19 +252,20 @@
   <!-- Serilog -->
   <ItemGroup>
     <PackageVersion Include="Serilog" Version="4.3.0" />
-    <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="3.0.1" />
     <PackageVersion Include="Serilog.Enrichers.Assembly" Version="2.0.0" />
+    <PackageVersion Include="Serilog.Enrichers.AssemblyName" Version="2.0.0" />
     <PackageVersion Include="Serilog.Enrichers.Process" Version="3.0.0" />
     <PackageVersion Include="Serilog.Enrichers.Thread" Version="4.0.0" />
     <PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0" />
     <PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.1" />
-    <PackageVersion Include="Serilog.Settings.Configuration" Version="9.0.0" />
+    <PackageVersion Include="Serilog.Settings.Configuration" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.Async" Version="2.1.0" />
-    <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
-    <PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
+    <PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
-    <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0-dev-00313" />
+    <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
   </ItemGroup>
   <!-- OpenTelemetry -->
   <ItemGroup>
@@ -347,6 +348,9 @@
     <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.19.4" />
     <PackageVersion Include="NRules" Version="0.9.2" />
     <PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
+    <PackageVersion Include="OllamaSharp" Version="5.4.20" />
+    <PackageVersion Include="ModelContextProtocol" Version="1.1.0" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Ollama" Version="1.74.0-alpha" />
     <PackageVersion Include="OpenIddict.Server.DataProtection" Version="7.2.0" />
     <PackageVersion Include="OpenIddict.Validation.DataProtection" Version="7.2.0" />
     <PackageVersion Include="Polly" Version="8.6.3" />

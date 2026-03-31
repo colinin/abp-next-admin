@@ -33,6 +33,7 @@ public class NotificationController : AbpControllerBase, INotificationAppService
 
     [HttpPost]
     [Route("send/template")]
+    [Authorize(NotificationsPermissions.Notification.Send)]
     public virtual Task SendTemplateAsync(NotificationTemplateSendDto input)
     {
         return NotificationAppService.SendTemplateAsync(input);

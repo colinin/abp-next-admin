@@ -1,4 +1,8 @@
 ﻿using Riok.Mapperly.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using Volo.Abp.Mapperly;
 
 namespace LINGYUN.Abp.OssManagement;
@@ -10,21 +14,18 @@ public partial class OssContainerToOssContainerDtoMapper : MapperBase<OssContain
     public override partial void Map(OssContainer source, OssContainerDto destination);
 }
 
-[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
+[Mapper]
 public partial class OssObjectToOssObjectDtoMapper : MapperBase<OssObject, OssObjectDto>
 {
-    [MapperIgnoreTarget(nameof(OssObjectDto.Path))]
-    [MapperIgnoreSource(nameof(OssObject.Prefix))]
+    [MapperIgnoreSource(nameof(OssObject.Content))]
+    [MapperIgnoreSource(nameof(OssObject.FullName))]
+    [MapProperty(nameof(OssObject.Prefix), nameof(OssObjectDto.Path))]
     public override partial OssObjectDto Map(OssObject source);
 
-    [MapperIgnoreTarget(nameof(OssObjectDto.Path))]
-    [MapperIgnoreSource(nameof(OssObject.Prefix))]
+    [MapperIgnoreSource(nameof(OssObject.Content))]
+    [MapperIgnoreSource(nameof(OssObject.FullName))]
+    [MapProperty(nameof(OssObject.Prefix), nameof(OssObjectDto.Path))]
     public override partial void Map(OssObject source, OssObjectDto destination);
-
-    public override void AfterMap(OssObject source, OssObjectDto destination)
-    {
-        destination.Path = source.Prefix;
-    }
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -37,8 +38,34 @@ public partial class GetOssContainersResponseToOssContainersResultDtoMapper : Ma
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 public partial class GetOssObjectsResponseToOssObjectsResultDtoMapper : MapperBase<GetOssObjectsResponse, OssObjectsResultDto>
 {
+    private readonly OssObjectToOssObjectDtoMapper _ossObjectMapper;
+
+    public GetOssObjectsResponseToOssObjectsResultDtoMapper(OssObjectToOssObjectDtoMapper ossObjectMapper)
+    {
+        _ossObjectMapper = ossObjectMapper;
+    }
+
+    [MapperIgnoreTarget(nameof(GetOssObjectsResponse.Objects))]
     public override partial OssObjectsResultDto Map(GetOssObjectsResponse source);
+
+    [MapperIgnoreTarget(nameof(GetOssObjectsResponse.Objects))]
     public override partial void Map(GetOssObjectsResponse source, OssObjectsResultDto destination);
+
+    public override void AfterMap(GetOssObjectsResponse source, OssObjectsResultDto destination)
+    {
+        if (source.Objects != null)
+        {
+            destination.Objects ??= new List<OssObjectDto>();
+            destination.Objects.Clear();
+
+            foreach (var ossObject in source.Objects)
+            {
+                var ossObjectDto = _ossObjectMapper.Map(ossObject);
+                _ossObjectMapper.AfterMap(ossObject, ossObjectDto);
+                destination.Objects.Add(ossObjectDto);
+            }
+        }
+    }
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]

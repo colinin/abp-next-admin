@@ -3,7 +3,7 @@ import type {
   ContextMenuContentProps,
   ContextMenuRootEmits,
   ContextMenuRootProps,
-} from 'radix-vue';
+} from 'reka-ui';
 
 import type { ClassType } from '@vben-core/typings';
 
@@ -11,7 +11,7 @@ import type { IContextMenuItem } from './interface';
 
 import { computed } from 'vue';
 
-import { useForwardPropsEmits } from 'radix-vue';
+import { useForwardPropsEmits } from 'reka-ui';
 
 import {
   ContextMenu,
@@ -73,6 +73,7 @@ function handleClick(menu: IContextMenuItem) {
     >
       <template v-for="menu in menusView" :key="menu.key">
         <ContextMenuItem
+          v-if="!menu.hidden"
           :class="itemClass"
           :disabled="menu.disabled"
           :inset="menu.inset || !menu.icon"

@@ -13,12 +13,16 @@ public interface INotificationPublishProvider
     /// </summary>
     string Name { get; }
     /// <summary>
+    /// 是否可发布通知
+    /// </summary>
+    /// <param name="notification"></param>
+    /// <returns></returns>
+    Task<bool> CanPublishAsync(
+        NotificationInfo notification);
+    /// <summary>
     /// 发布通知
     /// </summary>
-    /// <param name="notification">通知信息</param>
-    /// <param name="identifiers">接收用户列表</param>
+    /// <param name="context">通知发送上下文信息</param>
     /// <returns></returns>
-    Task PublishAsync(
-        NotificationInfo notification, 
-        IEnumerable<UserIdentifier> identifiers);
+    Task PublishAsync(NotificationPublishContext context);
 }

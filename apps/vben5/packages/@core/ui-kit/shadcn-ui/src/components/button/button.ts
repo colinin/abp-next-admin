@@ -1,4 +1,4 @@
-import type { AsTag } from 'radix-vue';
+import type { AsTag } from 'reka-ui';
 
 import type { Component } from 'vue';
 
@@ -13,7 +13,7 @@ export interface VbenButtonProps {
   /**
    * Change the default rendered element for the one passed as a child, merging their props and behavior.
    *
-   * Read our [Composition](https://www.radix-vue.com/guides/composition.html) guide for more details.
+   * Read our [Composition](https://www.reka-ui.com/docs/guides/composition) guide for more details.
    */
   asChild?: boolean;
   class?: any;
@@ -27,8 +27,10 @@ export type CustomRenderType = (() => Component | string) | string;
 
 export type ValueType = boolean | number | string;
 
-export interface VbenButtonGroupProps
-  extends Pick<VbenButtonProps, 'disabled'> {
+export interface VbenButtonGroupProps extends Pick<
+  VbenButtonProps,
+  'disabled'
+> {
   /** 单选模式下允许清除选中 */
   allowClear?: boolean;
   /** 值改变前的回调 */

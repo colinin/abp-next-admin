@@ -127,6 +127,7 @@ public class NotificationAppService : AbpNotificationsApplicationServiceBase, IN
                 severity: input.Severity);
     }
 
+    [Authorize(NotificationsPermissions.Notification.Send)]
     public async virtual Task SendTemplateAsync(NotificationTemplateSendDto input)
     {
         var notificationTemplate = new NotificationTemplate(

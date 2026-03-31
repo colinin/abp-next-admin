@@ -96,7 +96,7 @@ const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
       query: async ({ page, sort }) => {
         let items = sortby(featureGroups.value, sort.field);
         if (sort.order === 'desc') {
-          items = items.reverse();
+          items = items.toReversed();
         }
         const result = {
           totalCount: featureGroups.value.length,

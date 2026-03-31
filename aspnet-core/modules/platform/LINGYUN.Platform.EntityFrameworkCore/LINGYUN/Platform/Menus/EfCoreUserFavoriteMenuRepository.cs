@@ -10,11 +10,11 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Platform.Menus;
 public class EfCoreUserFavoriteMenuRepository :
-    EfCoreRepository<PlatformDbContext, UserFavoriteMenu, Guid>,
+    EfCoreRepository<IPlatformDbContext, UserFavoriteMenu, Guid>,
     IUserFavoriteMenuRepository
 {
     public EfCoreUserFavoriteMenuRepository(
-        IDbContextProvider<PlatformDbContext> dbContextProvider)
+        IDbContextProvider<IPlatformDbContext> dbContextProvider)
         : base(dbContextProvider)
     {
     }

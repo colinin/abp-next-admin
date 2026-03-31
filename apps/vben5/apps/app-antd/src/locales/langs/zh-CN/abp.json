@@ -52,7 +52,8 @@
       "title": "通知管理",
       "myNotifilers": "我的通知",
       "groups": "通知分组",
-      "definitions": "通知定义"
+      "definitions": "通知定义",
+      "sendRecords": "发送记录"
     },
     "localization": {
       "title": "本地化管理",
@@ -98,7 +99,8 @@
       "authenticatorSettings": "身份验证程序",
       "changeAvatar": "更改头像",
       "sessionSettings": "会话管理",
-      "personalDataSettings": "个人信息管理"
+      "personalDataSettings": "个人信息管理",
+      "systemSettings": "系统设置"
     },
     "profile": "个人中心"
   },
@@ -147,5 +149,11 @@
   "wechat": {
     "title": "微信集成",
     "settings": "微信设置"
+  },
+  "ai": {
+    "title": "人工智能",
+    "workspaces": "工作区管理",
+    "conversations": "会话管理",
+    "tools": "工具管理"
   }
 }

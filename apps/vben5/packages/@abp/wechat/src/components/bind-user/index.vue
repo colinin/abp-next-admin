@@ -38,7 +38,6 @@ async function onInitLogin() {
         login_type: WWLoginType.corpApp,
         appid: agentConfig.corpId,
         agentid: agentConfig.agentId,
-        // TODO: 是否应改为可配置式? 企业微信仅允许配置一个回调地址, 生产环境应配合反向代理服务器.
         redirect_uri: window.location.href,
         state: buildUUID(),
         redirect_type: WWLoginRedirectType.callback,

@@ -9,23 +9,35 @@ declare module 'vue-router' {
 
 export interface VbenAdminProAppConfigRaw {
   VITE_GLOB_API_URL: string;
-  VITE_GLOB_CLIENT_ID: string;
-  VITE_GLOB_CLIENT_SECRET: string;
-  VITE_GLOB_AUTHORITY: string;
-  VITE_GLOB_AUDIENCE?: string;
-  VITE_GLOB_ONLY_OIDC?: string;
-  VITE_GLOB_DISABLE_PKCE?: string;
+  VITE_GLOB_AUTH_CLIENT_ID: string;
+  VITE_GLOB_AUTH_CLIENT_SECRET: string;
+  VITE_GLOB_AUTH_AUTHORITY: string;
+  VITE_GLOB_AUTH_AUDIENCE?: string;
+  VITE_GLOB_AUTH_ONLY_OIDC?: string;
+  VITE_GLOB_AUTH_ONLY_OIDC_HINT?: string;
+  VITE_GLOB_AUTH_DISABLE_PKCE?: string;
+  VITE_GLOB_AUTH_DINGDING_CLIENT_ID: string;
+  VITE_GLOB_AUTH_DINGDING_CORP_ID: string;
   VITE_GLOB_UI_FRAMEWORK: string;
 }
 
-export interface ApplicationConfig {
-  apiURL: string;
+interface AuthConfig {
+  dingding?: {
+    clientId: string;
+    corpId: string;
+  };
   authority: string;
   audience?: string;
   clientId: string;
   clientSecret: string;
   onlyOidc?: boolean;
+  onlyOidcHint?: boolean;
   disablePKCE?: boolean;
+}
+
+export interface ApplicationConfig {
+  apiURL: string;
+  auth: AuthConfig;
   uiFramework: string;
 }
 

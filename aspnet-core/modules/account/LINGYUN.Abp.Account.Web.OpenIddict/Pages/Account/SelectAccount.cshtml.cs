@@ -24,7 +24,7 @@ public class SelectAccountModel : AccountPageModel
 {
     private const string LastLoginTimeFieldName = "LastLoginTime";
     private const string AllowedTenantsFieldName = "AllowedTenants";
-    private const string DefaultDateFormat = "yyyy-MM-dd HH:mm:ss";
+    public const string DefaultDateFormat = "yyyy-MM-dd HH:mm:ss";
 
     [BindProperty(SupportsGet = true)]
     public string RedirectUri { get; set; }

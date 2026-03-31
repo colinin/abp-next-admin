@@ -7,7 +7,9 @@
     "length": "{0}长度必须为{1}个字符",
     "alreadyExists": "{0} `{1}` 已存在",
     "startWith": "{0}必须以 {1} 开头",
-    "invalidURL": "请输入有效的链接"
+    "invalidURL": "请输入有效的链接",
+    "sizeLimit": "文件大小不能超过 {0}MB",
+    "previewWarning": "无法打开文件，没有可用的URL或预览地址"
   },
   "actionTitle": {
     "edit": "修改{0}",
@@ -24,15 +26,19 @@
   },
   "placeholder": {
     "input": "请输入",
-    "select": "请选择"
+    "select": "请选择",
+    "upload": "点击上传"
   },
   "captcha": {
     "title": "请完成安全验证",
     "sliderSuccessText": "验证通过",
     "sliderDefaultText": "请按住滑块拖动",
     "sliderRotateDefaultTip": "点击图片可刷新",
+    "sliderTranslateDefaultTip": "点击图片可刷新",
     "sliderRotateFailTip": "验证失败",
     "sliderRotateSuccessTip": "验证成功，耗时{0}秒",
+    "sliderTranslateFailTip": "验证失败",
+    "sliderTranslateSuccessTip": "验证成功，耗时{0}秒",
     "alt": "支持img标签src属性值",
     "refreshAriaLabel": "刷新验证码",
     "confirmAriaLabel": "确认选择",
@@ -47,6 +53,13 @@
   "jsonViewer": {
     "copy": "复制",
     "copied": "已复制"
+  },
+  "crop": {
+    "title": "图片裁剪",
+    "titleTip": "裁剪比例 {0}",
+    "confirm": "裁剪",
+    "cancel": "取消裁剪",
+    "errorTip": "裁剪错误"
   },
   "fallback": {
     "pageNotFound": "哎呀！未找到页面",
@@ -99,6 +112,10 @@
       "errorPasswordTip": "密码错误，请重新输入",
       "backToLogin": "返回登录",
       "entry": "进入系统"
+    },
+    "timezone": {
+      "setTimezone": "设置时区",
+      "setSuccess": "时区设置成功"
     }
   }
 }

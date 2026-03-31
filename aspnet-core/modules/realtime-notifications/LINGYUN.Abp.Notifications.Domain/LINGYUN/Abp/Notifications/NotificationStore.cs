@@ -25,6 +25,8 @@ public class NotificationStore : INotificationStore
 
     private readonly INotificationRepository _notificationRepository;
 
+    private readonly INotificationSendRecordRepository _notificationSendRecordRepository;
+
     private readonly IUserNotificationRepository _userNotificationRepository;
 
     private readonly IUserSubscribeRepository _userSubscribeRepository;
@@ -40,6 +42,7 @@ public class NotificationStore : INotificationStore
         INotificationRepository notificationRepository,
         IUserSubscribeRepository userSubscribeRepository,
         IUserNotificationRepository userNotificationRepository,
+        INotificationSendRecordRepository notificationSendRecordRepository,
         IOptions<AbpNotificationsPublishOptions> options,
         IObjectMapper<AbpNotificationsDomainModule> objectMapper)
     {
@@ -50,8 +53,38 @@ public class NotificationStore : INotificationStore
         _notificationRepository = notificationRepository;
         _userSubscribeRepository = userSubscribeRepository;
         _userNotificationRepository = userNotificationRepository;
+        _notificationSendRecordRepository = notificationSendRecordRepository;
 
         _options = options.Value;
+    }
+
+    public async virtual Task InsertSendStateAsync(
+        NotificationSendInfo notificationSendInfo,
+        CancellationToken cancellationToken = default)
+    {
+        if (!notificationSendInfo.Users.Any())
+        {
+            return;
+        }
+        var notificationSendRecords = notificationSendInfo.Users
+            .Select(user => new NotificationSendRecord(
+                notificationSendInfo.Provider,
+                notificationSendInfo.SendTime,
+                user.UserId,
+                user.UserName,
+                notificationSendInfo.NotificationInfo.GetId(),
+                notificationSendInfo.NotificationInfo.Name,
+                notificationSendInfo.State,
+                notificationSendInfo.Reason,
+                notificationSendInfo.NotificationInfo.TenantId));
+
+        using (var unitOfWork = _unitOfWorkManager.Begin())
+        using (_currentTenant.Change(notificationSendInfo.NotificationInfo.TenantId))
+        {
+            await _notificationSendRecordRepository.InsertManyAsync(notificationSendRecords);
+
+            await unitOfWork.CompleteAsync();
+        }
     }
 
     public async virtual Task ChangeUserNotificationReadStateAsync(

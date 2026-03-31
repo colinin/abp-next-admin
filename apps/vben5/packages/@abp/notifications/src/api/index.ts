@@ -3,3 +3,4 @@ export { useMySubscribesApi } from './useMySubscribesApi';
 export { useNotificationDefinitionsApi } from './useNotificationDefinitionsApi';
 export { useNotificationGroupDefinitionsApi } from './useNotificationGroupDefinitionsApi';
 export { useNotificationsApi } from './useNotificationsApi';
+export { useNotificationSendRecordsApi } from './useNotificationSendRecordsApi';

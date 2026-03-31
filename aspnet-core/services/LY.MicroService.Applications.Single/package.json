@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@abp/aspnetcore.mvc.ui.theme.leptonxlite": "5.0.2",
+    "@abp/virtual-file-explorer": "10.0.2",
     "@abp/qrcode": "10.0.2"
   }
 }

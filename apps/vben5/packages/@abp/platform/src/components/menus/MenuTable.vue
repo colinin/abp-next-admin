@@ -135,7 +135,7 @@ const gridOptions: VxeGridProps<MenuDto> = {
       query: async ({ page, sort }) => {
         let items = sortby(menus.value, sort.field);
         if (sort.order === 'desc') {
-          items = items.reverse();
+          items = items.toReversed();
         }
         const result = {
           totalCount: menus.value.length,

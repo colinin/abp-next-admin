@@ -37,7 +37,7 @@ public class WeChatMiniProgramNotificationPublishProvider : NotificationPublishP
         return true;
     }
 
-    protected async override Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default)
+    protected async override Task PublishAsync(NotificationPublishContext context, CancellationToken cancellationToken = default)
     {
         // step1 默认微信openid绑定的就是username,
         // 如果不是,需要自行处理openid获取逻辑
@@ -46,55 +46,51 @@ public class WeChatMiniProgramNotificationPublishProvider : NotificationPublishP
 
         // 微信不支持推送到所有用户
         // 在小程序里用户订阅消息后通过 api/subscribes/subscribe 接口订阅对应模板消息
-        foreach (var identifier in identifiers)
+        foreach (var identifier in context.Users)
         {
-            await SendWeChatTemplateMessagAsync(notification, identifier, cancellationToken);
-        }
-    }
+            var templateId = GetOrDefaultTemplateId(context.Notification.Data);
+            if (templateId.IsNullOrWhiteSpace())
+            {
+                context.Cancel("Wechat weapp template id be empty, can not send notification!");
+                Logger.LogWarning(context.Reason);
+                continue;
+            }
 
-    protected async virtual Task SendWeChatTemplateMessagAsync(NotificationInfo notification, UserIdentifier identifier, CancellationToken cancellationToken = default)
-    {
-        var templateId = GetOrDefaultTemplateId(notification.Data);
-        if (templateId.IsNullOrWhiteSpace())
-        {
-            Logger.LogWarning("Wechat weapp template id be empty, can not send notification!");
-            return;
-        }
+            Logger.LogDebug($"Get wechat weapp template id: {templateId}");
 
-        Logger.LogDebug($"Get wechat weapp template id: {templateId}");
+            var redirect = GetOrDefault(context.Notification.Data, "RedirectPage", null);
+            Logger.LogDebug($"Get wechat weapp redirect page: {redirect ?? "null"}");
 
-        var redirect = GetOrDefault(notification.Data, "RedirectPage", null);
-        Logger.LogDebug($"Get wechat weapp redirect page: {redirect ?? "null"}");
+            var weAppState = GetOrDefault(context.Notification.Data, "WeAppState", Options.Value.DefaultState);
+            Logger.LogDebug($"Get wechat weapp state: {weAppState ?? null}");
 
-        var weAppState = GetOrDefault(notification.Data, "WeAppState", Options.Value.DefaultState);
-        Logger.LogDebug($"Get wechat weapp state: {weAppState ?? null}");
+            var weAppLang = GetOrDefault(context.Notification.Data, "WeAppLanguage", Options.Value.DefaultLanguage);
+            Logger.LogDebug($"Get wechat weapp language: {weAppLang ?? null}");
 
-        var weAppLang = GetOrDefault(notification.Data, "WeAppLanguage", Options.Value.DefaultLanguage);
-        Logger.LogDebug($"Get wechat weapp language: {weAppLang ?? null}");
+            // TODO: 如果微信端发布通知,请组装好 openid 字段在通知数据内容里面
+            var openId = GetOrDefault(context.Notification.Data, AbpWeChatClaimTypes.OpenId, "");
 
-        // TODO: 如果微信端发布通知,请组装好 openid 字段在通知数据内容里面
-        var openId = GetOrDefault(notification.Data, AbpWeChatClaimTypes.OpenId, "");
+            if (openId.IsNullOrWhiteSpace())
+            {
+                // 发送小程序订阅消息
+                await SubscribeMessager
+                    .SendAsync(
+                        identifier.UserId, templateId, redirect, weAppLang,
+                        weAppState, context.Notification.Data.ExtraProperties, cancellationToken);
+            }
+            else
+            {
+                var weChatWeAppNotificationData = new SubscribeMessage(templateId, redirect, weAppState, weAppLang);
+                // 写入模板数据
+                weChatWeAppNotificationData.WriteData(context.Notification.Data.ExtraProperties);
 
-        if (openId.IsNullOrWhiteSpace())
-        {
-            // 发送小程序订阅消息
-            await SubscribeMessager
-                .SendAsync(
-                    identifier.UserId, templateId, redirect, weAppLang,
-                    weAppState, notification.Data.ExtraProperties, cancellationToken);
-        }
-        else
-        {
-            var weChatWeAppNotificationData = new SubscribeMessage(templateId, redirect, weAppState, weAppLang);
-            // 写入模板数据
-            weChatWeAppNotificationData.WriteData(notification.Data.ExtraProperties);
+                Logger.LogDebug($"Sending wechat weapp notification: {context.Notification.Name}");
 
-            Logger.LogDebug($"Sending wechat weapp notification: {notification.Name}");
+                // 发送小程序订阅消息
+                await SubscribeMessager.SendAsync(weChatWeAppNotificationData, cancellationToken);
 
-            // 发送小程序订阅消息
-            await SubscribeMessager.SendAsync(weChatWeAppNotificationData, cancellationToken);
-
-            Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
+                Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", context.Notification.Name, Name);
+            }
         }
     }
 

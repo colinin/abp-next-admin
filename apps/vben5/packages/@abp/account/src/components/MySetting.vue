@@ -26,9 +26,11 @@ const props = defineProps<{
   disablePersonalData?: boolean;
   disableSecurity?: boolean;
   disableSession?: boolean;
+  disableSystemSetting?: boolean;
 }>();
 const emits = defineEmits<{
   (event: 'onBindInit'): void;
+  (event: 'onConfirm', params: Record<string, any>): void;
 }>();
 const AuthenticatorSettings = defineAsyncComponent(
   () => import('./components/AuthenticatorSettings.vue'),
@@ -50,6 +52,9 @@ const SessionSettings = defineAsyncComponent(
 );
 const PersonalDataSettings = defineAsyncComponent(
   () => import('./components/PersonalDataSettings.vue'),
+);
+const UserSettings = defineAsyncComponent(
+  () => import('./components/UserSettings.vue'),
 );
 const { getApi, updateApi } = useProfileApi();
 const userStore = useUserStore();
@@ -86,6 +91,10 @@ const basicMenuItems: MenuItem[] = [
     key: 'personal-data',
     label: $t('abp.account.settings.personalDataSettings'),
   },
+  {
+    key: 'system-settings',
+    label: $t('abp.account.settings.systemSettings'),
+  },
 ];
 const getEnabledMenus = computed(() => {
   return basicMenuItems.filter((x) => {
@@ -96,6 +105,7 @@ const getEnabledMenus = computed(() => {
     if (x.key === 'personal-data') return !props.disablePersonalData;
     if (x.key === 'security') return !props.disableSecurity;
     if (x.key === 'session') return !props.disableSession;
+    if (x.key === 'system-settings') return !props.disableSystemSetting;
     return true; // default case for any unexpected keys
   });
 });
@@ -130,7 +140,7 @@ const [ChangePhoneNumberModal, changePhoneNumberModalApi] = useVbenModal({
     () => import('./components/ChangePhoneNumberModal.vue'),
   ),
 });
-function onEmailConfirm() {
+function onBindConfirm() {
   if (query?.confirmToken) {
     setTimeout(() => {
       emailConfirmModalApi.setData({
@@ -139,6 +149,7 @@ function onEmailConfirm() {
       });
       emailConfirmModalApi.open();
     }, 300);
+    emits('onConfirm', query);
   }
 }
 async function onGetProfile() {
@@ -173,13 +184,13 @@ function onChangePhoneNumber() {
 }
 onMounted(async () => {
   await onGetProfile();
-  onEmailConfirm();
+  onBindConfirm();
 });
 </script>
 
 <template>
-  <div>
-    <Card>
+  <div class="h-full">
+    <Card :bordered="false">
       <div class="flex">
         <div class="basis-1/6">
           <Menu
@@ -188,7 +199,7 @@ onMounted(async () => {
             mode="inline"
           />
         </div>
-        <div class="basis-5/6">
+        <div class="h-[800px] basis-5/6 overflow-y-scroll">
           <BasicSettings
             v-if="selectedMenuKeys[0] === 'basic'"
             :profile="myProfile"
@@ -214,6 +225,7 @@ onMounted(async () => {
           <PersonalDataSettings
             v-else-if="selectedMenuKeys[0] === 'personal-data'"
           />
+          <UserSettings v-else-if="selectedMenuKeys[0] === 'system-settings'" />
         </div>
       </div>
     </Card>

@@ -14,14 +14,14 @@ using Volo.Abp.Timing;
 namespace LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 
 public class EfCoreBackgroundJobInfoRepository :
-    EfCoreRepository<TaskManagementDbContext, BackgroundJobInfo, string>,
+    EfCoreRepository<ITaskManagementDbContext, BackgroundJobInfo, string>,
     IBackgroundJobInfoRepository
 {
     protected IClock Clock { get; }
 
     public EfCoreBackgroundJobInfoRepository(
         IClock clock,
-        IDbContextProvider<TaskManagementDbContext> dbContextProvider)
+        IDbContextProvider<ITaskManagementDbContext> dbContextProvider)
         : base(dbContextProvider)
     {
         Clock = clock;

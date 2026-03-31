@@ -9,11 +9,11 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 
-public class EfCoreLanguageRepository : EfCoreRepository<LocalizationDbContext, Language, Guid>,
+public class EfCoreLanguageRepository : EfCoreRepository<ILocalizationDbContext, Language, Guid>,
     ILanguageRepository
 {
     public EfCoreLanguageRepository(
-        IDbContextProvider<LocalizationDbContext> dbContextProvider) : base(dbContextProvider)
+        IDbContextProvider<ILocalizationDbContext> dbContextProvider) : base(dbContextProvider)
     {
     }
 

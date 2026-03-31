@@ -19,6 +19,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 using Volo.Abp.TextTemplating;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
@@ -43,6 +44,10 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// Reference to <see cref="AbpNotificationsPublishOptions"/>.
         /// </summary>
         protected AbpNotificationsPublishOptions Options { get; }
+        /// <summary>
+        /// Reference to <see cref="IClock"/>.
+        /// </summary>
+        protected IClock Clock { get; }
         /// <summary>
         /// Reference to <see cref="ISettingProvider"/>.
         /// </summary>
@@ -100,6 +105,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// Initializes a new instance of the <see cref="NotificationEventHandler"/> class.
         /// </summary>
         public NotificationEventHandler(
+            IClock clock,
             ICurrentTenant currentTenant,
             ISettingProvider settingProvider,
             ITenantConfigurationCache tenantConfigurationCache,
@@ -115,6 +121,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             INotificationSubscriptionManager notificationSubscriptionManager,
             INotificationPublishProviderManager notificationPublishProviderManager)
         {
+            Clock = clock;
             Options = options.Value;
             TenantConfigurationCache = tenantConfigurationCache;
             CurrentTenant = currentTenant;
@@ -435,20 +442,40 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// </summary>
         /// <param name="provider">通知发布者</param>
         /// <param name="notificationInfo">通知信息</param>
-        /// <param name="subscriptionUserIdentifiers">订阅用户列表</param>
+        /// <param name="subscriptionUsers">订阅用户列表</param>
         /// <returns></returns>
         protected async Task PublishToSubscriberAsync(
             INotificationPublishProvider provider,
             NotificationInfo notificationInfo,
             IEnumerable<UserIdentifier> subscriptionUsers)
         {
+            var sendInfo = OnPublishing(provider, notificationInfo, subscriptionUsers);
+
             try
             {
                 Logger.LogDebug($"Sending notification with provider {provider.Name}");
-                // 发布
-                await provider.PublishAsync(notificationInfo, subscriptionUsers);
 
-                Logger.LogDebug($"Send notification {notificationInfo.Name} with provider {provider.Name} was successful");
+                if (await provider.CanPublishAsync(notificationInfo))
+                {
+                    var context = new NotificationPublishContext(notificationInfo, subscriptionUsers);
+                    // 发布
+                    await provider.PublishAsync(context);
+
+                    sendInfo.Sent(context.Exception);
+
+                    if (context.Exception == null && !context.Reason.IsNullOrWhiteSpace())
+                    {
+                        sendInfo.Cancel(context.Reason);
+                    }
+
+                    Logger.LogDebug($"Send notification {notificationInfo.Name} with provider {provider.Name} was successful");
+                }
+                else
+                {
+                    sendInfo.Disbaled();
+                }
+
+                await OnPublished(sendInfo);
             }
             catch (Exception ex)
             {
@@ -457,6 +484,13 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                 Logger.LogDebug($"Failed to send notification {notificationInfo.Name}. Try to push notification to background job");
                 // 发送失败的消息进入后台队列
                 await ProcessingFailedToQueueAsync(provider, notificationInfo, subscriptionUsers);
+
+                try
+                {
+                    sendInfo.Sent(ex);
+                    await OnPublished(sendInfo);
+                }
+                catch { }
             }
         }
         /// <summary>
@@ -488,6 +522,23 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             {
                 Logger.LogWarning("Failed to push to background job, notification will be discarded, error cause: {message}", ex.Message);
             }
+        }
+
+        protected virtual NotificationSendInfo OnPublishing(
+            INotificationPublishProvider provider,
+            NotificationInfo notification,
+            IEnumerable<UserIdentifier> identifiers)
+        {
+            return new NotificationSendInfo(
+                provider.Name,
+                Clock.Now,
+                notification,
+                identifiers);
+        }
+
+        protected async Task OnPublished(NotificationSendInfo sendInfo)
+        {
+            await NotificationStore.InsertSendStateAsync(sendInfo);
         }
     }
 }

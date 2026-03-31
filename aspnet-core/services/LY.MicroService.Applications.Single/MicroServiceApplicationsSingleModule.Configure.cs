@@ -1,3 +1,4 @@
+using LINGYUN.Abp.AIManagement;
 using Microsoft.AspNetCore.SignalR;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
@@ -464,6 +465,18 @@ public partial class MicroServiceApplicationsSingleModule
         }
     }
 
+    private void ConfigureAIManagement(IConfiguration configuration)
+    {
+        if (configuration.GetValue<bool>("AIManagement:IsDynamicStoreEnabled"))
+        {
+            Configure<AIManagementOptions>(options =>
+            {
+                options.IsDynamicWorkspaceStoreEnabled = true;
+                options.SaveStaticWorkspacesToDatabase = true;
+            });
+        }
+    }
+
     private void ConfigureDistributedLock(IServiceCollection services, IConfiguration configuration)
     {
         var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
@@ -479,6 +492,23 @@ public partial class MicroServiceApplicationsSingleModule
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<MicroServiceApplicationsSingleModule>("LY.MicroService.Applications.Single");
+        });
+    }
+
+    private void ConfigureIP2RegionIPLocation()
+    {
+        Configure<AbpIP2RegionLocationResolveOptions>(options =>
+        {
+            // 仅中国IP不显示国家
+            options.UseCountry = (localtion) =>
+            {
+                return !string.Equals("中国", localtion.Country);
+            };
+            // 仅中国IP显示省份
+            options.UseProvince = (localtion) =>
+            {
+                return string.Equals("中国", localtion.Country);
+            };
         });
     }
 

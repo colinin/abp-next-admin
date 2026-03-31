@@ -8,9 +8,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace PackageName.CompanyName.ProjectName.Users
 {
-    public class UserRepository : EfCoreRepository<ProjectNameDbContext, User, Guid>, IUserRepository
+    public class UserRepository : EfCoreRepository<IProjectNameDbContext, User, Guid>, IUserRepository
     {
-        public UserRepository(IDbContextProvider<ProjectNameDbContext> dbContextProvider) : base(dbContextProvider)
+        public UserRepository(IDbContextProvider<IProjectNameDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
 
