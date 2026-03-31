@@ -59,6 +59,7 @@
     "Tools": "工具列表",
     "Propertites": "属性",
     "Tools:New": "新工具",
-    "Tools:Edit": "编辑工具"
+    "Tools:Edit": "编辑工具",
+    "DesignConversationNamePrompt": "根据用户的提问, 生成一个简短且具有描述性的对话名称, 长度必须控制在10个字符以内."
   }
 }

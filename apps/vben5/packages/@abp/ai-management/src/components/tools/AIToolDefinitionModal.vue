@@ -236,6 +236,7 @@ async function onSubmit() {
           </FormItem>
           <FormItem
             :label="$t('AIManagement.DisplayName:IsGlobal')"
+            :extra="$t('AIManagement.Description:IsGlobal')"
             name="isEnabled"
           >
             <Checkbox v-model:checked="formModel.isGlobal">
@@ -264,7 +265,10 @@ async function onSubmit() {
             :label="$t('AIManagement.DisplayName:Description')"
             name="description"
           >
-            <LocalizableInput v-model:value="formModel.description" />
+            <LocalizableInput
+              :disabled="!getIsAllowUpdate"
+              v-model:value="formModel.description"
+            />
           </FormItem>
         </TabPane>
         <TabPane

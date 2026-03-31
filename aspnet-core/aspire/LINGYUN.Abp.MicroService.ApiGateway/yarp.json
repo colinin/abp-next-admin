@@ -12,7 +12,7 @@
             "X-Forwarded": "Append"
           },
           {
-            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat;Content-Type;Cache-Control"
           }
         ]
       },
