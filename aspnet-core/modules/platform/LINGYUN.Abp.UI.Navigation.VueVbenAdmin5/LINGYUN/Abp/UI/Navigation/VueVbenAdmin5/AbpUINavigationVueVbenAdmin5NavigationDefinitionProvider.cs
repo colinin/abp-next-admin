@@ -532,13 +532,22 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
     private static NavigationDefinition GetAIManagement()
     {
         var aiManagement = new ApplicationMenu(
-            name: "Artificial Intelligence",
+            name: "Vben5ArtificialIntelligence",
             displayName: "人工智能",
             url: "/artificia-intelligence",
             component: "",
             description: "人工智能",
             icon: "hugeicons:artificial-intelligence-04")
             .SetProperty("title", "abp.ai.title");
+        aiManagement.AddItem(
+          new ApplicationMenu(
+              name: "Vben5AIToolDefinitions",
+              displayName: "工具管理",
+              url: "/artificia-intelligence/tools",
+              component: "/ai-management/tools/index",
+              icon: "ant-design:tool-outlined",
+              description: "工具管理")
+            .SetProperty("title", "abp.ai.tools"));
         aiManagement.AddItem(
           new ApplicationMenu(
               name: "Vben5AIWorkspaceDefinitions",
