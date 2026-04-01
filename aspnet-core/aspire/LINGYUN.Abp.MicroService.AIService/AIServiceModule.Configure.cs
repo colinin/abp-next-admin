@@ -1,4 +1,6 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AI;
+using LINGYUN.Abp.AI.Agent;
 using LINGYUN.Abp.AIManagement;
 using LINGYUN.Abp.AIManagement.Chats;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -8,9 +10,11 @@ using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.Wrapper;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
+using Microsoft.Agents.AI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -121,6 +125,27 @@ public partial class AIServiceModule
 
     private void ConfigureAIManagement()
     {
+        Configure<AbpAICoreOptions>(options =>
+        {
+            options.ChatClientBuildActions.Add((_, __, builder) =>
+            {
+                return Task.FromResult(builder
+                    .UseLogging()
+                    .UseOpenTelemetry()
+                    .UseDistributedCache());
+            });
+        });
+
+        Configure<AbpAIAgentOptions>(options =>
+        {
+            options.AgentBuildActions.Add((_, builder) =>
+            {
+                return Task.FromResult(builder
+                    .UseLogging()
+                    .UseOpenTelemetry());
+            });
+        });
+
         Configure<AIManagementOptions>(options =>
         {
             options.IsDynamicWorkspaceStoreEnabled = true;

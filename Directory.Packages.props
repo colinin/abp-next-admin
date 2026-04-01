@@ -28,6 +28,8 @@
     <PackageVersion Include="Volo.Abp.Account.Web.OpenIddict" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.AspNetCore" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Components.Web.Theming" Version="$(VoloAbpPackageVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Components.WebAssembly.Theming" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.Client.Common" Version="$(VoloAbpPackageVersion)" />

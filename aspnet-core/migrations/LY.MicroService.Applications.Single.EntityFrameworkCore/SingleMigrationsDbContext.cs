@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.AIManagement.Chats;
 using LINGYUN.Abp.AIManagement.EntityFrameworkCore;
 using LINGYUN.Abp.AIManagement.Tokens;
+using LINGYUN.Abp.AIManagement.Tools;
 using LINGYUN.Abp.AIManagement.Workspaces;
 using LINGYUN.Abp.DataProtectionManagement;
 using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
@@ -238,6 +239,8 @@ public class SingleMigrationsDbContext :
     public DbSet<Author> Authors { get; set; }
 
     public DbSet<WorkspaceDefinitionRecord> WorkspaceDefinitions { get; set; }
+
+    public DbSet<AIToolDefinitionRecord> AIToolDefinitions { get; set; }
 
     public DbSet<TextChatMessageRecord> TextChatMessageRecords { get; set; }
 

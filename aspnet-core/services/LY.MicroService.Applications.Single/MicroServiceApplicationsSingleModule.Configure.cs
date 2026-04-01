@@ -1,5 +1,9 @@
+using LINGYUN.Abp.AI;
+using LINGYUN.Abp.AI.Agent;
 using LINGYUN.Abp.AIManagement;
+using Microsoft.Agents.AI;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.AI;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
@@ -467,12 +471,37 @@ public partial class MicroServiceApplicationsSingleModule
 
     private void ConfigureAIManagement(IConfiguration configuration)
     {
+        Configure<AbpAICoreOptions>(options =>
+        {
+            options.ChatClientBuildActions.Add((_, __, builder) =>
+            {
+                return Task.FromResult(builder
+                    .UseLogging()
+                    .UseOpenTelemetry()
+                    .UseDistributedCache());
+            });
+        });
+
+
+        Configure<AbpAIAgentOptions>(options =>
+        {
+            options.AgentBuildActions.Add((_, builder) =>
+            {
+                return Task.FromResult(builder
+                    .UseLogging()
+                    .UseOpenTelemetry());
+            });
+        });
+
         if (configuration.GetValue<bool>("AIManagement:IsDynamicStoreEnabled"))
         {
             Configure<AIManagementOptions>(options =>
             {
                 options.IsDynamicWorkspaceStoreEnabled = true;
                 options.SaveStaticWorkspacesToDatabase = true;
+
+                options.IsDynamicAIToolStoreEnabled = true;
+                options.SaveStaticAIToolsToDatabase = true;
             });
         }
     }

@@ -14,7 +14,7 @@ public class AbpAICoreOptions
     public ITypeList<IKernelProvider> KernelProviders { get; }
 
     public List<Action<WorkspaceDefinition, IKernelBuilder>> KernelBuildActions { get; }
-    public List<Func<WorkspaceDefinition, IServiceProvider, ChatClientBuilder, Task>> ChatClientBuildActions { get; }
+    public List<Func<WorkspaceDefinition, IServiceProvider, ChatClientBuilder, Task<ChatClientBuilder>>> ChatClientBuildActions { get; }
 
     public HashSet<string> DeletedWorkspaces { get; }
 
@@ -26,6 +26,6 @@ public class AbpAICoreOptions
 
         DeletedWorkspaces = new HashSet<string>();
         KernelBuildActions = new List<Action<WorkspaceDefinition, IKernelBuilder>>();
-        ChatClientBuildActions = new List<Func<WorkspaceDefinition, IServiceProvider, ChatClientBuilder, Task>>();
+        ChatClientBuildActions = new List<Func<WorkspaceDefinition, IServiceProvider, ChatClientBuilder, Task<ChatClientBuilder>>>();
     }
 }

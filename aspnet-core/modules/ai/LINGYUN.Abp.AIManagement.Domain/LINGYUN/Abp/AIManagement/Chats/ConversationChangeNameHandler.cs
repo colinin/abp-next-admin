@@ -3,6 +3,7 @@ using LINGYUN.Abp.AIManagement.Localization;
 using LINGYUN.Abp.AIManagement.Tokens;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -20,6 +21,7 @@ public class ConversationChangeNameHandler :
     IDistributedEventHandler<EntityCreatedEto<TextChatMessageRecordEto>>,
     ITransientDependency
 {
+    private readonly IServiceProvider _serviceProvider;
     private readonly IGuidGenerator _guidGenerator;
     private readonly IAbpDistributedLock _distributedLock;
     private readonly IChatClientFactory _chatClientFactory;
@@ -29,14 +31,16 @@ public class ConversationChangeNameHandler :
     private readonly ITextChatMessageRecordRepository _textChatMessageRecordRepository;
 
     public ConversationChangeNameHandler(
+        IServiceProvider serviceProvider,
         IGuidGenerator guidGenerator,
         IAbpDistributedLock distributedLock,
-        IChatClientFactory chatClientFactory, 
+        IChatClientFactory chatClientFactory,
         IStringLocalizer<AIManagementResource> stringLocalizer,
         ITokenUsageRecordRepository tokenUsageRecordRepository, 
         IConversationRecordRepository conversationRecordRepository, 
         ITextChatMessageRecordRepository textChatMessageRecordRepository)
     {
+        _serviceProvider = serviceProvider;
         _guidGenerator = guidGenerator;
         _distributedLock = distributedLock;
         _chatClientFactory = chatClientFactory;
@@ -91,19 +95,29 @@ public class ConversationChangeNameHandler :
         using (CultureHelper.Use(currentCulture!))
         {
             var chatClient = await _chatClientFactory.CreateAsync(chatMessage.Workspace);
+            var instructions = _stringLocalizer["DesignConversationNamePrompt", ConversationRecordConsts.MaxNameLength].Value;
 
             var aiAgent = chatClient
                 .AsBuilder()
                 .ConfigureOptions(options =>
                 {
-                    // 不受工具影响
+                    // 禁用工具
                     options.Tools = [];
                 })
-                .BuildAIAgent(_stringLocalizer["DesignConversationNamePrompt"].Value);
+                .BuildAIAgent(
+                    instructions: instructions,
+                    services: _serviceProvider);
 
-            var agentRunRes = await aiAgent.RunAsync(chatMessage.Content);
+            var agentRunRes = await aiAgent.RunAsync([
+                new ChatMessage(ChatRole.System, instructions),
+                new ChatMessage(ChatRole.User, chatMessage.Content)]);
 
-            conversation.SetName(agentRunRes.Text);
+            conversation.SetName(
+                agentRunRes.Text.Length > ConversationRecordConsts.MaxNameLength
+                ? chatMessage.Content.Length > ConversationRecordConsts.MaxNameLength
+                    ? chatMessage.Content[..ConversationRecordConsts.MaxNameLength]
+                    : chatMessage.Content
+                : agentRunRes.Text);
 
             await _conversationRecordRepository.UpdateAsync(conversation);
 

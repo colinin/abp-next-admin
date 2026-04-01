@@ -90,13 +90,10 @@ public class AgentFactory : IAgentFactory, IScopedDependency
 
         foreach (var handlerAction in AgentOptions.AgentBuildActions)
         {
-            handlerAction(workspace, aiAgentBuilder);
+            aiAgentBuilder = await handlerAction(workspace, aiAgentBuilder);
         }
 
-        var aiAgent = aiAgentBuilder
-            .UseLogging()
-            .UseOpenTelemetry()
-            .Build(ServiceProvider);
+        var aiAgent = aiAgentBuilder.Build(ServiceProvider);
 
         return new WorkspaceAIAgent(aiAgent, workspace);
     }
