@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.AI;
+using LINGYUN.Abp.AI.Tools;
 using LINGYUN.Abp.AIManagement.Localization;
 using LINGYUN.Abp.AIManagement.Tokens;
 using Microsoft.Extensions.AI;
@@ -25,6 +26,7 @@ public class ConversationChangeNameHandler :
     private readonly IGuidGenerator _guidGenerator;
     private readonly IAbpDistributedLock _distributedLock;
     private readonly IChatClientFactory _chatClientFactory;
+    private readonly IWorkspaceAIToolFinder _workspaceAIToolFinder;
     private readonly IStringLocalizer<AIManagementResource> _stringLocalizer;
     private readonly ITokenUsageRecordRepository _tokenUsageRecordRepository;
     private readonly IConversationRecordRepository _conversationRecordRepository;
@@ -34,7 +36,8 @@ public class ConversationChangeNameHandler :
         IServiceProvider serviceProvider,
         IGuidGenerator guidGenerator,
         IAbpDistributedLock distributedLock,
-        IChatClientFactory chatClientFactory, 
+        IChatClientFactory chatClientFactory,
+        IWorkspaceAIToolFinder workspaceAIToolFinder,
         IStringLocalizer<AIManagementResource> stringLocalizer,
         ITokenUsageRecordRepository tokenUsageRecordRepository, 
         IConversationRecordRepository conversationRecordRepository, 
@@ -44,6 +47,7 @@ public class ConversationChangeNameHandler :
         _guidGenerator = guidGenerator;
         _distributedLock = distributedLock;
         _chatClientFactory = chatClientFactory;
+        _workspaceAIToolFinder = workspaceAIToolFinder;
         _stringLocalizer = stringLocalizer;
         _tokenUsageRecordRepository = tokenUsageRecordRepository;
         _conversationRecordRepository = conversationRecordRepository;
@@ -96,42 +100,41 @@ public class ConversationChangeNameHandler :
         {
             var chatClient = await _chatClientFactory.CreateAsync(chatMessage.Workspace);
             var instructions = _stringLocalizer["DesignConversationNamePrompt", ConversationRecordConsts.MaxNameLength].Value;
-            var aiAgent = chatClient
-                .AsBuilder()
-                .ConfigureOptions(options =>
-                {
-                    // 不受工具影响
-                    options.Tools = [];
-                })
-                .BuildAIAgent(
-                    instructions: instructions,
-                    services: _serviceProvider);
 
-            var agentRunRes = await aiAgent.RunAsync([
-                new ChatMessage(ChatRole.System, instructions),
-                new ChatMessage(ChatRole.User, chatMessage.Content)]);
-
-            conversation.SetName(
-                agentRunRes.Text.Length > ConversationRecordConsts.MaxNameLength
-                ? agentRunRes.Text[..ConversationRecordConsts.MaxNameLength]
-                : agentRunRes.Text);
-
-            await _conversationRecordRepository.UpdateAsync(conversation);
-
-            if (agentRunRes.Usage != null)
+            // 禁用AI工具
+            using (_workspaceAIToolFinder.DisableAITool())
             {
-                var tokenUsageRecord = new TokenUsageRecord(
-                    _guidGenerator.Create(),
-                    chatMessage.Id,
-                    conversation.Id,
-                    agentRunRes.Usage.InputTokenCount,
-                    agentRunRes.Usage.OutputTokenCount,
-                    agentRunRes.Usage.TotalTokenCount,
-                    agentRunRes.Usage.CachedInputTokenCount,
-                    agentRunRes.Usage.ReasoningTokenCount,
-                    chatMessage.TenantId);
+                var aiAgent = chatClient
+                    .CreateAIAgent(
+                        instructions: instructions,
+                        services: _serviceProvider);
 
-                await _tokenUsageRecordRepository.InsertAsync(tokenUsageRecord);
+                var agentRunRes = await aiAgent.RunAsync([
+                    new ChatMessage(ChatRole.System, instructions),
+                    new ChatMessage(ChatRole.User, chatMessage.Content)]);
+
+                conversation.SetName(
+                    agentRunRes.Text.Length > ConversationRecordConsts.MaxNameLength
+                    ? chatMessage.Content[..ConversationRecordConsts.MaxNameLength]
+                    : agentRunRes.Text);
+
+                await _conversationRecordRepository.UpdateAsync(conversation);
+
+                if (agentRunRes.Usage != null)
+                {
+                    var tokenUsageRecord = new TokenUsageRecord(
+                        _guidGenerator.Create(),
+                        chatMessage.Id,
+                        conversation.Id,
+                        agentRunRes.Usage.InputTokenCount,
+                        agentRunRes.Usage.OutputTokenCount,
+                        agentRunRes.Usage.TotalTokenCount,
+                        agentRunRes.Usage.CachedInputTokenCount,
+                        agentRunRes.Usage.ReasoningTokenCount,
+                        chatMessage.TenantId);
+
+                    await _tokenUsageRecordRepository.InsertAsync(tokenUsageRecord);
+                }
             }
         }
     }

@@ -1,10 +1,9 @@
 ﻿using LINGYUN.Abp.AI.Localization;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -34,55 +33,26 @@ public class AbpAIToolsModule : AbpModule
 
         Configure<AbpAICoreOptions>(options =>
         {
-            options.ChatClientBuildActions.Add((_, __, builder) =>
-            {
-                // 启用以支持函数式工具
-                builder.UseFunctionInvocation();
-
-                return Task.FromResult(builder);
-            });
             options.ChatClientBuildActions.Add(async (workspace, sp, builder) =>
             {
-                var useAITools = new List<AITool>();
-                var useAIToolDefinitions = new List<AIToolDefinition>();
-                var aiToolFactory = sp.GetRequiredService<IAIToolFactory>();
-                var aiToolDefinitionManager = sp.GetRequiredService<IAIToolDefinitionManager>();
-                var aiToolDefinitions = await aiToolDefinitionManager.GetAllAsync();
-
-                if (workspace.Tools.Count > 0)
+                IList<AITool>? workspaceAITools = default!;
+                var workspaceAIToolFinder = sp.GetService<IWorkspaceAIToolFinder>();
+                if (workspaceAIToolFinder != null && workspaceAIToolFinder.IsAIToolEnabled())
                 {
-                    useAIToolDefinitions.AddRange(aiToolDefinitions.Where(aiTool => workspace.Tools.Contains(aiTool.Name)));
+                    workspaceAITools = await workspaceAIToolFinder.GetToolsAsync(workspace);
                 }
 
-                foreach (var globalAIToolDefinition in aiToolDefinitions.Where(aiTool => aiTool.IsGlobal))
-                {
-                    if (!useAIToolDefinitions.Any(tool => tool.Name == globalAIToolDefinition.Name))
+                return builder
+                    .ConfigureOptions(config =>
                     {
-                        useAIToolDefinitions.Add(globalAIToolDefinition);
-                    }
-                }
+                        config.ToolMode = ChatToolMode.Auto;
+                        config.AllowMultipleToolCalls = true;
 
-                foreach (var aiToolDefinition in useAIToolDefinitions)
-                {
-                    var aiTools = await aiToolFactory.CreateTool(aiToolDefinition);
-                    if (aiTools.Length > 0)
-                    {
-                        useAITools.AddRange(aiTools);
-                    }
-                }
-
-                return builder.ConfigureOptions(ai =>
-                {
-                    ai.ToolMode = ChatToolMode.Auto;
-                    ai.AllowMultipleToolCalls = true;
-
-                    ai.Tools ??= [];
-
-                    foreach (var aiTool in useAITools)
-                    {
-                        ai.Tools.Add(aiTool);
-                    }
-                });
+                        // 添加发现的工具
+                        config.Tools = workspaceAITools;
+                    })
+                    // 启用以支持函数式工具
+                    .UseFunctionInvocation();
             });
         });
 
