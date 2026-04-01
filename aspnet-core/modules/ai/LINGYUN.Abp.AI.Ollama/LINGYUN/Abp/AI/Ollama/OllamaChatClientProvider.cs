@@ -34,15 +34,10 @@ public class OllamaChatClientProvider : ChatClientProvider
 
         foreach (var handlerAction in options.ChatClientBuildActions)
         {
-            await handlerAction(workspace, ServiceProvider, chatClientBuilder);
+            chatClientBuilder = await handlerAction(workspace, ServiceProvider, chatClientBuilder);
         }
 
-        return chatClientBuilder
-            .UseLogging()
-            .UseOpenTelemetry()
-            .UseFunctionInvocation()
-            .UseDistributedCache()
-            .Build(ServiceProvider);
+        return chatClientBuilder.Build(ServiceProvider);
     }
 
     public override ChatModel[] GetModels()

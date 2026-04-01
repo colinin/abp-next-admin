@@ -233,7 +233,9 @@ const updateConversationFn = useInterval(10_000, {
       });
       conversations.value = updateConversations;
       if (dayJs(conversation.expiredAt).isBefore(dayJs())) {
+        content.value = $t('AIManagement.ConversationsExpiredWarnMessage');
         agentRequestDisabled.value = true;
+        updateConversationFn.pause();
       }
     }
   },

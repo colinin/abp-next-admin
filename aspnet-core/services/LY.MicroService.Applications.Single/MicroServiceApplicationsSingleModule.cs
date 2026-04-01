@@ -1,3 +1,5 @@
+using LINGYUN.Abp.AI.Tools.Http;
+using LINGYUN.Abp.AI.Tools.Mcp;
 using LINGYUN.Abp.AIManagement;
 using LINGYUN.Abp.SystemInfo;
 
@@ -352,6 +354,10 @@ namespace LY.MicroService.Applications.Single;
     // 微信模块 设置管理
     typeof(AbpWeChatSettingManagementModule),
 
+    // AI管理模块 Http工具
+    typeof(AbpAIToolsHttpModule),
+    // AI管理模块 Mcp工具
+    typeof(AbpAIToolsMcpModule),
     // AI管理模块 应用服务
     typeof(AbpAIManagementApplicationModule),
     // AI管理模块 控制器

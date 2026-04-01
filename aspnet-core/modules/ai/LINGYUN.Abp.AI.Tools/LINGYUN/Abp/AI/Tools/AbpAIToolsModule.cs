@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -33,6 +34,13 @@ public class AbpAIToolsModule : AbpModule
 
         Configure<AbpAICoreOptions>(options =>
         {
+            options.ChatClientBuildActions.Add((_, __, builder) =>
+            {
+                // 启用以支持函数式工具
+                builder.UseFunctionInvocation();
+
+                return Task.FromResult(builder);
+            });
             options.ChatClientBuildActions.Add(async (workspace, sp, builder) =>
             {
                 var useAITools = new List<AITool>();
@@ -63,7 +71,7 @@ public class AbpAIToolsModule : AbpModule
                     }
                 }
 
-                builder.ConfigureOptions(ai =>
+                return builder.ConfigureOptions(ai =>
                 {
                     ai.ToolMode = ChatToolMode.Auto;
                     ai.AllowMultipleToolCalls = true;
