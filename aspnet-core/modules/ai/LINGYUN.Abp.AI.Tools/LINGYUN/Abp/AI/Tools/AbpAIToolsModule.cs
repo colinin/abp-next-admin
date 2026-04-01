@@ -35,12 +35,8 @@ public class AbpAIToolsModule : AbpModule
         {
             options.ChatClientBuildActions.Add(async (workspace, sp, builder) =>
             {
-                IList<AITool>? workspaceAITools = default!;
-                var workspaceAIToolFinder = sp.GetService<IWorkspaceAIToolFinder>();
-                if (workspaceAIToolFinder != null && workspaceAIToolFinder.IsAIToolEnabled())
-                {
-                    workspaceAITools = await workspaceAIToolFinder.GetToolsAsync(workspace);
-                }
+                var workspaceAIToolFinder = sp.GetRequiredService<IWorkspaceAIToolFinder>();
+                var workspaceAITools = await workspaceAIToolFinder.GetToolsAsync(workspace);
 
                 return builder
                     .ConfigureOptions(config =>

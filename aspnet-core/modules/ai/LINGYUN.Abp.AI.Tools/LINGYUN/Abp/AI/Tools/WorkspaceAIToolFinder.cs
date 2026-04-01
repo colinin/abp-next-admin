@@ -1,34 +1,22 @@
 ﻿using LINGYUN.Abp.AI.Workspaces;
 using Microsoft.Extensions.AI;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.AI.Tools;
 public class WorkspaceAIToolFinder : IWorkspaceAIToolFinder, ITransientDependency
 {
-    private const string AIToolDisabledScopeKey = "Abp.AI.Tools.DisabledAITool";
-
     private readonly IAIToolFactory _aiToolFactory;
     private readonly IAIToolDefinitionManager _aiToolDefinitionManager;
-    private readonly IAmbientScopeProvider<AIToolDisabledState> _aiToolDisabledState;
 
     public WorkspaceAIToolFinder(
         IAIToolFactory aiToolFactory, 
-        IAIToolDefinitionManager aiToolDefinitionManager,
-        IAmbientScopeProvider<AIToolDisabledState> aiToolDisabledState)
+        IAIToolDefinitionManager aiToolDefinitionManager)
     {
         _aiToolFactory = aiToolFactory;
         _aiToolDefinitionManager = aiToolDefinitionManager;
-        _aiToolDisabledState = aiToolDisabledState;
-    }
-
-    public virtual IDisposable DisableAITool()
-    {
-        return _aiToolDisabledState.BeginScope(AIToolDisabledScopeKey, new AIToolDisabledState(true));
     }
 
     public async virtual Task<AITool[]?> GetToolsAsync(WorkspaceDefinition workspace)
@@ -60,11 +48,5 @@ public class WorkspaceAIToolFinder : IWorkspaceAIToolFinder, ITransientDependenc
         }
 
         return useAITools.ToArray();
-    }
-
-    public virtual bool IsAIToolEnabled()
-    {
-        var state = _aiToolDisabledState.GetValue(AIToolDisabledScopeKey);
-        return state == null || !state.IsDisabled;
     }
 }
