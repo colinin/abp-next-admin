@@ -60,8 +60,18 @@
 
 ## 数据库迁移
 
-| Product                                    | Scripts     | ProductVersion |
-| ------------------------------------------ | --------- | ------ |
-| AdminService                                 | 20260403034826_Upgrade-Abp-Framework-To-10-2-0    | 10.2.0 |
-| Elsa2                                      | 2.16.0    | 2.16.1 |
-| Elsa3                                      | 3.3.5     | 3.6.0  |
+| Project Name             | Database Provider | Scripts                                        | EF Core Version |
+| ------------------------ | ----------------- | ---------------------------------------------- | --------------- |
+| aspire/AdminService      | PostgreSQL        | 20260403034826_Upgrade-Abp-Framework-To-10-2-0 | 10.0.2          |
+| aspire/AuthServer        | PostgreSQL        | 20260402040021_Upgrade-Abp-Framework-To-10-2-0 | 10.0.2          |
+| aspire/PlatformService   | PostgreSQL        | 20260411023117_Add-Blob-Management-Module      | 10.0.2          |
+| services/Single          | MySQL             | 20260421022905_Upgrade-Abp-Framework-To-10-2-0 | 10.0.3          |
+| services/Single          | PostgreSQL        | 20260403035350_Upgrade-Abp-Framework-To-10-2-0 | 10.0.2          |
+| services/Single          | PostgreSQL        | 20260421023019_Add-Blob-Management-Module      | 10.0.2          |
+| services/Single          | SqlServer         | 20260403035440_Upgrade-Abp-Framework-To-10-2-0 | 10.0.2          |
+| services/Single          | SqlServer         | 20260421023044_Add-Blob-Management-Module      | 10.0.2          |
+| services/AuthServer      | MySQL             | 20260420064613_Upgrade-Abp-Framework-To-10-0-2 | 10.0.3          |
+| services/BackendAdmin    | MySQL             | 20260420064540_Upgrade-Abp-Framework-To-10-0-2 | 10.0.3          |
+| services/IdentityServer  | MySQL             | 20260420065028_Upgrade-Abp-Framework-To-10-0-2 | 10.0.3          |
+| services/RealtimeMessage | MySQL             | 20260420065252_Upgrade-Abp-Framework-To-10-0-2 | 10.0.3          |
+| services/TaskManagement  | MySQL             | 20260420073543_Upgrade-Abp-Framework-To-10-0-2 | 10.0.3          |
