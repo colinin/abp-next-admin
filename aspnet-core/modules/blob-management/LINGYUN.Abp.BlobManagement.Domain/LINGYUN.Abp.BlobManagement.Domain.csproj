@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.BlobManagement.Domain</AssemblyName>
+		<PackageId>LINGYUN.Abp.BlobManagement.Domain</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.BlobStoring" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" />
+		<PackageReference Include="Volo.Abp.Mapperly" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.BlobManagement.Domain.Shared\LINGYUN.Abp.BlobManagement.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

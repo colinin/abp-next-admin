@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.BackgroundTasks;
+using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -19,17 +20,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Quartz;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.GlobalFeatures;
@@ -287,6 +290,22 @@ public partial class TaskManagementHttpApiHostModule
         });
     }
 
+    private void ConfigureBlobStoring(IConfiguration configuration)
+    {
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            // all container use oss management
+            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+            {
+                // use oss management
+                containerConfiguration.UseBlobManagement(config =>
+                {
+                    config.ContainerName = configuration[BlobManagementBlobProviderConfigurationNames.ContainerName] ?? "tasks";
+                });
+            });
+        });
+    }
+
     private void ConfigureMultiTenancy(IConfiguration configuration)
     {
         // 多租户
@@ -346,25 +365,16 @@ public partial class TaskManagementHttpApiHostModule
                 });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.DescribeAllParametersInCamelCase();
+
+                var xmlDocFiles = new List<string>();
+                xmlDocFiles.AddIfNotContains(Directory.GetFiles(AppContext.BaseDirectory, "LINGYUN.Abp.*.xml"));
+                xmlDocFiles.AddIfNotContains(Directory.GetFiles(AppContext.BaseDirectory, "Volo.Abp.*.xml"));
+
+                foreach (var xmlDocFile in xmlDocFiles)
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Scheme = "bearer",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT"
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                        },
-                        new string[] { }
-                    }
-                });
+                    options.IncludeXmlComments(xmlDocFile);
+                }
                 options.OperationFilter<TenantHeaderParamter>();
             });
     }

@@ -1,4 +1,6 @@
-﻿namespace LINGYUN.Abp.Identity;
+﻿using System;
+
+namespace LINGYUN.Abp.Identity;
 
 /// <summary>
 /// 安全令牌验证缓存
@@ -10,6 +12,10 @@ public class SecurityTokenCacheItem
     /// </summary>
     public string Token { get; set; }
     /// <summary>
+    /// 用于验证的用户Id
+    /// </summary>
+    public Guid UserId { get; set; }
+    /// <summary>
     /// 用于验证的安全令牌
     /// </summary>
     public string SecurityToken { get; set; }
@@ -19,9 +25,10 @@ public class SecurityTokenCacheItem
 
     }
 
-    public SecurityTokenCacheItem(string token, string securityToken)
+    public SecurityTokenCacheItem(string token, Guid userId, string securityToken)
     {
         Token = token;
+        UserId = userId;
         SecurityToken = securityToken;
     }
 

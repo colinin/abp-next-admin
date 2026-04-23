@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DistributedLocking;
@@ -12,25 +11,35 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore;
 
 public class BackendAdminDbMigrationEventHandler : EfCoreDatabaseMigrationEventHandlerBase<BackendAdminMigrationsDbContext>
 {
-    protected IDataSeeder DataSeeder { get; }
+    protected BackendAdminDataSeeder DataSeeder { get; }
 
     public BackendAdminDbMigrationEventHandler(
-        ICurrentTenant currentTenant, 
-        IUnitOfWorkManager unitOfWorkManager, 
-        ITenantStore tenantStore, 
+        ICurrentTenant currentTenant,
+        IUnitOfWorkManager unitOfWorkManager,
+        ITenantStore tenantStore,
         IAbpDistributedLock abpDistributedLock,
-        IDistributedEventBus distributedEventBus, 
+        IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory,
-        IDataSeeder dataSeeder) 
+        BackendAdminDataSeeder dataSeeder)
         : base(
-            ConnectionStringNameAttribute.GetConnStringName<BackendAdminMigrationsDbContext>(), 
+            ConnectionStringNameAttribute.GetConnStringName<BackendAdminMigrationsDbContext>(),
             currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
         DataSeeder = dataSeeder;
     }
 
-    protected async override Task SeedAsync(Guid? tenantId)
+    protected async override Task AfterTenantCreated(TenantCreatedEto eventData, bool schemaMigrated)
     {
-        await DataSeeder.SeedAsync(tenantId);   
+        // 新租户数据种子
+        var context = new DataSeedContext(eventData.Id);
+        if (eventData.Properties != null)
+        {
+            foreach (var property in eventData.Properties)
+            {
+                context.WithProperty(property.Key, property.Value);
+            }
+        }
+
+        await DataSeeder.SeedAsync(context);
     }
 }

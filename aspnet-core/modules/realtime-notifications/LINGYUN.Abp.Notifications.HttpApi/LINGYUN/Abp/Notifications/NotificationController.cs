@@ -55,7 +55,7 @@ public class NotificationController : AbpControllerBase, INotificationAppService
 
     [HttpGet]
     [Route("assignable-providers")]
-    public virtual Task<ListResultDto<NotificationProviderDto>> GetAssignableProvidersAsync()
+    public virtual Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync()
     {
         return NotificationAppService.GetAssignableProvidersAsync();
     }

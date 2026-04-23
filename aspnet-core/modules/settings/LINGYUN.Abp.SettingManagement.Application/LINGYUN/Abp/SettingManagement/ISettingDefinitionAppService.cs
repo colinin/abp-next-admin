@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -15,4 +16,6 @@ public interface ISettingDefinitionAppService : IApplicationService
     Task<SettingDefinitionDto> UpdateAsync(string name, SettingDefinitionUpdateDto input);
 
     Task DeleteOrRestoreAsync(string name);
+
+    Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync();
 }

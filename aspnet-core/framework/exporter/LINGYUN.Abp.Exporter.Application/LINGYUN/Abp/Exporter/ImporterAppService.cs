@@ -8,8 +8,8 @@ namespace LINGYUN.Abp.Exporter;
 public abstract class ImporterAppService<TEntity, TEntityImportDto> : ApplicationService, IImporterAppService<TEntityImportDto>
     where TEntityImportDto : class, new()
 {
-    private readonly IImporterProvider _importerProvider;
-    protected ImporterAppService(IImporterProvider importerProvider)
+    private readonly IExcelImporterProvider _importerProvider;
+    protected ImporterAppService(IExcelImporterProvider importerProvider)
     {
         _importerProvider = importerProvider;
     }

@@ -19,7 +19,7 @@ namespace LINGYUN.Abp.MicroService.AuthServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.PostgreSql)
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "10.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -458,6 +458,15 @@ namespace LINGYUN.Abp.MicroService.AuthServer.Migrations
                     b.Property<DateTimeOffset?>("LastPasswordChangeTime")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTimeOffset?>("LastSignInTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Leaved")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("Leaved");
+
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
@@ -651,6 +660,47 @@ namespace LINGYUN.Abp.MicroService.AuthServer.Migrations
                     b.HasIndex("UserId", "OrganizationUnitId");
 
                     b.ToTable("AbpUserOrganizationUnits", (string)null);
+                });
+
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityUserPasskey", b =>
+                {
+                    b.Property<byte[]>("CredentialId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("bytea");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CredentialId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AbpUserPasskeys", (string)null);
+                });
+
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityUserPasswordHistory", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("UserId", "Password");
+
+                    b.ToTable("AbpUserPasswordHistories", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserRole", b =>
@@ -1151,6 +1201,62 @@ namespace LINGYUN.Abp.MicroService.AuthServer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityUserPasskey", b =>
+                {
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
+                        .WithMany("Passkeys")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Volo.Abp.Identity.IdentityPasskeyData", "Data", b1 =>
+                        {
+                            b1.Property<byte[]>("IdentityUserPasskeyCredentialId");
+
+                            b1.Property<byte[]>("AttestationObject");
+
+                            b1.Property<byte[]>("ClientDataJson");
+
+                            b1.Property<DateTimeOffset>("CreatedAt");
+
+                            b1.Property<bool>("IsBackedUp");
+
+                            b1.Property<bool>("IsBackupEligible");
+
+                            b1.Property<bool>("IsUserVerified");
+
+                            b1.Property<string>("Name");
+
+                            b1.Property<byte[]>("PublicKey");
+
+                            b1.Property<long>("SignCount");
+
+                            b1.PrimitiveCollection<string>("Transports");
+
+                            b1.HasKey("IdentityUserPasskeyCredentialId");
+
+                            b1.ToTable("AbpUserPasskeys");
+
+                            b1
+                                .ToJson("Data")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("IdentityUserPasskeyCredentialId");
+                        });
+
+                    b.Navigation("Data");
+                });
+
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityUserPasswordHistory", b =>
+                {
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
+                        .WithMany("PasswordHistories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserRole", b =>
                 {
                     b.HasOne("Volo.Abp.Identity.IdentityRole", null)
@@ -1232,6 +1338,10 @@ namespace LINGYUN.Abp.MicroService.AuthServer.Migrations
                     b.Navigation("Logins");
 
                     b.Navigation("OrganizationUnits");
+
+                    b.Navigation("Passkeys");
+
+                    b.Navigation("PasswordHistories");
 
                     b.Navigation("Roles");
 

@@ -1,6 +1,5 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.MultiTenancy;
-using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
@@ -244,13 +243,6 @@ public partial class AuthServerModule
     {
         Configure<AbpBlobStoringOptions>(options =>
         {
-            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
-            {
-                containerConfiguration.UseOssManagement(config =>
-                {
-                    configuration.GetSection("OssManagement").Bind(config);
-                });
-            });
         });
     }
 

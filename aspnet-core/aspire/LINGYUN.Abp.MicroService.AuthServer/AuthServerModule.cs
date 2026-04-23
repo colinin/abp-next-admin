@@ -5,13 +5,14 @@ using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.MultiTenancy;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
-using LINGYUN.Abp.BlobStoring.OssManagement;
+using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
-using LINGYUN.Abp.Exporter.MiniExcel;
+using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.Web;
+using LINGYUN.Abp.Identity.AspNetCore;
 using LINGYUN.Abp.Identity.AspNetCore.Session;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
@@ -32,6 +33,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Identity;
 
@@ -45,13 +47,14 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpAccountHttpApiModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAccountWebOAuthModule),
-    typeof(AbpBlobStoringOssManagementModule),
+    typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpGdprApplicationModule),
     typeof(AbpGdprHttpApiModule),
     typeof(AbpGdprWebModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpIdentityAspNetCoreModule),
     typeof(AbpIdentityAspNetCoreSessionModule),
     typeof(AbpOpenIddictAspNetCoreSessionModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
@@ -69,7 +72,8 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
-    typeof(AbpExporterMiniExcelModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
+    typeof(AbpExporterMiniSoftwareModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpCAPEventBusModule)

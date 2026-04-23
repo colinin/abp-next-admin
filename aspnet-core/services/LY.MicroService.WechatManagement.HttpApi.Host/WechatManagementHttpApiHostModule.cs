@@ -4,6 +4,7 @@ using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
@@ -33,7 +34,6 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -67,7 +67,7 @@ namespace LY.MicroService.WechatManagement;
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
+    typeof(AbpEntityFrameworkCoreMySQLMicrotingModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpEmailingExceptionHandlingModule),

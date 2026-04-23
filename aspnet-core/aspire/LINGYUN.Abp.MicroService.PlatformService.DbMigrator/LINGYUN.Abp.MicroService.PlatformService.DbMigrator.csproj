@@ -30,6 +30,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.PlatformService.EntityFrameworkCore\LINGYUN.Abp.MicroService.PlatformService.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.Aliyun\LINGYUN.Abp.BlobManagement.Aliyun.csproj" />
+		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.FileSystem\LINGYUN.Abp.BlobManagement.FileSystem.csproj" />
+		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.Minio\LINGYUN.Abp.BlobManagement.Minio.csproj" />
+		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.Tencent\LINGYUN.Abp.BlobManagement.Tencent.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

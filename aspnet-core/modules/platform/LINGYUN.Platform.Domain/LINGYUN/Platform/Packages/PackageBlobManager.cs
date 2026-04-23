@@ -31,7 +31,7 @@ public class PackageBlobManager : DomainService, IPackageBlobManager, ITransient
     {
         var blobName = BlobNormalizer.Normalize(package, packageBlob);
 
-        await RemoveBlobAsync(blobName);
+        await RemoveBlobAsync(blobName, cancellationToken);
     }
 
     public async virtual Task<Stream> DownloadBlobAsync(
@@ -41,7 +41,7 @@ public class PackageBlobManager : DomainService, IPackageBlobManager, ITransient
     {
         packageBlob.Download();
 
-        return await DownloadFromBlobAsync(package, packageBlob);
+        return await DownloadFromBlobAsync(package, packageBlob, cancellationToken);
     }
 
     public async virtual Task SaveBlobAsync(
@@ -67,7 +67,7 @@ public class PackageBlobManager : DomainService, IPackageBlobManager, ITransient
     {
         var blobName = BlobNormalizer.Normalize(package, packageBlob);
 
-        return await PackageContainer.GetAsync(blobName);
+        return await PackageContainer.GetAsync(blobName, cancellationToken);
     }
 
     protected async virtual Task SaveToBlobAsync(

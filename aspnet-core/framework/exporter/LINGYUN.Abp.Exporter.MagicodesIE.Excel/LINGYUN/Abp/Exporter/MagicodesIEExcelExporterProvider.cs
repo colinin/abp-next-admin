@@ -1,5 +1,6 @@
 ﻿using Magicodes.ExporterAndImporter.Excel.Utility;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +9,12 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Exporter.MagicodesIE.Excel;
-public class MagicodesIEExcelExporterProvider : IExporterProvider, ITransientDependency
+public class MagicodesIEExcelExporterProvider :
+    IExcelExporterProvider,
+#pragma warning disable CS0618
+    IExporterProvider,
+#pragma warning restore CS0618
+    ITransientDependency
 {
     private readonly AbpExporterMagicodesIEExcelOptions _options;
 
@@ -17,11 +23,41 @@ public class MagicodesIEExcelExporterProvider : IExporterProvider, ITransientDep
         _options = options.Value;
     }
 
+    public async virtual Task<Stream> ExportAsync(object data, CancellationToken cancellationToken = default)
+    {
+        var dataType = data.GetType();
+
+        var collectionType = dataType.GetInterface(typeof(ICollection<>).Name);
+        if (collectionType != null)
+        {
+            var itemType = collectionType.GetGenericArguments()[0];
+
+            var exportMethod = GetType().GetMethod(
+                nameof(ExportAsync), 
+                new[] { 
+                    typeof(ICollection<>).MakeGenericType(itemType), 
+                    typeof(CancellationToken)
+                });
+
+            if (exportMethod != null)
+            {
+                var genericMethod = exportMethod.MakeGenericMethod(itemType);
+                var result = genericMethod.Invoke(this, new[] { data, cancellationToken });
+
+                if (result is Task<Stream> task)
+                {
+                    return await task;
+                }
+            }
+        }
+
+        throw new NotSupportedException($"Type {dataType.Name} is not supported. Expected ICollection<T>.");
+    }
+
     public async virtual Task<Stream> ExportAsync<T>(ICollection<T> data, CancellationToken cancellationToken = default)
         where T : class, new()
     {
         var fileBytes = new List<byte>();
-
         var exportHelper = new ExportHelper<T>();
 
         // 由于Microsoft.IE.Excel官方此接口未暴露用户配置,做一次转换

@@ -93,4 +93,10 @@ public class CacheAppService : ApplicationService, ICacheAppService
     {
         await CacheManager.RemoveAsync(input.Key);
     }
+
+    [Authorize(CachingManagementPermissionNames.Cache.Delete)]
+    public async virtual Task RemoveManyAsync(CacheRemoveKeysInput input)
+    {
+        await CacheManager.RemoveAsync(input.Keys);
+    }
 }

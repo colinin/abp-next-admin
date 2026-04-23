@@ -1,10 +1,11 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
+using LINGYUN.Abp.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore;
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
+    typeof(AbpEntityFrameworkCoreMySQLMicrotingModule),
     typeof(AbpDataDbMigratorModule)
     )]
 public class BackendAdminMigrationsEntityFrameworkCoreModule : AbpModule
@@ -34,7 +35,7 @@ public class BackendAdminMigrationsEntityFrameworkCoreModule : AbpModule
                 mysql =>
                 {
                     // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
-                    mysql.TranslateParameterizedCollectionsToConstants();
+                    mysql.UseParameterizedCollectionMode(ParameterTranslationMode.Parameter);
                 });
         });
     }

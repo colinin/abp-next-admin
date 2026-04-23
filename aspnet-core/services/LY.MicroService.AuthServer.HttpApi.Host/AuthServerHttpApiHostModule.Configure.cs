@@ -1,5 +1,4 @@
 ﻿using DotNetCore.CAP;
-using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Identity.Session;
@@ -22,10 +21,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -119,15 +119,6 @@ public partial class AuthServerHttpApiHostModule
     {
         Configure<AbpBlobStoringOptions>(options =>
         {
-            // all container use oss management
-            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
-            {
-                // use oss management
-                containerConfiguration.UseOssManagement(config =>
-                {
-                    config.Bucket = configuration[OssManagementBlobProviderConfigurationNames.Bucket];
-                });
-            });
         });
     }
 
@@ -392,25 +383,17 @@ public partial class AuthServerHttpApiHostModule
                 });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.DescribeAllParametersInCamelCase();
+
+                var xmlDocFiles = new List<string>();
+                xmlDocFiles.AddIfNotContains(Directory.GetFiles(AppContext.BaseDirectory, "LINGYUN.Abp.*.xml"));
+                xmlDocFiles.AddIfNotContains(Directory.GetFiles(AppContext.BaseDirectory, "Volo.Abp.*.xml"));
+
+                foreach (var xmlDocFile in xmlDocFiles)
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Scheme = "bearer",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT"
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                            },
-                            new string[] { }
-                        }
-                });
+                    options.IncludeXmlComments(xmlDocFile);
+                }
+
                 options.OperationFilter<TenantHeaderParamter>();
             });
     }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.TextTemplating;
 
@@ -29,17 +30,21 @@ public class NotificationAppService : AbpNotificationsApplicationServiceBase, IN
         NotificationPublishProviderManager = notificationPublishProviderManager;
     }
 
-    public virtual Task<ListResultDto<NotificationProviderDto>> GetAssignableProvidersAsync()
+    public virtual Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync()
     {
-        var providers = NotificationPublishProviderManager
-            .Providers
-            .Select(x => new NotificationProviderDto
-            {
-                Name = x.Name
-            })
-            .ToList();
+        var providerNames = NotificationPublishProviderManager.Providers.Select(x => x.Name);
 
-        return Task.FromResult(new ListResultDto<NotificationProviderDto>(providers));
+        return Task.FromResult(new ListResultDto<NameValue<string>>(
+            providerNames.Select(name =>
+            {
+                var provider = new NameValue<string>(name, name);
+                var displayName = L[$"Providers:{name}"];
+                if (!displayName.ResourceNotFound)
+                {
+                    provider.Name = displayName.Value;
+                }
+                return provider;
+            }).ToList()));
     }
 
     public async virtual Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync()

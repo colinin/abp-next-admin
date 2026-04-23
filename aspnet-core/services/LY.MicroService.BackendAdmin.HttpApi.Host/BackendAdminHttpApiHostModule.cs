@@ -19,7 +19,7 @@ using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
-using LINGYUN.Abp.OssManagement.SettingManagement;
+using LINGYUN.Abp.BlobManagement.SettingManagement;
 using LINGYUN.Abp.PermissionManagement;
 using LINGYUN.Abp.PermissionManagement.HttpApi;
 using LINGYUN.Abp.PermissionManagement.OrganizationUnits;
@@ -74,7 +74,7 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpTencentCloudSettingManagementModule),
     // typeof(AbpWeChatSettingManagementModule),
     typeof(AbpWxPusherSettingManagementModule),
-    typeof(AbpOssManagementSettingManagementModule),
+    typeof(AbpBlobManagementSettingManagementModule),
 
     typeof(AbpSettingManagementApplicationModule),
     typeof(AbpSettingManagementHttpApiModule),

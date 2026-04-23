@@ -23,6 +23,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\framework\navigation\LINGYUN.Abp.UI.Navigation\LINGYUN.Abp.UI.Navigation.csproj" />
+		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.EntityFrameworkCore\LINGYUN.Abp.BlobManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.EntityFrameworkCore\LINGYUN.Platform.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin5\LINGYUN.Abp.UI.Navigation.VueVbenAdmin5.csproj" />

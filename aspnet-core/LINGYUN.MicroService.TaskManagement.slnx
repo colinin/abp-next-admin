@@ -1,0 +1,117 @@
+<Solution>
+  <Folder Name="/framework/" />
+  <Folder Name="/framework/common/">
+    <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.Elasticsearch/LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
+    <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging/LINGYUN.Abp.AuditLogging.csproj" />
+    <Project Path="framework/authorization/LINGYUN.Abp.Authorization.OrganizationUnits/LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.AspNetCore.HttpOverrides/LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.Data.DbMigrator/LINGYUN.Abp.Data.DbMigrator.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.EventBus.CAP/LINGYUN.Abp.EventBus.CAP.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.ExceptionHandling.Emailing/LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.ExceptionHandling/LINGYUN.Abp.ExceptionHandling.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.Http.Client.Wrapper/LINGYUN.Abp.Http.Client.Wrapper.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.Wrapper/LINGYUN.Abp.Wrapper.csproj" />
+    <Project Path="framework/localization/LINGYUN.Abp.AspNetCore.Mvc.Localization/LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
+    <Project Path="framework/localization/LINGYUN.Abp.Localization.CultureMap/LINGYUN.Abp.Localization.CultureMap.csproj" />
+    <Project Path="framework/logging/LINGYUN.Abp.Serilog.Enrichers.Application/LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
+    <Project Path="framework/logging/LINGYUN.Abp.Serilog.Enrichers.UniqueId/LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
+    <Project Path="framework/mvc/LINGYUN.Abp.AspNetCore.Mvc.Wrapper/LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
+    <Project Path="framework/security/LINGYUN.Abp.Claims.Mapping/LINGYUN.Abp.Claims.Mapping.csproj" />
+    <Project Path="framework/security/LINGYUN.Abp.Security/LINGYUN.Abp.Security.csproj" />
+    <Project Path="framework/telemetry/LINGYUN.Abp.Telemetry.OpenTelemetry/LINGYUN.Abp.Telemetry.OpenTelemetry.csproj" />
+    <Project Path="framework/telemetry/LINGYUN.Abp.Telemetry.SkyWalking/LINGYUN.Abp.Telemetry.SkyWalking.csproj" />
+    <Project Path="framework/tenants/LINGYUN.Abp.MultiTenancy.Editions/LINGYUN.Abp.MultiTenancy.Editions.csproj" />
+    <Project Path="modules/localization-management/LINGYUN.Abp.LocalizationManagement.Domain.Shared/LINGYUN.Abp.LocalizationManagement.Domain.Shared.csproj" />
+    <Project Path="modules/localization-management/LINGYUN.Abp.LocalizationManagement.Domain/LINGYUN.Abp.LocalizationManagement.Domain.csproj" />
+    <Project Path="modules/localization-management/LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore/LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/framework/dapr/">
+    <Project Path="framework/dapr/LINGYUN.Abp.Dapr.Client/LINGYUN.Abp.Dapr.Client.csproj" />
+    <Project Path="framework/dapr/LINGYUN.Abp.Dapr/LINGYUN.Abp.Dapr.csproj" />
+  </Folder>
+  <Folder Name="/framework/dynamic-queryable/">
+    <Project Path="framework/dynamic-queryable/LINGYUN.Abp.Dynamic.Queryable.Application.Contracts/LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj" />
+    <Project Path="framework/dynamic-queryable/LINGYUN.Abp.Dynamic.Queryable.Application/LINGYUN.Abp.Dynamic.Queryable.Application.csproj" />
+    <Project Path="framework/dynamic-queryable/LINGYUN.Abp.Dynamic.Queryable.HttpApi/LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj" />
+    <Project Path="framework/dynamic-queryable/LINGYUN.Linq.Dynamic.Queryable/LINGYUN.Linq.Dynamic.Queryable.csproj" />
+  </Folder>
+  <Folder Name="/framework/efcore/">
+    <Project Path="framework/efcore/LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting/LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting.csproj" />
+  </Folder>
+  <Folder Name="/framework/elasticsearch/">
+    <Project Path="framework/elasticsearch/LINGYUN.Abp.Elasticsearch/LINGYUN.Abp.Elasticsearch.csproj" />
+  </Folder>
+  <Folder Name="/framework/realtime/">
+    <Project Path="framework/common/LINGYUN.Abp.RealTime/LINGYUN.Abp.RealTime.csproj" />
+    <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Core/LINGYUN.Abp.Notifications.Core.csproj" />
+    <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications/LINGYUN.Abp.Notifications.csproj" />
+  </Folder>
+  <Folder Name="/host/">
+    <Project Path="services/LY.MicroService.TaskManagement.HttpApi.Host/LY.MicroService.TaskManagement.HttpApi.Host.csproj" />
+  </Folder>
+  <Folder Name="/migrations/">
+    <Project Path="migrations/LY.MicroService.TaskManagement.DbMigrator/LY.MicroService.TaskManagement.DbMigrator.csproj" />
+    <Project Path="migrations/LY.MicroService.TaskManagement.EntityFrameworkCore/LY.MicroService.TaskManagement.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/modules/" />
+  <Folder Name="/modules/blob-management/">
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.HttpApi.Client/LINGYUN.Abp.BlobManagement.HttpApi.Client.csproj" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobStoring.BlobManagement/LINGYUN.Abp.BlobStoring.BlobManagement.csproj" />
+  </Folder>
+  <Folder Name="/modules/platform/">
+    <Project Path="modules/platform/LINGYUN.Abp.Emailing.Platform/LINGYUN.Abp.Emailing.Platform.csproj" />
+    <Project Path="modules/platform/LINGYUN.Abp.Sms.Platform/LINGYUN.Abp.Sms.Platform.csproj" />
+    <Project Path="modules/platform/LINGYUN.Platform.Application.Contracts/LINGYUN.Platform.Application.Contracts.csproj" />
+    <Project Path="modules/platform/LINGYUN.Platform.Domain.Shared/LINGYUN.Platform.Domain.Shared.csproj" />
+    <Project Path="modules/platform/LINGYUN.Platform.HttpApi.Client/LINGYUN.Platform.HttpApi.Client.csproj" />
+  </Folder>
+  <Folder Name="/modules/saas/">
+    <Project Path="modules/saas/LINGYUN.Abp.MultiTenancy.Saas/LINGYUN.Abp.MultiTenancy.Saas.csproj" />
+    <Project Path="modules/saas/LINGYUN.Abp.Saas.Domain.Shared/LINGYUN.Abp.Saas.Domain.Shared.csproj" />
+    <Project Path="modules/saas/LINGYUN.Abp.Saas.Domain/LINGYUN.Abp.Saas.Domain.csproj" />
+    <Project Path="modules/saas/LINGYUN.Abp.Saas.EntityFrameworkCore/LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="../common.props" />
+    <File Path="../common.secrets.props" />
+    <File Path="../configureawait.props" />
+    <File Path="../Directory.Build.props" />
+    <File Path="../Directory.Packages.props" />
+    <File Path="../NuGet.Config" />
+    <File Path=".editorconfig" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Abstractions/LINGYUN.Abp.BackgroundTasks.Abstractions.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Activities/LINGYUN.Abp.BackgroundTasks.Activities.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.DistributedLocking/LINGYUN.Abp.BackgroundTasks.DistributedLocking.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.EventBus/LINGYUN.Abp.BackgroundTasks.EventBus.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.ExceptionHandling/LINGYUN.Abp.BackgroundTasks.ExceptionHandling.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Jobs/LINGYUN.Abp.BackgroundTasks.Jobs.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Notifications/LINGYUN.Abp.BackgroundTasks.Notifications.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks/LINGYUN.Abp.BackgroundTasks.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.Application.Contracts/LINGYUN.Abp.TaskManagement.Application.Contracts.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.Application/LINGYUN.Abp.TaskManagement.Application.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.Domain.Shared/LINGYUN.Abp.TaskManagement.Domain.Shared.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.Domain/LINGYUN.Abp.TaskManagement.Domain.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.EntityFrameworkCore/LINGYUN.Abp.TaskManagement.EntityFrameworkCore.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.HttpApi.Client/LINGYUN.Abp.TaskManagement.HttpApi.Client.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.HttpApi/LINGYUN.Abp.TaskManagement.HttpApi.csproj" />
+  </Folder>
+  <Folder Name="/src/extend-jobs/">
+    <Project Path="modules/task-management/LINGYUN.Abp.Elasticsearch.Jobs/LINGYUN.Abp.Elasticsearch.Jobs.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Notifications.Jobs/LINGYUN.Abp.Notifications.Jobs.csproj" />
+  </Folder>
+  <Folder Name="/src/provider/">
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Quartz/LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.TaskManagement/LINGYUN.Abp.BackgroundTasks.TaskManagement.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Quartz.MySqlInstaller/LINGYUN.Abp.Quartz.MySqlInstaller.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Quartz.PostgresSqlInstaller/LINGYUN.Abp.Quartz.PostgresSqlInstaller.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Quartz.SqlInstaller/LINGYUN.Abp.Quartz.SqlInstaller.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Quartz.SqlServerInstaller/LINGYUN.Abp.Quartz.SqlServerInstaller.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LINGYUN.Abp.BackgroundTasks.Activities.Tests/LINGYUN.Abp.BackgroundTasks.Activities.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.BackgroundTasks.Tests/LINGYUN.Abp.BackgroundTasks.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.TestBase/LINGYUN.Abp.TestsBase.csproj" />
+  </Folder>
+</Solution>
