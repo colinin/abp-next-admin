@@ -35,7 +35,7 @@ public class BackendAdminMigrationsEntityFrameworkCoreModule : AbpModule
                 mysql =>
                 {
                     // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
-                    mysql.UseParameterizedCollectionMode(ParameterTranslationMode.Parameter);
+                    mysql.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
                 });
         });
     }

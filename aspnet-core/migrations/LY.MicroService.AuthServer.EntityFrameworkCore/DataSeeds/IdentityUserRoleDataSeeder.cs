@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
@@ -18,6 +20,8 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
     public const string AdminUserNameDefaultValue = "admin";
     public const string AdminPasswordPropertyName = "AdminPassword";
     public const string AdminPasswordDefaultValue = "1q2w3E*";
+
+    public ILogger<IdentityUserRoleDataSeeder> Logger { protected get; set; }
 
     protected IGuidGenerator GuidGenerator { get; }
     protected IIdentityRoleRepository RoleRepository { get; }
@@ -43,12 +47,19 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
         UserManager = userManager;
         RoleManager = roleManager;
         IdentityOptions = identityOptions;
+
+        Logger = NullLogger<IdentityUserRoleDataSeeder>.Instance;
     }
 
     public virtual async Task SeedAsync(DataSeedContext context)
     {
+        Logger.LogInformation("Seeding the admin user roles...");
         await SeedAdminUserAsync(context);
+
+        Logger.LogInformation("Seeding the default roles...");
         await SeedDefaultRoleAsync(context);
+
+        Logger.LogInformation("Seeding user roles completed.");
     }
 
     private async Task SeedAdminUserAsync(DataSeedContext context)
@@ -59,8 +70,13 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
         var adminUserName = context?[AdminUserNamePropertyName] as string ?? AdminUserNameDefaultValue;
 
         Guid adminRoleId;
+
+        Logger.LogInformation("Check admin role {adminRoleName} exists.", adminRoleName);
+
         if (!await RoleManager.RoleExistsAsync(adminRoleName))
         {
+            Logger.LogInformation("Create new role {adminRoleName}.", adminRoleName);
+
             adminRoleId = GuidGenerator.Create();
             var adminRole = new IdentityRole(
                 adminRoleId,
@@ -87,9 +103,13 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
         var adminEmailAddress = context?[AdminEmailPropertyName] as string ?? AdminEmailDefaultValue;
         var adminPassword = context?[AdminPasswordPropertyName] as string ?? AdminPasswordDefaultValue;
 
+        Logger.LogInformation("Check admin user {adminUserName} exists.", adminUserName);
+
         var adminUser = await UserManager.FindByNameAsync(adminUserName);
         if (adminUser == null)
         {
+            Logger.LogInformation("Create new user {adminUserName}.", adminUserName);
+
             adminUser = new IdentityUser(
                 adminUserId,
                 adminUserName,
@@ -100,6 +120,8 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
 
             // 创建租户管理用户
             (await UserManager.CreateAsync(adminUser)).CheckErrors();
+
+            Logger.LogInformation("Add user {adminUserName} password.", adminUserName);
             (await UserManager.AddPasswordAsync(adminUser, adminPassword)).CheckErrors();
         }
     }
@@ -107,8 +129,10 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
     private async Task SeedDefaultRoleAsync(DataSeedContext context)
     {
         const string defaultRoleName = "Users";
-        if (await RoleManager.FindByNameAsync(defaultRoleName) != null)
+        Logger.LogInformation("Check Role {defaultRoleName} exists.", defaultRoleName);
+        if (!await RoleManager.RoleExistsAsync(defaultRoleName))
         {
+            Logger.LogInformation("Create new role {defaultRoleName}.", defaultRoleName);
             var roleId = GuidGenerator.Create();
             var defaultRole = new IdentityRole(
                 roleId,

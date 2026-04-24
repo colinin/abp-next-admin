@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using OpenIddict.Abstractions;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -23,6 +24,8 @@ public class IdentityClaimTypeDataSeeder : ITransientDependency
         GuidGenerator = guidGenerator;
         IdentityClaimTypeManager = identityClaimTypeManager;
         IdentityClaimTypeRepository = identityClaimTypeRepository;
+
+        Logger = NullLogger<IdentityClaimTypeDataSeeder>.Instance;
     }
 
     public async virtual Task SeedAsync(DataSeedContext context)
@@ -72,8 +75,12 @@ public class IdentityClaimTypeDataSeeder : ITransientDependency
         [CanBeNull] string description = null,
         IdentityClaimValueType valueType = IdentityClaimValueType.String)
     {
+        Logger.LogInformation("Check claim types {name} exists.", name);
+
         if (!await IdentityClaimTypeRepository.AnyAsync(name))
         {
+            Logger.LogInformation("Create new claim types {name}.", name);
+
             await IdentityClaimTypeManager.CreateAsync(
                 new IdentityClaimType(
                     GuidGenerator.Create(),

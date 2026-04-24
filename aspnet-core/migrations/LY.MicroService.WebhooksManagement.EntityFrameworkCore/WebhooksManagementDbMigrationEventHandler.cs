@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Volo.Abp.Data;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.EntityFrameworkCore.Migrations;
 using Volo.Abp.EventBus.Distributed;
@@ -16,7 +17,9 @@ public class WebhooksManagementDbMigrationEventHandler : EfCoreDatabaseMigration
         IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory)
-        : base("WebhooksManagementDbMigrator", currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
+        : base(
+            ConnectionStringNameAttribute.GetConnStringName<WebhooksManagementMigrationsDbContext>(),
+            currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
     }
 }

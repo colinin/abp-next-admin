@@ -43,9 +43,11 @@ public partial class NotificationSendRecordInfoToNotificationSendRecordDtoMapper
         _userNotificationInfoMapper = userNotificationInfoMapper;
     }
 
+    [MapperIgnoreTarget(nameof(NotificationSendRecordDto.Notification))]
     [MapProperty(nameof(NotificationSendRecordInfo.Id), nameof(NotificationSendRecordDto.Id))]
     public override partial NotificationSendRecordDto Map(NotificationSendRecordInfo source);
 
+    [MapperIgnoreTarget(nameof(NotificationSendRecordDto.Notification))]
     [MapProperty(nameof(NotificationSendRecordInfo.Id), nameof(NotificationSendRecordDto.Id))]
     public override partial void Map(NotificationSendRecordInfo source, NotificationSendRecordDto destination);
 

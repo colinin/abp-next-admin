@@ -10,14 +10,14 @@ using Volo.Abp.MultiTenancy;
 
 namespace LY.MicroService.TaskManagement.EntityFrameworkCore;
 
-public class TaskManagementDataSeeder : ITransientDependency
+public class TaskServiceDataSeeder : ITransientDependency
 {
     protected AbpBackgroundTasksOptions Options { get; }
     protected IJobStore JobStore { get; }
     protected IJobScheduler JobScheduler { get; }
     protected ICurrentTenant CurrentTenant { get; }
 
-    public TaskManagementDataSeeder(
+    public TaskServiceDataSeeder(
         IOptions<AbpBackgroundTasksOptions> options,
         IJobStore jobStore,
         IJobScheduler jobScheduler,

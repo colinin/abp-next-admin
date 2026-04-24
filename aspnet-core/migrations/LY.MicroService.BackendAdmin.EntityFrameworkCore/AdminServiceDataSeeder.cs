@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
@@ -11,14 +10,14 @@ using Volo.Abp.PermissionManagement;
 
 namespace LY.MicroService.BackendAdmin.EntityFrameworkCore;
 
-public class BackendAdminDataSeeder : ITransientDependency
+public class AdminServiceDataSeeder : ITransientDependency
 {
-    protected ILogger<BackendAdminDataSeeder> Logger { get; }
+    protected ILogger<AdminServiceDataSeeder> Logger { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
     protected IPermissionDataSeeder PermissionDataSeeder { get; }
 
-    public BackendAdminDataSeeder(
+    public AdminServiceDataSeeder(
         IPermissionDefinitionManager permissionDefinitionManager,
         IPermissionDataSeeder permissionDataSeeder,
         ICurrentTenant currentTenant)
@@ -27,7 +26,7 @@ public class BackendAdminDataSeeder : ITransientDependency
         PermissionDataSeeder = permissionDataSeeder;
         CurrentTenant = currentTenant;
 
-        Logger = NullLogger<BackendAdminDataSeeder>.Instance;
+        Logger = NullLogger<AdminServiceDataSeeder>.Instance;
     }
 
     public virtual async Task SeedAsync(DataSeedContext context)
@@ -59,3 +58,4 @@ public class BackendAdminDataSeeder : ITransientDependency
         Logger.LogInformation("Seed default role permissions completed.");
     }
 }
+

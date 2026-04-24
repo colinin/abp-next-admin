@@ -11,7 +11,7 @@ namespace LY.MicroService.BackendAdmin.EntityFrameworkCore;
 
 public class BackendAdminDbMigrationEventHandler : EfCoreDatabaseMigrationEventHandlerBase<BackendAdminMigrationsDbContext>
 {
-    protected BackendAdminDataSeeder DataSeeder { get; }
+    protected AdminServiceDataSeeder DataSeeder { get; }
 
     public BackendAdminDbMigrationEventHandler(
         ICurrentTenant currentTenant,
@@ -20,7 +20,7 @@ public class BackendAdminDbMigrationEventHandler : EfCoreDatabaseMigrationEventH
         IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory,
-        BackendAdminDataSeeder dataSeeder)
+        AdminServiceDataSeeder dataSeeder)
         : base(
             ConnectionStringNameAttribute.GetConnStringName<BackendAdminMigrationsDbContext>(),
             currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)

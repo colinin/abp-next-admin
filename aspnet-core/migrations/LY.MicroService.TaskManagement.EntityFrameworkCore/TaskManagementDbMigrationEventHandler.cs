@@ -15,7 +15,7 @@ public class TaskManagementDbMigrationEventHandler :
     EfCoreDatabaseMigrationEventHandlerBase<TaskManagementMigrationsDbContext>,
     IDistributedEventHandler<EntityDeletedEto<TenantEto>>
 {
-    protected TaskManagementDataSeeder DataSeeder { get; }
+    protected TaskServiceDataSeeder DataSeeder { get; }
 
     public TaskManagementDbMigrationEventHandler(
        ICurrentTenant currentTenant,
@@ -24,8 +24,10 @@ public class TaskManagementDbMigrationEventHandler :
        IAbpDistributedLock abpDistributedLock,
        IDistributedEventBus distributedEventBus,
        ILoggerFactory loggerFactory,
-       TaskManagementDataSeeder dataSeeder)
-       : base("TaskManagementDbMigrator", currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
+       TaskServiceDataSeeder dataSeeder)
+       : base(
+            ConnectionStringNameAttribute.GetConnStringName<TaskManagementMigrationsDbContext>(),
+           currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
         DataSeeder = dataSeeder;
     }
