@@ -10,6 +10,10 @@ using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Exporter.MiniSoftware;
 
+#pragma warning disable CS0618
+[ExposeServices(typeof(IExporterProvider))]
+#pragma warning restore CS0618
+[ExposeServices(typeof(IExcelExporterProvider))]
 public class MiniExcelExporterProvider : 
     IExcelExporterProvider,
 #pragma warning disable CS0618

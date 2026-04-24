@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Exporter.MagicodesIE.Excel;
+
+#pragma warning disable CS0618
+[ExposeServices(typeof(IExporterProvider))]
+#pragma warning restore CS0618
+[ExposeServices(typeof(IExcelExporterProvider))]
 public class MagicodesIEExcelExporterProvider :
     IExcelExporterProvider,
 #pragma warning disable CS0618

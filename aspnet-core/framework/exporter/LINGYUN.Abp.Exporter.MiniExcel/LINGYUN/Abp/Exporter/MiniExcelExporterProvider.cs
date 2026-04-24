@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MiniExcelLibs;
 using MiniExcelLibs.OpenXml;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -8,6 +9,11 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Exporter.MiniExcel;
+
+#pragma warning disable CS0618
+[ExposeServices(typeof(IExporterProvider))]
+#pragma warning restore CS0618
+[Obsolete("Use AbpExporterMiniSoftwareModule")]
 public class MiniExcelExporterProvider : IExporterProvider, ITransientDependency
 {
     private readonly AbpExporterMiniExcelOptions _options;

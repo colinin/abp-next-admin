@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Exporter.MiniSoftware;
+
+#pragma warning disable CS0618
+[ExposeServices(typeof(IImporterProvider))]
+#pragma warning restore CS0618
+[ExposeServices(typeof(IExcelImporterProvider))]
 public class MiniExcelImporterProvider : 
     IExcelImporterProvider,
 #pragma warning disable CS0618

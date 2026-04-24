@@ -12,6 +12,10 @@ using Volo.Abp.Json;
 
 namespace LINGYUN.Abp.Exporter.MagicodesIE.Excel;
 
+#pragma warning disable CS0618
+[ExposeServices(typeof(IImporterProvider))]
+#pragma warning restore CS0618
+[ExposeServices(typeof(IExcelImporterProvider))]
 public class MagicodesIEExcelImporterProvider :
     IExcelImporterProvider,
 #pragma warning disable CS0618
