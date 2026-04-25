@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { Page } from '@vben/common-ui';
 
-import { ContainerTable } from '@abp/oss';
+import { BlobContainerTable } from '@abp/blob-management';
 
 defineOptions({
-  name: 'Vben5OssContainers',
+  name: 'Vben5BlobContainers',
 });
 </script>
 
 <template>
   <Page>
-    <ContainerTable />
+    <BlobContainerTable />
   </Page>
 </template>

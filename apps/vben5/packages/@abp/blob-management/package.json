@@ -1,0 +1,50 @@
+{
+  "name": "@abp/blob-management",
+  "version": "10.0.2",
+  "homepage": "https://github.com/colinin/abp-next-admin",
+  "bugs": "https://github.com/colinin/abp-next-admin/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colinin/abp-next-admin.git",
+    "directory": "packages/@abp/blob-management"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./global": {
+      "types": "./global.d.ts"
+    }
+  },
+  "dependencies": {
+    "@abp/components": "workspace:*",
+    "@abp/core": "workspace:*",
+    "@abp/features": "workspace:*",
+    "@abp/request": "workspace:*",
+    "@abp/ui": "workspace:*",
+    "@ant-design/icons-vue": "catalog:",
+    "@vben/access": "workspace:*",
+    "@vben/common-ui": "workspace:*",
+    "@vben/hooks": "workspace:*",
+    "@vben/icons": "workspace:*",
+    "@vben/layouts": "workspace:*",
+    "@vben/locales": "workspace:*",
+    "@vben/stores": "workspace:*",
+    "@vben/utils": "workspace:*",
+    "@vue-office/docx": "catalog:",
+    "@vue-office/excel": "catalog:",
+    "@vue-office/pdf": "catalog:",
+    "@vue-office/pptx": "catalog:",
+    "ant-design-vue": "catalog:",
+    "vue": "catalog:",
+    "vue-demi": "catalog:",
+    "vue-simple-uploader": "catalog:",
+    "vxe-table": "catalog:"
+  }
+}

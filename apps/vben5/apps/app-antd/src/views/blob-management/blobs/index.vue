@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { Page } from '@vben/common-ui';
 
-import { ObjectPage } from '@abp/oss';
+import { BlobViewPage } from '@abp/blob-management';
 
 defineOptions({
-  name: 'Vben5OssObjects',
+  name: 'Vben5BlobFiles',
 });
 </script>
 
 <template>
-  <Page auto-content-height>
-    <ObjectPage />
+  <Page>
+    <BlobViewPage />
   </Page>
 </template>
