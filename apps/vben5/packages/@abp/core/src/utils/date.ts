@@ -49,6 +49,16 @@ export function formatToDate(
   }
   return formatDate(date, format);
 }
+
+/**
+ * @zh_CN 转换为日期
+ * @param date 日期/字符串
+ * @returns 日期
+ */
+export function toDate(date: dayjs.ConfigType): dayjs.Dayjs {
+  return dayjs(date);
+}
+
 /**
  * @zh_CN 获取指定日期
  * @param days 天数
