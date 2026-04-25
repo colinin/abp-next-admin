@@ -15,6 +15,7 @@ export interface VbenAdminProAppConfigRaw {
   VITE_GLOB_AUTH_AUDIENCE?: string;
   VITE_GLOB_AUTH_ONLY_OIDC?: string;
   VITE_GLOB_AUTH_ONLY_OIDC_HINT?: string;
+  VITE_GLOB_AUTH_PROMPT?: string;
   VITE_GLOB_AUTH_DISABLE_PKCE?: string;
   VITE_GLOB_AUTH_DINGDING_CLIENT_ID: string;
   VITE_GLOB_AUTH_DINGDING_CORP_ID: string;
@@ -32,6 +33,7 @@ interface AuthConfig {
   clientSecret: string;
   onlyOidc?: boolean;
   onlyOidcHint?: boolean;
+  prompt?: string;
   disablePKCE?: boolean;
 }
 
