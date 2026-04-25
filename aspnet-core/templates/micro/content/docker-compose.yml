@@ -1,5 +1,8 @@
 services:
   project-name-api:
+    build:
+      context: .
+      dockerfile: host/PackageName.CompanyName.ProjectName.HttpApi.Host/Dockerfile
     hostname: project-name-api
     container_name: project-name-api
     environment:
@@ -13,3 +16,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: always
+    volumes:
+      - /var/opt/project-name/logs:/app/Logs
+      - /var/opt/project-name/modules:/app/Modules

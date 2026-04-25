@@ -1,12 +1,12 @@
 <Project>
 	<PropertyGroup>
-		<DotNetCoreCAPPackageVersion>8.3.5</DotNetCoreCAPPackageVersion>
-		<ElsaPackageVersion>2.15.1</ElsaPackageVersion>
-		<VoloAbpPackageVersion>9.3.6</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>9.3.6</LINGYUNAbpPackageVersion>
-		<MicrosoftExtensionsPackageVersion>9.0.5</MicrosoftExtensionsPackageVersion>
-		<MicrosoftAspNetCorePackageVersion>9.0.5</MicrosoftAspNetCorePackageVersion>
-		<MicrosoftEntityFrameworkCorePackageVersion>9.0.5</MicrosoftEntityFrameworkCorePackageVersion>
+		<DotNetCoreCAPPackageVersion>10.0.0</DotNetCoreCAPPackageVersion>
+		<ElsaPackageVersion>2.16.1</ElsaPackageVersion>
+		<VoloAbpPackageVersion>10.2.0</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>10.2.0</LINGYUNAbpPackageVersion>
+		<MicrosoftExtensionsPackageVersion>10.0.2</MicrosoftExtensionsPackageVersion>
+		<MicrosoftAspNetCorePackageVersion>10.0.2</MicrosoftAspNetCorePackageVersion>
+		<MicrosoftEntityFrameworkCorePackageVersion>10.0.2</MicrosoftEntityFrameworkCorePackageVersion>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 
@@ -21,6 +21,7 @@
 		<PackageVersion Include="LINGYUN.Abp.Authorization.OrganizationUnits" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.BackgroundTasks.Abstractions" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.BackgroundTasks.Jobs" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.BlobStoring.BlobManagement" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Data.DbMigrator" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.DataProtection" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.DataProtection.Abstractions" Version="$(LINGYUNAbpPackageVersion)" />
@@ -48,7 +49,7 @@
 		<PackageVersion Include="LINGYUN.Abp.Exporter.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Exporter.Core" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Exporter.MagicodesIE.Excel" Version="$(LINGYUNAbpPackageVersion)" />
-		<PackageVersion Include="LINGYUN.Abp.Exporter.MiniExcel" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Exporter.MiniSoftware" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Http.Client.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.IdGenerator" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Identity.Session" Version="$(LINGYUNAbpPackageVersion)" />
@@ -243,7 +244,7 @@
 
 	<!-- Abp Framework -->
 	<ItemGroup>
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="4.3.6" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="5.2.0" />
 		<PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -332,6 +333,7 @@
 		<PackageVersion Include="Volo.Abp.Json.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Localization" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.MailKit" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.Mapperly" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.MemoryDb" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.MultiTenancy.Abstractions" Version="$(VoloAbpPackageVersion)" />
@@ -392,9 +394,11 @@
 		<PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsPackageVersion)" />
 		<PackageVersion Include="Microsoft.Extensions.Options" Version="$(MicrosoftExtensionsPackageVersion)" />
-		<PackageVersion Include="MySql.EntityFrameworkCore" Version="9.0.6" />
+		<PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.1" />
 		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
 		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="9.0.0" />
+		<PackageVersion Include="Microting.EntityFrameworkCore.MySql" Version="10.0.3" />
+		<PackageVersion Include="LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting" Version="$(LINGYUNAbpPackageVersion)" />
 	</ItemGroup>
 
 	<!-- Elsa -->
@@ -430,55 +434,57 @@
 
 	<!-- Serilog -->
 	<ItemGroup>
-		<PackageVersion Include="Serilog" Version="4.2.0" />
-		<PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
+		<PackageVersion Include="Serilog" Version="4.3.0" />
+		<PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
 		<PackageVersion Include="Serilog.Enrichers.Environment" Version="3.0.1" />
 		<PackageVersion Include="Serilog.Enrichers.Assembly" Version="2.0.0" />
+		<PackageVersion Include="Serilog.Enrichers.AssemblyName" Version="2.0.0" />
 		<PackageVersion Include="Serilog.Enrichers.Process" Version="3.0.0" />
 		<PackageVersion Include="Serilog.Enrichers.Thread" Version="4.0.0" />
 		<PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0" />
-		<PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.1" />
-		<PackageVersion Include="Serilog.Settings.Configuration" Version="9.0.0" />
+		<PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.2" />
+		<PackageVersion Include="Serilog.Settings.Configuration" Version="10.0.0" />
 		<PackageVersion Include="Serilog.Sinks.Async" Version="2.1.0" />
-		<PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
-		<PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
+		<PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
+		<PackageVersion Include="Serilog.Sinks.Elasticsearch" Version="10.0.0" />
 		<PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
+		<PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
 	</ItemGroup>
 
 	<!-- Test -->
 	<ItemGroup>
 		<PackageVersion Include="coverlet.collector" Version="6.0.4" />
-		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
 		<PackageVersion Include="Moq.AutoMock" Version="3.5.0" />
 		<PackageVersion Include="NSubstitute" Version="5.3.0" />
 		<PackageVersion Include="Shouldly" Version="4.3.0" />
 		<PackageVersion Include="xunit" Version="2.9.3" />
 		<PackageVersion Include="xunit.extensibility.execution" Version="2.9.3" />
-		<PackageVersion Include="xunit.runner.visualstudio" Version="3.0.2" />
+		<PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
 	</ItemGroup>
 
 	<!-- Fody -->
 	<ItemGroup>
 		<PackageVersion Include="ConfigureAwait.Fody" Version="3.3.2" />
-		<PackageVersion Include="Fody" Version="6.9.2" />
+		<PackageVersion Include="Fody" Version="6.9.3" />
 	</ItemGroup>
 
 	<!-- Other -->
 	<ItemGroup>
-		<PackageVersion Include="aliyun-net-sdk-core" Version="1.5.10" />
+		<PackageVersion Include="aliyun-net-sdk-core" Version="1.6.2" />
 		<PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.14.1" />
-		<PackageVersion Include="AgileConfig.Client" Version="1.6.9" />
-		<PackageVersion Include="Dapr.Client" Version="1.15.4" />
-		<PackageVersion Include="Dapr.Actors" Version="1.15.4" />
-		<PackageVersion Include="Dapr.Actors.AspNetCore" Version="1.15.4" />
+		<PackageVersion Include="AgileConfig.Client" Version="1.8.0" />
+		<PackageVersion Include="Dapr.Client" Version="1.16.0" />
+		<PackageVersion Include="Dapr.Actors" Version="1.16.0" />
+		<PackageVersion Include="Dapr.Actors.AspNetCore" Version="1.16.0" />
 		<PackageVersion Include="DistributedLock.Core" Version="1.0.8" />
-		<PackageVersion Include="DistributedLock.Redis" Version="1.0.3" />
+		<PackageVersion Include="DistributedLock.Redis" Version="1.1.0" />
 		<PackageVersion Include="Hangfire.MySqlStorage" Version="2.0.3" />
-		<PackageVersion Include="HangFire.SqlServer" Version="1.8.18" />
+		<PackageVersion Include="HangFire.SqlServer" Version="1.8.21" />
 		<PackageVersion Include="IdentityModel" Version="7.0.0" />
-		<PackageVersion Include="JetBrains.Annotations" Version="2024.3.0" />
-		<PackageVersion Include="Markdig" Version="0.34.0" />
-		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
+		<PackageVersion Include="Markdig" Version="0.44.0" />
+		<PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageVersion Include="NEST" Version="7.17.5" />
 		<PackageVersion Include="NRules" Version="0.9.2" />
 		<PackageVersion Include="Ocelot.Provider.Polly" Version="20.0.0" />
@@ -486,15 +492,15 @@
 		<PackageVersion Include="Quartz.Serialization.Json" Version="3.14.0" />
 		<PackageVersion Include="RulesEngine" Version="5.0.5" />
 		<PackageVersion Include="Senparc.Weixin.MP" Version="16.18.9" />
-		<PackageVersion Include="SixLabors.ImageSharp" Version="3.1.8" />
-		<PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.1.6" />
-		<PackageVersion Include="StackExchange.Redis" Version="2.8.31" />
-		<PackageVersion Include="Swashbuckle.AspNetCore" Version="8.1.1" />
+		<PackageVersion Include="SixLabors.ImageSharp" Version="3.1.11" />
+		<PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.1.7" />
+		<PackageVersion Include="StackExchange.Redis" Version="2.9.17" />
+		<PackageVersion Include="Swashbuckle.AspNetCore" Version="10.0.1" />
 		<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
 		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
-		<PackageVersion Include="TencentCloudSDK" Version="3.0.712" />
-		<PackageVersion Include="Yarp.ReverseProxy" Version="2.1.0" />
-		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="6.2.1" />
-		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="6.2.1" />
+		<PackageVersion Include="TencentCloudSDK" Version="3.0.1273" />
+		<PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />
+		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="7.2.0" />
+		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="7.2.0" />
 	</ItemGroup>
 </Project>

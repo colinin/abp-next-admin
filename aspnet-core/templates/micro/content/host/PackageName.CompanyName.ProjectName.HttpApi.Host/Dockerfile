@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 LABEL maintainer="colin.in@foxmail.com"
 WORKDIR /app
 
@@ -43,15 +43,46 @@ COPY . /app
 #RUN apt-get clean
 #RUN apt-get update
 
+RUN apt update && apt install wget -y
+
+USER $APP_UID
+
 ## .NET 8.0 默认使用8080端口,变更为80端口需要环境变量ASPNETCORE_HTTP_PORTS=80
 ## .NET 8.0 defaults to port 8080, changing to port 80 requires the environment variable ASPNETCORE.HTTP-PORTS=80
-
 EXPOSE 8080/tcp
 
 VOLUME [ "./app/Logs" ]
 VOLUME [ "./app/Modules" ]
 
-RUN apt update
-RUN apt install wget -y
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /build
 
+## 复制构建项目所需配置
+COPY ["common.props", "./"]
+COPY ["configureawait.props", "./"]
+COPY ["Directory.Build.props", "./"]
+COPY ["Directory.Packages.props", "./"]
+COPY ["NuGet.Config", "./"]
+
+## 复制项目结构
+COPY ["src/", "build/src/"]
+COPY ["migrations/", "build/migrations/"]
+COPY ["host/", "build/host/"]
+RUN dotnet restore "build/host/PackageName.CompanyName.ProjectName.HttpApi.Host/PackageName.CompanyName.ProjectName.HttpApi.Host.csproj"
+
+## 构建
+COPY . .
+WORKDIR "/build/host/PackageName.CompanyName.ProjectName.HttpApi.Host"
+RUN dotnet build "./PackageName.CompanyName.ProjectName.HttpApi.Host.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+## 发布
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./PackageName.CompanyName.ProjectName.HttpApi.Host.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+## 运行
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "PackageName.CompanyName.ProjectName.HttpApi.Host.dll"]

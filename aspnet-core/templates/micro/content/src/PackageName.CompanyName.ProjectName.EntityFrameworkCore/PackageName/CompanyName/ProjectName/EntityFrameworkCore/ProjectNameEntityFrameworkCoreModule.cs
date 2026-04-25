@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.DataProtection.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.Modularity;
 
 namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
@@ -14,6 +15,15 @@ public class ProjectNameEntityFrameworkCoreModule : AbpModule
         context.Services.AddAbpDbContext<ProjectNameDbContext>(options =>
         {
             options.AddDefaultRepositories<IProjectNameDbContext>();
+        });
+
+        Configure<AbpEntityOptions>(options =>
+        {
+            // Default Entity Details Func
+            //options.Entity<Entity>(e =>
+            //{
+            //    e.DefaultWithDetailsFunc = x => x;
+            //});
         });
     }
 }

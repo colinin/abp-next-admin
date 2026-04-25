@@ -1,19 +1,20 @@
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.Exporter.MiniExcel;
+using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
-using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.Telemetry.OpenTelemetry;
+using LINGYUN.Abp.Telemetry.SkyWalking;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -61,6 +62,7 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
 
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpDistributedLockingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
@@ -68,7 +70,7 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpTelemetryOpenTelemetryModule),
-    typeof(AbpExporterMiniExcelModule),
+    typeof(AbpExporterMiniSoftwareModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
@@ -93,7 +95,7 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureWrapper();
-        ConfigureMiniExcel();
+        ConfigureMiniSoftware();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureTiming(configuration);
