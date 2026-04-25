@@ -85,6 +85,9 @@ public class EmailMessageAppService : PlatformApplicationServiceBase, IEmailMess
                 .AndIf(!Input.Subject.IsNullOrWhiteSpace(), x => x.Subject.Contains(Input.Subject))
                 .AndIf(!Input.Content.IsNullOrWhiteSpace(), x => x.Content.Contains(Input.Content))
                 .AndIf(!Input.From.IsNullOrWhiteSpace(), x => x.From.Contains(Input.From))
+                .AndIf(!Input.Filter.IsNullOrWhiteSpace(), x => x.From.Contains(Input.Filter) ||
+                    x.Receiver.Contains(Input.Filter) || x.Content.Contains(Input.Filter) || 
+                    x.Subject.Contains(Input.Filter))
                 .AndIf(Input.Status.HasValue, x => x.Status == Input.Status)
                 .AndIf(Input.Priority.HasValue, x => x.Priority == Input.Priority)
                 .AndIf(Input.BeginSendTime.HasValue, x => x.SendTime >= Input.BeginSendTime)

@@ -1,9 +1,10 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -14,7 +15,7 @@ namespace LY.MicroService.WebhooksManagement.EntityFrameworkCore;
 [DependsOn(
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(WebhooksManagementEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
+    typeof(AbpEntityFrameworkCoreMySQLMicrotingModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
@@ -32,7 +33,7 @@ public class WebhooksManagementMigrationsEntityFrameworkCoreModule : AbpModule
                 mysql =>
                 {
                     // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
-                    mysql.TranslateParameterizedCollectionsToConstants();
+                    mysql.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
                 });
         });
     }

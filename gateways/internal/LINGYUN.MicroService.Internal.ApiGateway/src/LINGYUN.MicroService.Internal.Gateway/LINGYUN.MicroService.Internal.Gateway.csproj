@@ -34,6 +34,7 @@
 		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
 		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
 		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
+		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,0 +1,27 @@
+﻿using LINGYUN.Abp.BlobManagement.Dtos;
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Content;
+
+namespace LINGYUN.Abp.BlobManagement;
+
+public interface IPrivateBlobAppService : IApplicationService
+{
+    Task<BlobDto> CreateFileAsync(BlobFileCreateWithoutContainerDto input);
+
+    Task CreateChunkFileAsync(BlobFileChunkCreateWithoutContainerDto input);
+
+    Task<BlobDto> CreateFolderAsync(BlobFolderCreateWithoutContainerDto input);
+
+    Task DeleteAsync(Guid id);
+
+    Task<IRemoteStreamContent> GetContentAsync(Guid id);
+
+    Task<IRemoteStreamContent> GetContentByNameAsync(string name);
+
+    Task<BlobDto> GetAsync(Guid id);
+
+    Task<PagedResultDto<BlobDto>> GetListAsync(BlobGetPagedListWithoutContainerInput input);
+}

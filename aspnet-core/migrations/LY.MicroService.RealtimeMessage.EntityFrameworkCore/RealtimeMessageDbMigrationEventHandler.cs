@@ -36,11 +36,6 @@ public class RealtimeMessageDbMigrationEventHandler : EfCoreDatabaseMigrationEve
 
     protected async override Task AfterTenantCreated(TenantCreatedEto eventData, bool schemaMigrated)
     {
-        if (!schemaMigrated)
-        {
-            return;
-        }
-
         using (CurrentTenant.Change(eventData.Id))
         {
             await SendNotificationAsync(eventData);

@@ -1,17 +1,11 @@
 <script setup lang="ts">
+import type { NameValue } from '@abp/core';
 import type { PropertyInfo } from '@abp/ui';
 import type { FormInstance } from 'ant-design-vue';
 
 import type { SettingDefinitionDto } from '../../types/definitions';
 
-import {
-  defineEmits,
-  defineOptions,
-  reactive,
-  ref,
-  toValue,
-  useTemplateRef,
-} from 'vue';
+import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -47,15 +41,10 @@ const isEditModel = ref(false);
 const activeTab = ref<TabKeys>('basic');
 const form = useTemplateRef<FormInstance>('form');
 const formModel = ref<SettingDefinitionDto>({ ...defaultModel });
-const providerOptions = reactive([
-  { label: $t('AbpSettingManagement.Providers:Default'), value: 'D' },
-  { label: $t('AbpSettingManagement.Providers:Configuration'), value: 'C' },
-  { label: $t('AbpSettingManagement.Providers:Global'), value: 'G' },
-  { label: $t('AbpSettingManagement.Providers:Tenant'), value: 'T' },
-  { label: $t('AbpSettingManagement.Providers:User'), value: 'U' },
-]);
+const availableProviders = ref<NameValue<string>[]>([]);
 
-const { createApi, getApi, updateApi } = useDefinitionsApi();
+const { createApi, getApi, getAssignableProvidersApi, updateApi } =
+  useDefinitionsApi();
 
 const [Modal, modalApi] = useVbenModal({
   class: 'w-1/2',
@@ -93,6 +82,7 @@ const [Modal, modalApi] = useVbenModal({
         modalApi.setState({ loading: true });
         const { name } = modalApi.getData<SettingDefinitionDto>();
         name && (await onGet(name));
+        await onInitProviders();
       } finally {
         modalApi.setState({ loading: false });
       }
@@ -100,6 +90,10 @@ const [Modal, modalApi] = useVbenModal({
   },
   title: $t('AbpSettingManagement.Definition:AddNew'),
 });
+async function onInitProviders() {
+  const { items } = await getAssignableProvidersApi();
+  availableProviders.value = items;
+}
 async function onGet(name: string) {
   isEditModel.value = true;
   const dto = await getApi(name);
@@ -180,7 +174,8 @@ function onPropDelete(prop: PropertyInfo) {
               v-model:value="formModel.providers"
               :allow-clear="true"
               :disabled="formModel.isStatic"
-              :options="providerOptions"
+              :field-names="{ label: 'name', value: 'value' }"
+              :options="availableProviders"
               mode="multiple"
             />
           </FormItem>

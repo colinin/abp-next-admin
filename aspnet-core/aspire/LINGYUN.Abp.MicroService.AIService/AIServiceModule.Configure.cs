@@ -18,8 +18,9 @@ using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using StackExchange.Redis;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp.AspNetCore.Mvc;
@@ -281,7 +282,7 @@ public partial class AIServiceModule
             configuration["AuthServer:Authority"]!,
             new Dictionary<string, string>
             {
-                { "AIService", "AI Service API"}
+                { configuration["AuthServer:Audience"]!, "Identity Service API"}
             },
             options =>
             {
@@ -302,25 +303,18 @@ public partial class AIServiceModule
                 });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.DescribeAllParametersInCamelCase();
+
+                var xmlDocFiles = new List<string>();
+                xmlDocFiles.AddIfNotContains(Directory.GetFiles(AppContext.BaseDirectory, "LINGYUN.Abp.*.xml"));
+                xmlDocFiles.AddIfNotContains(Directory.GetFiles(AppContext.BaseDirectory, "Volo.Abp.*.xml"));
+
+                foreach (var xmlDocFile in xmlDocFiles)
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Scheme = "bearer",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT"
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                        },
-                        new string[] { }
-                    }
-                });
+                    options.IncludeXmlComments(xmlDocFile);
+                }
+
+                options.SchemaFilter<EnumDescriptionSchemaFilter>();
                 options.OperationFilter<TenantHeaderParamter>();
             });
     }

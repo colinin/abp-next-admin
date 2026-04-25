@@ -404,10 +404,10 @@
           }
         ]
       },
-      "oss-management-route": {
+      "blob-management-route": {
         "ClusterId": "platform-service-cluster",
         "Match": {
-          "Path": "/api/oss-management/{**everything}"
+          "Path": "/api/blob-management/{**everything}"
         },
         "Transforms": [
           {

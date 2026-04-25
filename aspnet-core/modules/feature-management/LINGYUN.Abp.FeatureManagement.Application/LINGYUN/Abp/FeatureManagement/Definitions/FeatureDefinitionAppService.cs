@@ -24,6 +24,7 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
     private readonly StringValueTypeSerializer _stringValueTypeSerializer;
     private readonly ILocalizableStringSerializer _localizableStringSerializer;
     private readonly IFeatureDefinitionManager _featureDefinitionManager;
+    private readonly IFeatureValueProviderManager _featureValueProviderManager;
     private readonly IStaticFeatureDefinitionStore _staticFeatureDefinitionStore;
     private readonly IDynamicFeatureDefinitionStore _dynamicFeatureDefinitionStore;
     private readonly IFeatureDefinitionRecordRepository _definitionRepository;
@@ -33,6 +34,7 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         StringValueTypeSerializer stringValueTypeSerializer,
         ILocalizableStringSerializer localizableStringSerializer,
         IFeatureDefinitionManager featureDefinitionManager,
+        IFeatureValueProviderManager featureValueProviderManager,
         IStaticFeatureDefinitionStore featureDefinitionStore,
         IDynamicFeatureDefinitionStore dynamicFeatureDefinitionStore,
         IFeatureDefinitionRecordRepository definitionRepository, 
@@ -41,10 +43,28 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         _stringValueTypeSerializer = stringValueTypeSerializer;
         _localizableStringSerializer = localizableStringSerializer;
         _featureDefinitionManager = featureDefinitionManager;
+        _featureValueProviderManager = featureValueProviderManager;
         _staticFeatureDefinitionStore = featureDefinitionStore;
         _dynamicFeatureDefinitionStore = dynamicFeatureDefinitionStore;
         _definitionRepository = definitionRepository;
         _definitionBasicRepository = definitionBasicRepository;
+    }
+
+    public virtual Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync()
+    {
+        var providerNames = _featureValueProviderManager.ValueProviders.Select(x => x.Name);
+
+        return Task.FromResult(new ListResultDto<NameValue<string>>(
+            providerNames.Select(name =>
+            {
+                var provider = new NameValue<string>(name, name);
+                var displayName = L[$"FeatureProviders:{name}"];
+                if (!displayName.ResourceNotFound)
+                {
+                    provider.Name = displayName.Value;
+                }
+                return provider;
+            }).ToList()));
     }
 
     [Authorize(FeatureManagementPermissionNames.Definition.Create)]

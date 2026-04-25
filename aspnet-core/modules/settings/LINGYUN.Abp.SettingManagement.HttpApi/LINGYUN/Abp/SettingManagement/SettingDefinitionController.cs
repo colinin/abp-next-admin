@@ -55,4 +55,11 @@ public class SettingDefinitionController : AbpControllerBase, ISettingDefinition
     {
         return _service.UpdateAsync(name, input);
     }
+
+    [HttpGet]
+    [Route("assignable-providers")]
+    public virtual Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync()
+    {
+        return _service.GetAssignableProvidersAsync();
+    }
 }

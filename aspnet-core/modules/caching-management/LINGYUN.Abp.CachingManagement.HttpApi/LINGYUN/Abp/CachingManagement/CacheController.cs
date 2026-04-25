@@ -61,4 +61,12 @@ public class CacheController : AbpControllerBase, ICacheAppService
     {
         return CacheAppService.RemoveAsync(input);
     }
+
+    [HttpDelete]
+    [Route("bulk/remove")]
+    [Authorize(CachingManagementPermissionNames.Cache.Delete)]
+    public virtual Task RemoveManyAsync([FromBody] CacheRemoveKeysInput input)
+    {
+        return CacheAppService.RemoveManyAsync(input);
+    }
 }

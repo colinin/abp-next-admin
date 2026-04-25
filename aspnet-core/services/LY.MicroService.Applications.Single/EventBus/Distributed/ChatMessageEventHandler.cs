@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
+using ChatMessage = LINGYUN.Abp.IM.Messages.ChatMessage;
 
 namespace LY.MicroService.Applications.Single.EventBus.Distributed
 {

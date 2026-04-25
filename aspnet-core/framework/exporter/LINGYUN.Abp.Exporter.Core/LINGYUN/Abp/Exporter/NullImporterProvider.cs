@@ -7,6 +7,7 @@ using Volo.Abp.DependencyInjection;
 namespace LINGYUN.Abp.Exporter;
 
 [Dependency(TryRegister = true)]
+[Obsolete("This interface will be deprecated in future versions. Please use IExcelImporterProvider instead.")]
 public class NullImporterProvider : IImporterProvider, ISingletonDependency
 {
     public Task<IReadOnlyCollection<T>> ImportAsync<T>(Stream stream) where T : class, new()

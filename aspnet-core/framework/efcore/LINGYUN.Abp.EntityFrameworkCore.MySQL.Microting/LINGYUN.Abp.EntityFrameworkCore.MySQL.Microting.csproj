@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting</AssemblyName>
+		<PackageId>LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore" />
+		<PackageReference Include="Microting.EntityFrameworkCore.MySql" />
+	</ItemGroup>
+
+</Project>

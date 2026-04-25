@@ -13,6 +13,8 @@ public class AbpAuthorizationOrganizationUnitsModule : AbpModule
         Configure<AbpPermissionOptions>(options =>
         {
             options.ValueProviders.Add<OrganizationUnitPermissionValueProvider>();
+
+            options.ResourceValueProviders.Add<OrganizationUnitResourcePermissionValueProvider>();
         });
     }
 }

@@ -83,6 +83,10 @@ catalog:
   '@vite-pwa/vitepress': ^1.1.0
   '@vitejs/plugin-vue': ^6.0.4
   '@vitejs/plugin-vue-jsx': ^5.1.4
+  '@vue-office/docx': ^1.6.3
+  '@vue-office/excel': ^1.7.14
+  '@vue-office/pdf': ^2.0.10
+  '@vue-office/pptx': ^1.0.1
   '@vue/shared': ^3.5.27
   '@vue/test-utils': ^2.4.6
   '@vueuse/core': ^14.1.0
@@ -229,6 +233,7 @@ catalog:
   vitepress-plugin-group-icons: ^1.7.1
   vitest: ^3.2.4
   vue: ^3.5.27
+  vue-demi: ^0.14.6
   vue-eslint-parser: ^10.2.0
   vue-i18n: ^11.2.8
   vue-json-viewer: ^3.0.4

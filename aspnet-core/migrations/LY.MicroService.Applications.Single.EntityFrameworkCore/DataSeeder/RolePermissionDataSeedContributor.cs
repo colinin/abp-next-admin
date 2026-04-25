@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 
@@ -34,22 +34,21 @@ public class RolePermissionDataSeedContributor : IDataSeedContributor, ITransien
     {
         using (CurrentTenant.Change(context.TenantId))
         {
-            Logger.LogInformation("Seeding the new tenant admin role permissions...");
+            Logger.LogInformation("Seeding the Users role permissions...");
 
-            var definitionPermissions = await PermissionDefinitionManager.GetPermissionsAsync();
-            await PermissionDataSeeder.SeedAsync(
-                RolePermissionValueProvider.ProviderName,
-                "admin",
-                definitionPermissions.Select(x => x.Name),
-                context.TenantId);
-
+            // 所有用户都应该具有查询用户权限, 用于IM场景
             await PermissionDataSeeder.SeedAsync(
                 RolePermissionValueProvider.ProviderName,
                 "Users",
-                new string[] { "Platform.Feedback.Create" },
-                context.TenantId);
+                new string[]
+                {
+                    IdentityPermissions.UserLookup.Default,
+                    IdentityPermissions.Users.Default,
+                    "Platform.Feedback.Create"
+                },
+                tenantId: context.TenantId);
 
-            Logger.LogInformation("Seeding new tenant admin role permissions completed.");
+            Logger.LogInformation("Seeding Users role permissions completed.");
         }
     }
 }

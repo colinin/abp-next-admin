@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/.changes/">
+    <File Path="../.changes/Migration 10.0.2 - 10.2.0.md" />
+  </Folder>
   <Folder Name="/.github/" />
   <Folder Name="/.github/workflows/">
     <File Path="../.github/workflows/build.yml" />
@@ -132,6 +135,9 @@
     <Project Path="framework/dynamic-queryable/LINGYUN.Abp.Dynamic.Queryable.HttpApi/LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj" />
     <Project Path="framework/dynamic-queryable/LINGYUN.Linq.Dynamic.Queryable/LINGYUN.Linq.Dynamic.Queryable.csproj" />
   </Folder>
+  <Folder Name="/framework/efcore/">
+    <Project Path="framework/efcore/LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting/LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting.csproj" Id="83359abe-f8c3-4f18-a597-dd6c96c42ecb" />
+  </Folder>
   <Folder Name="/framework/elasticsearch/">
     <Project Path="framework/elasticsearch/LINGYUN.Abp.Elasticsearch/LINGYUN.Abp.Elasticsearch.csproj" />
   </Folder>
@@ -148,6 +154,7 @@
     <Project Path="framework/exporter/LINGYUN.Abp.Exporter.Core/LINGYUN.Abp.Exporter.Core.csproj" />
     <Project Path="framework/exporter/LINGYUN.Abp.Exporter.MagicodesIE.Excel/LINGYUN.Abp.Exporter.MagicodesIE.Excel.csproj" />
     <Project Path="framework/exporter/LINGYUN.Abp.Exporter.MiniExcel/LINGYUN.Abp.Exporter.MiniExcel.csproj" />
+    <Project Path="framework/exporter/LINGYUN.Abp.Exporter.MiniSoftware/LINGYUN.Abp.Exporter.MiniSoftware.csproj" Id="854f6afa-51e0-4e09-a67a-a8d0d5785772" />
     <Project Path="framework/exporter/LINGYUN.Abp.Exporter.Pdf.LibreOffice/LINGYUN.Abp.Exporter.Pdf.LibreOffice.csproj" />
     <Project Path="framework/exporter/LINGYUN.Abp.Exporter.Pdf.SpireLib/LINGYUN.Abp.Exporter.Pdf.SpireLib.csproj" />
     <Project Path="framework/exporter/LINGYUN.Abp.Exporter.Pdf/LINGYUN.Abp.Exporter.Pdf.csproj" />
@@ -302,6 +309,20 @@
     <Project Path="modules/auditing/LINGYUN.Abp.Auditing.HttpApi.Client/LINGYUN.Abp.Auditing.HttpApi.Client.csproj" />
     <Project Path="modules/auditing/LINGYUN.Abp.Auditing.HttpApi/LINGYUN.Abp.Auditing.HttpApi.csproj" />
   </Folder>
+  <Folder Name="/modules/blob-management/">
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Aliyun/LINGYUN.Abp.BlobManagement.Aliyun.csproj" Id="25624506-7e9e-4f8c-bc9d-557998971f96" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Application.Contracts/LINGYUN.Abp.BlobManagement.Application.Contracts.csproj" Id="35984de9-0051-4710-805c-e884486f14ce" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Application/LINGYUN.Abp.BlobManagement.Application.csproj" Id="22ae56dc-99fd-425e-a341-d018fac6d40b" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Domain.Shared/LINGYUN.Abp.BlobManagement.Domain.Shared.csproj" Id="14b71479-1d0f-4653-83c3-a897bbb0e554" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Domain/LINGYUN.Abp.BlobManagement.Domain.csproj" Id="f5ee6b41-4da7-419e-a938-e6f442c8eb79" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.EntityFrameworkCore/LINGYUN.Abp.BlobManagement.EntityFrameworkCore.csproj" Id="6b02ba14-2f7e-4384-b6b1-bdfe16264c53" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.FileSystem/LINGYUN.Abp.BlobManagement.FileSystem.csproj" Id="2269c845-fb79-4dde-855d-068bd0df4edf" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.HttpApi.Client/LINGYUN.Abp.BlobManagement.HttpApi.Client.csproj" Id="94f8b5c9-fcd1-46bc-a521-c794c767da3c" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.HttpApi/LINGYUN.Abp.BlobManagement.HttpApi.csproj" Id="88222f2c-d55f-4d31-9776-e76f880ac052" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Minio/LINGYUN.Abp.BlobManagement.Minio.csproj" Id="808fb513-aa95-4645-aea9-07634e6c3a86" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Tencent/LINGYUN.Abp.BlobManagement.Tencent.csproj" Id="5d99850b-f8ad-4fa0-bcd4-7f5f455ec5d5" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobStoring.BlobManagement/LINGYUN.Abp.BlobStoring.BlobManagement.csproj" Id="55898e62-9dbe-4569-b7af-b65773408ec5" />
+  </Folder>
   <Folder Name="/modules/caching-management/">
     <Project Path="modules/caching-management/LINGYUN.Abp.CachingManagement.Application.Contracts/LINGYUN.Abp.CachingManagement.Application.Contracts.csproj" />
     <Project Path="modules/caching-management/LINGYUN.Abp.CachingManagement.Application/LINGYUN.Abp.CachingManagement.Application.csproj" />
@@ -316,21 +337,6 @@
     <Project Path="modules/data-protection/LINGYUN.Abp.DataProtectionManagement.Domain/LINGYUN.Abp.DataProtectionManagement.Domain.csproj" />
     <Project Path="modules/data-protection/LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore/LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore.csproj" />
     <Project Path="modules/data-protection/LINGYUN.Abp.DataProtectionManagement.HttpApi/LINGYUN.Abp.DataProtectionManagement.HttpApi.csproj" />
-  </Folder>
-  <Folder Name="/modules/elsa/">
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.BlobStoring/LINGYUN.Abp.Elsa.Activities.BlobStoring.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.Emailing/LINGYUN.Abp.Elsa.Activities.Emailing.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.IM/LINGYUN.Abp.Elsa.Activities.IM.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.Notifications/LINGYUN.Abp.Elsa.Activities.Notifications.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.Sms/LINGYUN.Abp.Elsa.Activities.Sms.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.Webhooks/LINGYUN.Abp.Elsa.Activities.Webhooks.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities/LINGYUN.Abp.Elsa.Activities.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql/LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql/LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.EntityFrameworkCore/LINGYUN.Abp.Elsa.EntityFrameworkCore.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Notifications/LINGYUN.Abp.Elsa.Notifications.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Server/LINGYUN.Abp.Elsa.Server.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.Elsa/LINGYUN.Abp.Elsa.csproj" />
   </Folder>
   <Folder Name="/modules/feature-management/">
     <Project Path="modules/feature-management/LINGYUN.Abp.FeatureManagement.Application.Contracts/LINGYUN.Abp.FeatureManagement.Application.Contracts.csproj" />
@@ -353,6 +359,7 @@
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Application/LINGYUN.Abp.Identity.Application.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.AspNetCore.QrCode/LINGYUN.Abp.Identity.AspNetCore.QrCode.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.AspNetCore.Session/LINGYUN.Abp.Identity.AspNetCore.Session.csproj" />
+    <Project Path="modules/identity/LINGYUN.Abp.Identity.AspNetCore/LINGYUN.Abp.Identity.AspNetCore.csproj" Id="e25f7078-3af5-4456-b6e5-4027266de1ff" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Domain.Shared/LINGYUN.Abp.Identity.Domain.Shared.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Domain/LINGYUN.Abp.Identity.Domain.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.EntityFrameworkCore/LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
@@ -397,24 +404,6 @@
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Sms/LINGYUN.Abp.OpenIddict.Sms.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.WeChat.Work/LINGYUN.Abp.OpenIddict.WeChat.Work.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.WeChat/LINGYUN.Abp.OpenIddict.WeChat.csproj" />
-  </Folder>
-  <Folder Name="/modules/oss-management/">
-    <File Path="modules/oss-management/README.md" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.BlobStoring.OssManagement/LINGYUN.Abp.BlobStoring.OssManagement.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.Aliyun/LINGYUN.Abp.OssManagement.Aliyun.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.Application.Contracts/LINGYUN.Abp.OssManagement.Application.Contracts.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.Application/LINGYUN.Abp.OssManagement.Application.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.Domain.Shared/LINGYUN.Abp.OssManagement.Domain.Shared.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.Domain/LINGYUN.Abp.OssManagement.Domain.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.FileSystem/LINGYUN.Abp.OssManagement.FileSystem.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.HttpApi.Client/LINGYUN.Abp.OssManagement.HttpApi.Client.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.HttpApi/LINGYUN.Abp.OssManagement.HttpApi.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.ImageSharp/LINGYUN.Abp.OssManagement.ImageSharp.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.Imaging/LINGYUN.Abp.OssManagement.Imaging.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.Minio/LINGYUN.Abp.OssManagement.Minio.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.Nexus/LINGYUN.Abp.OssManagement.Nexus.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.SettingManagement/LINGYUN.Abp.OssManagement.SettingManagement.csproj" />
-    <Project Path="modules/oss-management/LINGYUN.Abp.OssManagement.Tencent/LINGYUN.Abp.OssManagement.Tencent.csproj" />
   </Folder>
   <Folder Name="/modules/permission-management/">
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Application.Contracts/LINGYUN.Abp.PermissionManagement.Application.Contracts.csproj" />
@@ -499,6 +488,9 @@
   </Folder>
   <Folder Name="/modules/task-management/">
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Abstractions/LINGYUN.Abp.BackgroundTasks.Abstractions.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Activities/LINGYUN.Abp.BackgroundTasks.Activities.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.DistributedLocking/LINGYUN.Abp.BackgroundTasks.DistributedLocking.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.EventBus/LINGYUN.Abp.BackgroundTasks.EventBus.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Jobs/LINGYUN.Abp.BackgroundTasks.Jobs.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Notifications/LINGYUN.Abp.BackgroundTasks.Notifications.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Quartz/LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
@@ -554,6 +546,13 @@
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Notifications/LINGYUN.Abp.Elsa.Notifications.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Server/LINGYUN.Abp.Elsa.Server.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa/LINGYUN.Abp.Elsa.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/">
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql.csproj" Id="eac3cdfe-670e-41fd-a7cf-67a38de69f97" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.EntityFrameworkCore/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.csproj" Id="96f6e53d-2e56-4fb2-b603-3e493f588c69" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Server/LINGYUN.Abp.ElsaNext.Server.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio/LINGYUN.Abp.ElsaNext.Studio.csproj" Id="3550e74f-776d-4f6c-bc6a-2ba7618f5d41" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext/LINGYUN.Abp.ElsaNext.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/LINGYUN.Abp.Aliyun.Tests/LINGYUN.Abp.Aliyun.Tests.csproj" />

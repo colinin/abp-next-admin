@@ -26,7 +26,7 @@ public class NotificationPublishContext
         Users = users;
     }
 
-    public void Cancel(string reason, Exception exception = null)
+    public void Cancel(string reason, Exception? exception = null)
     {
         Reason = reason;
         Exception = exception;

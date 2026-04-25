@@ -8,9 +8,9 @@ namespace LINGYUN.Abp.Exporter;
 public abstract class ExporterAppService<TEntity, TEntityExportDto, TEntityListGetInput> : ApplicationService, IExporterAppService<TEntityExportDto, TEntityListGetInput>
     where TEntityExportDto : class, new()
 {
-    private readonly IExporterProvider _exporterProvider;
+    private readonly IExcelExporterProvider _exporterProvider;
 
-    protected ExporterAppService(IExporterProvider exporterProvider)
+    protected ExporterAppService(IExcelExporterProvider exporterProvider)
     {
         _exporterProvider = exporterProvider;
     }

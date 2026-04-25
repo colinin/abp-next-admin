@@ -13,7 +13,7 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
         context.Add(GetAIManagement());
         context.Add(GetSaas());
         context.Add(GetPlatform());
-        context.Add(GetOssManagement());
+        context.Add(GetBlobManagement());
         context.Add(GetTaskManagement());
         context.Add(GetWebhooksManagement());
         context.Add(GetTextTemplating());
@@ -677,31 +677,31 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
         return new NavigationDefinition(platform);
     }
 
-    private static NavigationDefinition GetOssManagement()
+    private static NavigationDefinition GetBlobManagement()
     {
         var oss = new ApplicationMenu(
-            name: "Vben5Oss",
+            name: "Vben5BlobManagement",
             displayName: "对象存储",
-            url: "/oss",
+            url: "/blob-management",
             component: "",
             description: "对象存储",
             icon: "icon-park-outline:cloud-storage")
             .SetProperty("title", "abp.oss.title");
         oss.AddItem(
           new ApplicationMenu(
-              name: "Vben5OssContainers",
+              name: "Vben5BlobContainers",
               displayName: "容器管理",
-              url: "/oss/containers",
-              component: "/oss/containers/index",
+              url: "/blob-management/blob-containers",
+              component: "/blob-management/containers/index",
               icon: "mdi:bucket-outline",
               description: "容器管理")
             .SetProperty("title", "abp.oss.containers"));
         oss.AddItem(
           new ApplicationMenu(
-              name: "Vben5OssObjects",
+              name: "Vben5BlobFiles",
               displayName: "文件管理",
-              url: "/oss/objects",
-              component: "/oss/objects/index",
+              url: "/blob-management/blobs",
+              component: "/blob-management/blobs/index",
               icon: "mdi-light:file",
               description: "文件管理")
             .SetProperty("title", "abp.oss.objects"));

@@ -1,7 +1,4 @@
-using LINGYUN.Abp.AI.Tools.Http;
-using LINGYUN.Abp.AI.Tools.Mcp;
-using LINGYUN.Abp.AIManagement;
-using LINGYUN.Abp.SystemInfo;
+using LINGYUN.Abp.Exporter.MiniSoftware;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -105,8 +102,6 @@ namespace LY.MicroService.Applications.Single;
     // 通知模块 实体框架
     typeof(AbpNotificationsEntityFrameworkCoreModule),
 
-    // OpenIddict扩展模块 自定义身份标识
-    typeof(LINGYUN.Abp.OpenIddict.AspNetCore.AbpOpenIddictAspNetCoreModule),
     // OpenIddict扩展模块 会话
     typeof(AbpOpenIddictAspNetCoreSessionModule),
     // OpenIddict扩展模块 应用服务
@@ -126,20 +121,24 @@ namespace LY.MicroService.Applications.Single;
     // OpenIddict扩展模块 扫码登录
     typeof(AbpOpenIddictQrCodeModule),
 
-    // 对象存储模块 Minio
-    typeof(AbpOssManagementMinioModule),
+    // 对象存储模块 阿里云
+    typeof(AbpBlobManagementAliyunModule),
     // 对象存储模块 文件系统
-    typeof(AbpOssManagementFileSystemModule),
-    // 对象存储模块 图片处理
-    typeof(AbpOssManagementImagingModule),
+    typeof(AbpBlobManagementFileSystemModule),
+    // 对象存储模块 Minio
+    typeof(AbpBlobManagementMinioModule),
+    // 对象存储模块 腾讯云
+    typeof(AbpBlobManagementTencentModule),
     // 对象存储模块 应用服务
-    typeof(AbpOssManagementDomainModule),
+    typeof(AbpBlobManagementDomainModule),
     // 对象存储模块 控制器
-    typeof(AbpOssManagementApplicationModule),
+    typeof(AbpBlobManagementApplicationModule),
     // 对象存储模块 控制器
-    typeof(AbpOssManagementHttpApiModule),
+    typeof(AbpBlobManagementHttpApiModule),
     // 对象存储模块 设置管理
-    typeof(AbpOssManagementSettingManagementModule),
+    typeof(AbpBlobManagementSettingManagementModule),
+    // 对象存储模块 通用存储代理
+    typeof(AbpBlobStoringBlobManagementModule),
     // 图形处理模块
     typeof(AbpImagingImageSharpModule),
 
@@ -258,8 +257,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpBackgroundTasksDistributedLockingModule),
     // 后台任务模块 事件总线
     typeof(AbpBackgroundTasksEventBusModule),
-    // 后台任务模块 异常处理
-    typeof(AbpBackgroundTasksExceptionHandlingModule),
     // 后台任务模块 默认作业
     typeof(AbpBackgroundTasksJobsModule),
     // 后台任务模块 通知
@@ -383,8 +380,8 @@ namespace LY.MicroService.Applications.Single;
     // Elsa工作流设计器模块
     typeof(AbpElsaDesignerModule),
 
-    // 数据导出模块 MiniExcel集成
-    typeof(AbpExporterMiniExcelModule),
+    // 数据导出模块 MiniSoftware集成
+    typeof(AbpExporterMiniSoftwareModule),
 
     // 虚拟文件浏览器 Mvc视图
     typeof(AbpVirtualFileExplorerWebModule),
@@ -392,6 +389,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreMvcIdempotentWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpMailKitModule),
     typeof(AbpAutofacModule),

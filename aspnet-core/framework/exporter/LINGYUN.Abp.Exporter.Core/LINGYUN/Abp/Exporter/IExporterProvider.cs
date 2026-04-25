@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ namespace LINGYUN.Abp.Exporter;
 /// <summary>
 /// 数据导出提供者
 /// </summary>
+[Obsolete("This interface will be deprecated in future versions. Please use IExcelExporterProvider instead.")]
 public interface IExporterProvider
 {
     /// <summary>

@@ -3,6 +3,8 @@ using LINGYUN.Abp.AIManagement.EntityFrameworkCore;
 using LINGYUN.Abp.AIManagement.Tokens;
 using LINGYUN.Abp.AIManagement.Tools;
 using LINGYUN.Abp.AIManagement.Workspaces;
+using LINGYUN.Abp.BlobManagement;
+using LINGYUN.Abp.BlobManagement.EntityFrameworkCore;
 using LINGYUN.Abp.DataProtectionManagement;
 using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Demo.Authors;
@@ -55,25 +57,26 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace LY.MicroService.Applications.Single.EntityFrameworkCore;
 
-[ReplaceDbContext(typeof(IAuditLoggingDbContext))]
-[ReplaceDbContext(typeof(IIdentityDbContext))]
-[ReplaceDbContext(typeof(IOpenIddictDbContext))]
-[ReplaceDbContext(typeof(ISaasDbContext))]
-[ReplaceDbContext(typeof(IFeatureManagementDbContext))]
-[ReplaceDbContext(typeof(ISettingManagementDbContext))]
-[ReplaceDbContext(typeof(IPermissionManagementDbContext))]
-[ReplaceDbContext(typeof(ITextTemplatingDbContext))]
-[ReplaceDbContext(typeof(ITaskManagementDbContext))]
-[ReplaceDbContext(typeof(IWebhooksManagementDbContext))]
-[ReplaceDbContext(typeof(IPlatformDbContext))]
-[ReplaceDbContext(typeof(ILocalizationDbContext))]
-[ReplaceDbContext(typeof(INotificationsDbContext))]
-[ReplaceDbContext(typeof(INotificationsDefinitionDbContext))]
-[ReplaceDbContext(typeof(IMessageServiceDbContext))]
-[ReplaceDbContext(typeof(IAbpDataProtectionManagementDbContext))]
-[ReplaceDbContext(typeof(IGdprDbContext))]
-[ReplaceDbContext(typeof(IDemoDbContext))]
-[ReplaceDbContext(typeof(IAIManagementDbContext))]
+//[ReplaceDbContext(typeof(IAuditLoggingDbContext))]
+//[ReplaceDbContext(typeof(IIdentityDbContext))]
+//[ReplaceDbContext(typeof(IOpenIddictDbContext))]
+//[ReplaceDbContext(typeof(ISaasDbContext))]
+//[ReplaceDbContext(typeof(IFeatureManagementDbContext))]
+//[ReplaceDbContext(typeof(ISettingManagementDbContext))]
+//[ReplaceDbContext(typeof(IPermissionManagementDbContext))]
+//[ReplaceDbContext(typeof(ITextTemplatingDbContext))]
+//[ReplaceDbContext(typeof(ITaskManagementDbContext))]
+//[ReplaceDbContext(typeof(IWebhooksManagementDbContext))]
+//[ReplaceDbContext(typeof(IPlatformDbContext))]
+//[ReplaceDbContext(typeof(ILocalizationDbContext))]
+//[ReplaceDbContext(typeof(INotificationsDbContext))]
+//[ReplaceDbContext(typeof(INotificationsDefinitionDbContext))]
+//[ReplaceDbContext(typeof(IMessageServiceDbContext))]
+//[ReplaceDbContext(typeof(IAbpDataProtectionManagementDbContext))]
+//[ReplaceDbContext(typeof(IGdprDbContext))]
+//[ReplaceDbContext(typeof(IDemoDbContext))]
+//[ReplaceDbContext(typeof(IAIManagementDbContext))]
+//[ReplaceDbContext(typeof(IBlobManagementDbContext))]
 
 [ConnectionStringName("Default")]
 public class SingleMigrationsDbContext : 
@@ -96,7 +99,8 @@ public class SingleMigrationsDbContext :
     IAbpDataProtectionManagementDbContext,
     IGdprDbContext,
     IDemoDbContext,
-    IAIManagementDbContext
+    IAIManagementDbContext,
+    IBlobManagementDbContext
 {
     public SingleMigrationsDbContext(DbContextOptions<SingleMigrationsDbContext> options)
         : base(options)
@@ -153,6 +157,8 @@ public class SingleMigrationsDbContext :
     public DbSet<PermissionDefinitionRecord> Permissions { get; set; }
 
     public DbSet<PermissionGrant> PermissionGrants { get; set; }
+
+    public DbSet<ResourcePermissionGrant> ResourcePermissionGrants { get; set; }
 
     public DbSet<TextTemplate> TextTemplates { get; set; }
 
@@ -248,6 +254,10 @@ public class SingleMigrationsDbContext :
 
     public DbSet<TokenUsageRecord> TokenUsageRecords { get; set; }
 
+    public DbSet<BlobContainer> BlobContainers { get; set; }
+
+    public DbSet<Blob> Blobs { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -273,5 +283,7 @@ public class SingleMigrationsDbContext :
         modelBuilder.ConfigureDemo();
 
         modelBuilder.ConfigureAIManagement();
+
+        modelBuilder.ConfigureBlobManagement();
     }
 }

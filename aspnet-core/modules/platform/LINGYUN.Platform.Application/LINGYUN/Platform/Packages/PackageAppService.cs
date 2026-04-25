@@ -145,7 +145,8 @@ public class PackageAppService : PlatformApplicationServiceBase, IPackageAppServ
         var specification = new PackageSpecification(filter);
 
         var totalCount = await _packageRepository.GetCountAsync(specification);
-        var entities = await _packageRepository.GetListAsync(specification);
+        var entities = await _packageRepository.GetListAsync(specification,
+            input.Sorting, input.SkipCount, input.MaxResultCount);
 
         return new PagedResultDto<PackageDto>(
             totalCount,

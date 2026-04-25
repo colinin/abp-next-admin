@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.BlobManagement.Tencent</AssemblyName>
+		<PackageId>LINGYUN.Abp.BlobManagement.Tencent</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\cloud-tencent\LINGYUN.Abp.BlobStoring.Tencent\LINGYUN.Abp.BlobStoring.Tencent.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.BlobManagement.Domain\LINGYUN.Abp.BlobManagement.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

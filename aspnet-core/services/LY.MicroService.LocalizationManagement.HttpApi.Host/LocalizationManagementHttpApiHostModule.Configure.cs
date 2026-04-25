@@ -18,15 +18,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.FeatureManagement;
@@ -163,8 +165,11 @@ public partial class LocalizationManagementHttpApiHostModule
         var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
         if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
-            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+            services.AddSingleton<IDistributedLockProvider>(_ =>
+            {
+                return new RedisDistributedSynchronizationProvider(
+                    ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]).GetDatabase());
+            });
         }
     }
 
@@ -263,25 +268,17 @@ public partial class LocalizationManagementHttpApiHostModule
                 });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.DescribeAllParametersInCamelCase();
+
+                var xmlDocFiles = new List<string>();
+                xmlDocFiles.AddIfNotContains(Directory.GetFiles(AppContext.BaseDirectory, "LINGYUN.Abp.*.xml"));
+                xmlDocFiles.AddIfNotContains(Directory.GetFiles(AppContext.BaseDirectory, "Volo.Abp.*.xml"));
+
+                foreach (var xmlDocFile in xmlDocFiles)
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Scheme = "bearer",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT"
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                            },
-                            new string[] { }
-                        }
-                });
+                    options.IncludeXmlComments(xmlDocFile);
+                }
+
                 options.OperationFilter<TenantHeaderParamter>();
             });
     }
@@ -362,19 +359,18 @@ public partial class LocalizationManagementHttpApiHostModule
                 }
             });
 
-        if (isDevelopment)
+        Configure<AbpAntiForgeryOptions>(options =>
         {
-            // services.AddAlwaysAllowAuthorization();
-        }
+            configuration.GetSection("AntiForgery").Bind(options);
+        });
 
-        if (!isDevelopment)
-        {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-            services
-                .AddDataProtection()
-                .SetApplicationName("LINGYUN.Abp.Application")
-                .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
-        }
+        services.AddDataProtection()
+            .SetApplicationName("LINGYUN.Abp.Application")
+            .PersistKeysToStackExchangeRedis(() =>
+            {
+                return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]).GetDatabase();
+            },
+            "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
     }
 
     private void ConfigureWrapper()
