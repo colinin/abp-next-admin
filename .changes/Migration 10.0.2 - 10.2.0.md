@@ -37,6 +37,7 @@
 
 15. [数据导出模块]   增加 `AbpExporterMiniSoftwareModule` 模块, 集成 `MiniExcel`、`MiniWord` 实现 `IExcelExporterProvider`、`IExcelImporterProvider`、`IWordExporterProvider` 接口  
 
+16. [解决方案优化]   合并Task、Webhook、Wechat、Workflow解决方案到All中,移除多余的解决方案文件
 
 ## 依赖项变更  
 
@@ -72,6 +73,34 @@
 | services/Single          | SqlServer         | 20260421023044_Add-Blob-Management-Module      | 10.0.2          |
 | services/AuthServer      | MySQL             | 20260420064613_Upgrade-Abp-Framework-To-10-0-2 | 10.0.3          |
 | services/BackendAdmin    | MySQL             | 20260420064540_Upgrade-Abp-Framework-To-10-0-2 | 10.0.3          |
+| services/Platform		   | MySQL             | 20260424033808_Add-Blob-Management-Module      | 10.0.3          |
 | services/IdentityServer  | MySQL             | 20260420065028_Upgrade-Abp-Framework-To-10-0-2 | 10.0.3          |
 | services/RealtimeMessage | MySQL             | 20260420065252_Upgrade-Abp-Framework-To-10-0-2 | 10.0.3          |
 | services/TaskManagement  | MySQL             | 20260420073543_Upgrade-Abp-Framework-To-10-0-2 | 10.0.3          |
+
+
+## 数据库连接字符串
+
+| Module Name                   | ConnectionString Name        | Example(MySQL)                                               |
+| ----------------------------- | ---------------------------- | ------------------------------------------------------------ |
+| Default                       | Default                      | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| abp/Identity                  | AbpIdentity                  | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| abp/IdentityServer            | AbpIdentityServer            | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| abp/OpenIddict                | AbpOpenIddict                | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| abp/TenantManagement          | AbpTenantManagement(AbpSaas) | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| abp/FeatureManagement         | AbpFeatureManagement         | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| abp/SettingManagement         | AbpSettingManagement         | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| abp/PermissionManagement      | AbpPermissionManagement      | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/AIManagement             | AbpAIManagement              | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/BlobManagement           | AbpBlobManagement            | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/DataProtectionManagement | AbpDataProtectionManagement  | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/Gdpr                     | AbpGdpr                      | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/Saas                     | AbpSaas                      | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/LocalizationManagement   | AbpLocalizationManagement    | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/TextTemplating           | AbpTextTemplating            | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/Platform                 | AppPlatform                  | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/MessageService           | MessageService               | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/NotificationService      | Notifications                | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/TaskManagement           | TaskManagement               | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/WebhooksManagement       | WebhooksManagement           | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |
+| labp/Elsa                     | Workflow                     | Server=127.0.0.1;Database=abp;User Id=root;Password=123456;SslMode=None |

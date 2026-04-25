@@ -1,9 +1,87 @@
 <Solution>
+  <Folder Name="/.changes/">
+    <File Path="../.changes/Migration 10.0.2 - 10.2.0.md" />
+  </Folder>
   <Folder Name="/.github/" />
   <Folder Name="/.github/workflows/">
     <File Path="../.github/workflows/build.yml" />
     <File Path="../.github/workflows/publish.yml" />
     <File Path="../.github/workflows/release.yml" />
+  </Folder>
+  <Folder Name="/.Solution Items/">
+    <File Path="../common.props" />
+    <File Path="../common.secrets.props" />
+    <File Path="../configureawait.props" />
+    <File Path="../Directory.Build.props" />
+    <File Path="../Directory.Packages.props" />
+    <File Path="../NuGet.Config" />
+  </Folder>
+  <Folder Name="/00 migrations/" />
+  <Folder Name="/00 migrations/00 admin-service/">
+    <Project Path="migrations/LY.MicroService.BackendAdmin.DbMigrator/LY.MicroService.BackendAdmin.DbMigrator.csproj" />
+    <Project Path="migrations/LY.MicroService.BackendAdmin.EntityFrameworkCore/LY.MicroService.BackendAdmin.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/00 migrations/01 platform-service/">
+    <Project Path="migrations/LY.MicroService.Platform.DbMigrator/LY.MicroService.Platform.DbMigrator.csproj" />
+    <Project Path="migrations/LY.MicroService.Platform.EntityFrameworkCore/LY.MicroService.Platform.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/00 migrations/02 localization-service/">
+    <Project Path="migrations/LY.MicroService.LocalizationManagement.DbMigrator/LY.MicroService.LocalizationManagement.DbMigrator.csproj" />
+    <Project Path="migrations/LY.MicroService.LocalizationManagement.EntityFrameworkCore/LY.MicroService.LocalizationManagement.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/00 migrations/03 task-service/">
+    <Project Path="migrations/LY.MicroService.TaskManagement.DbMigrator/LY.MicroService.TaskManagement.DbMigrator.csproj" />
+    <Project Path="migrations/LY.MicroService.TaskManagement.EntityFrameworkCore/LY.MicroService.TaskManagement.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/00 migrations/04 message-service/">
+    <Project Path="migrations/LY.MicroService.RealtimeMessage.DbMigrator/LY.MicroService.RealtimeMessage.DbMigrator.csproj" />
+    <Project Path="migrations/LY.MicroService.RealtimeMessage.EntityFrameworkCore/LY.MicroService.RealtimeMessage.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/00 migrations/05 webhook-service/">
+    <Project Path="migrations/LY.MicroService.WebhooksManagement.DbMigrator/LY.MicroService.WebhooksManagement.DbMigrator.csproj" />
+    <Project Path="migrations/LY.MicroService.WebhooksManagement.EntityFrameworkCore/LY.MicroService.WebhooksManagement.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/00 migrations/06 auth-server/">
+    <Project Path="migrations/LY.MicroService.AuthServer.DbMigrator/LY.MicroService.AuthServer.DbMigrator.csproj" />
+    <Project Path="migrations/LY.MicroService.AuthServer.EntityFrameworkCore/LY.MicroService.AuthServer.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/01 services/" />
+  <Folder Name="/01 services/00 localization-service/">
+    <Project Path="services/LY.MicroService.LocalizationManagement.HttpApi.Host/LY.MicroService.LocalizationManagement.HttpApi.Host.csproj" />
+  </Folder>
+  <Folder Name="/01 services/01 auth-server/">
+    <Project Path="services/LY.MicroService.AuthServer/LY.MicroService.AuthServer.csproj" />
+  </Folder>
+  <Folder Name="/01 services/02 admin-service/">
+    <Project Path="services/LY.MicroService.BackendAdmin.HttpApi.Host/LY.MicroService.BackendAdmin.HttpApi.Host.csproj" />
+  </Folder>
+  <Folder Name="/01 services/03 identity-service/">
+    <Project Path="services/LY.MicroService.AuthServer.HttpApi.Host/LY.MicroService.AuthServer.HttpApi.Host.csproj" />
+  </Folder>
+  <Folder Name="/01 services/04 platform-service/">
+    <Project Path="services/LY.MicroService.PlatformManagement.HttpApi.Host/LY.MicroService.PlatformManagement.HttpApi.Host.csproj" />
+  </Folder>
+  <Folder Name="/01 services/05 task-service/">
+    <Project Path="services/LY.MicroService.TaskManagement.HttpApi.Host/LY.MicroService.TaskManagement.HttpApi.Host.csproj" />
+  </Folder>
+  <Folder Name="/01 services/06 message-service/">
+    <Project Path="services/LY.MicroService.RealtimeMessage.HttpApi.Host/LY.MicroService.RealtimeMessage.HttpApi.Host.csproj" />
+  </Folder>
+  <Folder Name="/01 services/07 webhook-service/">
+    <Project Path="services/LY.MicroService.WebhooksManagement.HttpApi.Host/LY.MicroService.WebhooksManagement.HttpApi.Host.csproj" />
+  </Folder>
+  <Folder Name="/01 services/08 wechat-service/">
+    <Project Path="services/LY.MicroService.WechatManagement.HttpApi.Host/LY.MicroService.WechatManagement.HttpApi.Host.csproj" />
+  </Folder>
+  <Folder Name="/01 services/09 workflow-service/">
+    <Project Path="services/LY.MicroService.WorkflowManagement.HttpApi.Host/LY.MicroService.WorkflowManagement.HttpApi.Host.csproj" />
+  </Folder>
+  <Folder Name="/02 gateways/" />
+  <Folder Name="/02 gateways/00 internal/">
+    <Project Path="../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.Internal.Gateway/LINGYUN.MicroService.Internal.Gateway.csproj" />
+  </Folder>
+  <Folder Name="/02 gateways/01 open-api/">
+    <Project Path="../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.OpenApi.Gateway/LINGYUN.MicroService.OpenApi.Gateway.csproj" />
   </Folder>
   <Folder Name="/framework/" />
   <Folder Name="/framework/auditing/">
@@ -95,13 +173,6 @@
     <Project Path="framework/features/LINGYUN.Abp.FeatureManagement.Client/LINGYUN.Abp.FeatureManagement.Client.csproj" />
     <Project Path="framework/features/LINGYUN.Abp.Features.Client/LINGYUN.Abp.Features.Client.csproj" />
   </Folder>
-  <Folder Name="/framework/hangfire/">
-    <Project Path="framework/common/LINGYUN.Abp.BackgroundJobs.Hangfire/LINGYUN.Abp.BackgroundJobs.Hangfire.csproj" />
-    <Project Path="framework/common/LINGYUN.Abp.BackgroundWorkers.Hangfire/LINGYUN.Abp.BackgroundWorkers.Hangfire.csproj" />
-    <Project Path="framework/common/LINGYUN.Abp.Hangfire.Dashboard/LINGYUN.Abp.Hangfire.Dashboard.csproj" />
-    <Project Path="framework/common/LINGYUN.Abp.Hangfire.MySqlStorage/LINGYUN.Abp.Hangfire.Storage.MySql.csproj" />
-    <Project Path="framework/common/LINGYUN.Abp.Hangfire.Storage.SqlServer/LINGYUN.Abp.Hangfire.Storage.SqlServer.csproj" />
-  </Folder>
   <Folder Name="/framework/localization/">
     <Project Path="framework/localization/LINGYUN.Abp.AspNetCore.Mvc.Localization/LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
     <Project Path="framework/localization/LINGYUN.Abp.Localization.CultureMap/LINGYUN.Abp.Localization.CultureMap.csproj" />
@@ -153,21 +224,24 @@
     <Project Path="framework/settings/LINGYUN.Abp.SettingManagement.Application.Contracts/LINGYUN.Abp.SettingManagement.Application.Contracts.csproj" />
     <Project Path="framework/settings/LINGYUN.Abp.Settings/LINGYUN.Abp.Settings.csproj" />
   </Folder>
-  <Folder Name="/framework/tenants/">
-    <Project Path="framework/tenants/LINGYUN.Abp.AspNetCore.MultiTenancy/LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
-    <Project Path="framework/tenants/LINGYUN.Abp.MultiTenancy.Editions/LINGYUN.Abp.MultiTenancy.Editions.csproj" />
-  </Folder>
-  <Folder Name="/framework/tracking/">
+  <Folder Name="/framework/telemetry/">
     <Project Path="framework/telemetry/LINGYUN.Abp.Telemetry.APM/LINGYUN.Abp.Telemetry.APM.csproj" />
     <Project Path="framework/telemetry/LINGYUN.Abp.Telemetry.OpenTelemetry/LINGYUN.Abp.Telemetry.OpenTelemetry.csproj" />
     <Project Path="framework/telemetry/LINGYUN.Abp.Telemetry.SkyWalking/LINGYUN.Abp.Telemetry.SkyWalking.csproj" />
+  </Folder>
+  <Folder Name="/framework/tenants/">
+    <Project Path="framework/tenants/LINGYUN.Abp.AspNetCore.MultiTenancy/LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
+    <Project Path="framework/tenants/LINGYUN.Abp.MultiTenancy.Editions/LINGYUN.Abp.MultiTenancy.Editions.csproj" />
   </Folder>
   <Folder Name="/framework/wechat/">
     <Project Path="framework/wechat/LINGYUN.Abp.Identity.WeChat.Work/LINGYUN.Abp.Identity.WeChat.Work.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.Identity.WeChat/LINGYUN.Abp.Identity.WeChat.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Common/LINGYUN.Abp.WeChat.Common.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.MiniProgram/LINGYUN.Abp.WeChat.MiniProgram.csproj" />
+    <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Official.Application.Contracts/LINGYUN.Abp.WeChat.Official.Application.Contracts.csproj" />
+    <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Official.Application/LINGYUN.Abp.WeChat.Official.Application.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Official.Handlers/LINGYUN.Abp.WeChat.Official.Handlers.csproj" />
+    <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Official.HttpApi/LINGYUN.Abp.WeChat.Official.HttpApi.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Official.Senparc/LINGYUN.Abp.WeChat.Official.Senparc.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Official/LINGYUN.Abp.WeChat.Official.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.SettingManagement/LINGYUN.Abp.WeChat.SettingManagement.csproj" />
@@ -175,8 +249,11 @@
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Work.Application/LINGYUN.Abp.WeChat.Work.Application.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Work.AspNetCore/LINGYUN.Abp.WeChat.Work.AspNetCore.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Work.Common/LINGYUN.Abp.WeChat.Work.Common.csproj" />
+    <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Work.Contacts/LINGYUN.Abp.WeChat.Work.Contacts.csproj" />
+    <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Work.ExternalContact/LINGYUN.Abp.WeChat.Work.ExternalContact.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Work.Handlers/LINGYUN.Abp.WeChat.Work.Handlers.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Work.HttpApi/LINGYUN.Abp.WeChat.Work.HttpApi.csproj" />
+    <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Work.OA/LINGYUN.Abp.WeChat.Work.OA.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat.Work/LINGYUN.Abp.WeChat.Work.csproj" />
     <Project Path="framework/wechat/LINGYUN.Abp.WeChat/LINGYUN.Abp.WeChat.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.WeChat.MiniProgram/LINGYUN.Abp.Notifications.WeChat.MiniProgram.csproj" />
@@ -194,31 +271,6 @@
     <Project Path="framework/wx-pusher/LINGYUN.Abp.WxPusher/LINGYUN.Abp.WxPusher.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.WxPusher/LINGYUN.Abp.Notifications.WxPusher.csproj" />
   </Folder>
-  <Folder Name="/migrations/" />
-  <Folder Name="/migrations/admin/">
-    <Project Path="migrations/LY.MicroService.BackendAdmin.DbMigrator/LY.MicroService.BackendAdmin.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.BackendAdmin.EntityFrameworkCore/LY.MicroService.BackendAdmin.EntityFrameworkCore.csproj" />
-  </Folder>
-  <Folder Name="/migrations/auth-server/">
-    <Project Path="migrations/LY.MicroService.AuthServer.DbMigrator/LY.MicroService.AuthServer.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.AuthServer.EntityFrameworkCore/LY.MicroService.AuthServer.EntityFrameworkCore.csproj" />
-  </Folder>
-  <Folder Name="/migrations/identity-server/">
-    <Project Path="migrations/LY.MicroService.IdentityServer.DbMigrator/LY.MicroService.IdentityServer.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.IdentityServer.EntityFrameworkCore/LY.MicroService.IdentityServer.EntityFrameworkCore.csproj" />
-  </Folder>
-  <Folder Name="/migrations/localization/">
-    <Project Path="migrations/LY.MicroService.LocalizationManagement.DbMigrator/LY.MicroService.LocalizationManagement.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.LocalizationManagement.EntityFrameworkCore/LY.MicroService.LocalizationManagement.EntityFrameworkCore.csproj" />
-  </Folder>
-  <Folder Name="/migrations/platform/">
-    <Project Path="migrations/LY.MicroService.Platform.DbMigrator/LY.MicroService.Platform.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.Platform.EntityFrameworkCore/LY.MicroService.Platform.EntityFrameworkCore.csproj" />
-  </Folder>
-  <Folder Name="/migrations/realtime-message/">
-    <Project Path="migrations/LY.MicroService.RealtimeMessage.DbMigrator/LY.MicroService.RealtimeMessage.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.RealtimeMessage.EntityFrameworkCore/LY.MicroService.RealtimeMessage.EntityFrameworkCore.csproj" />
-  </Folder>
   <Folder Name="/modules/" />
   <Folder Name="/modules/account/">
     <Project Path="modules/account/LINGYUN.Abp.Account.Application.Contracts/LINGYUN.Abp.Account.Application.Contracts.csproj" />
@@ -227,7 +279,6 @@
     <Project Path="modules/account/LINGYUN.Abp.Account.HttpApi/LINGYUN.Abp.Account.HttpApi.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.OAuth/LINGYUN.Abp.Account.OAuth.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Security/LINGYUN.Abp.Account.Security.csproj" />
-    <Project Path="modules/account/LINGYUN.Abp.Account.Web.IdentityServer/LINGYUN.Abp.Account.Web.IdentityServer.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.OAuth/LINGYUN.Abp.Account.Web.OAuth.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.OpenIddict/LINGYUN.Abp.Account.Web.OpenIddict.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web/LINGYUN.Abp.Account.Web.csproj" />
@@ -276,6 +327,7 @@
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.Sms/LINGYUN.Abp.Elsa.Activities.Sms.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities.Webhooks/LINGYUN.Abp.Elsa.Activities.Webhooks.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Activities/LINGYUN.Abp.Elsa.Activities.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Designer/LINGYUN.Abp.Elsa.Designer.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql/LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa.EntityFrameworkCore/LINGYUN.Abp.Elsa.EntityFrameworkCore.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Notifications/LINGYUN.Abp.Elsa.Notifications.csproj" />
@@ -313,18 +365,6 @@
     <Project Path="modules/identity/LINGYUN.Abp.Identity.QrCode/LINGYUN.Abp.Identity.QrCode.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Session.AspNetCore/LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Session/LINGYUN.Abp.Identity.Session.csproj" />
-  </Folder>
-  <Folder Name="/modules/identityServer/">
-    <Project Path="modules/identityServer/LINGYUN.Abp.IdentityServer.Application.Contracts/LINGYUN.Abp.IdentityServer.Application.Contracts.csproj" />
-    <Project Path="modules/identityServer/LINGYUN.Abp.IdentityServer.Application/LINGYUN.Abp.IdentityServer.Application.csproj" />
-    <Project Path="modules/identityServer/LINGYUN.Abp.IdentityServer.Domain/LINGYUN.Abp.IdentityServer.Domain.csproj" />
-    <Project Path="modules/identityServer/LINGYUN.Abp.IdentityServer.EntityFrameworkCore/LINGYUN.Abp.IdentityServer.EntityFrameworkCore.csproj" />
-    <Project Path="modules/identityServer/LINGYUN.Abp.IdentityServer.HttpApi/LINGYUN.Abp.IdentityServer.HttpApi.csproj" />
-    <Project Path="modules/identityServer/LINGYUN.Abp.IdentityServer.LinkUser/LINGYUN.Abp.IdentityServer.LinkUser.csproj" />
-    <Project Path="modules/identityServer/LINGYUN.Abp.IdentityServer.Portal/LINGYUN.Abp.IdentityServer.Portal.csproj" />
-    <Project Path="modules/identityServer/LINGYUN.Abp.IdentityServer.Session/LINGYUN.Abp.IdentityServer.Session.csproj" />
-    <Project Path="modules/identityServer/LINGYUN.Abp.IdentityServer.SmsValidator/LINGYUN.Abp.IdentityServer.SmsValidator.csproj" />
-    <Project Path="modules/identityServer/LINGYUN.Abp.IdentityServer.WeChat.Work/LINGYUN.Abp.IdentityServer.WeChat.Work.csproj" />
   </Folder>
   <Folder Name="/modules/localization-management/">
     <File Path="modules/localization-management/README.md" />
@@ -423,10 +463,23 @@
   </Folder>
   <Folder Name="/modules/task-management/">
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Abstractions/LINGYUN.Abp.BackgroundTasks.Abstractions.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Activities/LINGYUN.Abp.BackgroundTasks.Activities.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.DistributedLocking/LINGYUN.Abp.BackgroundTasks.DistributedLocking.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.EventBus/LINGYUN.Abp.BackgroundTasks.EventBus.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Jobs/LINGYUN.Abp.BackgroundTasks.Jobs.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Notifications/LINGYUN.Abp.BackgroundTasks.Notifications.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Quartz/LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.TaskManagement/LINGYUN.Abp.BackgroundTasks.TaskManagement.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks/LINGYUN.Abp.BackgroundTasks.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Quartz.MySqlInstaller/LINGYUN.Abp.Quartz.MySqlInstaller.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Quartz.SqlInstaller/LINGYUN.Abp.Quartz.SqlInstaller.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.Application.Contracts/LINGYUN.Abp.TaskManagement.Application.Contracts.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.Application/LINGYUN.Abp.TaskManagement.Application.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.Domain.Shared/LINGYUN.Abp.TaskManagement.Domain.Shared.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.Domain/LINGYUN.Abp.TaskManagement.Domain.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.EntityFrameworkCore/LINGYUN.Abp.TaskManagement.EntityFrameworkCore.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.HttpApi.Client/LINGYUN.Abp.TaskManagement.HttpApi.Client.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.HttpApi/LINGYUN.Abp.TaskManagement.HttpApi.csproj" />
   </Folder>
   <Folder Name="/modules/text-templating/">
     <Project Path="modules/text-templating/LINGYUN.Abp.TextTemplating.Application.Contracts/LINGYUN.Abp.TextTemplating.Application.Contracts.csproj" />
@@ -439,41 +492,19 @@
     <Project Path="modules/text-templating/LINGYUN.Abp.TextTemplating.Scriban/LINGYUN.Abp.TextTemplating.Scriban.csproj" />
   </Folder>
   <Folder Name="/modules/webhooks/">
+    <Project Path="modules/webhooks/LINGYUN.Abp.Webhooks.ClientProxies/LINGYUN.Abp.Webhooks.ClientProxies.csproj" />
     <Project Path="modules/webhooks/LINGYUN.Abp.Webhooks.Core/LINGYUN.Abp.Webhooks.Core.csproj" />
+    <Project Path="modules/webhooks/LINGYUN.Abp.Webhooks.EventBus/LINGYUN.Abp.Webhooks.EventBus.csproj" />
+    <Project Path="modules/webhooks/LINGYUN.Abp.Webhooks.Identity/LINGYUN.Abp.Webhooks.Identity.csproj" />
+    <Project Path="modules/webhooks/LINGYUN.Abp.Webhooks.Saas/LINGYUN.Abp.Webhooks.Saas.csproj" />
     <Project Path="modules/webhooks/LINGYUN.Abp.WebHooks/LINGYUN.Abp.WebHooks.csproj" />
-  </Folder>
-  <Folder Name="/services/" />
-  <Folder Name="/services/admin/">
-    <Project Path="services/LY.MicroService.BackendAdmin.HttpApi.Host/LY.MicroService.BackendAdmin.HttpApi.Host.csproj" />
-  </Folder>
-  <Folder Name="/services/auth-server-api/">
-    <Project Path="services/LY.MicroService.AuthServer.HttpApi.Host/LY.MicroService.AuthServer.HttpApi.Host.csproj" />
-  </Folder>
-  <Folder Name="/services/auth-server/">
-    <Project Path="services/LY.MicroService.AuthServer/LY.MicroService.AuthServer.csproj" />
-  </Folder>
-  <Folder Name="/services/identity-server-api/">
-    <Project Path="services/LY.MicroService.IdentityServer.HttpApi.Host/LY.MicroService.IdentityServer.HttpApi.Host.csproj" />
-  </Folder>
-  <Folder Name="/services/identity-server/">
-    <Project Path="services/LY.MicroService.IdentityServer/LY.MicroService.IdentityServer.csproj" />
-  </Folder>
-  <Folder Name="/services/localization/">
-    <Project Path="services/LY.MicroService.LocalizationManagement.HttpApi.Host/LY.MicroService.LocalizationManagement.HttpApi.Host.csproj" />
-  </Folder>
-  <Folder Name="/services/platform/">
-    <Project Path="services/LY.MicroService.PlatformManagement.HttpApi.Host/LY.MicroService.PlatformManagement.HttpApi.Host.csproj" />
-  </Folder>
-  <Folder Name="/services/realtime-message/">
-    <Project Path="services/LY.MicroService.RealtimeMessage.HttpApi.Host/LY.MicroService.RealtimeMessage.HttpApi.Host.csproj" />
-  </Folder>
-  <Folder Name="/Solution Items/">
-    <File Path="../common.props" />
-    <File Path="../common.secrets.props" />
-    <File Path="../configureawait.props" />
-    <File Path="../Directory.Build.props" />
-    <File Path="../Directory.Packages.props" />
-    <File Path="../NuGet.Config" />
+    <Project Path="modules/webhooks/LINGYUN.Abp.WebhooksManagement.Application.Contracts/LINGYUN.Abp.WebhooksManagement.Application.Contracts.csproj" />
+    <Project Path="modules/webhooks/LINGYUN.Abp.WebhooksManagement.Application/LINGYUN.Abp.WebhooksManagement.Application.csproj" />
+    <Project Path="modules/webhooks/LINGYUN.Abp.WebhooksManagement.Domain.Shared/LINGYUN.Abp.WebhooksManagement.Domain.Shared.csproj" />
+    <Project Path="modules/webhooks/LINGYUN.Abp.WebhooksManagement.Domain/LINGYUN.Abp.WebhooksManagement.Domain.csproj" />
+    <Project Path="modules/webhooks/LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore/LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore.csproj" />
+    <Project Path="modules/webhooks/LINGYUN.Abp.WebhooksManagement.HttpApi.Client/LINGYUN.Abp.WebhooksManagement.HttpApi.Client.csproj" />
+    <Project Path="modules/webhooks/LINGYUN.Abp.WebhooksManagement.HttpApi/LINGYUN.Abp.WebhooksManagement.HttpApi.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/LINGYUN.Abp.Aliyun.Tests/LINGYUN.Abp.Aliyun.Tests.csproj" />
@@ -489,9 +520,6 @@
     <Project Path="tests/LINGYUN.Abp.Localization.Xml.Tests/LINGYUN.Abp.Localization.Xml.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Baidu.Tests/LINGYUN.Abp.Location.Baidu.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Tencent.Tests/LINGYUN.Abp.Location.Tencent.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OssManagement.Domain.Tests/LINGYUN.Abp.OssManagement.Domain.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OssManagement.Minio.Tests/LINGYUN.Abp.OssManagement.Minio.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OssManagement.Nexus.Tests/LINGYUN.Abp.OssManagement.Nexus.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Rules.RulesEngine.Tests/LINGYUN.Abp.Rules.RulesEngine.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Sms.Platform.Tests/LINGYUN.Abp.Sms.Platform.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.TestBase/LINGYUN.Abp.TestsBase.csproj" />
