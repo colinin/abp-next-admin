@@ -95,14 +95,19 @@ watch(
 <template>
   <BasicLayout @clear-preferences-and-logout="handleLogout">
     <template #user-dropdown>
-      <UserDropdown
-        :avatar
-        :description="description"
-        :menus
-        :tag-text="userInfo?.email"
-        :text="userInfo?.realName"
-        @logout="handleLogout"
-      />
+      <div class="flex items-center pr-[4px]">
+        <UserDropdown
+          :avatar
+          :description="description"
+          :menus
+          :tag-text="userInfo?.email"
+          :text="userInfo?.realName"
+          @logout="handleLogout"
+        />
+        <span class="mb-1 flex items-center text-sm font-medium">
+          {{ description }}
+        </span>
+      </div>
     </template>
     <template #notification>
       <Notification
