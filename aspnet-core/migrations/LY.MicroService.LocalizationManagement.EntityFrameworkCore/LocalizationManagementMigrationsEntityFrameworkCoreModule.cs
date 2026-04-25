@@ -1,9 +1,10 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -17,7 +18,7 @@ namespace LY.MicroService.LocalizationManagement.EntityFrameworkCore;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
+    typeof(AbpEntityFrameworkCoreMySQLMicrotingModule),
     typeof(AbpDataDbMigratorModule)
     )]
 public class LocalizationManagementMigrationsEntityFrameworkCoreModule : AbpModule
@@ -32,7 +33,7 @@ public class LocalizationManagementMigrationsEntityFrameworkCoreModule : AbpModu
                 mysql =>
                 {
                     // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
-                    mysql.TranslateParameterizedCollectionsToConstants();
+                    mysql.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
                 });
         });
     }

@@ -1,9 +1,11 @@
 ﻿using JetBrains.Annotations;
-using LINGYUN.Abp.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.Localization;
 
 namespace Microsoft.AspNetCore.Identity;
 
@@ -26,14 +28,17 @@ public static class IdentityUserManagerExtensions
             // 如果其中一个安全选项未确认,无法启用双因素验证
             if (!hasAuthenticatorEnabled && !phoneNumberConfirmed && !emailAddressConfirmed)
             {
+                var localizer = userManager.ServiceProvider.GetRequiredService<IStringLocalizer<IdentityResource>>();
 
-                // TODO: 返回标准的 IdentityResult
-                //var error = new IdentityError();
-                //return IdentityResult.Failed(error);
+                //throw new IdentityException(
+                //    LINGYUN.Abp.Identity.IdentityErrorCodes.ChangeTwoFactorWithMFANotBound,
+                //    details: phoneNumberConfirmed ? "phone number not confirmed" : "email address not confirmed");
 
-                throw new IdentityException(
-                    LINGYUN.Abp.Identity.IdentityErrorCodes.ChangeTwoFactorWithMFANotBound,
-                    details: phoneNumberConfirmed ? "phone number not confirmed" : "email address not confirmed");
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Code = LINGYUN.Abp.Identity.IdentityErrorCodes.ChangeTwoFactorWithMFANotBound,
+                    Description = localizer[LINGYUN.Abp.Identity.IdentityErrorCodes.ChangeTwoFactorWithMFANotBound]
+                });
             }
         }
 

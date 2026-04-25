@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { VbenFormProps } from '@vben/common-ui';
 
 import type { FeatureDefinitionDto } from '../../../types/definitions';
-import type { FeatureGroupDefinitionDto } from '../../../types/groups';
 
 import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
+import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import {
@@ -23,18 +25,21 @@ import {
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
+  EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
 
 import { useFeatureDefinitionsApi } from '../../../api/useFeatureDefinitionsApi';
 import { useFeatureGroupDefinitionsApi } from '../../../api/useFeatureGroupDefinitionsApi';
-import { GroupDefinitionsPermissions } from '../../../constants/permissions';
+import { FeatureDefinitionsPermissions } from '../../../constants/permissions';
 
 defineOptions({
   name: 'FeatureDefinitionTable',
 });
+const FeaturesOutlined = createIconifyIcon('pajamas:feature-flag');
+const MenuItem = Menu.Item;
 
 interface FeatureVo {
   children: FeatureVo[];
@@ -56,6 +61,7 @@ interface FeatureGroupVo {
 const featureGroups = ref<FeatureGroupVo[]>([]);
 
 const { Lr } = useLocalization();
+const { hasAccessByCodes } = useAccess();
 const { deserialize } = useLocalizationSerializer();
 const { getListApi: getGroupsApi } = useFeatureGroupDefinitionsApi();
 const { deleteApi, getListApi: getFeaturesApi } = useFeatureDefinitionsApi();
@@ -81,7 +87,7 @@ const formOptions: VbenFormProps = {
   submitOnEnter: true,
 };
 
-const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
+const gridOptions: VxeGridProps<FeatureGroupVo> = {
   columns: [
     {
       align: 'center',
@@ -111,8 +117,10 @@ const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
     },
   ],
   expandConfig: {
+    accordion: true,
     padding: true,
     trigger: 'row',
+    height: 300,
   },
   exportConfig: {},
   keepSource: true,
@@ -121,7 +129,7 @@ const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
       query: async ({ page, sort }) => {
         let items = sortby(featureGroups.value, sort.field);
         if (sort.order === 'desc') {
-          items = items.reverse();
+          items = items.toReversed();
         }
         const result = {
           totalCount: featureGroups.value.length,
@@ -147,7 +155,7 @@ const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
     zoom: true,
   },
 };
-const subGridColumns: VxeGridProps<FeatureDefinitionDto>['columns'] = [
+const subGridColumns: VxeGridProps<FeatureGroupVo>['columns'] = [
   {
     align: 'center',
     type: 'seq',
@@ -196,11 +204,11 @@ const subGridColumns: VxeGridProps<FeatureDefinitionDto>['columns'] = [
     fixed: 'right',
     slots: { default: 'action' },
     title: $t('AbpUi.Actions'),
-    width: 180,
+    width: 220,
   },
 ];
 
-const gridEvents: VxeGridListeners<FeatureGroupDefinitionDto> = {
+const gridEvents: VxeGridListeners<FeatureGroupVo> = {
   sortChange: () => {
     gridApi.query();
   },
@@ -280,6 +288,19 @@ function onDelete(row: FeatureDefinitionDto) {
   });
 }
 
+function onMenuClick(row: FeatureDefinitionDto, info: MenuInfo) {
+  switch (info.key) {
+    case 'features': {
+      modalApi.setData({
+        groupName: row.groupName,
+        parentName: row.name,
+      });
+      modalApi.open();
+      break;
+    }
+  }
+}
+
 onMounted(onGet);
 </script>
 
@@ -289,7 +310,7 @@ onMounted(onGet);
       <Button
         :icon="h(PlusOutlined)"
         type="primary"
-        v-access:code="[GroupDefinitionsPermissions.Create]"
+        v-access:code="[FeatureDefinitionsPermissions.Create]"
         @click="onCreate"
       >
         {{ $t('AbpFeatureManagement.FeatureDefinitions:AddNew') }}
@@ -323,28 +344,44 @@ onMounted(onGet);
             <CloseOutlined v-else class="text-red-500" />
           </div>
         </template>
-        <template #action="{ row: permission }">
+        <template #action="{ row: feature }">
           <div class="flex flex-row">
             <Button
               :icon="h(EditOutlined)"
               block
               type="link"
-              v-access:code="[GroupDefinitionsPermissions.Update]"
-              @click="onUpdate(permission)"
+              v-access:code="[FeatureDefinitionsPermissions.Update]"
+              @click="onUpdate(feature)"
             >
               {{ $t('AbpUi.Edit') }}
             </Button>
             <Button
-              v-if="!permission.isStatic"
+              v-if="!feature.isStatic"
               :icon="h(DeleteOutlined)"
               block
               danger
               type="link"
-              v-access:code="[GroupDefinitionsPermissions.Delete]"
-              @click="onDelete(permission)"
+              v-access:code="[FeatureDefinitionsPermissions.Delete]"
+              @click="onDelete(feature)"
             >
               {{ $t('AbpUi.Delete') }}
             </Button>
+            <Dropdown v-if="!feature.isStatic">
+              <template #overlay>
+                <Menu @click="(info) => onMenuClick(feature, info)">
+                  <MenuItem
+                    v-if="
+                      hasAccessByCodes([FeatureDefinitionsPermissions.Create])
+                    "
+                    key="features"
+                    :icon="h(FeaturesOutlined)"
+                  >
+                    {{ $t('AbpFeatureManagement.FeatureDefinitions:AddNew') }}
+                  </MenuItem>
+                </Menu>
+              </template>
+              <Button :icon="h(EllipsisOutlined)" type="link" />
+            </Dropdown>
           </div>
         </template>
       </VxeGrid>

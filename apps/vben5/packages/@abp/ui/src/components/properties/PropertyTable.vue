@@ -8,6 +8,7 @@ import { computed, defineAsyncComponent } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
+import { isFunction } from '@vben/utils';
 
 import { Button, Popconfirm, Table } from 'ant-design-vue';
 
@@ -46,8 +47,13 @@ const getTableColumns = computed((): TableColumnsType<PropertyInfo> => {
       align: 'left',
       dataIndex: 'key',
       fixed: 'left',
-      minWidth: 100,
+      width: 100,
       title: $t('component.extra_property_dictionary.key'),
+      customRender: (opt) => {
+        if (props.renderKey && isFunction(props.renderKey)) {
+          return props.renderKey(opt.record.key);
+        }
+      },
     },
     {
       align: 'left',

@@ -10,12 +10,16 @@ export enum LoginStateEnum {
 
 interface LoginStateContextType {
 	loginState: LoginStateEnum;
+	isExternalLoginState: boolean;
 	setLoginState: (loginState: LoginStateEnum) => void;
+	setIsExternalLoginState: (isExternalLogin: boolean) => void;
 	backToLogin: () => void;
 }
 const LoginStateContext = createContext<LoginStateContextType>({
 	loginState: LoginStateEnum.LOGIN,
+	isExternalLoginState: false,
 	setLoginState: () => {},
+	setIsExternalLoginState: () => {},
 	backToLogin: () => {},
 });
 
@@ -26,12 +30,16 @@ export function useLoginStateContext() {
 
 export function LoginStateProvider({ children }: PropsWithChildren) {
 	const [loginState, setLoginState] = useState(LoginStateEnum.LOGIN);
+	const [isExternalLoginState, setIsExternalLoginState] = useState(false);
 
 	function backToLogin() {
 		setLoginState(LoginStateEnum.LOGIN);
 	}
 
-	const value: LoginStateContextType = useMemo(() => ({ loginState, setLoginState, backToLogin }), [loginState]);
+	const value: LoginStateContextType = useMemo(
+		() => ({ loginState, setLoginState, backToLogin, isExternalLoginState, setIsExternalLoginState }),
+		[loginState, isExternalLoginState],
+	);
 
 	return <LoginStateContext.Provider value={value}>{children}</LoginStateContext.Provider>;
 }

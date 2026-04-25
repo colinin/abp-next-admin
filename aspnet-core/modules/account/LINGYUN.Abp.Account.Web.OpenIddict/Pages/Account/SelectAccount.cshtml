@@ -52,7 +52,7 @@
                             accountName += "/" + account.TenantName;
                         }
                         // TODO: Date format
-                        var lastLoginTime = account.LastLoginTime.HasValue ? account.LastLoginTime.Value.ToString("yyyy-MM:dd HH:mm:ss") : "";
+                        var lastLoginTime = account.LastLoginTime.HasValue ? account.LastLoginTime.Value.ToString(SelectAccountModel.DefaultDateFormat) : "";
                         var isCurrent = account.IsCurrentAccount;
                         // TODO: 实现用户头像
                         var avatar = !string.IsNullOrWhiteSpace(account.UserName) ? account.UserName[0].ToString().ToUpper() : "U";

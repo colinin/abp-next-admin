@@ -61,6 +61,9 @@ const gridOptions = reactive<VxeGridProps<IdentitySessionDto>>({
       field: 'signedIn',
       minWidth: 200,
       title: $t('AbpIdentity.DisplayName:SignedIn'),
+      formatter: ({ cellValue }) => {
+        return formatToDateTime(cellValue);
+      },
     },
     {
       field: 'action',
@@ -71,8 +74,10 @@ const gridOptions = reactive<VxeGridProps<IdentitySessionDto>>({
     },
   ],
   expandConfig: {
+    accordion: true,
     padding: true,
-    trigger: 'default',
+    trigger: 'row',
+    height: 300,
   },
   exportConfig: {},
   keepSource: true,

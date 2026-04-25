@@ -6,13 +6,6 @@ import { CircleLoading } from "@/components/loading";
 
 import type { AppRouteObject } from "#/router";
 
-// const ProfilePage = lazy(() => import("@/pages/management/user/profile"));
-// const AccountPage = lazy(() => import("@/pages/management/user/account"));
-
-// const OrganizationPage = lazy(() => import("@/pages/management/system/organization"));
-// const PermissioPage = lazy(() => import("@/pages/management/system/permission"));
-
-// const Blog = lazy(() => import("@/pages/management/blog"));
 
 // Identity
 const Users = lazy(() => import("@/pages/management/identity/users/user-table"));
@@ -29,15 +22,36 @@ const PermissionGroupDefinition = lazy(
 const PermissionDefinitions = lazy(
 	() => import("@/pages/management/permissions/permissions/permission-definition-table"),
 );
+
+// Features
+const FeatureGroupDefinition = lazy(
+	() => import("@/pages/management/features/definitions-groups/feature-group-definition-table"),
+);
+const FeatureDefinitions = lazy(
+	() => import("@/pages/management/features/definitions-features/feature-definition-table"),
+);
+
 // Auditing logs
 const AuditingAuditLogs = lazy(() => import("@/pages/management/audit-logs/audit-log-table"));
+const Loggings = lazy(() => import("@/pages/management/loggings/logging-table"));
 
 // settings
 const SettingDefinitions = lazy(() => import("@/pages/management/settings/definitions/setting-definition-table"));
 const SystemSettings = lazy(() => import("@/pages/management/settings/settings/system-setting.tsx"));
 
 // notifications
-const MyNotifications = lazy(() => import("@/pages/management/notifications/my-notification-table"));
+const MyNotifications = lazy(() => import("@/pages/management/notifications/my-notifications/my-notification-table"));
+const NotificationsGroupDefinition = lazy(
+	() => import("@/pages/management/notifications/definitions/groups/notification-group-definition-table"),
+);
+const NotificationsDefinition = lazy(
+	() => import("@/pages/management/notifications/definitions/notifications/notification-definition-table"),
+);
+
+// Localization
+const Languages = lazy(() => import("@/pages/management/localization/languages/localization-language-table"));
+const Resources = lazy(() => import("@/pages/management/localization/resources/localization-resource-table"));
+const Texts = lazy(() => import("@/pages/management/localization/texts/localization-text-table"));
 
 const management: AppRouteObject = {
 	order: 2,
@@ -57,59 +71,6 @@ const management: AppRouteObject = {
 			index: true,
 			element: <Navigate to="user" replace />,
 		},
-		// {
-		// 	path: "user",
-		// 	meta: { label: "sys.menu.user.index", key: "/management/user" },
-		// 	children: [
-		// 		{
-		// 			index: true,
-		// 			element: <Navigate to="profile" replace />,
-		// 		},
-		// 		{
-		// 			path: "profile",
-		// 			element: <ProfilePage />,
-		// 			meta: {
-		// 				label: "sys.menu.user.profile",
-		// 				key: "/management/user/profile",
-		// 			},
-		// 		},
-		// 		{
-		// 			path: "account",
-		// 			element: <AccountPage />,
-		// 			meta: {
-		// 				label: "sys.menu.user.account",
-		// 				key: "/management/user/account",
-		// 			},
-		// 		},
-		// 	],
-		// },
-		// {
-		// 	path: "system",
-		// 	meta: { label: "sys.menu.system.index", key: "/management/system" },
-		// 	children: [
-		// 		{
-		// 			path: "organization",
-		// 			element: <OrganizationPage />,
-		// 			meta: {
-		// 				label: "sys.menu.system.organization",
-		// 				key: "/management/system/organization",
-		// 			},
-		// 		},
-		// 		{
-		// 			path: "permission",
-		// 			element: <PermissioPage />,
-		// 			meta: {
-		// 				label: "sys.menu.system.permission",
-		// 				key: "/management/system/permission",
-		// 			},
-		// 		},
-		// 	],
-		// },
-		// {
-		// 	path: "blog",
-		// 	element: <Blog />,
-		// 	meta: { label: "sys.menu.blog", key: "/management/blog" },
-		// },
 		{
 			path: "identity",
 			meta: {
@@ -179,6 +140,47 @@ const management: AppRouteObject = {
 			],
 		},
 		{
+			path: "localization",
+			meta: {
+				label: "abp.manage.localization.title",
+				key: "/management/localization",
+				icon: <Iconify icon="ion:globe-outline" />,
+			},
+			children: [
+				{
+					index: true,
+					element: <Navigate to="resources" replace />,
+				},
+				{
+					path: "resources",
+					element: <Resources />,
+					meta: {
+						label: "abp.manage.localization.resources",
+						key: "/management/localization/resources",
+						icon: <Iconify icon="grommet-icons:resources" />,
+					},
+				},
+				{
+					path: "languages",
+					element: <Languages />,
+					meta: {
+						label: "abp.manage.localization.languages",
+						key: "/management/localization/languages",
+						icon: <Iconify icon="cil:language" />,
+					},
+				},
+				{
+					path: "texts",
+					element: <Texts />,
+					meta: {
+						label: "abp.manage.localization.texts",
+						key: "/management/localization/texts",
+						icon: <Iconify icon="mi:text" />,
+					},
+				},
+			],
+		},
+		{
 			path: "permissions",
 			meta: {
 				label: "abp.manage.permissions.title",
@@ -243,12 +245,53 @@ const management: AppRouteObject = {
 			],
 		},
 		{
+			path: "features",
+			meta: {
+				label: "abp.manage.features.title",
+				key: "/management/features",
+				icon: <Iconify icon="ant-design:gold-outlined" />,
+			},
+			children: [
+				{
+					index: true,
+					element: <Navigate to="definitions" replace />,
+				},
+				{
+					path: "definitions",
+					element: <FeatureDefinitions />,
+					meta: {
+						label: "abp.manage.features.definitions",
+						key: "/management/features/definitions",
+						icon: <Iconify icon="pajamas:feature-flag" />,
+					},
+				},
+				{
+					path: "groups",
+					element: <FeatureGroupDefinition />,
+					meta: {
+						label: "abp.manage.features.groups",
+						key: "/management/features/groups",
+						icon: <Iconify icon="lucide:group" />,
+					},
+				},
+			],
+		},
+		{
 			path: "audit-logs",
 			element: <AuditingAuditLogs />,
 			meta: {
-				label: "abp.manage.identity.auditLogs",
+				label: "abp.manage.auditLogs",
 				key: "/management/audit-logs",
 				icon: <Iconify icon="fluent-mdl2:compliance-audit" />,
+			},
+		},
+		{
+			path: "sys-logs",
+			element: <Loggings />,
+			meta: {
+				label: "abp.manage.loggings",
+				key: "/management/sys-logs",
+				icon: <Iconify icon="icon-park-outline:log" />,
 			},
 		},
 		{
@@ -261,15 +304,33 @@ const management: AppRouteObject = {
 			children: [
 				{
 					index: true,
-					element: <Navigate to="my-notifilers" replace />,
+					element: <Navigate to="my-notifications" replace />,
 				},
 				{
-					path: "my-notifilers",
+					path: "my-notifications",
 					element: <MyNotifications />,
 					meta: {
 						label: "abp.manage.notifications.myNotifilers",
-						key: "/management/notifications/my-notifilers",
+						key: "/management/notifications/my-notifications",
 						icon: <Iconify icon="ant-design:notification-outlined" />,
+					},
+				},
+				{
+					path: "groups",
+					element: <NotificationsGroupDefinition />,
+					meta: {
+						label: "abp.manage.notifications.groups",
+						key: "/management/notifications/groups",
+						icon: <Iconify icon="lucide:group" />,
+					},
+				},
+				{
+					path: "definitions",
+					element: <NotificationsDefinition />,
+					meta: {
+						label: "abp.manage.notifications.definitions",
+						key: "/management/notifications/definitions",
+						icon: <Iconify icon="nimbus:notification" />,
 					},
 				},
 			],

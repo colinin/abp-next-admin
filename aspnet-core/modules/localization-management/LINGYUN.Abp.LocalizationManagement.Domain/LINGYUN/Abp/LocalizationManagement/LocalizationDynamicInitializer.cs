@@ -16,64 +16,56 @@ public class LocalizationDynamicInitializer : ITransientDependency
     public ILogger<LocalizationDynamicInitializer> Logger { get; set; }
 
     protected IServiceProvider ServiceProvider { get; }
-    protected IOptions<AbpLocalizationManagementOptions> Options { get; }
-    protected IHostApplicationLifetime ApplicationLifetime { get; }
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
-    protected IStaticLocalizationSaver StaticLocalizationSaver { get; }
 
-    public LocalizationDynamicInitializer(
-        IServiceProvider serviceProvider,
-        IOptions<AbpLocalizationManagementOptions> options,
-        ICancellationTokenProvider cancellationTokenProvider,
-        IStaticLocalizationSaver staticLocalizationSaver)
+    public LocalizationDynamicInitializer(IServiceProvider serviceProvider)
     {
 
         ServiceProvider = serviceProvider;
-        Options = options;
-        ApplicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
-        CancellationTokenProvider = cancellationTokenProvider;
-        StaticLocalizationSaver = staticLocalizationSaver;
 
         Logger = NullLogger<LocalizationDynamicInitializer>.Instance;
     }
 
     public virtual Task InitializeAsync(bool runInBackground, CancellationToken cancellationToken = default)
     {
-        if (!Options.Value.SaveStaticLocalizationsToDatabase)
+        var options = ServiceProvider.GetRequiredService<IOptions<AbpLocalizationManagementOptions>>().Value;
+
+        if (!options.SaveStaticLocalizationsToDatabase)
         {
             return Task.CompletedTask;
         }
 
         if (runInBackground)
         {
+            var applicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
             Task.Run(async () =>
             {
-                if (cancellationToken == default && ApplicationLifetime?.ApplicationStopping != null)
+                if (cancellationToken == default && applicationLifetime?.ApplicationStopping != null)
                 {
-                    cancellationToken = ApplicationLifetime.ApplicationStopping;
+                    cancellationToken = applicationLifetime.ApplicationStopping;
                 }
-                await ExecuteInitializationAsync(cancellationToken);
+                await ExecuteInitializationAsync(options, cancellationToken);
             }, cancellationToken);
             return Task.CompletedTask;
         }
 
-        return ExecuteInitializationAsync(cancellationToken);
+        return ExecuteInitializationAsync(options, cancellationToken);
     }
 
-    protected virtual async Task ExecuteInitializationAsync(CancellationToken cancellationToken)
+    protected virtual async Task ExecuteInitializationAsync(AbpLocalizationManagementOptions options, CancellationToken cancellationToken)
     {
         try
         {
-            using (CancellationTokenProvider.Use(cancellationToken))
+            var cancellationTokenProvider = ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
+            using (cancellationTokenProvider.Use(cancellationToken))
             {
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
 
-                await SaveStaticLocalizationToDatabaseAsync(cancellationToken);
+                await SaveStaticLocalizationToDatabaseAsync(options, cancellationToken);
 
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
@@ -85,12 +77,14 @@ public class LocalizationDynamicInitializer : ITransientDependency
         }
     }
 
-    protected virtual async Task SaveStaticLocalizationToDatabaseAsync(CancellationToken cancellationToken)
+    protected virtual async Task SaveStaticLocalizationToDatabaseAsync(AbpLocalizationManagementOptions options, CancellationToken cancellationToken)
     {
-        if (!Options.Value.SaveStaticLocalizationsToDatabase)
+        if (!options.SaveStaticLocalizationsToDatabase)
         {
             return;
         }
+
+        var staticLocalizationSaver = ServiceProvider.GetRequiredService<IStaticLocalizationSaver>();
 
         await Policy
             .Handle<Exception>(e => e is not OperationCanceledException)
@@ -108,7 +102,7 @@ public class LocalizationDynamicInitializer : ITransientDependency
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    await StaticLocalizationSaver.SaveAsync();
+                    await staticLocalizationSaver.SaveAsync();
                 }
                 catch (Exception ex)
                 {

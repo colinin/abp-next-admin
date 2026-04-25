@@ -1,6 +1,6 @@
 {
   "name": "@abp/app-antd",
-  "version": "9.2.0",
+  "version": "10.0.2",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
@@ -27,7 +27,10 @@
   },
   "dependencies": {
     "@abp/account": "workspace:*",
+    "@abp/ai-management": "workspace:*",
     "@abp/auditing": "workspace:*",
+    "@abp/blob-management": "workspace:*",
+    "@abp/cache-management": "workspace:*",
     "@abp/components": "workspace:*",
     "@abp/core": "workspace:*",
     "@abp/data-protection": "workspace:*",
@@ -37,7 +40,6 @@
     "@abp/localization": "workspace:*",
     "@abp/notifications": "workspace:*",
     "@abp/openiddict": "workspace:*",
-    "@abp/oss": "workspace:*",
     "@abp/permissions": "workspace:*",
     "@abp/platform": "workspace:*",
     "@abp/request": "workspace:*",

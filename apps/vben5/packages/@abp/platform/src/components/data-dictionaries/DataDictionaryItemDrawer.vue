@@ -121,7 +121,7 @@ const gridOptions: VxeGridProps<DataItemDto> = {
       query: async ({ page, sort }) => {
         let items = sortby(dataItems.value, sort.field);
         if (sort.order === 'desc') {
-          items = items.reverse();
+          items = items.toReversed();
         }
         const result = {
           totalCount: dataItems.value.length,

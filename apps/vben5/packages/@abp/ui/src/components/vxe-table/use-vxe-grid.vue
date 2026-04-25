@@ -29,10 +29,17 @@ import { usePriorityValues } from '@vben/hooks';
 import { EmptyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { usePreferences } from '@vben/preferences';
-import { cloneDeep, cn, mergeWithArrayOverride } from '@vben/utils';
+import {
+  cloneDeep,
+  cn,
+  isBoolean,
+  isEqual,
+  mergeWithArrayOverride,
+} from '@vben/utils';
 
 import { VbenHelpTooltip, VbenLoading } from '@vben-core/shadcn-ui';
 
+import { VxeButton } from 'vxe-pc-ui';
 import { VxeGrid, VxeUI } from 'vxe-table';
 
 import { extendProxyOptions } from './extends';
@@ -52,43 +59,68 @@ const FORM_SLOT_PREFIX = 'form-';
 
 const TOOLBAR_ACTIONS = 'toolbar-actions';
 const TOOLBAR_TOOLS = 'toolbar-tools';
+const TABLE_TITLE = 'table-title';
 
 const gridRef = useTemplateRef<VxeGridInstance>('gridRef');
 
 const state = props.api?.useStore?.();
 
 const {
+  gridOptions,
   class: className,
-  formOptions,
   gridClass,
   gridEvents,
-  gridOptions,
-  showSearchForm,
+  formOptions,
   tableTitle,
   tableTitleHelp,
+  showSearchForm,
+  separator,
 } = usePriorityValues(props, state);
 
 const { isMobile } = usePreferences();
-
+const isSeparator = computed(() => {
+  if (
+    !formOptions.value ||
+    showSearchForm.value === false ||
+    separator.value === false
+  ) {
+    return false;
+  }
+  if (separator.value === true || separator.value === undefined) {
+    return true;
+  }
+  return separator.value.show !== false;
+});
+const separatorBg = computed(() => {
+  return !separator.value ||
+    isBoolean(separator.value) ||
+    !separator.value.backgroundColor
+    ? undefined
+    : separator.value.backgroundColor;
+});
 const slots: SetupContext['slots'] = useSlots();
 
 const [Form, formApi] = useTableForm({
-  commonConfig: {
-    componentProps: {
-      class: 'w-full',
-    },
-  },
   compact: true,
-  handleReset: async () => {
-    await formApi.resetForm();
-    const formValues = await formApi.getValues();
-    formApi.setLatestSubmissionValues(formValues);
-    props.api.reload(formValues);
-  },
   handleSubmit: async () => {
     const formValues = await formApi.getValues();
     formApi.setLatestSubmissionValues(toRaw(formValues));
     props.api.reload(formValues);
+  },
+  handleReset: async () => {
+    const prevValues = await formApi.getValues();
+    await formApi.resetForm();
+    const formValues = await formApi.getValues();
+    formApi.setLatestSubmissionValues(formValues);
+    // 如果值发生了变化，submitOnChange会触发刷新。所以只在submitOnChange为false或者值没有发生变化时，手动刷新
+    if (isEqual(prevValues, formValues) || !formOptions.value?.submitOnChange) {
+      props.api.reload(formValues);
+    }
+  },
+  commonConfig: {
+    componentProps: {
+      class: 'w-full',
+    },
   },
   showCollapseButton: true,
   submitButtonOptions: {
@@ -98,7 +130,7 @@ const [Form, formApi] = useTableForm({
 });
 
 const showTableTitle = computed(() => {
-  return !!slots.tableTitle?.() || tableTitle.value;
+  return !!slots[TABLE_TITLE]?.() || tableTitle.value;
 });
 
 const showToolbar = computed(() => {
@@ -113,11 +145,13 @@ const toolbarOptions = computed(() => {
   const slotActions = slots[TOOLBAR_ACTIONS]?.();
   const slotTools = slots[TOOLBAR_TOOLS]?.();
   const searchBtn: VxeToolbarPropTypes.ToolConfig = {
-    circle: true,
     code: 'search',
-    icon: 'vxe-icon--search',
+    icon: 'vxe-icon-search',
+    circle: true,
     status: showSearchForm.value ? 'primary' : undefined,
-    title: $t('common.search'),
+    title: showSearchForm.value
+      ? $t('common.hideSearchPanel')
+      : $t('common.showSearchPanel'),
   };
   // 将搜索按钮合并到用户配置的toolbarConfig.tools中
   const toolbarConfig: VxeGridPropTypes.ToolbarConfig = {
@@ -131,6 +165,7 @@ const toolbarOptions = computed(() => {
   }
 
   if (!showToolbar.value) {
+    toolbarConfig.enabled = false;
     return { toolbarConfig };
   }
 
@@ -183,11 +218,11 @@ const options = computed(() => {
       {},
       mergedOptions.pagerConfig,
       {
+        pageSize: 20,
         background: true,
+        pageSizes: [10, 20, 30, 50, 100, 200],
         className: 'mt-2 w-full',
         layouts: isMobile.value ? mobileLayouts : layouts,
-        pageSize: 20,
-        pageSizes: [10, 20, 30, 50, 100, 200],
         size: 'mini' as const,
       },
     );
@@ -200,11 +235,15 @@ const options = computed(() => {
 
 function onToolbarToolClick(event: VxeGridDefines.ToolbarToolClickEventParams) {
   if (event.code === 'search') {
-    props.api?.toggleSearchForm?.();
+    onSearchBtnClick();
   }
   (
     gridEvents.value?.toolbarToolClick as VxeGridListeners['toolbarToolClick']
   )?.(event);
+}
+
+function onSearchBtnClick() {
+  props.api?.toggleSearchForm?.();
 }
 
 const events = computed(() => {
@@ -218,7 +257,11 @@ const delegatedSlots = computed(() => {
   const resultSlots: string[] = [];
 
   for (const key of Object.keys(slots)) {
-    if (!['empty', 'form', 'loading', TOOLBAR_ACTIONS].includes(key)) {
+    if (
+      !['empty', 'form', 'loading', TOOLBAR_ACTIONS, TOOLBAR_TOOLS].includes(
+        key,
+      )
+    ) {
       resultSlots.push(key);
     }
   }
@@ -236,6 +279,15 @@ const delegatedFormSlots = computed(() => {
   return resultSlots.map((key) => key.replace(FORM_SLOT_PREFIX, ''));
 });
 
+const showDefaultEmpty = computed(() => {
+  // 检查是否有原生的 VXE Table 空状态配置
+  const hasEmptyText = options.value.emptyText !== undefined;
+  const hasEmptyRender = options.value.emptyRender !== undefined;
+
+  // 如果有原生配置，就不显示默认的空状态
+  return !hasEmptyText && !hasEmptyRender;
+});
+
 async function init() {
   await nextTick();
   const globalGridConfig = VxeUI?.getConfig()?.grid ?? {};
@@ -249,7 +301,7 @@ async function init() {
   const enableProxyConfig = options.value.proxyConfig?.enabled;
   if (enableProxyConfig && autoLoad) {
     props.api.grid.commitProxy?.(
-      'initial',
+      'query',
       formOptions.value ? ((await formApi.getValues()) ?? {}) : {},
     );
     // props.api.reload(formApi.form?.values ?? {});
@@ -264,6 +316,7 @@ async function init() {
       '[Vben Vxe Table]: The formConfig in the grid is not supported, please use the `formOptions` props',
     );
   }
+  // @ts-ignore
   props.api?.setState?.({ gridOptions: defaultGridOptions });
   // form 由 vben-form 代替，所以需要保证query相关事件可以拿到参数
   extendProxyOptions(props.api, defaultGridOptions, () =>
@@ -326,9 +379,11 @@ onUnmounted(() => {
       <!-- 左侧操作区域或者title -->
       <template v-if="showToolbar" #toolbar-actions="slotProps">
         <slot v-if="showTableTitle" name="table-title">
-          <div class="mr-1 pl-1 text-[1rem]">
+          <div
+            class="flex items-center justify-center gap-1 text-[1rem] font-bold"
+          >
             {{ tableTitle }}
-            <VbenHelpTooltip v-if="tableTitleHelp" trigger-class="pb-1">
+            <VbenHelpTooltip v-if="tableTitleHelp">
               {{ tableTitleHelp }}
             </VbenHelpTooltip>
           </div>
@@ -344,13 +399,36 @@ onUnmounted(() => {
       >
         <slot :name="slotName" v-bind="slotProps"></slot>
       </template>
+      <template #toolbar-tools="slotProps">
+        <slot name="toolbar-tools" v-bind="slotProps"></slot>
+        <VxeButton
+          icon="vxe-icon-search"
+          circle
+          class="ml-2"
+          v-if="gridOptions?.toolbarConfig?.search && !!formOptions"
+          :status="showSearchForm ? 'primary' : undefined"
+          :title="$t('common.search')"
+          @click="onSearchBtnClick"
+        />
+      </template>
 
       <!-- form表单 -->
       <template #form>
         <div
           v-if="formOptions"
           v-show="showSearchForm !== false"
-          :class="cn('relative rounded py-3', isCompactForm ? 'pb-6' : 'pb-4')"
+          :class="
+            cn(
+              'relative rounded py-3',
+              isCompactForm
+                ? isSeparator
+                  ? 'pb-8'
+                  : 'pb-4'
+                : isSeparator
+                  ? 'pb-4'
+                  : 'pb-0',
+            )
+          "
         >
           <slot name="form">
             <Form>
@@ -379,6 +457,10 @@ onUnmounted(() => {
             </Form>
           </slot>
           <div
+            v-if="isSeparator"
+            :style="{
+              ...(separatorBg ? { backgroundColor: separatorBg } : undefined),
+            }"
             class="bg-background-deep z-100 absolute -left-2 bottom-1 h-2 w-[calc(100%+1rem)] overflow-hidden md:bottom-2 md:h-3"
           ></div>
         </div>
@@ -390,7 +472,7 @@ onUnmounted(() => {
         </slot>
       </template>
       <!-- 统一控状态 -->
-      <template #empty>
+      <template v-if="showDefaultEmpty" #empty>
         <slot name="empty">
           <EmptyIcon class="mx-auto" />
           <div class="mt-2">{{ $t('common.noData') }}</div>

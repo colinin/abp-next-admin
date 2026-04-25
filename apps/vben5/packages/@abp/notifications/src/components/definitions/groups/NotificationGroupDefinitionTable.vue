@@ -95,7 +95,7 @@ const gridOptions: VxeGridProps<NotificationGroupDefinitionDto> = {
       query: async ({ page, sort }) => {
         let items = sortby(dataSource.value, sort.field);
         if (sort.order === 'desc') {
-          items = items.reverse();
+          items = items.toReversed();
         }
         const result = {
           totalCount: dataSource.value.length,

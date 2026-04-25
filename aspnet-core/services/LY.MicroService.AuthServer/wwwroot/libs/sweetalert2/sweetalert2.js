@@ -1,5 +1,5 @@
 /*!
-* sweetalert2 v11.23.0
+* sweetalert2 v11.26.24
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -147,28 +147,33 @@
    * If `arg` is a function, call it (with no arguments or context) and return the result.
    * Otherwise, just pass the value through
    *
-   * @param {Function | any} arg
-   * @returns {any}
+   * @param {(() => *) | *} arg
+   * @returns {*}
    */
   const callIfFunction = arg => typeof arg === 'function' ? arg() : arg;
 
   /**
-   * @param {any} arg
+   * @param {*} arg
    * @returns {boolean}
    */
   const hasToPromiseFn = arg => arg && typeof arg.toPromise === 'function';
 
   /**
-   * @param {any} arg
-   * @returns {Promise<any>}
+   * @param {*} arg
+   * @returns {Promise<*>}
    */
   const asPromise = arg => hasToPromiseFn(arg) ? arg.toPromise() : Promise.resolve(arg);
 
   /**
-   * @param {any} arg
+   * @param {*} arg
    * @returns {boolean}
    */
   const isPromise = arg => arg && Promise.resolve(arg) === arg;
+
+  /**
+   * @returns {boolean}
+   */
+  const isFirefox = () => navigator.userAgent.includes('Firefox');
 
   /**
    * Gets the popup container which contains the backdrop and the popup itself.
@@ -485,25 +490,16 @@
     if (!target || !classList) {
       return;
     }
-    if (typeof classList === 'string') {
-      classList = classList.split(/\s+/).filter(Boolean);
-    }
-    classList.forEach(className => {
-      if (Array.isArray(target)) {
-        target.forEach(elem => {
-          if (condition) {
-            elem.classList.add(className);
-          } else {
-            elem.classList.remove(className);
-          }
-        });
-      } else {
+    const classes = typeof classList === 'string' ? classList.split(/\s+/).filter(Boolean) : classList;
+    const targets = Array.isArray(target) ? target : [target];
+    targets.forEach(elem => {
+      classes.forEach(className => {
         if (condition) {
-          target.classList.add(className);
+          elem.classList.add(className);
         } else {
-          target.classList.remove(className);
+          elem.classList.remove(className);
         }
-      }
+      });
     });
   };
 
@@ -543,14 +539,14 @@
   /**
    * @param {HTMLElement} elem
    * @param {string} property
-   * @param {*} value
+   * @param {string | number | null | undefined} value
    */
   const applyNumericalStyle = (elem, property, value) => {
-    if (value === `${parseInt(value)}`) {
+    if (value === `${parseInt(`${value}`)}`) {
       value = parseInt(value);
     }
-    if (value || parseInt(value) === 0) {
-      elem.style.setProperty(property, typeof value === 'number' ? `${value}px` : value);
+    if (value || value === 0) {
+      elem.style.setProperty(property, typeof value === 'number' ? `${value}px` : (/** @type {string} */value));
     } else {
       elem.style.removeProperty(property);
     }
@@ -609,7 +605,7 @@
 
   /**
    * @param {HTMLElement} elem
-   * @param {any} condition
+   * @param {boolean | string | null | undefined} condition
    * @param {string} display
    */
   const toggle = (elem, condition, display = 'flex') => {
@@ -626,7 +622,7 @@
    * @param {HTMLElement | null} elem
    * @returns {boolean}
    */
-  const isVisible$1 = elem => !!(elem && (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length));
+  const isVisible$1 = elem => Boolean(elem && (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length));
 
   /**
    * @returns {boolean}
@@ -637,7 +633,7 @@
    * @param {HTMLElement} elem
    * @returns {boolean}
    */
-  const isScrollable = elem => !!(elem.scrollHeight > elem.clientHeight);
+  const isScrollable = elem => Boolean(elem.scrollHeight > elem.clientHeight);
 
   /**
    * @param {HTMLElement} element
@@ -645,7 +641,7 @@
    * @returns {boolean}
    */
   const selfOrParentIsScrollable = (element, stopElement) => {
-    let parent = element;
+    let parent = /** @type {HTMLElement | null} */element;
     while (parent && parent !== stopElement) {
       if (isScrollable(parent)) {
         return true;
@@ -752,50 +748,81 @@
       return false;
     }
     oldContainer.remove();
-    removeClass([document.documentElement, document.body], [swalClasses['no-backdrop'], swalClasses['toast-shown'], swalClasses['has-column']]);
+    removeClass([document.documentElement, document.body], [swalClasses['no-backdrop'], swalClasses['toast-shown'],
+    // @ts-ignore: 'has-column' is not defined in swalClasses but may be set dynamically
+    swalClasses['has-column']]);
     return true;
   };
   const resetValidationMessage$1 = () => {
-    globalState.currentInstance.resetValidationMessage();
+    if (globalState.currentInstance) {
+      globalState.currentInstance.resetValidationMessage();
+    }
   };
   const addInputChangeListeners = () => {
     const popup = getPopup();
+    if (!popup) {
+      return;
+    }
     const input = getDirectChildByClass(popup, swalClasses.input);
     const file = getDirectChildByClass(popup, swalClasses.file);
-    /** @type {HTMLInputElement} */
+    /** @type {HTMLInputElement | null} */
     const range = popup.querySelector(`.${swalClasses.range} input`);
-    /** @type {HTMLOutputElement} */
+    /** @type {HTMLOutputElement | null} */
     const rangeOutput = popup.querySelector(`.${swalClasses.range} output`);
     const select = getDirectChildByClass(popup, swalClasses.select);
-    /** @type {HTMLInputElement} */
+    /** @type {HTMLInputElement | null} */
     const checkbox = popup.querySelector(`.${swalClasses.checkbox} input`);
     const textarea = getDirectChildByClass(popup, swalClasses.textarea);
-    input.oninput = resetValidationMessage$1;
-    file.onchange = resetValidationMessage$1;
-    select.onchange = resetValidationMessage$1;
-    checkbox.onchange = resetValidationMessage$1;
-    textarea.oninput = resetValidationMessage$1;
-    range.oninput = () => {
-      resetValidationMessage$1();
-      rangeOutput.value = range.value;
-    };
-    range.onchange = () => {
-      resetValidationMessage$1();
-      rangeOutput.value = range.value;
-    };
+    if (input) {
+      input.oninput = resetValidationMessage$1;
+    }
+    if (file) {
+      file.onchange = resetValidationMessage$1;
+    }
+    if (select) {
+      select.onchange = resetValidationMessage$1;
+    }
+    if (checkbox) {
+      checkbox.onchange = resetValidationMessage$1;
+    }
+    if (textarea) {
+      textarea.oninput = resetValidationMessage$1;
+    }
+    if (range && rangeOutput) {
+      range.oninput = () => {
+        resetValidationMessage$1();
+        rangeOutput.value = range.value;
+      };
+      range.onchange = () => {
+        resetValidationMessage$1();
+        rangeOutput.value = range.value;
+      };
+    }
   };
 
   /**
    * @param {string | HTMLElement} target
    * @returns {HTMLElement}
    */
-  const getTarget = target => typeof target === 'string' ? document.querySelector(target) : target;
+  const getTarget = target => {
+    if (typeof target === 'string') {
+      const element = document.querySelector(target);
+      if (!element) {
+        throw new Error(`Target element "${target}" not found`);
+      }
+      return /** @type {HTMLElement} */element;
+    }
+    return target;
+  };
 
   /**
    * @param {SweetAlertOptions} params
    */
   const setupAccessibility = params => {
     const popup = getPopup();
+    if (!popup) {
+      return;
+    }
     popup.setAttribute('role', params.toast ? 'alert' : 'dialog');
     popup.setAttribute('aria-live', params.toast ? 'polite' : 'assertive');
     if (!params.toast) {
@@ -809,6 +836,7 @@
   const setupRTL = targetElement => {
     if (window.getComputedStyle(targetElement).direction === 'rtl') {
       addClass(getContainer(), swalClasses.rtl);
+      globalState.isRTL = true;
     }
   };
 
@@ -831,7 +859,7 @@
     }
     setInnerHtml(container, sweetHTML);
     container.dataset['swal2Theme'] = params.theme;
-    const targetElement = getTarget(params.target);
+    const targetElement = getTarget(params.target || 'body');
     targetElement.appendChild(container);
     if (params.topLayer) {
       container.setAttribute('popover', '');
@@ -864,12 +892,12 @@
   };
 
   /**
-   * @param {any} param
+   * @param {object} param
    * @param {HTMLElement} target
    */
   const handleObject = (param, target) => {
     // JQuery element(s)
-    if (param.jquery) {
+    if ('jquery' in param) {
       handleJqueryElem(target, param);
     }
 
@@ -966,21 +994,15 @@
     }
     addClass([confirmButton, denyButton, cancelButton], swalClasses.styled);
 
-    // Apply custom background colors to action buttons
-    if (params.confirmButtonColor) {
-      confirmButton.style.setProperty('--swal2-confirm-button-background-color', params.confirmButtonColor);
-    }
-    if (params.denyButtonColor) {
-      denyButton.style.setProperty('--swal2-deny-button-background-color', params.denyButtonColor);
-    }
-    if (params.cancelButtonColor) {
-      cancelButton.style.setProperty('--swal2-cancel-button-background-color', params.cancelButtonColor);
-    }
-
-    // Apply the outline color to action buttons
-    applyOutlineColor(confirmButton);
-    applyOutlineColor(denyButton);
-    applyOutlineColor(cancelButton);
+    // Apply custom background colors and outline colors to action buttons
+    /** @type {[HTMLElement, string, string | undefined][]} */
+    const buttons = [[confirmButton, 'confirm', params.confirmButtonColor], [denyButton, 'deny', params.denyButtonColor], [cancelButton, 'cancel', params.cancelButtonColor]];
+    buttons.forEach(([button, type, color]) => {
+      if (color) {
+        button.style.setProperty(`--swal2-${type}-button-background-color`, color);
+      }
+      applyOutlineColor(button);
+    });
   }
 
   /**
@@ -1097,7 +1119,8 @@
 
   var privateProps = {
     innerParams: new WeakMap(),
-    domCache: new WeakMap()
+    domCache: new WeakMap(),
+    focusedElement: new WeakMap()
   };
 
   /// <reference path="../../../../sweetalert2.d.ts"/>
@@ -1268,96 +1291,121 @@
   const renderInputType = {};
 
   /**
-   * @param {HTMLInputElement} input
+   * @param {Input | HTMLElement} input
    * @param {SweetAlertOptions} params
-   * @returns {HTMLInputElement}
+   * @returns {Input}
    */
   renderInputType.text = renderInputType.email = renderInputType.password = renderInputType.number = renderInputType.tel = renderInputType.url = renderInputType.search = renderInputType.date = renderInputType['datetime-local'] = renderInputType.time = renderInputType.week = renderInputType.month = /** @type {(input: Input | HTMLElement, params: SweetAlertOptions) => Input} */
   (input, params) => {
-    checkAndSetInputValue(input, params.inputValue);
-    setInputLabel(input, input, params);
-    setInputPlaceholder(input, params);
-    input.type = params.input;
-    return input;
+    // oxfmt-ignore
+    const inputElement = /** @type {HTMLInputElement} */input;
+    checkAndSetInputValue(inputElement, params.inputValue);
+    setInputLabel(inputElement, inputElement, params);
+    setInputPlaceholder(inputElement, params);
+    // oxfmt-ignore
+    inputElement.type = /** @type {string} */params.input;
+    return inputElement;
   };
 
   /**
-   * @param {HTMLInputElement} input
+   * @param {Input | HTMLElement} input
    * @param {SweetAlertOptions} params
-   * @returns {HTMLInputElement}
+   * @returns {Input}
    */
   renderInputType.file = (input, params) => {
-    setInputLabel(input, input, params);
-    setInputPlaceholder(input, params);
-    return input;
+    const inputElement = /** @type {HTMLInputElement} */input;
+    setInputLabel(inputElement, inputElement, params);
+    setInputPlaceholder(inputElement, params);
+    return inputElement;
   };
 
   /**
-   * @param {HTMLInputElement} range
+   * @param {Input | HTMLElement} range
    * @param {SweetAlertOptions} params
-   * @returns {HTMLInputElement}
+   * @returns {Input}
    */
   renderInputType.range = (range, params) => {
-    const rangeInput = range.querySelector('input');
-    const rangeOutput = range.querySelector('output');
-    checkAndSetInputValue(rangeInput, params.inputValue);
-    rangeInput.type = params.input;
-    checkAndSetInputValue(rangeOutput, params.inputValue);
-    setInputLabel(rangeInput, range, params);
-    return range;
+    const rangeContainer = /** @type {HTMLElement} */range;
+    const rangeInput = rangeContainer.querySelector('input');
+    const rangeOutput = rangeContainer.querySelector('output');
+    if (rangeInput) {
+      checkAndSetInputValue(rangeInput, params.inputValue);
+      rangeInput.type = /** @type {string} */params.input;
+      setInputLabel(rangeInput, /** @type {Input} */range, params);
+    }
+    if (rangeOutput) {
+      checkAndSetInputValue(rangeOutput, params.inputValue);
+    }
+    return /** @type {Input} */range;
   };
 
   /**
-   * @param {HTMLSelectElement} select
+   * @param {Input | HTMLElement} select
    * @param {SweetAlertOptions} params
-   * @returns {HTMLSelectElement}
+   * @returns {Input}
    */
   renderInputType.select = (select, params) => {
-    select.textContent = '';
+    const selectElement = /** @type {HTMLSelectElement} */select;
+    selectElement.textContent = '';
     if (params.inputPlaceholder) {
       const placeholder = document.createElement('option');
       setInnerHtml(placeholder, params.inputPlaceholder);
       placeholder.value = '';
       placeholder.disabled = true;
       placeholder.selected = true;
-      select.appendChild(placeholder);
+      selectElement.appendChild(placeholder);
     }
-    setInputLabel(select, select, params);
-    return select;
+    setInputLabel(selectElement, selectElement, params);
+    return selectElement;
   };
 
   /**
-   * @param {HTMLInputElement} radio
-   * @returns {HTMLInputElement}
+   * @param {Input | HTMLElement} radio
+   * @returns {Input}
    */
   renderInputType.radio = radio => {
-    radio.textContent = '';
-    return radio;
+    const radioElement = /** @type {HTMLElement} */radio;
+    radioElement.textContent = '';
+    return /** @type {Input} */radio;
   };
 
   /**
-   * @param {HTMLLabelElement} checkboxContainer
+   * @param {Input | HTMLElement} checkboxContainer
    * @param {SweetAlertOptions} params
-   * @returns {HTMLInputElement}
+   * @returns {Input}
    */
   renderInputType.checkbox = (checkboxContainer, params) => {
-    const checkbox = getInput$1(getPopup(), 'checkbox');
+    const popup = getPopup();
+    if (!popup) {
+      throw new Error('Popup not found');
+    }
+    const checkbox = getInput$1(popup, 'checkbox');
+    if (!checkbox) {
+      throw new Error('Checkbox input not found');
+    }
     checkbox.value = '1';
     checkbox.checked = Boolean(params.inputValue);
-    const label = checkboxContainer.querySelector('span');
-    setInnerHtml(label, params.inputPlaceholder || params.inputLabel);
+    const containerElement = /** @type {HTMLElement} */checkboxContainer;
+    const label = containerElement.querySelector('span');
+    if (label) {
+      const placeholderOrLabel = params.inputPlaceholder || params.inputLabel;
+      if (placeholderOrLabel) {
+        setInnerHtml(label, placeholderOrLabel);
+      }
+    }
     return checkbox;
   };
 
   /**
-   * @param {HTMLTextAreaElement} textarea
+   * @param {Input | HTMLElement} textarea
    * @param {SweetAlertOptions} params
-   * @returns {HTMLTextAreaElement}
+   * @returns {Input}
    */
   renderInputType.textarea = (textarea, params) => {
-    checkAndSetInputValue(textarea, params.inputValue);
-    setInputPlaceholder(textarea, params);
-    setInputLabel(textarea, textarea, params);
+    const textareaElement = /** @type {HTMLTextAreaElement} */textarea;
+    checkAndSetInputValue(textareaElement, params.inputValue);
+    setInputPlaceholder(textareaElement, params);
+    setInputLabel(textareaElement, textareaElement, params);
 
     /**
      * @param {HTMLElement} el
@@ -1369,26 +1417,33 @@
     setTimeout(() => {
       // https://github.com/sweetalert2/sweetalert2/issues/1699
       if ('MutationObserver' in window) {
-        const initialPopupWidth = parseInt(window.getComputedStyle(getPopup()).width);
+        const popup = getPopup();
+        if (!popup) {
+          return;
+        }
+        const initialPopupWidth = parseInt(window.getComputedStyle(popup).width);
         const textareaResizeHandler = () => {
           // check if texarea is still in document (i.e. popup wasn't closed in the meantime)
-          if (!document.body.contains(textarea)) {
+          if (!document.body.contains(textareaElement)) {
             return;
           }
-          const textareaWidth = textarea.offsetWidth + getMargin(textarea);
-          if (textareaWidth > initialPopupWidth) {
-            getPopup().style.width = `${textareaWidth}px`;
-          } else {
-            applyNumericalStyle(getPopup(), 'width', params.width);
+          const textareaWidth = textareaElement.offsetWidth + getMargin(textareaElement);
+          const popupElement = getPopup();
+          if (popupElement) {
+            if (textareaWidth > initialPopupWidth) {
+              popupElement.style.width = `${textareaWidth}px`;
+            } else {
+              applyNumericalStyle(popupElement, 'width', params.width);
+            }
           }
         };
-        new MutationObserver(textareaResizeHandler).observe(textarea, {
+        new MutationObserver(textareaResizeHandler).observe(textareaElement, {
           attributes: true,
           attributeFilter: ['style']
         });
       }
     });
-    return textarea;
+    return textareaElement;
   };
 
   /**
@@ -1432,7 +1487,7 @@
       return;
     }
     showWhenInnerHtmlPresent(footer);
-    toggle(footer, params.footer, 'block');
+    toggle(footer, Boolean(params.footer), 'block');
     if (params.footer) {
       parseHtmlToContainer(params.footer, footer);
     }
@@ -1652,7 +1707,11 @@
    */
   const down = event => {
     const popup = getPopup();
-    if (event.target === popup || getIcon().contains(/** @type {HTMLElement} */event.target)) {
+    if (!popup) {
+      return;
+    }
+    const icon = getIcon();
+    if (event.target === popup || icon && icon.contains(/** @type {HTMLElement} */event.target)) {
       dragging = true;
       const clientXY = getClientXY(event);
       mousedownX = clientXY.clientX;
@@ -1668,12 +1727,17 @@
    */
   const move = event => {
     const popup = getPopup();
+    if (!popup) {
+      return;
+    }
     if (dragging) {
       let {
         clientX,
         clientY
       } = getClientXY(event);
-      popup.style.insetInlineStart = `${initialX + (clientX - mousedownX)}px`;
+      const deltaX = clientX - mousedownX;
+      // In RTL mode, negate the horizontal delta since insetInlineStart refers to the right edge
+      popup.style.insetInlineStart = `${initialX + (globalState.isRTL ? -deltaX : deltaX)}px`;
       popup.style.insetBlockStart = `${initialY + (clientY - mousedownY)}px`;
     }
   };
@@ -1688,18 +1752,10 @@
    * @returns {{ clientX: number, clientY: number }}
    */
   const getClientXY = event => {
-    let clientX = 0,
-      clientY = 0;
-    if (event.type.startsWith('mouse')) {
-      clientX = /** @type {MouseEvent} */event.clientX;
-      clientY = /** @type {MouseEvent} */event.clientY;
-    } else if (event.type.startsWith('touch')) {
-      clientX = /** @type {TouchEvent} */event.touches[0].clientX;
-      clientY = /** @type {TouchEvent} */event.touches[0].clientY;
-    }
+    const source = event.type.startsWith('touch') ? /** @type {TouchEvent} */event.touches[0] : (/** @type {MouseEvent} */event);
     return {
-      clientX,
-      clientY
+      clientX: source.clientX,
+      clientY: source.clientY
     };
   };
 
@@ -1849,7 +1905,7 @@
       return;
     }
     showWhenInnerHtmlPresent(title);
-    toggle(title, params.title || params.titleText, 'block');
+    toggle(title, Boolean(params.title || params.titleText), 'block');
     if (params.title) {
       parseHtmlToContainer(params.title, title);
     }
@@ -1866,6 +1922,7 @@
    * @param {SweetAlertOptions} params
    */
   const render = (instance, params) => {
+    var _globalState$eventEmi;
     renderPopup(instance, params);
     renderContainer(instance, params);
     renderProgressSteps(instance, params);
@@ -1880,7 +1937,7 @@
     if (typeof params.didRender === 'function' && popup) {
       params.didRender(popup);
     }
-    globalState.eventEmitter.emit('didRender', popup);
+    (_globalState$eventEmi = globalState.eventEmitter) === null || _globalState$eventEmi === void 0 || _globalState$eventEmi.emit('didRender', popup);
   };
 
   /*
@@ -1914,8 +1971,6 @@
     return (_dom$getCancelButton = getCancelButton()) === null || _dom$getCancelButton === void 0 ? void 0 : _dom$getCancelButton.click();
   };
 
-  /** @typedef {'cancel' | 'backdrop' | 'close' | 'esc' | 'timer'} DismissReason */
-
   /** @type {Record<DismissReason, DismissReason>} */
   const DismissReason = Object.freeze({
     cancel: 'cancel',
@@ -1929,8 +1984,10 @@
    * @param {GlobalState} globalState
    */
   const removeKeydownHandler = globalState => {
-    if (globalState.keydownTarget && globalState.keydownHandlerAdded) {
-      globalState.keydownTarget.removeEventListener('keydown', globalState.keydownHandler, {
+    if (globalState.keydownTarget && globalState.keydownHandlerAdded && globalState.keydownHandler) {
+      const handler = /** @type {EventListenerOrEventListenerObject} */
+      /** @type {unknown} */globalState.keydownHandler;
+      globalState.keydownTarget.removeEventListener('keydown', handler, {
         capture: globalState.keydownListenerCapture
       });
       globalState.keydownHandlerAdded = false;
@@ -1940,24 +1997,31 @@
   /**
    * @param {GlobalState} globalState
    * @param {SweetAlertOptions} innerParams
-   * @param {*} dismissWith
+   * @param {(dismiss: DismissReason) => void} dismissWith
    */
   const addKeydownHandler = (globalState, innerParams, dismissWith) => {
     removeKeydownHandler(globalState);
     if (!innerParams.toast) {
-      globalState.keydownHandler = e => keydownHandler(innerParams, e, dismissWith);
-      globalState.keydownTarget = innerParams.keydownListenerCapture ? window : getPopup();
-      globalState.keydownListenerCapture = innerParams.keydownListenerCapture;
-      globalState.keydownTarget.addEventListener('keydown', globalState.keydownHandler, {
-        capture: globalState.keydownListenerCapture
-      });
-      globalState.keydownHandlerAdded = true;
+      /** @type {(this: HTMLElement, event: KeyboardEvent) => void} */
+      const handler = e => keydownHandler(innerParams, e, dismissWith);
+      globalState.keydownHandler = handler;
+      const target = innerParams.keydownListenerCapture ? window : getPopup();
+      if (target) {
+        globalState.keydownTarget = target;
+        globalState.keydownListenerCapture = innerParams.keydownListenerCapture;
+        const eventHandler = /** @type {EventListenerOrEventListenerObject} */ /** @type {unknown} */handler;
+        globalState.keydownTarget.addEventListener('keydown', eventHandler, {
+          capture: globalState.keydownListenerCapture
+        });
+        globalState.keydownHandlerAdded = true;
+      }
     }
   };
 
   /**
    * @param {number} index
    * @param {number} increment
+   * @returns {boolean} shouldPreventDefault
    */
   const setFocus = (index, increment) => {
     var _dom$getPopup;
@@ -1980,10 +2044,17 @@
         index = focusableElements.length - 1;
       }
       focusableElements[index].focus();
-      return;
+
+      // don't prevent default for iframes (Firefox fix)
+      // https://github.com/sweetalert2/sweetalert2/issues/2931
+      if (isFirefox() && focusableElements[index] instanceof HTMLIFrameElement) {
+        return false;
+      }
+      return true;
     }
     // no visible focusable elements, focus the popup
     (_dom$getPopup = getPopup()) === null || _dom$getPopup === void 0 || _dom$getPopup.focus();
+    return true;
   };
   const arrowKeysNextButton = ['ArrowRight', 'ArrowDown'];
   const arrowKeysPreviousButton = ['ArrowLeft', 'ArrowUp'];
@@ -1991,7 +2062,7 @@
   /**
    * @param {SweetAlertOptions} innerParams
    * @param {KeyboardEvent} event
-   * @param {Function} dismissWith
+   * @param {(dismiss: DismissReason) => void} dismissWith
    */
   const keydownHandler = (innerParams, event, dismissWith) => {
     if (!innerParams) {
@@ -2039,7 +2110,11 @@
     if (!callIfFunction(innerParams.allowEnterKey)) {
       return;
     }
-    const input = getInput$1(getPopup(), innerParams.input);
+    const popup = getPopup();
+    if (!popup || !innerParams.input) {
+      return;
+    }
+    const input = getInput$1(popup, innerParams.input);
     if (event.target && input && event.target instanceof HTMLElement && event.target.outerHTML === input.outerHTML) {
       if (['textarea', 'file'].includes(innerParams.input)) {
         return; // do not submit
@@ -2063,17 +2138,23 @@
       }
     }
 
+    // don't prevent default for iframes (Firefox fix)
+    // https://github.com/sweetalert2/sweetalert2/issues/2931
+    let shouldPreventDefault = true;
+
     // Cycle to the next button
     if (!event.shiftKey) {
-      setFocus(btnIndex, 1);
+      shouldPreventDefault = setFocus(btnIndex, 1);
     }
 
     // Cycle to the prev button
     else {
-      setFocus(btnIndex, -1);
+      shouldPreventDefault = setFocus(btnIndex, -1);
     }
     event.stopPropagation();
-    event.preventDefault();
+    if (shouldPreventDefault) {
+      event.preventDefault();
+    }
   };
 
   /**
@@ -2114,7 +2195,7 @@
   /**
    * @param {KeyboardEvent} event
    * @param {SweetAlertOptions} innerParams
-   * @param {Function} dismissWith
+   * @param {(dismiss: DismissReason) => void} dismissWith
    */
   const handleEsc = (event, innerParams, dismissWith) => {
     event.preventDefault();
@@ -2169,7 +2250,10 @@
   };
 
   // @ts-ignore
-  const isSafariOrIOS = typeof window !== 'undefined' && !!window.GestureEvent; // true for Safari desktop + all iOS browsers https://stackoverflow.com/a/70585394
+  const isSafariOrIOS = typeof window !== 'undefined' && Boolean(window.GestureEvent); // true for Safari desktop + all iOS browsers https://stackoverflow.com/a/70585394
+
+  // @ts-ignore
+  const isIOS = isSafariOrIOS && /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
   /**
    * Fix iOS scrolling
@@ -2245,11 +2329,13 @@
   /**
    * https://github.com/sweetalert2/sweetalert2/issues/1786
    *
-   * @param {*} event
+   * @param {TouchEvent} event
    * @returns {boolean}
    */
   const isStylus = event => {
-    return event.touches && event.touches.length && event.touches[0].touchType === 'stylus';
+    return Boolean(event.touches && event.touches.length &&
+    // @ts-ignore - touchType is not a standard property
+    event.touches[0].touchType === 'stylus');
   };
 
   /**
@@ -2318,7 +2404,7 @@
    * @param {SweetAlert} instance
    * @param {HTMLElement} container
    * @param {boolean} returnFocus
-   * @param {Function} didClose
+   * @param {(() => void) | undefined} didClose
    */
   function removePopupAndResetState(instance, container, returnFocus, didClose) {
     if (isToast()) {
@@ -2355,7 +2441,8 @@
   /**
    * Instance method to close sweetAlert
    *
-   * @param {any} resolveValue
+   * @param {SweetAlertResult | undefined} resolveValue
+   * @this {SweetAlert}
    */
   function close(resolveValue) {
     resolveValue = prepareResolveValue(resolveValue);
@@ -2372,6 +2459,11 @@
       swalPromiseResolve(resolveValue);
     }
   }
+
+  /**
+   * @param {SweetAlert} instance
+   * @returns {boolean}
+   */
   const triggerClosePopup = instance => {
     const popup = getPopup();
     if (!popup) {
@@ -2391,7 +2483,8 @@
   };
 
   /**
-   * @param {any} error
+   * @param {Error | string} error
+   * @this {SweetAlert}
    */
   function rejectPromise(error) {
     const rejectPromise = privateMethods.swalPromiseReject.get(this);
@@ -2407,6 +2500,7 @@
    */
   const handleAwaitingPromise = instance => {
     if (instance.isAwaitingPromise) {
+      // @ts-ignore
       delete instance.isAwaitingPromise;
       // The instance might have been previously partly destroyed, we must resume the destroy process in this case #2335
       if (!privateProps.innerParams.get(instance)) {
@@ -2416,7 +2510,7 @@
   };
 
   /**
-   * @param {any} resolveValue
+   * @param {SweetAlertResult | undefined} resolveValue
    * @returns {SweetAlertResult}
    */
   const prepareResolveValue = resolveValue => {
@@ -2449,11 +2543,11 @@
       innerParams.willClose(popup);
     }
     (_globalState$eventEmi = globalState.eventEmitter) === null || _globalState$eventEmi === void 0 || _globalState$eventEmi.emit('willClose', popup);
-    if (animationIsSupported) {
-      animatePopup(instance, popup, container, innerParams.returnFocus, innerParams.didClose);
-    } else {
+    if (animationIsSupported && container) {
+      animatePopup(instance, popup, container, Boolean(innerParams.returnFocus), innerParams.didClose);
+    } else if (container) {
       // Otherwise, remove immediately
-      removePopupAndResetState(instance, container, innerParams.returnFocus, innerParams.didClose);
+      removePopupAndResetState(instance, container, Boolean(innerParams.returnFocus), innerParams.didClose);
     }
   };
 
@@ -2462,7 +2556,7 @@
    * @param {HTMLElement} popup
    * @param {HTMLElement} container
    * @param {boolean} returnFocus
-   * @param {Function} didClose
+   * @param {(() => void) | undefined} didClose
    */
   const animatePopup = (instance, popup, container, returnFocus, didClose) => {
     globalState.swalCloseEventFinishedCallback = removePopupAndResetState.bind(null, instance, container, returnFocus, didClose);
@@ -2484,7 +2578,7 @@
 
   /**
    * @param {SweetAlert} instance
-   * @param {Function} didClose
+   * @param {(() => void) | undefined} didClose
    */
   const triggerDidCloseAndDispose = (instance, didClose) => {
     setTimeout(() => {
@@ -2612,7 +2706,7 @@
       return;
     }
     /**
-     * @param {Record<string, any>} inputOptions
+     * @param {*} inputOptions
      */
     const processInputOptions = inputOptions => {
       if (params.input === 'select') {
@@ -2739,33 +2833,13 @@
   /**
    * Converts `inputOptions` into an array of `[value, label]`s
    *
-   * @param {Record<string, any>} inputOptions
+   * @param {*} inputOptions
    * @typedef {string[]} InputOptionFlattened
    * @returns {InputOptionFlattened[]}
    */
   const formatInputOptions = inputOptions => {
-    /** @type {InputOptionFlattened[]} */
-    const result = [];
-    if (inputOptions instanceof Map) {
-      inputOptions.forEach((value, key) => {
-        let valueFormatted = value;
-        if (typeof valueFormatted === 'object') {
-          // case of <optgroup>
-          valueFormatted = formatInputOptions(valueFormatted);
-        }
-        result.push([key, valueFormatted]);
-      });
-    } else {
-      Object.keys(inputOptions).forEach(key => {
-        let valueFormatted = inputOptions[key];
-        if (typeof valueFormatted === 'object') {
-          // case of <optgroup>
-          valueFormatted = formatInputOptions(valueFormatted);
-        }
-        result.push([key, valueFormatted]);
-      });
-    }
-    return result;
+    const entries = inputOptions instanceof Map ? Array.from(inputOptions) : Object.entries(inputOptions);
+    return entries.map(([key, value]) => [key, typeof value === 'object' ? formatInputOptions(value) : value]); // case of <optgroup>
   };
 
   /**
@@ -2774,7 +2848,7 @@
    * @returns {boolean}
    */
   const isSelected = (optionValue, inputValue) => {
-    return !!inputValue && inputValue.toString() === optionValue.toString();
+    return Boolean(inputValue) && inputValue !== null && inputValue !== undefined && inputValue.toString() === optionValue.toString();
   };
 
   /**
@@ -2805,7 +2879,7 @@
 
   /**
    * @param {SweetAlert} instance
-   * @param {Function} dismissWith
+   * @param {(dismiss: DismissReason) => void} dismissWith
    */
   const handleCancelButtonClick = (instance, dismissWith) => {
     instance.disableButtons();
@@ -2860,10 +2934,10 @@
 
   /**
    * @param {SweetAlert} instance
-   * @param {any} value
+   * @param {*} value
    */
   const deny = (instance, value) => {
-    const innerParams = privateProps.innerParams.get(instance || undefined);
+    const innerParams = privateProps.innerParams.get(instance);
     if (innerParams.showLoaderOnDeny) {
       showLoading(getDenyButton());
     }
@@ -2875,14 +2949,14 @@
           instance.hideLoading();
           handleAwaitingPromise(instance);
         } else {
-          instance.close({
+          instance.close(/** @type SweetAlertResult */{
             isDenied: true,
             value: typeof preDenyValue === 'undefined' ? value : preDenyValue
           });
         }
-      }).catch(error => rejectWith(instance || undefined, error));
+      }).catch(error => rejectWith(instance, error));
     } else {
-      instance.close({
+      instance.close(/** @type SweetAlertResult */{
         isDenied: true,
         value
       });
@@ -2891,10 +2965,10 @@
 
   /**
    * @param {SweetAlert} instance
-   * @param {any} value
+   * @param {*} value
    */
   const succeedWith = (instance, value) => {
-    instance.close({
+    instance.close(/** @type SweetAlertResult */{
       isConfirmed: true,
       value
     });
@@ -2912,10 +2986,10 @@
   /**
    *
    * @param {SweetAlert} instance
-   * @param {any} value
+   * @param {*} value
    */
   const confirm = (instance, value) => {
-    const innerParams = privateProps.innerParams.get(instance || undefined);
+    const innerParams = privateProps.innerParams.get(instance);
     if (innerParams.showLoaderOnConfirm) {
       showLoading();
     }
@@ -2930,7 +3004,7 @@
         } else {
           succeedWith(instance, typeof preConfirmValue === 'undefined' ? value : preConfirmValue);
         }
-      }).catch(error => rejectWith(instance || undefined, error));
+      }).catch(error => rejectWith(instance, error));
     } else {
       succeedWith(instance, value);
     }
@@ -2938,6 +3012,7 @@
 
   /**
    * Hides loader and shows back the button which was hidden by .showLoading()
+   * @this {SweetAlert}
    */
   function hideLoading() {
     // do nothing if popup is closed
@@ -2960,11 +3035,21 @@
     domCache.confirmButton.disabled = false;
     domCache.denyButton.disabled = false;
     domCache.cancelButton.disabled = false;
+    const focusedElement = privateProps.focusedElement.get(this);
+    if (focusedElement instanceof HTMLElement && document.activeElement === document.body) {
+      focusedElement.focus();
+    }
+    privateProps.focusedElement.delete(this);
   }
+
+  /**
+   * @param {DomCache} domCache
+   */
   const showRelatedButton = domCache => {
-    const buttonToReplace = domCache.popup.getElementsByClassName(domCache.loader.getAttribute('data-button-to-replace'));
+    const dataButtonToReplace = domCache.loader.getAttribute('data-button-to-replace');
+    const buttonToReplace = dataButtonToReplace ? domCache.popup.getElementsByClassName(dataButtonToReplace) : [];
     if (buttonToReplace.length) {
-      show(buttonToReplace[0], 'inline-block');
+      show(/** @type {HTMLElement} */buttonToReplace[0], 'inline-block');
     } else if (allButtonsAreHidden()) {
       hide(domCache.actions);
     }
@@ -2974,6 +3059,7 @@
    * Gets the input DOM node, this method works with input parameter.
    *
    * @returns {HTMLInputElement | null}
+   * @this {SweetAlert}
    */
   function getInput() {
     const innerParams = privateProps.innerParams.get(this);
@@ -3022,6 +3108,11 @@
    */
   function enableButtons() {
     setButtonsDisabled(this, ['confirmButton', 'denyButton', 'cancelButton'], false);
+    const focusedElement = privateProps.focusedElement.get(this);
+    if (focusedElement instanceof HTMLElement && document.activeElement === document.body) {
+      focusedElement.focus();
+    }
+    privateProps.focusedElement.delete(this);
   }
 
   /**
@@ -3029,6 +3120,7 @@
    * @this {SweetAlert}
    */
   function disableButtons() {
+    privateProps.focusedElement.set(this, document.activeElement);
     setButtonsDisabled(this, ['confirmButton', 'denyButton', 'cancelButton'], true);
   }
 
@@ -3259,7 +3351,7 @@
     if (params.backdrop === false && params.allowOutsideClick) {
       warn('"allowOutsideClick" parameter requires `backdrop` parameter to be set to `true`');
     }
-    if (params.theme && !['light', 'dark', 'auto', 'minimal', 'borderless', 'embed-iframe', 'bulma', 'bulma-light', 'bulma-dark'].includes(params.theme)) {
+    if (params.theme && !['light', 'dark', 'auto', 'minimal', 'borderless', 'bootstrap-4', 'bootstrap-4-light', 'bootstrap-4-dark', 'bootstrap-5', 'bootstrap-5-light', 'bootstrap-5-dark', 'material-ui', 'material-ui-light', 'material-ui-dark', 'embed-iframe', 'bulma', 'bulma-light', 'bulma-dark'].includes(params.theme)) {
       warn(`Invalid theme "${params.theme}"`);
     }
     for (const param in params) {
@@ -3274,6 +3366,7 @@
   /**
    * Updates popup parameters.
    *
+   * @this {any}
    * @param {SweetAlertOptions} params
    */
   function update(params) {
@@ -3287,7 +3380,9 @@
     const validUpdatableParams = filterValidParams(params);
     const updatedParams = Object.assign({}, innerParams, validUpdatableParams);
     showWarningsForParams(updatedParams);
-    container.dataset['swal2Theme'] = updatedParams.theme;
+    if (container) {
+      container.dataset['swal2Theme'] = updatedParams.theme;
+    }
     render(this, updatedParams);
     privateProps.innerParams.set(this, updatedParams);
     Object.defineProperties(this, {
@@ -3304,10 +3399,12 @@
    * @returns {SweetAlertOptions}
    */
   const filterValidParams = params => {
+    /** @type {Record<string, any>} */
     const validUpdatableParams = {};
     Object.keys(params).forEach(param => {
       if (isUpdatableParameter(param)) {
-        validUpdatableParams[param] = params[param];
+        const typedParams = /** @type {Record<string, any>} */params;
+        validUpdatableParams[param] = typedParams[param];
       } else {
         warn(`Invalid parameter to update: ${param}`);
       }
@@ -3317,8 +3414,10 @@
 
   /**
    * Dispose the current SweetAlert2 instance
+   * @this {SweetAlert}
    */
   function _destroy() {
+    var _globalState$eventEmi;
     const domCache = privateProps.domCache.get(this);
     const innerParams = privateProps.innerParams.get(this);
     if (!innerParams) {
@@ -3334,7 +3433,7 @@
     if (typeof innerParams.didDestroy === 'function') {
       innerParams.didDestroy();
     }
-    globalState.eventEmitter.emit('didDestroy');
+    (_globalState$eventEmi = globalState.eventEmitter) === null || _globalState$eventEmi === void 0 || _globalState$eventEmi.emit('didDestroy');
     disposeSwal(this);
   }
 
@@ -3344,6 +3443,7 @@
   const disposeSwal = instance => {
     disposeWeakMaps(instance);
     // Unset this.params so GC will dispose it (#1569)
+    // @ts-ignore
     delete instance.params;
     // Unset globalState props so GC will dispose globalState (#1569)
     delete globalState.keydownHandler;
@@ -3363,29 +3463,47 @@
     } else {
       unsetWeakMaps(privateMethods, instance);
       unsetWeakMaps(privateProps, instance);
+
+      // @ts-ignore
       delete instance.isAwaitingPromise;
       // Unset instance methods
+      // @ts-ignore
       delete instance.disableButtons;
+      // @ts-ignore
       delete instance.enableButtons;
+      // @ts-ignore
       delete instance.getInput;
+      // @ts-ignore
       delete instance.disableInput;
+      // @ts-ignore
       delete instance.enableInput;
+      // @ts-ignore
       delete instance.hideLoading;
+      // @ts-ignore
       delete instance.disableLoading;
+      // @ts-ignore
       delete instance.showValidationMessage;
+      // @ts-ignore
       delete instance.resetValidationMessage;
+      // @ts-ignore
       delete instance.close;
+      // @ts-ignore
       delete instance.closePopup;
+      // @ts-ignore
       delete instance.closeModal;
+      // @ts-ignore
       delete instance.closeToast;
+      // @ts-ignore
       delete instance.rejectPromise;
+      // @ts-ignore
       delete instance.update;
+      // @ts-ignore
       delete instance._destroy;
     }
   };
 
   /**
-   * @param {object} obj
+   * @param {Record<string, WeakMap<any, any>>} obj
    * @param {SweetAlert} instance
    */
   const unsetWeakMaps = (obj, instance) => {
@@ -3418,7 +3536,7 @@
   /**
    * @param {SweetAlertOptions} innerParams
    * @param {DomCache} domCache
-   * @param {Function} dismissWith
+   * @param {(dismiss: DismissReason) => void} dismissWith
    */
   const handlePopupClick = (innerParams, domCache, dismissWith) => {
     if (innerParams.toast) {
@@ -3437,7 +3555,7 @@
   /**
    * @param {SweetAlertOptions} innerParams
    * @param {DomCache} domCache
-   * @param {Function} dismissWith
+   * @param {(dismiss: DismissReason) => void} dismissWith
    */
   const handleToastClick = (innerParams, domCache, dismissWith) => {
     // Closing toast by internal click
@@ -3454,7 +3572,7 @@
    * @returns {boolean}
    */
   const isAnyButtonShown = innerParams => {
-    return !!(innerParams.showConfirmButton || innerParams.showDenyButton || innerParams.showCancelButton || innerParams.showCloseButton);
+    return Boolean(innerParams.showConfirmButton || innerParams.showDenyButton || innerParams.showCancelButton || innerParams.showCloseButton);
   };
   let ignoreOutsideClick = false;
 
@@ -3496,7 +3614,7 @@
   /**
    * @param {SweetAlertOptions} innerParams
    * @param {DomCache} domCache
-   * @param {Function} dismissWith
+   * @param {(dismiss: DismissReason) => void} dismissWith
    */
   const handleModalClick = (innerParams, domCache, dismissWith) => {
     domCache.container.onclick = e => {
@@ -3510,9 +3628,24 @@
     };
   };
 
-  const isJqueryElement = elem => typeof elem === 'object' && elem.jquery;
+  /**
+   * @param {unknown} elem
+   * @returns {boolean}
+   */
+  const isJqueryElement = elem => typeof elem === 'object' && elem !== null && 'jquery' in elem;
+
+  /**
+   * @param {unknown} elem
+   * @returns {boolean}
+   */
   const isElement = elem => elem instanceof Element || isJqueryElement(elem);
+
+  /**
+   * @param {ReadonlyArray<unknown>} args
+   * @returns {SweetAlertOptions}
+   */
   const argsToParams = args => {
+    /** @type {Record<string, unknown>} */
     const params = {};
     if (typeof args[0] === 'object' && !isElement(args[0])) {
       Object.assign(params, args[0]);
@@ -3526,12 +3659,13 @@
         }
       });
     }
-    return params;
+    return /** @type {SweetAlertOptions} */params;
   };
 
   /**
    * Main method to create a new SweetAlert2 popup
    *
+   * @this {new (...args: any[]) => any}
    * @param  {...SweetAlertOptions} args
    * @returns {Promise<SweetAlertResult>}
    */
@@ -3557,9 +3691,15 @@
    *
    * @param {SweetAlertOptions} mixinParams
    * @returns {SweetAlert}
+   * @this {typeof import('../SweetAlert.js').SweetAlert}
    */
   function mixin(mixinParams) {
+    // @ts-ignore: 'this' refers to the SweetAlert constructor
     class MixinSwal extends this {
+      /**
+       * @param {any} params
+       * @param {any} priorityMixinParams
+       */
       _main(params, priorityMixinParams) {
         return super._main(params, Object.assign({}, mixinParams, priorityMixinParams));
       }
@@ -3639,13 +3779,15 @@
    * @returns {boolean}
    */
   const isTimerRunning = () => {
-    return !!(globalState.timeout && globalState.timeout.isRunning());
+    return Boolean(globalState.timeout && globalState.timeout.isRunning());
   };
 
   let bodyClickListenerAdded = false;
+  /** @type {Record<string, any>} */
   const clickHandlers = {};
 
   /**
+   * @this {any}
    * @param {string} attr
    */
   function bindClickHandler(attr = 'data-swal-template') {
@@ -3655,10 +3797,14 @@
       bodyClickListenerAdded = true;
     }
   }
+
+  /**
+   * @param {MouseEvent} event
+   */
   const bodyClickListener = event => {
-    for (let el = event.target; el && el !== document; el = el.parentNode) {
+    for (let el = /** @type {any} */event.target; el && el !== document; el = el.parentNode) {
       for (const attr in clickHandlers) {
-        const template = el.getAttribute(attr);
+        const template = el.getAttribute && el.getAttribute(attr);
         if (template) {
           clickHandlers[attr].fire({
             template
@@ -3707,10 +3853,11 @@
      */
     once(eventName, eventHandler) {
       /**
-       * @param {Array} args
+       * @param {...any} args
        */
       const onceFn = (...args) => {
         this.removeListener(eventName, onceFn);
+        // @ts-ignore
         eventHandler.apply(this, args);
       };
       this.on(eventName, onceFn);
@@ -3718,7 +3865,7 @@
 
     /**
      * @param {string} eventName
-     * @param {Array} args
+     * @param {...any} args
      */
     emit(eventName, ...args) {
       this._getHandlersByEventName(eventName).forEach(
@@ -3727,6 +3874,7 @@
        */
       eventHandler => {
         try {
+          // @ts-ignore
           eventHandler.apply(this, args);
         } catch (error) {
           console.error(error);
@@ -3767,7 +3915,9 @@
    * @param {EventHandler} eventHandler
    */
   const on = (eventName, eventHandler) => {
-    globalState.eventEmitter.on(eventName, eventHandler);
+    if (globalState.eventEmitter) {
+      globalState.eventEmitter.on(eventName, eventHandler);
+    }
   };
 
   /**
@@ -3775,7 +3925,9 @@
    * @param {EventHandler} eventHandler
    */
   const once = (eventName, eventHandler) => {
-    globalState.eventEmitter.once(eventName, eventHandler);
+    if (globalState.eventEmitter) {
+      globalState.eventEmitter.once(eventName, eventHandler);
+    }
   };
 
   /**
@@ -3783,6 +3935,10 @@
    * @param {EventHandler} [eventHandler]
    */
   const off = (eventName, eventHandler) => {
+    if (!globalState.eventEmitter) {
+      return;
+    }
+
     // Remove all handlers for all events
     if (!eventName) {
       globalState.eventEmitter.reset();
@@ -3845,7 +4001,7 @@
 
   class Timer {
     /**
-     * @param {Function} callback
+     * @param {() => void} callback
      * @param {number} delay
      */
     constructor(callback, delay) {
@@ -3934,10 +4090,10 @@
 
   /**
    * @param {DocumentFragment} templateContent
-   * @returns {Record<string, any>}
+   * @returns {Record<string, string | boolean | number>}
    */
   const getSwalParams = templateContent => {
-    /** @type {Record<string, any>} */
+    /** @type {Record<string, string | boolean | number>} */
     const result = {};
     /** @type {HTMLElement[]} */
     const swalParams = Array.from(templateContent.querySelectorAll('swal-param'));
@@ -3948,9 +4104,9 @@
       if (!paramName || !value) {
         return;
       }
-      if (typeof defaultParams[paramName] === 'boolean') {
+      if (paramName in defaultParams && typeof defaultParams[(/** @type {keyof typeof defaultParams} */paramName)] === 'boolean') {
         result[paramName] = value !== 'false';
-      } else if (typeof defaultParams[paramName] === 'object') {
+      } else if (paramName in defaultParams && typeof defaultParams[(/** @type {keyof typeof defaultParams} */paramName)] === 'object') {
         result[paramName] = JSON.parse(value);
       } else {
         result[paramName] = value;
@@ -3961,10 +4117,10 @@
 
   /**
    * @param {DocumentFragment} templateContent
-   * @returns {Record<string, any>}
+   * @returns {Record<string, () => void>}
    */
   const getSwalFunctionParams = templateContent => {
-    /** @type {Record<string, any>} */
+    /** @type {Record<string, () => void>} */
     const result = {};
     /** @type {HTMLElement[]} */
     const swalFunctions = Array.from(templateContent.querySelectorAll('swal-function-param'));
@@ -3981,10 +4137,10 @@
 
   /**
    * @param {DocumentFragment} templateContent
-   * @returns {Record<string, any>}
+   * @returns {Record<string, string | boolean>}
    */
   const getSwalButtons = templateContent => {
-    /** @type {Record<string, any>} */
+    /** @type {Record<string, string | boolean>} */
     const result = {};
     /** @type {HTMLElement[]} */
     const swalButtons = Array.from(templateContent.querySelectorAll('swal-button'));
@@ -3996,11 +4152,13 @@
       }
       result[`${type}ButtonText`] = button.innerHTML;
       result[`show${capitalizeFirstLetter(type)}Button`] = true;
-      if (button.hasAttribute('color')) {
-        result[`${type}ButtonColor`] = button.getAttribute('color');
+      const color = button.getAttribute('color');
+      if (color !== null) {
+        result[`${type}ButtonColor`] = color;
       }
-      if (button.hasAttribute('aria-label')) {
-        result[`${type}ButtonAriaLabel`] = button.getAttribute('aria-label');
+      const ariaLabel = button.getAttribute('aria-label');
+      if (ariaLabel !== null) {
+        result[`${type}ButtonAriaLabel`] = ariaLabel;
       }
     });
     return result;
@@ -4016,25 +4174,22 @@
     const image = templateContent.querySelector('swal-image');
     if (image) {
       showWarningsForAttributes(image, ['src', 'width', 'height', 'alt']);
-      if (image.hasAttribute('src')) {
-        result.imageUrl = image.getAttribute('src') || undefined;
-      }
-      if (image.hasAttribute('width')) {
-        result.imageWidth = image.getAttribute('width') || undefined;
-      }
-      if (image.hasAttribute('height')) {
-        result.imageHeight = image.getAttribute('height') || undefined;
-      }
-      if (image.hasAttribute('alt')) {
-        result.imageAlt = image.getAttribute('alt') || undefined;
-      }
+      // getAttribute returns null if attribute is absent; `|| undefined` converts empty string to undefined
+      const src = image.getAttribute('src');
+      if (src !== null) result.imageUrl = src || undefined;
+      const width = image.getAttribute('width');
+      if (width !== null) result.imageWidth = width || undefined;
+      const height = image.getAttribute('height');
+      if (height !== null) result.imageHeight = height || undefined;
+      const alt = image.getAttribute('alt');
+      if (alt !== null) result.imageAlt = alt || undefined;
     }
     return result;
   };
 
   /**
    * @param {DocumentFragment} templateContent
-   * @returns {Record<string, any>}
+   * @returns {object}
    */
   const getSwalIcon = templateContent => {
     const result = {};
@@ -4055,7 +4210,7 @@
 
   /**
    * @param {DocumentFragment} templateContent
-   * @returns {Record<string, any>}
+   * @returns {object}
    */
   const getSwalInput = templateContent => {
     /** @type {Record<string, any>} */
@@ -4095,10 +4250,10 @@
   /**
    * @param {DocumentFragment} templateContent
    * @param {string[]} paramNames
-   * @returns {Record<string, any>}
+   * @returns {Record<string, string>}
    */
   const getSwalStringParams = (templateContent, paramNames) => {
-    /** @type {Record<string, any>} */
+    /** @type {Record<string, string>} */
     const result = {};
     for (const i in paramNames) {
       const paramName = paramNames[i];
@@ -4145,12 +4300,16 @@
    * @param {SweetAlertOptions} params
    */
   const openPopup = params => {
+    var _globalState$eventEmi, _globalState$eventEmi2;
     const container = getContainer();
     const popup = getPopup();
+    if (!container || !popup) {
+      return;
+    }
     if (typeof params.willOpen === 'function') {
       params.willOpen(popup);
     }
-    globalState.eventEmitter.emit('willOpen', popup);
+    (_globalState$eventEmi = globalState.eventEmitter) === null || _globalState$eventEmi === void 0 || _globalState$eventEmi.emit('willOpen', popup);
     const bodyStyles = window.getComputedStyle(document.body);
     const initialBodyOverflow = bodyStyles.overflowY;
     addClasses(container, popup, params);
@@ -4160,31 +4319,43 @@
       setScrollingVisibility(container, popup);
     }, SHOW_CLASS_TIMEOUT);
     if (isModal()) {
-      fixScrollContainer(container, params.scrollbarPadding, initialBodyOverflow);
+      fixScrollContainer(container, params.scrollbarPadding !== undefined ? params.scrollbarPadding : false, initialBodyOverflow);
       setAriaHidden();
+    }
+
+    // https://github.com/sweetalert2/sweetalert2/issues/2923
+    if (isIOS && params.backdrop === false && popup.scrollHeight > container.clientHeight) {
+      // remove pointer-events: none from container, it breaks scrolling tall popups in iOS
+      container.style.pointerEvents = 'auto';
     }
     if (!isToast() && !globalState.previousActiveElement) {
       globalState.previousActiveElement = document.activeElement;
     }
     if (typeof params.didOpen === 'function') {
-      setTimeout(() => params.didOpen(popup));
+      const didOpen = params.didOpen;
+      setTimeout(() => didOpen(popup));
     }
-    globalState.eventEmitter.emit('didOpen', popup);
-    removeClass(container, swalClasses['no-transition']);
+    (_globalState$eventEmi2 = globalState.eventEmitter) === null || _globalState$eventEmi2 === void 0 || _globalState$eventEmi2.emit('didOpen', popup);
   };
 
   /**
-   * @param {AnimationEvent} event
+   * @param {Event} event
    */
   const swalOpenAnimationFinished = event => {
     const popup = getPopup();
-    if (event.target !== popup) {
+    if (!popup || event.target !== popup) {
       return;
     }
     const container = getContainer();
+    if (!container) {
+      return;
+    }
     popup.removeEventListener('animationend', swalOpenAnimationFinished);
     popup.removeEventListener('transitionend', swalOpenAnimationFinished);
     container.style.overflowY = 'auto';
+
+    // no-transition is added in init() in case one swal is opened right after another
+    removeClass(container, swalClasses['no-transition']);
   };
 
   /**
@@ -4224,14 +4395,20 @@
    * @param {SweetAlertOptions} params
    */
   const addClasses = (container, popup, params) => {
-    addClass(container, params.showClass.backdrop);
+    var _params$showClass;
+    if ((_params$showClass = params.showClass) !== null && _params$showClass !== void 0 && _params$showClass.backdrop) {
+      addClass(container, params.showClass.backdrop);
+    }
     if (params.animation) {
       // this workaround with opacity is needed for https://github.com/sweetalert2/sweetalert2/issues/2059
       popup.style.setProperty('opacity', '0', 'important');
       show(popup, 'grid');
       setTimeout(() => {
+        var _params$showClass2;
         // Animate popup right after showing it
-        addClass(popup, params.showClass.popup);
+        if ((_params$showClass2 = params.showClass) !== null && _params$showClass2 !== void 0 && _params$showClass2.popup) {
+          addClass(popup, params.showClass.popup);
+        }
         // and remove the opacity workaround
         popup.style.removeProperty('opacity');
       }, SHOW_CLASS_TIMEOUT); // 10ms in order to fix #2062
@@ -4317,14 +4494,19 @@
   var _promise = /*#__PURE__*/new WeakMap();
   class SweetAlert {
     /**
-     * @param {...any} args
+     * @param {...(SweetAlertOptions | string)} args
      * @this {SweetAlert}
      */
     constructor(...args) {
       /**
        * @type {Promise<SweetAlertResult>}
        */
-      _classPrivateFieldInitSpec(this, _promise, void 0);
+      _classPrivateFieldInitSpec(this, _promise, /** @type {Promise<SweetAlertResult>} */
+      Promise.resolve({
+        isConfirmed: false,
+        isDenied: false,
+        isDismissed: true
+      }));
       // Prevent run in Node env
       if (typeof window === 'undefined') {
         return;
@@ -4341,6 +4523,11 @@
       this.isAwaitingPromise = false;
       _classPrivateFieldSet2(_promise, this, this._main(currentInstance.params));
     }
+
+    /**
+     * @param {any} userParams
+     * @param {any} mixinParams
+     */
     _main(userParams, mixinParams = {}) {
       showWarningsForParams(Object.assign({}, mixinParams, userParams));
       if (globalState.currentInstance) {
@@ -4378,9 +4565,17 @@
     }
 
     // `catch` cannot be the name of a module export, so we define our thenable methods here instead
+    /**
+     * @param {any} onFulfilled
+     */
+    // oxlint-disable-next-line unicorn/no-thenable
     then(onFulfilled) {
       return _classPrivateFieldGet2(_promise, this).then(onFulfilled);
     }
+
+    /**
+     * @param {any} onFinally
+     */
     finally(onFinally) {
       return _classPrivateFieldGet2(_promise, this).finally(onFinally);
     }
@@ -4390,7 +4585,7 @@
    * @param {SweetAlert} instance
    * @param {DomCache} domCache
    * @param {SweetAlertOptions} innerParams
-   * @returns {Promise}
+   * @returns {Promise<SweetAlertResult>}
    */
   const swalPromise = (instance, domCache, innerParams) => {
     return new Promise((resolve, reject) => {
@@ -4401,7 +4596,9 @@
       const dismissWith = dismiss => {
         instance.close({
           isDismissed: true,
-          dismiss
+          dismiss,
+          isConfirmed: false,
+          isDenied: false
         });
       };
       privateMethods.swalPromiseResolve.set(instance, resolve);
@@ -4456,17 +4653,17 @@
    * @returns {DomCache}
    */
   const populateDomCache = instance => {
-    const domCache = {
-      popup: getPopup(),
-      container: getContainer(),
-      actions: getActions(),
-      confirmButton: getConfirmButton(),
-      denyButton: getDenyButton(),
-      cancelButton: getCancelButton(),
-      loader: getLoader(),
-      closeButton: getCloseButton(),
-      validationMessage: getValidationMessage(),
-      progressSteps: getProgressSteps()
+    const domCache = /** @type {DomCache} */{
+      popup: (/** @type {HTMLElement} */getPopup()),
+      container: (/** @type {HTMLElement} */getContainer()),
+      actions: (/** @type {HTMLElement} */getActions()),
+      confirmButton: (/** @type {HTMLElement} */getConfirmButton()),
+      denyButton: (/** @type {HTMLElement} */getDenyButton()),
+      cancelButton: (/** @type {HTMLElement} */getCancelButton()),
+      loader: (/** @type {HTMLElement} */getLoader()),
+      closeButton: (/** @type {HTMLElement} */getCloseButton()),
+      validationMessage: (/** @type {HTMLElement} */getValidationMessage()),
+      progressSteps: (/** @type {HTMLElement} */getProgressSteps())
     };
     privateProps.domCache.set(instance, domCache);
     return domCache;
@@ -4475,7 +4672,7 @@
   /**
    * @param {GlobalState} globalState
    * @param {SweetAlertOptions} innerParams
-   * @param {Function} dismissWith
+   * @param {(dismiss: DismissReason) => void} dismissWith
    */
   const setupTimer = (globalState, innerParams, dismissWith) => {
     const timerProgressBar = getTimerProgressBar();
@@ -4485,13 +4682,13 @@
         dismissWith('timer');
         delete globalState.timeout;
       }, innerParams.timer);
-      if (innerParams.timerProgressBar) {
+      if (innerParams.timerProgressBar && timerProgressBar) {
         show(timerProgressBar);
         applyCustomClass(timerProgressBar, innerParams, 'timerProgressBar');
         setTimeout(() => {
           if (globalState.timeout && globalState.timeout.running) {
             // timer can be already stopped or unset at this point
-            animateTimerProgressBar(innerParams.timer);
+            animateTimerProgressBar(/** @type {number} */innerParams.timer);
           }
         });
       }
@@ -4517,8 +4714,8 @@
     }
     // TODO: this is dumb, remove `allowEnterKey` param in the next major version
     if (!callIfFunction(innerParams.allowEnterKey)) {
-      warnAboutDeprecation('allowEnterKey');
-      blurActiveElement();
+      warnAboutDeprecation('allowEnterKey', 'preConfirm: () => false');
+      domCache.popup.focus();
       return;
     }
     if (focusAutofocus(domCache)) {
@@ -4565,11 +4762,6 @@
     }
     return false;
   };
-  const blurActiveElement = () => {
-    if (document.activeElement instanceof HTMLElement && typeof document.activeElement.blur === 'function') {
-      document.activeElement.blur();
-    }
-  };
 
   // Assign instance methods from src/instanceMethods/*.js to prototype
   SweetAlert.prototype.disableButtons = disableButtons;
@@ -4595,18 +4787,21 @@
   // Proxy to instance methods to constructor, for now, for backwards compatibility
   Object.keys(instanceMethods).forEach(key => {
     /**
-     * @param {...any} args
-     * @returns {any | undefined}
+     * @param {...(SweetAlertOptions | string | undefined)} args
+     * @returns {SweetAlertResult | Promise<SweetAlertResult> | undefined}
      */
+    // @ts-ignore: Dynamic property assignment for backwards compatibility
     SweetAlert[key] = function (...args) {
+      // @ts-ignore
       if (currentInstance && currentInstance[key]) {
+        // @ts-ignore
         return currentInstance[key](...args);
       }
-      return null;
+      return undefined;
     };
   });
   SweetAlert.DismissReason = DismissReason;
-  SweetAlert.version = '11.23.0';
+  SweetAlert.version = '11.26.24';
 
   const Swal = SweetAlert;
   // @ts-ignore

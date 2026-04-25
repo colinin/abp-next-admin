@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -22,24 +21,23 @@ public abstract class NotificationPublishProvider : INotificationPublishProvider
 
     public ICancellationTokenProvider CancellationTokenProvider => ServiceProvider.LazyGetService<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
 
-    public async Task PublishAsync(
-        NotificationInfo notification,
-        IEnumerable<UserIdentifier> identifiers)
+    public async virtual Task<bool> CanPublishAsync(NotificationInfo notification)
     {
-        if (await CanPublishAsync(notification))
-        {
-            await PublishAsync(
-                notification, 
-                identifiers, 
-                GetCancellationToken());
-        }
+        return await CanPublishAsync(notification, GetCancellationToken());
     }
+
+    public async Task PublishAsync(NotificationPublishContext context)
+    {
+        await PublishAsync(context, GetCancellationToken());
+    }
+
     protected virtual Task<bool> CanPublishAsync(
-        NotificationInfo notification, 
+        NotificationInfo notification,
         CancellationToken cancellationToken = default)
     {
         return Task.FromResult(true);
     }
+
     protected virtual CancellationToken GetCancellationToken(CancellationToken cancellationToken = default)
     {
         return CancellationTokenProvider.FallbackToProvider(cancellationToken);
@@ -47,9 +45,8 @@ public abstract class NotificationPublishProvider : INotificationPublishProvider
     /// <summary>
     /// 重写实现通知发布
     /// </summary>
-    /// <param name="notification"></param>
-    /// <param name="identifiers"></param>
+    /// <param name="context">通知发送上下文</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    protected abstract Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default);
+    protected abstract Task PublishAsync(NotificationPublishContext context, CancellationToken cancellationToken = default);
 }

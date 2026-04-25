@@ -16,71 +16,60 @@ public class TextTemplateDynamicInitializer : ITransientDependency
     public ILogger<TextTemplateDynamicInitializer> Logger { get; set; }
 
     protected IServiceProvider ServiceProvider { get; }
-    protected IOptions<AbpTextTemplatingCachingOptions> Options { get; }
-    protected IHostApplicationLifetime ApplicationLifetime { get; }
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
-    protected ITemplateDefinitionStore TemplateDefinitionStore { get; }
-    protected IStaticTemplateSaver StaticTemplateSaver { get; }
 
-    public TextTemplateDynamicInitializer(
-        IServiceProvider serviceProvider,
-        IOptions<AbpTextTemplatingCachingOptions> options,
-        ICancellationTokenProvider cancellationTokenProvider,
-        ITemplateDefinitionStore templateDefinitionStore,
-        IStaticTemplateSaver staticTemplateSaver)
+    public TextTemplateDynamicInitializer(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
-        Options = options;
-        ApplicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
-        CancellationTokenProvider = cancellationTokenProvider;
-        TemplateDefinitionStore = templateDefinitionStore;
-        StaticTemplateSaver = staticTemplateSaver;
 
         Logger = NullLogger<TextTemplateDynamicInitializer>.Instance;
     }
 
     public virtual Task InitializeAsync(bool runInBackground, CancellationToken cancellationToken = default)
     {
-        if (!Options.Value.SaveStaticTemplateDefinitionToDatabase && !Options.Value.IsDynamicTemplateDefinitionStoreEnabled)
+        var options = ServiceProvider.GetRequiredService<IOptions<AbpTextTemplatingCachingOptions>>().Value;
+
+        if (!options.SaveStaticTemplateDefinitionToDatabase && !options.IsDynamicTemplateDefinitionStoreEnabled)
         {
             return Task.CompletedTask;
         }
 
         if (runInBackground)
         {
+            var applicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
             Task.Run(async () =>
             {
-                if (cancellationToken == default && ApplicationLifetime?.ApplicationStopping != null)
+                if (cancellationToken == default && applicationLifetime?.ApplicationStopping != null)
                 {
-                    cancellationToken = ApplicationLifetime.ApplicationStopping;
+                    cancellationToken = applicationLifetime.ApplicationStopping;
                 }
-                await ExecuteInitializationAsync(cancellationToken);
+                await ExecuteInitializationAsync(options, cancellationToken);
             }, cancellationToken);
             return Task.CompletedTask;
         }
 
-        return ExecuteInitializationAsync(cancellationToken);
+        return ExecuteInitializationAsync(options, cancellationToken);
     }
 
-    protected virtual async Task ExecuteInitializationAsync(CancellationToken cancellationToken)
+    protected virtual async Task ExecuteInitializationAsync(AbpTextTemplatingCachingOptions options, CancellationToken cancellationToken)
     {
         try
         {
-            using (CancellationTokenProvider.Use(cancellationToken))
+            var cancellationTokenProvider = ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
+            using (cancellationTokenProvider.Use(cancellationToken))
             {
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
 
-                await SaveStaticTextTemplatesToDatabaseAsync(cancellationToken);
+                await SaveStaticTextTemplatesToDatabaseAsync(options, cancellationToken);
 
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
 
-                await PreCacheDynamicTextTemplatesAsync(cancellationToken);
+                await PreCacheDynamicTextTemplatesAsync(options, cancellationToken);
             }
         }
         catch
@@ -89,12 +78,14 @@ public class TextTemplateDynamicInitializer : ITransientDependency
         }
     }
 
-    protected virtual async Task SaveStaticTextTemplatesToDatabaseAsync(CancellationToken cancellationToken)
+    protected virtual async Task SaveStaticTextTemplatesToDatabaseAsync(AbpTextTemplatingCachingOptions options, CancellationToken cancellationToken)
     {
-        if (!Options.Value.SaveStaticTemplateDefinitionToDatabase)
+        if (!options.SaveStaticTemplateDefinitionToDatabase)
         {
             return;
         }
+
+        var staticTemplateSaver = ServiceProvider.GetRequiredService<IStaticTemplateSaver>();
 
         await Policy
             .Handle<Exception>(e => e is not OperationCanceledException)
@@ -112,8 +103,8 @@ public class TextTemplateDynamicInitializer : ITransientDependency
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    await StaticTemplateSaver.SaveDefinitionTemplateAsync();
-                    await StaticTemplateSaver.SaveTemplateContentAsync();
+                    await staticTemplateSaver.SaveDefinitionTemplateAsync();
+                    await staticTemplateSaver.SaveTemplateContentAsync();
                 }
                 catch (Exception ex)
                 {
@@ -124,19 +115,21 @@ public class TextTemplateDynamicInitializer : ITransientDependency
             }, cancellationToken);
     }
 
-    protected virtual async Task PreCacheDynamicTextTemplatesAsync(CancellationToken cancellationToken)
+    protected virtual async Task PreCacheDynamicTextTemplatesAsync(AbpTextTemplatingCachingOptions options, CancellationToken cancellationToken)
     {
-        if (!Options.Value.IsDynamicTemplateDefinitionStoreEnabled)
+        if (!options.IsDynamicTemplateDefinitionStoreEnabled)
         {
             return;
         }
+
+        var templateDefinitionStore = ServiceProvider.GetRequiredService<ITemplateDefinitionStore>();
 
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             // Pre-cache tempte definitions, so first request doesn't wait
-            await TemplateDefinitionStore.GetAllAsync();
+            await templateDefinitionStore.GetAllAsync();
         }
         catch (Exception ex)
         {

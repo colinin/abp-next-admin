@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Notifications.Localization;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users;
 using Volo.Abp.VirtualFileSystem;
@@ -23,6 +24,11 @@ public class AbpNotificationsDomainSharedModule : AbpModule
             options.Resources
                 .Get<NotificationsResource>()
                 .AddVirtualJson("/LINGYUN/Abp/Notifications/Localization/DomainShared");
+        });
+
+        Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace(NotificationsErrorCodes.Namespace, typeof(NotificationsResource));
         });
     }
 }

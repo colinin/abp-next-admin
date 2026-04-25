@@ -3,11 +3,11 @@ import type { Component } from 'vue';
 
 import type { AnyPromiseFunction } from '@vben/types';
 
-import { computed, ref, unref, useAttrs, watch } from 'vue';
+import { computed, nextTick, ref, unref, useAttrs, watch } from 'vue';
 
 import { LoaderCircle } from '@vben/icons';
 
-import { get, isEqual, isFunction } from '@vben-core/shared/utils';
+import { cloneDeep, get, isEqual, isFunction } from '@vben-core/shared/utils';
 
 import { objectOmit } from '@vueuse/core';
 
@@ -36,6 +36,8 @@ interface Props {
   childrenField?: string;
   /** value字段名 */
   valueField?: string;
+  /** disabled字段名 */
+  disabledField?: string;
   /** 组件接收options数据的属性名 */
   optionsPropName?: string;
   /** 是否立即调用api */
@@ -75,6 +77,7 @@ defineOptions({ name: 'ApiComponent', inheritAttrs: false });
 const props = withDefaults(defineProps<Props>(), {
   labelField: 'label',
   valueField: 'value',
+  disabledField: 'disabled',
   childrenField: '',
   optionsPropName: 'options',
   resultField: '',
@@ -104,19 +107,29 @@ const refOptions = ref<OptionsItem[]>([]);
 const loading = ref(false);
 // 首次是否加载过了
 const isFirstLoaded = ref(false);
+// 标记是否有待处理的请求
+const hasPendingRequest = ref(false);
 
 const getOptions = computed(() => {
-  const { labelField, valueField, childrenField, numberToString } = props;
+  const {
+    labelField,
+    valueField,
+    disabledField,
+    childrenField,
+    numberToString,
+  } = props;
 
   const refOptionsData = unref(refOptions);
 
   function transformData(data: OptionsItem[]): OptionsItem[] {
     return data.map((item) => {
       const value = get(item, valueField);
+      const disabled = get(item, disabledField);
       return {
-        ...objectOmit(item, [labelField, valueField, childrenField]),
+        ...objectOmit(item, [labelField, valueField, disabled, childrenField]),
         label: get(item, labelField),
         value: numberToString ? `${value}` : value,
+        disabled: get(item, disabledField),
         ...(childrenField && item[childrenField]
           ? { children: transformData(item[childrenField]) }
           : {}),
@@ -146,18 +159,26 @@ const bindProps = computed(() => {
 });
 
 async function fetchApi() {
-  let { api, beforeFetch, afterFetch, params, resultField } = props;
+  const { api, beforeFetch, afterFetch, resultField } = props;
 
-  if (!api || !isFunction(api) || loading.value) {
+  if (!api || !isFunction(api)) {
     return;
   }
+
+  // 如果正在加载，标记有待处理的请求并返回
+  if (loading.value) {
+    hasPendingRequest.value = true;
+    return;
+  }
+
   refOptions.value = [];
   try {
     loading.value = true;
+    let finalParams = unref(mergedParams);
     if (beforeFetch && isFunction(beforeFetch)) {
-      params = (await beforeFetch(params)) || params;
+      finalParams = (await beforeFetch(cloneDeep(finalParams))) || finalParams;
     }
-    let res = await api(params);
+    let res = await api(finalParams);
     if (afterFetch && isFunction(afterFetch)) {
       res = (await afterFetch(res)) || res;
     }
@@ -177,6 +198,13 @@ async function fetchApi() {
     isFirstLoaded.value = false;
   } finally {
     loading.value = false;
+    // 如果有待处理的请求，立即触发新的请求
+    if (hasPendingRequest.value) {
+      hasPendingRequest.value = false;
+      // 使用 nextTick 确保状态更新完成后再触发新请求
+      await nextTick();
+      fetchApi();
+    }
   }
 }
 
@@ -190,7 +218,7 @@ async function handleFetchForVisible(visible: boolean) {
   }
 }
 
-const params = computed(() => {
+const mergedParams = computed(() => {
   return {
     ...props.params,
     ...unref(innerParams),
@@ -198,7 +226,7 @@ const params = computed(() => {
 });
 
 watch(
-  params,
+  mergedParams,
   (value, oldValue) => {
     if (isEqual(value, oldValue)) {
       return;

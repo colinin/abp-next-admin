@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -62,7 +63,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     {
         var user = await UserManager.GetByIdAsync(id);
 
-        return new ListResultDto<IdentityClaimDto>(ObjectMapper.Map<ICollection<IdentityUserClaim>, List<IdentityClaimDto>>(user.Claims));
+        return new ListResultDto<IdentityClaimDto>(ObjectMapper.Map<List<IdentityUserClaim>, List<IdentityClaimDto>>(user.Claims.ToList()));
     }
 
     [Authorize(IdentityPermissions.Users.ManageClaims)]

@@ -23,4 +23,6 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
 
 export const requestClient = createRequestClient(apiURL, {
   responseReturn: 'data',
+  withCredentials: false,
+  withXSRFToken: false,
 });

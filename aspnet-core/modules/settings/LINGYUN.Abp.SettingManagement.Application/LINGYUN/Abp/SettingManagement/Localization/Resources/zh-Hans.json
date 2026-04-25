@@ -29,11 +29,11 @@
     "Definition:AddNew": "添加新设置",
     "DeleteOrRestore": "删除/还原",
     "ItemWillBeDeleteOrRestoreMessage": "如果已改变设置, 将还原到默认设置项。否则会删除自定义设置.",
-    "Providers:Default": "默认",
-    "Providers:Configuration": "配置",
-    "Providers:Global": "全局",
-    "Providers:Tenant": "租户",
-    "Providers:User": "用户",
+    "SettingProviders:D": "默认",
+    "SettingProviders:C": "配置",
+    "SettingProviders:G": "全局",
+    "SettingProviders:T": "租户",
+    "SettingProviders:U": "用户",
     "BasicInfo": "基本",
     "Properties": "属性"
   }

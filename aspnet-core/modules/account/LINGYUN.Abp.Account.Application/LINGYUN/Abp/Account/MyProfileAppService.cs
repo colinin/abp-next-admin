@@ -79,17 +79,27 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
             userId, input.Device, input.ClientId);
 
         return new PagedResultDto<IdentitySessionDto>(totalCount,
-            identitySessions.Select(session => new IdentitySessionDto
+            identitySessions.Select(session =>
             {
-                Id = session.Id,
-                SessionId = session.SessionId,
-                SignedIn = session.SignedIn,
-                ClientId = session.ClientId,
-                Device = session.Device,
-                UserId = session.UserId,
-                DeviceInfo = session.DeviceInfo,
-                IpAddresses = session.IpAddresses,
-                LastAccessed = session.LastAccessed,
+                var sessionDto = new IdentitySessionDto
+                {
+                    Id = session.Id,
+                    SessionId = session.SessionId,
+                    SignedIn = session.SignedIn,
+                    ClientId = session.ClientId,
+                    Device = session.Device,
+                    UserId = session.UserId,
+                    DeviceInfo = session.DeviceInfo,
+                    IpAddresses = session.IpAddresses,
+                    LastAccessed = session.LastAccessed,
+                };
+
+                foreach (var prop in session.ExtraProperties)
+                {
+                    sessionDto.SetProperty(prop.Key, prop.Value);
+                }
+
+                return sessionDto;
             }).ToList());
     }
 
@@ -145,7 +155,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         // 发送验证码
         await SmsSecurityCodeSender.SendAsync(input.NewPhoneNumber, token, template);
 
-        securityTokenCacheItem = new SecurityTokenCacheItem(token, user.ConcurrencyStamp);
+        securityTokenCacheItem = new SecurityTokenCacheItem(token, user.Id, user.ConcurrencyStamp);
         await SecurityTokenCache
             .SetAsync(securityTokenCacheKey, securityTokenCacheItem,
                 new DistributedCacheEntryOptions

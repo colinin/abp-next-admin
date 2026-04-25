@@ -139,7 +139,7 @@ const gridOptions: VxeGridProps<TextTemplateDefinitionDto> = {
       query: async ({ page, sort }) => {
         let items = sortby(textTemplates.value, sort.field);
         if (sort.order === 'desc') {
-          items = items.reverse();
+          items = items.toReversed();
         }
         const result = {
           totalCount: textTemplates.value.length,

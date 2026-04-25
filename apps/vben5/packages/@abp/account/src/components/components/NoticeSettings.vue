@@ -81,7 +81,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Card :bordered="false" :title="$t('abp.account.settings.noticeSettings')">
+  <Card :title="$t('abp.account.settings.noticeSettings')">
     <Collapse>
       <template v-for="group in notificationGroups" :key="group.name">
         <CollapsePanel :header="group.displayName">

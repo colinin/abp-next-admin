@@ -37,6 +37,12 @@ export const useAuthStore = defineStore('auth', () => {
       if (user?.refresh_token) {
         accessStore.setRefreshToken(user.refresh_token);
       }
+      try {
+        const userInfo = await fetchUserInfo();
+        userStore.setUserInfo(userInfo);
+      } catch (error) {
+        console.warn('refresh user iinfo error', error);
+      }
       return newToken;
     }
   }
@@ -170,7 +176,6 @@ export const useAuthStore = defineStore('auth', () => {
       userInfoRes = user.profile;
     }
     const abpConfig = await getConfigApi();
-    const picture = await getPictureApi();
     userInfo = {
       userId: userInfoRes.sub ?? abpConfig.currentUser.id,
       username: userInfoRes.uniqueName ?? abpConfig.currentUser.userName,
@@ -178,7 +183,7 @@ export const useAuthStore = defineStore('auth', () => {
         userInfoRes.name ??
         abpConfig.currentUser.name ??
         abpConfig.currentUser.userName,
-      avatar: URL.createObjectURL(picture) ?? '',
+      avatar: '',
       desc: userInfoRes.uniqueName ?? userInfoRes.name,
       email: userInfoRes.email ?? userInfoRes.email,
       emailVerified:
@@ -191,6 +196,14 @@ export const useAuthStore = defineStore('auth', () => {
       roles: abpConfig.currentUser.roles,
       homePath: '/',
     };
+    try {
+      const picture = await getPictureApi();
+      if (picture) {
+        userInfo.avatar = URL.createObjectURL(picture);
+      }
+    } catch (error) {
+      console.warn('Error in get user avatar:', error);
+    }
     userStore.setUserInfo(userInfo);
     abpStore.setApplication(abpConfig);
     accessStore.setAccessCodes(Object.keys(abpConfig.auth.grantedPolicies));

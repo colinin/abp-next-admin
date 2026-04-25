@@ -11,7 +11,7 @@ import {
   useAbpStore,
   useLocalizationSerializer,
 } from '@abp/core';
-import { Form, Input, Select } from 'ant-design-vue';
+import { Form, Input, Select, Textarea } from 'ant-design-vue';
 
 const props = defineProps<{
   allowClear?: boolean;
@@ -125,7 +125,7 @@ function triggerDisplayNameChange(value?: string) {
 </script>
 
 <template>
-  <div class="w-full">
+  <div class="localizable-input w-full">
     <ItemReset>
       <InputGroup>
         <div class="flex flex-row gap-4">
@@ -143,7 +143,7 @@ function triggerDisplayNameChange(value?: string) {
             />
           </div>
           <div class="basis-3/5">
-            <Input
+            <Textarea
               v-if="getIsFixed"
               :allow-clear="props.allowClear"
               :disabled="props.disabled"
@@ -151,7 +151,7 @@ function triggerDisplayNameChange(value?: string) {
                 $t('component.localizable_input.resources.fiexed.placeholder')
               "
               :value="state.displayName"
-              autocomplete="off"
+              :auto-size="{ maxRows: 3 }"
               class="w-full"
               @change="
                 (e: any) => handleDisplayNameChange(e.target.value?.toString())
@@ -179,3 +179,12 @@ function triggerDisplayNameChange(value?: string) {
     </ItemReset>
   </div>
 </template>
+
+<style scoped lang="scss">
+.localizable-input {
+  :deep(.ant-select-selector .ant-select-selection-item) {
+    word-break: break-all;
+    white-space: normal;
+  }
+}
+</style>

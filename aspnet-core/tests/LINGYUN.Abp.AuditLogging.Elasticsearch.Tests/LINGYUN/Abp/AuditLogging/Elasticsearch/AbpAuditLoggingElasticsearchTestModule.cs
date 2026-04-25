@@ -29,10 +29,10 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch
             var options = context.ServiceProvider.GetRequiredService<IOptions<AbpAuditLoggingElasticsearchOptions>>().Value;
             var clientFactory = context.ServiceProvider.GetRequiredService<IElasticsearchClientFactory>();
             var client = clientFactory.Create();
-            var indicesResponse = client.Cat.Indices(i => i.Index($"{options.IndexPrefix}-security-log"));
-            foreach (var index in indicesResponse.Records)
+            var indicesResponse = client.Indices.Get($"{options.IndexPrefix}-security-log");
+            foreach (var index in indicesResponse.Indices)
             {
-                client.Indices.Delete(index.Index);
+                client.Indices.Delete(index.Key);
             }
         }
     }

@@ -96,8 +96,10 @@ const actionsGridOptions: VxeGridProps<Action> = {
     },
   ],
   expandConfig: {
+    accordion: true,
     padding: true,
     trigger: 'row',
+    height: 300,
   },
   exportConfig: {},
   keepSource: true,

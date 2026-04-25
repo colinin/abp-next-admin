@@ -6,12 +6,13 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { toast } from "sonner";
 import type { UserInfo, UserToken } from "#/entity";
 import { StorageEnum } from "#/enum";
-import { getUserInfoApi, loginApi } from "@/api/account";
-import type { PasswordTokenRequestModel } from "#/account";
+import { externalLoginApi, getUserInfoApi, loginApi } from "@/api/account";
+import type { PasswordTokenRequestModel, SignInRedirectResult, TokenResult } from "#/account";
 import { getConfigApi } from "@/api/abp-core";
 import useAbpStore from "./abpCoreStore";
 import { useEventBus } from "@/utils/abp/useEventBus";
 import { Events } from "@/constants/abp-core";
+import { getPictureApi } from "@/api/account/profile";
 
 const { VITE_APP_HOMEPAGE: HOMEPAGE } = import.meta.env;
 
@@ -50,37 +51,108 @@ const useUserStore = create<UserStore>()(
 					publish(Events.UserLogout);
 					set({ userInfo: {}, userToken: {} });
 				},
+				// fetchAndSetUser: async () => {
+				// 	let userInfo: ({ [key: string]: any } & UserInfo) | null = null;
+
+				// 	try {
+				// 		const userInfoRes = await getUserInfoApi();
+				// 		const abpConfig = await getConfigApi();
+				// 		const picture = await getPictureApi();
+				// 		userInfo = {
+				// 			id: userInfoRes.sub, //额外加的
+				// 			userId: userInfoRes.sub,
+				// 			username: userInfoRes.uniqueName ?? abpConfig.currentUser.userName,
+				// 			realName: userInfoRes.name ?? abpConfig.currentUser.name,
+				// 			// avatar: userInfoRes.avatarUrl ?? userInfoRes.picture,
+				// 			avatar: URL.createObjectURL(picture) ?? "",
+				// 			desc: userInfoRes.uniqueName ?? userInfoRes.name,
+				// 			email: userInfoRes.email ?? userInfoRes.email,
+				// 			emailVerified: userInfoRes.emailVerified ?? abpConfig.currentUser.emailVerified,
+				// 			phoneNumber: userInfoRes.phoneNumber ?? abpConfig.currentUser.phoneNumber,
+				// 			phoneNumberVerified: userInfoRes.phoneNumberVerified ?? abpConfig.currentUser.phoneNumberVerified,
+				// 			token: "",
+				// 			roles: abpConfig.currentUser.roles,
+				// 			homePath: "/",
+				// 		};
+
+				// 		// 更新一系列到 zustand store 中
+				// 		set({ userInfo });
+
+				// 		useAbpStore.getState().actions.setApplication(abpConfig);
+
+				// 		set({ accessCodes: Object.keys(abpConfig.auth.grantedPolicies) });
+				// 	} catch (err) {
+				// 		console.error("Failed to fetch user info:", err);
+				// 	}
+
+				// 	return userInfo;
+				// },
 				fetchAndSetUser: async () => {
 					let userInfo: ({ [key: string]: any } & UserInfo) | null = null;
 
+					// 1. Run all requests in parallel.
+					const [userInfoResult, configResult, pictureResult] = await Promise.allSettled([
+						getUserInfoApi(),
+						getConfigApi(),
+						getPictureApi(),
+					]);
+
+					// 2. Check Critical Dependency
+					if (configResult.status === "rejected") {
+						console.error("Critical: Failed to fetch ABP Config", configResult.reason);
+						return null;
+					}
+					const abpConfig = configResult.value;
+
+					// 3. Handle User Info (Fix applied here)
+					const userInfoRes = userInfoResult.status === "fulfilled" ? userInfoResult.value : ({} as any);
+
+					if (userInfoResult.status === "rejected") {
+						console.warn("Non-Critical: Failed to fetch /connect/userinfo", userInfoResult.reason);
+					}
+
+					// 4. Handle Picture
+					let avatarUrl = "";
+					if (pictureResult.status === "fulfilled" && pictureResult.value) {
+						try {
+							avatarUrl = URL.createObjectURL(pictureResult.value);
+						} catch (e) {
+							console.warn("Failed to create object URL for avatar", e);
+						}
+					}
+
+					// 5. Construct UserInfo
+					const currentUser = abpConfig.currentUser || {};
+
+					userInfo = {
+						// Now these accessors will not throw TS errors because userInfoRes is typed as 'any' in the fallback case
+						id: userInfoRes.sub ?? currentUser.id ?? "",
+						userId: userInfoRes.sub ?? currentUser.id ?? "",
+						username: userInfoRes.uniqueName ?? currentUser.userName ?? "",
+						realName: userInfoRes.name ?? currentUser.name ?? "",
+						desc: userInfoRes.uniqueName ?? userInfoRes.name ?? currentUser.userName ?? "",
+						email: userInfoRes.email ?? currentUser.email ?? "",
+						emailVerified: userInfoRes.emailVerified ?? currentUser.emailVerified ?? false,
+						phoneNumber: userInfoRes.phoneNumber ?? currentUser.phoneNumber ?? "",
+						phoneNumberVerified: userInfoRes.phoneNumberVerified ?? currentUser.phoneNumberVerified ?? false,
+						roles: currentUser.roles ?? [],
+						token: "",
+						homePath: "/",
+						avatar: avatarUrl,
+					};
+
+					// 6. Update Stores
 					try {
-						const userInfoRes = await getUserInfoApi();
-						const abpConfig = await getConfigApi();
-
-						userInfo = {
-							id: userInfoRes.sub, //额外加的
-							userId: userInfoRes.sub,
-							username: userInfoRes.uniqueName ?? abpConfig.currentUser.userName,
-							realName: userInfoRes.name ?? abpConfig.currentUser.name,
-							avatar: userInfoRes.avatarUrl ?? userInfoRes.picture,
-							desc: userInfoRes.uniqueName ?? userInfoRes.name,
-							email: userInfoRes.email ?? userInfoRes.email,
-							emailVerified: userInfoRes.emailVerified ?? abpConfig.currentUser.emailVerified,
-							phoneNumber: userInfoRes.phoneNumber ?? abpConfig.currentUser.phoneNumber,
-							phoneNumberVerified: userInfoRes.phoneNumberVerified ?? abpConfig.currentUser.phoneNumberVerified,
-							token: "",
-							roles: abpConfig.currentUser.roles,
-							homePath: "/",
-						};
-
-						// 更新一系列到 zustand store 中
 						set({ userInfo });
-
 						useAbpStore.getState().actions.setApplication(abpConfig);
 
-						set({ accessCodes: Object.keys(abpConfig.auth.grantedPolicies) });
-					} catch (err) {
-						console.error("Failed to fetch user info:", err);
+						if (abpConfig.auth?.grantedPolicies) {
+							set({ accessCodes: Object.keys(abpConfig.auth.grantedPolicies) });
+						} else {
+							set({ accessCodes: [] });
+						}
+					} catch (storeError) {
+						console.error("Failed to update app state", storeError);
 					}
 
 					return userInfo;
@@ -134,6 +206,44 @@ export const useSignIn = () => {
 	};
 
 	return signIn;
+};
+// 添加类型守卫
+function isTokenResult(res: TokenResult | SignInRedirectResult): res is TokenResult {
+	return "accessToken" in res;
+}
+export const useExternalSignIn = (handleRegister: (res: SignInRedirectResult) => void) => {
+	const navigatge = useNavigate();
+	const { setUserToken, fetchAndSetUser } = useUserActions();
+
+	const externalSignInMutation = useMutation({
+		mutationFn: externalLoginApi,
+		retry: 0,
+	});
+
+	const externalSignIn = async () => {
+		try {
+			const res = await externalSignInMutation.mutateAsync();
+
+			if (isTokenResult(res)) {
+				const { tokenType, accessToken, refreshToken } = res;
+				// 如果成功获取到 accessToken
+				if (accessToken) {
+					setUserToken({ accessToken: `${tokenType} ${accessToken}`, refreshToken });
+
+					await fetchAndSetUser();
+
+					navigatge(HOMEPAGE, { replace: true });
+					toast.success("Sign in success!");
+				}
+			} else {
+				handleRegister(res);
+			}
+		} catch (err) {
+			console.error(err.message);
+		}
+	};
+
+	return externalSignIn;
 };
 
 export default useUserStore;

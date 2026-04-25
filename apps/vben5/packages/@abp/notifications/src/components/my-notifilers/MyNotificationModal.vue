@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 
-import { Tinymce } from '@abp/components/tinymce';
+import { MarkdownViewer } from '@abp/components/vditor';
 
 const notification = ref<Notification>();
 
@@ -21,14 +21,15 @@ const [Modal, modalApi] = useVbenModal({
 
 <template>
   <Modal :title="notification?.title">
-    <Tinymce
-      :value="notification?.message"
-      :plugins="[]"
-      :toolbar="[]"
-      readonly
-      menubar="''"
+    <MarkdownViewer
+      class="color: text-[#333]"
+      :value="notification?.message as string"
     />
   </Modal>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.vditor-reset {
+  color: #333;
+}
+</style>

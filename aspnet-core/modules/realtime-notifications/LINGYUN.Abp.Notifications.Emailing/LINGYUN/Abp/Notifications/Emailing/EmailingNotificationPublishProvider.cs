@@ -21,11 +21,10 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
     protected INotificationDataSerializer NotificationDataSerializer => ServiceProvider.LazyGetRequiredService<INotificationDataSerializer>();
 
     protected async override Task PublishAsync(
-        NotificationInfo notification,
-        IEnumerable<UserIdentifier> identifiers,
+        NotificationPublishContext context,
         CancellationToken cancellationToken = default)
     {
-        var userIds = identifiers.Select(x => x.UserId).ToList();
+        var userIds = context.Users.Select(x => x.UserId).ToList();
         var userList = await UserRepository.GetListByIdListAsync(userIds, cancellationToken: cancellationToken);
 
         var emailAddress = userList
@@ -47,19 +46,21 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
 
         if (emailAddress.IsNullOrWhiteSpace())
         {
-            Logger.LogWarning("The subscriber did not confirm the email address and could not send email notifications!");
+            var reason = "The subscriber did not confirm the email address and could not send email notifications!";
+            Logger.LogWarning(reason);
+            context.Cancel(reason);
             return;
         }
-        var notificationData = await NotificationDataSerializer.ToStandard(notification.Data);
+        var notificationData = await NotificationDataSerializer.ToStandard(context.Notification.Data);
 
         // markdown进行处理
-        if (notification.ContentType == NotificationContentType.Markdown)
+        if (context.Notification.ContentType == NotificationContentType.Markdown)
         {
             notificationData.Message = Markdown.ToHtml(notificationData.Message);
         }
 
         await EmailSender.SendAsync(emailAddress, notificationData.Title, notificationData.Message);
 
-        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", context.Notification.Name, Name);
     }
 }

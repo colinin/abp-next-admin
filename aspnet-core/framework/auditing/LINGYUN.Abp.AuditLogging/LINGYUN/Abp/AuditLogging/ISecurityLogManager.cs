@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.SecurityLog;
 
 namespace LINGYUN.Abp.AuditLogging;
 
@@ -20,10 +19,6 @@ public interface ISecurityLogManager
     Task DeleteManyAsync(
        List<Guid> ids,
        CancellationToken cancellationToken = default);
-
-    Task SaveAsync(
-        SecurityLogInfo securityLogInfo,
-        CancellationToken cancellationToken = default);
 
     Task<List<SecurityLog>> GetListAsync(
         string? sorting = null, 

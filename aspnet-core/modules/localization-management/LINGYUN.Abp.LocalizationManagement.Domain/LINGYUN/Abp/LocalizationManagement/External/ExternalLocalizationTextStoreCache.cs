@@ -8,7 +8,6 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Localization;
 using Volo.Abp.Threading;
-using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.LocalizationManagement.External;
 
@@ -40,7 +39,12 @@ public class ExternalLocalizationTextStoreCache : IExternalLocalizationTextStore
         var cacheKey = ExternalLocalizationTextCacheItem.CalculateCacheKey(resourceName, cultureName);
         var stampCacheKey = ExternalLocalizationTextStampCacheItem.CalculateCacheKey(resourceName, cultureName);
 
-        await using var lockHandle = await DistributedLock.TryAcquireAsync(cacheKey, TimeSpan.FromMinutes(1d));
+        await using var lockHandle = await DistributedLock.TryAcquireAsync(cacheKey);
+
+        if (lockHandle == null)
+        {
+            return;
+        }
 
         await DistributedCache.RemoveAsync(cacheKey);
 
@@ -93,21 +97,12 @@ public class ExternalLocalizationTextStoreCache : IExternalLocalizationTextStore
                 return distributeCacheItem.Texts;
             }
 
-            await using var lockHandle = await DistributedLock.TryAcquireAsync(cacheKey, TimeSpan.FromMinutes(1d));
+            distributeCacheItem = await CreateCacheItemAsync(resource, cultureName);
 
-            if (lockHandle == null)
+            if (distributeCacheItem == null)
             {
                 return new Dictionary<string, string>();
             }
-
-            distributeCacheItem = await CreateCacheItemAsync(resource, cultureName);
-
-            await DistributedCache.SetAsync(cacheKey, distributeCacheItem);
-
-            stampCacheItem = new ExternalLocalizationTextStampCacheItem(Guid.NewGuid().ToString());
-            await StampCache.SetAsync(stampCacheKey, stampCacheItem);
-
-            MemoryCache[cacheKey] = new LocalizationTextMemoryCacheItem(distributeCacheItem.Texts, stampCacheItem.Stamp);
 
             return distributeCacheItem.Texts;
         }
@@ -117,11 +112,24 @@ public class ExternalLocalizationTextStoreCache : IExternalLocalizationTextStore
         return DateTime.Now.Subtract(memoryCacheItem.LastCheckTime).TotalSeconds >= 30.0;
     }
 
+    internal async Task UpdateCache(LocalizationResourceBase resource, string cultureName)
+    {
+        await CreateCacheItemAsync(resource, cultureName);
+    }
+
     protected async virtual Task<ExternalLocalizationTextCacheItem> CreateCacheItemAsync(LocalizationResourceBase resource, string cultureName)
     {
+        await using var lockHandle = await DistributedLock.TryAcquireAsync($"{nameof(ExternalLocalizationTextStoreCache)}_{nameof(CreateCacheItemAsync)}");
+
+        if (lockHandle == null)
+        {
+            return null;
+        }
+
+        var cacheKey = ExternalLocalizationTextCacheItem.CalculateCacheKey(resource.ResourceName, cultureName);
+        var stampCacheKey = ExternalLocalizationTextStampCacheItem.CalculateCacheKey(resource.ResourceName, cultureName);
+
         using var scope = ServiceScopeFactory.CreateScope();
-        var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
-        using var unitOfWork = unitOfWorkManager.Begin(requiresNew: true);
         var repo = scope.ServiceProvider.GetRequiredService<ITextRepository>();
 
         var texts = await repo.GetListAsync(resource.ResourceName, cultureName);
@@ -133,6 +141,14 @@ public class ExternalLocalizationTextStoreCache : IExternalLocalizationTextStore
             fillTexts[text.Key] = text.Value;
         }
 
-        return new ExternalLocalizationTextCacheItem(fillTexts);
+        var cacheItem = new ExternalLocalizationTextCacheItem(fillTexts);
+        await DistributedCache.SetAsync(cacheKey, cacheItem);
+
+        var stampCacheItem = new ExternalLocalizationTextStampCacheItem(Guid.NewGuid().ToString());
+        await StampCache.SetAsync(stampCacheKey, stampCacheItem);
+
+        MemoryCache[cacheKey] = new LocalizationTextMemoryCacheItem(cacheItem.Texts, stampCacheItem.Stamp);
+
+        return cacheItem;
     }
 }

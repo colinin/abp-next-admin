@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 
-import type { OssContainerDto } from '../../types/containes';
 import type { OssObjectDto } from '../../types/objects';
 
 import { defineAsyncComponent, h, nextTick, ref, watch } from 'vue';
@@ -42,7 +41,7 @@ const { deleteApi, generateUrlApi } = useObjectsApi();
 
 const selectedKeys = ref<string[]>([]);
 
-const gridOptions: VxeGridProps<OssContainerDto> = {
+const gridOptions: VxeGridProps<OssObjectDto> = {
   columns: [
     {
       align: 'left',
@@ -158,7 +157,7 @@ const gridOptions: VxeGridProps<OssContainerDto> = {
   },
 };
 
-const gridEvents: VxeGridListeners<OssContainerDto> = {
+const gridEvents: VxeGridListeners<OssObjectDto> = {
   checkboxAll: (params) => {
     selectedKeys.value = params.records.map((record) => record.name);
   },

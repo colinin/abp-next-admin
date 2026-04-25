@@ -18,8 +18,8 @@ function onFolderChange(val: string) {
 </script>
 
 <template>
-  <div class="flex flex-row gap-2">
-    <div style="width: 30%">
+  <div class="flex h-full flex-row gap-2">
+    <div style="width: 30%" class="h-full">
       <FolderTree
         @bucket-change="onBucketChange"
         @folder-change="onFolderChange"

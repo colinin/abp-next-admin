@@ -25,6 +25,8 @@
     "Description:IsVisibleToClients": "客户端是否可以看到这个功能.",
     "DisplayName:IsAvailableToHost": "宿主可用功能",
     "Description:IsAvailableToHost": "宿主端是否可以使用此功能.",
+    "DisplayName:AllowedProviders": "功能提供者",
+    "Description:AllowedProviders": "允许获取/设置此功能值的提供者列表, 若为空列表,则表示所有提供者均被允许.",
     "DisplayName:IsStatic": "静态",
     "GroupDefinitions": "分组定义",
     "GroupDefinitions:AddNew": "添加分组",
@@ -33,6 +35,11 @@
     "BasicInfo": "基本信息",
     "Properties": "属性",
     "ValueValidator": "值验证",
-    "ItemWillBeDeleteOrRestoreMessage": "如果已改变功能, 将还原到默认功能项。否则会删除自定义功能."
+    "ItemWillBeDeleteOrRestoreMessage": "如果已改变功能, 将还原到默认功能项。否则会删除自定义功能.",
+    "FeatureProviders:C": "配置",
+    "FeatureProviders:D": "默认",
+    "FeatureProviders:E": "版本",
+    "FeatureProviders:T": "租户",
+    "FeatureProviders:CT": "客户端"
   }
 }

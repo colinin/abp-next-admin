@@ -7,9 +7,6 @@ import type { IdentityRoleDto } from "#/management/identity/role";
 import { type ActionType, ProTable, type ProColumns } from "@ant-design/pro-table";
 import { hasAccessByCodes } from "@/utils/abp/access-checker";
 import { deleteApi, getPagedListApi } from "@/api/management/identity/role";
-import RoleModal from "./role-modal";
-import RoleClaimModal from "./role-claim-modal";
-import PermissionModal from "@/components/abp/permissions/permission-modal";
 import { toast } from "sonner";
 import { Iconify } from "@/components/icon";
 import useAbpStore from "@/store/abpCoreStore";
@@ -17,17 +14,26 @@ import { IdentityRolePermissions } from "@/constants/management/identity/permiss
 import { AuditLogPermissions } from "@/constants/management/auditing/permissions";
 import { EntityChangeDrawer } from "@/components/abp/auditing/entity-change-drawer";
 
+// Import your components
+import RoleModal from "./role-modal";
+import RoleClaimModal from "./role-claim-modal";
+import PermissionModal from "@/components/abp/permissions/permission-modal";
+import MenuAllotModal from "@/pages/platform/menus/menu-allot-modal";
+
 const RoleTable: React.FC = () => {
 	const { t: $t } = useTranslation();
 	const actionRef = useRef<ActionType>();
 	const queryClient = useQueryClient();
 	const abpStore = useAbpStore();
 	const [modal, contextHolder] = Modal.useModal();
+
 	// Modal states
 	const [roleModalVisible, setRoleModalVisible] = useState(false);
 	const [claimModalVisible, setClaimModalVisible] = useState(false);
 	const [permissionModalVisible, setPermissionModalVisible] = useState(false);
 	const [entityChangeDrawerVisible, setEntityChangeDrawerVisible] = useState(false);
+	const [menuModalVisible, setMenuModalVisible] = useState(false); // Added state for Menu Modal
+
 	const [selectedRole, setSelectedRole] = useState<IdentityRoleDto>();
 	const [searchParams, setSearchParams] = useState<{ filter?: string }>({});
 
@@ -65,6 +71,9 @@ const RoleTable: React.FC = () => {
 				break;
 			case "entity-changes":
 				setEntityChangeDrawerVisible(true);
+				break;
+			case "menus": // Handle menu click
+				setMenuModalVisible(true);
 				break;
 		}
 	};
@@ -136,6 +145,14 @@ const RoleTable: React.FC = () => {
 												label: $t("AbpIdentity.ManageClaim"),
 											}
 										: null,
+									// Added Menu Management Item
+									hasAccessByCodes(["Platform.Menu.ManageRoles"])
+										? {
+												key: "menus",
+												icon: <Iconify icon="heroicons-outline:menu-alt-3" />,
+												label: $t("AppPlatform.Menu:Manage"),
+											}
+										: null,
 									hasAccessByCodes([AuditLogPermissions.Default])
 										? {
 												key: "entity-changes",
@@ -143,7 +160,7 @@ const RoleTable: React.FC = () => {
 												label: $t("AbpAuditLogging.EntitiesChanged"),
 											}
 										: null,
-								].filter(Boolean),
+								].filter(Boolean) as any, // filter(Boolean) needs 'as any' or strict type guard in some TS configs
 								onClick: ({ key }) => handleMenuClick(key as string, record),
 							}}
 						>
@@ -178,7 +195,6 @@ const RoleTable: React.FC = () => {
 					request={async (params) => {
 						const { filter } = params;
 						setSearchParams({ filter });
-						// 强制重新请求数据
 						await queryClient.invalidateQueries({ queryKey: ["roles"] });
 						return { data: data?.items, success: true, total: data?.totalCount };
 					}}
@@ -197,6 +213,8 @@ const RoleTable: React.FC = () => {
 					]}
 				/>
 			</Card>
+
+			{/* Modals */}
 			<RoleModal
 				visible={roleModalVisible}
 				role={selectedRole}
@@ -205,10 +223,10 @@ const RoleTable: React.FC = () => {
 					setSelectedRole(undefined);
 				}}
 				onChange={() => {
-					// actionRef.current?.reload();
 					queryClient.invalidateQueries({ queryKey: ["roles"] });
 				}}
 			/>
+
 			{selectedRole && (
 				<RoleClaimModal
 					visible={claimModalVisible}
@@ -217,31 +235,40 @@ const RoleTable: React.FC = () => {
 						setClaimModalVisible(false);
 						setSelectedRole(undefined);
 					}}
-					// onChange={() => {
-					//   actionRef.current?.reload();
-					// }}
 				/>
 			)}
+
 			<PermissionModal
 				visible={permissionModalVisible}
 				providerKey={selectedRole?.name}
 				providerName="R"
 				displayName={selectedRole?.name}
-				readonly={abpStore.application?.currentUser.roles.includes(selectedRole?.name ?? "")} //TODO 好像有改动
+				readonly={abpStore.application?.currentUser.roles.includes(selectedRole?.name ?? "")}
 				onClose={() => {
 					setPermissionModalVisible(false);
 					setSelectedRole(undefined);
 				}}
 				onChange={() => {
-					// actionRef.current?.reload();
 					queryClient.invalidateQueries({ queryKey: ["roles"] });
 				}}
 			/>
+
 			<EntityChangeDrawer
 				open={entityChangeDrawerVisible}
 				input={{ entityId: selectedRole?.id, entityTypeFullName: "Volo.Abp.Identity.IdentityRole" }}
 				onClose={() => {
 					setEntityChangeDrawerVisible(false);
+					setSelectedRole(undefined);
+				}}
+			/>
+
+			{/* Added MenuAllotModal */}
+			<MenuAllotModal
+				visible={menuModalVisible}
+				subject="role"
+				identity={selectedRole?.name || ""}
+				onClose={() => {
+					setMenuModalVisible(false);
 					setSelectedRole(undefined);
 				}}
 			/>

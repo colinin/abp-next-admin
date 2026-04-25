@@ -20,6 +20,7 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
 {
     private readonly IStringEncryptionService _stringEncryptionService;
     private readonly ISettingDefinitionManager _settingDefinitionManager;
+    private readonly ISettingValueProviderManager _settingValueProviderManager;
     private readonly IStaticSettingDefinitionStore _staticSettingDefinitionStore;
     private readonly IDynamicSettingDefinitionStore _dynamicSettingDefinitionStore;
     private readonly ILocalizableStringSerializer _localizableStringSerializer;
@@ -31,7 +32,8 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
         IStaticSettingDefinitionStore staticSettingDefinitionStore,
         IDynamicSettingDefinitionStore dynamicSettingDefinitionStore,
         ILocalizableStringSerializer localizableStringSerializer,
-        IRepository<SettingDefinitionRecord, Guid> settingRepository)
+        IRepository<SettingDefinitionRecord, Guid> settingRepository,
+        ISettingValueProviderManager settingValueProviderManager)
     {
         _stringEncryptionService = stringEncryptionService;
         _settingDefinitionManager = settingDefinitionManager;
@@ -39,6 +41,7 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
         _dynamicSettingDefinitionStore = dynamicSettingDefinitionStore;
         _localizableStringSerializer = localizableStringSerializer;
         _settingRepository = settingRepository;
+        _settingValueProviderManager = settingValueProviderManager;
     }
 
     [Authorize(SettingManagementPermissions.Definition.Create)]
@@ -130,6 +133,23 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
             .WhereIf(!input.ProviderName.IsNullOrWhiteSpace(), x => x.Providers.Contains(input.ProviderName))
             .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter) || x.DisplayName.Contains(input.Filter))
             .ToList());
+    }
+
+    public virtual Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync()
+    {
+        var providerNames = _settingValueProviderManager.Providers.Select(x => x.Name);
+
+        return Task.FromResult(new ListResultDto<NameValue<string>>(
+            providerNames.Select(name =>
+            {
+                var provider = new NameValue<string>(name, name);
+                var displayName = L[$"SettingProviders:{name}"];
+                if (!displayName.ResourceNotFound)
+                {
+                    provider.Name = displayName.Value;
+                }
+                return provider;
+            }).ToList()));
     }
 
     [Authorize(SettingManagementPermissions.Definition.Update)]

@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import type { IHasSimpleStateCheckers, ISimpleStateChecker } from '@abp/core';
+import type {
+  IHasSimpleStateCheckers,
+  ISimpleStateChecker,
+  NameValue,
+} from '@abp/core';
 import type { PropertyInfo } from '@abp/ui';
 import type { FormInstance } from 'ant-design-vue';
 
@@ -41,8 +45,7 @@ const emits = defineEmits<{
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
-interface PermissionStateChecker
-  extends IHasSimpleStateCheckers<PermissionStateChecker> {}
+interface PermissionStateChecker extends IHasSimpleStateCheckers<PermissionStateChecker> {}
 
 class PermissionState implements PermissionStateChecker {
   stateCheckers: ISimpleStateChecker<PermissionStateChecker>[] = [];
@@ -66,9 +69,10 @@ const isEditModel = ref(false);
 const activeTab = ref<TabKeys>('basic');
 const form = useTemplateRef<FormInstance>('form');
 const formModel = ref<PermissionDefinitionDto>({ ...defaultModel });
-const { multiTenancySideOptions, providerOptions } = useTypesMap();
+const { multiTenancySideOptions } = useTypesMap();
 const availableGroups = ref<PermissionGroupDefinitionDto[]>([]);
 const availablePermissions = ref<PermissionTreeVo[]>([]);
+const availableProviders = ref<NameValue<string>[]>([]);
 
 const { Lr } = useLocalization();
 const { deserialize } = useLocalizationSerializer();
@@ -77,6 +81,7 @@ const {
   createApi,
   getApi,
   getListApi: getPermissionsApi,
+  getAssignableProvidersApi,
   updateApi,
 } = usePermissionDefinitionsApi();
 const [Modal, modalApi] = useVbenModal({
@@ -118,7 +123,7 @@ const [Modal, modalApi] = useVbenModal({
         modalApi.setState({ loading: true });
         const { groupName, name } = modalApi.getData<PermissionDefinitionDto>();
         name && (await onGet(name));
-        await onInitGroups(groupName);
+        await Promise.all([onInitGroups(groupName), onInitProviders()]);
       } finally {
         modalApi.setState({ loading: false });
       }
@@ -126,6 +131,10 @@ const [Modal, modalApi] = useVbenModal({
   },
   title: $t('AbpPermissionManagement.PermissionDefinitions:AddNew'),
 });
+async function onInitProviders() {
+  const { items } = await getAssignableProvidersApi();
+  availableProviders.value = items;
+}
 async function onInitGroups(name?: string) {
   const { items } = await getGroupsApi({ filter: name });
   availableGroups.value = items.map((group) => {
@@ -268,13 +277,15 @@ function onPropDelete(prop: PropertyInfo) {
           </FormItem>
           <FormItem
             :label="$t('AbpPermissionManagement.DisplayName:Providers')"
+            :extra="$t('AbpPermissionManagement.Description:Providers')"
             name="providers"
           >
             <Select
               v-model:value="formModel.providers"
               :allow-clear="true"
               :disabled="formModel.isStatic"
-              :options="providerOptions"
+              :field-names="{ label: 'name', value: 'value' }"
+              :options="availableProviders"
               mode="multiple"
             />
           </FormItem>

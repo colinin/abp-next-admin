@@ -16,3 +16,5 @@ CODEOWNERS
 public
 .npmrc
 *-lock.yaml
+
+packages/@abp/components

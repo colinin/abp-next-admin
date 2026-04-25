@@ -43,8 +43,8 @@ public partial class NotificationClientProxy : ClientProxyBase<INotificationAppS
         return await RequestAsync<ListResultDto<NotificationTemplateDto>>(nameof(GetAssignableTemplatesAsync));
     }
 
-    public virtual async Task<ListResultDto<NotificationProviderDto>> GetAssignableProvidersAsync()
+    public virtual async Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync()
     {
-        return await RequestAsync<ListResultDto<NotificationProviderDto>>(nameof(GetAssignableProvidersAsync));
+        return await RequestAsync<ListResultDto<NameValue<string>>>(nameof(GetAssignableProvidersAsync));
     }
 }

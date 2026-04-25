@@ -1,16 +1,20 @@
 {
   "folders": [
     {
-      "name": "@vben/backend-mock",
-      "path": "apps/backend-mock",
-    },
-    {
       "name": "@abp/app-antd",
       "path": "apps/app-antd",
     },
     {
+      "name": "@vben/backend-mock",
+      "path": "apps/backend-mock",
+    },
+    {
       "name": "@vben/web-antd",
       "path": "apps/web-antd",
+    },
+    {
+      "name": "@vben/web-antdv-next",
+      "path": "apps/web-antdv-next",
     },
     {
       "name": "@vben/web-ele",
@@ -19,6 +23,10 @@
     {
       "name": "@vben/web-naive",
       "path": "apps/web-naive",
+    },
+    {
+      "name": "@vben/web-tdesign",
+      "path": "apps/web-tdesign",
     },
     {
       "name": "@vben/docs",
@@ -55,6 +63,106 @@
     {
       "name": "@vben/vite-config",
       "path": "internal/vite-config",
+    },
+    {
+      "name": "@abp/account",
+      "path": "packages/@abp/account",
+    },
+    {
+      "name": "@abp/ai-management",
+      "path": "packages/@abp/ai-management",
+    },
+    {
+      "name": "@abp/auditing",
+      "path": "packages/@abp/auditing",
+    },
+    {
+      "name": "@abp/components",
+      "path": "packages/@abp/components",
+    },
+    {
+      "name": "@abp/core",
+      "path": "packages/@abp/core",
+    },
+    {
+      "name": "@abp/data-protection",
+      "path": "packages/@abp/data-protection",
+    },
+    {
+      "name": "@abp/demo",
+      "path": "packages/@abp/demo",
+    },
+    {
+      "name": "@abp/features",
+      "path": "packages/@abp/features",
+    },
+    {
+      "name": "@abp/gdpr",
+      "path": "packages/@abp/gdpr",
+    },
+    {
+      "name": "@abp/identity",
+      "path": "packages/@abp/identity",
+    },
+    {
+      "name": "@abp/localization",
+      "path": "packages/@abp/localization",
+    },
+    {
+      "name": "@abp/notifications",
+      "path": "packages/@abp/notifications",
+    },
+    {
+      "name": "@abp/openiddict",
+      "path": "packages/@abp/openiddict",
+    },
+    {
+      "name": "@abp/oss",
+      "path": "packages/@abp/oss",
+    },
+    {
+      "name": "@abp/permissions",
+      "path": "packages/@abp/permissions",
+    },
+    {
+      "name": "@abp/platform",
+      "path": "packages/@abp/platform",
+    },
+    {
+      "name": "@abp/request",
+      "path": "packages/@abp/request",
+    },
+    {
+      "name": "@abp/saas",
+      "path": "packages/@abp/saas",
+    },
+    {
+      "name": "@abp/settings",
+      "path": "packages/@abp/settings",
+    },
+    {
+      "name": "@abp/signalr",
+      "path": "packages/@abp/signalr",
+    },
+    {
+      "name": "@abp/tasks",
+      "path": "packages/@abp/tasks",
+    },
+    {
+      "name": "@abp/text-templating",
+      "path": "packages/@abp/text-templating",
+    },
+    {
+      "name": "@abp/ui",
+      "path": "packages/@abp/ui",
+    },
+    {
+      "name": "@abp/webhooks",
+      "path": "packages/@abp/webhooks",
+    },
+    {
+      "name": "@abp/wechat",
+      "path": "packages/@abp/wechat",
     },
     {
       "name": "@vben-core/design",

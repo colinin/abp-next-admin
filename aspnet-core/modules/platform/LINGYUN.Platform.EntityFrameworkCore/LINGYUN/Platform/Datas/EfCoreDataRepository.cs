@@ -11,10 +11,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Platform.Datas;
 
-public class EfCoreDataRepository : EfCoreRepository<PlatformDbContext, Data, Guid>, IDataRepository
+public class EfCoreDataRepository : EfCoreRepository<IPlatformDbContext, Data, Guid>, IDataRepository
 {
     public EfCoreDataRepository(
-        IDbContextProvider<PlatformDbContext> dbContextProvider) : base(dbContextProvider)
+        IDbContextProvider<IPlatformDbContext> dbContextProvider) : base(dbContextProvider)
     {
     }
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -60,6 +59,25 @@ public static class NotificationsDbContextModelCreatingExtensions
              .HasDatabaseName("IX_Tenant_User_Notification_Name")
              .IsUnique();
         });
+
+        builder.Entity<NotificationSendRecord>(b =>
+        {
+            b.ToTable(options.TablePrefix + "NotificationSendRecords", options.Schema);
+
+            b.Property(p => p.Provider).HasMaxLength(NotificationSendRecordConsts.MaxProviderLength).IsRequired();
+            b.Property(p => p.NotificationName).HasMaxLength(NotificationConsts.MaxNameLength).IsRequired();
+            b.Property(p => p.UserName)
+                .HasMaxLength(SubscribeConsts.MaxUserNameLength)
+                .HasDefaultValue("/")// 不是必须的
+                .IsRequired();
+
+            b.Property(p => p.Reason).HasMaxLength(NotificationSendRecordConsts.MaxReasonLength);
+
+            b.ConfigureByConvention();
+
+            b.HasIndex(p => new { p.TenantId, p.NotificationName })
+             .HasDatabaseName("IX_Tenant_Send_Notification_Name");
+        });
     }
 
     public static void ConfigureNotificationsDefinition(
@@ -72,44 +90,47 @@ public static class NotificationsDbContextModelCreatingExtensions
 
         optionsAction?.Invoke(options);
 
-        builder.Entity<NotificationDefinitionGroupRecord>(b =>
+        if (builder.IsHostDatabase())
         {
-            b.ToTable(options.TablePrefix + "NotificationDefinitionGroups", options.Schema);
-            b.Property(p => p.Name)
-             .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxNameLength)
-             .IsRequired();
+            builder.Entity<NotificationDefinitionGroupRecord>(b =>
+            {
+                b.ToTable(options.TablePrefix + "NotificationDefinitionGroups", options.Schema);
+                b.Property(p => p.Name)
+                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxNameLength)
+                 .IsRequired();
 
-            b.Property(p => p.DisplayName)
-             .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxDisplayNameLength);
-            b.Property(p => p.Description)
-             .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxDescriptionLength);
+                b.Property(p => p.DisplayName)
+                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxDisplayNameLength);
+                b.Property(p => p.Description)
+                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxDescriptionLength);
 
-            b.ConfigureByConvention();
-        });
+                b.ConfigureByConvention();
+            });
 
-        builder.Entity<NotificationDefinitionRecord>(b =>
-        {
-            b.ToTable(options.TablePrefix + "NotificationDefinitions", options.Schema);
-            b.Property(p => p.Name)
-             .HasMaxLength(NotificationDefinitionRecordConsts.MaxNameLength)
-             .IsRequired();
-            b.Property(p => p.GroupName)
-             .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxNameLength)
-             .IsRequired();
+            builder.Entity<NotificationDefinitionRecord>(b =>
+            {
+                b.ToTable(options.TablePrefix + "NotificationDefinitions", options.Schema);
+                b.Property(p => p.Name)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxNameLength)
+                 .IsRequired();
+                b.Property(p => p.GroupName)
+                 .HasMaxLength(NotificationDefinitionGroupRecordConsts.MaxNameLength)
+                 .IsRequired();
 
-            b.Property(p => p.DisplayName)
-             .HasMaxLength(NotificationDefinitionRecordConsts.MaxDisplayNameLength);
-            b.Property(p => p.Description)
-             .HasMaxLength(NotificationDefinitionRecordConsts.MaxDescriptionLength);
-            b.Property(p => p.Providers)
-             .HasMaxLength(NotificationDefinitionRecordConsts.MaxProvidersLength);
-            b.Property(p => p.Template)
-             .HasMaxLength(NotificationDefinitionRecordConsts.MaxTemplateLength);
+                b.Property(p => p.DisplayName)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxDisplayNameLength);
+                b.Property(p => p.Description)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxDescriptionLength);
+                b.Property(p => p.Providers)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxProvidersLength);
+                b.Property(p => p.Template)
+                 .HasMaxLength(NotificationDefinitionRecordConsts.MaxTemplateLength);
 
-            b.Property(p => p.ContentType)
-             .HasDefaultValue(NotificationContentType.Text);
+                b.Property(p => p.ContentType)
+                 .HasDefaultValue(NotificationContentType.Text);
 
-            b.ConfigureByConvention();
-        });
+                b.ConfigureByConvention();
+            });
+        }
     }
 }

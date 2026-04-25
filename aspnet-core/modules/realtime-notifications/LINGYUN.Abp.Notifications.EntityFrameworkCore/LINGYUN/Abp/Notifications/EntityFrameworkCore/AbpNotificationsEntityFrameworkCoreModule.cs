@@ -19,6 +19,8 @@ public class AbpNotificationsEntityFrameworkCoreModule : AbpModule
 
             options.AddRepository<UserNotification, EfCoreUserNotificationRepository>();
             options.AddRepository<UserSubscribe, EfCoreUserSubscribeRepository>();
+
+            options.AddRepository<NotificationSendRecord, EfCoreNotificationSendRecordRepository>();
         });
 
         context.Services.AddAbpDbContext<NotificationsDefinitionDbContext>(options =>

@@ -11,9 +11,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace LINGYUN.Platform.Layouts;
 
-public class EfCoreLayoutRepository : EfCoreRepository<PlatformDbContext, Layout, Guid>, ILayoutRepository
+public class EfCoreLayoutRepository : EfCoreRepository<IPlatformDbContext, Layout, Guid>, ILayoutRepository
 {
-    public EfCoreLayoutRepository(IDbContextProvider<PlatformDbContext> dbContextProvider) 
+    public EfCoreLayoutRepository(IDbContextProvider<IPlatformDbContext> dbContextProvider) 
         : base(dbContextProvider)
     {
     }

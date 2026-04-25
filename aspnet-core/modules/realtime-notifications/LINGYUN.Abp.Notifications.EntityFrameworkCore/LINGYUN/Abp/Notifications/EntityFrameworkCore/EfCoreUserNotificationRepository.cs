@@ -1,13 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.Notifications.EntityFrameworkCore;
 
@@ -151,6 +154,35 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
+    public async virtual Task<int> GetCountAsync(
+        Guid userId,
+        ISpecification<UserNotificationInfo> specification,
+        CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+        var notifilerQuery = from un in dbContext.Set<UserNotification>()
+                             join n in dbContext.Set<Notification>()
+                                on un.NotificationId equals n.NotificationId
+                             where un.UserId == userId
+                             select new UserNotificationInfo
+                             {
+                                 NotificationId = n.NotificationId,
+                                 TenantId = n.TenantId,
+                                 Name = n.NotificationName,
+                                 ExtraProperties = n.ExtraProperties,
+                                 CreationTime = n.CreationTime,
+                                 NotificationTypeName = n.NotificationTypeName,
+                                 Severity = n.Severity,
+                                 State = un.ReadStatus,
+                                 Type = n.Type,
+                                 ContentType = n.ContentType
+                             };
+
+        return await notifilerQuery
+            .Where(specification.ToExpression())
+            .CountAsync(GetCancellationToken(cancellationToken));
+    }
+
     public async virtual Task<List<UserNotificationInfo>> GetListAsync(
         Guid userId,
         string filter = "",
@@ -165,14 +197,6 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
             sorting = $"{nameof(Notification.CreationTime)} DESC";
         }
         var dbContext = await GetDbContextAsync();
-        //var userNotifilerQuery = dbContext.Set<UserNotification>()
-        //    .Where(x => x.UserId == userId)
-        //    .WhereIf(readState.HasValue, x => x.ReadStatus == readState.Value);
-
-        //var notificationQuery = dbContext.Set<Notification>()
-        //    .WhereIf(!filter.IsNullOrWhiteSpace(), nf =>
-        //        nf.NotificationName.Contains(filter) ||
-        //        nf.NotificationTypeName.Contains(filter));
 
         var notifilerQuery = from un in dbContext.Set<UserNotification>()
                              join n in dbContext.Set<Notification>()
@@ -197,6 +221,47 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
             .WhereIf(!filter.IsNullOrWhiteSpace(), nf =>
                 nf.Name.Contains(filter) ||
                 nf.NotificationTypeName.Contains(filter))
+            .OrderBy(sorting)
+            .PageBy(skipCount, maxResultCount)
+            .AsNoTracking()
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public async virtual Task<List<UserNotificationInfo>> GetListAsync(
+        Guid userId,
+        ISpecification<UserNotificationInfo> specification,
+        string sorting = nameof(Notification.CreationTime),
+        int skipCount = 0,
+        int maxResultCount = 10,
+        CancellationToken cancellationToken = default)
+    {
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = $"{nameof(Notification.CreationTime)} DESC";
+        }
+        var dbContext = await GetDbContextAsync();
+
+        var notifilerQuery = from un in dbContext.Set<UserNotification>()
+                             join n in dbContext.Set<Notification>()
+                                on un.NotificationId equals n.NotificationId
+                             where un.UserId == userId
+                             select new UserNotificationInfo
+                             {
+                                 NotificationId = n.NotificationId,
+                                 TenantId = n.TenantId,
+                                 Name = n.NotificationName,
+                                 ExtraProperties = n.ExtraProperties,
+                                 CreationTime = n.CreationTime,
+                                 NotificationTypeName = n.NotificationTypeName,
+                                 Severity = n.Severity,
+                                 State = un.ReadStatus,
+                                 Type = n.Type,
+                                 ContentType = n.ContentType,
+                                 Id = un.Id,
+                             };
+
+        return await notifilerQuery
+            .Where(specification.ToExpression())
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .AsNoTracking()
