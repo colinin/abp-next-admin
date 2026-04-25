@@ -150,7 +150,6 @@
     <Project Path="framework/mvc/LINGYUN.Abp.AspNetCore.Mvc.Wrapper/LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
   </Folder>
   <Folder Name="/hosts/">
-    <Project Path="../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.Internal.ApiGateway/LINGYUN.MicroService.Internal.ApiGateway.csproj" />
     <Project Path="services/LY.AIO.Applications.Single/LY.AIO.Applications.Single.csproj" />
     <Project Path="services/LY.MicroService.Applications.Single/LY.MicroService.Applications.Single.csproj" />
   </Folder>
