@@ -1,0 +1,46 @@
+<Solution>
+  <Folder Name="/framework/" />
+  <Folder Name="/framework/auditing/">
+    <Project Path="../../../aspnet-core/framework/auditing/LINGYUN.Abp.AuditLogging.Elasticsearch/LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
+    <Project Path="../../../aspnet-core/framework/auditing/LINGYUN.Abp.AuditLogging/LINGYUN.Abp.AuditLogging.csproj" />
+  </Folder>
+  <Folder Name="/framework/common/">
+    <Project Path="../../../aspnet-core/framework/common/LINGYUN.Abp.AspNetCore.Wrapper/LINGYUN.Abp.AspNetCore.Wrapper.csproj" />
+    <Project Path="../../../aspnet-core/framework/common/LINGYUN.Abp.IdGenerator/LINGYUN.Abp.IdGenerator.csproj" />
+    <Project Path="../../../aspnet-core/framework/common/LINGYUN.Abp.IP2Region/LINGYUN.Abp.IP2Region.csproj" />
+    <Project Path="../../../aspnet-core/framework/common/LINGYUN.Abp.Wrapper/LINGYUN.Abp.Wrapper.csproj" />
+    <Project Path="../../../aspnet-core/framework/mvc/LINGYUN.Abp.AspNetCore.Mvc.Wrapper/LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
+  </Folder>
+  <Folder Name="/framework/elasticsearch/">
+    <Project Path="../../../aspnet-core/framework/elasticsearch/LINGYUN.Abp.Elasticsearch/LINGYUN.Abp.Elasticsearch.csproj" />
+  </Folder>
+  <Folder Name="/framework/identity/">
+    <Project Path="../../../aspnet-core/modules/identity/LINGYUN.Abp.Identity.Session.AspNetCore/LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
+    <Project Path="../../../aspnet-core/modules/identity/LINGYUN.Abp.Identity.Session/LINGYUN.Abp.Identity.Session.csproj" />
+  </Folder>
+  <Folder Name="/framework/localization/">
+    <Project Path="../../../aspnet-core/framework/localization/LINGYUN.Abp.Localization.CultureMap/LINGYUN.Abp.Localization.CultureMap.csproj" />
+  </Folder>
+  <Folder Name="/framework/logging/">
+    <Project Path="../../../aspnet-core/framework/logging/LINGYUN.Abp.Logging.Serilog.Elasticsearch/LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj" />
+    <Project Path="../../../aspnet-core/framework/logging/LINGYUN.Abp.Logging/LINGYUN.Abp.Logging.csproj" />
+    <Project Path="../../../aspnet-core/framework/logging/LINGYUN.Abp.Serilog.Enrichers.Application/LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
+    <Project Path="../../../aspnet-core/framework/logging/LINGYUN.Abp.Serilog.Enrichers.UniqueId/LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
+  </Folder>
+  <Folder Name="/framework/open-api/">
+    <Project Path="../../../aspnet-core/framework/open-api/LINGYUN.Abp.OpenApi.Authorization/LINGYUN.Abp.OpenApi.Authorization.csproj" />
+    <Project Path="../../../aspnet-core/framework/open-api/LINGYUN.Abp.OpenApi/LINGYUN.Abp.OpenApi.csproj" />
+    <Project Path="../../../aspnet-core/framework/open-api/OpenApi.Sdk/OpenApi.Sdk.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="../../../common.props" />
+    <File Path="../../../common.secrets.props" />
+    <File Path="../../../configureawait.props" />
+    <File Path="../../../Directory.Build.props" />
+    <File Path="../../../Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/LINGYUN.MicroService.Internal.Gateway/LINGYUN.MicroService.Internal.Gateway.csproj" />
+    <Project Path="src/LINGYUN.MicroService.OpenApi.Gateway/LINGYUN.MicroService.OpenApi.Gateway.csproj" />
+  </Folder>
+</Solution>
