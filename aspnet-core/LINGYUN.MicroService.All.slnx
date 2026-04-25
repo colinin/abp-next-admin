@@ -1,4 +1,11 @@
 <Solution>
+  <Folder Name="/.build/">
+    <File Path="../build/build-aspnetcore-build-sln.ps1" />
+    <File Path="../build/build-aspnetcore-common.ps1" />
+    <File Path="../build/build-aspnetcore-publish-sln.ps1" />
+    <File Path="../build/build-aspnetcore-release-sln.ps1" />
+    <File Path="../build/package-aspnetcore-publish.ps1" />
+  </Folder>
   <Folder Name="/.changes/">
     <File Path="../.changes/Migration 10.0.2 - 10.2.0.md" />
   </Folder>
@@ -85,6 +92,7 @@
   </Folder>
   <Folder Name="/framework/" />
   <Folder Name="/framework/auditing/">
+    <Project Path="framework/auditing/LINGYUN.Abp.AspNetCore.Auditing/LINGYUN.Abp.AspNetCore.Auditing.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.Elasticsearch/LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.EntityFrameworkCore/LINGYUN.Abp.AuditLogging.EntityFrameworkCore.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.IP.Location/LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
@@ -116,6 +124,7 @@
   <Folder Name="/framework/common/">
     <Project Path="framework/common/LINGYUN.Abp.AspNetCore.HttpOverrides/LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.AspNetCore.Mvc.Client/LINGYUN.Abp.AspNetCore.Mvc.Client.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.Core/LINGYUN.Abp.Core.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.Data.DbMigrator/LINGYUN.Abp.Data.DbMigrator.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.EventBus.CAP/LINGYUN.Abp.EventBus.CAP.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.IdGenerator/LINGYUN.Abp.IdGenerator.csproj" />

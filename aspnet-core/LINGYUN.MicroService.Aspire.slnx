@@ -228,10 +228,6 @@
     <Project Path="framework/tenants/LINGYUN.Abp.AspNetCore.MultiTenancy/LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
     <Project Path="framework/tenants/LINGYUN.Abp.MultiTenancy.Editions/LINGYUN.Abp.MultiTenancy.Editions.csproj" />
   </Folder>
-  <Folder Name="/framework/themes/">
-    <Project Path="framework/themes/LINGYUN.Abp.AspNetCore.Mvc.UI.Theme.Lepton/LINGYUN.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj" />
-    <Project Path="framework/themes/LINGYUN.Abp.Themes.Lepton/LINGYUN.Abp.Themes.Lepton.csproj" />
-  </Folder>
   <Folder Name="/framework/tracking/">
     <Project Path="framework/telemetry/LINGYUN.Abp.Telemetry.APM/LINGYUN.Abp.Telemetry.APM.csproj" />
     <Project Path="framework/telemetry/LINGYUN.Abp.Telemetry.OpenTelemetry/LINGYUN.Abp.Telemetry.OpenTelemetry.csproj" />
@@ -568,9 +564,6 @@
     <Project Path="tests/LINGYUN.Abp.Localization.Xml.Tests/LINGYUN.Abp.Localization.Xml.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Baidu.Tests/LINGYUN.Abp.Location.Baidu.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Tencent.Tests/LINGYUN.Abp.Location.Tencent.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OssManagement.Domain.Tests/LINGYUN.Abp.OssManagement.Domain.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OssManagement.Minio.Tests/LINGYUN.Abp.OssManagement.Minio.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OssManagement.Nexus.Tests/LINGYUN.Abp.OssManagement.Nexus.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Rules.RulesEngine.Tests/LINGYUN.Abp.Rules.RulesEngine.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Sms.Platform.Tests/LINGYUN.Abp.Sms.Platform.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.TestBase/LINGYUN.Abp.TestsBase.csproj" />
