@@ -29,6 +29,7 @@
     "@abp/account": "workspace:*",
     "@abp/ai-management": "workspace:*",
     "@abp/auditing": "workspace:*",
+    "@abp/cache-management": "workspace:*",
     "@abp/components": "workspace:*",
     "@abp/core": "workspace:*",
     "@abp/data-protection": "workspace:*",
