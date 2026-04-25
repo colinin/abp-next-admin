@@ -10,6 +10,12 @@ public class NotificationsPermissions
 
         public const string Delete = Default + ".Delete";
         public const string Send = Default + ".Send";
+        public static class SendRecord
+        {
+            public const string Default = Notification.Default + ".SendRecord";
+            public const string ReSend = Default + ".ReSend";
+            public const string Delete = Default + ".Delete";
+        }
     }
 
     public static class GroupDefinition

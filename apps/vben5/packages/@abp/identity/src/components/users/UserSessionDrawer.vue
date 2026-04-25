@@ -20,9 +20,9 @@ const { cancel, getSessionsApi, revokeSessionApi } = useUserSessionsApi();
 
 const [Drawer, drawerApi] = useVbenDrawer({
   class: 'w-[800px]',
-  onBeforeClose: cancel,
   onCancel() {
     drawerApi.close();
+    cancel();
   },
   onConfirm: async () => {},
   onOpenChange: async (isOpen: boolean) => {

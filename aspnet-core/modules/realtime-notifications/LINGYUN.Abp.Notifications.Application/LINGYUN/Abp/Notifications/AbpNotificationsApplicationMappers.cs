@@ -33,3 +33,31 @@ public partial class UserNotificationInfoToUserNotificationDtoMapper : MapperBas
         return new NotificationData();
     }
 }
+
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
+public partial class NotificationSendRecordInfoToNotificationSendRecordDtoMapper : MapperBase<NotificationSendRecordInfo, NotificationSendRecordDto>
+{
+    private readonly UserNotificationInfoToUserNotificationDtoMapper _userNotificationInfoMapper;
+    public NotificationSendRecordInfoToNotificationSendRecordDtoMapper(UserNotificationInfoToUserNotificationDtoMapper userNotificationInfoMapper)
+    {
+        _userNotificationInfoMapper = userNotificationInfoMapper;
+    }
+
+    [MapperIgnoreTarget(nameof(NotificationSendRecordDto.Notification))]
+    [MapProperty(nameof(NotificationSendRecordInfo.Id), nameof(NotificationSendRecordDto.Id))]
+    public override partial NotificationSendRecordDto Map(NotificationSendRecordInfo source);
+
+    [MapperIgnoreTarget(nameof(NotificationSendRecordDto.Notification))]
+    [MapProperty(nameof(NotificationSendRecordInfo.Id), nameof(NotificationSendRecordDto.Id))]
+    public override partial void Map(NotificationSendRecordInfo source, NotificationSendRecordDto destination);
+
+    public override void AfterMap(NotificationSendRecordInfo source, NotificationSendRecordDto destination)
+    {
+        if (source.NotificationInfo != null)
+        {
+            var userNotificationInfoDto = _userNotificationInfoMapper.Map(source.NotificationInfo);
+            _userNotificationInfoMapper.AfterMap(source.NotificationInfo, userNotificationInfoDto);
+            destination.Notification = userNotificationInfoDto;
+        }
+    }
+}

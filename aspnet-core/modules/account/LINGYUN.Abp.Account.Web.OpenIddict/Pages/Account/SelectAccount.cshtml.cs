@@ -24,7 +24,8 @@ public class SelectAccountModel : AccountPageModel
 {
     private const string LastLoginTimeFieldName = "LastLoginTime";
     private const string AllowedTenantsFieldName = "AllowedTenants";
-    private const string DefaultDateFormat = "yyyy-MM-dd HH:mm:ss";
+    public const string DefaultDateFormat = "yyyy-MM-dd HH:mm:ss";
+    private OriginalRequestInfo _originalRequest;
 
     [BindProperty(SupportsGet = true)]
     public string RedirectUri { get; set; }
@@ -62,8 +63,8 @@ public class SelectAccountModel : AccountPageModel
             });
         }
 
-        var requestInfo = await ParseOriginalRequestFromRedirectUriAsync();
-        if (requestInfo == null)
+        _originalRequest = await ParseOriginalRequestFromRedirectUriAsync();
+        if (_originalRequest == null)
         {
             Alerts.Warning(L["InvalidSelectAccountRequest"]);
             return Page();
@@ -71,12 +72,12 @@ public class SelectAccountModel : AccountPageModel
 
         Input = new SelectAccountInput
         {
-            RedirectUri = requestInfo.RedirectUri,
-            ClientId = requestInfo.ClientId,
+            RedirectUri = _originalRequest.RedirectUri,
+            ClientId = _originalRequest.ClientId,
         };
 
-        var application = await ApplicationManager.FindByClientIdAsync(requestInfo.ClientId);
-        ClientName = await ApplicationManager.GetLocalizedDisplayNameAsync(application) ?? requestInfo.ClientId;
+        var application = await ApplicationManager.FindByClientIdAsync(_originalRequest.ClientId);
+        ClientName = await ApplicationManager.GetLocalizedDisplayNameAsync(application) ?? _originalRequest.ClientId;
 
         var currentUser = await UserManager.GetUserAsync(User);
         if (currentUser == null)
@@ -84,13 +85,13 @@ public class SelectAccountModel : AccountPageModel
             await SignInManager.SignOutAsync();
             return RedirectToPage("/Account/Login", new 
             {
-                ReturnUrl = requestInfo.RedirectUri
+                ReturnUrl = _originalRequest.RedirectUri
             });
         }
 
         UserName = currentUser.UserName;
 
-        AvailableAccounts = await DiscoverUserAccountsAsync(currentUser, requestInfo.ClientId);
+        AvailableAccounts = await DiscoverUserAccountsAsync(currentUser, _originalRequest.ClientId);
 
         if (AvailableAccounts.Count == 0)
         {
@@ -182,9 +183,40 @@ public class SelectAccountModel : AccountPageModel
             // Clear the dynamic claims cache.
             await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
         }
-        
+
         // 重定向回原始授权请求
-        return await RedirectSafelyAsync(Input.RedirectUri);
+        var originalAuthorizeUrl = await ReconstructOriginalAuthorizeUrlAsync();
+
+        return Redirect(originalAuthorizeUrl);
+    }
+
+    protected async virtual Task<string> ReconstructOriginalAuthorizeUrlAsync()
+    {
+        if (_originalRequest == null)
+        {
+            return Input.RedirectUri;
+        }
+        // 构建完整的授权请求 URL
+        var authorizeUrl = "/connect/authorize";
+        var parameters = new Dictionary<string, string>
+        {
+            ["client_id"] = _originalRequest.ClientId,
+            ["redirect_uri"] = _originalRequest.RedirectUri,
+            ["response_type"] = _originalRequest.ResponseType ?? "code",
+            ["scope"] = _originalRequest.Scope,
+            ["state"] = _originalRequest.State,
+            ["code_challenge"] = _originalRequest.CodeChallenge,
+            ["code_challenge_method"] = _originalRequest.CodeChallengeMethod,
+            ["prompt"] = "none" // 用户已认证，不需要再次提示
+        };
+
+        // 添加可选的 nonce 参数
+        if (!string.IsNullOrEmpty(_originalRequest.Nonce))
+        {
+            parameters["nonce"] = _originalRequest.Nonce;
+        }
+
+        return QueryHelpers.AddQueryString(authorizeUrl, parameters);
     }
 
     protected virtual Task<OriginalRequestInfo> ParseOriginalRequestFromRedirectUriAsync()

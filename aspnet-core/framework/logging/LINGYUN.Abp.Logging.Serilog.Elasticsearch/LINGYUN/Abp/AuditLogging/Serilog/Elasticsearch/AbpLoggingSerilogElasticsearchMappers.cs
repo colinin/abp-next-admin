@@ -2,6 +2,7 @@
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 using Riok.Mapperly.Abstractions;
 using Serilog.Events;
+using System.Collections.Generic;
 using Volo.Abp.Mapperly;
 
 namespace LINGYUN.Abp.AuditLogging.Serilog.Elasticsearch;
@@ -31,11 +32,46 @@ public partial class SerilogFieldToLogFieldMapper : MapperBase<SerilogField, Log
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 public partial class SerilogInfoToLogInfoMapper : MapperBase<SerilogInfo, LogInfo>
 {
-    [MapPropertyFromSource(nameof(LogInfo.Level), Use = nameof(GetLogLevel))]
+    private readonly SerilogFieldToLogFieldMapper _logFieldMapper;
+    private readonly SerilogExceptionToLogExceptionMapper _logExceptionMapper;
+    public SerilogInfoToLogInfoMapper(
+        SerilogFieldToLogFieldMapper logFieldMapper,
+        SerilogExceptionToLogExceptionMapper logExceptionMapper)
+    {
+        _logFieldMapper = logFieldMapper;
+        _logExceptionMapper = logExceptionMapper;
+    }
+
+    [MapperIgnoreTarget(nameof(LogInfo.Fields))]
+    [MapPropertyFromSource(nameof(SerilogInfo.Level), Use = nameof(GetLogLevel))]
     public override partial LogInfo Map(SerilogInfo source);
 
-    [MapPropertyFromSource(nameof(LogInfo.Level), Use = nameof(GetLogLevel))]
+    [MapperIgnoreTarget(nameof(LogInfo.Fields))]
+    [MapPropertyFromSource(nameof(SerilogInfo.Level), Use = nameof(GetLogLevel))]
     public override partial void Map(SerilogInfo source, LogInfo destination);
+
+    public override void AfterMap(SerilogInfo source, LogInfo destination)
+    {
+        if (source.Exceptions != null)
+        {
+            destination.Exceptions ??= new List<LogException>();
+            destination.Exceptions.Clear();
+
+            foreach (var exception in source.Exceptions)
+            {
+                var logException = _logExceptionMapper.Map(exception);
+                _logExceptionMapper.AfterMap(exception, logException);
+                destination.Exceptions.Add(logException);
+            }
+        }
+
+        if (source.Fields != null)
+        {
+            var logFields = _logFieldMapper.Map(source.Fields);
+            _logFieldMapper.AfterMap(source.Fields, logFields);
+            destination.Fields = logFields;
+        }
+    }
 
     [UserMapping(Default = false)]
     private static Microsoft.Extensions.Logging.LogLevel GetLogLevel(SerilogInfo source)

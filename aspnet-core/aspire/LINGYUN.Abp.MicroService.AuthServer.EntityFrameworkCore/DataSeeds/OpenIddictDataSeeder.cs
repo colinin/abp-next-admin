@@ -203,6 +203,7 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
                 "api-gateway",
                 "auth-server",
                 "admin-service",
+                "ai-service",
                 "identity-service",
                 "localization-service",
                 "message-service",
@@ -423,6 +424,27 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
                 "workflow-service",
             }
         });
+        // AI Service
+        await CreateScopesAsync(new OpenIddictScopeDescriptor
+        {
+            Name = "ai-service",
+            DisplayName = "Artificial Intelligence Service",
+            DisplayNames =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "AI管理服务",
+                [CultureInfo.GetCultureInfo("en")] = "Artificial Intelligence Service"
+            },
+            Description = "适用于AI管理服务Swagger授权",
+            Descriptions =
+            {
+                [CultureInfo.GetCultureInfo("zh-Hans")] = "适用于AI管理服务Swagger授权",
+                [CultureInfo.GetCultureInfo("en")] = "Applicable to the Artificial Intelligence service Swagger authorization"
+            },
+            Resources =
+            {
+                "ai-service",
+            }
+        });
     }
 
     private async Task CreateApplicationAsync(string scope)
@@ -530,6 +552,7 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
                  "api-gateway",
                 "auth-server",
                 "admin-service",
+                "ai-service",
                 "identity-service",
                 "localization-service",
                 "message-service",

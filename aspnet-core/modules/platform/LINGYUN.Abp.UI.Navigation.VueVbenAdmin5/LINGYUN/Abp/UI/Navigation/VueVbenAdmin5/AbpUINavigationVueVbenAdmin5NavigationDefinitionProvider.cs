@@ -1,5 +1,4 @@
-﻿using System.Security.Principal;
-using Volo.Abp.Data;
+﻿using Volo.Abp.Data;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin5;
@@ -11,9 +10,10 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
         context.Add(GetDashboard());
         context.Add(GetAccount());
         context.Add(GetManage());
+        context.Add(GetAIManagement());
         context.Add(GetSaas());
         context.Add(GetPlatform());
-        context.Add(GetOssManagement());
+        context.Add(GetBlobManagement());
         context.Add(GetTaskManagement());
         context.Add(GetWebhooksManagement());
         context.Add(GetTextTemplating());
@@ -485,7 +485,7 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
                multiTenancySides: MultiTenancySides.Host)
             .SetProperty("title", "abp.manage.notifications.groups"));
         notificationManagement.AddItem(new ApplicationMenu(
-               name: "NotificationsDefinitions",
+               name: "Vben5NotificationsDefinitions",
                displayName: "通知定义",
                url: "/manage/notifications/definitions",
                component: "/notifications/definitions/index",
@@ -493,6 +493,15 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
                description: "通知定义",
                multiTenancySides: MultiTenancySides.Host)
             .SetProperty("title", "abp.manage.notifications.definitions"));
+        notificationManagement.AddItem(new ApplicationMenu(
+               name: "Vben5NotificationsSendRecords",
+               displayName: "发送记录",
+               url: "/manage/notifications/send-records",
+               component: "/notifications/send-records/index",
+               icon: "material-symbols:history",
+               description: "发送记录",
+               multiTenancySides: MultiTenancySides.Host)
+            .SetProperty("title", "abp.manage.notifications.sendRecords"));
 
         manage.AddItem(
             new ApplicationMenu(
@@ -518,6 +527,47 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
             .SetProperty("title", "abp.manage.cache"));
 
         return new NavigationDefinition(manage);
+    }
+
+    private static NavigationDefinition GetAIManagement()
+    {
+        var aiManagement = new ApplicationMenu(
+            name: "Vben5ArtificialIntelligence",
+            displayName: "人工智能",
+            url: "/artificia-intelligence",
+            component: "",
+            description: "人工智能",
+            icon: "hugeicons:artificial-intelligence-04")
+            .SetProperty("title", "abp.ai.title");
+        aiManagement.AddItem(
+          new ApplicationMenu(
+              name: "Vben5AIToolDefinitions",
+              displayName: "工具管理",
+              url: "/artificia-intelligence/tools",
+              component: "/ai-management/tools/index",
+              icon: "ant-design:tool-outlined",
+              description: "工具管理")
+            .SetProperty("title", "abp.ai.tools"));
+        aiManagement.AddItem(
+          new ApplicationMenu(
+              name: "Vben5AIWorkspaceDefinitions",
+              displayName: "工作区管理",
+              url: "/artificia-intelligence/workspace",
+              component: "/ai-management/workspaces/index",
+              icon: "carbon:workspace",
+              description: "工作区管理")
+            .SetProperty("title", "abp.ai.workspaces"));
+        aiManagement.AddItem(
+          new ApplicationMenu(
+              name: "Vben5AIConversations",
+              displayName: "会话管理",
+              url: "/artificia-intelligence/conversations",
+              component: "/ai-management/conversations/index",
+              icon: "arcticons:conversations",
+              description: "会话管理")
+            .SetProperty("title", "abp.ai.conversations"));
+
+        return new NavigationDefinition(aiManagement);
     }
 
     private static NavigationDefinition GetSaas()
@@ -627,31 +677,31 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
         return new NavigationDefinition(platform);
     }
 
-    private static NavigationDefinition GetOssManagement()
+    private static NavigationDefinition GetBlobManagement()
     {
         var oss = new ApplicationMenu(
-            name: "Vben5Oss",
+            name: "Vben5BlobManagement",
             displayName: "对象存储",
-            url: "/oss",
+            url: "/blob-management",
             component: "",
             description: "对象存储",
             icon: "icon-park-outline:cloud-storage")
             .SetProperty("title", "abp.oss.title");
         oss.AddItem(
           new ApplicationMenu(
-              name: "Vben5OssContainers",
+              name: "Vben5BlobContainers",
               displayName: "容器管理",
-              url: "/oss/containers",
-              component: "/oss/containers/index",
+              url: "/blob-management/blob-containers",
+              component: "/blob-management/containers/index",
               icon: "mdi:bucket-outline",
               description: "容器管理")
             .SetProperty("title", "abp.oss.containers"));
         oss.AddItem(
           new ApplicationMenu(
-              name: "Vben5OssObjects",
+              name: "Vben5BlobFiles",
               displayName: "文件管理",
-              url: "/oss/objects",
-              component: "/oss/objects/index",
+              url: "/blob-management/blobs",
+              component: "/blob-management/blobs/index",
               icon: "mdi-light:file",
               description: "文件管理")
             .SetProperty("title", "abp.oss.objects"));

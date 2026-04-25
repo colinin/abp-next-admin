@@ -18,6 +18,9 @@
     "DisplayName:Keys": "Keys",
     "DisplayName:AbsoluteExpiration": "Absolute Expiration",
     "DisplayName:SlidingExpiration": "Sliding Expiration",
-    "Abp.CachingManagement:01001": "A cache of Type {Type} does not support viewing key values."
+    "DisplayName:Prefix": "Prefix",
+    "Abp.CachingManagement:01001": "A cache of Type {Type} does not support viewing key values.",
+    "MultipleCacheWillBeDeletedMessage": "The selected cache will be deleted. Deleting the cache may have an impact on the system. Please proceed with caution!",
+    "EditCacheValueAlertMessage": "Modifying the cache directly may affect the system operation. Please proceed with caution!"
   }
 }

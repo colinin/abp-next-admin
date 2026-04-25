@@ -56,13 +56,13 @@ public class InternalApiGatewayModule : AbpModule
         Configure<InternalApiGatewayOptions>(options =>
         {
             options.Aggregator.ConfigurationUrl.ClientName = "_Abp_Application_Configuration";
-            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30010"));
-            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30015"));
-            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30020"));
-            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30025"));
-            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30030"));
-            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30035"));
-            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://10.21.15.28:30040"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://localhost:30010"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://localhost:30015"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://localhost:30020"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://localhost:30025"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://localhost:30030"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://localhost:30035"));
+            options.Aggregator.ConfigurationUrl.GetUrls.AddIfNotContains(new RequestUrl("http://localhost:30040"));
         });
 
         context.Services.AddAbpSwaggerGenWithOAuth(

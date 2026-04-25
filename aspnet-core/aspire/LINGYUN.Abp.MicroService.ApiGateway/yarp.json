@@ -1,6 +1,21 @@
 ﻿{
   "ReverseProxy": {
     "Routes": {
+      "ai-management-route": {
+        "ClusterId": "ai-management-cluster",
+        "Match": {
+          "Path": "/api/ai-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat;Content-Type;Cache-Control"
+          }
+        ]
+      },
       "abp-route": {
         "ClusterId": "admin-service-cluster",
         "Match": {
@@ -389,10 +404,10 @@
           }
         ]
       },
-      "oss-management-route": {
+      "blob-management-route": {
         "ClusterId": "platform-service-cluster",
         "Match": {
-          "Path": "/api/oss-management/{**everything}"
+          "Path": "/api/blob-management/{**everything}"
         },
         "Transforms": [
           {
@@ -451,6 +466,16 @@
       }
     },
     "Clusters": {
+      "ai-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30070",
+            "Metadata": {
+              "SwaggerEndpoint": "http://localhost:30070"
+            }
+          }
+        }
+      },
       "auth-server-cluster": {
         "Destinations": {
           "destination1": {

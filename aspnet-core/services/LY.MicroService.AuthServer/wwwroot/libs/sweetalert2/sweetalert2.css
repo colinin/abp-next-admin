@@ -2,7 +2,7 @@
   --swal2-outline: 0 0 0 3px rgba(100, 150, 200, 0.5);
   --swal2-container-padding: 0.625em;
   --swal2-backdrop: rgba(0, 0, 0, 0.4);
-  --swal2-backdrop-transition: background-color 0.1s;
+  --swal2-backdrop-transition: background-color 0.15s;
   --swal2-width: 32em;
   --swal2-padding: 0 0 1.25em;
   --swal2-border: none;
@@ -22,7 +22,7 @@
   --swal2-input-transition: border-color 0.2s, box-shadow 0.2s;
   --swal2-input-hover-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px transparent;
   --swal2-input-focus-border: 1px solid #b4dbed;
-  --swal2-input-focus-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px $swal2-outline-color;
+  --swal2-input-focus-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px rgba(100, 150, 200, 0.5);
   --swal2-progress-step-background: #add8e6;
   --swal2-validation-message-background: #f0f0f0;
   --swal2-validation-message-color: #666;
@@ -112,7 +112,7 @@ body.swal2-no-backdrop .swal2-container {
   pointer-events: none;
 }
 body.swal2-no-backdrop .swal2-container .swal2-popup {
-  pointer-events: all;
+  pointer-events: auto;
 }
 body.swal2-no-backdrop .swal2-container .swal2-modal {
   box-shadow: 0 0 10px var(--swal2-backdrop);
@@ -855,7 +855,7 @@ div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=long] {
   border: var(--swal2-toast-border);
   background: var(--swal2-background);
   box-shadow: var(--swal2-toast-box-shadow);
-  pointer-events: all;
+  pointer-events: auto;
 }
 .swal2-toast > * {
   grid-column: 2;
@@ -1012,25 +1012,21 @@ div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=long] {
 
 @keyframes swal2-show {
   0% {
-    transform: scale(0.7);
-  }
-  45% {
-    transform: scale(1.05);
-  }
-  80% {
-    transform: scale(0.95);
+    transform: translate3d(0, -50px, 0) scale(0.9);
+    opacity: 0;
   }
   100% {
-    transform: scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 1;
   }
 }
 @keyframes swal2-hide {
   0% {
-    transform: scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
     opacity: 1;
   }
   100% {
-    transform: scale(0.5);
+    transform: translate3d(0, -50px, 0) scale(0.9);
     opacity: 0;
   }
 }

@@ -1,0 +1,22 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "McpAITool:Endpoint": "请求地址",
+    "McpAITool:Headers": "请求头",
+    "McpAITool:TransportMode": "传输方式",
+    "McpAITool:TransportModeDesc": "连接所采用的传输方式, 默认: Auto Detect.",
+    "McpAITool:ConnectionTimeout": "超时时间",
+    "McpAITool:ConnectionTimeoutDesc": "用于建立与 SSE 服务器初始连接的超时时间, 默认: 30秒.",
+    "McpAITool:MaxReconnectionAttempts": "最大重连次数",
+    "McpAITool:MaxReconnectionAttemptsDesc": "最大重连次数, 默认: 5次.",
+    "McpAITool:CurrentAccessToken": "使用当前用户Token",
+    "McpAITool:UseOAuth": "使用OAuth认证",
+    "McpAITool:RedirectUri": "重定向Uri",
+    "McpAITool:ClientId": "客户端Id",
+    "McpAITool:ClientSecret": "客户端密钥",
+    "McpAITool:ClientMetadataDocumentUri": "发现文档Uri",
+    "McpAITool:Scopes": "授权范围",
+    "McpAITool:ScopesDesc": "多个授权范围以空格分隔.",
+    "McpAITool:AdditionalParameters": "附加参数"
+  }
+}

@@ -9,7 +9,7 @@ using LINGYUN.Abp.Authentication.WeChat;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
-using LINGYUN.Abp.Exporter.MiniExcel;
+using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.Web;
 using LINGYUN.Abp.Identity.AspNetCore.Session;
@@ -75,7 +75,7 @@ namespace LY.MicroService.IdentityServer;
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
-    typeof(AbpExporterMiniExcelModule),
+    typeof(AbpExporterMiniSoftwareModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpCAPEventBusModule)
@@ -113,7 +113,6 @@ public partial class IdentityServerModule : AbpModule
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
-        ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 

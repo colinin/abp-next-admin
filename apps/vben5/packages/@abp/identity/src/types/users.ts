@@ -44,17 +44,19 @@ interface IdentityUserOrganizationUnitUpdateDto {
 }
 /** 用户实体数据传输对象 */
 interface IdentityUserDto
-  extends FullAuditedEntityDto<string>,
+  extends
+    FullAuditedEntityDto<string>,
     IHasConcurrencyStamp,
     IHasExtraProperties,
     IUser {
-  [key: string]: any;
   /** 访问失败次数 */
   accessFailedCount?: number;
   /** 邮箱已验证 */
   emailConfirmed: boolean;
   /** 已激活的用户 */
   isActive: boolean;
+  /** 最后一次密码修改时间 */
+  lastPasswordChangeTime?: Date;
   /** 锁定截止时间 */
   lockoutEnd?: Date;
   /** 联系方式已验证 */
@@ -64,6 +66,11 @@ interface IdentityUserDto
   /** 租户标识 */
   tenentId?: string;
 }
+/** 用户实体数据视图对象 */
+type IdentityUserVto = Omit<
+  IdentityUserDto,
+  'creationTime' | 'id' | 'isDeleted'
+> & { creationTime?: Date; id?: string; password?: string };
 /** 创建或更新用户实体数据传输对象 */
 interface IdentityUserCreateOrUpdateDto extends ExtensibleObject {
   /** 邮件地址 */
@@ -97,8 +104,7 @@ interface UserLookupCountInput {
 }
 
 interface UserLookupSearchInput
-  extends PagedAndSortedResultRequestDto,
-    UserLookupCountInput {}
+  extends PagedAndSortedResultRequestDto, UserLookupCountInput {}
 
 export type {
   ChangeMyPasswordInput,
@@ -108,6 +114,7 @@ export type {
   IdentityUserDto,
   IdentityUserOrganizationUnitUpdateDto,
   IdentityUserUpdateDto,
+  IdentityUserVto,
   UserLookupCountInput,
   UserLookupSearchInput,
 };

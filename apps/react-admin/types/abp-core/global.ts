@@ -43,6 +43,7 @@ interface IHasExtraProperties {
 }
 /** 选择项 */
 interface ISelectionStringValueItem {
+	[key: string]: any;
 	/** 选择项显示文本多语言对象 */
 	displayText: LocalizableStringInfo;
 	/** 选择项值 */
@@ -211,11 +212,12 @@ interface IHasSimpleStateCheckers<TState extends IHasSimpleStateCheckers<TState>
 	stateCheckers: ISimpleStateChecker<TState>[];
 }
 
-type SimpleStateRecord<TState extends IHasSimpleStateCheckers<TState>, TValue> = {
-	[P in keyof TState]: TValue;
-};
+// type SimpleStateRecord<TState extends IHasSimpleStateCheckers<TState>, TValue> = {
+// 	[P in keyof TState]: TValue;
+// };
 
-type SimpleStateCheckerResult<TState extends IHasSimpleStateCheckers<TState>> = SimpleStateRecord<TState, boolean>;
+// type SimpleStateCheckerResult<TState extends IHasSimpleStateCheckers<TState>> = SimpleStateRecord<TState, boolean>;
+type SimpleStateCheckerResult<TState> = Map<TState, boolean>;
 
 interface SimpleStateCheckerContext<TState extends IHasSimpleStateCheckers<TState>> {
 	state: TState;

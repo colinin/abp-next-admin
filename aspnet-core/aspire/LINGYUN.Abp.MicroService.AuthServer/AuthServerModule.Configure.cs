@@ -1,6 +1,5 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.MultiTenancy;
-using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.MicroService.AuthServer.Ui.Branding;
@@ -15,13 +14,11 @@ using LINGYUN.Abp.Wrapper;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +37,6 @@ using System.Text.Unicode;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.Auditing;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
@@ -168,15 +164,6 @@ public partial class AuthServerModule
     {
         Configure<AbpBlobStoringOptions>(options =>
         {
-            // all container use oss management
-            options.Containers.ConfigureAll((containerName, containerConfiguration) =>
-            {
-                // use oss management
-                containerConfiguration.UseOssManagement(config =>
-                {
-                    config.Bucket = configuration[OssManagementBlobProviderConfigurationNames.Bucket];
-                });
-            });
         });
     }
 

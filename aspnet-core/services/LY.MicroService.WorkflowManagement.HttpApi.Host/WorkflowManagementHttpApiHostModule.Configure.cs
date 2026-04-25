@@ -3,7 +3,6 @@ using Elsa;
 using Elsa.Options;
 using Elsa.Rebus.RabbitMq;
 using LINGYUN.Abp.BackgroundTasks;
-using LINGYUN.Abp.BlobStoring.OssManagement;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -23,11 +22,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Quartz;
 using StackExchange.Redis;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -211,8 +212,11 @@ public partial class WorkflowManagementHttpApiHostModule
         var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
         if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
-            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+            services.AddSingleton<IDistributedLockProvider>(_ =>
+            {
+                return new RedisDistributedSynchronizationProvider(
+                    ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]).GetDatabase());
+            });
         }
     }
 
@@ -222,20 +226,6 @@ public partial class WorkflowManagementHttpApiHostModule
         Configure<AbpBlobStoringOptions>(options =>
         {
             preActions.Configure(options);
-            //options.Containers.Configure<WorkflowContainer>((containerConfiguration) =>
-            //{
-            //    containerConfiguration.UseOssManagement(config =>
-            //    {
-            //        config.Bucket = configuration[OssManagementBlobProviderConfigurationNames.Bucket] ?? "workflow";
-            //    });
-            //});
-            options.Containers.ConfigureAll((_, containerConfiguration) =>
-            {
-                containerConfiguration.UseOssManagement(config =>
-                {
-                    config.Bucket = configuration[OssManagementBlobProviderConfigurationNames.Bucket] ?? "workflow";
-                });
-            });
         });
     }
 
@@ -247,7 +237,7 @@ public partial class WorkflowManagementHttpApiHostModule
             options.UseMySQL(mysql =>
             {
                 // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
-                mysql.TranslateParameterizedCollectionsToConstants();
+                mysql.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
             });
         });
     }
@@ -415,27 +405,32 @@ public partial class WorkflowManagementHttpApiHostModule
                         Url = new Uri("https://github.com/colinin/abp-next-admin/blob/master/LICENSE")
                     }
                 });
-                options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.DocInclusionPredicate((docName, description) =>
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Scheme = "bearer",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT"
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
+                    if (description.TryGetMethodInfo(out var methodInfo))
                     {
-                        new OpenApiSecurityScheme
+                        var controllerNamespace = methodInfo.DeclaringType?.Namespace;
+                        if (controllerNamespace?.StartsWith("Elsa") == true)
                         {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                        },
-                        new string[] { }
+                            // TODO: Elsa 2.x 使用 Swashbuckle 6.x版本不兼容, 忽略Swagger文档
+                            return false;
+                        }
                     }
+
+                    return true;
                 });
+                options.CustomSchemaIds(type => type.FullName);
+                options.DescribeAllParametersInCamelCase();
+
+                var xmlDocFiles = new List<string>();
+                xmlDocFiles.AddIfNotContains(Directory.GetFiles(AppContext.BaseDirectory, "LINGYUN.Abp.*.xml"));
+                xmlDocFiles.AddIfNotContains(Directory.GetFiles(AppContext.BaseDirectory, "Volo.Abp.*.xml"));
+
+                foreach (var xmlDocFile in xmlDocFiles)
+                {
+                    options.IncludeXmlComments(xmlDocFile);
+                }
+
                 options.OperationFilter<TenantHeaderParamter>();
             });
     }
@@ -469,12 +464,6 @@ public partial class WorkflowManagementHttpApiHostModule
 
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
     {
-        Configure<AbpAntiForgeryOptions>(options =>
-        {
-            options.AutoValidate = false;
-            //options.AutoValidateFilter = (type) => !type.Namespace.Contains("elsa", StringComparison.CurrentCultureIgnoreCase);
-        });
-
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddAbpJwtBearer(options =>
             {
@@ -493,18 +482,18 @@ public partial class WorkflowManagementHttpApiHostModule
                 }
             });
 
-        //services.AddElsaJwtBearerAuthentication(options =>
-        //{
-        //});
-
-        if (!isDevelopment)
+        Configure<AbpAntiForgeryOptions>(options =>
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-            services
-                .AddDataProtection()
-                .SetApplicationName("LINGYUN.Abp.Application")
-                .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
-        }
+            configuration.GetSection("AntiForgery").Bind(options);
+        });
+
+        services.AddDataProtection()
+            .SetApplicationName("LINGYUN.Abp.Application")
+            .PersistKeysToStackExchangeRedis(() =>
+            {
+                return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]).GetDatabase();
+            },
+            "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
     }
 
     private void ConfigureCors(IServiceCollection services, IConfiguration configuration)

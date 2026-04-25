@@ -9,7 +9,7 @@ import type { Ref } from 'vue';
 
 import type { ClassType, DeepPartial } from '@vben/types';
 
-import type { VbenFormProps } from '@vben-core/form-ui';
+import type { BaseFormComponentType, VbenFormProps } from '@vben-core/form-ui';
 
 import type { VxeGridApi } from './api';
 
@@ -31,7 +31,15 @@ export interface VxeTableGridOptions<T = any> extends VxeTableGridProps<T> {
   toolbarConfig?: ToolbarConfigOptions;
 }
 
-export interface VxeGridProps {
+export interface SeparatorOptions {
+  backgroundColor?: string;
+  show?: boolean;
+}
+
+export interface VxeGridProps<
+  T extends Record<string, any> = any,
+  D extends BaseFormComponentType = BaseFormComponentType,
+> {
   /**
    * 组件class
    */
@@ -39,7 +47,7 @@ export interface VxeGridProps {
   /**
    * 表单配置
    */
-  formOptions?: VbenFormProps;
+  formOptions?: VbenFormProps<D>;
   /**
    * vxe-grid class
    */
@@ -47,11 +55,15 @@ export interface VxeGridProps {
   /**
    * vxe-grid 事件
    */
-  gridEvents?: DeepPartial<VxeGridListeners>;
+  gridEvents?: DeepPartial<VxeGridListeners<T>>;
   /**
    * vxe-grid 配置
    */
-  gridOptions?: DeepPartial<VxeTableGridOptions>;
+  gridOptions?: DeepPartial<VxeTableGridOptions<T>>;
+  /**
+   * 搜索表单与表格主体之间的分隔条
+   */
+  separator?: boolean | SeparatorOptions;
   /**
    * 显示搜索表单
    */
@@ -66,9 +78,12 @@ export interface VxeGridProps {
   tableTitleHelp?: string;
 }
 
-export type ExtendedVxeGridApi = VxeGridApi & {
-  useStore: <T = NoInfer<VxeGridProps>>(
-    selector?: (state: NoInfer<VxeGridProps>) => T,
+export type ExtendedVxeGridApi<
+  D extends Record<string, any> = any,
+  F extends BaseFormComponentType = BaseFormComponentType,
+> = VxeGridApi<D> & {
+  useStore: <T = NoInfer<VxeGridProps<D, F>>>(
+    selector?: (state: NoInfer<VxeGridProps<any, any>>) => T,
   ) => Readonly<Ref<T>>;
 };
 

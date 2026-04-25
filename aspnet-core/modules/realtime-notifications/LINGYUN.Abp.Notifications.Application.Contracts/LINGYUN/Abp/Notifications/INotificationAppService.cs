@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.Notifications;
 
 public interface INotificationAppService
 {
-    Task<ListResultDto<NotificationProviderDto>> GetAssignableProvidersAsync();
+    Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync();
 
     Task<ListResultDto<NotificationGroupDto>> GetAssignableNotifiersAsync();
 

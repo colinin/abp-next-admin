@@ -10,7 +10,5 @@ public interface INotificationsDbContext : IEfCoreDbContext
     DbSet<Notification> Notifications { get; }
     DbSet<UserNotification> UserNotifications { get; }
     DbSet<UserSubscribe> UserSubscribes { get; }
-
-    DbSet<NotificationDefinitionGroupRecord> NotificationDefinitionGroupRecords { get; }
-    DbSet<NotificationDefinitionRecord> NotificationDefinitionRecords { get; }
+    DbSet<NotificationSendRecord> NotificationSendRecords { get; }
 }

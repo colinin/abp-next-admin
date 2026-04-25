@@ -72,7 +72,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     {
         var role = await IdentityRoleRepository.GetAsync(id);
 
-        return new ListResultDto<IdentityClaimDto>(ObjectMapper.Map<ICollection<IdentityRoleClaim>, List<IdentityClaimDto>>(role.Claims));
+        return new ListResultDto<IdentityClaimDto>(ObjectMapper.Map<List<IdentityRoleClaim>, List<IdentityClaimDto>>(role.Claims.ToList()));
     }
 
     [Authorize(IdentityPermissions.Roles.ManageClaims)]

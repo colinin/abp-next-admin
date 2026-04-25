@@ -15,71 +15,60 @@ public class NotificationDynamicInitializer : ITransientDependency
 {
     public ILogger<NotificationDynamicInitializer> Logger { get; set; }
     protected IServiceProvider ServiceProvider { get; }
-    protected IOptions<AbpNotificationsManagementOptions> Options { get; }
-    protected IHostApplicationLifetime ApplicationLifetime { get; }
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
-    protected IDynamicNotificationDefinitionStore DynamicNotificationDefinitionStore { get; }
-    protected IStaticNotificationSaver StaticNotificationSaver { get; }
 
-    public NotificationDynamicInitializer(
-        IServiceProvider serviceProvider,
-        IOptions<AbpNotificationsManagementOptions> options,
-        ICancellationTokenProvider cancellationTokenProvider,
-        IDynamicNotificationDefinitionStore dynamicNotificationDefinitionStore,
-        IStaticNotificationSaver staticNotificationSaver)
+    public NotificationDynamicInitializer(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
-        Options = options;
-        CancellationTokenProvider = cancellationTokenProvider;
-        DynamicNotificationDefinitionStore = dynamicNotificationDefinitionStore;
-        StaticNotificationSaver = staticNotificationSaver;
-        ApplicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
 
         Logger = NullLogger<NotificationDynamicInitializer>.Instance;
     }
 
     public virtual Task InitializeAsync(bool runInBackground, CancellationToken cancellationToken = default)
     {
-        if (!Options.Value.SaveStaticNotificationsToDatabase && !Options.Value.IsDynamicNotificationsStoreEnabled)
+        var options = ServiceProvider.GetRequiredService<IOptions<AbpNotificationsManagementOptions>>().Value;
+
+        if (!options.SaveStaticNotificationsToDatabase && !options.IsDynamicNotificationsStoreEnabled)
         {
             return Task.CompletedTask;
         }
 
         if (runInBackground)
         {
+            var applicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
             Task.Run(async () =>
             {
-                if (cancellationToken == default && ApplicationLifetime?.ApplicationStopping != null)
+                if (cancellationToken == default && applicationLifetime?.ApplicationStopping != null)
                 {
-                    cancellationToken = ApplicationLifetime.ApplicationStopping;
+                    cancellationToken = applicationLifetime.ApplicationStopping;
                 }
-                await ExecuteInitializationAsync(cancellationToken);
+                await ExecuteInitializationAsync(options, cancellationToken);
             }, cancellationToken);
             return Task.CompletedTask;
         }
 
-        return ExecuteInitializationAsync(cancellationToken);
+        return ExecuteInitializationAsync(options, cancellationToken);
     }
 
-    protected virtual async Task ExecuteInitializationAsync(CancellationToken cancellationToken)
+    protected virtual async Task ExecuteInitializationAsync(AbpNotificationsManagementOptions options, CancellationToken cancellationToken)
     {
         try
         {
-            using (CancellationTokenProvider.Use(cancellationToken))
+            var cancellationTokenProvider = ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
+            using (cancellationTokenProvider.Use(cancellationToken))
             {
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
 
-                await SaveStaticNotificationssToDatabaseAsync(cancellationToken);
+                await SaveStaticNotificationssToDatabaseAsync(options, cancellationToken);
 
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
 
-                await PreCacheDynamicNotificationsAsync(cancellationToken);
+                await PreCacheDynamicNotificationsAsync(options, cancellationToken);
             }
         }
         catch
@@ -88,12 +77,14 @@ public class NotificationDynamicInitializer : ITransientDependency
         }
     }
 
-    protected virtual async Task SaveStaticNotificationssToDatabaseAsync(CancellationToken cancellationToken)
+    protected virtual async Task SaveStaticNotificationssToDatabaseAsync(AbpNotificationsManagementOptions options, CancellationToken cancellationToken)
     {
-        if (!Options.Value.SaveStaticNotificationsToDatabase)
+        if (!options.SaveStaticNotificationsToDatabase)
         {
             return;
         }
+
+        var staticNotificationSaver = ServiceProvider.GetRequiredService<IStaticNotificationSaver>();
 
         await Policy
             .Handle<Exception>(e => e is not OperationCanceledException)
@@ -111,7 +102,7 @@ public class NotificationDynamicInitializer : ITransientDependency
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    await StaticNotificationSaver.SaveAsync();
+                    await staticNotificationSaver.SaveAsync();
                 }
                 catch (Exception ex)
                 {
@@ -122,18 +113,20 @@ public class NotificationDynamicInitializer : ITransientDependency
             }, cancellationToken);
     }
 
-    protected virtual async Task PreCacheDynamicNotificationsAsync(CancellationToken cancellationToken)
+    protected virtual async Task PreCacheDynamicNotificationsAsync(AbpNotificationsManagementOptions options, CancellationToken cancellationToken)
     {
-        if (!Options.Value.IsDynamicNotificationsStoreEnabled)
+        if (!options.IsDynamicNotificationsStoreEnabled)
         {
             return;
         }
+
+        var dynamicNotificationDefinitionStore = ServiceProvider.GetRequiredService<IDynamicNotificationDefinitionStore>();
 
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
             // Pre-cache notifications, so first request doesn't wait
-            await DynamicNotificationDefinitionStore.GetGroupsAsync();
+            await dynamicNotificationDefinitionStore.GetGroupsAsync();
         }
         catch (Exception ex)
         {

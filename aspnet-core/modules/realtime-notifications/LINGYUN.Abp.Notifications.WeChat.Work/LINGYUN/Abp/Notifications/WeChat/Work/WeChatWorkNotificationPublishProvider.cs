@@ -41,34 +41,35 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
     }
 
     protected async override Task PublishAsync(
-        NotificationInfo notification, 
-        IEnumerable<UserIdentifier> identifiers, 
+        NotificationPublishContext context,
         CancellationToken cancellationToken = default)
     {
         var sendToAgentIds = new List<string>();
-        var notificationDefine = await NotificationDefinitionManager.GetOrNullAsync(notification.Name);
+        var notificationDefine = await NotificationDefinitionManager.GetOrNullAsync(context.Notification.Name);
         var agentId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.AgentId);
         if (agentId.IsNullOrWhiteSpace())
         {
-            Logger.LogWarning("Unable to send work weixin messages because agentId is not set.");
+            context.Cancel("Unable to send work weixin messages because agentId is not set.");
+            Logger.LogWarning(context.Reason);
             return;
         }
-        var notificationData = await NotificationDataSerializer.ToStandard(notification.Data);
-        var toTag = notification.Data.GetTagOrNull() ?? notificationDefine?.GetTagOrNull();
-        var toParty = notification.Data.GetPartyOrNull() ?? notificationDefine?.GetPartyOrNull();
-        var toUsers = await WeChatWorkInternalUserFinder.FindUserIdentifierListAsync(identifiers.Select(id => id.UserId));
+        var notificationData = await NotificationDataSerializer.ToStandard(context.Notification.Data);
+        var toTag = context.Notification.Data.GetTagOrNull() ?? notificationDefine?.GetTagOrNull();
+        var toParty = context.Notification.Data.GetPartyOrNull() ?? notificationDefine?.GetPartyOrNull();
+        var toUsers = await WeChatWorkInternalUserFinder.FindUserIdentifierListAsync(context.Users.Select(id => id.UserId));
 
         if (toUsers.IsNullOrEmpty() && toTag.IsNullOrWhiteSpace() && toParty.IsNullOrWhiteSpace())
         {
             // touser、toparty、totag不能同时为空：https://developer.work.weixin.qq.com/document/path/90236
-            Logger.LogWarning("Unable to send work weixin messages because The recipient/department/label cannot be empty simultaneously.");
+            context.Cancel("Unable to send work weixin messages because The recipient/department/label cannot be empty simultaneously.");
+            Logger.LogWarning(context.Reason);
             return;
         }
 
         // 发送到个人
         await PublishToAgentAsync(
+            context,
             agentId,
-            notification,
             notificationData.Title,
             notificationData.Message,
             notificationData.Description,
@@ -79,8 +80,8 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
     }
 
     protected async virtual Task PublishToAgentAsync(
+        NotificationPublishContext context,
         string agentId,
-        NotificationInfo notification,
         string title,
         string content,
         string description = "",
@@ -91,7 +92,7 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
     {
         WeChatWorkMessage message = null;
 
-        switch (notification.ContentType)
+        switch (context.Notification.ContentType)
         {
             case NotificationContentType.Text:
                 message = new WeChatWorkTextMessage(agentId, new TextMessage(content));
@@ -108,7 +109,8 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
 
         if (message == null)
         {
-            Logger.LogWarning("Unable to send work weixin messages because WeChatWorkMessage is null.");
+            context.Cancel("Unable to send work weixin messages because WeChatWorkMessage is null.");
+            Logger.LogWarning(context.Reason);
             return;
         }
 
@@ -118,6 +120,6 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
 
         await WeChatWorkMessageSender.SendAsync(message, cancellationToken);
 
-        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", notification.Name, Name);
+        Logger.LogDebug("The notification: {0} with provider: {1} has successfully published!", context.Notification.Name, Name);
     }
 }

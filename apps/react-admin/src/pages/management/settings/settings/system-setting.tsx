@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Input, Modal } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import { useTranslation } from "react-i18next";
 import type { SettingsUpdateInput } from "#/management/settings/settings";
 
@@ -14,12 +14,18 @@ import SettingForm from "./setting-form";
 import { toast } from "sonner";
 import { isEmail } from "@/utils/abp/regex";
 import { useApplication } from "@/store/abpCoreStore";
+import { hasAccessByCodes } from "@/utils/abp/access-checker";
+import FeatureManagementModal from "@/components/abp/features/feature-modal";
+import { SettingOutlined } from "@ant-design/icons";
 
 const SystemSetting: React.FC = () => {
 	const { t: $t } = useTranslation();
 	// const [form] = Form.useForm();
 	const [sending, setSending] = useState(false);
 	const application = useApplication();
+
+	// Modal State for Feature Management
+	const [featureModalVisible, setFeatureModalVisible] = useState(false);
 
 	const [modal, contextHolder] = Modal.useModal();
 	const handleGet = async () => {
@@ -54,27 +60,46 @@ const SystemSetting: React.FC = () => {
 			setSending(false);
 		}
 	};
+	const handleFeatureManage = () => {
+		setFeatureModalVisible(true);
+	};
+
+	// -- Slots for SettingForm --
 
 	const SendTestEmailSlot: React.FC<{
 		detail: any;
 		onChange: (setting: any) => void;
 	}> = ({ detail, onChange }) => (
-		<Input.Search
-			// value={detail.value}
-			loading={sending}
-			placeholder={$t("AbpSettingManagement.TargetEmailAddress")}
-			onSearch={handleSendMail}
-			onChange={(e) => {
-				detail.value = e.target.value;
-				onChange(detail);
-			}}
-			enterButton={
-				<Button loading={sending} type="primary">
-					{$t("AbpSettingManagement.Send")}
-				</Button>
-			}
-		/>
+		<Form.Item label={detail.displayName} extra={detail.description} required>
+			<Input.Search
+				defaultValue={detail.value}
+				loading={sending}
+				placeholder={$t("AbpSettingManagement.TargetEmailAddress")}
+				onSearch={handleSendMail}
+				onChange={(e) => {
+					detail.value = e.target.value;
+					onChange(detail);
+				}}
+				enterButton={
+					<Button loading={sending} type="primary">
+						{$t("AbpSettingManagement.Send")}
+					</Button>
+				}
+			/>
+		</Form.Item>
 	);
+
+	const ToolbarSlot: React.FC = () => {
+		if (!hasAccessByCodes(["FeatureManagement.ManageHostFeatures"])) {
+			return null;
+		}
+
+		return (
+			<Button ghost type="primary" icon={<SettingOutlined />} onClick={handleFeatureManage}>
+				{$t("AbpFeatureManagement.ManageHostFeatures")}
+			</Button>
+		);
+	};
 
 	return (
 		<>
@@ -85,7 +110,15 @@ const SystemSetting: React.FC = () => {
 				onChange={() => {}}
 				slots={{
 					"send-test-email": SendTestEmailSlot,
+					toolbar: ToolbarSlot,
 				}}
+			/>
+
+			{/* Feature Management Modal */}
+			<FeatureManagementModal
+				visible={featureModalVisible}
+				onClose={() => setFeatureModalVisible(false)}
+				providerName="T" //Fixed to 'T'
 			/>
 		</>
 	);

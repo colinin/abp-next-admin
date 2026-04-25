@@ -38,6 +38,10 @@
     "PermissionDefinitions:AddNew": "Add New",
     "BasicInfo": "Basic",
     "Properties": "Properties",
-    "StateCheckers": "State Checkers"
+    "StateCheckers": "State Checkers",
+    "PermissionProviders:C": "Client",
+    "PermissionProviders:R": "Role",
+    "PermissionProviders:U": "User",
+    "PermissionProviders:O": "Organization Unit"
   }
 }

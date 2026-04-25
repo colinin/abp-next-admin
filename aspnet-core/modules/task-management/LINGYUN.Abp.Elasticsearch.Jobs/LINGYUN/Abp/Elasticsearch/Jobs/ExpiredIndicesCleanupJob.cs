@@ -1,5 +1,5 @@
-﻿using LINGYUN.Abp.BackgroundTasks;
-using System;
+﻿using Elastic.Transport.Products.Elasticsearch;
+using LINGYUN.Abp.BackgroundTasks;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Timing;
@@ -21,10 +21,6 @@ public class ExpiredIndicesCleanupJob : IJobRunnable
                 LocalizableStatic.Create("Indices:IndexPrefix"),
                 required: true),
             new JobDefinitionParamter(
-                PropertyTimeZone,
-                LocalizableStatic.Create("Indices:TimeZone"),
-                LocalizableStatic.Create("Indices:TimeZoneDesc")),
-            new JobDefinitionParamter(
                 PropertyExpirationTime,
                 LocalizableStatic.Create("Indices:ExpirationTime")),
         };
@@ -34,10 +30,6 @@ public class ExpiredIndicesCleanupJob : IJobRunnable
     /// 每次清除记录大小
     /// </summary>
     private const string PropertyIndexPrefix = "IndexPrefix";
-    /// <summary>
-    /// 计算时差的时区, 默认Utc
-    /// </summary>
-    private const string PropertyTimeZone = "TimeZone";
     /// <summary>
     /// 过期时间, 单位秒, 默认 5184000 (60天)
     /// </summary>
@@ -49,26 +41,14 @@ public class ExpiredIndicesCleanupJob : IJobRunnable
     {
         #region Initializes Job Parameters
 
-        var timeZone = TimeZoneInfo.Utc;
         var indexPrefix = context.GetString(PropertyIndexPrefix);
-        var timeZoneString = context.GetOrDefaultString(PropertyTimeZone, "utc");
         var expirationSecond = context.GetOrDefaultJobData(PropertyExpirationTime, 5184000L);
-
-        if (!timeZoneString.IsNullOrWhiteSpace())
-        {
-            timeZone = timeZoneString.ToLowerInvariant() switch
-            {
-                "local" => TimeZoneInfo.Local,
-                _ => TimeZoneInfo.Utc,
-            };
-        }
 
         var elasticClientFactory = context.GetRequiredService<IElasticsearchClientFactory>();
         var elasticClient = elasticClientFactory.Create();
 
         var clock = context.GetRequiredService<IClock>();
         var expirationTime = clock.Now.AddSeconds(-expirationSecond);
-        var startTime = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), timeZone);
         var removeIndices = new List<string>();
 
         #endregion
@@ -76,23 +56,21 @@ public class ExpiredIndicesCleanupJob : IJobRunnable
         #region ES indices.get_settings API
 
         // GET demo*/_settings
-        var settingResponse = await elasticClient.Indices.GetSettingsAsync(indexPrefix);
-        if (!settingResponse.IsValid)
+        var indexResponse = await elasticClient.Indices.GetAsync(indexPrefix);
+        if (!indexResponse.IsValidResponse)
         {
-            throw new AbpJobExecutionException(GetType(), settingResponse.ServerError.ToString(), settingResponse.OriginalException);
+            indexResponse.TryGetOriginalException(out var originalException);
+            indexResponse.TryGetElasticsearchServerError(out var elasticsearchServerError);
+            throw new AbpJobExecutionException(GetType(), elasticsearchServerError?.ToString(), originalException);
         }
 
-        foreach (var indexSet in settingResponse.Indices)
+        foreach (var index in indexResponse.Indices)
         {
             // 索引创建日期
-            if (indexSet.Value.Settings.TryGetValue("index.creation_date", out var indexSetV) &&
-                long.TryParse(indexSetV.ToString(), out var timestamp))
+            if (index.Value.Settings?.CreationDate <= expirationTime ||
+                index.Value.Settings?.Index?.CreationDate <= expirationTime)
             {
-                var indexCreationDate = startTime.AddMilliseconds(timestamp);
-                if (indexCreationDate <= expirationTime)
-                {
-                    removeIndices.Add(indexSet.Key.Name);
-                }
+                removeIndices.Add(index.Key);
             }
         }
 
@@ -103,9 +81,11 @@ public class ExpiredIndicesCleanupJob : IJobRunnable
         foreach (var index in removeIndices)
         {
             var delResponse = await elasticClient.Indices.DeleteAsync(index);
-            if (!delResponse.IsValid)
+            if (!delResponse.IsValidResponse)
             {
-                throw new AbpJobExecutionException(GetType(), delResponse.ServerError.ToString(), delResponse.OriginalException);
+                delResponse.TryGetOriginalException(out var originalException);
+                delResponse.TryGetElasticsearchServerError(out var elasticsearchServerError);
+                throw new AbpJobExecutionException(GetType(), elasticsearchServerError?.ToString(), originalException);
             }
         }
 

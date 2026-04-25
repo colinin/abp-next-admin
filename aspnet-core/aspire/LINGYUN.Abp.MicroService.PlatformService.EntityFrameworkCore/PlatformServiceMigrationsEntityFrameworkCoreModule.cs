@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Data.DbMigrator;
+﻿using LINGYUN.Abp.BlobManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.UI.Navigation.VueVbenAdmin5;
 using LINGYUN.Platform.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace LINGYUN.Abp.MicroService.PlatformService;
 [DependsOn(
     typeof(AbpUINavigationVueVbenAdmin5Module),
     typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpBlobManagementEntityFrameworkCoreModule),
     typeof(PlatformEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),

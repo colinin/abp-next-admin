@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Collections.Generic;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.AspNetCore.MultiTenancy;
 
 namespace LY.MicroService.Applications.Single;
@@ -23,7 +21,7 @@ public class TenantHeaderParamter : IOperationFilter
     {
         if (_multiTenancyOptions.IsEnabled)
         {
-            operation.Parameters = operation.Parameters ?? new List<OpenApiParameter>();
+            operation.Parameters ??= new List<IOpenApiParameter>();
             operation.Parameters.Add(new OpenApiParameter
             {
                 Name = _aspNetCoreMultiTenancyOptions.TenantKey,

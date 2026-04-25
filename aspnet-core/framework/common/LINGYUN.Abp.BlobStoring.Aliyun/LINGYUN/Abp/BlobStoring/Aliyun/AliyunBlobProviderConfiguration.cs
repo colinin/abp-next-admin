@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Volo.Abp;
 using Volo.Abp.BlobStoring;
 
 namespace LINGYUN.Abp.BlobStoring.Aliyun;
@@ -12,7 +11,7 @@ public class AliyunBlobProviderConfiguration
     public string BucketName
     {
         get => _containerConfiguration.GetConfiguration<string>(AliyunBlobProviderConfigurationNames.BucketName);
-        set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.BucketName, Check.NotNullOrWhiteSpace(value, nameof(value)));
+        set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.BucketName, value);
     }
     /// <summary>
     /// 命名空间不存在是否创建

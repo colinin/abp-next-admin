@@ -23,6 +23,13 @@ public class FeatureDefinitionController : FeatureManagementControllerBase, IFea
         _service = service;
     }
 
+    [HttpGet]
+    [Route("assignable-providers")]
+    public virtual Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync()
+    {
+        return _service.GetAssignableProvidersAsync();
+    }
+
     [HttpPost]
     [Authorize(FeatureManagementPermissionNames.Definition.Create)]
     public virtual Task<FeatureDefinitionDto> CreateAsync(FeatureDefinitionCreateDto input)

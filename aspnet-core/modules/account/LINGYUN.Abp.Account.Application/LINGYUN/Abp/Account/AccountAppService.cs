@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.Account.Security;
 using LINGYUN.Abp.Identity;
-using LINGYUN.Abp.Identity.Security;
 using LINGYUN.Abp.Identity.Settings;
 using LINGYUN.Abp.WeChat;
 using LINGYUN.Abp.WeChat.MiniProgram;
@@ -11,7 +10,6 @@ using Microsoft.Extensions.Options;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -26,7 +24,6 @@ namespace LINGYUN.Abp.Account;
 
 public class AccountAppService : AccountApplicationServiceBase, IAccountAppService
 {
-    protected ITotpService TotpService { get; }
     protected IIdentityUserRepository UserRepository { get; }
     protected IAccountSmsSecurityCodeSender SecurityCodeSender { get; }
     protected IWeChatOpenIdFinder WeChatOpenIdFinder { get; }
@@ -35,7 +32,6 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
     protected IDistributedCache<SecurityTokenCacheItem> SecurityTokenCache { get; }
 
     public AccountAppService(
-        ITotpService totpService,
         IWeChatOpenIdFinder weChatOpenIdFinder,
         IIdentityUserRepository userRepository,
         IAccountSmsSecurityCodeSender securityCodeSender,
@@ -43,7 +39,6 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory,
         IdentitySecurityLogManager identitySecurityLogManager)
     {
-        TotpService = totpService;
         UserRepository = userRepository;
         WeChatOpenIdFinder = weChatOpenIdFinder;
         SecurityCodeSender = securityCodeSender;
@@ -106,7 +101,9 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         await CheckSelfRegistrationAsync();
         await CheckNewUserPhoneNumberNotBeUsedAsync(input.PhoneNumber);
 
-        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.PhoneNumber, "SmsVerifyCode");
+        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(
+            input.PhoneNumber, 
+            UserTwoFactorTokenProviderConsts.PhoneNumberRegisterPurpose);
         var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
         var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepetInterval, 1);
 
@@ -117,11 +114,21 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
 
         var template = await SettingProvider.GetOrNullAsync(IdentitySettingNames.User.SmsNewUserRegister);
 
-        // 安全令牌
-        var securityToken = GuidGenerator.Create().ToString("N");
+        var tempNewUser = new IdentityUser(
+            GuidGenerator.Create(),
+            "TempUser",
+            "TempUser@abp.io",
+            CurrentTenant.Id);
+        tempNewUser.SetPhoneNumberRegisterUser();
 
-        var code = TotpService.GenerateCode(Encoding.Unicode.GetBytes(securityToken), securityTokenCacheKey);
-        securityTokenCacheItem = new SecurityTokenCacheItem(code.ToString(), securityToken);
+        (await UserManager.UpdateSecurityStampAsync(tempNewUser)).CheckErrors();
+
+        var code = await UserManager.GenerateUserTokenAsync(
+            tempNewUser, 
+            UserTwoFactorTokenProviderConsts.PhoneNumberRegisterTokenProvider, 
+            UserTwoFactorTokenProviderConsts.PhoneNumberRegisterPurpose);
+
+        securityTokenCacheItem = new SecurityTokenCacheItem(code, tempNewUser.Id, await UserManager.GetSecurityStampAsync(tempNewUser));
 
         await SecurityCodeSender.SendAsync(
             input.PhoneNumber, securityTokenCacheItem.Token, template);
@@ -140,7 +147,9 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         await IdentityOptions.SetAsync();
         await CheckNewUserPhoneNumberNotBeUsedAsync(input.PhoneNumber);
 
-        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.PhoneNumber, "SmsVerifyCode");
+        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(
+            input.PhoneNumber,
+            UserTwoFactorTokenProviderConsts.PhoneNumberRegisterPurpose);
         var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
         if (securityTokenCacheItem == null)
         {
@@ -149,11 +158,21 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         }
 
         // 验证码是否有效
-        if (input.Code.Equals(securityTokenCacheItem.Token) && int.TryParse(input.Code, out int token))
+        if (input.Code.Equals(securityTokenCacheItem.Token))
         {
-            var securityToken = Encoding.Unicode.GetBytes(securityTokenCacheItem.SecurityToken);
-            // 校验totp验证码
-            if (TotpService.ValidateCode(securityToken, token, securityTokenCacheKey))
+            var tempNewUser = new IdentityUser(
+                securityTokenCacheItem.UserId,
+                "TempUser",
+                "TempUser@abp.io",
+                CurrentTenant.Id);
+            tempNewUser.SetPhoneNumberRegisterUser();
+            await UserStore.SetSecurityStampAsync(tempNewUser, securityTokenCacheItem.SecurityToken);
+
+            if (await UserManager.VerifyUserTokenAsync(
+                tempNewUser, 
+                UserTwoFactorTokenProviderConsts.PhoneNumberRegisterTokenProvider, 
+                UserTwoFactorTokenProviderConsts.PhoneNumberRegisterPurpose,
+                input.Code))
             {
                 var userEmail = input.EmailAddress ?? $"{input.PhoneNumber}@{CurrentTenant.Name ?? "default"}.io";//如果邮件地址不验证,随意写入一个
                 var userName = input.UserName ?? input.PhoneNumber;
@@ -162,10 +181,10 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
                     Name = input.Name ?? input.PhoneNumber
                 };
 
-                await UserStore.SetPhoneNumberAsync(user, input.PhoneNumber);
-                await UserStore.SetPhoneNumberConfirmedAsync(user, true);
-
+                (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
                 (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
+
+                await UserStore.SetPhoneNumberConfirmedAsync(user, true);
 
                 (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
 
@@ -191,21 +210,6 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
 
     public async virtual Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input)
     {
-        /*
-         * 注解: 微软的重置密码方法通过 UserManager.GeneratePasswordResetTokenAsync 接口生成密码重置Token
-         *       而这个Token设计的意义就是用户通过链接来重置密码,所以不适合短信验证
-         *       某些企业是把链接生成一个短链发送短信的,不过这种方式不是很推荐,因为现在是真没几个人敢随便点短信链接的
-         *  
-         *  此处设计方式为:
-         *  
-         *  step1: 例行检查是否重复发送,这一点是很有必要的
-         *  step2: 通过已确认的手机号来查询用户,如果用户未确认手机号,那就不能发送,这一点也是很有必要的
-         *  step3(重点): 通过 UserManager.GenerateTwoFactorTokenAsync 接口来生成二次认证码,这就相当于伪验证码,只是用于确认用户传递的验证码是否通过
-         *               比起自己生成随机数,这个验证码利用了TOTP算法,有时间限制的
-         *  step4(重点): 用户传递验证码后,通过 UserManager.VerifyTwoFactorTokenAsync 接口来校验验证码
-         *               验证通过后,再利用 UserManager.GeneratePasswordResetTokenAsync 接口来生成真正的用于重置密码的Token
-        */
-
         // 传递 isConfirmed 用户必须是已确认过手机号的
         var user = await GetUserByPhoneNumberAsync(input.PhoneNumber, isConfirmed: true);
         // 外部认证用户不允许修改密码
@@ -214,7 +218,9 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
             throw new BusinessException(code: Volo.Abp.Identity.IdentityErrorCodes.ExternalUserPasswordChange);
         }
 
-        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.PhoneNumber, "SmsVerifyCode");
+        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(
+            input.PhoneNumber,
+            UserTwoFactorTokenProviderConsts.PhoneResetPasswordPurpose);
         var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
         var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepetInterval, 1);
         // 能查询到缓存就是重复发送
@@ -225,11 +231,14 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
 
         var template = await SettingProvider.GetOrNullAsync(IdentitySettingNames.User.SmsResetPassword);
         // 生成二次认证码
-        var code = await UserManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider);
+        var code = await UserManager.GenerateUserTokenAsync(
+            user, 
+            TokenOptions.DefaultPhoneProvider,
+            UserTwoFactorTokenProviderConsts.PhoneResetPasswordPurpose);
         // 发送短信验证码
         await SecurityCodeSender.SendAsync(input.PhoneNumber, code, template);
         // 缓存这个手机号的记录,防重复
-        securityTokenCacheItem = new SecurityTokenCacheItem(code, user.SecurityStamp);
+        securityTokenCacheItem = new SecurityTokenCacheItem(code, user.Id, user.SecurityStamp);
         await SecurityTokenCache
             .SetAsync(securityTokenCacheKey, securityTokenCacheItem,
                 new DistributedCacheEntryOptions
@@ -240,7 +249,9 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
 
     public async virtual Task ResetPasswordAsync(PhoneResetPasswordDto input)
     {
-        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.PhoneNumber, "SmsVerifyCode");
+        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(
+            input.PhoneNumber,
+            UserTwoFactorTokenProviderConsts.PhoneResetPasswordPurpose);
         var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
         if (securityTokenCacheItem == null)
         {
@@ -255,7 +266,11 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
             throw new BusinessException(code: Volo.Abp.Identity.IdentityErrorCodes.ExternalUserPasswordChange);
         }
         // 验证二次认证码
-        if (!await UserManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider, input.Code))
+        if (!await UserManager.VerifyUserTokenAsync(
+            user, 
+            TokenOptions.DefaultPhoneProvider,
+            UserTwoFactorTokenProviderConsts.PhoneResetPasswordPurpose, 
+            input.Code))
         {
             // 验证码无效
             throw new UserFriendlyException(L["InvalidVerifyCode"]);
@@ -281,7 +296,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
 
     public async virtual Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input)
     {
-        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.PhoneNumber, "SmsVerifyCode");
+        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.PhoneNumber, "PhoneNumberSignin");
         var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
         var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepetInterval, 1);
         if (securityTokenCacheItem != null)
@@ -290,13 +305,14 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         }
         // 传递 isConfirmed 验证过的用户才允许通过手机登录
         var user = await GetUserByPhoneNumberAsync(input.PhoneNumber, isConfirmed: true);
+        // 登录验证手机号需要使用二次自带的认证
         var code = await UserManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider);
         var template = await SettingProvider.GetOrNullAsync(IdentitySettingNames.User.SmsUserSignin);
 
         // 发送登录验证码短信
         await SecurityCodeSender.SendAsync(input.PhoneNumber, code, template);
         // 缓存登录验证码状态,防止同一手机号重复发送
-        securityTokenCacheItem = new SecurityTokenCacheItem(code, user.SecurityStamp);
+        securityTokenCacheItem = new SecurityTokenCacheItem(code, user.Id, user.SecurityStamp);
         await SecurityTokenCache
             .SetAsync(securityTokenCacheKey, securityTokenCacheItem,
                 new DistributedCacheEntryOptions
@@ -320,6 +336,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
             throw new UserFriendlyException(L["UserEmailNotConfirmed"]);
         }
 
+        // 登录验证邮件安全码需要使用二次自带的认证
         var code = await UserManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
 
         await sender.SendLoginCodeAsync(code, user.UserName, user.Email);

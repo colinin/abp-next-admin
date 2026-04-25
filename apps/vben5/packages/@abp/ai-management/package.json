@@ -1,0 +1,49 @@
+{
+  "name": "@abp/ai-management",
+  "version": "10.0.2",
+  "homepage": "https://github.com/colinin/abp-next-admin",
+  "bugs": "https://github.com/colinin/abp-next-admin/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colinin/abp-next-admin.git",
+    "directory": "packages/@abp/ai-management"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@abp/core": "workspace:*",
+    "@abp/features": "workspace:*",
+    "@abp/request": "workspace:*",
+    "@abp/settings": "workspace:*",
+    "@abp/ui": "workspace:*",
+    "@ant-design/icons-vue": "catalog:",
+    "@vben-core/shared": "workspace:*",
+    "@vben/access": "workspace:*",
+    "@vben/common-ui": "workspace:*",
+    "@vben/hooks": "workspace:*",
+    "@vben/icons": "workspace:*",
+    "@vben/layouts": "workspace:*",
+    "@vben/locales": "workspace:*",
+    "@vben/preferences": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "ant-design-vue": "catalog:",
+    "ant-design-x-vue": "catalog:",
+    "dayjs": "catalog:",
+    "lodash.debounce": "catalog:",
+    "markdown-it": "catalog:",
+    "vue": "catalog:"
+  },
+  "devDependencies": {
+    "@types/lodash.debounce": "catalog:",
+    "@types/markdown-it": "catalog:"
+  }
+}

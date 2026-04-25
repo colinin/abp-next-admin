@@ -357,8 +357,8 @@ async function onDeleteMany(keys: string[]) {
       </div>
     </template>
     <template #responseStatusCode="{ row }">
-      <Tag :color="getHttpStatusColor(row.responseStatusCode)">
-        {{ httpStatusCodeMap[row.responseStatusCode] }}
+      <Tag :color="getHttpStatusColor(row.responseStatusCode!)">
+        {{ httpStatusCodeMap[row.responseStatusCode!] }}
       </Tag>
     </template>
     <template #action="{ row }">

@@ -1,12 +1,11 @@
 ﻿using LINGYUN.Abp.Auditing;
+using LINGYUN.Abp.BlobManagement;
 using LINGYUN.Abp.CachingManagement;
 using LINGYUN.Abp.Identity;
-using LINGYUN.Abp.IdentityServer;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.OpenIddict;
-using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.SettingManagement;
 using LINGYUN.Abp.TaskManagement;
 using LINGYUN.Abp.TextTemplating;
@@ -30,10 +29,9 @@ namespace LY.MicroService.BackendAdmin.DbMigrator;
     typeof(AbpAuditingApplicationContractsModule),
     typeof(AbpTextTemplatingApplicationContractsModule),
     typeof(AbpIdentityApplicationContractsModule),
-    typeof(AbpIdentityServerApplicationContractsModule),
     typeof(AbpOpenIddictApplicationContractsModule),
     typeof(PlatformApplicationContractModule),
-    typeof(AbpOssManagementApplicationContractsModule),
+    typeof(AbpBlobManagementApplicationContractsModule),
     typeof(AbpNotificationsApplicationContractsModule),
     typeof(AbpMessageServiceApplicationContractsModule),
     typeof(TaskManagementApplicationContractsModule),

@@ -12,11 +12,11 @@ using Volo.Abp.Specifications;
 
 namespace LINGYUN.Platform.Packages;
 public class EfCorePackageRepository :
-    EfCoreRepository<PlatformDbContext, Package, Guid>,
+    EfCoreRepository<IPlatformDbContext, Package, Guid>,
     IPackageRepository
 {
     public EfCorePackageRepository(
-        IDbContextProvider<PlatformDbContext> dbContextProvider) 
+        IDbContextProvider<IPlatformDbContext> dbContextProvider) 
         : base(dbContextProvider)
     {
     }

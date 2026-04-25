@@ -39,17 +39,21 @@ public class PlatformServiceDbMigrationEventHandler :
 
     protected async override Task AfterTenantCreated(TenantCreatedEto eventData, bool schemaMigrated)
     {
-        // 新租户数据种子
-        var context = new DataSeedContext(eventData.Id);
-        if (eventData.Properties != null)
+        using (CurrentTenant.Change(eventData.Id))
         {
-            foreach (var property in eventData.Properties)
+            using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
             {
-                context.WithProperty(property.Key, property.Value);
+                var seedContext = new DataSeedContext(eventData.Id);
+                foreach (var prop in eventData.Properties)
+                {
+                    seedContext.WithProperty(prop.Key, prop.Value);
+                }
+
+                await DataSeeder.SeedAsync(seedContext);
+
+                await uow.CompleteAsync();
             }
         }
-
-        await DataSeeder.SeedAsync(context);
     }
 
     public async virtual Task HandleEventAsync(TenantDeletedEto eventData)

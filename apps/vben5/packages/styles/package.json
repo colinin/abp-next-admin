@@ -1,6 +1,6 @@
 {
   "name": "@vben/styles",
-  "version": "5.5.7",
+  "version": "5.6.0",
   "homepage": "https://github.com/vbenjs/vue-vben-admin",
   "bugs": "https://github.com/vbenjs/vue-vben-admin/issues",
   "repository": {
@@ -17,6 +17,9 @@
     },
     "./antd": {
       "default": "./src/antd/index.css"
+    },
+    "./antdv-next": {
+      "default": "./src/antdv-next/index.css"
     },
     "./ele": {
       "default": "./src/ele/index.css"

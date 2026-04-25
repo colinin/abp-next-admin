@@ -1,11 +1,13 @@
-import { useState, useEffect, lazy } from "react";
-import { Card, Menu, Modal } from "antd";
+import type React from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
+import { Card, Menu, Modal, Spin } from "antd";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { toast } from "sonner";
+import { getApi, updateApi } from "@/api/account/profile";
 import type { UpdateProfileDto } from "#/account/profile";
 import { useUserActions, useUserInfo } from "@/store/userStore";
-import { getApi, updateApi } from "@/api/account/profile";
-import { toast } from "sonner";
 import { useSearchParams } from "react-router";
 
 // Lazy load components
@@ -15,9 +17,12 @@ const BindSettings = lazy(() => import("@/components/abp/account/bind-settings")
 const SecuritySettings = lazy(() => import("@/components/abp/account/security-settings"));
 const SessionSettings = lazy(() => import("@/components/abp/account/session-settings"));
 const NoticeSettings = lazy(() => import("@/components/abp/account/notice-settings"));
+// const PersonalDataSettings = lazy(() => import("@/components/abp/account/personal-data-settings"));
 const EmailConfirmModal = lazy(() => import("@/components/abp/account/email-confirm-modal"));
+const ChangePasswordModal = lazy(() => import("@/components/abp/account/change-password-modal"));
+const ChangePhoneNumberModal = lazy(() => import("@/components/abp/account/change-phone-number-modal"));
 
-const MySetting = () => {
+const MySetting: React.FC = () => {
 	const { t: $t } = useTranslation();
 	const [searchParams] = useSearchParams();
 	const [modal, contextHolder] = Modal.useModal();
@@ -26,7 +31,11 @@ const MySetting = () => {
 	const queryClient = useQueryClient();
 
 	const [selectedKey, setSelectedKey] = useState<string>("basic");
-	const [emailConfirmModalVisible, setEmailConfirmModalVisible] = useState(false);
+
+	// Modal Visibility States
+	const [emailConfirmVisible, setEmailConfirmVisible] = useState(false);
+	const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+	const [phoneModalVisible, setPhoneModalVisible] = useState(false);
 
 	const menuItems = [
 		{ key: "basic", label: $t("abp.account.settings.basic.title") },
@@ -35,6 +44,7 @@ const MySetting = () => {
 		{ key: "session", label: $t("abp.account.settings.sessionSettings") },
 		{ key: "notice", label: $t("abp.account.settings.noticeSettings") },
 		{ key: "authenticator", label: $t("abp.account.settings.authenticatorSettings") },
+		// { key: "personal-data", label: $t("abp.account.settings.personalDataSettings") },
 	];
 
 	// Fetch profile data
@@ -48,7 +58,7 @@ const MySetting = () => {
 		mutationFn: updateApi,
 		onSuccess: async () => {
 			toast.success($t("AbpAccount.PersonalSettingsChangedConfirmationModalTitle"));
-			queryClient.invalidateQueries({ queryKey: ["profile"] }); //refresh user info
+			queryClient.invalidateQueries({ queryKey: ["profile"] });
 			await fetchAndSetUser();
 		},
 	});
@@ -56,7 +66,7 @@ const MySetting = () => {
 	useEffect(() => {
 		const confirmToken = searchParams.get("confirmToken");
 		if (confirmToken && profile) {
-			setEmailConfirmModalVisible(true);
+			setEmailConfirmVisible(true);
 		}
 	}, [searchParams, profile]);
 
@@ -70,13 +80,16 @@ const MySetting = () => {
 	};
 
 	const handleChangePassword = () => {
-		// TODO: Implement password change
-		console.warn("onChangePassword not implemented yet!");
+		setPasswordModalVisible(true);
 	};
 
 	const handleChangePhoneNumber = () => {
-		// TODO: Implement phone number change
-		console.warn("onChangePhoneNumber not implemented yet!");
+		setPhoneModalVisible(true);
+	};
+
+	const onPhoneNumberChanged = async (phoneNumber: string) => {
+		// Optimistically update store or refetch user info
+		await fetchAndSetUser();
 	};
 
 	const renderContent = () => {
@@ -112,6 +125,7 @@ const MySetting = () => {
 				return <AuthenticatorSettings />;
 			case "session":
 				return <SessionSettings />;
+			// case "personal-data": return <PersonalDataSettings />;
 			default:
 				return null;
 		}
@@ -121,32 +135,53 @@ const MySetting = () => {
 		<div>
 			{contextHolder}
 			<Card>
-				<div className="flex">
-					<div className="basis-1/6">
+				<div className="flex flex-col md:flex-row min-h-[600px]">
+					<div className="w-full md:w-1/6 border-r border-gray-100">
 						<Menu
 							selectedKeys={[selectedKey]}
 							items={menuItems}
 							mode="inline"
+							className="border-none"
 							onSelect={({ key }) => setSelectedKey(key)}
 						/>
 					</div>
-					<div className="basis-5/6 overflow-hidden">{renderContent()}</div>
+					<div className="w-full md:w-5/6 p-6">
+						<Suspense
+							fallback={
+								<div className="flex justify-center p-10">
+									<Spin />
+								</div>
+							}
+						>
+							{renderContent()}
+						</Suspense>
+					</div>
 				</div>
 			</Card>
 
-			<EmailConfirmModal
-				visible={emailConfirmModalVisible}
-				initialState={{
-					email: profile?.email || "",
-					confirmToken: searchParams.get("confirmToken") || "",
-					userId: searchParams.get("userId") || "",
-					returnUrl: searchParams.get("returnUrl") || "",
-				}}
-				onClose={() => setEmailConfirmModalVisible(false)}
-				onSuccess={async () => {
-					await fetchAndSetUser();
-				}}
-			/>
+			<Suspense fallback={null}>
+				<EmailConfirmModal
+					visible={emailConfirmVisible}
+					initialState={{
+						email: profile?.email || "",
+						confirmToken: searchParams.get("confirmToken") || "",
+						userId: searchParams.get("userId") || "",
+						returnUrl: searchParams.get("returnUrl") || "",
+					}}
+					onClose={() => setEmailConfirmVisible(false)}
+					onSuccess={async () => {
+						await fetchAndSetUser();
+					}}
+				/>
+
+				<ChangePasswordModal visible={passwordModalVisible} onClose={() => setPasswordModalVisible(false)} />
+
+				<ChangePhoneNumberModal
+					visible={phoneModalVisible}
+					onClose={() => setPhoneModalVisible(false)}
+					onChange={onPhoneNumberChanged}
+				/>
+			</Suspense>
 		</div>
 	);
 };

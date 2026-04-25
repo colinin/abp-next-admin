@@ -37,6 +37,8 @@ public class AdminServiceMigrationsDbContext :
 
     public DbSet<PermissionGrant> PermissionGrants { get; set; }
 
+    public DbSet<ResourcePermissionGrant> ResourcePermissionGrants { get; set; }
+
     public DbSet<Setting> Settings { get; set; }
 
     public DbSet<SettingDefinitionRecord> SettingDefinitionRecords { get; set; }

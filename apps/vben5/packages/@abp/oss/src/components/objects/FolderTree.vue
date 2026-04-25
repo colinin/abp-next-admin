@@ -153,8 +153,8 @@ onMounted(onInit);
 </script>
 
 <template>
-  <Card :title="$t('AbpOssManagement.Containers')">
-    <div class="flex flex-col gap-2">
+  <Card :title="$t('AbpOssManagement.Containers')" class="h-full">
+    <div class="flex h-full flex-col gap-2">
       <Select
         :placeholder="$t('AbpOssManagement.Containers:Select')"
         :options="containers"
@@ -165,18 +165,20 @@ onMounted(onInit);
       <Button v-if="bucket" block type="primary" ghost @click="onCreate">
         {{ $t('AbpOssManagement.Objects:CreateFolder') }}
       </Button>
-      <DirectoryTree
-        v-if="bucket"
-        block-node
-        v-model:expanded-keys="expandedFolders"
-        v-model:selected-keys="selectedFolders"
-        :loaded-keys="loadedFolders"
-        :tree-data="folders"
-        :load-data="onLoadChildFolders"
-        @select="onFolderChange"
-        @expand="onFolderExpand"
-      />
-      <Empty v-else />
+      <div class="h-[calc(100%-100px)] overflow-auto">
+        <DirectoryTree
+          v-if="bucket"
+          block-node
+          v-model:expanded-keys="expandedFolders"
+          v-model:selected-keys="selectedFolders"
+          :loaded-keys="loadedFolders"
+          :tree-data="folders"
+          :load-data="onLoadChildFolders"
+          @select="onFolderChange"
+          @expand="onFolderExpand"
+        />
+        <Empty v-else />
+      </div>
     </div>
   </Card>
   <FolderModal @change="onFolderCreated" />
@@ -188,5 +190,9 @@ onMounted(onInit);
     // word-break: break-word;
     white-space: normal;
   }
+}
+
+:deep(.ant-card-body) {
+  height: calc(100% - 56px);
 }
 </style>

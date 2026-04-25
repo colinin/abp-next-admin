@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using LINGYUN.Abp.LocalizationManagement.External;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -34,24 +35,33 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
     protected AbpLocalizationOptions LocalizationOptions { get; }
     protected AbpLocalizationManagementOptions LocalizationManagementOptions { get; }
 
+    protected IExternalLocalizationTextStoreCache ExternalLocalizationTextStoreCache { get; }
+    protected IExternalLocalizationStoreCache ExternalLocalizationStoreCache { get; }
+    protected ILocalizationLanguageStoreCache LocalizationLanguageStoreCache { get; }
+    protected ILocalizationTextStoreCache LocalizationTextStoreCache { get; }
+
     protected ILanguageRepository LanguageRepository { get; }
     protected IResourceRepository ResourceRepository { get; }
     protected ITextRepository TextRepository { get; }
 
     public StaticLocalizationSaver(
         ILogger<StaticLocalizationSaver> logger,
-        IDistributedCache cache, 
-        IGuidGenerator guidGenerator, 
+        IDistributedCache cache,
+        IGuidGenerator guidGenerator,
         IAbpDistributedLock distributedLock,
         IUnitOfWorkManager unitOfWorkManager,
         IApplicationInfoAccessor applicationInfoAccessor,
         ICancellationTokenProvider cancellationTokenProvider,
         IStringLocalizerFactory stringLocalizerFactory,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
-        IOptions<AbpLocalizationOptions> localizationOptions, 
-        IOptions<AbpLocalizationManagementOptions> localizationManagementOptions, 
-        ILanguageRepository languageRepository, 
-        IResourceRepository resourceRepository, 
+        IOptions<AbpLocalizationOptions> localizationOptions,
+        IOptions<AbpLocalizationManagementOptions> localizationManagementOptions,
+        IExternalLocalizationTextStoreCache externalLocalizationTextStoreCache,
+        IExternalLocalizationStoreCache externalLocalizationStoreCache,
+        ILocalizationLanguageStoreCache localizationLanguageStoreCache,
+        ILocalizationTextStoreCache localizationTextStoreCache,
+        ILanguageRepository languageRepository,
+        IResourceRepository resourceRepository,
         ITextRepository textRepository)
     {
         Logger = logger;
@@ -65,6 +75,10 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
         StringLocalizerFactory = stringLocalizerFactory;
         LocalizationOptions = localizationOptions.Value;
         LocalizationManagementOptions = localizationManagementOptions.Value;
+        ExternalLocalizationTextStoreCache = externalLocalizationTextStoreCache;
+        ExternalLocalizationStoreCache = externalLocalizationStoreCache;
+        LocalizationLanguageStoreCache = localizationLanguageStoreCache;
+        LocalizationTextStoreCache = localizationTextStoreCache;
         LanguageRepository = languageRepository;
         ResourceRepository = resourceRepository;
         TextRepository = textRepository;
@@ -79,7 +93,9 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
 
         Logger.LogDebug("Waiting to acquire the distributed lock for saving static localizations...");
 
-        await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(GetApplicationDistributedLockKey());
+        await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
+            GetApplicationDistributedLockKey(),
+            TimeSpan.FromSeconds(5));
         if (applicationLockHandle == null)
         {
             return;
@@ -91,6 +107,8 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
             await SaveLanguagesAsync();
             await SaveResourcesAsync();
             await SaveTextsAsync();
+
+            await PreCacheDynamicLocalizationsAsync();
         }
         catch (Exception ex)
         {
@@ -110,6 +128,34 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
         await unitOfWork.CompleteAsync();
 
         Logger.LogInformation("Completed to save static localizations.");
+    }
+
+    private async Task PreCacheDynamicLocalizationsAsync()
+    {
+        if (LocalizationLanguageStoreCache is LocalizationLanguageStoreCache languageStoreCache)
+        {
+            await languageStoreCache.UpdateCache();
+        }
+
+        foreach (var resource in LocalizationOptions.Resources)
+        {
+            if (ExternalLocalizationStoreCache is ExternalLocalizationStoreCache localizationStoreCache)
+            {
+                await localizationStoreCache.UpdateCache(resource.Key);
+            }
+
+            foreach (var language in LocalizationOptions.Languages)
+            {
+                if (ExternalLocalizationTextStoreCache is ExternalLocalizationTextStoreCache externalLocalizationTextStoreCache)
+                {
+                    await externalLocalizationTextStoreCache.UpdateCache(resource.Value, language.CultureName);
+                }
+                if (LocalizationTextStoreCache is LocalizationTextStoreCache localizationTextStoreCache)
+                {
+                    await localizationTextStoreCache.UpdateCache(resource.Value, language.CultureName);
+                }
+            }
+        }
     }
 
     private async Task SaveLanguagesAsync()
@@ -195,7 +241,7 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
                 {
                     var stringLocalizer = StringLocalizerFactory.Create(resource.ResourceType);
 
-                    var localizedStrings = await stringLocalizer.GetAllStringsAsync(false, false, false);
+                    var localizedStrings = stringLocalizer.GetAllStrings(false, false, false);
 
                     var textHashKey = GetApplicationTextHashKey(resource.ResourceName, language.CultureName);
                     var textHashCache = await Cache.GetStringAsync(textHashKey, CancellationTokenProvider.Token);

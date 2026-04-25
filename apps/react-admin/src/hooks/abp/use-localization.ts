@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from "react";
-import type { Dictionary } from "#/abp-core/global";
 import { format } from "@/utils/string";
 import useLocaleStore, { useLocale } from "@/store/localeI18nStore";
 import { getResources } from "@/utils/abp/localzations/get-resources";

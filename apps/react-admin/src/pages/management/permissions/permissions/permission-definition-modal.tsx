@@ -6,13 +6,15 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { useTypesMap } from "./types";
 import type { PermissionDefinitionDto } from "#/management/permissions/definitions";
-// import type { PermissionGroupDefinitionDto } from "#/permissions/groups";
 import { listToTree } from "@/utils/tree";
 import { useLocalizer } from "@/hooks/abp/use-localization";
 import { localizationSerializer } from "@/utils/abp/localization-serializer";
 import type { PropertyInfo } from "@/components/abp/properties/types";
 import LocalizableInput from "@/components/abp/localizable-input/localizable-input";
 import PropertyTable from "@/components/abp/properties/property-table";
+import SimpleStateChecking from "@/components/abp/simple-state-checking/simple-state-checking";
+import type { SimplaCheckStateBase } from "@/components/abp/simple-state-checking/interface";
+import type { ISimpleStateChecker } from "#/abp-core";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const { TabPane } = Tabs;
@@ -34,9 +36,19 @@ interface PermissionTreeVo {
 	disabled?: boolean;
 }
 
-type TabKeys = "basic" | "props";
+// 1. Define the PermissionState class to satisfy the SimplaCheckStateBase interface
+class PermissionState implements SimplaCheckStateBase {
+	stateCheckers: ISimpleStateChecker<SimplaCheckStateBase>[] = [];
+}
 
-const defaultModel: PermissionDefinitionDto = {} as PermissionDefinitionDto;
+const permissionState = new PermissionState();
+
+// 2. Update TabKeys
+type TabKeys = "basic" | "stateCheckers" | "props";
+
+const defaultModel: PermissionDefinitionDto = {
+	isEnabled: true,
+} as PermissionDefinitionDto;
 
 const PermissionDefinitionModal: React.FC<PermissionDefinitionModalProps> = ({
 	visible,
@@ -54,7 +66,7 @@ const PermissionDefinitionModal: React.FC<PermissionDefinitionModalProps> = ({
 	const { Lr } = useLocalizer();
 	const { deserialize } = localizationSerializer();
 
-	// 查询权限组列表
+	// Query Groups
 	const { data: availableGroups = [] } = useQuery({
 		queryKey: ["permissionGroups", groupName],
 		queryFn: async () => {
@@ -69,11 +81,10 @@ const PermissionDefinitionModal: React.FC<PermissionDefinitionModalProps> = ({
 					};
 				});
 		},
-
 		enabled: visible,
 	});
 
-	// 查询权限列表
+	// Query Permissions
 	const { data: availablePermissions = [] } = useQuery({
 		queryKey: ["permissions", formModel.groupName],
 		queryFn: async () => {
@@ -91,7 +102,7 @@ const PermissionDefinitionModal: React.FC<PermissionDefinitionModalProps> = ({
 		enabled: visible && !!formModel.groupName,
 	});
 
-	// 创建权限
+	// Create Mutation
 	const { mutateAsync: createPermission, isPending: isCreating } = useMutation({
 		mutationFn: createApi,
 		onSuccess: () => {
@@ -103,7 +114,7 @@ const PermissionDefinitionModal: React.FC<PermissionDefinitionModalProps> = ({
 		},
 	});
 
-	// 更新权限
+	// Update Mutation
 	const { mutateAsync: updatePermission, isPending: isUpdating } = useMutation({
 		mutationFn: (data: PermissionDefinitionDto) => updateApi(data.name, data),
 		onSuccess: () => {
@@ -131,16 +142,19 @@ const PermissionDefinitionModal: React.FC<PermissionDefinitionModalProps> = ({
 				setFormModel({ ...defaultModel });
 				if (groupName) {
 					form.setFieldsValue({ groupName });
+					// If setting initial group name, trigger local model update so permissions query runs
+					setFormModel((prev) => ({ ...prev, groupName: groupName }));
 				}
 			}
 		}
-	}, [visible, permission, groupName]);
+	}, [visible, permission, groupName, form]);
 
 	const handleOk = async () => {
 		try {
 			const values = await form.validateFields();
 			const submitData = {
-				...values,
+				...formModel, // Keep existing model data (like extraProperties)
+				...values, // Overwrite with form values (including stateCheckers from the new tab)
 				extraProperties: formModel.extraProperties,
 			};
 
@@ -154,8 +168,8 @@ const PermissionDefinitionModal: React.FC<PermissionDefinitionModalProps> = ({
 		}
 	};
 
-	const handleGroupChange = (groupName?: string) => {
-		setFormModel((prev) => ({ ...prev, groupName: groupName || "" }));
+	const handleGroupChange = (val?: string) => {
+		setFormModel((prev) => ({ ...prev, groupName: val || "" }));
 	};
 
 	const handlePropChange = (prop: PropertyInfo) => {
@@ -192,9 +206,11 @@ const PermissionDefinitionModal: React.FC<PermissionDefinitionModalProps> = ({
 			confirmLoading={isCreating || isUpdating}
 			okButtonProps={{ disabled: formModel.isStatic }}
 			width="50%"
+			destroyOnClose
 		>
 			<Form form={form} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
 				<Tabs activeKey={activeTab} onChange={(key) => setActiveTab(key as TabKeys)}>
+					{/* Basic Info */}
 					<TabPane tab={$t("AbpPermissionManagement.BasicInfo")} key="basic">
 						<Form.Item
 							label={$t("AbpPermissionManagement.DisplayName:IsEnabled")}
@@ -223,6 +239,7 @@ const PermissionDefinitionModal: React.FC<PermissionDefinitionModalProps> = ({
 									disabled={formModel.isStatic}
 									treeData={availablePermissions}
 									fieldNames={{ label: "displayName", value: "name", children: "children" }}
+									treeDefaultExpandAll
 								/>
 							</Form.Item>
 						)}
@@ -255,6 +272,25 @@ const PermissionDefinitionModal: React.FC<PermissionDefinitionModalProps> = ({
 							</Select>
 						</Form.Item>
 					</TabPane>
+
+					{/* State Checkers Tab */}
+					<TabPane tab={$t("AbpPermissionManagement.StateCheckers")} key="stateCheckers">
+						<Form.Item
+							name="stateCheckers"
+							// Hide Label for this item to use full width or match design
+							labelCol={{ span: 0 }}
+							wrapperCol={{ span: 24 }}
+						>
+							<SimpleStateChecking
+								state={permissionState}
+								disabled={formModel.isStatic}
+								allowEdit={true}
+								allowDelete={true}
+							/>
+						</Form.Item>
+					</TabPane>
+
+					{/* Properties Tab */}
 					<TabPane tab={$t("AbpPermissionManagement.Properties")} key="props">
 						<PropertyTable
 							data={formModel.extraProperties}

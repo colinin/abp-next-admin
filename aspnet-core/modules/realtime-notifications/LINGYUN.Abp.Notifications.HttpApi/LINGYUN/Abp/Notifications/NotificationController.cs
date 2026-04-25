@@ -33,6 +33,7 @@ public class NotificationController : AbpControllerBase, INotificationAppService
 
     [HttpPost]
     [Route("send/template")]
+    [Authorize(NotificationsPermissions.Notification.Send)]
     public virtual Task SendTemplateAsync(NotificationTemplateSendDto input)
     {
         return NotificationAppService.SendTemplateAsync(input);
@@ -54,7 +55,7 @@ public class NotificationController : AbpControllerBase, INotificationAppService
 
     [HttpGet]
     [Route("assignable-providers")]
-    public virtual Task<ListResultDto<NotificationProviderDto>> GetAssignableProvidersAsync()
+    public virtual Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync()
     {
         return NotificationAppService.GetAssignableProvidersAsync();
     }

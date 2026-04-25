@@ -1,4 +1,6 @@
-﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+﻿using Autofac.Core;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,7 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -31,6 +34,7 @@ namespace LINGYUN.MicroService.Internal.Gateway;
 [DependsOn(
     typeof(AbpSerilogEnrichersApplicationModule),
     typeof(AbpSerilogEnrichersUniqueIdModule),
+    typeof(AbpClaimsMappingModule),
     typeof(AbpAutofacModule),
     typeof(AbpDataModule),
     typeof(AbpSwashbuckleModule),
@@ -39,7 +43,7 @@ namespace LINGYUN.MicroService.Internal.Gateway;
 )]
 public class InternalGatewayModule : AbpModule
 {
-    public static string ApplicationName { get; set; } = "Services.ApiGateWay";
+    public static string ApplicationName { get; set; } = "InternalApiGateway";
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
@@ -70,15 +74,14 @@ public class InternalGatewayModule : AbpModule
             authority: configuration["AuthServer:Authority"],
             scopes: new Dictionary<string, string>
             {
-                {"Account", "Account API"},
-                {"Identity", "Identity API"},
-                {"IdentityServer", "Identity Server API"},
-                {"BackendAdmin", "Backend Admin API"},
-                {"Localization", "Localization API"},
-                {"Platform", "Platform API"},
-                {"RealtimeMessage", "RealtimeMessage API"},
-                {"TaskManagement", "Task Management API"},
-                {"Webhooks", "Webhooks API"},
+                {"identity-service", "Identity Service API"},
+                {"admin-service", "Admin Service API"},
+                {"localization-service", "Localization Service API"},
+                {"platform-service", "Platform Service API"},
+                {"message-service", "Message Service API"},
+                {"task-service", "Task Service API"},
+                {"webhook-service", "Webhook Service API"},
+                {"wechat-service", "WeChat Service API"},
             },
             options =>
             {
@@ -87,30 +90,47 @@ public class InternalGatewayModule : AbpModule
                 options.CustomSchemaIds(type => type.FullName);
             });
         context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    configuration.GetSection("AuthServer").Bind(options);
-                });
+            .AddJwtBearer(options =>
+            {
+                configuration.GetSection("AuthServer").Bind(options);
 
-        if (hostingEnvironment.IsProduction())
-        {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-            context.Services
-                .AddDataProtection()
-                .SetApplicationName("LINGYUN.Abp.Application")
-                .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
-        }
+                var validIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<List<string>>();
+                if (validIssuers?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidIssuers = validIssuers;
+                    options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                }
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
+                if (validAudiences?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidAudiences = validAudiences;
+                }
+            });
+
+        context.Services.AddDataProtection()
+            .SetApplicationName("LINGYUN.Abp.Application")
+            .PersistKeysToStackExchangeRedis(() =>
+            {
+                return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]).GetDatabase();
+            },
+            "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
 
         context.Services.AddCors(options =>
         {
             options.AddDefaultPolicy(builder =>
             {
+                var corsOrigins = configuration.GetSection("App:CorsOrigins").Get<List<string>>();
+                if (corsOrigins == null || corsOrigins.Count == 0)
+                {
+                    corsOrigins = configuration["App:CorsOrigins"]?
+                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToList() ?? new List<string>();
+                }
                 builder
-                    .WithOrigins(
-                        configuration["App:CorsOrigins"]
-                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                            .Select(o => o.Trim().RemovePostFix("/"))
-                            .ToArray()
+                    .WithOrigins(corsOrigins
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToArray()
                     )
                     .WithAbpExposedHeaders()
                     .WithAbpWrapExposedHeaders()

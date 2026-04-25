@@ -11,6 +11,13 @@ public class NullNotificationStore : INotificationStore, ISingletonDependency
 {
     public readonly static INotificationStore Instance = new NullNotificationStore();
 
+    public Task InsertSendStateAsync(
+        NotificationSendInfo notificationSendInfo,
+        CancellationToken cancellationToken = default)
+    {
+        return Task.CompletedTask;
+    }
+
     public Task ChangeUserNotificationReadStateAsync(
         Guid? tenantId, 
         Guid userId, 

@@ -1,4 +1,4 @@
-import type { VxeGridProps } from '../components/vxe-table/types';
+import type { BaseFormComponentType } from '@vben/common-ui';
 
 import { h } from 'vue';
 
@@ -9,7 +9,9 @@ import { Button, Image } from 'ant-design-vue';
 import { setupVbenVxeTable } from '../components/vxe-table';
 import { useVbenVxeGrid as useVxeGrid } from '../components/vxe-table/use-vxe-grid';
 
-function useVbenVxeGrid(options: VxeGridProps) {
+const useVbenVxeGrid = <T extends Record<string, any>>(
+  ...rest: Parameters<typeof useVxeGrid<T, BaseFormComponentType>>
+) => {
   setupVbenVxeTable({
     configVxeTable: (vxeUI) => {
       vxeUI.setConfig({
@@ -71,7 +73,7 @@ function useVbenVxeGrid(options: VxeGridProps) {
     },
     useVbenForm,
   });
-  return useVxeGrid(options);
-}
+  return useVxeGrid(...rest);
+};
 
 export { useVbenVxeGrid };

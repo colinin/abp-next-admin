@@ -1,0 +1,10 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Tools:GetApplicationConfiguration": "Get the application configuration. When the user does not explicitly request it, the IncludeLocalizationResources parameter needs to be passed, with the parameter value set to false.",
+    "HttpAITool:Endpoint": "Endpoint",
+    "HttpAITool:Method": "Method",
+    "HttpAITool:Headers": "Headers",
+    "HttpAITool:CurrentAccessToken": "Use the current user token"
+  }
+}

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { refreshToken } from "./account/token";
 import { wrapperResult } from "@/utils/abp/request";
 import { handleOAuthError } from "@/utils/abp/handleOAuthError";
+import useAbpStore from "@/store/abpCoreStore";
 
 const requestClient = new RequestClient({
 	baseURL: import.meta.env.VITE_APP_BASE_API,
@@ -64,12 +65,18 @@ function formatToken(token: null | string) {
 requestClient.addRequestInterceptor({
 	fulfilled: async (config) => {
 		const { userToken } = useUserStore.getState();
+		const { tenantId, xsrfToken } = useAbpStore.getState();
 		if (userToken.accessToken) {
 			config.headers.Authorization = `${userToken.accessToken}`;
 		}
 		const { locale } = useLocaleStore.getState();
 		config.headers["Accept-Language"] = mapLocaleToAbpLanguageFormat(locale);
-		config.headers["X-Request-From"] = "slash-admin";
+		// config.headers["X-Request-From"] = "slash-admin";
+		config.headers["X-Request-From"] = "vben";
+
+		config.headers.__tenant = tenantId;
+		config.headers.RequestVerificationToken = xsrfToken;
+
 		return config;
 	},
 });

@@ -27,14 +27,14 @@ function handleItemClick(value: string) {
     </DropdownMenuTrigger>
     <DropdownMenuContent align="start">
       <DropdownMenuGroup>
-        <template v-for="menu in menus" :key="menu.key">
+        <template v-for="menu in menus" :key="menu.value">
           <DropdownMenuItem
             :class="
               menu.value === modelValue
                 ? 'bg-accent text-accent-foreground'
                 : ''
             "
-            class="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground text-foreground/80 mb-1 cursor-pointer"
+            class="mb-1 cursor-pointer text-foreground/80 data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground"
             @click="handleItemClick(menu.value)"
           >
             <component :is="menu.icon" v-if="menu.icon" class="mr-2 size-4" />

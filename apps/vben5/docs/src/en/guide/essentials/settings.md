@@ -219,6 +219,7 @@ const defaultPreferences: Preferences = {
     dynamicTitle: true,
     enableCheckUpdates: true,
     enablePreferences: true,
+    enableCopyPreferences: true,
     enableRefreshToken: false,
     isMobile: false,
     layout: 'sidebar-nav',
@@ -261,6 +262,7 @@ const defaultPreferences: Preferences = {
     enable: true,
     fit: 'contain',
     source: 'https://unpkg.com/@vbenjs/static-source@0.1.7/source/logo-v1.webp',
+    // sourceDark: 'https://unpkg.com/@vbenjs/static-source@0.1.7/source/logo-dark.webp', // Optional: Dark theme logo
   },
   navigation: {
     accordion: true,
@@ -375,6 +377,8 @@ interface AppPreferences {
   enableCheckUpdates: boolean;
   /** Whether to display preferences */
   enablePreferences: boolean;
+  /** Whether to display copy preferences button */
+  enableCopyPreferences: boolean;
   /**
    * @zh_CN Whether to enable refreshToken
    */
@@ -457,6 +461,8 @@ interface LogoPreferences {
   fit: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
   /** Logo URL */
   source: string;
+  /** Dark theme logo URL (optional, if not set, use source) */
+  sourceDark?: string;
 }
 
 interface NavigationPreferences {

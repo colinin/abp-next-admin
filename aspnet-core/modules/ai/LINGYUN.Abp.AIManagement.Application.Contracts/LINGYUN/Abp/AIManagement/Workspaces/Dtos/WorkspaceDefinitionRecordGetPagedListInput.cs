@@ -1,0 +1,14 @@
+﻿using System;
+using Volo.Abp.Application.Dtos;
+
+namespace LINGYUN.Abp.AIManagement.Workspaces.Dtos;
+
+[Serializable]
+public class WorkspaceDefinitionRecordGetPagedListInput : PagedAndSortedResultRequestDto
+{
+    public string? Filter { get; set; }
+
+    public string? Provider { get; set; }
+
+    public string? ModelName { get; set; }
+}

@@ -47,13 +47,11 @@ interface RemoteServiceErrorInfo {
 }
 /** 扩展属性数据传输对象 */
 interface ExtensibleObject {
-  [key: string]: any;
   /** 扩展属性 */
   extraProperties: ExtraPropertyDictionary;
 }
 /** 实体数据传输对象 */
 interface EntityDto<TPrimaryKey> {
-  [key: string]: any;
   /** 实体标识 */
   id: TPrimaryKey;
 }
@@ -65,30 +63,36 @@ interface CreationAuditedEntityDto<TPrimaryKey> extends EntityDto<TPrimaryKey> {
   creatorId?: string;
 }
 /** 实体新增用户属性数据传输对象 */
-interface CreationAuditedEntityWithUserDto<TPrimaryKey, TUserDto>
-  extends CreationAuditedEntityDto<TPrimaryKey> {
+interface CreationAuditedEntityWithUserDto<
+  TPrimaryKey,
+  TUserDto,
+> extends CreationAuditedEntityDto<TPrimaryKey> {
   /** 创建人实体数据传输对象 */
   creator: TUserDto;
 }
 /** 实体审计属性数据传输对象 */
-interface AuditedEntityDto<TPrimaryKey>
-  extends CreationAuditedEntityDto<TPrimaryKey> {
+interface AuditedEntityDto<
+  TPrimaryKey,
+> extends CreationAuditedEntityDto<TPrimaryKey> {
   /** 上次变更过时间 */
   lastModificationTime?: Date;
   /** 上次变更人 */
   lastModifierId?: string;
 }
 /** 实体审计用户属性数据传输对象 */
-interface AuditedEntityWithUserDto<TPrimaryKey, TUserDto>
-  extends AuditedEntityDto<TPrimaryKey> {
+interface AuditedEntityWithUserDto<
+  TPrimaryKey,
+  TUserDto,
+> extends AuditedEntityDto<TPrimaryKey> {
   /** 创建人实体数据传输对象 */
   creator: TUserDto;
   /** 变更人实体数据传输对象 */
   lastModifier: TUserDto;
 }
 /** 实体审计全属性数据传输对象 */
-interface FullAuditedEntityDto<TPrimaryKey>
-  extends AuditedEntityDto<TPrimaryKey> {
+interface FullAuditedEntityDto<
+  TPrimaryKey,
+> extends AuditedEntityDto<TPrimaryKey> {
   /** 删除人标识 */
   deleterId?: string;
   /** 删除时间 */
@@ -98,7 +102,8 @@ interface FullAuditedEntityDto<TPrimaryKey>
 }
 /** 实体审计用户全属性数据传输对象 */
 interface FullAuditedEntityWithUserDto<TPrimaryKey, TUserDto>
-  extends AuditedEntityWithUserDto<TPrimaryKey, TUserDto>,
+  extends
+    AuditedEntityWithUserDto<TPrimaryKey, TUserDto>,
     FullAuditedEntityDto<TPrimaryKey> {
   /** 删除人实体数据传输对象 */
   deleter: TUserDto;
@@ -107,27 +112,29 @@ interface FullAuditedEntityWithUserDto<TPrimaryKey, TUserDto>
 interface ExtensibleEntityDto<TKey> extends EntityDto<TKey>, ExtensibleObject {}
 /** 实体新增扩展属性数据传输对象 */
 interface ExtensibleCreationAuditedEntityDto<TPrimaryKey>
-  extends CreationAuditedEntityDto<TPrimaryKey>,
+  extends
+    CreationAuditedEntityDto<TPrimaryKey>,
     ExtensibleEntityDto<TPrimaryKey> {}
 /** 实体新增用户扩展属性数据传输对象 */
 interface ExtensibleCreationAuditedEntityWithUserDto<TPrimaryKey, TUserDto>
-  extends CreationAuditedEntityWithUserDto<TPrimaryKey, TUserDto>,
+  extends
+    CreationAuditedEntityWithUserDto<TPrimaryKey, TUserDto>,
     ExtensibleEntityDto<TPrimaryKey> {}
 /** 实体审计扩展属性数据传输对象 */
 interface ExtensibleAuditedEntityDto<TPrimaryKey>
-  extends AuditedEntityDto<TPrimaryKey>,
-    ExtensibleEntityDto<TPrimaryKey> {}
+  extends AuditedEntityDto<TPrimaryKey>, ExtensibleEntityDto<TPrimaryKey> {}
 /** 实体审计用户扩展属性数据传输对象 */
 interface ExtensibleAuditedEntityWithUserDto<TPrimaryKey, TUserDto>
-  extends AuditedEntityWithUserDto<TPrimaryKey, TUserDto>,
+  extends
+    AuditedEntityWithUserDto<TPrimaryKey, TUserDto>,
     ExtensibleEntityDto<TPrimaryKey> {}
 /** 实体审计全属性扩展数据传输对象 */
 interface ExtensibleFullAuditedEntityDto<TPrimaryKey>
-  extends ExtensibleEntityDto<TPrimaryKey>,
-    FullAuditedEntityDto<TPrimaryKey> {}
+  extends ExtensibleEntityDto<TPrimaryKey>, FullAuditedEntityDto<TPrimaryKey> {}
 /** 实体审计用户全属性扩展数据传输对象 */
 interface ExtensibleFullAuditedEntityWithUserDto<TPrimaryKey, TUserDto>
-  extends ExtensibleEntityDto<TPrimaryKey>,
+  extends
+    ExtensibleEntityDto<TPrimaryKey>,
     FullAuditedEntityWithUserDto<TPrimaryKey, TUserDto> {}
 /** 最大请求数据传输对象 */
 interface LimitedResultRequestDto {
@@ -136,8 +143,7 @@ interface LimitedResultRequestDto {
 }
 /** 最大请求扩展数据传输对象 */
 interface ExtensibleLimitedResultRequestDto
-  extends ExtensibleObject,
-    LimitedResultRequestDto {}
+  extends ExtensibleObject, LimitedResultRequestDto {}
 /** 排序请求数据传输对象 */
 interface SortedResultRequest {
   /** 排序字段
@@ -158,12 +164,10 @@ interface PagedResultRequestDto extends LimitedResultRequestDto {
 }
 /** 分页排序请求数据传输对象 */
 interface PagedAndSortedResultRequestDto
-  extends PagedResultRequestDto,
-    SortedResultRequest {}
+  extends PagedResultRequestDto, SortedResultRequest {}
 /** 分页排序请求扩展数据传输对象 */
 interface ExtensiblePagedAndSortedResultRequestDto
-  extends ExtensibleObject,
-    PagedAndSortedResultRequestDto {}
+  extends ExtensibleObject, PagedAndSortedResultRequestDto {}
 /** 列表数据传输对象 */
 interface ListResultDto<T> {
   /** 返回项目列表 */
@@ -171,8 +175,7 @@ interface ListResultDto<T> {
 }
 /** 列表扩展数据传输对象 */
 interface ExtensibleListResultDto<T>
-  extends ExtensibleObject,
-    ListResultDto<T> {}
+  extends ExtensibleObject, ListResultDto<T> {}
 /** 分页列表数据传输对象 */
 interface PagedResultDto<T> extends ListResultDto<T> {
   /** 符合条件的最大数量 */
@@ -180,12 +183,10 @@ interface PagedResultDto<T> extends ListResultDto<T> {
 }
 /** 分页列表扩展数据传输对象 */
 interface ExtensiblePagedResultDto<T>
-  extends ExtensibleObject,
-    PagedResultDto<T> {}
+  extends ExtensibleObject, PagedResultDto<T> {}
 /** 分页列表扩展数据传输对象 */
 interface ExtensiblePagedResultRequestDto
-  extends ExtensibleObject,
-    PagedResultRequestDto {}
+  extends ExtensibleObject, PagedResultRequestDto {}
 /** 应用程序本地化资源数据传输对象 */
 interface ApplicationLocalizationResourceDto {
   /** 继承资源名称列表 */

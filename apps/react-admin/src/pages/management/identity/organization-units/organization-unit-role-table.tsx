@@ -7,7 +7,7 @@ import { ProTable, type ActionType, type ProColumns } from "@ant-design/pro-tabl
 import { hasAccessByCodes } from "@/utils/abp/access-checker";
 import { OrganizationUnitPermissions } from "@/constants/management/identity/permissions";
 import SelectRoleModal from "./select-role-modal";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { removeOrganizationUnitApi } from "@/api/management/identity/role";
 import { addRoles, getRoleListApi } from "@/api/management/identity/organization-units";
 import { toast } from "sonner";
@@ -19,7 +19,6 @@ interface Props {
 const OrganizationUnitRoleTable: React.FC<Props> = ({ selectedKey }) => {
 	const { t: $t } = useTranslation();
 	const actionRef = useRef<ActionType>();
-	const queryClient = useQueryClient();
 	const [modal, contextHolder] = Modal.useModal();
 	const [roleModalVisible, setRoleModalVisible] = useState(false);
 

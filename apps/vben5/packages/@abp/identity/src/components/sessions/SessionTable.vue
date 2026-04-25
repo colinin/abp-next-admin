@@ -12,7 +12,7 @@ import { computed, h, onMounted, ref } from 'vue';
 import { useAccess } from '@vben/access';
 import { $t } from '@vben/locales';
 
-import { useAbpStore } from '@abp/core';
+import { formatToDateTime, useAbpStore } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined } from '@ant-design/icons-vue';
 import { Button, message, Modal, Select, Tag } from 'ant-design-vue';
@@ -120,6 +120,9 @@ const gridOptions: VxeGridProps<IdentitySessionDto> = {
       minWidth: 120,
       sortable: true,
       title: $t('AbpIdentity.DisplayName:SignedIn'),
+      formatter: ({ cellValue }) => {
+        return formatToDateTime(cellValue);
+      },
     },
     {
       align: 'left',
@@ -127,6 +130,9 @@ const gridOptions: VxeGridProps<IdentitySessionDto> = {
       minWidth: 120,
       sortable: true,
       title: $t('AbpIdentity.DisplayName:LastAccessed'),
+      formatter: ({ cellValue }) => {
+        return formatToDateTime(cellValue);
+      },
     },
     {
       field: 'action',
@@ -223,7 +229,7 @@ onMounted(onGetUsers);
         allow-clear
         class="w-full"
         show-search
-        @change="(val) => onFieldChange('userId', val)"
+        @change="(val?: SelectValue) => onFieldChange('userId', val)"
         @search="onGetUsers"
       />
     </template>

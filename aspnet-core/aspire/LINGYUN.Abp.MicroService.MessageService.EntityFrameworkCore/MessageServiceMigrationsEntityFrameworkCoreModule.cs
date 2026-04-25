@@ -4,6 +4,7 @@ using LINGYUN.Abp.Notifications.EntityFrameworkCore;
 using LINGYUN.Abp.Quartz.PostgresSqlInstaller;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Volo.Abp.EntityFrameworkCore;

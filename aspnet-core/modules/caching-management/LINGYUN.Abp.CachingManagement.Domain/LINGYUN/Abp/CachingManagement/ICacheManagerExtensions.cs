@@ -42,4 +42,24 @@ public static class ICacheManagerExtensions
             new RefreshCacheRequest(key, absExpr, sldExpr),
             cancellationToken);
     }
+
+    public static Task RemoveAsync(
+        this ICacheManager cacheManager,
+        string key,
+        CancellationToken cancellationToken = default)
+    {
+        return cacheManager.RemoveAsync(
+            new RemoveCacheRequest([key]),
+            cancellationToken);
+    }
+
+    public static Task RemoveAsync(
+        this ICacheManager cacheManager,
+        string[] keys,
+        CancellationToken cancellationToken = default)
+    {
+        return cacheManager.RemoveAsync(
+            new RemoveCacheRequest(keys),
+            cancellationToken);
+    }
 }

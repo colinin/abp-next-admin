@@ -4,9 +4,12 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 type AbpStore = {
+	tenantId: string | undefined;
+	xsrfToken: string | undefined;
 	application: ApplicationConfigurationDto | undefined;
 	localization: ApplicationLocalizationDto | undefined;
 	actions: {
+		setTenantId: (val?: string) => void;
 		getI18nLocales: () => Record<string, any>;
 		setApplication: (val: ApplicationConfigurationDto) => void;
 		setLocalization: (val: ApplicationLocalizationDto) => void;
@@ -17,6 +20,8 @@ type AbpStore = {
 const useAbpStore = create<AbpStore>()(
 	persist(
 		(set, get) => ({
+			tenantId: undefined,
+			xsrfToken: undefined,
 			application: undefined,
 			localization: undefined,
 			actions: {
@@ -50,8 +55,16 @@ const useAbpStore = create<AbpStore>()(
 					});
 					return abpLocales;
 				},
+				setTenantId: (val) => set({ tenantId: val }),
 				// 设置 application 数据
-				setApplication: (val) => set({ application: val }),
+				setApplication: (val) => {
+					set({ application: val });
+					const match = document.cookie.match(new RegExp("(^| )XSRF-TOKEN=([^;]+)"));
+					const xsrfToken = match ? match[2] : undefined;
+					set({ xsrfToken });
+					// console.log("--------- xsrfToken set in store:", get().xsrfToken);
+					// 提取并设置 xsrfToken
+				},
 				// 设置 localization 数据
 				setLocalization: (val) => set({ localization: val }),
 				// 重置 store

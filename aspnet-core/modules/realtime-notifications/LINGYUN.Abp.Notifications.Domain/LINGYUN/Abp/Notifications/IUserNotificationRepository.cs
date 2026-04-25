@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.Notifications;
 
@@ -45,6 +46,19 @@ public interface IUserNotificationRepository : IBasicRepository<UserNotification
         string sorting = nameof(Notification.CreationTime),
         NotificationReadState? readState = null,
         int skipCount = 0, 
+        int maxResultCount = 10,
+        CancellationToken cancellationToken = default);
+
+    Task<int> GetCountAsync(
+        Guid userId,
+        ISpecification<UserNotificationInfo> specification,
+        CancellationToken cancellationToken = default);
+
+    Task<List<UserNotificationInfo>> GetListAsync(
+        Guid userId,
+        ISpecification<UserNotificationInfo> specification,
+        string sorting = nameof(Notification.CreationTime),
+        int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);
 }

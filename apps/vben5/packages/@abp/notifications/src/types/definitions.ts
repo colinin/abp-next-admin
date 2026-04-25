@@ -69,8 +69,7 @@ interface NotificationDefinitionCreateOrUpdateDto extends IHasExtraProperties {
 
 type NotificationDefinitionUpdateDto = NotificationDefinitionCreateOrUpdateDto;
 
-interface NotificationDefinitionCreateDto
-  extends NotificationDefinitionCreateOrUpdateDto {
+interface NotificationDefinitionCreateDto extends NotificationDefinitionCreateOrUpdateDto {
   groupName?: string;
   name: string;
 }

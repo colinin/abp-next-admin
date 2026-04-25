@@ -165,6 +165,7 @@ const toolbarOptions = computed(() => {
   }
 
   if (!showToolbar.value) {
+    toolbarConfig.enabled = false;
     return { toolbarConfig };
   }
 
@@ -300,7 +301,7 @@ async function init() {
   const enableProxyConfig = options.value.proxyConfig?.enabled;
   if (enableProxyConfig && autoLoad) {
     props.api.grid.commitProxy?.(
-      'initial',
+      'query',
       formOptions.value ? ((await formApi.getValues()) ?? {}) : {},
     );
     // props.api.reload(formApi.form?.values ?? {});
@@ -315,6 +316,7 @@ async function init() {
       '[Vben Vxe Table]: The formConfig in the grid is not supported, please use the `formOptions` props',
     );
   }
+  // @ts-ignore
   props.api?.setState?.({ gridOptions: defaultGridOptions });
   // form 由 vben-form 代替，所以需要保证query相关事件可以拿到参数
   extendProxyOptions(props.api, defaultGridOptions, () =>
@@ -377,9 +379,11 @@ onUnmounted(() => {
       <!-- 左侧操作区域或者title -->
       <template v-if="showToolbar" #toolbar-actions="slotProps">
         <slot v-if="showTableTitle" name="table-title">
-          <div class="mr-1 pl-1 text-[1rem]">
+          <div
+            class="flex items-center justify-center gap-1 text-[1rem] font-bold"
+          >
             {{ tableTitle }}
-            <VbenHelpTooltip v-if="tableTitleHelp" trigger-class="pb-1">
+            <VbenHelpTooltip v-if="tableTitleHelp">
               {{ tableTitleHelp }}
             </VbenHelpTooltip>
           </div>

@@ -96,7 +96,7 @@ const gridOptions: VxeGridProps<PermissionGroupDefinitionDto> = {
       query: async ({ page, sort }) => {
         let items = sortby(permissionGroups.value, sort.field);
         if (sort.order === 'desc') {
-          items = items.reverse();
+          items = items.toReversed();
         }
         const result = {
           totalCount: permissionGroups.value.length,

@@ -14,17 +14,36 @@ interface PasswordTokenRequest extends TokenRequest {
 	/** 用户名 */
 	userName: string;
 }
+/** 手机号授权请求数据模型 */
+interface PhoneNumberTokenRequest {
+	[key: string]: any;
+	/** 验证码 */
+	code: string;
+	/** 手机号 */
+	phoneNumber: string;
+}
+/** 扫码登录授权请求数据模型 */
+interface QrCodeTokenRequest {
+	[key: string]: any;
+	/** 二维码Key */
+	key: string;
+	/** 租户Id */
+	tenantId?: string;
+}
 /** 用户密码授权请求数据模型 */
 interface PasswordTokenRequestModel {
+	[key: string]: any;
 	/** 用户密码 */
 	password: string;
 	/** 用户名 */
 	username: string;
 }
-/** 用户刷新令牌请求数据模型 */
-interface RefreshTokenRequestModel {
-	/** 用户密码 */
-	refreshToken: string;
+/** 令牌撤销请求数据类型 */
+interface RevokeTokenRequest {
+	/** 令牌 */
+	token: string;
+	/** 令牌类型 */
+	tokenType?: "access_token" | "refresh_token";
 }
 /** 令牌返回数据模型 */
 interface TokenResult {
@@ -36,6 +55,10 @@ interface TokenResult {
 	refreshToken: string;
 	/** 令牌类型 */
 	tokenType: string;
+}
+interface OAuthTokenRefreshModel {
+	/** 刷新令牌 */
+	refreshToken: string;
 }
 /** oauth标准令牌返回结构 */
 interface OAuthTokenResult {
@@ -49,11 +72,50 @@ interface OAuthTokenResult {
 	token_type: string;
 }
 
+interface OAuthError {
+	/** 错误类型 */
+	error: string;
+	/** 错误描述 */
+	error_description: string;
+	/** 错误描述链接 */
+	error_uri?: string;
+}
+
+interface TwoFactorError extends OAuthError {
+	twoFactorToken: string;
+	userId: string;
+}
+
+interface ShouldChangePasswordError extends OAuthError {
+	changePasswordToken: string;
+	userId: string;
+}
+
+/** 用户刷新令牌请求数据模型 */
+interface RefreshTokenRequestModel {
+	/** 用户密码 */
+	refreshToken: string;
+}
+
+interface SignInRedirectResult {
+	isExternalLogin: boolean;
+	needRegister: boolean;
+	redirectUrl?: string;
+}
+
 export type {
+	OAuthError,
+	OAuthTokenRefreshModel,
 	OAuthTokenResult,
 	PasswordTokenRequest,
 	PasswordTokenRequestModel,
+	PhoneNumberTokenRequest,
+	QrCodeTokenRequest,
+	RevokeTokenRequest,
+	ShouldChangePasswordError,
 	TokenRequest,
 	TokenResult,
+	TwoFactorError,
 	RefreshTokenRequestModel,
+	SignInRedirectResult,
 };

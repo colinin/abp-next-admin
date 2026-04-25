@@ -3,7 +3,7 @@ import {
   authenticateResponseInterceptor,
   errorMessageResponseInterceptor,
 } from '@vben/request';
-import { useAccessStore } from '@vben/stores';
+import { useAccessStore, useTimezoneStore } from '@vben/stores';
 
 import { useOAuthError } from '@abp/account';
 import { useAbpStore } from '@abp/core';
@@ -53,16 +53,23 @@ export function initRequestClient() {
     fulfilled: async (config) => {
       const abpStore = useAbpStore();
       const accessStore = useAccessStore();
+      const timezoneStore = useTimezoneStore();
+
       if (accessStore.accessToken) {
         config.headers.Authorization = `${accessStore.accessToken}`;
       }
       config.headers['Accept-Language'] = preferences.app.locale;
       config.headers['X-Request-From'] = 'vben';
       if (abpStore.tenantId) {
+        // see: https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.MultiTenancy.Abstractions/Volo/Abp/MultiTenancy/TenantResolverConsts.cs
         config.headers.__tenant = abpStore.tenantId;
       }
       if (abpStore.xsrfToken) {
         config.headers.RequestVerificationToken = abpStore.xsrfToken;
+      }
+      if (timezoneStore.timezone) {
+        // see: https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.Timing/Volo/Abp/Timing/TimeZoneConsts.cs
+        config.headers.__timezone = timezoneStore.timezone;
       }
       return config;
     },

@@ -18,6 +18,9 @@
     "DisplayName:Keys": "键列表",
     "DisplayName:AbsoluteExpiration": "绝对过期时间",
     "DisplayName:SlidingExpiration": "滑动过期时间",
-    "Abp.CachingManagement:01001": "类型为 {Type} 的缓存暂不支持查看键值."
+    "DisplayName:Prefix": "前缀",
+    "Abp.CachingManagement:01001": "类型为 {Type} 的缓存暂不支持查看键值.",
+    "MultipleCacheWillBeDeletedMessage": "选择的缓存将被删除, 删除缓存可能会对系统造成影响, 请谨慎操作!",
+    "EditCacheValueAlertMessage": "直接修改缓存可能会对系统运行造成影响,请谨慎操作!"
   }
 }

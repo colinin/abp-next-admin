@@ -1,0 +1,9 @@
+.account-module-form {
+    padding: 24px;
+    border: 0;
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 30px rgba(8, 20, 73, .1);
+    border-radius: 4px;
+    margin-top: 0.75rem !important;
+}
