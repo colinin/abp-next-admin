@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,11 +32,11 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
-using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
@@ -56,7 +57,7 @@ namespace LY.MicroService.AuthServer;
 
 public partial class AuthServerHttpApiHostModule
 {
-    public static string ApplicationName { get; set; } = "AuthService";
+    public static string ApplicationName { get; set; } = "IdentityService";
 
     private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
@@ -131,38 +132,8 @@ public partial class AuthServerHttpApiHostModule
                 mysql =>
                 {
                     // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
-                    mysql.TranslateParameterizedCollectionsToConstants();
+                    mysql.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
                 });
-        });
-
-        Configure<AbpDbConnectionOptions>(options =>
-        {
-            options.Databases.Configure("Platform", database =>
-            {
-                database.MapConnection("AbpSaas");
-                database.MapConnection("Workflow");
-                database.MapConnection("AppPlatform");
-                database.MapConnection("TaskManagement");
-                database.MapConnection("AbpAuditLogging");
-                database.MapConnection("AbpTextTemplating");
-                database.MapConnection("AbpSettingManagement");
-                database.MapConnection("AbpFeatureManagement");
-                database.MapConnection("AbpPermissionManagement");
-                database.MapConnection("AbpLocalizationManagement");
-                database.MapConnection("AbpDataProtectionManagement");
-            });
-            options.Databases.Configure("Identity", database =>
-            {
-                database.MapConnection("AbpGdpr");
-                database.MapConnection("AbpIdentity");
-                database.MapConnection("AbpOpenIddict");
-                database.MapConnection("AbpIdentityServer");
-            });
-            options.Databases.Configure("Realtime", database =>
-            {
-                database.MapConnection("Notifications");
-                database.MapConnection("MessageService");
-            });
         });
     }
 
@@ -261,8 +232,11 @@ public partial class AuthServerHttpApiHostModule
         var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
         if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
-            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+            services.AddSingleton<IDistributedLockProvider>(_ =>
+            {
+                return new RedisDistributedSynchronizationProvider(
+                    ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]).GetDatabase());
+            });
         }
     }
 
@@ -474,14 +448,19 @@ public partial class AuthServerHttpApiHostModule
                 }
             });
 
-        if (!isDevelopment)
+
+        Configure<AbpAntiForgeryOptions>(options =>
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-            services
-                .AddDataProtection()
-                .SetApplicationName("LINGYUN.Abp.Application")
-                .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
-        }
+            configuration.GetSection("AntiForgery").Bind(options);
+        });
+
+        services.AddDataProtection()
+            .SetApplicationName("LINGYUN.Abp.Application")
+            .PersistKeysToStackExchangeRedis(() =>
+            {
+                return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]).GetDatabase();
+            },
+            "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
     }
 
     private void ConfigureWrapper()

@@ -35,6 +35,7 @@ using System.Text.Unicode;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.FeatureManagement;
@@ -226,8 +227,11 @@ public partial class RealtimeMessageHttpApiHostModule
         var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
         if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
-            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+            services.AddSingleton<IDistributedLockProvider>(_ =>
+            {
+                return new RedisDistributedSynchronizationProvider(
+                    ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]).GetDatabase());
+            });
         }
     }
 
@@ -474,19 +478,19 @@ public partial class RealtimeMessageHttpApiHostModule
                 };
             });
 
-        if (isDevelopment)
-        {
-            // services.AddAlwaysAllowAuthorization();
-        }
 
-        if (!isDevelopment)
+        Configure<AbpAntiForgeryOptions>(options =>
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-            services
-                .AddDataProtection()
-                .SetApplicationName("LINGYUN.Abp.Application")
-                .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
-        }
+            configuration.GetSection("AntiForgery").Bind(options);
+        });
+
+        services.AddDataProtection()
+            .SetApplicationName("LINGYUN.Abp.Application")
+            .PersistKeysToStackExchangeRedis(() =>
+            {
+                return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]).GetDatabase();
+            },
+            "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
     }
     private void ConfigureWrapper()
     {

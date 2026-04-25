@@ -39,6 +39,8 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Volo.Abp.Auditing;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
@@ -179,6 +181,15 @@ public partial class AuthServerModule
             });
         });
 
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.StyleBundles
+                .Configure(LeptonXLiteThemeBundles.Styles.Global, bundle =>
+                {
+                    bundle.AddFiles("/css/global-styles.css");
+                });
+        });
+
         services.AddHealthChecks();
     }
 
@@ -226,8 +237,11 @@ public partial class AuthServerModule
         var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
         if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
-            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+            services.AddSingleton<IDistributedLockProvider>(_ =>
+            {
+                return new RedisDistributedSynchronizationProvider(
+                    ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]).GetDatabase());
+            });
         }
     }
 
@@ -407,19 +421,19 @@ public partial class AuthServerModule
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
                 }
             });
-            //.AddWeChatWork(options =>
-            //{
-            //    options.SignInScheme = IdentityConstants.ExternalScheme;
-            //});
+        //.AddWeChatWork(options =>
+        //{
+        //    options.SignInScheme = IdentityConstants.ExternalScheme;
+        //});
 
-        if (!isDevelopment)
-        {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-            services
-                .AddDataProtection()
-                .SetApplicationName("LINGYUN.Abp.Application")
-                .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
-        }
+        services.AddDataProtection()
+            .SetApplicationName("LINGYUN.Abp.Application")
+            .PersistKeysToStackExchangeRedis(() =>
+            {
+                return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]).GetDatabase();
+            },
+            "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
+
         services.AddSameSiteCookiePolicy();
     }
     private void ConfigureMultiTenancy(IConfiguration configuration)

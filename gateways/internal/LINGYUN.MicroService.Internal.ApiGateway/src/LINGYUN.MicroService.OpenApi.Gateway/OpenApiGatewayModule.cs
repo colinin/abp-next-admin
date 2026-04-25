@@ -41,7 +41,7 @@ namespace LINGYUN.MicroService.OpenApi.Gateway;
 )]
 public class OpenApiGatewayModule : AbpModule
 {
-    public static string ApplicationName { get; set; } = "Services.OpenApi.GateWay";
+    public static string ApplicationName { get; set; } = "OpenApiGateWay";
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
@@ -94,15 +94,14 @@ public class OpenApiGatewayModule : AbpModule
             authority: configuration["AuthServer:Authority"],
             scopes: new Dictionary<string, string>
             {
-                {"Account", "Account API"},
-                {"Identity", "Identity API"},
-                {"IdentityServer", "Identity Server API"},
-                {"BackendAdmin", "Backend Admin API"},
-                {"Localization", "Localization API"},
-                {"Platform", "Platform API"},
-                {"RealtimeMessage", "RealtimeMessage API"},
-                {"TaskManagement", "Task Management API"},
-                {"Webhooks", "Webhooks API"},
+                {"identity-service", "Identity Service API"},
+                {"admin-service", "Admin Service API"},
+                {"localization-service", "Localization Service API"},
+                {"platform-service", "Platform Service API"},
+                {"message-service", "Message Service API"},
+                {"task-service", "Task Service API"},
+                {"webhook-service", "Webhook Service API"},
+                {"wechat-service", "WeChat Service API"},
             },
             options =>
             {
