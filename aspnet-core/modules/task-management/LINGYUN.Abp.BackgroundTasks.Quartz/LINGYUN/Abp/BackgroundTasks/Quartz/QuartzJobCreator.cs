@@ -125,11 +125,21 @@ public class QuartzJobCreator : IQuartzJobCreator, ISingletonDependency
                 triggerBuilder
                     .WithIdentity(KeyBuilder.CreateTriggerKey(job))
                     .WithDescription(job.Description)
-                    .StartAt(Clock.Now.AddSeconds(job.Interval))
                     .EndAt(job.EndTime)
                     .ForJob(KeyBuilder.CreateJobKey(job))
                     .WithPriority((int)job.Priority);
-
+                    
+                // 首次启动时间由 BeginTime 决定，不再使用 Interval 作为"延迟启动"。
+                // Interval 仅在 Persistent 周期任务中表示"重复间隔"。
+                if (job.BeginTime > Clock.Now)
+                {
+                    triggerBuilder.StartAt(job.BeginTime);
+                }
+                else
+                {
+                    triggerBuilder.StartNow();
+                }
+                
                 // Quartz约定. 重复间隔不能为0
                 // fix throw Quartz.SchedulerException: Repeat Interval cannot be zero.
                 var scheduleBuilder = SimpleScheduleBuilder.Create();
@@ -139,14 +149,8 @@ public class QuartzJobCreator : IQuartzJobCreator, ISingletonDependency
                 {
                     scheduleBuilder.WithRepeatCount(maxCount);
                 }
-                if (job.Interval > 0)
-                {
-                    scheduleBuilder.WithIntervalInSeconds(job.Interval);
-                }
-                else
-                {
-                    scheduleBuilder.WithIntervalInSeconds(300);
-                }
+                scheduleBuilder.WithIntervalInSeconds(job.Interval > 0 ? job.Interval : 300);
+
 
                 triggerBuilder.WithSchedule(scheduleBuilder);
 
