@@ -10,7 +10,6 @@ using Volo.Abp.Data;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.EntityFrameworkCore.Migrations;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
@@ -19,8 +18,7 @@ public class PlatformDbMigrationEventHandler :
     EfCoreDatabaseMigrationEventHandlerBase<PlatformMigrationsDbContext>,
     IDistributedEventHandler<TenantDeletedEto>
 {
-    protected IDataSeeder DataSeeder { get; }
-    protected IFeatureChecker FeatureChecker { get; }
+    protected PlatformServiceDataSeeder DataSeeder { get; }
     protected IConfiguration Configuration { get; }
     public PlatformDbMigrationEventHandler(
         ICurrentTenant currentTenant,
@@ -29,23 +27,32 @@ public class PlatformDbMigrationEventHandler :
         IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory,
-        IDataSeeder dataSeeder,
-        IFeatureChecker featureChecker,
+        PlatformServiceDataSeeder dataSeeder,
         IConfiguration configuration)
         : base(
             ConnectionStringNameAttribute.GetConnStringName<PlatformMigrationsDbContext>(), 
             currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
         DataSeeder = dataSeeder;
-        FeatureChecker = featureChecker;
         Configuration = configuration;
     }
 
-    protected async override Task SeedAsync(Guid? tenantId)
+    protected async override Task AfterTenantCreated(TenantCreatedEto eventData, bool schemaMigrated)
     {
-        using (CurrentTenant.Change(tenantId))
+        using (CurrentTenant.Change(eventData.Id))
         {
-            await DataSeeder.SeedAsync(tenantId);
+            using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
+            {
+                var seedContext = new DataSeedContext(eventData.Id);
+                foreach (var prop in eventData.Properties)
+                {
+                    seedContext.WithProperty(prop.Key, prop.Value);
+                }
+
+                await DataSeeder.SeedAsync(seedContext);
+
+                await uow.CompleteAsync();
+            }
         }
     }
 

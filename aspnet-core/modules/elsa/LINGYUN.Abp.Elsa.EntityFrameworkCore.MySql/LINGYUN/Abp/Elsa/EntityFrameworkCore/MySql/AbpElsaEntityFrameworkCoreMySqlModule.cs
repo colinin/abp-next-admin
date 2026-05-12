@@ -1,11 +1,11 @@
 ﻿using Elsa;
 using Elsa.Options;
 using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql.Migrations;
+using LINGYUN.Abp.EntityFrameworkCore.MySQL;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -13,7 +13,7 @@ namespace LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
 
 [DependsOn(
     typeof(AbpElsaEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLPomeloModule))]
+    typeof(AbpEntityFrameworkCoreMySQLMicrotingModule))]
 public class AbpElsaEntityFrameworkCoreMySqlModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

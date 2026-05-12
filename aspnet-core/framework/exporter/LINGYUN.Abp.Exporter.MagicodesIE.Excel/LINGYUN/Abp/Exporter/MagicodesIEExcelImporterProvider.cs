@@ -1,5 +1,4 @@
 ﻿using Magicodes.ExporterAndImporter.Core.Models;
-using Magicodes.ExporterAndImporter.Excel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -13,21 +12,27 @@ using Volo.Abp.Json;
 
 namespace LINGYUN.Abp.Exporter.MagicodesIE.Excel;
 
-public class MagicodesIEExcelImporterProvider : IImporterProvider, ITransientDependency
+#pragma warning disable CS0618
+[ExposeServices(typeof(IImporterProvider))]
+#pragma warning restore CS0618
+[ExposeServices(typeof(IExcelImporterProvider))]
+public class MagicodesIEExcelImporterProvider :
+    IExcelImporterProvider,
+#pragma warning disable CS0618
+    IImporterProvider,
+#pragma warning restore CS0618
+    ITransientDependency
 {
     public ILogger<MagicodesIEExcelImporterProvider> Logger { protected get; set; }
 
     private readonly AbpExporterMagicodesIEExcelOptions _options;
     private readonly IJsonSerializer _jsonSerializer;
-    private readonly IExcelImporter _excelImporter;
 
     public MagicodesIEExcelImporterProvider(
         IJsonSerializer jsonSerializer, 
-        IExcelImporter excelImporter,
         IOptions<AbpExporterMagicodesIEExcelOptions> options)
     {
         _jsonSerializer = jsonSerializer;
-        _excelImporter = excelImporter;
         _options = options.Value;
 
         Logger = NullLogger<MagicodesIEExcelImporterProvider>.Instance;

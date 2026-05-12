@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.UI.Navigation.VueVbenAdmin5;
-using LY.MicroService.Applications.Single.EntityFrameworkCore.MySql;
+﻿using LY.MicroService.Applications.Single.EntityFrameworkCore.MySql;
 using LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql;
 using LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +9,6 @@ namespace LY.MicroService.Applications.Single.DbMigrator;
 
 [DependsOn(
     typeof(AbpAutofacModule),
-    typeof(AbpUINavigationVueVbenAdmin5Module),
     typeof(SingleMigrationsEntityFrameworkCorePostgreSqlModule),
     typeof(SingleMigrationsEntityFrameworkCoreSqlServerModule),
     typeof(SingleMigrationsEntityFrameworkCoreMySqlModule)

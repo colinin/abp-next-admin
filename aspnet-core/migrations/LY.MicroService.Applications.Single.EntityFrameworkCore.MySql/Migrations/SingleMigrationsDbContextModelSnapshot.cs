@@ -19,15 +19,504 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.MySql)
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "10.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("LINGYUN.Abp.AIManagement.Chats.ConversationRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<DateTime>("ExpiredAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Workspace")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AbpAIConversations", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.AIManagement.Chats.TextChatMessageRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("varchar(1024)");
+
+                    b.Property<Guid?>("ConversationId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<DateTime?>("ReplyAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ReplyMessage")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Workspace")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "ConversationId");
+
+                    b.ToTable("AbpAITextChatMessages", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.AIManagement.Tokens.TokenUsageRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<long?>("CachedInputTokenCount")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid?>("ConversationId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<long?>("InputTokenCount")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<Guid?>("MessageId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<long?>("OutputTokenCount")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ReasoningTokenCount")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.Property<long?>("TotalTokenCount")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "ConversationId");
+
+                    b.ToTable("AbpAITokenUsages", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.AIManagement.Tools.AIToolDefinitionRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("varchar(1024)");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsGlobal")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("StateCheckers")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("AbpAIAIToolDefinitionRecords", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.AIManagement.Workspaces.WorkspaceDefinitionRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ApiBaseUrl")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("ApiKey")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<float?>("FrequencyPenalty")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Instructions")
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<int?>("MaxOutputTokens")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModelName")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<float?>("PresencePenalty")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("StateCheckers")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("SystemPrompt")
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)");
+
+                    b.Property<float?>("Temperature")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Tools")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("AbpAIWorkspaceDefinitions", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.BlobManagement.Blob", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<Guid>("ContainerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ContentType")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<long>("DownloadCount")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("ExpirationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContainerId");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("TenantId", "ContainerId", "FullName");
+
+                    b.ToTable("AbpBlobs", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.BlobManagement.BlobContainer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "Name");
+
+                    b.ToTable("AbpBlobContainers", (string)null);
+                });
+
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityEnumInfo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("DisplayName")
@@ -61,7 +550,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("DisplayName")
@@ -101,7 +589,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityTypeInfo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -373,7 +860,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.Demo.Authors.Author", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("BirthDate")
@@ -439,7 +925,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.Demo.Books.Book", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<Guid>("AuthorId")
@@ -540,7 +1025,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprInfo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Data")
@@ -567,7 +1051,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprRequest", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -602,7 +1085,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.LocalizationManagement.Language", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
@@ -659,7 +1141,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.LocalizationManagement.Resource", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
@@ -1323,7 +1804,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.Notifications.NotificationDefinitionGroupRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<bool>("AllowSubscriptionToClients")
@@ -1354,7 +1834,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.Notifications.NotificationDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<bool>("AllowSubscriptionToClients")
@@ -1404,6 +1883,59 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                     b.HasKey("Id");
 
                     b.ToTable("AppNotificationDefinitions", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.Notifications.NotificationSendRecord", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("NotificationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("NotificationName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("SendTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)")
+                        .HasDefaultValue("/");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "NotificationName")
+                        .HasDatabaseName("IX_Tenant_Send_Notification_Name");
+
+                    b.ToTable("AppNotificationSendRecords", (string)null);
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.Notifications.UserNotification", b =>
@@ -1478,7 +2010,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.Saas.Editions.Edition", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1541,7 +2072,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.Saas.Tenants.Tenant", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1643,7 +2173,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.TaskManagement.BackgroundJobAction", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1893,7 +2422,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.TextTemplating.TextTemplate", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Content")
@@ -1945,7 +2473,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.TextTemplating.TextTemplateDefinition", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -2009,7 +2536,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
@@ -2055,7 +2581,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookEventRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
@@ -2094,7 +2619,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookGroupDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("DisplayName")
@@ -2122,7 +2646,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Abp.WebhooksManagement.WebhookSendRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
@@ -2233,7 +2756,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Platform.Datas.Data", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Code")
@@ -2321,7 +2843,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Platform.Datas.DataItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<bool>("AllowBeNull")
@@ -2581,7 +3102,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Platform.Layouts.Layout", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -2672,7 +3192,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Platform.Menus.Menu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Code")
@@ -2781,7 +3300,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Platform.Menus.RoleMenu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
@@ -2826,7 +3344,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Platform.Menus.UserFavoriteMenu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("AliasName")
@@ -2904,7 +3421,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Platform.Menus.UserMenu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
@@ -2946,7 +3462,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Platform.Messages.EmailMessage", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<int?>("BodyTransferEncoding")
@@ -3116,7 +3631,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Platform.Messages.SmsMessage", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -3193,7 +3707,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Platform.Packages.Package", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Authors")
@@ -3360,7 +3873,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("LINGYUN.Platform.Portal.Enterprise", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Address")
@@ -3463,7 +3975,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ApplicationName")
@@ -3585,7 +4096,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<Guid>("AuditLogId")
@@ -3635,7 +4145,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogExcelFile", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationTime")
@@ -3663,7 +4172,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityChange", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<Guid>("AuditLogId")
@@ -3688,8 +4196,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
 
                     b.Property<string>("EntityTypeFullName")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)")
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)")
                         .HasColumnName("EntityTypeFullName");
 
                     b.Property<string>("ExtraProperties")
@@ -3712,7 +4220,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.AuditLogging.EntityPropertyChange", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<Guid>("EntityChangeId")
@@ -3736,8 +4243,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
 
                     b.Property<string>("PropertyTypeFullName")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)")
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)")
                         .HasColumnName("PropertyTypeFullName");
 
                     b.Property<Guid?>("TenantId")
@@ -3754,7 +4261,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("AllowedProviders")
@@ -3815,7 +4321,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureGroupDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("DisplayName")
@@ -3843,7 +4348,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureValue", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
@@ -3875,7 +4379,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -3928,7 +4431,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.Identity.IdentityLinkUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<Guid?>("SourceTenantId")
@@ -3954,7 +4456,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRole", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -4040,7 +4541,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.Identity.IdentitySecurityLog", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Action")
@@ -4117,7 +4617,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.Identity.IdentitySession", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ClientId")
@@ -4130,8 +4629,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                         .HasColumnType("varchar(64)");
 
                     b.Property<string>("DeviceInfo")
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("longtext")
@@ -4173,7 +4672,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<int>("AccessFailedCount")
@@ -4251,6 +4749,15 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
 
                     b.Property<DateTimeOffset?>("LastPasswordChangeTime")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset?>("LastSignInTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("Leaved")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false)
+                        .HasColumnName("Leaved");
 
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
@@ -4368,7 +4875,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserDelegation", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("EndTime")
@@ -4448,6 +4954,47 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                     b.ToTable("AbpUserOrganizationUnits", (string)null);
                 });
 
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityUserPasskey", b =>
+                {
+                    b.Property<byte[]>("CredentialId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("varbinary(1024)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("CredentialId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AbpUserPasskeys", (string)null);
+                });
+
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityUserPasswordHistory", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("UserId", "Password");
+
+                    b.ToTable("AbpUserPasswordHistories", (string)null);
+                });
+
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserRole", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -4495,7 +5042,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnit", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Code")
@@ -4601,7 +5147,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.OpenIddict.Applications.OpenIddictApplication", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ApplicationType")
@@ -4660,6 +5205,9 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
+                    b.Property<string>("FrontChannelLogoutUri")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint(1)")
@@ -4708,7 +5256,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<Guid?>("ApplicationId")
@@ -4757,7 +5304,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.OpenIddict.Scopes.OpenIddictScope", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -4834,7 +5380,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.OpenIddict.Tokens.OpenIddictToken", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<Guid?>("ApplicationId")
@@ -4883,8 +5428,8 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                         .HasColumnType("varchar(400)");
 
                     b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
 
                     b.HasKey("Id");
 
@@ -4900,7 +5445,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("DisplayName")
@@ -4913,12 +5457,15 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                         .HasColumnName("ExtraProperties");
 
                     b.Property<string>("GroupName")
-                        .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("varchar(128)");
 
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ManagementPermissionName")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
 
                     b.Property<byte>("MultiTenancySide")
                         .HasColumnType("tinyint unsigned");
@@ -4936,6 +5483,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                         .HasMaxLength(128)
                         .HasColumnType("varchar(128)");
 
+                    b.Property<string>("ResourceName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
                     b.Property<string>("StateCheckers")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -4944,7 +5495,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
 
                     b.HasIndex("GroupName");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("ResourceName", "Name")
                         .IsUnique();
 
                     b.ToTable("AbpPermissions", (string)null);
@@ -4953,7 +5504,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionGrant", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
@@ -4986,7 +5536,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.PermissionManagement.PermissionGroupDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("DisplayName")
@@ -5011,10 +5560,51 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                     b.ToTable("AbpPermissionGroups", (string)null);
                 });
 
+            modelBuilder.Entity("Volo.Abp.PermissionManagement.ResourcePermissionGrant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("ProviderKey")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("ProviderName")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("ResourceKey")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("ResourceName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "Name", "ResourceName", "ResourceKey", "ProviderName", "ProviderKey")
+                        .IsUnique();
+
+                    b.ToTable("AbpResourcePermissionGrants", (string)null);
+                });
+
             modelBuilder.Entity("Volo.Abp.SettingManagement.Setting", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
@@ -5046,7 +5636,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
             modelBuilder.Entity("Volo.Abp.SettingManagement.SettingDefinitionRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("DefaultValue")
@@ -5090,6 +5679,19 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                         .IsUnique();
 
                     b.ToTable("AbpSettingDefinitions", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.BlobManagement.Blob", b =>
+                {
+                    b.HasOne("LINGYUN.Abp.BlobManagement.BlobContainer", null)
+                        .WithMany()
+                        .HasForeignKey("ContainerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LINGYUN.Abp.BlobManagement.Blob", null)
+                        .WithMany("Blobs")
+                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityEnumInfo", b =>
@@ -5319,6 +5921,62 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityUserPasskey", b =>
+                {
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
+                        .WithMany("Passkeys")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Volo.Abp.Identity.IdentityPasskeyData", "Data", b1 =>
+                        {
+                            b1.Property<byte[]>("IdentityUserPasskeyCredentialId");
+
+                            b1.Property<byte[]>("AttestationObject");
+
+                            b1.Property<byte[]>("ClientDataJson");
+
+                            b1.Property<DateTimeOffset>("CreatedAt");
+
+                            b1.Property<bool>("IsBackedUp");
+
+                            b1.Property<bool>("IsBackupEligible");
+
+                            b1.Property<bool>("IsUserVerified");
+
+                            b1.Property<string>("Name");
+
+                            b1.Property<byte[]>("PublicKey");
+
+                            b1.Property<uint>("SignCount");
+
+                            b1.PrimitiveCollection<string>("Transports");
+
+                            b1.HasKey("IdentityUserPasskeyCredentialId");
+
+                            b1.ToTable("AbpUserPasskeys");
+
+                            b1
+                                .ToJson("Data")
+                                .HasColumnType("json");
+
+                            b1.WithOwner()
+                                .HasForeignKey("IdentityUserPasskeyCredentialId");
+                        });
+
+                    b.Navigation("Data");
+                });
+
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityUserPasswordHistory", b =>
+                {
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
+                        .WithMany("PasswordHistories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserRole", b =>
                 {
                     b.HasOne("Volo.Abp.Identity.IdentityRole", null)
@@ -5381,6 +6039,11 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                     b.HasOne("Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization", null)
                         .WithMany()
                         .HasForeignKey("AuthorizationId");
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.BlobManagement.Blob", b =>
+                {
+                    b.Navigation("Blobs");
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.DataProtectionManagement.EntityPropertyInfo", b =>
@@ -5451,6 +6114,10 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                     b.Navigation("Logins");
 
                     b.Navigation("OrganizationUnits");
+
+                    b.Navigation("Passkeys");
+
+                    b.Navigation("PasswordHistories");
 
                     b.Navigation("Roles");
 

@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Account;
 using LINGYUN.Abp.Auditing;
+using LINGYUN.Abp.BlobManagement;
 using LINGYUN.Abp.CachingManagement;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.DataProtectionManagement;
@@ -14,7 +15,6 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.OpenIddict;
-using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.ProjectManagement;
 using LINGYUN.Abp.RulesEngineManagement;
 using LINGYUN.Abp.Saas;
@@ -49,7 +49,7 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     typeof(AbpIdentityServerApplicationContractsModule),
     typeof(AbpLocalizationManagementApplicationContractsModule),
     typeof(AbpOpenIddictApplicationContractsModule),
-    typeof(AbpOssManagementApplicationContractsModule),
+    typeof(AbpBlobManagementApplicationContractsModule),
     typeof(AbpPermissionManagementApplicationContractsModule),
     typeof(PlatformApplicationContractModule),
     typeof(AbpProjectManagementApplicationContractsModule),

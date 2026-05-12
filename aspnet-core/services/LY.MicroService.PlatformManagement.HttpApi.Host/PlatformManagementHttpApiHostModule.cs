@@ -3,6 +3,13 @@ using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
+using LINGYUN.Abp.BlobManagement;
+using LINGYUN.Abp.BlobManagement.Aliyun;
+using LINGYUN.Abp.BlobManagement.FileSystem;
+using LINGYUN.Abp.BlobManagement.Minio;
+using LINGYUN.Abp.BlobManagement.SettingManagement;
+using LINGYUN.Abp.BlobManagement.Tencent;
+using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.EventBus.CAP;
@@ -12,14 +19,6 @@ using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications;
-using LINGYUN.Abp.OssManagement;
-using LINGYUN.Abp.OssManagement.Aliyun;
-using LINGYUN.Abp.OssManagement.FileSystem;
-using LINGYUN.Abp.OssManagement.Imaging;
-using LINGYUN.Abp.OssManagement.Minio;
-using LINGYUN.Abp.OssManagement.Nexus;
-using LINGYUN.Abp.OssManagement.SettingManagement;
-using LINGYUN.Abp.OssManagement.Tencent;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -55,9 +54,9 @@ using Volo.Abp.Imaging;
 using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
-using Volo.Abp.Threading;
 
 namespace LY.MicroService.PlatformManagement;
 
@@ -70,15 +69,14 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpUINavigationVueVbenAdmin5Module),
     typeof(PlatformThemeVueVbenAdminModule),
-    typeof(AbpOssManagementAliyunModule),    // 阿里云存储提供者模块
-    typeof(AbpOssManagementTencentModule),   // 腾讯云存储提供者模块
-    typeof(AbpOssManagementNexusModule),     // Nexus存储提供者模块
-    typeof(AbpOssManagementMinioModule),     // Minio存储提供者模块
-    typeof(AbpOssManagementFileSystemModule),// 本地文件系统提供者模块
-    typeof(AbpOssManagementImagingModule), // 对象存储图形处理模块
-    typeof(AbpOssManagementApplicationModule),
-    typeof(AbpOssManagementHttpApiModule),
-    typeof(AbpOssManagementSettingManagementModule),
+    typeof(AbpBlobManagementAliyunModule),    // 阿里云存储提供者模块
+    typeof(AbpBlobManagementTencentModule),   // 腾讯云存储提供者模块
+    typeof(AbpBlobManagementMinioModule),     // Minio存储提供者模块
+    typeof(AbpBlobManagementFileSystemModule),// 本地文件系统提供者模块
+    typeof(AbpBlobManagementApplicationModule),
+    typeof(AbpBlobManagementHttpApiModule),
+    typeof(AbpBlobManagementSettingManagementModule),
+    typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpImagingImageSharpModule),
     typeof(PlatformApplicationModule),
     typeof(PlatformHttpApiModule),
@@ -88,6 +86,7 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(PlatformMigrationsEntityFrameworkCoreModule),
@@ -148,26 +147,24 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
-        ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
 
         ConfigurePlatformModule(context.Services);
     }
 
-    public override void OnPostApplicationInitialization(ApplicationInitializationContext context)
-    {
-        AsyncHelper.RunSync(() => OnPostApplicationInitializationAsync(context));
-    }
-
     public async override Task OnPostApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpOssManagementOptions>>().Value;
+        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBlobManagementOptions>>().Value;
         if (options.IsCleanupEnabled)
         {
             await context.ServiceProvider
                 .GetRequiredService<IBackgroundWorkerManager>()
-                .AddAsync(context.ServiceProvider.GetRequiredService<OssObjectTempCleanupBackgroundWorker>());
+                .AddAsync(context.ServiceProvider.GetRequiredService<BlobTempCleanupBackgroundWorker>());
         }
+
+        await context.ServiceProvider
+            .GetRequiredService<IBlobDataSeeder>()
+            .SeedAsync();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

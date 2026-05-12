@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\..\configureawait.props" />
 	<Import Project="..\..\..\..\common.props" />
@@ -22,13 +22,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
-		<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="10.0.3" />
+		<!--<PackageReference Include="Elsa.Webhooks.Persistence.EntityFramework.MySql" />
 		<PackageReference Include="Elsa.WorkflowSettings.Persistence.EntityFramework.MySql" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL.Pomelo" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL.Pomelo" />-->
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\efcore\LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting\LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Elsa.EntityFrameworkCore\LINGYUN.Abp.Elsa.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj" />
 	</ItemGroup>

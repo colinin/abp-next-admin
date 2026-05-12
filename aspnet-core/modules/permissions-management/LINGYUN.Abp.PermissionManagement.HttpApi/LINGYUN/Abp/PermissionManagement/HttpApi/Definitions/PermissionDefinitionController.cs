@@ -23,6 +23,13 @@ public class PermissionDefinitionController : PermissionManagementControllerBase
         _service = service;
     }
 
+    [HttpGet]
+    [Route("assignable-providers")]
+    public virtual Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync()
+    {
+        return _service.GetAssignableProvidersAsync();
+    }
+
     [HttpPost]
     [Authorize(PermissionManagementPermissionNames.Definition.Create)]
     public virtual Task<PermissionDefinitionDto> CreateAsync(PermissionDefinitionCreateDto input)

@@ -1,10 +1,8 @@
 ﻿using DotNetCore.CAP;
-using LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql;
 using LINGYUN.Abp.Quartz.PostgresSqlInstaller;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using Volo.Abp.Guids;
@@ -15,7 +13,7 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql;
 [DependsOn(
     typeof(AbpEntityFrameworkCorePostgreSqlModule),
     typeof(AbpQuartzPostgresSqlInstallerModule),
-    typeof(AbpElsaEntityFrameworkCorePostgreSqlModule),
+    //typeof(AbpElsaEntityFrameworkCorePostgreSqlModule),
     typeof(SingleMigrationsEntityFrameworkCoreModule)
     )]
 public class SingleMigrationsEntityFrameworkCorePostgreSqlModule : AbpModule

@@ -26,6 +26,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
     private readonly ISimpleStateCheckerSerializer _simpleStateCheckerSerializer;
     private readonly ILocalizableStringSerializer _localizableStringSerializer;
     private readonly IPermissionDefinitionManager _permissionDefinitionManager;
+    private readonly IPermissionValueProviderManager _permissionValueProviderManager;
     private readonly IStaticPermissionDefinitionStore _staticPermissionDefinitionStore;
     private readonly IDynamicPermissionDefinitionStore _dynamicPermissionDefinitionStore;
     private readonly IPermissionDefinitionRecordRepository _definitionRepository;
@@ -34,6 +35,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
     public PermissionDefinitionAppService(
         ILocalizableStringSerializer localizableStringSerializer, 
         IPermissionDefinitionManager permissionDefinitionManager,
+        IPermissionValueProviderManager permissionValueProviderManager,
         IStaticPermissionDefinitionStore staticPermissionDefinitionStore,
         IDynamicPermissionDefinitionStore dynamicPermissionDefinitionStore,
         ISimpleStateCheckerSerializer simpleStateCheckerSerializer,
@@ -42,11 +44,29 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
     {
         _localizableStringSerializer = localizableStringSerializer;
         _permissionDefinitionManager = permissionDefinitionManager;
+        _permissionValueProviderManager = permissionValueProviderManager;
         _staticPermissionDefinitionStore = staticPermissionDefinitionStore;
         _dynamicPermissionDefinitionStore = dynamicPermissionDefinitionStore;
         _simpleStateCheckerSerializer = simpleStateCheckerSerializer;
         _definitionRepository = definitionRepository;
         _definitionBasicRepository = definitionBasicRepository;
+    }
+
+    public virtual Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync()
+    {
+        var providerNames = _permissionValueProviderManager.ValueProviders.Select(x => x.Name);
+
+        return Task.FromResult(new ListResultDto<NameValue<string>>(
+            providerNames.Select(name =>
+            {
+                var provider = new NameValue<string>(name, name);
+                var displayName = L[$"PermissionProviders:{name}"];
+                if (!displayName.ResourceNotFound)
+                {
+                    provider.Name = displayName.Value;
+                }
+                return provider;
+            }).ToList()));
     }
 
     [Authorize(PermissionManagementPermissionNames.Definition.Create)]
@@ -75,6 +95,8 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
             GuidGenerator.Create(),
             groupDefinition.Name,
             input.Name,
+            input.ResourceName,
+            input.ManagementPermissionName,
             input.ParentName,
             input.DisplayName,
             input.IsEnabled);
@@ -172,6 +194,8 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
                 GuidGenerator.Create(),
                 groupDefinition.Name,
                 name,
+                input.ResourceName,
+                input.ManagementPermissionName,
                 input.ParentName,
                 input.DisplayName,
                 input.IsEnabled);
@@ -203,6 +227,14 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
         if (!string.Equals(record.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
         {
             record.DisplayName = input.DisplayName;
+        }
+        if (!string.Equals(record.ResourceName, input.ResourceName, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.ResourceName = input.ResourceName;
+        }
+        if (!string.Equals(record.ManagementPermissionName, input.ManagementPermissionName, StringComparison.InvariantCultureIgnoreCase))
+        {
+            record.ManagementPermissionName = input.ManagementPermissionName;
         }
         string providers = null;
         if (!input.Providers.IsNullOrEmpty())
@@ -279,6 +311,8 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
             ParentName = definitionRecord.ParentName,
             IsEnabled = definitionRecord.IsEnabled,
             DisplayName = definitionRecord.DisplayName,
+            ResourceName = definitionRecord.ResourceName,
+            ManagementPermissionName = definitionRecord.ManagementPermissionName,
             Providers = definitionRecord.Providers?.Split(',').ToList(),
             StateCheckers = definitionRecord.StateCheckers,
             MultiTenancySide = definitionRecord.MultiTenancySide,
@@ -303,6 +337,8 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
             ParentName = definition.Parent?.Name,
             IsEnabled = definition.IsEnabled,
             Providers = definition.Providers,
+            ResourceName = definition.ResourceName,
+            ManagementPermissionName = definition.ManagementPermissionName,
             MultiTenancySide = definition.MultiTenancySide,
             DisplayName = _localizableStringSerializer.Serialize(definition.DisplayName),
             ExtraProperties = new ExtraPropertyDictionary(),

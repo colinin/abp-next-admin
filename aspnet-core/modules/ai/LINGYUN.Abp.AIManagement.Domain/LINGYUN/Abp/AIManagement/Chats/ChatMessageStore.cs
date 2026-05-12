@@ -3,8 +3,10 @@ using LINGYUN.Abp.AI.Models;
 using LINGYUN.Abp.AIManagement.Settings;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -100,6 +102,9 @@ public class ChatMessageStore : IChatMessageStore, ITransientDependency
                 textMessage.Role,
                 textMessage.CreatedAt,
                 _currentTenant.Id);
+
+            // 用于本地化场景
+            textMessageRecord.SetProperty(nameof(CultureInfo.CurrentCulture), CultureInfo.CurrentCulture.Name);
 
             UpdateUserMessageRecord(textMessageRecord, textMessage);
 

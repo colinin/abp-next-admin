@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.CachingManagement;
@@ -14,5 +13,5 @@ public interface ICacheManager
 
     Task RefreshAsync(RefreshCacheRequest request, CancellationToken cancellationToken = default);
 
-    Task RemoveAsync(string key, CancellationToken cancellationToken = default);
+    Task RemoveAsync(RemoveCacheRequest request, CancellationToken cancellationToken = default);
 }

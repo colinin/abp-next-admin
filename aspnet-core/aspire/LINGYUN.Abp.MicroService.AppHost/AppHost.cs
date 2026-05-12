@@ -3,9 +3,17 @@ using Microsoft.Extensions.Hosting;
 var builder = DistributedApplication.CreateBuilder(args);
 
 // Redis
-var redis = builder.AddRedis("redis")
+var redis = builder.AddRedis("redis",
+    password: builder.AddParameter("redis-password", "123456", secret: true))
     .WithContainerName("redis")
     .WithDataVolume("redis-dev");
+
+if (builder.Environment.IsDevelopment())
+{
+#pragma warning disable ASPIRECERTIFICATES001
+    redis.WithoutHttpsCertificate();
+#pragma warning restore ASPIRECERTIFICATES001
+}
 
 // Elasticsearch
 var elasticsearch = builder.AddElasticsearch("elasticsearch")

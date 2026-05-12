@@ -73,6 +73,6 @@ app.UseAbpSwaggerUI(options =>
 app.UseAuditing();
 app.UseAbpSerilogEnrichers();
 app.UseConfiguredEndpoints();
-app.UseHttpActivities();
+// app.UseHttpActivities();
 
 await app.RunAsync();

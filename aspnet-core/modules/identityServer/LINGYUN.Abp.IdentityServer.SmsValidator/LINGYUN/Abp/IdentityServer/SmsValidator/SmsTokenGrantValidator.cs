@@ -3,6 +3,7 @@ using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
+using LINGYUN.Abp.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -103,8 +104,11 @@ public class SmsTokenGrantValidator : IExtensionGrantValidator
             else
             {
                 Logger.LogInformation("Authentication failed for username: {username}, reason: access failed", currentUser.UserName);
-                var userAccessFailedError = identityResult.LocalizeErrors(IdentityLocalizer);
+
+
+                var userAccessFailedError = IdentityLocalizer["InvalidGrant:PhoneVerifyInvalid"].Value;
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, userAccessFailedError);
+
                 await EventService.RaiseAsync(new UserLoginFailureEvent(currentUser.UserName, userAccessFailedError, false));
             }
 

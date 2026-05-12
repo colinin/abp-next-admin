@@ -4,10 +4,10 @@ using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
-using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Jobs;
 using LINGYUN.Abp.BackgroundTasks.Notifications;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
+using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Elasticsearch.Jobs;
@@ -16,7 +16,6 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.OssManagement;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -51,7 +50,6 @@ namespace LINGYUN.Abp.MicroService.TaskService;
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpEmailingExceptionHandlingModule),
-    typeof(AbpOssManagementHttpApiClientModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcLocalizationModule),
@@ -59,7 +57,6 @@ namespace LINGYUN.Abp.MicroService.TaskService;
     typeof(AbpBackgroundTasksJobsModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
-    typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(AbpBackgroundTasksNotificationsModule),
     typeof(TaskManagementApplicationModule),
     typeof(TaskManagementHttpApiModule),
@@ -70,6 +67,7 @@ namespace LINGYUN.Abp.MicroService.TaskService;
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(TaskServiceMigrationsEntityFrameworkCoreModule),
+    typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpEmailingPlatformModule),
@@ -112,6 +110,7 @@ public partial class TaskServiceModule : AbpModule
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
+        ConfigureBlobStoring(configuration);
         ConfigureMultiTenancy(configuration);
         ConfigureJsonSerializer(configuration);
         ConfigureMvc(context.Services, configuration);

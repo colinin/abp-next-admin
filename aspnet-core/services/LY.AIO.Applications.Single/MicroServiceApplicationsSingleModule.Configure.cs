@@ -42,12 +42,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using MiniExcelLibs.Attributes;
 using OpenIddict.Server;
 using OpenIddict.Server.AspNetCore;
 using Quartz;
 using StackExchange.Redis;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
@@ -690,7 +692,20 @@ public partial class MicroServiceApplicationsSingleModule
             options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "App API", Version = "v1" });
-                options.DocInclusionPredicate((docName, description) => true);
+                options.DocInclusionPredicate((docName, description) =>
+                {
+                    if (description.TryGetMethodInfo(out var methodInfo))
+                    {
+                        var controllerNamespace = methodInfo.DeclaringType?.Namespace;
+                        if (controllerNamespace?.StartsWith("Elsa") == true)
+                        {
+                            // TODO: Elsa 2.x 使用 Swashbuckle 6.x版本不兼容, 忽略Swagger文档
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
                 options.CustomSchemaIds(type => type.FullName);
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -700,16 +715,6 @@ public partial class MicroServiceApplicationsSingleModule
                     Scheme = "bearer",
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT"
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                            },
-                            new string[] { }
-                        }
                 });
                 options.OperationFilter<TenantHeaderParamter>();
             });

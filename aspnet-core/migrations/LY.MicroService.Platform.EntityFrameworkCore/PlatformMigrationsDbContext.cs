@@ -1,4 +1,5 @@
-﻿using LINGYUN.Platform.EntityFrameworkCore;
+﻿using LINGYUN.Abp.BlobManagement.EntityFrameworkCore;
+using LINGYUN.Platform.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -19,5 +20,6 @@ public class PlatformMigrationsDbContext : AbpDbContext<PlatformMigrationsDbCont
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ConfigurePlatform();
+        modelBuilder.ConfigureBlobManagement();
     }
 }

@@ -99,16 +99,13 @@ public abstract class AliyunClientFactory<TClient>
 /// </summary>
 /// <typeparam name="TClient">客户端类型</typeparam>
 /// <typeparam name="TConfiguration">客户端参数类型</typeparam>
-public abstract class AliyunClientFactory<TClient, TConfiguration>
+public abstract class AliyunClientFactory<TClient, TConfiguration> : AliyunClientFactory<TClient>
 {
-    protected ISettingProvider SettingProvider { get; }
-    protected IDistributedCache<AliyunBasicSessionCredentialsCacheItem> Cache { get; }
     public AliyunClientFactory(
         ISettingProvider settingProvider,
         IDistributedCache<AliyunBasicSessionCredentialsCacheItem> cache)
+        : base(settingProvider, cache)
     {
-        Cache = cache;
-        SettingProvider = settingProvider;
     }
 
     public async virtual Task<TClient> CreateAsync(TConfiguration configuration)
@@ -134,46 +131,4 @@ public abstract class AliyunClientFactory<TClient, TConfiguration>
     protected abstract TClient GetClient(TConfiguration configuration, string regionId, string accessKeyId, string accessKeySecret);
 
     protected abstract TClient GetSecurityTokenClient(TConfiguration configuration, string regionId, string accessKeyId, string accessKeySecret, string securityToken);
-
-    protected async virtual Task<AliyunBasicSessionCredentialsCacheItem> GetCacheItemAsync(string accessKeyId, string accessKeySecret, string regionId)
-    {
-        var cacheItem = await Cache.GetAsync(AliyunBasicSessionCredentialsCacheItem.CacheKey);
-        if (cacheItem == null)
-        {
-            var roleArn = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Authorization.RamRoleArn);
-            var roleSession = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Authorization.RoleSessionName);
-            Check.NotNullOrWhiteSpace(roleArn, AliyunSettingNames.Authorization.RamRoleArn);
-
-            var policy = await SettingProvider.GetOrNullAsync(AliyunSettingNames.Authorization.Policy);
-            var durationSeconds = await SettingProvider.GetAsync(AliyunSettingNames.Authorization.DurationSeconds, 3000);
-
-            var profile = DefaultProfile.GetProfile(regionId, accessKeyId, accessKeySecret);
-            var request = new AssumeRoleRequest
-            {
-                AcceptFormat = FormatType.JSON,
-                RoleArn = roleArn,
-                RoleSessionName = roleSession,
-                DurationSeconds = durationSeconds,
-                Policy = policy.IsNullOrWhiteSpace() ? null : policy
-            };
-
-            var client = new DefaultAcsClient(profile);
-            var response = client.GetAcsResponse(request);
-
-            cacheItem = new AliyunBasicSessionCredentialsCacheItem(
-                response.Credentials.AccessKeyId,
-                response.Credentials.AccessKeySecret,
-                response.Credentials.SecurityToken);
-
-            await Cache.SetAsync(
-                AliyunBasicSessionCredentialsCacheItem.CacheKey,
-                cacheItem,
-                new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(durationSeconds - 10)
-                });
-        }
-
-        return cacheItem;
-    }
 }

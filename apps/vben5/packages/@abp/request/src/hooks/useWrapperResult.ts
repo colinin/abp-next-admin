@@ -3,9 +3,20 @@ import type { AxiosResponse } from 'axios';
 import { useErrorFormat } from './useErrorFormat';
 
 export function useWrapperResult(response: AxiosResponse) {
-  const { hasError, throwIfError: throwIfAbpError } = useErrorFormat(response);
+  const {
+    hasError: hasAbpError,
+    getErrorMessage: getAbpErrorMessage,
+    throwIfError: throwIfAbpError,
+  } = useErrorFormat(response);
   const _defaultWrapperHeaderKey: string = '_abpwrapresult';
   const { data, headers } = response;
+
+  /** 是否请求错误 */
+  function hasError(): boolean {
+    if (hasAbpError()) return true;
+    return Reflect.has(data, 'code') && data.code !== '0';
+  }
+
   /** 是否已包装结果 */
   function hasWrapResult(): boolean {
     if (
@@ -14,7 +25,7 @@ export function useWrapperResult(response: AxiosResponse) {
     ) {
       return String(headers[_defaultWrapperHeaderKey]).includes('true');
     }
-    return hasError();
+    return hasAbpError();
   }
 
   /** 获取包装结果 */
@@ -26,8 +37,7 @@ export function useWrapperResult(response: AxiosResponse) {
   /** 如果请求错误,抛出异常 */
   function throwIfError(): void {
     throwIfAbpError();
-    const hasSuccess = data && Reflect.has(data, 'code') && data.code === '0';
-    if (!hasSuccess) {
+    if (hasError()) {
       const content = data.details || data.message;
       throw Object.assign({}, response, {
         response: {
@@ -41,8 +51,19 @@ export function useWrapperResult(response: AxiosResponse) {
     }
   }
 
+  /** 获取错误消息 */
+  function getErrorMessage(): string | undefined {
+    if (!hasWrapResult()) return undefined;
+    const errorMessage = getAbpErrorMessage();
+    if (errorMessage) return errorMessage;
+    if (!hasError()) return undefined;
+    return data.message;
+  }
+
   return {
     getData,
+    getErrorMessage,
+    hasError,
     hasWrapResult,
   };
 }

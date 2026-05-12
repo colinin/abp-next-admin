@@ -27,7 +27,7 @@
 		<PackageReference Include="Serilog.Settings.Configuration" />
 		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
 		<PackageReference Include="Serilog.Sinks.File" />
-		<PackageReference Include="Swashbuckle.AspNetCore" />
+		<PackageReference Include="Swashbuckle.AspNetCore" VersionOverride="10.1.7" />
 		<PackageReference Include="Quartz.Serialization.Json" />
 		<PackageReference Include="Volo.Abp.Account.Web.OpenIddict" />
 		<!--<PackageReference Include="Volo.Abp.Account.Web.IdentityServer" />-->

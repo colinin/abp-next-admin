@@ -4,16 +4,17 @@ using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
-using LINGYUN.Abp.BlobStoring.OssManagement;
+using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.Exporter.MiniExcel;
+using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Gdpr.Identity;
 using LINGYUN.Abp.Identity;
+using LINGYUN.Abp.Identity.AspNetCore;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -35,6 +36,7 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -51,6 +53,7 @@ namespace LINGYUN.Abp.MicroService.IdentityService;
     typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
+    typeof(AbpIdentityAspNetCoreModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
@@ -70,9 +73,9 @@ namespace LINGYUN.Abp.MicroService.IdentityService;
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpEmailingExceptionHandlingModule),
-    typeof(AbpBlobStoringOssManagementModule),
+    typeof(AbpBlobStoringBlobManagementModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpCAPEventBusModule),
-    typeof(AbpHttpClientModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpCachingStackExchangeRedisModule),
@@ -81,7 +84,7 @@ namespace LINGYUN.Abp.MicroService.IdentityService;
     typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
-    typeof(AbpExporterMiniExcelModule),
+    typeof(AbpExporterMiniSoftwareModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)

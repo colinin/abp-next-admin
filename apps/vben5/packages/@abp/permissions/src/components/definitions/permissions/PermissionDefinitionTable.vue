@@ -3,9 +3,6 @@ import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 
 import type { VbenFormProps } from '@vben/common-ui';
 
-import type { PermissionDefinitionDto } from '../../../types/definitions';
-import type { PermissionGroupDefinitionDto } from '../../../types/groups';
-
 import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
@@ -82,7 +79,7 @@ const formOptions: VbenFormProps = {
   submitOnEnter: true,
 };
 
-const gridOptions: VxeGridProps<PermissionGroupDefinitionDto> = {
+const gridOptions: VxeGridProps<PermissionGroupVo> = {
   columns: [
     {
       align: 'center',
@@ -150,7 +147,7 @@ const gridOptions: VxeGridProps<PermissionGroupDefinitionDto> = {
     zoom: true,
   },
 };
-const subGridColumns: VxeGridProps<PermissionDefinitionDto>['columns'] = [
+const subGridColumns: VxeGridProps<PermissionVo>['columns'] = [
   {
     align: 'center',
     type: 'seq',
@@ -200,7 +197,7 @@ const subGridColumns: VxeGridProps<PermissionDefinitionDto>['columns'] = [
   },
 ];
 
-const gridEvents: VxeGridListeners<PermissionGroupDefinitionDto> = {
+const gridEvents: VxeGridListeners<PermissionGroupVo> = {
   sortChange: () => {
     gridApi.query();
   },
@@ -263,12 +260,12 @@ function onCreate() {
   modalApi.open();
 }
 
-function onUpdate(row: PermissionDefinitionDto) {
+function onUpdate(row: PermissionGroupVo) {
   modalApi.setData(row);
   modalApi.open();
 }
 
-function onDelete(row: PermissionDefinitionDto) {
+function onDelete(row: PermissionGroupVo) {
   Modal.confirm({
     centered: true,
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,

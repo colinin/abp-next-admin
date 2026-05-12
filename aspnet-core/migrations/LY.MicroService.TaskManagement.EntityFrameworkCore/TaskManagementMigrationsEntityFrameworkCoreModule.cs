@@ -1,11 +1,11 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.Quartz.MySqlInstaller;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -17,7 +17,7 @@ namespace LY.MicroService.TaskManagement.EntityFrameworkCore;
     typeof(AbpQuartzMySqlInstallerModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
+    typeof(AbpEntityFrameworkCoreMySQLMicrotingModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
@@ -35,38 +35,8 @@ public class TaskManagementMigrationsEntityFrameworkCoreModule : AbpModule
                 mysql =>
                 {
                     // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
-                    mysql.TranslateParameterizedCollectionsToConstants();
+                    mysql.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
                 });
-        });
-
-        Configure<AbpDbConnectionOptions>(options =>
-        {
-            options.Databases.Configure("Platform", database =>
-            {
-                database.MapConnection("AbpSaas");
-                database.MapConnection("Workflow");
-                database.MapConnection("AppPlatform");
-                database.MapConnection("TaskManagement");
-                database.MapConnection("AbpAuditLogging");
-                database.MapConnection("AbpTextTemplating");
-                database.MapConnection("AbpSettingManagement");
-                database.MapConnection("AbpFeatureManagement");
-                database.MapConnection("AbpPermissionManagement");
-                database.MapConnection("AbpLocalizationManagement");
-                database.MapConnection("AbpDataProtectionManagement");
-            });
-            options.Databases.Configure("Identity", database =>
-            {
-                database.MapConnection("AbpGdpr");
-                database.MapConnection("AbpIdentity");
-                database.MapConnection("AbpOpenIddict");
-                database.MapConnection("AbpIdentityServer");
-            });
-            options.Databases.Configure("Realtime", database =>
-            {
-                database.MapConnection("Notifications");
-                database.MapConnection("MessageService");
-            });
         });
     }
 }

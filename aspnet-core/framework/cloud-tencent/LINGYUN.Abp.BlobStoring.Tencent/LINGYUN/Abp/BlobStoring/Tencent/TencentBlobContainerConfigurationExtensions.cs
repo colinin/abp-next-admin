@@ -13,11 +13,11 @@ public static class TencentBlobContainerConfigurationExtensions
 
     public static BlobContainerConfiguration UseTencentCloud(
         this BlobContainerConfiguration containerConfiguration,
-        Action<TencentBlobProviderConfiguration> aliyunConfigureAction)
+        Action<TencentBlobProviderConfiguration> tencentCloudConfigureAction)
     {
         containerConfiguration.ProviderType = typeof(TencentCloudBlobProvider);
 
-        aliyunConfigureAction(new TencentBlobProviderConfiguration(containerConfiguration));
+        tencentCloudConfigureAction(new TencentBlobProviderConfiguration(containerConfiguration));
 
         return containerConfiguration;
     }

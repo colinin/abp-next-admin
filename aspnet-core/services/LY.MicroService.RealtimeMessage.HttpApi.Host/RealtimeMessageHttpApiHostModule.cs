@@ -168,7 +168,6 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         ConfigureCors(context.Services, configuration);
         ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLocking(context.Services, configuration);
-        ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 

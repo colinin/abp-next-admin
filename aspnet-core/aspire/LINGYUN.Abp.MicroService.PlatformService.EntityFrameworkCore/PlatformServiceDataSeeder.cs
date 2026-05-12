@@ -1,5 +1,5 @@
-﻿using LINGYUN.Abp.UI.Navigation;
-using System.Collections.Generic;
+﻿using LINGYUN.Abp.BlobManagement;
+using LINGYUN.Abp.UI.Navigation;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -8,17 +8,17 @@ using Volo.Abp.MultiTenancy;
 namespace LINGYUN.Abp.MicroService.PlatformService;
 public class PlatformServiceDataSeeder : ITransientDependency
 {
-    protected IEnumerable<INavigationSeedContributor> NavigationSeedContributors { get; }
-    protected INavigationProvider NavigationProvider { get; }
+    protected NavigationDataSeeder NavigationDataSeeder { get; }
+    protected IBlobDataSeeder BlobDataSeeder { get; }
     protected ICurrentTenant CurrentTenant { get; }
     public PlatformServiceDataSeeder(
-        IEnumerable<INavigationSeedContributor> navigationSeedContributors, 
-        INavigationProvider navigationProvider, 
-        ICurrentTenant currentTenant)
+        NavigationDataSeeder navigationDataSeeder, 
+        ICurrentTenant currentTenant,
+        IBlobDataSeeder blobDataSeeder)
     {
-        NavigationSeedContributors = navigationSeedContributors;
-        NavigationProvider = navigationProvider;
+        NavigationDataSeeder = navigationDataSeeder;
         CurrentTenant = currentTenant;
+        BlobDataSeeder = blobDataSeeder;
     }
 
     public async virtual Task SeedAsync(DataSeedContext context)
@@ -26,22 +26,17 @@ public class PlatformServiceDataSeeder : ITransientDependency
         using (CurrentTenant.Change(context.TenantId))
         {
             await SeedNavigationAsync();
+            await SeedBlobContainerAsync();
         }
     }
 
     private async Task SeedNavigationAsync()
     {
-        var menus = await NavigationProvider.GetAllAsync();
+        await NavigationDataSeeder.SeedAsync(CurrentTenant.Id);
+    }
 
-        var multiTenancySides = CurrentTenant.IsAvailable
-            ? MultiTenancySides.Tenant
-            : MultiTenancySides.Host;
-
-        var seedContext = new NavigationSeedContext(menus, multiTenancySides);
-
-        foreach (var contributor in NavigationSeedContributors)
-        {
-            await contributor.SeedAsync(seedContext);
-        }
+    private async Task SeedBlobContainerAsync()
+    {
+        await BlobDataSeeder.SeedAsync(CurrentTenant.Id);
     }
 }

@@ -42,9 +42,11 @@ public partial class SerilogInfoToLogInfoMapper : MapperBase<SerilogInfo, LogInf
         _logExceptionMapper = logExceptionMapper;
     }
 
+    [MapperIgnoreTarget(nameof(LogInfo.Fields))]
     [MapPropertyFromSource(nameof(SerilogInfo.Level), Use = nameof(GetLogLevel))]
     public override partial LogInfo Map(SerilogInfo source);
 
+    [MapperIgnoreTarget(nameof(LogInfo.Fields))]
     [MapPropertyFromSource(nameof(SerilogInfo.Level), Use = nameof(GetLogLevel))]
     public override partial void Map(SerilogInfo source, LogInfo destination);
 

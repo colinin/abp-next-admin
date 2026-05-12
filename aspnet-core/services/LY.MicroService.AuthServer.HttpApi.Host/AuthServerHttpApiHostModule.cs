@@ -4,12 +4,13 @@ using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
-using LINGYUN.Abp.BlobStoring.OssManagement;
+using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Emailing.Platform;
+using LINGYUN.Abp.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.Exporter.MiniExcel;
+using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Gdpr.Identity;
@@ -35,7 +36,6 @@ using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
@@ -64,7 +64,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpGdprHttpApiModule),
     typeof(AbpGdprDomainIdentityModule),
     typeof(AbpGdprEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
+    typeof(AbpEntityFrameworkCoreMySQLMicrotingModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
@@ -73,7 +73,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpEmailingExceptionHandlingModule),
-    typeof(AbpBlobStoringOssManagementModule),
+    typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpHttpClientModule),
     typeof(AbpSmsPlatformModule),
@@ -86,7 +86,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
-    typeof(AbpExporterMiniExcelModule),
+    typeof(AbpExporterMiniSoftwareModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)

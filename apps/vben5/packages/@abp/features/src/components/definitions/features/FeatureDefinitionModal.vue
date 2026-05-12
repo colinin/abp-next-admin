@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { NameValue } from '@abp/core';
 import type {
   PropertyInfo,
   SelectionStringValueItem,
@@ -65,18 +66,17 @@ interface DefinitionTreeVo {
 
 type TabKeys = 'basic' | 'props';
 
-const defaultModel = {
+const defaultModel: FeatureDefinitionDto = {
   allowedProviders: [],
   displayName: '',
   extraProperties: {},
   groupName: '',
   isAvailableToHost: true,
-  isEnabled: true,
   isStatic: false,
   isVisibleToClients: false,
   name: '',
   valueType: '',
-} as FeatureDefinitionDto;
+};
 
 const isEditModel = ref(false);
 const validatorNameRef = ref<string>('NULL');
@@ -87,6 +87,7 @@ const valueTypeInput = useTemplateRef<StringValueTypeInstance>('valueType');
 const formModel = ref<FeatureDefinitionDto>({ ...defaultModel });
 const availableGroups = ref<FeatureGroupDefinitionDto[]>([]);
 const availableDefinitions = ref<DefinitionTreeVo[]>([]);
+const availableProviders = ref<NameValue<string>[]>([]);
 const selectionDataSource = ref<{ label: string; value: string }[]>([]);
 
 const { Lr } = useLocalization();
@@ -97,6 +98,7 @@ const {
   createApi,
   getApi,
   getListApi: getDefinitionsApi,
+  getAssignableProvidersApi,
   updateApi,
 } = useFeatureDefinitionsApi();
 const formRules = reactive({
@@ -189,9 +191,11 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        const { groupName, name } = modalApi.getData<FeatureDefinitionDto>();
+        const { groupName, name, parentName } =
+          modalApi.getData<FeatureDefinitionDto>();
+        formModel.value.parentName = parentName;
         name && (await onGet(name));
-        await onInitGroups(groupName);
+        await Promise.all([onInitGroups(groupName), onInitProviders()]);
       } finally {
         modalApi.setState({ loading: false });
       }
@@ -199,6 +203,10 @@ const [Modal, modalApi] = useVbenModal({
   },
   title: $t('AbpFeatureManagement.FeatureDefinitions:AddNew'),
 });
+async function onInitProviders() {
+  const { items } = await getAssignableProvidersApi();
+  availableProviders.value = items;
+}
 async function onInitGroups(name?: string) {
   const { items } = await getGroupsApi({ filter: name });
   availableGroups.value = items.map((group) => {
@@ -410,6 +418,20 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
             >
               {{ $t('AbpFeatureManagement.DisplayName:DefaultValue') }}
             </Checkbox>
+          </FormItem>
+          <FormItem
+            name="providers"
+            :label="$t('AbpFeatureManagement.DisplayName:AllowedProviders')"
+            :extra="$t('AbpFeatureManagement.Description:AllowedProviders')"
+          >
+            <Select
+              v-model:value="formModel.allowedProviders"
+              :allow-clear="true"
+              :disabled="formModel.isStatic"
+              :field-names="{ label: 'name', value: 'value' }"
+              :options="availableProviders"
+              mode="multiple"
+            />
           </FormItem>
           <FormItem
             name="isVisibleToClients"

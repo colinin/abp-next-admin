@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -23,7 +23,7 @@ namespace LY.MicroService.PlatformManagement
         {
             if (_multiTenancyOptions.IsEnabled)
             {
-                operation.Parameters = operation.Parameters ?? new List<OpenApiParameter>();
+                operation.Parameters = operation.Parameters ?? new List<IOpenApiParameter>();
                 operation.Parameters.Add(new OpenApiParameter
                 {
                     Name = _aspNetCoreMultiTenancyOptions.TenantKey,

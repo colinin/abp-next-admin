@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ main ]
 env:
-  DOTNET_VERSION: "10.0.102"
+  DOTNET_VERSION: "10.0.201"
 
 jobs:
   publish:

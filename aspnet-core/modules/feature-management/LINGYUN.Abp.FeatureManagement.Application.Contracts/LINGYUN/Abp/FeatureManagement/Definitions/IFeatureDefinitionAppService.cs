@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -15,4 +16,6 @@ public interface IFeatureDefinitionAppService : IApplicationService
     Task<FeatureDefinitionDto> UpdateAsync(string name, FeatureDefinitionUpdateDto input);
 
     Task<ListResultDto<FeatureDefinitionDto>> GetListAsync(FeatureDefinitionGetListInput input);
+
+    Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync();
 }

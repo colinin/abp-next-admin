@@ -1,6 +1,4 @@
-using LINGYUN.Abp.AIManagement;
-using Microsoft.AspNetCore.SignalR;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;
@@ -307,7 +305,7 @@ public partial class MicroServiceApplicationsSingleModule
         //    options.SubstituteApiVersionInUrl = true;
         //});
         services.AddRazorPages();
-        services.AddControllersWithViews().AddNewtonsoftJson();
+        services.AddControllersWithViews();//.AddNewtonsoftJson();
     }
 
     private void ConfigureKestrelServer(IConfiguration configuration, IWebHostEnvironment environment)
@@ -467,12 +465,37 @@ public partial class MicroServiceApplicationsSingleModule
 
     private void ConfigureAIManagement(IConfiguration configuration)
     {
+        Configure<AbpAICoreOptions>(options =>
+        {
+            options.ChatClientBuildActions.Add((_, __, builder) =>
+            {
+                return Task.FromResult(builder
+                    .UseLogging()
+                    .UseOpenTelemetry()
+                    .UseDistributedCache());
+            });
+        });
+
+
+        Configure<AbpAIAgentOptions>(options =>
+        {
+            options.AgentBuildActions.Add((_, builder) =>
+            {
+                return Task.FromResult(builder
+                    .UseLogging()
+                    .UseOpenTelemetry());
+            });
+        });
+
         if (configuration.GetValue<bool>("AIManagement:IsDynamicStoreEnabled"))
         {
             Configure<AIManagementOptions>(options =>
             {
                 options.IsDynamicWorkspaceStoreEnabled = true;
                 options.SaveStaticWorkspacesToDatabase = true;
+
+                options.IsDynamicAIToolStoreEnabled = true;
+                options.SaveStaticAIToolsToDatabase = true;
             });
         }
     }
@@ -656,7 +679,20 @@ public partial class MicroServiceApplicationsSingleModule
                         Url = new Uri("https://github.com/colinin/abp-next-admin/blob/master/LICENSE")
                     }
                 });
-                options.DocInclusionPredicate((docName, description) => true);
+                options.DocInclusionPredicate((docName, description) =>
+                {
+                    if (description.TryGetMethodInfo(out var methodInfo))
+                    {
+                        var controllerNamespace = methodInfo.DeclaringType?.Namespace;
+                        if (controllerNamespace?.StartsWith("Elsa") == true)
+                        {
+                            // TODO: Elsa 2.x 使用 Swashbuckle 6.x版本不兼容, 忽略Swagger文档
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
                 options.CustomSchemaIds(type => type.FullName);
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -666,16 +702,6 @@ public partial class MicroServiceApplicationsSingleModule
                     Scheme = "bearer",
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT"
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                        },
-                        new string[] { }
-                    }
                 });
                 options.OperationFilter<TenantHeaderParamter>();
             });
@@ -837,11 +863,13 @@ public partial class MicroServiceApplicationsSingleModule
         });
 
         // 用于消息中心邮件集中发送
-        services.Replace<Volo.Abp.Emailing.IEmailSender, PlatformEmailSender>(ServiceLifetime.Transient);
+        services.Replace(
+            ServiceDescriptor.Transient<Volo.Abp.Emailing.IEmailSender, PlatformEmailSender>());
         services.AddKeyedTransient<Volo.Abp.Emailing.IEmailSender, MailKitSmtpEmailSender>("DefaultEmailSender");
 
         // 用于消息中心短信集中发送
-        services.Replace<ISmsSender, PlatformSmsSender>(ServiceLifetime.Transient);
+        services.Replace(
+            ServiceDescriptor.Transient<Volo.Abp.Sms.ISmsSender, PlatformSmsSender>());
         services.AddKeyedSingleton<ISmsSender, AliyunSmsSender>("DefaultSmsSender");
     }
 

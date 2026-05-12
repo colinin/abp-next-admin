@@ -17,11 +17,21 @@ namespace LINGYUN.Abp.PermissionManagement;
 public class PermissionAppService : VoloPermissionAppService
 {
     public PermissionAppService(
-        IMultiplePermissionManager permissionManager, 
+        IMultiplePermissionManager permissionManager,
+        IPermissionChecker permissionChecker,
         IPermissionDefinitionManager permissionDefinitionManager,
+        IResourcePermissionManager resourcePermissionManager,
+        IResourcePermissionGrantRepository resourcePermissionGrantRepository,
         IOptions<PermissionManagementOptions> options,
         ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager) 
-        : base(permissionManager, permissionDefinitionManager, options, simpleStateCheckerManager)
+        : base(
+            permissionManager,
+            permissionChecker,
+            permissionDefinitionManager,
+            resourcePermissionManager,
+            resourcePermissionGrantRepository,
+            options,
+            simpleStateCheckerManager)
     {
     }
 

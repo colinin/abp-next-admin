@@ -16,6 +16,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.IdentityServer.Domain" />
+		<PackageReference Include="Newtonsoft.Json" VersionOverride="13.0.4" />
 	</ItemGroup>
 	
 	<ItemGroup>

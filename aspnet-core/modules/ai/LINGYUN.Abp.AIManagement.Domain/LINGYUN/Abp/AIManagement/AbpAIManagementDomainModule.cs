@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.AI.Agent;
 using LINGYUN.Abp.AI.Localization;
 using LINGYUN.Abp.AI.Tools;
+using LINGYUN.Abp.AIManagement.Chats;
 using LINGYUN.Abp.AIManagement.Localization;
 using LINGYUN.Abp.AIManagement.Tools;
 using LINGYUN.Abp.AIManagement.Workspaces;
@@ -12,6 +13,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Localization;
 using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
@@ -43,6 +45,13 @@ public class AbpAIManagementDomainModule : AbpModule
                 options.IsDynamicWorkspaceStoreEnabled = false;
             });
         }
+
+        Configure<AbpDistributedEntityEventOptions>(options =>
+        {
+            options.AutoEventSelectors.Add<TextChatMessageRecord>();
+
+            options.EtoMappings.Add<TextChatMessageRecord, TextChatMessageRecordEto>(typeof(AbpAIManagementDomainModule));
+        });
 
         Configure<AbpLocalizationOptions>(options =>
         {

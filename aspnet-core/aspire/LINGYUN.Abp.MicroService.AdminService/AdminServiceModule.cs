@@ -17,7 +17,6 @@ using LINGYUN.Abp.FeatureManagement.HttpApi;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
-using LINGYUN.Abp.OssManagement.SettingManagement;
 using LINGYUN.Abp.PermissionManagement;
 using LINGYUN.Abp.PermissionManagement.HttpApi;
 using LINGYUN.Abp.PermissionManagement.OrganizationUnits;
@@ -59,7 +58,6 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     typeof(AbpTencentCloudSettingManagementModule),
     // typeof(AbpWeChatSettingManagementModule),
     typeof(AbpWxPusherSettingManagementModule),
-    typeof(AbpOssManagementSettingManagementModule),
 
     typeof(AbpSettingManagementApplicationModule),
     typeof(AbpSettingManagementHttpApiModule),

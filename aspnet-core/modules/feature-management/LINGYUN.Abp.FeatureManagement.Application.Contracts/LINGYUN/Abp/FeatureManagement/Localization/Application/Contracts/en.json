@@ -25,6 +25,8 @@
     "Description:IsVisibleToClients": "Can clients see this feature and it's value.",
     "DisplayName:IsAvailableToHost": "Available To Host",
     "Description:IsAvailableToHost": "Can host use this feature.",
+    "DisplayName:AllowedProviders": "Allowed Providers",
+    "Description:AllowedProviders": "A list of allowed providers to get/set value of this feature.An empty list indicates that all providers are allowed.",
     "DisplayName:IsStatic": "Static",
     "GroupDefinitions": "Group Definitions",
     "GroupDefinitions:AddNew": "Add Group",
@@ -33,6 +35,11 @@
     "BasicInfo": "Basic",
     "Properties": "Properties",
     "ValueValidator": "Value Validator",
-    "ItemWillBeDeleteOrRestoreMessage": "If you have changed the Features, you will revert to the default Features. Otherwise, the custom Features are removed."
+    "ItemWillBeDeleteOrRestoreMessage": "If you have changed the Features, you will revert to the default Features. Otherwise, the custom Features are removed.",
+    "FeatureProviders:C": "Configuration",
+    "FeatureProviders:D": "Default",
+    "FeatureProviders:E": "Edition",
+    "FeatureProviders:T": "Tenant",
+    "FeatureProviders:CT": "Client"
   }
 }

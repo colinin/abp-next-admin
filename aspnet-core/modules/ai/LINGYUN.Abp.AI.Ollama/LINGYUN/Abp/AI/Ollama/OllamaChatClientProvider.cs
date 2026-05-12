@@ -24,24 +24,20 @@ public class OllamaChatClientProvider : ChatClientProvider
     public async override Task<IChatClient> CreateAsync(WorkspaceDefinition workspace)
     {
         Check.NotNull(workspace, nameof(workspace));
+        Check.NotNullOrWhiteSpace(workspace.ModelName, nameof(WorkspaceDefinition.ModelName));
 
         var options = ServiceProvider.GetRequiredService<IOptions<AbpAICoreOptions>>().Value;
 
-        var ollamaApiClient = new OllamaApiClient(workspace.ApiBaseUrl ?? DefaultEndpoint);
+        var ollamaApiClient = new OllamaApiClient(workspace.ApiBaseUrl ?? DefaultEndpoint, workspace.ModelName);
 
         var chatClientBuilder = ChatClientBuilderChatClientExtensions.AsBuilder(ollamaApiClient);
 
         foreach (var handlerAction in options.ChatClientBuildActions)
         {
-            await handlerAction(workspace, ServiceProvider, chatClientBuilder);
+            chatClientBuilder = await handlerAction(workspace, ServiceProvider, chatClientBuilder);
         }
 
-        return chatClientBuilder
-            .UseLogging()
-            .UseOpenTelemetry()
-            .UseFunctionInvocation()
-            .UseDistributedCache()
-            .Build(ServiceProvider);
+        return chatClientBuilder.Build(ServiceProvider);
     }
 
     public override ChatModel[] GetModels()

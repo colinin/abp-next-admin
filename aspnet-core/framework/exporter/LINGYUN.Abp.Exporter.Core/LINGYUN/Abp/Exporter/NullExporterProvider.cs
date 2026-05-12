@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Exporter;
 
+[Obsolete("This interface will be deprecated in future versions. Please use IExcelExporterProvider instead.")]
 [Dependency(TryRegister = true)]
 public class NullExporterProvider : IExporterProvider, ISingletonDependency
 {

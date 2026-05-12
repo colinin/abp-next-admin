@@ -2,7 +2,7 @@
 using LINGYUN.Abp.Dapr.Client.ClientProxying;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.Exporter.MiniExcel;
+using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -20,8 +20,9 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using StackExchange.Redis;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -137,8 +138,11 @@ public partial class ProjectNameHttpApiHostModule
         var distributedLockIsEnabled = configuration["DistributedLock:IsEnabled"];
         if (distributedLockIsEnabled.IsNullOrWhiteSpace() || bool.Parse(distributedLockIsEnabled))
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
-            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+            services.AddSingleton<IDistributedLockProvider>(_ =>
+            {
+                return new RedisDistributedSynchronizationProvider(
+                    ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]).GetDatabase());
+            });
         }
     }
     private void ConfigureExceptionHandling()
@@ -232,11 +236,15 @@ public partial class ProjectNameHttpApiHostModule
         services.AddHealthChecks();
     }
 
-    private void ConfigureMiniExcel()
+    private void ConfigureMiniSoftware()
     {
         Configure<AbpExporterMiniExcelOptions>(options =>
         {
             // MiniExcel导入导出配置
+        });
+        Configure<AbpExporterMiniWordOptions>(options =>
+        {
+            // MiniWord导入导出配置
         });
     }
 
@@ -368,25 +376,16 @@ public partial class ProjectNameHttpApiHostModule
                     BearerFormat = "JWT"
                 });
 
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                        },
-                        new string[] { }
-                    }
-                });
-
                 var currentPath = AppContext.BaseDirectory;
                 var xmlDocFiles = Directory.GetFiles(currentPath, "PackageName.CompanyName.ProjectName.*.xml");
+                xmlDocFiles.AddIfNotContains(Directory.GetFiles(AppContext.BaseDirectory, "Volo.Abp.*.xml"));
 
                 foreach (var xmlDocFile in xmlDocFiles)
                 {
                     options.IncludeXmlComments(xmlDocFile);
                 }
 
+                options.SchemaFilter<EnumDescriptionSchemaFilter>();
                 options.OperationFilter<TenantHeaderParamter>();
                 options.HideAbpEndpoints();
             });
@@ -426,6 +425,7 @@ public partial class ProjectNameHttpApiHostModule
     {
         Configure<AbpAntiForgeryOptions>(options =>
         {
+            configuration.GetSection("AntiForgery").Bind(options);
             // options.AutoValidate = false;
             // options.AutoValidateFilter = (type) => !type.Namespace.Contains("elsa", StringComparison.CurrentCultureIgnoreCase);
         });
@@ -455,15 +455,13 @@ public partial class ProjectNameHttpApiHostModule
                     options.TokenValidationParameters.ValidAudiences = validAudiences;
                 }
             });
-
-        if (!isDevelopment)
-        {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-            services
-                .AddDataProtection()
-                .SetApplicationName("LINGYUN.Abp.Application")
-                .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
-        }
+        services.AddDataProtection()
+            .SetApplicationName("LINGYUN.Abp.Application")
+            .PersistKeysToStackExchangeRedis(() =>
+            {
+                return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]).GetDatabase();
+            },
+            "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
     }
 
     private void ConfigureCors(IServiceCollection services, IConfiguration configuration)

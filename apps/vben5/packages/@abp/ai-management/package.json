@@ -26,6 +26,7 @@
     "@abp/settings": "workspace:*",
     "@abp/ui": "workspace:*",
     "@ant-design/icons-vue": "catalog:",
+    "@vben-core/shared": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/hooks": "workspace:*",

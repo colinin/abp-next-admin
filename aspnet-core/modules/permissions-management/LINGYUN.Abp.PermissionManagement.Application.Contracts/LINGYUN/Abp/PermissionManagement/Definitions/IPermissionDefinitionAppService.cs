@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -15,4 +16,6 @@ public interface IPermissionDefinitionAppService : IApplicationService
     Task<PermissionDefinitionDto> UpdateAsync(string name, PermissionDefinitionUpdateDto input);
 
     Task<ListResultDto<PermissionDefinitionDto>> GetListAsync(PermissionDefinitionGetListInput input);
+
+    Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync();
 }

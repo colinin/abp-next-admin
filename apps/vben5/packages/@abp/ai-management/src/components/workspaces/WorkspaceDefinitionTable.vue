@@ -10,6 +10,7 @@ import { defineAsyncComponent, h } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { useLocalization, useLocalizationSerializer } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   CheckOutlined,
@@ -26,6 +27,9 @@ import { WorkspaceDefinitionPermissions } from '../../constants/permissions';
 defineOptions({
   name: 'WorkspaceDefinitionTable',
 });
+const { Lr } = useLocalization();
+const { deserialize: deserializeLocalizableString } =
+  useLocalizationSerializer();
 const { deleteApi, getPagedListApi } = useWorkspaceDefinitionsApi();
 
 const formOptions: VbenFormProps = {
@@ -73,6 +77,13 @@ const gridOptions: VxeGridProps<WorkspaceDefinitionRecordDto> = {
     {
       align: 'left',
       field: 'displayName',
+      formatter: ({ row }) => {
+        if (!row.displayName) {
+          return '';
+        }
+        const localizableString = deserializeLocalizableString(row.displayName);
+        return Lr(localizableString.resourceName, localizableString.name);
+      },
       sortable: true,
       title: $t('AIManagement.DisplayName:DisplayName'),
     },

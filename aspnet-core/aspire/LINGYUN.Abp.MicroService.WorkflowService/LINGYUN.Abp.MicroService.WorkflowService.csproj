@@ -62,6 +62,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobStoring.BlobManagement\LINGYUN.Abp.BlobStoring.BlobManagement.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql\LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Notifications\LINGYUN.Abp.Elsa.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities\LINGYUN.Abp.Elsa.Activities.csproj" />
@@ -70,7 +71,6 @@
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.BlobStoring.OssManagement\LINGYUN.Abp.BlobStoring.OssManagement.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Sms.Platform\LINGYUN.Abp.Sms.Platform.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Quartz\LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />

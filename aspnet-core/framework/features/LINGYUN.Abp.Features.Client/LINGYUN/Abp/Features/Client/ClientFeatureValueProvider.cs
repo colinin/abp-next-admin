@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.Features.Client;
 
 public class ClientFeatureValueProvider : FeatureValueProvider
 {
-    public const string ProviderName = "C";
+    public const string ProviderName = "CT";
 
     public override string Name => ProviderName;
 

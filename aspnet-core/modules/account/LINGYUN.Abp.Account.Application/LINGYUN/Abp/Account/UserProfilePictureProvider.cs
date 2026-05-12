@@ -92,8 +92,6 @@ public class UserProfileUserPictureProvider : IUserPictureProvider
 
         var pictureName = $"{user.Id:N}/avatar/{picture}";
 
-        return await AccountBlobContainer.ExistsAsync(pictureName)
-            ? await AccountBlobContainer.GetAsync(pictureName)
-            : Stream.Null;
+        return await AccountBlobContainer.GetOrNullAsync(pictureName) ?? Stream.Null;
     }
 }

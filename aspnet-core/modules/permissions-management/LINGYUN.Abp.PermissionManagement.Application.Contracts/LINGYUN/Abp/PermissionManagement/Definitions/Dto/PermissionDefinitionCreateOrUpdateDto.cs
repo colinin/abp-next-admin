@@ -16,6 +16,12 @@ public abstract class PermissionDefinitionCreateOrUpdateDto : IHasExtraPropertie
     [DynamicStringLength(typeof(PermissionDefinitionRecordConsts), nameof(PermissionDefinitionRecordConsts.MaxNameLength))]
     public string ParentName { get; set; }
 
+    [DynamicStringLength(typeof(PermissionDefinitionRecordConsts), nameof(PermissionDefinitionRecordConsts.MaxResourceNameLength))]
+    public string ResourceName { get; set; }
+
+    [DynamicStringLength(typeof(PermissionDefinitionRecordConsts), nameof(PermissionDefinitionRecordConsts.MaxManagementPermissionNameLength))]
+    public string ManagementPermissionName { get; set; }
+
     public bool IsEnabled { get; set; }
 
     public MultiTenancySides MultiTenancySide { get; set; } = MultiTenancySides.Both;

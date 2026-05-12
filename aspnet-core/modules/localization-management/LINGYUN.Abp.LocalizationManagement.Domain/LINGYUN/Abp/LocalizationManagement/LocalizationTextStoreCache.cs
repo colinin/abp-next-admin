@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Localization;
 using Volo.Abp.Threading;
@@ -15,12 +16,16 @@ public class LocalizationTextStoreCache : ILocalizationTextStoreCache, ISingleto
 {
     private static readonly SemaphoreSlim _cacheLock = new SemaphoreSlim(1, 1);
     private static readonly LocalizationResourceDictionary _staticCache = new LocalizationResourceDictionary();
+
+    protected IAbpDistributedLock DistributedLock { get; }
     protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected IDistributedCache<LocalizationTextCacheItem> LocalizationTextCache { get; }
     public LocalizationTextStoreCache(
-        IServiceScopeFactory serviceScopeFactory, 
+        IAbpDistributedLock distributedLock,
+        IServiceScopeFactory serviceScopeFactory,
         IDistributedCache<LocalizationTextCacheItem> localizationTextCache)
     {
+        DistributedLock = distributedLock;
         ServiceScopeFactory = serviceScopeFactory;
         LocalizationTextCache = localizationTextCache;
     }
@@ -40,11 +45,13 @@ public class LocalizationTextStoreCache : ILocalizationTextStoreCache, ISingleto
     public async virtual Task FillAsync(LocalizationResourceBase resource, string cultureName, Dictionary<string, LocalizedString> dictionary)
     {
         var cacheItem = await GetCacheItemAsync(resource, cultureName);
-
-        foreach (var text in cacheItem.Texts)
+        if (cacheItem != null)
         {
-            var localizedString = new LocalizedString(text.Key, text.Value);
-            dictionary[text.Key] = localizedString;
+            foreach (var text in cacheItem.Texts)
+            {
+                var localizedString = new LocalizedString(text.Key, text.Value);
+                dictionary[text.Key] = localizedString;
+            }
         }
     }
 
@@ -58,18 +65,21 @@ public class LocalizationTextStoreCache : ILocalizationTextStoreCache, ISingleto
         return null;
     }
 
-    internal async Task UpdateStaticCache(LocalizationResourceBase resource, string cultureName)
+    internal async Task UpdateCache(LocalizationResourceBase resource, string cultureName)
     {
         using (await _cacheLock.LockAsync())
         {
             var cacheItem = await GetCacheItemAsync(resource, cultureName);
-            var textDic = _staticCache
+            if (cacheItem != null)
+            {
+                var textDic = _staticCache
                 .GetOrAdd(resource.ResourceName, _ => new LocalizationCultureDictionary())
                 .GetOrAdd(cultureName, _ => new LocalizationTextDictionary());
 
-            foreach (var text in cacheItem.Texts)
-            {
-                textDic[text.Key] = new LocalizedString(text.Key, text.Value);
+                foreach (var text in cacheItem.Texts)
+                {
+                    textDic[text.Key] = new LocalizedString(text.Key, text.Value);
+                }
             }
         }
     }
@@ -82,6 +92,13 @@ public class LocalizationTextStoreCache : ILocalizationTextStoreCache, ISingleto
         if (cacheItem != null)
         {
             return cacheItem;
+        }
+
+        await using var handle = await DistributedLock.TryAcquireAsync($"{nameof(LocalizationTextStoreCache)}_{nameof(GetCacheItemAsync)}");
+
+        if (handle == null)
+        {
+            return null;    
         }
 
         var setTexts = new Dictionary<string, string>();

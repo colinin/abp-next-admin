@@ -37,17 +37,9 @@ export function useTypesMap() {
     U: $t('AbpPermissionManagement.Providers:User'),
   };
 
-  const providerOptions = [
-    { label: providersMap.R, value: 'R' },
-    { label: providersMap.U, value: 'U' },
-    { label: providersMap.O, value: 'O' },
-    { label: providersMap.C, value: 'C' },
-  ];
-
   return {
     multiTenancySideOptions,
     multiTenancySidesMap,
-    providerOptions,
     providersMap,
   };
 }

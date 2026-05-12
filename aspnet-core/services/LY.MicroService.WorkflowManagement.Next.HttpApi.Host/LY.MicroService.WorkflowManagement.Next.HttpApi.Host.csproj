@@ -43,8 +43,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Elsa.EntityFrameworkCore" VersionOverride="$(ElsaNextPackageVersion)" />
-		<PackageReference Include="Elsa.EntityFrameworkCore.Sqlite" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Persistence.EFCore" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Persistence.EFCore.Sqlite" VersionOverride="$(ElsaNextPackageVersion)" />
 		<PackageReference Include="Elsa.Identity" VersionOverride="$(ElsaNextPackageVersion)" />
 		<PackageReference Include="Elsa.Studio" VersionOverride="$(ElsaNextPackageVersion)" />
 		<PackageReference Include="Elsa.Studio.Core.BlazorServer" VersionOverride="$(ElsaNextPackageVersion)" />

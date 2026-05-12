@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.Gdpr;
 [Authorize]
 public class GdprRequestAppService(
     IJsonSerializer jsonSerializer,
-    IExporterProvider exporterProvider,
+    IExcelExporterProvider exporterProvider,
     IOptions<AbpGdprOptions> gdprOptions,
     IDistributedEventBus distributedEventBus,
     IDistributedCache<GdprRequestCacheItem> gdprRequestCache,

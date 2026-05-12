@@ -18,7 +18,7 @@ import {
   useLocalization,
   useLocalizationSerializer,
 } from '@abp/core';
-import { useMessage } from '@abp/ui';
+import { LocalizableInput, useMessage } from '@abp/ui';
 import {
   AutoComplete,
   Checkbox,
@@ -210,15 +210,18 @@ async function onSubmit() {
             name="displayName"
             required
           >
-            <Input v-model:value="formModel.displayName" />
+            <LocalizableInput
+              :disabled="!isAllowUpdate"
+              v-model:value="formModel.displayName"
+            />
           </FormItem>
           <FormItem
             :label="$t('AIManagement.DisplayName:Description')"
             name="description"
           >
-            <Textarea
+            <LocalizableInput
+              :disabled="!isAllowUpdate"
               v-model:value="formModel.description"
-              :auto-size="{ minRows: 3 }"
             />
           </FormItem>
           <FormItem :label="$t('AIManagement.DisplayName:Tools')" name="tools">

@@ -1,4 +1,6 @@
-﻿using LINGYUN.Platform.Datas;
+﻿using LINGYUN.Abp.BlobManagement;
+using LINGYUN.Abp.BlobManagement.EntityFrameworkCore;
+using LINGYUN.Platform.Datas;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.Layouts;
 using LINGYUN.Platform.Menus;
@@ -14,7 +16,8 @@ namespace LINGYUN.Abp.MicroService.PlatformService;
 [ConnectionStringName("Default")]
 public class PlatformServiceMigrationsDbContext : 
     AbpDbContext<PlatformServiceMigrationsDbContext>,
-    IPlatformDbContext
+    IPlatformDbContext,
+    IBlobManagementDbContext
 {
     public DbSet<Menu> Menus { get; set; }
 
@@ -40,6 +43,10 @@ public class PlatformServiceMigrationsDbContext :
 
     public DbSet<SmsMessage> SmsMessages { get; set; }
 
+    public DbSet<BlobContainer> BlobContainers { get; set; }
+
+    public DbSet<Blob> Blobs { get; set; }
+
     public PlatformServiceMigrationsDbContext(DbContextOptions<PlatformServiceMigrationsDbContext> options)
         : base(options)
     {
@@ -51,5 +58,6 @@ public class PlatformServiceMigrationsDbContext :
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ConfigurePlatform();
+        modelBuilder.ConfigureBlobManagement();
     }
 }

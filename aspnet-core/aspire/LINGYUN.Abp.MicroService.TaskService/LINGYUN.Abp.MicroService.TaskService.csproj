@@ -60,11 +60,11 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.TaskService.EntityFrameworkCore\LINGYUN.Abp.MicroService.TaskService.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\..\modules\oss-management\LINGYUN.Abp.OssManagement.HttpApi.Client\LINGYUN.Abp.OssManagement.HttpApi.Client.csproj" />
+		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobStoring.BlobManagement\LINGYUN.Abp.BlobStoring.BlobManagement.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Sms.Platform\LINGYUN.Abp.Sms.Platform.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.DistributedLocking\LINGYUN.Abp.BackgroundTasks.DistributedLocking.csproj" />
-		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.ExceptionHandling\LINGYUN.Abp.BackgroundTasks.ExceptionHandling.csproj" />
+		<!--<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.ExceptionHandling\LINGYUN.Abp.BackgroundTasks.ExceptionHandling.csproj" />-->
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Jobs\LINGYUN.Abp.BackgroundTasks.Jobs.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Notifications\LINGYUN.Abp.BackgroundTasks.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Quartz\LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />

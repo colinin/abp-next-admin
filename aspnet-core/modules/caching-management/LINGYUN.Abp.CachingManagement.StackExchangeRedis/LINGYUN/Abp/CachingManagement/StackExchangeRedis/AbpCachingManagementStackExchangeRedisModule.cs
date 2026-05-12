@@ -8,4 +8,8 @@ namespace LINGYUN.Abp.CachingManagement.StackExchangeRedis;
     typeof(AbpCachingStackExchangeRedisModule))]
 public class AbpCachingManagementStackExchangeRedisModule : AbpModule
 {
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpCachingManagementStackExchangeRedisOptions>(context.Configuration.GetSection("CachingManagement:Redis"));
+    }
 }

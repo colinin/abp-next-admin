@@ -1,9 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Polly;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -48,9 +43,6 @@ public class AbpLocalizationManagementDomainModule : AbpModule
             options.EtoMappings.Add<Language, LanguageEto>(typeof(AbpLocalizationManagementDomainModule));
             options.EtoMappings.Add<Resource, ResourceEto>(typeof(AbpLocalizationManagementDomainModule));
         });
-
-        // 定期更新本地化缓存缓解措施
-        context.Services.AddHostedService<LocalizationTextCacheRefreshWorker>();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

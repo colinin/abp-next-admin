@@ -102,7 +102,7 @@ public class SmsTokenExtensionGrant : ITokenExtensionGrant
                 logger.LogInformation("Authentication failed for username: {username}, reason: access failed", currentUser.UserName);
 
 
-                errorDescription = identityResult.LocalizeErrors(localizer);
+                errorDescription = localizer["InvalidGrant:PhoneVerifyInvalid"].Value;
             }
 
             await SaveSecurityLogAsync(context, currentUser, SmsTokenExtensionGrantConsts.SecurityCodeFailed);

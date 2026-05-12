@@ -156,6 +156,7 @@ const oidcSettings: UserManagerSettings = {
   silent_redirect_uri: `${window.location.origin}/silent-renew.html`,
   automaticSilentRenew: true,
   loadUserInfo: true,
+  prompt: auth.prompt,
   userStore: new WebStorageStateStore({
     store: import.meta.env.DEV
       ? localStorage

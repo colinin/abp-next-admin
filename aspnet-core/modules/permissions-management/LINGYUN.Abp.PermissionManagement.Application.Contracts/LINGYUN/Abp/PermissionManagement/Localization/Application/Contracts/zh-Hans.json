@@ -39,6 +39,10 @@
     "PermissionDefinitions:AddNew": "添加权限",
     "BasicInfo": "基本信息",
     "Properties": "属性",
-    "StateCheckers": "状态检查"
+    "StateCheckers": "状态检查",
+    "PermissionProviders:C": "客户端",
+    "PermissionProviders:R": "角色",
+    "PermissionProviders:U": "用户",
+    "PermissionProviders:O": "组织机构"
   }
 }

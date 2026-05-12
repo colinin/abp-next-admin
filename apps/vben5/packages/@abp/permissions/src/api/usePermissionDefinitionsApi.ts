@@ -1,4 +1,4 @@
-import type { ListResultDto } from '@abp/core';
+import type { ListResultDto, NameValue } from '@abp/core';
 
 import type {
   PermissionDefinitionCreateDto,
@@ -89,11 +89,27 @@ export function usePermissionDefinitionsApi() {
     );
   }
 
+  /**
+   * 获取可用权限提供者列表
+   * @returns {Promise<ListResultDto<NameValue<string>>>} 权限提供者列表
+   */
+  function getAssignableProvidersApi(): Promise<
+    ListResultDto<NameValue<string>>
+  > {
+    return request<ListResultDto<NameValue<string>>>(
+      '/api/permission-management/definitions/assignable-providers',
+      {
+        method: 'GET',
+      },
+    );
+  }
+
   return {
     cancel,
     createApi,
     deleteApi,
     getApi,
+    getAssignableProvidersApi,
     getListApi,
     updateApi,
   };

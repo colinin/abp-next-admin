@@ -1,0 +1,44 @@
+<Solution>
+  <Folder Name="/.docker/">
+    <File Path="docker-compose.yml" />
+  </Folder>
+  <Folder Name="/.k8s/">
+    <File Path=".k8s/deployment.yaml" />
+  </Folder>
+  <Folder Name="/.Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="common.props" />
+    <File Path="configureawait.props" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="NuGet.Config" />
+  </Folder>
+  <Folder Name="/.workflows/">
+    <File Path=".gitlab-ci.yml" />
+  </Folder>
+  <Folder Name="/host/">
+    <Project Path="host/PackageName.CompanyName.ProjectName.HttpApi.Host/PackageName.CompanyName.ProjectName.HttpApi.Host.csproj" />
+  </Folder>
+  <Folder Name="/migrations/">
+    <File Path="migrations/migrations-database.ps1" />
+    <Project Path="migrations/PackageName.CompanyName.ProjectName.DbMigrator.EntityFrameworkCore/PackageName.CompanyName.ProjectName.DbMigrator.EntityFrameworkCore.csproj" />
+    <Project Path="migrations/PackageName.CompanyName.ProjectName.DbMigrator/PackageName.CompanyName.ProjectName.DbMigrator.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/PackageName.CompanyName.ProjectName.Application.Contracts/PackageName.CompanyName.ProjectName.Application.Contracts.csproj" />
+    <Project Path="src/PackageName.CompanyName.ProjectName.Application/PackageName.CompanyName.ProjectName.Application.csproj" />
+    <Project Path="src/PackageName.CompanyName.ProjectName.Dapr.Client/PackageName.CompanyName.ProjectName.Dapr.Client.csproj" />
+    <Project Path="src/PackageName.CompanyName.ProjectName.Domain.Shared/PackageName.CompanyName.ProjectName.Domain.Shared.csproj" />
+    <Project Path="src/PackageName.CompanyName.ProjectName.Domain/PackageName.CompanyName.ProjectName.Domain.csproj" />
+    <Project Path="src/PackageName.CompanyName.ProjectName.EntityFrameworkCore/PackageName.CompanyName.ProjectName.EntityFrameworkCore.csproj" />
+    <Project Path="src/PackageName.CompanyName.ProjectName.HttpApi.Client/PackageName.CompanyName.ProjectName.HttpApi.Client.csproj" />
+    <Project Path="src/PackageName.CompanyName.ProjectName.HttpApi/PackageName.CompanyName.ProjectName.HttpApi.csproj" />
+    <Project Path="src/PackageName.CompanyName.ProjectName.SettingManagement/PackageName.CompanyName.ProjectName.SettingManagement.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PackageName.CompanyName.ProjectName.Application.Tests/PackageName.CompanyName.ProjectName.Application.Tests.csproj" />
+    <Project Path="tests/PackageName.CompanyName.ProjectName.Domain.Tests/PackageName.CompanyName.ProjectName.Domain.Tests.csproj" />
+    <Project Path="tests/PackageName.CompanyName.ProjectName.EntityFrameworkCore.Tests/PackageName.CompanyName.ProjectName.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="tests/PackageName.CompanyName.ProjectName.TestBase/PackageName.CompanyName.ProjectName.TestBase.csproj" />
+  </Folder>
+</Solution>

@@ -14,6 +14,10 @@ public class PermissionDefinitionDto : IHasExtraProperties
 
     public string GroupName { get; set; }
 
+    public string ResourceName { get; set; }
+
+    public string ManagementPermissionName { get; set; }
+
     public bool IsEnabled { get; set; }
 
     public bool IsStatic { get; set; }

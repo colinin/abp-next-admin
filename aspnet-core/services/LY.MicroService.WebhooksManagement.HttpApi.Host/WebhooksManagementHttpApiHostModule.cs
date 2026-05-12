@@ -130,7 +130,6 @@ public partial class WebhooksManagementHttpApiHostModule : AbpModule
         ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureBackgroundTasks(context.Services, configuration);
-        ConfigureSeedWorker(context.Services, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 

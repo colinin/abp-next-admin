@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Identity.Session;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
@@ -18,6 +19,14 @@ namespace LINGYUN.Abp.Identity;
     typeof(Volo.Abp.Identity.AbpIdentityDomainModule))]
 public class AbpIdentityDomainModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<IdentityBuilder>(builder =>
+        {
+            builder.AddUserValidator<PhoneNumberUserValidator>();
+        });
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddMapperlyObjectMapper<AbpIdentityDomainModule>();

@@ -14,4 +14,6 @@ public interface ICacheAppService : IApplicationService
     Task RefreshAsync(CacheRefreshInput input);
 
     Task RemoveAsync(CacheKeyInput input);
+
+    Task RemoveManyAsync(CacheRemoveKeysInput input);
 }

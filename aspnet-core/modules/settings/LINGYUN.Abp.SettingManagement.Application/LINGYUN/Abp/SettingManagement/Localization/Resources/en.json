@@ -29,11 +29,11 @@
     "Definition:AddNew": "Add New",
     "DeleteOrRestore": "Delete/Restore",
     "ItemWillBeDeleteOrRestoreMessage": "If you have changed the Settings, you will revert to the default Settings. Otherwise, the custom Settings are removed.",
-    "Providers:Default": "Default",
-    "Providers:Configuration": "Config",
-    "Providers:Global": "Global",
-    "Providers:Tenant": "Tenant",
-    "Providers:User": "User",
+    "SettingProviders:D": "Default",
+    "SettingProviders:C": "Config",
+    "SettingProviders:G": "Global",
+    "SettingProviders:T": "Tenant",
+    "SettingProviders:U": "User",
     "BasicInfo": "Basic",
     "Properties": "Properties"
   }

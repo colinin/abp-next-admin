@@ -6,7 +6,7 @@ using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
 using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
-using LINGYUN.Abp.BlobStoring.OssManagement;
+using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Elsa;
@@ -52,7 +52,7 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpBlobStoringOssManagementModule),
+    typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpElsaModule),
     typeof(AbpElsaServerModule),
     typeof(AbpElsaActivitiesModule),

@@ -1,10 +1,47 @@
 ﻿{
   "ReverseProxy": {
     "Routes": {
+      "ai-management-route": {
+        "ClusterId": "ai-management-cluster",
+        "Match": {
+          "Path": "/api/ai-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat;Content-Type;Cache-Control"
+          }
+        ]
+      },
       "abp-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/abp/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          },
+          {
+            "ResponseHeadersCopy": true
+          },
+          {
+            "ResponseHeader": "Set-Cookie",
+            "Append": true
+          }
+        ]
+      },
+      "oidc-discovery-route": {
+        "ClusterId": "auth-server-cluster",
+        "Match": {
+          "Path": "/.well-known/{**everything}"
         },
         "Transforms": [
           {
@@ -16,7 +53,7 @@
           }
         ]
       },
-      "auth-server-route": {
+      "oidc-token-route": {
         "ClusterId": "auth-server-cluster",
         "Match": {
           "Path": "/connect/{**everything}"
@@ -31,8 +68,53 @@
           }
         ]
       },
+      "account-external-logins-route": {
+        "ClusterId": "auth-server-cluster",
+        "Match": {
+          "Path": "/api/account/external-logins/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "account-oauth-route": {
+        "ClusterId": "auth-server-cluster",
+        "Match": {
+          "Path": "/api/account/oauth/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "account-qrcode-route": {
+        "ClusterId": "auth-server-cluster",
+        "Match": {
+          "Path": "/api/account/qrcode/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
       "account-route": {
-        "ClusterId": "auth-server-api-cluster",
+        "ClusterId": "identity-service-cluster",
         "Match": {
           "Path": "/api/account/{**everything}"
         },
@@ -47,7 +129,7 @@
         ]
       },
       "identity-route": {
-        "ClusterId": "auth-server-api-cluster",
+        "ClusterId": "identity-service-cluster",
         "Match": {
           "Path": "/api/identity/{**everything}"
         },
@@ -62,7 +144,7 @@
         ]
       },
       "identity-server-route": {
-        "ClusterId": "auth-server-api-cluster",
+        "ClusterId": "identity-service-cluster",
         "Match": {
           "Path": "/api/identity-server/{**everything}"
         },
@@ -76,8 +158,23 @@
           }
         ]
       },
+      "openiddict-route": {
+        "ClusterId": "identity-service-cluster",
+        "Match": {
+          "Path": "/api/openiddict/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
       "cache-management-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/caching-management/{**everything}"
         },
@@ -92,7 +189,7 @@
         ]
       },
       "saas-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/saas/{**everything}"
         },
@@ -107,7 +204,7 @@
         ]
       },
       "auditing-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/auditing/{**everything}"
         },
@@ -122,7 +219,7 @@
         ]
       },
       "data-protected-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/data-protection-management/{**everything}"
         },
@@ -137,7 +234,7 @@
         ]
       },
       "text-template-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/text-templating/{**everything}"
         },
@@ -152,7 +249,7 @@
         ]
       },
       "feature-management-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/feature-management/{**everything}"
         },
@@ -167,7 +264,7 @@
         ]
       },
       "permission-management-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/permission-management/{**everything}"
         },
@@ -182,7 +279,7 @@
         ]
       },
       "setting-management-route": {
-        "ClusterId": "admin-api-cluster",
+        "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/setting-management/{**everything}"
         },
@@ -197,7 +294,7 @@
         ]
       },
       "localization-management-route": {
-        "ClusterId": "localization-api-cluster",
+        "ClusterId": "localization-service-cluster",
         "Match": {
           "Path": "/api/localization/{**everything}"
         },
@@ -212,7 +309,7 @@
         ]
       },
       "im-route": {
-        "ClusterId": "messages-api-cluster",
+        "ClusterId": "messages-service-cluster",
         "Match": {
           "Path": "/api/im/{**everything}"
         },
@@ -227,7 +324,7 @@
         ]
       },
       "notifications-route": {
-        "ClusterId": "messages-api-cluster",
+        "ClusterId": "messages-service-cluster",
         "Match": {
           "Path": "/api/notifications/{**everything}"
         },
@@ -241,8 +338,8 @@
           }
         ]
       },
-      "signalr-route": {
-        "ClusterId": "messages-api-cluster",
+      "signalr-hubs-route": {
+        "ClusterId": "messages-service-cluster",
         "Match": {
           "Path": "/signalr-hubs/{**everything}"
         },
@@ -262,8 +359,8 @@
           }
         ]
       },
-      "webhooks-management-route": {
-        "ClusterId": "webhooks-api-cluster",
+      "webhooks-route": {
+        "ClusterId": "webhooks-service-cluster",
         "Match": {
           "Path": "/api/webhooks/{**everything}"
         },
@@ -278,7 +375,7 @@
         ]
       },
       "task-management-route": {
-        "ClusterId": "tasks-api-cluster",
+        "ClusterId": "task-service-cluster",
         "Match": {
           "Path": "/api/task-management/{**everything}"
         },
@@ -293,7 +390,7 @@
         ]
       },
       "platform-route": {
-        "ClusterId": "platform-api-cluster",
+        "ClusterId": "platform-service-cluster",
         "Match": {
           "Path": "/api/platform/{**everything}"
         },
@@ -307,10 +404,10 @@
           }
         ]
       },
-      "oss-route": {
-        "ClusterId": "platform-api-cluster",
+      "blob-management-route": {
+        "ClusterId": "platform-service-cluster",
         "Match": {
-          "Path": "/api/oss-management/{**everything}"
+          "Path": "/api/blob-management/{**everything}"
         },
         "Transforms": [
           {
@@ -323,9 +420,39 @@
         ]
       },
       "files-route": {
-        "ClusterId": "platform-api-cluster",
+        "ClusterId": "platform-service-cluster",
         "Match": {
           "Path": "/api/files/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "wechat-route": {
+        "ClusterId": "wechat-service-cluster",
+        "Match": {
+          "Path": "/api/wechat/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "elsa-route": {
+        "ClusterId": "workflow-service-cluster",
+        "Match": {
+          "Path": "/elsa/{**everything}"
         },
         "Transforms": [
           {
@@ -339,92 +466,109 @@
       }
     },
     "Clusters": {
+      "ai-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30070",
+            "Metadata": {
+              "SwaggerEndpoint": "http://localhost:30070"
+            }
+          }
+        }
+      },
       "auth-server-cluster": {
         "Destinations": {
           "destination1": {
-            "Address": "http://auth-server:44385",
+            "Address": "http://localhost:44385"
+          }
+        }
+      },
+      "identity-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:30015",
             "Metadata": {
-              "SwaggerEndpoint": "http://127.0.0.1:44385"
+              "SwaggerEndpoint": "http://localhost:30015"
             }
           }
         }
       },
-      "auth-server-api-cluster": {
+      "admin-service-cluster": {
         "Destinations": {
           "destination1": {
-            "Address": "http://auth-server-api:30015",
+            "Address": "http://localhost:30010",
             "Metadata": {
-              "SwaggerEndpoint": "http://127.0.0.1:30015"
+              "SwaggerEndpoint": "http://localhost:30010"
             }
           }
         }
       },
-      "admin-api-cluster": {
+      "localization-service-cluster": {
         "Destinations": {
           "destination1": {
-            "Address": "http://admin-api:30010",
+            "Address": "http://localhost:30030",
             "Metadata": {
-              "SwaggerEndpoint": "http://127.0.0.1:30010"
+              "SwaggerEndpoint": "http://localhost:30030"
             }
           }
         }
       },
-      "localization-api-cluster": {
+      "messages-service-cluster": {
         "Destinations": {
           "destination1": {
-            "Address": "http://localization-api:30030",
+            "Address": "http://localhost:30020",
             "Metadata": {
-              "SwaggerEndpoint": "http://127.0.0.1:30030"
+              "SwaggerEndpoint": "http://localhost:30020"
             }
           }
         }
       },
-      "messages-api-cluster": {
+      "webhooks-service-cluster": {
         "Destinations": {
           "destination1": {
-            "Address": "http://messages-api:30020",
+            "Address": "http://localhost:30045",
             "Metadata": {
-              "SwaggerEndpoint": "http://127.0.0.1:30020"
+              "SwaggerEndpoint": "http://localhost:30045"
             }
           }
         }
       },
-      "webhooks-api-cluster": {
+      "task-service-cluster": {
         "Destinations": {
           "destination1": {
-            "Address": "http://webhooks-api:30045",
+            "Address": "http://localhost:30040",
             "Metadata": {
-              "SwaggerEndpoint": "http://127.0.0.1:30045"
+              "SwaggerEndpoint": "http://localhost:30040"
             }
           }
         }
       },
-      "tasks-api-cluster": {
+      "platform-service-cluster": {
         "Destinations": {
           "destination1": {
-            "Address": "http://tasks-api:30040",
+            "Address": "http://localhost:30025",
             "Metadata": {
-              "SwaggerEndpoint": "http://127.0.0.1:30040"
+              "SwaggerEndpoint": "http://localhost:30025"
             }
           }
         }
       },
-      "platform-api-cluster": {
+      "workflow-service-cluster": {
         "Destinations": {
           "destination1": {
-            "Address": "http://platform-api:30025",
+            "Address": "http://localhost:30050",
             "Metadata": {
-              "SwaggerEndpoint": "http://127.0.0.1:30025"
+              "SwaggerEndpoint": "http://localhost:30050"
             }
           }
         }
       },
-      "workflow-api-cluster": {
+      "wechat-service-cluster": {
         "Destinations": {
           "destination1": {
-            "Address": "http://workflow-api:30050",
+            "Address": "http://localhost:30060",
             "Metadata": {
-              "SwaggerEndpoint": "http://127.0.0.1:30050"
+              "SwaggerEndpoint": "http://localhost:30060"
             }
           }
         }

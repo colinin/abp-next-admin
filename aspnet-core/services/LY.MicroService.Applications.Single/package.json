@@ -1,10 +1,10 @@
 {
-  "version": "10.0.2",
+  "version": "10.2.0",
   "name": "my-app-single",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.leptonxlite": "5.0.2",
-    "@abp/virtual-file-explorer": "10.0.2",
-    "@abp/qrcode": "10.0.2"
+    "@abp/aspnetcore.mvc.ui.theme.leptonxlite": "5.2.0",
+    "@abp/virtual-file-explorer": "10.2.0",
+    "@abp/qrcode": "10.2.0"
   }
 }
