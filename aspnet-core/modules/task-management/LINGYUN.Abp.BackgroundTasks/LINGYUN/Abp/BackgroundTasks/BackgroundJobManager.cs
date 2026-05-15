@@ -47,33 +47,36 @@ public class BackgroundJobManager : IBackgroundJobManager
         TimeSpan? delay = null)
     {
         var jobConfiguration = Options.GetJob<TArgs>();
-        var interval = 0;
-        if (delay.HasValue)
-        {
-            interval = delay.Value.Seconds;
-        }
-        var jobId = GuidGenerator.Create();
-        var jobArgs = new Dictionary<string, object>
-        {
-            { nameof(TArgs), JsonSerializer.Serialize(args) },
-            { "ArgsType", jobConfiguration.ArgsType.AssemblyQualifiedName },
-            { "JobType", jobConfiguration.JobType.AssemblyQualifiedName },
-            { "JobName", jobConfiguration.JobName },
-        };
-        var jobInfo = new JobInfo
-        {
-            Id = jobId.ToString(),
-            TenantId = CurrentTenant.Id,
-            Name = jobId.ToString(),
-            Group = "BackgroundJobs",
-            Priority = ConverForm(priority),
-            Source = JobSource.System,
-            BeginTime = DateTime.Now,
-            Args = jobArgs,
-            Description = "From the framework background jobs",
-            JobType = JobType.Once,
-            Interval = interval,
-            CreationTime = Clock.Now,
+         // 用 BeginTime 表达延迟启动，避免与 JobInfo.Interval（重复间隔）语义混用。
+         // 原实现使用 delay.Value.Seconds（仅取秒分量 0-59），
+         // 会让 TimeSpan.FromMinutes(5) 这类整分钟/整小时的延迟退化为 0，导致任务立即执行。
+         var now = Clock.Now;
+         var beginTime = now;
+         if (delay.HasValue && delay.Value > TimeSpan.Zero)
+         {
+             beginTime = now.Add(delay.Value);
+         }
+         var jobId = GuidGenerator.Create();
+         var jobArgs = new Dictionary<string, object>
+         {
+             { nameof(TArgs), JsonSerializer.Serialize(args) },
+             { "ArgsType", jobConfiguration.ArgsType.AssemblyQualifiedName },
+             { "JobType", jobConfiguration.JobType.AssemblyQualifiedName },
+             { "JobName", jobConfiguration.JobName },
+         };
+         var jobInfo = new JobInfo
+         {
+             Id = jobId.ToString(),
+             TenantId = CurrentTenant.Id,
+             Name = jobId.ToString(),
+             Group = "BackgroundJobs",
+             Priority = ConverForm(priority),
+             Source = JobSource.System,
+             BeginTime = beginTime,
+             Args = jobArgs,
+             Description = "From the framework background jobs",
+             JobType = JobType.Once,
+             CreationTime = now,
             // 确保不会被轮询入队
             Status = JobStatus.None,
             NodeName = TasksOptions.NodeName,
