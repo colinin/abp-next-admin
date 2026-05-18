@@ -60,15 +60,16 @@ public class ProjectNameDbMigratorEntityFrameworkCoreModule : AbpModule
         Configure<AbpDbContextOptions>(options =>
         {
 #if MySQL
-            options.UseMySQL(mysql =>
+            options.UseMySQL(builder =>
             {
                 // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
-                mysql.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
+                builder.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
             });
-            options.UseMySQL<ProjectNameDbContext>(mysql =>
+            options.UseMySQL<ProjectNameDbContext>(builder =>
             {
                 // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
-                mysql.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
+                builder.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
+                builder.MigrationsAssembly(GetType().Assembly);
             });
 #elif SqlServer
             options.UseSqlServer();
@@ -76,16 +77,26 @@ public class ProjectNameDbMigratorEntityFrameworkCoreModule : AbpModule
             {
                 // see https://learn.microsoft.com/en-us/sql/t-sql/statements/alter-database-transact-sql-compatibility-level?view=sql-server-ver16
                 // builder.UseCompatibilityLevel(150);
+                builder.MigrationsAssembly(GetType().Assembly);
             });
 #elif Sqlite
             options.UseSqlite();
-            options.UseSqlite<ProjectNameDbContext>();
+            options.UseSqlite<ProjectNameDbContext>(builder => 
+            {
+                builder.MigrationsAssembly(GetType().Assembly);
+            });
 #elif Oracle || OracleDevart
             options.UseOracle();
-            options.UseOracle<ProjectNameDbContext>();
+            options.UseOracle<ProjectNameDbContext>(builder => 
+            {
+                builder.MigrationsAssembly(GetType().Assembly);
+            });
 #elif PostgreSql
             options.UseNpgsql();
-            options.UseNpgsql<ProjectNameDbContext>();
+            options.UseNpgsql<ProjectNameDbContext>(builder => 
+            {
+                builder.MigrationsAssembly(GetType().Assembly);
+            });
 #endif
         });
     }
