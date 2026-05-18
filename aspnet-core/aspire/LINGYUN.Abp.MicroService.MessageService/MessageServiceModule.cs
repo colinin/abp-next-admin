@@ -23,6 +23,7 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.Notifications.Calendar;
 using LINGYUN.Abp.Notifications.Common;
 using LINGYUN.Abp.Notifications.Emailing;
 using LINGYUN.Abp.Notifications.EntityFrameworkCore;
@@ -102,6 +103,7 @@ namespace LINGYUN.Abp.MicroService.MessageService;
     typeof(AbpNotificationsWeChatWorkModule),
     typeof(AbpNotificationsExceptionHandlingModule),
     typeof(AbpNotificationsTemplatingModule),
+    typeof(AbpNotificationsCalendarModule),
     typeof(AbpWeChatWorkHandlersModule),
     typeof(AbpWeChatOfficialHandlersModule),
     typeof(AbpIdentityNotificationsModule),

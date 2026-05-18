@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 
@@ -12,7 +11,7 @@ namespace LINGYUN.Abp.Notifications.Calendar;
 /// <summary>
 /// 工作日通知发布拦截器
 /// </summary>
-public class WorkdayCalendarPublishInterceptor : INotificationPublishInterceptor, ITransientDependency
+public class WorkdayCalendarPublishInterceptor : INotificationPublishInterceptor
 {
     private readonly IClock _clock;
     private readonly ICurrentTenant _currentTenant;

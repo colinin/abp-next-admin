@@ -1,4 +1,5 @@
 using LINGYUN.Abp.Exporter.MiniSoftware;
+using LINGYUN.Abp.Notifications.Calendar;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -316,6 +317,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsWeChatMiniProgramModule),
     // 通知模块 企业微信
     typeof(AbpNotificationsWeChatWorkModule),
+    // 通知模块 工作日检查拦截器
+    typeof(AbpNotificationsCalendarModule),
     // 多租户模块 版本
     typeof(AbpMultiTenancyEditionsModule),
 

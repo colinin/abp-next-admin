@@ -55,6 +55,7 @@
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Official.Handlers\LINGYUN.Abp.WeChat.Official.Handlers.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.Work.Handlers\LINGYUN.Abp.WeChat.Work.Handlers.csproj" />
+		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.Calendar\LINGYUN.Abp.Notifications.Calendar.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

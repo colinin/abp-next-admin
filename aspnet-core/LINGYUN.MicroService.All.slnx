@@ -105,6 +105,9 @@
   <Folder Name="/framework/authorization/">
     <Project Path="framework/authorization/LINGYUN.Abp.Authorization.OrganizationUnits/LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
   </Folder>
+  <Folder Name="/framework/calendars/">
+    <Project Path="framework/calendars/LINGYUN.Abp.Calendar/LINGYUN.Abp.Calendar.csproj" />
+  </Folder>
   <Folder Name="/framework/cli/">
     <Project Path="framework/cli/LINGYUN.Abp.Cli/LINGYUN.Abp.Cli.csproj" />
   </Folder>
@@ -433,6 +436,7 @@
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.ExceptionHandling.Notifications/LINGYUN.Abp.ExceptionHandling.Notifications.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Application.Contracts/LINGYUN.Abp.Notifications.Application.Contracts.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Application/LINGYUN.Abp.Notifications.Application.csproj" />
+    <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Calendar/LINGYUN.Abp.Notifications.Calendar.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Common/LINGYUN.Abp.Notifications.Common.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Core/LINGYUN.Abp.Notifications.Core.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Domain.Shared/LINGYUN.Abp.Notifications.Domain.Shared.csproj" />
