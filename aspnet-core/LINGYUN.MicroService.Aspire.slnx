@@ -90,6 +90,9 @@
   <Folder Name="/framework/authorization/">
     <Project Path="framework/authorization/LINGYUN.Abp.Authorization.OrganizationUnits/LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
   </Folder>
+  <Folder Name="/framework/calendars/">
+    <Project Path="framework/calendars/LINGYUN.Abp.Calendar/LINGYUN.Abp.Calendar.csproj" Id="2fee90a2-01aa-4417-9529-79bb10b8850c" />
+  </Folder>
   <Folder Name="/framework/cli/">
     <Project Path="framework/cli/LINGYUN.Abp.Cli/LINGYUN.Abp.Cli.csproj" />
   </Folder>
