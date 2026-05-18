@@ -36,6 +36,9 @@
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.SqlInstaller/LINGYUN.Abp.Quartz.SqlInstaller.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.SqlServerInstaller/LINGYUN.Abp.Quartz.SqlServerInstaller.csproj" />
   </Folder>
+  <Folder Name="/framework/calendars/">
+    <Project Path="framework/calendars/LINGYUN.Abp.Calendar/LINGYUN.Abp.Calendar.csproj" />
+  </Folder>
   <Folder Name="/framework/cap/">
     <Project Path="framework/common/LINGYUN.Abp.EventBus.CAP/LINGYUN.Abp.EventBus.CAP.csproj" />
   </Folder>
@@ -96,6 +99,7 @@
     <Project Path="framework/common/LINGYUN.Abp.RealTime/LINGYUN.Abp.RealTime.csproj" />
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM.SignalR/LINGYUN.Abp.IM.SignalR.csproj" />
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM/LINGYUN.Abp.IM.csproj" />
+    <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Calendar/LINGYUN.Abp.Notifications.Calendar.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Common/LINGYUN.Abp.Notifications.Common.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Core/LINGYUN.Abp.Notifications.Core.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Emailing/LINGYUN.Abp.Notifications.Emailing.csproj" />

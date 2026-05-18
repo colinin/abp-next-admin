@@ -87,7 +87,7 @@ public class WorkdayCalendarService : IWorkdayCalendarService, ITransientDepende
                 return false;
             }
             if (_options.EnableWorkTimeRestriction &&
-                !_options.DefaultWorkTimes.Any(timeRange => timeRange.StartTime >= time.TimeOfDay && timeRange.EndTime <= time.TimeOfDay))
+                !_options.DefaultWorkTimes.Any(timeRange => time.TimeOfDay >= timeRange.StartTime && time.TimeOfDay <= timeRange.EndTime))
             {
                 return false;
             }
@@ -109,7 +109,7 @@ public class WorkdayCalendarService : IWorkdayCalendarService, ITransientDepende
         if (calendar.EnableWorkTimeRestriction && 
             calendar.WorkTimes != null)
         {
-            return calendar.WorkTimes.Any(x => x.StartTime >= time.TimeOfDay && x.EndTime <= time.TimeOfDay);
+            return calendar.WorkTimes.Any(timeRange => time.TimeOfDay >= timeRange.StartTime && time.TimeOfDay <= timeRange.EndTime);
         }
 
         return false;
