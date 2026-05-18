@@ -448,6 +448,7 @@
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.ExceptionHandling.Notifications/LINGYUN.Abp.ExceptionHandling.Notifications.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Application.Contracts/LINGYUN.Abp.Notifications.Application.Contracts.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Application/LINGYUN.Abp.Notifications.Application.csproj" />
+    <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Calendar/LINGYUN.Abp.Notifications.Calendar.csproj" Id="afef5b69-ebbf-454c-8783-027dde6e5970" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Common/LINGYUN.Abp.Notifications.Common.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Core/LINGYUN.Abp.Notifications.Core.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Domain.Shared/LINGYUN.Abp.Notifications.Domain.Shared.csproj" />

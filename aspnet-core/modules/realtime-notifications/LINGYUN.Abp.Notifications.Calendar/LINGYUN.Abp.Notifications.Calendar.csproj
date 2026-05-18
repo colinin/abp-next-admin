@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.Notifications.Calendar</AssemblyName>
+		<PackageId>LINGYUN.Abp.Notifications.Calendar</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\calendars\LINGYUN.Abp.Calendar\LINGYUN.Abp.Calendar.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Notifications\LINGYUN.Abp.Notifications.csproj" />
+	</ItemGroup>
+
+</Project>
