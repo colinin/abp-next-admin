@@ -1,5 +1,6 @@
 ﻿using System;
 using Volo.Abp;
+using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
 
@@ -16,6 +17,7 @@ public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
 
     public string? Description { get; set; }
 
+    [DisableAuditing]
     public string? ApiKey { get; private set; }
 
     public string? ApiBaseUrl { get; private set; }
