@@ -1,10 +1,7 @@
 ﻿using LINGYUN.Abp.BlobManagement.Dtos;
-using LINGYUN.Abp.BlobManagement.Features;
-using LINGYUN.Abp.Features.LimitValidation;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Content;
-using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.BlobManagement;
 
@@ -20,11 +17,6 @@ public abstract class BlobWithoutContainerAppService : BlobAppServiceBase
     {
     }
 
-    [RequiresFeature(BlobManagementFeatureNames.Blob.UploadFile)]
-    [RequiresLimitFeature(
-        BlobManagementFeatureNames.Blob.UploadLimit,
-        BlobManagementFeatureNames.Blob.UploadInterval,
-        LimitPolicy.Month)]
     public async virtual Task CreateChunkFileAsync(BlobFileChunkCreateWithoutContainerDto input)
     {
         await CheckCreatePolicyAsync();
@@ -32,11 +24,6 @@ public abstract class BlobWithoutContainerAppService : BlobAppServiceBase
         await base.CreateChunkFileAsync(ContainerName, input);
     }
 
-    [RequiresFeature(BlobManagementFeatureNames.Blob.UploadFile)]
-    [RequiresLimitFeature(
-        BlobManagementFeatureNames.Blob.UploadLimit,
-        BlobManagementFeatureNames.Blob.UploadInterval,
-        LimitPolicy.Month)]
     public async virtual Task<BlobDto> CreateFileAsync(BlobFileCreateWithoutContainerDto input)
     {
         await CheckCreatePolicyAsync();
@@ -55,11 +42,6 @@ public abstract class BlobWithoutContainerAppService : BlobAppServiceBase
         return await base.CreateFolderAsync(blobContainer, input);
     }
 
-    [RequiresFeature(BlobManagementFeatureNames.Blob.DownloadFile)]
-    [RequiresLimitFeature(
-        BlobManagementFeatureNames.Blob.DownloadLimit,
-        BlobManagementFeatureNames.Blob.DownloadInterval,
-        LimitPolicy.Month)]
     public async virtual Task<IRemoteStreamContent> GetContentByNameAsync(string name)
     {
         var blobContainer = await BlobContainerRepository.GetByNameAsync(ContainerName);

@@ -1,8 +1,10 @@
 ﻿using Aliyun.OSS;
 using LINGYUN.Abp.Aliyun.Features;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.DependencyInjection;
@@ -14,13 +16,16 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun;
 public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
 {
     protected IOssClientFactory OssClientFactory { get; }
+    protected IHttpClientFactory HttpClientFactory { get; }
     protected IAliyunBlobNameCalculator AliyunBlobNameCalculator { get; }
 
     public AliyunBlobProvider(
         IOssClientFactory ossClientFactory,
+        IHttpClientFactory httpClientFactory,
         IAliyunBlobNameCalculator aliyunBlobNameCalculator)
     {
         OssClientFactory = ossClientFactory;
+        HttpClientFactory = httpClientFactory;
         AliyunBlobNameCalculator = aliyunBlobNameCalculator;
     }
 
@@ -55,8 +60,11 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
             return null;
         }
 
-        var ossObject = ossClient.GetObject(GetBucketName(args), blobName);
-        return ossObject.Content;
+        var downloadUri = ossClient.GeneratePresignedUri(GetBucketName(args), blobName);
+
+        var httpClient = HttpClientFactory.CreateAliyunHttpClient();
+
+        return await httpClient.GetStreamAsync(downloadUri, args.CancellationToken);
     }
 
     public override async Task SaveAsync(BlobProviderSaveArgs args)

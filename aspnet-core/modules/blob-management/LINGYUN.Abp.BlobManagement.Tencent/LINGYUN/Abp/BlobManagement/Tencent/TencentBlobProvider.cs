@@ -10,9 +10,9 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BlobManagement.Tencent;
 
@@ -21,6 +21,7 @@ public class TencentBlobProvider : IBlobProvider
     public const string ProviderName = "TencentCloud";
     public string Name => ProviderName;
 
+    protected IClock Clock { get; }
     protected IConfiguration Configuration { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected ICosClientFactory CosClientFactory { get; }
@@ -29,6 +30,7 @@ public class TencentBlobProvider : IBlobProvider
     protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
 
     public TencentBlobProvider(
+        IClock clock,
         IConfiguration configuration,
         ICurrentTenant currentTenant,
         ICosClientFactory cosClientFactory,
@@ -36,6 +38,7 @@ public class TencentBlobProvider : IBlobProvider
         TencentBlobNamingNormalizer blobNamingNormalizer,
         IBlobContainerConfigurationProvider configurationProvider)
     {
+        Clock = clock;
         Configuration = configuration;
         CurrentTenant = currentTenant;
         CosClientFactory = cosClientFactory;
@@ -98,6 +101,29 @@ public class TencentBlobProvider : IBlobProvider
         string blobName,
         CancellationToken cancellationToken = default)
     {
+        var configuration = await GetBlobConfiguration();
+
+        var downloadUrl = await GenerateDownloadUrlAsync(
+            containerName, 
+            blobName,
+            TimeSpan.FromSeconds(configuration.PresignedGetExpirySeconds),
+            cancellationToken);
+        if (downloadUrl.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        var httpClient = HttpClientFactory.CreateTencentHttpClient();
+
+        return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
+    }
+
+    public async virtual Task<string?> GenerateDownloadUrlAsync(
+        string containerName,
+        string blobName,
+        TimeSpan expiration,
+        CancellationToken cancellationToken = default)
+    {
         var client = await CreateClientAsync();
         var bucket = NormalizeContainerName(containerName);
         var objectName = CalculateBlobName(blobName);
@@ -108,8 +134,6 @@ public class TencentBlobProvider : IBlobProvider
         }
 
         var configuration = await GetBlobConfiguration();
-        var blobProviderConfig = Configuration.GetSection($"BlobManagement:{ProviderName}");
-
         // See: https://cloud.tencent.com/document/product/436/47238
         var preSignatureStruct = new PreSignatureStruct
         {
@@ -119,16 +143,12 @@ public class TencentBlobProvider : IBlobProvider
             key = objectName, //对象键
             httpMethod = "GET", //HTTP 请求方法
             isHttps = true, //生成 HTTPS 请求 URL
-            signDurationSecond = blobProviderConfig.GetValue("SignDurationSecond", 600), //请求签名时间
+            signDurationSecond = expiration.TotalSeconds.To<long>(), //请求签名时间
             headers = null, //签名中需要校验的 header
             queryParameters = null //签名中需要校验的 URL 中请求参数
         };
 
-        var downloadUrl = client.GenerateSignURL(preSignatureStruct);
-
-        var httpClient = HttpClientFactory.CreateTencentHttpClient();
-
-        return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
+        return client.GenerateSignURL(preSignatureStruct);
     }
 
     public virtual Task CreateFolderAsync(
@@ -144,7 +164,8 @@ public class TencentBlobProvider : IBlobProvider
     public async virtual Task UploadBlobAsync(
         string containerName, 
         string blobName, 
-        Stream content, 
+        Stream content,
+        string? contentType = null,
         CancellationToken cancellationToken = default)
     {
         var client = await CreateClientAsync();
@@ -153,7 +174,13 @@ public class TencentBlobProvider : IBlobProvider
 
         CreateBucketIfNotExists(client, bucket);
 
-        client.PutObject(new PutObjectRequest(bucket, objectName, content));
+        var putObjectRequest = new PutObjectRequest(bucket, objectName, content);
+        if (!contentType.IsNullOrWhiteSpace())
+        {
+            putObjectRequest.SetRequestHeader("Content-Type", contentType);
+        }
+
+        client.PutObject(putObjectRequest);
     }
 
     protected async virtual Task<CosXml> CreateClientAsync()

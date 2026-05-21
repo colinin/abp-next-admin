@@ -17,6 +17,10 @@ public interface IBlobAppService : IApplicationService
 
     Task DeleteAsync(Guid id);
 
+    Task<string> GenerateDownloadUrlAsync(Guid id);
+
+    Task<IRemoteStreamContent> DownloadAsync(BlobDownloadByKeyInput input);
+
     Task<IRemoteStreamContent> GetContentAsync(Guid id);
 
     Task<IRemoteStreamContent> GetContentByNameAsync(BlobDownloadByNameInput input);

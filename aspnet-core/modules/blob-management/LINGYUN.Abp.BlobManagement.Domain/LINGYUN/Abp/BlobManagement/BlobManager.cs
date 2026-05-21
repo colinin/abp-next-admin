@@ -1,4 +1,7 @@
-﻿using LINGYUN.Abp.BlobManagement.Settings;
+﻿using LINGYUN.Abp.BlobManagement.Features;
+using LINGYUN.Abp.BlobManagement.Settings;
+using LINGYUN.Abp.Features.LimitValidation;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.IO;
@@ -10,6 +13,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.Content;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Features;
 using Volo.Abp.IO;
 using Volo.Abp.Settings;
 using Volo.Abp.Specifications;
@@ -19,11 +23,13 @@ namespace LINGYUN.Abp.BlobManagement;
 
 public class BlobManager : DomainService
 {
+    private readonly IDistributedCache<BlobDownloadKeyCacheItem> _blobDownloadKeyCache;
     private readonly IDistributedCache<BlobDownloadCacheItem> _blobDownloadCache;
     private readonly IDistributedEventBus _distributedEventBus;
     private readonly IMemoryCache _blobFileValidateCache;
     private readonly ISettingProvider _settingProvider;
 
+    private readonly IBlobContentTypeResolver _blobContentTypeResolver;
     private readonly IBlobProvider _blobProvider;
     private readonly IBlobRepository _blobRepository;
     private readonly IBlobContainerRepository _blobContainerRepository;
@@ -36,7 +42,9 @@ public class BlobManager : DomainService
         IBlobContainerRepository blobContainerRepository,
         ICancellationTokenProvider cancellationTokenProvider,
         IDistributedEventBus distributedEventBus,
+        IDistributedCache<BlobDownloadKeyCacheItem> blobDownloadKeyCache,
         IDistributedCache<BlobDownloadCacheItem> blobDownloadCache,
+        IBlobContentTypeResolver blobContentTypeResolver,
         IApplicationInfoAccessor applicationInfoAccessor,
         IMemoryCache blobFileValidateCache,
         ISettingProvider settingProvider)
@@ -46,7 +54,9 @@ public class BlobManager : DomainService
         _blobContainerRepository = blobContainerRepository;
         _cancellationTokenProvider = cancellationTokenProvider;
         _distributedEventBus = distributedEventBus;
+        _blobDownloadKeyCache = blobDownloadKeyCache;
         _blobDownloadCache = blobDownloadCache;
+        _blobContentTypeResolver = blobContentTypeResolver;
         _applicationInfoAccessor = applicationInfoAccessor;
         _blobFileValidateCache = blobFileValidateCache;
         _settingProvider = settingProvider;
@@ -183,11 +193,15 @@ public class BlobManager : DomainService
         }
     }
 
+    [RequiresFeature(BlobManagementFeatureNames.Blob.UploadFile)]
+    [RequiresLimitFeature(
+        BlobManagementFeatureNames.Blob.UploadLimit,
+        BlobManagementFeatureNames.Blob.UploadInterval,
+        LimitPolicy.Month)]
     public async virtual Task<Blob> UploadBlobAsync(
         BlobContainer blobContainer, 
         Blob blob, 
         Stream stream,
-        string? contentType = null,
         string? compareMd5 = null)
     {
         await ValidateUploadFileAsync(blob.Name, stream.Length);
@@ -204,7 +218,14 @@ public class BlobManager : DomainService
             blob.SetContentMd5(blobMd5);
         }
 
-        await _blobProvider.UploadBlobAsync(blobContainer.Name, blob.FullName, stream, GetCancellationToken());
+        var contentType = await _blobContentTypeResolver.ResolveContentTypeAsync(blob.Name, stream);
+
+        await _blobProvider.UploadBlobAsync(
+            blobContainer.Name, 
+            blob.FullName, 
+            stream, 
+            contentType,
+            GetCancellationToken());
 
         blob.SetProvider(_blobProvider.Name);
         blob.SetFileInfo(contentType, stream.Length);
@@ -212,6 +233,7 @@ public class BlobManager : DomainService
         return blob;
     }
 
+    [RequiresFeature(BlobManagementFeatureNames.Blob.UploadFile)]
     public async virtual Task CreateChunkBlobAsync(
         string containerIdOrName,
         string name,
@@ -285,6 +307,7 @@ public class BlobManager : DomainService
 
                     // 多分片文件流合并上传
                     mergeFileStream.Seek(0, SeekOrigin.Begin);
+
                     await UploadBlobAsync(blobContainer, blob, mergeFileStream, compareMd5);
                 }
                 // 文件保存之后删除临时文件目录
@@ -299,11 +322,69 @@ public class BlobManager : DomainService
         }
     }
 
+    [RequiresFeature(BlobManagementFeatureNames.Blob.DownloadFile)]
+    [RequiresLimitFeature(
+        BlobManagementFeatureNames.Blob.DownloadLimit,
+        BlobManagementFeatureNames.Blob.DownloadInterval,
+        LimitPolicy.Month)]
     public async virtual Task<Stream?> DownloadBlobsync(Blob blob)
     {
         var containerName = await _blobContainerRepository.GetNameAsync(blob.ContainerId);
 
         return await DownloadBlobsync(containerName, blob.FullName);
+    }
+
+    [RequiresFeature(BlobManagementFeatureNames.Blob.GenerateDownloadUrl)]
+    public async virtual Task<string> GenerateDownloadUrlAsync(
+        BlobContainer blobContainer, 
+        Blob blob,
+        string fallbackUrlPrefix)
+    {
+        var cacheKey = BlobDownloadKeyCacheItem.CalculateCacheKey(blob.Id, blob.FullName);
+        var cacheItem = await _blobDownloadKeyCache.GetAsync(cacheKey);
+        if (cacheItem == null)
+        {
+            var downloadUrlExpirySeconds = await _settingProvider.GetAsync(
+            BlobManagementSettingNames.GenerateDownloadUrlExpirySeconds,
+            BlobManagementSettingNames.DefaultGenerateDownloadUrlExpirySeconds);
+
+            var downloadUrl = await _blobProvider.GenerateDownloadUrlAsync(
+                blobContainer.Name,
+                blob.FullName,
+                TimeSpan.FromSeconds(downloadUrlExpirySeconds),
+                GetCancellationToken());
+
+            if (downloadUrl.IsNullOrWhiteSpace())
+            {
+                // 特殊对象存储提供者（FileSystem）无法生成下载链接, 回退指定的请求Url前缀
+                downloadUrl = fallbackUrlPrefix.EnsureEndsWith('/') + cacheKey;
+            }
+
+            cacheItem = new BlobDownloadKeyCacheItem(
+                blob.Id,
+                downloadUrl);
+
+            await _blobDownloadKeyCache.SetAsync(
+                cacheKey,
+                cacheItem,
+                new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(downloadUrlExpirySeconds),
+                });
+        }
+
+        return cacheItem.Url;
+    }
+
+    public async virtual Task<Blob?> FindBlobByDownloadKeyAsync(string downloadKey)
+    {
+        var cacheItem = await _blobDownloadKeyCache.GetAsync(downloadKey);
+        if (cacheItem == null)
+        {
+            return null;
+        }
+
+        return await _blobRepository.FindAsync(cacheItem.BlobId);
     }
 
     public virtual string GetBlobProvider()

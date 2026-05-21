@@ -18,4 +18,8 @@ public static class AliyunBlobProviderConfigurationNames
     /// 创建命名空间时防盗链列表
     /// </summary>
     public const string CreateBucketReferer = "Aliyun:OSS:CreateBucketReferer";
+    /// <summary>
+    /// 生成预签名Uri的过期时间(s)
+    /// </summary>
+    public const string PresignedGetExpirySeconds = "Aliyun:OSS:PresignedGetExpirySeconds";
 }

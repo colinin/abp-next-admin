@@ -23,6 +23,8 @@ public static class BlobManagementPermissionNames
 
         public const string Download = Default + ".Download";
 
+        public const string GenerateDownloadUrl = Default + ".GenerateDownloadUrl";
+
         public const string ManagePermissions = Default + ".ManagePermissions";
 
         public static class Resources

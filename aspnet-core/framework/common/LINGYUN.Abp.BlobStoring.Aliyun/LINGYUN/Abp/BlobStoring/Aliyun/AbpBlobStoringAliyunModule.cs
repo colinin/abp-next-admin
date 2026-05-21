@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Aliyun;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Modularity;
 
@@ -9,6 +10,10 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun;
     typeof(AbpAliyunModule))]
 public class AbpBlobStoringAliyunModule : AbpModule
 {
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddAliyunHttpClient();
+    }
     // 需要时引用配置
     //public override void ConfigureServices(ServiceConfigurationContext context)
     //{

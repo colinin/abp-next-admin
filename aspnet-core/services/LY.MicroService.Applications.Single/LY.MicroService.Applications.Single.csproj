@@ -151,6 +151,7 @@
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.Domain\LINGYUN.Abp.BlobManagement.Domain.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.FileSystem\LINGYUN.Abp.BlobManagement.FileSystem.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.HttpApi\LINGYUN.Abp.BlobManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.MimeCheck\LINGYUN.Abp.BlobManagement.MimeCheck.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.Minio\LINGYUN.Abp.BlobManagement.Minio.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.Tencent\LINGYUN.Abp.BlobManagement.Tencent.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.SettingManagement\LINGYUN.Abp.BlobManagement.SettingManagement.csproj" />

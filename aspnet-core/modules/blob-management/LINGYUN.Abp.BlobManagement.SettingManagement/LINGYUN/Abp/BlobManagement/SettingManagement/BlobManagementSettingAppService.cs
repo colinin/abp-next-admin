@@ -52,6 +52,11 @@ public class BlobManagementSettingAppService : ApplicationService, IBlobManageme
             var ossObjectSetting = ossSettingGroup.AddSetting(L["DisplayName:Blobs"], L["DisplayName:Blobs"]);
 
             ossObjectSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(BlobManagementSettingNames.GenerateDownloadUrlExpirySeconds),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(BlobManagementSettingNames.GenerateDownloadUrlExpirySeconds, providerName, providerKey),
+                ValueType.Number);
+            ossObjectSetting.AddDetail(
                 await SettingDefinitionManager.GetAsync(BlobManagementSettingNames.FileLimitLength),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(BlobManagementSettingNames.FileLimitLength, providerName, providerKey),

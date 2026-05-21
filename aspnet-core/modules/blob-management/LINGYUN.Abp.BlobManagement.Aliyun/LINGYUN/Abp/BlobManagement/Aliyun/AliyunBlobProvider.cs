@@ -7,8 +7,9 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BlobManagement.Aliyun;
 
@@ -17,24 +18,30 @@ public class AliyunBlobProvider : IBlobProvider
     public const string ProviderName = "Aliyun";
     public string Name => ProviderName;
 
+    protected IClock Clock { get; }
     protected IConfiguration Configuration { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IOssClientFactory OssClientFactory { get; }
     protected IHttpClientFactory HttpClientFactory { get; }
     protected AliyunBlobNamingNormalizer BlobNamingNormalizer { get; }
+    protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
 
     public AliyunBlobProvider(
+        IClock clock,
         IConfiguration configuration,
         ICurrentTenant currentTenant,
         IOssClientFactory ossClientFactory,
         IHttpClientFactory httpClientFactory,
-        AliyunBlobNamingNormalizer blobNamingNormalizer)
+        AliyunBlobNamingNormalizer blobNamingNormalizer,
+        IBlobContainerConfigurationProvider configurationProvider)
     {
+        Clock = clock;
         Configuration = configuration;
         CurrentTenant = currentTenant;
         OssClientFactory = ossClientFactory;
         HttpClientFactory = httpClientFactory;
         BlobNamingNormalizer = blobNamingNormalizer;
+        ConfigurationProvider = configurationProvider;
     }
 
     public async virtual Task CreateContainerAsync(
@@ -91,6 +98,29 @@ public class AliyunBlobProvider : IBlobProvider
         string blobName,
         CancellationToken cancellationToken = default)
     {
+        var configuration = GetBlobConfiguration();
+
+        var downloadUrl = await GenerateDownloadUrlAsync(
+            containerName,
+            blobName,
+            TimeSpan.FromSeconds(configuration.PresignedGetExpirySeconds),
+            cancellationToken);
+        if (downloadUrl.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        var httpClient = HttpClientFactory.CreateAliyunHttpClient();
+
+        return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
+    }
+
+    public async virtual Task<string?> GenerateDownloadUrlAsync(
+        string containerName,
+        string blobName,
+        TimeSpan expiration,
+        CancellationToken cancellationToken = default)
+    {
         var client = await CreateClientAsync();
         var bucket = NormalizeContainerName(containerName);
         var objectName = CalculateBlobName(blobName);
@@ -100,11 +130,7 @@ public class AliyunBlobProvider : IBlobProvider
             return null;
         }
 
-        var downloadUrl = client.GeneratePresignedUri(bucket, objectName);
-
-        var httpClient = HttpClientFactory.CreateAliyunHttpClient();
-
-        return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
+        return client.GeneratePresignedUri(bucket, objectName, Clock.Now.Add(expiration)).ToString();
     }
 
     public virtual Task CreateFolderAsync(
@@ -120,7 +146,8 @@ public class AliyunBlobProvider : IBlobProvider
     public async virtual Task UploadBlobAsync(
         string containerName, 
         string blobName, 
-        Stream content, 
+        Stream content,
+        string? contentType = null,
         CancellationToken cancellationToken = default)
     {
         var client = await CreateClientAsync();
@@ -129,7 +156,20 @@ public class AliyunBlobProvider : IBlobProvider
 
         CreateBucketIfNotExists(client, bucket);
 
-        client.PutObject(bucket, objectName, content);
+        var objectMetadata = new ObjectMetadata();
+        if (!contentType.IsNullOrWhiteSpace())
+        {
+            objectMetadata.ContentType = contentType;
+        }
+
+        client.PutObject(bucket, objectName, content, objectMetadata);
+    }
+
+    protected virtual AliyunBlobProviderConfiguration GetBlobConfiguration()
+    {
+        var configuration = ConfigurationProvider.Get<BlobManagementContainer>();
+        var blobConfiguration = configuration.GetAliyunConfiguration();
+        return blobConfiguration;
     }
 
     protected async virtual Task<IOss> CreateClientAsync()

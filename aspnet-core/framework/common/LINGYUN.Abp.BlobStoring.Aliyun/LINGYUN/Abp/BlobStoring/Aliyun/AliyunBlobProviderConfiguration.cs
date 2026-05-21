@@ -40,6 +40,16 @@ public class AliyunBlobProviderConfiguration
         }
     }
 
+    /// <summary>
+    /// Default value: 7 * 24 * 3600.
+    /// </summary>
+    public int PresignedGetExpirySeconds {
+        get => _containerConfiguration.GetConfigurationOrDefault(AliyunBlobProviderConfigurationNames.PresignedGetExpirySeconds, _defaultExpirySeconds);
+        set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.PresignedGetExpirySeconds, value);
+    }
+
+    private int _defaultExpirySeconds = 7 * 24 * 3600;
+
     private readonly BlobContainerConfiguration _containerConfiguration;
 
     public AliyunBlobProviderConfiguration(BlobContainerConfiguration containerConfiguration)

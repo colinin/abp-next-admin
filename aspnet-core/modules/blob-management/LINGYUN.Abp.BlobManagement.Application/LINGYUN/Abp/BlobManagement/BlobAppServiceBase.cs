@@ -1,7 +1,5 @@
 ﻿using LINGYUN.Abp.BlobManagement.Dtos;
-using LINGYUN.Abp.BlobManagement.Features;
 using LINGYUN.Abp.BlobManagement.Permissions;
-using LINGYUN.Abp.Features.LimitValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -13,7 +11,6 @@ using System.Web;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Content;
-using Volo.Abp.Features;
 using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.BlobManagement;
@@ -49,11 +46,44 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
         await DeleteBlobAsync(blob);
     }
 
-    [RequiresFeature(BlobManagementFeatureNames.Blob.DownloadFile)]
-    [RequiresLimitFeature(
-        BlobManagementFeatureNames.Blob.DownloadLimit,
-        BlobManagementFeatureNames.Blob.DownloadInterval,
-        LimitPolicy.Month)]
+    public async virtual Task<string> GenerateDownloadUrlAsync(Guid id)
+    {
+        var blob = await BlobRepository.GetAsync(id);
+        var blobContainer = await BlobContainerRepository.GetAsync(blob.ContainerId);
+
+        await CheckGetPolicyAsync(blob);
+
+        var fallbackUrlPrefix = blob.TenantId.HasValue
+            ? $"/api/{BlobManagementRemoteServiceConsts.ModuleName}/blobs/download/t/{blob.TenantId:N}"
+            : $"/api/{BlobManagementRemoteServiceConsts.ModuleName}/blobs/download";
+
+        var downloadUrl = await BlobManager.GenerateDownloadUrlAsync(
+            blobContainer, 
+            blob,
+            fallbackUrlPrefix);
+
+        return downloadUrl;
+    }
+
+    public async virtual Task<IRemoteStreamContent> DownloadAsync(BlobDownloadByKeyInput input)
+    {
+        using (CurrentTenant.Change(input.TenantId))
+        {
+            var blob = await BlobManager.FindBlobByDownloadKeyAsync(input.Key);
+            if (blob == null)
+            {
+                return new RemoteStreamContent(Stream.Null, input.Key);
+            }
+
+            // 临时下载链接一般用于临时预览与下载, 过期时间短, 不校验权限
+            // await CheckGetPolicyAsync(blob);
+
+            var stream = await BlobManager.DownloadBlobsync(blob);
+
+            return new RemoteStreamContent(stream ?? Stream.Null, blob.Name, blob.ContentType, stream?.Length);
+        }
+    }
+
     public async virtual Task<IRemoteStreamContent> GetContentAsync(Guid id)
     {
         var blob = await BlobRepository.GetAsync(id);
@@ -62,7 +92,7 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
 
         var stream = await BlobManager.DownloadBlobsync(blob);
 
-        return new RemoteStreamContent(stream ?? Stream.Null, blob.Name, blob.ContentType, blob.Size);
+        return new RemoteStreamContent(stream ?? Stream.Null, blob.Name, blob.ContentType, stream?.Length);
     }
 
     public async virtual Task<BlobDto> GetAsync(Guid id)
@@ -120,7 +150,7 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
             blobStream.Length,
             parentBlob);
 
-        blob = await BlobManager.UploadBlobAsync(blobContainer, blob, blobStream, input.File.ContentType, input.CompareMd5);
+        blob = await BlobManager.UploadBlobAsync(blobContainer, blob, blobStream, input.CompareMd5);
 
         return ObjectMapper.Map<Blob, BlobDto>(blob);
     }
@@ -167,7 +197,7 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
 
         var stream = await BlobManager.DownloadBlobsync(blob);
 
-        return new RemoteStreamContent(stream ?? Stream.Null, blob.Name, blob.ContentType, blob.Size);
+        return new RemoteStreamContent(stream ?? Stream.Null, blob.Name, blob.ContentType, stream?.Length);
     }
 
     protected async virtual Task<Blob?> FindBlobByNameAsync(BlobContainer blobContainer, string name)

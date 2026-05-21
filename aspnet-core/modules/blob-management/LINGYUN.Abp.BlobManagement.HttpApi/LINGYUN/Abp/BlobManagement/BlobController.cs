@@ -73,4 +73,18 @@ public class BlobController : BlobControllerBase, IBlobAppService
     {
         return _service.GetListAsync(input);
     }
+
+    [HttpGet("{id}/generate-url")]
+    public virtual Task<string> GenerateDownloadUrlAsync(Guid id)
+    {
+        return _service.GenerateDownloadUrlAsync(id);
+    }
+
+    [HttpGet]
+    [Route("download/{Key}")]
+    [Route("download/t/{TenantId}/{Key}")]
+    public virtual Task<IRemoteStreamContent> DownloadAsync(BlobDownloadByKeyInput input)
+    {
+        return _service.DownloadAsync(input);
+    }
 }
