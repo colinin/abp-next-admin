@@ -35,7 +35,7 @@ const kbUnit = 1 * 1024;
 const mbUnit = kbUnit * 1024;
 const gbUnit = mbUnit * 1024;
 
-const { deleteApi, getPagedListApi } = useBlobsApi();
+const { deleteApi, getPagedListApi, generateDownloadUrlApi } = useBlobsApi();
 
 const selectedKeys = ref<string[]>([]);
 
@@ -169,7 +169,7 @@ const [BlobFileUploadModal, uploadModalApi] = useVbenModal({
 });
 const [BlobFilePreviewModal, previewModalApi] = useVbenModal({
   connectedComponent: defineAsyncComponent(
-    () => import('./BlobFilePreviewModal.vue'),
+    () => import('./BlobFilePreviewModal1.vue'),
   ),
 });
 
@@ -191,10 +191,11 @@ function onDownload(row: BlobDto) {
     centered: true,
     content: $t('BlobManagement.BlobWellDownloadMessage', [row.name]),
     onCancel: () => {},
-    onOk: () => {
+    onOk: async () => {
+      const downloadUrl = await generateDownloadUrlApi(row.id);
       downloadFileFromUrl({
         fileName: row.name,
-        source: `/api/blob-management/blobs/uid/${row.id}/content`,
+        source: downloadUrl,
       });
     },
     title: $t('AbpUi.AreYouSure'),

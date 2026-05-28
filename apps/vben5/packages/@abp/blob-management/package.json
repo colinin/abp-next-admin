@@ -37,13 +37,10 @@
     "@vben/locales": "workspace:*",
     "@vben/stores": "workspace:*",
     "@vben/utils": "workspace:*",
-    "@vue-office/docx": "catalog:",
-    "@vue-office/excel": "catalog:",
-    "@vue-office/pdf": "catalog:",
-    "@vue-office/pptx": "catalog:",
     "ant-design-vue": "catalog:",
     "vue": "catalog:",
     "vue-demi": "catalog:",
+    "vue-files-preview": "catalog:",
     "vue-simple-uploader": "catalog:",
     "vxe-table": "catalog:"
   }

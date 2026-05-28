@@ -64,7 +64,7 @@ const blobType = ref<FileType>();
 const errorMessage = ref<string>('');
 const excelComponentKey = ref(0); // 只对 Excel 组件使用 key
 
-const { getContentApi } = useBlobsApi();
+const { downloadApi } = useBlobsApi();
 
 // 文件类型配置
 const allowFiles: Record<FileType, string[]> = {
@@ -175,7 +175,7 @@ async function onInit() {
     }
 
     // 获取文件内容
-    const content = await getContentApi(blob.value.id);
+    const content = await downloadApi(blob.value.id);
 
     // 检查文件大小
     if (!isFileSizeValid(content)) {
