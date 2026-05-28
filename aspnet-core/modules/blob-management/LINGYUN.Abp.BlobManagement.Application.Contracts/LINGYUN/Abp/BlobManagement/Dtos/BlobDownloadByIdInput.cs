@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LINGYUN.Abp.BlobManagement.Dtos;
 
-public class BlobDownloadByKeyInput
+public class BlobDownloadByIdInput
 {
     public Guid? TenantId { get; set; }
 
     [Required]
-    public string Key { get; set; }
+    public Guid Id { get; set; }
 }

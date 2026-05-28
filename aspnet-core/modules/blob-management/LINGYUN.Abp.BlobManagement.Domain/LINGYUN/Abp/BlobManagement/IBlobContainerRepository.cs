@@ -14,6 +14,7 @@ public interface IBlobContainerRepository : IBasicRepository<BlobContainer, Guid
         CancellationToken cancellationToken = default);
 
     Task<BlobContainer?> FindByNameAsync(
+        string provider,
         string name,
         CancellationToken cancellationToken = default);
 

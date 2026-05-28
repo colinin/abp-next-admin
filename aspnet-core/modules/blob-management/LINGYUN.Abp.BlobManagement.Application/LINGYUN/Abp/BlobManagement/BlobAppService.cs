@@ -47,11 +47,30 @@ public class BlobAppService : BlobAppServiceBase, IBlobAppService
         return await base.CreateFolderAsync(blobContainer, input);
     }
 
-    public async virtual Task<IRemoteStreamContent> GetContentByNameAsync(BlobDownloadByNameInput input)
+    public async virtual Task<IRemoteStreamContent> DownloadAsync(BlobDownloadByIdInput input)
     {
-        var blobContainer = await BlobContainerRepository.GetByNameAsync(input.ContainerName);
+        using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
+        {
+            return await base.DownloadAsync(input.Id);
+        }
+    }
 
-        return await base.GetContentByNameAsync(blobContainer, input.BlobName);
+    public async virtual Task<IRemoteStreamContent> PreviewAsync(BlobDownloadByIdInput input)
+    {
+        using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
+        {
+            return await base.DownloadAsync(input.Id);
+        }
+    }
+
+    public async virtual Task<IRemoteStreamContent> DownloadByNameAsync(BlobDownloadByNameInput input)
+    {
+        using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
+        {
+            var blobContainer = await BlobContainerRepository.GetByNameAsync(BlobManager.GetBlobProvider(), input.ContainerName);
+
+            return await base.DownloadByNameAsync(blobContainer, input.BlobName);
+        }
     }
 
     protected async override Task CheckGetPolicyAsync(string containerName, Blob blob)

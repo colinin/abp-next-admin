@@ -6,6 +6,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>LY.MicroService.Applications.Single</RootNamespace>
+		<UserSecretsId>A47DB958-CC3F-430B-A18A-57AA535BAB49</UserSecretsId>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Version>10.2.0</Version>
 	</PropertyGroup>

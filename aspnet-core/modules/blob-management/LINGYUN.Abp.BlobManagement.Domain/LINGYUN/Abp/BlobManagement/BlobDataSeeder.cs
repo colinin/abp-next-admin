@@ -41,7 +41,7 @@ public class BlobDataSeeder : IBlobDataSeeder, ITransientDependency
             {
                 Logger.LogInformation("Seeding container {containerName}...", containerName);
 
-                if (await BlobContainerRepository.FindByNameAsync(containerName) == null)
+                if (await BlobManager.FindContainerAsync(containerName) == null)
                 {
                     await BlobManager.CreateContainerAsync(containerName);
                 }

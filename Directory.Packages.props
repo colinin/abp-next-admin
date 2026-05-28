@@ -354,6 +354,7 @@
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
     <PackageVersion Include="Magicodes.IE.Excel" Version="2.8.2" />
     <PackageVersion Include="Markdig" Version="0.44.0" />
+    <PackageVersion Include="MimeCheck" Version="1.0.0" />
     <PackageVersion Include="MiniExcel" Version="1.43.0" />
     <PackageVersion Include="MiniWord" Version="0.9.2" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />

@@ -4,6 +4,7 @@ using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
@@ -108,11 +109,11 @@ public class MinioBlobProvider : IBlobProvider
     {
         var configuration = GetBlobConfiguration();
 
-        var downloadUrl = await GenerateDownloadUrlAsync(
+        var downloadUrl = await GeneratePresignedUrlAsync(
             containerName,
             blobName,
             TimeSpan.FromSeconds(configuration.PresignedGetExpirySeconds),
-            cancellationToken);
+            cancellationToken: cancellationToken);
         if (downloadUrl.IsNullOrWhiteSpace())
         {
             return null;
@@ -123,10 +124,11 @@ public class MinioBlobProvider : IBlobProvider
         return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
     }
 
-    public async virtual Task<string?> GenerateDownloadUrlAsync(
+    public async virtual Task<string?> GeneratePresignedUrlAsync(
        string containerName,
        string blobName,
        TimeSpan expiration,
+       bool isAttachmentContent = true,
        CancellationToken cancellationToken = default)
     {
         var client = GetMinioClient();
@@ -138,11 +140,21 @@ public class MinioBlobProvider : IBlobProvider
             return null;
         }
 
-        return await client.PresignedGetObjectAsync(
-            new PresignedGetObjectArgs()
+        var presignedGetObjectArgs = new PresignedGetObjectArgs()
                 .WithBucket(bucket)
                 .WithObject(objectName)
-                .WithExpiry(expiration.TotalSeconds.To<int>()));
+                .WithExpiry(expiration.TotalSeconds.To<int>());
+
+        var fileName = Path.GetFileName(blobName);
+        var type = isAttachmentContent ? "attachment" : "inline";
+        var disposition = $"{type}; filename=\"{Uri.EscapeDataString(fileName)}\"; " +
+                             $"filename*=UTF-8''{Uri.EscapeDataString(fileName)}";
+        presignedGetObjectArgs.WithHeaders(new Dictionary<string, string>()
+        {
+            { "response-content-disposition", disposition },
+        });
+
+        return await client.PresignedGetObjectAsync(presignedGetObjectArgs);
     }
 
     public virtual Task CreateFolderAsync(

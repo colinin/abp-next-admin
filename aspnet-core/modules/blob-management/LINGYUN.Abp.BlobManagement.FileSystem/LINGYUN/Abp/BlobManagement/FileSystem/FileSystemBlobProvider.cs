@@ -99,10 +99,11 @@ public class FileSystemBlobProvider : IBlobProvider
         return Task.FromResult<Stream?>(File.OpenRead(fileName));
     }
 
-    public virtual Task<string?> GenerateDownloadUrlAsync(
+    public virtual Task<string?> GeneratePresignedUrlAsync(
         string containerName,
         string blobName,
         TimeSpan expiration,
+        bool isAttachmentContent = true,
         CancellationToken cancellationToken = default)
     {
         // 本地文件系统无需生成下载链接

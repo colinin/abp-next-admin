@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,10 +23,11 @@ public interface IBlobProvider
         string blobName,
         CancellationToken cancellationToken = default);
 
-    Task<string?> GenerateDownloadUrlAsync(
+    Task<string?> GeneratePresignedUrlAsync(
         string containerName,
         string blobName,
         TimeSpan expiration,
+        bool isAttachmentContent = true,
         CancellationToken cancellationToken = default);
 
     Task CreateFolderAsync(

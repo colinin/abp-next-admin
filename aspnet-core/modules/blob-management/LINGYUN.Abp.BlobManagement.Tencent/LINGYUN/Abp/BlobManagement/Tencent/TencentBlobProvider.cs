@@ -6,6 +6,7 @@ using LINGYUN.Abp.BlobStoring.Tencent;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
@@ -103,11 +104,11 @@ public class TencentBlobProvider : IBlobProvider
     {
         var configuration = await GetBlobConfiguration();
 
-        var downloadUrl = await GenerateDownloadUrlAsync(
+        var downloadUrl = await GeneratePresignedUrlAsync(
             containerName, 
             blobName,
             TimeSpan.FromSeconds(configuration.PresignedGetExpirySeconds),
-            cancellationToken);
+            cancellationToken: cancellationToken);
         if (downloadUrl.IsNullOrWhiteSpace())
         {
             return null;
@@ -118,10 +119,11 @@ public class TencentBlobProvider : IBlobProvider
         return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
     }
 
-    public async virtual Task<string?> GenerateDownloadUrlAsync(
+    public async virtual Task<string?> GeneratePresignedUrlAsync(
         string containerName,
         string blobName,
         TimeSpan expiration,
+       bool isAttachmentContent = true,
         CancellationToken cancellationToken = default)
     {
         var client = await CreateClientAsync();
@@ -146,6 +148,14 @@ public class TencentBlobProvider : IBlobProvider
             signDurationSecond = expiration.TotalSeconds.To<long>(), //请求签名时间
             headers = null, //签名中需要校验的 header
             queryParameters = null //签名中需要校验的 URL 中请求参数
+        };
+        var fileName = Path.GetFileName(blobName);
+        var type = isAttachmentContent ? "attachment" : "inline";
+        var disposition = $"{type}; filename=\"{Uri.EscapeDataString(fileName)}\"; " +
+                             $"filename*=UTF-8''{Uri.EscapeDataString(fileName)}";
+        preSignatureStruct.queryParameters = new Dictionary<string, string>
+        {
+            { "response-content-disposition", disposition },
         };
 
         return client.GenerateSignURL(preSignatureStruct);

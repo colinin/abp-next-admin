@@ -50,7 +50,7 @@ public class BlobTempCleanupService : ITransientDependency
 
             try
             {
-                var tempBlobContainer = await BlobContainerRepository.FindByNameAsync("temp");
+                var tempBlobContainer = await BlobManager.FindContainerAsync("temp");
                 if (tempBlobContainer == null)
                 {
                     Logger.LogInformation($"No temp container found.");

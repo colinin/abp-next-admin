@@ -17,13 +17,15 @@ public interface IBlobAppService : IApplicationService
 
     Task DeleteAsync(Guid id);
 
+    Task<string> GeneratePreviewUrlAsync(Guid id);
+
     Task<string> GenerateDownloadUrlAsync(Guid id);
 
-    Task<IRemoteStreamContent> DownloadAsync(BlobDownloadByKeyInput input);
+    Task<IRemoteStreamContent> DownloadAsync(BlobDownloadByIdInput input);
 
-    Task<IRemoteStreamContent> GetContentAsync(Guid id);
+    Task<IRemoteStreamContent> PreviewAsync(BlobDownloadByIdInput input);
 
-    Task<IRemoteStreamContent> GetContentByNameAsync(BlobDownloadByNameInput input);
+    Task<IRemoteStreamContent> DownloadByNameAsync(BlobDownloadByNameInput input);
 
     Task<BlobDto> GetAsync(Guid id);
 

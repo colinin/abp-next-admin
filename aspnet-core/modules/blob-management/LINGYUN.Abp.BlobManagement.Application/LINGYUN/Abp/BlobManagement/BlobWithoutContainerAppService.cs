@@ -42,11 +42,11 @@ public abstract class BlobWithoutContainerAppService : BlobAppServiceBase
         return await base.CreateFolderAsync(blobContainer, input);
     }
 
-    public async virtual Task<IRemoteStreamContent> GetContentByNameAsync(string name)
+    public async virtual Task<IRemoteStreamContent> DownloadByNameAsync(string name)
     {
-        var blobContainer = await BlobContainerRepository.GetByNameAsync(ContainerName);
+        var blobContainer = await BlobContainerRepository.GetByNameAsync(BlobManager.GetBlobProvider(), ContainerName);
 
-        return await base.GetContentByNameAsync(blobContainer, name);
+        return await base.DownloadByNameAsync(blobContainer, name);
     }
 
     public async virtual Task<PagedResultDto<BlobDto>> GetListAsync(BlobGetPagedListWithoutContainerInput input)
@@ -67,7 +67,7 @@ public abstract class BlobWithoutContainerAppService : BlobAppServiceBase
 
     protected async virtual Task<BlobContainer> GetOrCreateContainer()
     {
-        var blobContainer = await BlobContainerRepository.FindByNameAsync(ContainerName)
+        var blobContainer = await BlobManager.FindContainerAsync(ContainerName)
             ?? await BlobManager.CreateContainerAsync(ContainerName);
 
         return blobContainer;

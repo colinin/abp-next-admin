@@ -62,11 +62,16 @@ public class BlobManager : DomainService
         _settingProvider = settingProvider;
     }
 
-    public async virtual Task<BlobContainer> CreateContainerAsync(string name)
+    public async virtual Task<BlobContainer?> FindContainerAsync(string name)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
 
-        if (await _blobContainerRepository.FindByNameAsync(name) != null)
+        return await _blobContainerRepository.FindByNameAsync(GetBlobProvider(), name);
+    }
+
+    public async virtual Task<BlobContainer> CreateContainerAsync(string name)
+    {
+        if (await FindContainerAsync(name) != null)
         {
             throw new BusinessException(
                 BlobManagementErrorCodes.Container.NameAlreadyExists,
@@ -81,7 +86,7 @@ public class BlobManager : DomainService
 
         await _blobProvider.CreateContainerAsync(blobContainer.Name, GetCancellationToken());
 
-        blobContainer.SetProvider(_blobProvider.Name);
+        blobContainer.SetProvider(GetBlobProvider());
 
         await _blobContainerRepository.InsertAsync(blobContainer);
 
@@ -153,7 +158,7 @@ public class BlobManager : DomainService
         {
             await _blobProvider.CreateFolderAsync(blobContainer.Name, blob.FullName, GetCancellationToken());
 
-            blob.SetProvider(_blobProvider.Name);
+            blob.SetProvider(GetBlobProvider());
         }
 
         await _blobRepository.InsertAsync(blob);
@@ -227,7 +232,7 @@ public class BlobManager : DomainService
             contentType,
             GetCancellationToken());
 
-        blob.SetProvider(_blobProvider.Name);
+        blob.SetProvider(GetBlobProvider());
         blob.SetFileInfo(contentType, stream.Length);
 
         return blob;
@@ -292,7 +297,7 @@ public class BlobManager : DomainService
                     }
                     else
                     {
-                        blobContainer = await _blobContainerRepository.GetByNameAsync(containerIdOrName);
+                        blobContainer = await _blobContainerRepository.GetByNameAsync(GetBlobProvider(), containerIdOrName);
                     }
                     if (parentId.HasValue)
                     {
@@ -338,9 +343,10 @@ public class BlobManager : DomainService
     public async virtual Task<string> GenerateDownloadUrlAsync(
         BlobContainer blobContainer, 
         Blob blob,
-        string fallbackUrlPrefix)
+        string fallbackDownloadUrl,
+        bool isAttachmentContent = true)
     {
-        var cacheKey = BlobDownloadKeyCacheItem.CalculateCacheKey(blob.Id, blob.FullName);
+        var cacheKey = $"{fallbackDownloadUrl.ToMd5()}";
         var cacheItem = await _blobDownloadKeyCache.GetAsync(cacheKey);
         if (cacheItem == null)
         {
@@ -348,16 +354,17 @@ public class BlobManager : DomainService
             BlobManagementSettingNames.GenerateDownloadUrlExpirySeconds,
             BlobManagementSettingNames.DefaultGenerateDownloadUrlExpirySeconds);
 
-            var downloadUrl = await _blobProvider.GenerateDownloadUrlAsync(
+            var downloadUrl = await _blobProvider.GeneratePresignedUrlAsync(
                 blobContainer.Name,
                 blob.FullName,
                 TimeSpan.FromSeconds(downloadUrlExpirySeconds),
+                isAttachmentContent,
                 GetCancellationToken());
 
             if (downloadUrl.IsNullOrWhiteSpace())
             {
-                // 特殊对象存储提供者（FileSystem）无法生成下载链接, 回退指定的请求Url前缀
-                downloadUrl = fallbackUrlPrefix.EnsureEndsWith('/') + cacheKey;
+                // 特殊对象存储提供者（FileSystem）无法生成下载链接, 回退指定的请求Url
+                downloadUrl = fallbackDownloadUrl;
             }
 
             cacheItem = new BlobDownloadKeyCacheItem(
@@ -403,7 +410,7 @@ public class BlobManager : DomainService
             downloadCacheItem.DownloadCount += 1;
             await _blobDownloadCache.SetAsync(downloadCacheKey, downloadCacheItem);
 
-            await _distributedEventBus.PublishAsync(new BlobDownloadEto(containerName, blobName, CurrentTenant.Id));
+            await _distributedEventBus.PublishAsync(new BlobDownloadEto(GetBlobProvider(), containerName, blobName, CurrentTenant.Id));
         }
 
         return blobStream;

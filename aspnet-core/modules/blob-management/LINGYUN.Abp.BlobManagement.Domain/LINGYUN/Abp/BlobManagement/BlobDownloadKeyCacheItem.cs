@@ -16,9 +16,4 @@ public class BlobDownloadKeyCacheItem
         BlobId = blobId;
         Url = url;
     }
-
-    public static string CalculateCacheKey(Guid blobId, string blobName)
-    {
-        return $"{blobId:N}{blobName.RemovePreFix("/")}";
-    }
 }

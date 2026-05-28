@@ -48,43 +48,15 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
 
     public async virtual Task<string> GenerateDownloadUrlAsync(Guid id)
     {
-        var blob = await BlobRepository.GetAsync(id);
-        var blobContainer = await BlobContainerRepository.GetAsync(blob.ContainerId);
-
-        await CheckGetPolicyAsync(blob);
-
-        var fallbackUrlPrefix = blob.TenantId.HasValue
-            ? $"/api/{BlobManagementRemoteServiceConsts.ModuleName}/blobs/download/t/{blob.TenantId:N}"
-            : $"/api/{BlobManagementRemoteServiceConsts.ModuleName}/blobs/download";
-
-        var downloadUrl = await BlobManager.GenerateDownloadUrlAsync(
-            blobContainer, 
-            blob,
-            fallbackUrlPrefix);
-
-        return downloadUrl;
+        return await GenerateDownloadUrlAsync(id, "download");
     }
 
-    public async virtual Task<IRemoteStreamContent> DownloadAsync(BlobDownloadByKeyInput input)
+    public async virtual Task<string> GeneratePreviewUrlAsync(Guid id)
     {
-        using (CurrentTenant.Change(input.TenantId))
-        {
-            var blob = await BlobManager.FindBlobByDownloadKeyAsync(input.Key);
-            if (blob == null)
-            {
-                return new RemoteStreamContent(Stream.Null, input.Key);
-            }
-
-            // 临时下载链接一般用于临时预览与下载, 过期时间短, 不校验权限
-            // await CheckGetPolicyAsync(blob);
-
-            var stream = await BlobManager.DownloadBlobsync(blob);
-
-            return new RemoteStreamContent(stream ?? Stream.Null, blob.Name, blob.ContentType, stream?.Length);
-        }
+        return await GenerateDownloadUrlAsync(id, "preview", isAttachmentContent: false);
     }
 
-    public async virtual Task<IRemoteStreamContent> GetContentAsync(Guid id)
+    public async virtual Task<IRemoteStreamContent> DownloadAsync(Guid id)
     {
         var blob = await BlobRepository.GetAsync(id);
 
@@ -185,7 +157,7 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
         return ObjectMapper.Map<Blob, BlobDto>(blob);
     }
 
-    protected async virtual Task<IRemoteStreamContent> GetContentByNameAsync(BlobContainer blobContainer, string name)
+    protected async virtual Task<IRemoteStreamContent> DownloadByNameAsync(BlobContainer blobContainer, string name)
     {
         var blob = await FindBlobByNameAsync(blobContainer, name)
             ?? throw new BusinessException(
@@ -198,6 +170,26 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
         var stream = await BlobManager.DownloadBlobsync(blob);
 
         return new RemoteStreamContent(stream ?? Stream.Null, blob.Name, blob.ContentType, stream?.Length);
+    }
+
+    protected async virtual Task<string> GenerateDownloadUrlAsync(Guid id, string method, bool isAttachmentContent = true)
+    {
+        var blob = await BlobRepository.GetAsync(id);
+        var blobContainer = await BlobContainerRepository.GetAsync(blob.ContainerId);
+
+        await CheckGetPolicyAsync(blob);
+
+        var fallbackDownloadUrl = blob.TenantId.HasValue
+            ? $"/api/{BlobManagementRemoteServiceConsts.ModuleName}/blobs/{method}/t/{blob.TenantId:N}/{blob.Id:N}"
+            : $"/api/{BlobManagementRemoteServiceConsts.ModuleName}/blobs/{method}/{blob.Id:N}";
+
+        var downloadUrl = await BlobManager.GenerateDownloadUrlAsync(
+            blobContainer,
+            blob,
+            fallbackDownloadUrl,
+            isAttachmentContent);
+
+        return downloadUrl;
     }
 
     protected async virtual Task<Blob?> FindBlobByNameAsync(BlobContainer blobContainer, string name)
