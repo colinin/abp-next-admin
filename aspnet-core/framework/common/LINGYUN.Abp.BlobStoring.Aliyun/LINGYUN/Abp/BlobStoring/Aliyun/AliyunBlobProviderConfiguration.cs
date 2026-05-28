@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AlibabaCloud.OSS.V2.Models;
+using System.Collections.Generic;
 using Volo.Abp.BlobStoring;
 
 namespace LINGYUN.Abp.BlobStoring.Aliyun;
@@ -14,6 +15,13 @@ public class AliyunBlobProviderConfiguration
         set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.BucketName, value);
     }
     /// <summary>
+    /// 跳过服务器证书验证
+    /// </summary>
+    public bool InsecureSkipVerify {
+        get => _containerConfiguration.GetConfigurationOrDefault(AliyunBlobProviderConfigurationNames.InsecureSkipVerify, false);
+        set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.InsecureSkipVerify, value);
+    }
+    /// <summary>
     /// 命名空间不存在是否创建
     /// </summary>
     public bool CreateBucketIfNotExists
@@ -22,11 +30,18 @@ public class AliyunBlobProviderConfiguration
         set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.CreateBucketIfNotExists, value);
     }
     /// <summary>
+    /// 创建命名空间时的Acl
+    /// </summary>
+    public BucketAclType? CreateBucketAcl {
+        get => _containerConfiguration.GetConfigurationOrDefault<BucketAclType?>(AliyunBlobProviderConfigurationNames.CreateBucketAcl);
+        set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.CreateBucketAcl, value);
+    }
+    /// <summary>
     /// 创建命名空间时防盗链列表
     /// </summary>
     public List<string> CreateBucketReferer
     {
-        get => _containerConfiguration.GetConfiguration<List<string>>(AliyunBlobProviderConfigurationNames.CreateBucketReferer);
+        get => _containerConfiguration.GetConfigurationOrDefault(AliyunBlobProviderConfigurationNames.CreateBucketReferer, new List<string>());
         set
         {
             if (value == null)

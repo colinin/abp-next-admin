@@ -15,7 +15,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aliyun.OSS.SDK.NetCore" />
+		<PackageReference Include="AlibabaCloud.OSS.V2" />
 		<PackageReference Include="Microsoft.Extensions.Http" />
 		<PackageReference Include="Volo.Abp.BlobStoring" />
 	</ItemGroup>
