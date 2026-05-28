@@ -140,7 +140,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         var interval = await SettingProvider.GetAsync(Identity.Settings.IdentitySettingNames.User.SmsRepetInterval, 1);
         if (securityTokenCacheItem != null)
         {
-            throw new UserFriendlyException(L["SendRepeatPhoneVerifyCode", interval]);
+            throw new UserFriendlyException(L["SendRepeatSmsVerifyCode", interval]);
         }
 
         // 是否已有用户使用手机号绑定
