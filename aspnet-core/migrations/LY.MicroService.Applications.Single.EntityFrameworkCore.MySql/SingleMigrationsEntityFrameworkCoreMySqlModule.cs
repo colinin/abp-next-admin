@@ -8,6 +8,8 @@ using System;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.Tokens;
 
 namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql;
 
@@ -63,6 +65,11 @@ public class SingleMigrationsEntityFrameworkCoreMySqlModule : AbpModule
                 {
                     options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsString;
                 }
+            });
+
+            context.Services.AddAbpDbContext<OpenIddictDbContext>(options =>
+            {
+                options.AddRepository<OpenIddictToken, EfCoreMySqlOpenIddictTokenRepository>();
             });
         }
     }
