@@ -32,7 +32,12 @@ public class BlobManagementFeatureDefinitionProvider : FeatureDefinitionProvider
             displayName: L("Features:DisplayName:EnableBlob"),
             description: L("Features:Description:EnableBlob"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
-
+        blobDefaultFeature.CreateChild(
+            name: BlobManagementFeatureNames.Blob.GenerateDownloadUrl,
+            defaultValue: true.ToString(),
+            displayName: L("Features:DisplayName:GenerateDownloadUrl"),
+            description: L("Features:Description:GenerateDownloadUrl"),
+            valueType: new ToggleStringValueType(new BooleanValueValidator()));
         blobDefaultFeature.CreateChild(
             name: BlobManagementFeatureNames.Blob.DownloadFile,
             defaultValue: true.ToString(),

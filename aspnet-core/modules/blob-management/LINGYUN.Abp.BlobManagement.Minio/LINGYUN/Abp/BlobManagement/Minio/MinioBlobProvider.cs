@@ -4,6 +4,7 @@ using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BlobManagement.Minio;
 
@@ -19,17 +21,20 @@ public class MinioBlobProvider : IBlobProvider
     public const string ProviderName = "Minio";
     public string Name => ProviderName;
 
+    protected IClock Clock { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IHttpClientFactory HttpClientFactory { get; }
     protected MinioBlobNamingNormalizer BlobNamingNormalizer { get; }
     protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
 
     public MinioBlobProvider(
+        IClock clock,
         ICurrentTenant currentTenant,
         IHttpClientFactory httpClientFactory,
         MinioBlobNamingNormalizer blobNamingNormalizer,
         IBlobContainerConfigurationProvider configurationProvider)
     {
+        Clock = clock;
         CurrentTenant = currentTenant;
         HttpClientFactory = httpClientFactory;
         BlobNamingNormalizer = blobNamingNormalizer;
@@ -102,6 +107,30 @@ public class MinioBlobProvider : IBlobProvider
         string blobName,
         CancellationToken cancellationToken = default)
     {
+        var configuration = GetBlobConfiguration();
+
+        var downloadUrl = await GeneratePresignedUrlAsync(
+            containerName,
+            blobName,
+            TimeSpan.FromSeconds(configuration.PresignedGetExpirySeconds),
+            cancellationToken: cancellationToken);
+        if (downloadUrl.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        var httpClient = HttpClientFactory.CreateMinioHttpClient();
+
+        return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
+    }
+
+    public async virtual Task<string?> GeneratePresignedUrlAsync(
+       string containerName,
+       string blobName,
+       TimeSpan expiration,
+       bool isAttachmentContent = true,
+       CancellationToken cancellationToken = default)
+    {
         var client = GetMinioClient();
         var bucket = NormalizeContainerName(containerName);
         var objectName = CalculateBlobName(blobName);
@@ -111,17 +140,21 @@ public class MinioBlobProvider : IBlobProvider
             return null;
         }
 
-        var configuration = GetBlobConfiguration();
+        var presignedGetObjectArgs = new PresignedGetObjectArgs()
+                .WithBucket(bucket)
+                .WithObject(objectName)
+                .WithExpiry(expiration.TotalSeconds.To<int>());
 
-        var downloadUrl = await client.PresignedGetObjectAsync(
-                new PresignedGetObjectArgs()
-                    .WithBucket(bucket)
-                    .WithObject(objectName)
-                    .WithExpiry(configuration.PresignedGetExpirySeconds));
+        var fileName = Path.GetFileName(blobName);
+        var type = isAttachmentContent ? "attachment" : "inline";
+        var disposition = $"{type}; filename=\"{Uri.EscapeDataString(fileName)}\"; " +
+                             $"filename*=UTF-8''{Uri.EscapeDataString(fileName)}";
+        presignedGetObjectArgs.WithHeaders(new Dictionary<string, string>()
+        {
+            { "response-content-disposition", disposition },
+        });
 
-        var httpClient = HttpClientFactory.CreateMinioHttpClient();
-
-        return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
+        return await client.PresignedGetObjectAsync(presignedGetObjectArgs);
     }
 
     public virtual Task CreateFolderAsync(
@@ -136,7 +169,8 @@ public class MinioBlobProvider : IBlobProvider
     public async virtual Task UploadBlobAsync(
         string containerName, 
         string blobName, 
-        Stream content, 
+        Stream content,
+        string? contentType = null,
         CancellationToken cancellationToken = default)
     {
         var client = GetMinioClient();
@@ -145,12 +179,17 @@ public class MinioBlobProvider : IBlobProvider
 
         await CreateBucketIfNotExists(client, bucket);
 
-        await client.PutObjectAsync(new PutObjectArgs()
+        var putObjectArgs = new PutObjectArgs()
            .WithBucket(bucket)
            .WithObject(objectName)
            .WithStreamData(content)
-           .WithObjectSize(content.Length),
-           cancellationToken);
+           .WithObjectSize(content.Length);
+        if (!contentType.IsNullOrWhiteSpace())
+        {
+            putObjectArgs.WithContentType(contentType);
+        }
+
+        await client.PutObjectAsync(putObjectArgs, cancellationToken);
     }
 
     protected virtual IMinioClient GetMinioClient()

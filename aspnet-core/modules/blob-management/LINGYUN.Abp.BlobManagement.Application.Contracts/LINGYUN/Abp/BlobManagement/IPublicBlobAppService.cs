@@ -9,9 +9,9 @@ namespace LINGYUN.Abp.BlobManagement;
 
 public interface IPublicBlobAppService : IApplicationService
 {
-    Task<IRemoteStreamContent> GetContentAsync(Guid id);
+    Task<IRemoteStreamContent> DownloadAsync(Guid id);
 
-    Task<IRemoteStreamContent> GetContentByNameAsync(string name);
+    Task<IRemoteStreamContent> DownloadByNameAsync(string name);
 
     Task<BlobDto> GetAsync(Guid id);
 

@@ -1,3 +1,4 @@
+using LINGYUN.Abp.BlobManagement.MimeCheck;
 using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Notifications.Calendar;
 
@@ -130,6 +131,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpBlobManagementMinioModule),
     // 对象存储模块 腾讯云
     typeof(AbpBlobManagementTencentModule),
+    // 对象存储模块 MimeCheck扩展
+    typeof(AbpBlobManagementMimeCheckModule),
     // 对象存储模块 应用服务
     typeof(AbpBlobManagementDomainModule),
     // 对象存储模块 控制器

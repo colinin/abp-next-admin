@@ -21,6 +21,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Sms" />
+		<PackageReference Include="AlibabaCloud.SDK.Dypnsapi20170525" />
+		<PackageReference Include="AlibabaCloud.SDK.Dysmsapi20170525" />
 	</ItemGroup>
 
 	<ItemGroup>

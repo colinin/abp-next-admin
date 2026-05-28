@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="aliyun-net-sdk-core" />
+		<PackageReference Include="AlibabaCloud.SDK.Sts20150401" />
 		<PackageReference Include="Volo.Abp.Caching" />
 		<PackageReference Include="Volo.Abp.Features" />
 		<PackageReference Include="Volo.Abp.Localization" />

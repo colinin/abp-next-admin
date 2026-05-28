@@ -32,8 +32,26 @@ export function useBlobsApi() {
     });
   }
 
-  function getContentApi(id: string): Promise<Blob> {
-    return request<Blob>(`/api/blob-management/blobs/uid/${id}/content`, {
+  function generateDownloadUrlApi(id: string): Promise<string> {
+    return request<string>(
+      `/api/blob-management/blobs/generate/download-url/${id}`,
+      {
+        method: 'GET',
+      },
+    );
+  }
+
+  function generatePreviewUrlApi(id: string): Promise<string> {
+    return request<string>(
+      `/api/blob-management/blobs/generate/preview-url/${id}`,
+      {
+        method: 'GET',
+      },
+    );
+  }
+
+  function downloadApi(id: string): Promise<Blob> {
+    return request<Blob>(`/api/blob-management/blobs/download/${id}`, {
       method: 'GET',
       responseType: 'blob',
     });
@@ -70,8 +88,10 @@ export function useBlobsApi() {
     cancel,
     createFolderApi,
     deleteApi,
+    downloadApi,
     getApi,
-    getContentApi,
+    generateDownloadUrlApi,
+    generatePreviewUrlApi,
     getFolderPagedListApi,
     getFilePagedListApi,
     getPagedListApi,

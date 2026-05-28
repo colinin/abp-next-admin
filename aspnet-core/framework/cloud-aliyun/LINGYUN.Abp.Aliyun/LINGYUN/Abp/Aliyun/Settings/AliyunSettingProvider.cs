@@ -79,7 +79,7 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 TenantSettingValueProvider.ProviderName),
             new SettingDefinition(
                 AliyunSettingNames.Authorization.RegionId,
-                defaultValue: "oss-cn-hangzhou",
+                defaultValue: "cn-hangzhou",
                 displayName: L("DisplayName:RegionId"),
                 description: L("Description:RegionId"),
                 isVisibleToClients: false

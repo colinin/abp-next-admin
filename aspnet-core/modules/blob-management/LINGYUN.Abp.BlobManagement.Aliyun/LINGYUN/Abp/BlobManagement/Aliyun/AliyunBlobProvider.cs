@@ -1,4 +1,5 @@
-﻿using Aliyun.OSS;
+﻿using AlibabaCloud.OSS.V2;
+using AlibabaCloud.OSS.V2.Models;
 using LINGYUN.Abp.BlobStoring.Aliyun;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,8 +8,9 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BlobManagement.Aliyun;
 
@@ -17,24 +19,30 @@ public class AliyunBlobProvider : IBlobProvider
     public const string ProviderName = "Aliyun";
     public string Name => ProviderName;
 
+    protected IClock Clock { get; }
     protected IConfiguration Configuration { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IOssClientFactory OssClientFactory { get; }
     protected IHttpClientFactory HttpClientFactory { get; }
     protected AliyunBlobNamingNormalizer BlobNamingNormalizer { get; }
+    protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
 
     public AliyunBlobProvider(
+        IClock clock,
         IConfiguration configuration,
         ICurrentTenant currentTenant,
         IOssClientFactory ossClientFactory,
         IHttpClientFactory httpClientFactory,
-        AliyunBlobNamingNormalizer blobNamingNormalizer)
+        AliyunBlobNamingNormalizer blobNamingNormalizer,
+        IBlobContainerConfigurationProvider configurationProvider)
     {
+        Clock = clock;
         Configuration = configuration;
         CurrentTenant = currentTenant;
         OssClientFactory = ossClientFactory;
         HttpClientFactory = httpClientFactory;
         BlobNamingNormalizer = blobNamingNormalizer;
+        ConfigurationProvider = configurationProvider;
     }
 
     public async virtual Task CreateContainerAsync(
@@ -43,23 +51,29 @@ public class AliyunBlobProvider : IBlobProvider
     {
         var client = await CreateClientAsync();
         var bucket = NormalizeContainerName(name);
+        var configuration = GetBlobConfiguration();
 
-        CreateBucketIfNotExists(client, bucket);
+        await CreateBucketIfNotExists(client, bucket, configuration.CreateBucketAcl, cancellationToken);
     }
 
     public async virtual Task DeleteContainerAsync(
         string name,
         CancellationToken cancellationToken = default)
     {
-        var client = await CreateClientAsync();
+        var ossClient = await CreateClientAsync();
         var bucket = NormalizeContainerName(name);
 
-        if (!BucketExists(client, bucket))
+        if (!await BucketExists(ossClient, bucket, cancellationToken))
         {
             return;
         }
 
-        client.DeleteBucket(bucket);
+        await ossClient.DeleteBucketAsync(
+            new DeleteBucketRequest
+            {
+                Bucket = bucket,
+            },
+            cancellationToken: cancellationToken);
     }
 
     public async virtual Task DeleteBlobAsync(
@@ -67,13 +81,19 @@ public class AliyunBlobProvider : IBlobProvider
         string blobName,
         CancellationToken cancellationToken = default)
     {
-        var client = await CreateClientAsync();
+        var ossClient = await CreateClientAsync();
         var bucket = NormalizeContainerName(containerName);
         var objectName = CalculateBlobName(blobName);
 
-        if (ObjectExists(client, bucket, objectName))
+        if (await ObjectExists(ossClient, bucket, objectName, cancellationToken))
         {
-            client.DeleteObject(bucket, objectName);
+            await ossClient.DeleteObjectAsync(
+                new DeleteObjectRequest
+                {
+                    Bucket = bucket,
+                    Key = objectName,
+                },
+                cancellationToken: cancellationToken);
         }
     }
 
@@ -91,20 +111,75 @@ public class AliyunBlobProvider : IBlobProvider
         string blobName,
         CancellationToken cancellationToken = default)
     {
-        var client = await CreateClientAsync();
+        var ossClient = await CreateClientAsync();
         var bucket = NormalizeContainerName(containerName);
         var objectName = CalculateBlobName(blobName);
 
-        if (!ObjectExists(client, bucket, objectName))
+        if (!await ObjectExists(ossClient, bucket, objectName, cancellationToken))
         {
             return null;
         }
 
-        var downloadUrl = client.GeneratePresignedUri(bucket, objectName);
+        var result = await ossClient.GetObjectAsync(
+            new GetObjectRequest
+            {
+                Bucket = bucket,
+                Key = blobName,
+            });
 
-        var httpClient = HttpClientFactory.CreateAliyunHttpClient();
+        return result.Body;
 
-        return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
+        // TODO: 阿里云sdk预签名不可用[2026/05/23]
+        //var configuration = GetBlobConfiguration();
+
+        //var downloadUrl = await GeneratePresignedUrlAsync(
+        //    containerName,
+        //    blobName,
+        //    TimeSpan.FromSeconds(configuration.PresignedGetExpirySeconds),
+        //    cancellationToken: cancellationToken);
+        //if (downloadUrl.IsNullOrWhiteSpace())
+        //{
+        //    return null;
+        //}
+
+        //var httpClient = HttpClientFactory.CreateAliyunHttpClient();
+
+        //return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
+    }
+
+    public virtual Task<string?> GeneratePresignedUrlAsync(
+        string containerName,
+        string blobName,
+        TimeSpan expiration,
+        bool isAttachmentContent = true,
+        CancellationToken cancellationToken = default)
+    {
+        // TODO: 阿里云sdk预签名不可用[2026/05/23]
+        return Task.FromResult<string?>(null);
+        //var ossClient = await CreateClientAsync();
+        //var bucket = NormalizeContainerName(containerName);
+        //var objectName = CalculateBlobName(blobName);
+
+        //if (!await ObjectExists(ossClient, bucket, objectName, cancellationToken))
+        //{
+        //    return null;
+        //}
+
+        //var fileName = Path.GetFileName(blobName);
+        //var type = isAttachmentContent ? "attachment" : "inline";
+        //var disposition = $"{type}; filename=\"{Uri.EscapeDataString(fileName)}\"; " +
+        //                     $"filename*=UTF-8''{Uri.EscapeDataString(fileName)}";
+
+        //var presignResult = ossClient.Presign(
+        //    new GetObjectRequest
+        //    {
+        //        Bucket = bucket,
+        //        Key = blobName,
+        //        ResponseContentDisposition = disposition,
+        //    },
+        //    Clock.Now.Add(expiration));
+
+        //return presignResult.Url;
     }
 
     public virtual Task CreateFolderAsync(
@@ -120,39 +195,83 @@ public class AliyunBlobProvider : IBlobProvider
     public async virtual Task UploadBlobAsync(
         string containerName, 
         string blobName, 
-        Stream content, 
+        Stream content,
+        string? contentType = null,
         CancellationToken cancellationToken = default)
     {
-        var client = await CreateClientAsync();
+        var ossClient = await CreateClientAsync();
         var bucket = NormalizeContainerName(containerName);
         var objectName = CalculateBlobName(blobName);
+        var configuration = GetBlobConfiguration();
 
-        CreateBucketIfNotExists(client, bucket);
+        await CreateBucketIfNotExists(ossClient, bucket, configuration.CreateBucketAcl, cancellationToken);
 
-        client.PutObject(bucket, objectName, content);
+        await ossClient.PutObjectAsync(
+            new PutObjectRequest
+            {
+                Bucket = bucket,
+                Key = objectName,
+                Body = content,
+                ContentType = contentType,
+            },
+            cancellationToken: cancellationToken);
     }
 
-    protected async virtual Task<IOss> CreateClientAsync()
+    protected virtual AliyunBlobProviderConfiguration GetBlobConfiguration()
     {
-        return await OssClientFactory.CreateAsync();
+        var configuration = ConfigurationProvider.Get<BlobManagementContainer>();
+        return configuration.GetAliyunConfiguration();
     }
 
-    protected virtual void CreateBucketIfNotExists(IOss oss, string bucket)
+    protected async virtual Task<Client> CreateClientAsync()
     {
-        if (!BucketExists(oss, bucket))
+        var configuration = GetBlobConfiguration();
+        return await OssClientFactory.CreateAsync(configuration);
+    }
+
+    protected async virtual Task CreateBucketIfNotExists(
+        Client ossClient, 
+        string bucket, 
+        BucketAclType? bucketAcl = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (!await BucketExists(ossClient, bucket, cancellationToken))
         {
-            oss.CreateBucket(bucket);
+            await ossClient.PutBucketAsync(
+                new PutBucketRequest
+                {
+                    Bucket = bucket,
+                },
+                cancellationToken: cancellationToken);
+
+            if (bucketAcl.HasValue)
+            {
+                await ossClient.PutBucketAclAsync(
+                    new PutBucketAclRequest
+                    {
+                        Bucket = bucket,
+                        Acl = bucketAcl.Value.GetString(),
+                    },
+                    cancellationToken: cancellationToken);
+            }
         }
     }
 
-    protected virtual bool BucketExists(IOss oss, string bucket)
+    protected async virtual Task<bool> BucketExists(
+        Client ossClient, 
+        string bucket,
+        CancellationToken cancellationToken = default)
     {
-        return oss.DoesBucketExist(bucket);
+        return await ossClient.IsBucketExistAsync(bucket, cancellationToken);
     }
 
-    protected virtual bool ObjectExists(IOss oss, string bucket, string objectName)
+    protected async virtual Task<bool> ObjectExists(
+        Client ossClient, 
+        string bucket, 
+        string objectName,
+        CancellationToken cancellationToken = default)
     {
-        return oss.DoesObjectExist(bucket, objectName);
+        return await ossClient.IsObjectExistAsync(bucket, objectName, cancellationToken: cancellationToken);
     }
 
     protected virtual string GetPrefixPath()

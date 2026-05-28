@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Xml.Linq;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -67,6 +68,14 @@ public class Blob : AuditedAggregateRoot<Guid>, IMultiTenant
         this.SetDefaultsForExtraProperties();
     }
 
+    public void MoveTo(Blob parentBlob)
+    {
+        ValidateSubBlob(parentBlob, Name);
+        ParentId = parentBlob.Id;
+        parentBlob.Blobs.Add(this);
+        parentBlob.CalculateSize();
+    }
+
     public void SetFullName(string fullName)
     {
         FullName = Check.NotNullOrWhiteSpace(fullName, nameof(fullName), BlobConsts.MaxFullNameLength);
@@ -99,20 +108,7 @@ public class Blob : AuditedAggregateRoot<Guid>, IMultiTenant
         BlobType type,
         long? size = null)
     {
-        if (Type != BlobType.Folder)
-        {
-            throw new BusinessException(
-                BlobManagementErrorCodes.Blob.NonFolderChildBlob,
-                "Sub-files/directories cannot be added to non-directory types!");
-        }
-
-        if (HasBlob(name))
-        {
-            throw new BusinessException(
-                BlobManagementErrorCodes.Blob.NameAlreadyExists,
-                $"There is already a file/directory named {name} in the current directory!")
-                .WithData("Name", name);
-        }
+        ValidateSubBlob(this, name);
 
         var blob = new Blob(
             id,
@@ -182,5 +178,23 @@ public class Blob : AuditedAggregateRoot<Guid>, IMultiTenant
         }
 
         return blobPath.EnsureEndsWith('/') + blobName.RemovePreFix("/");
+    }
+
+    public static void ValidateSubBlob(Blob parentBlob, string subBlobName)
+    {
+        if (parentBlob.Type != BlobType.Folder)
+        {
+            throw new BusinessException(
+                BlobManagementErrorCodes.Blob.NonFolderChildBlob,
+                "Sub-files/directories cannot be added to non-directory types!");
+        }
+
+        if (parentBlob.HasBlob(subBlobName))
+        {
+            throw new BusinessException(
+                BlobManagementErrorCodes.Blob.NameAlreadyExists,
+                $"There is already a file/directory named {subBlobName} in the current directory!")
+                .WithData("Name", subBlobName);
+        }
     }
 }

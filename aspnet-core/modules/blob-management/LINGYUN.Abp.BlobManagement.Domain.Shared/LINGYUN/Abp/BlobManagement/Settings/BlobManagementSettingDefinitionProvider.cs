@@ -37,6 +37,17 @@ public class BlobManagementSettingDefinitionProvider : SettingDefinitionProvider
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName),
+            new SettingDefinition(
+                name: BlobManagementSettingNames.GenerateDownloadUrlExpirySeconds,
+                defaultValue: BlobManagementSettingNames.DefaultGenerateDownloadUrlExpirySeconds.ToString(),
+                displayName: L("DisplayName:GenerateDownloadUrlExpirySeconds"),
+                description: L("Description:GenerateDownloadUrlExpirySeconds"),
+                isVisibleToClients: true)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName),
         };
     }
 

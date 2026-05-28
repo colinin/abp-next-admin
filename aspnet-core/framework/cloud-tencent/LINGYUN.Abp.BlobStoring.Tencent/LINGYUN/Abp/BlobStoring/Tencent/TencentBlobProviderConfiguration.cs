@@ -53,6 +53,16 @@ public class TencentBlobProviderConfiguration
         }
     }
 
+    /// <summary>
+    /// Default value: 600.
+    /// </summary>
+    public int PresignedGetExpirySeconds {
+        get => _containerConfiguration.GetConfigurationOrDefault(TencentBlobProviderConfigurationNames.PresignedGetExpirySeconds, _defaultExpirySeconds);
+        set => _containerConfiguration.SetConfiguration(TencentBlobProviderConfigurationNames.PresignedGetExpirySeconds, value);
+    }
+
+    private int _defaultExpirySeconds = 600;
+
     private readonly BlobContainerConfiguration _containerConfiguration;
 
     public TencentBlobProviderConfiguration(BlobContainerConfiguration containerConfiguration)

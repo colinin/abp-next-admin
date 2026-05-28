@@ -180,6 +180,7 @@ export const useAuthStore = defineStore('auth', () => {
       userId: userInfoRes.sub ?? abpConfig.currentUser.id,
       username: userInfoRes.uniqueName ?? abpConfig.currentUser.userName,
       realName:
+        userInfoRes.given_name ??
         userInfoRes.name ??
         abpConfig.currentUser.name ??
         abpConfig.currentUser.userName,

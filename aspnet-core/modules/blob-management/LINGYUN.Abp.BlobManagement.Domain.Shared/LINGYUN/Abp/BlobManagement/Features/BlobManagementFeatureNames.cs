@@ -20,6 +20,10 @@ public static class BlobManagementFeatureNames
         /// </summary>
         public const string Enable = Default + ".Enable";
         /// <summary>
+        /// 生成临时文件下载链接
+        /// </summary>
+        public const string GenerateDownloadUrl = Default + ".GenerateDownloadUrl";
+        /// <summary>
         /// 下载文件功能
         /// </summary>
         public const string DownloadFile = Default + ".DownloadFile";

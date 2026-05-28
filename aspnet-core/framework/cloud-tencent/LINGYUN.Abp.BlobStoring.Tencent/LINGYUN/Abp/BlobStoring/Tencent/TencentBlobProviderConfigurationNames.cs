@@ -22,4 +22,8 @@ public static class TencentBlobProviderConfigurationNames
     /// 创建命名空间时防盗链列表
     /// </summary>
     public const string CreateBucketReferer = "Tencent:OSS:CreateBucketReferer";
+    /// <summary>
+    /// 生成预签名Uri的过期时间(s)
+    /// </summary>
+    public const string PresignedGetExpirySeconds = "Tencent:OSS:PresignedGetExpirySeconds";
 }
