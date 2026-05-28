@@ -49,7 +49,7 @@ public class AliyunBlobProvider : IBlobProvider
         string name,
         CancellationToken cancellationToken = default)
     {
-        var client = await CreateClientAsync();
+        using var client = await CreateClientAsync();
         var bucket = NormalizeContainerName(name);
         var configuration = GetBlobConfiguration();
 
@@ -60,7 +60,7 @@ public class AliyunBlobProvider : IBlobProvider
         string name,
         CancellationToken cancellationToken = default)
     {
-        var ossClient = await CreateClientAsync();
+        using var ossClient = await CreateClientAsync();
         var bucket = NormalizeContainerName(name);
 
         if (!await BucketExists(ossClient, bucket, cancellationToken))
@@ -81,7 +81,7 @@ public class AliyunBlobProvider : IBlobProvider
         string blobName,
         CancellationToken cancellationToken = default)
     {
-        var ossClient = await CreateClientAsync();
+        using var ossClient = await CreateClientAsync();
         var bucket = NormalizeContainerName(containerName);
         var objectName = CalculateBlobName(blobName);
 
@@ -111,40 +111,39 @@ public class AliyunBlobProvider : IBlobProvider
         string blobName,
         CancellationToken cancellationToken = default)
     {
-        var ossClient = await CreateClientAsync();
-        var bucket = NormalizeContainerName(containerName);
-        var objectName = CalculateBlobName(blobName);
+        //using var ossClient = await CreateClientAsync();
+        //var bucket = NormalizeContainerName(containerName);
+        //var objectName = CalculateBlobName(blobName);
 
-        if (!await ObjectExists(ossClient, bucket, objectName, cancellationToken))
-        {
-            return null;
-        }
-
-        var result = await ossClient.GetObjectAsync(
-            new GetObjectRequest
-            {
-                Bucket = bucket,
-                Key = blobName,
-            });
-
-        return result.Body;
-
-        // TODO: 阿里云sdk预签名不可用[2026/05/23]
-        //var configuration = GetBlobConfiguration();
-
-        //var downloadUrl = await GeneratePresignedUrlAsync(
-        //    containerName,
-        //    blobName,
-        //    TimeSpan.FromSeconds(configuration.PresignedGetExpirySeconds),
-        //    cancellationToken: cancellationToken);
-        //if (downloadUrl.IsNullOrWhiteSpace())
+        //if (!await ObjectExists(ossClient, bucket, objectName, cancellationToken))
         //{
         //    return null;
         //}
 
-        //var httpClient = HttpClientFactory.CreateAliyunHttpClient();
+        //var result = await ossClient.GetObjectAsync(
+        //    new GetObjectRequest
+        //    {
+        //        Bucket = bucket,
+        //        Key = objectName,
+        //    });
 
-        //return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
+        //return result.Body;
+
+        var configuration = GetBlobConfiguration();
+
+        var downloadUrl = await InternalGeneratePresignedUrlAsync(
+            containerName,
+            blobName,
+            TimeSpan.FromSeconds(configuration.PresignedGetExpirySeconds),
+            cancellationToken: cancellationToken);
+        if (downloadUrl.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        var httpClient = HttpClientFactory.CreateAliyunHttpClient();
+
+        return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
     }
 
     public virtual Task<string?> GeneratePresignedUrlAsync(
@@ -154,32 +153,14 @@ public class AliyunBlobProvider : IBlobProvider
         bool isAttachmentContent = true,
         CancellationToken cancellationToken = default)
     {
-        // TODO: 阿里云sdk预签名不可用[2026/05/23]
+        // TODO: 阿里云SDK2.0不支持Bucket跨域配置, 不启用阿里云的预览方式
+        //return InternalGeneratePresignedUrlAsync(
+        //    containerName,
+        //    blobName,
+        //    expiration,
+        //    isAttachmentContent,
+        //    cancellationToken);
         return Task.FromResult<string?>(null);
-        //var ossClient = await CreateClientAsync();
-        //var bucket = NormalizeContainerName(containerName);
-        //var objectName = CalculateBlobName(blobName);
-
-        //if (!await ObjectExists(ossClient, bucket, objectName, cancellationToken))
-        //{
-        //    return null;
-        //}
-
-        //var fileName = Path.GetFileName(blobName);
-        //var type = isAttachmentContent ? "attachment" : "inline";
-        //var disposition = $"{type}; filename=\"{Uri.EscapeDataString(fileName)}\"; " +
-        //                     $"filename*=UTF-8''{Uri.EscapeDataString(fileName)}";
-
-        //var presignResult = ossClient.Presign(
-        //    new GetObjectRequest
-        //    {
-        //        Bucket = bucket,
-        //        Key = blobName,
-        //        ResponseContentDisposition = disposition,
-        //    },
-        //    Clock.Now.Add(expiration));
-
-        //return presignResult.Url;
     }
 
     public virtual Task CreateFolderAsync(
@@ -199,7 +180,7 @@ public class AliyunBlobProvider : IBlobProvider
         string? contentType = null,
         CancellationToken cancellationToken = default)
     {
-        var ossClient = await CreateClientAsync();
+        using var ossClient = await CreateClientAsync();
         var bucket = NormalizeContainerName(containerName);
         var objectName = CalculateBlobName(blobName);
         var configuration = GetBlobConfiguration();
@@ -241,20 +222,43 @@ public class AliyunBlobProvider : IBlobProvider
                 new PutBucketRequest
                 {
                     Bucket = bucket,
+                    Acl = bucketAcl?.GetString(),
                 },
                 cancellationToken: cancellationToken);
-
-            if (bucketAcl.HasValue)
-            {
-                await ossClient.PutBucketAclAsync(
-                    new PutBucketAclRequest
-                    {
-                        Bucket = bucket,
-                        Acl = bucketAcl.Value.GetString(),
-                    },
-                    cancellationToken: cancellationToken);
-            }
         }
+    }
+
+    protected async virtual Task<string?> InternalGeneratePresignedUrlAsync(
+        string containerName,
+        string blobName,
+        TimeSpan expiration,
+        bool isAttachmentContent = true,
+        CancellationToken cancellationToken = default)
+    {
+        using var ossClient = await CreateClientAsync();
+        var bucket = NormalizeContainerName(containerName);
+        var objectName = CalculateBlobName(blobName);
+
+        if (!await ObjectExists(ossClient, bucket, objectName, cancellationToken))
+        {
+            return null;
+        }
+
+        var fileName = Path.GetFileName(blobName);
+        var type = isAttachmentContent ? "attachment" : "inline";
+        var disposition = $"{type}; filename=\"{Uri.EscapeDataString(fileName)}\"; " +
+                             $"filename*=UTF-8''{Uri.EscapeDataString(fileName)}";
+
+        var presignResult = ossClient.Presign(
+            new GetObjectRequest
+            {
+                Bucket = bucket,
+                Key = objectName,
+                ResponseContentDisposition = disposition,
+            },
+            Clock.Now.Add(expiration));
+
+        return presignResult.Url;
     }
 
     protected async virtual Task<bool> BucketExists(

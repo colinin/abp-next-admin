@@ -1,5 +1,6 @@
 ﻿using AlibabaCloud.OSS.V2;
 using AlibabaCloud.OSS.V2.Credentials;
+using AlibabaCloud.OSS.V2.Transport;
 using LINGYUN.Abp.Aliyun;
 using System;
 using Volo.Abp.Caching;
@@ -31,10 +32,10 @@ public class OssClientFactory : AliyunClientFactory<Client, AliyunBlobProviderCo
             new Configuration
             {
                 Region = regionId,
-                CredentialsProvider = new CredentialsProviderFunc(() =>
-                {
-                    return new Credentials(accessKeyId, accessKeySecret);
-                }),
+                SignatureVersion = AliyunBlobProviderConfiguration.DefaultSignatureVersion,
+                InsecureSkipVerify = AliyunBlobProviderConfiguration.DefaultInsecureSkipVerify,
+                CredentialsProvider = new StaticCredentialsProvider(accessKeyId, accessKeySecret),
+                HttpTransport = HttpTransport.Shared,
             });
         //return new OssClient(
         //    regionId,
@@ -56,11 +57,18 @@ public class OssClientFactory : AliyunClientFactory<Client, AliyunBlobProviderCo
             new Configuration
             {
                 Region = regionId,
-                CredentialsProvider = new CredentialsProviderFunc(() =>
-                {
-                    return new Credentials(accessKeyId, accessKeySecret);
-                }),
+                Endpoint = configuration.Endpoint,
+                SignatureVersion = configuration.SignatureVersion,
                 InsecureSkipVerify = configuration.InsecureSkipVerify,
+                UseCName = configuration.UseCName,
+                UsePathStyle = configuration.UsePathStyle,
+                UseAccelerateEndpoint = configuration.UseAccelerateEndpoint,
+                UseDualStackEndpoint = configuration.UseDualStackEndpoint,
+                UseInternalEndpoint = configuration.UseInternalEndpoint,
+                DisableUploadCrc64Check = configuration.DisableUploadCrc64Check,
+                DisableDownloadCrc64Check = configuration.DisableDownloadCrc64Check,
+                CredentialsProvider = new StaticCredentialsProvider(accessKeyId, accessKeySecret),
+                HttpTransport = HttpTransport.Shared,
             });
     }
 
@@ -83,10 +91,10 @@ public class OssClientFactory : AliyunClientFactory<Client, AliyunBlobProviderCo
             new Configuration
             {
                 Region = regionId,
-                CredentialsProvider = new CredentialsProviderFunc(() =>
-                {
-                    return new Credentials(accessKeyId, accessKeySecret, securityToken, expiration);
-                }),
+                SignatureVersion = AliyunBlobProviderConfiguration.DefaultSignatureVersion,
+                InsecureSkipVerify = AliyunBlobProviderConfiguration.DefaultInsecureSkipVerify,
+                CredentialsProvider = new StaticCredentialsProvider(accessKeyId, accessKeySecret, securityToken),
+                HttpTransport = HttpTransport.Shared,
             });
     }
     /// <summary>
@@ -110,11 +118,18 @@ public class OssClientFactory : AliyunClientFactory<Client, AliyunBlobProviderCo
             new Configuration
             {
                 Region = regionId,
-                CredentialsProvider = new CredentialsProviderFunc(() =>
-                {
-                    return new Credentials(accessKeyId, accessKeySecret, securityToken, expiration);
-                }),
+                Endpoint = configuration.Endpoint,
+                SignatureVersion = configuration.SignatureVersion,
                 InsecureSkipVerify = configuration.InsecureSkipVerify,
+                UseCName = configuration.UseCName,
+                UsePathStyle = configuration.UsePathStyle,
+                UseAccelerateEndpoint = configuration.UseAccelerateEndpoint,
+                UseDualStackEndpoint = configuration.UseDualStackEndpoint,
+                UseInternalEndpoint = configuration.UseInternalEndpoint,
+                DisableUploadCrc64Check = configuration.DisableUploadCrc64Check,
+                DisableDownloadCrc64Check = configuration.DisableDownloadCrc64Check,
+                CredentialsProvider = new StaticCredentialsProvider(accessKeyId, accessKeySecret, securityToken),
+                HttpTransport = HttpTransport.Shared,
             });
     }
 }

@@ -64,7 +64,11 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
 
         var stream = await BlobManager.DownloadBlobsync(blob);
 
-        return new RemoteStreamContent(stream ?? Stream.Null, blob.Name, blob.ContentType, stream?.Length);
+        return new RemoteStreamContent(
+            stream ?? Stream.Null,
+            blob.Name, 
+            blob.ContentType, 
+            stream != null ? blob.Size : null);
     }
 
     public async virtual Task<BlobDto> GetAsync(Guid id)
@@ -169,7 +173,11 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
 
         var stream = await BlobManager.DownloadBlobsync(blob);
 
-        return new RemoteStreamContent(stream ?? Stream.Null, blob.Name, blob.ContentType, stream?.Length);
+        return new RemoteStreamContent(
+            stream ?? Stream.Null,
+            blob.Name,
+            blob.ContentType,
+            stream != null ? blob.Size : null);
     }
 
     protected async virtual Task<string> GenerateDownloadUrlAsync(Guid id, string method, bool isAttachmentContent = true)

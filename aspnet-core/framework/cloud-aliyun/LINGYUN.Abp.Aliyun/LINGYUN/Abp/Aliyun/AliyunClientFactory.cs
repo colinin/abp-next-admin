@@ -98,20 +98,19 @@ public abstract class AliyunClientFactory<TClient>
                 assumeRoleResponse.Body.Credentials.AccessKeySecret,
                 assumeRoleResponse.Body.Credentials.SecurityToken);
 
-            var expirationTimeSpan = TimeSpan.FromSeconds(durationSeconds - 10);
+            var cacheOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(durationSeconds - 10),
+            };
             if (DateTime.TryParse(assumeRoleResponse.Body.Credentials.Expiration, out var expiration))
             {
                 cacheItem.Expiration = expiration;
-                expirationTimeSpan = new TimeSpan(expiration.AddSeconds(-10).Ticks);
             }
 
             await Cache.SetAsync(
                 cacheKey,
                 cacheItem,
-                new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = expirationTimeSpan,
-                });
+                cacheOptions);
         }
 
         return cacheItem;
