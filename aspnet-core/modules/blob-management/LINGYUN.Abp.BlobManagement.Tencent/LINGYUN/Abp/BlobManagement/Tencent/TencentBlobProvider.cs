@@ -104,7 +104,7 @@ public class TencentBlobProvider : IBlobProvider
     {
         var configuration = await GetBlobConfiguration();
 
-        var downloadUrl = await GeneratePresignedUrlAsync(
+        var downloadUrl = await InternalGeneratePresignedUrlAsync(
             containerName, 
             blobName,
             TimeSpan.FromSeconds(configuration.PresignedGetExpirySeconds),
@@ -119,11 +119,61 @@ public class TencentBlobProvider : IBlobProvider
         return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
     }
 
-    public async virtual Task<string?> GeneratePresignedUrlAsync(
+    public virtual Task<string?> GeneratePresignedUrlAsync(
         string containerName,
         string blobName,
         TimeSpan expiration,
-       bool isAttachmentContent = true,
+        bool isAttachmentContent = true,
+        CancellationToken cancellationToken = default)
+    {
+        // TODO: 腾讯云需用户开通对象处理服务以支持预览, 不启用腾讯云的预览方式.
+        //return InternalGeneratePresignedUrlAsync(
+        //    containerName,
+        //    blobName,
+        //    expiration,
+        //    isAttachmentContent,
+        //    cancellationToken);
+
+        return Task.FromResult<string?>(null);
+    }
+
+    public virtual Task CreateFolderAsync(
+        string containerName, 
+        string blobName,
+        CancellationToken cancellationToken = default)
+    {
+        // 腾讯云Oss没有目录的概念,新建对象时可以模拟目录
+        // https://cloud.tencent.com/document/product/436/13324
+        return Task.CompletedTask;
+    }
+
+    public async virtual Task UploadBlobAsync(
+        string containerName, 
+        string blobName, 
+        Stream content,
+        string? contentType = null,
+        CancellationToken cancellationToken = default)
+    {
+        var client = await CreateClientAsync();
+        var bucket = NormalizeContainerName(containerName);
+        var objectName = CalculateBlobName(blobName);
+
+        CreateBucketIfNotExists(client, bucket);
+
+        var putObjectRequest = new PutObjectRequest(bucket, objectName, content);
+        if (!contentType.IsNullOrWhiteSpace())
+        {
+            putObjectRequest.SetRequestHeader("Content-Type", contentType);
+        }
+
+        client.PutObject(putObjectRequest);
+    }
+
+    protected async virtual Task<string?> InternalGeneratePresignedUrlAsync(
+        string containerName,
+        string blobName,
+        TimeSpan expiration,
+        bool isAttachmentContent = true,
         CancellationToken cancellationToken = default)
     {
         var client = await CreateClientAsync();
@@ -159,38 +209,6 @@ public class TencentBlobProvider : IBlobProvider
         };
 
         return client.GenerateSignURL(preSignatureStruct);
-    }
-
-    public virtual Task CreateFolderAsync(
-        string containerName, 
-        string blobName,
-        CancellationToken cancellationToken = default)
-    {
-        // 腾讯云Oss没有目录的概念,新建对象时可以模拟目录
-        // https://cloud.tencent.com/document/product/436/13324
-        return Task.CompletedTask;
-    }
-
-    public async virtual Task UploadBlobAsync(
-        string containerName, 
-        string blobName, 
-        Stream content,
-        string? contentType = null,
-        CancellationToken cancellationToken = default)
-    {
-        var client = await CreateClientAsync();
-        var bucket = NormalizeContainerName(containerName);
-        var objectName = CalculateBlobName(blobName);
-
-        CreateBucketIfNotExists(client, bucket);
-
-        var putObjectRequest = new PutObjectRequest(bucket, objectName, content);
-        if (!contentType.IsNullOrWhiteSpace())
-        {
-            putObjectRequest.SetRequestHeader("Content-Type", contentType);
-        }
-
-        client.PutObject(putObjectRequest);
     }
 
     protected async virtual Task<CosXml> CreateClientAsync()

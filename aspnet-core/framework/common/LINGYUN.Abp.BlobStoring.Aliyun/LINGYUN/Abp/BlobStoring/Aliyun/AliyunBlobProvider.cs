@@ -35,7 +35,7 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
 
     public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
     {
-        var ossClient = await GetOssClientAsync(args);
+        using var ossClient = await GetOssClientAsync(args);
         var blobName = AliyunBlobNameCalculator.Calculate(args);
 
         if (await BlobExistsAsync(ossClient, args, blobName))
@@ -55,7 +55,7 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
 
     public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
     {
-        var ossClient = await GetOssClientAsync(args);
+        using var ossClient = await GetOssClientAsync(args);
         var blobName = AliyunBlobNameCalculator.Calculate(args);
 
         return await BlobExistsAsync(ossClient, args, blobName);
@@ -63,40 +63,39 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
 
     public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
     {
-        var ossClient = await GetOssClientAsync(args);
+        using var ossClient = await GetOssClientAsync(args);
         var blobName = AliyunBlobNameCalculator.Calculate(args);
 
-        if (!await BlobExistsAsync(ossClient, args, blobName))
-        {
-            return null;
-        }
+        //if (!await BlobExistsAsync(ossClient, args, blobName))
+        //{
+        //    return null;
+        //}
 
-        var result = await ossClient.GetObjectAsync(
-            new GetObjectRequest
-            {
-                Bucket = GetBucketName(args),
-                Key = blobName,
-            });
-        return result.Body;
-
-        // TODO: 阿里云sdk预签名不可用[2026/05/23]
-        //var configuration = args.Configuration.GetAliyunConfiguration();
-        //var presignResult = ossClient.Presign(
+        //var result = await ossClient.GetObjectAsync(
         //    new GetObjectRequest
         //    {
         //        Bucket = GetBucketName(args),
         //        Key = blobName,
-        //    }, 
-        //    Clock.Now.AddSeconds(configuration.PresignedGetExpirySeconds));
+        //    });
+        //return result.Body;
 
-        //var httpClient = HttpClientFactory.CreateAliyunHttpClient();
+        var configuration = args.Configuration.GetAliyunConfiguration();
+        var presignResult = ossClient.Presign(
+            new GetObjectRequest
+            {
+                Bucket = GetBucketName(args),
+                Key = blobName,
+            },
+            Clock.Now.AddSeconds(configuration.PresignedGetExpirySeconds));
 
-        //return await httpClient.GetStreamAsync(presignResult.Url, args.CancellationToken);
+        var httpClient = HttpClientFactory.CreateAliyunHttpClient();
+
+        return await httpClient.GetStreamAsync(presignResult.Url, args.CancellationToken);
     }
 
     public override async Task SaveAsync(BlobProviderSaveArgs args)
     {
-        var ossClient = await GetOssClientAsync(args);
+        using var ossClient = await GetOssClientAsync(args);
         var blobName = AliyunBlobNameCalculator.Calculate(args);
         var configuration = args.Configuration.GetAliyunConfiguration();
 
