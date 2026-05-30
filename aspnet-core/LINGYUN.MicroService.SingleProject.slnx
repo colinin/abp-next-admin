@@ -282,6 +282,7 @@
     <Project Path="modules/identity/LINGYUN.Abp.Identity.QrCode/LINGYUN.Abp.Identity.QrCode.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Session.AspNetCore/LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Session/LINGYUN.Abp.Identity.Session.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Identity.Jobs/LINGYUN.Abp.Identity.Jobs.csproj" />
   </Folder>
   <Folder Name="/modules/localization-management/">
     <Project Path="modules/localization-management/LINGYUN.Abp.LocalizationManagement.Application.Contracts/LINGYUN.Abp.LocalizationManagement.Application.Contracts.csproj" />

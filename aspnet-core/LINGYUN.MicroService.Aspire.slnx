@@ -496,6 +496,7 @@
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Quartz/LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.TaskManagement/LINGYUN.Abp.BackgroundTasks.TaskManagement.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Elasticsearch.Jobs/LINGYUN.Abp.Elasticsearch.Jobs.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Identity.Jobs/LINGYUN.Abp.Identity.Jobs.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.MySqlInstaller/LINGYUN.Abp.Quartz.MySqlInstaller.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.PostgresSqlInstaller/LINGYUN.Abp.Quartz.PostgresSqlInstaller.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.SqlInstaller/LINGYUN.Abp.Quartz.SqlInstaller.csproj" />

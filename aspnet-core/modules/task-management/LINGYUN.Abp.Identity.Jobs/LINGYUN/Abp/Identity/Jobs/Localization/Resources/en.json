@@ -2,8 +2,13 @@
   "culture": "en",
   "texts": {
     "InactiveIdentitySessionCleanupJob": "Inactive Session Cleanup Job",
+    "InactiveIdentityUserNotifierJob": "Inactive User Notifier Job",
     "InactiveIdentityUserCleanupJob": "Inactive User Cleanup Job",
     "DisplayName:SessionInactiveDays": "Duration of inactive conversation",
-    "Description:SessionInactiveDays": "Duration of inactive conversation, unit: days."
+    "Description:SessionInactiveDays": "Duration of inactive conversation, unit: days.",
+    "DisplayName:InactivityPeriodDays": "Inactivity Period Days",
+    "Description:InactivityPeriodDays": "The duration since the last login, in units of days, defaults to 180 days if it is empty.",
+    "DisplayName:GracePeriodDays": "Grace Period Days",
+    "Description:GracePeriodDays": "The duration since the account was deactivated, in units of days. If the value is empty, it defaults to 60 days."
   }
 }

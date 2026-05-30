@@ -85,6 +85,18 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName),
+
+            new SettingDefinition(
+                name: IdentitySettingNames.Link.UserLoginUri,
+                defaultValue: "http://localhost:8080/Account/Login",
+                displayName: L("DisplayName:Abp.Identity.Link.UserLoginUri"),
+                description: L("Description:Abp.Identity.Link.UserLoginUri"),
+                isVisibleToClients: false)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
         );
     }

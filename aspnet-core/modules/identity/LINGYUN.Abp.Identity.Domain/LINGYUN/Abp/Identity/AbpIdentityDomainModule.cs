@@ -15,6 +15,7 @@ namespace LINGYUN.Abp.Identity;
 
 [DependsOn(
     typeof(AbpIdentityDomainSharedModule),
+    typeof(AbpIdentitySessionModule),
     typeof(AbpDistributedLockingAbstractionsModule),
     typeof(Volo.Abp.Identity.AbpIdentityDomainModule))]
 public class AbpIdentityDomainModule : AbpModule

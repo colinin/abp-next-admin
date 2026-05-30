@@ -41,4 +41,13 @@ public static class IdentitySettingNames
         /// </summary>
         public const string LogoutFromSameTypeDevicesLimit = SessionPrefix + ".LogoutFromSameTypeDevicesLimit";
     }
+
+    public static class Link
+    {
+        private const string LinkPrefix = Prefix + ".Link";
+        /// <summary>
+        /// 用户登录页(包含协议的登录地址串,用于发送用户登录邮件中的链接)
+        /// </summary>
+        public const string UserLoginUri = LinkPrefix + ".UserLoginUri";
+    }
 }
