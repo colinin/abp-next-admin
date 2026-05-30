@@ -19,6 +19,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Emailing" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
 		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Notifications\LINGYUN.Abp.Identity.Notifications.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj" />

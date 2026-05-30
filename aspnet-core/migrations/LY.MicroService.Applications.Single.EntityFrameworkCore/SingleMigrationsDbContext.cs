@@ -12,6 +12,7 @@ using LINGYUN.Abp.Demo.Books;
 using LINGYUN.Abp.Demo.EntityFrameworkCore;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.Chat;
@@ -39,7 +40,6 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Data;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
@@ -285,5 +285,7 @@ public class SingleMigrationsDbContext :
         modelBuilder.ConfigureAIManagement();
 
         modelBuilder.ConfigureBlobManagement();
+
+        modelBuilder.ConfigureIdentityUserInactive();
     }
 }

@@ -1,0 +1,29 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "InactiveUserReminderNotifier": "Account Activity Reminder",
+    "InactiveUserDeactivationNotifier": "Account Deactivation Notice",
+    "InactiveUserDeletionNotifier": "Account Deletion Notice",
+    "InactiveUserReminderHeader": "Account Activity Reminder",
+    "InactiveUserReminderWarning": "We have noticed that your account has been inactive for an extended period. To keep your account active and secure, we recommend logging in.",
+    "InactiveUserReminderAction": "If you wish to keep your account, please log in before",
+    "InactiveUserReminderReactivate": ".",
+    "InactiveUserReminderClosure": "If you no longer need this account, no action is required. However, please note that if you do not log in before",
+    "InactiveUserReminderInactive": ", your account will be deactivated, and you will not be able to log in.",
+    "InactiveUserDeactivationNotice": "This notice is to inform you that, due to",
+    "InactiveUserDeactivationWarning": "consecutive days of inactivity, your account has been deactivated. Your data is still stored but inaccessible. If needed, please contact us before",
+    "InactiveUserDeactivationAction": "to restore your account. If not addressed in time, your account will be permanently deleted.",
+    "NoReactionClosure": "If you do not wish to reactivate your account, no further action is required. After the reactivation period ends, your account will be automatically queued for deletion.",
+    "AutomatedNotification": "This is an automated notification. Please do not reply directly to this email.",
+    "InactiveUserDeactivationHeader": "Account Deactivation Notice",
+    "InactiveUserDeletionHeader": "Account Deletion Notice",
+    "InactiveUserDeletionNotice": "Due to prolonged inactivity and failure to respond to previous notices, your account has been permanently deleted. All data associated with you has been removed from the platform.",
+    "WhatYouCanDo": "What you can do:",
+    "CreateNewAccountInstructions": "To continue using the service, please",
+    "CreateNewAccountStep1": "Create a new account",
+    "CreateNewAccountStep2": "Set up your profile",
+    "CreateNewAccountStep3": "Resubscribe to services",
+    "LastSignInTime": "Last sign-in time",
+    "SignInToAccount": "Sign in to account"
+  }
+}

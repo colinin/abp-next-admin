@@ -6,10 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
-using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.EntityFrameworkCore;
-using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.MicroService.TaskService;
 
@@ -18,9 +15,6 @@ namespace LINGYUN.Abp.MicroService.TaskService;
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCorePostgreSqlModule),
-    typeof(AbpSettingManagementEntityFrameworkCoreModule),
-    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule)
     )]
 public class TaskServiceMigrationsEntityFrameworkCoreModule : AbpModule

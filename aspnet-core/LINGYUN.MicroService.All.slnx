@@ -377,6 +377,7 @@
     <Project Path="modules/identity/LINGYUN.Abp.Identity.QrCode/LINGYUN.Abp.Identity.QrCode.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Session.AspNetCore/LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Session/LINGYUN.Abp.Identity.Session.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Identity.Jobs/LINGYUN.Abp.Identity.Jobs.csproj" />
   </Folder>
   <Folder Name="/modules/localization-management/">
     <File Path="modules/localization-management/README.md" />
@@ -484,6 +485,7 @@
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Quartz/LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.TaskManagement/LINGYUN.Abp.BackgroundTasks.TaskManagement.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks/LINGYUN.Abp.BackgroundTasks.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Elasticsearch.Jobs/LINGYUN.Abp.Elasticsearch.Jobs.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.MySqlInstaller/LINGYUN.Abp.Quartz.MySqlInstaller.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.SqlInstaller/LINGYUN.Abp.Quartz.SqlInstaller.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.TaskManagement.Application.Contracts/LINGYUN.Abp.TaskManagement.Application.Contracts.csproj" />

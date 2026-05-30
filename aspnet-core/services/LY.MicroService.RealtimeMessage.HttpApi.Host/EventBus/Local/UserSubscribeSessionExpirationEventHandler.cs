@@ -25,11 +25,16 @@ public class UserSubscribeSessionExpirationEventHandler : ILocalEventHandler<Ent
                 eventData.Entity.TenantId,
                 new UserIdentifier(eventData.Entity.Id, eventData.Entity.UserName),
                 IdentityNotificationNames.Session.ExpirationSession);
-        // 新用户订阅不活跃用户清理通知
+        // 新用户订阅不活跃用户相关通知
         await _notificationSubscriptionManager
             .SubscribeAsync(
                 eventData.Entity.TenantId,
                 new UserIdentifier(eventData.Entity.Id, eventData.Entity.UserName),
-                IdentityNotificationNames.IdentityUser.CleaningUpInactiveUsers);
+                IdentityNotificationNames.IdentityUser.InactiveUserReminderNotifier);
+        await _notificationSubscriptionManager
+            .SubscribeAsync(
+                eventData.Entity.TenantId,
+                new UserIdentifier(eventData.Entity.Id, eventData.Entity.UserName),
+                IdentityNotificationNames.IdentityUser.InactiveUserDeactivationNotifier);
     }
 }

@@ -2,8 +2,13 @@
   "culture": "zh-Hans",
   "texts": {
     "InactiveIdentitySessionCleanupJob": "不活跃会话清理作业",
+    "InactiveIdentityUserNotifierJob": "不活跃用户通知作业",
     "InactiveIdentityUserCleanupJob": "不活跃用户清理作业",
     "DisplayName:SessionInactiveDays": "不活跃会话保持时长",
-    "Description:SessionInactiveDays": "不活跃会话保持时长,单位: 天."
+    "Description:SessionInactiveDays": "不活跃会话保持时长,单位: 天.",
+    "DisplayName:InactivityPeriodDays": "不活跃账号期限",
+    "Description:InactivityPeriodDays": "距离上次登录以来的时长,单位:天,为空时默认180天.",
+    "DisplayName:GracePeriodDays": "停用账号宽限期限",
+    "Description:GracePeriodDays": "距离账号停用以来的时长,单位:天,为空时默认60天."
   }
 }

@@ -105,6 +105,8 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
 
     #endregion
 
+    #region Security
+
     [Authorize(IdentityPermissions.Users.ResetPassword)]
     public async virtual Task ChangePasswordAsync(Guid id, IdentityUserSetPasswordInput input)
     {
@@ -139,6 +141,10 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         await CurrentUnitOfWork.SaveChangesAsync();
     }
 
+    #endregion
+
+    #region Lock
+
     [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
     public async virtual Task LockAsync(Guid id, int seconds)
     {
@@ -161,6 +167,8 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
 
         await CurrentUnitOfWork.SaveChangesAsync();
     }
+
+    #endregion
 
     protected async virtual Task<IdentityUser> GetUserAsync(Guid id)
     {

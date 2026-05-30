@@ -1,5 +1,6 @@
 using LINGYUN.Abp.BlobManagement.MimeCheck;
 using LINGYUN.Abp.Exporter.MiniSoftware;
+using LINGYUN.Abp.Identity.Jobs;
 using LINGYUN.Abp.Notifications.Calendar;
 
 namespace LY.MicroService.Applications.Single;
@@ -267,6 +268,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpBackgroundTasksNotificationsModule),
     // 后台任务模块 Quartz集成
     typeof(AbpBackgroundTasksQuartzModule),
+    // 后台任务模块 身份认证模块作业
+    typeof(AbpIdentityJobsModule),
 
     // 数据审计模块 应用服务
     typeof(AbpDataProtectionManagementApplicationModule),
