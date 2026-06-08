@@ -150,7 +150,8 @@ const gridOptions: VxeGridProps<OssObjectDto> = {
   toolbarConfig: {
     custom: true,
     export: false,
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
     zoom: true,

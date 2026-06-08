@@ -387,7 +387,8 @@ const gridOptions: VxeGridProps<BackgroundJobInfoDto> = {
     },
   },
   toolbarConfig: {
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
   },
