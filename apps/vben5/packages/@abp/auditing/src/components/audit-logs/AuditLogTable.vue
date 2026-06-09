@@ -241,7 +241,8 @@ const gridOptions: VxeGridProps<AuditLogDto> = {
     custom: true,
     export: true,
     // import: true,
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
     zoom: true,

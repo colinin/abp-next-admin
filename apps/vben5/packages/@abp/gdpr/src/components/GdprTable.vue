@@ -84,7 +84,8 @@ const gridOptions: VxeGridProps<GdprRequestDto> = {
     },
   },
   toolbarConfig: {
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
   },
