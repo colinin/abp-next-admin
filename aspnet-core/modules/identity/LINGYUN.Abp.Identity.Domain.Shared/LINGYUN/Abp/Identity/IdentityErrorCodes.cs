@@ -34,4 +34,8 @@ public class IdentityErrorCodes
     /// 验证器验证无效
     /// </summary>
     public const string AuthenticatorTokenInValid = "Volo.Abp.Identity:020012";
+    /// <summary>
+    /// 密码不能与最近{0}次使用的密码相同
+    /// </summary>
+    public const string PasswordInHistoryInValid = "Volo.Abp.Identity:020013";
 }

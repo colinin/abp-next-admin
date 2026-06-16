@@ -24,7 +24,8 @@ public class AbpIdentityDomainModule : AbpModule
     {
         PreConfigure<IdentityBuilder>(builder =>
         {
-            builder.AddUserValidator<PhoneNumberUserValidator>();
+            builder.AddUserValidator<PhoneNumberUserValidator>()
+                .AddPasswordValidator<PasswordHistoryPasswordValidator>();
         });
     }
 
