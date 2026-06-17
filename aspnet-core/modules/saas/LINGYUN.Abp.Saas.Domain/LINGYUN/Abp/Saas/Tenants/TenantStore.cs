@@ -1,7 +1,7 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
@@ -15,18 +15,21 @@ public class TenantStore : ITenantStore, ITransientDependency
     protected ITenantRepository TenantRepository { get; }
     protected IObjectMapper<AbpSaasDomainModule> ObjectMapper { get; }
     protected ICurrentTenant CurrentTenant { get; }
-    protected IDistributedCache<TenantCacheItem> Cache { get; }
+    protected IDistributedCache<TenantCacheItem> TenantCache { get; }
+    protected IDistributedCache<TenantsCacheItem> TenantsCache { get; }
 
     public TenantStore(
         ITenantRepository tenantRepository,
         IObjectMapper<AbpSaasDomainModule> objectMapper,
         ICurrentTenant currentTenant,
-        IDistributedCache<TenantCacheItem> cache)
+        IDistributedCache<TenantCacheItem> tenantCache,
+        IDistributedCache<TenantsCacheItem> tenantsCache)
     {
         TenantRepository = tenantRepository;
         ObjectMapper = objectMapper;
         CurrentTenant = currentTenant;
-        Cache = cache;
+        TenantCache = tenantCache;
+        TenantsCache = tenantsCache;
     }
 
     public async virtual Task<TenantConfiguration> FindAsync(string name)
@@ -41,8 +44,16 @@ public class TenantStore : ITenantStore, ITransientDependency
 
     public async virtual Task<IReadOnlyList<TenantConfiguration>> GetListAsync(bool includeDetails = false)
     {
-        return ObjectMapper.Map<List<Tenant>, List<TenantConfiguration>>(
-            await TenantRepository.GetListAsync(includeDetails));
+        var cacheKey = TenantsCacheItem.CalculateCacheKey(includeDetails);
+        var cacheItem = await TenantsCache.GetAsync(cacheKey);
+        if (cacheItem == null)
+        {
+            var tenants = await TenantRepository.GetListAsync(includeDetails);
+            var tenantConfiurations = ObjectMapper.Map<List<Tenant>, List<TenantConfiguration>>(tenants);
+            cacheItem = new TenantsCacheItem(tenantConfiurations);
+            await TenantsCache.SetAsync(cacheKey, cacheItem, considerUow: true);
+        }
+        return [.. cacheItem.Tenants];
     }
 
     [Obsolete("Use FindAsync method.")]
@@ -61,7 +72,7 @@ public class TenantStore : ITenantStore, ITransientDependency
     {
         var cacheKey = CalculateCacheKey(id, name);
 
-        var cacheItem = await Cache.GetAsync(cacheKey, considerUow: true);
+        var cacheItem = await TenantCache.GetAsync(cacheKey, considerUow: true);
         if (cacheItem != null)
         {
             return cacheItem;
@@ -92,7 +103,7 @@ public class TenantStore : ITenantStore, ITransientDependency
     {
         var tenantConfiguration = tenant != null ? ObjectMapper.Map<Tenant, TenantConfiguration>(tenant) : null;
         var cacheItem = new TenantCacheItem(tenantConfiguration);
-        await Cache.SetAsync(cacheKey, cacheItem, considerUow: true);
+        await TenantCache.SetAsync(cacheKey, cacheItem, considerUow: true);
         return cacheItem;
     }
 
@@ -101,7 +112,7 @@ public class TenantStore : ITenantStore, ITransientDependency
     {
         var cacheKey = CalculateCacheKey(id, name);
 
-        var cacheItem = Cache.Get(cacheKey, considerUow: true);
+        var cacheItem = TenantCache.Get(cacheKey, considerUow: true);
         if (cacheItem != null)
         {
             return cacheItem;
@@ -133,7 +144,7 @@ public class TenantStore : ITenantStore, ITransientDependency
     {
         var tenantConfiguration = tenant != null ? ObjectMapper.Map<Tenant, TenantConfiguration>(tenant) : null;
         var cacheItem = new TenantCacheItem(tenantConfiguration);
-        Cache.Set(cacheKey, cacheItem, considerUow: true);
+        TenantCache.Set(cacheKey, cacheItem, considerUow: true);
         return cacheItem;
     }
 
