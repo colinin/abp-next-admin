@@ -269,7 +269,7 @@ async function onSubmit() {
 
 <style lang="scss" scoped>
 :deep(.ant-tabs) {
-  height: 34rem;
+  height: 60vh;
 
   .ant-tabs-nav {
     width: 14rem;

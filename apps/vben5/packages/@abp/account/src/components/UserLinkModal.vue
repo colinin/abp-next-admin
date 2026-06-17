@@ -44,6 +44,12 @@ const gridOptions: VxeGridProps<LinkUserDto> = {
     {
       align: 'left',
       field: 'linkUserName',
+      formatter: ({ row }) => {
+        if (row.linkTenantName) {
+          return `${row.linkTenantName}/${row.linkUserName}`;
+        }
+        return row.linkUserName;
+      },
       sortable: true,
       title: $t('AbpAccount.DisplayName:LinkUserName'),
     },

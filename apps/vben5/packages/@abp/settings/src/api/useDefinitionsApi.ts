@@ -96,7 +96,7 @@ export function useDefinitionsApi() {
     ListResultDto<NameValue<string>>
   > {
     return request<ListResultDto<NameValue<string>>>(
-      '/api/permission-management/definitions/assignable-providers',
+      '/api/setting-management/settings/definitions/assignable-providers',
       {
         method: 'GET',
       },

@@ -46,7 +46,6 @@ const getTableColumns = computed((): TableColumnsType<PropertyInfo> => {
     {
       align: 'left',
       dataIndex: 'key',
-      fixed: 'left',
       width: 100,
       title: $t('component.extra_property_dictionary.key'),
       customRender: (opt) => {
@@ -58,8 +57,8 @@ const getTableColumns = computed((): TableColumnsType<PropertyInfo> => {
     {
       align: 'left',
       dataIndex: 'value',
-      fixed: 'left',
-      minWidth: 150,
+      width: 500,
+      ellipsis: true,
       title: $t('component.extra_property_dictionary.value'),
     },
   ];
@@ -74,7 +73,7 @@ const getTableColumns = computed((): TableColumnsType<PropertyInfo> => {
             fixed: 'right',
             key: 'action',
             title: $t('component.extra_property_dictionary.actions.title'),
-            width: 150,
+            width: 200,
           },
         ] as TableColumnsType<PropertyInfo>)),
   ];
