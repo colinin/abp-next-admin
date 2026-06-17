@@ -17,6 +17,8 @@
     "DisplayName:AuthenticatorCode": "验证代码",
     "DisplayName:PhoneNumber": "手机号码",
     "DisplayName:Code": "验证码",
+    "DisplayName:LinkUserName": "用户名",
+    "DisplayName:DirectlyLinked": "直接关联",
     "TwoFactor": "双因素身份验证",
     "TwoFactor:Enabled": "启用双因素认证",
     "TwoFactor:Email": "邮箱验证",
@@ -67,6 +69,15 @@
     "CancelBindWarningMessage": "解除绑定后将无法使用外部身份,如果你通过此方式登录,你的会话将被注销!",
     "EmailConfirm": "确认邮件",
     "AvatarChanged": "变更头像",
-    "ClickToValidation": "点击去验证"
+    "ClickToValidation": "点击去验证",
+    "LinkUser": "关联账户",
+    "LinkUser:New": "新关联账户",
+    "LinkUser:Login": "以该账号登录",
+    "LinkAccountWarning": "请注意,你正在关联到其他帐户,<a href=\"{0}\">单击此处</a>取消链接关联!",
+    "LinkAccountWillBeCreateWarning": "您将从当前账户退出,然后用另一个账户登录.完成登录后,两个账户将被关联起来.",
+    "LinkAccountWillBeDeleteWarning": "您确定要删除关联帐户\"{0}\"吗?",
+    "LinkLogged": "帐户已经关联",
+    "StayWithCurrentAccount": "继续使用当前帐户",
+    "Settings:Identity.Account": "用户账户"
   }
 }

@@ -1,11 +1,15 @@
+using LINGYUN.Abp.Account.Dto;
 using LINGYUN.Abp.Account.Web.ExternalProviders;
 using LINGYUN.Abp.Account.Web.Models;
 using LINGYUN.Abp.Identity.QrCode;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyCSharp.HttpUserAgentParser.Providers;
@@ -66,7 +70,28 @@ public class LoginModel : AccountPageModel
 
     protected IIdentityUserRepository UserRepository => LazyServiceProvider.LazyGetRequiredService<IIdentityUserRepository>();
     protected IQrCodeLoginProvider QrCodeLoginProvider => LazyServiceProvider.LazyGetRequiredService<IQrCodeLoginProvider>();
+    protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
     protected IHttpUserAgentParserProvider HttpUserAgentParserProvider => LazyServiceProvider.LazyGetRequiredService<IHttpUserAgentParserProvider>();
+
+    #region LinkUser
+
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public Guid? LinkUserId { get; set; }
+
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public Guid? LinkTenantId { get; set; }
+
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public string LinkToken { get; set; }
+
+    public bool IsLinkLogin { get; set; }
+
+    public IIdentityLinkUserAppService IdentityLinkUserAppService => LazyServiceProvider.LazyGetRequiredService<IIdentityLinkUserAppService>();
+
+    #endregion
 
     protected IExternalProviderService ExternalProviderService { get; }
     protected IAuthenticationSchemeProvider SchemeProvider { get; }
@@ -89,21 +114,9 @@ public class LoginModel : AccountPageModel
     public virtual async Task<IActionResult> OnGetAsync()
     {
         LoginType = LoginType.Password;
-        PhoneLoginInput = new PhoneLoginInputModel
-        {
-            ReturnUrl = ReturnUrl,
-            ReturnUrlHash = ReturnUrlHash,
-        };
-        QrCodeLoginInput = new QrCodeLoginInputModel
-        {
-            ReturnUrl = ReturnUrl,
-            ReturnUrlHash = ReturnUrlHash,
-        };
-        PasswordLoginInput = new PasswordLoginInputModel
-        {
-            ReturnUrl = ReturnUrl,
-            ReturnUrlHash = ReturnUrlHash,
-        };
+        PhoneLoginInput = new PhoneLoginInputModel();
+        QrCodeLoginInput = new QrCodeLoginInputModel();
+        PasswordLoginInput = new PasswordLoginInputModel();
 
         AllowQrCodeLoginIfNotMobileDevice();
 
@@ -114,6 +127,20 @@ public class LoginModel : AccountPageModel
         if (IsExternalLoginOnly)
         {
             return await OnPostExternalLogin(ExternalProviders.First().AuthenticationScheme);
+        }
+
+        IsLinkLogin = await VerifyLinkTokenAsync();
+        if (IsLinkLogin && CurrentUser.IsAuthenticated)
+        {
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogActionConsts.Logout
+            });
+
+            await SignInManager.SignOutAsync();
+
+            return Redirect(HttpContext.Request.GetDisplayUrl());
         }
 
         return Page();
@@ -139,6 +166,8 @@ public class LoginModel : AccountPageModel
         await ReplaceEmailToUsernameOfInputIfNeeds();
 
         await IdentityOptions.SetAsync();
+
+        IsLinkLogin = await VerifyLinkTokenAsync();
 
         var result = await SignInManager.PasswordSignInAsync(
             PasswordLoginInput.UserNameOrEmailAddress,
@@ -179,10 +208,15 @@ public class LoginModel : AccountPageModel
 
         Debug.Assert(user != null, nameof(user) + " != null");
 
+        if (IsLinkLogin)
+        {
+            return await HandleLinkUserLogin(user);
+        }
+
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-        return await RedirectSafelyAsync(PasswordLoginInput.ReturnUrl, PasswordLoginInput.ReturnUrlHash);
+        return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
     }
 
     public async virtual Task<IActionResult> OnPostPhoneNumberLogin(string action)
@@ -217,6 +251,11 @@ public class LoginModel : AccountPageModel
             return Page();
         }
 
+        if (IsLinkLogin)
+        {
+            return await HandleLinkUserLogin(user);
+        }
+
         await SignInManager.SignInAsync(user, PhoneLoginInput.RememberMe);
 
         await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
@@ -229,7 +268,7 @@ public class LoginModel : AccountPageModel
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-        return await RedirectSafelyAsync(PhoneLoginInput.ReturnUrl, PhoneLoginInput.ReturnUrlHash);
+        return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
     }
 
     protected virtual void SetTenantCookies(Guid? tenantId = null)
@@ -296,6 +335,11 @@ public class LoginModel : AccountPageModel
                 return Page();
             }
 
+            if (IsLinkLogin)
+            {
+                return await HandleLinkUserLogin(user);
+            }
+
             // TODO: 记住登录
             await SignInManager.SignInAsync(user, true);
 
@@ -311,7 +355,7 @@ public class LoginModel : AccountPageModel
             // Clear the dynamic claims cache.
             await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-            return await RedirectSafelyAsync(QrCodeLoginInput.ReturnUrl, QrCodeLoginInput.ReturnUrlHash);
+            return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
         }
     }
 
@@ -398,7 +442,10 @@ public class LoginModel : AccountPageModel
             {
                 IsExternalLogin = true,
                 ExternalLoginAuthSchema = loginInfo.LoginProvider,
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                LinkUserId,
+                LinkTenantId,
+                LinkToken
             });
         }
 
@@ -409,7 +456,10 @@ public class LoginModel : AccountPageModel
             {
                 IsExternalLogin = true,
                 ExternalLoginAuthSchema = loginInfo.LoginProvider,
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                LinkUserId,
+                LinkTenantId,
+                LinkToken
             });
         }
 
@@ -438,9 +488,12 @@ public class LoginModel : AccountPageModel
         // 重定向双因素认证页面
         return Task.FromResult<IActionResult>(RedirectToPage("SendCode", new
         {
-            returnUrl = PasswordLoginInput.ReturnUrl,
-            returnUrlHash = PasswordLoginInput.ReturnUrlHash,
-            rememberMe = PasswordLoginInput.RememberMe
+            returnUrl = ReturnUrl,
+            returnUrlHash = ReturnUrlHash,
+            rememberMe = PasswordLoginInput.RememberMe,
+            linkUserId = LinkUserId,
+            linkTenantId = LinkTenantId,
+            linkToken = LinkToken,
         }));
     }
 
@@ -535,9 +588,9 @@ public class LoginModel : AccountPageModel
 
                 return RedirectToPage("ChangePassword", new
                 {
-                    returnUrl = PasswordLoginInput.ReturnUrl,
-                    returnUrlHash = PasswordLoginInput.ReturnUrlHash,
-                    rememberMe = PasswordLoginInput.RememberMe
+                    returnUrl = ReturnUrl,
+                    returnUrlHash = ReturnUrlHash,
+                    rememberMe = PasswordLoginInput.RememberMe,
                 });
             }
         }
@@ -562,7 +615,7 @@ public class LoginModel : AccountPageModel
             return RedirectToPage("./ChangePassword", new
             {
                 ReturnUrl,
-                ReturnUrlHash
+                ReturnUrlHash,
             });
         }
 
@@ -612,17 +665,104 @@ public class LoginModel : AccountPageModel
             }
         }
     }
+
+    #region LinkUser
+
+    protected virtual async Task<bool> VerifyLinkTokenAsync()
+    {
+        if (LinkToken.IsNullOrWhiteSpace() || !LinkUserId.HasValue)
+        {
+            if (string.IsNullOrWhiteSpace(ReturnUrl))
+            {
+                return false;
+            }
+            var queryString = QueryHelpers.ParseQuery(ReturnUrl);
+            queryString.TryGetValue("LinkToken", out var linkTokenVal);
+            queryString.TryGetValue("LinkUserId", out var linkUserIdVal);
+            queryString.TryGetValue("LinkTenantId", out var linkTenantIdVal);
+            if (!linkTokenVal.IsNullOrEmpty() && !linkUserIdVal.IsNullOrEmpty() &&
+                Guid.TryParse(linkUserIdVal.ToString(), out var linkUserId))
+            {
+                LinkToken = linkTokenVal.ToString();
+                LinkUserId = linkUserId;
+                if (Guid.TryParse(linkTenantIdVal.ToString(), out var linkTenantId))
+                {
+                    LinkTenantId = linkTenantId;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        // TODO: 替换框架对于空格符号的编码错误
+        LinkToken = LinkToken.Replace(" ", "+");
+        return await IdentityLinkUserAppService.VerifyLinkTokenAsync(new VerifyLinkTokenInput()
+        {
+            UserId = LinkUserId.Value,
+            TenantId = LinkTenantId,
+            Token = LinkToken
+        });
+    }
+
+
+    protected async virtual Task<IActionResult> HandleLinkUserLogin(IdentityUser user)
+    {
+        using (CurrentPrincipalAccessor.Change(await SignInManager.CreateUserPrincipalAsync(user)))
+        {
+            await IdentityLinkUserAppService.LinkAsync(new LinkUserInput
+            {
+                UserId = LinkUserId.Value,
+                TenantId = LinkTenantId,
+                Token = LinkToken
+            });
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                UserName = user.UserName,
+                Action = "LinkUser",
+                ExtraProperties =
+                {
+                    { "LinkTenantId",  LinkTenantId },
+                    { "LinkUserId", LinkUserId }
+                }
+            });
+
+            using (CurrentTenant.Change(LinkTenantId))
+            {
+                user = await UserManager.GetByIdAsync(LinkUserId.Value);
+                using (CurrentPrincipalAccessor.Change(await SignInManager.CreateUserPrincipalAsync(user)))
+                {
+                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                    {
+                        Identity = IdentitySecurityLogIdentityConsts.Identity,
+                        UserName = user.UserName,
+                        Action = "LinkUser",
+                        ExtraProperties =
+                        {
+                            { "LinkTenantId",  LinkTenantId },
+                            { "LinkUserId", LinkUserId }
+                        }
+                    });
+                }
+            }
+
+            return RedirectToPage("./LinkLogged", new
+            {
+                ReturnUrl,
+                ReturnUrlHash,
+                LinkUserId,
+                LinkTenantId
+            });
+        }
+    }
+
+    #endregion
 }
 
 public abstract class LoginInputModel
 {
-    [HiddenInput]
-    [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; }
-
-    [HiddenInput]
-    [BindProperty(SupportsGet = true)]
-    public string ReturnUrlHash { get; set; }
 }
 
 public class PhoneLoginInputModel : LoginInputModel

@@ -17,6 +17,7 @@ public class AbpOpenIddictLinkUserModule : AbpModule
         PreConfigure<OpenIddictServerBuilder>(builder =>
         {
             builder.AllowLinkUserFlow();
+            builder.AddEventHandler(LinkUserAuthorizationHandler.Descriptor);
         });
     }
 

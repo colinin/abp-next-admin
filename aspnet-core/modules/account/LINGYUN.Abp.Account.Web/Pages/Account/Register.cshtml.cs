@@ -1,3 +1,4 @@
+using LINGYUN.Abp.Account.Dto;
 using LINGYUN.Abp.Account.Web.ExternalProviders;
 using LINGYUN.Abp.Account.Web.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -45,6 +46,25 @@ public class RegisterModel : AccountPageModel
 
     [BindProperty(SupportsGet = true)]
     public string ExternalLoginAuthSchema { get; set; }
+
+    #region LinkUser
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public Guid? LinkUserId { get; set; }
+
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public Guid? LinkTenantId { get; set; }
+
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public string LinkToken { get; set; }
+
+    protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
+
+    public IIdentityLinkUserAppService IdentityLinkUserAppService => LazyServiceProvider.LazyGetRequiredService<IIdentityLinkUserAppService>();
+
+    #endregion
 
     public IEnumerable<ExternalLoginProviderModel> ExternalProviders { get; set; }
     public IEnumerable<ExternalLoginProviderModel> VisibleExternalProviders => ExternalProviders.Where(x => !string.IsNullOrWhiteSpace(x.DisplayName));
@@ -146,7 +166,17 @@ public class RegisterModel : AccountPageModel
             }
             else
             {
-                await RegisterLocalUserAsync();
+                var user = await RegisterLocalUserAsync();
+
+                if (await VerifyLinkTokenAsync())
+                {
+                    await HandleLinkUserLogin(user);
+                }
+
+                await SignInManager.SignInAsync(user, isPersistent: true);
+
+                // Clear the dynamic claims cache.
+                await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
             }
 
             return Redirect(ReturnUrl ?? "~/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
@@ -158,7 +188,7 @@ public class RegisterModel : AccountPageModel
         }
     }
 
-    protected virtual async Task RegisterLocalUserAsync()
+    protected virtual async Task<IdentityUser> RegisterLocalUserAsync()
     {
         ValidateModel();
 
@@ -172,11 +202,7 @@ public class RegisterModel : AccountPageModel
             }
         );
 
-        var user = await UserManager.GetByIdAsync(userDto.Id);
-        await SignInManager.SignInAsync(user, isPersistent: true);
-
-        // Clear the dynamic claims cache.
-        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+        return await UserManager.GetByIdAsync(userDto.Id);
     }
 
     protected virtual async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string userName, string emailAddress)
@@ -270,6 +296,63 @@ public class RegisterModel : AccountPageModel
 
         return await Task.FromResult(Challenge(properties, provider));
     }
+
+    #region LinkUser
+    protected async virtual Task HandleLinkUserLogin(IdentityUser user)
+    {
+        using (CurrentPrincipalAccessor.Change(await SignInManager.CreateUserPrincipalAsync(user)))
+        {
+            await IdentityLinkUserAppService.LinkAsync(new LinkUserInput
+            {
+                UserId = LinkUserId.Value,
+                TenantId = LinkTenantId,
+                Token = LinkToken
+            });
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                UserName = user.UserName,
+                Action = "LinkUser",
+                ExtraProperties =
+                {
+                    { "LinkTenantId",  LinkTenantId },
+                    { "LinkUserId", LinkUserId }
+                }
+            });
+
+            using (CurrentTenant.Change(LinkTenantId))
+            {
+                var targetUser = await UserManager.GetByIdAsync(LinkUserId.Value);
+                using (CurrentPrincipalAccessor.Change(await SignInManager.CreateUserPrincipalAsync(targetUser)))
+                {
+                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                    {
+                        Identity = IdentitySecurityLogIdentityConsts.Identity,
+                        UserName = targetUser.UserName,
+                        Action = "LinkUser",
+                        ExtraProperties =
+                        {
+                            { "LinkTenantId",  LinkTenantId },
+                            { "LinkUserId", LinkUserId }
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    protected virtual async Task<bool> VerifyLinkTokenAsync()
+    {
+        return !LinkToken.IsNullOrWhiteSpace() && LinkUserId != null
+            && await IdentityLinkUserAppService.VerifyLinkTokenAsync(new VerifyLinkTokenInput
+            {
+                UserId = LinkUserId.Value,
+                TenantId = LinkTenantId,
+                Token = LinkToken
+            });
+    }
+    #endregion
 
     public class PostInput
     {

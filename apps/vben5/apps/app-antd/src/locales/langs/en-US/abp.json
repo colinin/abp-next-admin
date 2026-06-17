@@ -79,6 +79,7 @@
   },
   "account": {
     "title": "Account",
+    "linkAccount": "Link Account",
     "settings": {
       "title": "My Settings",
       "basic": {

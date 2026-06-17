@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import type { NotificationItem } from '@vben/layouts';
 
-import { computed, ref, watch } from 'vue';
+import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { AuthenticationLoginExpiredModal } from '@vben/common-ui';
+import { AuthenticationLoginExpiredModal, useVbenModal } from '@vben/common-ui';
 import { useWatermark } from '@vben/hooks';
 import { createIconifyIcon } from '@vben/icons';
 import {
@@ -24,6 +24,7 @@ import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
 const UserSettingsIcon = createIconifyIcon('tdesign:user-setting');
+const UserLinkIcon = createIconifyIcon('material-symbols-light:link');
 
 const notifications = ref<NotificationItem[]>([]);
 
@@ -39,7 +40,21 @@ const showDot = computed(() =>
   notifications.value.some((item) => !item.isRead),
 );
 
+const [LinkUserModal, linkUserModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(async () => {
+    const res = await import('@abp/account');
+    return res.UserLinkModal;
+  }),
+});
+
 const menus = computed(() => [
+  {
+    handler: () => {
+      linkUserModalApi.open();
+    },
+    icon: UserLinkIcon,
+    text: $t('abp.account.linkAccount'),
+  },
   {
     handler: () => {
       replace('/account/my-settings');
@@ -75,6 +90,28 @@ function handleNoticeClear() {
 function handleMakeAll() {
   notifications.value.forEach((item) => (item.isRead = true));
 }
+
+async function handleLinkUser(token: string) {
+  const { currentUser, currentTenant } = abpStore.application!;
+  const extraQueryParams: Record<string, string> = {
+    LinkUserId: currentUser.id!,
+    LinkToken: token,
+  };
+  if (currentTenant.id) {
+    extraQueryParams.LinkTenantId = currentTenant.id;
+  }
+  // 跳转登录页,交由后端处理
+  await authStore.oidcLogin({
+    prompt: 'login',
+    extraQueryParams,
+  });
+}
+
+async function handleLinkLogin(userId: string, tenantId?: string) {
+  await authStore.linkUseLogin(userId, tenantId, () => {
+    window.location.reload();
+  });
+}
 watch(
   () => preferences.app.watermark,
   async (enable) => {
@@ -108,6 +145,7 @@ watch(
           {{ description }}
         </span>
       </div>
+      <LinkUserModal @link="handleLinkUser" @login="handleLinkLogin" />
     </template>
     <template #notification>
       <Notification

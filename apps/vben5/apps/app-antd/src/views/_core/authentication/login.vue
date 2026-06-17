@@ -5,6 +5,7 @@ import type { ExtendedFormApi, VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
 import { computed, nextTick, onMounted, useTemplateRef } from 'vue';
+import { useRoute } from 'vue-router';
 
 import { AuthenticationLogin, useVbenModal, z } from '@vben/common-ui';
 import { useAppConfig } from '@vben/hooks';
@@ -30,6 +31,7 @@ const { auth } = useAppConfig(import.meta.env, import.meta.env.PROD);
 
 const abpStore = useAbpStore();
 const authStore = useAuthStore();
+const route = useRoute();
 
 const { isTrue } = useSettings();
 
@@ -83,6 +85,12 @@ const [ShouldChangePasswordModal, changePasswordModalApi] = useVbenModal({
 });
 async function onInit() {
   if (auth.onlyOidc === true) {
+    const query: Record<string, string> = {};
+    Object.keys(route.query).forEach((key) => {
+      if (typeof route.query[key] === 'string') {
+        query[key] = route.query[key];
+      }
+    });
     if (auth.onlyOidcHint) {
       setTimeout(() => {
         Modal.confirm({
@@ -95,16 +103,16 @@ async function onInit() {
             disabled: true,
           },
           async onOk() {
-            await authStore.oidcLogin();
+            await authStore.oidcLogin(query);
           },
         });
       }, 300);
     } else {
-      await authStore.oidcLogin();
+      await authStore.oidcLogin(query);
     }
     return;
   }
-  const abpConfig = await getConfigApi();
+  const abpConfig = await getConfigApi({ includeLocalizationResources: false });
   abpStore.setApplication(abpConfig);
   nextTick(() => {
     const formApi = login.value?.getFormApi();
