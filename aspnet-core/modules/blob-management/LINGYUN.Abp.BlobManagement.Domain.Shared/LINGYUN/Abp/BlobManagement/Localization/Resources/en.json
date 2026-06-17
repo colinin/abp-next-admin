@@ -75,6 +75,8 @@
     "UploadStatus:Error": "Error",
     "UploadStatus:Pause": "Pause",
     "BlobWellDownloadMessage": "The file download is about to start.",
-    "BlobCanNotPreviewMessage": "This file does not support previewing. Please download it and view it!"
+    "BlobCanNotPreviewMessage": "This file does not support previewing. Please download it and view it!",
+    "Settings:BlobManagement": "Blob Management",
+    "Settings:BlobManagement.Blobs": "Blobs"
   }
 }

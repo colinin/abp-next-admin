@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Account.OAuth.Localization;
+﻿using LINGYUN.Abp.Account.OAuth.Features;
+using LINGYUN.Abp.Account.OAuth.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
@@ -6,6 +7,8 @@ namespace LINGYUN.Abp.Account.OAuth.Settings;
 
 public class AccountOAuthSettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "ExternalOAuthLogin";
+
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(GetGitHubSettings());
@@ -26,7 +29,10 @@ public class AccountOAuthSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:ExternalOAuthLogin"))
+            .WithParent("GitHubAuth", L("Settings:GitHubAuth"))
+            .RequiredFeatures([AccountOAuthFeatureNames.GitHub.Enable]),
             new SettingDefinition(
                 AccountOAuthSettingNames.GitHub.ClientSecret,
                 displayName: L("Settings:GitHubClientSecret"),
@@ -37,7 +43,10 @@ public class AccountOAuthSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:ExternalOAuthLogin"))
+            .WithParent("GitHubAuth", L("Settings:GitHubAuth"))
+            .RequiredFeatures([AccountOAuthFeatureNames.GitHub.Enable]),
         };
     }
 
@@ -55,7 +64,10 @@ public class AccountOAuthSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:ExternalOAuthLogin"))
+            .WithParent("Bilibili", L("Settings:BilibiliAuth"))
+            .RequiredFeatures([AccountOAuthFeatureNames.Bilibili.Enable]),
             new SettingDefinition(
                 AccountOAuthSettingNames.Bilibili.ClientSecret,
                 displayName: L("Settings:BilibiliClientSecret"),
@@ -66,11 +78,14 @@ public class AccountOAuthSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:ExternalOAuthLogin"))
+            .WithParent("Bilibili", L("Settings:BilibiliAuth"))
+            .RequiredFeatures([AccountOAuthFeatureNames.Bilibili.Enable]),
         };
     }
 
-    protected ILocalizableString L(string name)
+    protected LocalizableString L(string name)
     {
         return LocalizableString.Create<AccountOAuthResource>(name);
     }

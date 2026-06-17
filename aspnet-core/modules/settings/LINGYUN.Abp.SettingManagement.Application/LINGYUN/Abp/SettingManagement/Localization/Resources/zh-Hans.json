@@ -35,6 +35,14 @@
     "SettingProviders:T": "租户",
     "SettingProviders:U": "用户",
     "BasicInfo": "基本",
-    "Properties": "属性"
+    "Properties": "属性",
+    "Settings:DefaultGroup": "未分组设置",
+    "Settings:DefaultSetting": "默认设置",
+    "Settings:System": "系统设置",
+    "Settings:System.Language": "语言",
+    "Settings:System.Timing": "时区",
+    "Settings:Emailing": "邮件设置",
+    "Settings:Emailing.Default": "默认配置",
+    "Settings:Emailing.Smtp": "Smtp配置"
   }
 }

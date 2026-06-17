@@ -5,6 +5,7 @@ using Volo.Abp.Settings;
 namespace LINGYUN.Abp.AIManagement.Settings;
 public class AIManagementSettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "AIManagement";
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(
@@ -12,10 +13,19 @@ public class AIManagementSettingDefinitionProvider : SettingDefinitionProvider
                 AIManagementSettingNames.ChatMessage.MaxLatestHistoryMessagesToKeep,
                 defaultValue: "5",
                 displayName: L("DisplayName:MaxLatestHistoryMessagesToKeep"),
-                description: L("Description:MaxLatestHistoryMessagesToKeep")));
+                description: L("Description:MaxLatestHistoryMessagesToKeep"))
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:AIManagement"))
+            .WithParent("ChatMessage", L("Settings:AIManagement.ChatMessage"))
+            .WithValueType(ValueType.Number)
+        );
     }
 
-    private static ILocalizableString L(string name)
+    private static LocalizableString L(string name)
     {
         return LocalizableString.Create<AIManagementResource>(name);
     }

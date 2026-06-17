@@ -76,6 +76,9 @@
     "WeChatWork:40009": "上传图片大小不是有效值，参考：https://developer.work.weixin.qq.com/document/path/90313#10112/%E4%B8%8A%E4%BC%A0%E7%9A%84%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6%E9%99%90%E5%88%B6",
     "WeChatWork:40011": "上传视频大小不是有效值，参考：https://developer.work.weixin.qq.com/document/path/90313#10112/%E4%B8%8A%E4%BC%A0%E7%9A%84%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6%E9%99%90%E5%88%B6",
     "WeChatWork:40013": "不合法的CorpID",
-    "WeChatWork:40014": "不合法的access_token，参考：https://developer.work.weixin.qq.com/document/path/90313#10649/%E9%94%99%E8%AF%AF%E7%A0%81%EF%BC%9A40014"
+    "WeChatWork:40014": "不合法的access_token，参考：https://developer.work.weixin.qq.com/document/path/90313#10649/%E9%94%99%E8%AF%AF%E7%A0%81%EF%BC%9A40014",
+    "Settings:WeChatWork": "WeChat Work",
+    "Settings:WeChatWork.UserLogin": "User Login",
+    "Settings:WeChatWork.Connection": "Connection"
   }
 }

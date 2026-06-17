@@ -31,4 +31,8 @@
 		<PackageReference Include="TencentCloudSDK" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\..\settings\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
+	</ItemGroup>
+
 </Project>

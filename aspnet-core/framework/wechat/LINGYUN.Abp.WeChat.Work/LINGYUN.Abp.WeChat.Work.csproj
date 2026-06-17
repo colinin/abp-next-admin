@@ -29,6 +29,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj" />
+	  <ProjectReference Include="..\..\settings\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.Work.Common\LINGYUN.Abp.WeChat.Work.Common.csproj" />
 	</ItemGroup>
 

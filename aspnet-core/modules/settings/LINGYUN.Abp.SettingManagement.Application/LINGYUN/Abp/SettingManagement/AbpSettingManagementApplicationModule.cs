@@ -3,10 +3,12 @@ using LINGYUN.Abp.Account.OAuth;
 using LINGYUN.Abp.Account.OAuth.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application;
+using Volo.Abp.Emailing;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.Localization;
+using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
 using VoloAbpSettingManagementApplicationContractsModule = Volo.Abp.SettingManagement.AbpSettingManagementApplicationContractsModule;
 
@@ -18,6 +20,9 @@ namespace LINGYUN.Abp.SettingManagement;
     typeof(VoloAbpSettingManagementApplicationContractsModule),
     typeof(AbpAccountApplicationContractsModule),
     typeof(AbpAccountOAuthModule),
+    typeof(AbpEmailingModule),
+    typeof(AbpTimingModule),
+    typeof(AbpLocalizationModule),
     typeof(AbpDddApplicationModule)
     )]
 public class AbpSettingManagementApplicationModule : AbpModule

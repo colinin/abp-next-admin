@@ -116,6 +116,14 @@
     "CurrentSession": "Current Session",
     "RevokeSession": "Revoke Session",
     "SessionWillBeRevokedMessage": "The selected session will be revoked, which will invalidate the user's login!",
-    "SuccessfullyRevoked": "Successful session revoked"
+    "SuccessfullyRevoked": "Successful session revoked",
+    "Settings:Identity": "Identity",
+    "Settings:Identity.User": "User",
+    "Settings:Identity.Lockout": "Lockout",
+    "Settings:Identity.SignIn": "SignIn",
+    "Settings:Identity.Password": "Password",
+    "Settings:Identity.OrganizationUnit": "OrganizationUnit",
+    "Settings:Identity.Session": "Session",
+    "Settings:Identity.Link": "Link"
   }
 }

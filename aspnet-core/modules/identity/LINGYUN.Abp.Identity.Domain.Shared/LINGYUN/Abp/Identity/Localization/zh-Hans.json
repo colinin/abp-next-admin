@@ -116,6 +116,14 @@
     "CurrentSession": "当前会话",
     "RevokeSession": "撤销会话",
     "SessionWillBeRevokedMessage": "选择的会话将被撤销,此操作使目标登录失效!",
-    "SuccessfullyRevoked": "撤销会话成功"
+    "SuccessfullyRevoked": "撤销会话成功",
+    "Settings:Identity": "身份认证",
+    "Settings:Identity.User": "用户配置",
+    "Settings:Identity.Lockout": "用户锁定",
+    "Settings:Identity.SignIn": "用户登录",
+    "Settings:Identity.Password": "密码配置",
+    "Settings:Identity.OrganizationUnit": "组织机构",
+    "Settings:Identity.Session": "会话配置",
+    "Settings:Identity.Link": "链接"
   }
 }
