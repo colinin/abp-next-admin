@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.Settings;
+using ValueType = Volo.Abp.Settings.ValueType;
 
 namespace LINGYUN.Abp.SettingManagement;
 

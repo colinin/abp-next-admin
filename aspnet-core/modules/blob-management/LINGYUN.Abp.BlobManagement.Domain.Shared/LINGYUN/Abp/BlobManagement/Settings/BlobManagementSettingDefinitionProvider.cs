@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.BlobManagement.Localization;
+﻿using LINGYUN.Abp.BlobManagement.Features;
+using LINGYUN.Abp.BlobManagement.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
@@ -6,6 +7,7 @@ namespace LINGYUN.Abp.BlobManagement.Settings;
 
 public class BlobManagementSettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "BlobManagement";
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(CreateBlobFileSettings());
@@ -25,7 +27,13 @@ public class BlobManagementSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName, 
+                L("Settings:BlobManagement"),
+                requiredFeatures: [BlobManagementFeatureNames.Blob.Enable])
+            .WithParent("Blobs", L("Settings:BlobManagement.Blobs"))
+            .WithValueType(ValueType.Number),
             new SettingDefinition(
                 name: BlobManagementSettingNames.AllowFileExtensions,
                 defaultValue: BlobManagementSettingNames.DefaultAllowFileExtensions,
@@ -36,18 +44,29 @@ public class BlobManagementSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:BlobManagement"),
+                requiredFeatures: [BlobManagementFeatureNames.Blob.Enable])
+            .WithParent("Blobs", L("Settings:BlobManagement.Blobs")),
             new SettingDefinition(
                 name: BlobManagementSettingNames.GenerateDownloadUrlExpirySeconds,
                 defaultValue: BlobManagementSettingNames.DefaultGenerateDownloadUrlExpirySeconds.ToString(),
                 displayName: L("DisplayName:GenerateDownloadUrlExpirySeconds"),
                 description: L("Description:GenerateDownloadUrlExpirySeconds"),
-                isVisibleToClients: true)
+                isVisibleToClients: false)
             .WithProviders(
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:BlobManagement"),
+                requiredFeatures: [BlobManagementFeatureNames.Blob.Enable])
+            .WithParent("Blobs", L("Settings:BlobManagement.Blobs"))
+            .WithValueType(ValueType.Number),
         };
     }
 

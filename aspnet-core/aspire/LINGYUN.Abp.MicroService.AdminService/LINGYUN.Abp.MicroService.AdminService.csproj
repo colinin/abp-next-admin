@@ -55,6 +55,7 @@
 		<ProjectReference Include="..\..\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
 		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
 		<ProjectReference Include="..\..\framework\wx-pusher\LINGYUN.Abp.WxPusher.SettingManagement\LINGYUN.Abp.WxPusher.SettingManagement.csproj" />
+		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.SettingManagement\LINGYUN.Abp.BlobManagement.SettingManagement.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

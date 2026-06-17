@@ -9,7 +9,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Settings;
-using ValueType = LINGYUN.Abp.SettingManagement.ValueType;
+using ValueType = Volo.Abp.Settings.ValueType;
 
 namespace LINGYUN.Abp.BlobManagement.SettingManagement;
 

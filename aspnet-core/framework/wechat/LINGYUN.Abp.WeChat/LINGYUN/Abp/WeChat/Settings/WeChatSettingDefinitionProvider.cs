@@ -6,6 +6,8 @@ namespace LINGYUN.Abp.WeChat.Settings;
 
 public class WeChatSettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "WeChat";
+
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(
@@ -22,10 +24,14 @@ public class WeChatSettingDefinitionProvider : SettingDefinitionProvider
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:WeChat"))
+            .WithParent("UserLogin", L("Settings:WeChat.UserLogin"), order: 0)
+            .WithOrder(0)
+            .WithValueType(ValueType.Boolean)
         );
     }
 
-    protected ILocalizableString L(string name)
+    protected LocalizableString L(string name)
     {
         return LocalizableString.Create<WeChatResource>(name);
     }

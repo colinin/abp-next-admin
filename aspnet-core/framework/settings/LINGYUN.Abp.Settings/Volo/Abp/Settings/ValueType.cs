@@ -1,4 +1,4 @@
-﻿namespace LINGYUN.Abp.SettingManagement;
+﻿namespace Volo.Abp.Settings;
 
 public enum ValueType
 {

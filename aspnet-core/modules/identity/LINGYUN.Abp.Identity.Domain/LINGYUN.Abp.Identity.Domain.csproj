@@ -18,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\settings\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Identity.Domain.Shared\LINGYUN.Abp.Identity.Domain.Shared.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Identity.Session\LINGYUN.Abp.Identity.Session.csproj" />
 	</ItemGroup>

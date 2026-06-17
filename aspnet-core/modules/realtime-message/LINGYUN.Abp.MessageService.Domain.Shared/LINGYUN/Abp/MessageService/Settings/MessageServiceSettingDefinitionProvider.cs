@@ -6,6 +6,7 @@ namespace LINGYUN.Abp.MessageService.Settings;
 
 public class MessageServiceSettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "MessageService";
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(
@@ -21,10 +22,13 @@ public class MessageServiceSettingDefinitionProvider : SettingDefinitionProvider
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:MessageService"))
+            .WithParent("Messages", L("Settings:MessageService.Messages"))
+            .WithValueType(ValueType.Number)
          );
     }
 
-    protected ILocalizableString L(string name)
+    protected LocalizableString L(string name)
     {
         return LocalizableString.Create<MessageServiceResource>(name);
     }

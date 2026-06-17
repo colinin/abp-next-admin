@@ -24,6 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\settings\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj" />
 	</ItemGroup>
 

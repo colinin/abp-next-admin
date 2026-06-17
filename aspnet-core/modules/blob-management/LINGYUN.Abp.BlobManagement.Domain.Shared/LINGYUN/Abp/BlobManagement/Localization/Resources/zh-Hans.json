@@ -75,6 +75,8 @@
     "UploadStatus:Error": "错误",
     "UploadStatus:Pause": "暂停",
     "BlobWellDownloadMessage": "即将开始下载文件.",
-    "BlobCanNotPreviewMessage": "此文件不支持预览,请下载后查看!"
+    "BlobCanNotPreviewMessage": "此文件不支持预览,请下载后查看!",
+    "Settings:BlobManagement": "对象存储",
+    "Settings:BlobManagement.Blobs": "存储管理"
   }
 }

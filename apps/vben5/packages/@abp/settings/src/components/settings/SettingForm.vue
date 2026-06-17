@@ -124,12 +124,8 @@ onMounted(onGet);
         </Button>
       </div>
     </template>
-    <Form
-      :label-col="{ span: 5 }"
-      :wrapper-col="{ span: 15 }"
-      class="h-[700px] overflow-y-scroll"
-    >
-      <Tabs v-model="activeTab">
+    <Form :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
+      <Tabs tab-position="left" type="card" v-model="activeTab">
         <TabPane
           v-for="(group, index) in settingGroups"
           :key="index"
@@ -221,4 +217,16 @@ onMounted(onGet);
   </Card>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+:deep(.ant-tabs) {
+  height: 75vh;
+
+  .ant-tabs-nav {
+    width: 14rem;
+  }
+
+  .ant-tabs-content-holder {
+    overflow: hidden auto !important;
+  }
+}
+</style>
