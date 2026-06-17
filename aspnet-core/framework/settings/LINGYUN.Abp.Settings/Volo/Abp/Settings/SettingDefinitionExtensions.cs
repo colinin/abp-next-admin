@@ -227,7 +227,8 @@ public static class SettingDefinitionExtensions
     public static IEnumerable<NameValue<string>> GetOptions(this SettingDefinition definition)
     {
         if (definition.TryGetArrayProperties(OptionNameKey, out var optionNames) &&
-            definition.TryGetArrayProperties(OptionValueKey, out var optionValues))
+            definition.TryGetArrayProperties(OptionValueKey, out var optionValues) &&
+            optionNames.Length == optionValues.Length)
         {
             return optionNames.Select((name, index) =>
             {
