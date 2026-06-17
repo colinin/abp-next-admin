@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.Notifications.Templating;
 using LY.MicroService.RealtimeMessage.BackgroundJobs;
-using LY.MicroService.RealtimeMessage.MultiTenancy;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -57,9 +56,9 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         /// </summary>
         protected ICurrentTenant CurrentTenant { get; }
         /// <summary>
-        /// Reference to <see cref="ITenantConfigurationCache"/>.
+        /// Reference to <see cref="ITenantStore"/>.
         /// </summary>
-        protected ITenantConfigurationCache TenantConfigurationCache { get; }
+        protected ITenantStore TenantStore { get; }
         /// <summary>
         /// Reference to <see cref="IJsonSerializer"/>.
         /// </summary>
@@ -108,7 +107,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
             IClock clock,
             ICurrentTenant currentTenant,
             ISettingProvider settingProvider,
-            ITenantConfigurationCache tenantConfigurationCache,
+            ITenantStore tenantStore,
             IJsonSerializer jsonSerializer,
             ITemplateRenderer templateRenderer,
             IBackgroundJobManager backgroundJobManager,
@@ -123,7 +122,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
         {
             Clock = clock;
             Options = options.Value;
-            TenantConfigurationCache = tenantConfigurationCache;
+            TenantStore = tenantStore;
             CurrentTenant = currentTenant;
             SettingProvider = settingProvider;
             JsonSerializer = jsonSerializer;
@@ -165,7 +164,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                     {
                         await SendToTenantAsync(null, notification, eventData, result);
 
-                        var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
+                        var allActiveTenants = (await TenantStore.GetListAsync()).Where(x => x.IsActive);
 
                         foreach (var activeTenant in allActiveTenants)
                         {
@@ -202,7 +201,7 @@ namespace LY.MicroService.RealtimeMessage.EventBus.Distributed
                     {
                         await SendToTenantAsync(null, notification, eventData);
 
-                        var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
+                        var allActiveTenants = (await TenantStore.GetListAsync()).Where(x => x.IsActive);
 
                         foreach (var activeTenant in allActiveTenants)
                         {

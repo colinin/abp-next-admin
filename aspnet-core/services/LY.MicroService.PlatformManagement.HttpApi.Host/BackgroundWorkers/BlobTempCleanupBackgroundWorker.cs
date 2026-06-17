@@ -1,8 +1,8 @@
 ﻿using LINGYUN.Abp.BlobManagement;
-using LY.MicroService.PlatformManagement.MultiTenancy;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.DistributedLocking;
@@ -13,9 +13,9 @@ namespace LY.MicroService.PlatformManagement.BackgroundWorkers;
 
 public class BlobTempCleanupBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
 {
+    protected ITenantStore TenantStore { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IAbpDistributedLock DistributedLock { get; }
-    protected ITenantConfigurationCache TenantConfigurationCache { get; }
 
     public BlobTempCleanupBackgroundWorker(
         AbpAsyncTimer timer,
@@ -23,12 +23,12 @@ public class BlobTempCleanupBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
         IOptionsMonitor<AbpBlobManagementOptions> cleanupOptions,
         IAbpDistributedLock distributedLock,
         ICurrentTenant currentTenant,
-        ITenantConfigurationCache tenantConfigurationCache)
+        ITenantStore tenantStore)
         : base(timer, serviceScopeFactory)
     {
+        TenantStore = tenantStore;
         CurrentTenant = currentTenant;
         DistributedLock = distributedLock;
-        TenantConfigurationCache = tenantConfigurationCache;
         timer.Period = cleanupOptions.CurrentValue.CleanupPeriod;
     }
 
@@ -44,7 +44,7 @@ public class BlobTempCleanupBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
             {
                 await ExecuteCleanService(workerContext);
 
-                var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
+                var allActiveTenants = (await TenantStore.GetListAsync()).Where(x => x.IsActive);
 
                 foreach (var activeTenant in allActiveTenants)
                 {
