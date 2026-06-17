@@ -11,6 +11,4 @@ public interface IExternalLocalizationStoreCache
     Task<string[]> GetResourceNamesAsync();
 
     Task<LocalizationResourceCacheItem[]> GetResourcesAsync();
-    
-    Task RemoveAsync(string resourceName);
 }
