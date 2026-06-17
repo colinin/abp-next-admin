@@ -18,6 +18,11 @@ public class LocalizationResourceCacheItem
 
     public bool IsEnabled { get; set; }
 
+    public LocalizationResourceCacheItem()
+    {
+
+    }
+
     public LocalizationResourceCacheItem(
         string name, 
         string defaultCulture = null,

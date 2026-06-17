@@ -9,6 +9,4 @@ public interface IExternalLocalizationTextStoreCache
     Dictionary<string, string> GetTexts(LocalizationResourceBase resource, string cultureName);
 
     Task<Dictionary<string, string>> GetTextsAsync(LocalizationResourceBase resource, string cultureName);
-
-    Task RemoveAsync(string resourceName, string cultureName);
 }

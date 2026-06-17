@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
@@ -16,4 +17,6 @@ public interface IResourceRepository : IRepository<Resource, Guid>
     Task<Resource> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default);
+
+    Task<List<Resource>> GetActivedListAsync(CancellationToken cancellationToken = default);
 }
