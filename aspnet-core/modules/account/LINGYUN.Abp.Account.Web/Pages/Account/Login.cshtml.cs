@@ -19,6 +19,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account.Settings;
@@ -668,7 +669,21 @@ public class LoginModel : AccountPageModel
 
     #region LinkUser
 
-    protected virtual async Task<bool> VerifyLinkTokenAsync()
+    public async virtual Task<string> GetWithoutLinkReturnUrlAsync(string returnUrl, string returnUrlHash)
+    {
+        var redirectUrl = await base.GetRedirectUrlAsync(returnUrl, returnUrlHash);
+
+        // 使用正则表达式移除 LinkUser 参数
+        redirectUrl = Regex.Replace(redirectUrl, @"[&?]LinkToken=[^&]*", "");
+        redirectUrl = Regex.Replace(redirectUrl, @"[&?]LinkUserId=[^&]*", "");
+        redirectUrl = Regex.Replace(redirectUrl, @"[&?]LinkTenantId=[^&]*", "");
+        redirectUrl = Regex.Replace(redirectUrl, @"[&?]linkUserId=[^&]*", "");
+        redirectUrl = Regex.Replace(redirectUrl, @"[&?]linkToken=[^&]*", "");
+
+        return redirectUrl;
+    }
+
+    protected async virtual Task<bool> VerifyLinkTokenAsync()
     {
         if (LinkToken.IsNullOrWhiteSpace() || !LinkUserId.HasValue)
         {

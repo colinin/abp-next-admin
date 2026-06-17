@@ -27,7 +27,7 @@
     @if (Model.IsLinkLogin)
     {
         <abp-alert alert-type="Warning">
-            @L["LinkAccountWarning", Url.PageLink()]
+            @L["LinkAccountWarning", await Model.GetWithoutLinkReturnUrlAsync(Model.ReturnUrl, Model.ReturnUrlHash)]
         </abp-alert>
     }
 
