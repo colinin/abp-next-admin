@@ -17,6 +17,8 @@
     "DisplayName:AuthenticatorCode": "Authenticator Code",
     "DisplayName:PhoneNumber": "Phone Number",
     "DisplayName:Code": "Code",
+    "DisplayName:LinkUserName": "User Name",
+    "DisplayName:DirectlyLinked": "Directly Linked",
     "TwoFactor": "Two factor authentication",
     "TwoFactor:Enabled": "TwoFactor Enabled",
     "TwoFactor:Email": "Email",
@@ -67,6 +69,15 @@
     "CancelBindWarningMessage": "After unbinding, you will not be able to use an external identity. If you log in through this method, your session will be logged out!",
     "EmailConfirm": "Email Confirm",
     "AvatarChanged": "Avatar Changed",
-    "ClickToValidation": "Click To Validation"
+    "ClickToValidation": "Click To Validation",
+    "LinkUser": "Link User",
+    "LinkUser:New": "New Link User",
+    "LinkUser:Login": "Log in with this account",
+    "LinkAccountWarning": "Please note that you are linking to other accounts, <a href=\"{0}\">Click here</a> to cancel the link login!",
+    "LinkAccountWillBeCreateWarning": "You will log out from your current account and then log in with another account. After completing the login process, the two accounts will be linked together.",
+    "LinkAccountWillBeDeleteWarning": "Are you sure you want to delete the associated account \"{0}\"?",
+    "LinkLogged": "Accounts are linked",
+    "StayWithCurrentAccount": "Stay with the current account",
+    "Settings:Identity.Account": "Account"
   }
 }

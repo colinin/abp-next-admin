@@ -38,6 +38,15 @@ interface PasswordTokenRequestModel {
   /** 用户名 */
   username: string;
 }
+/** 关联用户授权请求数据模型 */
+interface LinkUserTokenRequest {
+  /** 当前用户访问令牌 */
+  accessToken?: string;
+  /** 关联用户租户Id */
+  linkTenantId?: string;
+  /** 关联用户Id */
+  linkUserId: string;
+}
 /** 令牌撤销请求数据类型 */
 interface RevokeTokenRequest {
   /** 令牌 */
@@ -92,6 +101,7 @@ interface ShouldChangePasswordError extends OAuthError {
 }
 
 export type {
+  LinkUserTokenRequest,
   OAuthError,
   OAuthTokenRefreshModel,
   OAuthTokenResult,

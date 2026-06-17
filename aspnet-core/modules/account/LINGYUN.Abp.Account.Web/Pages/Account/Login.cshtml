@@ -24,13 +24,23 @@
 }
 
 <div class="account-module-form">
+    @if (Model.IsLinkLogin)
+    {
+        <abp-alert alert-type="Warning">
+            @L["LinkAccountWarning", await Model.GetWithoutLinkReturnUrlAsync(Model.ReturnUrl, Model.ReturnUrlHash)]
+        </abp-alert>
+    }
+
     @if (Model.EnableLocalLogin)
     {
         <abp-tabs id="LoginFormTabs">
             <abp-tab title="@L["PasswordLogin"].Value" active="Model.LoginType == LoginType.Password" header-name="PasswordLogin">
                 <form method="post" class="mt-4" asp-page-handler="PasswordLogin">
-                    <input asp-for="PasswordLoginInput.ReturnUrl" />
-                    <input asp-for="PasswordLoginInput.ReturnUrlHash" />
+                    <input asp-for="ReturnUrl" />
+                    <input asp-for="ReturnUrlHash" />
+                    <input asp-for="LinkTenantId" />
+                    <input asp-for="LinkUserId" />
+                    <input asp-for="LinkToken" />
                     <div class="mb-3">
                         <label asp-for="PasswordLoginInput.UserNameOrEmailAddress" class="form-label"></label>
                         <input asp-for="PasswordLoginInput.UserNameOrEmailAddress" class="form-control" />
@@ -79,8 +89,11 @@
             </abp-tab>
             <abp-tab title="@L["PhoneNumberLogin"].Value" active="Model.LoginType == LoginType.PhoneNumber" header-name="PhoneNumberLogin">
                 <form method="post" class="mt-4" asp-page-handler="PhoneNumberLogin" id="PhoneNumberForm">
-                    <input asp-for="PhoneLoginInput.ReturnUrl" />
-                    <input asp-for="PhoneLoginInput.ReturnUrlHash" />
+                    <input asp-for="ReturnUrl" />
+                    <input asp-for="ReturnUrlHash" />
+                    <input asp-for="LinkTenantId" />
+                    <input asp-for="LinkUserId" />
+                    <input asp-for="LinkToken" />
                     <div class="mb-3">
                         <label asp-for="PhoneLoginInput.PhoneNumber" class="form-label"></label>
                         <input asp-for="PhoneLoginInput.PhoneNumber" class="form-control" id="PhoneNumberInput" />
@@ -121,8 +134,11 @@
             {
                 <abp-tab title="@L["ScanQrCodeLogin"].Value" active="Model.LoginType == LoginType.QrCode" header-name="QrCodeLogin">
                     <form method="post" class="mt-4" asp-page-handler="QrCodeLogin" id="QrCodeForm">
-                        <input asp-for="QrCodeLoginInput.ReturnUrl" />
-                        <input asp-for="QrCodeLoginInput.ReturnUrlHash" />
+                        <input asp-for="ReturnUrl" />
+                        <input asp-for="ReturnUrlHash" />
+                        <input asp-for="LinkTenantId" />
+                        <input asp-for="LinkUserId" />
+                        <input asp-for="LinkToken" />
                         <input asp-for="QrCodeLoginInput.Key" id="QrCodeKey" />
                         <div class="gap-2" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                             <div id="QrCode"></div>

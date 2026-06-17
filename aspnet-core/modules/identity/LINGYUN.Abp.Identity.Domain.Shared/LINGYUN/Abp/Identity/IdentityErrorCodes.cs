@@ -38,4 +38,8 @@ public class IdentityErrorCodes
     /// 密码不能与最近{0}次使用的密码相同
     /// </summary>
     public const string PasswordInHistoryInValid = "Volo.Abp.Identity:020013";
+    /// <summary>
+    /// 关联用户Token无效
+    /// </summary>
+    public const string LinkUserTokenInValid = "Volo.Abp.Identity:020014";
 }
