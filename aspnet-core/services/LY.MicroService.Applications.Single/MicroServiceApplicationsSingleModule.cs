@@ -121,6 +121,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpOpenIddictWeChatModule),
     // OpenIddict扩展模块 企业微信认证
     typeof(AbpOpenIddictWeChatWorkModule),
+    // OpenIddict扩展模块 关联账户
+    typeof(AbpOpenIddictLinkUserModule),
     // OpenIddict扩展模块 扫码登录
     typeof(AbpOpenIddictQrCodeModule),
 

@@ -8,6 +8,7 @@
   </Folder>
   <Folder Name="/.changes/">
     <File Path="../.changes/Migration 10.0.2 - 10.2.0.md" />
+    <File Path="../.changes/Migration 10.2.0 - 10.4.0.md" />
   </Folder>
   <Folder Name="/.github/" />
   <Folder Name="/.github/workflows/">

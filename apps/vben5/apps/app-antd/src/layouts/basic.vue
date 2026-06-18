@@ -14,7 +14,7 @@ import {
   UserDropdown,
 } from '@vben/layouts';
 import { preferences } from '@vben/preferences';
-import { useAccessStore, useUserStore } from '@vben/stores';
+import { useAccessStore, useTabbarStore, useUserStore } from '@vben/stores';
 
 import { useAbpStore } from '@abp/core';
 
@@ -30,11 +30,12 @@ const notifications = ref<NotificationItem[]>([]);
 
 useSessions();
 
-const { replace } = useRouter();
+const router = useRouter();
 const abpStore = useAbpStore();
 const userStore = useUserStore();
 const authStore = useAuthStore();
 const accessStore = useAccessStore();
+const tabbarStore = useTabbarStore();
 const { destroyWatermark, updateWatermark } = useWatermark();
 const showDot = computed(() =>
   notifications.value.some((item) => !item.isRead),
@@ -57,7 +58,7 @@ const menus = computed(() => [
   },
   {
     handler: () => {
-      replace('/account/my-settings');
+      router.replace('/account/my-settings');
     },
     icon: UserSettingsIcon,
     text: $t('abp.account.settings.title'),
@@ -109,7 +110,8 @@ async function handleLinkUser(token: string) {
 
 async function handleLinkLogin(userId: string, tenantId?: string) {
   await authStore.linkUseLogin(userId, tenantId, () => {
-    window.location.reload();
+    tabbarStore.closeAllTabs(router);
+    window.location.replace('/');
   });
 }
 watch(

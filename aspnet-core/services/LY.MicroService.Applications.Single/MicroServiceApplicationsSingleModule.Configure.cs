@@ -788,6 +788,7 @@ public partial class MicroServiceApplicationsSingleModule
         Configure<AbpLocalizationManagementOptions>(options =>
         {
             options.SaveStaticLocalizationsToDatabase = true;
+            options.IsDynamicLocalizationInitializerHost = true;
         });
     }
 

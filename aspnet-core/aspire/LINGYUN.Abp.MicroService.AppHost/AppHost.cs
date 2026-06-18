@@ -5,7 +5,8 @@ var builder = DistributedApplication.CreateBuilder(args);
 // Redis
 var redis = builder.AddRedis("redis",
     password: builder.AddParameter("redis-password", "123456", secret: true))
-    .WithContainerName("redis")
+    .WithContainerName("redis-aspire")
+    .WithImageTag("8.0.2")
     .WithDataVolume("redis-dev");
 
 if (builder.Environment.IsDevelopment())
@@ -16,8 +17,9 @@ if (builder.Environment.IsDevelopment())
 }
 
 // Elasticsearch
-var elasticsearch = builder.AddElasticsearch("elasticsearch")
-    .WithContainerName("elasticsearch")
+var elasticsearch = builder.AddElasticsearch("elasticsearch", 
+    password: builder.AddParameter("elasticsearch-password", "123456", secret: true))
+    .WithContainerName("elasticsearch-aspire")
     .WithImageTag("8.17.3")
     .WithDataVolume("elasticsearch-dev")
     .WithEnvironment("ES_JAVA_OPTS", "-Xms2g -Xmx2g")
@@ -26,15 +28,17 @@ var elasticsearch = builder.AddElasticsearch("elasticsearch")
 
 // Kibana
 builder.AddContainer("kibana", "kibana", "8.17.3")
+    .WithContainerName("kibana-aspire")
     .WithReference(elasticsearch)
     .WithEndpoint(5601, 5601)
     .WaitFor(elasticsearch);
 
 // Postgres
-var postgres = builder.AddPostgres("postgres")
-    .WithPassword(builder.AddParameter("postgres-pwd", "123456", secret: true))
+var postgres = builder.AddPostgres("postgres",
+    userName: builder.AddParameter("postgres-username", "postgres", secret: true),
+    password: builder.AddParameter("postgres-pwd", "123456", secret: true))
     .WithImage("postgres", "17-alpine")
-    .WithContainerName("postgres")
+    .WithContainerName("postgres-aspire")
     .WithDataVolume("postgres-dev");
 
 var abpDb = postgres.AddDatabase("abp");
@@ -43,7 +47,8 @@ var abpDb = postgres.AddDatabase("abp");
 var rabbitmq = builder.AddRabbitMQ("rabbitmq",
     userName: builder.AddParameter("rabbitmq-username", "admin", secret: true),
     password: builder.AddParameter("rabbitmq-password", "123456", secret: true))
-    .WithContainerName("rabbitmq")
+    .WithContainerName("rabbitmq-aspire")
+    .WithImageTag("3.13.1")
     .WithDataVolume("rabbitmq-dev")
     .WithManagementPlugin();
 

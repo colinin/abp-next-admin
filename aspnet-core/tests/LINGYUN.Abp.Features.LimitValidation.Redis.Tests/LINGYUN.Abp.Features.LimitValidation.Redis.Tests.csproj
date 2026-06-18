@@ -6,7 +6,7 @@
 
 		<IsPackable>false</IsPackable>
 
-		<Configurations>Debug;Release;PostgreSQL</Configurations>
+		<Configurations>Debug;Release</Configurations>
 
 		<Platforms>AnyCPU</Platforms>
 	</PropertyGroup>

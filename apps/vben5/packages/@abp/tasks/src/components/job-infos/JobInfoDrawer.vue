@@ -27,7 +27,7 @@ import {
 } from 'ant-design-vue';
 
 import { useJobInfosApi } from '../../api/useJobInfosApi';
-import { JobPriority, JobType } from '../../types/job-infos';
+import { JobPriority, JobSource, JobType } from '../../types/job-infos';
 
 defineOptions({
   name: 'JobInfoDrawer',
@@ -39,6 +39,9 @@ const TabPane = Tabs.TabPane;
 interface JobParamter {
   key: string;
   value: any;
+}
+interface ModalState extends BackgroundJobInfoDto {
+  isCopy?: boolean;
 }
 
 const activedTab = ref('basic');
@@ -79,6 +82,7 @@ const jobPriorityOptions = reactive([
   },
 ]);
 const jobDefinetions = ref<BackgroundJobDefinitionDto[]>([]);
+const jobArgsDisplayNameMap = ref<Record<string, string>>({});
 const form = useTemplateRef<FormInstance>('form');
 const formModel = ref<BackgroundJobInfoDto>({} as BackgroundJobInfoDto);
 const { createApi, getApi, getDefinitionsApi, updateApi } = useJobInfosApi();
@@ -101,9 +105,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
           priority: JobPriority.Normal,
         } as BackgroundJobInfoDto;
         drawerApi.setState({ loading: true });
-        const dto = drawerApi.getData<BackgroundJobInfoDto>();
-        if (dto?.id) {
-          await onGet(dto.id);
+        const state = drawerApi.getData<ModalState>();
+        if (state?.id) {
+          await onGet(state.id, state.isCopy);
         } else {
           await onInitDefaultJobs();
           drawerApi.setState({
@@ -117,12 +121,23 @@ const [Drawer, drawerApi] = useVbenDrawer({
   },
   title: $t('BackgroundJobs:Edit'),
 });
-async function onGet(id: string) {
+
+async function onGet(id: string, isCopy?: boolean) {
   const dto = await getApi(id);
+  if (isCopy === true) {
+    dto.id = '';
+    dto.name = '';
+    dto.source = JobSource.User;
+    drawerApi.setState({
+      title: $t('TaskManagement.BackgroundJobs:AddNew'),
+    });
+    await onInitDefaultJobs();
+  } else {
+    drawerApi.setState({
+      title: `${$t('TaskManagement.BackgroundJobs:Edit')} - ${dto.name}`,
+    });
+  }
   formModel.value = dto;
-  drawerApi.setState({
-    title: `${$t('TaskManagement.BackgroundJobs:Edit')} - ${dto.name}`,
-  });
 }
 
 async function onInitDefaultJobs() {
@@ -148,14 +163,18 @@ async function onSubmit() {
 
 function onJobDefineChange(jobName: string) {
   formModel.value.args = {};
+  jobArgsDisplayNameMap.value = {};
   const jobDefine = jobDefinetions.value.find((x) => x.name === jobName);
   if (jobDefine) {
     const params: Record<string, any> = {};
+    const paramDisplayNames: Record<string, any> = {};
     jobDefine.paramters.forEach((param) => {
       params[param.name] = undefined;
+      paramDisplayNames[param.name] = param.displayName;
     });
     formModel.value.args = params;
     formModel.value.type = jobDefine.name;
+    jobArgsDisplayNameMap.value = paramDisplayNames;
   }
 }
 
@@ -206,6 +225,7 @@ function onDeleteParam(record: JobParamter) {
             >
               <Input
                 v-model:value="formModel.nodeName"
+                :disabled="!!formModel.id"
                 allow-clear
                 autocomplete="off"
               />
@@ -217,6 +237,7 @@ function onDeleteParam(record: JobParamter) {
             >
               <Input
                 v-model:value="formModel.group"
+                :disabled="!!formModel.id"
                 allow-clear
                 autocomplete="off"
               />
@@ -228,6 +249,7 @@ function onDeleteParam(record: JobParamter) {
             >
               <Input
                 v-model:value="formModel.name"
+                :disabled="!!formModel.id"
                 allow-clear
                 autocomplete="off"
               />
@@ -241,6 +263,7 @@ function onDeleteParam(record: JobParamter) {
               <Textarea
                 allow-clear
                 v-model:value="formModel.type"
+                :disabled="!!formModel.id"
                 :auto-size="{ minRows: 3 }"
               />
             </FormItem>
@@ -280,7 +303,16 @@ function onDeleteParam(record: JobParamter) {
               />
             </FormItem>
             <FormItem
-              v-if="formModel.jobType === JobType.Period"
+              v-if="formModel.jobType === JobType.Persistent"
+              name="interval"
+              required
+              :label="$t('TaskManagement.DisplayName:Interval')"
+              :extra="$t('TaskManagement.Description:Interval')"
+            >
+              <InputNumber class="w-full" v-model:value="formModel.interval" />
+            </FormItem>
+            <FormItem
+              v-else-if="formModel.jobType === JobType.Period"
               name="cron"
               required
               :label="$t('TaskManagement.DisplayName:Cron')"
@@ -347,6 +379,7 @@ function onDeleteParam(record: JobParamter) {
           <TabPane key="paramters" :tab="$t('TaskManagement.Paramters')">
             <PropertyTable
               :data="formModel.args"
+              :display-name-map="jobArgsDisplayNameMap"
               @change="onEditParam"
               @delete="onDeleteParam"
             />
