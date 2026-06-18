@@ -280,6 +280,7 @@ public partial class WeChatServiceModule
         Configure<FeatureManagementOptions>(options =>
         {
             options.IsDynamicFeatureStoreEnabled = true;
+            options.SaveStaticFeaturesToDatabase = true;
         });
     }
 
@@ -288,7 +289,7 @@ public partial class WeChatServiceModule
         Configure<PermissionManagementOptions>(options =>
         {
             options.IsDynamicPermissionStoreEnabled = true;
-            options.SaveStaticPermissionsToDatabase = false;
+            options.SaveStaticPermissionsToDatabase = true;
         });
     }
 
@@ -297,6 +298,7 @@ public partial class WeChatServiceModule
         Configure<SettingManagementOptions>(options =>
         {
             options.IsDynamicSettingStoreEnabled = true;
+            options.SaveStaticSettingsToDatabase = true;
         });
     }
 

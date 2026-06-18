@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Features;
@@ -29,32 +28,32 @@ public class WebhookNotificationPublishProvider : NotificationPublishProvider
         return base.CanPublishAsync(notification, cancellationToken);
     }
 
-    protected async override Task PublishAsync(NotificationInfo notification, IEnumerable<UserIdentifier> identifiers, CancellationToken cancellationToken = default)
+    protected async override Task PublishAsync(NotificationPublishContext context, CancellationToken cancellationToken = default)
     {
         using var scope = ServiceScopeFactory.CreateScope();
 
         foreach (var contributor in Options.Value.Contributors)
         {
-            var context = new WebhookNotificationContext(scope.ServiceProvider, notification);
+            var webhookNotificationContext = new WebhookNotificationContext(scope.ServiceProvider, context.Notification);
 
-            await contributor.ContributeAsync(context);
+            await contributor.ContributeAsync(webhookNotificationContext);
 
-            if (!context.HasResolved())
+            if (!webhookNotificationContext.HasResolved())
             {
                 Logger.LogWarning("The Webhook notifies the contributor: {0} that the Webhook data for the given notification: {1} cannot be parsed. Skip it.",
-                    contributor.Name, notification.Name);
+                    contributor.Name, context.Notification.Name);
                 continue;
             }
             else
             {
                 await WebhookPublisher.PublishAsync(
-                    context.Webhook.WebhookName,
-                    context.Webhook.Data,
-                    notification.TenantId,
-                    context.Webhook.SendExactSameData,
-                    context.Webhook.Headers);
+                    webhookNotificationContext.Webhook.WebhookName,
+                    webhookNotificationContext.Webhook.Data,
+                    context.Notification.TenantId,
+                    webhookNotificationContext.Webhook.SendExactSameData,
+                    webhookNotificationContext.Webhook.Headers);
 
-                Logger.LogDebug("The webhook: {webhookName} with contributor: {name} has successfully published!", context.Webhook.WebhookName, Name);
+                Logger.LogDebug("The webhook: {webhookName} with contributor: {name} has successfully published!", webhookNotificationContext.Webhook.WebhookName, Name);
             }
         }
     }

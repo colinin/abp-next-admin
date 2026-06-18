@@ -1,125 +1,293 @@
-﻿//using LINGYUN.Abp.BackgroundTasks;
-//using LINGYUN.Abp.Identity.Notifications;
-//using LINGYUN.Abp.Notifications;
-//using Microsoft.Extensions.Logging;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Threading.Tasks;
-//using Volo.Abp.Domain.Repositories;
-//using Volo.Abp.Identity;
-//using Volo.Abp.Specifications;
-//using Volo.Abp.Timing;
+﻿using LINGYUN.Abp.BackgroundTasks;
+using LINGYUN.Abp.Identity.Notifications;
+using LINGYUN.Abp.Notifications;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Volo.Abp.Emailing;
+using Volo.Abp.Identity;
+using Volo.Abp.Identity.Localization;
+using Volo.Abp.Specifications;
+using Volo.Abp.TextTemplating;
+using Volo.Abp.Timing;
 
-//namespace LINGYUN.Abp.Identity.Jobs;
+namespace LINGYUN.Abp.Identity.Jobs;
 
-///// <summary>
-///// 用户清理作业
-///// </summary>
-///// <remarks>
-///// 清理长期未登录用户
-///// </remarks>
-//public class InactiveIdentityUserCleanupJob : IJobRunnable
-//{
-//    public const string Name = "InactiveIdentityUserCleanupJob";
+/// <summary>
+/// 不活跃用户清理作业
+/// </summary>
+/// <remarks>
+/// 清理长期不活跃用户
+/// </remarks>
+public class InactiveIdentityUserCleanupJob : IJobRunnable
+{
+    public const string Name = "InactiveIdentityUserCleanupJob";
 
-//    #region Definition Paramters
+    #region Definition Paramters
 
-//    public readonly static IReadOnlyList<JobDefinitionParamter> Paramters =
-//        new List<JobDefinitionParamter>
-//        {
-//            new JobDefinitionParamter(
-//                PropertyUserInactiveCleanupDays,
-//                LocalizableStatic.Create("DisplayName:UserInactiveCleanupDays"),
-//                LocalizableStatic.Create("Description:UserInactiveCleanupDays")),
-//            new JobDefinitionParamter(
-//                PropertyUserInactiveNotifierDays,
-//                LocalizableStatic.Create("DisplayName:UserInactiveNotifierDays"),
-//                LocalizableStatic.Create("Description:UserInactiveNotifierDays")),
-//        };
+    public readonly static IReadOnlyList<JobDefinitionParamter> Paramters =
+        new List<JobDefinitionParamter>
+        {
+            new JobDefinitionParamter(
+                PropertyInactivityPeriodDays,
+                LocalizableStatic.Create("DisplayName:InactivityPeriodDays"),
+                LocalizableStatic.Create("Description:InactivityPeriodDays")),
+            new JobDefinitionParamter(
+                PropertyGracePeriodDays,
+                LocalizableStatic.Create("DisplayName:GracePeriodDays"),
+                LocalizableStatic.Create("Description:GracePeriodDays")),
+        };
 
-//    #endregion
-//    /// <summary>
-//    /// 不活跃用户清理时间, 单位: 天
-//    /// </summary>
-//    public const string PropertyUserInactiveCleanupDays = "UserInactiveCleanupDays";
-//    /// <summary>
-//    /// 不活跃用户通知时间, 单位: 天
-//    /// </summary>
-//    public const string PropertyUserInactiveNotifierDays = "UserInactiveNotifierDays";
+    #endregion
+    /// <summary>
+    /// 停用不活跃用户天数
+    /// </summary>
+    public const string PropertyInactivityPeriodDays = "InactivityPeriodDays";
+    /// <summary>
+    /// 已停用用户宽限天数
+    /// </summary>
+    public const string PropertyGracePeriodDays = "GracePeriodDays";
 
-//    public async virtual Task ExecuteAsync(JobRunnableContext context)
-//    {
-//        var logger = context.GetRequiredService<ILogger<InactiveIdentityUserCleanupJob>>();
+    public async virtual Task ExecuteAsync(JobRunnableContext context)
+    {
+        await Task.WhenAll([
+            SetInactiveIdentityUsers(context),
+            DeleteInactiveIdentityUsers(context)
+        ]);
+    }
 
-//        // 不活跃用户清理时间
-//        var inactiveCleanupDays = context.GetOrDefaultJobData(PropertyUserInactiveCleanupDays, 30);
-//        // 不活跃用户通知时间
-//        var inactiveNotifierDays = context.GetOrDefaultJobData(PropertyUserInactiveNotifierDays, 180);
+    protected async virtual Task SetInactiveIdentityUsers(JobRunnableContext context)
+    {
+        // 不活跃用户停用时间: 用户距离上次登录天数 + 宽限天数
+        var inactivityPeriodDays = context.GetOrDefaultJobData(PropertyInactivityPeriodDays, 180);
+        var gracePeriodDays = context.GetOrDefaultJobData(PropertyGracePeriodDays, 60);
 
-//        var clock = context.GetRequiredService<IClock>();
-//        var identityUserRepo = context.GetRequiredService<IIdentityUserRepository>();
-//        var identityUserSessionRepo = context.GetRequiredService<IIdentitySessionRepository>();
+        var clock = context.GetRequiredService<IClock>();
+        var logger = context.GetRequiredService<ILogger<InactiveIdentityUserCleanupJob>>();
 
-//        // 获取需要清理的用户集合
-//        var specification = new ExpressionSpecification<IdentitySession>(
-//            x => x.LastAccessed <= clock.Now.AddDays(-inactiveNotifierDays));
+        var identityUserRepo = context.GetRequiredService<IIdentityUserRepository>();
+        var identityUserInactiveRepo = context.GetRequiredService<IIdentityUserInactiveRepository>();
 
-//        using (identityUserSessionRepo.DisableTracking())
-//        {
-//            var inactiveUserCount = await identityUserSessionRepo.GetCountAsync(specification);
-//            if (inactiveUserCount == 0)
-//            {
-//                logger.LogInformation("There are no inactive users to be notified.");
-//                return;
-//            }
-//            // 不活跃用户会话集合
-//            var inactiveUsers = await identityUserSessionRepo.GetListAsync(specification, maxResultCount: inactiveUserCount);
+        var specification = new ExpressionSpecification<IdentityUserInactive>(
+            x => x.Status == InactiveUserStatus.Notified && x.LastSignInTime < clock.Now.AddDays(-(inactivityPeriodDays + gracePeriodDays)));
 
-//            // 直接清理的不活跃用户集合
-//            var inactiveCleanupUsers = inactiveUsers.Where(x => x.LastAccessed <= clock.Now.AddDays(-inactiveCleanupDays));
+        var inactiveUserCount = await identityUserInactiveRepo.GetCountAsync(specification); 
+        if (inactiveUserCount == 0)
+        {
+            logger.LogInformation("There are no inactive users that can be deactivated.");
+            return;
+        }
 
-//            // 需要通知的不活跃用户
-//            var inactiveNotifierUsers = inactiveUsers.ExceptBy(inactiveCleanupUsers.Select(x => x.Id), x => x.Id);
-//            if (inactiveNotifierUsers.Count() != 0)
-//            {
-//                await SendInactiveUserNotifier(context, inactiveNotifierUsers);
-//            }
+        var inactiveUserBatch = 1000;
 
-//            if (inactiveCleanupUsers.Count() != 0)
-//            {
-//                logger.LogInformation(
-//                    "Prepare to clean up {count} users who have been inactive for more than {inactiveCleanupDays} days.",
-//                    inactiveCleanupUsers.Count(),
-//                    inactiveCleanupDays);
+        while (true)
+        {
+            var identityUserInactives = await identityUserInactiveRepo.GetListAsync(
+                specification,
+                maxResultCount: inactiveUserBatch);
+            if (identityUserInactives.Count == 0)
+            {
+                logger.LogInformation("There are no inactive users that can be deactivated.");
+                break;
+            }
 
-//                // 清理不活跃用户
-//                await identityUserRepo.DeleteManyAsync(inactiveCleanupUsers.Select(x => x.UserId));
-//            }
-//        }
-//        logger.LogInformation($"Cleaned inactive users.");
-//    }
+            var inactiveUsers = await identityUserRepo.GetListByIdsAsync(
+                identityUserInactives.Select(x => x.UserId));
+            if (inactiveUsers.Count > 0)
+            {
+                inactiveUsers.ForEach((inactiveUser) =>
+                {
+                    inactiveUser.SetIsActive(false);
+                });
 
-//    /// <summary>
-//    /// 发送不活跃用户清理通知
-//    /// </summary>
-//    /// <param name="context"></param>
-//    /// <param name="userSessions"></param>
-//    /// <returns></returns>
-//    private async Task SendInactiveUserNotifier(JobRunnableContext context, IEnumerable<IdentitySession> userSessions)
-//    {
-//        // TODO: 完成不活跃用户清理通知
-//        var notificationSender = context.GetRequiredService<INotificationSender>();
+                await identityUserRepo.UpdateManyAsync(inactiveUsers);
 
-//        var notificationTemplate = new NotificationTemplate(
-//            IdentityNotificationNames.IdentityUser.CleaningUpInactiveUsers,
-//            data: new Dictionary<string, object>
-//            {
+                await SendInactiveUserDeactivationNotifier(context, inactiveUsers);
+            }
 
-//            });
+            identityUserInactives.ForEach((identityUserInactive) =>
+            {
+                identityUserInactive.MarkDeactivated(clock.Now);
+            });
 
-//        await notificationSender.SendNofiterAsync(
-//            IdentityNotificationNames.IdentityUser.CleaningUpInactiveUsers,
-//            notificationTemplate
-//            );
-//    }
-//}
+            await identityUserInactiveRepo.UpdateManyAsync(identityUserInactives);
+
+            if (identityUserInactives.Count < inactiveUserBatch)
+            {
+                break;
+            }
+        }
+
+        logger.LogInformation("The operation to deactivate inactive users has been successfully completed.");
+    }
+
+    /// <summary>
+    /// 发送不活跃用户停用通知
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="inactiveUsers"></param>
+    /// <returns></returns>
+    protected async virtual Task SendInactiveUserDeactivationNotifier(JobRunnableContext context, IEnumerable<IdentityUser> inactiveUsers)
+    {
+        var clock = context.GetRequiredService<IClock>();
+        var notificationSender = context.GetRequiredService<INotificationSender>();
+
+        var inactivityPeriodDays = context.GetOrDefaultJobData(PropertyInactivityPeriodDays, 180);
+        var gracePeriodDays = context.GetOrDefaultJobData(PropertyGracePeriodDays, 60);
+
+        var reactivateDate = clock.Now.AddDays(gracePeriodDays);
+        await Parallel.ForEachAsync(
+            inactiveUsers,
+            context.CancellationToken,
+            async (inactiveUser, ctx) =>
+            {
+                var inactivityDays = (int)(clock.Now - (inactiveUser.LastSignInTime ?? inactiveUser.CreationTime)).TotalDays;
+                var notificationTemplateData = new Dictionary<string, object>
+                {
+                    { "now", clock.Now },
+                    { "name", inactiveUser.Name },
+                    { "userName", inactiveUser.UserName },
+                    { "surname", inactiveUser.Surname },
+                    { "email", inactiveUser.Email },
+                    { "isActive", inactiveUser.IsActive },
+                    { "inactivityDays", inactivityDays },
+                    { "reactivateDate", reactivateDate },
+                    { "creationTime", clock.Normalize(inactiveUser.CreationTime) },
+                };
+                if (inactiveUser.LastSignInTime.HasValue)
+                {
+                    notificationTemplateData["lastSignInTime"] = clock.Normalize(inactiveUser.LastSignInTime.Value.DateTime);
+                }
+                var notificationTemplate = new NotificationTemplate(
+                    IdentityNotificationNames.IdentityUser.InactiveUserDeactivationNotifier,
+                    data: notificationTemplateData);
+
+                await notificationSender.SendNofiterAsync(
+                    IdentityNotificationNames.IdentityUser.InactiveUserDeactivationNotifier,
+                    template: notificationTemplate,
+                    user: new UserIdentifier(inactiveUser.Id, inactiveUser.UserName),
+                    tenantId: inactiveUser.TenantId,
+                    severity: NotificationSeverity.Warn);
+            });
+    }
+
+    protected async virtual Task DeleteInactiveIdentityUsers(JobRunnableContext context)
+    {
+        // 不活跃用户删除时间: 距离上次发送不活跃通知天数 + 宽限天数
+        var gracePeriodDays = context.GetOrDefaultJobData(PropertyGracePeriodDays, 60);
+
+        var clock = context.GetRequiredService<IClock>();
+        var logger = context.GetRequiredService<ILogger<InactiveIdentityUserCleanupJob>>();
+
+        var identityUserRepo = context.GetRequiredService<IIdentityUserRepository>();
+        var identityUserInactiveRepo = context.GetRequiredService<IIdentityUserInactiveRepository>();
+
+        var specification = new ExpressionSpecification<IdentityUserInactive>(
+            x => x.Status == InactiveUserStatus.Deactivated && x.DeactivatedTime < clock.Now.AddDays(-gracePeriodDays));
+
+        var inactiveUserCount = await identityUserInactiveRepo.GetCountAsync(specification); if (inactiveUserCount == 0)
+        {
+            logger.LogInformation("There are no inactive users to delete.");
+            return;
+        }
+
+        var inactiveUserBatch = 1000;
+
+        while (true)
+        {
+            var identityUserInactives = await identityUserInactiveRepo.GetListAsync(
+                specification,
+                maxResultCount: inactiveUserBatch);
+            if (identityUserInactives.Count == 0)
+            {
+                logger.LogInformation("There are no inactive users to delete.");
+                break;
+            }
+
+            await identityUserInactiveRepo.DeleteManyAsync(identityUserInactives);
+
+            var inactiveUsers = await identityUserRepo.GetListByIdsAsync(
+                identityUserInactives.Select(x => x.UserId));
+            if (inactiveUsers.Count > 0)
+            {
+                await identityUserRepo.DeleteManyAsync(inactiveUsers);
+
+                await SendInactiveUserDeletionNotifier(context, inactiveUsers);
+            }
+
+            if (identityUserInactives.Count < inactiveUserBatch)
+            {
+                break;
+            }
+        }
+
+        logger.LogInformation("The operation to deactivate inactive users has been successfully completed.");
+    }
+
+    /// <summary>
+    /// 发送不活跃用户删除通知
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="inactiveUsers"></param>
+    /// <returns></returns>
+    protected async virtual Task SendInactiveUserDeletionNotifier(JobRunnableContext context, IEnumerable<IdentityUser> inactiveUsers)
+    {
+        var clock = context.GetRequiredService<IClock>();
+        var emailSender = context.GetRequiredService<IEmailSender>();
+        var templateRenderer = context.GetRequiredService<ITemplateRenderer>();
+        var logger = context.GetRequiredService<ILogger<InactiveIdentityUserCleanupJob>>();
+        var stringLocalizer = context.GetRequiredService<IStringLocalizer<IdentityResource>>();
+
+        var emailTitle = stringLocalizer["InactiveUserDeletionNotifier"];
+        var gracePeriodDays = context.GetOrDefaultJobData(PropertyGracePeriodDays, 60);
+        var inactivityPeriodDays = context.GetOrDefaultJobData(PropertyInactivityPeriodDays, 180);
+
+        await Parallel.ForEachAsync(
+            inactiveUsers,
+            context.CancellationToken,
+            async (inactiveUser, ctx) =>
+            {
+                if (!inactiveUser.EmailConfirmed)
+                {
+                    logger.LogWarning("{userName} email has not been confirmed, skipping the account deletion notification sending.", inactiveUser.UserName);
+                    return;
+                }
+                try
+                {
+                    var notificationTemplateData = new Dictionary<string, object>
+                    {
+                        { "now", clock.Now },
+                        { "name", inactiveUser.Name },
+                        { "userName", inactiveUser.UserName },
+                        { "surname", inactiveUser.Surname },
+                        { "email", inactiveUser.Email },
+                        { "isActive", inactiveUser.IsActive },
+                        { "inactivityPeriodDays", inactivityPeriodDays },
+                        { "gracePeriodDays", gracePeriodDays },
+                        { "creationTime", clock.Normalize(inactiveUser.CreationTime) },
+                    };
+                    if (inactiveUser.LastSignInTime.HasValue)
+                    {
+                        notificationTemplateData["lastSignInTime"] = clock.Normalize(inactiveUser.LastSignInTime.Value.DateTime);
+                    }
+
+                    var emailBody = await templateRenderer.RenderAsync(
+                        IdentityNotificationNames.IdentityUser.InactiveUserDeletionNotifier,
+                        notificationTemplateData);
+
+                    await emailSender.SendAsync(
+                        inactiveUser.Email,
+                        emailTitle,
+                        emailBody,
+                        isBodyHtml: true);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogWarning("Failure in sending the email for notifying the deletion of the user {userName}, error: {message}", inactiveUser.UserName, ex.Message);
+                }
+            });
+    }
+}

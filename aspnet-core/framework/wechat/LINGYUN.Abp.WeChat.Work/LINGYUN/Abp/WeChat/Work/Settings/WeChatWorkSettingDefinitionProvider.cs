@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.WeChat.Work.Localization;
+﻿using LINGYUN.Abp.WeChat.Work.Features;
+using LINGYUN.Abp.WeChat.Work.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
@@ -6,6 +7,7 @@ namespace LINGYUN.Abp.WeChat.Work.Settings;
 
 public class WeChatWorkSettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "WeChatWork";
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(
@@ -22,6 +24,13 @@ public class WeChatWorkSettingDefinitionProvider : SettingDefinitionProvider
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:WeChatWork"),
+                requiredFeatures: [WeChatWorkFeatureNames.Enable])
+            .WithParent("UserLogin", L("Settings:WeChatWork.UserLogin"), order: 1)
+            .WithOrder(0)
+            .WithValueType(ValueType.Boolean)
         );
         context.Add(GetConnectionSettings());
     }
@@ -39,7 +48,13 @@ public class WeChatWorkSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:WeChatWork"),
+                requiredFeatures: [WeChatWorkFeatureNames.Enable])
+            .WithParent("Connection", L("Settings:WeChatWork.Connection"), order: 2)
+            .WithOrder(0),
 
             new SettingDefinition(
                 WeChatWorkSettingNames.Connection.AgentId,
@@ -50,7 +65,13 @@ public class WeChatWorkSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:WeChatWork"),
+                requiredFeatures: [WeChatWorkFeatureNames.Enable])
+            .WithParent("Connection", L("Settings:WeChatWork.Connection"), order: 2)
+            .WithOrder(1),
             new SettingDefinition(
                 WeChatWorkSettingNames.Connection.Secret,
                 displayName: L("DisplayName:WeChatWork.Connection.Secret"),
@@ -60,7 +81,13 @@ public class WeChatWorkSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:WeChatWork"),
+                requiredFeatures: [WeChatWorkFeatureNames.Enable])
+            .WithParent("Connection", L("Settings:WeChatWork.Connection"), order: 2)
+            .WithOrder(2),
             new SettingDefinition(
                 WeChatWorkSettingNames.Connection.Token,
                 displayName: L("DisplayName:WeChatWork.Connection.Token"),
@@ -70,7 +97,13 @@ public class WeChatWorkSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:WeChatWork"),
+                requiredFeatures: [WeChatWorkFeatureNames.Enable])
+            .WithParent("Connection", L("Settings:WeChatWork.Connection"), order: 2)
+            .WithOrder(3),
             new SettingDefinition(
                 WeChatWorkSettingNames.Connection.EncodingAESKey,
                 displayName: L("DisplayName:WeChatWork.Connection.EncodingAESKey"),
@@ -80,11 +113,17 @@ public class WeChatWorkSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:WeChatWork"),
+                requiredFeatures: [WeChatWorkFeatureNames.Enable])
+            .WithParent("Connection", L("Settings:WeChatWork.Connection"), order: 2)
+            .WithOrder(4),
         };
     }
 
-    protected ILocalizableString L(string name)
+    protected LocalizableString L(string name)
     {
         return LocalizableString.Create<WeChatWorkResource>(name);
     }

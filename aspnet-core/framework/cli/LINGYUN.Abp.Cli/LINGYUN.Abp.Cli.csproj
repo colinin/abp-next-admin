@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\..\configureawait.props" />
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net10.0</TargetFramework>
-		<Version>9.3.6</Version>
+		<Version>10.2.0</Version>
 		<Copyright>colin</Copyright>
 		<Description>Use LINGYUN.MicroService.Templates command line</Description>
 		<PackAsTool>true</PackAsTool>
@@ -28,7 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CSharp" />
+		<!--<PackageReference Include="Microsoft.CSharp" />-->
 		<!--<PackageReference Include="NETStandard.Library" Version="2.0.3" />-->
 		<PackageReference Include="Serilog.Extensions.Logging" />
 		<PackageReference Include="Serilog.Sinks.File" />

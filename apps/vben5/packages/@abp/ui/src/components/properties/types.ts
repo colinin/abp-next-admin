@@ -11,6 +11,7 @@ interface PropertyProps {
   allowEdit?: boolean;
   data?: Dictionary<string, string>;
   disabled?: boolean;
+  displayNameMap?: Dictionary<string, string>;
   renderKey?: (key: string) => string | VNode;
 }
 

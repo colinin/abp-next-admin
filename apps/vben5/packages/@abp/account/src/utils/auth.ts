@@ -1,6 +1,7 @@
 import type { Logger, UserManagerSettings } from 'oidc-client-ts';
 
 import type {
+  LinkUserTokenRequest,
   PasswordTokenRequestModel,
   PhoneNumberTokenRequest,
   QrCodeTokenRequest,
@@ -71,6 +72,28 @@ class AbpUserManager extends UserManager {
       params.set('userId', model.userId);
     }
   }
+  async signinLinkUser(params: LinkUserTokenRequest) {
+    const logger = this._logger.create('signinLinkUser');
+    const body = new URLSearchParams({
+      LinkUserId: params.linkUserId,
+      grant_type: 'link_user',
+      client_id: this.settings.client_id,
+    });
+    if (params.accessToken) {
+      body.set('access_token', params.accessToken);
+    }
+    if (params.linkTenantId) {
+      body.set('LinkTenantId', params.linkTenantId);
+    }
+    const client_secret = this.settings.client_secret;
+    if (client_secret) {
+      body.set('client_secret', client_secret);
+    }
+    this._writeUserId(body, params);
+    this._writeTenantId(body, params);
+    this._writeTwoFactorToken(body, params);
+    return await this._fetchUser(logger, body);
+  }
   async signinQrCode(params: QrCodeTokenRequest) {
     const logger = this._logger.create('signinQrCode');
     const client_secret = this.settings.client_secret;
@@ -89,7 +112,6 @@ class AbpUserManager extends UserManager {
     this._writeTwoFactorToken(body, params);
     return await this._fetchUser(logger, body);
   }
-
   override async signinResourceOwnerCredentials(
     params: PasswordTokenRequestModel,
   ) {
@@ -111,7 +133,6 @@ class AbpUserManager extends UserManager {
     this._writeChangePasswordToken(body, params);
     return await this._fetchUser(logger, body);
   }
-
   async signinSmsCode(params: PhoneNumberTokenRequest) {
     const logger = this._logger.create('signinSmsCode');
     const client_secret = this.settings.client_secret;

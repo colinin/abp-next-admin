@@ -6,7 +6,7 @@ import { ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { isEmail, useAbpStore } from '@abp/core';
+import { isEmail } from '@abp/core';
 import { FeatureModal } from '@abp/features';
 import { Button, Form, InputSearch, message, Modal } from 'ant-design-vue';
 
@@ -19,14 +19,7 @@ defineOptions({
 
 const FormItem = Form.Item;
 
-const abpStore = useAbpStore();
-const {
-  getGlobalSettingsApi,
-  getTenantSettingsApi,
-  sendTestEmailApi,
-  setGlobalSettingsApi,
-  setTenantSettingsApi,
-} = useSettingsApi();
+const { getSettingsApi, setSettingsApi, sendTestEmailApi } = useSettingsApi();
 const [HostFeatureModal, featureModalApi] = useVbenModal({
   connectedComponent: FeatureModal,
 });
@@ -34,18 +27,12 @@ const [HostFeatureModal, featureModalApi] = useVbenModal({
 const sending = ref(false);
 
 async function onGet() {
-  const api = abpStore.application?.currentTenant.isAvailable
-    ? getTenantSettingsApi
-    : getGlobalSettingsApi;
-  const { items } = await api();
+  const { items } = await getSettingsApi();
   return items;
 }
 
 async function onSubmit(input: SettingsUpdateInput) {
-  const api = abpStore.application?.currentTenant.isAvailable
-    ? setTenantSettingsApi
-    : setGlobalSettingsApi;
-  await api(input);
+  await setSettingsApi(input);
 }
 
 async function onSendMail(email: string) {

@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Identity.Localization;
+﻿using Microsoft.Extensions.Localization;
+using Volo.Abp;
+using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
@@ -6,8 +8,20 @@ namespace LINGYUN.Abp.Identity.Settings;
 
 public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "Identity";
+    private const int GroupOrder = 10;
+
+    protected IStringLocalizerFactory StringLocalizerFactory { get; }
+
+    public IdentitySettingDefinitionProvider(IStringLocalizerFactory stringLocalizerFactory)
+    {
+        StringLocalizerFactory = stringLocalizerFactory;
+    }
+
     public override void Define(ISettingDefinitionContext context)
     {
+        var stringLocalizer = StringLocalizerFactory.Create<IdentityResource>();
+
         context.Add(
             new SettingDefinition(
                 name: IdentitySettingNames.User.SmsNewUserRegister,
@@ -19,7 +33,11 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("User", L("Settings:Identity.User"), order: 1)
+            .WithOrder(0)
+            .WithValueType(ValueType.String),
             new SettingDefinition(
                 name: IdentitySettingNames.User.SmsUserSignin,
                 defaultValue: "",
@@ -30,7 +48,11 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("User", L("Settings:Identity.User"), order: 1)
+            .WithOrder(1)
+            .WithValueType(ValueType.String),
             new SettingDefinition(
                 name: IdentitySettingNames.User.SmsResetPassword,
                 defaultValue: "",
@@ -41,7 +63,11 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("User", L("Settings:Identity.User"), order: 1)
+            .WithOrder(2)
+            .WithValueType(ValueType.String),
             new SettingDefinition(
                 name: IdentitySettingNames.User.SmsPhoneNumberConfirmed,
                 defaultValue: "",
@@ -52,7 +78,11 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("User", L("Settings:Identity.User"), order: 1)
+            .WithOrder(3)
+            .WithValueType(ValueType.String),
             new SettingDefinition(
                 name: IdentitySettingNames.User.SmsRepetInterval,
                 defaultValue: "5",
@@ -63,7 +93,11 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("User", L("Settings:Identity.User"), order: 1)
+            .WithOrder(4)
+            .WithValueType(ValueType.Number),
             new SettingDefinition(
                 name: IdentitySettingNames.Session.ConcurrentLoginStrategy,
                 defaultValue: ConcurrentLoginStrategy.None.ToString(),
@@ -74,7 +108,16 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("Session", L("Settings:Identity.Session"), order: 5)
+            .WithOrder(0)
+            .WithOptions([
+                new NameValue<string>(stringLocalizer["ConcurrentLoginStrategy:None"].Value, ConcurrentLoginStrategy.None.ToString()),
+                new NameValue<string>(stringLocalizer["ConcurrentLoginStrategy:LogoutFromSameTypeDevicesLimit"].Value, ConcurrentLoginStrategy.LogoutFromSameTypeDevicesLimit.ToString()),
+                new NameValue<string>(stringLocalizer["ConcurrentLoginStrategy:LogoutFromSameTypeDevices"].Value, ConcurrentLoginStrategy.LogoutFromSameTypeDevices.ToString()),
+                new NameValue<string>(stringLocalizer["ConcurrentLoginStrategy:LogoutFromAllDevices"].Value, ConcurrentLoginStrategy.LogoutFromAllDevices.ToString()),
+            ]),
             new SettingDefinition(
                 name: IdentitySettingNames.Session.LogoutFromSameTypeDevicesLimit,
                 defaultValue: "1",
@@ -86,6 +129,26 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("Session", L("Settings:Identity.Session"), order: 5)
+            .WithOrder(1)
+            .WithValueType(ValueType.Number),
+
+            new SettingDefinition(
+                name: IdentitySettingNames.Link.UserLoginUri,
+                defaultValue: "http://localhost:8080/Account/Login",
+                displayName: L("DisplayName:Abp.Identity.Link.UserLoginUri"),
+                description: L("Description:Abp.Identity.Link.UserLoginUri"),
+                isVisibleToClients: false)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("Link", L("Settings:Identity.Link"), order: 7)
+            .WithOrder(0)
+            .WithValueType(ValueType.String)
         );
     }
 

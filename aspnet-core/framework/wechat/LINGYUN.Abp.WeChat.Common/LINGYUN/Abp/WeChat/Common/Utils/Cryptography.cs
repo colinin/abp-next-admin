@@ -97,7 +97,11 @@ public class Cryptography
 
     private static string AES_encrypt(string Input, byte[] Iv, byte[] Key)
     {
+#if NET462
         var aes = new RijndaelManaged();
+#else
+        var aes = Aes.Create();
+#endif
         //秘钥的大小，以位为单位
         aes.KeySize = 256;
         //支持的块大小
@@ -125,7 +129,11 @@ public class Cryptography
 
     private static string AES_encrypt(byte[] Input, byte[] Iv, byte[] Key)
     {
+#if NET462
         var aes = new RijndaelManaged();
+#else
+        var aes = Aes.Create();
+#endif
         //秘钥的大小，以位为单位
         aes.KeySize = 256;
         //支持的块大小
@@ -196,7 +204,11 @@ public class Cryptography
     }
     private static byte[] AES_decrypt(string Input, byte[] Iv, byte[] Key)
     {
+#if NET462
         var aes = new RijndaelManaged();
+#else
+        var aes = Aes.Create();
+#endif
         aes.KeySize = 256;
         aes.BlockSize = 128;
         aes.Mode = CipherMode.CBC;

@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
@@ -11,7 +12,9 @@ using Volo.Abp.Uow;
 namespace LINGYUN.Abp.MicroService.MessageService;
 public class MessageServiceDbMigrationService : EfCoreRuntimeDbMigratorBase<MessageServiceMigrationsDbContext>, ITransientDependency
 {
+    protected MessageServiceDataSeeder DataSeeder { get; }
     public MessageServiceDbMigrationService(
+        MessageServiceDataSeeder dataSeeder,
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         IServiceProvider serviceProvider,
@@ -22,5 +25,12 @@ public class MessageServiceDbMigrationService : EfCoreRuntimeDbMigratorBase<Mess
             ConnectionStringNameAttribute.GetConnStringName<MessageServiceMigrationsDbContext>(),
             unitOfWorkManager, serviceProvider, currentTenant, abpDistributedLock, distributedEventBus, loggerFactory)
     {
+        DataSeeder = dataSeeder;
+    }
+
+    protected async override Task SeedAsync()
+    {
+        // DbMigrator迁移数据种子
+        await DataSeeder.SeedAsync(new DataSeedContext());
     }
 }

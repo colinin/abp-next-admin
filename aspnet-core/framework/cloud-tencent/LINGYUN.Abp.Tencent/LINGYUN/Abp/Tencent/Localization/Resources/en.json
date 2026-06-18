@@ -57,6 +57,10 @@
     "Region:Moscow": "Europe (Moscow)",
     "Region:Virginia": "Eastern US (Virginia)",
     "Region:SiliconValley": "Western US (Silicon Valley)",
-    "Region:Toronto": "North America (Toronto)"
+    "Region:Toronto": "North America (Toronto)",
+    "Settings:TenantCloud": "Tenant Cloud",
+    "Settings:TenantCloud.ConnectionSetting": "Connection",
+    "Settings:TenantCloud.SmsSetting": "Sms",
+    "Settings:TenantCloud.BasicSetting": "Basic"
   }
 }

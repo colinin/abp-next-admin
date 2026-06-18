@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Http.Client.Authentication;
+using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
 using Volo.Abp.Tracing;
@@ -22,7 +23,9 @@ public class HttpAITool
         Context = context;
     }
 
-    public async virtual Task<object?> InvokeAsync(IDictionary<string, object?>? paramters = null)
+    public async virtual Task<object?> InvokeAsync(
+        IDictionary<string, object?>? paramters = null,
+        object? body = null)
     {
         // Abp远程服务适配
         //var remoteService = Context.ToolDefinition.GetRemoteServiceOrNull();
@@ -90,6 +93,12 @@ public class HttpAITool
             Context.ToolDefinition.GetHttpMethod(),
             requestUri);
 
+        if (body != null)
+        {
+            var jsonSerializer = Context.ServiceProvider.GetRequiredService<IJsonSerializer>();
+            httpRequestMessage.Content = new StringContent(jsonSerializer.Serialize(body));
+        }
+
         var headers = Context.ToolDefinition.GetHttpHeaders();
         foreach (var header in headers)
         {
@@ -148,6 +157,7 @@ public class HttpAITool
 
         //X-Requested-With
         requestMessage.Headers.Add("X-Requested-With", "XMLHttpRequest");
+        requestMessage.Headers.Add("X-Requested-From", "abp-ai-httptool");
 
         //Timezone
         var currentTimezoneProvider = Context.ServiceProvider.GetRequiredService<ICurrentTimezoneProvider>();

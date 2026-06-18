@@ -40,8 +40,8 @@ public class BlobIntegrationController : AbpControllerBase, IBlobIntegrationServ
     }
 
     [HttpGet("download")]
-    public virtual Task<IRemoteStreamContent> GetContentAsync(BlobFileGetByNameIntegrationDto input)
+    public virtual Task<IRemoteStreamContent> DownloadAsync(BlobFileGetByNameIntegrationDto input)
     {
-        return _service.GetContentAsync(input);
+        return _service.DownloadAsync(input);
     }
 }

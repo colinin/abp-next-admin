@@ -1,0 +1,26 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using Volo.Abp.Account.Localization;
+@using Volo.Abp.MultiTenancy;
+@using Volo.Abp.Users;
+@model LINGYUN.Abp.Account.Web.Pages.Account.LinkLoggedModel
+@inject Volo.Abp.AspNetCore.Mvc.UI.Layout.IPageLayout PageLayout
+@inject IHtmlLocalizer<AccountResource> L
+@inject ICurrentUser CurrentUser
+@inject ICurrentTenant CurrentTenant
+@{
+    PageLayout.Content.Title = L["LinkLogged"].Value;
+}
+
+<div>
+    <div class="gap-2 d-grid">
+        <a href="@Url.Content(await Model.GetReturnUrlAsync(Model.ReturnUrl, Model.ReturnUrlHash))" class="mb-3 btn btn-primary"> @L["StayWithCurrentAccount"]</a>
+    </div>
+    <form method="post" asp-page="/Account/LinkLogged" id="linkUserLoginForm" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash">
+        <input asp-for="LinkTenantId">
+        <input asp-for="LinkUserId">
+        <div class="gap-2 d-grid">
+            <abp-button class="btn-secondary">@L["LogInUsingYourProviderAccount", Model.LinkTenantAndUserName] &rarr;</abp-button>
+        </div>
+    </form>
+</div>

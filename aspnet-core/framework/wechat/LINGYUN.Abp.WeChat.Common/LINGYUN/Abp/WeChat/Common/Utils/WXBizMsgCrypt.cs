@@ -241,10 +241,14 @@ public class WXBizMsgCrypt
         var hash = "";
         try
         {
+#if NET462
             sha = new SHA1CryptoServiceProvider();
+#else
+            sha = SHA1.Create();
+#endif
             enc = new ASCIIEncoding();
-            var dataToHash = enc.GetBytes(raw);
-            var dataHashed = sha.ComputeHash(dataToHash);
+            byte[] dataToHash = enc.GetBytes(raw);
+            byte[] dataHashed = sha.ComputeHash(dataToHash);
             hash = BitConverter.ToString(dataHashed).Replace("-", "");
             hash = hash.ToLower();
         }

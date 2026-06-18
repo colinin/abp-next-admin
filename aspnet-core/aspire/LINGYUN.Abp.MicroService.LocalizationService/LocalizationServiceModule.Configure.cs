@@ -250,6 +250,14 @@ public partial class LocalizationServiceModule
             });
     }
 
+    private void PreConfigureLocalization()
+    {
+        Configure<AbpLocalizationManagementOptions>(options =>
+        {
+            options.IsDynamicLocalizationInitializerHost = true;
+        });
+    }
+
     private void ConfigureLocalization()
     {
         // 默认支持的本地化语言类型

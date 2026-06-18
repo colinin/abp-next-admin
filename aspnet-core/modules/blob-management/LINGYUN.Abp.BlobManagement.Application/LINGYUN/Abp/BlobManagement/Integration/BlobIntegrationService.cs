@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.BlobManagement.Dtos;
 using LINGYUN.Abp.BlobManagement.Features;
 using LINGYUN.Abp.BlobManagement.Integration.Dtos;
-using LINGYUN.Abp.Features.LimitValidation;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -27,14 +26,9 @@ public class BlobIntegrationService : BlobAppServiceBase, IBlobIntegrationServic
     {
     }
 
-    [RequiresFeature(BlobManagementFeatureNames.Blob.UploadFile)]
-    [RequiresLimitFeature(
-        BlobManagementFeatureNames.Blob.UploadLimit,
-        BlobManagementFeatureNames.Blob.UploadInterval,
-        LimitPolicy.Month)]
     public async virtual Task<BlobDto> CreateAsync(BlobFileCreateIntegrationDto input)
     {
-        var blobContainer = await BlobContainerRepository.GetByNameAsync(input.ContainerName);
+        var blobContainer = await BlobContainerRepository.GetByNameAsync(BlobManager.GetBlobProvider(), input.ContainerName);
 
         // Example: /a/b/c/d/f.txt
         var blobName = HttpUtility.UrlDecode(input.BlobName);
@@ -62,14 +56,14 @@ public class BlobIntegrationService : BlobAppServiceBase, IBlobIntegrationServic
             parentBlob,
             input.Overwrite == true);
 
-        await BlobManager.UploadBlobAsync(blobContainer, blob, blobStream, input.File.ContentType);
+        await BlobManager.UploadBlobAsync(blobContainer, blob, blobStream);
 
         return ObjectMapper.Map<Blob, BlobDto>(blob);
     }
 
     public async virtual Task DeleteAsync(BlobFileGetByNameIntegrationDto input)
     {
-        var blobContainer = await BlobContainerRepository.GetByNameAsync(input.ContainerName);
+        var blobContainer = await BlobContainerRepository.GetByNameAsync(BlobManager.GetBlobProvider(), input.ContainerName);
 
         var blob = await FindBlobByNameAsync(blobContainer, input.BlobName)
             ?? throw new BusinessException(
@@ -96,17 +90,12 @@ public class BlobIntegrationService : BlobAppServiceBase, IBlobIntegrationServic
         }
     }
 
-    [RequiresFeature(BlobManagementFeatureNames.Blob.DownloadFile)]
-    [RequiresLimitFeature(
-        BlobManagementFeatureNames.Blob.DownloadLimit,
-        BlobManagementFeatureNames.Blob.DownloadInterval,
-        LimitPolicy.Month)]
-    public async virtual Task<IRemoteStreamContent> GetContentAsync(BlobFileGetByNameIntegrationDto input)
+    public async virtual Task<IRemoteStreamContent> DownloadAsync(BlobFileGetByNameIntegrationDto input)
     {
         try
         {
-            var blobContainer = await BlobContainerRepository.GetByNameAsync(input.ContainerName);
-            return await GetContentByNameAsync(blobContainer, input.BlobName);
+            var blobContainer = await BlobContainerRepository.GetByNameAsync(BlobManager.GetBlobProvider(), input.ContainerName);
+            return await DownloadByNameAsync(blobContainer, input.BlobName);
         }
         catch (Exception ex)
         {

@@ -28,6 +28,10 @@
     "Notifications:DissolveGroup": "群组解散通知",
     "AddNewFriendBySearchId": "通过账号搜索添加",
     "WelcomeToApplicationFormUser": "用户:{User} 欢迎您的加入!",
-    "Messages:NewFriend": "我已经添加您为好友,让我们一起聊天吧!"
+    "Messages:NewFriend": "我已经添加您为好友,让我们一起聊天吧!",
+    "DisplayName:RecallExpirationTime": "撤回消息过期时间",
+    "Description:RecallExpirationTime": "允许用户撤回消息时间限制（分）.",
+    "Settings:MessageService": "即时通讯",
+    "Settings:MessageService.Messages": "消息设置"
   }
 }

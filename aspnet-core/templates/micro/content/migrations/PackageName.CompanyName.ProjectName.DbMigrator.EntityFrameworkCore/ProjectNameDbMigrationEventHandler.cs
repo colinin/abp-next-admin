@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DistributedLocking;
@@ -12,10 +11,10 @@ namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 
 public class ProjectNameDbMigrationEventHandler : EfCoreDatabaseMigrationEventHandlerBase<ProjectNameDbContext>
 {
-    protected IDataSeeder DataSeeder { get; }
+    protected ProjectNameDataSeeder DataSeeder { get; }
 
     public ProjectNameDbMigrationEventHandler(
-        IDataSeeder dataSeeder,
+        ProjectNameDataSeeder dataSeeder,
         ITenantStore tenantStore,
         ICurrentTenant currentTenant, 
         IUnitOfWorkManager unitOfWorkManager, 
@@ -29,8 +28,18 @@ public class ProjectNameDbMigrationEventHandler : EfCoreDatabaseMigrationEventHa
         DataSeeder = dataSeeder;
     }
 
-    protected async override Task SeedAsync(Guid? tenantId)
+    protected async override Task AfterTenantCreated(TenantCreatedEto eventData, bool schemaMigrated)
     {
-        await DataSeeder.SeedAsync(tenantId);
+        // 新租户数据种子
+        var context = new DataSeedContext(eventData.Id);
+        if (eventData.Properties != null)
+        {
+            foreach (var property in eventData.Properties)
+            {
+                context.WithProperty(property.Key, property.Value);
+            }
+        }
+
+        await DataSeeder.SeedAsync(context);
     }
 }

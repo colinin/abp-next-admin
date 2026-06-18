@@ -28,6 +28,10 @@
     "Notifications:DissolveGroup": "Dissolve group notification",
     "AddNewFriendBySearchId": "Add by account search",
     "WelcomeToApplicationFormUser": "User :{User} welcome to join us!",
-    "Messages:NewFriend": "I have added you as a friend, let's chat together!"
+    "Messages:NewFriend": "I have added you as a friend, let's chat together!",
+    "DisplayName:RecallExpirationTime": "Message revocation expiration time",
+    "Description:RecallExpirationTime": "Allow user to withdraw message time limit (minutes).",
+    "Settings:MessageService": "IM",
+    "Settings:MessageService.Messages": "Messages"
   }
 }

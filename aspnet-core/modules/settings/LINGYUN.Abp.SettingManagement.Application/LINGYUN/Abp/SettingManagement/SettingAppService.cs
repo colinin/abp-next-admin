@@ -269,15 +269,21 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
 
         var signinSetting = identitySetting.AddSetting(L["DisplayName:Identity.SignIn"], L["Description:Identity.SignIn"]);
         signinSetting.AddDetail(
-            await SettingDefinitionManager.GetAsync(IdentitySettingNames.SignIn.EnablePhoneNumberConfirmation),
-            StringLocalizerFactory,
-            await SettingManager.GetOrNullAsync(IdentitySettingNames.SignIn.EnablePhoneNumberConfirmation, providerName, providerKey),
-            ValueType.Boolean,
-            providerName);
-        signinSetting.AddDetail(
             await SettingDefinitionManager.GetAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail),
             StringLocalizerFactory,
             await SettingManager.GetOrNullAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail, providerName, providerKey),
+            ValueType.Boolean,
+            providerName);
+        signinSetting.AddDetail(
+            await SettingDefinitionManager.GetAsync(IdentitySettingNames.SignIn.RequireEmailVerificationToRegister),
+            StringLocalizerFactory,
+            await SettingManager.GetOrNullAsync(IdentitySettingNames.SignIn.RequireEmailVerificationToRegister, providerName, providerKey),
+            ValueType.Boolean,
+            providerName);
+        signinSetting.AddDetail(
+            await SettingDefinitionManager.GetAsync(IdentitySettingNames.SignIn.EnablePhoneNumberConfirmation),
+            StringLocalizerFactory,
+            await SettingManager.GetOrNullAsync(IdentitySettingNames.SignIn.EnablePhoneNumberConfirmation, providerName, providerKey),
             ValueType.Boolean,
             providerName);
         signinSetting.AddDetail(
@@ -362,6 +368,18 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
             await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.PasswordChangePeriodDays, providerName, providerKey),
             ValueType.Number,
             providerName);
+        passwordSetting.AddDetail(
+            await SettingDefinitionManager.GetAsync(IdentitySettingNames.Password.EnablePreventPasswordReuse),
+            StringLocalizerFactory,
+            await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.EnablePreventPasswordReuse, providerName, providerKey),
+            ValueType.Boolean,
+            providerName);
+        passwordSetting.AddDetail(
+            await SettingDefinitionManager.GetAsync(IdentitySettingNames.Password.PreventPasswordReuseCount),
+            StringLocalizerFactory,
+            await SettingManager.GetOrNullAsync(IdentitySettingNames.Password.PreventPasswordReuseCount, providerName, providerKey),
+            ValueType.Number,
+            providerName);
 
         #endregion
 
@@ -395,9 +413,21 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
             ValueType.Number,
             providerName);
 
-        settingGroups.AddGroup(identitySetting);
+        #endregion
+
+        #region 链接
+
+        var linkSetting = identitySetting.AddSetting(L["DisplayName:Identity.Link"], L["Description:Identity.Link"]);
+        linkSetting.AddDetail(
+            await SettingDefinitionManager.GetAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.Link.UserLoginUri),
+            StringLocalizerFactory,
+            await SettingManager.GetOrNullAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.Link.UserLoginUri, providerName, providerKey),
+            ValueType.String,
+            providerName);
 
         #endregion
+
+        settingGroups.AddGroup(identitySetting);
 
         #endregion
 

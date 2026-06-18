@@ -53,6 +53,8 @@
     "Volo.Abp.Identity:020010": "The email address is bound!",
     "Volo.Abp.Identity:020011": "Secondary authentication cannot be enabled when an MFA device is not attached!",
     "Volo.Abp.Identity:020012": "Invalid authenticator code!",
+    "Volo.Abp.Identity:020013": "The password cannot be the same as the previous one.!",
+    "Volo.Abp.Identity:020014": "Link user token is invalid!",
     "Volo.Abp.Identity:DuplicatePhoneNumber": "Phone number '{0}' is already taken.",
     "DisplayName:Abp.Identity.User.SmsNewUserRegister": "Register sms template",
     "Description:Abp.Identity.User.SmsNewUserRegister": "When the user registers, he/she should send the template number of the SMS verification code and fill in the template number of the corresponding cloud platform registration",
@@ -68,6 +70,10 @@
     "Description:Abp.Identity.Session.ConcurrentLoginStrategy": "There is a setting in the identity section to prevent concurrent login.",
     "DisplayName:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit": "Same Type Devices Login Limit",
     "Description:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit": "Limit the login times of devices of the same type. The sessions that exceed the limit will be deregistered.",
+    "DisplayName:Abp.Identity.Link.UserLoginUri": "User Login Uri",
+    "Description:Abp.Identity.Link.UserLoginUri": "Set up a user login link for redirecting external authenticated users.",
+    "DisplayName:Identity.Link": "Link",
+    "Description:Identity.Link": "Used for setting up external access links",
     "DisplayName:NewPhoneNumber": "New Phone Number",
     "DisplayName:SmsVerifyCode": "SMS verification code",
     "DisplayName:EmailVerifyCode": "Mail verification code",
@@ -110,6 +116,14 @@
     "CurrentSession": "Current Session",
     "RevokeSession": "Revoke Session",
     "SessionWillBeRevokedMessage": "The selected session will be revoked, which will invalidate the user's login!",
-    "SuccessfullyRevoked": "Successful session revoked"
+    "SuccessfullyRevoked": "Successful session revoked",
+    "Settings:Identity": "Identity",
+    "Settings:Identity.User": "User",
+    "Settings:Identity.Lockout": "Lockout",
+    "Settings:Identity.SignIn": "SignIn",
+    "Settings:Identity.Password": "Password",
+    "Settings:Identity.OrganizationUnit": "OrganizationUnit",
+    "Settings:Identity.Session": "Session",
+    "Settings:Identity.Link": "Link"
   }
 }

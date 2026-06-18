@@ -1,7 +1,5 @@
 ﻿using LINGYUN.Abp.BlobManagement.Dtos;
-using LINGYUN.Abp.BlobManagement.Features;
 using LINGYUN.Abp.BlobManagement.Permissions;
-using LINGYUN.Abp.Features.LimitValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -13,7 +11,6 @@ using System.Web;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Content;
-using Volo.Abp.Features;
 using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.BlobManagement;
@@ -49,12 +46,17 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
         await DeleteBlobAsync(blob);
     }
 
-    [RequiresFeature(BlobManagementFeatureNames.Blob.DownloadFile)]
-    [RequiresLimitFeature(
-        BlobManagementFeatureNames.Blob.DownloadLimit,
-        BlobManagementFeatureNames.Blob.DownloadInterval,
-        LimitPolicy.Month)]
-    public async virtual Task<IRemoteStreamContent> GetContentAsync(Guid id)
+    public async virtual Task<string> GenerateDownloadUrlAsync(Guid id)
+    {
+        return await GenerateDownloadUrlAsync(id, "download");
+    }
+
+    public async virtual Task<string> GeneratePreviewUrlAsync(Guid id)
+    {
+        return await GenerateDownloadUrlAsync(id, "preview", isAttachmentContent: false);
+    }
+
+    public async virtual Task<IRemoteStreamContent> DownloadAsync(Guid id)
     {
         var blob = await BlobRepository.GetAsync(id);
 
@@ -62,7 +64,11 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
 
         var stream = await BlobManager.DownloadBlobsync(blob);
 
-        return new RemoteStreamContent(stream ?? Stream.Null, blob.Name, blob.ContentType, blob.Size);
+        return new RemoteStreamContent(
+            stream ?? Stream.Null,
+            blob.Name, 
+            blob.ContentType, 
+            stream != null ? blob.Size : null);
     }
 
     public async virtual Task<BlobDto> GetAsync(Guid id)
@@ -120,7 +126,7 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
             blobStream.Length,
             parentBlob);
 
-        blob = await BlobManager.UploadBlobAsync(blobContainer, blob, blobStream, input.File.ContentType, input.CompareMd5);
+        blob = await BlobManager.UploadBlobAsync(blobContainer, blob, blobStream, input.CompareMd5);
 
         return ObjectMapper.Map<Blob, BlobDto>(blob);
     }
@@ -155,7 +161,7 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
         return ObjectMapper.Map<Blob, BlobDto>(blob);
     }
 
-    protected async virtual Task<IRemoteStreamContent> GetContentByNameAsync(BlobContainer blobContainer, string name)
+    protected async virtual Task<IRemoteStreamContent> DownloadByNameAsync(BlobContainer blobContainer, string name)
     {
         var blob = await FindBlobByNameAsync(blobContainer, name)
             ?? throw new BusinessException(
@@ -167,7 +173,31 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
 
         var stream = await BlobManager.DownloadBlobsync(blob);
 
-        return new RemoteStreamContent(stream ?? Stream.Null, blob.Name, blob.ContentType, blob.Size);
+        return new RemoteStreamContent(
+            stream ?? Stream.Null,
+            blob.Name,
+            blob.ContentType,
+            stream != null ? blob.Size : null);
+    }
+
+    protected async virtual Task<string> GenerateDownloadUrlAsync(Guid id, string method, bool isAttachmentContent = true)
+    {
+        var blob = await BlobRepository.GetAsync(id);
+        var blobContainer = await BlobContainerRepository.GetAsync(blob.ContainerId);
+
+        await CheckGetPolicyAsync(blob);
+
+        var fallbackDownloadUrl = blob.TenantId.HasValue
+            ? $"/api/{BlobManagementRemoteServiceConsts.ModuleName}/blobs/{method}/t/{blob.TenantId:N}/{blob.Id:N}"
+            : $"/api/{BlobManagementRemoteServiceConsts.ModuleName}/blobs/{method}/{blob.Id:N}";
+
+        var downloadUrl = await BlobManager.GenerateDownloadUrlAsync(
+            blobContainer,
+            blob,
+            fallbackDownloadUrl,
+            isAttachmentContent);
+
+        return downloadUrl;
     }
 
     protected async virtual Task<Blob?> FindBlobByNameAsync(BlobContainer blobContainer, string name)

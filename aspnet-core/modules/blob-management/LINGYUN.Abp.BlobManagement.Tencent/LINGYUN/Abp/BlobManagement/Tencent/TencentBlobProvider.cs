@@ -6,13 +6,14 @@ using LINGYUN.Abp.BlobStoring.Tencent;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BlobManagement.Tencent;
 
@@ -21,6 +22,7 @@ public class TencentBlobProvider : IBlobProvider
     public const string ProviderName = "TencentCloud";
     public string Name => ProviderName;
 
+    protected IClock Clock { get; }
     protected IConfiguration Configuration { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected ICosClientFactory CosClientFactory { get; }
@@ -29,6 +31,7 @@ public class TencentBlobProvider : IBlobProvider
     protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
 
     public TencentBlobProvider(
+        IClock clock,
         IConfiguration configuration,
         ICurrentTenant currentTenant,
         ICosClientFactory cosClientFactory,
@@ -36,6 +39,7 @@ public class TencentBlobProvider : IBlobProvider
         TencentBlobNamingNormalizer blobNamingNormalizer,
         IBlobContainerConfigurationProvider configurationProvider)
     {
+        Clock = clock;
         Configuration = configuration;
         CurrentTenant = currentTenant;
         CosClientFactory = cosClientFactory;
@@ -98,37 +102,39 @@ public class TencentBlobProvider : IBlobProvider
         string blobName,
         CancellationToken cancellationToken = default)
     {
-        var client = await CreateClientAsync();
-        var bucket = NormalizeContainerName(containerName);
-        var objectName = CalculateBlobName(blobName);
+        var configuration = await GetBlobConfiguration();
 
-        if (!ObjectExists(client, bucket, objectName))
+        var downloadUrl = await InternalGeneratePresignedUrlAsync(
+            containerName, 
+            blobName,
+            TimeSpan.FromSeconds(configuration.PresignedGetExpirySeconds),
+            cancellationToken: cancellationToken);
+        if (downloadUrl.IsNullOrWhiteSpace())
         {
             return null;
         }
 
-        var configuration = await GetBlobConfiguration();
-        var blobProviderConfig = Configuration.GetSection($"BlobManagement:{ProviderName}");
-
-        // See: https://cloud.tencent.com/document/product/436/47238
-        var preSignatureStruct = new PreSignatureStruct
-        {
-            appid = configuration.AppId,//"1250000000"; //腾讯云账号 APPID
-            region = configuration.Region,//"COS_REGION"; //存储桶地域
-            bucket = bucket,//"examplebucket-1250000000"; //存储桶
-            key = objectName, //对象键
-            httpMethod = "GET", //HTTP 请求方法
-            isHttps = true, //生成 HTTPS 请求 URL
-            signDurationSecond = blobProviderConfig.GetValue("SignDurationSecond", 600), //请求签名时间
-            headers = null, //签名中需要校验的 header
-            queryParameters = null //签名中需要校验的 URL 中请求参数
-        };
-
-        var downloadUrl = client.GenerateSignURL(preSignatureStruct);
-
         var httpClient = HttpClientFactory.CreateTencentHttpClient();
 
         return await httpClient.GetStreamAsync(downloadUrl, cancellationToken);
+    }
+
+    public virtual Task<string?> GeneratePresignedUrlAsync(
+        string containerName,
+        string blobName,
+        TimeSpan expiration,
+        bool isAttachmentContent = true,
+        CancellationToken cancellationToken = default)
+    {
+        // TODO: 腾讯云需用户开通对象处理服务以支持预览, 不启用腾讯云的预览方式.
+        //return InternalGeneratePresignedUrlAsync(
+        //    containerName,
+        //    blobName,
+        //    expiration,
+        //    isAttachmentContent,
+        //    cancellationToken);
+
+        return Task.FromResult<string?>(null);
     }
 
     public virtual Task CreateFolderAsync(
@@ -144,7 +150,8 @@ public class TencentBlobProvider : IBlobProvider
     public async virtual Task UploadBlobAsync(
         string containerName, 
         string blobName, 
-        Stream content, 
+        Stream content,
+        string? contentType = null,
         CancellationToken cancellationToken = default)
     {
         var client = await CreateClientAsync();
@@ -153,7 +160,55 @@ public class TencentBlobProvider : IBlobProvider
 
         CreateBucketIfNotExists(client, bucket);
 
-        client.PutObject(new PutObjectRequest(bucket, objectName, content));
+        var putObjectRequest = new PutObjectRequest(bucket, objectName, content);
+        if (!contentType.IsNullOrWhiteSpace())
+        {
+            putObjectRequest.SetRequestHeader("Content-Type", contentType);
+        }
+
+        client.PutObject(putObjectRequest);
+    }
+
+    protected async virtual Task<string?> InternalGeneratePresignedUrlAsync(
+        string containerName,
+        string blobName,
+        TimeSpan expiration,
+        bool isAttachmentContent = true,
+        CancellationToken cancellationToken = default)
+    {
+        var client = await CreateClientAsync();
+        var bucket = NormalizeContainerName(containerName);
+        var objectName = CalculateBlobName(blobName);
+
+        if (!ObjectExists(client, bucket, objectName))
+        {
+            return null;
+        }
+
+        var configuration = await GetBlobConfiguration();
+        // See: https://cloud.tencent.com/document/product/436/47238
+        var preSignatureStruct = new PreSignatureStruct
+        {
+            appid = configuration.AppId,//"1250000000"; //腾讯云账号 APPID
+            region = configuration.Region,//"COS_REGION"; //存储桶地域
+            bucket = bucket,//"examplebucket-1250000000"; //存储桶
+            key = objectName, //对象键
+            httpMethod = "GET", //HTTP 请求方法
+            isHttps = true, //生成 HTTPS 请求 URL
+            signDurationSecond = expiration.TotalSeconds.To<long>(), //请求签名时间
+            headers = null, //签名中需要校验的 header
+            queryParameters = null //签名中需要校验的 URL 中请求参数
+        };
+        var fileName = Path.GetFileName(blobName);
+        var type = isAttachmentContent ? "attachment" : "inline";
+        var disposition = $"{type}; filename=\"{Uri.EscapeDataString(fileName)}\"; " +
+                             $"filename*=UTF-8''{Uri.EscapeDataString(fileName)}";
+        preSignatureStruct.queryParameters = new Dictionary<string, string>
+        {
+            { "response-content-disposition", disposition },
+        };
+
+        return client.GenerateSignURL(preSignatureStruct);
     }
 
     protected async virtual Task<CosXml> CreateClientAsync()

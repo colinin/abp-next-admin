@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -17,38 +16,22 @@ namespace LINGYUN.Abp.TextTemplating;
 public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase, ITextTemplateDefinitionAppService
 {
     private readonly ITemplateDefinitionStore _store;
-    private readonly ITemplateDefinitionManager _templateDefinitionManager;
-    private readonly IStaticTemplateDefinitionStore _staticTemplateDefinitionStore;
-    private readonly IDynamicTemplateDefinitionStore _dynamicTemplateDefinitionStore;
     private readonly ITextTemplateDefinitionRepository _repository;
     private readonly ILocalizableStringSerializer _localizableStringSerializer;
 
     public TextTemplateDefinitionAppService(
         ITemplateDefinitionStore store, 
         ITextTemplateDefinitionRepository repository,
-        ITemplateDefinitionManager templateDefinitionManager,
-        ILocalizableStringSerializer localizableStringSerializer,
-        IStaticTemplateDefinitionStore staticTemplateDefinitionStore,
-        IDynamicTemplateDefinitionStore dynamicTemplateDefinitionStore)
+        ILocalizableStringSerializer localizableStringSerializer)
     {
         _store = store;
         _repository = repository;
-        _templateDefinitionManager = templateDefinitionManager;
         _localizableStringSerializer = localizableStringSerializer;
-        _staticTemplateDefinitionStore = staticTemplateDefinitionStore;
-        _dynamicTemplateDefinitionStore = dynamicTemplateDefinitionStore;
     }
 
     [Authorize(AbpTextTemplatingPermissions.TextTemplateDefinition.Create)]
     public async virtual Task<TextTemplateDefinitionDto> CreateAsync(TextTemplateDefinitionCreateDto input)
     {
-        var template = await _templateDefinitionManager.GetOrNullAsync(input.Name);
-        if (template != null)
-        {
-            throw new BusinessException(AbpTextTemplatingErrorCodes.TextTemplateDefinition.NameAlreadyExists)
-                .WithData(nameof(TextTemplateDefinition.Name), input.Name);
-        }
-
         var templateDefinitionRecord = await _repository.FindByNameAsync(input.Name);
         if (templateDefinitionRecord != null)
         {
@@ -82,28 +65,20 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
 
     public async virtual Task<TextTemplateDefinitionDto> GetByNameAsync(string name)
     {
-        var templateDefinition = await _staticTemplateDefinitionStore.GetOrNullAsync(name);
-        if (templateDefinition != null)
+        var templateDefinitionRecord = await _repository.FindByNameAsync(name);
+        if (templateDefinitionRecord == null)
         {
-            return DefinitionToDto(templateDefinition, true);
+            return null;
         }
-        templateDefinition = await _dynamicTemplateDefinitionStore.GetOrNullAsync(name);
-        return DefinitionToDto(templateDefinition);
+        return DefinitionRecordToDto(templateDefinitionRecord);
     }
 
     public async virtual Task<ListResultDto<TextTemplateDefinitionDto>> GetListAsync(TextTemplateDefinitionGetListInput input)
     {
         var templateDtoList = new List<TextTemplateDefinitionDto>();
-        var staticTemplates = await _staticTemplateDefinitionStore.GetAllAsync();
-        var staticTemplateNames = staticTemplates
-            .Select(p => p.Name)
-            .ToImmutableHashSet();
-        templateDtoList.AddRange(staticTemplates.Select(d => DefinitionToDto(d, true)));
 
-        var dynamicTemplates = await _dynamicTemplateDefinitionStore.GetAllAsync();
-        templateDtoList.AddRange(dynamicTemplates
-            .Where(d => !staticTemplateNames.Contains(d.Name))
-            .Select(d => DefinitionToDto(d)));
+        var dynamicTemplates = await _repository.GetListAsync(includeDetails: false);
+        templateDtoList.AddRange(dynamicTemplates.Select(DefinitionRecordToDto));
 
         return new ListResultDto<TextTemplateDefinitionDto>(templateDtoList
             .WhereIf(input.IsStatic.HasValue, x => x.IsStatic == input.IsStatic)
@@ -115,11 +90,6 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
     [Authorize(AbpTextTemplatingPermissions.TextTemplateDefinition.Update)]
     public async virtual Task<TextTemplateDefinitionDto> UpdateAsync(string name, TextTemplateDefinitionUpdateDto input)
     {
-        if (await _staticTemplateDefinitionStore.GetOrNullAsync(name) != null)
-        {
-            throw new BusinessException(AbpTextTemplatingErrorCodes.TextTemplateDefinition.StaticTemplateNotAllowedChanged)
-              .WithData("Name", name);
-        }
         var templateDefinitionRecord = await _repository.FindByNameAsync(name);
 
         if (templateDefinitionRecord == null)
@@ -141,6 +111,11 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
         }
         else
         {
+            if (templateDefinitionRecord.IsStatic)
+            {
+                throw new BusinessException(AbpTextTemplatingErrorCodes.TextTemplateDefinition.StaticTemplateNotAllowedChanged)
+                    .WithData("Name", name);
+            }
             UpdateByInput(templateDefinitionRecord, input);
 
             await _store.UpdateAsync(templateDefinitionRecord);

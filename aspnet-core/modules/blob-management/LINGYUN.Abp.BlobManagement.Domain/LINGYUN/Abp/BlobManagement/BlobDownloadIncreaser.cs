@@ -37,7 +37,7 @@ public class BlobDownloadIncreaser :
             return;
         }
 
-        var blobContainer = await _blobContainerRepository.FindByNameAsync(eventData.ContainerName);
+        var blobContainer = await _blobContainerRepository.FindByNameAsync(eventData.Provider, eventData.ContainerName);
         if (blobContainer == null)
         {
             return;

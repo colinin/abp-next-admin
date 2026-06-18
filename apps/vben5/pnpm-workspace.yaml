@@ -83,6 +83,7 @@ catalog:
   '@vite-pwa/vitepress': ^1.1.0
   '@vitejs/plugin-vue': ^6.0.4
   '@vitejs/plugin-vue-jsx': ^5.1.4
+  '@vue-files-preview': ^0.0.0
   '@vue-office/docx': ^1.6.3
   '@vue-office/excel': ^1.7.14
   '@vue-office/pdf': ^2.0.10
@@ -235,6 +236,7 @@ catalog:
   vue: ^3.5.27
   vue-demi: ^0.14.6
   vue-eslint-parser: ^10.2.0
+  vue-files-preview: ^1.0.43
   vue-i18n: ^11.2.8
   vue-json-viewer: ^3.0.4
   vue-router: ^5.0.3

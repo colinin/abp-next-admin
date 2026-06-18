@@ -19,11 +19,12 @@
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.HttpOverrides" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" />
 		<PackageReference Include="LINGYUN.Abp.AuditLogging.Elasticsearch" />
+		<PackageReference Include="LINGYUN.Abp.BlobStoring.BlobManagement" />
 		<PackageReference Include="LINGYUN.Abp.Data.DbMigrator" />
 		<PackageReference Include="LINGYUN.Abp.Dapr.Client.Wrapper" />
 		<PackageReference Include="LINGYUN.Abp.EventBus.CAP" />
 		<PackageReference Include="LINGYUN.Abp.ExceptionHandling.Emailing" />
-		<PackageReference Include="LINGYUN.Abp.Exporter.MiniExcel" />
+		<PackageReference Include="LINGYUN.Abp.Exporter.MiniSoftware" />
 		<PackageReference Include="LINGYUN.Abp.Localization.CultureMap" />
 		<PackageReference Include="LINGYUN.Abp.Identity.Session.AspNetCore" />
 		<PackageReference Include="LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore" />
@@ -44,6 +45,7 @@
 		<PackageReference Include="Serilog.Enrichers.Process" />
 		<PackageReference Include="Serilog.Enrichers.Thread" />
 		<PackageReference Include="Serilog.Settings.Configuration" />
+		<PackageReference Include="Serilog.Sinks.Async" />
 		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
 		<PackageReference Include="Serilog.Sinks.File" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />

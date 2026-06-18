@@ -29,6 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\settings\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.WeChat.Common\LINGYUN.Abp.WeChat.Common.csproj" />
 	</ItemGroup>
 

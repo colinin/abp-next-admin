@@ -129,16 +129,16 @@ public class AbpTelemetryOpenTelemetryModule : AbpModule
             });
         }
 
-        if (configuration.GetValue("OpenTelemetry:ZipKin:IsEnabled", false))
-        {
-            tracing.AddZipkinExporter(zipKinOptions =>
-            {
-                var zipkinEndPoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
-                Check.NotNullOrWhiteSpace(zipkinEndPoint, nameof(zipkinEndPoint));
+        //if (configuration.GetValue("OpenTelemetry:ZipKin:IsEnabled", false))
+        //{
+        //    tracing.AddZipkinExporter(zipKinOptions =>
+        //    {
+        //        var zipkinEndPoint = configuration["OpenTelemetry:ZipKin:Endpoint"];
+        //        Check.NotNullOrWhiteSpace(zipkinEndPoint, nameof(zipkinEndPoint));
 
-                zipKinOptions.Endpoint = new Uri(zipkinEndPoint);
-            });
-        }
+        //        zipKinOptions.Endpoint = new Uri(zipkinEndPoint);
+        //    });
+        //}
     }
 
     private static void ConfigureMetrics(MeterProviderBuilder metrics, IConfiguration configuration)

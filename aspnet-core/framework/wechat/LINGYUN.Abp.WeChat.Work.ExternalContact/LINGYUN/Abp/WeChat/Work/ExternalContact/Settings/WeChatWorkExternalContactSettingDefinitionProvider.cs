@@ -1,4 +1,6 @@
-﻿using LINGYUN.Abp.WeChat.Work.Localization;
+﻿using LINGYUN.Abp.WeChat.Work.ExternalContact.Features;
+using LINGYUN.Abp.WeChat.Work.Features;
+using LINGYUN.Abp.WeChat.Work.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
@@ -6,6 +8,7 @@ namespace LINGYUN.Abp.WeChat.Work.ExternalContact.Settings;
 
 public class WeChatWorkExternalContactSettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "WeChatWork";
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(
@@ -20,10 +23,19 @@ public class WeChatWorkExternalContactSettingDefinitionProvider : SettingDefinit
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:WeChatWork"),
+                requiredFeatures: [WeChatWorkFeatureNames.Enable])
+            .WithParent(
+                "WeChatWorkExternalContact",
+                L("Settings:WeChatWork.WeChatWorkExternalContact"),
+                requiredFeatures: [WeChatWorkExternalContactFeatureNames.Enable], order: 4)
+            .WithOrder(0)
         );
     }
 
-    private static ILocalizableString L(string name)
+    private static LocalizableString L(string name)
     {
         return LocalizableString.Create<WeChatWorkResource>(name);
     }

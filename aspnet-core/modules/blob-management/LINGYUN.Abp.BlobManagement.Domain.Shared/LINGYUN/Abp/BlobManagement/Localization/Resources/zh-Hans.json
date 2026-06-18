@@ -10,6 +10,7 @@
     "Permission:Download": "下载",
     "Permission:Blob:Delete": "删除存储对象",
     "Permission:Blob:View": "查看存储对象",
+    "Permission:GenerateDownloadUrl": "生成下载链接",
     "Features:BlobManagement": "对象存储",
     "Features:DisplayName:EnableBlobManagement": "启用对象存储",
     "Features:Description:EnableBlobManagement": "启用以使应用程序拥有对象存储模块的能力.",
@@ -29,6 +30,8 @@
     "Features:Description:UploadLimit": "在指定的周期内限制上传文件的总次数",
     "Features:DisplayName:UploadInterval": "限制上传文件周期",
     "Features:Description:UploadInterval": "限制上传文件次数的更新周期,时间刻度为：月,默认：1",
+    "Features:DisplayName:GenerateDownloadUrl": "生成文件下载链接",
+    "Features:Description:GenerateDownloadUrl": "是否允许用户生成临时文件下载链接",
     "BlobManagement:001001": "已经存在名为 {Name} 的存储容器!",
     "BlobManagement:001002": "存储容器非空,不可删除!",
     "BlobManagement:001003": "存储容器为系统容器,不可删除!",
@@ -55,6 +58,8 @@
     "Description:FileLimitLength": "上传文件的限制大小,单位(MB)",
     "DisplayName:AllowFileExtensions": "文件扩展名",
     "Description:AllowFileExtensions": "允许的上传文件扩展名列表,多个扩展名以,分隔,无需输入.符号",
+    "DisplayName:GenerateDownloadUrlExpirySeconds": "生成临时下载链接有效期",
+    "Description:GenerateDownloadUrlExpirySeconds": "生成临时下载链接有效时间, 单位(s), 未设置或为空时默认600s.",
     "DisplayName:BlobManagement": "对象存储",
     "DisplayName:Blobs": "存储管理",
     "DisplayName:CreationTime": "创建时间",
@@ -70,6 +75,8 @@
     "UploadStatus:Error": "错误",
     "UploadStatus:Pause": "暂停",
     "BlobWellDownloadMessage": "即将开始下载文件.",
-    "BlobCanNotPreviewMessage": "此文件不支持预览,请下载后查看!"
+    "BlobCanNotPreviewMessage": "此文件不支持预览,请下载后查看!",
+    "Settings:BlobManagement": "对象存储",
+    "Settings:BlobManagement.Blobs": "存储管理"
   }
 }

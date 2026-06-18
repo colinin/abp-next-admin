@@ -31,7 +31,7 @@ public class MiniExcelImporterProvider :
     {
         var xmlConfig = new OpenXmlConfiguration();
 
-        if (_options.ExportSettingMapping.TryGetValue(typeof(T), out var exportSetting))
+        if (_options.ImportSettingMapping.TryGetValue(typeof(T), out var exportSetting))
         {
             exportSetting?.Invoke(xmlConfig);
         }

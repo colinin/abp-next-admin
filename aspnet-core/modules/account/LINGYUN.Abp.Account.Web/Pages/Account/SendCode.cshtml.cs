@@ -2,6 +2,7 @@ using LINGYUN.Abp.Account.Security;
 using LINGYUN.Abp.Identity.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +29,18 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
         public bool RememberMe { get; set; }
+
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public Guid? LinkUserId { get; set; }
+
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public Guid? LinkTenantId { get; set; }
+
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public string LinkToken { get; set; }
 
         public IEnumerable<SelectListItem> Providers { get; set; }
 
@@ -78,7 +91,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 {
                     returnUrl = ReturnUrl,
                     returnUrlHash = ReturnUrlHash,
-                    rememberMe = RememberMe
+                    rememberMe = RememberMe,
                 });
             }
             // 生成验证码
@@ -116,7 +129,10 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 provider = Input.SelectedProvider,
                 returnUrl = ReturnUrl,
                 returnUrlHash = ReturnUrlHash,
-                rememberMe = RememberMe
+                rememberMe = RememberMe,
+                linkUserId = LinkUserId,
+                linkTenantId = LinkTenantId,
+                linkToken = LinkToken
             });
         }
     }

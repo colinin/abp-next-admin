@@ -1,37 +1,53 @@
-﻿using Aliyun.OSS;
+﻿using AlibabaCloud.OSS.V2;
+using AlibabaCloud.OSS.V2.Models;
 using LINGYUN.Abp.Aliyun.Features;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BlobStoring.Aliyun;
 
 [RequiresFeature(AliyunFeatureNames.BlobStoring.Enable)]
 public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
 {
+    protected IClock Clock { get; }
     protected IOssClientFactory OssClientFactory { get; }
+    protected IHttpClientFactory HttpClientFactory { get; }
     protected IAliyunBlobNameCalculator AliyunBlobNameCalculator { get; }
 
     public AliyunBlobProvider(
+        IClock clock,
         IOssClientFactory ossClientFactory,
+        IHttpClientFactory httpClientFactory,
         IAliyunBlobNameCalculator aliyunBlobNameCalculator)
     {
+        Clock = clock;
         OssClientFactory = ossClientFactory;
+        HttpClientFactory = httpClientFactory;
         AliyunBlobNameCalculator = aliyunBlobNameCalculator;
     }
 
     public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
     {
-        var ossClient = await GetOssClientAsync(args);
+        using var ossClient = await GetOssClientAsync(args);
         var blobName = AliyunBlobNameCalculator.Calculate(args);
 
         if (await BlobExistsAsync(ossClient, args, blobName))
         {
-            return ossClient.DeleteObject(GetBucketName(args), blobName).DeleteMarker;
+            var deleteObjectRes = await ossClient.DeleteObjectAsync(
+                new DeleteObjectRequest
+                {
+                    Bucket = GetBucketName(args),
+                    Key = blobName,
+                },
+                cancellationToken: args.CancellationToken);
+            return deleteObjectRes.DeleteMarker == true;
         }
 
         return false;
@@ -39,7 +55,7 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
 
     public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
     {
-        var ossClient = await GetOssClientAsync(args);
+        using var ossClient = await GetOssClientAsync(args);
         var blobName = AliyunBlobNameCalculator.Calculate(args);
 
         return await BlobExistsAsync(ossClient, args, blobName);
@@ -47,28 +63,46 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
 
     public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
     {
-        var ossClient = await GetOssClientAsync(args);
+        using var ossClient = await GetOssClientAsync(args);
         var blobName = AliyunBlobNameCalculator.Calculate(args);
 
-        if (!await BlobExistsAsync(ossClient, args, blobName))
-        {
-            return null;
-        }
+        //if (!await BlobExistsAsync(ossClient, args, blobName))
+        //{
+        //    return null;
+        //}
 
-        var ossObject = ossClient.GetObject(GetBucketName(args), blobName);
-        return ossObject.Content;
+        //var result = await ossClient.GetObjectAsync(
+        //    new GetObjectRequest
+        //    {
+        //        Bucket = GetBucketName(args),
+        //        Key = blobName,
+        //    });
+        //return result.Body;
+
+        var configuration = args.Configuration.GetAliyunConfiguration();
+        var presignResult = ossClient.Presign(
+            new GetObjectRequest
+            {
+                Bucket = GetBucketName(args),
+                Key = blobName,
+            },
+            Clock.Now.AddSeconds(configuration.PresignedGetExpirySeconds));
+
+        var httpClient = HttpClientFactory.CreateAliyunHttpClient();
+
+        return await httpClient.GetStreamAsync(presignResult.Url, args.CancellationToken);
     }
 
     public override async Task SaveAsync(BlobProviderSaveArgs args)
     {
-        var ossClient = await GetOssClientAsync(args);
+        using var ossClient = await GetOssClientAsync(args);
         var blobName = AliyunBlobNameCalculator.Calculate(args);
         var configuration = args.Configuration.GetAliyunConfiguration();
 
         // 先检查Bucket
         if (configuration.CreateBucketIfNotExists)
         {
-            await CreateBucketIfNotExists(ossClient, args, configuration.CreateBucketReferer);
+            await CreateBucketIfNotExists(ossClient, args, configuration.CreateBucketAcl);
         }
 
         var bucketName = GetBucketName(args);
@@ -84,60 +118,70 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
             else
             {
                 // 删除原文件
-                ossClient.DeleteObject(bucketName, blobName);
+                await ossClient.DeleteObjectAsync(
+                    new DeleteObjectRequest
+                    {
+                        Bucket = bucketName,
+                        Key = blobName,
+                    },
+                    cancellationToken: args.CancellationToken);
             }
         }
         // 保存
-        ossClient.PutObject(bucketName, blobName, args.BlobStream);
+        await ossClient.PutObjectAsync(
+            new PutObjectRequest
+            {
+                Bucket = bucketName,
+                Key = blobName,
+                Body = args.BlobStream,
+            },
+            cancellationToken: args.CancellationToken);
     }
 
-    protected async virtual Task<IOss> GetOssClientAsync(BlobProviderArgs args)
+    protected async virtual Task<Client> GetOssClientAsync(BlobProviderArgs args)
     {
-        var ossClient = await OssClientFactory.CreateAsync();
-        return ossClient;
+        return await OssClientFactory.CreateAsync();
     }
 
-    protected async virtual Task CreateBucketIfNotExists(IOss ossClient, BlobProviderArgs args, IList<string> refererList = null)
+    protected async virtual Task CreateBucketIfNotExists(Client ossClient, BlobProviderArgs args, BucketAclType? bucketAcl = null)
     {
-        if (! await BucketExistsAsync(ossClient, args))
+        if (!await BucketExistsAsync(ossClient, args))
         {
             var bucketName = GetBucketName(args);
 
-            var request = new CreateBucketRequest(bucketName)
-            {
-                //设置存储空间访问权限ACL。
-                ACL = CannedAccessControlList.PublicReadWrite,
-                //设置数据容灾类型。
-                DataRedundancyType = DataRedundancyType.ZRS
-            };
+            await ossClient.PutBucketAsync(
+                new PutBucketRequest
+                {
+                    Bucket = bucketName,
+                },
+                cancellationToken: args.CancellationToken);
 
-            ossClient.CreateBucket(request);
-
-            if (refererList != null && refererList.Count > 0)
+            if (bucketAcl.HasValue)
             {
-                var srq = new SetBucketRefererRequest(bucketName, refererList);
-                ossClient.SetBucketReferer(srq);
+                await ossClient.PutBucketAclAsync(
+                    new PutBucketAclRequest
+                    {
+                        Bucket = bucketName,
+                        Acl = bucketAcl.Value.GetString(),
+                    },
+                    cancellationToken: args.CancellationToken);
             }
         }
     }
 
-    private async Task<bool> BlobExistsAsync(IOss ossClient, BlobProviderArgs args, string blobName)
+    private async Task<bool> BlobExistsAsync(Client ossClient, BlobProviderArgs args, string blobName)
     {
         var bucketExists = await BucketExistsAsync(ossClient, args);
         if (bucketExists)
         {
-            var objectExists = ossClient.DoesObjectExist(GetBucketName(args), blobName);
-
-            return objectExists;
+            return await ossClient.IsObjectExistAsync(GetBucketName(args), blobName, cancellationToken: args.CancellationToken);
         }
         return false;
     }
 
-    private Task<bool> BucketExistsAsync(IOss ossClient,  BlobProviderArgs args)
+    private async Task<bool> BucketExistsAsync(Client ossClient,  BlobProviderArgs args)
     {
-        var bucketExists = ossClient.DoesBucketExist(GetBucketName(args));
-
-        return Task.FromResult(bucketExists);
+        return await ossClient.IsBucketExistAsync(GetBucketName(args), args.CancellationToken);
     }
 
     private static string GetBucketName(BlobProviderArgs args)

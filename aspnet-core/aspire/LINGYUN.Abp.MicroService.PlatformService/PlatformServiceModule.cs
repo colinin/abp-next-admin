@@ -6,6 +6,7 @@ using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BlobManagement;
 using LINGYUN.Abp.BlobManagement.Aliyun;
 using LINGYUN.Abp.BlobManagement.FileSystem;
+using LINGYUN.Abp.BlobManagement.MimeCheck;
 using LINGYUN.Abp.BlobManagement.Minio;
 using LINGYUN.Abp.BlobManagement.Tencent;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
@@ -62,6 +63,7 @@ namespace LINGYUN.Abp.MicroService.PlatformService;
     typeof(AbpBlobManagementMinioModule),
     typeof(AbpBlobManagementTencentModule),
     typeof(AbpBlobManagementHttpApiModule),
+    typeof(AbpBlobManagementMimeCheckModule),
     typeof(AbpBlobStoringBlobManagementModule),
 
     typeof(AbpImagingImageSharpModule),

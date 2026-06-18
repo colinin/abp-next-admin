@@ -30,11 +30,12 @@ public class EfCoreBlobContainerRepository : EfCoreRepository<IBlobManagementDbC
     }
 
     public async virtual Task<BlobContainer?> FindByNameAsync(
+        string provider,
         string name,
         CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync())
-            .Where(x => x.Name == name)
+            .Where(x => x.Provider == provider && x.Name == name)
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 

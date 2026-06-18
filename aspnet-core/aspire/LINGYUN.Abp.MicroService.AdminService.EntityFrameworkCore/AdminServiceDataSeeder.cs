@@ -7,6 +7,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.Roles;
 
 namespace LINGYUN.Abp.MicroService.AdminService;
 public class AdminServiceDataSeeder : ITransientDependency
@@ -49,7 +50,7 @@ public class AdminServiceDataSeeder : ITransientDependency
 
         await PermissionDataSeeder.SeedAsync(
             RolePermissionValueProvider.ProviderName,
-            "admin",
+            AbpRoleConsts.AdminRoleName,
             permissionNames,
             context?.TenantId
         );

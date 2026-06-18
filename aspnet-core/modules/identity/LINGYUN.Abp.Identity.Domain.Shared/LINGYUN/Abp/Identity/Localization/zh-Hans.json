@@ -53,6 +53,8 @@
     "Volo.Abp.Identity:020010": "邮件地址已绑定!",
     "Volo.Abp.Identity:020011": "未绑定MFA设备时无法启用二次认证!",
     "Volo.Abp.Identity:020012": "无效的验证器代码!",
+    "Volo.Abp.Identity:020013": "密码不能与之前的密码相同!",
+    "Volo.Abp.Identity:020014": "关联用户Token无效!",
     "Volo.Abp.Identity:DuplicatePhoneNumber": "手机号 '{0}' 已存在.",
     "DisplayName:Abp.Identity.User.SmsNewUserRegister": "新用户注册模板",
     "Description:Abp.Identity.User.SmsNewUserRegister": "新用户通过手机注册账号验证码模板",
@@ -68,6 +70,10 @@
     "Description:Abp.Identity.Session.ConcurrentLoginStrategy": "用户重复登录会话策略",
     "DisplayName:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit": "允许相同类型设备登录次数",
     "Description:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit": "限制相同类型设备登录次数,超出限制的会话将被注销.",
+    "DisplayName:Abp.Identity.Link.UserLoginUri": "用户登录链接",
+    "Description:Abp.Identity.Link.UserLoginUri": "设置用户登录链接,用于外部认证用户重定向.",
+    "DisplayName:Identity.Link": "链接",
+    "Description:Identity.Link": "用于设定外部接入链接",
     "DisplayName:NewPhoneNumber": "新手机号码",
     "DisplayName:SmsVerifyCode": "短信验证码",
     "DisplayName:EmailVerifyCode": "邮件验证码",
@@ -110,6 +116,14 @@
     "CurrentSession": "当前会话",
     "RevokeSession": "撤销会话",
     "SessionWillBeRevokedMessage": "选择的会话将被撤销,此操作使目标登录失效!",
-    "SuccessfullyRevoked": "撤销会话成功"
+    "SuccessfullyRevoked": "撤销会话成功",
+    "Settings:Identity": "身份认证",
+    "Settings:Identity.User": "用户配置",
+    "Settings:Identity.Lockout": "用户锁定",
+    "Settings:Identity.SignIn": "用户登录",
+    "Settings:Identity.Password": "密码配置",
+    "Settings:Identity.OrganizationUnit": "组织机构",
+    "Settings:Identity.Session": "会话配置",
+    "Settings:Identity.Link": "链接"
   }
 }

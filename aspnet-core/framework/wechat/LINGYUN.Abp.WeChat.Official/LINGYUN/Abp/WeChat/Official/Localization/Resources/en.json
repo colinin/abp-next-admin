@@ -14,6 +14,7 @@
     "DisplayName:WeChat.Official.Token": "Token",
     "Description:WeChat.Official.Token": "Token,See:https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Access_Overview.html",
     "DisplayName:WeChat.Official.EncodingAESKey": "Encoding AES Key",
-    "Description:WeChat.Official.EncodingAESKey": "Encoding AES Key,See:https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Access_Overview.html"
+    "Description:WeChat.Official.EncodingAESKey": "Encoding AES Key,See:https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Access_Overview.html",
+    "Settings:WeChat.Official": "WeChat Official"
   }
 }

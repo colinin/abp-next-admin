@@ -17,11 +17,15 @@ public class TenantCacheItemInvalidator :
     ILocalEventHandler<EntityChangedEventData<Tenant>>,
     ITransientDependency
 {
-    protected IDistributedCache<TenantCacheItem> Cache { get; }
+    protected IDistributedCache<TenantCacheItem> TenantCache { get; }
+    protected IDistributedCache<TenantsCacheItem> TenantsCache { get; }
 
-    public TenantCacheItemInvalidator(IDistributedCache<TenantCacheItem> cache)
+    public TenantCacheItemInvalidator(
+        IDistributedCache<TenantCacheItem> tenantCache, 
+        IDistributedCache<TenantsCacheItem> tenantsCache)
     {
-        Cache = cache;
+        TenantCache = tenantCache;
+        TenantsCache = tenantsCache;
     }
 
     public async virtual Task HandleEventAsync(EntityCreatedEto<TenantEto> eto)
@@ -46,7 +50,7 @@ public class TenantCacheItemInvalidator :
 
     protected async virtual Task RemoveTenantCache(Guid tenantId, string tenantName = null)
     {
-        var keys = new string[]
+        var removeTenantKeys = new string[]
         {
             TenantCacheItem.CalculateCacheKey(null, tenantName),
             TenantCacheItem.CalculateCacheKey(tenantId, null),
@@ -55,6 +59,13 @@ public class TenantCacheItemInvalidator :
             // 同时移除租户版本缓存
             EditionCacheItem.CalculateCacheKey(tenantId)
         };
-        await Cache.RemoveManyAsync(keys, considerUow: true);
+        await TenantCache.RemoveManyAsync(removeTenantKeys, considerUow: true);
+
+        var removeTenantsKeys = new string[]
+        {
+            TenantsCacheItem.CalculateCacheKey(true),
+            TenantsCacheItem.CalculateCacheKey(false)
+        };
+        await TenantsCache.RemoveManyAsync(removeTenantsKeys, considerUow: true);
     }
 }

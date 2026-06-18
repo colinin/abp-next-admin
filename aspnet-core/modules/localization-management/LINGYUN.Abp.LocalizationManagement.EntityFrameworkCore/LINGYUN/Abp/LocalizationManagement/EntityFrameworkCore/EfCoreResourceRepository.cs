@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,5 +40,11 @@ public class EfCoreResourceRepository : EfCoreRepository<ILocalizationDbContext,
     {
         return await (await GetDbSetAsync()).Where(x => x.Name.Equals(name))
           .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public async virtual Task<List<Resource>> GetActivedListAsync(CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync()).Where(x => x.Enable)
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

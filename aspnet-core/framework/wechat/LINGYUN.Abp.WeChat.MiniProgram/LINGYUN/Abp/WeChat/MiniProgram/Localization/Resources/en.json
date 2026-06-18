@@ -24,6 +24,7 @@
     "Features:WeChat.MiniProgram.SendLimit": "Send Limit",
     "Features:WeChat.MiniProgram.SendLimitDesc": "Limit wechat applet template message certain period",
     "Features:WeChat.MiniProgram.SendLimitInterval": "Send Duration",
-    "Features:WeChat.MiniProgram.SendLimitIntervalDesc": "Limit template message can be invoked, unit is Month"
+    "Features:WeChat.MiniProgram.SendLimitIntervalDesc": "Limit template message can be invoked, unit is Month",
+    "Settings:WeChat.MiniProgram": "WeChat Mini Program"
   }
 }

@@ -105,4 +105,8 @@ public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<string>, IHasConc
     /// 0或更小不生效
     /// </summary>
     public int LockTimeOut { get; set; }
+    /// <summary>
+    /// 指定作业运行节点
+    /// </summary>
+    public string NodeName { get; set; }
 }

@@ -8,6 +8,8 @@ namespace LY.MicroService.BackendAdmin.Settings;
 // 后台管理项目不引用 Volo.Abp.Account.Application模块,只能自建一个配置
 public class AccountSettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "Identity";
+    private const int GroupOrder = 10;
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(
@@ -18,10 +20,14 @@ public class AccountSettingDefinitionProvider : SettingDefinitionProvider
                 L("Description:Abp.Account.IsSelfRegistrationEnabled"),
                 isVisibleToClients: true)
             .WithProviders(
-                    DefaultValueSettingValueProvider.ProviderName,
-                    ConfigurationSettingValueProvider.ProviderName,
-                    GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName)
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("Account", L("Settings:Identity.Account"), order: 0)
+            .WithOrder(1)
+            .WithValueType(ValueType.Boolean)
         );
 
         context.Add(
@@ -32,10 +38,14 @@ public class AccountSettingDefinitionProvider : SettingDefinitionProvider
                 L("Description:Abp.Account.EnableLocalLogin"),
                 isVisibleToClients: true)
             .WithProviders(
-                    DefaultValueSettingValueProvider.ProviderName,
-                    ConfigurationSettingValueProvider.ProviderName,
-                    GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName)
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("Account", L("Settings:Identity.Account"), order: 0)
+            .WithOrder(0)
+            .WithValueType(ValueType.Boolean)
         );
     }
 

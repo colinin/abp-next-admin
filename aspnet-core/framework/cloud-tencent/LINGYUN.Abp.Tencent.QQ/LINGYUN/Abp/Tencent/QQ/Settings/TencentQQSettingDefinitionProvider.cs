@@ -6,6 +6,8 @@ namespace LINGYUN.Abp.Tencent.QQ.Settings;
 
 public class TencentQQSettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "TenantCloud";
+
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(GetQQConnectSettings());
@@ -25,7 +27,10 @@ public class TencentQQSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:TenantCloud"))
+            .WithParent("QQConnect", L("Settings:TenantCloud.QQConnect"), order: 10)
+            .WithOrder(0),
             new SettingDefinition(
                 TencentQQSettingNames.QQConnect.AppKey,
                 displayName: L("DisplayName:QQConnect.AppKey"),
@@ -36,7 +41,10 @@ public class TencentQQSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:TenantCloud"))
+            .WithParent("QQConnect", L("Settings:TenantCloud.QQConnect"), order: 10)
+            .WithOrder(1),
             new SettingDefinition(
                 TencentQQSettingNames.QQConnect.IsMobile,
                 "false",
@@ -49,10 +57,14 @@ public class TencentQQSettingDefinitionProvider : SettingDefinitionProvider
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:TenantCloud"))
+            .WithParent("QQConnect", L("Settings:TenantCloud.QQConnect"), order: 10)
+            .WithOrder(2)
+            .WithValueType(ValueType.Boolean)
         };
     }
 
-    protected ILocalizableString L(string name)
+    protected LocalizableString L(string name)
     {
         return LocalizableString.Create<TencentCloudResource>(name);
     }

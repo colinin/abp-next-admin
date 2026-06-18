@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.BlobManagement.Features;
+using LINGYUN.Abp.BlobManagement.Permissions;
 using System.Threading.Tasks;
 using Volo.Abp.Features;
 
@@ -15,16 +16,19 @@ public class PublicBlobAppService : BlobWithoutContainerAppService, IPublicBlobA
         BlobManager blobManager) 
         : base(blobContainerRepository, blobRepository, blobManager)
     {
+        DeletePolicyName = BlobManagementPermissionNames.Blob.Delete;
     }
 
-    protected override Task CheckGetPolicyAsync(string containerName, Blob blob)
+    protected async override Task CheckGetPolicyAsync(string containerName, Blob blob)
     {
-        // 公共文件访问不校验权限
-        return Task.CompletedTask;
+        if (!CurrentUser.IsAuthenticated)
+        {
+            await FeatureChecker.CheckEnabledAsync(BlobManagementFeatureNames.PublicAccess);
+        }
     }
 
-    protected override Task CheckDeletePolicyAsync(string containerName, Blob blob)
+    protected async override Task CheckDeletePolicyAsync(string containerName, Blob blob)
     {
-        return base.CheckDeletePolicyAsync(blob);
+        await CheckPolicyAsync(DeletePolicyName);
     }
 }

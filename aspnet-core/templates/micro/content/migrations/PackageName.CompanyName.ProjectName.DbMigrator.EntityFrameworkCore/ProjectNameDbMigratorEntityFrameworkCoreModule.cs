@@ -6,7 +6,9 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 #if MySQL
-using Volo.Abp.EntityFrameworkCore.MySQL;
+// using Volo.Abp.EntityFrameworkCore.MySQL;
+using LINGYUN.Abp.EntityFrameworkCore.MySQL;
+using Microsoft.EntityFrameworkCore;
 #elif SqlServer 
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -17,6 +19,7 @@ using Volo.Abp.EntityFrameworkCore.Oracle;
 #elif OracleDevart 
 using Volo.Abp.EntityFrameworkCore.Oracle.Devart;
 #elif PostgreSql 
+using System;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
 #endif
 
@@ -27,7 +30,8 @@ namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
     typeof(ProjectNameEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
 #if MySQL
-    typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
+    // typeof(AbpEntityFrameworkCoreMySQLPomeloModule),
+    typeof(AbpEntityFrameworkCoreMySQLMicrotingModule),
 #elif SqlServer
     typeof(AbpEntityFrameworkCoreSqlServerModule),
 #elif Sqlite
@@ -43,21 +47,29 @@ namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
     )]
 public class ProjectNameDbMigratorEntityFrameworkCoreModule : AbpModule
 {
+#if PostgreSql
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+    }
+#endif
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         // 配置Ef
         Configure<AbpDbContextOptions>(options =>
         {
 #if MySQL
-            options.UseMySQL(mysql =>
+            options.UseMySQL(builder =>
             {
                 // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
-                mysql.TranslateParameterizedCollectionsToConstants();
+                builder.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
             });
-            options.UseMySQL<ProjectNameDbContext>(mysql =>
+            options.UseMySQL<ProjectNameDbContext>(builder =>
             {
                 // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
-                mysql.TranslateParameterizedCollectionsToConstants();
+                builder.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
+                builder.MigrationsAssembly(GetType().Assembly);
             });
 #elif SqlServer
             options.UseSqlServer();
@@ -65,16 +77,26 @@ public class ProjectNameDbMigratorEntityFrameworkCoreModule : AbpModule
             {
                 // see https://learn.microsoft.com/en-us/sql/t-sql/statements/alter-database-transact-sql-compatibility-level?view=sql-server-ver16
                 // builder.UseCompatibilityLevel(150);
+                builder.MigrationsAssembly(GetType().Assembly);
             });
 #elif Sqlite
             options.UseSqlite();
-            options.UseSqlite<ProjectNameDbContext>();
+            options.UseSqlite<ProjectNameDbContext>(builder => 
+            {
+                builder.MigrationsAssembly(GetType().Assembly);
+            });
 #elif Oracle || OracleDevart
             options.UseOracle();
-            options.UseOracle<ProjectNameDbContext>();
+            options.UseOracle<ProjectNameDbContext>(builder => 
+            {
+                builder.MigrationsAssembly(GetType().Assembly);
+            });
 #elif PostgreSql
             options.UseNpgsql();
-            options.UseNpgsql<ProjectNameDbContext>();
+            options.UseNpgsql<ProjectNameDbContext>(builder => 
+            {
+                builder.MigrationsAssembly(GetType().Assembly);
+            });
 #endif
         });
     }

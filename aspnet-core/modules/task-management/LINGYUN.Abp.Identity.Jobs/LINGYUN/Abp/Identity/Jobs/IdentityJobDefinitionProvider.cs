@@ -10,12 +10,17 @@ public class IdentityJobDefinitionProvider : JobDefinitionProvider
                 InactiveIdentitySessionCleanupJob.Name,
                 typeof(InactiveIdentitySessionCleanupJob),
                 LocalizableStatic.Create("InactiveIdentitySessionCleanupJob"),
-                InactiveIdentitySessionCleanupJob.Paramters)
-            // TODO: 实现用户过期清理作业需要增加用户会话实体
-            //new JobDefinition(
-            //    InactiveIdentityUserCleanupJob.Name,
-            //    typeof(InactiveIdentityUserCleanupJob),
-            //    LocalizableStatic.Create("InactiveIdentityUserCleanupJob"))
+                InactiveIdentitySessionCleanupJob.Paramters),
+            new JobDefinition(
+                InactiveIdentityUserNotifierJob.Name,
+                typeof(InactiveIdentityUserNotifierJob),
+                LocalizableStatic.Create("InactiveIdentityUserNotifierJob"),
+                InactiveIdentityUserNotifierJob.Paramters),
+            new JobDefinition(
+                InactiveIdentityUserCleanupJob.Name,
+                typeof(InactiveIdentityUserCleanupJob),
+                LocalizableStatic.Create("InactiveIdentityUserCleanupJob"),
+                InactiveIdentityUserCleanupJob.Paramters)
             );
     }
 }

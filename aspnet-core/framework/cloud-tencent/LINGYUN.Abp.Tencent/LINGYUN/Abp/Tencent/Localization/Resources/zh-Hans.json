@@ -57,6 +57,10 @@
     "Region:Moscow": "欧洲地区(莫斯科)",
     "Region:Virginia": "美国东部(弗吉尼亚)",
     "Region:SiliconValley": "美国西部(硅谷)",
-    "Region:Toronto": "北美地区(多伦多)"
+    "Region:Toronto": "北美地区(多伦多)",
+    "Settings:TenantCloud": "腾讯云服务",
+    "Settings:TenantCloud.ConnectionSetting": "连接配置",
+    "Settings:TenantCloud.SmsSetting": "短信配置",
+    "Settings:TenantCloud.BasicSetting": "基础配置"
   }
 }

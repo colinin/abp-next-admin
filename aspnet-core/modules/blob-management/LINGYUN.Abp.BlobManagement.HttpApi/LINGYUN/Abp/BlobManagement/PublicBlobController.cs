@@ -22,16 +22,16 @@ public class PublicBlobController : BlobControllerBase, IPublicBlobAppService
         _service = service;
     }
 
-    [HttpGet("uid/{id}/content")]
-    public virtual Task<IRemoteStreamContent> GetContentAsync(Guid id)
+    [HttpGet("download/{id}")]
+    public virtual Task<IRemoteStreamContent> DownloadAsync(Guid id)
     {
-        return _service.GetContentAsync(id);
+        return _service.DownloadAsync(id);
     }
 
-    [HttpGet("content/{name}")]
-    public virtual Task<IRemoteStreamContent> GetContentByNameAsync(string name)
+    [HttpGet("download/by-name/{name}")]
+    public virtual Task<IRemoteStreamContent> DownloadByNameAsync(string name)
     {
-        return _service.GetContentByNameAsync(name);
+        return _service.DownloadByNameAsync(name);
     }
 
     [HttpGet("{id}")]

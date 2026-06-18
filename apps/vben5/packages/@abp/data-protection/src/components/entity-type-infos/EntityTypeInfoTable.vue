@@ -91,7 +91,8 @@ const gridOptions: VxeGridProps<EntityTypeInfoDto> = {
     },
   },
   toolbarConfig: {
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
   },
