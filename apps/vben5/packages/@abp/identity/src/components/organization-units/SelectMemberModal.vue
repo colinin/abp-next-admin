@@ -112,7 +112,8 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
     },
   },
   toolbarConfig: {
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
   },

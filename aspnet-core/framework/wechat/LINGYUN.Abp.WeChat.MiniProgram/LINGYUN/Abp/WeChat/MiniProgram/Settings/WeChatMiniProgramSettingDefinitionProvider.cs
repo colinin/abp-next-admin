@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.WeChat.Localization;
+using LINGYUN.Abp.WeChat.MiniProgram.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
@@ -6,6 +7,7 @@ namespace LINGYUN.Abp.WeChat.MiniProgram.Settings;
 
 public class WeChatMiniProgramSettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "WeChat";
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(
@@ -19,7 +21,13 @@ public class WeChatMiniProgramSettingDefinitionProvider : SettingDefinitionProvi
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName, 
+                L("Settings:WeChat"),
+                requiredFeatures: [WeChatMiniProgramFeatures.Enable])
+            .WithParent("MiniProgram", L("Settings:WeChat.MiniProgram"), order: 1)
+            .WithOrder(0),
             new SettingDefinition(
                 WeChatMiniProgramSettingNames.AppSecret, "",
                 L("DisplayName:WeChat.MiniProgram.AppSecret"),
@@ -30,7 +38,13 @@ public class WeChatMiniProgramSettingDefinitionProvider : SettingDefinitionProvi
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:WeChat"),
+                requiredFeatures: [WeChatMiniProgramFeatures.Enable])
+            .WithParent("MiniProgram", L("Settings:WeChat.MiniProgram"), order: 1)
+            .WithOrder(1),
             new SettingDefinition(
                 WeChatMiniProgramSettingNames.Token, "",
                 L("DisplayName:WeChat.MiniProgram.Token"),
@@ -41,7 +55,13 @@ public class WeChatMiniProgramSettingDefinitionProvider : SettingDefinitionProvi
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:WeChat"),
+                requiredFeatures: [WeChatMiniProgramFeatures.Enable])
+            .WithParent("MiniProgram", L("Settings:WeChat.MiniProgram"), order: 1)
+            .WithOrder(2),
             new SettingDefinition(
                 WeChatMiniProgramSettingNames.EncodingAESKey, "",
                 L("DisplayName:WeChat.MiniProgram.EncodingAESKey"),
@@ -53,10 +73,16 @@ public class WeChatMiniProgramSettingDefinitionProvider : SettingDefinitionProvi
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("Settings:WeChat"),
+                requiredFeatures: [WeChatMiniProgramFeatures.Enable])
+            .WithParent("MiniProgram", L("Settings:WeChat.MiniProgram"), order: 1)
+            .WithOrder(3)
         );
     }
 
-    protected ILocalizableString L(string name)
+    protected LocalizableString L(string name)
     {
         return LocalizableString.Create<WeChatResource>(name);
     }

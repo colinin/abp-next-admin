@@ -59,7 +59,7 @@ public interface IIdentityUserRepository : Volo.Abp.Identity.IIdentityUserReposi
         List<Guid> userIds,
         bool includeDetails = false,
         CancellationToken cancellationToken = default
-        );
+    );
     /// <summary>
     /// 获取用户所有的组织机构列表
     /// </summary>

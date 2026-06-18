@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Auditing;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
@@ -20,6 +21,7 @@ public abstract class WorkspaceDefinitionRecordCreateOrUpdateDto : ExtensibleObj
     [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxDescriptionLength))]
     public string? Description { get; set; }
 
+    [DisableAuditing]
     [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxApiKeyLength))]
     public string? ApiKey { get; set; }
 

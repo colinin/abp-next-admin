@@ -78,7 +78,7 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
             key = blobName, //对象键
             httpMethod = "GET", //HTTP 请求方法
             isHttps = true, //生成 HTTPS 请求 URL
-            signDurationSecond = 600, //请求签名时间为600s
+            signDurationSecond = configuration.PresignedGetExpirySeconds, //请求签名时间为600s
             headers = null, //签名中需要校验的 header
             queryParameters = null //签名中需要校验的 URL 中请求参数
         };

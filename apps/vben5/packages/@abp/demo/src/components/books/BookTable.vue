@@ -108,7 +108,8 @@ const gridOptions: VxeGridProps<BookDto> = {
     },
   },
   toolbarConfig: {
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
   },

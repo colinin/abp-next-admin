@@ -7,7 +7,7 @@ namespace Volo.Abp.Settings;
 
 public static class ISettingProviderExtensions
 {
-    public static async Task<string> GetOrDefaultAsync(
+    public static async Task<string?> GetOrDefaultAsync(
         [NotNull] this ISettingProvider settingProvider,
         [NotNull] string name,
         [NotNull] IServiceProvider serviceProvider)

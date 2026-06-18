@@ -104,7 +104,8 @@ const gridOptions: VxeGridProps<IdentityRoleDto> = {
     },
   },
   toolbarConfig: {
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
   },

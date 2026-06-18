@@ -44,6 +44,10 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
     /// </summary>
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
     /// <summary>
+    /// 本地动态事件处理器工厂对象集合
+    /// </summary>
+    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> DynamicHandlerFactories { get; }
+    /// <summary>
     /// 本地事件集合
     /// </summary>
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
@@ -113,6 +117,7 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
         JsonSerializer = jsonSerializer;
         CancellationTokenProvider = cancellationTokenProvider;
         CustomDistributedEventSubscriber = customDistributedEventSubscriber;
+        DynamicHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
         HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         EventTypes = new ConcurrentDictionary<string, Type>();
     }
@@ -165,9 +170,7 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
     /// <returns></returns>
     protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-
-        await PublishToCapAsync(eventName, eventData, messageId: null, correlationId: CorrelationIdProvider.Get());
+        await PublishToCapAsync(eventType, eventData, messageId: null, correlationId: CorrelationIdProvider.Get());
     }
 
     /// <summary>
@@ -178,31 +181,24 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
         var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
+        var eventNames = EventTypes.Where(x => ShouldTriggerEventForHandler(eventType, x.Value)).Select(x => x.Key).ToList();
 
         foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
             handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
         }
 
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
+        {
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
+        }
+
         return handlerFactoryList.ToArray();
     }
 
-    private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
+    protected override Type GetEventTypeByEventName(string eventName)
     {
-        //Should trigger same type
-        if (handlerEventType == targetEventType)
-        {
-            return true;
-        }
-
-        //TODO: Support inheritance? But it does not support on subscription to RabbitMq!
-        //Should trigger for inherited types
-        if (handlerEventType.IsAssignableFrom(targetEventType))
-        {
-            return true;
-        }
-
-        return false;
+        return EventTypes.GetOrDefault(eventName);
     }
 
     protected override byte[] Serialize(object eventData)
@@ -242,20 +238,27 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
 
     public override async Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
     {
+        var eventJson = Encoding.UTF8.GetString(incomingEvent.EventData);
         var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
-        if (eventType == null)
+        object eventData;
+        if (eventType != null)
+        {
+            eventData = JsonSerializer.Deserialize(eventType, eventJson);
+        }
+        else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
+        {
+            eventData = new DynamicEventData(incomingEvent.EventName, JsonSerializer.Deserialize<object>(eventJson));
+            eventType = typeof(DynamicEventData);
+        }
+        else
         {
             return;
         }
-
-        var eventJson = Encoding.UTF8.GetString(incomingEvent.EventData);
-        var eventData = JsonSerializer.Deserialize(eventType, eventJson);
         var exceptions = new List<Exception>();
         using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
         {
             await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
         }
-
         if (exceptions.Any())
         {
             ThrowOriginalExceptions(eventType, exceptions);
@@ -264,7 +267,8 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
 
     protected virtual async Task PublishToCapAsync(Type eventType, object eventData, Guid? messageId, string correlationId = null)
     {
-        await PublishToCapAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData, null, correlationId);
+        var (eventName, resolvedData) = ResolveEventForPublishing(eventType, eventData);
+        await PublishToCapAsync(eventName, resolvedData, null, correlationId);
     }
 
     protected virtual async Task PublishToCapAsync(string eventName, object eventData, Guid? messageId, string correlationId = null)
@@ -292,5 +296,74 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
         }
 
         await CapPublisher.PublishAsync(eventName, eventData, headers, CancellationTokenProvider.FallbackToProvider());
+    }
+
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        return NullDisposable.Instance;
+    }
+
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+
+    }
+
+    public override void Unsubscribe(string eventName, IEventHandler handler)
+    {
+
+    }
+
+    public override void UnsubscribeAll(string eventName)
+    {
+
+    }
+
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+
+        if (eventType != null)
+        {
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
+        }
+
+        return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete);
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName)
+    {
+        var result = new List<EventTypeWithEventHandlerFactories>();
+
+        var eventType = GetEventTypeByEventName(eventName);
+        if (eventType != null)
+        {
+            return GetHandlerFactories(eventType);
+        }
+
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(hf => hf.Key == eventName))
+        {
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
+        }
+
+        return result;
+    }
+
+    private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
+    {
+        //Should trigger same type
+        if (handlerEventType == targetEventType)
+        {
+            return true;
+        }
+
+        //TODO: Support inheritance? But it does not support on subscription to RabbitMq!
+        //Should trigger for inherited types
+        if (handlerEventType.IsAssignableFrom(targetEventType))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

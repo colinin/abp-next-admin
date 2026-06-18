@@ -33,6 +33,7 @@ public class AbpAccountApplicationModule : AbpModule
         Configure<AppUrlOptions>(options =>
         {
             options.Applications["MVC"].Urls[AccountUrlNames.EmailConfirm] = "Account/EmailConfirm";
+            options.Applications["MVC"].Urls[AccountUrlNames.UserLogin] = "Account/Login";
         });
 
         Configure<AbpLocalizationOptions>(options =>

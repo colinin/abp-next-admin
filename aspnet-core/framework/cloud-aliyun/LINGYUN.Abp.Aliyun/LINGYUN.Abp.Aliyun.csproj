@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="aliyun-net-sdk-core" />
+		<PackageReference Include="AlibabaCloud.SDK.Sts20150401" />
 		<PackageReference Include="Volo.Abp.Caching" />
 		<PackageReference Include="Volo.Abp.Features" />
 		<PackageReference Include="Volo.Abp.Localization" />
@@ -35,6 +35,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\common\LINGYUN.Abp.Features.LimitValidation\LINGYUN.Abp.Features.LimitValidation.csproj" />
+	  <ProjectReference Include="..\..\settings\LINGYUN.Abp.Settings\LINGYUN.Abp.Settings.csproj" />
 	</ItemGroup>
 
 </Project>

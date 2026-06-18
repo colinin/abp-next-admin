@@ -1,7 +1,4 @@
-﻿using LINGYUN.Abp.Notifications;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DistributedLocking;
@@ -13,8 +10,7 @@ using Volo.Abp.Uow;
 namespace LINGYUN.Abp.MicroService.MessageService;
 public class MessageServiceDbMigrationEventHandler : EfCoreDatabaseMigrationEventHandlerBase<MessageServiceMigrationsDbContext>
 {
-    protected INotificationSender NotificationSender { get; }
-    protected INotificationSubscriptionManager NotificationSubscriptionManager { get; }
+    protected MessageServiceDataSeeder MessageServiceDataSeeder { get; }
 
     public MessageServiceDbMigrationEventHandler(
         ICurrentTenant currentTenant,
@@ -23,65 +19,27 @@ public class MessageServiceDbMigrationEventHandler : EfCoreDatabaseMigrationEven
         IAbpDistributedLock abpDistributedLock,
         IDistributedEventBus distributedEventBus,
         ILoggerFactory loggerFactory,
-        INotificationSender notificationSender,
-        INotificationSubscriptionManager notificationSubscriptionManager)
+        MessageServiceDataSeeder messageServiceDataSeeder)
         : base(
             ConnectionStringNameAttribute.GetConnStringName<MessageServiceMigrationsDbContext>(),
             currentTenant, unitOfWorkManager, tenantStore, abpDistributedLock, distributedEventBus, loggerFactory)
     {
-        NotificationSender = notificationSender;
-        NotificationSubscriptionManager = notificationSubscriptionManager;
+        MessageServiceDataSeeder = messageServiceDataSeeder;
     }
 
     protected async override Task AfterTenantCreated(TenantCreatedEto eventData, bool schemaMigrated)
     {
         using (CurrentTenant.Change(eventData.Id))
         {
-            await SendNotificationAsync(eventData);
-        }
-    }
-
-    protected async virtual Task SendNotificationAsync(TenantCreatedEto eventData)
-    {
-        try
-        {
-            if (!eventData.Properties.TryGetValue("AdminUserId", out var userIdString) ||
-                !Guid.TryParse(userIdString, out var adminUserId))
+            var context = new DataSeedContext(eventData.Id);
+            if (eventData.Properties != null)
             {
-                return;
+                foreach (var prop in eventData.Properties)
+                {
+                    context.WithProperty(prop.Key, prop.Value);
+                }
             }
-            var adminEmailAddress = eventData.Properties.GetOrDefault("AdminEmail") ?? "admin@abp.io";
-
-            var tenantAdminUserIdentifier = new UserIdentifier(adminUserId, adminEmailAddress);
-
-            // 租户管理员订阅事件
-            await NotificationSubscriptionManager
-                .SubscribeAsync(
-                    eventData.Id,
-                    tenantAdminUserIdentifier,
-                    TenantNotificationNames.NewTenantRegistered);
-
-            Logger.LogInformation("publish new tenant notification..");
-            await NotificationSender.SendNofiterAsync(
-                TenantNotificationNames.NewTenantRegistered,
-                new NotificationTemplate(
-                    TenantNotificationNames.NewTenantRegistered,
-                    formUser: adminEmailAddress,
-                    data: new Dictionary<string, object>
-                    {
-                            { "name", eventData.Name },
-                            { "email", adminEmailAddress },
-                            { "id", eventData.Id },
-                    }),
-                tenantAdminUserIdentifier,
-                eventData.Id,
-                NotificationSeverity.Success);
-
-            Logger.LogInformation("tenant administrator subscribes to new tenant events..");
-        }
-        catch (Exception ex)
-        {
-            Logger.LogWarning(ex, "Failed to send the tenant initialization notification.");
+            await MessageServiceDataSeeder.SeedAsync(context);
         }
     }
 }

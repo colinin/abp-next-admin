@@ -20,6 +20,7 @@ namespace LINGYUN.Abp.LocalizationManagement;
 public class AbpLocalizationManagementDomainModule : AbpModule
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddMapperlyObjectMapper<AbpLocalizationManagementDomainModule>();

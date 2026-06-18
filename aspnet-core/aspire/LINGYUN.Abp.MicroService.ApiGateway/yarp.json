@@ -143,6 +143,21 @@
           }
         ]
       },
+      "gdpr-route": {
+        "ClusterId": "identity-service-cluster",
+        "Match": {
+          "Path": "/api/gdpr/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
       "identity-server-route": {
         "ClusterId": "identity-service-cluster",
         "Match": {
@@ -282,6 +297,21 @@
         "ClusterId": "admin-service-cluster",
         "Match": {
           "Path": "/api/setting-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
+      "setting-management-v2-route": {
+        "ClusterId": "admin-service-cluster",
+        "Match": {
+          "Path": "/api/v2/setting-management/{**everything}"
         },
         "Transforms": [
           {

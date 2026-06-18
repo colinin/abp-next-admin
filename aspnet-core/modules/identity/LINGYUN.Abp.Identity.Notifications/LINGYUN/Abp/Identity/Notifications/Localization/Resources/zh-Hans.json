@@ -1,0 +1,29 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "InactiveUserReminderNotifier": "账户保持活跃通知",
+    "InactiveUserDeactivationNotifier": "账户停用通知",
+    "InactiveUserDeletionNotifier": "账户删除通知",
+    "InactiveUserReminderHeader": "账户保持活跃提醒",
+    "InactiveUserReminderWarning": "我们注意到您的账户已经长时间没有活动,为保持您的账户活跃和安全,建议您登录账户.",
+    "InactiveUserReminderAction": "如果您想保留您的账号,请在",
+    "InactiveUserReminderReactivate": "之前登录.",
+    "InactiveUserReminderClosure": "如果您不再需要此账户,则无需采取任何操作.但请注意,如果截止",
+    "InactiveUserReminderInactive": "之前您仍未登录账号,系统将禁用您的账号,此时您将无法登录您的账号.",
+    "InactiveUserDeactivationNotice": "此通知旨在告知您,由于您已连续",
+    "InactiveUserDeactivationWarning": "天未登录,您的账号已被禁用,您的数据仍被存储但无法访问,如果有需要可在",
+    "InactiveUserDeactivationAction": "之前联系我们恢复账号,如未及时处理账号将被永久删除.",
+    "NoReactionClosure": "如果您不希望重新激活账户,则无需采取进一步操作.重新激活期限过后,您的账户将自动进入删除队列.",
+    "AutomatedNotification": "这是自动发送的通知, 请勿直接回复此邮件.",
+    "InactiveUserDeactivationHeader": "账户停用通知",
+    "InactiveUserDeletionHeader": "账户删除通知",
+    "InactiveUserDeletionNotice": "由于长期不活跃且未响应之前的通知,您的账户已被永久删除,与您相关的数据已从平台中移除.",
+    "WhatYouCanDo": "您可以:",
+    "CreateNewAccountInstructions": "如需继续使用服务,请",
+    "CreateNewAccountStep1": "创建新账户",
+    "CreateNewAccountStep2": "设置个人资料",
+    "CreateNewAccountStep3": "重新订阅服务",
+    "LastSignInTime": "上次登录时间",
+    "SignInToAccount": "登录账号"
+  }
+}

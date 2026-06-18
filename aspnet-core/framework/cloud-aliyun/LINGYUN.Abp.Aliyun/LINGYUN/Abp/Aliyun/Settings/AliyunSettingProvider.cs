@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Aliyun.Localization;
+﻿using LINGYUN.Abp.Aliyun.Features;
+using LINGYUN.Abp.Aliyun.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
@@ -6,6 +7,8 @@ namespace LINGYUN.Abp.Aliyun.Settings;
 
 public class AliyunSettingProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "Aliyun";
+
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(GetAuthorizationSettings());
@@ -28,7 +31,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Enable])
+            .WithParent("RAM", L("DisplayName:Aliyun.RAM")),
             new SettingDefinition(
                 AliyunSettingNames.Authorization.AccessKeySecret,
                 displayName: L("DisplayName:AccessKeySecret"),
@@ -40,7 +48,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Enable])
+            .WithParent("RAM", L("DisplayName:Aliyun.RAM")),
             new SettingDefinition(
                 AliyunSettingNames.Authorization.DurationSeconds,
                 defaultValue: "3600",
@@ -52,7 +65,13 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Enable])
+            .WithParent("RAM", L("DisplayName:Aliyun.RAM"))
+            .WithValueType(ValueType.Number),
             new SettingDefinition(
                 AliyunSettingNames.Authorization.Policy,
                 displayName: L("DisplayName:Policy"),
@@ -64,7 +83,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Enable])
+            .WithParent("RAM", L("DisplayName:Aliyun.RAM")),
             new SettingDefinition(
                 AliyunSettingNames.Authorization.RamRoleArn,
                 displayName: L("DisplayName:RamRoleArn"),
@@ -76,10 +100,15 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Enable])
+            .WithParent("RAM", L("DisplayName:Aliyun.RAM")),
             new SettingDefinition(
                 AliyunSettingNames.Authorization.RegionId,
-                defaultValue: "oss-cn-hangzhou",
+                defaultValue: "cn-hangzhou",
                 displayName: L("DisplayName:RegionId"),
                 description: L("Description:RegionId"),
                 isVisibleToClients: false
@@ -88,7 +117,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Enable])
+            .WithParent("RAM", L("DisplayName:Aliyun.RAM")),
             new SettingDefinition(
                 AliyunSettingNames.Authorization.RoleSessionName,
                 displayName: L("DisplayName:RoleSessionName"),
@@ -100,7 +134,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Enable])
+            .WithParent("RAM", L("DisplayName:Aliyun.RAM")),
             new SettingDefinition(
                 AliyunSettingNames.Authorization.UseSecurityTokenService,
                 defaultValue: true.ToString(),
@@ -112,7 +151,13 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Enable])
+            .WithParent("RAM", L("DisplayName:Aliyun.RAM"))
+            .WithValueType(ValueType.Boolean),
         };
     }
 
@@ -131,7 +176,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Sms.Enable])
+            .WithParent("Sms", L("DisplayName:Aliyun.Sms")),
             new SettingDefinition(
                 AliyunSettingNames.Sms.DefaultSignName,
                 displayName: L("DisplayName:DefaultSignName"),
@@ -143,7 +193,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Sms.Enable])
+            .WithParent("Sms", L("DisplayName:Aliyun.Sms")),
             new SettingDefinition(
                 AliyunSettingNames.Sms.DefaultTemplateCode,
                 displayName: L("DisplayName:DefaultTemplateCode"),
@@ -155,7 +210,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Sms.Enable])
+            .WithParent("Sms", L("DisplayName:Aliyun.Sms")),
             new SettingDefinition(
                 AliyunSettingNames.Sms.DefaultPhoneNumber,
                 displayName: L("DisplayName:DefaultPhoneNumber"),
@@ -166,7 +226,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Sms.Enable])
+            .WithParent("Sms", L("DisplayName:Aliyun.Sms")),
             new SettingDefinition(
                 AliyunSettingNames.Sms.Domain,
                 defaultValue: "dysmsapi.aliyuncs.com",
@@ -178,7 +243,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Sms.Enable])
+            .WithParent("Sms", L("DisplayName:Aliyun.Sms")),
             new SettingDefinition(
                 AliyunSettingNames.Sms.Version,
                 defaultValue: "2017-05-25",
@@ -190,7 +260,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Sms.Enable])
+            .WithParent("Sms", L("DisplayName:Aliyun.Sms")),
             new SettingDefinition(
                 AliyunSettingNames.Sms.VisableErrorToClient,
                 defaultValue: false.ToString(),
@@ -203,6 +278,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Sms.Enable])
+            .WithParent("Sms", L("DisplayName:Aliyun.Sms"))
+            .WithValueType(ValueType.Boolean)
         };
     }
 
@@ -221,7 +302,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Sms.Enable])
+            .WithParent("SmsVerifyCode", L("DisplayName:Aliyun.SmsVerifyCode")),
             new SettingDefinition(
                 AliyunSettingNames.SmsVerifyCode.DefaultSignName,
                 displayName: L("DisplayName:DefaultSignName"),
@@ -233,7 +319,12 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Sms.Enable])
+            .WithParent("SmsVerifyCode", L("DisplayName:Aliyun.SmsVerifyCode")),
             new SettingDefinition(
                 AliyunSettingNames.SmsVerifyCode.DefaultTemplateCode,
                 displayName: L("DisplayName:DefaultTemplateCode"),
@@ -245,10 +336,15 @@ public class AliyunSettingProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName),
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(
+                GroupName,
+                L("DisplayName:Aliyun"),
+                requiredFeatures: [AliyunFeatureNames.Sms.Enable])
+            .WithParent("SmsVerifyCode", L("DisplayName:Aliyun.SmsVerifyCode")),
         };
     }
-    private ILocalizableString L(string name)
+    private LocalizableString L(string name)
     {
         return LocalizableString.Create<AliyunResource>(name);
     }

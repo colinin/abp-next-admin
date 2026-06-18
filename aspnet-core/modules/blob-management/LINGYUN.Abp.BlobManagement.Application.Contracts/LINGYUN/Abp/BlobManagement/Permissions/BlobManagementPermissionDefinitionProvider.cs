@@ -27,6 +27,8 @@ public class BlobManagementPermissionDefinitionProvider : PermissionDefinitionPr
         blob.AddChild(BlobManagementPermissionNames.Blob.Delete, L("Permission:Delete"));
         blob.AddChild(BlobManagementPermissionNames.Blob.Download, L("Permission:Download"))
             .RequireFeatures(BlobManagementFeatureNames.Blob.DownloadFile);
+        blob.AddChild(BlobManagementPermissionNames.Blob.GenerateDownloadUrl, L("Permission:GenerateDownloadUrl"))
+            .RequireFeatures(BlobManagementFeatureNames.Blob.GenerateDownloadUrl);
 
         context.AddResourcePermission(
             name: BlobManagementPermissionNames.Blob.Resources.Delete,

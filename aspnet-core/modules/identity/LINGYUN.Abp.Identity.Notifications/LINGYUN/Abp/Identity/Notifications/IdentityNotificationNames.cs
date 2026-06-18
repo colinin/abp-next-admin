@@ -16,8 +16,16 @@ public static class IdentityNotificationNames
     {
         public const string Prefix = GroupName + ".IdentityUser";
         /// <summary>
-        /// 不活跃用户清理通知
+        /// 账户保持活跃通知
         /// </summary>
-        public const string CleaningUpInactiveUsers = Prefix + ".CleaningUpInactiveUsers";
+        public const string InactiveUserReminderNotifier = Prefix + ".InactiveUserReminderNotifier";
+        /// <summary>
+        /// 账户停用通知
+        /// </summary>
+        public const string InactiveUserDeactivationNotifier = Prefix + ".InactiveUserDeactivationNotifier";
+        /// <summary>
+        /// 账户删除通知
+        /// </summary>
+        public const string InactiveUserDeletionNotifier = Prefix + ".InactiveUserDeletionNotifier";
     }
 }

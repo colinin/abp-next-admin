@@ -233,7 +233,7 @@ public class SelectAccountModel : AccountPageModel
 
             if (RedirectUri.StartsWith("/"))
             {
-                int queryIndex = RedirectUri.IndexOf('?');
+                var queryIndex = RedirectUri.IndexOf('?');
                 if (queryIndex >= 0)
                 {
                     queryString = RedirectUri.Substring(queryIndex + 1);

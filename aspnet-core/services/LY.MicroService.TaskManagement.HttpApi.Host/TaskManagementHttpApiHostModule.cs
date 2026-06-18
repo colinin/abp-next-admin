@@ -8,14 +8,17 @@ using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Jobs;
 using LINGYUN.Abp.BackgroundTasks.Notifications;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
+using LINGYUN.Abp.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Elasticsearch.Jobs;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.Jobs;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.BlobManagement;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -64,9 +67,12 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpBackgroundTasksDistributedLockingModule),
     typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(AbpBackgroundTasksNotificationsModule),
+    typeof(AbpElasticsearchJobsModule),
+    typeof(AbpIdentityJobsModule),
     typeof(TaskManagementApplicationModule),
     typeof(TaskManagementHttpApiModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),

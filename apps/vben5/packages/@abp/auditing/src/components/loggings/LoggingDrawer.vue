@@ -219,7 +219,7 @@ async function onGet(id: string) {
                   {{ row.hResult }}
                 </DescriptionsItem>
                 <DescriptionsItem :label="$t('AbpAuditLogging.HelpURL')">
-                  {{ row.helpURL }}
+                  {{ row.helpUrl }}
                 </DescriptionsItem>
               </Descriptions>
             </template>

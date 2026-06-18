@@ -1,7 +1,6 @@
 ﻿using LINGYUN.Abp.BlobManagement.Dtos;
 using LINGYUN.Abp.BlobManagement.Features;
 using LINGYUN.Abp.BlobManagement.Permissions;
-using LINGYUN.Abp.Features.LimitValidation;
 using System.Threading.Tasks;
 using Volo.Abp.Content;
 using Volo.Abp.Features;
@@ -23,11 +22,6 @@ public class BlobAppService : BlobAppServiceBase, IBlobAppService
         GetListPolicyName = BlobManagementPermissionNames.Blob.Default;
     }
 
-    [RequiresFeature(BlobManagementFeatureNames.Blob.UploadFile)]
-    [RequiresLimitFeature(
-        BlobManagementFeatureNames.Blob.UploadLimit,
-        BlobManagementFeatureNames.Blob.UploadInterval,
-        LimitPolicy.Month)]
     public async virtual Task CreateChunkFileAsync(BlobFileChunkCreateDto input)
     {
         await CheckCreatePolicyAsync();
@@ -35,11 +29,6 @@ public class BlobAppService : BlobAppServiceBase, IBlobAppService
         await base.CreateChunkFileAsync(input.ContainerId.ToString(), input);
     }
 
-    [RequiresFeature(BlobManagementFeatureNames.Blob.UploadFile)]
-    [RequiresLimitFeature(
-        BlobManagementFeatureNames.Blob.UploadLimit,
-        BlobManagementFeatureNames.Blob.UploadInterval,
-        LimitPolicy.Month)]
     public async virtual Task<BlobDto> CreateFileAsync(BlobFileCreateDto input)
     {
         await CheckCreatePolicyAsync();
@@ -58,16 +47,30 @@ public class BlobAppService : BlobAppServiceBase, IBlobAppService
         return await base.CreateFolderAsync(blobContainer, input);
     }
 
-    [RequiresFeature(BlobManagementFeatureNames.Blob.DownloadFile)]
-    [RequiresLimitFeature(
-        BlobManagementFeatureNames.Blob.DownloadLimit,
-        BlobManagementFeatureNames.Blob.DownloadInterval,
-        LimitPolicy.Month)]
-    public async virtual Task<IRemoteStreamContent> GetContentByNameAsync(BlobDownloadByNameInput input)
+    public async virtual Task<IRemoteStreamContent> DownloadAsync(BlobDownloadByIdInput input)
     {
-        var blobContainer = await BlobContainerRepository.GetByNameAsync(input.ContainerName);
+        using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
+        {
+            return await base.DownloadAsync(input.Id);
+        }
+    }
 
-        return await base.GetContentByNameAsync(blobContainer, input.BlobName);
+    public async virtual Task<IRemoteStreamContent> PreviewAsync(BlobDownloadByIdInput input)
+    {
+        using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
+        {
+            return await base.DownloadAsync(input.Id);
+        }
+    }
+
+    public async virtual Task<IRemoteStreamContent> DownloadByNameAsync(BlobDownloadByNameInput input)
+    {
+        using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
+        {
+            var blobContainer = await BlobContainerRepository.GetByNameAsync(BlobManager.GetBlobProvider(), input.ContainerName);
+
+            return await base.DownloadByNameAsync(blobContainer, input.BlobName);
+        }
     }
 
     protected async override Task CheckGetPolicyAsync(string containerName, Blob blob)

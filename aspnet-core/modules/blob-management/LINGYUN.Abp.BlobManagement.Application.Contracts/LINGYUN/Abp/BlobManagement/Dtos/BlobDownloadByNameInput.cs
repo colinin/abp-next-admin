@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.BlobManagement.Dtos;
 
 public class BlobDownloadByNameInput
 {
+    public Guid? TenantId { get; set; }
+
     [Required]
     [DynamicStringLength(typeof(BlobContainerConsts), nameof(BlobContainerConsts.MaxNameLength))]
     public string ContainerName { get; set; }

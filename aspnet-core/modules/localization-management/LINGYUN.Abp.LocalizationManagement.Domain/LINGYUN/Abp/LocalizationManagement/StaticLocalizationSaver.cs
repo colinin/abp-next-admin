@@ -1,87 +1,46 @@
-﻿using LINGYUN.Abp.LocalizationManagement.External;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.DistributedLocking;
-using Volo.Abp.Guids;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Localization;
-using Volo.Abp.Threading;
-using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.LocalizationManagement;
 
 public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDependency
 {
     protected ILogger<StaticLocalizationSaver> Logger { get; }
-
-    protected IDistributedCache Cache { get; }
-    protected IGuidGenerator GuidGenerator { get; }
-    protected IAbpDistributedLock DistributedLock { get; }
-    protected IUnitOfWorkManager UnitOfWorkManager { get; }
-    protected AbpDistributedCacheOptions CacheOptions { get; }
-    protected IApplicationInfoAccessor ApplicationInfoAccessor { get; }
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    protected IDistributedEventBus DistributedEventBus { get; }
     protected IStringLocalizerFactory StringLocalizerFactory { get; }
     protected AbpLocalizationOptions LocalizationOptions { get; }
     protected AbpLocalizationManagementOptions LocalizationManagementOptions { get; }
-
-    protected IExternalLocalizationTextStoreCache ExternalLocalizationTextStoreCache { get; }
-    protected IExternalLocalizationStoreCache ExternalLocalizationStoreCache { get; }
-    protected ILocalizationLanguageStoreCache LocalizationLanguageStoreCache { get; }
-    protected ILocalizationTextStoreCache LocalizationTextStoreCache { get; }
-
-    protected ILanguageRepository LanguageRepository { get; }
-    protected IResourceRepository ResourceRepository { get; }
-    protected ITextRepository TextRepository { get; }
+    protected IDistributedCache<DynamicLanguageInitializerCacheItem> DynamicLanguageCache { get; }
+    protected IDistributedCache<DynamicResourceInitializerCacheItem> DynamicResourceCache { get; }
+    protected IDistributedCache<DynamicTextInitializerCacheItem> DynamicTextCache { get; }
 
     public StaticLocalizationSaver(
         ILogger<StaticLocalizationSaver> logger,
-        IDistributedCache cache,
-        IGuidGenerator guidGenerator,
-        IAbpDistributedLock distributedLock,
-        IUnitOfWorkManager unitOfWorkManager,
-        IApplicationInfoAccessor applicationInfoAccessor,
-        ICancellationTokenProvider cancellationTokenProvider,
-        IStringLocalizerFactory stringLocalizerFactory,
-        IOptions<AbpDistributedCacheOptions> cacheOptions,
-        IOptions<AbpLocalizationOptions> localizationOptions,
-        IOptions<AbpLocalizationManagementOptions> localizationManagementOptions,
-        IExternalLocalizationTextStoreCache externalLocalizationTextStoreCache,
-        IExternalLocalizationStoreCache externalLocalizationStoreCache,
-        ILocalizationLanguageStoreCache localizationLanguageStoreCache,
-        ILocalizationTextStoreCache localizationTextStoreCache,
-        ILanguageRepository languageRepository,
-        IResourceRepository resourceRepository,
-        ITextRepository textRepository)
+        IDistributedEventBus distributedEventBus, 
+        IStringLocalizerFactory stringLocalizerFactory, 
+        IOptions<AbpLocalizationOptions> localizationOptions, 
+        IOptions<AbpLocalizationManagementOptions> localizationManagementOptions, 
+        IDistributedCache<DynamicLanguageInitializerCacheItem> dynamicLanguageCache,
+        IDistributedCache<DynamicResourceInitializerCacheItem> dynamicResourceCache,
+        IDistributedCache<DynamicTextInitializerCacheItem> dynamicTextCache)
     {
         Logger = logger;
-        Cache = cache;
-        GuidGenerator = guidGenerator;
-        DistributedLock = distributedLock;
-        UnitOfWorkManager = unitOfWorkManager;
-        CacheOptions = cacheOptions.Value;
-        ApplicationInfoAccessor = applicationInfoAccessor;
-        CancellationTokenProvider = cancellationTokenProvider;
+        DistributedEventBus = distributedEventBus;
         StringLocalizerFactory = stringLocalizerFactory;
         LocalizationOptions = localizationOptions.Value;
         LocalizationManagementOptions = localizationManagementOptions.Value;
-        ExternalLocalizationTextStoreCache = externalLocalizationTextStoreCache;
-        ExternalLocalizationStoreCache = externalLocalizationStoreCache;
-        LocalizationLanguageStoreCache = localizationLanguageStoreCache;
-        LocalizationTextStoreCache = localizationTextStoreCache;
-        LanguageRepository = languageRepository;
-        ResourceRepository = resourceRepository;
-        TextRepository = textRepository;
+        DynamicLanguageCache = dynamicLanguageCache;
+        DynamicResourceCache = dynamicResourceCache;
+        DynamicTextCache = dynamicTextCache;
     }
 
     public async virtual Task SaveAsync()
@@ -91,265 +50,72 @@ public class StaticLocalizationSaver : IStaticLocalizationSaver, ITransientDepen
             return;
         }
 
-        Logger.LogDebug("Waiting to acquire the distributed lock for saving static localizations...");
 
-        await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
-            GetApplicationDistributedLockKey(),
-            TimeSpan.FromSeconds(5));
-        if (applicationLockHandle == null)
-        {
-            return;
-        }
-
-        using var unitOfWork = UnitOfWorkManager.Begin(true, true);
-        try
-        {
-            await SaveLanguagesAsync();
-            await SaveResourcesAsync();
-            await SaveTextsAsync();
-
-            await PreCacheDynamicLocalizationsAsync();
-        }
-        catch (Exception ex)
-        {
-            Logger.LogInformation("Filed to save static localizations.");
-            Logger.LogWarning(ex.ToString());
-            try
-            {
-                await unitOfWork.RollbackAsync();
-            }
-            catch
-            {
-                Logger.LogInformation("Filed to rollback saving static localizations.");
-            }
-            throw;
-        }
-
-        await unitOfWork.CompleteAsync();
-
-        Logger.LogInformation("Completed to save static localizations.");
-    }
-
-    private async Task PreCacheDynamicLocalizationsAsync()
-    {
-        if (LocalizationLanguageStoreCache is LocalizationLanguageStoreCache languageStoreCache)
-        {
-            await languageStoreCache.UpdateCache();
-        }
-
-        foreach (var resource in LocalizationOptions.Resources)
-        {
-            if (ExternalLocalizationStoreCache is ExternalLocalizationStoreCache localizationStoreCache)
-            {
-                await localizationStoreCache.UpdateCache(resource.Key);
-            }
-
-            foreach (var language in LocalizationOptions.Languages)
-            {
-                if (ExternalLocalizationTextStoreCache is ExternalLocalizationTextStoreCache externalLocalizationTextStoreCache)
-                {
-                    await externalLocalizationTextStoreCache.UpdateCache(resource.Value, language.CultureName);
-                }
-                if (LocalizationTextStoreCache is LocalizationTextStoreCache localizationTextStoreCache)
-                {
-                    await localizationTextStoreCache.UpdateCache(resource.Value, language.CultureName);
-                }
-            }
-        }
-    }
-
-    private async Task SaveLanguagesAsync()
-    {
-        var languageHashKey = GetApplicationLanguageHashKey();
-        var languageHashCache = await Cache.GetStringAsync(languageHashKey, CancellationTokenProvider.Token);
-        var languageHash = CalculateLanguagesHash(LocalizationOptions.Languages);
-        if (languageHashCache != languageHash)
-        {
-            var newLanguages = new List<Language>();
-            foreach (var language in LocalizationOptions.Languages)
-            {
-                if (await LanguageRepository.FindByCultureNameAsync(language.CultureName, cancellationToken: CancellationTokenProvider.Token) == null)
-                {
-                    newLanguages.Add(
-                        new Language(
-                            GuidGenerator.Create(),
-                            language.CultureName,
-                            language.UiCultureName,
-                            language.DisplayName,
-                            language.TwoLetterISOLanguageName));
-                }
-            }
-
-            if (newLanguages.Any())
-            {
-                Logger.LogInformation("Saved {0} new languages.", newLanguages.Count);
-
-                await LanguageRepository.InsertManyAsync(newLanguages, cancellationToken: CancellationTokenProvider.Token);
-            }
-
-            await Cache.SetStringAsync(languageHashKey, languageHash, CancellationTokenProvider.Token);
-        }
-    }
-
-    private async Task SaveResourcesAsync()
-    {
-        var resourceHashKey = GetApplicationResourceHashKey();
-        var resourceHashCache = await Cache.GetStringAsync(resourceHashKey, CancellationTokenProvider.Token);
-        var resourceHash = CalculateResourceHash(LocalizationOptions.Resources.Select(x => x.Value).ToList());
-        if (resourceHashCache != resourceHash)
-        {
-            var newResources = new List<Resource>();
-            foreach (var resource in LocalizationOptions.Resources)
-            {
-                if (await ResourceRepository.FindByNameAsync(resource.Key, cancellationToken: CancellationTokenProvider.Token) == null)
-                {
-                    newResources.Add(
-                        new Resource(
-                            GuidGenerator.Create(),
-                            resource.Value.ResourceName,
-                            resource.Value.ResourceName,
-                            resource.Value.ResourceName,
-                            resource.Value.DefaultCultureName));
-                }
-            }
-            if (newResources.Any())
-            {
-                Logger.LogInformation("Saved {0} new resources.", newResources.Count);
-
-                await ResourceRepository.InsertManyAsync(newResources, cancellationToken: CancellationTokenProvider.Token);
-            }
-
-            await Cache.SetStringAsync(resourceHashKey, resourceHash, CancellationTokenProvider.Token);
-        }
-    }
-
-    private async Task SaveTextsAsync()
-    {
-        var createTexts = new List<Text>();
-        var updateTexts = new List<Text>();
+        var languageCacheItems = new Dictionary<string, DynamicLanguageInitializerCacheItem>();
+        var resourceCacheItems = new Dictionary<string, DynamicResourceInitializerCacheItem>();
+        var textCacheItems = new Dictionary<string, DynamicTextInitializerCacheItem>();
 
         var localizationResources = LocalizationOptions.Resources.Values.OfType<LocalizationResource>().ToArray();
-
-        var languageResourceTexts = new Dictionary<string, Dictionary<string, Dictionary<string, LocalizedString>>>();
-
         foreach (var language in LocalizationOptions.Languages)
         {
-            var resourceTexts = new Dictionary<string, Dictionary<string, LocalizedString>>();
+            if (!languageCacheItems.Any(x => x.Value.CultureName == language.CultureName))
+            {
+                languageCacheItems.Add(
+                    Guid.NewGuid().ToString(),
+                    new DynamicLanguageInitializerCacheItem(
+                        language.CultureName,
+                        language.UiCultureName,
+                        language.DisplayName,
+                        language.TwoLetterISOLanguageName));
+            }
+
             foreach (var resource in localizationResources)
             {
+                if (!resourceCacheItems.Any(x => x.Value.ResourceName == resource.ResourceName))
+                {
+                    resourceCacheItems.Add(
+                        Guid.NewGuid().ToString(),
+                        new DynamicResourceInitializerCacheItem(
+                            resource.ResourceName,
+                            resource.DefaultCultureName));
+                }
+
                 using (CultureHelper.Use(language.CultureName, language.UiCultureName))
                 {
                     var stringLocalizer = StringLocalizerFactory.Create(resource.ResourceType);
 
                     var localizedStrings = stringLocalizer.GetAllStrings(false, false, false);
 
-                    var textHashKey = GetApplicationTextHashKey(resource.ResourceName, language.CultureName);
-                    var textHashCache = await Cache.GetStringAsync(textHashKey, CancellationTokenProvider.Token);
-                    var textHash = CalculateTextsHash(localizedStrings);
-                    if (textHashCache == textHash)
+                    if (!localizedStrings.Any())
                     {
                         continue;
                     }
-
-                    var savedLocalizedStrings = await TextRepository.GetListAsync(
-                        resource.ResourceName,
-                        language.CultureName);
+                    var localizedStringsDic = new Dictionary<string, string>();
 
                     foreach (var localizedString in localizedStrings)
                     {
-                        var findLocalizedString = savedLocalizedStrings.FirstOrDefault(x => x.Key == localizedString.Name);
-                        if (findLocalizedString == null)
-                        {
-                            createTexts.Add(
-                                new Text(
-                                    resource.ResourceName,
-                                    language.CultureName,
-                                    localizedString.Name,
-                                    localizedString.Value));
-                            continue;
-                        }
-
-                        if (!string.Equals(findLocalizedString.Value, localizedString.Value, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            findLocalizedString.SetValue(localizedString.Value);
-                            updateTexts.Add(findLocalizedString);
-                        }
+                        localizedStringsDic.TryAdd(localizedString.Name, localizedString.Value);
                     }
 
-                    await Cache.SetStringAsync(textHashKey, textHash, CancellationTokenProvider.Token);
+                    textCacheItems.Add(
+                        Guid.NewGuid().ToString(),
+                        new DynamicTextInitializerCacheItem(
+                            resource.ResourceName,
+                            language.CultureName,
+                            localizedStringsDic));
                 }
             }
-
-            languageResourceTexts[language.CultureName] = resourceTexts;
         }
 
-        if (createTexts.Any())
-        {
-            Logger.LogInformation("Saved {0} new texts.", createTexts.Count);
+        await DynamicLanguageCache.SetManyAsync(languageCacheItems);
+        await DynamicResourceCache.SetManyAsync(resourceCacheItems);
+        await DynamicTextCache.SetManyAsync(textCacheItems);
 
-            await TextRepository.InsertManyAsync(createTexts, cancellationToken: CancellationTokenProvider.Token);
-        }
-        if (updateTexts.Any())
-        {
-            Logger.LogInformation("Update {0} changed texts.", updateTexts.Count);
-
-            await TextRepository.UpdateManyAsync(updateTexts, cancellationToken: CancellationTokenProvider.Token);
-        }
-    }
-
-    private string GetApplicationDistributedLockKey()
-    {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpLocalizationsUpdateLock";
-    }
-
-    private string GetApplicationResourceHashKey()
-    {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpLocalizationResourcesHash";
-    }
-
-    private string GetApplicationLanguageHashKey()
-    {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpLocalizationLanguagesHash";
-    }
-    private string GetApplicationTextHashKey(string resourceName, string cultureName)
-    {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_{resourceName}_{cultureName}_AbpLocalizationTextsHash";
-    }
-
-    private static string CalculateResourceHash(List<LocalizationResourceBase> localizationResources)
-    {
-        var stringBuilder = new StringBuilder();
-
-        stringBuilder.Append("LocalizationResources:");
-        stringBuilder.AppendLine(JsonSerializer.Serialize(localizationResources));
-
-        return stringBuilder
-            .ToString()
-            .ToMd5();
-    }
-
-    private static string CalculateLanguagesHash(List<LanguageInfo> languageInfos)
-    {
-        var stringBuilder = new StringBuilder();
-
-        stringBuilder.Append("LocalizationLanguages:");
-        stringBuilder.AppendLine(JsonSerializer.Serialize(languageInfos));
-
-        return stringBuilder
-            .ToString()
-            .ToMd5();
-    }
-
-    private static string CalculateTextsHash(IEnumerable<LocalizedString> localizers)
-    {
-        var stringBuilder = new StringBuilder();
-
-        stringBuilder.Append("LocalizationTexts:");
-        stringBuilder.AppendLine(JsonSerializer.Serialize(
-            localizers.Select(x => new NameValue(x.Name, x.Value)).ToList()));
-
-        return stringBuilder
-            .ToString()
-            .ToMd5();
+        await DistributedEventBus.PublishAsync(
+            new DynamicLanguageInitializerEto(languageCacheItems.Keys.ToArray()));
+        await DistributedEventBus.PublishAsync(
+            new DynamicResourceInitializerEto(resourceCacheItems.Keys.ToArray()));
+        await DistributedEventBus.PublishAsync(
+            new DynamicTextInitializerEto(textCacheItems.Keys.ToArray()));
     }
 }

@@ -4,6 +4,7 @@ using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.BlobManagement.SettingManagement;
 using LINGYUN.Abp.CachingManagement;
 using LINGYUN.Abp.CachingManagement.StackExchangeRedis;
 using LINGYUN.Abp.Claims.Mapping;
@@ -58,6 +59,7 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     typeof(AbpTencentCloudSettingManagementModule),
     // typeof(AbpWeChatSettingManagementModule),
     typeof(AbpWxPusherSettingManagementModule),
+    typeof(AbpBlobManagementSettingManagementModule),
 
     typeof(AbpSettingManagementApplicationModule),
     typeof(AbpSettingManagementHttpApiModule),

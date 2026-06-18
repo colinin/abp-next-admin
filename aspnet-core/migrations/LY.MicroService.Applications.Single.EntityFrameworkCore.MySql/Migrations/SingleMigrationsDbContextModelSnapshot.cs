@@ -1082,6 +1082,48 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                     b.ToTable("AbpGdprRequests", (string)null);
                 });
 
+            modelBuilder.Entity("LINGYUN.Abp.Identity.IdentityUserInactive", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<DateTimeOffset?>("DeactivatedTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset?>("LastNotificationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset>("LastSignInTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "UserId");
+
+                    b.ToTable("AbpUserInactives", (string)null);
+                });
+
             modelBuilder.Entity("LINGYUN.Abp.LocalizationManagement.Language", b =>
                 {
                     b.Property<Guid>("Id")

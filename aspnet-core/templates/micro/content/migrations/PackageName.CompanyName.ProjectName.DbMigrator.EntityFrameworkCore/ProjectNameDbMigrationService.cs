@@ -1,9 +1,6 @@
 ﻿using LINGYUN.Abp.Data.DbMigrator;
-using LINGYUN.Abp.Saas.Tenants;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -16,14 +13,10 @@ namespace PackageName.CompanyName.ProjectName.EntityFrameworkCore;
 
 public class ProjectNameDbMigrationService : EfCoreRuntimeDbMigratorBase<ProjectNameDbContext>, ITransientDependency
 {
-    protected IDataSeeder DataSeeder { get; }
-    protected IDbSchemaMigrator DbSchemaMigrator { get; }
-    protected ITenantRepository TenantRepository { get; }
+    protected ProjectNameDataSeeder DataSeeder { get; }
 
     public ProjectNameDbMigrationService(
-        IDataSeeder dataSeeder,
-        IDbSchemaMigrator dbSchemaMigrator,
-        ITenantRepository tenantRepository,
+        ProjectNameDataSeeder dataSeeder,
         ICurrentTenant currentTenant,
         IUnitOfWorkManager unitOfWorkManager,
         IServiceProvider serviceProvider,
@@ -35,36 +28,11 @@ public class ProjectNameDbMigrationService : EfCoreRuntimeDbMigratorBase<Project
             unitOfWorkManager, serviceProvider, currentTenant, abpDistributedLock, distributedEventBus, loggerFactory)
     {
         DataSeeder = dataSeeder;
-        DbSchemaMigrator = dbSchemaMigrator;
-        TenantRepository = tenantRepository;
-    }
-
-    protected async override Task LockAndApplyDatabaseMigrationsAsync()
-    {
-        await base.LockAndApplyDatabaseMigrationsAsync();
-
-        IList<Tenant> tenants;
-
-        try
-        {
-            tenants = await TenantRepository.GetListAsync();
-        }
-        catch
-        {
-            return;
-        }
-
-
-        foreach (var tenant in tenants.Where(x => x.IsActive))
-        {
-            await LockAndApplyDatabaseWithTenantMigrationsAsync(tenant.Id);
-        }
     }
 
     protected async override Task SeedAsync()
     {
-        Logger.LogInformation($"Executing {(!CurrentTenant.IsAvailable ? "host" : CurrentTenant.Name ?? CurrentTenant.GetId().ToString())} database seed...");
-
-        await DataSeeder.SeedAsync(CurrentTenant.Id);
+        // DbMigrator迁移数据种子
+        await DataSeeder.SeedAsync(new DataSeedContext());
     }
 }

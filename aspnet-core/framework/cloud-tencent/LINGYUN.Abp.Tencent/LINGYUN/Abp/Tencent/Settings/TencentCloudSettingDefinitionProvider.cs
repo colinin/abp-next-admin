@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Tencent.Localization;
+﻿using LINGYUN.Abp.Tencent.Features;
+using LINGYUN.Abp.Tencent.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
@@ -6,6 +7,8 @@ namespace LINGYUN.Abp.Tencent.Settings;
 
 public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
 {
+    private const string GroupName = "TenantCloud";
+
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(GetBasicSettings());
@@ -29,7 +32,10 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
+                    TenantSettingValueProvider.ProviderName)
+                .WithGroup(GroupName, L("Settings:TenantCloud"))
+                .WithParent("ConnectionSetting", L("Settings:TenantCloud.ConnectionSetting"), order: 0)
+                .WithOrder(0),
                 new SettingDefinition(
                     TencentCloudSettingNames.Connection.Timeout,
                     // 默认 60秒
@@ -42,7 +48,11 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
+                    TenantSettingValueProvider.ProviderName)
+                .WithGroup(GroupName, L("Settings:TenantCloud"))
+                .WithParent("ConnectionSetting", L("Settings:TenantCloud.ConnectionSetting"), order: 0)
+                .WithOrder(1)
+                .WithValueType(ValueType.Number),
                 new SettingDefinition(
                     TencentCloudSettingNames.Connection.WebProxy,
                     displayName: L("DisplayName:WebProxy"),
@@ -53,7 +63,10 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
+                    TenantSettingValueProvider.ProviderName)
+                .WithGroup(GroupName, L("Settings:TenantCloud"))
+                .WithParent("ConnectionSetting", L("Settings:TenantCloud.ConnectionSetting"), order: 0)
+                .WithOrder(2),
         };
     }
 
@@ -72,7 +85,13 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
+                    TenantSettingValueProvider.ProviderName)
+                .WithGroup(
+                    GroupName,
+                    L("Settings:TenantCloud"),
+                    requiredFeatures: [TencentCloudFeatures.Sms.Enable])
+                .WithParent("SmsSetting", L("DisplayName:TenantCloud.SmsSetting"), order: 2)
+                .WithOrder(0),
                 new SettingDefinition(
                     TencentCloudSettingNames.Sms.DefaultSignName,
                     displayName: L("DisplayName:DefaultSignName"),
@@ -84,7 +103,13 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
+                    TenantSettingValueProvider.ProviderName)
+                .WithGroup(
+                    GroupName,
+                    L("Settings:TenantCloud"),
+                    requiredFeatures: [TencentCloudFeatures.Sms.Enable])
+                .WithParent("SmsSetting", L("DisplayName:TenantCloud.SmsSetting"), order: 2)
+                .WithOrder(1),
                 new SettingDefinition(
                     TencentCloudSettingNames.Sms.DefaultTemplateId,
                     displayName: L("DisplayName:DefaultTemplateId"),
@@ -96,7 +121,13 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
+                    TenantSettingValueProvider.ProviderName)
+                .WithGroup(
+                    GroupName,
+                    L("Settings:TenantCloud"),
+                    requiredFeatures: [TencentCloudFeatures.Sms.Enable])
+                .WithParent("SmsSetting", L("DisplayName:TenantCloud.SmsSetting"), order: 2)
+                .WithOrder(2),
             };
     }
 
@@ -116,7 +147,10 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
+                    TenantSettingValueProvider.ProviderName)
+                .WithGroup(GroupName, L("Settings:TenantCloud"))
+                .WithParent("BasicSetting", L("DisplayName:TenantCloud.BasicSetting"), order: 1)
+                .WithOrder(0),
                 new SettingDefinition(
                     TencentCloudSettingNames.SecretId,
                     displayName: L("DisplayName:SecretId"),
@@ -128,7 +162,10 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
+                    TenantSettingValueProvider.ProviderName)
+                .WithGroup(GroupName, L("Settings:TenantCloud"))
+                .WithParent("BasicSetting", L("DisplayName:TenantCloud.BasicSetting"), order: 1)
+                .WithOrder(1),
                 new SettingDefinition(
                     TencentCloudSettingNames.SecretKey,
                     displayName: L("DisplayName:SecretKey"),
@@ -140,7 +177,10 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
+                    TenantSettingValueProvider.ProviderName)
+                .WithGroup(GroupName, L("Settings:TenantCloud"))
+                .WithParent("BasicSetting", L("DisplayName:TenantCloud.BasicSetting"), order: 1)
+                .WithOrder(2),
                 new SettingDefinition(
                     TencentCloudSettingNames.DurationSecond,
                     defaultValue: "600",
@@ -152,11 +192,15 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName),
+                    TenantSettingValueProvider.ProviderName)
+                .WithGroup(GroupName, L("Settings:TenantCloud"))
+                .WithParent("BasicSetting", L("DisplayName:TenantCloud.BasicSetting"), order: 1)
+                .WithOrder(3)
+                .WithValueType(ValueType.Number),
         };
     }
 
-    private ILocalizableString L(string name)
+    private LocalizableString L(string name)
     {
         return LocalizableString.Create<TencentCloudResource>(name);
     }

@@ -35,6 +35,14 @@
     "SettingProviders:T": "Tenant",
     "SettingProviders:U": "User",
     "BasicInfo": "Basic",
-    "Properties": "Properties"
+    "Properties": "Properties",
+    "Settings:DefaultGroup": "Default Group",
+    "Settings:DefaultSetting": "Default Setting",
+    "Settings:System": "System",
+    "Settings:System.Language": "Language",
+    "Settings:System.Timing": "Timing",
+    "Settings:Emailing": "Emailing",
+    "Settings:Emailing.Default": "Default",
+    "Settings:Emailing.Smtp": "Smtp"
   }
 }

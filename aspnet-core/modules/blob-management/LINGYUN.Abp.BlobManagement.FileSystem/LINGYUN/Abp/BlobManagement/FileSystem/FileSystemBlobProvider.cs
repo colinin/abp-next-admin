@@ -99,6 +99,17 @@ public class FileSystemBlobProvider : IBlobProvider
         return Task.FromResult<Stream?>(File.OpenRead(fileName));
     }
 
+    public virtual Task<string?> GeneratePresignedUrlAsync(
+        string containerName,
+        string blobName,
+        TimeSpan expiration,
+        bool isAttachmentContent = true,
+        CancellationToken cancellationToken = default)
+    {
+        // 本地文件系统无需生成下载链接
+        return Task.FromResult<string?>(null);
+    }
+
     public virtual Task CreateFolderAsync(
         string containerName, 
         string blobName,
@@ -114,7 +125,8 @@ public class FileSystemBlobProvider : IBlobProvider
     public async virtual Task UploadBlobAsync(
         string containerName, 
         string blobName, 
-        Stream content, 
+        Stream content,
+        string? contentType = null,
         CancellationToken cancellationToken = default)
     {
         var fileName = CalculateBlobName(NormalizeContainerName(containerName.RemovePostFix("/")), blobName);

@@ -11,6 +11,7 @@
   <Folder Name="/framework/alibaba-cloud/">
     <Project Path="framework/cloud-aliyun/LINGYUN.Abp.Aliyun.SettingManagement/LINGYUN.Abp.Aliyun.SettingManagement.csproj" />
     <Project Path="framework/cloud-aliyun/LINGYUN.Abp.Aliyun/LINGYUN.Abp.Aliyun.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.BlobStoring.Aliyun/LINGYUN.Abp.BlobStoring.Aliyun.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.Sms.Aliyun/LINGYUN.Abp.Sms.Aliyun.csproj" />
   </Folder>
   <Folder Name="/framework/authentication/">
@@ -35,6 +36,9 @@
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.PostgresSqlInstaller/LINGYUN.Abp.Quartz.PostgresSqlInstaller.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.SqlInstaller/LINGYUN.Abp.Quartz.SqlInstaller.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.SqlServerInstaller/LINGYUN.Abp.Quartz.SqlServerInstaller.csproj" />
+  </Folder>
+  <Folder Name="/framework/calendars/">
+    <Project Path="framework/calendars/LINGYUN.Abp.Calendar/LINGYUN.Abp.Calendar.csproj" />
   </Folder>
   <Folder Name="/framework/cap/">
     <Project Path="framework/common/LINGYUN.Abp.EventBus.CAP/LINGYUN.Abp.EventBus.CAP.csproj" />
@@ -96,6 +100,7 @@
     <Project Path="framework/common/LINGYUN.Abp.RealTime/LINGYUN.Abp.RealTime.csproj" />
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM.SignalR/LINGYUN.Abp.IM.SignalR.csproj" />
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM/LINGYUN.Abp.IM.csproj" />
+    <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Calendar/LINGYUN.Abp.Notifications.Calendar.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Common/LINGYUN.Abp.Notifications.Common.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Core/LINGYUN.Abp.Notifications.Core.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Emailing/LINGYUN.Abp.Notifications.Emailing.csproj" />
@@ -207,6 +212,7 @@
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.FileSystem/LINGYUN.Abp.BlobManagement.FileSystem.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.HttpApi.Client/LINGYUN.Abp.BlobManagement.HttpApi.Client.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.HttpApi/LINGYUN.Abp.BlobManagement.HttpApi.csproj" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.MimeCheck/LINGYUN.Abp.BlobManagement.MimeCheck.csproj" Id="bb981955-78c8-45b7-a46a-cc9eefa2166a" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Minio/LINGYUN.Abp.BlobManagement.Minio.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.SettingManagement/LINGYUN.Abp.BlobManagement.SettingManagement.csproj" Id="649cb4c3-e7c9-4736-b254-0899bb26bfcb" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Tencent/LINGYUN.Abp.BlobManagement.Tencent.csproj" />
@@ -276,6 +282,7 @@
     <Project Path="modules/identity/LINGYUN.Abp.Identity.QrCode/LINGYUN.Abp.Identity.QrCode.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Session.AspNetCore/LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Session/LINGYUN.Abp.Identity.Session.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Identity.Jobs/LINGYUN.Abp.Identity.Jobs.csproj" />
   </Folder>
   <Folder Name="/modules/localization-management/">
     <Project Path="modules/localization-management/LINGYUN.Abp.LocalizationManagement.Application.Contracts/LINGYUN.Abp.LocalizationManagement.Application.Contracts.csproj" />

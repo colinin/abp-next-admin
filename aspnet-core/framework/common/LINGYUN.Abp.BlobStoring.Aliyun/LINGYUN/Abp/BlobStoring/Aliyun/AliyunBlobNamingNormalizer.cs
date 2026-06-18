@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.DependencyInjection;
 
@@ -14,7 +15,10 @@ public class AliyunBlobNamingNormalizer : IBlobNamingNormalizer, ITransientDepen
     /// <returns></returns>
     public virtual string NormalizeBlobName(string blobName)
     {
-        return blobName;
+        // 不能以正斜线（/）或者反斜线（\）开头。
+        return blobName
+            .RemovePreFix("/")
+            .RemovePreFix("\\");
     }
 
     /// <summary>

@@ -25,6 +25,7 @@
     "@abp/request": "workspace:*",
     "@abp/ui": "workspace:*",
     "@ant-design/icons-vue": "catalog:",
+    "@vben-core/shadcn-ui": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/hooks": "workspace:*",

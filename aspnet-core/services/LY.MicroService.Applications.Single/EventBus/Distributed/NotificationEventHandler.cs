@@ -1,7 +1,4 @@
-﻿using LINGYUN.Abp.Notifications;
-using LINGYUN.Abp.Notifications.Templating;
-using LY.MicroService.Applications.Single.BackgroundJobs;
-using LY.MicroService.Applications.Single.MultiTenancy;
+﻿using LY.MicroService.Applications.Single.BackgroundJobs;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -9,9 +6,6 @@ using System.Globalization;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.Json;
-using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.TextTemplating;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
@@ -47,9 +41,9 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
         /// </summary>
         protected ICurrentTenant CurrentTenant { get; }
         /// <summary>
-        /// Reference to <see cref="ITenantConfigurationCache"/>.
+        /// Reference to <see cref="ITenantStore"/>.
         /// </summary>
-        protected ITenantConfigurationCache TenantConfigurationCache { get; }
+        protected ITenantStore TenantStore { get; }
         /// <summary>
         /// Reference to <see cref="IJsonSerializer"/>.
         /// </summary>
@@ -97,7 +91,7 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
         public NotificationEventHandler(
             IClock clock,
             ICurrentTenant currentTenant,
-            ITenantConfigurationCache tenantConfigurationCache,
+            ITenantStore tenantStore,
             IJsonSerializer jsonSerializer,
             ITemplateRenderer templateRenderer,
             IBackgroundJobManager backgroundJobManager,
@@ -112,7 +106,7 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
         {
             Clock = clock;
             Options = options.Value;
-            TenantConfigurationCache = tenantConfigurationCache;
+            TenantStore = tenantStore;
             CurrentTenant = currentTenant;
             JsonSerializer = jsonSerializer;
             TemplateRenderer = templateRenderer;
@@ -152,7 +146,7 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
                     {
                         await SendToTenantAsync(null, notification, eventData, result);
 
-                        var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
+                        var allActiveTenants = (await TenantStore.GetListAsync()).Where(x => x.IsActive);
 
                         foreach (var activeTenant in allActiveTenants)
                         {
@@ -182,7 +176,7 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
                 {
                     await SendToTenantAsync(null, notification, eventData);
 
-                    var allActiveTenants = await TenantConfigurationCache.GetTenantsAsync();
+                    var allActiveTenants = (await TenantStore.GetListAsync()).Where(x => x.IsActive);
 
                     foreach (var activeTenant in allActiveTenants)
                     {

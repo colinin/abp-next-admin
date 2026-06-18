@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/.changes/">
     <File Path="../.changes/Migration 10.0.2 - 10.2.0.md" />
+    <File Path="../.changes/Migration 10.2.0 - 10.4.0.md" />
   </Folder>
   <Folder Name="/.github/" />
   <Folder Name="/.github/workflows/">
@@ -89,6 +90,9 @@
   </Folder>
   <Folder Name="/framework/authorization/">
     <Project Path="framework/authorization/LINGYUN.Abp.Authorization.OrganizationUnits/LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
+  </Folder>
+  <Folder Name="/framework/calendars/">
+    <Project Path="framework/calendars/LINGYUN.Abp.Calendar/LINGYUN.Abp.Calendar.csproj" Id="2fee90a2-01aa-4417-9529-79bb10b8850c" />
   </Folder>
   <Folder Name="/framework/cli/">
     <Project Path="framework/cli/LINGYUN.Abp.Cli/LINGYUN.Abp.Cli.csproj" />
@@ -228,10 +232,6 @@
     <Project Path="framework/tenants/LINGYUN.Abp.AspNetCore.MultiTenancy/LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
     <Project Path="framework/tenants/LINGYUN.Abp.MultiTenancy.Editions/LINGYUN.Abp.MultiTenancy.Editions.csproj" />
   </Folder>
-  <Folder Name="/framework/themes/">
-    <Project Path="framework/themes/LINGYUN.Abp.AspNetCore.Mvc.UI.Theme.Lepton/LINGYUN.Abp.AspNetCore.Mvc.UI.Theme.Lepton.csproj" />
-    <Project Path="framework/themes/LINGYUN.Abp.Themes.Lepton/LINGYUN.Abp.Themes.Lepton.csproj" />
-  </Folder>
   <Folder Name="/framework/tracking/">
     <Project Path="framework/telemetry/LINGYUN.Abp.Telemetry.APM/LINGYUN.Abp.Telemetry.APM.csproj" />
     <Project Path="framework/telemetry/LINGYUN.Abp.Telemetry.OpenTelemetry/LINGYUN.Abp.Telemetry.OpenTelemetry.csproj" />
@@ -319,7 +319,9 @@
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.FileSystem/LINGYUN.Abp.BlobManagement.FileSystem.csproj" Id="2269c845-fb79-4dde-855d-068bd0df4edf" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.HttpApi.Client/LINGYUN.Abp.BlobManagement.HttpApi.Client.csproj" Id="94f8b5c9-fcd1-46bc-a521-c794c767da3c" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.HttpApi/LINGYUN.Abp.BlobManagement.HttpApi.csproj" Id="88222f2c-d55f-4d31-9776-e76f880ac052" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.MimeCheck/LINGYUN.Abp.BlobManagement.MimeCheck.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Minio/LINGYUN.Abp.BlobManagement.Minio.csproj" Id="808fb513-aa95-4645-aea9-07634e6c3a86" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.SettingManagement/LINGYUN.Abp.BlobManagement.SettingManagement.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Tencent/LINGYUN.Abp.BlobManagement.Tencent.csproj" Id="5d99850b-f8ad-4fa0-bcd4-7f5f455ec5d5" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobStoring.BlobManagement/LINGYUN.Abp.BlobStoring.BlobManagement.csproj" Id="55898e62-9dbe-4569-b7af-b65773408ec5" />
   </Folder>
@@ -449,6 +451,7 @@
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.ExceptionHandling.Notifications/LINGYUN.Abp.ExceptionHandling.Notifications.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Application.Contracts/LINGYUN.Abp.Notifications.Application.Contracts.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Application/LINGYUN.Abp.Notifications.Application.csproj" />
+    <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Calendar/LINGYUN.Abp.Notifications.Calendar.csproj" Id="afef5b69-ebbf-454c-8783-027dde6e5970" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Common/LINGYUN.Abp.Notifications.Common.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Core/LINGYUN.Abp.Notifications.Core.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Domain.Shared/LINGYUN.Abp.Notifications.Domain.Shared.csproj" />
@@ -459,6 +462,9 @@
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.HttpApi/LINGYUN.Abp.Notifications.HttpApi.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.SignalR/LINGYUN.Abp.Notifications.SignalR.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Sms/LINGYUN.Abp.Notifications.Sms.csproj" />
+    <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Templating/LINGYUN.Abp.Notifications.Templating.csproj" />
+    <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Webhook.WeChat.Work/LINGYUN.Abp.Notifications.Webhook.WeChat.Work.csproj" />
+    <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Webhook/LINGYUN.Abp.Notifications.Webhook.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications/LINGYUN.Abp.Notifications.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Notifications.Jobs/LINGYUN.Abp.Notifications.Jobs.csproj" />
   </Folder>
@@ -495,7 +501,9 @@
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Notifications/LINGYUN.Abp.BackgroundTasks.Notifications.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.Quartz/LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks.TaskManagement/LINGYUN.Abp.BackgroundTasks.TaskManagement.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.BackgroundTasks/LINGYUN.Abp.BackgroundTasks.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Elasticsearch.Jobs/LINGYUN.Abp.Elasticsearch.Jobs.csproj" />
+    <Project Path="modules/task-management/LINGYUN.Abp.Identity.Jobs/LINGYUN.Abp.Identity.Jobs.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.MySqlInstaller/LINGYUN.Abp.Quartz.MySqlInstaller.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.PostgresSqlInstaller/LINGYUN.Abp.Quartz.PostgresSqlInstaller.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Quartz.SqlInstaller/LINGYUN.Abp.Quartz.SqlInstaller.csproj" />
@@ -568,12 +576,10 @@
     <Project Path="tests/LINGYUN.Abp.Localization.Xml.Tests/LINGYUN.Abp.Localization.Xml.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Baidu.Tests/LINGYUN.Abp.Location.Baidu.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Tencent.Tests/LINGYUN.Abp.Location.Tencent.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OssManagement.Domain.Tests/LINGYUN.Abp.OssManagement.Domain.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OssManagement.Minio.Tests/LINGYUN.Abp.OssManagement.Minio.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OssManagement.Nexus.Tests/LINGYUN.Abp.OssManagement.Nexus.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Rules.RulesEngine.Tests/LINGYUN.Abp.Rules.RulesEngine.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Sms.Platform.Tests/LINGYUN.Abp.Sms.Platform.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.TestBase/LINGYUN.Abp.TestsBase.csproj" />
+    <Project Path="tests/LINGYUN.Abp.WeChat.Common.Tests/LINGYUN.Abp.WeChat.Common.Tests.csproj" Id="8caa0c21-3cd4-4593-af38-e045113fcd75" />
     <Project Path="tests/LINGYUN.Abp.WeChat.Work.Tests/LINGYUN.Abp.WeChat.Work.Tests.csproj" />
   </Folder>
 </Solution>

@@ -6,6 +6,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>LY.MicroService.Applications.Single</RootNamespace>
+		<UserSecretsId>A47DB958-CC3F-430B-A18A-57AA535BAB49</UserSecretsId>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Version>10.2.0</Version>
 	</PropertyGroup>
@@ -151,6 +152,7 @@
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.Domain\LINGYUN.Abp.BlobManagement.Domain.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.FileSystem\LINGYUN.Abp.BlobManagement.FileSystem.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.HttpApi\LINGYUN.Abp.BlobManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.MimeCheck\LINGYUN.Abp.BlobManagement.MimeCheck.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.Minio\LINGYUN.Abp.BlobManagement.Minio.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.Tencent\LINGYUN.Abp.BlobManagement.Tencent.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.SettingManagement\LINGYUN.Abp.BlobManagement.SettingManagement.csproj" />
@@ -211,6 +213,7 @@
 		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.MessageService.EntityFrameworkCore\LINGYUN.Abp.MessageService.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.MessageService.HttpApi\LINGYUN.Abp.MessageService.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.ExceptionHandling.Notifications\LINGYUN.Abp.ExceptionHandling.Notifications.csproj" />
+		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.Calendar\LINGYUN.Abp.Notifications.Calendar.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.Common\LINGYUN.Abp.Notifications.Common.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.Core\LINGYUN.Abp.Notifications.Core.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.Emailing\LINGYUN.Abp.Notifications.Emailing.csproj" />
@@ -262,6 +265,7 @@
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Notifications\LINGYUN.Abp.BackgroundTasks.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks.Quartz\LINGYUN.Abp.BackgroundTasks.Quartz.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.BackgroundTasks\LINGYUN.Abp.BackgroundTasks.csproj" />
+		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.Identity.Jobs\LINGYUN.Abp.Identity.Jobs.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.Application.Contracts\LINGYUN.Abp.TaskManagement.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.Application\LINGYUN.Abp.TaskManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.Domain.Shared\LINGYUN.Abp.TaskManagement.Domain.Shared.csproj" />

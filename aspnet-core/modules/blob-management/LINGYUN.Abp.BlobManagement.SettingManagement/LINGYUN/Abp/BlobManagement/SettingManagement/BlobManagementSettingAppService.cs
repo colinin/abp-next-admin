@@ -9,7 +9,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Settings;
-using ValueType = LINGYUN.Abp.SettingManagement.ValueType;
+using ValueType = Volo.Abp.Settings.ValueType;
 
 namespace LINGYUN.Abp.BlobManagement.SettingManagement;
 
@@ -51,6 +51,11 @@ public class BlobManagementSettingAppService : ApplicationService, IBlobManageme
 
             var ossObjectSetting = ossSettingGroup.AddSetting(L["DisplayName:Blobs"], L["DisplayName:Blobs"]);
 
+            ossObjectSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(BlobManagementSettingNames.GenerateDownloadUrlExpirySeconds),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(BlobManagementSettingNames.GenerateDownloadUrlExpirySeconds, providerName, providerKey),
+                ValueType.Number);
             ossObjectSetting.AddDetail(
                 await SettingDefinitionManager.GetAsync(BlobManagementSettingNames.FileLimitLength),
                 StringLocalizerFactory,

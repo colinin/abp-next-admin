@@ -3,11 +3,13 @@ import { useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 
-import { buildUUID } from '@abp/core';
+import { buildUUID, useFeatures } from '@abp/core';
 import { WWLoginRedirectType, WWLoginType } from '@wecom/jssdk';
 import * as ww from '@wecom/jssdk';
+import { Empty } from 'ant-design-vue';
 
 import { userWorkWeixinJsSdkApi } from '../../api/userWorkWeixinJsSdkApi';
+import { WeixinWorkAuthEnable } from '../../constants/features';
 
 const emits = defineEmits<{
   /**
@@ -18,6 +20,7 @@ const emits = defineEmits<{
 }>();
 const wxLoginRef = useTemplateRef<Element>('wxLogin');
 
+const { isEnabled } = useFeatures();
 const { getAgentConfigApi } = userWorkWeixinJsSdkApi();
 
 const [Modal, modalApi] = useVbenModal({
@@ -54,7 +57,15 @@ async function onInitLogin() {
 
 <template>
   <Modal :title="$t('AbpAccountOAuth.OAuth:WorkWeixin')">
-    <div ref="wxLogin"></div>
+    <div v-if="isEnabled([WeixinWorkAuthEnable])" ref="wxLogin"></div>
+    <Empty
+      v-else
+      :description="
+        $t('AbpFeature.Volo.Feature:010001', [
+          $t('AbpAccountOAuth.Features:WeComOAuthEnable'),
+        ])
+      "
+    />
   </Modal>
 </template>
 

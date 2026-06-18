@@ -1,4 +1,7 @@
+using LINGYUN.Abp.BlobManagement.MimeCheck;
 using LINGYUN.Abp.Exporter.MiniSoftware;
+using LINGYUN.Abp.Identity.Jobs;
+using LINGYUN.Abp.Notifications.Calendar;
 
 namespace LY.MicroService.Applications.Single;
 
@@ -118,6 +121,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpOpenIddictWeChatModule),
     // OpenIddict扩展模块 企业微信认证
     typeof(AbpOpenIddictWeChatWorkModule),
+    // OpenIddict扩展模块 关联账户
+    typeof(AbpOpenIddictLinkUserModule),
     // OpenIddict扩展模块 扫码登录
     typeof(AbpOpenIddictQrCodeModule),
 
@@ -129,6 +134,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpBlobManagementMinioModule),
     // 对象存储模块 腾讯云
     typeof(AbpBlobManagementTencentModule),
+    // 对象存储模块 MimeCheck扩展
+    typeof(AbpBlobManagementMimeCheckModule),
     // 对象存储模块 应用服务
     typeof(AbpBlobManagementDomainModule),
     // 对象存储模块 控制器
@@ -263,6 +270,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpBackgroundTasksNotificationsModule),
     // 后台任务模块 Quartz集成
     typeof(AbpBackgroundTasksQuartzModule),
+    // 后台任务模块 身份认证模块作业
+    typeof(AbpIdentityJobsModule),
 
     // 数据审计模块 应用服务
     typeof(AbpDataProtectionManagementApplicationModule),
@@ -316,6 +325,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpNotificationsWeChatMiniProgramModule),
     // 通知模块 企业微信
     typeof(AbpNotificationsWeChatWorkModule),
+    // 通知模块 工作日检查拦截器
+    typeof(AbpNotificationsCalendarModule),
     // 多租户模块 版本
     typeof(AbpMultiTenancyEditionsModule),
 

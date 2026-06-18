@@ -14,6 +14,8 @@ using LINGYUN.Abp.Elasticsearch.Jobs;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.Jobs;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
@@ -54,6 +56,7 @@ namespace LINGYUN.Abp.MicroService.TaskService;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpElasticsearchJobsModule),
+    typeof(AbpIdentityJobsModule),
     typeof(AbpBackgroundTasksJobsModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
@@ -61,6 +64,7 @@ namespace LINGYUN.Abp.MicroService.TaskService;
     typeof(TaskManagementApplicationModule),
     typeof(TaskManagementHttpApiModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),

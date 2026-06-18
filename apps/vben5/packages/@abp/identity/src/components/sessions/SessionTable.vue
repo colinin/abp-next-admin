@@ -168,7 +168,8 @@ const gridOptions: VxeGridProps<IdentitySessionDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
     zoom: true,

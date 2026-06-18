@@ -1,10 +1,13 @@
+using LINGYUN.Abp.Account.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Identity;
+using Volo.Abp.Security.Claims;
 
 namespace LINGYUN.Abp.Account.Web.Pages.Account
 {
@@ -39,6 +42,25 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         [BindProperty(SupportsGet = true)]
         public bool RememberMe { get; set; }
 
+        #region LinkUser
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public Guid? LinkUserId { get; set; }
+
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public Guid? LinkTenantId { get; set; }
+
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public string LinkToken { get; set; }
+
+        protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
+
+        public IIdentityLinkUserAppService IdentityLinkUserAppService => LazyServiceProvider.LazyGetRequiredService<IIdentityLinkUserAppService>();
+
+        #endregion
+
         public VerifyCodeModel(
             IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache)
         {
@@ -67,6 +89,10 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
             var result = await SignInManager.TwoFactorSignInAsync(Provider, Input.VerifyCode, RememberMe, Input.RememberBrowser);
             if (result.Succeeded)
             {
+                if (await VerifyLinkTokenAsync())
+                {
+                    await HandleLinkUserLogin(user);
+                }
                 // Clear the dynamic claims cache.
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
@@ -84,6 +110,63 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 return Page();
             }
         }
+
+        #region LinkUser
+        protected async virtual Task HandleLinkUserLogin(IdentityUser user)
+        {
+            using (CurrentPrincipalAccessor.Change(await SignInManager.CreateUserPrincipalAsync(user)))
+            {
+                await IdentityLinkUserAppService.LinkAsync(new LinkUserInput
+                {
+                    UserId = LinkUserId.Value,
+                    TenantId = LinkTenantId,
+                    Token = LinkToken
+                });
+
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                {
+                    Identity = IdentitySecurityLogIdentityConsts.Identity,
+                    UserName = user.UserName,
+                    Action = "LinkUser",
+                    ExtraProperties =
+                {
+                    { "LinkTenantId",  LinkTenantId },
+                    { "LinkUserId", LinkUserId }
+                }
+                });
+
+                using (CurrentTenant.Change(LinkTenantId))
+                {
+                    var targetUser = await UserManager.GetByIdAsync(LinkUserId.Value);
+                    using (CurrentPrincipalAccessor.Change(await SignInManager.CreateUserPrincipalAsync(targetUser)))
+                    {
+                        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                        {
+                            Identity = IdentitySecurityLogIdentityConsts.Identity,
+                            UserName = targetUser.UserName,
+                            Action = "LinkUser",
+                            ExtraProperties =
+                        {
+                            { "LinkTenantId",  LinkTenantId },
+                            { "LinkUserId", LinkUserId }
+                        }
+                        });
+                    }
+                }
+            }
+        }
+
+        protected virtual async Task<bool> VerifyLinkTokenAsync()
+        {
+            return !LinkToken.IsNullOrWhiteSpace() && LinkUserId != null
+                && await IdentityLinkUserAppService.VerifyLinkTokenAsync(new VerifyLinkTokenInput
+                {
+                    UserId = LinkUserId.Value,
+                    TenantId = LinkTenantId,
+                    Token = LinkToken
+                });
+        }
+        #endregion
     }
 
     public class VerifyCodeInputModel

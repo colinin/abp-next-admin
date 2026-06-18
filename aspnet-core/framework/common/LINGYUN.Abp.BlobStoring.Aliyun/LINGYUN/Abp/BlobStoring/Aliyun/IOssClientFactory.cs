@@ -1,4 +1,4 @@
-﻿using Aliyun.OSS;
+﻿using AlibabaCloud.OSS.V2;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.BlobStoring.Aliyun;
@@ -9,11 +9,11 @@ public interface IOssClientFactory
     /// 构建Oss客户端
     /// </summary>
     /// <returns></returns>
-    Task<IOss> CreateAsync();
+    Task<Client> CreateAsync();
     /// <summary>
     /// 构建Oss客户端
     /// </summary>
     /// <param name="configuration"></param>
     /// <returns></returns>
-    Task<IOss> CreateAsync(AliyunBlobProviderConfiguration configuration);
+    Task<Client> CreateAsync(AliyunBlobProviderConfiguration configuration);
 }

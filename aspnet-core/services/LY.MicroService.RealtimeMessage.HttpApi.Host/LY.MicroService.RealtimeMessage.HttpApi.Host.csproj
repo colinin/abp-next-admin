@@ -74,6 +74,7 @@
 		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.ExceptionHandling.Notifications\LINGYUN.Abp.ExceptionHandling.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.Application\LINGYUN.Abp.Notifications.Application.csproj" />
+		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.Calendar\LINGYUN.Abp.Notifications.Calendar.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.Emailing\LINGYUN.Abp.Notifications.Emailing.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.EntityFrameworkCore\LINGYUN.Abp.Notifications.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.HttpApi\LINGYUN.Abp.Notifications.HttpApi.csproj" />

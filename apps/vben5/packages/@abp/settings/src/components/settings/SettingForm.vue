@@ -41,7 +41,6 @@ const emits = defineEmits<{
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 const CollapsePanel = Collapse.Panel;
-const SelectOption = Select.Option;
 
 const defaultModel: SettingsUpdateInput = {
   settings: [],
@@ -104,6 +103,15 @@ function onValueChange(setting: SettingDetail) {
   }
 }
 
+function onFilterOption(input: string, option: any) {
+  if (option?.value || option?.name) {
+    return (
+      option?.name?.toLowerCase().includes(input.toLowerCase()) ||
+      option?.value?.toLowerCase().includes(input.toLowerCase())
+    );
+  }
+}
+
 onMounted(onGet);
 </script>
 
@@ -124,12 +132,8 @@ onMounted(onGet);
         </Button>
       </div>
     </template>
-    <Form
-      :label-col="{ span: 5 }"
-      :wrapper-col="{ span: 15 }"
-      class="h-[700px] overflow-y-scroll"
-    >
-      <Tabs v-model="activeTab">
+    <Form :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
+      <Tabs tab-position="left" type="card" v-model="activeTab">
         <TabPane
           v-for="(group, index) in settingGroups"
           :key="index"
@@ -194,16 +198,20 @@ onMounted(onGet);
                   <Select
                     v-if="detail.valueType === ValueType.Option"
                     v-model:value="detail.value"
+                    :filter-option="onFilterOption"
+                    :field-names="{ label: 'name', value: 'value' }"
+                    :options="detail.options"
+                    show-search
                     @change="onValueChange(detail)"
-                  >
-                    <SelectOption
+                  />
+                  <!-- <SelectOption
                       v-for="option in detail.options"
                       :key="option.value"
                       :disabled="option.value === detail.value"
                     >
                       {{ option.name }}
                     </SelectOption>
-                  </Select>
+                  </Select> -->
                   <Checkbox
                     v-if="detail.valueType === ValueType.Boolean"
                     :checked="detail.value?.toLowerCase() === 'true'"
@@ -221,4 +229,16 @@ onMounted(onGet);
   </Card>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+:deep(.ant-tabs) {
+  height: 75vh;
+
+  .ant-tabs-nav {
+    width: 14rem;
+  }
+
+  .ant-tabs-content-holder {
+    overflow: hidden auto !important;
+  }
+}
+</style>
