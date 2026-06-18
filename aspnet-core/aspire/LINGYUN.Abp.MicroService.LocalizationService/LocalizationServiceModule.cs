@@ -70,6 +70,7 @@ public partial class LocalizationServiceModule : AbpModule
         PreConfigureWrapper();
         PreConfigureFeature();
         PreForwardedHeaders();
+        PreConfigureLocalization();
         PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
     }

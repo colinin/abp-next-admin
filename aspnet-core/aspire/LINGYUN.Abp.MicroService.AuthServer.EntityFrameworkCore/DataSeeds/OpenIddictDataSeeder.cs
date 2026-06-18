@@ -478,7 +478,9 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
                 [OpenIddictConstants.GrantTypes.AuthorizationCode,
                 OpenIddictConstants.GrantTypes.Implicit,
                 OpenIddictConstants.GrantTypes.Password,
-                OpenIddictConstants.GrantTypes.RefreshToken],
+                OpenIddictConstants.GrantTypes.RefreshToken,
+                // TODO: 引用项目?
+                "link_user"],
                 [OpenIddictConstants.Scopes.OpenId,
                 OpenIddictConstants.Scopes.Email,
                 OpenIddictConstants.Scopes.Roles,
@@ -540,7 +542,9 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
                 "Abp OAuth Client",
                 null,
                 [OpenIddictConstants.GrantTypes.AuthorizationCode,
-                 OpenIddictConstants.GrantTypes.RefreshToken],
+                 OpenIddictConstants.GrantTypes.RefreshToken,
+                // TODO: 引用项目?
+                "link_user"],
                 [OpenIddictConstants.Scopes.OpenId,
                 OpenIddictConstants.Scopes.Email,
                 OpenIddictConstants.Scopes.Roles,

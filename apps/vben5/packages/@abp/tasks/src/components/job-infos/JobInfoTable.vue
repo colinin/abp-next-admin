@@ -16,6 +16,7 @@ import { $t } from '@vben/locales';
 import { formatToDateTime } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
+  CopyOutlined,
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
@@ -25,6 +26,7 @@ import {
   Button,
   Dropdown,
   Menu,
+  MenuDivider,
   MenuItem,
   message,
   Modal,
@@ -516,6 +518,14 @@ function onBulkStart() {
 
 function onMenuClick(row: BackgroundJobInfoDto, info: MenuInfo) {
   switch (info.key) {
+    case 'copy': {
+      jobDrawerApi.setData({
+        ...row,
+        isCopy: true,
+      });
+      jobDrawerApi.open();
+      break;
+    }
     case 'pause': {
       onJobStatusChange(
         row,
@@ -722,6 +732,14 @@ function onJobStatusChange(
                 :icon="h(StopIcon)"
               >
                 {{ $t('TaskManagement.BackgroundJobs:Stop') }}
+              </MenuItem>
+              <MenuDivider />
+              <MenuItem
+                v-if="hasAccessByCodes([BackgroundJobsPermissions.Create])"
+                key="copy"
+                :icon="h(CopyOutlined)"
+              >
+                {{ $t('TaskManagement.BackgroundJobs:Copy') }}
               </MenuItem>
             </Menu>
           </template>

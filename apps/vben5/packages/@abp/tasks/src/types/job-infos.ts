@@ -35,8 +35,7 @@ enum JobSource {
 }
 
 interface BackgroundJobInfoDto
-  extends ExtensibleAuditedEntityDto<string>,
-    IHasConcurrencyStamp {
+  extends ExtensibleAuditedEntityDto<string>, IHasConcurrencyStamp {
   args: Record<string, any>;
   beginTime: string;
   cron?: string;
@@ -53,6 +52,7 @@ interface BackgroundJobInfoDto
   maxTryCount: number;
   name: string;
   nextRunTime?: string;
+  nodeName?: string;
   priority: JobPriority;
   result?: string;
   source: JobSource;
@@ -75,8 +75,7 @@ interface BackgroundJobInfoCreateOrUpdateDto {
   priority: JobPriority;
 }
 
-interface BackgroundJobInfoCreateDto
-  extends BackgroundJobInfoCreateOrUpdateDto {
+interface BackgroundJobInfoCreateDto extends BackgroundJobInfoCreateOrUpdateDto {
   beginTime: string;
   endTime?: string;
   group: string;
@@ -87,8 +86,7 @@ interface BackgroundJobInfoCreateDto
 }
 
 interface BackgroundJobInfoUpdateDto
-  extends BackgroundJobInfoCreateOrUpdateDto,
-    IHasConcurrencyStamp {}
+  extends BackgroundJobInfoCreateOrUpdateDto, IHasConcurrencyStamp {}
 
 interface BackgroundJobInfoGetListInput extends PagedAndSortedResultRequestDto {
   beginCreationTime?: Date;

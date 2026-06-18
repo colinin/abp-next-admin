@@ -41,7 +41,6 @@ const emits = defineEmits<{
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 const CollapsePanel = Collapse.Panel;
-const SelectOption = Select.Option;
 
 const defaultModel: SettingsUpdateInput = {
   settings: [],
@@ -101,6 +100,15 @@ function onValueChange(setting: SettingDetail) {
     });
   } else {
     settingsUpdateInput.value.settings[index]!.value = String(setting.value);
+  }
+}
+
+function onFilterOption(input: string, option: any) {
+  if (option?.value || option?.name) {
+    return (
+      option?.name?.toLowerCase().includes(input.toLowerCase()) ||
+      option?.value?.toLowerCase().includes(input.toLowerCase())
+    );
   }
 }
 
@@ -190,16 +198,20 @@ onMounted(onGet);
                   <Select
                     v-if="detail.valueType === ValueType.Option"
                     v-model:value="detail.value"
+                    :filter-option="onFilterOption"
+                    :field-names="{ label: 'name', value: 'value' }"
+                    :options="detail.options"
+                    show-search
                     @change="onValueChange(detail)"
-                  >
-                    <SelectOption
+                  />
+                  <!-- <SelectOption
                       v-for="option in detail.options"
                       :key="option.value"
                       :disabled="option.value === detail.value"
                     >
                       {{ option.name }}
                     </SelectOption>
-                  </Select>
+                  </Select> -->
                   <Checkbox
                     v-if="detail.valueType === ValueType.Boolean"
                     :checked="detail.value?.toLowerCase() === 'true'"

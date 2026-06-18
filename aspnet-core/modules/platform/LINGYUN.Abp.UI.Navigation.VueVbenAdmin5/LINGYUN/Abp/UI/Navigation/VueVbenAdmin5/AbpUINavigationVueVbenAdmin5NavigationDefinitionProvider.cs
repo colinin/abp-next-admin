@@ -17,6 +17,7 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
         context.Add(GetTaskManagement());
         context.Add(GetWebhooksManagement());
         context.Add(GetTextTemplating());
+        context.Add(GetWeChatManagement());
         context.Add(GetVbenDemos());
     }
 
@@ -810,5 +811,28 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
             .SetProperty("title", "abp.textTemplating.definitions"));
 
         return new NavigationDefinition(textTemplating);
+    }
+
+    private static NavigationDefinition GetWeChatManagement()
+    {
+        var wechat = new ApplicationMenu(
+            name: "Vben5Wechat",
+            displayName: "微信集成",
+            url: "/wechat",
+            component: "",
+            description: "微信集成",
+            icon: "ant-design:wechat-outlined")
+            .SetProperty("title", "abp.wechat.title");
+        wechat.AddItem(
+          new ApplicationMenu(
+              name: "Vben5WechatSettings",
+              displayName: "微信设置",
+              url: "/wechat/settings",
+              component: "/wechat/settings/index",
+              icon: "ant-design:setting-outlined",
+              description: "微信设置")
+            .SetProperty("title", "abp.wechat.settings"));
+
+        return new NavigationDefinition(wechat);
     }
 }
