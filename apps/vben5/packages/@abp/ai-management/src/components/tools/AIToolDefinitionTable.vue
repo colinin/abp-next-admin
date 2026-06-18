@@ -140,7 +140,8 @@ const gridOptions: VxeGridProps<AIToolDefinitionRecordDto> = {
     custom: true,
     export: true,
     // import: true,
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
     zoom: true,

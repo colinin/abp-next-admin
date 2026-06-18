@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Domain.Entities.Events.Distributed;
@@ -28,6 +28,8 @@ public class IdentitySessionUserInactiveSynchronizer :
         await using var lockHandle = await _distributedLock.TryAcquireAsync(
             $"{nameof(IdentitySessionUserInactiveSynchronizer)}_{nameof(IdentitySessionEto)}");
         if (lockHandle != null)
+        var userInactive = await _identityUserInactiveRepository.FindByUserIdAsync(eventData.Entity.UserId);
+        if (userInactive != null)
         {
             var userInactive = await _identityUserInactiveRepository.FindByUserIdAsync(eventData.Entity.UserId);
             if (userInactive != null)

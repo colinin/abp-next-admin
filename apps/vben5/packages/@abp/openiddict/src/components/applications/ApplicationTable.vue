@@ -146,7 +146,8 @@ const gridOptions: VxeGridProps<OpenIddictApplicationDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
     zoom: true,

@@ -278,7 +278,8 @@ const gridOptions: VxeGridProps<LogDto> = {
   toolbarConfig: {
     custom: true,
     export: true,
-    refresh: {
+    refresh: true,
+    refreshOptions: {
       code: 'query',
     },
     zoom: true,
