@@ -9,13 +9,14 @@ import { computed, onMounted, ref, toValue } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { formatToDate } from '@abp/core';
+import { formatToDate, useFeatures } from '@abp/core';
 import {
   Button,
   Card,
   Checkbox,
   Collapse,
   DatePicker,
+  Empty,
   Form,
   Input,
   InputNumber,
@@ -26,6 +27,7 @@ import {
 } from 'ant-design-vue';
 import dayjs from 'dayjs';
 
+import { SettingManagementEnable } from '../../constants/features';
 import { ValueType } from '../../types';
 
 defineOptions({
@@ -46,6 +48,8 @@ const defaultModel: SettingsUpdateInput = {
   settings: [],
 };
 
+const { isEnabled } = useFeatures();
+
 const activeTab = ref(0);
 const submiting = ref(false);
 const settingGroups = ref<SettingGroup[]>([]);
@@ -61,7 +65,10 @@ const getExpandedCollapseKeys = computed(() => {
 });
 
 async function onGet() {
-  settingGroups.value = await props.getApi();
+  settingGroups.value = [];
+  if (isEnabled(SettingManagementEnable)) {
+    settingGroups.value = await props.getApi();
+  }
 }
 
 async function onSubmit() {
@@ -132,7 +139,11 @@ onMounted(onGet);
         </Button>
       </div>
     </template>
-    <Form :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
+    <Form
+      v-if="isEnabled(SettingManagementEnable)"
+      :label-col="{ span: 5 }"
+      :wrapper-col="{ span: 15 }"
+    >
       <Tabs tab-position="left" type="card" v-model="activeTab">
         <TabPane
           v-for="(group, index) in settingGroups"
@@ -226,6 +237,15 @@ onMounted(onGet);
         </TabPane>
       </Tabs>
     </Form>
+    <Empty
+      :description="
+        $t('AbpFeature.Volo_Feature:010001', {
+          FeatureName: $t(
+            'AbpSettingManagement.Feature:SettingManagementEnable',
+          ),
+        })
+      "
+    />
   </Card>
 </template>
 
