@@ -11,6 +11,8 @@ public static class WebhooksManagementErrorCodes
 
         public const string AlreayNameExists = Prefix + "001";
 
+        public const string NameNotFount = Prefix + "002";
+
         public const string StaticGroupNotAllowedChanged = Prefix + "010";
     }
 
@@ -19,6 +21,8 @@ public static class WebhooksManagementErrorCodes
         public const string Prefix = Namespace + ":002";
 
         public const string AlreayNameExists = Prefix + "001";
+
+        public const string NameNotFount = Prefix + "002";
 
         public const string StaticWebhookNotAllowedChanged = Prefix + "010";
     }

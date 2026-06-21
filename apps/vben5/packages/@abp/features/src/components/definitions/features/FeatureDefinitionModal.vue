@@ -67,7 +67,6 @@ interface DefinitionTreeVo {
 type TabKeys = 'basic' | 'props';
 
 const defaultModel: FeatureDefinitionDto = {
-  allowedProviders: [],
   displayName: '',
   extraProperties: {},
   groupName: '',
@@ -438,7 +437,10 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
             :label="$t('AbpFeatureManagement.DisplayName:IsVisibleToClients')"
             :extra="$t('AbpFeatureManagement.Description:IsVisibleToClients')"
           >
-            <Checkbox v-model:checked="formModel.isVisibleToClients">
+            <Checkbox
+              v-model:checked="formModel.isVisibleToClients"
+              :disabled="formModel.isStatic"
+            >
               {{ $t('AbpFeatureManagement.DisplayName:IsVisibleToClients') }}
             </Checkbox>
           </FormItem>
@@ -447,7 +449,10 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
             :label="$t('AbpFeatureManagement.DisplayName:IsAvailableToHost')"
             :extra="$t('AbpFeatureManagement.Description:IsAvailableToHost')"
           >
-            <Checkbox v-model:checked="formModel.isAvailableToHost">
+            <Checkbox
+              v-model:checked="formModel.isAvailableToHost"
+              :disabled="formModel.isStatic"
+            >
               {{ $t('AbpFeatureManagement.DisplayName:IsAvailableToHost') }}
             </Checkbox>
           </FormItem>

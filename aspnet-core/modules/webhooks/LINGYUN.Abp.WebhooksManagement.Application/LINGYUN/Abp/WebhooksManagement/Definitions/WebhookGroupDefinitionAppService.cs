@@ -1,51 +1,31 @@
-﻿using LINGYUN.Abp.Webhooks;
-using LINGYUN.Abp.WebhooksManagement.Authorization;
+﻿using LINGYUN.Abp.WebhooksManagement.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
-using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.WebhooksManagement.Definitions;
 
 [Authorize(WebhooksManagementPermissions.WebhookGroupDefinition.Default)]
 public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase, IWebhookGroupDefinitionAppService
 {
-    private readonly ILocalizableStringSerializer _localizableStringSerializer;
-    private readonly IWebhookDefinitionManager _webhookDefinitionManager;
-    private readonly IStaticWebhookDefinitionStore _staticWebhookDefinitionStore;
-    private readonly IDynamicWebhookDefinitionStore _dynamicWebhookDefinitionStore;
     private readonly IWebhookGroupDefinitionRecordRepository _webhookGroupDefinitionRecordRepository;
 
     public WebhookGroupDefinitionAppService(
-        ILocalizableStringSerializer localizableStringSerializer,
-        IWebhookDefinitionManager webhookDefinitionManager,
-        IWebhookGroupDefinitionRecordRepository webhookGroupDefinitionRecordRepository,
-        IStaticWebhookDefinitionStore staticWebhookDefinitionStore,
-        IDynamicWebhookDefinitionStore dynamicWebhookDefinitionStore)
+        IWebhookGroupDefinitionRecordRepository webhookGroupDefinitionRecordRepository)
     {
-        _localizableStringSerializer = localizableStringSerializer;
-        _webhookDefinitionManager = webhookDefinitionManager;
         _webhookGroupDefinitionRecordRepository = webhookGroupDefinitionRecordRepository;
-        _staticWebhookDefinitionStore = staticWebhookDefinitionStore;
-        _dynamicWebhookDefinitionStore = dynamicWebhookDefinitionStore;
     }
 
     [Authorize(WebhooksManagementPermissions.WebhookGroupDefinition.Create)]
     public async virtual Task<WebhookGroupDefinitionDto> CreateAsync(WebhookGroupDefinitionCreateDto input)
     {
-        if (await _webhookDefinitionManager.GetGroupOrNullAsync(input.Name) != null)
-        {
-            throw new BusinessException(WebhooksManagementErrorCodes.WebhookGroupDefinition.AlreayNameExists)
-                .WithData(nameof(WebhookGroupDefinitionRecord.Name), input.Name);
-        }
-
         var webhookGroupDefinitionRecord = await _webhookGroupDefinitionRecordRepository.FindByNameAsync(input.Name);
         if (webhookGroupDefinitionRecord != null)
         {
@@ -62,6 +42,7 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
         {
             webhookGroupDefinitionRecord.SetProperty(property.Key, property.Value);
         }
+        webhookGroupDefinitionRecord.SetProperty(nameof(WebhookGroupDefinitionDto.IsStatic), false);
 
         await _webhookGroupDefinitionRecordRepository.InsertAsync(webhookGroupDefinitionRecord);
 
@@ -73,89 +54,82 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
     [Authorize(WebhooksManagementPermissions.WebhookGroupDefinition.Delete)]
     public async virtual Task DeleteAsync(string name)
     {
-        var webhookGroupDefinitionRecord = await _webhookGroupDefinitionRecordRepository.FindByNameAsync(name);
-        if (webhookGroupDefinitionRecord != null)
-        {
-            await _webhookGroupDefinitionRecordRepository.DeleteAsync(webhookGroupDefinitionRecord);
+        var definitionRecord = await FindByNameAsync(name) ??
+            throw new BusinessException(WebhooksManagementErrorCodes.WebhookGroupDefinition.NameNotFount)
+                .WithData(nameof(WebhookGroupDefinitionRecord.Name), name);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
-        }
+        CheckIsStaticDefinitionRecord(definitionRecord);
+        await _webhookGroupDefinitionRecordRepository.DeleteAsync(definitionRecord);
+
+        await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     public async virtual Task<WebhookGroupDefinitionDto> GetAsync(string name)
     {
-        var webhookGroupDefinition = await _staticWebhookDefinitionStore.GetGroupOrNullAsync(name);
-        if (webhookGroupDefinition != null)
-        {
-            return DefinitionToDto(webhookGroupDefinition, true);
-        }
-        webhookGroupDefinition = await _dynamicWebhookDefinitionStore.GetGroupOrNullAsync(name);
-        return DefinitionToDto(webhookGroupDefinition);
+        var definitionRecord = await FindByNameAsync(name) ??
+            throw new BusinessException(WebhooksManagementErrorCodes.WebhookGroupDefinition.NameNotFount)
+                .WithData(nameof(WebhookGroupDefinitionRecord.Name), name);
+
+        return DefinitionRecordToDto(definitionRecord);
     }
 
     public async virtual Task<ListResultDto<WebhookGroupDefinitionDto>> GetListAsync(WebhookGroupDefinitionGetListInput input)
     {
         var groupDtoList = new List<WebhookGroupDefinitionDto>();
-        var staticGroups = await _staticWebhookDefinitionStore.GetGroupsAsync();
-        var staticGroupNames = staticGroups
-            .Select(p => p.Name)
-            .ToImmutableHashSet();
-        groupDtoList.AddRange(staticGroups.Select(d => DefinitionToDto(d, true)));
 
-        var dynamicGroups = await _dynamicWebhookDefinitionStore.GetGroupsAsync();
-        groupDtoList.AddRange(dynamicGroups
-            .Where(d => !staticGroupNames.Contains(d.Name))
-            .Select(d => DefinitionToDto(d)));
+        Expression<Func<WebhookGroupDefinitionRecord, bool>> expression = _ => true;
+        if (!input.Filter.IsNullOrWhiteSpace())
+        {
+            expression = expression.And(x => x.Name.Contains(input.Filter));
+        }
 
-        return new ListResultDto<WebhookGroupDefinitionDto>(groupDtoList
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter) || x.DisplayName.Contains(input.Filter))
-            .ToList());
+        var definitionRecords = await _webhookGroupDefinitionRecordRepository.GetListAsync(
+            new Volo.Abp.Specifications.ExpressionSpecification<WebhookGroupDefinitionRecord>(expression));
+
+        groupDtoList.AddRange(definitionRecords.Select(DefinitionRecordToDto));
+
+        return new ListResultDto<WebhookGroupDefinitionDto>(groupDtoList);
     }
 
     [Authorize(WebhooksManagementPermissions.WebhookGroupDefinition.Update)]
     public async virtual Task<WebhookGroupDefinitionDto> UpdateAsync(string name, WebhookGroupDefinitionUpdateDto input)
     {
-        if (await _staticWebhookDefinitionStore.GetOrNullAsync(name) != null)
+        var definitionRecord = await FindByNameAsync(name) ??
+            throw new BusinessException(WebhooksManagementErrorCodes.WebhookGroupDefinition.NameNotFount)
+                .WithData(nameof(WebhookGroupDefinitionRecord.Name), name);
+
+        CheckIsStaticDefinitionRecord(definitionRecord);
+
+        definitionRecord.ExtraProperties.Clear();
+        foreach (var property in input.ExtraProperties)
         {
-            throw new BusinessException(WebhooksManagementErrorCodes.WebhookGroupDefinition.StaticGroupNotAllowedChanged)
-              .WithData("Name", name);
+            definitionRecord.SetProperty(property.Key, property.Value);
         }
 
-        var webhookGroupDefinitionRecord = await _webhookGroupDefinitionRecordRepository.FindByNameAsync(name);
-
-        if (webhookGroupDefinitionRecord == null)
+        if (!string.Equals(definitionRecord.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
         {
-            webhookGroupDefinitionRecord = new WebhookGroupDefinitionRecord(
-                GuidGenerator.Create(),
-                name,
-                input.DisplayName);
-
-            foreach (var property in input.ExtraProperties)
-            {
-                webhookGroupDefinitionRecord.SetProperty(property.Key, property.Value);
-            }
-
-            webhookGroupDefinitionRecord = await _webhookGroupDefinitionRecordRepository.InsertAsync(webhookGroupDefinitionRecord);
+            definitionRecord.DisplayName = input.DisplayName;
         }
-        else
-        {
-            webhookGroupDefinitionRecord.ExtraProperties.Clear();
-            foreach (var property in input.ExtraProperties)
-            {
-                webhookGroupDefinitionRecord.SetProperty(property.Key, property.Value);
-            }
 
-            if (!string.Equals(webhookGroupDefinitionRecord.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
-            {
-                webhookGroupDefinitionRecord.DisplayName = input.DisplayName;
-            }
-
-            webhookGroupDefinitionRecord = await _webhookGroupDefinitionRecordRepository.UpdateAsync(webhookGroupDefinitionRecord);
-        }
+        definitionRecord = await _webhookGroupDefinitionRecordRepository.UpdateAsync(definitionRecord);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        return DefinitionRecordToDto(webhookGroupDefinitionRecord);
+        return DefinitionRecordToDto(definitionRecord);
+    }
+
+    protected async virtual Task<WebhookGroupDefinitionRecord> FindByNameAsync(string name)
+    {
+        return await _webhookGroupDefinitionRecordRepository.FindByNameAsync(name);
+    }
+
+    protected virtual void CheckIsStaticDefinitionRecord(WebhookGroupDefinitionRecord record)
+    {
+        if (record.GetProperty(nameof(WebhookGroupDefinitionDto.IsStatic), true))
+        {
+            throw new BusinessException(WebhooksManagementErrorCodes.WebhookGroupDefinition.StaticGroupNotAllowedChanged)
+              .WithData("Name", record.Name);
+        }
     }
 
     protected virtual WebhookGroupDefinitionDto DefinitionRecordToDto(WebhookGroupDefinitionRecord webhookGroupDefinitionRecord)
@@ -164,27 +138,10 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
         {
             Name = webhookGroupDefinitionRecord.Name,
             DisplayName = webhookGroupDefinitionRecord.DisplayName,
-            IsStatic = false,
+            IsStatic = webhookGroupDefinitionRecord.GetProperty(nameof(WebhookGroupDefinitionDto.IsStatic), true),
         };
 
         foreach (var property in webhookGroupDefinitionRecord.ExtraProperties)
-        {
-            webhookGroupDto.SetProperty(property.Key, property.Value);
-        }
-
-        return webhookGroupDto;
-    }
-
-    protected virtual WebhookGroupDefinitionDto DefinitionToDto(WebhookGroupDefinition webhookGroupDefinition, bool isStatic = false)
-    {
-        var webhookGroupDto = new WebhookGroupDefinitionDto
-        {
-            Name = webhookGroupDefinition.Name,
-            IsStatic = isStatic,
-            DisplayName = _localizableStringSerializer.Serialize(webhookGroupDefinition.DisplayName),
-        };
-
-        foreach (var property in webhookGroupDefinition.Properties)
         {
             webhookGroupDto.SetProperty(property.Key, property.Value);
         }
