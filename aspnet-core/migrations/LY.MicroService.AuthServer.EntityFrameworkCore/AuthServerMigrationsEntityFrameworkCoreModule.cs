@@ -13,6 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.Tokens;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
@@ -47,6 +48,11 @@ public class AuthServerMigrationsEntityFrameworkCoreModule : AbpModule
                     // see: https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/issues/1960
                     mysql.UseParameterizedCollectionMode(ParameterTranslationMode.Constant);
                 });
+        });
+
+        context.Services.AddAbpDbContext<OpenIddictDbContext>(options =>
+        {
+            options.AddRepository<OpenIddictToken, EfCoreMySqlOpenIddictTokenRepository>();
         });
     }
 }

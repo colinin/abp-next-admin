@@ -48,7 +48,8 @@ public class SystemGroupSettingDefinitionProvider : SettingDefinitionProvider
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName);
+                TenantSettingValueProvider.ProviderName,
+                UserSettingValueProvider.ProviderName);
 
         var timezoneSetting = context.GetOrNull(TimingSettingNames.TimeZone);
         if (timezoneSetting != null)
@@ -74,7 +75,8 @@ public class SystemGroupSettingDefinitionProvider : SettingDefinitionProvider
                     DefaultValueSettingValueProvider.ProviderName,
                     ConfigurationSettingValueProvider.ProviderName,
                     GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName);
+                    TenantSettingValueProvider.ProviderName,
+                    UserSettingValueProvider.ProviderName);
         }
     }
 

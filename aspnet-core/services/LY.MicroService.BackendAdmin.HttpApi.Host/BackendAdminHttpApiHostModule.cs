@@ -4,6 +4,7 @@ using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.BlobManagement.SettingManagement;
 using LINGYUN.Abp.CachingManagement;
 using LINGYUN.Abp.CachingManagement.StackExchangeRedis;
 using LINGYUN.Abp.Claims.Mapping;
@@ -19,7 +20,6 @@ using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
-using LINGYUN.Abp.BlobManagement.SettingManagement;
 using LINGYUN.Abp.PermissionManagement;
 using LINGYUN.Abp.PermissionManagement.HttpApi;
 using LINGYUN.Abp.PermissionManagement.OrganizationUnits;
@@ -49,11 +49,11 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
-using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.PermissionManagement.IdentityServer;
+using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
 
@@ -96,12 +96,12 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpCachingManagementHttpApiModule),
     typeof(AbpCachingManagementStackExchangeRedisModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
-    typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包
+    typeof(AbpOpenIddictEntityFrameworkCoreModule), // 客户端权限需要引用包
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
-    typeof(AbpPermissionManagementDomainIdentityServerModule),
+    typeof(AbpPermissionManagementDomainOpenIddictModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
@@ -148,6 +148,7 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
 
         ConfigureWrapper();
         ConfigureLocalization();
+        ConfigureBackgroundWorker();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureTextTemplating();
