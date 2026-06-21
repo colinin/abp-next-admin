@@ -8,12 +8,20 @@ import type { CheckInfo } from 'ant-design-vue/es/vc-tree/props';
 
 import type { PermissionTree } from '../../types/permissions';
 
-import { computed, ref } from 'vue';
+import { computed, defineAsyncComponent, ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { Card, Checkbox, Divider, message, Tabs, Tree } from 'ant-design-vue';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Divider,
+  message,
+  Tabs,
+  Tree,
+} from 'ant-design-vue';
 
 import { usePermissionsApi } from '../../api/usePermissionsApi';
 import {
@@ -149,6 +157,12 @@ const [Modal, modalApi] = useVbenModal({
   title: $t('AbpPermissionManagement.Permissions'),
 });
 
+const [PermissionGrantedModal, grantedModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./PermissionGrantedModal.vue'),
+  ),
+});
+
 /** 全选所有节点权限 */
 function onCheckAll(e: CheckboxChangeEvent) {
   checkedNodeKeys.value = [];
@@ -262,12 +276,20 @@ function getChildren(permissions: PermissionTree[]): PermissionTree[] {
   });
   return children;
 }
+
+function onSearchPermissionGrant() {
+  grantedModalApi.setData({
+    providerName: modelState.value?.providerName,
+    readonly: modelState.value?.readonly,
+  });
+  grantedModalApi.open();
+}
 </script>
 
 <template>
   <Modal>
     <div class="flex flex-col content-center justify-center">
-      <div>
+      <div class="flex items-center justify-between">
         <Checkbox
           :disabled="modelState?.readonly"
           @change="onCheckAll"
@@ -275,6 +297,9 @@ function getChildren(permissions: PermissionTree[]): PermissionTree[] {
         >
           {{ $t('AbpPermissionManagement.SelectAllInAllTabs') }}
         </Checkbox>
+        <Button type="primary" @click="onSearchPermissionGrant">
+          {{ $t('AbpPermissionManagement.PermissionGranted') }}
+        </Button>
       </div>
       <Divider />
       <Tabs tab-position="left" type="card">
@@ -318,6 +343,7 @@ function getChildren(permissions: PermissionTree[]): PermissionTree[] {
         </template>
       </Tabs>
     </div>
+    <PermissionGrantedModal />
   </Modal>
 </template>
 

@@ -90,13 +90,18 @@ public class MultiplePermissionManager : PermissionManager, IMultiplePermissionM
         var provider = ManagementProviders.FirstOrDefault(m => m.Name == providerName) ?? 
             throw new AbpException("Unknown permission management provider: " + providerName);
 
-        // 移除现有全部授权
-        var delPermissionGrants = await PermissionGrantRepository.GetListAsync(providerName, providerKey);
+        // 获取现有全部授权
+        var permissionGrants = await PermissionGrantRepository.GetListAsync(providerName, providerKey);
+        var permissionGrantNames = permissionGrants.Select(x => x.Name);
+
+        // 删除取消授权
+        var delPermissionGrantNames = existsPermissions.Where(x => !x.State.IsGranted).Select(x => x.State.Name);
+        var delPermissionGrants = permissionGrants.Where(x => delPermissionGrantNames.Contains(x.Name));
         await PermissionGrantRepository.DeleteManyAsync(delPermissionGrants);
 
-        // 重新添加授权
+        // 新增授权
         var newPermissionGrants = existsPermissions
-            .Where(p => p.State.IsGranted)
+            .Where(x => x.State.IsGranted && !permissionGrantNames.Contains(x.State.Name))
             .Select(p => new PermissionGrant(
                 GuidGenerator.Create(),
                 p.Definition.Name,

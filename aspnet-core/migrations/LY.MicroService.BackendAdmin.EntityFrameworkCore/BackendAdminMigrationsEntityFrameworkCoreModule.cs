@@ -1,17 +1,61 @@
-﻿using LINGYUN.Abp.Data.DbMigrator;
+﻿using LINGYUN.Abp.Account;
+using LINGYUN.Abp.Auditing;
+using LINGYUN.Abp.BlobManagement;
+using LINGYUN.Abp.CachingManagement;
+using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.DataProtectionManagement;
 using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
 using LINGYUN.Abp.EntityFrameworkCore.MySQL;
+using LINGYUN.Abp.FeatureManagement;
+using LINGYUN.Abp.Gdpr;
+using LINGYUN.Abp.Identity;
+using LINGYUN.Abp.LocalizationManagement;
+using LINGYUN.Abp.MessageService;
+using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.OpenIddict;
+using LINGYUN.Abp.PermissionManagement;
+using LINGYUN.Abp.PermissionManagement.EntityFrameworkCore;
+using LINGYUN.Abp.ProjectManagement;
+using LINGYUN.Abp.RulesEngineManagement;
+using LINGYUN.Abp.Saas;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
+using LINGYUN.Abp.SettingManagement;
+using LINGYUN.Abp.TaskManagement;
+using LINGYUN.Abp.TextTemplating;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
+using LINGYUN.Abp.WebhooksManagement;
+using LINGYUN.Platform;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace LY.MicroService.BackendAdmin.EntityFrameworkCore;
+
+[DependsOn(
+    typeof(AbpSettingManagementApplicationContractsModule),
+    typeof(AbpAccountApplicationContractsModule),
+    typeof(AbpAuditingApplicationContractsModule),
+    typeof(AbpCachingManagementApplicationContractsModule),
+    typeof(AbpDataProtectionManagementApplicationContractsModule),
+    typeof(AbpFeatureManagementApplicationContractsModule),
+    typeof(AbpGdprApplicationContractsModule),
+    typeof(AbpIdentityApplicationContractsModule),
+    typeof(AbpLocalizationManagementApplicationContractsModule),
+    typeof(AbpOpenIddictApplicationContractsModule),
+    typeof(AbpBlobManagementApplicationContractsModule),
+    typeof(AbpPermissionManagementApplicationContractsModule),
+    typeof(PlatformApplicationContractModule),
+    typeof(AbpProjectManagementApplicationContractsModule),
+    typeof(AbpMessageServiceApplicationContractsModule),
+    typeof(AbpNotificationsApplicationContractsModule),
+    typeof(RulesEngineManagementApplicationContractsModule),
+    typeof(AbpSaasApplicationContractsModule),
+    typeof(TaskManagementApplicationContractsModule),
+    typeof(AbpTextTemplatingApplicationContractsModule),
+    typeof(WebhooksManagementApplicationContractsModule))]
 
 [DependsOn(
     typeof(AbpSaasEntityFrameworkCoreModule),

@@ -406,6 +406,8 @@
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Application.Contracts/LINGYUN.Abp.PermissionManagement.Application.Contracts.csproj" />
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Application/LINGYUN.Abp.PermissionManagement.Application.csproj" />
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits/LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits.csproj" />
+    <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Domain/LINGYUN.Abp.PermissionManagement.Domain.csproj" Id="867ae033-0d5c-4ad3-934a-971efd0c6b43" />
+    <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.EntityFrameworkCore/LINGYUN.Abp.PermissionManagement.EntityFrameworkCore.csproj" Id="59d20b04-2670-4cea-8335-4dea120a6a9d" />
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.HttpApi/LINGYUN.Abp.PermissionManagement.HttpApi.csproj" />
   </Folder>
   <Folder Name="/modules/platform/">
