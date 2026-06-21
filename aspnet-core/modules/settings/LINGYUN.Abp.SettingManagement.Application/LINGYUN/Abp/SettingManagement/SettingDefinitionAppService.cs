@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -19,26 +19,17 @@ namespace LINGYUN.Abp.SettingManagement;
 public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISettingDefinitionAppService
 {
     private readonly IStringEncryptionService _stringEncryptionService;
-    private readonly ISettingDefinitionManager _settingDefinitionManager;
     private readonly ISettingValueProviderManager _settingValueProviderManager;
-    private readonly IStaticSettingDefinitionStore _staticSettingDefinitionStore;
-    private readonly IDynamicSettingDefinitionStore _dynamicSettingDefinitionStore;
     private readonly ILocalizableStringSerializer _localizableStringSerializer;
     private readonly IRepository<SettingDefinitionRecord, Guid> _settingRepository;
 
     public SettingDefinitionAppService(
         IStringEncryptionService stringEncryptionService, 
-        ISettingDefinitionManager settingDefinitionManager,
-        IStaticSettingDefinitionStore staticSettingDefinitionStore,
-        IDynamicSettingDefinitionStore dynamicSettingDefinitionStore,
         ILocalizableStringSerializer localizableStringSerializer,
         IRepository<SettingDefinitionRecord, Guid> settingRepository,
         ISettingValueProviderManager settingValueProviderManager)
     {
         _stringEncryptionService = stringEncryptionService;
-        _settingDefinitionManager = settingDefinitionManager;
-        _staticSettingDefinitionStore = staticSettingDefinitionStore;
-        _dynamicSettingDefinitionStore = dynamicSettingDefinitionStore;
         _localizableStringSerializer = localizableStringSerializer;
         _settingRepository = settingRepository;
         _settingValueProviderManager = settingValueProviderManager;
@@ -47,12 +38,6 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
     [Authorize(SettingManagementPermissions.Definition.Create)]
     public async virtual Task<SettingDefinitionDto> CreateAsync(SettingDefinitionCreateDto input)
     {
-        if (await _staticSettingDefinitionStore.GetOrNullAsync(input.Name) != null)
-        {
-            throw new BusinessException(SettingManagementErrorCodes.Definition.DuplicateName)
-                .WithData("Name", input.Name);
-        }
-
         var settingDefinitionRecord = await _settingRepository.FindAsync(x => x.Name == input.Name);
         if (settingDefinitionRecord != null)
         {
@@ -79,6 +64,7 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
         {
             settingDefinitionRecord.ExtraProperties.Add(property.Key, property.Value);
         }
+        settingDefinitionRecord.SetProperty(nameof(SettingDefinitionDto.IsStatic), false);
 
         settingDefinitionRecord = await _settingRepository.InsertAsync(settingDefinitionRecord);
 
@@ -90,24 +76,23 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
     [Authorize(SettingManagementPermissions.Definition.DeleteOrRestore)]
     public async virtual Task DeleteOrRestoreAsync(string name)
     {
-        var settingDefinitionRecord = await _settingRepository.FindAsync(x => x.Name == name);
-        if (settingDefinitionRecord != null)
-        {
-            await _settingRepository.DeleteAsync(settingDefinitionRecord);
+        var definitionRecord = await FindByNameAsync(name) ??
+            throw new BusinessException(SettingManagementErrorCodes.Definition.NameNotFount)
+                .WithData(nameof(SettingDefinitionRecord.Name), name);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
-        }
+        CheckIsStaticDefinitionRecord(definitionRecord);
+
+        await _settingRepository.DeleteAsync(definitionRecord);
+
+        await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     public async virtual Task<SettingDefinitionDto> GetAsync(string name)
     {
-        var settingDefinition = await _staticSettingDefinitionStore.GetOrNullAsync(name);
-        if (settingDefinition != null)
-        {
-            return DefinitionToDto(settingDefinition, true);
-        }
-        settingDefinition = await _dynamicSettingDefinitionStore.GetOrNullAsync(name);
-        var dto = DefinitionToDto(settingDefinition);
+        var definitionRecord = await FindByNameAsync(name) ??
+            throw new BusinessException(SettingManagementErrorCodes.Definition.NameNotFount)
+                .WithData(nameof(SettingDefinitionRecord.Name), name);
+        var dto = DefinitionRecordToDto(definitionRecord);
         if (dto.IsEncrypted && !string.IsNullOrWhiteSpace(dto.DefaultValue))
         {
             dto.DefaultValue = _stringEncryptionService.Decrypt(dto.DefaultValue);
@@ -118,21 +103,20 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
     public async virtual Task<ListResultDto<SettingDefinitionDto>> GetListAsync(SettingDefinitionGetListInput input)
     {
         var settingDtoList = new List<SettingDefinitionDto>();
-        var staticSettings = await _staticSettingDefinitionStore.GetAllAsync();
-        var staticSettingNames = staticSettings
-            .Select(p => p.Name)
-            .ToImmutableHashSet();
-        settingDtoList.AddRange(staticSettings.Select(d => DefinitionToDto(d, true)));
 
-        var dynamicSettings = await _dynamicSettingDefinitionStore.GetAllAsync();
-        settingDtoList.AddRange(dynamicSettings
-            .Where(d => !staticSettingNames.Contains(d.Name))
-            .Select(d => DefinitionToDto(d)));
+        Expression<Func<SettingDefinitionRecord, bool>> predicate = _ => true;
+        if (!input.ProviderName.IsNullOrWhiteSpace())
+        {
+            predicate = predicate.And(x => x.Providers.Contains(input.ProviderName));
+        }
+        if (!input.Filter.IsNullOrWhiteSpace())
+        {
+            predicate = predicate.And(x => x.Name.Contains(input.Filter) || x.DisplayName.Contains(input.Filter));
+        }
+        var settingDefinitionRecords = await _settingRepository.GetListAsync();
+        settingDtoList.AddRange(settingDefinitionRecords.Select(DefinitionRecordToDto).Where(dto => dto != null));
 
-        return new ListResultDto<SettingDefinitionDto>(settingDtoList
-            .WhereIf(!input.ProviderName.IsNullOrWhiteSpace(), x => x.Providers.Contains(input.ProviderName))
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter) || x.DisplayName.Contains(input.Filter))
-            .ToList());
+        return new ListResultDto<SettingDefinitionDto>(settingDtoList);
     }
 
     public virtual Task<ListResultDto<NameValue<string>>> GetAssignableProvidersAsync()
@@ -155,37 +139,31 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
     [Authorize(SettingManagementPermissions.Definition.Update)]
     public async virtual Task<SettingDefinitionDto> UpdateAsync(string name, SettingDefinitionUpdateDto input)
     {
-        if (await _staticSettingDefinitionStore.GetOrNullAsync(name) != null)
-        {
-            throw new BusinessException(SettingManagementErrorCodes.Definition.StaticSettingNotAllowedChanged)
-              .WithData("Name", name);
-        }
+        var definitionRecord = await FindByNameAsync(name) ??
+            throw new BusinessException(SettingManagementErrorCodes.Definition.NameNotFount)
+                .WithData(nameof(SettingDefinitionRecord.Name), name);
 
-        var settingDefinitionRecord = await _settingRepository.FindAsync(x => x.Name == name);
-        if (settingDefinitionRecord == null)
-        {
-            settingDefinitionRecord = new SettingDefinitionRecord(
-               GuidGenerator.Create(),
-               name,
-               input.DisplayName,
-               input.Description,
-               input.DefaultValue,
-               input.IsVisibleToClients,
-               input.Providers?.JoinAsString(","),
-               input.IsInherited,
-               input.IsEncrypted);
-            UpdateByInput(settingDefinitionRecord, input);
-            settingDefinitionRecord = await _settingRepository.InsertAsync(settingDefinitionRecord);
-        }
-        else
-        {
-            UpdateByInput(settingDefinitionRecord, input);
-            settingDefinitionRecord = await _settingRepository.UpdateAsync(settingDefinitionRecord);
-        }
+        CheckIsStaticDefinitionRecord(definitionRecord);
+        UpdateByInput(definitionRecord, input);
+        definitionRecord = await _settingRepository.UpdateAsync(definitionRecord);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        return DefinitionRecordToDto(settingDefinitionRecord);
+        return DefinitionRecordToDto(definitionRecord);
+    }
+
+    protected async virtual Task<SettingDefinitionRecord> FindByNameAsync(string name)
+    {
+        return await _settingRepository.FindAsync(x => x.Name == name);
+    }
+
+    protected virtual void CheckIsStaticDefinitionRecord(SettingDefinitionRecord record)
+    {
+        if (record.GetProperty(nameof(SettingDefinitionDto.IsStatic), true))
+        {
+            throw new BusinessException(SettingManagementErrorCodes.Definition.StaticSettingNotAllowedChanged)
+              .WithData("Name", record.Name);
+        }
     }
 
     protected virtual void UpdateByInput(SettingDefinitionRecord record, SettingDefinitionCreateOrUpdateDto input)
@@ -222,6 +200,10 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
 
     protected virtual SettingDefinitionDto DefinitionRecordToDto(SettingDefinitionRecord definitionRecord)
     {
+        if (definitionRecord == null)
+        {
+            return null;
+        }
         var dto = new SettingDefinitionDto
         {
             Name = definitionRecord.Name,
@@ -231,41 +213,11 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
             DisplayName = definitionRecord.DisplayName,
             IsEncrypted = definitionRecord.IsEncrypted,
             IsInherited = definitionRecord.IsInherited,
-            Providers = definitionRecord.Providers?.Split(',').ToList(),
+            Providers = definitionRecord.Providers?.Split(',').ToList() ?? [],
+            IsStatic = definitionRecord.GetProperty(nameof(SettingDefinitionDto.IsStatic), true),
         };
 
         foreach (var property in definitionRecord.ExtraProperties)
-        {
-            dto.SetProperty(property.Key, property.Value);
-        }
-
-        return dto;
-    }
-
-    protected virtual SettingDefinitionDto DefinitionToDto(SettingDefinition definition, bool isStatic = false)
-    {
-        var dto = new SettingDefinitionDto
-        {
-            IsStatic = isStatic,
-            Name = definition.Name,
-            IsVisibleToClients = definition.IsVisibleToClients,
-            DefaultValue = definition.DefaultValue,
-            IsEncrypted = definition.IsEncrypted,
-            IsInherited = definition.IsInherited,
-            Providers = definition.Providers,
-        };
-
-        if (definition.DisplayName != null)
-        {
-            dto.DisplayName = _localizableStringSerializer.Serialize(definition.DisplayName);
-        }
-
-        if (definition.Description != null)
-        {
-            dto.Description = _localizableStringSerializer.Serialize(definition.Description);
-        }
-
-        foreach (var property in definition.Properties)
         {
             dto.SetProperty(property.Key, property.Value);
         }

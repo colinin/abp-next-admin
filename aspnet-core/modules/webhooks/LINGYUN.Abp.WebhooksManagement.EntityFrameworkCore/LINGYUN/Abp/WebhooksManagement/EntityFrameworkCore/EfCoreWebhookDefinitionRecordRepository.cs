@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 
@@ -32,6 +33,16 @@ public class EfCoreWebhookDefinitionRecordRepository :
     {
         return await (await GetDbSetAsync())
             .Where(x => x.IsEnabled == true)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+
+    public async virtual Task<List<WebhookDefinitionRecord>> GetListAsync(
+        ISpecification<WebhookDefinitionRecord> specification,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .Where(specification.ToExpression())
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

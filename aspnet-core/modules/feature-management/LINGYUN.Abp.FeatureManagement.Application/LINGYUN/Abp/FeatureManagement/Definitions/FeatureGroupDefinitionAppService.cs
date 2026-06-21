@@ -2,42 +2,28 @@
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.FeatureManagement;
-using Volo.Abp.Features;
-using Volo.Abp.Localization;
 
 namespace LINGYUN.Abp.FeatureManagement.Definitions;
 
 [Authorize(FeatureManagementPermissionNames.GroupDefinition.Default)]
 public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase, IFeatureGroupDefinitionAppService
 {
-    private readonly ILocalizableStringSerializer _localizableStringSerializer;
-    private readonly IFeatureDefinitionManager _featureDefinitionManager;
-    private readonly IStaticFeatureDefinitionStore _staticFeatureDefinitionStore;
-    private readonly IDynamicFeatureDefinitionStore _dynamicFeatureDefinitionStore;
     private readonly IFeatureGroupDefinitionRecordRepository _groupDefinitionRepository;
     private readonly IRepository<FeatureGroupDefinitionRecord, Guid> _groupDefinitionBasicRepository;
 
     public FeatureGroupDefinitionAppService(
-        ILocalizableStringSerializer localizableStringSerializer,
-        IFeatureDefinitionManager featureDefinitionManager, 
-        IStaticFeatureDefinitionStore featureDefinitionStore,
-        IDynamicFeatureDefinitionStore dynamicFeatureDefinitionStore,
         IFeatureGroupDefinitionRecordRepository groupDefinitionRepository, 
         IRepository<FeatureGroupDefinitionRecord, Guid> groupDefinitionBasicRepository)
     {
-        _localizableStringSerializer = localizableStringSerializer;
-        _featureDefinitionManager = featureDefinitionManager;
-        _staticFeatureDefinitionStore = featureDefinitionStore;
-        _dynamicFeatureDefinitionStore = dynamicFeatureDefinitionStore;
         _groupDefinitionRepository = groupDefinitionRepository;
         _groupDefinitionBasicRepository = groupDefinitionBasicRepository;
     }
@@ -45,11 +31,6 @@ public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase,
     [Authorize(FeatureManagementPermissionNames.GroupDefinition.Create)]
     public async virtual Task<FeatureGroupDefinitionDto> CreateAsync(FeatureGroupDefinitionCreateDto input)
     {
-        if (await _featureDefinitionManager.GetGroupOrNullAsync(input.Name) != null)
-        {
-            throw new BusinessException(FeatureManagementErrorCodes.GroupDefinition.AlreayNameExists)
-                .WithData(nameof(FeatureGroupDefinitionRecord.Name), input.Name);
-        }
         var groupDefinitionRecord = await _groupDefinitionBasicRepository.FindAsync(x => x.Name == input.Name);
         if (groupDefinitionRecord != null)
         {
@@ -64,6 +45,8 @@ public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase,
 
         UpdateByInput(groupDefinitionRecord, input);
 
+        groupDefinitionRecord.SetProperty(nameof(FeatureGroupDefinitionDto.IsStatic), false);
+
         await _groupDefinitionRepository.InsertAsync(groupDefinitionRecord);
 
         await CurrentUnitOfWork.SaveChangesAsync();
@@ -74,89 +57,65 @@ public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase,
     [Authorize(FeatureManagementPermissionNames.GroupDefinition.Delete)]
     public async virtual Task DeleteAsync(string name)
     {
-        var groupDefinitionRecord = await FindByNameAsync(name);
+        var groupDefinitionRecord = await FindByNameAsync(name)
+            ?? throw new BusinessException(FeatureManagementErrorCodes.GroupDefinition.NameNotFount)
+                .WithData(nameof(FeatureGroupDefinitionRecord.Name), name);
 
-        if (groupDefinitionRecord != null)
-        {
-            await _groupDefinitionRepository.DeleteAsync(groupDefinitionRecord);
+        CheckIsStaticDefinitionRecord(groupDefinitionRecord);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
-        }
+        await _groupDefinitionRepository.DeleteAsync(groupDefinitionRecord);
+
+        await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     public async virtual Task<FeatureGroupDefinitionDto> GetAsync(string name)
     {
-        var staticGroups = await _staticFeatureDefinitionStore.GetGroupsAsync();
-        var groupDefinition = staticGroups.FirstOrDefault(x => x.Name == name);
-        if (groupDefinition != null)
-        {
-            return GroupDefinitionToDto(groupDefinition, true);
-        }
-
-        var dynamicGroups = await _dynamicFeatureDefinitionStore.GetGroupsAsync();
-
-        groupDefinition = dynamicGroups.FirstOrDefault(x => x.Name == name);
-        if (groupDefinition == null)
-        {
-            throw new BusinessException(FeatureManagementErrorCodes.GroupDefinition.NameNotFount)
+        var groupDefinitionRecord = await FindByNameAsync(name)
+            ?? throw new BusinessException(FeatureManagementErrorCodes.GroupDefinition.NameNotFount)
                 .WithData(nameof(FeatureGroupDefinitionRecord.Name), name);
-        }
 
-        return GroupDefinitionToDto(groupDefinition);
+        return GroupDefinitionRecordToDto(groupDefinitionRecord);
     }
 
     public async virtual Task<ListResultDto<FeatureGroupDefinitionDto>> GetListAsync(FeatureGroupDefinitionGetListInput input)
     {
         var groupDtoList = new List<FeatureGroupDefinitionDto>();
 
-        var staticGroups = await _staticFeatureDefinitionStore.GetGroupsAsync();
-        var staticGroupsNames = staticGroups
-           .Select(p => p.Name)
-           .ToImmutableHashSet();
-        groupDtoList.AddRange(staticGroups.Select(d => GroupDefinitionToDto(d, true)));
+        Expression<Func<FeatureGroupDefinitionRecord, bool>> predicate = _ => true;
+        if (!input.Filter.IsNullOrWhiteSpace())
+        {
+            predicate = predicate.And(x => x.Name.Contains(input.Filter));
+        }
+        var permissionGroupDefinitions = await _groupDefinitionBasicRepository.GetListAsync(predicate);
 
-        var dynamicGroups = await _dynamicFeatureDefinitionStore.GetGroupsAsync();
-        groupDtoList.AddRange(dynamicGroups
-           .Where(d => !staticGroupsNames.Contains(d.Name))
-           .Select(d => GroupDefinitionToDto(d)));
+        groupDtoList.AddRange(permissionGroupDefinitions.Select(GroupDefinitionRecordToDto));
 
-        return new ListResultDto<FeatureGroupDefinitionDto>(
-            groupDtoList
-                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter))
-                .ToList());
+        return new ListResultDto<FeatureGroupDefinitionDto>(groupDtoList);
     }
 
     [Authorize(FeatureManagementPermissionNames.GroupDefinition.Update)]
     public async virtual Task<FeatureGroupDefinitionDto> UpdateAsync(string name, FeatureGroupDefinitionUpdateDto input)
     {
-        var staticGroups = await _staticFeatureDefinitionStore.GetGroupsAsync();
-        if (staticGroups.FirstOrDefault(x => x.Name == name) != null)
-        {
-            throw new BusinessException(FeatureManagementErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
-              .WithData("Name", name);
-        }
+        var groupDefinitionRecord = await FindByNameAsync(name)
+            ?? throw new BusinessException(FeatureManagementErrorCodes.GroupDefinition.NameNotFount)
+                .WithData(nameof(FeatureGroupDefinitionRecord.Name), name);
 
-        var groupDefinitionRecord = await FindByNameAsync(name);
-
-        if (groupDefinitionRecord == null)
-        {
-            groupDefinitionRecord = new FeatureGroupDefinitionRecord(
-                GuidGenerator.Create(),
-                name,
-                input.DisplayName);
-            UpdateByInput(groupDefinitionRecord, input);
-
-            groupDefinitionRecord = await _groupDefinitionBasicRepository.InsertAsync(groupDefinitionRecord);
-        }
-        else
-        {
-            UpdateByInput(groupDefinitionRecord, input);
-            groupDefinitionRecord = await _groupDefinitionBasicRepository.UpdateAsync(groupDefinitionRecord);
-        }
+        CheckIsStaticDefinitionRecord(groupDefinitionRecord);
+        UpdateByInput(groupDefinitionRecord, input);
+        groupDefinitionRecord = await _groupDefinitionBasicRepository.UpdateAsync(groupDefinitionRecord);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
         return GroupDefinitionRecordToDto(groupDefinitionRecord);
+    }
+
+    protected virtual void CheckIsStaticDefinitionRecord(FeatureGroupDefinitionRecord record)
+    {
+        if (record.GetProperty(nameof(FeatureGroupDefinitionDto.IsStatic), true))
+        {
+            throw new BusinessException(FeatureManagementErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
+              .WithData("Name", record.Name);
+        }
     }
 
     protected virtual void UpdateByInput(FeatureGroupDefinitionRecord record, FeatureGroupDefinitionCreateOrUpdateDto input)
@@ -183,30 +142,13 @@ public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase,
     {
         var groupDto = new FeatureGroupDefinitionDto
         {
+            IsStatic = groupDefinitionRecord.GetProperty(nameof(FeatureGroupDefinitionDto.IsStatic), true),
             Name = groupDefinitionRecord.Name,
             DisplayName = groupDefinitionRecord.DisplayName,
             ExtraProperties = new ExtraPropertyDictionary(),
         };
 
         foreach (var property in groupDefinitionRecord.ExtraProperties)
-        {
-            groupDto.SetProperty(property.Key, property.Value);
-        }
-
-        return groupDto;
-    }
-
-    protected virtual FeatureGroupDefinitionDto GroupDefinitionToDto(FeatureGroupDefinition groupDefinition, bool isStatic = false)
-    {
-        var groupDto = new FeatureGroupDefinitionDto
-        {
-            IsStatic = isStatic,
-            Name = groupDefinition.Name,
-            DisplayName = _localizableStringSerializer.Serialize(groupDefinition.DisplayName),
-            ExtraProperties = new ExtraPropertyDictionary(),
-        };
-
-        foreach (var property in groupDefinition.Properties)
         {
             groupDto.SetProperty(property.Key, property.Value);
         }

@@ -9,6 +9,8 @@ public static class SettingManagementErrorCodes
 
         public const string DuplicateName = Prefix + "001";
 
+        public const string NameNotFount = Prefix + "002";
+
         public const string StaticSettingNotAllowedChanged = Prefix + "010";
     }
 }

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -16,33 +16,19 @@ namespace LINGYUN.Abp.Notifications.Definitions.Groups;
 public class NotificationGroupDefinitionAppService : AbpNotificationsApplicationServiceBase, INotificationGroupDefinitionAppService
 {
     private readonly ILocalizableStringSerializer _localizableStringSerializer;
-    private readonly INotificationDefinitionManager _definitionManager;
-    private readonly IStaticNotificationDefinitionStore _staticDefinitionStore;
-    private readonly IDynamicNotificationDefinitionStore _dynamicDefinitionStore;
-    private readonly INotificationDefinitionGroupRecordRepository _definitionRecordRepository;
+    private readonly INotificationDefinitionGroupRecordRepository _definitionGroupRecordRepository;
 
     public NotificationGroupDefinitionAppService(
         ILocalizableStringSerializer localizableStringSerializer, 
-        INotificationDefinitionManager definitionManager,
-        IStaticNotificationDefinitionStore staticDefinitionStore,
-        IDynamicNotificationDefinitionStore dynamicDefinitionStore,
-        INotificationDefinitionGroupRecordRepository definitionRecordRepository)
+        INotificationDefinitionGroupRecordRepository definitionGroupRecordRepository)
     {
         _localizableStringSerializer = localizableStringSerializer;
-        _definitionManager = definitionManager;
-        _staticDefinitionStore = staticDefinitionStore;
-        _dynamicDefinitionStore = dynamicDefinitionStore;
-        _definitionRecordRepository = definitionRecordRepository;
+        _definitionGroupRecordRepository = definitionGroupRecordRepository;
     }
 
     [Authorize(NotificationsPermissions.GroupDefinition.Create)]
     public async virtual Task<NotificationGroupDefinitionDto> CreateAsync(NotificationGroupDefinitionCreateDto input)
     {
-        if (await _definitionManager.GetGroupOrNullAsync(input.Name) != null)
-        {
-            throw new BusinessException(NotificationsErrorCodes.GroupDefinition.AlreayNameExists)
-                .WithData(nameof(NotificationDefinitionGroupRecord.Name), input.Name);
-        }
         var definitionRecord = await FindByNameAsync(input.Name);
         if (definitionRecord != null)
         {
@@ -57,7 +43,9 @@ public class NotificationGroupDefinitionAppService : AbpNotificationsApplication
 
         UpdateByInput(definitionRecord, input);
 
-        await _definitionRecordRepository.InsertAsync(definitionRecord);
+        definitionRecord.SetProperty(nameof(NotificationGroupDefinitionDto.IsStatic), false);
+
+        await _definitionGroupRecordRepository.InsertAsync(definitionRecord);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
@@ -67,86 +55,66 @@ public class NotificationGroupDefinitionAppService : AbpNotificationsApplication
     [Authorize(NotificationsPermissions.GroupDefinition.Delete)]
     public async virtual Task DeleteAsync(string name)
     {
-        var definitionRecord = await FindByNameAsync(name);
+        var definitionRecord = await FindByNameAsync(name) ??
+            throw new BusinessException(NotificationsErrorCodes.GroupDefinition.NameNotFount)
+                .WithData(nameof(NotificationDefinitionGroupRecord.Name), name);
 
-        if (definitionRecord != null)
-        {
-            await _definitionRecordRepository.DeleteAsync(definitionRecord);
+        CheckIsStaticDefinitionRecord(definitionRecord);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
-        }
+        await _definitionGroupRecordRepository.DeleteAsync(definitionRecord);
+
+        await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     public async virtual Task<NotificationGroupDefinitionDto> GetAsync(string name)
     {
-        var definition = await _staticDefinitionStore.GetGroupOrNullAsync(name);
-        if (definition != null)
-        {
-            return DefinitionToDto(definition, true);
-        }
-
-        definition = await _dynamicDefinitionStore.GetGroupOrNullAsync(name);
-        if (definition == null)
-        {
+        var definitionRecord = await FindByNameAsync(name) ??
             throw new BusinessException(NotificationsErrorCodes.GroupDefinition.NameNotFount)
                 .WithData(nameof(NotificationDefinitionGroupRecord.Name), name);
-        }
-
-        return DefinitionToDto(definition);
+        return DefinitionRecordToDto(definitionRecord);
     }
 
     public async virtual Task<ListResultDto<NotificationGroupDefinitionDto>> GetListAsync(NotificationGroupDefinitionGetListInput input)
     {
         var definitionDtoList = new List<NotificationGroupDefinitionDto>();
 
-        var staticGroups = await _staticDefinitionStore.GetGroupsAsync();
-        var staticGroupsNames = staticGroups
-           .Select(p => p.Name)
-           .ToImmutableHashSet();
-        definitionDtoList.AddRange(staticGroups.Select(d => DefinitionToDto(d, true)));
+        Expression<Func<NotificationDefinitionGroupRecord, bool>> expression = _ => true;
+        if (!input.Filter.IsNullOrWhiteSpace())
+        {
+            expression = expression.And(x => x.Name.Contains(input.Filter));
+        }
 
-        var dynamicGroups = await _dynamicDefinitionStore.GetGroupsAsync();
-        definitionDtoList.AddRange(dynamicGroups
-           .Where(d => !staticGroupsNames.Contains(d.Name))
-           .Select(d => DefinitionToDto(d)));
+        var definitionRecords = await _definitionGroupRecordRepository.GetListAsync(
+            new Volo.Abp.Specifications.ExpressionSpecification<NotificationDefinitionGroupRecord>(expression));
 
-        return new ListResultDto<NotificationGroupDefinitionDto>(
-            definitionDtoList
-                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter))
-                .ToList());
+        definitionDtoList.AddRange(definitionRecords.Select(DefinitionRecordToDto));
+
+        return new ListResultDto<NotificationGroupDefinitionDto>(definitionDtoList);
     }
 
     [Authorize(NotificationsPermissions.GroupDefinition.Update)]
     public async virtual Task<NotificationGroupDefinitionDto> UpdateAsync(string name, NotificationGroupDefinitionUpdateDto input)
     {
-        var definition = await _staticDefinitionStore.GetGroupOrNullAsync(name);
-        if (definition != null)
-        {
-            throw new BusinessException(NotificationsErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
-              .WithData(nameof(NotificationDefinitionGroupRecord.Name), name);
-        }
+        var definitionRecord = await FindByNameAsync(name) ??
+            throw new BusinessException(NotificationsErrorCodes.GroupDefinition.NameNotFount)
+                .WithData(nameof(NotificationDefinitionGroupRecord.Name), name);
 
-        var definitionRecord = await FindByNameAsync(name);
-
-        if (definitionRecord == null)
-        {
-            definitionRecord = new NotificationDefinitionGroupRecord(
-                GuidGenerator.Create(),
-                name,
-                input.DisplayName);
-            UpdateByInput(definitionRecord, input);
-
-            definitionRecord = await _definitionRecordRepository.InsertAsync(definitionRecord);
-        }
-        else
-        {
-            UpdateByInput(definitionRecord, input);
-            definitionRecord = await _definitionRecordRepository.UpdateAsync(definitionRecord);
-        }
+        CheckIsStaticDefinitionRecord(definitionRecord);
+        UpdateByInput(definitionRecord, input);
+        definitionRecord = await _definitionGroupRecordRepository.UpdateAsync(definitionRecord);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
+    }
+
+    protected virtual void CheckIsStaticDefinitionRecord(NotificationDefinitionGroupRecord record)
+    {
+        if (record.GetProperty(nameof(NotificationGroupDefinitionDto.IsStatic), true))
+        {
+            throw new BusinessException(NotificationsErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
+              .WithData(nameof(NotificationDefinitionGroupRecord.Name), record.Name);
+        }
     }
 
     protected virtual void UpdateByInput(NotificationDefinitionGroupRecord record, NotificationGroupDefinitionCreateOrUpdateDto input)
@@ -170,7 +138,7 @@ public class NotificationGroupDefinitionAppService : AbpNotificationsApplication
 
     protected async virtual Task<NotificationDefinitionGroupRecord> FindByNameAsync(string name)
     {
-        var definitionRecord = await _definitionRecordRepository.FindByNameAsync(name);
+        var definitionRecord = await _definitionGroupRecordRepository.FindByNameAsync(name);
 
         return definitionRecord;
     }
@@ -179,7 +147,7 @@ public class NotificationGroupDefinitionAppService : AbpNotificationsApplication
     {
         var dto = new NotificationGroupDefinitionDto
         {
-            IsStatic = false,
+            IsStatic = definitionRecord.GetProperty(nameof(NotificationGroupDefinitionDto.IsStatic), true),
             Name = definitionRecord.Name,
             DisplayName = definitionRecord.DisplayName,
             Description = definitionRecord.Description,
@@ -187,29 +155,6 @@ public class NotificationGroupDefinitionAppService : AbpNotificationsApplication
         };
 
         foreach (var property in definitionRecord.ExtraProperties)
-        {
-            dto.SetProperty(property.Key, property.Value);
-        }
-
-        return dto;
-    }
-
-    protected virtual NotificationGroupDefinitionDto DefinitionToDto(NotificationGroupDefinition definition, bool isStatic = false)
-    {
-        var dto = new NotificationGroupDefinitionDto
-        {
-            IsStatic = isStatic,
-            Name = definition.Name,
-            AllowSubscriptionToClients = definition.AllowSubscriptionToClients,
-            DisplayName = _localizableStringSerializer.Serialize(definition.DisplayName),
-        };
-
-        if (definition.Description != null)
-        {
-            dto.Description = _localizableStringSerializer.Serialize(definition.Description);
-        }
-
-        foreach (var property in definition.Properties)
         {
             dto.SetProperty(property.Key, property.Value);
         }
