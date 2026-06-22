@@ -19,33 +19,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\framework\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\auditing\LINGYUN.Abp.Auditing.Application.Contracts\LINGYUN.Abp.Auditing.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\caching-management\LINGYUN.Abp.CachingManagement.Application.Contracts\LINGYUN.Abp.CachingManagement.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\data-protection\LINGYUN.Abp.DataProtectionManagement.Application.Contracts\LINGYUN.Abp.DataProtectionManagement.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\feature-management\LINGYUN.Abp.FeatureManagement.Application.Contracts\LINGYUN.Abp.FeatureManagement.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.Application.Contracts\LINGYUN.Abp.Gdpr.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.Application.Contracts\LINGYUN.Abp.LocalizationManagement.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.Application.Contracts\LINGYUN.Abp.OpenIddict.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.Application.Contracts\LINGYUN.Abp.BlobManagement.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\permissions-management\LINGYUN.Abp.PermissionManagement.Application.Contracts\LINGYUN.Abp.PermissionManagement.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Application.Contracts\LINGYUN.Platform.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\project\LINGYUN.Abp.ProjectManagement.Application.Contracts\LINGYUN.Abp.ProjectManagement.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.Application.Contracts\LINGYUN.Abp.Notifications.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\rules-management\rules-engine\LINGYUN.Abp.RulesEngineManagement.Application.Contracts\LINGYUN.Abp.RulesEngineManagement.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.Application.Contracts\LINGYUN.Abp.Saas.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.Application.Contracts\LINGYUN.Abp.TaskManagement.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\text-templating\LINGYUN.Abp.TextTemplating.Application.Contracts\LINGYUN.Abp.TextTemplating.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.Application.Contracts\LINGYUN.Abp.WebhooksManagement.Application.Contracts.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\framework\efcore\LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting\LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting.csproj" />
 		<ProjectReference Include="..\..\modules\data-protection\LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore\LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore.csproj" />
