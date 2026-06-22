@@ -36,7 +36,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.Http.Client;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
@@ -93,7 +93,7 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpEmailingExceptionHandlingModule),
-    typeof(AbpHttpClientModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpCachingStackExchangeRedisModule),

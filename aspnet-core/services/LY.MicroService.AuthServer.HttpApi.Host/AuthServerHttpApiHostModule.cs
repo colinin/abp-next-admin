@@ -38,6 +38,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -75,12 +76,12 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpCAPEventBusModule),
-    typeof(AbpHttpClientModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAspNetCoreMvcWrapperModule),

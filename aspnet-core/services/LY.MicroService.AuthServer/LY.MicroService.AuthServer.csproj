@@ -36,6 +36,7 @@
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" />
 		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
 		<PackageReference Include="Volo.Abp.Autofac" />
+		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" />
 		<PackageReference Include="Volo.Abp.Identity.AspNetCore" />
 		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" />
