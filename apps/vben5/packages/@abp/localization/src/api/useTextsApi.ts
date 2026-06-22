@@ -1,6 +1,7 @@
 import type { ListResultDto } from '@abp/core';
 
 import type {
+  DeleteTextInput,
   GetTextByKeyInput,
   GetTextsInput,
   SetTextInput,
@@ -22,7 +23,7 @@ export function useTextsApi() {
     input: GetTextsInput,
   ): Promise<ListResultDto<TextDifferenceDto>> {
     return request<ListResultDto<TextDifferenceDto>>(
-      '/api/abp/localization/texts',
+      '/api/localization/texts',
       {
         method: 'GET',
         params: input,
@@ -36,7 +37,7 @@ export function useTextsApi() {
    * @returns 查询的文本
    */
   function getApi(input: GetTextByKeyInput): Promise<TextDto> {
-    return request<TextDto>('/api/abp/localization/texts/by-culture-key', {
+    return request<TextDto>('/api/localization/texts/by-key', {
       method: 'GET',
       params: input,
     });
@@ -53,8 +54,20 @@ export function useTextsApi() {
     });
   }
 
+  /**
+   * 删除文本
+   * @param input 参数
+   */
+  function deleteApi(input: DeleteTextInput): Promise<void> {
+    return request('/api/localization/texts', {
+      data: input,
+      method: 'DELETE',
+    });
+  }
+
   return {
     cancel,
+    deleteApi,
     getApi,
     getListApi,
     setApi,

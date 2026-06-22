@@ -4,7 +4,6 @@ using LINGYUN.Abp.AI.Tools.Http;
 using LINGYUN.Abp.AI.Tools.Mcp;
 using LINGYUN.Abp.AIManagement;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Claims.Mapping;
@@ -41,7 +40,6 @@ namespace LINGYUN.Abp.MicroService.AIService;
     typeof(AbpLoggingSerilogElasticsearchModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
 
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementDomainOpenIddictModule),

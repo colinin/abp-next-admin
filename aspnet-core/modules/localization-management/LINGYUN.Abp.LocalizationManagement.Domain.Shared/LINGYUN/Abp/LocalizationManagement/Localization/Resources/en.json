@@ -27,6 +27,24 @@
     "Localization:001100": "Language {CultureName} already exists!",
     "Localization:001400": "Language name {CultureName} not found or built-in language operation not allowed!",
     "Localization:002100": "Resource {Name} already exists!",
-    "Localization:002400": "Resource Name {Name} not found or built-in resource operation not allowed!"
+    "Localization:002400": "Resource Name {Name} not found or built-in resource operation not allowed!",
+    "Languages": "Languages",
+    "Resources": "Resources",
+    "Texts": "Texts",
+    "DisplayName:Key": "Key",
+    "DisplayName:Value": "Value",
+    "DisplayName:Name": "Name",
+    "DisplayName:CultureName": "Culture Name",
+    "DisplayName:ResourceName": "Resource Name",
+    "DisplayName:TargetCultureName": "Target Culture",
+    "DisplayName:TargetValue": "Target Value",
+    "DisplayName:Any": "Any",
+    "DisplayName:OnlyNull": "Only Null",
+    "DisplayName:Filter": "Filter",
+    "DisplayName:UiCultureName": "Ui Culture Name",
+    "DisplayName:DisplayName": "Display Name",
+    "DisplayName:FlagIcon": "Flag Icon",
+    "DisplayName:Description": "Description",
+    "DisplayName:DefaultCultureName": "Default Culture"
   }
 }

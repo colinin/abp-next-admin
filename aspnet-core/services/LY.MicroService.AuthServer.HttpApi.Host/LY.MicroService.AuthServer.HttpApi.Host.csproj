@@ -50,7 +50,6 @@
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
 		<ProjectReference Include="..\..\framework\efcore\LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting\LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting.csproj" />
 		<ProjectReference Include="..\..\framework\exporter\LINGYUN.Abp.Exporter.MiniSoftware\LINGYUN.Abp.Exporter.MiniSoftware.csproj" />
-		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
 		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />

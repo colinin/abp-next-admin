@@ -1,9 +1,14 @@
 ﻿using LINGYUN.Abp.LocalizationManagement.Features;
 using LINGYUN.Abp.LocalizationManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
 
@@ -76,6 +81,24 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
         await CurrentUnitOfWork.SaveChangesAsync();
 
         return ObjectMapper.Map<Language, LanguageDto>(language);
+    }
+
+    public async virtual Task<PagedResultDto<LanguageDto>> GetListAsync(LanguageGetPagedListInput input)
+    {
+        Expression<Func<Language, bool>> predicate = _ => true;
+        if (!input.Filter.IsNullOrWhiteSpace())
+        {
+            predicate = predicate.And(x => x.CultureName.Contains(input.Filter) ||
+                x.UiCultureName.Contains(input.Filter) || x.DisplayName.Contains(input.Filter));
+        }
+
+        var specification = new Volo.Abp.Specifications.ExpressionSpecification<Language>(predicate);
+        var totalCount = await _repository.GetCountAsync(specification);
+        var languages = await _repository.GetListAsync(specification,
+            input.Sorting, input.MaxResultCount, input.SkipCount);
+
+        return new PagedResultDto<LanguageDto>(totalCount,
+            ObjectMapper.Map<List<Language>, List<LanguageDto>>(languages));
     }
 
     private async Task<Language> InternalGetByNameAsync(string name)

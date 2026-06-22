@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace LINGYUN.Abp.LocalizationManagement;
@@ -9,6 +9,8 @@ public interface ILanguageAppService : IApplicationService
     Task<LanguageDto> GetByNameAsync(string name);
 
     Task<LanguageDto> CreateAsync(LanguageCreateDto input);
+
+    Task<PagedResultDto<LanguageDto>> GetListAsync(LanguageGetPagedListInput input);
 
     Task<LanguageDto> UpdateAsync(string name, LanguageUpdateDto input);
 

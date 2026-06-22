@@ -5,12 +5,12 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { LanguageDto } from '../../types/languages';
 
-import { defineAsyncComponent, h, onMounted, ref } from 'vue';
+import { defineAsyncComponent, h } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { sortby, useAbpStore } from '@abp/core';
+import { useAbpStore } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -27,19 +27,13 @@ defineOptions({
   name: 'LocalizationLanguageTable',
 });
 
-const dataSource = ref<LanguageDto[]>([]);
-
 const abpStore = useAbpStore();
-const { deleteApi, getListApi } = useLanguagesApi();
+const { deleteApi, getPagedListApi } = useLanguagesApi();
 const { getLocalizationApi } = useLocalizationsApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开
   collapsed: false,
-  handleReset: onReset,
-  async handleSubmit(params) {
-    await onGet(params);
-  },
   schema: [
     {
       component: 'Input',
@@ -89,20 +83,13 @@ const gridOptions: VxeGridProps<LanguageDto> = {
   keepSource: true,
   proxyConfig: {
     ajax: {
-      query: async ({ page, sort }) => {
-        let items = sortby(dataSource.value, sort.field);
-        if (sort.order === 'desc') {
-          items = items.toReversed();
-        }
-        const result = {
-          totalCount: dataSource.value.length,
-          items: items.slice(
-            (page.currentPage - 1) * page.pageSize,
-            page.currentPage * page.pageSize,
-          ),
-        };
-        return new Promise((resolve) => {
-          resolve(result);
+      query: async ({ page, sort }, formValues) => {
+        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
+        return await getPagedListApi({
+          sorting,
+          maxResultCount: page.pageSize,
+          skipCount: (page.currentPage - 1) * page.pageSize,
+          ...formValues,
         });
       },
     },
@@ -137,23 +124,6 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions,
 });
 
-async function onGet(input?: Record<string, string>) {
-  try {
-    gridApi.setLoading(true);
-    const { items } = await getListApi(input);
-    dataSource.value = items;
-    setTimeout(() => gridApi.reload(), 100);
-  } finally {
-    gridApi.setLoading(false);
-  }
-}
-
-async function onReset() {
-  await gridApi.formApi.resetForm();
-  const input = await gridApi.formApi.getValues();
-  await onGet(input);
-}
-
 function onCreate() {
   modalApi.setData({});
   modalApi.open();
@@ -178,8 +148,6 @@ function onDelete(row: LanguageDto) {
 }
 
 async function onChange(data: LanguageDto) {
-  const input = await gridApi.formApi.getValues();
-  onGet(input);
   // 资源变化刷新本地多语言缓存
   const cultureName =
     abpStore.application!.localization.currentCulture.cultureName;
@@ -190,8 +158,6 @@ async function onChange(data: LanguageDto) {
     abpStore.setLocalization(localization);
   }
 }
-
-onMounted(onGet);
 </script>
 
 <template>
@@ -218,7 +184,6 @@ onMounted(onGet);
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
-          v-if="!row.isStatic"
           :icon="h(DeleteOutlined)"
           block
           danger

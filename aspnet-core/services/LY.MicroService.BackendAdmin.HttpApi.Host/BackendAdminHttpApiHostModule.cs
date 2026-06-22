@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.Aliyun.SettingManagement;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
@@ -67,7 +66,6 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpLoggingSerilogElasticsearchModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
 
     // 设置管理
     typeof(AbpAliyunSettingManagementModule),

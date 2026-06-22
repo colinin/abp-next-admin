@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -66,7 +65,6 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpUINavigationVueVbenAdmin5Module),
     typeof(PlatformThemeVueVbenAdminModule),
     typeof(AbpBlobManagementAliyunModule),    // 阿里云存储提供者模块

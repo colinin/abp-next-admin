@@ -12,9 +12,14 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { sortby, useAbpStore } from '@abp/core';
-import { useVbenVxeGrid } from '@abp/ui';
-import { EditOutlined, PlusOutlined } from '@ant-design/icons-vue';
-import { Button, Select } from 'ant-design-vue';
+import { useMessage, useVbenVxeGrid } from '@abp/ui';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  PlusOutlined,
+} from '@ant-design/icons-vue';
+import { useDebounceFn } from '@vueuse/core';
+import { Button, Modal, Select } from 'ant-design-vue';
 
 import { useLanguagesApi } from '../../api/useLanguagesApi';
 import { useLocalizationsApi } from '../../api/useLocalizationsApi';
@@ -40,10 +45,11 @@ const targetValueOptions = reactive([
   },
 ]);
 
+const message = useMessage();
 const abpStore = useAbpStore();
-const { getListApi } = useTextsApi();
-const { getListApi: getLanguagesApi } = useLanguagesApi();
-const { getListApi: getResourcesApi } = useResourcesApi();
+const { getListApi, deleteApi } = useTextsApi();
+const { getPagedListApi: getLanguagesApi } = useLanguagesApi();
+const { getPagedListApi: getResourcesApi } = useResourcesApi();
 const { getLocalizationApi } = useLocalizationsApi();
 
 const formOptions: VbenFormProps = {
@@ -188,20 +194,27 @@ const [LocalizationTextModal, modalApi] = useVbenModal({
   ),
 });
 
+const onSearchLanguages = useDebounceFn((filter?: string) => {
+  getLanguagesApi({ filter, maxResultCount: 100 }).then((res) => {
+    languages.value = res.items;
+  });
+}, 200);
+
+const onSearchResources = useDebounceFn((filter?: string) => {
+  getResourcesApi({ filter, maxResultCount: 100 }).then((res) => {
+    resources.value = res.items;
+  });
+}, 200);
+
 async function onInit() {
-  const [languageRes, resourceRes] = await Promise.all([
-    getLanguagesApi(),
-    getResourcesApi(),
-  ]);
-  languages.value = languageRes.items;
-  resources.value = resourceRes.items;
+  await Promise.all([onSearchLanguages(), onSearchResources()]);
 }
 
 function onFieldChange(fieldName: string, value?: string) {
   gridApi.formApi.setFieldValue(fieldName, value);
 }
 
-async function onGet(input: Record<string, string>) {
+async function onGet(input?: Record<string, string>) {
   try {
     gridApi.setLoading(true);
     const { items } = await getListApi(input as any);
@@ -232,6 +245,23 @@ function onUpdate(row: TextDifferenceDto) {
   modalApi.open();
 }
 
+function onDelete(row: TextDifferenceDto) {
+  Modal.confirm({
+    centered: true,
+    content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.key])}`,
+    onOk: async () => {
+      await deleteApi({
+        resourceName: row.resourceName,
+        cultureName: row.cultureName,
+        key: row.key,
+      });
+      message.success($t('AbpUi.DeletedSuccessfully'));
+      await onChange(row);
+    },
+    title: $t('AbpUi.AreYouSure'),
+  });
+}
+
 async function onChange(data: TextDto) {
   const input = await gridApi.formApi.getValues();
   onGet(input);
@@ -255,32 +285,38 @@ onMounted(onInit);
       <Select
         class="w-full"
         allow-clear
+        show-search
         :options="languages"
         :value="modelValue"
         :field-names="{ label: 'displayName', value: 'cultureName' }"
         @change="(value) => onFieldChange('cultureName', value?.toString())"
+        @search="onSearchLanguages"
       />
     </template>
     <template #form-targetCultureName="{ modelValue }">
       <Select
         class="w-full"
         allow-clear
+        show-search
         :options="languages"
         :value="modelValue"
         :field-names="{ label: 'displayName', value: 'cultureName' }"
         @change="
           (value) => onFieldChange('targetCultureName', value?.toString())
         "
+        @search="onSearchLanguages"
       />
     </template>
     <template #form-resourceName="{ modelValue }">
       <Select
         class="w-full"
         allow-clear
+        show-search
         :options="resources"
         :value="modelValue"
         :field-names="{ label: 'displayName', value: 'name' }"
         @change="(value) => onFieldChange('resourceName', value?.toString())"
+        @search="onSearchResources"
       />
     </template>
     <template #form-onlyNull="{ modelValue }">
@@ -313,10 +349,24 @@ onMounted(onInit);
         >
           {{ $t('AbpUi.Edit') }}
         </Button>
+        <Button
+          :icon="h(DeleteOutlined)"
+          block
+          type="link"
+          danger
+          v-access:code="[TextsPermissions.Delete]"
+          @click="onDelete(row)"
+        >
+          {{ $t('AbpUi.Delete') }}
+        </Button>
       </div>
     </template>
   </Grid>
-  <LocalizationTextModal @change="onChange" />
+  <LocalizationTextModal
+    :resources="resources"
+    :languages="languages"
+    @change="onChange"
+  />
 </template>
 
 <style scoped></style>
