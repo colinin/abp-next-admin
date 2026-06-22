@@ -25,6 +25,8 @@
     "DisplayName:Providers": "Providers",
     "Description:Providers": "A list of allowed providers to get/set value of this permission,An empty list indicates that all providers are allowed.",
     "DisplayName:StateCheckers": "State Checkers",
+    "DisplayName:PermissionGranted": "Authorized entities",
+    "DisplayName:PermissionProvider": "Permission provider",
     "MultiTenancySides:Tenant": "Tenant",
     "MultiTenancySides:Host": "Host",
     "MultiTenancySides:Both": "Both",
@@ -42,6 +44,11 @@
     "PermissionProviders:C": "Client",
     "PermissionProviders:R": "Role",
     "PermissionProviders:U": "User",
-    "PermissionProviders:O": "Organization Unit"
+    "PermissionProviders:O": "Organization Unit",
+    "AllPermissions": "Permissions",
+    "SearchPermission": "Search Permission",
+    "PermissionGranted": "Authorized entities",
+    "RejectPermission": "Reject Permission",
+    "RejectPermissionWarningMessage": "Reject the '{1}' permission authorization for '{0}'!"
   }
 }

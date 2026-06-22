@@ -170,6 +170,8 @@ public partial class AuthServerHttpApiHostModule
             // Rename IdentityServer.Client.ManagePermissions
             // See https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo/Abp/PermissionManagement/IdentityServer/AbpPermissionManagementDomainIdentityServerModule.cs
             options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = AbpOpenIddictPermissions.Applications.ManagePermissions;
+
+            options.IsDynamicPermissionStoreEnabled = true;
         });
     }
 
