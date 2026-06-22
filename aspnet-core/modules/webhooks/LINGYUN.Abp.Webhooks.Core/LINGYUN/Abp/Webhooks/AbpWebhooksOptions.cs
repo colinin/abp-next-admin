@@ -12,6 +12,10 @@ public class AbpWebhooksOptions
     /// </summary>
     public TimeSpan TimeoutDuration { get; set; }
     /// <summary>
+    /// 动态Webhook策略
+    /// </summary>
+    public DynamicWebhookStrategy DynamicWebhookStrategy { get; set; }
+    /// <summary>
     /// 默认最大发送次数
     /// </summary>
     public int MaxSendAttemptCount { get; set; }
@@ -39,6 +43,7 @@ public class AbpWebhooksOptions
     public string DefaultAgentIdentifier { get; set; }
     public AbpWebhooksOptions()
     {
+        DynamicWebhookStrategy = DynamicWebhookStrategy.Merge;
         TimeoutDuration = TimeSpan.FromSeconds(60);
         MaxSendAttemptCount = 5;
         MaxConsecutiveFailCountBeforeDeactivateSubscription = MaxSendAttemptCount * 3;
