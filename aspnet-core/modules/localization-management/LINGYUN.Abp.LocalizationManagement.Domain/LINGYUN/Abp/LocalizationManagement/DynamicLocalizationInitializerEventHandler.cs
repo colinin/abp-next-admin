@@ -10,6 +10,9 @@ using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
+using Volo.Abp.Domain.ChangeTracking;
+using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
 using Volo.Abp.Localization;
@@ -17,10 +20,13 @@ using Volo.Abp.Uow;
 
 namespace LINGYUN.Abp.LocalizationManagement;
 
-public class DynamicLocalizationInitializerEeventHandler :
+public class DynamicLocalizationInitializerEventHandler :
     IDistributedEventHandler<DynamicLanguageInitializerEto>,
     IDistributedEventHandler<DynamicResourceInitializerEto>,
     IDistributedEventHandler<DynamicTextInitializerEto>,
+    ILocalEventHandler<EntityChangedEventData<Resource>>,
+    ILocalEventHandler<EntityChangedEventData<Language>>,
+    ILocalEventHandler<EntityChangedEventData<Text>>,
     ITransientDependency
 {
     public ILogger<StaticLocalizationSaver> Logger { protected get; set; }
@@ -45,7 +51,7 @@ public class DynamicLocalizationInitializerEeventHandler :
     protected IResourceRepository ResourceRepository { get; }
     protected ITextRepository TextRepository { get; }
 
-    public DynamicLocalizationInitializerEeventHandler(
+    public DynamicLocalizationInitializerEventHandler(
         IDistributedCache<LocalizationResourceCacheItem> resourceCache,
         IDistributedCache<LocalizationResourcesCacheItem> resourcesCache,
         IDistributedCache<LocalizationLanguageCacheItem> languageCache,
@@ -81,6 +87,19 @@ public class DynamicLocalizationInitializerEeventHandler :
         Logger = NullLogger<StaticLocalizationSaver>.Instance;
     }
 
+    [DisableEntityChangeTracking]
+    public async virtual Task HandleEventAsync(EntityChangedEventData<Language> eventData)
+    {
+        Logger.LogInformation("Languages have changed. Refresh the language cache.");
+
+        await RefreshLanguagesCacheAsync();
+
+        await DistributedEventBus.PublishAsync(new DynamicLocalizationChangedEto());
+
+        Logger.LogInformation("Language cache has been refreshed.");
+    }
+
+    [DisableEntityChangeTracking]
     public async virtual Task HandleEventAsync(DynamicLanguageInitializerEto eventData)
     {
         if (!LocalizationManagementOptions.SaveStaticLocalizationsToDatabase ||
@@ -92,7 +111,7 @@ public class DynamicLocalizationInitializerEeventHandler :
         Logger.LogDebug("Waiting to acquire the distributed lock for saving static languages...");
 
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
-            $"{nameof(DynamicLocalizationInitializerEeventHandler)}_{nameof(DynamicLanguageInitializerEto)}",
+            $"{nameof(DynamicLocalizationInitializerEventHandler)}_{nameof(DynamicLanguageInitializerEto)}",
             TimeSpan.FromSeconds(5));
         if (applicationLockHandle == null)
         {
@@ -117,6 +136,19 @@ public class DynamicLocalizationInitializerEeventHandler :
         Logger.LogInformation("Completed to save static languages.");
     }
 
+    [DisableEntityChangeTracking]
+    public async virtual Task HandleEventAsync(EntityChangedEventData<Resource> eventData)
+    {
+        Logger.LogInformation("Resources have changed. Refresh the resource cache.");
+
+        await RefreshResourcesCacheAsync();
+
+        await DistributedEventBus.PublishAsync(new DynamicLocalizationChangedEto());
+
+        Logger.LogInformation("Resource cache has been refreshed.");
+    }
+
+    [DisableEntityChangeTracking]
     public async virtual Task HandleEventAsync(DynamicResourceInitializerEto eventData)
     {
         if (!LocalizationManagementOptions.SaveStaticLocalizationsToDatabase ||
@@ -128,7 +160,7 @@ public class DynamicLocalizationInitializerEeventHandler :
         Logger.LogDebug("Waiting to acquire the distributed lock for saving static resources...");
 
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
-            $"{nameof(DynamicLocalizationInitializerEeventHandler)}_{nameof(DynamicResourceInitializerEto)}",
+            $"{nameof(DynamicLocalizationInitializerEventHandler)}_{nameof(DynamicResourceInitializerEto)}",
             TimeSpan.FromSeconds(5));
         if (applicationLockHandle == null)
         {
@@ -153,6 +185,29 @@ public class DynamicLocalizationInitializerEeventHandler :
         Logger.LogInformation("Completed to save static resources.");
     }
 
+    [DisableEntityChangeTracking]
+    public async virtual Task HandleEventAsync(EntityChangedEventData<Text> eventData)
+    {
+        Logger.LogInformation("Texts have changed. Refresh the text cache.");
+
+        var setTexts = new Dictionary<string, string>();
+        var allTexts = await TextRepository.GetListAsync(eventData.Entity.ResourceName, eventData.Entity.CultureName);
+        foreach (var text in allTexts)
+        {
+            setTexts[text.Key] = text.Value;
+        }
+
+        var textCacheKey = LocalizationTextCacheItem.CalculateCacheKey(eventData.Entity.ResourceName, eventData.Entity.CultureName);
+        var textCacheItem = new LocalizationTextCacheItem(eventData.Entity.ResourceName, eventData.Entity.CultureName, setTexts);
+
+        await LocalizationTextCache.SetAsync(textCacheKey, textCacheItem);
+
+        await DistributedEventBus.PublishAsync(new DynamicLocalizationChangedEto());
+
+        Logger.LogInformation("Text cache has been refreshed.");
+    }
+
+    [DisableEntityChangeTracking]
     public async virtual Task HandleEventAsync(DynamicTextInitializerEto eventData)
     {
         if (!LocalizationManagementOptions.SaveStaticLocalizationsToDatabase ||
@@ -164,7 +219,7 @@ public class DynamicLocalizationInitializerEeventHandler :
         Logger.LogDebug("Waiting to acquire the distributed lock for saving static texts...");
 
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
-            $"{nameof(DynamicLocalizationInitializerEeventHandler)}_{nameof(DynamicTextInitializerEto)}",
+            $"{nameof(DynamicLocalizationInitializerEventHandler)}_{nameof(DynamicTextInitializerEto)}",
             TimeSpan.FromSeconds(5));
         if (applicationLockHandle == null)
         {

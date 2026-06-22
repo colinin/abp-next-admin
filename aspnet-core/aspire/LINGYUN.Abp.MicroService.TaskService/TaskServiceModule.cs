@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -54,7 +53,6 @@ namespace LINGYUN.Abp.MicroService.TaskService;
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpElasticsearchJobsModule),
     typeof(AbpIdentityJobsModule),
     typeof(AbpBackgroundTasksJobsModule),

@@ -32,6 +32,7 @@
     "@vben/icons": "workspace:*",
     "@vben/layouts": "workspace:*",
     "@vben/locales": "workspace:*",
+    "@vueuse/core": "catalog:",
     "ant-design-vue": "catalog:",
     "dayjs": "catalog:",
     "vue": "catalog:",

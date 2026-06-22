@@ -27,6 +27,24 @@
     "Localization:001100": "语言 {CultureName} 已经存在!",
     "Localization:001400": "没有找到名为 {CultureName} 的语言名称或内置语言不允许操作!",
     "Localization:002100": "资源 {Name} 已经存在!",
-    "Localization:002400": "没有找到名为 {Name} 的资源名称或内置资源不允许操作!"
+    "Localization:002400": "没有找到名为 {Name} 的资源名称或内置资源不允许操作!",
+    "Languages": "语言",
+    "Resources": "资源",
+    "Texts": "文档",
+    "DisplayName:Key": "键名",
+    "DisplayName:Value": "键值",
+    "DisplayName:Name": "名称",
+    "DisplayName:CultureName": "文化名称",
+    "DisplayName:ResourceName": "资源名称",
+    "DisplayName:TargetCultureName": "目标文化",
+    "DisplayName:TargetValue": "目标值",
+    "DisplayName:Any": "所有",
+    "DisplayName:OnlyNull": "仅限空值",
+    "DisplayName:Filter": "筛选",
+    "DisplayName:UiCultureName": "Ui文件名称",
+    "DisplayName:DisplayName": "显示名称",
+    "DisplayName:FlagIcon": "旗帜图标",
+    "DisplayName:Description": "描述",
+    "DisplayName:DefaultCultureName": "默认文化"
   }
 }

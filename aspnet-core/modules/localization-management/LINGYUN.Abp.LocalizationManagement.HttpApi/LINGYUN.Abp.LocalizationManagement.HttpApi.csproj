@@ -14,7 +14,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\framework\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\LINGYUN.Abp.LocalizationManagement.Application.Contracts\LINGYUN.Abp.LocalizationManagement.Application.Contracts.csproj" />
 	</ItemGroup>
 

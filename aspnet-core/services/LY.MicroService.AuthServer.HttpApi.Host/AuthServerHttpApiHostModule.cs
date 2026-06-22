@@ -1,6 +1,5 @@
 using LINGYUN.Abp.Account;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
@@ -37,7 +36,6 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
-using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
@@ -52,7 +50,6 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
     typeof(AbpIdentityApplicationModule),

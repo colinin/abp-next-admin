@@ -1,5 +1,4 @@
 using LINGYUN.Abp.BlobManagement.MimeCheck;
-using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Identity.Jobs;
 using LINGYUN.Abp.Notifications.Calendar;
 
@@ -300,8 +299,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpFeaturesValidationRedisClientModule),
     // 功能管理模块 Mvc视图
     typeof(AbpFeatureManagementWebModule),
-    // 多语言模块
-    typeof(AbpAspNetCoreMvcLocalizationModule),
     // 多语言模块 语言映射
     typeof(AbpLocalizationCultureMapModule),
 

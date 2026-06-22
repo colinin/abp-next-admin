@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.Localization;
@@ -9,6 +10,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.AspNetCore.Mvc.Localization;
 
 [DependsOn(typeof(AbpAspNetCoreMvcModule))]
+[Obsolete("This module has been deprecated. Please use the LocalizationManagement module instead.")]
 public class AbpAspNetCoreMvcLocalizationModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

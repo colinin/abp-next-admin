@@ -95,7 +95,6 @@
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Linq.Dynamic.Queryable\LINGYUN.Linq.Dynamic.Queryable.csproj" />
 		<ProjectReference Include="..\..\framework\exporter\LINGYUN.Abp.Exporter.MiniSoftware\LINGYUN.Abp.Exporter.MiniSoftware.csproj" />
 		<ProjectReference Include="..\..\framework\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj" />
-		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
 		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Logging.Serilog.Elasticsearch\LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj" />

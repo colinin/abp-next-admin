@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Specifications;
 using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
@@ -45,6 +47,29 @@ public class EfCoreResourceRepository : EfCoreRepository<ILocalizationDbContext,
     public async virtual Task<List<Resource>> GetActivedListAsync(CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync()).Where(x => x.Enable)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public async virtual Task<int> GetCountAsync(
+        ISpecification<Resource> specification,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .Where(specification.ToExpression())
+            .CountAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public async virtual Task<List<Resource>> GetListAsync(
+        ISpecification<Resource> specification,
+        string sorting = nameof(Resource.Name),
+        int maxResultCount = 10,
+        int skipCount = 0,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .Where(specification.ToExpression())
+            .OrderBy(!sorting.IsNullOrWhiteSpace() ? sorting : nameof(Resource.Name))
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

@@ -1,9 +1,9 @@
-import type { ListResultDto } from '@abp/core';
+import type { PagedResultDto } from '@abp/core';
 
 import type {
   LanguageCreateDto,
   LanguageDto,
-  LanguageGetListInput,
+  LanguageGetPagedListInput,
   LanguageUpdateDto,
 } from '../types/languages';
 
@@ -13,20 +13,17 @@ export function useLanguagesApi() {
   const { cancel, request } = useRequest();
 
   /**
-   * 查询语言列表
+   * 查询语言分页列表
    * @param input 参数
    * @returns 语言列表
    */
-  function getListApi(
-    input?: LanguageGetListInput,
-  ): Promise<ListResultDto<LanguageDto>> {
-    return request<ListResultDto<LanguageDto>>(
-      '/api/abp/localization/languages',
-      {
-        method: 'GET',
-        params: input,
-      },
-    );
+  function getPagedListApi(
+    input?: LanguageGetPagedListInput,
+  ): Promise<PagedResultDto<LanguageDto>> {
+    return request<PagedResultDto<LanguageDto>>('/api/localization/languages', {
+      method: 'GET',
+      params: input,
+    });
   }
 
   /**
@@ -83,7 +80,7 @@ export function useLanguagesApi() {
     createApi,
     deleteApi,
     getApi,
-    getListApi,
+    getPagedListApi,
     updateApi,
   };
 }
