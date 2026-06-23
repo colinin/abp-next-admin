@@ -343,10 +343,10 @@ public class BlobManager : DomainService
     public async virtual Task<string> GenerateDownloadUrlAsync(
         BlobContainer blobContainer, 
         Blob blob,
-        string fallbackDownloadUrl,
+        string fallbackUrlPrefix,
         bool isAttachmentContent = true)
     {
-        var cacheKey = $"{fallbackDownloadUrl.ToMd5()}";
+        var cacheKey = $"{fallbackUrlPrefix}{Clock.Now:yyyy-MM-ddHH}{blob.Name}".ToMd5();
         var cacheItem = await _blobDownloadKeyCache.GetAsync(cacheKey);
         if (cacheItem == null)
         {
@@ -364,12 +364,13 @@ public class BlobManager : DomainService
             if (downloadUrl.IsNullOrWhiteSpace())
             {
                 // 特殊对象存储提供者（FileSystem）无法生成下载链接, 回退指定的请求Url
-                downloadUrl = fallbackDownloadUrl;
+                downloadUrl = $"{fallbackUrlPrefix.EnsureEndsWith('/')}{cacheKey}";
             }
 
             cacheItem = new BlobDownloadKeyCacheItem(
                 blob.Id,
-                downloadUrl);
+                downloadUrl,
+                blob.TenantId);
 
             await _blobDownloadKeyCache.SetAsync(
                 cacheKey,
@@ -391,7 +392,10 @@ public class BlobManager : DomainService
             return null;
         }
 
-        return await _blobRepository.FindAsync(cacheItem.BlobId);
+        using (CurrentTenant.Change(cacheItem.TenantId))
+        {
+            return await _blobRepository.FindAsync(cacheItem.BlobId);
+        }
     }
 
     public virtual string GetBlobProvider()
