@@ -13,7 +13,6 @@ global using LINGYUN.Abp.Aliyun.Localization;
 global using LINGYUN.Abp.Aliyun.SettingManagement;
 global using LINGYUN.Abp.AspNetCore.HttpOverrides;
 global using LINGYUN.Abp.AspNetCore.Mvc.Idempotent.Wrapper;
-global using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 global using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 global using LINGYUN.Abp.Auditing;
 global using LINGYUN.Abp.AuditLogging.EntityFrameworkCore;

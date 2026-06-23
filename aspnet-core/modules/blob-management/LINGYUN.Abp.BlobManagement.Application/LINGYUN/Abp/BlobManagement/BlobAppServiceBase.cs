@@ -66,9 +66,26 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
 
         return new RemoteStreamContent(
             stream ?? Stream.Null,
-            blob.Name, 
-            blob.ContentType, 
+            blob.Name,
+            blob.ContentType,
             stream != null ? blob.Size : null);
+    }
+
+    public async virtual Task<IRemoteStreamContent> DownloadByKeyAsync(string key)
+    {
+        var blob = await BlobManager.FindBlobByDownloadKeyAsync(key);
+        if (blob != null)
+        {
+            var stream = await BlobManager.DownloadBlobsync(blob);
+
+            return new RemoteStreamContent(
+                stream ?? Stream.Null,
+                blob.Name,
+                blob.ContentType,
+                stream != null ? blob.Size : null);
+        }
+
+        return new RemoteStreamContent(Stream.Null);
     }
 
     public async virtual Task<BlobDto> GetAsync(Guid id)
@@ -187,14 +204,12 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
 
         await CheckGetPolicyAsync(blob);
 
-        var fallbackDownloadUrl = blob.TenantId.HasValue
-            ? $"/api/{BlobManagementRemoteServiceConsts.ModuleName}/blobs/{method}/t/{blob.TenantId:N}/{blob.Id:N}"
-            : $"/api/{BlobManagementRemoteServiceConsts.ModuleName}/blobs/{method}/{blob.Id:N}";
+        var fallbackUrlPrefix = $"/api/{BlobManagementRemoteServiceConsts.ModuleName}/blobs/{method}/";
 
         var downloadUrl = await BlobManager.GenerateDownloadUrlAsync(
             blobContainer,
             blob,
-            fallbackDownloadUrl,
+            fallbackUrlPrefix,
             isAttachmentContent);
 
         return downloadUrl;
