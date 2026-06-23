@@ -59,7 +59,14 @@ public partial class MicroServiceApplicationsSingleModule
         {
             builder.AddValidation(options =>
             {
-                options.AddAudiences("all_in_one");
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
+                if (validAudiences?.Count > 0)
+                {
+                    foreach (var audience in validAudiences)
+                    {
+                        options.AddAudiences(audience);
+                    }
+                }
 
                 options.UseLocalServer();
 
