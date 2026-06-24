@@ -18,6 +18,7 @@ public class IdentityPermissionDefinitionProvider : PermissionDefinitionProvider
                 userPermission.AddChild(IdentityPermissions.Users.ResetPassword, L("Permission:ResetPassword"));
                 userPermission.AddChild(IdentityPermissions.Users.ManageClaims, L("Permission:ManageClaims"));
                 userPermission.AddChild(IdentityPermissions.Users.ManageOrganizationUnits, L("Permission:ManageOrganizationUnits"));
+                userPermission.AddChild(IdentityPermissions.Users.Impersonation, L("Permission:Impersonation"));
             }
 
             var rolePermission = identityGroup.GetPermissionOrNull(Volo.Abp.Identity.IdentityPermissions.Roles.Default);

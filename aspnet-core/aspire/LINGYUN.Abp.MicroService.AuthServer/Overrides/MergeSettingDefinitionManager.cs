@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Settings;

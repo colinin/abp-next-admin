@@ -15,6 +15,7 @@ public class IdentityPermissions
         public const string ResetPassword = Volo.Abp.Identity.IdentityPermissions.Users.Default + ".ResetPassword";
         public const string ManageClaims = Volo.Abp.Identity.IdentityPermissions.Users.Default + ".ManageClaims";
         public const string ManageOrganizationUnits = Volo.Abp.Identity.IdentityPermissions.Users.Default + ".ManageOrganizationUnits";
+        public const string Impersonation = Volo.Abp.Identity.IdentityPermissions.Users.Default + ".Impersonation";
     }
 
     public static class OrganizationUnits

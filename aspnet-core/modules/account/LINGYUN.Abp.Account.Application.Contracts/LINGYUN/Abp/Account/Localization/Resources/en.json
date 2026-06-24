@@ -78,6 +78,9 @@
     "LinkAccountWillBeDeleteWarning": "Are you sure you want to delete the associated account \"{0}\"?",
     "LinkLogged": "Accounts are linked",
     "StayWithCurrentAccount": "Stay with the current account",
-    "Settings:Identity.Account": "Account"
+    "Settings:Identity.Account": "Account",
+    "ImpersonatorUser": "Impersonator",
+    "ImpersonatorWarning": "You will log out from your current account and access the system as {0}!",
+    "RevertImpersonationWarning": "You will log out of your current account and return to the account you previously logged in with!"
   }
 }

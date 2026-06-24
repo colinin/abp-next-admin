@@ -10,6 +10,7 @@
     "Permission:IdentityClaimTypeManagement": "管理声明类型",
     "Permission:IdentitySessions": "管理会话",
     "Permission:RevokeSession": "撤销会话",
+    "Permission:Impersonation": "模拟用户",
     "OrganizationUnits": "组织机构",
     "OrganizationUnit:RefreshRoot": "刷新根组织",
     "OrganizationUnit:Tree": "组织机构树",
@@ -124,6 +125,7 @@
     "Settings:Identity.Password": "密码配置",
     "Settings:Identity.OrganizationUnit": "组织机构",
     "Settings:Identity.Session": "会话配置",
-    "Settings:Identity.Link": "链接"
+    "Settings:Identity.Link": "链接",
+    "ImpersonationUser": "模拟用户"
   }
 }

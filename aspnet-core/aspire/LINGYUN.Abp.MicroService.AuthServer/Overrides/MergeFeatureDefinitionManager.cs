@@ -1,4 +1,8 @@
-﻿using System.Collections.Immutable;
+﻿using JetBrains.Annotations;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Features;
@@ -76,7 +80,7 @@ public class MergeFeatureDefinitionManager : FeatureDefinitionManager
     {
         foreach (var sourceFeature in source.Features)
         {
-            var existingFeature = target.GetFeatureOrNull(sourceFeature.Name);
+            var existingFeature = GetFeatureOrNull(target, sourceFeature.Name);
 
             if (existingFeature == null)
             {
@@ -215,5 +219,36 @@ public class MergeFeatureDefinitionManager : FeatureDefinitionManager
 
         target.IsVisibleToClients = target.IsVisibleToClients || source.IsVisibleToClients;
         target.IsAvailableToHost = target.IsAvailableToHost || source.IsAvailableToHost;
+    }
+
+
+    public static FeatureDefinition GetFeatureOrNull(
+        FeatureGroupDefinition group,
+        [NotNull] string name)
+    {
+        Check.NotNull(name, nameof(name));
+
+        return GetFeatureOrNullRecursively(group.Features, name);
+    }
+
+    private static FeatureDefinition GetFeatureOrNullRecursively(
+        IReadOnlyList<FeatureDefinition> features,
+        string name)
+    {
+        foreach (var feature in features)
+        {
+            if (feature.Name == name)
+            {
+                return feature;
+            }
+
+            var childFeature = GetFeatureOrNullRecursively(feature.Children, name);
+            if (childFeature != null)
+            {
+                return childFeature;
+            }
+        }
+
+        return null;
     }
 }
