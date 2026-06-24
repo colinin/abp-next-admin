@@ -7,7 +7,8 @@ var redis = builder.AddRedis("redis",
     password: builder.AddParameter("redis-password", "123456", secret: true))
     .WithContainerName("redis-aspire")
     .WithImageTag("8.0.2")
-    .WithDataVolume("redis-dev");
+    .WithDataVolume("redis-dev")
+    .WithEndpoint(6379, 6379, name: "redis-tcp", isProxied: false);
 
 if (builder.Environment.IsDevelopment())
 {
@@ -24,13 +25,14 @@ var elasticsearch = builder.AddElasticsearch("elasticsearch",
     .WithDataVolume("elasticsearch-dev")
     .WithEnvironment("ES_JAVA_OPTS", "-Xms2g -Xmx2g")
     // see: https://www.funkysi1701.com/posts/2025/adding-elasticsearch-with-aspire/
-    .WithEnvironment("xpack.security.enabled", "false");
+    .WithEnvironment("xpack.security.enabled", "false")
+    .WithEndpoint(9200, 9200, name: "elasticsearch-http", isProxied: false);
 
 // Kibana
 builder.AddContainer("kibana", "kibana", "8.17.3")
     .WithContainerName("kibana-aspire")
     .WithReference(elasticsearch)
-    .WithEndpoint(5601, 5601)
+    .WithEndpoint(5601, 5601, name: "kibana-http", isProxied: false)
     .WaitFor(elasticsearch);
 
 // Postgres
@@ -39,7 +41,8 @@ var postgres = builder.AddPostgres("postgres",
     password: builder.AddParameter("postgres-pwd", "123456", secret: true))
     .WithImage("postgres", "17-alpine")
     .WithContainerName("postgres-aspire")
-    .WithDataVolume("postgres-dev");
+    .WithDataVolume("postgres-dev")
+    .WithEndpoint(5432, 5432, name: "postgres-tcp", isProxied: false);
 
 var abpDb = postgres.AddDatabase("abp");
 
@@ -50,7 +53,9 @@ var rabbitmq = builder.AddRabbitMQ("rabbitmq",
     .WithContainerName("rabbitmq-aspire")
     .WithImageTag("3.13.1")
     .WithDataVolume("rabbitmq-dev")
-    .WithManagementPlugin();
+    .WithManagementPlugin()
+    .WithEndpoint(5672, 5672, name: "rabbitmq-amqp", isProxied: false)
+    .WithEndpoint(15672, 15672, name: "rabbitmq-management", isProxied: false);
 
 IResourceBuilder<ProjectResource> AddDotNetProject<TDbMigrator, TProject>(
     IDistributedApplicationBuilder builder, 
