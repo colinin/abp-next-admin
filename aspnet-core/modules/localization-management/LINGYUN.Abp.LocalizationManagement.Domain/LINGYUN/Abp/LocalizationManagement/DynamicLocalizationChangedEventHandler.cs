@@ -32,7 +32,10 @@ public class DynamicLocalizationChangedEventHandler :
     {
         var resourcesCacheItem = await ResourcesCache.GetAsync(LocalizationResourcesCacheItem.CacheKey);
         var languagesCacheItem = await LanguageCache.GetAsync(LocalizationLanguageCacheItem.CacheKey);
-
+        if (languagesCacheItem == null || resourcesCacheItem == null)
+        {
+            return;
+        }
         foreach (var language in languagesCacheItem.Languages)
         {
             foreach (var resource in resourcesCacheItem.Resources)

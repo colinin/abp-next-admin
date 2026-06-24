@@ -120,6 +120,10 @@ public class DynamicLocalizationInitializerEventHandler :
         using var unitOfWork = UnitOfWorkManager.Begin(true, true);
 
         var cacheItems = await DynamicLanguageCache.GetManyAsync(eventData.Keys);
+        if (cacheItems == null)
+        {
+            return;
+        }
 
         await SaveLanguagesAsync(cacheItems.Select(kv => kv.Value).ToArray());
 
@@ -169,6 +173,10 @@ public class DynamicLocalizationInitializerEventHandler :
         using var unitOfWork = UnitOfWorkManager.Begin(true, true);
 
         var cacheItems = await DynamicResourceCache.GetManyAsync(eventData.Keys);
+        if (cacheItems == null)
+        {
+            return;
+        }
 
         await SaveResourcesAsync(cacheItems.Select(kv => kv.Value).ToArray());
 
@@ -229,6 +237,10 @@ public class DynamicLocalizationInitializerEventHandler :
 
         var cacheItemDics = await DynamicTextCache.GetManyAsync(eventData.Keys);
         var cacheItems = cacheItemDics.Select(kv => kv.Value).ToArray();
+        if (cacheItems == null)
+        {
+            return;
+        }
 
         await SaveTextsAsync(cacheItems);
 
