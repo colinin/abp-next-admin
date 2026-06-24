@@ -105,6 +105,8 @@ public class TextAppService : LocalizationAppServiceBase, ITextAppService
             await _textRepository.UpdateAsync(text);
         }
 
+        await PublishDynamicLocalizationRefreshEvent(new DynamicTextRefreshEventData(text.ResourceName, text.CultureName));
+
         await CurrentUnitOfWork.SaveChangesAsync();
     }
 
@@ -115,6 +117,8 @@ public class TextAppService : LocalizationAppServiceBase, ITextAppService
         if (text != null)
         {
             await _textRepository.DeleteAsync(text);
+
+            await PublishDynamicLocalizationRefreshEvent(new DynamicTextRefreshEventData(text.ResourceName, text.CultureName));
 
             await CurrentUnitOfWork.SaveChangesAsync();
         }
@@ -128,6 +132,8 @@ public class TextAppService : LocalizationAppServiceBase, ITextAppService
         if (text != null)
         {
             await _textRepository.DeleteAsync(text);
+
+            await PublishDynamicLocalizationRefreshEvent(new DynamicTextRefreshEventData(text.ResourceName, text.CultureName));
 
             await CurrentUnitOfWork.SaveChangesAsync();
         }

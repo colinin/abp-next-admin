@@ -18,6 +18,7 @@ namespace LINGYUN.Abp.LocalizationManagement;
 [Authorize(LocalizationManagementPermissions.Language.Default)]
 public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppService
 {
+
     private readonly ILanguageRepository _repository;
 
     public LanguageAppService(ILanguageRepository repository)
@@ -53,6 +54,8 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
 
             language = await _repository.InsertAsync(language);
 
+            await PublishDynamicLocalizationRefreshEvent(new DynamicLanguageRefreshEventData(language.CultureName));
+
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<Language, LanguageDto>(language);
@@ -66,6 +69,8 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
 
         await _repository.DeleteAsync(language);
 
+        await PublishDynamicLocalizationRefreshEvent(new DynamicLanguageRefreshEventData(language.CultureName));
+
         await CurrentUnitOfWork.SaveChangesAsync();
     }
 
@@ -77,6 +82,8 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
         language.SetDisplayName(input.DisplayName);
 
         await _repository.UpdateAsync(language);
+
+        await PublishDynamicLocalizationRefreshEvent(new DynamicLanguageRefreshEventData(language.CultureName));
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
