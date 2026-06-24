@@ -108,13 +108,20 @@ public partial class AuthServerModule
         });
     }
 
-    private void PreConfigureAuthServer()
+    private void PreConfigureAuthServer(IConfiguration configuration)
     {
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
             {
-                //options.AddAudiences("lingyun-abp-application");
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
+                if (validAudiences?.Count > 0)
+                {
+                    foreach (var audience in validAudiences)
+                    {
+                        options.AddAudiences(audience);
+                    }
+                }
 
                 options.UseLocalServer();
 

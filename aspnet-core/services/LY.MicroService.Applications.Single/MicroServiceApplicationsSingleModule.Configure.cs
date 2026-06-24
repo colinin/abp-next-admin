@@ -961,11 +961,16 @@ public partial class MicroServiceApplicationsSingleModule
 
         if (!isDevelopment)
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
             services
                 .AddDataProtection()
                 .SetApplicationName("LINGYUN.Abp.Application")
-                .PersistKeysToStackExchangeRedis(redis, "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
+                .PersistKeysToStackExchangeRedis(() =>
+                {
+                    var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]!);
+
+                    return redis.GetDatabase();
+                },
+                "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
         }
 
         services.AddSameSiteCookiePolicy();

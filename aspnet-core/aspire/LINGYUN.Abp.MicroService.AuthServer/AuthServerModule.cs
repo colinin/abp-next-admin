@@ -88,9 +88,9 @@ public partial class AuthServerModule : AbpModule
         PreConfigureWrapper();
         PreConfigureFeature();
         PreForwardedHeaders();
-        PreConfigureAuthServer();
         PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
+        PreConfigureAuthServer(configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
     }
 
