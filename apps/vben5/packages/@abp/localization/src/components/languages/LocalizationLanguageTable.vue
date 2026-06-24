@@ -55,21 +55,21 @@ const gridOptions: VxeGridProps<LanguageDto> = {
       field: 'cultureName',
       minWidth: 150,
       sortable: true,
-      title: $t('AbpLocalization.DisplayName:CultureName'),
+      title: $t('LocalizationManagement.DisplayName:CultureName'),
     },
     {
       align: 'left',
       field: 'displayName',
       minWidth: 150,
       sortable: true,
-      title: $t('AbpLocalization.DisplayName:DisplayName'),
+      title: $t('LocalizationManagement.DisplayName:DisplayName'),
     },
     {
       align: 'left',
       field: 'uiCultureName',
       minWidth: 150,
       sortable: true,
-      title: $t('AbpLocalization.DisplayName:UiCultureName'),
+      title: $t('LocalizationManagement.DisplayName:UiCultureName'),
     },
     {
       field: 'action',
@@ -161,7 +161,7 @@ async function onChange(data: LanguageDto) {
 </script>
 
 <template>
-  <Grid :table-title="$t('AbpLocalization.Languages')">
+  <Grid :table-title="$t('LocalizationManagement.Languages')">
     <template #toolbar-tools>
       <Button
         :icon="h(PlusOutlined)"

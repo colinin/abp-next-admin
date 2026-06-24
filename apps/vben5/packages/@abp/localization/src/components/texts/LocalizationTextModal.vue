@@ -105,7 +105,7 @@ async function onLoad(input: GetTextByKeyInput) {
     const textDto = await getApi(input);
     formModel.value = textDto;
     modalApi.setState({
-      title: `${$t('AbpLocalization.Texts')} - ${textDto.key}`,
+      title: `${$t('LocalizationManagement.Texts')} - ${textDto.key}`,
     });
   } finally {
     modalApi.setState({ loading: false });
@@ -136,7 +136,7 @@ async function onSubmit() {
       :wrapper-col="{ span: 18 }"
     >
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:CultureName')"
+        :label="$t('LocalizationManagement.DisplayName:CultureName')"
         name="cultureName"
         required
       >
@@ -148,7 +148,7 @@ async function onSubmit() {
         />
       </FormItem>
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:ResourceName')"
+        :label="$t('LocalizationManagement.DisplayName:ResourceName')"
         name="resourceName"
         required
       >
@@ -160,7 +160,7 @@ async function onSubmit() {
         />
       </FormItem>
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:Key')"
+        :label="$t('LocalizationManagement.DisplayName:Key')"
         name="key"
         required
       >
@@ -171,7 +171,7 @@ async function onSubmit() {
         />
       </FormItem>
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:Value')"
+        :label="$t('LocalizationManagement.DisplayName:Value')"
         name="value"
         required
       >

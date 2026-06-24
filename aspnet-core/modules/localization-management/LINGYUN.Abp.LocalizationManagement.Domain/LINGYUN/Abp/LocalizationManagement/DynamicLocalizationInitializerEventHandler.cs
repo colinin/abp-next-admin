@@ -11,7 +11,6 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Domain.ChangeTracking;
-using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
@@ -24,9 +23,9 @@ public class DynamicLocalizationInitializerEventHandler :
     IDistributedEventHandler<DynamicLanguageInitializerEto>,
     IDistributedEventHandler<DynamicResourceInitializerEto>,
     IDistributedEventHandler<DynamicTextInitializerEto>,
-    ILocalEventHandler<EntityChangedEventData<Resource>>,
-    ILocalEventHandler<EntityChangedEventData<Language>>,
-    ILocalEventHandler<EntityChangedEventData<Text>>,
+    ILocalEventHandler<DynamicLanguageRefreshEventData>,
+    ILocalEventHandler<DynamicResourceRefreshEventData>,
+    ILocalEventHandler<DynamicTextRefreshEventData>,
     ITransientDependency
 {
     public ILogger<StaticLocalizationSaver> Logger { protected get; set; }
@@ -88,7 +87,7 @@ public class DynamicLocalizationInitializerEventHandler :
     }
 
     [DisableEntityChangeTracking]
-    public async virtual Task HandleEventAsync(EntityChangedEventData<Language> eventData)
+    public async virtual Task HandleEventAsync(DynamicLanguageRefreshEventData eventData)
     {
         Logger.LogInformation("Languages have changed. Refresh the language cache.");
 
@@ -137,7 +136,7 @@ public class DynamicLocalizationInitializerEventHandler :
     }
 
     [DisableEntityChangeTracking]
-    public async virtual Task HandleEventAsync(EntityChangedEventData<Resource> eventData)
+    public async virtual Task HandleEventAsync(DynamicResourceRefreshEventData eventData)
     {
         Logger.LogInformation("Resources have changed. Refresh the resource cache.");
 
@@ -186,19 +185,19 @@ public class DynamicLocalizationInitializerEventHandler :
     }
 
     [DisableEntityChangeTracking]
-    public async virtual Task HandleEventAsync(EntityChangedEventData<Text> eventData)
+    public async virtual Task HandleEventAsync(DynamicTextRefreshEventData eventData)
     {
         Logger.LogInformation("Texts have changed. Refresh the text cache.");
 
         var setTexts = new Dictionary<string, string>();
-        var allTexts = await TextRepository.GetListAsync(eventData.Entity.ResourceName, eventData.Entity.CultureName);
+        var allTexts = await TextRepository.GetListAsync(eventData.ResourceName, eventData.CultureName);
         foreach (var text in allTexts)
         {
             setTexts[text.Key] = text.Value;
         }
 
-        var textCacheKey = LocalizationTextCacheItem.CalculateCacheKey(eventData.Entity.ResourceName, eventData.Entity.CultureName);
-        var textCacheItem = new LocalizationTextCacheItem(eventData.Entity.ResourceName, eventData.Entity.CultureName, setTexts);
+        var textCacheKey = LocalizationTextCacheItem.CalculateCacheKey(eventData.ResourceName, eventData.CultureName);
+        var textCacheItem = new LocalizationTextCacheItem(eventData.ResourceName, eventData.CultureName, setTexts);
 
         await LocalizationTextCache.SetAsync(textCacheKey, textCacheItem);
 

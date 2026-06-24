@@ -36,11 +36,11 @@ const resources = ref<ResourceDto[]>([]);
 const languages = ref<LanguageDto[]>([]);
 const targetValueOptions = reactive([
   {
-    label: $t('AbpLocalization.DisplayName:Any'),
+    label: $t('LocalizationManagement.DisplayName:Any'),
     value: 'false',
   },
   {
-    label: $t('AbpLocalization.DisplayName:OnlyNull'),
+    label: $t('LocalizationManagement.DisplayName:OnlyNull'),
     value: 'true',
   },
 ]);
@@ -71,25 +71,25 @@ const formOptions: VbenFormProps = {
       component: 'Input',
       fieldName: 'cultureName',
       formItemClass: 'items-baseline',
-      label: $t('AbpLocalization.DisplayName:CultureName'),
+      label: $t('LocalizationManagement.DisplayName:CultureName'),
       rules: 'selectRequired',
     },
     {
       component: 'Input',
       fieldName: 'targetCultureName',
       formItemClass: 'items-baseline',
-      label: $t('AbpLocalization.DisplayName:TargetCultureName'),
+      label: $t('LocalizationManagement.DisplayName:TargetCultureName'),
       rules: 'selectRequired',
     },
     {
       component: 'Input',
       fieldName: 'resourceName',
-      label: $t('AbpLocalization.DisplayName:ResourceName'),
+      label: $t('LocalizationManagement.DisplayName:ResourceName'),
     },
     {
       component: 'Input',
       fieldName: 'onlyNull',
-      label: $t('AbpLocalization.DisplayName:TargetValue'),
+      label: $t('LocalizationManagement.DisplayName:TargetValue'),
     },
     {
       component: 'Input',
@@ -111,28 +111,28 @@ const gridOptions: VxeGridProps<TextDifferenceDto> = {
       field: 'key',
       minWidth: 150,
       sortable: true,
-      title: $t('AbpLocalization.DisplayName:Key'),
+      title: $t('LocalizationManagement.DisplayName:Key'),
     },
     {
       align: 'left',
       field: 'value',
       minWidth: 150,
       sortable: true,
-      title: $t('AbpLocalization.DisplayName:Value'),
+      title: $t('LocalizationManagement.DisplayName:Value'),
     },
     {
       align: 'left',
       field: 'targetValue',
       minWidth: 150,
       sortable: true,
-      title: $t('AbpLocalization.DisplayName:TargetValue'),
+      title: $t('LocalizationManagement.DisplayName:TargetValue'),
     },
     {
       align: 'left',
       field: 'resourceName',
       minWidth: 150,
       sortable: true,
-      title: $t('AbpLocalization.DisplayName:ResourceName'),
+      title: $t('LocalizationManagement.DisplayName:ResourceName'),
     },
     {
       field: 'action',
@@ -280,12 +280,13 @@ onMounted(onInit);
 </script>
 
 <template>
-  <Grid :table-title="$t('AbpLocalization.Texts')">
+  <Grid :table-title="$t('LocalizationManagement.Texts')">
     <template #form-cultureName="{ modelValue }">
       <Select
         class="w-full"
         allow-clear
         show-search
+        :filter-option="undefined"
         :options="languages"
         :value="modelValue"
         :field-names="{ label: 'displayName', value: 'cultureName' }"
@@ -298,6 +299,7 @@ onMounted(onInit);
         class="w-full"
         allow-clear
         show-search
+        :filter-option="undefined"
         :options="languages"
         :value="modelValue"
         :field-names="{ label: 'displayName', value: 'cultureName' }"
@@ -312,6 +314,7 @@ onMounted(onInit);
         class="w-full"
         allow-clear
         show-search
+        :filter-option="undefined"
         :options="resources"
         :value="modelValue"
         :field-names="{ label: 'displayName', value: 'name' }"

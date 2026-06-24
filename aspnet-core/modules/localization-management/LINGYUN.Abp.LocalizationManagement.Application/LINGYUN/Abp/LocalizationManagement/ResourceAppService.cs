@@ -16,6 +16,7 @@ namespace LINGYUN.Abp.LocalizationManagement;
 [Authorize(LocalizationManagementPermissions.Resource.Default)]
 public class ResourceAppService : LocalizationAppServiceBase, IResourceAppService
 {
+
     private readonly IResourceRepository _repository;
 
     public ResourceAppService(IResourceRepository repository)
@@ -48,6 +49,8 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
 
         resource = await _repository.InsertAsync(resource);
 
+        await PublishDynamicLocalizationRefreshEvent(new DynamicResourceRefreshEventData(resource.Name));
+
         await CurrentUnitOfWork.SaveChangesAsync();
 
         return ObjectMapper.Map<Resource, ResourceDto>(resource);
@@ -59,6 +62,8 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
         var resource = await InternalGetByNameAsync(name);
 
         await _repository.DeleteAsync(resource);
+
+        await PublishDynamicLocalizationRefreshEvent(new DynamicResourceRefreshEventData(resource.Name));
 
         await CurrentUnitOfWork.SaveChangesAsync();
     }
@@ -73,6 +78,8 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
         resource.SetDefaultCultureName(input.DefaultCultureName);
 
         await _repository.UpdateAsync(resource);
+
+        await PublishDynamicLocalizationRefreshEvent(new DynamicResourceRefreshEventData(resource.Name));
 
         await CurrentUnitOfWork.SaveChangesAsync();
 

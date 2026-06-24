@@ -151,7 +151,7 @@ async function onChange() {
 </script>
 
 <template>
-  <Grid :table-title="$t('AbpLocalization.Resources')">
+  <Grid :table-title="$t('LocalizationManagement.Resources')">
     <template #toolbar-tools>
       <Button
         :icon="h(PlusOutlined)"
