@@ -145,6 +145,9 @@ public class ImpersonationTokenExtensionGrant : ITokenExtensionGrant
         var permissionChecker = GetRequiredService<IPermissionChecker>(context);
         var options = GetRequiredService<IOptions<OpenIddictImpersonationOptions>>(context);
 
+        var tenantId = currentTenant.Id;
+        var tenantName = currentTenant.Name;
+
         using (currentTenant.Change(request.TenantId))
         {
             if (currentUser.Id == request.UserId)
@@ -171,7 +174,7 @@ public class ImpersonationTokenExtensionGrant : ITokenExtensionGrant
                     localizer["TargetUserNotFound", request.UserId.Value]);
             }
 
-            return await CreateImpersonatedSignInResult(context, principal, targetUser, request.TenantId);
+            return await CreateImpersonatedSignInResult(context, principal, targetUser, tenantId, tenantName);
         }
     }
 
@@ -198,6 +201,9 @@ public class ImpersonationTokenExtensionGrant : ITokenExtensionGrant
             }
         }
 
+        var tenantId = currentTenant.Id;
+        var tenantName = currentTenant.Name;
+
         using (currentTenant.Change(request.TenantId))
         {
             var adminUserName = request.TenantUserName ?? options.Value.DefaultTenantAdminUserName;
@@ -216,7 +222,7 @@ public class ImpersonationTokenExtensionGrant : ITokenExtensionGrant
                     localizer["TenantAdminUserNotFound", adminUserName]);
             }
 
-            return await CreateImpersonatedSignInResult(context, principal, adminUser, request.TenantId);
+            return await CreateImpersonatedSignInResult(context, principal, adminUser, tenantId, tenantName);
         }
     }
 
@@ -307,11 +313,11 @@ public class ImpersonationTokenExtensionGrant : ITokenExtensionGrant
         ClaimsPrincipal currentPrincipal,
         IdentityUser targetUser,
         Guid? tenantId,
+        string? tenantName,
         string action = "ImpersonateUser")
     {
         var userClaimsPrincipalFactory = GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>(context);
         var currentUser = GetRequiredService<ICurrentUser>(context);
-        var currentTenant = GetRequiredService<ICurrentTenant>(context);
         var currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>(context);
 
         var principal = await userClaimsPrincipalFactory.CreateAsync(targetUser);
@@ -322,9 +328,13 @@ public class ImpersonationTokenExtensionGrant : ITokenExtensionGrant
             claims.Add(new Claim(AbpClaimTypes.ImpersonatorUserId, currentUser.Id!.Value.ToString()));
             claims.Add(new Claim(AbpClaimTypes.ImpersonatorUserName, currentUser.UserName!));
 
-            if (currentTenant.IsAvailable)
+            if (tenantId.HasValue)
             {
-                claims.Add(new Claim(AbpClaimTypes.ImpersonatorTenantId, currentTenant.Id!.Value.ToString()));
+                claims.Add(new Claim(AbpClaimTypes.ImpersonatorTenantId, tenantId.Value.ToString()));
+            }
+            if (!tenantName.IsNullOrWhiteSpace())
+            {
+                claims.Add(new Claim(AbpClaimTypes.ImpersonatorTenantName, tenantName));
             }
         }
 

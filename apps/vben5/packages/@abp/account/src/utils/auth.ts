@@ -88,6 +88,9 @@ class AbpUserManager extends UserManager {
     if (params.userDelegationId) {
       body.set('UserDelegationId', params.userDelegationId);
     }
+    if (params.tenantId) {
+      body.set('TenantId', params.tenantId);
+    }
     if (params.tenantUserName) {
       body.set('TenantUserName', params.tenantUserName);
     }

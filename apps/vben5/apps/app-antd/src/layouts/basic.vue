@@ -28,8 +28,8 @@ import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
 const UserSettingsIcon = createIconifyIcon('tdesign:user-setting');
-const UserLinkIcon = createIconifyIcon('material-symbols-light:link');
-const BckLoginIcon = createIconifyIcon('lets-icons:back-light');
+const UserLinkIcon = createIconifyIcon('material-symbols:link');
+const BckLoginIcon = createIconifyIcon('mingcute:back-line');
 
 const notifications = ref<NotificationItem[]>([]);
 
