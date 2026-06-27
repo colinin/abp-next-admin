@@ -61,18 +61,66 @@ const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 const SessionIcon = createIconifyIcon('carbon:prompt-session');
 const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 
-const getLockEnd = computed(() => {
-  return (row: IdentityUserDto) => {
-    if (row.lockoutEnd) {
-      const lockTime = new Date(row.lockoutEnd);
-      if (lockTime) {
-        // 锁定时间高于当前时间不显示
-        const nowTime = new Date();
-        return lockTime < nowTime;
-      }
+const isCurrentUser = (user: IdentityUserDto) => {
+  return abpStore.application?.currentUser.id === user.id;
+};
+
+const getLockEnd = (row: IdentityUserDto) => {
+  if (row.lockoutEnd) {
+    const lockTime = new Date(row.lockoutEnd);
+    if (lockTime) {
+      // 锁定时间高于当前时间不显示
+      const nowTime = new Date();
+      return lockTime < nowTime;
     }
-    return true;
+  }
+  return true;
+};
+
+const isDeleteEnabled = computed(() => {
+  return (user: IdentityUserDto) => {
+    return (
+      !isCurrentUser(user) && hasAccessByCodes([IdentityUserPermissions.Delete])
+    );
   };
+});
+
+const isLockEnabled = computed(() => {
+  return (user: IdentityUserDto) => {
+    return (
+      !isCurrentUser(user) &&
+      user.isActive &&
+      getLockEnd(user) &&
+      hasAccessByCodes([IdentityUserPermissions.Update])
+    );
+  };
+});
+
+const isUnLockEnabled = computed(() => {
+  return (user: IdentityUserDto) => {
+    return (
+      !isCurrentUser(user) &&
+      user.isActive &&
+      !getLockEnd(user) &&
+      hasAccessByCodes([IdentityUserPermissions.Update])
+    );
+  };
+});
+
+const isImpersonationEnabled = computed(() => {
+  return (user: IdentityUserDto) => {
+    return (
+      !isCurrentUser(user) &&
+      hasAccessByCodes([IdentityUserPermissions.Impersonation])
+    );
+  };
+});
+
+const isAuditLogEnabled = computed(() => {
+  return (
+    isEnabled('AbpAuditing.Logging.AuditLog') &&
+    hasAccessByCodes([AuditLogPermissions.Default])
+  );
 });
 
 const abpStore = useAbpStore();
@@ -386,7 +434,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
             block
             danger
             type="link"
-            v-access:code="[IdentityUserPermissions.Delete]"
+            :disabled="!isDeleteEnabled(row)"
             @click="handleDelete(row)"
           >
             {{ $t('AbpUi.Delete') }}
@@ -397,22 +445,14 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
             <template #overlay>
               <Menu @click="(info: MenuInfo) => handleMenuClick(row, info)">
                 <MenuItem
-                  v-if="
-                    hasAccessByCodes([IdentityUserPermissions.Update]) &&
-                    row.isActive &&
-                    getLockEnd(row)
-                  "
+                  v-if="isLockEnabled(row)"
                   key="lock"
                   :icon="h(LockOutlined)"
                 >
                   {{ $t('AbpIdentity.Lock') }}
                 </MenuItem>
                 <MenuItem
-                  v-if="
-                    hasAccessByCodes([IdentityUserPermissions.Update]) &&
-                    row.isActive &&
-                    !getLockEnd(row)
-                  "
+                  v-if="isUnLockEnabled(row)"
                   key="unlock"
                   :icon="h(UnlockOutlined)"
                 >
@@ -447,9 +487,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                   {{ $t('AbpIdentity.ManageClaim') }}
                 </MenuItem>
                 <MenuItem
-                  v-if="
-                    hasAccessByCodes([IdentityUserPermissions.Impersonation])
-                  "
+                  v-if="isImpersonationEnabled(row)"
                   key="impersonation"
                   :icon="h(LoginOutlined)"
                 >
@@ -473,10 +511,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem
-                  v-if="
-                    isEnabled('AbpAuditing.Logging.AuditLog') &&
-                    hasAccessByCodes([AuditLogPermissions.Default])
-                  "
+                  v-if="isAuditLogEnabled"
                   key="entity-changes"
                   :icon="h(AuditLogIcon)"
                 >
