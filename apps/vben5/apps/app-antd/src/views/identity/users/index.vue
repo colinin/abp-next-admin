@@ -22,7 +22,7 @@ async function handleImpersonation(user: IdentityUserDto) {
   await authStore.impersonationUserLogin(
     {
       userId: user.id,
-      tenantId: user.tenentId,
+      tenantId: user.tenantId,
     },
     () => {
       tabbarStore.closeAllTabs(router);

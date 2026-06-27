@@ -64,7 +64,7 @@ interface IdentityUserDto
   /** 角色列表 */
   roleNames: string[];
   /** 租户标识 */
-  tenentId?: string;
+  tenantId?: string;
 }
 /** 用户实体数据视图对象 */
 type IdentityUserVto = Omit<
