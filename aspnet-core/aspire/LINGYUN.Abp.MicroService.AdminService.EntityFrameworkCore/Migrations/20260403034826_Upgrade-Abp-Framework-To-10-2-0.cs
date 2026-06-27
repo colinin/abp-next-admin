@@ -65,7 +65,7 @@ namespace LINGYUN.Abp.MicroService.AdminService.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AbpResourcePermissionGrants_TenantId_Name_ResourceName_Reso~",
                 table: "AbpResourcePermissionGrants",
-                columns: new[] { "TenantId", "ResourceName", "ResourceKey", "ProviderName", "ProviderKey" },
+                columns: new[] { "TenantId", "Name", "ResourceName", "ResourceKey", "ProviderName", "ProviderKey" },
                 unique: true);
         }
 
