@@ -2,7 +2,7 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.TextTemplating;
 
-namespace LINGYUN.Abp.MicroService.AdminService.Overrides;
+namespace Volo.Abp.TextTemplatin;
 
 
 [Dependency(ReplaceServices = true)]

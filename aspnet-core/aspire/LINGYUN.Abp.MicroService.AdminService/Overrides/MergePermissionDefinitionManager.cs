@@ -1,9 +1,8 @@
 ﻿using System.Collections.Immutable;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace LINGYUN.Abp.MicroService.AdminService.Overrides;
+namespace Volo.Abp.Authorization.Permissions;
 
 [Dependency(ReplaceServices = true)]
 public class MergePermissionDefinitionManager : PermissionDefinitionManager

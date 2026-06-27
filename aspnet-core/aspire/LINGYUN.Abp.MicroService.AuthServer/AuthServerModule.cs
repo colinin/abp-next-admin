@@ -18,6 +18,7 @@ using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
+using LINGYUN.Abp.OpenIddict.Impersonation;
 using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Portal;
 using LINGYUN.Abp.OpenIddict.Sms;
@@ -61,6 +62,7 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpOpenIddictSmsModule),
     typeof(AbpOpenIddictWeChatModule),
     typeof(AbpOpenIddictLinkUserModule),
+    typeof(AbpOpenIddictImpersonationModule),
     typeof(AbpOpenIddictPortalModule),
     typeof(AbpOpenIddictWeChatWorkModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),

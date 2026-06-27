@@ -15,6 +15,7 @@ using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.OpenIddict;
+using LINGYUN.Abp.PermissionManagement.EntityFrameworkCore;
 using LINGYUN.Abp.ProjectManagement;
 using LINGYUN.Abp.RulesEngineManagement;
 using LINGYUN.Abp.Saas;
@@ -32,7 +33,6 @@ using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace LINGYUN.Abp.MicroService.AdminService;

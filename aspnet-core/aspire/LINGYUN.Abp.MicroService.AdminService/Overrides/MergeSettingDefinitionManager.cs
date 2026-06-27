@@ -1,8 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Settings;
 
-namespace LINGYUN.Abp.MicroService.AdminService.Overrides;
+namespace Volo.Abp.Settings;
 
 [Dependency(ReplaceServices = true)]
 public class MergeSettingDefinitionManager : SettingDefinitionManager

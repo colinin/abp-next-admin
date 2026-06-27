@@ -401,6 +401,7 @@
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Dapr.Client/LINGYUN.Abp.OpenIddict.Dapr.Client.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.HttpApi.Client/LINGYUN.Abp.OpenIddict.HttpApi.Client.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.HttpApi/LINGYUN.Abp.OpenIddict.HttpApi.csproj" />
+    <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Impersonation/LINGYUN.Abp.OpenIddict.Impersonation.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.LinkUser/LINGYUN.Abp.OpenIddict.LinkUser.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Portal/LINGYUN.Abp.OpenIddict.Portal.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Sms/LINGYUN.Abp.OpenIddict.Sms.csproj" />
@@ -411,6 +412,8 @@
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Application.Contracts/LINGYUN.Abp.PermissionManagement.Application.Contracts.csproj" />
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Application/LINGYUN.Abp.PermissionManagement.Application.csproj" />
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits/LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits.csproj" />
+    <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Domain/LINGYUN.Abp.PermissionManagement.Domain.csproj" />
+    <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.EntityFrameworkCore/LINGYUN.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.HttpApi/LINGYUN.Abp.PermissionManagement.HttpApi.csproj" />
   </Folder>
   <Folder Name="/modules/platform/">

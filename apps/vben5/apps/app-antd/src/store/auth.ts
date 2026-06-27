@@ -142,6 +142,37 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function impersonationUserLogin(
+    params: {
+      tenantId?: string;
+      tenantUserName?: string;
+      userDelegationId?: string;
+      userId?: string;
+    },
+    onSuccess?: () => Promise<void> | void,
+  ) {
+    try {
+      loginLoading.value = true;
+      const accessToken = await oAuthService.getAccessToken();
+      const user = await oAuthService.loginByImpersonation({
+        accessToken,
+        ...params,
+      });
+      return await _loginSuccess(
+        {
+          accessToken: user.access_token,
+          tokenType: user.token_type,
+          refreshToken: user.refresh_token ?? '',
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          expiresIn: user.expires_in!,
+        },
+        onSuccess,
+      );
+    } finally {
+      loginLoading.value = false;
+    }
+  }
+
   /**
    * 异步处理登录操作
    * Asynchronously handle the login process
@@ -300,6 +331,7 @@ export const useAuthStore = defineStore('auth', () => {
     oidcCallback,
     fetchUserInfo,
     linkUseLogin,
+    impersonationUserLogin,
     loginLoading,
     logout,
     refreshSession,

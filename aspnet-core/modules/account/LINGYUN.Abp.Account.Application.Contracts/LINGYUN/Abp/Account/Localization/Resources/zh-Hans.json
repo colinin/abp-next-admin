@@ -78,6 +78,9 @@
     "LinkAccountWillBeDeleteWarning": "您确定要删除关联帐户\"{0}\"吗?",
     "LinkLogged": "帐户已经关联",
     "StayWithCurrentAccount": "继续使用当前帐户",
-    "Settings:Identity.Account": "用户账户"
+    "Settings:Identity.Account": "用户账户",
+    "ImpersonatorUser": "模拟用户",
+    "ImpersonatorWarning": "您将从当前账户退出, 使用 {0} 的身份访问系统!",
+    "RevertImpersonationWarning": "您将从当前账户退出, 回到您之前登录的账户!"
   }
 }

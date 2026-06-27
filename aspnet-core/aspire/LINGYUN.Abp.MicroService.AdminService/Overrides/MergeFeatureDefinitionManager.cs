@@ -1,8 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Features;
 
-namespace LINGYUN.Abp.MicroService.AdminService.Overrides;
+namespace Volo.Abp.Features;
 
 [Dependency(ReplaceServices = true)]
 public class MergeFeatureDefinitionManager : FeatureDefinitionManager

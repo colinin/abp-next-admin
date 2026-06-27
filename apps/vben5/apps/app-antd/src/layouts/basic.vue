@@ -4,7 +4,11 @@ import type { NotificationItem } from '@vben/layouts';
 import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { AuthenticationLoginExpiredModal, useVbenModal } from '@vben/common-ui';
+import {
+  AuthenticationLoginExpiredModal,
+  confirm,
+  useVbenModal,
+} from '@vben/common-ui';
 import { useWatermark } from '@vben/hooks';
 import { createIconifyIcon } from '@vben/icons';
 import {
@@ -24,7 +28,8 @@ import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
 const UserSettingsIcon = createIconifyIcon('tdesign:user-setting');
-const UserLinkIcon = createIconifyIcon('material-symbols-light:link');
+const UserLinkIcon = createIconifyIcon('material-symbols:link');
+const BckLoginIcon = createIconifyIcon('mingcute:back-line');
 
 const notifications = ref<NotificationItem[]>([]);
 
@@ -48,22 +53,32 @@ const [LinkUserModal, linkUserModalApi] = useVbenModal({
   }),
 });
 
-const menus = computed(() => [
-  {
-    handler: () => {
-      linkUserModalApi.open();
+const menus = computed(() => {
+  const basicMenus = [
+    {
+      handler: () => {
+        linkUserModalApi.open();
+      },
+      icon: UserLinkIcon,
+      text: $t('abp.account.linkAccount'),
     },
-    icon: UserLinkIcon,
-    text: $t('abp.account.linkAccount'),
-  },
-  {
-    handler: () => {
-      router.replace('/account/my-settings');
+    {
+      handler: () => {
+        router.replace('/account/my-settings');
+      },
+      icon: UserSettingsIcon,
+      text: $t('abp.account.settings.title'),
     },
-    icon: UserSettingsIcon,
-    text: $t('abp.account.settings.title'),
-  },
-]);
+  ];
+  if (abpStore.application?.currentUser.impersonatorUserId) {
+    basicMenus.push({
+      handler: handleBackUserLogin,
+      icon: BckLoginIcon,
+      text: $t('abp.account.revertImpersonation'),
+    });
+  }
+  return basicMenus;
+});
 
 const userInfo = computed(() => {
   return userStore.userInfo;
@@ -112,6 +127,23 @@ async function handleLinkLogin(userId: string, tenantId?: string) {
   await authStore.linkUseLogin(userId, tenantId, () => {
     tabbarStore.closeAllTabs(router);
     window.location.replace('/');
+  });
+}
+
+async function handleBackUserLogin() {
+  confirm({
+    beforeClose: async (scope) => {
+      if (scope.isConfirm) {
+        await authStore.impersonationUserLogin({}, () => {
+          tabbarStore.closeAllTabs(router);
+          window.location.replace('/');
+        });
+      }
+      return true;
+    },
+    centered: true,
+    content: $t('AbpAccount.RevertImpersonationWarning'),
+    title: $t('AbpUi.AreYouSure'),
   });
 }
 watch(

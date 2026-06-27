@@ -50,6 +50,7 @@
 		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
 		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.AspNetCore.MultiTenancy\LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.AspNetCore\LINGYUN.Abp.Identity.AspNetCore.csproj" />
+		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.Impersonation\LINGYUN.Abp.OpenIddict.Impersonation.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
