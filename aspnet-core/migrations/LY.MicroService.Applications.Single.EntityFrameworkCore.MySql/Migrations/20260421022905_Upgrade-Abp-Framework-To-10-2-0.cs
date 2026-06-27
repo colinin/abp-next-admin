@@ -497,20 +497,6 @@ namespace LY.MicroService.Applications.Single.EntityFrameworkCore.MySql.Migratio
                 table: "AbpBlobs",
                 columns: new[] { "TenantId", "ContainerId", "FullName" });
 
-            // TODO: Specified key was too long; max key length is 3072 bytes
-            // Fix: Remove Name
-            // TenantId:    36 × 4 = 144
-            // Name:        128 × 4 = 512
-            // ResourceName:256 × 4 = 1024
-            // ResourceKey: 256 × 4 = 1024
-            // ProviderName:64 × 4 = 256
-            // ProviderKey: 64 × 4 = 256
-            // = 3216
-            //migrationBuilder.CreateIndex(
-            //    name: "IX_AbpResourcePermissionGrants_TenantId_Name_ResourceName_Resou~",
-            //    table: "AbpResourcePermissionGrants",
-            //    columns: new[] { "TenantId", "Name", "ResourceName", "ResourceKey", "ProviderName", "ProviderKey" },
-            //    unique: true);
             migrationBuilder.CreateIndex(
                 name: "IX_AbpResourcePermissionGrants_TenantId_Name_ResourceName_Resou~",
                 table: "AbpResourcePermissionGrants",

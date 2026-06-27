@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using VoloAbpPermissionManagementEntityFrameworkCoreModule = Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule;
 
@@ -16,7 +17,7 @@ public class AbpPermissionManagementEntityFrameworkCoreModule : AbpModule
         {
             options.AddDefaultRepositories<IPermissionManagementDbContext>();
 
-            options.AddRepository<Volo.Abp.PermissionManagement.PermissionGrant, EfCorePermissionGrantRepository>();
+            options.AddRepository<PermissionGrant, EfCorePermissionGrantRepository>();
         });
     }
 }
