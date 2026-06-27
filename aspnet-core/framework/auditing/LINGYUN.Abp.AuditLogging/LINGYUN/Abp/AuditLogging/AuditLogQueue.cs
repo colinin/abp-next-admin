@@ -30,7 +30,7 @@ public class AuditLogQueue : AuditLoggingQueue<AuditLogInfo>, IAuditLogQueue, IS
 
     protected async override Task BulkWriteAsync(IEnumerable<AuditLogInfo> auditLogInfos, CancellationToken cancellationToken = default)
     {
-        var tenantAuditlogGroup = auditLogInfos.GroupBy(x => x.ImpersonatorTenantId ?? x.TenantId);
+        var tenantAuditlogGroup = auditLogInfos.GroupBy(x => x.TenantId);
         foreach (var tenantAuditlogs in tenantAuditlogGroup)
         {
             using (_currentTenant.Change(tenantAuditlogs.Key))
@@ -42,7 +42,7 @@ public class AuditLogQueue : AuditLoggingQueue<AuditLogInfo>, IAuditLogQueue, IS
 
     protected async override Task WriteAsync(AuditLogInfo auditLogInfo, CancellationToken cancellationToken = default)
     {
-        using (_currentTenant.Change(auditLogInfo.ImpersonatorTenantId ?? auditLogInfo.TenantId))
+        using (_currentTenant.Change(auditLogInfo.TenantId))
         {
             await _auditLogWriter.WriteAsync(auditLogInfo, cancellationToken);
         }

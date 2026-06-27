@@ -18,7 +18,11 @@ public class AuditLogDto : ExtensibleEntityDto<Guid>
 
     public Guid? ImpersonatorUserId { get; set; }
 
+    public string ImpersonatorUserName { get; set; }
+
     public Guid? ImpersonatorTenantId { get; set; }
+
+    public string ImpersonatorTenantName { get; set; }
 
     public DateTime ExecutionTime { get; set; }
 

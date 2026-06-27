@@ -39,7 +39,9 @@ interface AuditLogDto {
   httpStatusCode?: number;
   id: string;
   impersonatorTenantId?: string;
+  impersonatorTenantName?: string;
   impersonatorUserId?: string;
+  impersonatorUserName?: string;
   tenantId?: string;
   tenantName?: string;
   url?: string;

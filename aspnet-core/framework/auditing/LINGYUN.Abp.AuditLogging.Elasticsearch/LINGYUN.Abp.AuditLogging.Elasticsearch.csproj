@@ -15,7 +15,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Json" />
-		<PackageReference Include="System.Threading.Channels" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,6 +1,9 @@
-import type { EntityDto, PagedAndSortedResultRequestDto } from '@abp/core';
+import type {
+  ExtensibleEntityDto,
+  PagedAndSortedResultRequestDto,
+} from '@abp/core';
 
-interface IdentitySessionDto extends EntityDto<string> {
+interface IdentitySessionDto extends ExtensibleEntityDto<string> {
   clientId?: string;
   device: string;
   deviceInfo: string;

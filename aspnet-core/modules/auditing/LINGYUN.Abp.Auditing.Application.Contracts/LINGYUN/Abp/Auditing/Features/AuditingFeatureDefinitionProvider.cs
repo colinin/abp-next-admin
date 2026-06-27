@@ -15,6 +15,7 @@ public class AuditingFeatureDefinitionProvider : FeatureDefinitionProvider
 
         var loggingEnableFeature = auditingGroup.AddFeature(
             name: AuditingFeatureNames.Logging.Enable,
+            defaultValue: true.ToString(),
             displayName: L("Features:Auditing"),
             description: L("Features:AuditingDesc")
             );
