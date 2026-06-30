@@ -106,7 +106,9 @@ function onValueChange(setting: SettingDetail) {
       value: String(setting.value),
     });
   } else {
-    settingsUpdateInput.value.settings[index]!.value = String(setting.value);
+    if (settingsUpdateInput.value.settings[index]) {
+      settingsUpdateInput.value.settings[index].value = String(setting.value);
+    }
   }
 }
 
@@ -141,8 +143,8 @@ onMounted(onGet);
     </template>
     <Form
       v-if="isEnabled(SettingManagementEnable)"
-      :label-col="{ span: 5 }"
-      :wrapper-col="{ span: 15 }"
+      :label-col="{ span: 6 }"
+      :wrapper-col="{ span: 18 }"
     >
       <Tabs tab-position="left" type="card" v-model="activeTab">
         <TabPane
@@ -238,6 +240,7 @@ onMounted(onGet);
       </Tabs>
     </Form>
     <Empty
+      v-else
       :description="
         $t('AbpFeature.Volo_Feature:010001', {
           FeatureName: $t(

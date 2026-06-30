@@ -1,5 +1,6 @@
 {
-  "tailwindCSS.experimental.configFile": "internal/tailwind-config/src/index.ts",
+  "tailwindCSS.experimental.configFile": "internal/tailwind-config/src/theme.css",
+  "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
   // workbench
   "workbench.list.smoothScrolling": true,
   "workbench.startupEditor": "newUntitledFile",
@@ -31,39 +32,51 @@
   "editor.autoClosingOvertype": "always",
   "editor.autoClosingQuotes": "beforeWhitespace",
   "editor.wordSeparators": "`~!@#%^&*()=+[{]}\\|;:'\",.<>/?",
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+
+  // lint && format
+  "oxc.enable": true,
+  "oxc.typeAware": true,
+  "oxc.configPath": "oxlint.config.ts",
+  "oxc.fmt.configPath": "oxfmt.config.ts",
+  "eslint.useFlatConfig": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
+    "source.fixAll.oxc": "explicit",
     "source.fixAll.stylelint": "explicit",
     "source.organizeImports": "never"
   },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[scss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[vue]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
+
   // extensions
   "extensions.ignoreRecommendations": true,
 
@@ -79,6 +92,7 @@
   "files.insertFinalNewline": true,
   "files.simpleDialog.enable": true,
   "files.associations": {
+    "*.css": "tailwindcss",
     "*.ejs": "html",
     "*.art": "html",
     "**/tsconfig.json": "jsonc",
@@ -118,7 +132,7 @@
   // search
   "search.searchEditor.singleClickBehaviour": "peekDefinition",
   "search.followSymlinks": false,
-  // 在使用搜索功能时，将这些文件夹/文件排除在外
+  // 使用搜索功能时，将这些文件和文件夹排除在外
   "search.exclude": {
     "**/node_modules": true,
     "**/*.log": true,
@@ -158,7 +172,7 @@
   "emmet.triggerExpansionOnTab": false,
 
   "errorLens.enabledDiagnosticLevels": ["warning", "error"],
-  "errorLens.excludeBySource": ["cSpell", "Grammarly", "eslint"],
+  "errorLens.excludeBySource": ["cSpell", "Grammarly"],
 
   "stylelint.enable": true,
   "stylelint.packageManager": "pnpm",
@@ -166,9 +180,10 @@
   "stylelint.customSyntax": "postcss-html",
   "stylelint.snippet": ["css", "less", "postcss", "scss", "vue"],
 
-  "typescript.inlayHints.enumMemberValues.enabled": true,
-  "typescript.preferences.preferTypeOnlyAutoImports": true,
-  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.inlayHints.enumMemberValues.enabled": true,
+  "js/ts.preferences.preferTypeOnlyAutoImports": true,
+  "js/ts.preferences.includePackageJsonAutoImports": "on",
 
   "eslint.validate": [
     "javascript",
@@ -195,7 +210,7 @@
     "yaml": false
   },
 
-  "cssVariables.lookupFiles": ["packages/core/base/design/src/**/*.css"],
+  "cssVariables.lookupFiles": ["packages/@core/base/design/src/**/*.css"],
 
   "i18n-ally.localesPaths": [
     "packages/locales/src/langs",
@@ -220,12 +235,9 @@
     "*.env": "$(capture).env.*",
     "README.md": "README*,CHANGELOG*,LICENSE,CNAME",
     "package.json": "pnpm-lock.yaml,pnpm-workspace.yaml,.gitattributes,.gitignore,.gitpod.yml,.npmrc,.browserslistrc,.node-version,.git*,.tazerc.json",
-    "eslint.config.mjs": ".eslintignore,.prettierignore,.stylelintignore,.commitlintrc.*,.prettierrc.*,stylelint.config.*,.lintstagedrc.mjs,cspell.json,lefthook.yml",
-    "tailwind.config.mjs": "postcss.*"
+    "oxlint.config.ts": ".eslintignore,.stylelintignore,.commitlintrc.*,stylelint.config.*,.lintstagedrc.mjs,cspell.json,lefthook.yml,oxfmt.config.*,eslint.config.*"
   },
   "commentTranslate.hover.enabled": false,
   "commentTranslate.multiLineMerge": true,
-  "vue.server.hybridMode": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "oxc.enable": false
+  "vue.server.hybridMode": true
 }

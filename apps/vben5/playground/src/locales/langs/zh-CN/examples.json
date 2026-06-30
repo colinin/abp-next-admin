@@ -17,6 +17,7 @@
     "basic": "基础表单",
     "layout": "自定义布局",
     "query": "查询表单",
+    "valueFormat": "值格式化",
     "rules": "表单校验",
     "dynamic": "动态表单",
     "custom": "自定义组件",
@@ -27,7 +28,8 @@
     "upload-urls": "文件上传后的网址",
     "file": "文件",
     "crop-image": "裁剪图片",
-    "upload-image": "点击上传图片"
+    "upload-image": "点击上传图片",
+    "collapsible": "单项表单折叠"
   },
   "vxeTable": {
     "title": "Vxe 表格",
@@ -39,7 +41,8 @@
     "editCell": "单元格编辑",
     "editRow": "行编辑",
     "custom-cell": "自定义单元格",
-    "form": "搜索表单"
+    "form": "搜索表单",
+    "viewed": "行标记"
   },
   "captcha": {
     "title": "验证码",
@@ -79,5 +82,8 @@
   },
   "cropper": {
     "title": "图片裁剪"
+  },
+  "tiptap": {
+    "title": "富文本编辑器"
   }
 }

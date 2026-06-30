@@ -3,23 +3,40 @@
  * 可用于 vben-form、vben-modal、vben-drawer 等组件使用,
  */
 
+import type {
+  CheckboxGroupProps,
+  CheckboxProps,
+  DatePickerProps,
+  DividerProps,
+  ElTimePicker as ElTimePickerType,
+  ElTreeSelect as ElTreeSelectType,
+  InputNumberProps,
+  InputProps,
+  RadioGroupProps,
+  SelectV2Props,
+  SpaceProps,
+  SwitchProps,
+  UploadProps,
+} from 'element-plus';
+
 import type { Component } from 'vue';
 
-import type { BaseFormComponentType } from '@vben/common-ui';
+import type {
+  ApiComponentSharedProps,
+  BaseFormComponentType,
+  IconPickerProps,
+} from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
-import {
-  defineAsyncComponent,
-  defineComponent,
-  getCurrentInstance,
-  h,
-  ref,
-} from 'vue';
+import { defineAsyncComponent, defineComponent, h, ref } from 'vue';
 
 import { ApiComponent, globalShareState, IconPicker } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { ElNotification } from 'element-plus';
+
+type ElTreeSelectSchemaProps = InstanceType<typeof ElTreeSelectType>['$props'];
+type ElTimePickerSchemaProps = InstanceType<typeof ElTimePickerType>['$props'];
 
 const ElButton = defineAsyncComponent(() =>
   Promise.all([
@@ -124,8 +141,8 @@ const ElUpload = defineAsyncComponent(() =>
   ]).then(([res]) => res.ElUpload),
 );
 
-const withDefaultPlaceholder = <T extends Component>(
-  component: T,
+const withDefaultPlaceholder = (
+  component: Component,
   type: 'input' | 'select',
   componentProps: Recordable<any> = {},
 ) => {
@@ -139,16 +156,15 @@ const withDefaultPlaceholder = <T extends Component>(
         $t(`ui.placeholder.${type}`);
       // 透传组件暴露的方法
       const innerRef = ref();
-      const publicApi: Recordable<any> = {};
-      expose(publicApi);
-      const instance = getCurrentInstance();
-      instance?.proxy?.$nextTick(() => {
-        for (const key in innerRef.value) {
-          if (typeof innerRef.value[key] === 'function') {
-            publicApi[key] = innerRef.value[key];
-          }
-        }
-      });
+      expose(
+        new Proxy(
+          {},
+          {
+            get: (_target, key) => innerRef.value?.[key],
+            has: (_target, key) => key in (innerRef.value || {}),
+          },
+        ),
+      );
       return () =>
         h(
           component,
@@ -178,6 +194,28 @@ export type ComponentType =
   | 'TreeSelect'
   | 'Upload'
   | BaseFormComponentType;
+
+/**
+ * 与 {@link ComponentType} 中注册的组件名一一对应，便于 Schema 上 `component` + `componentProps` 联动提示
+ */
+export interface ComponentPropsMap {
+  ApiSelect: ApiComponentSharedProps & SelectV2Props;
+  ApiTreeSelect: ApiComponentSharedProps & ElTreeSelectSchemaProps;
+  Checkbox: CheckboxProps;
+  CheckboxGroup: CheckboxGroupProps;
+  DatePicker: DatePickerProps;
+  Divider: DividerProps;
+  IconPicker: IconPickerProps;
+  Input: InputProps;
+  InputNumber: InputNumberProps;
+  RadioGroup: RadioGroupProps;
+  Select: SelectV2Props;
+  Space: SpaceProps;
+  Switch: SwitchProps;
+  TimePicker: ElTimePickerSchemaProps;
+  TreeSelect: ElTreeSelectSchemaProps;
+  Upload: UploadProps;
+}
 
 async function initComponentAdapter() {
   const components: Partial<Record<ComponentType, Component>> = {
@@ -246,7 +284,9 @@ async function initComponentAdapter() {
       inputComponent: ElInput,
     }),
     Input: withDefaultPlaceholder(ElInput, 'input'),
-    InputNumber: withDefaultPlaceholder(ElInputNumber, 'input'),
+    InputNumber: withDefaultPlaceholder(ElInputNumber, 'input', {
+      style: { width: '100%' },
+    }),
     RadioGroup: (props, { attrs, slots }) => {
       let defaultSlot;
       if (Reflect.has(slots, 'default')) {

@@ -61,6 +61,50 @@
     "cancel": "Cancel cropping",
     "errorTip": "Cropping error"
   },
+  "tiptap": {
+    "placeholder": "Please enter content...",
+    "prompts": {
+      "image": "Enter image URL",
+      "link": "Enter link URL"
+    },
+    "toolbar": {
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "strike": "Strike",
+      "code": "Code",
+      "codeBlock": "Code Block",
+      "heading": "Heading",
+      "paragraph": "Paragraph",
+      "heading1": "H1",
+      "heading2": "H2",
+      "heading3": "H3",
+      "heading4": "H4",
+      "bulletList": "Bullets",
+      "orderedList": "Numbering",
+      "blockquote": "Quote",
+      "link": "Link",
+      "unlink": "Unlink",
+      "image": "Image",
+      "imageUrl": "Image URL",
+      "imageUpload": "Upload Image",
+      "textColor": "Text Color",
+      "highlightColor": "Highlight Color",
+      "alignLeft": "Left",
+      "alignCenter": "Center",
+      "alignRight": "Right",
+      "preview": "Preview",
+      "undo": "Undo",
+      "redo": "Redo",
+      "clear": "Clear"
+    },
+    "upload": {
+      "fileTooLarge": "File size exceeds the limit",
+      "fileTypeNotAllowed": "File type is not allowed",
+      "onlySingleImage": "Only single image upload is supported, the first one is selected",
+      "uploadFailed": "Upload Failed"
+    }
+  },
   "fallback": {
     "pageNotFound": "Oops! Page Not Found",
     "pageNotFoundDesc": "Sorry, we couldn't find the page you were looking for.",
@@ -105,7 +149,7 @@
     },
     "lockScreen": {
       "title": "Lock Screen",
-      "screenButton": "Locking",
+      "screenButton": "Unlock",
       "password": "Password",
       "placeholder": "Please enter password",
       "unlock": "Click to unlock",

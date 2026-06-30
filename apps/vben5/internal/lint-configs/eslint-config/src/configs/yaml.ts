@@ -12,7 +12,7 @@ export async function yaml(): Promise<Linter.Config[]> {
     {
       files: ['**/*.y?(a)ml'],
       plugins: {
-        yaml: pluginYaml as any,
+        yaml: pluginYaml,
       },
       languageOptions: {
         parser: parserYaml,
@@ -56,6 +56,11 @@ export async function yaml(): Promise<Linter.Config[]> {
           {
             order: [
               'packages',
+              'publicHoistPattern',
+              'strictPeerDependencies',
+              'autoInstallPeers',
+              'dedupePeerDependents',
+              'verifyDepsBeforeRun',
               'overrides',
               'patchedDependencies',
               'hoistPattern',
@@ -63,6 +68,7 @@ export async function yaml(): Promise<Linter.Config[]> {
               'catalogs',
 
               'allowedDeprecatedVersions',
+              'allowBuilds',
               'allowNonAppliedPatches',
               'configDependencies',
               'ignoredBuiltDependencies',
@@ -78,7 +84,7 @@ export async function yaml(): Promise<Linter.Config[]> {
           },
           {
             order: { type: 'asc' },
-            pathPattern: '.*',
+            pathPattern: '^.+$',
           },
         ],
       },

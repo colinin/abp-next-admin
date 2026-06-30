@@ -1,11 +1,11 @@
 {
   "name": "@vben/vsh",
-  "version": "5.6.0",
+  "version": "5.7.0",
   "private": true,
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "stub": "pnpm unbuild --stub"
+    "stub": "pnpm exec tsdown"
   },
   "files": [
     "dist"
@@ -25,7 +25,7 @@
     "@vben/node-utils": "workspace:*",
     "cac": "catalog:",
     "circular-dependency-scanner": "catalog:",
-    "depcheck": "catalog:",
+    "knip": "catalog:",
     "publint": "catalog:"
   }
 }

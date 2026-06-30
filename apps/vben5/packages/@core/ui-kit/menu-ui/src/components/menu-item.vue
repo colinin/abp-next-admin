@@ -5,6 +5,9 @@ import { computed, onBeforeUnmount, onMounted, reactive, useSlots } from 'vue';
 
 import { useNamespace } from '@vben-core/composables';
 import { VbenIcon, VbenTooltip } from '@vben-core/shadcn-ui';
+import { isHttpUrl } from '@vben-core/shared/utils';
+
+import qs from 'qs';
 
 import { MenuBadge } from '../components';
 import { useMenu, useMenuContext, useSubMenuContext } from '../hooks';
@@ -31,8 +34,10 @@ const menuIcon = computed(() =>
   active.value ? props.activeIcon || props.icon : props.icon,
 );
 
+const isHttp = computed(() => isHttpUrl(item.parentPaths.at(-1)));
+
 const isTopLevelMenuItem = computed(
-  () => parentMenu.value?.type.name === 'Menu',
+  () => parentMenu.value?.type.name === 'MenuUI',
 );
 
 const collapseShowTitle = computed(
@@ -54,6 +59,7 @@ const item: MenuItemRegistered = reactive({
   active,
   parentPaths: parentPaths.value,
   path: props.path || '',
+  query: props.query,
 });
 
 /**
@@ -81,42 +87,52 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <li
-    :class="[
-      rootMenu.theme,
-      b(),
-      is('active', active),
-      is('disabled', disabled),
-      is('collapse-show-title', collapseShowTitle),
-    ]"
-    role="menuitem"
-    @click.stop="handleClick"
+  <router-link
+    v-slot="{ href }"
+    custom
+    :to="
+      (item.parentPaths.at(-1) ?? '') +
+      (item?.query ? `?${qs.stringify(item?.query)}` : '')
+    "
   >
-    <VbenTooltip
-      v-if="showTooltip"
-      :content-class="[rootMenu.theme]"
-      side="right"
+    <a
+      :href="isHttp ? item.parentPaths.at(-1) : href"
+      :class="[
+        rootMenu.theme,
+        b(),
+        is('active', active),
+        is('disabled', disabled),
+        is('collapse-show-title', collapseShowTitle),
+      ]"
+      role="menuitem"
+      @click.prevent.stop="handleClick"
     >
-      <template #trigger>
-        <div :class="[nsMenu.be('tooltip', 'trigger')]">
-          <VbenIcon :class="nsMenu.e('icon')" :icon="menuIcon" fallback />
-          <slot></slot>
-          <span v-if="collapseShowTitle" :class="nsMenu.e('name')">
-            <slot name="title"></slot>
-          </span>
-        </div>
-      </template>
-      <slot name="title"></slot>
-    </VbenTooltip>
-    <div v-show="!showTooltip" :class="[e('content')]">
-      <MenuBadge
-        v-if="rootMenu.props.mode !== 'horizontal'"
-        class="right-2"
-        v-bind="props"
-      />
-      <VbenIcon :class="nsMenu.e('icon')" :icon="menuIcon" />
-      <slot></slot>
-      <slot name="title"></slot>
-    </div>
-  </li>
+      <VbenTooltip
+        v-if="showTooltip"
+        :content-class="[rootMenu.theme]"
+        side="right"
+      >
+        <template #trigger>
+          <div :class="[nsMenu.be('tooltip', 'trigger')]">
+            <VbenIcon :class="nsMenu.e('icon')" :icon="menuIcon" fallback />
+            <slot></slot>
+            <span v-if="collapseShowTitle" :class="nsMenu.e('name')">
+              <slot name="title"></slot>
+            </span>
+          </div>
+        </template>
+        <slot name="title"></slot>
+      </VbenTooltip>
+      <div v-show="!showTooltip" :class="[e('content')]">
+        <MenuBadge
+          v-if="rootMenu.props.mode !== 'horizontal'"
+          class="right-2"
+          v-bind="props"
+        />
+        <VbenIcon :class="nsMenu.e('icon')" :icon="menuIcon" />
+        <slot></slot>
+        <slot name="title"></slot>
+      </div>
+    </a>
+  </router-link>
 </template>

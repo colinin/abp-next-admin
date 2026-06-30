@@ -1,9 +1,10 @@
 {
   "name": "@vben/docs",
-  "version": "5.6.0",
+  "version": "5.7.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "vitepress build",
+    "build": "cross-env NODE_OPTIONS=\"--import ./.vitepress/build/dayjs-loader.mjs\" vitepress build",
     "dev": "vitepress dev",
     "docs:preview": "vitepress preview"
   },
@@ -14,19 +15,21 @@
     }
   },
   "dependencies": {
+    "@lucide/vue": "catalog:",
     "@vben-core/shadcn-ui": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/locales": "workspace:*",
     "@vben/plugins": "workspace:*",
     "@vben/styles": "workspace:*",
-    "ant-design-vue": "catalog:",
-    "lucide-vue-next": "catalog:",
+    "antdv-next": "catalog:",
     "medium-zoom": "catalog:",
     "reka-ui": "catalog:",
     "vitepress-plugin-group-icons": "catalog:"
   },
   "devDependencies": {
     "@nolebase/vitepress-plugin-git-changelog": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@vben/tailwind-config": "workspace:*",
     "@vben/vite-config": "workspace:*",
     "@vite-pwa/vitepress": "catalog:",
     "vitepress": "catalog:",

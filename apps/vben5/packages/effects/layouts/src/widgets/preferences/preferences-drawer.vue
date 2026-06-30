@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SupportedLanguagesType } from '@vben/locales';
+import type { CustomPreferencesRecord } from '@vben/preferences';
 import type {
   BreadcrumbStyleType,
   BuiltinThemeType,
@@ -22,6 +23,7 @@ import {
   clearCache,
   preferences,
   resetPreferences,
+  updateCustomPreferences,
   usePreferences,
 } from '@vben/preferences';
 
@@ -43,6 +45,7 @@ import {
   ColorMode,
   Content,
   Copyright,
+  Custom,
   FontSize,
   Footer,
   General,
@@ -62,6 +65,7 @@ const emit = defineEmits<{ clearPreferencesAndLogout: [] }>();
 const message = globalShareState.getMessage();
 
 const appLocale = defineModel<SupportedLanguagesType>('appLocale');
+const appTimezone = defineModel<string>('appTimezone');
 const appDynamicTitle = defineModel<boolean>('appDynamicTitle');
 const appLayout = defineModel<LayoutType>('appLayout');
 const appColorGrayMode = defineModel<boolean>('appColorGrayMode');
@@ -70,7 +74,9 @@ const appContentCompact = defineModel<ContentCompactType>('appContentCompact');
 const appWatermark = defineModel<boolean>('appWatermark');
 const appWatermarkContent = defineModel<string>('appWatermarkContent');
 const appEnableCheckUpdates = defineModel<boolean>('appEnableCheckUpdates');
-const appEnableCopyPreferences = defineModel<boolean>('appEnableCopyPreferences');
+const appEnableCopyPreferences = defineModel<boolean>(
+  'appEnableCopyPreferences',
+);
 const appEnableStickyPreferencesNavigationBar = defineModel<boolean>(
   'appEnableStickyPreferencesNavigationBar',
 );
@@ -160,6 +166,9 @@ const shortcutKeysGlobalSearch = defineModel<boolean>(
 const shortcutKeysGlobalLogout = defineModel<boolean>(
   'shortcutKeysGlobalLogout',
 );
+const shortcutKeysGlobalEscape = defineModel<boolean>(
+  'shortcutKeysGlobalEscape',
+);
 
 const shortcutKeysGlobalLockScreen = defineModel<boolean>(
   'shortcutKeysGlobalLockScreen',
@@ -173,14 +182,18 @@ const widgetThemeToggle = defineModel<boolean>('widgetThemeToggle');
 const widgetSidebarToggle = defineModel<boolean>('widgetSidebarToggle');
 const widgetLockScreen = defineModel<boolean>('widgetLockScreen');
 const widgetRefresh = defineModel<boolean>('widgetRefresh');
+const widgetTimezone = defineModel<boolean>('widgetTimezone');
 
 const {
+  customPreferences,
+  diffCustomPreference,
   diffPreference,
   isDark,
   isFullContent,
   isHeaderNav,
   isHeaderSidebarNav,
   isMixedNav,
+  preferencesExtension,
   isSideMixedNav,
   isSideMode,
   isSideNav,
@@ -191,8 +204,42 @@ const [Drawer] = useVbenDrawer();
 
 const activeTab = ref('appearance');
 
+const customPreferencesTab = computed(() => {
+  return preferencesExtension.value;
+});
+
+const customTabLabel = computed(() => {
+  return customPreferencesTab.value?.tabLabel
+    ? $t(customPreferencesTab.value.tabLabel)
+    : '';
+});
+
+const customTabTitle = computed(() => {
+  const title =
+    customPreferencesTab.value?.title || customPreferencesTab.value?.tabLabel;
+  return title ? $t(title) : '';
+});
+
+const mergedDiffPreference = computed(() => {
+  const result: Record<string, unknown> = {};
+
+  if (diffPreference.value) {
+    Object.assign(result, diffPreference.value);
+  }
+
+  if (diffCustomPreference.value) {
+    result.custom = diffCustomPreference.value;
+  }
+
+  return Object.keys(result).length > 0 ? result : undefined;
+});
+
+const showCustomTab = computed(() => {
+  return (customPreferencesTab.value?.fields.length ?? 0) > 0;
+});
+
 const tabs = computed((): SegmentedItem[] => {
-  return [
+  const items: SegmentedItem[] = [
     {
       label: $t('preferences.appearance'),
       value: 'appearance',
@@ -210,6 +257,15 @@ const tabs = computed((): SegmentedItem[] => {
       value: 'general',
     },
   ];
+
+  if (showCustomTab.value) {
+    items.push({
+      label: customTabLabel.value,
+      value: 'custom',
+    });
+  }
+
+  return items;
 });
 
 const showBreadcrumbConfig = computed(() => {
@@ -222,7 +278,7 @@ const showBreadcrumbConfig = computed(() => {
 });
 
 async function handleCopy() {
-  await copy(JSON.stringify(diffPreference.value, null, 2));
+  await copy(JSON.stringify(mergedDiffPreference.value, null, 2));
 
   message.copyPreferencesSuccess?.(
     $t('preferences.copyPreferencesSuccessTitle'),
@@ -231,17 +287,21 @@ async function handleCopy() {
 }
 
 async function handleClearCache() {
-  resetPreferences();
-  clearCache();
+  await resetPreferences();
+  await clearCache();
   emit('clearPreferencesAndLogout');
 }
 
 async function handleReset() {
-  if (!diffPreference.value) {
+  if (!mergedDiffPreference.value) {
     return;
   }
-  resetPreferences();
+  await resetPreferences();
   await loadLocaleMessages(preferences.app.locale);
+}
+
+function handleCustomPreferencesUpdate(updates: CustomPreferencesRecord) {
+  updateCustomPreferences(updates);
 }
 </script>
 
@@ -250,19 +310,19 @@ async function handleReset() {
     <Drawer
       :description="$t('preferences.subtitle')"
       :title="$t('preferences.title')"
-      class="!border-0 sm:max-w-sm"
+      class="border-0! sm:max-w-sm"
     >
       <template #extra>
         <div class="flex items-center">
           <VbenIconButton
-            :disabled="!diffPreference"
+            :disabled="!mergedDiffPreference"
             :tooltip="$t('preferences.resetTip')"
             class="relative"
             @click="handleReset"
           >
             <span
-              v-if="diffPreference"
-              class="bg-primary absolute right-0.5 top-0.5 h-2 w-2 rounded"
+              v-if="mergedDiffPreference"
+              class="absolute top-0.5 right-0.5 size-2 rounded-sm bg-primary"
             ></span>
             <RotateCw class="size-4" />
           </VbenIconButton>
@@ -303,6 +363,7 @@ async function handleReset() {
                 v-model:app-enable-check-updates="appEnableCheckUpdates"
                 v-model:app-enable-copy-preferences="appEnableCopyPreferences"
                 v-model:app-locale="appLocale"
+                v-model:app-timezone="appTimezone"
                 v-model:app-watermark="appWatermark"
                 v-model:app-watermark-content="appWatermarkContent"
               />
@@ -430,6 +491,7 @@ async function handleReset() {
                 v-model:widget-refresh="widgetRefresh"
                 v-model:widget-sidebar-toggle="widgetSidebarToggle"
                 v-model:widget-theme-toggle="widgetThemeToggle"
+                v-model:widget-timezone="widgetTimezone"
               />
             </Block>
             <Block :title="$t('preferences.footer.title')">
@@ -461,6 +523,16 @@ async function handleReset() {
                 v-model:shortcut-keys-global-search="shortcutKeysGlobalSearch"
                 v-model:shortcut-keys-lock-screen="shortcutKeysGlobalLockScreen"
                 v-model:shortcut-keys-logout="shortcutKeysGlobalLogout"
+                v-model:shortcut-keys-escape="shortcutKeysGlobalEscape"
+              />
+            </Block>
+          </template>
+          <template #custom>
+            <Block :title="customTabTitle">
+              <Custom
+                :fields="customPreferencesTab?.fields || []"
+                :values="customPreferences"
+                @update="handleCustomPreferencesUpdate"
               />
             </Block>
           </template>
@@ -470,7 +542,7 @@ async function handleReset() {
       <template #footer>
         <VbenButton
           v-if="appEnableCopyPreferences"
-          :disabled="!diffPreference"
+          :disabled="!mergedDiffPreference"
           class="mx-4 w-full"
           size="sm"
           variant="default"
@@ -480,7 +552,7 @@ async function handleReset() {
           {{ $t('preferences.copyPreferences') }}
         </VbenButton>
         <VbenButton
-          :disabled="!diffPreference"
+          :disabled="!mergedDiffPreference"
           class="mr-4 w-full"
           size="sm"
           variant="ghost"
@@ -495,8 +567,6 @@ async function handleReset() {
 
 <style scoped>
 :deep(.sticky-tabs-header [role='tablist']) {
-  position: sticky;
-  top: -12px;
-  z-index: 9999;
+  @apply -top-3 z-9999 sticky;
 }
 </style>

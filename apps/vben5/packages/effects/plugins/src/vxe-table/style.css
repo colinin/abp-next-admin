@@ -1,3 +1,5 @@
+@reference "@vben/tailwind-config/theme";
+
 :root .vxe-grid {
   --vxe-ui-font-color: hsl(var(--foreground));
   --vxe-ui-font-primary-color: hsl(var(--primary));
@@ -114,4 +116,13 @@
 
 .vxe-grid--layout-body-content-wrapper {
   overflow: hidden;
+}
+
+/* 已读行默认样式 */
+.vxe-row--viewed {
+  color: hsl(var(--foreground) / 50%);
+
+  .vxe-body--column {
+    opacity: 0.9;
+  }
 }

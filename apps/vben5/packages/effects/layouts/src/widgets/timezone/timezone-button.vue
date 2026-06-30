@@ -59,7 +59,7 @@ const handleClick = () => {
       class="hover:animate-[shrink_0.3s_ease-in-out]"
       @click="handleClick"
     >
-      <TimezoneIcon class="text-foreground size-4" />
+      <TimezoneIcon class="size-4 text-foreground" />
     </VbenIconButton>
     <Modal :title="$t('ui.widgets.timezone.setTimezone')">
       <div class="timezone-container">
@@ -82,6 +82,6 @@ const handleClick = () => {
 
 <style scoped>
 .timezone-container {
-  padding-left: 20px;
+  @apply pl-5;
 }
 </style>

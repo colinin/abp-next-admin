@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import type { Component } from 'vue';
-
-import type { AnyPromiseFunction } from '@vben/types';
+import type {
+  ApiComponentProps,
+  ApiComponentOptionsItem as OptionsItem,
+} from './types';
 
 import { computed, nextTick, ref, unref, useAttrs, watch } from 'vue';
 
@@ -11,72 +12,12 @@ import { cloneDeep, get, isEqual, isFunction } from '@vben-core/shared/utils';
 
 import { objectOmit } from '@vueuse/core';
 
-type OptionsItem = {
-  [name: string]: any;
-  children?: OptionsItem[];
-  disabled?: boolean;
-  label?: string;
-  value?: string;
-};
-
-interface Props {
-  /** 组件 */
-  component: Component;
-  /** 是否将value从数字转为string */
-  numberToString?: boolean;
-  /** 获取options数据的函数 */
-  api?: (arg?: any) => Promise<OptionsItem[] | Record<string, any>>;
-  /** 传递给api的参数 */
-  params?: Record<string, any>;
-  /** 从api返回的结果中提取options数组的字段名 */
-  resultField?: string;
-  /** label字段名 */
-  labelField?: string;
-  /** children字段名，需要层级数据的组件可用 */
-  childrenField?: string;
-  /** value字段名 */
-  valueField?: string;
-  /** disabled字段名 */
-  disabledField?: string;
-  /** 组件接收options数据的属性名 */
-  optionsPropName?: string;
-  /** 是否立即调用api */
-  immediate?: boolean;
-  /** 每次`visibleEvent`事件发生时都重新请求数据 */
-  alwaysLoad?: boolean;
-  /** 在api请求之前的回调函数 */
-  beforeFetch?: AnyPromiseFunction<any, any>;
-  /** 在api请求之后的回调函数 */
-  afterFetch?: AnyPromiseFunction<any, any>;
-  /** 直接传入选项数据，也作为api返回空数据时的后备数据 */
-  options?: OptionsItem[];
-  /** 组件的插槽名称，用来显示一个"加载中"的图标 */
-  loadingSlot?: string;
-  /** 触发api请求的事件名 */
-  visibleEvent?: string;
-  /** 组件的v-model属性名，默认为modelValue。部分组件可能为value */
-  modelPropName?: string;
-  /**
-   * 自动选择
-   * - `first`：自动选择第一个选项
-   * - `last`：自动选择最后一个选项
-   * - `one`: 当请求的结果只有一个选项时，自动选择该选项
-   * - 函数：自定义选择逻辑，函数的参数为请求的结果数组，返回值为选择的选项
-   * - false：不自动选择(默认)
-   */
-  autoSelect?:
-    | 'first'
-    | 'last'
-    | 'one'
-    | ((item: OptionsItem[]) => OptionsItem)
-    | false;
-}
-
 defineOptions({ name: 'ApiComponent', inheritAttrs: false });
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<ApiComponentProps>(), {
   labelField: 'label',
   valueField: 'value',
+  labelFn: undefined,
   disabledField: 'disabled',
   childrenField: '',
   optionsPropName: 'options',
@@ -88,6 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
   alwaysLoad: false,
   loadingSlot: '',
   beforeFetch: undefined,
+  shouldFetch: undefined,
   afterFetch: undefined,
   modelPropName: 'modelValue',
   api: undefined,
@@ -113,33 +55,37 @@ const hasPendingRequest = ref(false);
 const getOptions = computed(() => {
   const {
     labelField,
+    labelFn,
     valueField,
     disabledField,
     childrenField,
     numberToString,
   } = props;
 
-  const refOptionsData = unref(refOptions);
-
-  function transformData(data: OptionsItem[]): OptionsItem[] {
+  function transformData(data: OptionsItem[] = []): OptionsItem[] {
     return data.map((item) => {
       const value = get(item, valueField);
-      const disabled = get(item, disabledField);
+      const children = childrenField ? get(item, childrenField) : item.children;
       return {
-        ...objectOmit(item, [labelField, valueField, disabled, childrenField]),
-        label: get(item, labelField),
+        ...objectOmit(item, [
+          labelField,
+          valueField,
+          disabledField,
+          ...(childrenField ? [childrenField] : []),
+        ]),
+        label: labelFn ? labelFn(item) : get(item, labelField),
         value: numberToString ? `${value}` : value,
         disabled: get(item, disabledField),
-        ...(childrenField && item[childrenField]
-          ? { children: transformData(item[childrenField]) }
+        ...(Array.isArray(children) && children.length > 0
+          ? { children: transformData(children) }
           : {}),
       };
     });
   }
 
-  const data: OptionsItem[] = transformData(refOptionsData);
+  const data = transformData(unref(refOptions));
 
-  return data.length > 0 ? data : props.options;
+  return data.length > 0 ? data : transformData(props.options);
 });
 
 const bindProps = computed(() => {
@@ -159,7 +105,7 @@ const bindProps = computed(() => {
 });
 
 async function fetchApi() {
-  const { api, beforeFetch, afterFetch, resultField } = props;
+  const { api, beforeFetch, shouldFetch, afterFetch, resultField } = props;
 
   if (!api || !isFunction(api)) {
     return;
@@ -177,6 +123,14 @@ async function fetchApi() {
     let finalParams = unref(mergedParams);
     if (beforeFetch && isFunction(beforeFetch)) {
       finalParams = (await beforeFetch(cloneDeep(finalParams))) || finalParams;
+    }
+    // 判断是否需要控制执行中断
+    if (
+      shouldFetch &&
+      isFunction(shouldFetch) &&
+      !(await shouldFetch(finalParams))
+    ) {
+      return;
     }
     let res = await api(finalParams);
     if (afterFetch && isFunction(afterFetch)) {
@@ -275,7 +229,7 @@ defineExpose({
   /** 获取当前值 */
   getValue: () => unref(modelValue),
   /** 获取被包装的组件实例 */
-  getComponentRef: <T = any,>() => componentRef.value as T,
+  getComponentRef: <T = any>() => componentRef.value as T,
   /** 更新Api参数 */
   updateParam(newParams: Record<string, any>) {
     innerParams.value = newParams;

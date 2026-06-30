@@ -1,4 +1,4 @@
-import { defineOverridesPreferences } from '@vben/preferences';
+import { appCopyrightPreferences, defineOverridesPreferences } from '@vben/preferences';
 
 /**
  * @description 项目配置文件
@@ -13,6 +13,7 @@ export const overridesPreferences = defineOverridesPreferences({
     enableRefreshToken: true,
     name: import.meta.env.VITE_APP_TITLE,
   },
+  copyright: appCopyrightPreferences,
   logo: {
     source: '/resource/img/logo.png',
   },

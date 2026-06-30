@@ -42,28 +42,27 @@
 #       runner: go run
 
 pre-commit:
-  parallel: true
-  commands:
-    code-workspace:
-      run: pnpm vsh code-workspace --auto-commit
-    lint-md:
-      run: pnpm prettier --cache --ignore-unknown --write {staged_files}
-      glob: '*.md'
-    lint-vue:
-      run: pnpm prettier --write {staged_files} && pnpm eslint --cache --fix {staged_files} && pnpm stylelint --fix --allow-empty-input {staged_files}
-      glob: '*.vue'
-    lint-js:
-      run: pnpm prettier --cache --ignore-unknown --write {staged_files} && pnpm eslint --cache --fix {staged_files}
-      glob: '*.{js,jsx,ts,tsx}'
-    lint-style:
-      run: pnpm prettier --cache --ignore-unknown --write {staged_files} && pnpm stylelint --fix --allow-empty-input {staged_files}
-      glob: '*.{scss,less,styl,html,vue,css}'
-    lint-package:
-      run: pnpm prettier --cache --write {staged_files}
-      glob: 'package.json'
-    lint-json:
-      run: pnpm prettier --cache --write --parser json {staged_files}
-      glob: '{!(package)*.json,*.code-snippets,.!(browserslist)*rc}'
+  # 串行执行（不设 parallel），避免与 check:type 同时运行导致低配机内存/CPU 瞬时飙升。
+  # lint 仅检查暂存文件并自动修复后回填，大幅降低负载；check:type 仍需全量。
+  jobs:
+    - name: oxlint
+      glob: '*.{js,jsx,ts,tsx,vue,cjs,mjs,cts,mts}'
+      run: pnpm exec oxlint --fix --type-aware --threads=4 --no-error-on-unmatched-pattern {staged_files}
+      stage_fixed: true
+    - name: oxfmt
+      glob: '*.{js,jsx,ts,tsx,vue,cjs,mjs,cts,mts,json,jsonc}'
+      run: pnpm exec oxfmt --threads=4 --no-error-on-unmatched-pattern {staged_files}
+      stage_fixed: true
+    - name: eslint
+      glob: '*.{js,jsx,ts,tsx,vue,cjs,mjs,cts,mts}'
+      run: pnpm exec eslint --fix {staged_files}
+      stage_fixed: true
+    - name: stylelint
+      glob: '*.{vue,css,less,scss}'
+      run: pnpm exec stylelint --fix {staged_files}
+      stage_fixed: true
+    - name: checkType
+      run: pnpm check:type
 
 post-merge:
   commands:

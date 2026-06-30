@@ -1,10 +1,13 @@
+import type { TableActionProps } from '@vben/common-ui';
 import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
 import type { Recordable } from '@vben/types';
 
-import type { ComponentType } from './component';
+import type { ComponentPropsMap, ComponentType } from './component';
 
-import { h } from 'vue';
+import { defineComponent, h } from 'vue';
 
+import { useAccess } from '@vben/access';
+import { VbenTableAction as VbenTableActionCore } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 import { $te } from '@vben/locales';
 import {
@@ -14,11 +17,9 @@ import {
 import { get, isFunction, isString } from '@vben/utils';
 
 import { objectOmit } from '@vueuse/core';
-import { Button, Image, Popconfirm, Switch, Tag } from 'ant-design-vue';
+import { Button, Image, Popconfirm, Switch, Tag } from 'antdv-next';
 
 import { $t } from '#/locales';
-
-import { useVbenForm } from './form';
 
 setupVbenVxeTable({
   configVxeTable: (vxeUI) => {
@@ -135,7 +136,7 @@ setupVbenVxeTable({
     vxeUI.renderer.add('CellOperation', {
       renderTableDefault({ attrs, options, props }, { column, row }) {
         const defaultProps = { size: 'small', type: 'link', ...props };
-        let align = 'end';
+        let align: string;
         switch (column.align) {
           case 'center': {
             align = 'center';
@@ -158,9 +159,12 @@ setupVbenVxeTable({
           edit: {
             text: $t('common.edit'),
           },
+          detail: {
+            text: $t('common.detail'),
+          },
         };
         const operations: Array<Recordable<any>> = (
-          options || ['edit', 'delete']
+          options || ['edit', 'detail', 'delete']
         )
           .map((opt) => {
             if (isString(opt)) {
@@ -281,12 +285,34 @@ setupVbenVxeTable({
     // 这里可以自行扩展 vxe-table 的全局配置，比如自定义格式化
     // vxeUI.formats.add
   },
-  useVbenForm,
 });
 
 export const useVbenVxeGrid = <T extends Record<string, any>>(
-  ...rest: Parameters<typeof useGrid<T, ComponentType>>
-) => useGrid<T, ComponentType>(...rest);
+  ...rest: Parameters<typeof useGrid<T, ComponentType, ComponentPropsMap>>
+) => useGrid<T, ComponentType, ComponentPropsMap>(...rest);
+
+/**
+ * 表格操作按钮组件
+ *
+ * 在适配器内部统一注入权限判断（hasPermission），使用方无需再传入 `:has-permission`。
+ * 通过 action 的 `auth` 字段声明权限码，结合 `useAccess().hasAccessByCodes` 判断是否展示。
+ * 如需自定义权限逻辑，仍可显式传入 `:has-permission` 覆盖默认行为。
+ */
+export const VbenTableAction = defineComponent(
+  (props: TableActionProps, { attrs, slots }) => {
+    const { hasAccessByCodes } = useAccess();
+    function hasPermission(auth?: string | string[]) {
+      if (!auth) return true;
+      return hasAccessByCodes(Array.isArray(auth) ? auth : [auth]);
+    }
+    return () =>
+      h(VbenTableActionCore, { hasPermission, ...props, ...attrs }, slots);
+  },
+  {
+    name: 'VbenTableAction',
+    inheritAttrs: false,
+  },
+);
 
 export type OnActionClickParams<T = Recordable<any>> = {
   code: string;

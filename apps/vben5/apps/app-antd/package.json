@@ -50,6 +50,7 @@
     "@abp/ui": "workspace:*",
     "@abp/webhooks": "workspace:*",
     "@abp/wechat": "workspace:*",
+    "@tanstack/vue-query": "catalog:",
     "@vben-core/shadcn-ui": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",

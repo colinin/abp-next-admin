@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue';
 
-import { computed, shallowRef, useSlots, watchEffect } from 'vue';
+import { computed, onUnmounted, shallowRef, useSlots, watchEffect } from 'vue';
 
 import { VbenScrollbar } from '@vben-core/shadcn-ui';
 
@@ -262,20 +262,18 @@ function handleMouseleave() {
   extraVisible.value = false;
 }
 
-const { startDrag } = useSidebarDrag();
+const { startDrag, endDrag } = useSidebarDrag();
 
 const handleDragSidebar = (e: MouseEvent) => {
-  const { isSidebarMixed, collapseWidth, extraWidth, width } = props;
+  const { isSidebarMixed, collapseWidth, width } = props;
   const minLimit = isSidebarMixed ? width + collapseWidth : collapseWidth;
   const maxLimit = isSidebarMixed ? width + 320 : 320;
-  const startWidth = isSidebarMixed ? width + extraWidth : width;
 
   startDrag(
     e,
     {
       min: minLimit,
       max: maxLimit,
-      startWidth,
     },
     {
       target: asideRef.value,
@@ -293,6 +291,10 @@ const handleDragSidebar = (e: MouseEvent) => {
     },
   );
 };
+
+onUnmounted(() => {
+  endDrag();
+});
 </script>
 
 <template>
@@ -306,13 +308,13 @@ const handleDragSidebar = (e: MouseEvent) => {
     ref="asideRef"
     :style="style"
     class="fixed left-0 top-0 h-full transition-all duration-150"
+    :class="theme"
     @mouseenter="handleMouseenter"
     @mouseleave="handleMouseleave"
   >
     <div
       class="h-full"
       :class="[
-        theme,
         {
           'bg-sidebar-deep': isSidebarMixed,
           'border-r border-border bg-sidebar': !isSidebarMixed,
@@ -372,7 +374,7 @@ const handleDragSidebar = (e: MouseEvent) => {
     <div
       v-if="draggable"
       ref="dragBarRef"
-      class="absolute inset-y-0 -right-[1px] z-1000 w-[2px] cursor-col-resize hover:bg-primary"
+      class="absolute inset-y-0 -right-px z-1000 w-0.5 cursor-col-resize hover:bg-primary"
       @mousedown="handleDragSidebar"
     ></div>
   </aside>
