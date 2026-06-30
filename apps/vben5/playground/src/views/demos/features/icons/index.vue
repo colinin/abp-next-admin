@@ -18,7 +18,7 @@ import {
   SvgWeChatIcon,
 } from '@vben/icons';
 
-import { Card, Input } from 'ant-design-vue';
+import { Card, Input } from 'antdv-next';
 
 const iconValue1 = ref('ant-design:trademark-outlined');
 const iconValue2 = ref('svg:avatar-1');
@@ -81,11 +81,11 @@ const inputComponent = h(Input);
     <Card class="mb-5" title="图标选择器">
       <div class="mb-5 flex items-center gap-5">
         <span>原始样式(Iconify):</span>
-        <IconPicker v-model="iconValue1" class="w-[200px]" />
+        <IconPicker v-model="iconValue1" class="w-50" />
       </div>
       <div class="mb-5 flex items-center gap-5">
         <span>原始样式(svg):</span>
-        <IconPicker v-model="iconValue2" class="w-[200px]" prefix="svg" />
+        <IconPicker v-model="iconValue2" class="w-50" prefix="svg" />
       </div>
       <div class="mb-5 flex items-center gap-5">
         <span>自定义Input:</span>
@@ -103,7 +103,7 @@ const inputComponent = h(Input);
           v-model:value="iconValue4"
           allow-clear
           placeholder="点击这里选择图标"
-          style="width: 300px"
+          class="w-75"
         >
           <template #addonAfter>
             <IconPicker v-model="iconValue4" prefix="mdi-light" type="icon" />

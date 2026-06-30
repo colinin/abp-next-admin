@@ -12,11 +12,11 @@ const { isFullscreen, toggle } = useFullscreen();
 // 重新检查全屏状态
 isFullscreen.value = !!(
   document.fullscreenElement ||
-  // @ts-ignore
+  // @ts-expect-error - vendor fullscreen APIs are not included in the standard DOM typings
   document.webkitFullscreenElement ||
-  // @ts-ignore
+  // @ts-expect-error - vendor fullscreen APIs are not included in the standard DOM typings
   document.mozFullScreenElement ||
-  // @ts-ignore
+  // @ts-expect-error - vendor fullscreen APIs are not included in the standard DOM typings
   document.msFullscreenElement
 );
 </script>
@@ -25,7 +25,7 @@ isFullscreen.value = !!(
     class="hover:animate-[shrink_0.3s_ease-in-out]"
     @click="toggle"
   >
-    <Minimize v-if="isFullscreen" class="size-4 text-foreground" />
-    <Maximize v-else class="size-4 text-foreground" />
+    <Minimize v-if="isFullscreen" class="text-foreground size-4" />
+    <Maximize v-else class="text-foreground size-4" />
   </VbenIconButton>
 </template>

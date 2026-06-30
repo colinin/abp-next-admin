@@ -11,6 +11,7 @@ import { $t } from '@vben/locales';
 import { initComponentAdapter } from './component';
 
 initComponentAdapter();
+
 setupVbenForm<ComponentType>({
   config: {
     baseModelPropName: 'value',

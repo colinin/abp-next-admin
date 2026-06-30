@@ -1,10 +1,15 @@
+/* oxlint-disable unicorn/prefer-export-from */
 import type { Preferences } from './types';
 
 import { preferencesManager } from './preferences';
 
 export const {
   getPreferences,
+  getCustomPreferences,
+  getInitialCustomPreferences,
+  getPreferencesExtension,
   updatePreferences,
+  updateCustomPreferences,
   resetPreferences,
   clearCache,
   initPreferences,

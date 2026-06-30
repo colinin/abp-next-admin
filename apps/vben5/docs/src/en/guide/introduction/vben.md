@@ -20,13 +20,13 @@
 - **Dynamic Menu**: Supports dynamic menus that can display based on permissions.
 - **Mock Data**: High-performance local Mock data solution based on `Nitro`.
 - **Rich Components**: Provides a wide range of components to meet most business needs.
-- **Standardization**: Code quality is ensured with tools like `ESLint`, `Prettier`, `Stylelint`, `Publint`, and `CSpell`.
-- **Engineering**: Development efficiency is improved with tools like `Pnpm Monorepo`, `TurboRepo`, and `Changeset`.
-- **Multi-UI Library Support**: Supports mainstream UI libraries like `Ant Design Vue`, `Element Plus`, and `Vuetify`, without being restricted to a specific framework.
+- **Standardization**: Code quality is ensured with tools like `Oxfmt`, `Oxlint`, `ESLint`, `Stylelint`, `Publint`, and `CSpell`.
+- **Engineering**: Development efficiency is improved with tools like `Pnpm Monorepo`, `Turborepo`, and `Changeset`.
+- **Multi-UI Library Support**: Supports mainstream UI libraries like `Ant Design Vue`, `Ant Design Vue Next`, `Element Plus`, `Naive UI`, and `TDesign`, without being restricted to a specific framework.
 
 ## Browser Support
 
-- **Local development** is recommended using the **latest version of Chrome**. **Versions below Chrome 80 are not supported**.
+- **Local development** is recommended using the **latest version of Chrome**. **Tailwind CSS v4.0 is designed for Safari 16.4+, Chrome 111+, and Firefox 128+**.
 
 - **Production environment** supports modern browsers, IE is not supported.
 

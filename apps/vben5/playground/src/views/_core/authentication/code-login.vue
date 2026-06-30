@@ -7,7 +7,7 @@ import { computed, ref, useTemplateRef } from 'vue';
 import { AuthenticationCodeLogin, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message } from 'ant-design-vue';
+import { message } from 'antdv-next';
 
 defineOptions({ name: 'CodeLogin' });
 
@@ -94,8 +94,7 @@ const formSchema = computed((): VbenFormSchema[] => {
  * @param values 登录表单数据
  */
 async function handleLogin(values: Recordable<any>) {
-  // eslint-disable-next-line no-console
-  console.log(values);
+  void values;
 }
 </script>
 

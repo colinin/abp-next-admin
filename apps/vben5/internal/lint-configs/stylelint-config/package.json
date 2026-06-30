@@ -1,6 +1,6 @@
 {
   "name": "@vben/stylelint-config",
-  "version": "5.6.0",
+  "version": "5.7.0",
   "private": true,
   "homepage": "https://github.com/vbenjs/vue-vben-admin",
   "bugs": "https://github.com/vbenjs/vue-vben-admin/issues",
@@ -31,13 +31,11 @@
     "postcss": "catalog:",
     "postcss-html": "catalog:",
     "postcss-scss": "catalog:",
-    "prettier": "catalog:",
     "stylelint": "catalog:",
     "stylelint-config-recommended": "catalog:",
     "stylelint-config-recommended-scss": "catalog:",
     "stylelint-config-recommended-vue": "catalog:",
     "stylelint-config-standard": "catalog:",
-    "stylelint-order": "catalog:",
-    "stylelint-prettier": "catalog:"
+    "stylelint-order": "catalog:"
   }
 }

@@ -14,6 +14,7 @@ import {
   Info,
   X,
 } from '@vben-core/icons';
+import { usePreferences } from '@vben-core/preferences';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,8 +35,10 @@ const props = withDefaults(defineProps<AlertProps>(), {
   bordered: true,
   buttonAlign: 'end',
   centered: true,
+  escapeKeyClose: true,
 });
 const emits = defineEmits(['closed', 'confirm', 'opened']);
+const { globalEscapeShortcutKey } = usePreferences();
 const open = defineModel<boolean>('open', { default: false });
 const { $t } = useSimpleLocale();
 const components = globalShareState.getComponents();
@@ -46,8 +49,14 @@ function onAlertClosed() {
   isConfirm.value = false;
 }
 
-function onEscapeKeyDown() {
+function onEscapeKeyDown(e: KeyboardEvent) {
+  // 先标记是按 Esc 触发的（用于后续 isConfirm 判断等）
   isConfirm.value = false;
+
+  // 只有当组件参数和全局配置都为false时才阻止关闭，其任意一个为true都需要让esc生效
+  if (!props.escapeKeyClose && !globalEscapeShortcutKey.value) {
+    e.preventDefault();
+  }
 }
 
 const getIconRender = computed(() => {
@@ -136,18 +145,19 @@ async function handleOpenChange(val: boolean) {
 }
 </script>
 <template>
-  <AlertDialog :open="open" @update:open="handleOpenChange">
+  <AlertDialog :modal="false" :open="open" @update:open="handleOpenChange">
     <AlertDialogContent
       :open="open"
       :centered="centered"
       :overlay-blur="overlayBlur"
       @opened="emits('opened')"
       @closed="onAlertClosed"
-      @escape-key-down="onEscapeKeyDown"
+      @escape-key-down="onEscapeKeyDown($event)"
+      @close="handleOpenChange(false)"
       :class="
         cn(
           containerClass,
-          'left-0 right-0 mx-auto flex max-h-[80%] flex-col p-0 duration-300 sm:w-[520px] sm:max-w-[80%] sm:rounded-[var(--radius)]',
+          'flex max-h-[80%] flex-col p-0 duration-300 sm:w-130 sm:max-w-[80%] sm:rounded-(--radius)',
           {
             'border border-border': bordered,
             'shadow-3xl': !bordered,
@@ -174,7 +184,7 @@ async function handleOpenChange(val: boolean) {
           </div>
         </AlertDialogTitle>
         <AlertDialogDescription>
-          <div class="m-4 min-h-[30px]">
+          <div class="m-4 min-h-7.5">
             <VbenRenderContent :content="content" render-br />
           </div>
           <VbenLoading v-if="loading && contentMasking" :spinning="loading" />
@@ -188,7 +198,7 @@ async function handleOpenChange(val: boolean) {
             <component
               :is="components.DefaultButton || VbenButton"
               :disabled="loading"
-              variant="ghost"
+              variant="outline"
               @click="handleCancel"
             >
               {{ cancelText || $t('cancel') }}

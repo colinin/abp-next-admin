@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Input, Select } from 'ant-design-vue';
+import { Input, Select } from 'antdv-next';
 
 const emit = defineEmits(['blur', 'change']);
 
@@ -15,7 +15,7 @@ function onChange() {
   <div class="flex w-full gap-1">
     <Select
       v-model:value="modelValue[0]"
-      class="w-[80px]"
+      class="w-20"
       placeholder="类型"
       allow-clear
       :class="{ 'valid-success': !!modelValue[0] }"

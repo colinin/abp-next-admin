@@ -3,7 +3,7 @@ import type { VxeGridListeners, VxeGridProps } from '#/adapter/vxe-table';
 
 import { Page } from '@vben/common-ui';
 
-import { Button, message } from 'ant-design-vue';
+import { Button, message } from 'antdv-next';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 
@@ -43,7 +43,6 @@ const gridEvents: VxeGridListeners<RowType> = {
   },
 };
 
-// @ts-ignore
 const [Grid, gridApi] = useVbenVxeGrid<RowType>({
   // 放开注释查看表单组件的类型
   // formOptions: {

@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-import { Page } from '@vben/common-ui';
+import { Page, useVbenModal } from '@vben/common-ui';
 
 import { NButton, NCard, useMessage } from 'naive-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { getAllMenusApi } from '#/api';
 
+import modalDemo from './modal.vue';
+
 const message = useMessage();
+
 const [Form, formApi] = useVbenForm({
   commonConfig: {
     // 所有表单项
@@ -14,7 +17,7 @@ const [Form, formApi] = useVbenForm({
       class: 'w-full',
     },
   },
-  layout: 'horizontal',
+  layout: 'vertical',
   // 大屏一行显示3个，中屏一行显示2个，小屏一行显示1个
   wrapperClass: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
   handleSubmit: (values) => {
@@ -131,8 +134,18 @@ const [Form, formApi] = useVbenForm({
       },
       rules: 'required',
     },
+    {
+      component: 'Input',
+      fieldName: 'collapsibleTextArea',
+      label: 'vertical时可折叠',
+      componentProps: {
+        type: 'textarea',
+      },
+      collapsible: true,
+    },
   ],
 });
+
 function setFormValues() {
   formApi.setValues({
     string: 'string',
@@ -143,17 +156,25 @@ function setFormValues() {
     date: Date.now(),
   });
 }
+
+const [Modal, modalApi] = useVbenModal({
+  connectedComponent: modalDemo,
+});
 </script>
 <template>
   <Page
     description="表单适配器重新包装了CheckboxGroup和RadioGroup，可以通过options属性传递选项数据（选项数据将作为子组件的属性）"
     title="表单演示"
   >
-    <NCard title="基础表单">
+    <NCard title="基础表单" header-extra-class="gap-4">
       <template #header-extra>
         <NButton type="primary" @click="setFormValues">设置表单值</NButton>
+        <NButton type="primary" @click="modalApi.open()" class="ml-2">
+          打开弹窗
+        </NButton>
       </template>
       <Form />
     </NCard>
+    <Modal />
   </Page>
 </template>

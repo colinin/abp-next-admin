@@ -1,11 +1,12 @@
+import type { Options as HtmlMinifierOptions } from 'html-minifier-terser';
 import type { PluginVisualizerOptions } from 'rollup-plugin-visualizer';
+import type { PluginOptions } from 'unplugin-dts';
 import type {
   ConfigEnv,
   PluginOption,
   UserConfig,
   UserConfigFnPromise,
 } from 'vite';
-import type { PluginOptions } from 'vite-plugin-dts';
 import type { Options as PwaPluginOptions } from 'vite-plugin-pwa';
 
 /**
@@ -93,6 +94,12 @@ interface ArchiverPluginOptions {
    */
   outputDir?: string;
 }
+
+/**
+ * HTML 插件配置
+ * @description 用于配置基于 transformIndexHtml 的 HTML 压缩行为
+ */
+type HtmlPluginOptions = HtmlMinifierOptions;
 
 /**
  * ImportMap 插件配置
@@ -208,6 +215,11 @@ interface ApplicationPluginOptions extends CommonPluginOptions {
    */
   compressTypes?: ('brotli' | 'gzip')[];
   /**
+   * 是否开启 dayjs 插件
+   * @default true
+   */
+  dayjs?: boolean;
+  /**
    * 是否抽离配置文件
    * @default false
    * @description 在构建时抽离配置文件
@@ -217,7 +229,7 @@ interface ApplicationPluginOptions extends CommonPluginOptions {
    * 是否开启 HTML 插件
    * @default true
    */
-  html?: boolean;
+  html?: boolean | HtmlPluginOptions;
   /**
    * 是否开启国际化
    * @default false
@@ -342,6 +354,7 @@ export type {
   DefineApplicationOptions,
   DefineConfig,
   DefineLibraryOptions,
+  HtmlPluginOptions,
   IImportMap,
   ImportmapPluginOptions,
   LibraryPluginOptions,

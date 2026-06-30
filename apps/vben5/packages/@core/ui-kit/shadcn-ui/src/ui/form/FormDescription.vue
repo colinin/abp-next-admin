@@ -1,10 +1,12 @@
 <script lang="ts" setup>
+import type { HTMLAttributes } from 'vue';
+
 import { cn } from '@vben-core/shared/utils';
 
 import { useFormField } from './useFormField';
 
 const props = defineProps<{
-  class?: any;
+  class?: HTMLAttributes['class'];
 }>();
 
 const { formDescriptionId } = useFormField();
@@ -13,7 +15,8 @@ const { formDescriptionId } = useFormField();
 <template>
   <p
     :id="formDescriptionId"
-    :class="cn('text-sm text-muted-foreground', props.class)"
+    data-slot="form-description"
+    :class="cn('text-muted-foreground text-sm', props.class)"
   >
     <slot></slot>
   </p>

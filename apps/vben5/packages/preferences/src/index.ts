@@ -1,4 +1,8 @@
-import type { Preferences } from '@vben-core/preferences';
+import type {
+  CustomPreferencesRecord,
+  Preferences,
+  PreferencesExtension,
+} from '@vben-core/preferences';
 import type { DeepPartial } from '@vben-core/typings';
 
 /**
@@ -12,6 +16,18 @@ function defineOverridesPreferences(preferences: DeepPartial<Preferences>) {
   return preferences;
 }
 
-export { defineOverridesPreferences };
+function definePreferencesExtension<
+  TCustomPreferences extends object = CustomPreferencesRecord,
+>(extension: PreferencesExtension<TCustomPreferences>) {
+  return extension;
+}
+
+/** 应用级 ICP 备案配置，供各 app 的 preferences 覆盖使用 */
+const appCopyrightPreferences = {
+  icp: '闽ICP备19024351号',
+  icpLink: 'https://beian.miit.gov.cn/',
+} satisfies DeepPartial<Preferences>['copyright'];
+
+export { appCopyrightPreferences, defineOverridesPreferences, definePreferencesExtension };
 
 export * from '@vben-core/preferences';

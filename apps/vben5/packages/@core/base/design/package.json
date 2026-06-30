@@ -1,6 +1,6 @@
 {
   "name": "@vben-core/design",
-  "version": "5.6.0",
+  "version": "5.7.0",
   "homepage": "https://github.com/vbenjs/vue-vben-admin",
   "bugs": "https://github.com/vbenjs/vue-vben-admin/issues",
   "repository": {
@@ -23,11 +23,16 @@
   "exports": {
     "./bem": {
       "development": "./src/scss-bem/bem.scss",
+      "production": "./src/scss-bem/bem.scss",
       "default": "./dist/bem.scss"
+    },
+    "./theme": {
+      "default": "./src/css/global.css"
     },
     ".": {
       "types": "./src/index.ts",
       "development": "./src/index.ts",
+      "production": "./src/index.ts",
       "default": "./dist/design.css"
     }
   },
@@ -37,5 +42,8 @@
         "default": "./dist/index.mjs"
       }
     }
+  },
+  "dependencies": {
+    "@iconify/json": "catalog:"
   }
 }

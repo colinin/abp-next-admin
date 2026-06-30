@@ -1,15 +1,18 @@
 import type {
+  ExtendedFormApi,
   FormItemDependencies,
   FormSchemaRuleType,
   MaybeComponentProps,
 } from '../types';
 
-import { computed, ref, watch } from 'vue';
+import { computed, isRef, ref, watch } from 'vue';
 
 import { get, isBoolean, isFunction } from '@vben-core/shared/utils';
 
 import { useFormValues } from 'vee-validate';
 
+import { resolveFieldNamePath } from '../field-name';
+import { injectFormProps } from '../use-form-context';
 import { injectRenderFormProps } from './context';
 
 /**
@@ -22,27 +25,43 @@ function resolveValueByFieldName(
   fieldName: string,
 ) {
   // vee-validate：[] 表示禁用嵌套
-  if (fieldName.startsWith('[') && fieldName.endsWith(']')) {
-    const rawKey = fieldName.slice(1, -1);
+  const { rawKey } = resolveFieldNamePath(fieldName);
+  if (rawKey) {
     return values[rawKey];
   }
 
   return get(values, fieldName);
 }
-
 export default function useDependencies(
   getDependencies: () => FormItemDependencies | undefined,
 ) {
   const values = useFormValues();
 
+  const [extendApi] = injectFormProps();
   const formRenderProps = injectRenderFormProps();
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const formApi = formRenderProps.form!;
+  const formApi = formRenderProps.form;
+
+  if (!formApi) {
+    throw new Error('Form api is required in useDependencies');
+  }
 
   if (!values) {
     throw new Error('useDependencies should be used within <VbenForm>');
   }
+
+  // 在 dependencies 里提供访问extendApi的能力
+  const getController = (): ExtendedFormApi => {
+    const controller = isRef(extendApi)
+      ? extendApi.value.formApi
+      : extendApi.formApi;
+
+    if (!controller) {
+      throw new Error('formApi is required in useDependencies');
+    }
+
+    return controller;
+  };
 
   const isIf = ref(true);
   const isDisabled = ref(false);
@@ -89,7 +108,7 @@ export default function useDependencies(
       const formValues = values.value;
 
       if (isFunction(whenIf)) {
-        isIf.value = !!(await whenIf(formValues, formApi));
+        isIf.value = !!(await whenIf(formValues, formApi, getController()));
         // 不渲染
         if (!isIf.value) return;
       } else if (isBoolean(whenIf)) {
@@ -99,31 +118,43 @@ export default function useDependencies(
 
       // 2. 判断show，如果show为false，则隐藏
       if (isFunction(show)) {
-        isShow.value = !!(await show(formValues, formApi));
+        isShow.value = !!(await show(formValues, formApi, getController()));
       } else if (isBoolean(show)) {
         isShow.value = show;
       }
 
       if (isFunction(componentProps)) {
-        dynamicComponentProps.value = await componentProps(formValues, formApi);
+        dynamicComponentProps.value = await componentProps(
+          formValues,
+          formApi,
+          getController(),
+        );
       }
 
       if (isFunction(rules)) {
-        dynamicRules.value = await rules(formValues, formApi);
+        dynamicRules.value = await rules(formValues, formApi, getController());
       }
 
       if (isFunction(disabled)) {
-        isDisabled.value = !!(await disabled(formValues, formApi));
+        isDisabled.value = !!(await disabled(
+          formValues,
+          formApi,
+          getController(),
+        ));
       } else if (isBoolean(disabled)) {
         isDisabled.value = disabled;
       }
 
       if (isFunction(required)) {
-        isRequired.value = !!(await required(formValues, formApi));
+        isRequired.value = !!(await required(
+          formValues,
+          formApi,
+          getController(),
+        ));
       }
 
       if (isFunction(trigger)) {
-        await trigger(formValues, formApi);
+        await trigger(formValues, formApi, getController());
       }
     },
     { deep: true, immediate: true },

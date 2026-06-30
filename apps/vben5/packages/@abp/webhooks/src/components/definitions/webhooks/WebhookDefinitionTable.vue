@@ -80,7 +80,7 @@ const formOptions: VbenFormProps = {
   submitOnEnter: true,
 };
 
-const gridOptions: VxeGridProps<WebhookGroupDefinitionDto> = {
+const gridOptions: VxeGridProps<DefinitionGroup> = {
   columns: [
     {
       align: 'center',

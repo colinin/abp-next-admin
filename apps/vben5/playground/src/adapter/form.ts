@@ -1,9 +1,9 @@
 import type {
+  VbenFormProps as FormProps,
   VbenFormSchema as FormSchema,
-  VbenFormProps,
 } from '@vben/common-ui';
 
-import type { ComponentType } from './component';
+import type { ComponentPropsMap, ComponentType } from './component';
 
 import { setupVbenForm, useVbenForm as useForm, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -11,7 +11,7 @@ import { $t } from '@vben/locales';
 async function initSetupVbenForm() {
   setupVbenForm<ComponentType>({
     config: {
-      // ant design vue组件库默认都是 v-model:value
+      // antdv-next 组件库默认都是 v-model:value
       baseModelPropName: 'value',
       // 一些组件是 v-model:checked 或者 v-model:fileList
       modelPropNameMap: {
@@ -40,8 +40,9 @@ async function initSetupVbenForm() {
   });
 }
 
-const useVbenForm = useForm<ComponentType>;
+const useVbenForm = useForm<ComponentType, ComponentPropsMap>;
 
 export { initSetupVbenForm, useVbenForm, z };
-export type VbenFormSchema = FormSchema<ComponentType>;
-export type { VbenFormProps };
+
+export type VbenFormSchema = FormSchema<ComponentType, ComponentPropsMap>;
+export type VbenFormProps = FormProps<ComponentType, ComponentPropsMap>;

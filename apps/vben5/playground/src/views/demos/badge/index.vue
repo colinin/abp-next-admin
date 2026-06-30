@@ -7,7 +7,7 @@ import { useAccessStore } from '@vben/stores';
 
 import { MenuBadge } from '@vben-core/menu-ui';
 
-import { Button, Card, Radio, RadioGroup } from 'ant-design-vue';
+import { Button, Card, Radio, RadioGroup } from 'antdv-next';
 
 import { useVbenForm } from '#/adapter/form';
 
@@ -99,7 +99,7 @@ function updateMenuBadge() {
             >
               <div
                 :title="color.label"
-                class="flex h-[14px] w-[50px] items-center justify-start"
+                class="flex h-3.5 w-12.5 items-center justify-start"
               >
                 <MenuBadge
                   v-bind="{ ...badgeProps, badgeVariants: color.value }"

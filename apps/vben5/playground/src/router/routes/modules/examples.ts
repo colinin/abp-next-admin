@@ -38,6 +38,14 @@ const routes: RouteRecordRaw[] = [
             },
           },
           {
+            name: 'FormValueFormatExample',
+            path: '/examples/form/value-format',
+            component: () => import('#/views/examples/form/value-format.vue'),
+            meta: {
+              title: $t('examples.form.valueFormat'),
+            },
+          },
+          {
             name: 'FormRulesExample',
             path: '/examples/form/rules',
             component: () => import('#/views/examples/form/rules.vue'),
@@ -92,6 +100,14 @@ const routes: RouteRecordRaw[] = [
               import('#/views/examples/form/scroll-to-error-test.vue'),
             meta: {
               title: $t('examples.form.scrollToError'),
+            },
+          },
+          {
+            name: 'FormCollapsibleExample',
+            path: '/examples/form/collapsible-test',
+            component: () => import('#/views/examples/form/collapsible.vue'),
+            meta: {
+              title: $t('examples.form.collapsible'),
             },
           },
         ],
@@ -175,6 +191,14 @@ const routes: RouteRecordRaw[] = [
             component: () => import('#/views/examples/vxe-table/virtual.vue'),
             meta: {
               title: $t('examples.vxeTable.virtual'),
+            },
+          },
+          {
+            name: 'VxeTableViewedExample',
+            path: '/examples/vxe-table/viewed',
+            component: () => import('#/views/examples/vxe-table/viewed.vue'),
+            meta: {
+              title: $t('examples.vxeTable.viewed'),
             },
           },
         ],
@@ -344,6 +368,15 @@ const routes: RouteRecordRaw[] = [
         meta: {
           icon: 'mdi:crop',
           title: $t('examples.cropper.title'),
+        },
+      },
+      {
+        name: 'TiptapExample',
+        path: '/examples/tiptap',
+        component: () => import('#/views/examples/tiptap/index.vue'),
+        meta: {
+          icon: 'lucide:square-pen',
+          title: $t('examples.tiptap.title'),
         },
       },
     ],

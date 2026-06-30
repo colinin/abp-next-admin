@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
-
 import type { Recordable } from '@vben/types';
 
 import type { VbenFormSchema } from '#/adapter/form';
@@ -108,7 +106,7 @@ const schema: VbenFormSchema[] = [
       // 不需要处理多语言时就无需这么做
       return {
         ...(titleSuffix.value && { addonAfter: titleSuffix.value }),
-        onChange({ target: { value } }: ChangeEvent) {
+        onChange({ target: { value } }: { target: { value: string } }) {
           titleSuffix.value = value && $te(value) ? $t(value) : undefined;
         },
       };
@@ -498,7 +496,7 @@ const getDrawerTitle = computed(() =>
 );
 </script>
 <template>
-  <Drawer class="w-full max-w-[800px]" :title="getDrawerTitle">
+  <Drawer class="w-full max-w-200" :title="getDrawerTitle">
     <Form class="mx-4" :layout="isHorizontal ? 'horizontal' : 'vertical'" />
   </Drawer>
 </template>

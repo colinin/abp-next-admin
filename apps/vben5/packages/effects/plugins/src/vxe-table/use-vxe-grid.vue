@@ -44,6 +44,7 @@ import { VxeGrid, VxeUI } from 'vxe-table';
 
 import { extendProxyOptions } from './extends';
 import { useTableForm } from './init';
+import { applyViewedRowOptions, useViewedRow } from './use-viewed-row';
 
 import 'vxe-table/styles/cssvar.scss';
 import 'vxe-pc-ui/styles/cssvar.scss';
@@ -72,10 +73,31 @@ const {
   gridEvents,
   formOptions,
   tableTitle,
+  tableData,
   tableTitleHelp,
   showSearchForm,
   separator,
+  viewedRowOptions,
 } = usePriorityValues(props, state);
+
+// viewedRowOptions：helper 只创建一次（persist/keyField 不支持运行时切换）
+// actionCodes、rowClassName、rowStyle、viewedKeys 的变化通过 options computed 自然响应
+const gridApi = props.api;
+
+watch(
+  viewedRowOptions,
+  (cfg) => {
+    // helper 已存在则不重建
+    if (gridApi.viewedRowHelper) return;
+
+    if (!cfg) return;
+
+    const keyField = (gridOptions.value?.rowConfig as any)?.keyField || 'id';
+    const resolved = isBoolean(cfg) ? { keyField } : { keyField, ...cfg };
+    gridApi.viewedRowHelper = useViewedRow(resolved);
+  },
+  { immediate: true },
+);
 
 const { isMobile } = usePreferences();
 const isSeparator = computed(() => {
@@ -230,6 +252,19 @@ const options = computed(() => {
   if (mergedOptions.formConfig) {
     mergedOptions.formConfig.enabled = false;
   }
+  if (tableData.value && tableData.value.length > 0) {
+    mergedOptions.data = tableData.value;
+  }
+
+  // 注入已读行功能（rowClassName、rowStyle、columns 拦截）
+  if (viewedRowOptions.value && gridApi.viewedRowHelper) {
+    applyViewedRowOptions(
+      mergedOptions,
+      viewedRowOptions.value,
+      gridApi.viewedRowHelper,
+    );
+  }
+
   return mergedOptions;
 });
 
@@ -316,7 +351,6 @@ async function init() {
       '[Vben Vxe Table]: The formConfig in the grid is not supported, please use the `formOptions` props',
     );
   }
-  // @ts-ignore
   props.api?.setState?.({ gridOptions: defaultGridOptions });
   // form 由 vben-form 代替，所以需要保证query相关事件可以拿到参数
   extendProxyOptions(props.api, defaultGridOptions, () =>
@@ -328,7 +362,7 @@ async function init() {
 watch(
   formOptions,
   () => {
-    formApi.setState((prev) => {
+    formApi.setState((prev: Record<string, any>) => {
       const finalFormOptions: VbenFormProps = mergeWithArrayOverride(
         {},
         formOptions.value,
@@ -361,7 +395,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div :class="cn('bg-card h-full rounded-md', className)">
+  <div :class="cn('h-full rounded-md bg-card', className)">
     <VxeGrid
       ref="gridRef"
       :class="
@@ -379,9 +413,7 @@ onUnmounted(() => {
       <!-- 左侧操作区域或者title -->
       <template v-if="showToolbar" #toolbar-actions="slotProps">
         <slot v-if="showTableTitle" name="table-title">
-          <div
-            class="flex items-center justify-center gap-1 text-[1rem] font-bold"
-          >
+          <div class="flex-center gap-1 text-[1rem] font-bold">
             {{ tableTitle }}
             <VbenHelpTooltip v-if="tableTitleHelp">
               {{ tableTitleHelp }}
@@ -419,7 +451,7 @@ onUnmounted(() => {
           v-show="showSearchForm !== false"
           :class="
             cn(
-              'relative rounded py-3',
+              'relative rounded-sm py-3',
               isCompactForm
                 ? isSeparator
                   ? 'pb-8'
@@ -461,7 +493,7 @@ onUnmounted(() => {
             :style="{
               ...(separatorBg ? { backgroundColor: separatorBg } : undefined),
             }"
-            class="bg-background-deep z-100 absolute -left-2 bottom-1 h-2 w-[calc(100%+1rem)] overflow-hidden md:bottom-2 md:h-3"
+            class="absolute bottom-1 -left-2 z-100 h-2 w-[calc(100%+1rem)] overflow-hidden bg-background-deep md:bottom-2 md:h-3"
           ></div>
         </div>
       </template>
