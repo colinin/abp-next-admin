@@ -236,7 +236,7 @@ async function onLayoutChange(layoutId?: string) {
     const layoutDto = await getLayoutApi(layoutId);
     const dataDto = await getDataDictionaryApi(layoutDto.dataId);
     basicFormApi.setFieldValue('component', layoutDto.path);
-    menuMetas.value = dataDto.items.sort();
+    menuMetas.value = dataDto.items.toSorted();
     onInitMetaFormSchemas();
   } finally {
     drawerApi.setState({ loading: false });
@@ -457,16 +457,14 @@ async function onSubmit() {
         v-if="currentStep === 0"
         type="primary"
         @click="basicFormApi.validateAndSubmitForm"
-        :loading="submiting"
-      >
+        :loading="submiting">
         {{ $t('AppPlatform.NextStep') }}
       </Button>
       <Button
         v-if="currentStep === 1"
         type="primary"
         @click="metaFormApi.validateAndSubmitForm"
-        :loading="submiting"
-      >
+        :loading="submiting">
         {{ $t('AbpUi.Submit') }}
       </Button>
     </template>

@@ -151,8 +151,7 @@ watchEffect(() => {
       padding: true,
     }"
     :pager-config="pagerConfig"
-    @page-change="onPageChange"
-  >
+    @page-change="onPageChange">
     <template #type="{ row }">
       <Tag :color="getChangeTypeColor(row.changeType)">
         {{ getChangeTypeValue(row.changeType) }}
@@ -162,8 +161,7 @@ watchEffect(() => {
       <VxeGrid
         :border="true"
         :columns="subColumnsConfig"
-        :data="row.propertyChanges"
-      />
+        :data="row.propertyChanges" />
     </template>
   </VxeGrid>
 </template>

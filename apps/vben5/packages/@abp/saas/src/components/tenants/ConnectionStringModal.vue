@@ -81,21 +81,18 @@ async function onSubmit() {
       ref="form"
       :label-col="{ span: 4 }"
       :wapper-col="{ span: 20 }"
-      :model="formModel"
-    >
+      :model="formModel">
       <FormItem
         required
         name="provider"
-        :label="$t('AbpSaas.DisplayName:DataBaseProvider')"
-      >
+        :label="$t('AbpSaas.DisplayName:DataBaseProvider')">
         <Select :options="dataBaseOptions" v-model:value="formModel.provider" />
       </FormItem>
       <FormItem required name="name" :label="$t('AbpSaas.DisplayName:Name')">
         <Input
           :disabled="isEditModal"
           autocomplete="off"
-          v-model:value="formModel.name"
-        />
+          v-model:value="formModel.name" />
       </FormItem>
       <FormItem required name="value" :label="$t('AbpSaas.DisplayName:Value')">
         <Textarea :auto-size="{ minRows: 3 }" v-model:value="formModel.value" />

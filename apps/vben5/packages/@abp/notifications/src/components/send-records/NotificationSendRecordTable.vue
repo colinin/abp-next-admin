@@ -335,8 +335,7 @@ async function onSend(row: NotificationSendRecordDto) {
           :icon="h(DeleteOutlined)"
           danger
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Button :icon="h(SendMessageIcon)" type="link" @click="onSend(row)">

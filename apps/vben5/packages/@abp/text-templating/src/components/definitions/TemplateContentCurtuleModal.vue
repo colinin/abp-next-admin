@@ -164,7 +164,7 @@ async function onSubmit(values: Record<string, string>) {
     modalApi.setState({ submitting: true });
     const { name } = modalApi.getData<TextTemplateDefinitionDto>();
     const dto = await updateApi(name, {
-      content: values.content!,
+      content: values.content ?? '',
       culture: values.culture,
     });
     emits('change', dto);

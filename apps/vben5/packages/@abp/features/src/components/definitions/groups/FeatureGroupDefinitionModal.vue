@@ -73,7 +73,9 @@ const [Modal, modalApi] = useVbenModal({
       try {
         modalApi.setState({ loading: true });
         const { name } = modalApi.getData<FeatureGroupDefinitionDto>();
-        name && (await onGet(name));
+        if (name) {
+          await onGet(name);
+        }
       } finally {
         modalApi.setState({ loading: false });
       }
@@ -106,31 +108,26 @@ function onPropDelete(prop: PropertyInfo) {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTab">
         <!-- 基本信息 -->
         <TabPane key="basic" :tab="$t('AbpFeatureManagement.BasicInfo')">
           <FormItem
             :label="$t('AbpFeatureManagement.DisplayName:Name')"
             name="name"
-            required
-          >
+            required>
             <Input
               v-model:value="formModel.name"
               :disabled="formModel.isStatic"
-              autocomplete="off"
-            />
+              autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('AbpFeatureManagement.DisplayName:DisplayName')"
             name="displayName"
-            required
-          >
+            required>
             <LocalizableInput
               v-model:value="formModel.displayName"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
         </TabPane>
         <!-- 属性 -->
@@ -139,8 +136,7 @@ function onPropDelete(prop: PropertyInfo) {
             :data="formModel.extraProperties"
             :disabled="formModel.isStatic"
             @change="onPropChange"
-            @delete="onPropDelete"
-          />
+            @delete="onPropDelete" />
         </TabPane>
       </Tabs>
     </Form>

@@ -155,8 +155,7 @@ async function onGet(id: string) {
             </DescriptionsItem>
             <template v-if="auditLogModel.impersonatorUserName">
               <DescriptionsItem
-                :label="$t('AbpAuditLogging.ImpersonatorTenantId')"
-              >
+                :label="$t('AbpAuditLogging.ImpersonatorTenantId')">
                 <span v-if="auditLogModel.impersonatorTenantId">
                   {{ auditLogModel.impersonatorTenantId }}/{{
                     auditLogModel.impersonatorTenantName
@@ -164,8 +163,7 @@ async function onGet(id: string) {
                 </span>
               </DescriptionsItem>
               <DescriptionsItem
-                :label="$t('AbpAuditLogging.ImpersonatorUserId')"
-              >
+                :label="$t('AbpAuditLogging.ImpersonatorUserId')">
                 {{ auditLogModel.impersonatorUserId }}/{{
                   auditLogModel.impersonatorUserName
                 }}
@@ -173,22 +171,19 @@ async function onGet(id: string) {
             </template>
             <DescriptionsItem
               :label="$t('AbpAuditLogging.RequestUrl')"
-              :span="2"
-            >
+              :span="2">
               {{ auditLogModel.url }}
             </DescriptionsItem>
             <DescriptionsItem
               :label="$t('AbpAuditLogging.HttpMethod')"
-              :span="2"
-            >
+              :span="2">
               <Tag :color="getHttpMethodColor(auditLogModel.httpMethod)">
                 {{ auditLogModel.httpMethod }}
               </Tag>
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.HttpStatusCode')">
               <Tag
-                :color="getHttpStatusCodeColor(auditLogModel.httpStatusCode)"
-              >
+                :color="getHttpStatusCodeColor(auditLogModel.httpStatusCode)">
                 {{ auditLogModel.httpStatusCode }}
               </Tag>
             </DescriptionsItem>
@@ -210,8 +205,7 @@ async function onGet(id: string) {
             <DescriptionsItem
               :label="$t('AbpAuditLogging.BrowserInfo')"
               :label-style="{ width: '110px' }"
-              :span="2"
-            >
+              :span="2">
               {{ auditLogModel.browserInfo }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.Comments')" :span="2">
@@ -219,14 +213,12 @@ async function onGet(id: string) {
             </DescriptionsItem>
             <DescriptionsItem
               :label="$t('AbpAuditLogging.Exception')"
-              :span="2"
-            >
+              :span="2">
               {{ auditLogModel.exceptions }}
             </DescriptionsItem>
             <DescriptionsItem
               :label="$t('AbpAuditLogging.Additional')"
-              :span="2"
-            >
+              :span="2">
               {{ auditLogModel.extraProperties }}
             </DescriptionsItem>
           </Descriptions>
@@ -234,8 +226,7 @@ async function onGet(id: string) {
         <TabPane
           v-if="auditLogModel.actions?.length"
           key="opera"
-          :tab="`${$t('AbpAuditLogging.InvokeMethod')}(${auditLogModel.actions?.length})`"
-        >
+          :tab="`${$t('AbpAuditLogging.InvokeMethod')}(${auditLogModel.actions?.length})`">
           <ActionsGrid>
             <template #parameters="{ row }">
               <Descriptions :colon="false" :column="1" bordered size="small">
@@ -243,15 +234,13 @@ async function onGet(id: string) {
                   <CodeEditor
                     :mode="MODE.JSON"
                     :value="row.parameters"
-                    readonly
-                  />
+                    readonly />
                 </DescriptionsItem>
                 <DescriptionsItem :label="$t('AbpAuditLogging.Additional')">
                   <CodeEditor
                     :mode="MODE.JSON"
                     :value="row.extraProperties"
-                    readonly
-                  />
+                    readonly />
                 </DescriptionsItem>
               </Descriptions>
             </template>
@@ -260,8 +249,7 @@ async function onGet(id: string) {
         <TabPane
           v-if="auditLogModel.entityChanges?.length"
           key="changes"
-          :tab="`${$t('AbpAuditLogging.EntitiesChanged')}(${auditLogModel.entityChanges?.length})`"
-        >
+          :tab="`${$t('AbpAuditLogging.EntitiesChanged')}(${auditLogModel.entityChanges?.length})`">
           <EntityChangeTable :data="auditLogModel.entityChanges" />
         </TabPane>
       </Tabs>

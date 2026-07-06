@@ -602,8 +602,7 @@ function onJobStatusChange(
           ghost
           type="primary"
           v-access:code="[BackgroundJobsPermissions.Start]"
-          @click="onBulkStart"
-        >
+          @click="onBulkStart">
           {{ $t('TaskManagement.BackgroundJobs:Start') }}
         </Button>
         <Button
@@ -613,16 +612,14 @@ function onJobStatusChange(
           ghost
           type="primary"
           v-access:code="[BackgroundJobsPermissions.Stop]"
-          @click="onBulkStop"
-        >
+          @click="onBulkStop">
           {{ $t('TaskManagement.BackgroundJobs:Pause') }}
         </Button>
         <Button
           :icon="h(PlusOutlined)"
           type="primary"
           v-access:code="[BackgroundJobsPermissions.Create]"
-          @click="onCreate"
-        >
+          @click="onCreate">
           {{ $t('TaskManagement.BackgroundJobs:AddNew') }}
         </Button>
         <Button
@@ -631,8 +628,7 @@ function onJobStatusChange(
           danger
           type="primary"
           v-access:code="[BackgroundJobsPermissions.Delete]"
-          @click="onBulkDelete"
-        >
+          @click="onBulkDelete">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>
@@ -662,8 +658,7 @@ function onJobStatusChange(
           :icon="h(EditOutlined)"
           block
           type="link"
-          @click="onEdit(row)"
-        >
+          @click="onEdit(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -676,8 +671,7 @@ function onJobStatusChange(
           block
           danger
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown>
@@ -689,8 +683,7 @@ function onJobStatusChange(
                   hasAccessByCodes([BackgroundJobsPermissions.Pause])
                 "
                 key="pause"
-                :icon="h(PauseIcon)"
-              >
+                :icon="h(PauseIcon)">
                 {{ $t('TaskManagement.BackgroundJobs:Pause') }}
               </MenuItem>
               <MenuItem
@@ -699,8 +692,7 @@ function onJobStatusChange(
                   hasAccessByCodes([BackgroundJobsPermissions.Resume])
                 "
                 key="resume"
-                :icon="h(ResumeIcon)"
-              >
+                :icon="h(ResumeIcon)">
                 {{ $t('TaskManagement.BackgroundJobs:Resume') }}
               </MenuItem>
               <MenuItem
@@ -709,8 +701,7 @@ function onJobStatusChange(
                   hasAccessByCodes([BackgroundJobsPermissions.Trigger])
                 "
                 key="trigger"
-                :icon="h(TriggerIcon)"
-              >
+                :icon="h(TriggerIcon)">
                 {{ $t('TaskManagement.BackgroundJobs:Trigger') }}
               </MenuItem>
               <MenuItem
@@ -719,8 +710,7 @@ function onJobStatusChange(
                   hasAccessByCodes([BackgroundJobsPermissions.Start])
                 "
                 key="start"
-                :icon="h(StartIcon)"
-              >
+                :icon="h(StartIcon)">
                 {{ $t('TaskManagement.BackgroundJobs:Start') }}
               </MenuItem>
               <MenuItem
@@ -729,16 +719,14 @@ function onJobStatusChange(
                   hasAccessByCodes([BackgroundJobsPermissions.Stop])
                 "
                 key="stop"
-                :icon="h(StopIcon)"
-              >
+                :icon="h(StopIcon)">
                 {{ $t('TaskManagement.BackgroundJobs:Stop') }}
               </MenuItem>
               <MenuDivider />
               <MenuItem
                 v-if="hasAccessByCodes([BackgroundJobsPermissions.Create])"
                 key="copy"
-                :icon="h(CopyOutlined)"
-              >
+                :icon="h(CopyOutlined)">
                 {{ $t('TaskManagement.BackgroundJobs:Copy') }}
               </MenuItem>
             </Menu>

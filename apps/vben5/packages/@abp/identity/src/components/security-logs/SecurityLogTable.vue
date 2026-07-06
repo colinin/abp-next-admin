@@ -264,8 +264,7 @@ function onBulkDelete() {
         ghost
         type="primary"
         v-access:code="[SecurityLogPermissions.Delete]"
-        @click="onBulkDelete"
-      >
+        @click="onBulkDelete">
         {{ $t('AbpUi.Delete') }}
       </Button>
     </template>
@@ -282,8 +281,7 @@ function onBulkDelete() {
           block
           type="link"
           v-access:code="[SecurityLogPermissions.Default]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -292,8 +290,7 @@ function onBulkDelete() {
           danger
           type="link"
           v-access:code="[SecurityLogPermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

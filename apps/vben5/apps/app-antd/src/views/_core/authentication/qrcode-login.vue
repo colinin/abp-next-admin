@@ -19,6 +19,5 @@ async function onConfirm(key: string, tenantId?: string) {
   <QrCodeLogin
     :login-path="LOGIN_PATH"
     @confirm="onConfirm"
-    :default-avatar="preferences.app.defaultAvatar"
-  />
+    :default-avatar="preferences.app.defaultAvatar" />
 </template>

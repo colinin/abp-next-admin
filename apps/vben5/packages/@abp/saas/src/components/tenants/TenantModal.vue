@@ -221,8 +221,7 @@ onMounted(onSearchEditions);
       :model="tenant"
       :label-col="{ span: 6 }"
       :wapper-col="{ span: 18 }"
-      :rules="getFormRules"
-    >
+      :rules="getFormRules">
       <FormItem name="isActive" :label="$t('AbpSaas.DisplayName:IsActive')">
         <Checkbox v-model:checked="tenant.isActive">
           {{ $t('AbpSaas.DisplayName:IsActive') }}
@@ -232,31 +231,26 @@ onMounted(onSearchEditions);
         <Input
           v-model:value="tenant.name"
           @change="(e) => onNameChange(e.target.value)"
-          autocomplete="off"
-        />
+          autocomplete="off" />
       </FormItem>
       <FormItem
         v-if="!tenant.id"
         name="adminEmailAddress"
         :label="$t('AbpSaas.DisplayName:AdminEmailAddress')"
         :label-col="{ span: 8 }"
-        :wapper-col="{ span: 16 }"
-      >
+        :wapper-col="{ span: 16 }">
         <Input
           type="email"
           v-model:value="tenant.adminEmailAddress"
-          autocomplete="off"
-        />
+          autocomplete="off" />
       </FormItem>
       <FormItem
         v-if="!tenant.id"
         name="adminPassword"
-        :label="$t('AbpSaas.DisplayName:AdminPassword')"
-      >
+        :label="$t('AbpSaas.DisplayName:AdminPassword')">
         <InputPassword
           v-model:value="tenant.adminPassword"
-          autocomplete="off"
-        />
+          autocomplete="off" />
       </FormItem>
       <FormItem name="editionId" :label="$t('AbpSaas.DisplayName:EditionName')">
         <Select
@@ -266,33 +260,28 @@ onMounted(onSearchEditions);
           allow-clear
           show-search
           :filter-option="false"
-          @search="onSearchEditions"
-        />
+          @search="onSearchEditions" />
       </FormItem>
       <FormItem name="enableTime" :label="$t('AbpSaas.DisplayName:EnableTime')">
         <DatePicker
           class="w-full"
           value-format="YYYY-MM-DD"
           :disabled-date="getDisabledEnableTime"
-          v-model:value="tenant.enableTime"
-        />
+          v-model:value="tenant.enableTime" />
       </FormItem>
       <FormItem
         name="disableTime"
-        :label="$t('AbpSaas.DisplayName:DisableTime')"
-      >
+        :label="$t('AbpSaas.DisplayName:DisableTime')">
         <DatePicker
           class="w-full"
           value-format="YYYY-MM-DD"
           :disabled-date="getDisabledDisableTime"
-          v-model:value="tenant.disableTime"
-        />
+          v-model:value="tenant.disableTime" />
       </FormItem>
       <FormItem
         v-if="!tenant.id"
         name="useSharedDatabase"
-        :label="$t('AbpSaas.DisplayName:UseSharedDatabase')"
-      >
+        :label="$t('AbpSaas.DisplayName:UseSharedDatabase')">
         <Checkbox v-model:checked="tenant.useSharedDatabase">
           {{ $t('AbpSaas.DisplayName:UseSharedDatabase') }}
         </Checkbox>
@@ -300,25 +289,21 @@ onMounted(onSearchEditions);
       <template v-if="!tenant.id && !tenant.useSharedDatabase">
         <FormItem
           name="provider"
-          :label="$t('AbpSaas.DisplayName:DataBaseProvider')"
-        >
+          :label="$t('AbpSaas.DisplayName:DataBaseProvider')">
           <Select :options="dataBaseOptions" v-model:value="tenant.provider" />
         </FormItem>
         <FormItem
           name="defaultConnectionString"
-          :label="$t('AbpSaas.DisplayName:DefaultConnectionString')"
-        >
+          :label="$t('AbpSaas.DisplayName:DefaultConnectionString')">
           <Textarea
             :auto-size="{ minRows: 2 }"
-            v-model:value="tenant.defaultConnectionString"
-          />
+            v-model:value="tenant.defaultConnectionString" />
         </FormItem>
         <ConnectionStringTable
           :data-base-options="dataBaseOptions"
           :connection-strings="tenant.connectionStrings"
           :submit="onConnectionChange"
-          :delete="onConnectionDelete"
-        />
+          :delete="onConnectionDelete" />
       </template>
     </Form>
   </Modal>

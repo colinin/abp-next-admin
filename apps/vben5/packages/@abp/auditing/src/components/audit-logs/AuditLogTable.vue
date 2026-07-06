@@ -324,8 +324,7 @@ function onFilter(field: string, value: any) {
         ghost
         type="primary"
         v-access:code="[AuditLogPermissions.Delete]"
-        @click="onBulkDelete"
-      >
+        @click="onBulkDelete">
         {{ $t('AbpUi.Delete') }}
       </Button>
     </template>
@@ -339,15 +338,13 @@ function onFilter(field: string, value: any) {
       <Tag
         :color="getHttpStatusCodeColor(row.httpStatusCode)"
         class="cursor-pointer"
-        @click="onFilter('httpStatusCode', row.httpStatusCode)"
-      >
+        @click="onFilter('httpStatusCode', row.httpStatusCode)">
         {{ row.httpStatusCode }}
       </Tag>
       <Tag
         :color="getHttpMethodColor(row.httpMethod)"
         class="ml-px cursor-pointer"
-        @click="onFilter('httpMethod', row.httpMethod)"
-      >
+        @click="onFilter('httpMethod', row.httpMethod)">
         {{ row.httpMethod }}
       </Tag>
       <a
@@ -364,8 +361,7 @@ function onFilter(field: string, value: any) {
           block
           type="link"
           v-access:code="[AuditLogPermissions.Default]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpAuditLogging.ShowLogDialog') }}
         </Button>
         <Button
@@ -374,8 +370,7 @@ function onFilter(field: string, value: any) {
           danger
           type="link"
           v-access:code="[AuditLogPermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

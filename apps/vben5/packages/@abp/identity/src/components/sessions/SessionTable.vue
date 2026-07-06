@@ -244,8 +244,7 @@ onMounted(onGetUsers);
         class="w-full"
         show-search
         @change="(val?: SelectValue) => onFieldChange('userId', val)"
-        @search="onGetUsers"
-      />
+        @search="onGetUsers" />
     </template>
     <template #device="{ row }">
       <div class="flex flex-row">
@@ -266,8 +265,7 @@ onMounted(onGetUsers);
           danger
           type="link"
           v-access:code="[IdentitySessionPermissions.Revoke]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpIdentity.RevokeSession') }}
         </Button>
       </div>

@@ -122,7 +122,9 @@ const [Modal, modalApi] = useVbenModal({
       try {
         modalApi.setState({ loading: true });
         const { groupName, name } = modalApi.getData<PermissionDefinitionDto>();
-        name && (await onGet(name));
+        if (name) {
+          await onGet(name);
+        }
         await Promise.all([onInitGroups(groupName), onInitProviders()]);
       } finally {
         modalApi.setState({ loading: false });
@@ -184,6 +186,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
+  // oxlint-disable-next-line typescript/no-dynamic-delete
   delete formModel.value.extraProperties[prop.key];
 }
 </script>
@@ -194,27 +197,23 @@ function onPropDelete(prop: PropertyInfo) {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTab">
         <!-- 基本信息 -->
         <TabPane key="basic" :tab="$t('AbpPermissionManagement.BasicInfo')">
           <FormItem
             :label="$t('AbpPermissionManagement.DisplayName:IsEnabled')"
-            name="isEnabled"
-          >
+            name="isEnabled">
             <Checkbox
               v-model:checked="formModel.isEnabled"
-              :disabled="formModel.isStatic"
-            >
+              :disabled="formModel.isStatic">
               {{ $t('AbpPermissionManagement.DisplayName:IsEnabled') }}
             </Checkbox>
           </FormItem>
           <FormItem
             :label="$t('AbpPermissionManagement.DisplayName:GroupName')"
             name="groupName"
-            required
-          >
+            required>
             <Select
               v-model:value="formModel.groupName"
               :allow-clear="true"
@@ -224,14 +223,12 @@ function onPropDelete(prop: PropertyInfo) {
                 value: 'name',
               }"
               :options="availableGroups"
-              @change="(e) => onGroupChange(e?.toString())"
-            />
+              @change="(e) => onGroupChange(e?.toString())" />
           </FormItem>
           <FormItem
             v-if="availablePermissions.length > 0"
             :label="$t('AbpPermissionManagement.DisplayName:ParentName')"
-            name="parentName"
-          >
+            name="parentName">
             <TreeSelect
               v-model:value="formModel.parentName"
               :allow-clear="true"
@@ -241,73 +238,61 @@ function onPropDelete(prop: PropertyInfo) {
                 value: 'name',
                 children: 'children',
               }"
-              :tree-data="availablePermissions"
-            />
+              :tree-data="availablePermissions" />
           </FormItem>
           <FormItem
             :label="$t('AbpPermissionManagement.DisplayName:Name')"
             name="name"
-            required
-          >
+            required>
             <Input
               v-model:value="formModel.name"
               :disabled="formModel.isStatic"
-              autocomplete="off"
-            />
+              autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('AbpPermissionManagement.DisplayName:DisplayName')"
             name="displayName"
-            required
-          >
+            required>
             <LocalizableInput
               v-model:value="formModel.displayName"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
           <FormItem
             :label="$t('AbpPermissionManagement.DisplayName:MultiTenancySide')"
-            name="multiTenancySide"
-          >
+            name="multiTenancySide">
             <Select
               v-model:value="formModel.multiTenancySide"
               :disabled="formModel.isStatic"
-              :options="multiTenancySideOptions"
-            />
+              :options="multiTenancySideOptions" />
           </FormItem>
           <FormItem
             :label="$t('AbpPermissionManagement.DisplayName:Providers')"
             :extra="$t('AbpPermissionManagement.Description:Providers')"
-            name="providers"
-          >
+            name="providers">
             <Select
               v-model:value="formModel.providers"
               :allow-clear="true"
               :disabled="formModel.isStatic"
               :field-names="{ label: 'name', value: 'value' }"
               :options="availableProviders"
-              mode="multiple"
-            />
+              mode="multiple" />
           </FormItem>
         </TabPane>
         <!-- 状态检查 -->
         <TabPane
           key="stateCheckers"
-          :tab="$t('AbpPermissionManagement.StateCheckers')"
-        >
+          :tab="$t('AbpPermissionManagement.StateCheckers')">
           <FormItem
             name="stateCheckers"
             label=""
             :label-col="{ span: 0 }"
-            :wrapper-col="{ span: 24 }"
-          >
+            :wrapper-col="{ span: 24 }">
             <SimpleStateChecking
               :disabled="formModel.isStatic"
               :allow-delete="true"
               :allow-edit="true"
               v-model:value="formModel.stateCheckers"
-              :state="permissionState"
-            />
+              :state="permissionState" />
           </FormItem>
         </TabPane>
         <!-- 属性 -->
@@ -316,8 +301,7 @@ function onPropDelete(prop: PropertyInfo) {
             :data="formModel.extraProperties"
             :disabled="formModel.isStatic"
             @change="onPropChange"
-            @delete="onPropDelete"
-          />
+            @delete="onPropDelete" />
         </TabPane>
       </Tabs>
     </Form>

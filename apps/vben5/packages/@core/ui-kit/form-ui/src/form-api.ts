@@ -249,7 +249,7 @@ export class FormApi {
    * 重置表单
    */
   async resetForm(
-    state?: Partial<FormState<GenericObject>> | undefined,
+    state?: Partial<FormState<GenericObject>>  ,
     opts?: Partial<ResetFormOpts>,
   ) {
     const form = await this.getForm();

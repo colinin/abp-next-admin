@@ -37,7 +37,7 @@ class SSE {
   ) {
     const baseUrl = this.client.getBaseUrl() || '';
 
-    let axiosConfig: InternalAxiosRequestConfig<any> = {
+    let axiosConfig: InternalAxiosRequestConfig = {
       url,
       method: (requestOptions?.method as any) ?? 'GET',
       headers: {} as AxiosRequestHeaders,
@@ -51,7 +51,7 @@ class SSE {
       for (const handler of requestInterceptors.handlers) {
         if (typeof handler?.fulfilled === 'function') {
           const next = await handler.fulfilled(axiosConfig as any);
-          if (next) axiosConfig = next as InternalAxiosRequestConfig<any>;
+          if (next) axiosConfig = next as InternalAxiosRequestConfig;
         }
       }
     }
@@ -72,7 +72,7 @@ class SSE {
     if (
       bodyInit &&
       typeof bodyInit === 'object' &&
-      !ArrayBuffer.isView(bodyInit as any) &&
+      !ArrayBuffer.isView(bodyInit) &&
       !(bodyInit instanceof ArrayBuffer) &&
       !(bodyInit instanceof Blob) &&
       !(bodyInit instanceof FormData) &&

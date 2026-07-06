@@ -132,15 +132,13 @@ async function handleOk() {
             height="300px"
             :circled="circled"
             @cropend="handleCropend"
-            @ready="handleReady"
-          />
+            @ready="handleReady" />
         </div>
         <div :class="e('toolbar')">
           <Upload
             :file-list="fileList"
             accept="image/*"
-            :before-upload="handleBeforeUpload"
-          >
+            :before-upload="handleBeforeUpload">
             <Tooltip :title="$t('cropper.selectImage')" placement="bottom">
               <Button size="small" :icon="h(UploadIcon)" type="primary" />
             </Tooltip>
@@ -152,8 +150,7 @@ async function handleOk() {
                 :icon="h(ResetIcon)"
                 size="small"
                 :disabled="!src"
-                @click="handlerToolbar('reset')"
-              />
+                @click="handlerToolbar('reset')" />
             </Tooltip>
             <Tooltip :title="$t('cropper.btn_rotate_left')" placement="bottom">
               <Button
@@ -161,8 +158,7 @@ async function handleOk() {
                 :icon="h(RotateLeftIcon)"
                 size="small"
                 :disabled="!src"
-                @click="handlerToolbar('rotate', -45)"
-              />
+                @click="handlerToolbar('rotate', -45)" />
             </Tooltip>
             <Tooltip :title="$t('cropper.btn_rotate_right')" placement="bottom">
               <Button
@@ -170,8 +166,7 @@ async function handleOk() {
                 :icon="h(RotateRightIcon)"
                 size="small"
                 :disabled="!src"
-                @click="handlerToolbar('rotate', 45)"
-              />
+                @click="handlerToolbar('rotate', 45)" />
             </Tooltip>
             <Tooltip :title="$t('cropper.btn_scale_x')" placement="bottom">
               <Button
@@ -179,8 +174,7 @@ async function handleOk() {
                 :icon="h(ScaleXIcon)"
                 size="small"
                 :disabled="!src"
-                @click="handlerToolbar('scaleX')"
-              />
+                @click="handlerToolbar('scaleX')" />
             </Tooltip>
             <Tooltip :title="$t('cropper.btn_scale_y')" placement="bottom">
               <Button
@@ -188,8 +182,7 @@ async function handleOk() {
                 :icon="h(ScaleYIcon)"
                 size="small"
                 :disabled="!src"
-                @click="handlerToolbar('scaleY')"
-              />
+                @click="handlerToolbar('scaleY')" />
             </Tooltip>
             <Tooltip :title="$t('cropper.btn_zoom_in')" placement="bottom">
               <Button
@@ -197,8 +190,7 @@ async function handleOk() {
                 :icon="h(ZoomInIcon)"
                 size="small"
                 :disabled="!src"
-                @click="handlerToolbar('zoom', 0.1)"
-              />
+                @click="handlerToolbar('zoom', 0.1)" />
             </Tooltip>
             <Tooltip :title="$t('cropper.btn_zoom_out')" placement="bottom">
               <Button
@@ -206,8 +198,7 @@ async function handleOk() {
                 :icon="h(ZoomOutIcon)"
                 size="small"
                 :disabled="!src"
-                @click="handlerToolbar('zoom', -0.1)"
-              />
+                @click="handlerToolbar('zoom', -0.1)" />
             </Tooltip>
           </Space>
         </div>
@@ -217,8 +208,7 @@ async function handleOk() {
           <img
             :src="previewSource"
             v-if="previewSource"
-            :alt="$t('cropper.preview')"
-          />
+            :alt="$t('cropper.preview')" />
         </div>
         <template v-if="previewSource">
           <div :class="e(`group`)">

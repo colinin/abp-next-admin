@@ -59,7 +59,7 @@ async function onInit(filter?: string) {
 }
 
 async function onSubmit(values: Record<string, any>) {
-  console.log(values);
+  console.warn('onSubmit is not implemented!', values);
 }
 
 onMounted(onInit);
@@ -73,8 +73,7 @@ onMounted(onInit);
           v-model:value="model[field]"
           :options="entityTypes"
           :field-names="{ label: 'displayName', value: 'id' }"
-          @change="(value) => emits('entityChange', value!.toString())"
-        />
+          @change="(value) => emits('entityChange', value!.toString())" />
       </template>
       <slot name="subject"></slot>
     </Form>

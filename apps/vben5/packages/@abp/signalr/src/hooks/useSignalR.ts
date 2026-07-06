@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { HubConnection, IHttpConnectionOptions } from '@microsoft/signalr';
 
 import { useAccessStore } from '@vben/stores';

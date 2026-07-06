@@ -61,6 +61,13 @@ The configuration method of static routes and dynamic routes is the same. Below 
 
 ### Secondary Routes
 
+::: tip
+
+- Only top-level routes should start their `path` with `/`; routes inside `children` should use relative segments such as `about` or `menu1`.
+- When a parent route does not define `redirect`, the framework automatically fills it with the first child route. This only works when child paths stay relative.
+
+:::
+
 ::: details Secondary Route Example Code
 
 ```ts

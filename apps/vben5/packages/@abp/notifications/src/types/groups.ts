@@ -12,15 +12,13 @@ interface NotificationGroupDefinitionGetListInput {
   filter?: string;
 }
 
-interface NotificationGroupDefinitionCreateOrUpdateDto
-  extends IHasExtraProperties {
+interface NotificationGroupDefinitionCreateOrUpdateDto extends IHasExtraProperties {
   allowSubscriptionToClients: boolean;
   description?: string;
   displayName: string;
 }
 
-interface NotificationGroupDefinitionCreateDto
-  extends NotificationGroupDefinitionCreateOrUpdateDto {
+interface NotificationGroupDefinitionCreateDto extends NotificationGroupDefinitionCreateOrUpdateDto {
   name: string;
 }
 

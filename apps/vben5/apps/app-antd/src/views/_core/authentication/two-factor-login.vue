@@ -130,33 +130,28 @@ async function onSendCode(api: () => Promise<void>) {
       ref="formRef"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <!-- 选择验证器 -->
       <FormItem
         :label="$t('abp.oauth.twoFactor.authenticator')"
         name="twoFactorProvider"
-        required
-      >
+        required>
         <Select
           v-model:value="formModel.twoFactorProvider"
           :field-names="{ label: 'name', value: 'value' }"
           :options="twoFactorProviders"
-          allow-clear
-        />
+          allow-clear />
       </FormItem>
       <!-- 邮件验证 -->
       <template v-if="formModel.twoFactorProvider === 'Email'">
         <FormItem
           :label="$t('abp.oauth.twoFactor.emailAddress')"
           name="email"
-          required
-        >
+          required>
           <Input
             v-model:value="formModel.email"
             autocomplete="off"
-            type="email"
-          />
+            type="email" />
         </FormItem>
         <FormItem :label="$t('abp.oauth.twoFactor.code')" name="code" required>
           <div class="flex flex-row gap-4">
@@ -164,8 +159,7 @@ async function onSendCode(api: () => Promise<void>) {
             <Button
               :disabled="getSendValidCodeLoading"
               :loading="sendValidCodeLoading"
-              @click="onSendEmail"
-            >
+              @click="onSendEmail">
               {{ getSendValidCodeTitle }}
             </Button>
           </div>
@@ -176,8 +170,7 @@ async function onSendCode(api: () => Promise<void>) {
         <FormItem
           :label="$t('abp.oauth.twoFactor.phoneNumber')"
           name="phoneNumber"
-          required
-        >
+          required>
           <Input v-model:value="formModel.phoneNumber" autocomplete="off" />
         </FormItem>
         <FormItem :label="$t('abp.oauth.twoFactor.code')" name="code" required>
@@ -186,8 +179,7 @@ async function onSendCode(api: () => Promise<void>) {
             <Button
               :disabled="getSendValidCodeLoading"
               :loading="sendValidCodeLoading"
-              @click="onSendSms"
-            >
+              @click="onSendSms">
               {{ getSendValidCodeTitle }}
             </Button>
           </div>

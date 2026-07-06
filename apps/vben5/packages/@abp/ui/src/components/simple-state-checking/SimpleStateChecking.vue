@@ -194,16 +194,14 @@ function handleClean() {
               <div v-else-if="record.name === 'G'">
                 <Tag
                   v-for="feature in record.globalFeatureNames"
-                  :key="feature"
-                >
+                  :key="feature">
                   {{ feature }}
                 </Tag>
               </div>
               <div v-else-if="record.name === 'P'">
                 <Tag
                   v-for="permission in record.model.permissions"
-                  :key="permission"
-                >
+                  :key="permission">
                   {{ permission }}
                 </Tag>
               </div>
@@ -220,8 +218,7 @@ function handleClean() {
                 <Button
                   v-if="props.allowEdit"
                   type="link"
-                  @click="() => handleEdit(record)"
-                >
+                  @click="() => handleEdit(record)">
                   <template #icon>
                     <EditOutlined />
                   </template>
@@ -231,8 +228,7 @@ function handleClean() {
                   v-if="props.allowDelete"
                   type="link"
                   @click="() => handleDelete(record)"
-                  danger
-                >
+                  danger>
                   <template #icon>
                     <DeleteOutlined />
                   </template>

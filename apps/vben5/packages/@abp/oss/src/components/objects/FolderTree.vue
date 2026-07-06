@@ -15,8 +15,7 @@ import { Button, Card, DirectoryTree, Empty, Select } from 'ant-design-vue';
 import { useContainesApi } from '../../api';
 
 const emits = defineEmits<{
-  (event: 'bucketChange', data: string): void;
-  (event: 'folderChange', data: string): void;
+  (event: 'bucketChange' | 'folderChange', data: string): void;
 }>();
 
 interface Folder {
@@ -160,8 +159,7 @@ onMounted(onInit);
         :options="containers"
         :field-names="{ label: 'name', value: 'name' }"
         v-model:value="bucket"
-        @change="(e) => onBucketChange(e!.toString())"
-      />
+        @change="(e) => onBucketChange(e!.toString())" />
       <Button v-if="bucket" block type="primary" ghost @click="onCreate">
         {{ $t('AbpOssManagement.Objects:CreateFolder') }}
       </Button>
@@ -175,8 +173,7 @@ onMounted(onInit);
           :tree-data="folders"
           :load-data="onLoadChildFolders"
           @select="onFolderChange"
-          @expand="onFolderExpand"
-        />
+          @expand="onFolderExpand" />
         <Empty v-else />
       </div>
     </div>

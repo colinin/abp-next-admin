@@ -160,6 +160,5 @@ async function handleSubmit(values: Recordable<any>) {
     :form-schema="formSchema"
     :submit-button-text="$t('AbpAccount.ResetPassword')"
     :loading="loading"
-    @submit="handleSubmit"
-  />
+    @submit="handleSubmit" />
 </template>

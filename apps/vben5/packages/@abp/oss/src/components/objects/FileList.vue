@@ -260,8 +260,7 @@ watch(
         v-if="props.path"
         :icon="h(UploadOutlined)"
         type="primary"
-        @click="onUpload"
-      >
+        @click="onUpload">
         {{ $t('AbpOssManagement.Objects:UploadFile') }}
       </Button>
     </template>
@@ -274,8 +273,7 @@ watch(
           :icon="h(DownloadOutlined)"
           block
           type="link"
-          @click="onDownload(row)"
-        >
+          @click="onDownload(row)">
           {{ $t('AbpOssManagement.Objects:Download') }}
         </Button>
         <Button
@@ -284,8 +282,7 @@ watch(
           danger
           block
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

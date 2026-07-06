@@ -123,7 +123,7 @@ async function init() {
 onMounted(async () => {
   await nextTick();
   init();
-  useWindowSizeFn<void>(debounceRefresh);
+  useWindowSizeFn(debounceRefresh);
 });
 
 onUnmounted(() => {

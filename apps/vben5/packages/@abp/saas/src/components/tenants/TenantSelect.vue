@@ -44,8 +44,7 @@ function onChange(tenant?: { id?: string; name?: string }) {
     <InputSearch
       readonly
       :value="getCurrentTenant?.name"
-      :placeholder="$t('AbpUiMultiTenancy.NotSelected')"
-    >
+      :placeholder="$t('AbpUiMultiTenancy.NotSelected')">
       <template #enterButton>
         <Button @click="onSwitchClick">
           ({{ $t('AbpUiMultiTenancy.Switch') }})

@@ -23,9 +23,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (event: 'change', value: string): void;
+  (event: 'change' | 'update:value', value: string): void;
   (event: 'formatError', error: string): void;
-  (event: 'update:value', value: string): void;
 }>();
 
 const getValue = computed(() => {
@@ -56,7 +55,6 @@ function handleValueChange(v: string) {
       :mode="mode"
       :readonly="readonly"
       :value="getValue"
-      @change="handleValueChange"
-    />
+      @change="handleValueChange" />
   </div>
 </template>

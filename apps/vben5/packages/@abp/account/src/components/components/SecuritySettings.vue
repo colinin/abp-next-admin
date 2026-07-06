@@ -14,8 +14,7 @@ defineProps<{
   userInfo: null | UserInfo;
 }>();
 const emits = defineEmits<{
-  (event: 'changePassword'): void;
-  (event: 'changePhoneNumber'): void;
+  (event: 'changePassword' | 'changePhoneNumber'): void;
 }>();
 const ListItem = List.Item;
 const ListItemMeta = List.Item.Meta;
@@ -86,8 +85,7 @@ onMounted(onGet);
         </template>
         <ListItemMeta
           :description="$t('abp.account.settings.security.passwordDesc')"
-          :title="$t('abp.account.settings.security.password')"
-        />
+          :title="$t('abp.account.settings.security.password')" />
       </ListItem>
       <!-- 手机号码 -->
       <ListItem>
@@ -125,8 +123,7 @@ onMounted(onGet);
             v-if="userInfo?.email && !userInfo?.emailVerified"
             :disabled="getSendMailLoading"
             type="link"
-            @click="onValidateEmail(userInfo.email)"
-          >
+            @click="onValidateEmail(userInfo.email)">
             {{ getSendMailTitle }}
           </Button>
         </template>
@@ -151,13 +148,11 @@ onMounted(onGet);
           <Switch
             v-model:checked="twoFactor.enabled"
             :loading="loading"
-            @change="(checked) => onTwoFactorChange(Boolean(checked))"
-          />
+            @change="(checked) => onTwoFactorChange(Boolean(checked))" />
         </template>
         <ListItemMeta
           :description="$t('AbpAccount.TwoFactor')"
-          :title="$t('AbpAccount.TwoFactor')"
-        />
+          :title="$t('AbpAccount.TwoFactor')" />
       </ListItem>
     </List>
   </Card>

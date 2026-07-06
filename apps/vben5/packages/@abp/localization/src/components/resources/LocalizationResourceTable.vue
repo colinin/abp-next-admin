@@ -141,12 +141,14 @@ function onDelete(row: ResourceDto) {
 }
 
 async function onChange() {
-  // 资源变化刷新本地多语言缓存
-  const cultureName = abpStore.localization!.currentCulture.cultureName;
-  const localization = await getLocalizationApi({
-    cultureName,
-  });
-  abpStore.setLocalization(localization);
+  if (abpStore.localization?.currentCulture) {
+    // 资源变化刷新本地多语言缓存
+    const cultureName = abpStore.localization.currentCulture.cultureName;
+    const localization = await getLocalizationApi({
+      cultureName,
+    });
+    abpStore.setLocalization(localization);
+  }
 }
 </script>
 
@@ -157,8 +159,7 @@ async function onChange() {
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[ResourcesPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('LocalizationManagement.Resource:AddNew') }}
       </Button>
     </template>
@@ -169,8 +170,7 @@ async function onChange() {
           block
           type="link"
           v-access:code="[ResourcesPermissions.Update]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -179,8 +179,7 @@ async function onChange() {
           danger
           type="link"
           v-access:code="[ResourcesPermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

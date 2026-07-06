@@ -67,17 +67,19 @@ function extendProxyOption(
 }
 
 export function extendsDefaultFormatter(vxeUI: VxeUIExport) {
-  !vxeUI.formats.has('formatDate') &&
+  if (!vxeUI.formats.has('formatDate')) {
     vxeUI.formats.add('formatDate', {
       tableCellFormatMethod({ cellValue }) {
         return formatDate(cellValue);
       },
     });
+  }
 
-  !vxeUI.formats.has('formatDateTime') &&
+  if (!vxeUI.formats.has('formatDateTime')) {
     vxeUI.formats.add('formatDateTime', {
       tableCellFormatMethod({ cellValue }) {
         return formatDateTime(cellValue);
       },
     });
+  }
 }

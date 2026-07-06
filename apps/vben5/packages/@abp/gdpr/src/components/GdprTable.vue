@@ -207,8 +207,7 @@ const onDelete = (row: GdprRequestDto) => {
           :icon="h(DownloadOutlined)"
           block
           type="link"
-          @click="onDownload(row)"
-        >
+          @click="onDownload(row)">
           {{ $t('AbpGdpr.Download') }}
         </Button>
         <Button
@@ -216,8 +215,7 @@ const onDelete = (row: GdprRequestDto) => {
           block
           danger
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

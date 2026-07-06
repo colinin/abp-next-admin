@@ -41,8 +41,7 @@ onMounted(onGet);
     <AuthenticatorSteps
       v-if="authenticator?.isAuthenticated === false"
       :authenticator="authenticator"
-      @done="onGet"
-    />
+      @done="onGet" />
     <List v-else-if="authenticator?.isAuthenticated === true">
       <ListItem>
         <template #extra>
@@ -52,8 +51,7 @@ onMounted(onGet);
         </template>
         <ListItemMeta
           :description="$t('AbpAccount.ResetAuthenticatorDesc')"
-          :title="$t('AbpAccount.ResetAuthenticator')"
-        />
+          :title="$t('AbpAccount.ResetAuthenticator')" />
       </ListItem>
     </List>
     <Skeleton v-else />

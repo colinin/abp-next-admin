@@ -18,8 +18,7 @@ defineOptions({
 
 const props = defineProps<PropertyProps>();
 const emits = defineEmits<{
-  (event: 'change', data: PropertyInfo): void;
-  (event: 'delete', data: PropertyInfo): void;
+  (event: 'change' | 'delete', data: PropertyInfo): void;
 }>();
 
 const getDataResource = computed((): PropertyInfo[] => {
@@ -75,8 +74,7 @@ function onChange(prop: PropertyInfo) {
   <VxeGrid
     :columns="columnsConfig"
     :data="getDataResource"
-    :toolbar-config="{ slots: { tools: 'toolbar_tools' } }"
-  >
+    :toolbar-config="{ slots: { tools: 'toolbar_tools' } }">
     <template #toolbar_tools>
       <Button :icon="h(PlusOutlined)" type="primary" @click="onCreate">
         {{ $t('AbpOpenIddict.Propertites:New') }}
@@ -86,8 +84,7 @@ function onChange(prop: PropertyInfo) {
       <div class="flex flex-row">
         <Popconfirm
           :title="`${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.key])}`"
-          @confirm="onDelete(row)"
-        >
+          @confirm="onDelete(row)">
           <Button :icon="h(DeleteOutlined)" block danger type="link">
             {{ $t('AbpUi.Delete') }}
           </Button>

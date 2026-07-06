@@ -1,6 +1,7 @@
 import { defineConfig } from '@vben/oxfmt-config';
 
 export default defineConfig({
+  bracketSameLine: true,
   ignorePatterns: [
     'dist',
     'dev-dist',
@@ -18,7 +19,7 @@ export default defineConfig({
     '.output',
     '**/*.svg',
     '**/*.sh',
-    'public',
+    'public/',
     '.npmrc',
     '*-lock.yaml',
     'skills-lock.json',

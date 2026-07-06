@@ -23,8 +23,7 @@ const [Modal, modalApi] = useVbenModal({
   <Modal :title="notification?.title">
     <MarkdownViewer
       class="color: text-[#333]"
-      :value="notification?.message as string"
-    />
+      :value="notification?.message as string" />
   </Modal>
 </template>
 

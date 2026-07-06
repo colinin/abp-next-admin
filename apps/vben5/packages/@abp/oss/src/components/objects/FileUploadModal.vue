@@ -195,8 +195,7 @@ watch(
       @file-error="onUploadError"
       @file-progress="onUploadProgress"
       @file-success="onUploadSuccess"
-      @files-submitted="onFileSubmitted"
-    >
+      @files-submitted="onFileSubmitted">
       <UploaderUnsupport />
       <UploaderDrop>
         <div class="flex flex-row gap-2">
@@ -212,13 +211,11 @@ watch(
             <VxeColumn type="seq" width="70" />
             <VxeColumn
               field="name"
-              :title="$t('AbpOssManagement.DisplayName:Name')"
-            />
+              :title="$t('AbpOssManagement.DisplayName:Name')" />
             <VxeColumn
               field="size"
               :title="$t('AbpOssManagement.DisplayName:Size')"
-              width="100"
-            >
+              width="100">
               <template #default="{ row }">
                 <span>{{ formatSize(row.size) }}</span>
               </template>
@@ -226,8 +223,7 @@ watch(
             <VxeColumn
               field="status"
               :title="$t('AbpOssManagement.DisplayName:Status')"
-              width="180"
-            >
+              width="180">
               <template #default="{ row }">
                 <Tag v-if="row.completed" color="green">
                   {{ $t('AbpOssManagement.Upload:Completed') }}
@@ -249,8 +245,7 @@ watch(
               fixed="right"
               field="action"
               :title="$t('AbpUi.Actions')"
-              width="100"
-            >
+              width="100">
               <template #default="{ row }">
                 <div class="flex flex-row">
                   <div v-if="!row.completed">
@@ -258,21 +253,18 @@ watch(
                       v-if="row.paused || row.error"
                       :icon="h(CaretRightOutlined)"
                       @click="onResume(row)"
-                      type="link"
-                    />
+                      type="link" />
                     <Button
                       v-else
                       :icon="h(PauseOutlined)"
                       @click="onPause(row)"
-                      type="link"
-                    />
+                      type="link" />
                   </div>
                   <Button
                     :icon="h(DeleteOutlined)"
                     @click="onDelete(row)"
                     type="link"
-                    danger
-                  />
+                    danger />
                 </div>
               </template>
             </VxeColumn>

@@ -46,8 +46,7 @@ const onDelete = async () => {
 <template>
   <Card
     :bordered="false"
-    :title="$t('abp.account.settings.personalDataSettings')"
-  >
+    :title="$t('abp.account.settings.personalDataSettings')">
     <template #extra>
       <Button block danger type="dashed" @click="onDelete">
         {{ $t('AbpGdpr.DeletePersonalAccount') }}

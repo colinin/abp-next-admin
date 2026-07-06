@@ -115,7 +115,7 @@ async function generateRoutes(
    * 1. 对未添加redirect的路由添加redirect
    * 2. 将懒加载的组件名称修改为当前路由的名称（如果启用了keep-alive的话）
    */
-  resultRoutes = mapTree(resultRoutes, (route) => {
+  resultRoutes = mapTree(resultRoutes, (route, parent) => {
     // 重新包装component，使用与路由名称相同的name以支持keep-alive的条件缓存。
     if (
       route.meta?.keepAlive &&
@@ -149,7 +149,14 @@ async function generateRoutes(
       return route;
     }
 
-    route.redirect = firstChild.path;
+    if (parent && parent.redirect) {
+      const parentSplit = (parent.redirect as string).split('/');
+      parentSplit.splice(-1, 2, route.path, firstChild.path);
+      const redirectPath = parentSplit.join('/');
+      route.redirect = redirectPath;
+    } else {
+      route.redirect = `${route.path}/${firstChild.path}`;
+    }
     return route;
   });
 
@@ -172,7 +179,7 @@ function mergeRoutesByName(
     const clone = { ...route } as RouteRecordRaw;
     result.push(clone);
     if (clone.name && isString(clone.name)) {
-      routeMap.set(clone.name as string, clone);
+      routeMap.set(clone.name, clone);
     }
   }
 
@@ -180,9 +187,9 @@ function mergeRoutesByName(
     if (
       route.name &&
       isString(route.name) &&
-      routeMap.has(route.name as string)
+      routeMap.has(route.name)
     ) {
-      const existing = routeMap.get(route.name as string);
+      const existing = routeMap.get(route.name);
       if (!existing) {
         continue;
       }
@@ -207,7 +214,7 @@ function mergeRoutesByName(
       const clone = { ...route } as RouteRecordRaw;
       result.push(clone);
       if (clone.name && isString(clone.name)) {
-        routeMap.set(clone.name as string, clone);
+        routeMap.set(clone.name, clone);
       }
     }
   }

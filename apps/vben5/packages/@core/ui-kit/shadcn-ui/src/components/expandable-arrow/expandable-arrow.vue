@@ -7,22 +7,20 @@ const props = defineProps<{
 }>();
 
 // 控制箭头展开/收起状态
-const collapsed = defineModel({ default: false });
+const collapsed = defineModel<boolean>({ default: false });
 </script>
 
 <template>
   <div
     :class="cn('vben-link inline-flex items-center', props.class)"
-    @click="collapsed = !collapsed"
-  >
+    @click="collapsed = !collapsed">
     <slot :is-expanded="collapsed">
       {{ collapsed }}
       <!-- <span>{{ isExpanded ? '收起' : '展开' }}</span> -->
     </slot>
     <div
       :class="{ 'rotate-180': !collapsed }"
-      class="transition-transform duration-300"
-    >
+      class="transition-transform duration-300">
       <slot name="icon">
         <ChevronDown class="size-4" />
       </slot>

@@ -13,7 +13,7 @@ export function useAuthorization(): IPermissionChecker {
   function isGranted(name: string | string[], requiresAll?: boolean): boolean {
     const grantedPolicies = getGrantedPolicies.value;
     if (Array.isArray(name)) {
-      if (requiresAll === undefined || requiresAll === true) {
+      if (requiresAll === undefined ||  requiresAll) {
         return name.every((name) => grantedPolicies[name]);
       }
       return name.some((name) => grantedPolicies[name]);

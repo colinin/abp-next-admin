@@ -84,15 +84,17 @@ watch(
 
 function handleResourceChange(value?: string, triggerChanged?: boolean) {
   state.displayNames = [];
-  const resources = abpStore.localization!.resources;
-  if (value && resources[value]) {
-    state.displayNames = Object.keys(resources[value].texts).map((key) => {
-      const labelText = resources[value]?.texts[key];
-      return {
-        label: labelText ?? key,
-        value: key,
-      };
-    });
+  if (value && abpStore.localization && abpStore.localization.resources) {
+    const resources = abpStore.localization.resources;
+    if (resources[value]) {
+      state.displayNames = Object.keys(resources[value].texts).map((key) => {
+        const labelText = resources[value]?.texts[key];
+        return {
+          label: labelText ?? key,
+          value: key,
+        };
+      });
+    }
   }
   state.displayName = undefined;
   if (triggerChanged === true) {
@@ -139,8 +141,7 @@ function triggerDisplayNameChange(value?: string) {
               class="w-full"
               @change="
                 (value: any) => handleResourceChange(value?.toString(), true)
-              "
-            />
+              " />
           </div>
           <div class="basis-3/5">
             <Textarea
@@ -155,8 +156,7 @@ function triggerDisplayNameChange(value?: string) {
               class="w-full"
               @change="
                 (e: any) => handleDisplayNameChange(e.target.value?.toString())
-              "
-            />
+              " />
             <Select
               v-else
               :allow-clear="props.allowClear"
@@ -171,8 +171,7 @@ function triggerDisplayNameChange(value?: string) {
               class="w-full"
               @change="
                 (value: any) => handleDisplayNameChange(value?.toString())
-              "
-            />
+              " />
           </div>
         </div>
       </InputGroup>

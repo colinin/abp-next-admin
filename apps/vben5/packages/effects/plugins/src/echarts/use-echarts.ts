@@ -118,7 +118,9 @@ function useEcharts(chartRef: Ref<EchartsUIType>) {
             if (!instance) return;
             chartInstance = instance;
           }
-          clear && chartInstance?.clear();
+          if (clear) {
+            chartInstance?.clear();
+          }
           chartInstance?.setOption(currentOptions);
           resolve(chartInstance);
         }, 30);

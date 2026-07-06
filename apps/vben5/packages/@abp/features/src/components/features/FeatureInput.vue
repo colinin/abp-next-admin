@@ -94,14 +94,12 @@ const isSelection = computed(
     :name="['groups', groupIndex, 'features', featureIndex, 'value']"
     :label="feature.displayName"
     :extra="feature.description"
-    :rules="createRules(feature.displayName, feature.valueType.validator)"
-  >
+    :rules="createRules(feature.displayName, feature.valueType.validator)">
     <!-- 复选框类型 -->
     <Checkbox
       v-if="isCheckbox"
       v-model:checked="feature.value"
-      @change="handleChange"
-    >
+      @change="handleChange">
       {{ feature.displayName }}
     </Checkbox>
 
@@ -111,14 +109,12 @@ const isSelection = computed(
         v-if="isNumeric"
         style="width: 100%"
         v-model:value="feature.value"
-        @change="handleChange"
-      />
+        @change="handleChange" />
       <Input
         v-else
         v-model:value="feature.value"
         autocomplete="off"
-        @change="handleChange"
-      />
+        @change="handleChange" />
     </div>
 
     <!-- 选择类型 -->
@@ -127,7 +123,6 @@ const isSelection = computed(
       v-model:value="feature.value"
       :options="feature.valueType.itemSource?.items"
       :field-names="{ label: 'displayName', value: 'value' }"
-      @change="handleChange"
-    />
+      @change="handleChange" />
   </FormItem>
 </template>

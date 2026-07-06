@@ -378,8 +378,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[IdentityUserPermissions.Create]"
-        @click="handleAdd"
-      >
+        @click="handleAdd">
         {{ $t('AbpIdentity.NewUser') }}
       </Button>
     </template>
@@ -423,8 +422,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
             block
             type="link"
             v-access:code="[IdentityUserPermissions.Update]"
-            @click="handleEdit(row)"
-          >
+            @click="handleEdit(row)">
             {{ $t('AbpUi.Edit') }}
           </Button>
         </div>
@@ -435,8 +433,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
             danger
             type="link"
             :disabled="!isDeleteEnabled(row)"
-            @click="handleDelete(row)"
-          >
+            @click="handleDelete(row)">
             {{ $t('AbpUi.Delete') }}
           </Button>
         </div>
@@ -447,15 +444,13 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                 <MenuItem
                   v-if="isLockEnabled(row)"
                   key="lock"
-                  :icon="h(LockOutlined)"
-                >
+                  :icon="h(LockOutlined)">
                   {{ $t('AbpIdentity.Lock') }}
                 </MenuItem>
                 <MenuItem
                   v-if="isUnLockEnabled(row)"
                   key="unlock"
-                  :icon="h(UnlockOutlined)"
-                >
+                  :icon="h(UnlockOutlined)">
                   {{ $t('AbpIdentity.UnLock') }}
                 </MenuItem>
                 <MenuDivider />
@@ -466,15 +461,13 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                     ])
                   "
                   key="permissions"
-                  :icon="h(PermissionsOutlined)"
-                >
+                  :icon="h(PermissionsOutlined)">
                   {{ $t('AbpPermissionManagement.Permissions') }}
                 </MenuItem>
                 <MenuItem
                   v-if="hasAccessByCodes([IdentitySessionPermissions.Default])"
                   key="session"
-                  :icon="h(SessionIcon)"
-                >
+                  :icon="h(SessionIcon)">
                   {{ $t('AbpIdentity.IdentitySessions') }}
                 </MenuItem>
                 <MenuItem
@@ -482,39 +475,34 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                     hasAccessByCodes([IdentityUserPermissions.ManageClaims])
                   "
                   key="claims"
-                  :icon="h(ClaimOutlined)"
-                >
+                  :icon="h(ClaimOutlined)">
                   {{ $t('AbpIdentity.ManageClaim') }}
                 </MenuItem>
                 <MenuItem
                   v-if="isImpersonationEnabled(row)"
                   key="impersonation"
-                  :icon="h(LoginOutlined)"
-                >
+                  :icon="h(LoginOutlined)">
                   {{ $t('AbpIdentity.ImpersonationUser') }}
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem
                   v-if="hasAccessByCodes([IdentityUserPermissions.Update])"
                   key="password"
-                  :icon="h(PasswordIcon)"
-                >
+                  :icon="h(PasswordIcon)">
                   {{ $t('AbpIdentity.SetPassword') }}
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem
                   v-if="hasAccessByCodes(['Platform.Menu.ManageUsers'])"
                   key="menus"
-                  :icon="h(MenuOutlined)"
-                >
+                  :icon="h(MenuOutlined)">
                   {{ $t('AppPlatform.Menu:Manage') }}
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem
                   v-if="isAuditLogEnabled"
                   key="entity-changes"
-                  :icon="h(AuditLogIcon)"
-                >
+                  :icon="h(AuditLogIcon)">
                   {{ $t('AbpAuditLogging.EntitiesChanged') }}
                 </MenuItem>
               </Menu>

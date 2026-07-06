@@ -22,8 +22,7 @@ const props = withDefaults(defineProps<PropertyProps>(), {
   disabled: false,
 });
 const emits = defineEmits<{
-  (event: 'change', data: PropertyInfo): void;
-  (event: 'delete', data: PropertyInfo): void;
+  (event: 'change' | 'delete', data: PropertyInfo): void;
 }>();
 const DeleteOutlined = createIconifyIcon('ant-design:delete-outlined');
 const EditOutlined = createIconifyIcon('ant-design:edit-outlined');
@@ -34,7 +33,7 @@ const getDataResource = computed((): PropertyInfo[] => {
   return Object.keys(props.data).map((item) => {
     return {
       key: item,
-      value: props.data![item]!,
+      value: props.data ? (props.data[item] ?? '') : '',
     };
   });
 });
@@ -90,15 +89,15 @@ function onEdit(prop: Record<string, string>) {
 
 function onDelete(prop: Record<string, string>) {
   emits('delete', {
-    key: prop.key!,
-    value: prop.value!,
+    key: prop.key ?? '',
+    value: prop.value ?? '',
   });
 }
 
 function onChange(prop: Record<string, string>) {
   emits('change', {
-    key: prop.key!,
-    value: prop.value!,
+    key: prop.key ?? '',
+    value: prop.value ?? '',
   });
 }
 </script>
@@ -110,8 +109,7 @@ function onChange(prop: Record<string, string>) {
         v-if="!props.disabled && props.allowEdit"
         class="flex items-center gap-2"
         type="primary"
-        @click="onCreate"
-      >
+        @click="onCreate">
         <template #icon>
           <PlusOutlined class="inline" />
         </template>
@@ -137,8 +135,7 @@ function onChange(prop: Record<string, string>) {
                 block
                 type="link"
                 class="flex items-center gap-2"
-                @click="onEdit(record)"
-              >
+                @click="onEdit(record)">
                 <template #icon>
                   <EditOutlined class="inline" />
                 </template>
@@ -147,14 +144,12 @@ function onChange(prop: Record<string, string>) {
               <Popconfirm
                 v-if="props.allowDelete"
                 :title="`${$t('component.extra_property_dictionary.itemWillBeDeleted', [record.key])}`"
-                @confirm="onDelete(record)"
-              >
+                @confirm="onDelete(record)">
                 <Button
                   block
                   class="flex items-center gap-2"
                   danger
-                  type="link"
-                >
+                  type="link">
                   <template #icon>
                     <DeleteOutlined class="inline" />
                   </template>

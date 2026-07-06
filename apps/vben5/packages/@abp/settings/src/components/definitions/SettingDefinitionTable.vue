@@ -185,8 +185,7 @@ onMounted(onGet);
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[SettingDefinitionsPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AbpSettingManagement.Definition:AddNew') }}
       </Button>
     </template>
@@ -198,8 +197,7 @@ onMounted(onGet);
             block
             type="link"
             v-access:code="[SettingDefinitionsPermissions.Update]"
-            @click="onUpdate(row)"
-          >
+            @click="onUpdate(row)">
             {{ $t('AbpUi.Edit') }}
           </Button>
         </div>
@@ -210,8 +208,7 @@ onMounted(onGet);
             danger
             type="link"
             v-access:code="[SettingDefinitionsPermissions.DeleteOrRestore]"
-            @click="onDelete(row)"
-          >
+            @click="onDelete(row)">
             {{ $t('AbpUi.Delete') }}
           </Button>
         </div>

@@ -166,8 +166,7 @@ watch(() => props.selectedKey, onRefresh);
         v-if="getAddRoleEnabled"
         :icon="h(PlusOutlined)"
         type="primary"
-        @click="onShowRole"
-      >
+        @click="onShowRole">
         {{ $t('AbpIdentity.OrganizationUnit:AddRole') }}
       </Button>
     </template>
@@ -177,8 +176,7 @@ watch(() => props.selectedKey, onRefresh);
         danger
         type="link"
         v-access:code="[OrganizationUnitPermissions.ManageRoles]"
-        @click="onDelete(row)"
-      >
+        @click="onDelete(row)">
         {{ $t('AbpUi.Delete') }}
       </Button>
     </template>

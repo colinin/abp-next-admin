@@ -32,7 +32,9 @@ const [Modal, modalApi] = useVbenModal({
   fullscreen: true,
   fullscreenButton: false,
   onOpenChange: async (isOpen) => {
-    isOpen && onInit();
+    if (isOpen) {
+      await onInit();
+    }
   },
   onClosed() {
     previewUrl.value = undefined;
@@ -71,8 +73,7 @@ function onError(error: Error) {
         v-if="previewUrl"
         :url="previewUrl"
         :name="fileName"
-        @error="onError"
-      />
+        @error="onError" />
 
       <!-- 下载按钮 -->
       <div v-if="errorMsg && previewUrl" class="download-button">

@@ -291,8 +291,7 @@ onMounted(onGet);
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[WebhookDefinitionsPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('WebhooksManagement.Webhooks:AddNew') }}
       </Button>
     </template>
@@ -304,8 +303,7 @@ onMounted(onGet);
           trigger: 'row',
           rowField: 'name',
           childrenField: 'children',
-        }"
-      >
+        }">
         <template #isEnabled="{ row }">
           <div class="flex flex-row justify-center">
             <CheckOutlined v-if="row.isEnabled" class="text-green-500" />
@@ -326,8 +324,7 @@ onMounted(onGet);
               block
               type="link"
               v-access:code="[WebhookDefinitionsPermissions.Update]"
-              @click="onUpdate(definition)"
-            >
+              @click="onUpdate(definition)">
               {{ $t('AbpUi.Edit') }}
             </Button>
             <Button
@@ -337,8 +334,7 @@ onMounted(onGet);
               danger
               type="link"
               v-access:code="[WebhookDefinitionsPermissions.Delete]"
-              @click="onDelete(definition)"
-            >
+              @click="onDelete(definition)">
               {{ $t('AbpUi.Delete') }}
             </Button>
           </div>

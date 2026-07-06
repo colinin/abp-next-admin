@@ -118,6 +118,15 @@ const logoTheme = computed(() => {
   return showLogoInHeader ? headerTheme.value : sidebarTheme.value;
 });
 
+/**
+ * layout-sidebar扩展区域插槽extra-title的高度
+ */
+const sidebarExtraTitleHeight = computed<number | undefined>(() => {
+  const showSideExtraTitle =
+    preferences.logo.enable && preferences.logo.showText;
+  return showSideExtraTitle ? undefined : 0;
+});
+
 const {
   handleMenuSelect,
   handleMenuOpen,
@@ -253,12 +262,14 @@ const headerSlots = computed(() => {
     :sidebar-expand-on-hover="preferences.sidebar.expandOnHover"
     :sidebar-extra-collapse="preferences.sidebar.extraCollapse"
     :sidebar-extra-collapsed-width="preferences.sidebar.extraCollapsedWidth"
+    :sidebar-extra-title-height="sidebarExtraTitleHeight"
     :sidebar-hidden="preferences.sidebar.hidden"
     :sidebar-mixed-width="preferences.sidebar.mixedWidth"
     :sidebar-theme="sidebarTheme"
     :sidebar-theme-sub="sidebarThemeSub"
     :sidebar-width="preferences.sidebar.width"
     :side-collapse-width="preferences.sidebar.collapseWidth"
+    :sidebar-logo-visible="preferences.logo.enable"
     :tabbar-enable="preferences.tabbar.enable"
     :tabbar-height="preferences.tabbar.height"
     :z-index="preferences.app.zIndex"
@@ -280,8 +291,7 @@ const headerSlots = computed(() => {
     "
     @update:sidebar-width="
       (value: number) => updatePreferences({ sidebar: { width: value } })
-    "
-  >
+    ">
     <!-- logo -->
     <template #logo>
       <VbenLogo
@@ -294,7 +304,9 @@ const headerSlots = computed(() => {
         :text="preferences.app.name"
         :theme="logoTheme"
         @click="clickLogo"
-      >
+        :show-text="preferences.logo.showText"
+        :logo-mode="preferences.logo.logoMode"
+        :full-logo-height="preferences.logo.fullLogoHeight">
         <template v-if="$slots['logo-text']" #text>
           <slot name="logo-text"></slot>
         </template>
@@ -304,18 +316,15 @@ const headerSlots = computed(() => {
     <template #header>
       <LayoutHeader
         :theme="theme"
-        @clear-preferences-and-logout="clearPreferencesAndLogout"
-      >
+        @clear-preferences-and-logout="clearPreferencesAndLogout">
         <template
           v-if="!showHeaderNav && preferences.breadcrumb.enable"
-          #breadcrumb
-        >
+          #breadcrumb>
           <Breadcrumb
             :hide-when-only-one="preferences.breadcrumb.hideOnlyOne"
             :show-home="preferences.breadcrumb.showHome"
             :show-icon="preferences.breadcrumb.showIcon"
-            :type="preferences.breadcrumb.styleType"
-          />
+            :type="preferences.breadcrumb.styleType" />
         </template>
         <template v-if="showHeaderNav" #menu>
           <LayoutMenu
@@ -325,8 +334,7 @@ const headerSlots = computed(() => {
             :theme="headerTheme"
             class="w-full"
             mode="horizontal"
-            @select="handleMenuSelect"
-          />
+            @select="handleMenuSelect" />
         </template>
         <template #user-dropdown>
           <slot name="user-dropdown"></slot>
@@ -354,8 +362,7 @@ const headerSlots = computed(() => {
         :theme="sidebarTheme"
         mode="vertical"
         @open="handleMenuOpen"
-        @select="handleMenuSelect"
-      />
+        @select="handleMenuSelect" />
     </template>
     <template #mixed-menu>
       <LayoutMixedMenu
@@ -365,8 +372,7 @@ const headerSlots = computed(() => {
         :theme="sidebarTheme"
         @default-select="handleDefaultSelect"
         @enter="handleMenuMouseEnter"
-        @select="handleMixedMenuSelect"
-      />
+        @select="handleMixedMenuSelect" />
     </template>
     <!-- 侧边额外区域 -->
     <template #side-extra>
@@ -375,16 +381,15 @@ const headerSlots = computed(() => {
         :collapse="preferences.sidebar.extraCollapse"
         :menus="wrapperMenus(extraMenus)"
         :rounded="isMenuRounded"
-        :theme="sidebarThemeSub"
-      />
+        :theme="sidebarThemeSub" />
     </template>
     <template #side-extra-title>
       <VbenLogo
         v-if="preferences.logo.enable"
         :fit="preferences.logo.fit"
+        :show-text="preferences.logo.showText"
         :text="preferences.app.name"
-        :theme="sidebarThemeSub"
-      >
+        :theme="sidebarThemeSub">
         <template v-if="$slots['logo-text']" #text>
           <slot name="logo-text"></slot>
         </template>
@@ -395,8 +400,7 @@ const headerSlots = computed(() => {
       <LayoutTabbar
         v-if="preferences.tabbar.enable"
         :show-icon="preferences.tabbar.showIcon"
-        :theme="theme"
-      />
+        :theme="theme" />
     </template>
 
     <!-- 主体内容 -->
@@ -413,8 +417,7 @@ const headerSlots = computed(() => {
       <LayoutFooter>
         <Copyright
           v-if="preferences.copyright.enable"
-          v-bind="preferences.copyright"
-        />
+          v-bind="preferences.copyright" />
       </LayoutFooter>
     </template>
 
@@ -422,8 +425,7 @@ const headerSlots = computed(() => {
       <slot name="extra"></slot>
       <CheckUpdates
         v-if="preferences.app.enableCheckUpdates"
-        :check-updates-interval="preferences.app.checkUpdatesInterval"
-      />
+        :check-updates-interval="preferences.app.checkUpdatesInterval" />
 
       <Transition v-if="preferences.widget.lockScreen" name="slide-up">
         <slot v-if="accessStore.isLockScreen" name="lock-screen"></slot>
@@ -432,8 +434,7 @@ const headerSlots = computed(() => {
       <template v-if="preferencesButtonPosition.fixed">
         <Preferences
           class="fixed top-1/2 right-0 z-100 -translate-y-1/2 transform"
-          @clear-preferences-and-logout="clearPreferencesAndLogout"
-        />
+          @clear-preferences-and-logout="clearPreferencesAndLogout" />
       </template>
       <VbenBackTop />
     </template>

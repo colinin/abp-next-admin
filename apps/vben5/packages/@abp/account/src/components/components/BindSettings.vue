@@ -31,8 +31,7 @@ onMounted(() => {
             v-for="button in item.buttons"
             :type="button.type"
             @click="button.click"
-            :key="button.title"
-          >
+            :key="button.title">
             {{ button.title }}
           </Button>
         </template>

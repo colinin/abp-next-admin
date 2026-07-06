@@ -127,8 +127,7 @@ onMounted(onInit);
       <Checkbox
         v-model:checked="modelValue.requiresAll"
         @blur="emits('blur')"
-        @change="onChange"
-      >
+        @change="onChange">
         {{ $t('component.simple_state_checking.requireFeatures.requiresAll') }}
       </Checkbox>
       <TreeSelect
@@ -139,8 +138,7 @@ onMounted(onInit);
         :field-names="{ label: 'displayName', value: 'name' }"
         :value="getRequiredFeatures"
         @blur="emits('blur')"
-        @change="onFeaturesChange"
-      />
+        @change="onFeaturesChange" />
     </FormItemRest>
   </div>
 </template>

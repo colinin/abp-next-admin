@@ -119,8 +119,7 @@ async function onSubmit() {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTabKey">
         <TabPane key="basic" :tab="$t('Notifications.BasicInfo')">
           <FormItem name="name" :label="$t('Notifications.DisplayName:Name')">
@@ -130,42 +129,36 @@ async function onSubmit() {
             v-if="!notification?.template"
             name="title"
             :label="$t('Notifications.Notifications:Title')"
-            required
-          >
+            required>
             <Textarea v-model:value="formModel.title" />
           </FormItem>
           <FormItem
             v-if="!notification?.template"
             name="message"
             :label="$t('Notifications.Notifications:Message')"
-            required
-          >
+            required>
             <MarkdownEditor
               v-if="
                 notification?.contentType === NotificationContentType.Markdown
               "
               v-model="formModel.message"
               :height="300"
-              :toolbar="getMarkdownToolbar"
-            />
+              :toolbar="getMarkdownToolbar" />
             <Textarea v-else v-model:value="formModel.message" />
           </FormItem>
           <FormItem
             v-if="!notification?.template"
             name="description"
-            :label="$t('Notifications.Notifications:Description')"
-          >
+            :label="$t('Notifications.Notifications:Description')">
             <Textarea v-model:value="formModel.description" />
           </FormItem>
           <FormItem
             name="severity"
-            :label="$t('Notifications.Notifications:Severity')"
-          >
+            :label="$t('Notifications.Notifications:Severity')">
             <Select
               allow-clear
               v-model:value="formModel.severity"
-              :options="notificationSeverityOptions"
-            />
+              :options="notificationSeverityOptions" />
           </FormItem>
         </TabPane>
         <TabPane key="props" :tab="$t('Notifications.Properties')">

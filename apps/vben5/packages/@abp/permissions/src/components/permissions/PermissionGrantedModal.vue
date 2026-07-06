@@ -317,14 +317,12 @@ async function onDeleteGrand(grantedInfo: PermissionProvider) {
       <template #left>
         <Card
           :body-style="{ height: '80vh' }"
-          :title="$t('AbpPermissionManagement.AllPermissions')"
-        >
+          :title="$t('AbpPermissionManagement.AllPermissions')">
           <template #extra>
             <InputSearch
               v-model:value="searchPermission"
               enter-button
-              placeholder="搜索权限"
-            />
+              placeholder="搜索权限" />
           </template>
           <div class="h-full overflow-y-auto">
             <Tree
@@ -341,8 +339,7 @@ async function onDeleteGrand(grantedInfo: PermissionProvider) {
               }"
               @check="onCheckNode"
               @expand="onExpandNode"
-              @select="onSelectNode"
-            >
+              @select="onSelectNode">
               <template #title="{ displayName }">
                 <span v-if="displayName.includes(searchPermission)">
                   {{
@@ -376,8 +373,7 @@ async function onDeleteGrand(grantedInfo: PermissionProvider) {
               :options="permissionProviders"
               :field-names="{ label: 'name', value: 'value' }"
               v-model:value="providerName"
-              @change="onProviderChange"
-            />
+              @change="onProviderChange" />
           </div>
         </template>
         <Grid>
@@ -390,8 +386,7 @@ async function onDeleteGrand(grantedInfo: PermissionProvider) {
                   permissionInfo!.displayName ?? permissionInfo!.name,
                 ])
               "
-              @confirm="onDeleteGrand(row)"
-            >
+              @confirm="onDeleteGrand(row)">
               <Button :icon="h(DeleteOutlined)" block danger type="link">
                 {{ $t('AbpPermissionManagement.RejectPermission') }}
               </Button>

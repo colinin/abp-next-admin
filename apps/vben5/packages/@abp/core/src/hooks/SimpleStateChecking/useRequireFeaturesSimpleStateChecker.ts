@@ -14,25 +14,25 @@ export interface RequireFeaturesStateChecker {
 }
 
 export class RequireFeaturesSimpleStateChecker<
-    TState extends IHasSimpleStateCheckers<TState>,
-  >
+  TState extends IHasSimpleStateCheckers<TState>,
+>
   implements ISimpleStateChecker<TState>, RequireFeaturesStateChecker
 {
-  _featureChecker: IFeatureChecker;
+  featureChecker: IFeatureChecker;
   featureNames: string[];
   name: string = 'F';
   requiresAll: boolean;
   constructor(
-    featureChecker: IFeatureChecker,
-    featureNames: string[],
-    requiresAll: boolean = false,
+    _featureChecker: IFeatureChecker,
+    _featureNames: string[],
+    _requiresAll: boolean = false,
   ) {
-    this._featureChecker = featureChecker;
-    this.featureNames = featureNames;
-    this.requiresAll = requiresAll;
+    this.featureChecker = _featureChecker;
+    this.featureNames = _featureNames;
+    this.requiresAll = _requiresAll;
   }
   isEnabled(_context: SimpleStateCheckerContext<TState>): boolean {
-    return this._featureChecker.isEnabled(this.featureNames, this.requiresAll);
+    return this.featureChecker.isEnabled(this.featureNames, this.requiresAll);
   }
 
   serialize(): string {

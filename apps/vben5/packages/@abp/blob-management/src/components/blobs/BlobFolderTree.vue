@@ -236,16 +236,14 @@ onMounted(onInit);
         :field-names="{ label: 'name', value: 'id' }"
         :loading="isLoadingContainers"
         v-model:value="containerId"
-        @change="(e) => onContainerChange(e!.toString())"
-      />
+        @change="(e) => onContainerChange(e!.toString())" />
       <Button
         v-if="containerId"
         block
         type="primary"
         ghost
         :disabled="isLoadingFolders"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('BlobManagement.Blobs:CreateFolder') }}
       </Button>
       <div class="h-[calc(100%-100px)] overflow-auto">
@@ -261,8 +259,7 @@ onMounted(onInit);
           :tree-data="folders"
           :load-data="onLoadChildFolders"
           @select="(_, info) => onFolderChange(info.node?.dataRef?.id)"
-          @expand="onFolderExpand"
-        />
+          @expand="onFolderExpand" />
         <Empty v-else />
       </div>
     </div>

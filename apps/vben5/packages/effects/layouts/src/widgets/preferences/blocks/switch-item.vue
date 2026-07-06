@@ -29,14 +29,13 @@ function handleClick() {
       'pointer-events-none opacity-50': disabled,
     }"
     class="my-1 flex w-full items-center justify-between rounded-md px-2 py-2.5 hover:bg-accent"
-    @click="handleClick"
-  >
+    @click="handleClick">
     <span class="flex items-center text-sm">
       <slot></slot>
 
       <VbenTooltip v-if="slots.tip || tip" side="bottom">
         <template #trigger>
-          <CircleHelp class="ml-1 size-3 cursor-help" />
+          <CircleHelp class="ml-1 size-3 cursor-help pointer-events-auto" />
         </template>
         <slot name="tip">
           <template v-if="tip">

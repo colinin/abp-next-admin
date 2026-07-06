@@ -94,8 +94,7 @@ async function onInitTenant(tenantId?: string) {
           <FormItem
             v-if="webhookTenant"
             name="tenantId"
-            :label="$t('WebhooksManagement.DisplayName:TenantId')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:TenantId')">
             <Input :value="webhookTenant.name" disabled />
           </FormItem>
           <FormItem name="sendExactSameData">
@@ -105,94 +104,80 @@ async function onInitTenant(tenantId?: string) {
           </FormItem>
           <FormItem
             name="creationTime"
-            :label="$t('WebhooksManagement.DisplayName:CreationTime')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:CreationTime')">
             <DatePicker
               class="w-full"
               value-format="YYYY-MM-DD HH:mm:ss"
               :value="formModel.creationTime"
               disabled
-              show-time
-            />
+              show-time />
           </FormItem>
           <FormItem
             name="requestHeaders"
-            :label="$t('WebhooksManagement.DisplayName:RequestHeaders')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:RequestHeaders')">
             <CodeEditor :value="formModel.requestHeaders" readonly />
           </FormItem>
           <FormItem
             v-if="formModel.responseStatusCode"
             name="responseStatusCode"
-            :label="$t('WebhooksManagement.DisplayName:ResponseStatusCode')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:ResponseStatusCode')">
             <Tag :color="getHttpStatusColor(formModel.responseStatusCode)">
               {{ httpStatusCodeMap[formModel.responseStatusCode] }}
             </Tag>
           </FormItem>
           <FormItem
             name="responseHeaders"
-            :label="$t('WebhooksManagement.DisplayName:ResponseHeaders')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:ResponseHeaders')">
             <CodeEditor :value="formModel.responseHeaders" readonly />
           </FormItem>
           <FormItem
             name="response"
-            :label="$t('WebhooksManagement.DisplayName:Response')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:Response')">
             <Tinymce
               :value="formModel.response"
               :toolbar="[]"
               :plugins="[]"
-              readonly
-            />
+              readonly />
           </FormItem>
         </TabPane>
         <TabPane key="event" :tab="$t('WebhooksManagement.WebhookEvent')">
           <FormItem
             name="webhookEventId"
-            :label="$t('WebhooksManagement.DisplayName:WebhookEventId')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:WebhookEventId')">
             <Input :value="formModel.webhookEventId" disabled />
           </FormItem>
           <FormItem
             :name="['webhookEvent', 'webhookName']"
-            :label="$t('WebhooksManagement.DisplayName:WebhookName')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:WebhookName')">
             <Input :value="formModel.webhookEvent.webhookName" disabled />
           </FormItem>
           <FormItem
             :name="['webhookEvent', 'creationTime']"
-            :label="$t('WebhooksManagement.DisplayName:CreationTime')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:CreationTime')">
             <DatePicker
               class="w-full"
               value-format="YYYY-MM-DD HH:mm:ss"
               :value="formModel.webhookEvent.creationTime"
               disabled
-              show-time
-            />
+              show-time />
           </FormItem>
           <FormItem
             :name="['webhookEvent', 'data']"
-            :label="$t('WebhooksManagement.DisplayName:Data')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:Data')">
             <CodeEditor :value="formModel.webhookEvent.data" readonly />
           </FormItem>
         </TabPane>
         <TabPane
           v-if="webhookSubscription"
           key="subscriber"
-          :tab="$t('WebhooksManagement.Subscriptions')"
-        >
+          :tab="$t('WebhooksManagement.Subscriptions')">
           <FormItem>
             <Checkbox :checked="webhookSubscription.isActive" disabled>
               {{ $t('WebhooksManagement.DisplayName:IsActive') }}
             </Checkbox>
           </FormItem>
           <FormItem
-            :label="$t('WebhooksManagement.DisplayName:WebhookSubscriptionId')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:WebhookSubscriptionId')">
             <Input :value="webhookSubscription.id" disabled />
           </FormItem>
           <FormItem :label="$t('WebhooksManagement.DisplayName:WebhookUri')">
@@ -202,8 +187,7 @@ async function onInitTenant(tenantId?: string) {
             <Textarea
               :auto-size="{ minRows: 3 }"
               :value="webhookSubscription.description"
-              disabled
-            />
+              disabled />
           </FormItem>
           <FormItem :label="$t('WebhooksManagement.DisplayName:Secret')">
             <InputPassword :value="webhookSubscription.secret" disabled />
@@ -214,14 +198,12 @@ async function onInitTenant(tenantId?: string) {
               value-format="YYYY-MM-DD HH:mm:ss"
               :value="formatToDateTime(webhookSubscription.creationTime)"
               disabled
-              show-time
-            />
+              show-time />
           </FormItem>
           <FormItem :label="$t('WebhooksManagement.DisplayName:Webhooks')">
             <template
               v-for="webhook in webhookSubscription.webhooks"
-              :key="webhook"
-            >
+              :key="webhook">
               <Tag color="blue">
                 {{ webhook }}
               </Tag>

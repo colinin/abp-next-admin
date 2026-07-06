@@ -76,35 +76,29 @@ watchEffect(() => {
         <Form
           :label-col="{ span: 6 }"
           :model="formModel"
-          :wrapper-col="{ span: 18 }"
-        >
+          :wrapper-col="{ span: 18 }">
           <FormItem
             :label="$t('AbpAccount.DisplayName:UserName')"
             name="userName"
-            required
-          >
+            required>
             <Input
               v-model:value="formModel.userName"
               :disabled="!isTrue('Abp.Identity.User.IsUserNameUpdateEnabled')"
-              autocomplete="off"
-            />
+              autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('AbpAccount.DisplayName:Email')"
             name="email"
-            required
-          >
+            required>
             <Input
               v-model:value="formModel.email"
               :disabled="!isTrue('Abp.Identity.User.IsEmailUpdateEnabled')"
               autocomplete="off"
-              type="email"
-            />
+              type="email" />
           </FormItem>
           <FormItem
             :label="$t('AbpAccount.DisplayName:Surname')"
-            name="surname"
-          >
+            name="surname">
             <Input v-model:value="formModel.surname" autocomplete="off" />
           </FormItem>
           <FormItem :label="$t('AbpAccount.DisplayName:Name')" name="name">
@@ -144,8 +138,7 @@ watchEffect(() => {
               :btn-text="$t('AbpAccount.AvatarChanged')"
               width="150"
               :upload-api="onUploadAvatar"
-              @change="onAvatarChange"
-            />
+              @change="onAvatarChange" />
           </div>
         </div>
       </div>

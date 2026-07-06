@@ -176,8 +176,7 @@ async function onDeleteLink(record: LinkUserDto) {
             :icon="h(LoginOutlined)"
             block
             type="link"
-            @click="onLoginByLink(row)"
-          >
+            @click="onLoginByLink(row)">
             {{ $t('AbpAccount.LinkUser:Login') }}
           </Button>
           <Button
@@ -185,8 +184,7 @@ async function onDeleteLink(record: LinkUserDto) {
             block
             danger
             type="link"
-            @click="onDeleteLink(row)"
-          >
+            @click="onDeleteLink(row)">
             {{ $t('AbpUi.Delete') }}
           </Button>
         </div>

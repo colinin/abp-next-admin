@@ -55,6 +55,13 @@ const externalRoutes: RouteRecordRaw[] = mergeRouteModules(externalRouteFiles); 
 
 ### 二级路由
 
+::: tip
+
+- 只有顶级路由的 `path` 需要以 `/` 开头；写在 `children` 中的子路由请使用相对路径片段，例如 `about`、`menu1`。
+- 当父级路由未显式配置 `redirect` 时，框架会自动补全到第一个子路由的重定向；这依赖子路由使用相对路径。
+
+:::
+
 ::: details 二级路由示例代码
 
 ```ts
@@ -101,6 +108,7 @@ export default routes;
 
 ::: tip
 
+- 多级路由同样遵循“顶级绝对路径、子级相对路径”的组织方式，避免在 `children` 中重复写完整路径。
 - 如果没有特殊情况，父级路由的 `redirect` 属性，不需要指定，默认会指向第一个子路由。
 
 :::

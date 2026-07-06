@@ -69,7 +69,14 @@ import { isEmpty } from '@vben/utils';
 import { FeatureStateCheck, GlobalFeatureStateCheck } from '@abp/features';
 import { PermissionStateCheck } from '@abp/permissions';
 import { TenantSelect } from '@abp/saas';
-import { Empty, InputSearch, message, Modal, notification, Tree } from 'ant-design-vue';
+import {
+  Empty,
+  InputSearch,
+  message,
+  Modal,
+  notification,
+  Tree,
+} from 'ant-design-vue';
 
 const ColorPicker = defineAsyncComponent(() =>
   import('vue3-colorpicker').then((res) => {

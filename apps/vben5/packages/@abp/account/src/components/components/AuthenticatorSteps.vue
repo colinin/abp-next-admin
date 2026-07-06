@@ -97,8 +97,7 @@ async function onValidCode() {
           <Card
             :title="$t('AbpAccount.Authenticator:UseQrCode')"
             class="mh-350"
-            type="inner"
-          >
+            type="inner">
             <div class="flex justify-center">
               <img :src="qrcode" />
             </div>
@@ -108,16 +107,14 @@ async function onValidCode() {
           <Card
             :title="$t('AbpAccount.Authenticator:InputCode')"
             class="mh-350"
-            type="inner"
-          >
+            type="inner">
             <template #extra>
               <Button type="primary" @click="onCopy(authenticator?.sharedKey)">
                 {{ $t('AbpAccount.Authenticator:CopyToClipboard') }}
               </Button>
             </template>
             <div
-              class="flex items-center justify-center rounded-lg bg-[#dac6c6]"
-            >
+              class="flex items-center justify-center rounded-lg bg-[#dac6c6]">
               <div class="m-4 text-xl font-bold text-blue-600">
                 {{ authenticator?.sharedKey }}
               </div>
@@ -144,8 +141,7 @@ async function onValidCode() {
             <FormItem
               :label="$t('AbpAccount.DisplayName:AuthenticatorCode')"
               name="authenticatorCode"
-              required
-            >
+              required>
               <Input v-model:value="validCodeInput.authenticatorCode" />
             </FormItem>
           </Form>
@@ -175,8 +171,7 @@ async function onValidCode() {
         </Button>
       </template>
       <div
-        class="flex flex-col items-center justify-center rounded-lg bg-[#dac6c6]"
-      >
+        class="flex flex-col items-center justify-center rounded-lg bg-[#dac6c6]">
         <div class="m-2 text-xl font-bold text-blue-600">
           {{ recoveryCodes.slice(0, 5).join('\r\n') }}
         </div>
@@ -195,8 +190,7 @@ async function onValidCode() {
           v-if="currentStep < 2"
           :disabled="currentStep === 1 && !codeValidated"
           type="primary"
-          @click="onNextStep"
-        >
+          @click="onNextStep">
           {{ $t('AbpAccount.Steps:NextStep') }}
         </Button>
         <Button v-if="currentStep === 2" type="primary" @click="emits('done')">

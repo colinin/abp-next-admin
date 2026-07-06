@@ -31,8 +31,7 @@ const indentStyle = computed(() =>
         :feature="node.feature"
         :group-index="groupIndex"
         :feature-index="0"
-        @change="(feature, idx) => emit('change', feature, idx)"
-      />
+        @change="(feature, idx) => emit('change', feature, idx)" />
     </div>
 
     <template v-for="child in node.children" :key="child.feature.name">
@@ -40,8 +39,7 @@ const indentStyle = computed(() =>
         :node="child"
         :group-index="groupIndex"
         :base-indent-size="baseIndentSize"
-        @change="(feature, idx) => emit('change', feature, idx)"
-      />
+        @change="(feature, idx) => emit('change', feature, idx)" />
     </template>
   </div>
 </template>

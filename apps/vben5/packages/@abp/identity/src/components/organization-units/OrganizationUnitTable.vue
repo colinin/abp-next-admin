@@ -27,8 +27,7 @@ const activeTab = ref<'roles' | 'users'>('users');
     </Tabs>
     <OrganizationUnitUserTable
       v-if="activeTab === 'users'"
-      :selected-key="props.selectedKey"
-    />
+      :selected-key="props.selectedKey" />
     <OrganizationUnitRoleTable v-else :selected-key="props.selectedKey" />
   </Card>
 </template>

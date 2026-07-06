@@ -48,7 +48,6 @@ function normalizeVxeLocale<T extends Record<string, any>>(localeModule: T) {
   ) as T;
 }
 
-
 export function useTableForm(...args: any[]) {
   const pluginsOptions = injectPluginsOptions();
   const contextFormFactory = pluginsOptions?.form?.useVbenForm;

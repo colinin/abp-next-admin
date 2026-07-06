@@ -64,8 +64,7 @@ async function onInitLogin() {
         $t('AbpFeature.Volo.Feature:010001', [
           $t('AbpAccountOAuth.Features:WeComOAuthEnable'),
         ])
-      "
-    />
+      " />
   </Modal>
 </template>
 

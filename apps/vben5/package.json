@@ -55,6 +55,7 @@
     "dev:play": "pnpm -F @vben/playground run dev",
     "format": "vsh lint --format",
     "lint": "vsh lint",
+    "lint:check": "oxlint --quiet",
     "postinstall": "pnpm -r run --if-present stub",
     "preinstall": "npx only-allow pnpm",
     "prepare": "is-ci || pnpm exec lefthook install",

@@ -71,8 +71,7 @@ function onFeatureManage() {
         ghost
         post-icon="ant-design:setting-outlined"
         type="primary"
-        @click="onFeatureManage"
-      >
+        @click="onFeatureManage">
         {{ $t('AbpFeatureManagement.ManageHostFeatures') }}
       </Button>
     </template>
@@ -80,14 +79,12 @@ function onFeatureManage() {
       <FormItem
         :extra="detail.description"
         :label="detail.displayName"
-        name="testEmail"
-      >
+        name="testEmail">
         <InputSearch
           v-model:value="detail.value"
           :loading="sending"
           :placeholder="$t('AbpSettingManagement.TargetEmailAddress')"
-          @search="onSendMail"
-        >
+          @search="onSendMail">
           <template #enterButton>
             <Button :loading="sending" type="primary">
               {{ $t('AbpSettingManagement.Send') }}

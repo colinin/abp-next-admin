@@ -46,8 +46,7 @@ function onFeaturesChange(value: any) {
       <Checkbox
         v-model:checked="modelValue.requiresAll"
         @blur="emits('blur')"
-        @change="onChange"
-      >
+        @change="onChange">
         {{ $t('component.simple_state_checking.requireFeatures.requiresAll') }}
       </Checkbox>
       <Select
@@ -56,8 +55,7 @@ function onFeaturesChange(value: any) {
         show-search
         mode="tags"
         @blur="emits('blur')"
-        @change="onFeaturesChange"
-      />
+        @change="onFeaturesChange" />
     </FormItemRest>
   </div>
 </template>

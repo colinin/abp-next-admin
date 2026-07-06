@@ -57,8 +57,8 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       formModel.value = { groups: [] };
       await onGet();
-      if (formModel.value?.groups.length > 0) {
-        activeTabKey.value = formModel.value.groups[0]?.name!;
+      if (formModel.value && formModel.value.groups) {
+        activeTabKey.value = formModel.value.groups[0]!.name;
       }
     }
   },
@@ -155,14 +155,12 @@ async function onSubmit() {
         <TabPane
           v-for="(group, gi) in formModel.groups"
           :key="group.name"
-          :tab="group.displayName"
-        >
+          :tab="group.displayName">
           <FeatureGroup
             :group="group"
             :group-index="gi"
             :base-indent-size="8"
-            @change="handleFeatureChange"
-          />
+            @change="handleFeatureChange" />
         </TabPane>
       </Tabs>
     </Form>

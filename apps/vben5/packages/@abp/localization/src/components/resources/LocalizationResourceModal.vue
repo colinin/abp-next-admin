@@ -49,7 +49,9 @@ const [Modal, modalApi] = useVbenModal({
         title: $t('LocalizationManagement.Resource:AddNew'),
       });
       const { name } = modalApi.getData<ResourceDto>();
-      name && (await onGet(name));
+      if (name) {
+        await onGet(name);
+      }
     }
   },
   title: $t('LocalizationManagement.Resource:AddNew'),
@@ -88,12 +90,10 @@ async function onSubmit() {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <FormItem
         :label="$t('LocalizationManagement.DisplayName:Enable')"
-        name="enable"
-      >
+        name="enable">
         <Checkbox v-model:checked="formModel.enable">
           {{ $t('LocalizationManagement.DisplayName:Enable') }}
         </Checkbox>
@@ -101,21 +101,18 @@ async function onSubmit() {
       <FormItem
         :label="$t('LocalizationManagement.DisplayName:ResourceName')"
         name="name"
-        required
-      >
+        required>
         <Input v-model:value="formModel.name" autocomplete="off" />
       </FormItem>
       <FormItem
         :label="$t('LocalizationManagement.DisplayName:DisplayName')"
         name="displayName"
-        required
-      >
+        required>
         <Input v-model:value="formModel.displayName" autocomplete="off" />
       </FormItem>
       <FormItem
         :label="$t('LocalizationManagement.DisplayName:Description')"
-        name="description"
-      >
+        name="description">
         <Input v-model:value="formModel.description" autocomplete="off" />
       </FormItem>
     </Form>

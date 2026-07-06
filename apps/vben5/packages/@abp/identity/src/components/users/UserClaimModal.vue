@@ -80,8 +80,7 @@ defineExpose({
       :delete-policy="IdentityUserPermissions.ManageClaims"
       :get-api="onGet"
       :update-api="onUpdate"
-      :update-policy="IdentityUserPermissions.ManageClaims"
-    />
+      :update-policy="IdentityUserPermissions.ManageClaims" />
   </Modal>
 </template>
 

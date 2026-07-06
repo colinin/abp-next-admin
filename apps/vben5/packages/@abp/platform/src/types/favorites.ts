@@ -24,8 +24,7 @@ interface UserFavoriteMenuCreateDto extends UserFavoriteMenuCreateOrUpdateDto {
 }
 
 interface UserFavoriteMenuUpdateDto
-  extends IHasConcurrencyStamp,
-    UserFavoriteMenuCreateOrUpdateDto {}
+  extends IHasConcurrencyStamp, UserFavoriteMenuCreateOrUpdateDto {}
 
 export type {
   UserFavoriteMenuCreateDto,

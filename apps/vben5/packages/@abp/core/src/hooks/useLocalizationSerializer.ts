@@ -15,7 +15,7 @@ interface ILocalizableStringSerializer {
 export function useLocalizationSerializer(): ILocalizableStringSerializer {
   function Validate(value?: string, opt?: ValidateOptions): boolean {
     if (!value || isNullOrWhiteSpace(value)) {
-      if (!opt || opt.required === undefined || opt.required === true) {
+      if (!opt || opt.required === undefined ||  opt.required) {
         return false;
       }
       return true;

@@ -58,7 +58,6 @@ export const useAuthStore = defineStore('auth', () => {
         accessToken: user.access_token,
         tokenType: user.token_type,
         refreshToken: user.refresh_token ?? '',
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         expiresIn: user.expires_in!,
       });
     } catch (error: any) {
@@ -81,7 +80,6 @@ export const useAuthStore = defineStore('auth', () => {
           accessToken: user.access_token,
           tokenType: user.token_type,
           refreshToken: user.refresh_token ?? '',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           expiresIn: user.expires_in!,
         },
         onSuccess,
@@ -104,7 +102,6 @@ export const useAuthStore = defineStore('auth', () => {
           accessToken: user.access_token,
           tokenType: user.token_type,
           refreshToken: user.refresh_token ?? '',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           expiresIn: user.expires_in!,
         },
         onSuccess,
@@ -132,7 +129,6 @@ export const useAuthStore = defineStore('auth', () => {
           accessToken: user.access_token,
           tokenType: user.token_type,
           refreshToken: user.refresh_token ?? '',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           expiresIn: user.expires_in!,
         },
         onSuccess,
@@ -163,7 +159,6 @@ export const useAuthStore = defineStore('auth', () => {
           accessToken: user.access_token,
           tokenType: user.token_type,
           refreshToken: user.refresh_token ?? '',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           expiresIn: user.expires_in!,
         },
         onSuccess,
@@ -190,7 +185,6 @@ export const useAuthStore = defineStore('auth', () => {
           accessToken: user.access_token,
           tokenType: user.token_type,
           refreshToken: user.refresh_token ?? '',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           expiresIn: user.expires_in!,
         },
         onSuccess,
@@ -228,7 +222,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUserInfo() {
-    let userInfo: null | (UserInfo & { [key: string]: any }) = null;
     let userInfoRes: { [key: string]: any } = {};
     const user = await oAuthService.getUser();
     if (user) {
@@ -237,7 +230,7 @@ export const useAuthStore = defineStore('auth', () => {
     const abpConfig = await getConfigApi({
       includeLocalizationResources: false,
     });
-    userInfo = {
+    const userInfo = {
       userId: userInfoRes.sub ?? abpConfig.currentUser.id,
       username: userInfoRes.uniqueName ?? abpConfig.currentUser.userName,
       realName:

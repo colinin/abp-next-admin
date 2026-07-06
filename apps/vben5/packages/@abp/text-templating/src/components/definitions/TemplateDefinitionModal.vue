@@ -47,7 +47,7 @@ const abpStore = useAbpStore();
 const { Lr } = useLocalization();
 const { hasAccessByCodes } = useAccess();
 const { deserialize } = useLocalizationSerializer();
-const { getListApi: getResourcesApi } = useResourcesApi();
+const { getPagedListApi: getResourcesApi } = useResourcesApi();
 const { cancel, createApi, getApi, getListApi, updateApi } =
   useTemplateDefinitionsApi();
 
@@ -144,7 +144,7 @@ async function onInitResources() {
   if (!hasAccessByCodes(['LocalizationManagement.Resource'])) {
     return;
   }
-  const { items } = await getResourcesApi();
+  const { items } = await getResourcesApi({ maxResultCount: 1000 });
   textTemplateResources.value = items;
 }
 
@@ -178,61 +178,51 @@ function onPropDelete(prop: PropertyInfo) {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTabKey">
         <TabPane key="basic" :tab="$t('AbpTextTemplating.BasicInfo')">
           <FormItem
             name="name"
             required
-            :label="$t('AbpTextTemplating.DisplayName:Name')"
-          >
+            :label="$t('AbpTextTemplating.DisplayName:Name')">
             <Input
               allow-clear
               autocomplete="off"
               :disabled="!isEditModel || formModel.isStatic"
-              v-model:value="formModel.name"
-            />
+              v-model:value="formModel.name" />
           </FormItem>
           <FormItem
             :label="$t('WebhooksManagement.DisplayName:DisplayName')"
             name="displayName"
-            required
-          >
+            required>
             <LocalizableInput
               v-model:value="formModel.displayName"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
           <FormItem
             name="isInlineLocalized"
-            :label="$t('AbpTextTemplating.DisplayName:IsInlineLocalized')"
-          >
+            :label="$t('AbpTextTemplating.DisplayName:IsInlineLocalized')">
             <Checkbox
               :disabled="formModel.isStatic"
               v-model:checked="formModel.isInlineLocalized"
-              @change="(e) => onIsInlineLocalizedChange(e.target.checked)"
-            >
+              @change="(e) => onIsInlineLocalizedChange(e.target.checked)">
               {{ $t('AbpTextTemplating.DisplayName:IsInlineLocalized') }}
             </Checkbox>
           </FormItem>
           <FormItem
             v-if="!formModel.isInlineLocalized"
             name="defaultCultureName"
-            :label="$t('AbpTextTemplating.DisplayName:DefaultCultureName')"
-          >
+            :label="$t('AbpTextTemplating.DisplayName:DefaultCultureName')">
             <Select
               allow-clear
               :disabled="formModel.isStatic"
               v-model:value="formModel.defaultCultureName"
-              :options="getLanguageOptions"
-            />
+              :options="getLanguageOptions" />
           </FormItem>
           <FormItem
             v-if="formModel.isInlineLocalized"
             name="localizationResourceName"
-            :label="$t('AbpTextTemplating.LocalizationResource')"
-          >
+            :label="$t('AbpTextTemplating.LocalizationResource')">
             <Select
               allow-clear
               :disabled="formModel.isStatic"
@@ -241,26 +231,22 @@ function onPropDelete(prop: PropertyInfo) {
               :field-names="{
                 label: 'displayName',
                 value: 'name',
-              }"
-            />
+              }" />
           </FormItem>
           <FormItem
             name="isLayout"
-            :label="$t('AbpTextTemplating.DisplayName:IsLayout')"
-          >
+            :label="$t('AbpTextTemplating.DisplayName:IsLayout')">
             <Checkbox
               :disabled="formModel.isStatic"
               v-model:checked="formModel.isLayout"
-              @change="(e) => onIsLayoutChange(e.target.checked)"
-            >
+              @change="(e) => onIsLayoutChange(e.target.checked)">
               {{ $t('AbpTextTemplating.DisplayName:IsLayout') }}
             </Checkbox>
           </FormItem>
           <FormItem
             v-if="!formModel.isLayout"
             name="layout"
-            :label="$t('AbpTextTemplating.DisplayName:Layout')"
-          >
+            :label="$t('AbpTextTemplating.DisplayName:Layout')">
             <Select
               allow-clear
               :disabled="formModel.isStatic"
@@ -269,8 +255,7 @@ function onPropDelete(prop: PropertyInfo) {
               :field-names="{
                 label: 'displayName',
                 value: 'name',
-              }"
-            />
+              }" />
           </FormItem>
         </TabPane>
         <TabPane key="properties" :tab="$t('AbpTextTemplating.Properties')">
@@ -278,8 +263,7 @@ function onPropDelete(prop: PropertyInfo) {
             :data="formModel.extraProperties"
             :disabled="formModel.isStatic"
             @change="onPropChange"
-            @delete="onPropDelete"
-          />
+            @delete="onPropDelete" />
         </TabPane>
       </Tabs>
     </Form>

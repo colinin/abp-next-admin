@@ -39,7 +39,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
           userName: item.userName,
         };
       });
-      state.subject && (title += ` - ${state.subject}`);
+      if (state.subject) {
+        title += ` - ${state.subject}`;
+      }
     }
     drawerApi.setState({ title });
   },

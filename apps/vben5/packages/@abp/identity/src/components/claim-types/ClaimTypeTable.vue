@@ -226,8 +226,7 @@ const onMenuClick = (row: IdentityClaimTypeDto, info: MenuInfo) => {
       <Button
         type="primary"
         v-access:code="[IdentityClaimTypePermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AbpIdentity.IdentityClaim:New') }}
       </Button>
     </template>
@@ -250,8 +249,7 @@ const onMenuClick = (row: IdentityClaimTypeDto, info: MenuInfo) => {
           block
           type="link"
           v-access:code="[IdentityClaimTypePermissions.Update]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -261,8 +259,7 @@ const onMenuClick = (row: IdentityClaimTypeDto, info: MenuInfo) => {
           danger
           type="link"
           v-access:code="[IdentityClaimTypePermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown v-if="isEnabled('AbpAuditing.Logging.AuditLog')">
@@ -271,8 +268,7 @@ const onMenuClick = (row: IdentityClaimTypeDto, info: MenuInfo) => {
               <MenuItem
                 v-if="hasAccessByCodes([AuditLogPermissions.Default])"
                 key="entity-changes"
-                :icon="h(AuditLogIcon)"
-              >
+                :icon="h(AuditLogIcon)">
                 {{ $t('AbpAuditLogging.EntitiesChanged') }}
               </MenuItem>
             </Menu>

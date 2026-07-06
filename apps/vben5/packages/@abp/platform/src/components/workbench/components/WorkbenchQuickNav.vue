@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
+
 import type { FavoriteMenu } from '../types';
 
 import { computed, h } from 'vue';
@@ -30,8 +32,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emits = defineEmits<{
-  (event: 'click', menu: FavoriteMenu): void;
-  (event: 'delete', menu: FavoriteMenu): void;
+  (event: 'click' | 'delete', menu: FavoriteMenu): void;
   (event: 'add'): void;
 }>();
 
@@ -82,8 +83,7 @@ function onMenuClick(key: string, menu: FavoriteMenu) {
     <CardContent class="flex flex-wrap p-0">
       <template
         v-for="(item, index) in getFavoriteMenus"
-        :key="item.displayName"
-      >
+        :key="item.displayName">
         <Dropdown :trigger="['contextmenu']">
           <div
             :class="{
@@ -94,22 +94,19 @@ function onMenuClick(key: string, menu: FavoriteMenu) {
               'rounded-br-xl': index === items.length - 1,
             }"
             class="flex-col-center border-border group w-1/3 cursor-pointer border-r border-t py-8 hover:shadow-xl"
-            @click="onClick(item)"
-          >
+            @click="onClick(item)">
             <VbenIcon
               :color="item.color"
               :icon="item.icon"
-              class="size-7 transition-all duration-300 group-hover:scale-125"
-            />
+              class="size-7 transition-all duration-300 group-hover:scale-125" />
             <span class="text-md mt-2 truncate">{{ item.displayName }}</span>
           </div>
           <template #overlay>
             <Menu
               v-if="!item.isDefault"
               @click="
-                ({ key: menuKey }) => onMenuClick(menuKey.toString(), item)
-              "
-            >
+                (info: MenuInfo) => onMenuClick(info.key.toString(), item)
+              ">
               <MenuItem key="delete" :icon="h(DeleteOutlined)">
                 {{ $t('workbench.content.favoriteMenu.delete') }}
               </MenuItem>

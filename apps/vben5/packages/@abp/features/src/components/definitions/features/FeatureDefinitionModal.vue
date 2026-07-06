@@ -193,7 +193,9 @@ const [Modal, modalApi] = useVbenModal({
         const { groupName, name, parentName } =
           modalApi.getData<FeatureDefinitionDto>();
         formModel.value.parentName = parentName;
-        name && (await onGet(name));
+        if (name) {
+          await onGet(name);
+        }
         await Promise.all([onInitGroups(groupName), onInitProviders()]);
       } finally {
         modalApi.setState({ loading: false });
@@ -305,15 +307,13 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
       :model="formModel"
       :rules="formRules"
       :label-col="{ span: 6 }"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTab">
         <!-- 基本信息 -->
         <TabPane key="basic" :tab="$t('AbpFeatureManagement.BasicInfo')">
           <FormItem
             :label="$t('AbpFeatureManagement.DisplayName:GroupName')"
-            name="groupName"
-          >
+            name="groupName">
             <Select
               v-model:value="formModel.groupName"
               :allow-clear="true"
@@ -323,14 +323,12 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
                 value: 'name',
               }"
               :options="availableGroups"
-              @change="(e) => onGroupChange(e?.toString())"
-            />
+              @change="(e) => onGroupChange(e?.toString())" />
           </FormItem>
           <FormItem
             v-if="availableDefinitions.length > 0"
             :label="$t('AbpFeatureManagement.DisplayName:ParentName')"
-            name="parentName"
-          >
+            name="parentName">
             <TreeSelect
               v-model:value="formModel.parentName"
               :allow-clear="true"
@@ -340,48 +338,39 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
                 value: 'name',
                 children: 'children',
               }"
-              :tree-data="availableDefinitions"
-            />
+              :tree-data="availableDefinitions" />
           </FormItem>
           <FormItem
             :label="$t('AbpFeatureManagement.DisplayName:Name')"
-            name="name"
-          >
+            name="name">
             <Input
               v-model:value="formModel.name"
               :disabled="formModel.isStatic"
-              autocomplete="off"
-            />
+              autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('AbpFeatureManagement.DisplayName:DisplayName')"
-            name="displayName"
-          >
+            name="displayName">
             <LocalizableInput
               v-model:value="formModel.displayName"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
           <FormItem
             :label="$t('AbpFeatureManagement.DisplayName:Description')"
-            name="description"
-          >
+            name="description">
             <LocalizableInput
               v-model:value="formModel.description"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
           <FormItem
             name="defaultValue"
-            :label="$t('AbpFeatureManagement.DisplayName:DefaultValue')"
-          >
+            :label="$t('AbpFeatureManagement.DisplayName:DefaultValue')">
             <Select
               v-if="valueTypeNameRef === 'SelectionStringValueType'"
               :disabled="formModel.isStatic"
               :allow-clear="true"
               v-model:value="formModel.defaultValue"
-              :options="selectionDataSource"
-            />
+              :options="selectionDataSource" />
             <Textarea
               v-else-if="
                 valueTypeNameRef === 'FreeTextStringValueType' &&
@@ -390,8 +379,7 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
               :disabled="formModel.isStatic"
               :allow-clear="true"
               :auto-size="{ minRows: 3 }"
-              v-model:value="formModel.defaultValue"
-            />
+              v-model:value="formModel.defaultValue" />
             <InputNumber
               v-else-if="
                 valueTypeNameRef === 'FreeTextStringValueType' &&
@@ -399,8 +387,7 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
               "
               style="width: 100%"
               :disabled="formModel.isStatic"
-              v-model:value="formModel.defaultValue"
-            />
+              v-model:value="formModel.defaultValue" />
             <Checkbox
               v-else-if="
                 valueTypeNameRef === 'ToggleStringValueType' &&
@@ -413,46 +400,39 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
                   (formModel.defaultValue = String(
                     e.target.checked,
                   ).toLowerCase())
-              "
-            >
+              ">
               {{ $t('AbpFeatureManagement.DisplayName:DefaultValue') }}
             </Checkbox>
           </FormItem>
           <FormItem
             name="providers"
             :label="$t('AbpFeatureManagement.DisplayName:AllowedProviders')"
-            :extra="$t('AbpFeatureManagement.Description:AllowedProviders')"
-          >
+            :extra="$t('AbpFeatureManagement.Description:AllowedProviders')">
             <Select
               v-model:value="formModel.allowedProviders"
               :allow-clear="true"
               :disabled="formModel.isStatic"
               :field-names="{ label: 'name', value: 'value' }"
               :options="availableProviders"
-              mode="multiple"
-            />
+              mode="multiple" />
           </FormItem>
           <FormItem
             name="isVisibleToClients"
             :label="$t('AbpFeatureManagement.DisplayName:IsVisibleToClients')"
-            :extra="$t('AbpFeatureManagement.Description:IsVisibleToClients')"
-          >
+            :extra="$t('AbpFeatureManagement.Description:IsVisibleToClients')">
             <Checkbox
               v-model:checked="formModel.isVisibleToClients"
-              :disabled="formModel.isStatic"
-            >
+              :disabled="formModel.isStatic">
               {{ $t('AbpFeatureManagement.DisplayName:IsVisibleToClients') }}
             </Checkbox>
           </FormItem>
           <FormItem
             name="isAvailableToHost"
             :label="$t('AbpFeatureManagement.DisplayName:IsAvailableToHost')"
-            :extra="$t('AbpFeatureManagement.Description:IsAvailableToHost')"
-          >
+            :extra="$t('AbpFeatureManagement.Description:IsAvailableToHost')">
             <Checkbox
               v-model:checked="formModel.isAvailableToHost"
-              :disabled="formModel.isStatic"
-            >
+              :disabled="formModel.isStatic">
               {{ $t('AbpFeatureManagement.DisplayName:IsAvailableToHost') }}
             </Checkbox>
           </FormItem>
@@ -460,14 +440,12 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
         <TabPane
           key="valueType"
           :tab="$t('AbpFeatureManagement.ValueValidator')"
-          force-render
-        >
+          force-render>
           <FormItem
             name="valueType"
             label=""
             :label-col="{ span: 0 }"
-            :wrapper-col="{ span: 24 }"
-          >
+            :wrapper-col="{ span: 24 }">
             <StringValueTypeInput
               ref="valueType"
               :disabled="formModel.isStatic"
@@ -476,8 +454,7 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
               v-model:value="formModel.valueType"
               @change:value-type="onValueTypeNameChange"
               @change:validator="onValidatorNameChange"
-              @change:selection="onSelectionChange"
-            />
+              @change:selection="onSelectionChange" />
           </FormItem>
         </TabPane>
         <!-- 属性 -->
@@ -486,8 +463,7 @@ function onSelectionChange(items: SelectionStringValueItem[]) {
             :data="formModel.extraProperties"
             :disabled="formModel.isStatic"
             @change="onPropChange"
-            @delete="onPropDelete"
-          />
+            @delete="onPropDelete" />
         </TabPane>
       </Tabs>
     </Form>

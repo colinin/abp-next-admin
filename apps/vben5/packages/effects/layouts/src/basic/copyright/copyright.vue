@@ -28,8 +28,7 @@ withDefaults(defineProps<Props>(), {
       :href="icpLink || 'https://beian.miit.gov.cn/'"
       class="mx-1 hover:text-primary-hover"
       rel="noopener noreferrer"
-      target="_blank"
-    >
+      target="_blank">
       {{ icp }}
     </a>
 
@@ -41,8 +40,7 @@ withDefaults(defineProps<Props>(), {
       v-if="companyName"
       :href="companySiteLink || 'javascript:void(0)'"
       class="mx-1 hover:text-primary-hover"
-      target="_blank"
-    >
+      target="_blank">
       {{ companyName }}
     </a>
   </div>

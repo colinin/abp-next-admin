@@ -35,8 +35,7 @@ function onFolderChange(val?: string) {
     <template #left>
       <BlobFolderTree
         @container-change="onContainerChange"
-        @folder-change="onFolderChange"
-      />
+        @folder-change="onFolderChange" />
     </template>
     <BlobFileTable :container-id="containerId" :folder-id="folderId" />
   </ColPage>

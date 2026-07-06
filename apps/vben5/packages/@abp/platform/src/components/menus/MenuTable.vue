@@ -270,8 +270,7 @@ onMounted(onGet);
         v-if="isGranted([MenuPermissions.Create])"
         :icon="h(PlusOutlined)"
         type="primary"
-        @click="onCreate()"
-      >
+        @click="onCreate()">
         {{ $t('AppPlatform.Menu:AddNew') }}
       </Button>
     </template>
@@ -288,8 +287,7 @@ onMounted(onGet);
           :icon="h(PlusOutlined)"
           block
           type="link"
-          @click="onCreate(row)"
-        >
+          @click="onCreate(row)">
           {{ $t('AppPlatform.Menu:AddChildren') }}
         </Button>
         <Button
@@ -299,8 +297,7 @@ onMounted(onGet);
           :icon="h(EditOutlined)"
           block
           type="link"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -309,8 +306,7 @@ onMounted(onGet);
           block
           danger
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

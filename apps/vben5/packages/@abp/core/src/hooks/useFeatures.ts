@@ -50,7 +50,7 @@ export function useFeatures(): IFeatureChecker {
     isEnabled(featureNames: string | string[], requiresAll?: boolean) {
       if (Array.isArray(featureNames)) {
         if (featureNames.length === 0) return true;
-        if (requiresAll === undefined || requiresAll === true) {
+        if (requiresAll === undefined ||  requiresAll) {
           for (const featureName of featureNames) {
             if (!_isEnabled(featureName)) return false;
           }

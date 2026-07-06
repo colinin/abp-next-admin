@@ -23,7 +23,9 @@ const sidebarDraggable = defineModel<boolean>('sidebarDraggable');
 const sidebarCollapsed = defineModel<boolean>('sidebarCollapsed');
 const sidebarExpandOnHover = defineModel<boolean>('sidebarExpandOnHover');
 
-const sidebarButtons = defineModel<string[]>('sidebarButtons', { default: [] });
+const sidebarButtons = defineModel<string[]>('sidebarButtons', {
+  default: () => [],
+});
 const sidebarCollapsedButton = defineModel<boolean>('sidebarCollapsedButton');
 const sidebarFixedButton = defineModel<boolean>('sidebarFixedButton');
 
@@ -58,14 +60,12 @@ const handleCheckboxChange = () => {
   <SwitchItem
     v-model="sidebarExpandOnHover"
     :disabled="!sidebarEnable || disabled || !sidebarCollapsed"
-    :tip="$t('preferences.sidebar.expandOnHoverTip')"
-  >
+    :tip="$t('preferences.sidebar.expandOnHoverTip')">
     {{ $t('preferences.sidebar.expandOnHover') }}
   </SwitchItem>
   <SwitchItem
     v-model="sidebarCollapsedShowTitle"
-    :disabled="!sidebarEnable || disabled || !sidebarCollapsed"
-  >
+    :disabled="!sidebarEnable || disabled || !sidebarCollapsed">
     {{ $t('preferences.sidebar.collapsedShowTitle') }}
   </SwitchItem>
   <SwitchItem
@@ -77,8 +77,7 @@ const handleCheckboxChange = () => {
       ) ||
       disabled
     "
-    :tip="$t('preferences.sidebar.autoActivateChildTip')"
-  >
+    :tip="$t('preferences.sidebar.autoActivateChildTip')">
     {{ $t('preferences.sidebar.autoActivateChild') }}
   </SwitchItem>
   <CheckboxItem
@@ -88,8 +87,7 @@ const handleCheckboxChange = () => {
     ]"
     multiple
     v-model="sidebarButtons"
-    :on-btn-click="handleCheckboxChange"
-  >
+    :on-btn-click="handleCheckboxChange">
     {{ $t('preferences.sidebar.buttons') }}
   </CheckboxItem>
   <NumberFieldItem
@@ -97,8 +95,7 @@ const handleCheckboxChange = () => {
     :disabled="!sidebarEnable || disabled"
     :max="320"
     :min="160"
-    :step="10"
-  >
+    :step="10">
     {{ $t('preferences.sidebar.width') }}
   </NumberFieldItem>
 </template>

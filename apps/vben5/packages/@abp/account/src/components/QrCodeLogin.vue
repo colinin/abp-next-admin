@@ -165,8 +165,7 @@ onUnmounted(() => {
           <img
             :src="qrcodeInfo.picture ?? defaultAvatar"
             alt="qrcode"
-            class="w-1/2"
-          />
+            class="w-1/2" />
         </div>
       </Spin>
     </div>

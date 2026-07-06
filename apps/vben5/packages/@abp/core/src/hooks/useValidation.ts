@@ -399,7 +399,7 @@ export function useValidation(): RuleCreator {
     },
     mapEnumValidMessage(
       enumName: string,
-      args?: any[] | Record<string, string> | undefined,
+      args?: any[] | Record<string, string>  ,
     ) {
       return L(enumName, args);
     },

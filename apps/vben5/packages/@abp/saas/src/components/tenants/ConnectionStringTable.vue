@@ -87,15 +87,13 @@ async function onDelete(row: TenantConnectionStringDto) {
             :icon="h(EditOutlined)"
             block
             type="link"
-            @click="handleUpdate(row)"
-          >
+            @click="handleUpdate(row)">
             {{ $t('AbpUi.Edit') }}
           </Button>
           <Popconfirm
             :title="$t('AbpUi.AreYouSure')"
             trigger="click"
-            @confirm="onDelete(row)"
-          >
+            @confirm="onDelete(row)">
             <template #description>
               <span>{{
                 $t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])
@@ -110,8 +108,7 @@ async function onDelete(row: TenantConnectionStringDto) {
     </VxeGrid>
     <ConnectionStringModal
       :data-base-options="dataBaseOptions"
-      :submit="submit"
-    />
+      :submit="submit" />
   </div>
 </template>
 

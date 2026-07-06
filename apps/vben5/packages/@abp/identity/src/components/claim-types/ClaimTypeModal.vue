@@ -118,20 +118,17 @@ const [Modal, modalApi] = useVbenModal({
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <FormItem
         :label="$t('AbpIdentity.IdentityClaim:Name')"
         name="name"
-        required
-      >
+        required>
         <Input v-model:value="formModel.name" :disabled="formModel.isStatic" />
       </FormItem>
       <FormItem :label="$t('AbpIdentity.IdentityClaim:Required')">
         <Checkbox
           v-model:checked="formModel.required"
-          :disabled="formModel.isStatic"
-        >
+          :disabled="formModel.isStatic">
           {{ $t('AbpIdentity.IdentityClaim:Required') }}
         </Checkbox>
       </FormItem>
@@ -141,22 +138,19 @@ const [Modal, modalApi] = useVbenModal({
       <FormItem :label="$t('AbpIdentity.IdentityClaim:RegexDescription')">
         <Input
           v-model:value="formModel.regexDescription"
-          :disabled="formModel.isStatic"
-        />
+          :disabled="formModel.isStatic" />
       </FormItem>
       <FormItem :label="$t('AbpIdentity.IdentityClaim:ValueType')">
         <Select
           v-model:value="formModel.valueType"
           :disabled="formModel.isStatic"
-          :options="valueTypeOptions"
-        />
+          :options="valueTypeOptions" />
       </FormItem>
       <FormItem :label="$t('AbpIdentity.IdentityClaim:Description')">
         <Textarea
           v-model:value="formModel.description"
           :auto-size="{ minRows: 2 }"
-          :disabled="formModel.isStatic"
-        />
+          :disabled="formModel.isStatic" />
       </FormItem>
     </Form>
   </Modal>

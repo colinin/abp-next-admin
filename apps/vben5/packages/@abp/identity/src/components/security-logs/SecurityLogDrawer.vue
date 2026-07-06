@@ -88,8 +88,7 @@ async function onGet(id: string) {
         <DescriptionsItem
           :label="$t('AbpAuditLogging.BrowserInfo')"
           :label-style="{ width: '110px' }"
-          :span="2"
-        >
+          :span="2">
           {{ formModel.browserInfo }}
         </DescriptionsItem>
         <DescriptionsItem :label="$t('AbpAuditLogging.Additional')" :span="2">

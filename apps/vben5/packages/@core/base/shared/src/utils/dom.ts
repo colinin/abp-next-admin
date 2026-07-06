@@ -12,7 +12,7 @@ export interface VisibleDomRect {
  * @param element
  */
 export function getElementVisibleRect(
-  element?: HTMLElement | null | undefined,
+  element?: HTMLElement | null  ,
 ): VisibleDomRect {
   if (!element) {
     return {

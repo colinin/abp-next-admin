@@ -317,8 +317,7 @@ function onDelete(row: WebhookSubscriptionDto) {
           :icon="h(DeleteOutlined)"
           danger
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

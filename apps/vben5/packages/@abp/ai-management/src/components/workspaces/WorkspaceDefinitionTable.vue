@@ -180,8 +180,7 @@ async function onDelete(row: WorkspaceDefinitionRecordDto) {
         v-access:code="[WorkspaceDefinitionPermissions.Create]"
         :icon="h(PlusOutlined)"
         type="primary"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AIManagement.Workspaces:New') }}
       </Button>
     </template>
@@ -198,8 +197,7 @@ async function onDelete(row: WorkspaceDefinitionRecordDto) {
           :icon="h(EditOutlined)"
           block
           type="link"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -208,8 +206,7 @@ async function onDelete(row: WorkspaceDefinitionRecordDto) {
           block
           danger
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

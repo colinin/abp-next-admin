@@ -223,8 +223,7 @@ function onPermissionChange(_name: string, key: string) {
       <Button
         type="primary"
         v-access:code="[IdentityRolePermissions.Create]"
-        @click="handleAdd"
-      >
+        @click="handleAdd">
         {{ $t('AbpIdentity.NewRole') }}
       </Button>
     </template>
@@ -247,8 +246,7 @@ function onPermissionChange(_name: string, key: string) {
           block
           type="link"
           v-access:code="[IdentityRolePermissions.Update]"
-          @click="handleEdit(row)"
-        >
+          @click="handleEdit(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -258,8 +256,7 @@ function onPermissionChange(_name: string, key: string) {
           danger
           type="link"
           v-access:code="[IdentityRolePermissions.Delete]"
-          @click="handleDelete(row)"
-        >
+          @click="handleDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown>
@@ -270,22 +267,19 @@ function onPermissionChange(_name: string, key: string) {
                   hasAccessByCodes([IdentityRolePermissions.ManagePermissions])
                 "
                 key="permissions"
-                :icon="h(PermissionsOutlined)"
-              >
+                :icon="h(PermissionsOutlined)">
                 {{ $t('AbpPermissionManagement.Permissions') }}
               </MenuItem>
               <MenuItem
                 v-if="hasAccessByCodes([IdentityRolePermissions.ManageClaims])"
                 key="claims"
-                :icon="h(ClaimOutlined)"
-              >
+                :icon="h(ClaimOutlined)">
                 {{ $t('AbpIdentity.ManageClaim') }}
               </MenuItem>
               <MenuItem
                 v-if="hasAccessByCodes(['Platform.Menu.ManageRoles'])"
                 key="menus"
-                :icon="h(MenuOutlined)"
-              >
+                :icon="h(MenuOutlined)">
                 {{ $t('AppPlatform.Menu:Manage') }}
               </MenuItem>
               <MenuItem
@@ -294,8 +288,7 @@ function onPermissionChange(_name: string, key: string) {
                   hasAccessByCodes([AuditLogPermissions.Default])
                 "
                 key="entity-changes"
-                :icon="h(AuditLogIcon)"
-              >
+                :icon="h(AuditLogIcon)">
                 {{ $t('AbpAuditLogging.EntitiesChanged') }}
               </MenuItem>
               <MenuItem key="entity-rules">

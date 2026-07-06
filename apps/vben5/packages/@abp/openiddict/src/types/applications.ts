@@ -26,8 +26,7 @@ interface OpenIddictApplicationSettingsDto {
   tokenLifetime: OpenIddictApplicationTokenLifetimesDto;
 }
 
-interface OpenIddictApplicationGetListInput
-  extends PagedAndSortedResultRequestDto {
+interface OpenIddictApplicationGetListInput extends PagedAndSortedResultRequestDto {
   filter?: string;
 }
 

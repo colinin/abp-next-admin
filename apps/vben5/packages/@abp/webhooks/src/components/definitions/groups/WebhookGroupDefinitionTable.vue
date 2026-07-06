@@ -206,8 +206,7 @@ onMounted(onGet);
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[GroupDefinitionsPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('WebhooksManagement.GroupDefinitions:AddNew') }}
       </Button>
     </template>
@@ -219,8 +218,7 @@ onMounted(onGet);
             block
             type="link"
             v-access:code="[GroupDefinitionsPermissions.Update]"
-            @click="onUpdate(row)"
-          >
+            @click="onUpdate(row)">
             {{ $t('AbpUi.Edit') }}
           </Button>
         </div>
@@ -232,8 +230,7 @@ onMounted(onGet);
               danger
               type="link"
               v-access:code="[GroupDefinitionsPermissions.Delete]"
-              @click="onDelete(row)"
-            >
+              @click="onDelete(row)">
               {{ $t('AbpUi.Delete') }}
             </Button>
           </div>

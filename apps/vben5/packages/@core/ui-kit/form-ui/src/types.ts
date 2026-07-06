@@ -64,7 +64,7 @@ export type MaybeComponentPropKey =
 
 export type MaybeComponentProps = { [K in MaybeComponentPropKey]?: any };
 
-export type FormActions = FormContext<GenericObject>;
+export type FormActions = FormContext;
 
 export type CustomRenderType = (() => Component | string) | string;
 
@@ -416,7 +416,7 @@ export interface FormRenderProps<
   /**
    * 表单实例
    */
-  form?: FormContext<GenericObject>;
+  form?: FormContext;
   /**
    * 表单项布局
    */

@@ -223,8 +223,7 @@ async function onLoadOuChildren(node: EventDataNode) {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activedTab">
         <!-- 基本信息 -->
         <TabPane key="info" :tab="$t('AbpIdentity.UserInformations')">
@@ -236,28 +235,24 @@ async function onLoadOuChildren(node: EventDataNode) {
           <FormItem
             :label="$t('AbpIdentity.UserName')"
             name="userName"
-            required
-          >
+            required>
             <Input
               v-model:value="formModel.userName"
               :disabled="
                 !!formModel.id &&
                 !isTrue('Abp.Identity.User.IsUserNameUpdateEnabled')
-              "
-            />
+              " />
           </FormItem>
           <FormItem
             v-if="!formModel.id"
             :label="$t('AbpIdentity.Password')"
             name="password"
-            required
-          >
+            required>
             <InputPassword v-model:value="formModel.password" />
           </FormItem>
           <FormItem
             :label="$t('AbpIdentity.DisplayName:Surname')"
-            name="surname"
-          >
+            name="surname">
             <Input v-model:value="formModel.surname" />
           </FormItem>
           <FormItem :label="$t('AbpIdentity.DisplayName:Name')" name="name">
@@ -266,17 +261,14 @@ async function onLoadOuChildren(node: EventDataNode) {
           <FormItem
             :label="$t('AbpIdentity.DisplayName:Email')"
             name="email"
-            required
-          >
+            required>
             <Input
               v-model:value="formModel.email"
-              :disabled="!isTrue('Abp.Identity.User.IsEmailUpdateEnabled')"
-            />
+              :disabled="!isTrue('Abp.Identity.User.IsEmailUpdateEnabled')" />
           </FormItem>
           <FormItem
             :label="$t('AbpIdentity.DisplayName:PhoneNumber')"
-            name="phoneNumber"
-          >
+            name="phoneNumber">
             <Input v-model:value="formModel.phoneNumber" />
           </FormItem>
           <FormItem :label="$t('AbpIdentity.DisplayName:LockoutEnabled')">
@@ -289,8 +281,7 @@ async function onLoadOuChildren(node: EventDataNode) {
         <TabPane
           v-if="checkManageRolePolicy()"
           key="role"
-          :tab="$t('AbpIdentity.Roles')"
-        >
+          :tab="$t('AbpIdentity.Roles')">
           <Transfer
             v-model:target-keys="formModel.roleNames"
             :data-source="assignedRoles"
@@ -303,15 +294,13 @@ async function onLoadOuChildren(node: EventDataNode) {
               $t('AbpOpenIddict.Assigned'),
               $t('AbpOpenIddict.Available'),
             ]"
-            class="tree-transfer"
-          />
+            class="tree-transfer" />
         </TabPane>
         <!-- 组织机构 -->
         <TabPane
           v-if="formModel.id && checkManageOuPolicy()"
           key="ou"
-          :tab="$t('AbpIdentity.OrganizationUnits')"
-        >
+          :tab="$t('AbpIdentity.OrganizationUnits')">
           <Tree
             v-if="organizationUnits.length > 0"
             :checked-keys="checkedOuKeys"
@@ -321,16 +310,14 @@ async function onLoadOuChildren(node: EventDataNode) {
             block-node
             check-strictly
             checkable
-            disabled
-          />
+            disabled />
           <Empty v-else />
         </TabPane>
         <!-- 详细信息 -->
         <TabPane
           v-if="formModel.id"
           key="details"
-          :tab="$t('AbpIdentity.Details')"
-        >
+          :tab="$t('AbpIdentity.Details')">
           <Descriptions :column="1" bordered size="small">
             <DescriptionsItem :label="$t('AbpIdentity.CreationTime')">
               <span>{{ formatToDateTime(formModel.creationTime) }}</span>

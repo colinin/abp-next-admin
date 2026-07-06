@@ -251,8 +251,7 @@ onMounted(onGet);
         type="primary"
         danger
         ghost
-        @click="onBulkDelete"
-      >
+        @click="onBulkDelete">
         {{ $t('AbpUi.Delete') }}
       </Button>
     </template>
@@ -261,8 +260,7 @@ onMounted(onGet);
         :icon="h(EditOutlined)"
         type="link"
         v-access:code="[CachingManagementPermissions.ManageValue]"
-        @click="onUpdate(row)"
-      >
+        @click="onUpdate(row)">
         {{ $t('AbpUi.Edit') }}
       </Button>
       <Button
@@ -270,16 +268,14 @@ onMounted(onGet);
         danger
         type="link"
         v-access:code="[CachingManagementPermissions.Delete]"
-        @click="onDelete(row)"
-      >
+        @click="onDelete(row)">
         {{ $t('AbpUi.Delete') }}
       </Button>
       <Button
         :icon="h(ReloadOutlined)"
         type="link"
         v-access:code="[CachingManagementPermissions.Refresh]"
-        @click="onRefresh(row)"
-      >
+        @click="onRefresh(row)">
         {{ $t('AbpUi.Refresh') }}
       </Button>
     </template>

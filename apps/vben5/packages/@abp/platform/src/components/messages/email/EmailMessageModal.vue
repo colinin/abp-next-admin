@@ -27,8 +27,7 @@ const [Modal, modalApi] = useVbenModal({
       :plugins="[]"
       :toolbar="[]"
       readonly
-      menubar="''"
-    />
+      menubar="''" />
   </Modal>
 </template>
 

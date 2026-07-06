@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 /**
  * copy to https://github.com/developit/mitt
  * Expand clear method
@@ -68,11 +67,11 @@ export default function mitt(all?: EventHandlerMap): Emitter {
      */
     emit<T = any>(type: EventType, evt: T) {
       [...((all?.get(type) || []) as EventHandlerList)].map((handler) => {
-        handler(evt);
+        return handler(evt);
       });
-      [...((all?.get('*') || []) as WildCardEventHandlerList)].map(
+      [...((all?.get('*') || []))].map(
         (handler) => {
-          handler(type, evt);
+          return handler(type, evt);
         },
       );
     },
@@ -86,7 +85,7 @@ export default function mitt(all?: EventHandlerMap): Emitter {
     off<T = any>(type: EventType, handler: Handler<T>) {
       const handlers = all?.get(type);
       if (handlers) {
-        handlers.splice(handlers.indexOf(handler) >>> 0, 1);
+        handlers.splice(Math.trunc(handlers.indexOf(handler)), 1);
       }
     },
 
