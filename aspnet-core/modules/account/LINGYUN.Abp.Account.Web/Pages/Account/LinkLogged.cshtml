@@ -20,7 +20,7 @@
         <input asp-for="LinkTenantId">
         <input asp-for="LinkUserId">
         <div class="gap-2 d-grid">
-            <abp-button class="btn-secondary">@L["LogInUsingYourProviderAccount", Model.LinkTenantAndUserName] &rarr;</abp-button>
+            <abp-button class="btn-secondary">@L["LogInUsingYourProviderAccount", @Model.LinkTenantAndUserName] &rarr;</abp-button>
         </div>
     </form>
 </div>

@@ -72,7 +72,7 @@ public partial class MicroServiceApplicationsSingleModule
 
                 options.UseAspNetCore();
 
-                options.UseDataProtection();
+                // options.UseDataProtection();
             });
         });
     }
@@ -96,7 +96,7 @@ public partial class MicroServiceApplicationsSingleModule
 
             PreConfigure<OpenIddictServerBuilder>(builder =>
             {
-                builder.UseDataProtection();
+                // builder.UseDataProtection();
 
                 // 禁用https
                 builder.UseAspNetCore()
@@ -134,7 +134,7 @@ public partial class MicroServiceApplicationsSingleModule
                     builder.AddEncryptionCertificate(certificate);
                 }
 
-                builder.UseDataProtection();
+                // builder.UseDataProtection();
 
                 // 禁用https
                 builder.UseAspNetCore()

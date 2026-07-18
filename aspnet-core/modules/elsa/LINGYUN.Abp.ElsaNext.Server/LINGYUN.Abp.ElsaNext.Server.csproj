@@ -16,7 +16,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="Elsa" VersionOverride="$(ElsaNextPackageVersion)" />
-		<PackageReference Include="Elsa.CSharp" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Expressions.CSharp" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Expressions.Liquid" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Http" VersionOverride="$(ElsaNextPackageVersion)" />
 		<PackageReference Include="Elsa.Scheduling" VersionOverride="$(ElsaNextPackageVersion)" />
 		<PackageReference Include="Elsa.Workflows.Api" VersionOverride="$(ElsaNextPackageVersion)" />
 	</ItemGroup>

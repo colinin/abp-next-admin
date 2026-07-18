@@ -1,0 +1,9 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "ElsaNext:Studio": "Elsa工作流设计器",
+    "Permission:ElsaNextStudio": "工作流设计器",
+    "Permission:ElsaNextStudio:View": "查看",
+    "ElsaNextStudio": "Elsa工作流设计器"
+  }
+}

@@ -1,0 +1,44 @@
+﻿@page
+@using LINGYUN.Abp.ElsaNext.Localization;
+@using LINGYUN.Abp.ElsaNext.Studio.Bundling;
+@using LINGYUN.Abp.ElsaNext.Studio.Navigation;
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Configuration
+@inject IPageLayout PageLayout
+@inject IConfiguration Configuration;
+@inject IHtmlLocalizer<ElsaNextResource> L
+@{
+    PageLayout.Content.Title = L["ElsaNext:Studio"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["ElsaNext:Studio"].Value);
+    PageLayout.Content.MenuItemName = AbpElsaNextStudioMenuNames.Index;
+}
+
+@section styles {
+    <abp-style-bundle name="@AbpElsaNextStudioBundles.Styles.Global">
+        <link rel="apple-touch-icon" sizes="180x180" href="_content/Elsa.Studio.Shell/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="_content/Elsa.Studio.Shell/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="_content/Elsa.Studio.Shell/favicon-16x16.png">
+        <link rel="manifest" href="_content/Elsa.Studio.Shell/site.webmanifest">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle name="@AbpElsaNextStudioBundles.Scripts.Global" />
+}
+
+<body>
+    <div id="app">
+        <div class="loading-splash mud-container mud-container-maxwidth-false">
+            <h5 class="mud-typography mud-typography-h5 mud-primary-text my-6">Loading...</h5>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+</body>

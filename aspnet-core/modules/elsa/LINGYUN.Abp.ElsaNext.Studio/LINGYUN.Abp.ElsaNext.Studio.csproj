@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.Studio</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.Studio</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		<RootNamespace>LINGYUN.Abp.ElsaNext.Studio</RootNamespace>
+		<OutputType>Library</OutputType>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Components\**\*.js" />
+		<EmbeddedResource Include="Components\**\*.css" />
+		<Content Remove="Components\**\*.js" />
+		<Content Remove="Components\**\*.css" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Elsa.Studio" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Studio.Core.BlazorServer" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Studio.Login.BlazorServer" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Studio.Localization.BlazorServer" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Studio.Translations" VersionOverride="$(ElsaNextPackageVersion)" />
+		<PackageReference Include="Elsa.Api.Client" VersionOverride="$(ElsaNextPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext\LINGYUN.Abp.ElsaNext.csproj" />
+	</ItemGroup>
+
+</Project>

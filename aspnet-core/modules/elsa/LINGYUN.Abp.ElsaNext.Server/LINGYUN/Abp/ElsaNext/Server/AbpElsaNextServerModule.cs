@@ -19,6 +19,9 @@ public class AbpElsaNextServerModule : AbpModule
             // Setup a SignalR hub for real-time updates from the server.
             elsa.UseRealTimeWorkflows();
 
+            // Enable JavaScript workflow expressions
+            elsa.UseJavaScript();
+
             // Enable C# workflow expressions
             elsa.UseCSharp();
 

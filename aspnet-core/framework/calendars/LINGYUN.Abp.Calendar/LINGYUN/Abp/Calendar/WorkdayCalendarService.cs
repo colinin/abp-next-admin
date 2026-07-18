@@ -12,10 +12,10 @@ public class WorkdayCalendarService : IWorkdayCalendarService, ITransientDepende
     private readonly IWorkdayCalendarStore _workdayCalendarStore;
 
     public WorkdayCalendarService(
-        IOptions<AbpCalendarOptions> options, 
+        IOptionsMonitor<AbpCalendarOptions> options, 
         IWorkdayCalendarStore workdayCalendarStore)
     {
-        _options = options.Value;
+        _options = options.CurrentValue;
         _workdayCalendarStore = workdayCalendarStore;
     }
 

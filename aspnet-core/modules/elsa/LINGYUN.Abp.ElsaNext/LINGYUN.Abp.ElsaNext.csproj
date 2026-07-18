@@ -21,7 +21,6 @@
 		<PackageReference Include="Volo.Abp.Timing" />
 		<PackageReference Include="Volo.Abp.Threading" />
 		<PackageReference Include="Volo.Abp.Json" />
-		<!--<PackageReference Include="Elsa" VersionOverride="$(ElsaNextPackageVersion)" />-->
 		<PackageReference Include="Elsa" VersionOverride="$(ElsaNextPackageVersion)" />
 	</ItemGroup>
 

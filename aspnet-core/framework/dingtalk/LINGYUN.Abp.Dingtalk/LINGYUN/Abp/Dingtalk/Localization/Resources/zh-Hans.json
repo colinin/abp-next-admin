@@ -1,0 +1,14 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Features:Dingtalk": "钉钉",
+    "Features:Dingtalk:IsEnabled": "启用钉钉",
+    "Features:Dingtalk:IsEnabledDesc": "启用使应用程序拥有钉钉的能力.",
+    "DisplayName:Dingtalk": "钉钉",
+    "DisplayName:Dingtalk.AccessToken": "应用凭证",
+    "DisplayName:AppKey": "App Key",
+    "Description:AppKey": "App Key, 请在钉钉开发者平台应用凭证中获取.",
+    "DisplayName:AppSecret": "App Secret",
+    "Description:AppSecret": "App Secret, 请在钉钉开发者平台应用凭证中获取."
+  }
+}

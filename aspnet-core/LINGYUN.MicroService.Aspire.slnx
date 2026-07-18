@@ -133,6 +133,10 @@
     <Project Path="framework/data-protection/LINGYUN.Abp.DataProtection.EntityFrameworkCore/LINGYUN.Abp.DataProtection.EntityFrameworkCore.csproj" />
     <Project Path="framework/data-protection/LINGYUN.Abp.DataProtection/LINGYUN.Abp.DataProtection.csproj" />
   </Folder>
+  <Folder Name="/framework/dingtalk/">
+    <Project Path="framework/dingtalk/LINGYUN.Abp.Dingtalk.Messages/LINGYUN.Abp.Dingtalk.Messages.csproj" Id="b0b8964c-0b62-4863-8c98-f9147c11cdac" />
+    <Project Path="framework/dingtalk/LINGYUN.Abp.Dingtalk/LINGYUN.Abp.Dingtalk.csproj" Id="20933297-1d32-4cb0-9661-73e0a7d219a6" />
+  </Folder>
   <Folder Name="/framework/dynamic-queryable/">
     <Project Path="framework/dynamic-queryable/LINGYUN.Abp.Dynamic.Queryable.Application.Contracts/LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj" />
     <Project Path="framework/dynamic-queryable/LINGYUN.Abp.Dynamic.Queryable.Application/LINGYUN.Abp.Dynamic.Queryable.Application.csproj" />
@@ -457,6 +461,7 @@
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Calendar/LINGYUN.Abp.Notifications.Calendar.csproj" Id="afef5b69-ebbf-454c-8783-027dde6e5970" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Common/LINGYUN.Abp.Notifications.Common.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Core/LINGYUN.Abp.Notifications.Core.csproj" />
+    <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Dingtalk/LINGYUN.Abp.Notifications.Dingtalk.csproj" Id="d54ae5e3-afa7-43f8-b5b5-2bcd43d0fae4" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Domain.Shared/LINGYUN.Abp.Notifications.Domain.Shared.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Domain/LINGYUN.Abp.Notifications.Domain.csproj" />
     <Project Path="modules/realtime-notifications/LINGYUN.Abp.Notifications.Emailing/LINGYUN.Abp.Notifications.Emailing.csproj" />
