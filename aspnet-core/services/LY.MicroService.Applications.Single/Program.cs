@@ -41,10 +41,9 @@ var app = builder.Build();
 
 await app.InitializeApplicationAsync();
 
-app.UseMapRequestLocalization();
-
-app.UseCookiePolicy();
 app.UseForwardedHeaders();
+app.UseMapRequestLocalization();
+app.UseCookiePolicy();
 app.UseAbpSecurityHeaders();
 if (app.Environment.IsDevelopment())
 {
