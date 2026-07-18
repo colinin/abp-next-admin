@@ -23,10 +23,10 @@ public class AbpAspNetCoreHttpOverridesModule : AbpModule
             var forwardedConfig = configuration.GetSection("Forwarded");
             forwardedConfig.Bind(options);
 
-            options.KnownProxies.Clear();
             var knownProxies = configuration.GetSection("Forwarded:KnownProxies").Get<List<string>>();
             if (knownProxies?.Count > 0)
             {
+                options.KnownProxies.Clear();
                 foreach (var knownProxy in knownProxies)
                 {
                     if (IPAddress.TryParse(knownProxy, out var iPAddress))
@@ -36,10 +36,10 @@ public class AbpAspNetCoreHttpOverridesModule : AbpModule
                 }
             }
 
-            options.KnownIPNetworks.Clear();
             var knownIPNetworks = configuration.GetSection("Forwarded:KnownIPNetworks").Get<List<string>>();
-            if (knownProxies?.Count > 0)
+            if (knownIPNetworks?.Count > 0)
             {
+                options.KnownIPNetworks.Clear();
                 foreach (var knownIPNetwork in knownIPNetworks)
                 {
                     if (IPNetwork.TryParse(knownIPNetwork, out var iPNetwork))
