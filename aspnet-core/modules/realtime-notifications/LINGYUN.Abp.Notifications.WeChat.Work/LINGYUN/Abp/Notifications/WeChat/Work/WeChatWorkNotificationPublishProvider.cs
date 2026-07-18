@@ -54,6 +54,13 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
             return;
         }
         var notificationData = await NotificationDataSerializer.ToStandard(context.Notification.Data);
+        if (notificationData.Title.IsNullOrWhiteSpace() && notificationData.Message.IsNullOrWhiteSpace())
+        {
+            context.Cancel("Unable to send work weixin messages because the title and content of the message must not be empty.");
+            Logger.LogWarning(context.Reason);
+            return;
+        }
+
         var toTag = context.Notification.Data.GetTagOrNull() ?? notificationDefine?.GetTagOrNull();
         var toParty = context.Notification.Data.GetPartyOrNull() ?? notificationDefine?.GetPartyOrNull();
         var toUsers = await WeChatWorkInternalUserFinder.FindUserIdentifierListAsync(context.Users.Select(id => id.UserId));

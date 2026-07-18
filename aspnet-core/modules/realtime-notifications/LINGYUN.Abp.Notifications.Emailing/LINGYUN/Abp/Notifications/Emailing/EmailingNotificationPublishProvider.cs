@@ -52,7 +52,12 @@ public class EmailingNotificationPublishProvider : NotificationPublishProvider
             return;
         }
         var notificationData = await NotificationDataSerializer.ToStandard(context.Notification.Data);
-
+        if (notificationData.Title.IsNullOrWhiteSpace() && notificationData.Message.IsNullOrWhiteSpace())
+        {
+            context.Cancel("Unable to send email notifications because the title and content of the message must not be empty.");
+            Logger.LogWarning(context.Reason);
+            return;
+        }
         // markdown进行处理
         if (context.Notification.ContentType == NotificationContentType.Markdown)
         {

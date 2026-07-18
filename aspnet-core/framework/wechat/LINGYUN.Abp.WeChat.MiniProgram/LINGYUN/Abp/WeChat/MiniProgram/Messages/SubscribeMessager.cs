@@ -100,7 +100,8 @@ public class SubscribeMessager : ISubscribeMessager, ITransientDependency
     {
         var client = HttpClientFactory.CreateClient(AbpWeChatMiniProgramConsts.HttpClient);
         var sendDataContent = JsonConvert.SerializeObject(message);
-        var requestContent = new StringContent(sendDataContent);
+        Logger.LogDebug("Send the subscription message request body: {content}", sendDataContent);
+        var requestContent = new StringContent(sendDataContent, Encoding.UTF8, "application/json");
         var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
         {
             Content = requestContent
