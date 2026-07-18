@@ -62,8 +62,8 @@ public class DefaultNotificationDataSerializer : INotificationDataSerializer, IS
 
         if (!source.NeedLocalizer())
         {
-            title = source.TryGetData("title").ToString();
-            message = source.TryGetData("message").ToString();
+            title = source.TryGetData("title")?.ToString() ?? "";
+            message = source.TryGetData("message")?.ToString() ?? "";
             description = source.TryGetData("description")?.ToString() ?? "";
         }
         else

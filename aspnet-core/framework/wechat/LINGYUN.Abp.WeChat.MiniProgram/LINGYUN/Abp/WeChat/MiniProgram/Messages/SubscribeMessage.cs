@@ -96,6 +96,7 @@ public class SubscribeMessage
 
 public class MessageData
 {
+    [JsonProperty("value")]
     public object Value { get; }
 
     public MessageData(object value)

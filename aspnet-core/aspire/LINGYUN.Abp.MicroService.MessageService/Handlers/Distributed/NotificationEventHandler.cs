@@ -145,6 +145,7 @@ namespace LINGYUN.Abp.MicroService.MessageService.Handlers.Distributed
             var notification = await NotificationDefinitionManager.GetOrNullAsync(eventData.Name);
             if (notification == null)
             {
+                Logger.LogWarning("Notification definition {notificationName} is not registered in the message service. Subscription message cannot be sent!", eventData.Name);
                 return;
             }
 
@@ -185,6 +186,7 @@ namespace LINGYUN.Abp.MicroService.MessageService.Handlers.Distributed
             var notification = await NotificationDefinitionManager.GetOrNullAsync(eventData.Name);
             if (notification == null)
             {
+                Logger.LogWarning("Notification definition {notificationName} is not registered in the message service. Subscription message cannot be sent!", eventData.Name);
                 return;
             }
             var culture = eventData.Data.TryGetData(NotificationData.CultureKey)?.ToString();

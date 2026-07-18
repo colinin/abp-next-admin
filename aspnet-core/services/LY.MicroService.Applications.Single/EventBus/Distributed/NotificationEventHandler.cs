@@ -128,6 +128,7 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
             var notification = await NotificationDefinitionManager.GetOrNullAsync(eventData.Name);
             if (notification == null)
             {
+                Logger.LogWarning("Notification definition {notificationName} is not registered in the message service. Subscription message cannot be sent!", eventData.Name);
                 return;
             }
 
@@ -167,6 +168,7 @@ namespace LY.MicroService.Applications.Single.EventBus.Distributed
             var notification = await NotificationDefinitionManager.GetOrNullAsync(eventData.Name);
             if (notification == null)
             {
+                Logger.LogWarning("Notification definition {notificationName} is not registered in the message service. Subscription message cannot be sent!", eventData.Name);
                 return;
             }
 
