@@ -27,7 +27,6 @@ public class PhoneRegisterDto
     [DisplayName("EmailAddress")]
     public string EmailAddress { get; set; }
 
-    [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
     [DataType(DataType.Password)]
     [DisplayName("Password")]

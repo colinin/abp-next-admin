@@ -121,7 +121,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
             CurrentTenant.Id);
         tempNewUser.SetPhoneNumberRegisterUser();
 
-        (await UserManager.UpdateSecurityStampAsync(tempNewUser)).CheckErrors();
+        await UserStore.SetSecurityStampAsync(tempNewUser, Guid.NewGuid().ToString("n"));
 
         var code = await UserManager.GenerateUserTokenAsync(
             tempNewUser, 
@@ -182,7 +182,10 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
                 };
 
                 (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
-                (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
+                if (!input.Password.IsNullOrWhiteSpace())
+                {
+                    (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
+                }
 
                 await UserStore.SetPhoneNumberConfirmedAsync(user, true);
 
