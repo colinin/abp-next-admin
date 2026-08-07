@@ -2,11 +2,11 @@
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>10.0.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.16.1</ElsaPackageVersion>
-		<VoloAbpPackageVersion>10.2.0</VoloAbpPackageVersion>
-		<LINGYUNAbpPackageVersion>10.2.0</LINGYUNAbpPackageVersion>
-		<MicrosoftExtensionsPackageVersion>10.0.2</MicrosoftExtensionsPackageVersion>
-		<MicrosoftAspNetCorePackageVersion>10.0.2</MicrosoftAspNetCorePackageVersion>
-		<MicrosoftEntityFrameworkCorePackageVersion>10.0.2</MicrosoftEntityFrameworkCorePackageVersion>
+		<VoloAbpPackageVersion>10.4.0</VoloAbpPackageVersion>
+		<LINGYUNAbpPackageVersion>10.4.0</LINGYUNAbpPackageVersion>
+		<MicrosoftExtensionsPackageVersion>10.0.7</MicrosoftExtensionsPackageVersion>
+		<MicrosoftAspNetCorePackageVersion>10.0.7</MicrosoftAspNetCorePackageVersion>
+		<MicrosoftEntityFrameworkCorePackageVersion>10.0.7</MicrosoftEntityFrameworkCorePackageVersion>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 
@@ -244,7 +244,7 @@
 
 	<!-- Abp Framework -->
 	<ItemGroup>
-		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="5.2.0" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="5.4.0" />
 		<PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(VoloAbpPackageVersion)" />
@@ -397,7 +397,7 @@
 		<PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.1" />
 		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
 		<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="9.0.0" />
-		<PackageVersion Include="Microting.EntityFrameworkCore.MySql" Version="10.0.3" />
+		<PackageVersion Include="Microting.EntityFrameworkCore.MySql" Version="10.0.7" />
 		<PackageVersion Include="LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting" Version="$(LINGYUNAbpPackageVersion)" />
 	</ItemGroup>
 
@@ -500,7 +500,7 @@
 		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
 		<PackageVersion Include="TencentCloudSDK" Version="3.0.1273" />
 		<PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />
-		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="7.2.0" />
-		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="7.2.0" />
+		<PackageVersion Include="OpenIddict.Server.DataProtection" Version="7.5.0" />
+		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="7.5.0" />
 	</ItemGroup>
 </Project>
