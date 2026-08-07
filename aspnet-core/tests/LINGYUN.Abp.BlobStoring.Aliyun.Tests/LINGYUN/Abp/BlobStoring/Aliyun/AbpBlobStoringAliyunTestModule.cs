@@ -1,13 +1,16 @@
-﻿using Aliyun.OSS;
+﻿using AlibabaCloud.OSS.V2;
+using AlibabaCloud.OSS.V2.Credentials;
 using LINGYUN.Abp.Aliyun;
 using LINGYUN.Abp.Aliyun.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Encryption;
+using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.BlobStoring.Aliyun
 {
@@ -42,13 +45,26 @@ namespace LINGYUN.Abp.BlobStoring.Aliyun
             _accessKeySecret = encryptionService.Decrypt(_configuration["Settings:" + AliyunSettingNames.Authorization.AccessKeySecret]);
         }
 
+        public async override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+        {
+            var ossClient = new Client(
+                new Configuration
+                {
+                    Endpoint = _endPoint,
+                    CredentialsProvider = new StaticCredentialsProvider(_accessKeyId, _accessKeySecret),
+                });
+            if (await ossClient.IsBucketExistAsync(_bucketName))
+            {
+                await ossClient.DeleteBucketAsync(new AlibabaCloud.OSS.V2.Models.DeleteBucketRequest
+                {
+                    Bucket = _bucketName,
+                });
+            }
+        }
+
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
-            var ossClient = new OssClient(_endPoint, _accessKeyId, _accessKeySecret);
-            if (ossClient.DoesBucketExist(_bucketName))
-            {
-                ossClient.DeleteBucket(_bucketName);
-            }
+            AsyncHelper.RunSync(async () => await OnApplicationShutdownAsync(context));
         }
     }
 }
