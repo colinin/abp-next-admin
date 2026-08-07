@@ -182,7 +182,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             // Clear the dynamic claims cache.
             await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-            return await RedirectSafelyAsync(PasswordLoginInput.ReturnUrl, PasswordLoginInput.ReturnUrlHash);
+            return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
         }
 
         public override async Task<IActionResult> OnPostPhoneNumberLogin(string action)
@@ -237,7 +237,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             // Clear the dynamic claims cache.
             await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-            return await RedirectSafelyAsync(PhoneLoginInput.ReturnUrl, PhoneLoginInput.ReturnUrlHash);
+            return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
         }
 
         public override async Task<IActionResult> OnPostQrCodeLogin(string action)
@@ -305,7 +305,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 // Clear the dynamic claims cache.
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-                return await RedirectSafelyAsync(QrCodeLoginInput.ReturnUrl, QrCodeLoginInput.ReturnUrlHash);
+                return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
             }
         }
 
