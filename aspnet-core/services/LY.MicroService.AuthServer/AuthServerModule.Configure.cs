@@ -1,8 +1,10 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.MultiTenancy;
+using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
+using LINGYUN.Abp.OpenIddict.Impersonation;
 using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Portal;
 using LINGYUN.Abp.OpenIddict.Sms;
@@ -398,6 +400,12 @@ public partial class AuthServerModule
             options.RefreshTokenLifetime = lifetime.GetValue("RefreshToken", options.RefreshTokenLifetime);
             options.RefreshTokenReuseLeeway = lifetime.GetValue("RefreshTokenReuseLeeway", options.RefreshTokenReuseLeeway);
             options.UserCodeLifetime = lifetime.GetValue("UserCode", options.UserCodeLifetime);
+        });
+
+        Configure<OpenIddictImpersonationOptions>(options =>
+        {
+            options.ImpersonationPermission = IdentityPermissions.Users.Impersonation;
+            options.ImpersonationTenantPermission = "AbpSaas.Tenants.Impersonation";
         });
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)

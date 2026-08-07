@@ -274,6 +274,7 @@
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Application/LINGYUN.Abp.Identity.Application.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.AspNetCore.QrCode/LINGYUN.Abp.Identity.AspNetCore.QrCode.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.AspNetCore.Session/LINGYUN.Abp.Identity.AspNetCore.Session.csproj" />
+    <Project Path="modules/identity/LINGYUN.Abp.Identity.AspNetCore/LINGYUN.Abp.Identity.AspNetCore.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Domain.Shared/LINGYUN.Abp.Identity.Domain.Shared.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Domain/LINGYUN.Abp.Identity.Domain.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.EntityFrameworkCore/LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />

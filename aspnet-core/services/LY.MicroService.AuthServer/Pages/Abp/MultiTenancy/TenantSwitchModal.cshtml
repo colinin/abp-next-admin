@@ -1,0 +1,36 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using LY.MicroService.AuthServer.Pages.Abp.MultiTenancy
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Localization
+@using static LY.MicroService.AuthServer.Pages.Abp.MultiTenancy.TenantSwitchModalModel
+@model TenantSwitchModalModel
+@inject IHtmlLocalizer<AbpUiMultiTenancyResource> L
+@{
+    Layout = null;
+}
+<abp-modal>
+    <abp-modal-header title="@L["SwitchTenant"].Value"></abp-modal-header>
+    <abp-modal-body>
+        <form method="post" id="tenantSwitchForm" asp-page="/Abp/MultiTenancy/TenantSwitchModal">
+            @if (Model.Input is SelectTenantInfoModel selectModel && selectModel.AvailableTenants.Count > 0)
+            {
+                <abp-select asp-for="Input.Name" label="@L["SwitchTenantHint"].Value" asp-items="selectModel.AvailableTenants" />
+            }
+            else
+            {
+                <abp-input asp-for="Input.Name" label="@L["SwitchTenantHint"].Value" />
+            }
+        </form>
+    </abp-modal-body>
+    <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
+</abp-modal>
+
+<script>
+    $(function() {
+        $('.modal-footer .btn-primary').click(function(e) {
+            e.preventDefault();
+            $('#tenantSwitchForm').submit();
+        });
+    });
+</script>

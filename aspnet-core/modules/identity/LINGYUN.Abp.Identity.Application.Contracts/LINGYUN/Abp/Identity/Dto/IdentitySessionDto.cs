@@ -2,7 +2,7 @@
 using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.Identity;
-public class IdentitySessionDto : EntityDto<Guid>
+public class IdentitySessionDto : ExtensibleEntityDto<Guid>
 {
     public string SessionId { get; set; }
 
