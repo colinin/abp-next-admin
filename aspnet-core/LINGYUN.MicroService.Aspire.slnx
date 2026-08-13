@@ -558,13 +558,6 @@
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Server/LINGYUN.Abp.Elsa.Server.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa/LINGYUN.Abp.Elsa.csproj" />
   </Folder>
-  <Folder Name="/modules/workflow/elsa3/">
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql.csproj" Id="eac3cdfe-670e-41fd-a7cf-67a38de69f97" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.EntityFrameworkCore/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.csproj" Id="96f6e53d-2e56-4fb2-b603-3e493f588c69" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Server/LINGYUN.Abp.ElsaNext.Server.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio/LINGYUN.Abp.ElsaNext.Studio.csproj" Id="3550e74f-776d-4f6c-bc6a-2ba7618f5d41" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext/LINGYUN.Abp.ElsaNext.csproj" />
-  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/LINGYUN.Abp.Aliyun.Tests/LINGYUN.Abp.Aliyun.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests.csproj" />
