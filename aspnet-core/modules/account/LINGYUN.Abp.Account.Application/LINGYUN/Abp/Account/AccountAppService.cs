@@ -69,7 +69,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         {
             userName = "wxid-" + wehchatOpenId.OpenId.ToMd5().ToLower();
         }
-        
+
         var userEmail = input.EmailAddress;//如果邮件地址不验证,随意写入一个
         if (userEmail.IsNullOrWhiteSpace())
         {
@@ -102,7 +102,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         await CheckNewUserPhoneNumberNotBeUsedAsync(input.PhoneNumber);
 
         var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(
-            input.PhoneNumber, 
+            input.PhoneNumber,
             UserTwoFactorTokenProviderConsts.PhoneNumberRegisterPurpose);
         var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
         var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.SmsRepetInterval, 1);
@@ -124,8 +124,8 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         await UserStore.SetSecurityStampAsync(tempNewUser, Guid.NewGuid().ToString("n"));
 
         var code = await UserManager.GenerateUserTokenAsync(
-            tempNewUser, 
-            UserTwoFactorTokenProviderConsts.PhoneNumberRegisterTokenProvider, 
+            tempNewUser,
+            UserTwoFactorTokenProviderConsts.PhoneNumberRegisterTokenProvider,
             UserTwoFactorTokenProviderConsts.PhoneNumberRegisterPurpose);
 
         securityTokenCacheItem = new SecurityTokenCacheItem(code, tempNewUser.Id, await UserManager.GetSecurityStampAsync(tempNewUser));
@@ -169,8 +169,8 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
             await UserStore.SetSecurityStampAsync(tempNewUser, securityTokenCacheItem.SecurityToken);
 
             if (await UserManager.VerifyUserTokenAsync(
-                tempNewUser, 
-                UserTwoFactorTokenProviderConsts.PhoneNumberRegisterTokenProvider, 
+                tempNewUser,
+                UserTwoFactorTokenProviderConsts.PhoneNumberRegisterTokenProvider,
                 UserTwoFactorTokenProviderConsts.PhoneNumberRegisterPurpose,
                 input.Code))
             {
@@ -180,11 +180,12 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
                 {
                     Name = input.Name ?? input.PhoneNumber
                 };
+                (await UserManager.CreateAsync(user)).CheckErrors();
 
                 (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
                 if (!input.Password.IsNullOrWhiteSpace())
                 {
-                    (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
+                    (await UserManager.AddPasswordAsync(user, input.Password)).CheckErrors();
                 }
 
                 await UserStore.SetPhoneNumberConfirmedAsync(user, true);
@@ -235,7 +236,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         var template = await SettingProvider.GetOrNullAsync(IdentitySettingNames.User.SmsResetPassword);
         // 生成二次认证码
         var code = await UserManager.GenerateUserTokenAsync(
-            user, 
+            user,
             TokenOptions.DefaultPhoneProvider,
             UserTwoFactorTokenProviderConsts.PhoneResetPasswordPurpose);
         // 发送短信验证码
@@ -270,9 +271,9 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         }
         // 验证二次认证码
         if (!await UserManager.VerifyUserTokenAsync(
-            user, 
+            user,
             TokenOptions.DefaultPhoneProvider,
-            UserTwoFactorTokenProviderConsts.PhoneResetPasswordPurpose, 
+            UserTwoFactorTokenProviderConsts.PhoneResetPasswordPurpose,
             input.Code))
         {
             // 验证码无效
@@ -282,6 +283,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         var resetPwdToken = await UserManager.GeneratePasswordResetTokenAsync(user);
         // 重置密码
         (await UserManager.ResetPasswordAsync(user, resetPwdToken, input.NewPassword)).CheckErrors();
+
         // 移除缓存项
         await SecurityTokenCache.RemoveAsync(securityTokenCacheKey);
 

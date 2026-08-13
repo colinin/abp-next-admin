@@ -15,15 +15,15 @@ public interface IIdentitySessionManager
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task SaveSessionAsync(
-        ClaimsPrincipal claimsPrincipal, 
+        ClaimsPrincipal claimsPrincipal,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 撤销用户会话
     /// </summary>
     /// <param name="sessionId">会话id</param>
-    /// <param name="cancellation"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task RevokeSessionAsync(
         string sessionId,
-        CancellationToken cancellation = default);
+        CancellationToken cancellationToken = default);
 }

@@ -1,10 +1,5 @@
-﻿using LINGYUN.Abp.Identity;
-using LINGYUN.Abp.Identity.Session;
-using LINGYUN.Abp.Identity.Settings;
-using Microsoft.Extensions.Logging;
+﻿using LINGYUN.Abp.Identity.Settings;
 using Microsoft.Extensions.Logging.Abstractions;
-using System;
-using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Domain.Entities.Events.Distributed;
@@ -13,7 +8,7 @@ using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
-namespace LINGYUN.Abp.MicroService.IdentityService.Handlers;
+namespace LY.MicroService.Applications.Single.EventBus.Distributed;
 /// <summary>
 /// 会话控制事件处理器
 /// </summary>
@@ -192,3 +187,4 @@ public class IdentitySessionAccessEventHandler :
         }
     }
 }
+

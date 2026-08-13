@@ -10,6 +10,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Security.Claims;
 
 namespace LINGYUN.Abp.Identity.Session;
+
 public class IdentitySessionManager : DomainService, IIdentitySessionManager
 {
     protected IDeviceInfoProvider DeviceInfoProvider { get; }
@@ -99,9 +100,9 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
 
     public async virtual Task RevokeSessionAsync(
         string sessionId,
-        CancellationToken cancellation = default)
+        CancellationToken cancellationToken = default)
     {
         Logger.LogDebug($"Revoke user session for: {sessionId}");
-        await IdentitySessionStore.RevokeAsync(sessionId, cancellation);
+        await IdentitySessionStore.RevokeAsync(sessionId, cancellationToken: cancellationToken);
     }
 }
