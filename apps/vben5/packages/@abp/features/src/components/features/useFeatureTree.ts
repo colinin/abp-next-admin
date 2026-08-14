@@ -25,7 +25,6 @@ export function buildFeatureTree(features: FeatureDto[]): TreeNode[] {
   features.forEach((feature) => {
     const node = nodeMap.get(feature.name);
     if (node && feature.parentName && nodeMap.has(feature.parentName)) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const parent = nodeMap.get(feature.parentName)!;
       parent.children.push(node);
       node.parent = parent;

@@ -93,29 +93,25 @@ const [Modal, modalApi] = useVbenModal({
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <FormItem :label="$t('AbpIdentity.DisplayName:IsDefault')">
         <Checkbox
           v-model:checked="formModel.isDefault"
-          :disabled="formModel.isStatic"
-        >
+          :disabled="formModel.isStatic">
           {{ $t('AbpIdentity.DisplayName:IsDefault') }}
         </Checkbox>
       </FormItem>
       <FormItem :label="$t('AbpIdentity.DisplayName:IsPublic')">
         <Checkbox
           v-model:checked="formModel.isPublic"
-          :disabled="formModel.isStatic"
-        >
+          :disabled="formModel.isStatic">
           {{ $t('AbpIdentity.DisplayName:IsPublic') }}
         </Checkbox>
       </FormItem>
       <FormItem
         :label="$t('AbpIdentity.DisplayName:RoleName')"
         name="name"
-        required
-      >
+        required>
         <Input v-model:value="formModel.name" :disabled="formModel.isStatic" />
       </FormItem>
     </Form>

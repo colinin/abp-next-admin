@@ -29,8 +29,7 @@ const formSchema = computed((): VbenFormSchema[] => {
 });
 
 function handleSubmit(value: Recordable<any>) {
-  // eslint-disable-next-line no-console
-  console.log('reset email:', value);
+  void value;
 }
 </script>
 
@@ -38,6 +37,5 @@ function handleSubmit(value: Recordable<any>) {
   <AuthenticationForgetPassword
     :form-schema="formSchema"
     :loading="loading"
-    @submit="handleSubmit"
-  />
+    @submit="handleSubmit" />
 </template>

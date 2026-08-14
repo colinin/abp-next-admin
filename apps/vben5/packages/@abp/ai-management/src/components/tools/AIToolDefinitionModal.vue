@@ -222,14 +222,12 @@ async function onSubmit() {
       :label-col="{ span: 6 }"
       :wrapper-col="{ span: 18 }"
       :disabled="!getIsAllowUpdate"
-      scroll-to-first-error
-    >
+      scroll-to-first-error>
       <Tabs>
         <TabPane key="basic" :tab="$t('AIManagement.BasicInfo')" force-render>
           <FormItem
             :label="$t('AIManagement.DisplayName:IsEnabled')"
-            name="isEnabled"
-          >
+            name="isEnabled">
             <Checkbox v-model:checked="formModel.isEnabled">
               {{ $t('AIManagement.DisplayName:IsEnabled') }}
             </Checkbox>
@@ -237,8 +235,7 @@ async function onSubmit() {
           <FormItem
             :label="$t('AIManagement.DisplayName:IsGlobal')"
             :extra="$t('AIManagement.Description:IsGlobal')"
-            name="isEnabled"
-          >
+            name="isEnabled">
             <Checkbox v-model:checked="formModel.isGlobal">
               {{ $t('AIManagement.DisplayName:IsGlobal') }}
             </Checkbox>
@@ -246,49 +243,41 @@ async function onSubmit() {
           <FormItem
             :label="$t('AIManagement.DisplayName:ToolProvider')"
             name="provider"
-            required
-          >
+            required>
             <Select
               :options="getAIToolOptions"
               v-model:value="formModel.provider"
-              @change="onProviderChange"
-            />
+              @change="onProviderChange" />
           </FormItem>
           <FormItem
             :label="$t('AIManagement.DisplayName:Name')"
             name="name"
-            required
-          >
+            required>
             <Input v-model:value="formModel.name" />
           </FormItem>
           <FormItem
             :label="$t('AIManagement.DisplayName:Description')"
-            name="description"
-          >
+            name="description">
             <LocalizableInput
               :disabled="!getIsAllowUpdate"
-              v-model:value="formModel.description"
-            />
+              v-model:value="formModel.description" />
           </FormItem>
         </TabPane>
         <TabPane
           v-if="currentAIToolProvider"
           key="propertites"
           :tab="$t('AIManagement.Propertites')"
-          force-render
-        >
+          force-render>
           <div class="h-[500px] overflow-y-auto rounded bg-gray-50 p-4">
             <template v-for="prop in getParentProperties" :key="prop.name">
               <FormItem
                 :extra="prop.description"
                 :label="prop.displayName"
                 :name="['extraProperties', prop.name]"
-                :required="prop.required"
-              >
+                :required="prop.required">
                 <AIToolProperty
                   :property="prop"
-                  v-model:model="formModel.extraProperties"
-                />
+                  v-model:model="formModel.extraProperties" />
               </FormItem>
             </template>
             <template v-for="prop in getDependencyProperties" :key="prop.name">
@@ -296,12 +285,10 @@ async function onSubmit() {
                 :extra="prop.description"
                 :label="prop.displayName"
                 :name="['extraProperties', prop.name]"
-                :required="prop.required"
-              >
+                :required="prop.required">
                 <AIToolProperty
                   :property="prop"
-                  v-model:model="formModel.extraProperties"
-                />
+                  v-model:model="formModel.extraProperties" />
               </FormItem>
             </template>
           </div>

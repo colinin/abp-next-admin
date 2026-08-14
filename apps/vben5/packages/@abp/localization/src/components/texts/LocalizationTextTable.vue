@@ -265,14 +265,16 @@ function onDelete(row: TextDifferenceDto) {
 async function onChange(data: TextDto) {
   const input = await gridApi.formApi.getValues();
   onGet(input);
-  // 资源变化刷新本地多语言缓存
-  const cultureName =
-    abpStore.application!.localization.currentCulture.cultureName;
-  if (data.cultureName === cultureName) {
-    const localization = await getLocalizationApi({
-      cultureName,
-    });
-    abpStore.setLocalization(localization);
+  if (abpStore.localization?.currentCulture) {
+    // 资源变化刷新本地多语言缓存
+    const cultureName =
+      abpStore.application!.localization.currentCulture.cultureName;
+    if (data.cultureName === cultureName) {
+      const localization = await getLocalizationApi({
+        cultureName,
+      });
+      abpStore.setLocalization(localization);
+    }
   }
 }
 
@@ -291,8 +293,7 @@ onMounted(onInit);
         :value="modelValue"
         :field-names="{ label: 'displayName', value: 'cultureName' }"
         @change="(value) => onFieldChange('cultureName', value?.toString())"
-        @search="onSearchLanguages"
-      />
+        @search="onSearchLanguages" />
     </template>
     <template #form-targetCultureName="{ modelValue }">
       <Select
@@ -306,8 +307,7 @@ onMounted(onInit);
         @change="
           (value) => onFieldChange('targetCultureName', value?.toString())
         "
-        @search="onSearchLanguages"
-      />
+        @search="onSearchLanguages" />
     </template>
     <template #form-resourceName="{ modelValue }">
       <Select
@@ -319,8 +319,7 @@ onMounted(onInit);
         :value="modelValue"
         :field-names="{ label: 'displayName', value: 'name' }"
         @change="(value) => onFieldChange('resourceName', value?.toString())"
-        @search="onSearchResources"
-      />
+        @search="onSearchResources" />
     </template>
     <template #form-onlyNull="{ modelValue }">
       <Select
@@ -328,16 +327,14 @@ onMounted(onInit);
         allow-clear
         :options="targetValueOptions"
         :value="modelValue"
-        @change="(value) => onFieldChange('onlyNull', value?.toString())"
-      />
+        @change="(value) => onFieldChange('onlyNull', value?.toString())" />
     </template>
     <template #toolbar-tools>
       <Button
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[TextsPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('LocalizationManagement.Text:AddNew') }}
       </Button>
     </template>
@@ -348,8 +345,7 @@ onMounted(onInit);
           block
           type="link"
           v-access:code="[TextsPermissions.Update]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -358,8 +354,7 @@ onMounted(onInit);
           type="link"
           danger
           v-access:code="[TextsPermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>
@@ -368,8 +363,7 @@ onMounted(onInit);
   <LocalizationTextModal
     :resources="resources"
     :languages="languages"
-    @change="onChange"
-  />
+    @change="onChange" />
 </template>
 
 <style scoped></style>

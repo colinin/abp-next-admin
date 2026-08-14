@@ -163,7 +163,9 @@ const [Modal, modalApi] = useVbenModal({
       try {
         const { groupName, name } = modalApi.getData<WebhookDefinitionDto>();
         await onInit(groupName);
-        name && (await onGet(name));
+        if (name) {
+          await onGet(name);
+        }
       } finally {
         modalApi.setState({ loading: false });
       }
@@ -255,65 +257,54 @@ function onPropDelete(prop: PropertyInfo) {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTab">
         <!-- 基本信息 -->
         <TabPane key="basic" :tab="$t('WebhooksManagement.BasicInfo')">
           <FormItem
             name="isEnabled"
-            :label="$t('WebhooksManagement.DisplayName:IsEnabled')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:IsEnabled')">
             <Checkbox
               :disabled="formModel.isStatic"
-              v-model:checked="formModel.isEnabled"
-            >
+              v-model:checked="formModel.isEnabled">
               {{ $t('WebhooksManagement.DisplayName:IsEnabled') }}
             </Checkbox>
           </FormItem>
           <FormItem
             name="groupName"
             :label="$t('WebhooksManagement.DisplayName:GroupName')"
-            required
-          >
+            required>
             <Select
               :disabled="formModel.isStatic"
               :allow-clear="true"
               v-model:value="formModel.groupName"
               :options="webhookGroups"
-              :field-names="{ label: 'displayName', value: 'name' }"
-            />
+              :field-names="{ label: 'displayName', value: 'name' }" />
           </FormItem>
           <FormItem
             :label="$t('WebhooksManagement.DisplayName:Name')"
             name="name"
-            required
-          >
+            required>
             <Input
               v-model:value="formModel.name"
               :disabled="formModel.isStatic"
-              autocomplete="off"
-            />
+              autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('WebhooksManagement.DisplayName:DisplayName')"
             name="displayName"
-            required
-          >
+            required>
             <LocalizableInput
               v-model:value="formModel.displayName"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
           <FormItem
             name="description"
-            :label="$t('WebhooksManagement.DisplayName:Description')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:Description')">
             <LocalizableInput
               :disabled="formModel.isStatic"
               :allow-clear="true"
-              v-model:value="formModel.description"
-            />
+              v-model:value="formModel.description" />
           </FormItem>
           <FormItem
             v-if="
@@ -326,8 +317,7 @@ function onPropDelete(prop: PropertyInfo) {
               )
             "
             name="requiredFeatures"
-            :label="$t('WebhooksManagement.DisplayName:RequiredFeatures')"
-          >
+            :label="$t('WebhooksManagement.DisplayName:RequiredFeatures')">
             <TreeSelect
               :tree-data="getFeatureOptions"
               :disabled="formModel.isStatic"
@@ -336,8 +326,7 @@ function onPropDelete(prop: PropertyInfo) {
               tree-check-strictly
               :field-names="{ label: 'displayName', value: 'name' }"
               :value="getRequiredFeatures"
-              @change="onFeaturesChange"
-            />
+              @change="onFeaturesChange" />
           </FormItem>
         </TabPane>
         <!-- 属性 -->
@@ -346,8 +335,7 @@ function onPropDelete(prop: PropertyInfo) {
             :data="formModel.extraProperties"
             :disabled="formModel.isStatic"
             @change="onPropChange"
-            @delete="onPropDelete"
-          />
+            @delete="onPropDelete" />
         </TabPane>
       </Tabs>
     </Form>

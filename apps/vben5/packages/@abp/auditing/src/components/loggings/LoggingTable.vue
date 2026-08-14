@@ -337,8 +337,7 @@ function onFilter(field: string, value: any) {
           block
           type="link"
           v-access:code="[SystemLogPermissions.Default]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpAuditLogging.ShowLogDialog') }}
         </Button>
       </div>

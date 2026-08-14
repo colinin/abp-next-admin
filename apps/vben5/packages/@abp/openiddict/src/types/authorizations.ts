@@ -4,8 +4,7 @@ import type {
   PagedAndSortedResultRequestDto,
 } from '@abp/core';
 
-interface OpenIddictAuthorizationDto
-  extends ExtensibleAuditedEntityDto<string> {
+interface OpenIddictAuthorizationDto extends ExtensibleAuditedEntityDto<string> {
   applicationId?: string;
   creationDate?: string;
   properties?: Dictionary<string, string>;
@@ -15,8 +14,7 @@ interface OpenIddictAuthorizationDto
   type?: string;
 }
 
-interface OpenIddictAuthorizationGetListInput
-  extends PagedAndSortedResultRequestDto {
+interface OpenIddictAuthorizationGetListInput extends PagedAndSortedResultRequestDto {
   beginCreationTime?: string;
   clientId?: string;
   endCreationTime?: string;

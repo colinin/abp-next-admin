@@ -48,11 +48,8 @@ const TabPane = Tabs.TabPane;
 
 const defaultModel: WebhookSubscriptionDto = {
   creationTime: new Date(),
-  displayName: '',
-  extraProperties: {},
   id: '',
   isActive: true,
-  isStatic: false,
   webhooks: [],
   webhookUri: '',
 };
@@ -109,7 +106,9 @@ const [Modal, modalApi] = useVbenModal({
       try {
         const { id } = modalApi.getData<WebhookSubscriptionDto>();
         await onInit();
-        !isNullOrWhiteSpace(id) && (await onGet(id));
+        if (!isNullOrWhiteSpace(id)) {
+          await onGet(id);
+        }
       } finally {
         modalApi.setState({ loading: false });
       }
@@ -122,7 +121,6 @@ async function onGet(id: string) {
   const dto = await getApi(id);
   formModel.value = dto;
   modalApi.setState({
-    showConfirmButton: !dto.isStatic,
     title: $t('WebhooksManagement.Subscriptions:Edit'),
   });
 }
@@ -170,19 +168,14 @@ function onPropDelete(prop: PropertyInfo) {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTabKey">
         <TabPane key="basic" :tab="$t('WebhooksManagement.BasicInfo')">
           <FormItem
             name="isActive"
             :label="$t('WebhooksManagement.DisplayName:IsActive')"
-            :extra="$t('WebhooksManagement.Description:IsActive')"
-          >
-            <Checkbox
-              :disabled="formModel.isStatic"
-              v-model:checked="formModel.isActive"
-            >
+            :extra="$t('WebhooksManagement.Description:IsActive')">
+            <Checkbox v-model:checked="formModel.isActive">
               {{ $t('WebhooksManagement.DisplayName:IsActive') }}
             </Checkbox>
           </FormItem>
@@ -190,38 +183,30 @@ function onPropDelete(prop: PropertyInfo) {
             :label="$t('WebhooksManagement.DisplayName:WebhookUri')"
             :extra="$t('WebhooksManagement.Description:WebhookUri')"
             name="webhookUri"
-            required
-          >
+            required>
             <Input
               v-model:value="formModel.webhookUri"
-              :disabled="formModel.isStatic"
               autocomplete="off"
-              allow-clear
-            />
+              allow-clear />
           </FormItem>
           <FormItem
             name="webhooks"
             :label="$t('WebhooksManagement.DisplayName:Webhooks')"
-            :extra="$t('WebhooksManagement.Description:Webhooks')"
-          >
+            :extra="$t('WebhooksManagement.Description:Webhooks')">
             <Select
-              :disabled="formModel.isStatic"
               allow-clear
               mode="multiple"
               v-model:value="formModel.webhooks"
-              :filter-option="onWebhooksFilter"
-            >
+              :filter-option="onWebhooksFilter">
               <SelectGroup
                 v-for="group in webhookGroups"
                 :key="group.name"
-                :label="group.displayName"
-              >
+                :label="group.displayName">
                 <SelectOption
                   v-for="option in group.webhooks"
                   :key="option.name"
                   :value="option.name"
-                  :displayname="option.displayName"
-                >
+                  :displayname="option.displayName">
                   <Tooltip placement="right">
                     <template #title>
                       {{ option.description }}
@@ -236,69 +221,54 @@ function onPropDelete(prop: PropertyInfo) {
             v-if="hasAccessByCodes(['AbpSaas.Tenants'])"
             :label="$t('WebhooksManagement.DisplayName:TenantId')"
             :extra="$t('WebhooksManagement.Description:TenantId')"
-            name="tenantId"
-          >
+            name="tenantId">
             <Select
               v-model:value="formModel.tenantId"
-              :disabled="formModel.isStatic"
               :options="tenants"
               :field-names="{ label: 'normalizedName', value: 'id' }"
               :filter-option="false"
               @search="onTenantsSearch"
               show-search
-              allow-clear
-            />
+              allow-clear />
           </FormItem>
           <FormItem
             :label="$t('WebhooksManagement.DisplayName:TimeoutDuration')"
             :extra="$t('WebhooksManagement.Description:TimeoutDuration')"
-            name="timeoutDuration"
-          >
+            name="timeoutDuration">
             <InputNumber
               class="w-full"
               v-model:value="formModel.timeoutDuration"
-              :disabled="formModel.isStatic"
               :min="10"
               :max="300"
-              autocomplete="off"
-            />
+              autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('WebhooksManagement.DisplayName:Secret')"
             :extra="$t('WebhooksManagement.Description:Secret')"
-            name="secret"
-          >
+            name="secret">
             <InputPassword
               v-model:value="formModel.secret"
-              :disabled="formModel.isStatic"
               autocomplete="off"
-              allow-clear
-            />
+              allow-clear />
           </FormItem>
           <FormItem
             :label="$t('WebhooksManagement.DisplayName:Description')"
-            name="description"
-          >
+            name="description">
             <Textarea
               v-model:value="formModel.description"
-              :disabled="formModel.isStatic"
               :auto-size="{ minRows: 3 }"
               autocomplete="off"
-              allow-clear
-            />
+              allow-clear />
           </FormItem>
         </TabPane>
         <TabPane
           key="headers"
-          :tab="$t('WebhooksManagement.DisplayName:Headers')"
-        >
+          :tab="$t('WebhooksManagement.DisplayName:Headers')">
           <FormItemRest>
             <PropertyTable
               :data="formModel.headers"
-              :disabled="formModel.isStatic"
               @change="onPropChange"
-              @delete="onPropDelete"
-            />
+              @delete="onPropDelete" />
           </FormItemRest>
         </TabPane>
       </Tabs>

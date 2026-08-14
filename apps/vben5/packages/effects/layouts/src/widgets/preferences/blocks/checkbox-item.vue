@@ -39,8 +39,7 @@ const slots = useSlots();
       'hover:bg-accent': !slots.tip,
       'pointer-events-none opacity-50': disabled,
     }"
-    class="my-1 flex w-full items-center justify-between rounded-md px-2 py-1"
-  >
+    class="my-1 flex w-full items-center justify-between rounded-md px-2 py-1">
     <span class="flex items-center text-sm">
       <slot></slot>
 
@@ -53,11 +52,10 @@ const slots = useSlots();
     </span>
     <VbenCheckButtonGroup
       v-model="inputValue"
-      class="h-8 w-[165px]"
+      class="h-8 w-41.25"
       :options="items"
       :disabled="disabled"
       :multiple="multiple"
-      @btn-click="onBtnClick"
-    />
+      @btn-click="onBtnClick" />
   </div>
 </template>

@@ -12,17 +12,17 @@ export interface RequireAuthenticatedStateChecker {
 }
 
 export class RequireAuthenticatedSimpleStateChecker<
-    TState extends IHasSimpleStateCheckers<TState>,
-  >
+  TState extends IHasSimpleStateCheckers<TState>,
+>
   implements ISimpleStateChecker<TState>, RequireAuthenticatedStateChecker
 {
-  _currentUser?: CurrentUser;
+  currentUser?: CurrentUser;
   name = 'A';
-  constructor(currentUser?: CurrentUser) {
-    this._currentUser = currentUser;
+  constructor(_currentUser?: CurrentUser) {
+    this.currentUser = _currentUser;
   }
   isEnabled(_context: SimpleStateCheckerContext<TState>): boolean {
-    return this._currentUser?.isAuthenticated ?? false;
+    return this.currentUser?.isAuthenticated ?? false;
   }
 
   serialize(): string {

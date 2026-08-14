@@ -347,8 +347,7 @@ function onPropertyTypeChange(
     <Form
       :model="formModel"
       :label-col="{ span: 6 }"
-      :wrapper-col="{ span: 24 }"
-    >
+      :wrapper-col="{ span: 24 }">
       <FormItem name="isEnabled" label="是否启用">
         <Checkbox v-model:checked="formModel.isEnabled">是否启用</Checkbox>
       </FormItem>
@@ -357,8 +356,7 @@ function onPropertyTypeChange(
           class="w-full"
           :options="strategyOptions"
           v-model:value="formModel.strategy"
-          @change="(value) => onStrategyChange(Number(value!))"
-        />
+          @change="(value) => onStrategyChange(Number(value!))" />
       </FormItem>
       <template v-if="formModel.strategy === DataAccessStrategy.Custom">
         <FormItem required name="entityTypeId" label="实体类型">
@@ -367,16 +365,14 @@ function onPropertyTypeChange(
             :options="entityTypes"
             :field-names="{ label: 'displayName', value: 'id' }"
             v-model:value="formModel.entityTypeId"
-            @change="(value) => onEntityTypeChange(value!.toString())"
-          />
+            @change="(value) => onEntityTypeChange(value!.toString())" />
         </FormItem>
         <FormItem required name="operation" label="操作">
           <Select
             class="w-full"
             :options="operationOptions"
             v-model:value="formModel.operation"
-            @change="onGetEntityType"
-          />
+            @change="onGetEntityType" />
         </FormItem>
         <FormItem name="accessedProperties" label="可访问字段">
           <Select
@@ -384,8 +380,7 @@ function onPropertyTypeChange(
             mode="multiple"
             :options="entityTypeProps"
             v-model:value="formModel.accessedProperties"
-            :field-names="{ label: 'displayName', value: 'name' }"
-          />
+            :field-names="{ label: 'displayName', value: 'name' }" />
         </FormItem>
         <FormItemRest>
           <!-- 分组 -->
@@ -394,16 +389,14 @@ function onPropertyTypeChange(
               <div class="m-2 text-sm">数据访问规则</div>
               <template
                 v-for="(group, gi) in formModel.filterGroup.groups"
-                :key="gi"
-              >
+                :key="gi">
                 <div class="flex flex-row items-center justify-items-center">
                   <!-- 条件 -->
                   <div class="m-2 flex w-full flex-row">
                     <div class="w-full border-2 border-dashed">
                       <template v-for="(rule, ri) in group.rules" :key="ri">
                         <div
-                          class="m-2 flex flex-row items-center justify-items-center gap-1"
-                        >
+                          class="m-2 flex flex-row items-center justify-items-center gap-1">
                           <div class="basis-2/5">
                             <Select
                               class="w-full"
@@ -416,76 +409,64 @@ function onPropertyTypeChange(
                               @change="
                                 (_, option: any) =>
                                   onPropertyTypeChange(rule, option)
-                              "
-                            />
+                              " />
                           </div>
                           <div class="basis-1/5">
                             <Select
                               class="w-full"
                               :options="dataAccessFilterOptions"
-                              v-model:value="rule.operate"
-                            />
+                              v-model:value="rule.operate" />
                           </div>
                           <div class="basis-2/5">
                             <InputNumber
                               v-if="rule.javaScriptType === 'number'"
                               class="w-full"
-                              v-model:value="rule.value"
-                            />
+                              v-model:value="rule.value" />
                             <Switch
                               v-else-if="rule.javaScriptType === 'boolean'"
-                              v-model:checked="rule.value"
-                            />
+                              v-model:checked="rule.value" />
                             <DatePicker
                               v-else-if="rule.javaScriptType === 'Date'"
                               class="w-full"
                               v-model:value="rule.value"
-                              value-format="YYYY-MM-DDT00:00:00"
-                            />
+                              value-format="YYYY-MM-DDT00:00:00" />
                             <Input
                               v-else
                               class="w-full"
-                              v-model:value="rule.value"
-                            />
+                              v-model:value="rule.value" />
                           </div>
                           <div class="basis-1/5">
                             <Popconfirm
                               title="你确定吗?"
                               description="将删除此过滤条件"
-                              @confirm="onDeleteRule(group, ri)"
-                            >
+                              @confirm="onDeleteRule(group, ri)">
                               <Button
                                 type="link"
                                 danger
-                                :icon="h(DeleteOutlined)"
-                              />
+                                :icon="h(DeleteOutlined)" />
                             </Popconfirm>
                           </div>
                         </div>
                       </template>
                       <div
-                        class="flex flex-row items-center justify-items-center gap-2"
-                      >
+                        class="flex flex-row items-center justify-items-center gap-2">
                         <div class="m-2 min-w-[60px]">
                           <Select
                             size="small"
                             class="w-full"
                             v-model:value="group.logic"
-                            :options="logicOptions"
-                          />
+                            :options="logicOptions" />
                         </div>
                         <Button
                           type="link"
                           :icon="h(PlusOutlined)"
-                          @click="onNewRule(group)"
-                        >
+                          @click="onNewRule(group)">
                           增加条件
                         </Button>
                         <Popconfirm
                           title="你确定吗?"
                           description="将删除此条件分组"
-                          @confirm="onDeleteGroup(gi)"
-                        >
+                          @confirm="onDeleteGroup(gi)">
                           <Button type="link" :icon="h(DeleteOutlined)" danger>
                             删除分组
                           </Button>
@@ -496,23 +477,20 @@ function onPropertyTypeChange(
                 </div>
               </template>
               <div
-                class="flex flex-row items-center justify-items-center gap-2"
-              >
+                class="flex flex-row items-center justify-items-center gap-2">
                 <div class="m-2 min-w-[60px]">
                   <Select
                     size="small"
                     class="w-full"
                     v-model:value="formModel.filterGroup.logic"
-                    :options="logicOptions"
-                  />
+                    :options="logicOptions" />
                 </div>
                 <div>
                   <Button
                     size="small"
                     type="link"
                     :icon="h(PlusOutlined)"
-                    @click="onNewGroup(formModel.filterGroup.logic)"
-                  >
+                    @click="onNewGroup(formModel.filterGroup.logic)">
                     增加分组
                   </Button>
                 </div>

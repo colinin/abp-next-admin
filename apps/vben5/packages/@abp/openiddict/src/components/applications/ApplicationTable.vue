@@ -241,8 +241,7 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[ApplicationsPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AbpOpenIddict.Applications:AddNew') }}
       </Button>
     </template>
@@ -266,8 +265,7 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
             block
             type="link"
             v-access:code="[ApplicationsPermissions.Update]"
-            @click="onUpdate(row)"
-          >
+            @click="onUpdate(row)">
             {{ $t('AbpUi.Edit') }}
           </Button>
         </div>
@@ -278,8 +276,7 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
             danger
             type="link"
             v-access:code="[ApplicationsPermissions.Delete]"
-            @click="onDelete(row)"
-          >
+            @click="onDelete(row)">
             {{ $t('AbpUi.Delete') }}
           </Button>
         </div>
@@ -293,8 +290,7 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
                     hasAccessByCodes([ApplicationsPermissions.ManageSecret])
                   "
                   key="secret"
-                  :icon="h(SecretIcon)"
-                >
+                  :icon="h(SecretIcon)">
                   {{ $t('AbpOpenIddict.GenerateSecret') }}
                 </MenuItem>
                 <MenuItem
@@ -304,8 +300,7 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
                     ])
                   "
                   key="permissions"
-                  :icon="h(PermissionsOutlined)"
-                >
+                  :icon="h(PermissionsOutlined)">
                   {{ $t('AbpOpenIddict.ManagePermissions') }}
                 </MenuItem>
                 <MenuItem
@@ -314,8 +309,7 @@ const onMenuClick = (row: OpenIddictApplicationDto, info: MenuInfo) => {
                     hasAccessByCodes([AuditLogPermissions.Default])
                   "
                   key="entity-changes"
-                  :icon="h(AuditLogIcon)"
-                >
+                  :icon="h(AuditLogIcon)">
                   {{ $t('AbpAuditLogging.EntitiesChanged') }}
                 </MenuItem>
               </Menu>

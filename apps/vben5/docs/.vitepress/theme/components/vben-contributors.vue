@@ -1,13 +1,12 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="vp-doc vben-contributors">
+  <div class="vben-contributors vp-doc">
     <p>Contributors</p>
     <a href="https://github.com/vbenjs/vue-vben-admin/graphs/contributors">
       <img
         alt="Contributors"
-        src="https://opencollective.com/vbenjs/contributors.svg?button=false"
-      />
+        src="https://opencollective.com/vbenjs/contributors.svg?button=false" />
     </a>
   </div>
 </template>

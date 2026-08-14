@@ -61,7 +61,7 @@ export function useLocalization(resourceNames?: string | string[]) {
     };
   });
 
-  function L(key: string, args?: any[] | Record<string, string> | undefined) {
+  function L(key: string, args?: any[] | Record<string, string>  ) {
     if (!key) return '';
     if (!getResource.value) return key;
     if (!getResource.value[key]) return key;
@@ -71,7 +71,7 @@ export function useLocalization(resourceNames?: string | string[]) {
   function Lr(
     resource: string,
     key: string,
-    args?: any[] | Record<string, string> | undefined,
+    args?: any[] | Record<string, string>  ,
   ) {
     if (!key) return '';
     const findResource = getResourceByName.value(resource);

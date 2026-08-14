@@ -3,7 +3,7 @@ import type { DrawerPlacement, DrawerState } from '@vben/common-ui';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 
-import { Button, Card } from 'ant-design-vue';
+import { Button, Card } from 'antdv-next';
 
 import DocButton from '../doc-button.vue';
 import AutoHeightDemo from './auto-height-demo.vue';
@@ -60,7 +60,7 @@ function openInContentDrawer(placement: DrawerPlacement = 'right') {
 }
 
 function openMaxContentDrawer() {
-  // 这里只是用来演示方便。实际上自己使用的时候可以直接将这些配置卸载Drawer的属性里
+  // 这里只是用来演示方便。实际上自己使用的时候可以直接将这些配置写在Drawer的属性里
   inContentDrawerApi.setState({ class: 'w-full', placement: 'right' }).open();
 }
 
@@ -99,8 +99,7 @@ function openFormDrawer() {
   <Page
     auto-content-height
     description="抽屉组件通常用于在当前页面上显示一个覆盖层，用以展示重要信息或提供用户交互界面。"
-    title="抽屉组件示例"
-  >
+    title="抽屉组件示例">
     <template #extra>
       <DocButton path="/components/common-ui/vben-drawer" />
     </template>
@@ -119,8 +118,7 @@ function openFormDrawer() {
       <Button
         class="mb-2 ml-2"
         type="primary"
-        @click="openBaseDrawer('bottom')"
-      >
+        @click="openBaseDrawer('bottom')">
         底部打开
       </Button>
       <Button class="mb-2 ml-2" type="primary" @click="openBaseDrawer('left')">
@@ -142,22 +140,19 @@ function openFormDrawer() {
       <Button
         class="mb-2 ml-2"
         type="primary"
-        @click="openInContentDrawer('bottom')"
-      >
+        @click="openInContentDrawer('bottom')">
         底部打开
       </Button>
       <Button
         class="mb-2 ml-2"
         type="primary"
-        @click="openInContentDrawer('left')"
-      >
+        @click="openInContentDrawer('left')">
         左侧打开
       </Button>
       <Button
         class="mb-2 ml-2"
         type="primary"
-        @click="openInContentDrawer('top')"
-      >
+        @click="openInContentDrawer('top')">
         顶部打开
       </Button>
       <Button class="mb-2 ml-2" type="primary" @click="openMaxContentDrawer">

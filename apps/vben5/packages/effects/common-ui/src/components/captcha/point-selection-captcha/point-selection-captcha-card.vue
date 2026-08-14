@@ -64,15 +64,15 @@ function handleClick(e: MouseEvent) {
         </div>
       </CardTitle>
     </CardHeader>
-    <CardContent class="relative mt-2 flex w-full overflow-hidden rounded p-0">
+    <CardContent
+      class="relative mt-2 flex w-full overflow-hidden rounded-sm p-0">
       <img
         v-show="captchaImage"
         :alt="$t('ui.captcha.alt')"
         :src="captchaImage"
         :style="captchaStyles"
         class="relative z-10"
-        @click="handleClick"
-      />
+        @click="handleClick" />
       <div class="absolute inset-0">
         <slot></slot>
       </div>

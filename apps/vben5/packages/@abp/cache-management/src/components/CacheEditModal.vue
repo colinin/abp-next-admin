@@ -137,8 +137,7 @@ async function onSubmit(input: Record<string, any>) {
         closable
         show-icon
         type="warning"
-        :message="$t('CachingManagement.EditCacheValueAlertMessage')"
-      />
+        :message="$t('CachingManagement.EditCacheValueAlertMessage')" />
       <Form />
     </div>
   </Modal>

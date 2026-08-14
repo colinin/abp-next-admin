@@ -57,9 +57,8 @@ const handleClick = () => {
     <VbenIconButton
       :tooltip="$t('ui.widgets.timezone.setTimezone')"
       class="hover:animate-[shrink_0.3s_ease-in-out]"
-      @click="handleClick"
-    >
-      <TimezoneIcon class="text-foreground size-4" />
+      @click="handleClick">
+      <TimezoneIcon class="size-4 text-foreground" />
     </VbenIconButton>
     <Modal :title="$t('ui.widgets.timezone.setTimezone')">
       <div class="timezone-container">
@@ -67,8 +66,7 @@ const handleClick = () => {
           <div
             class="flex cursor-pointer items-center gap-2"
             v-for="item in timezoneOptionsRef"
-            :key="`container${item.value}`"
-          >
+            :key="`container${item.value}`">
             <RadioGroupItem :id="item.value" :value="item.value" />
             <label :for="item.value" class="cursor-pointer">{{
               item.label
@@ -82,6 +80,6 @@ const handleClick = () => {
 
 <style scoped>
 .timezone-container {
-  padding-left: 20px;
+  @apply pl-5;
 }
 </style>

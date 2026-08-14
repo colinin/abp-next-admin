@@ -365,8 +365,7 @@ onMounted(onGet);
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[NotificationDefinitionsPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('Notifications.NotificationDefinitions:AddNew') }}
       </Button>
     </template>
@@ -378,14 +377,12 @@ onMounted(onGet);
           trigger: 'row',
           rowField: 'name',
           childrenField: 'children',
-        }"
-      >
+        }">
         <template #allowSubscriptionToClients="{ row }">
           <div class="flex flex-row justify-center">
             <CheckOutlined
               v-if="row.allowSubscriptionToClients"
-              class="text-green-500"
-            />
+              class="text-green-500" />
             <CloseOutlined v-else class="text-red-500" />
           </div>
         </template>
@@ -403,8 +400,7 @@ onMounted(onGet);
               block
               type="link"
               v-access:code="[NotificationDefinitionsPermissions.Update]"
-              @click="onUpdate(definition)"
-            >
+              @click="onUpdate(definition)">
               {{ $t('AbpUi.Edit') }}
             </Button>
             <Button
@@ -414,8 +410,7 @@ onMounted(onGet);
               danger
               type="link"
               v-access:code="[NotificationDefinitionsPermissions.Delete]"
-              @click="onDelete(definition)"
-            >
+              @click="onDelete(definition)">
               {{ $t('AbpUi.Delete') }}
             </Button>
             <Dropdown v-if="hasAccessByCodes([NotificationPermissions.Create])">

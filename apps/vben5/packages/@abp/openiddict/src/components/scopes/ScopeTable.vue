@@ -190,8 +190,7 @@ const onMenuClick = (row: OpenIddictScopeDto, info: MenuInfo) => {
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[ScopesPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AbpOpenIddict.Scopes:AddNew') }}
       </Button>
     </template>
@@ -214,8 +213,7 @@ const onMenuClick = (row: OpenIddictScopeDto, info: MenuInfo) => {
           block
           type="link"
           v-access:code="[ScopesPermissions.Update]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -224,8 +222,7 @@ const onMenuClick = (row: OpenIddictScopeDto, info: MenuInfo) => {
           danger
           type="link"
           v-access:code="[ScopesPermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown v-if="isEnabled('AbpAuditing.Logging.AuditLog')">
@@ -234,8 +231,7 @@ const onMenuClick = (row: OpenIddictScopeDto, info: MenuInfo) => {
               <MenuItem
                 v-if="hasAccessByCodes([AuditLogPermissions.Default])"
                 key="entity-changes"
-                :icon="h(AuditLogIcon)"
-              >
+                :icon="h(AuditLogIcon)">
                 {{ $t('AbpAuditLogging.EntitiesChanged') }}
               </MenuItem>
             </Menu>

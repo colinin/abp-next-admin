@@ -22,8 +22,7 @@ function onFolderChange(val: string) {
     <div style="width: 30%" class="h-full">
       <FolderTree
         @bucket-change="onBucketChange"
-        @folder-change="onFolderChange"
-      />
+        @folder-change="onFolderChange" />
     </div>
     <div style="width: 70%">
       <FileList :bucket="bucket" :path="path" />

@@ -133,53 +133,44 @@ async function onSubmit() {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <FormItem
         :label="$t('LocalizationManagement.DisplayName:CultureName')"
         name="cultureName"
-        required
-      >
+        required>
         <Select
           v-model:value="formModel.cultureName"
           :options="languages"
           :field-names="{ label: 'displayName', value: 'cultureName' }"
-          @change="(value) => onLanguageChange(value!.toString())"
-        />
+          @change="(value) => onLanguageChange(value!.toString())" />
       </FormItem>
       <FormItem
         :label="$t('LocalizationManagement.DisplayName:ResourceName')"
         name="resourceName"
-        required
-      >
+        required>
         <Select
           v-model:value="formModel.resourceName"
           :options="resources"
           :disabled="isEditModal"
-          :field-names="{ label: 'displayName', value: 'name' }"
-        />
+          :field-names="{ label: 'displayName', value: 'name' }" />
       </FormItem>
       <FormItem
         :label="$t('LocalizationManagement.DisplayName:Key')"
         name="key"
-        required
-      >
+        required>
         <Input
           :disabled="isEditModal"
           v-model:value="formModel.key"
-          autocomplete="off"
-        />
+          autocomplete="off" />
       </FormItem>
       <FormItem
         :label="$t('LocalizationManagement.DisplayName:Value')"
         name="value"
-        required
-      >
+        required>
         <Textarea
           :auto-size="{ minRows: 3 }"
           v-model:value="formModel.value"
-          autocomplete="off"
-        />
+          autocomplete="off" />
       </FormItem>
     </Form>
   </Modal>

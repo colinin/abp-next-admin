@@ -29,10 +29,9 @@ async function handleUpdate(value: string | undefined) {
     <VbenDropdownRadioMenu
       :menus="SUPPORT_LANGUAGES"
       :model-value="preferences.app.locale"
-      @update:model-value="handleUpdate"
-    >
+      @update:model-value="handleUpdate">
       <VbenIconButton class="hover:animate-[shrink_0.3s_ease-in-out]">
-        <Languages class="text-foreground size-4" />
+        <Languages class="size-4 text-foreground" />
       </VbenIconButton>
     </VbenDropdownRadioMenu>
   </div>

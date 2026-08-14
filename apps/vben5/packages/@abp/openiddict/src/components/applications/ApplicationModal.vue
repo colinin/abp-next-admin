@@ -290,85 +290,71 @@ function onUriDelete(uri: string) {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTab">
         <!-- 基本信息 -->
         <TabPane key="basic" :tab="$t('AbpOpenIddict.BasicInfo')">
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:ApplicationType')"
             name="applicationType"
-            required
-          >
+            required>
             <Select
               v-model:value="formModel.applicationType"
-              :options="applicationTypes"
-            />
+              :options="applicationTypes" />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:ClientId')"
             name="clientId"
-            required
-          >
+            required>
             <Input v-model:value="formModel.clientId" autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:ClientType')"
-            name="clientType"
-          >
+            name="clientType">
             <Select
               v-model:value="formModel.clientType"
-              :options="clientTypes"
-            />
+              :options="clientTypes" />
           </FormItem>
           <FormItem
             v-if="!formModel.id && formModel.clientType === 'confidential'"
             :label="$t('AbpOpenIddict.DisplayName:ClientSecret')"
-            name="clientSecret"
-          >
+            name="clientSecret">
             <InputPassword
               v-model:value="formModel.clientSecret"
-              autocomplete="off"
-            />
+              autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:ClientUri')"
-            name="clientUri"
-          >
+            name="clientUri">
             <Input v-model:value="formModel.clientUri" />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:LogoUri')"
-            name="logoUri"
-          >
+            name="logoUri">
             <Input v-model:value="formModel.logoUri" autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:ConsentType')"
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 20 }"
-            name="consentType"
-          >
+            name="consentType">
             <Select
               v-model:value="formModel.consentType"
               :options="consentTypes"
-              default-value="explicit"
-            />
+              default-value="explicit" />
           </FormItem>
         </TabPane>
         <!-- 显示名称 -->
         <TabPane key="dispalyName" :tab="$t('AbpOpenIddict.DisplayNames')">
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:DefaultDisplayName')"
-            name="displayName"
-          >
+            name="displayName">
             <Input v-model:value="formModel.displayName" autocomplete="off" />
           </FormItem>
           <DisplayNameTable
             :data="formModel.displayNames"
             @change="onDisplayNameChange"
-            @delete="onDisplayNameDelete"
-          />
+            @delete="onDisplayNameDelete" />
         </TabPane>
         <!-- 端点 -->
         <TabPane key="endpoint">
@@ -395,76 +381,65 @@ function onUriDelete(uri: string) {
             :title="uriComponentState.title"
             :uris="uriComponentState.uris"
             @change="onUriChange"
-            @delete="onUriDelete"
-          />
+            @delete="onUriDelete" />
         </TabPane>
         <!-- 令牌 -->
         <TabPane key="tokens" :tab="$t('AbpOpenIddict.Tokens')">
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:AccessTokenLifetime')"
             :name="['settings', 'tokenLifetime', 'accessToken']"
-            :extra="$t('AbpOpenIddict.Description:AccessTokenLifetime')"
-          >
+            :extra="$t('AbpOpenIddict.Description:AccessTokenLifetime')">
             <InputNumber
               class="w-full"
               min="300"
-              v-model:value="formModel.settings.tokenLifetime.accessToken"
-            />
+              v-model:value="formModel.settings.tokenLifetime.accessToken" />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:AuthorizationCodeLifetime')"
             :name="['settings', 'tokenLifetime', 'authorizationCode']"
-            :extra="$t('AbpOpenIddict.Description:AuthorizationCodeLifetime')"
-          >
+            :extra="$t('AbpOpenIddict.Description:AuthorizationCodeLifetime')">
             <InputNumber
               class="w-full"
               min="300"
-              v-model:value="formModel.settings.tokenLifetime.authorizationCode"
-            />
+              v-model:value="
+                formModel.settings.tokenLifetime.authorizationCode
+              " />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:IdentityTokenLifetime')"
             :name="['settings', 'tokenLifetime', 'identityToken']"
-            :extra="$t('AbpOpenIddict.Description:IdentityTokenLifetime')"
-          >
+            :extra="$t('AbpOpenIddict.Description:IdentityTokenLifetime')">
             <InputNumber
               class="w-full"
               min="300"
-              v-model:value="formModel.settings.tokenLifetime.identityToken"
-            />
+              v-model:value="formModel.settings.tokenLifetime.identityToken" />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:RefreshTokenLifetime')"
             :name="['settings', 'tokenLifetime', 'refreshToken']"
-            :extra="$t('AbpOpenIddict.Description:RefreshTokenLifetime')"
-          >
+            :extra="$t('AbpOpenIddict.Description:RefreshTokenLifetime')">
             <InputNumber
               class="w-full"
               min="300"
-              v-model:value="formModel.settings.tokenLifetime.refreshToken"
-            />
+              v-model:value="formModel.settings.tokenLifetime.refreshToken" />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:DeviceCodeLifetime')"
             :name="['settings', 'tokenLifetime', 'deviceCode']"
-            :extra="$t('AbpOpenIddict.Description:DeviceCodeLifetime')"
-          >
+            :extra="$t('AbpOpenIddict.Description:DeviceCodeLifetime')">
             <InputNumber
               class="w-full"
               min="300"
-              v-model:value="formModel.settings.tokenLifetime.deviceCode"
-            />
+              v-model:value="formModel.settings.tokenLifetime.deviceCode" />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:UserCodeLifetime')"
             :name="['settings', 'tokenLifetime', 'userCode']"
-            :extra="$t('AbpOpenIddict.Description:UserCodeLifetime')"
-          >
+            :extra="$t('AbpOpenIddict.Description:UserCodeLifetime')">
             <InputNumber
               class="w-full"
               min="300"
-              v-model:value="formModel.settings.tokenLifetime.userCode"
-            />
+              v-model:value="formModel.settings.tokenLifetime.userCode" />
           </FormItem>
         </TabPane>
         <!-- 范围 -->
@@ -481,18 +456,15 @@ function onUriDelete(uri: string) {
               $t('AbpOpenIddict.Assigned'),
               $t('AbpOpenIddict.Available'),
             ]"
-            class="tree-transfer"
-          />
+            class="tree-transfer" />
         </TabPane>
         <!-- 授权 -->
         <TabPane key="authorize" :tab="$t('AbpOpenIddict.Authorizations')">
           <FormItem
             :label="$t('AbpOpenIddict.Requirements:PKCE')"
-            :name="['requirements', 'features', 'requirePkce']"
-          >
+            :name="['requirements', 'features', 'requirePkce']">
             <Checkbox
-              v-model:checked="formModel.requirements.features.requirePkce"
-            >
+              v-model:checked="formModel.requirements.features.requirePkce">
               {{ $t('AbpOpenIddict.Requirements:PKCE') }}
             </Checkbox>
           </FormItem>
@@ -500,37 +472,31 @@ function onUriDelete(uri: string) {
             :label="$t('AbpOpenIddict.DisplayName:Endpoints')"
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 20 }"
-            name="endpoints"
-          >
+            name="endpoints">
             <Select
               v-model:value="formModel.endpoints"
               :options="endpoints"
-              mode="tags"
-            />
+              mode="tags" />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:GrantTypes')"
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 20 }"
-            name="grantTypes"
-          >
+            name="grantTypes">
             <Select
               v-model:value="formModel.grantTypes"
               :options="getGrantTypes"
-              mode="tags"
-            />
+              mode="tags" />
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:ResponseTypes')"
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 20 }"
-            name="responseTypes"
-          >
+            name="responseTypes">
             <Select
               v-model:value="formModel.responseTypes"
               :options="getResponseTypes"
-              mode="tags"
-            />
+              mode="tags" />
           </FormItem>
         </TabPane>
         <!-- 属性 -->
@@ -538,8 +504,7 @@ function onUriDelete(uri: string) {
           <PropertyTable
             :data="formModel.properties"
             @change="onPropChange"
-            @delete="onPropDelete"
-          />
+            @delete="onPropDelete" />
         </TabPane>
       </Tabs>
     </Form>

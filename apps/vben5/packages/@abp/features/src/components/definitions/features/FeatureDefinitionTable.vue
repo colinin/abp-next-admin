@@ -311,8 +311,7 @@ onMounted(onGet);
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[FeatureDefinitionsPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AbpFeatureManagement.FeatureDefinitions:AddNew') }}
       </Button>
     </template>
@@ -324,14 +323,12 @@ onMounted(onGet);
           trigger: 'row',
           rowField: 'name',
           childrenField: 'children',
-        }"
-      >
+        }">
         <template #isVisibleToClients="{ row }">
           <div class="flex flex-row justify-center">
             <CheckOutlined
               v-if="row.isVisibleToClients"
-              class="text-green-500"
-            />
+              class="text-green-500" />
             <CloseOutlined v-else class="text-red-500" />
           </div>
         </template>
@@ -339,8 +336,7 @@ onMounted(onGet);
           <div class="flex flex-row justify-center">
             <CheckOutlined
               v-if="row.isAvailableToHost"
-              class="text-green-500"
-            />
+              class="text-green-500" />
             <CloseOutlined v-else class="text-red-500" />
           </div>
         </template>
@@ -351,8 +347,7 @@ onMounted(onGet);
               block
               type="link"
               v-access:code="[FeatureDefinitionsPermissions.Update]"
-              @click="onUpdate(feature)"
-            >
+              @click="onUpdate(feature)">
               {{ $t('AbpUi.Edit') }}
             </Button>
             <Button
@@ -362,8 +357,7 @@ onMounted(onGet);
               danger
               type="link"
               v-access:code="[FeatureDefinitionsPermissions.Delete]"
-              @click="onDelete(feature)"
-            >
+              @click="onDelete(feature)">
               {{ $t('AbpUi.Delete') }}
             </Button>
             <Dropdown v-if="!feature.isStatic">
@@ -374,8 +368,7 @@ onMounted(onGet);
                       hasAccessByCodes([FeatureDefinitionsPermissions.Create])
                     "
                     key="features"
-                    :icon="h(FeaturesOutlined)"
-                  >
+                    :icon="h(FeaturesOutlined)">
                     {{ $t('AbpFeatureManagement.FeatureDefinitions:AddNew') }}
                   </MenuItem>
                 </Menu>

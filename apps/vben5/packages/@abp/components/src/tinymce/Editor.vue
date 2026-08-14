@@ -107,10 +107,9 @@ const props = defineProps({
   },
 });
 const emits = defineEmits<{
-  (event: 'change', content: any): void;
-  (event: 'update:modelValue', content: any): void;
+  (event: 'change' | 'update:modelValue', content: any): void;
   (event: 'inited', editor: Editor | Editor[]): void;
-  (event: 'initError', error: any): void;
+  (event: 'initError', error: Error): void;
 }>();
 const { buildShortUUID } = useTinymce();
 const attrs = useAttrs();
@@ -293,8 +292,7 @@ function bindModelHandlers(editor: any) {
       :id="tinymceId"
       ref="elRef"
       :style="{ visibility: 'hidden' }"
-      v-if="!initOptions.inline"
-    ></textarea>
+      v-if="!initOptions.inline"></textarea>
     <slot v-else></slot>
   </div>
 </template>

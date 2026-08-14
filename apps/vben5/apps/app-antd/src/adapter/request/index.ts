@@ -56,7 +56,7 @@ export function initRequestClient() {
       const timezoneStore = useTimezoneStore();
 
       if (accessStore.accessToken) {
-        config.headers.Authorization = `${accessStore.accessToken}`;
+        config.headers.Authorization = accessStore.accessToken;
       }
       config.headers['Accept-Language'] = preferences.app.locale;
       config.headers['X-Request-From'] = 'vben';
@@ -76,7 +76,7 @@ export function initRequestClient() {
   });
 
   // response数据解构
-  requestClient.addResponseInterceptor<any>({
+  requestClient.addResponseInterceptor({
     fulfilled: (response) => {
       const { data, status } = response;
       const { hasWrapResult, getData } = useWrapperResult(response);

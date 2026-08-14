@@ -172,8 +172,7 @@ watch(() => props.selectedKey, onRefresh);
         v-if="getAddMemberEnabled"
         :icon="h(PlusOutlined)"
         type="primary"
-        @click="onShowMember"
-      >
+        @click="onShowMember">
         {{ $t('AbpIdentity.OrganizationUnit:AddMember') }}
       </Button>
     </template>
@@ -183,8 +182,7 @@ watch(() => props.selectedKey, onRefresh);
         danger
         type="link"
         v-access:code="[OrganizationUnitPermissions.ManageUsers]"
-        @click="onDelete(row)"
-      >
+        @click="onDelete(row)">
         {{ $t('AbpUi.Delete') }}
       </Button>
     </template>

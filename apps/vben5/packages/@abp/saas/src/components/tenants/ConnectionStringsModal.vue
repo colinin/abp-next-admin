@@ -68,8 +68,7 @@ async function onDelete(data: TenantConnectionStringDto) {
       :data-base-options="dataBaseOptions"
       :connection-strings="connectionStrings"
       :delete="onDelete"
-      :submit="onChange"
-    />
+      :submit="onChange" />
   </Modal>
 </template>
 

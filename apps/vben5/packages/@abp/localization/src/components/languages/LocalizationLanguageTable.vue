@@ -148,14 +148,16 @@ function onDelete(row: LanguageDto) {
 }
 
 async function onChange(data: LanguageDto) {
-  // 资源变化刷新本地多语言缓存
-  const cultureName =
-    abpStore.application!.localization.currentCulture.cultureName;
-  if (data.cultureName === cultureName) {
-    const localization = await getLocalizationApi({
-      cultureName,
-    });
-    abpStore.setLocalization(localization);
+  if (abpStore.application?.localization) {
+    // 资源变化刷新本地多语言缓存
+    const cultureName =
+      abpStore.application.localization.currentCulture.cultureName;
+    if (data.cultureName === cultureName) {
+      const localization = await getLocalizationApi({
+        cultureName,
+      });
+      abpStore.setLocalization(localization);
+    }
   }
 }
 </script>
@@ -167,8 +169,7 @@ async function onChange(data: LanguageDto) {
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[LanguagesPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('LocalizationManagement.Language:AddNew') }}
       </Button>
     </template>
@@ -179,8 +180,7 @@ async function onChange(data: LanguageDto) {
           block
           type="link"
           v-access:code="[LanguagesPermissions.Update]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -189,8 +189,7 @@ async function onChange(data: LanguageDto) {
           danger
           type="link"
           v-access:code="[LanguagesPermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

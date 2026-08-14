@@ -1,9 +1,11 @@
 <script lang="ts" setup>
+import type { StepItem } from 'antdv-next';
+
 import { ref } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
-import { Button, Card, message, Step, Steps, Switch } from 'ant-design-vue';
+import { Button, Card, message, Steps, Switch } from 'antdv-next';
 
 import { useVbenForm } from '#/adapter/form';
 
@@ -75,6 +77,7 @@ const [SecondForm, secondFormApi] = useVbenForm({
   ],
   wrapperClass: 'grid-cols-1 md:grid-cols-1 lg:grid-cols-1',
 });
+const stepsItems: StepItem[] = [{ title: '表单1' }, { title: '表单2' }];
 const needMerge = ref(true);
 async function handleMergeSubmit() {
   const values = await firstFormApi
@@ -89,23 +92,18 @@ async function handleMergeSubmit() {
 <template>
   <Page
     description="表单组件合并示例：在某些场景下，例如分步表单，需要合并多个表单并统一提交。默认情况下，使用 Object.assign 规则合并表单。如果需要特殊处理数据，可以传入 false。"
-    title="表单组件"
-  >
+    title="表单组件">
     <Card title="基础示例">
       <template #extra>
         <Switch
-          v-model="needMerge"
+          v-model:checked="needMerge"
           checked-children="开启字段合并"
           class="mr-4"
-          un-checked-children="关闭字段合并"
-        />
+          un-checked-children="关闭字段合并" />
         <Button type="primary" @click="handleMergeSubmit">合并提交</Button>
       </template>
       <div class="mx-auto max-w-lg">
-        <Steps :current="currentTab" class="steps">
-          <Step title="表单1" />
-          <Step title="表单2" />
-        </Steps>
+        <Steps :current="currentTab" :items="stepsItems" class="steps" />
         <div class="p-20">
           <FirstForm v-show="currentTab === 0" />
           <SecondForm v-show="currentTab === 1" />

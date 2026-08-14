@@ -255,8 +255,7 @@ onMounted(onGet);
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[WebhookDefinitionsPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AbpTextTemplating.TextTemplates:AddNew') }}
       </Button>
     </template>
@@ -285,8 +284,7 @@ onMounted(onGet);
           block
           type="link"
           v-access:code="[WebhookDefinitionsPermissions.Update]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -299,8 +297,7 @@ onMounted(onGet);
           danger
           type="link"
           v-access:code="[WebhookDefinitionsPermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown>

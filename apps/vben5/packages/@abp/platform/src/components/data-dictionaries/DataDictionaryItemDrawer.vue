@@ -238,8 +238,7 @@ function onDelete(row: DataItemDto) {
             :icon="h(EditOutlined)"
             block
             type="link"
-            @click="onUpdate(row)"
-          >
+            @click="onUpdate(row)">
             {{ $t('AbpUi.Edit') }}
           </Button>
           <Button
@@ -247,8 +246,7 @@ function onDelete(row: DataItemDto) {
             block
             danger
             type="link"
-            @click="onDelete(row)"
-          >
+            @click="onDelete(row)">
             {{ $t('AbpUi.Delete') }}
           </Button>
         </div>

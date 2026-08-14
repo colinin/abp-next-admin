@@ -144,8 +144,7 @@ async function onGet(id: string) {
             v-for="scope in modelValue"
             :key="scope"
             :title="scope"
-            :value="scope"
-          />
+            :value="scope" />
         </Select>
       </template>
       <template #properties="{ modelValue }">

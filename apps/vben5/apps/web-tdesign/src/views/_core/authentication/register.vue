@@ -82,8 +82,7 @@ const formSchema = computed((): VbenFormSchema[] => {
 });
 
 async function handleSubmit(value: Recordable<any>) {
-  // eslint-disable-next-line no-console
-  console.log('register submit:', value);
+  void value;
 }
 </script>
 
@@ -91,6 +90,5 @@ async function handleSubmit(value: Recordable<any>) {
   <AuthenticationRegister
     :form-schema="formSchema"
     :loading="loading"
-    @submit="handleSubmit"
-  />
+    @submit="handleSubmit" />
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { VNode } from 'vue';
+import type { IconPickerProps } from './types';
 
 import { computed, ref, useAttrs, watch, watchEffect } from 'vue';
 
@@ -11,13 +11,13 @@ import {
   Button,
   Input,
   Pagination,
+  PaginationContent,
   PaginationEllipsis,
   PaginationFirst,
+  PaginationItem,
   PaginationLast,
-  PaginationList,
-  PaginationListItem,
   PaginationNext,
-  PaginationPrev,
+  PaginationPrevious,
   VbenIcon,
   VbenIconButton,
   VbenPopover,
@@ -28,28 +28,7 @@ import { objectOmit, refDebounced, watchDebounced } from '@vueuse/core';
 
 import { fetchIconsData } from './icons';
 
-interface Props {
-  pageSize?: number;
-  /** 图标集的名字 */
-  prefix?: string;
-  /** 是否自动请求API以获得图标集的数据.提供prefix时有效 */
-  autoFetchApi?: boolean;
-  /**
-   * 图标列表
-   */
-  icons?: string[];
-  /** Input组件 */
-  inputComponent?: VNode;
-  /** 图标插槽名，预览图标将被渲染到此插槽中 */
-  iconSlot?: string;
-  /** input组件的值属性名称 */
-  modelValueProp?: string;
-  /** 图标样式 */
-  iconClass?: string;
-  type?: 'icon' | 'input';
-}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<IconPickerProps>(), {
   prefix: 'ant-design',
   pageSize: 36,
   icons: () => [],
@@ -168,6 +147,9 @@ const searchInputProps = computed(() => {
 
 function updateCurrentSelect(v: string) {
   currentSelect.value = v;
+  if (props.modelValueProp === 'modelValue') {
+    modelValue.value = v;
+  }
   const eventKey = `onUpdate:${props.modelValueProp}`;
   if (attrs[eventKey] && isFunction(attrs[eventKey])) {
     attrs[eventKey](v);
@@ -184,8 +166,7 @@ defineExpose({ toggleOpenState, open, close });
     v-model:open="visible"
     :content-props="{ align: 'end', alignOffset: -11, sideOffset: 8 }"
     content-class="p-0 pt-3 w-full"
-    trigger-class="w-full"
-  >
+    trigger-class="w-full">
     <template #trigger>
       <template v-if="props.type === 'input'">
         <component
@@ -197,14 +178,12 @@ defineExpose({ toggleOpenState, open, close });
           :aria-label="$t('ui.iconPicker.placeholder')"
           aria-expanded="visible"
           :[`onUpdate:${modelValueProp}`]="updateCurrentSelect"
-          v-bind="getBindAttrs"
-        >
+          v-bind="getBindAttrs">
           <template #[iconSlot]>
             <VbenIcon
               :icon="currentSelect || Grip"
               class="size-4"
-              aria-hidden="true"
-            />
+              aria-hidden="true" />
           </template>
         </component>
         <div class="relative w-full" v-else>
@@ -215,101 +194,88 @@ defineExpose({ toggleOpenState, open, close });
             class="h-8 w-full pr-8"
             role="combobox"
             :aria-label="$t('ui.iconPicker.placeholder')"
-            aria-expanded="visible"
-          />
+            aria-expanded="visible" />
           <VbenIcon
             :icon="currentSelect || Grip"
-            class="absolute right-1 top-1 size-6"
-            aria-hidden="true"
-          />
+            class="absolute top-1 right-1 size-6"
+            aria-hidden="true" />
         </div>
       </template>
       <VbenIcon
         :icon="currentSelect || Grip"
         v-else
         class="size-4"
-        v-bind="$attrs"
-      />
+        v-bind="$attrs" />
     </template>
     <div class="mb-2 flex w-full">
       <component
         v-if="inputComponent"
         :is="inputComponent"
-        v-bind="searchInputProps"
-      />
+        v-bind="searchInputProps" />
       <Input
         v-else
         class="mx-2 h-8 w-full"
         :placeholder="$t('ui.iconPicker.search')"
-        v-model="keyword"
-      />
+        v-model="keyword" />
     </div>
 
     <template v-if="paginationList.length > 0">
-      <div class="grid max-h-[360px] w-full grid-cols-6 justify-items-center">
+      <div class="grid max-h-90 w-full grid-cols-6 justify-items-center">
         <VbenIconButton
           v-for="(item, index) in paginationList"
           :key="index"
           :tooltip="item"
           tooltip-side="top"
-          @click="handleClick(item)"
-        >
+          @click="handleClick(item)">
           <VbenIcon
             :class="{
               'text-primary transition-all': currentSelect === item,
             }"
-            :icon="item"
-          />
+            :icon="item" />
         </VbenIconButton>
       </div>
       <div
         v-if="total >= pageSize"
-        class="flex-center flex justify-end overflow-hidden border-t py-2 pr-3"
-      >
+        class="flex-center flex justify-end overflow-hidden border-t py-2 pr-3">
         <Pagination
           :items-per-page="36"
           :sibling-count="1"
           :total="total"
           show-edges
           size="small"
-          @update:page="handlePageChange"
-        >
-          <PaginationList
+          @update:page="handlePageChange">
+          <PaginationContent
             v-slot="{ items }"
-            class="flex w-full items-center gap-1"
-          >
+            class="flex w-full items-center gap-1">
             <PaginationFirst class="size-5" />
-            <PaginationPrev class="size-5" />
+            <PaginationPrevious class="size-5" />
             <template v-for="(item, index) in items">
-              <PaginationListItem
+              <PaginationItem
                 v-if="item.type === 'page'"
                 :key="index"
                 :value="item.value"
-                as-child
-              >
+                as-child>
                 <Button
                   :variant="item.value === currentPage ? 'default' : 'outline'"
-                  class="size-5 p-0 text-sm"
-                >
+                  class="size-5 p-0 text-sm">
                   {{ item.value }}
                 </Button>
-              </PaginationListItem>
+              </PaginationItem>
               <PaginationEllipsis
                 v-else
                 :key="item.type"
                 :index="index"
-                class="size-5"
-              />
+                class="size-5" />
             </template>
             <PaginationNext class="size-5" />
             <PaginationLast class="size-5" />
-          </PaginationList>
+          </PaginationContent>
         </Pagination>
       </div>
     </template>
 
     <template v-else>
-      <div class="flex-col-center text-muted-foreground min-h-[150px] w-full">
+      <div class="flex-col-center min-h-37.5 w-full text-muted-foreground">
         <EmptyIcon class="size-10" />
         <div class="mt-1 text-sm">{{ $t('common.noData') }}</div>
       </div>

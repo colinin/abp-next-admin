@@ -17,8 +17,7 @@ const props = defineProps<{
   property: AIToolPropertyDescriptorDto;
 }>();
 const emit = defineEmits<{
-  (event: 'change', data: Record<string, any>): void;
-  (event: 'update:value', data: Record<string, any>): void;
+  (event: 'change' | 'update:value', data: Record<string, any>): void;
 }>();
 const onValueChange = (value?: any) => {
   const prop = props.model;
@@ -48,20 +47,17 @@ const onPropDelete = (propertyInfo: PropertyInfo) => {
     class="w-full"
     :min="0"
     :value="model[property.name]"
-    @change="onValueChange($event)"
-  />
+    @change="onValueChange($event)" />
   <Input
     v-if="property.valueType === 'String'"
     class="w-full"
     :min="0"
     :value="model[property.name]"
-    @change="onValueChange($event.target.value)"
-  />
+    @change="onValueChange($event.target.value)" />
   <Checkbox
     v-else-if="property.valueType === 'Boolean'"
     :checked="model[property.name] === true"
-    @change="onValueChange($event.target.checked)"
-  >
+    @change="onValueChange($event.target.checked)">
     {{ property.displayName }}
   </Checkbox>
   <Select
@@ -70,14 +66,12 @@ const onPropDelete = (propertyInfo: PropertyInfo) => {
     :options="property.options"
     :field-names="{ label: 'name', value: 'value' }"
     :value="model[property.name]"
-    @change="onValueChange($event)"
-  />
+    @change="onValueChange($event)" />
   <FormItemRest v-else-if="property.valueType === 'Dictionary'">
     <PropertyTable
       :data="model[property.name]"
       @change="onPropChange"
-      @delete="onPropDelete"
-    />
+      @delete="onPropDelete" />
   </FormItemRest>
 </template>
 

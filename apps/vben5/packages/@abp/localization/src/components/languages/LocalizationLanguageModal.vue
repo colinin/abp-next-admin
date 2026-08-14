@@ -45,7 +45,9 @@ const [Modal, modalApi] = useVbenModal({
         title: $t('LocalizationManagement.Language:AddNew'),
       });
       const { cultureName } = modalApi.getData<LanguageDto>();
-      cultureName && (await onGet(cultureName));
+      if (cultureName) {
+        await onGet(cultureName);
+      }
     }
   },
   title: $t('LocalizationManagement.Language:AddNew'),
@@ -86,26 +88,22 @@ async function onSubmit() {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <FormItem
         :label="$t('LocalizationManagement.DisplayName:CultureName')"
         name="cultureName"
-        required
-      >
+        required>
         <Input v-model:value="formModel.cultureName" autocomplete="off" />
       </FormItem>
       <FormItem
         :label="$t('LocalizationManagement.DisplayName:UiCultureName')"
-        name="uiCultureName"
-      >
+        name="uiCultureName">
         <Input v-model:value="formModel.uiCultureName" autocomplete="off" />
       </FormItem>
       <FormItem
         :label="$t('LocalizationManagement.DisplayName:DisplayName')"
         name="displayName"
-        required
-      >
+        required>
         <Input v-model:value="formModel.displayName" autocomplete="off" />
       </FormItem>
     </Form>

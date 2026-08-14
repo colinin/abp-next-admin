@@ -81,7 +81,9 @@ const [Modal, modalApi] = useVbenModal({
       try {
         modalApi.setState({ loading: true });
         const { name } = modalApi.getData<SettingDefinitionDto>();
-        name && (await onGet(name));
+        if (name) {
+          await onGet(name);
+        }
         await onInitProviders();
       } finally {
         modalApi.setState({ loading: false });
@@ -119,99 +121,82 @@ function onPropDelete(prop: PropertyInfo) {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTab">
         <!-- 基本信息 -->
         <TabPane key="basic" :tab="$t('AbpSettingManagement.BasicInfo')">
           <FormItem
             :label="$t('AbpSettingManagement.DisplayName:Name')"
             name="name"
-            required
-          >
+            required>
             <Input
               v-model:value="formModel.name"
               :disabled="formModel.isStatic"
-              autocomplete="off"
-            />
+              autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('AbpSettingManagement.DisplayName:DefaultValue')"
-            name="defaultValue"
-          >
+            name="defaultValue">
             <Textarea
               v-model:value="formModel.defaultValue"
               :allow-clear="true"
               :auto-size="{ minRows: 3 }"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
           <FormItem
             :label="$t('AbpSettingManagement.DisplayName:DisplayName')"
             name="displayName"
-            required
-          >
+            required>
             <LocalizableInput
               v-model:value="formModel.displayName"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
           <FormItem
             :label="$t('AbpSettingManagement.DisplayName:Description')"
-            name="description"
-          >
+            name="description">
             <LocalizableInput
               v-model:value="formModel.description"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
           <FormItem
             :extra="$t('AbpSettingManagement.Description:Providers')"
             :label="$t('AbpSettingManagement.DisplayName:Providers')"
-            name="providers"
-          >
+            name="providers">
             <Select
               v-model:value="formModel.providers"
               :allow-clear="true"
               :disabled="formModel.isStatic"
               :field-names="{ label: 'name', value: 'value' }"
               :options="availableProviders"
-              mode="multiple"
-            />
+              mode="multiple" />
           </FormItem>
           <FormItem
             :extra="$t('AbpSettingManagement.Description:IsInherited')"
             :label="$t('AbpSettingManagement.DisplayName:IsInherited')"
-            name="isInherited"
-          >
+            name="isInherited">
             <Checkbox
               v-model:checked="formModel.isInherited"
-              :disabled="formModel.isStatic"
-            >
+              :disabled="formModel.isStatic">
               {{ $t('AbpSettingManagement.DisplayName:IsInherited') }}
             </Checkbox>
           </FormItem>
           <FormItem
             :extra="$t('AbpSettingManagement.Description:IsEncrypted')"
             :label="$t('AbpSettingManagement.DisplayName:IsEncrypted')"
-            name="isEncrypted"
-          >
+            name="isEncrypted">
             <Checkbox
               v-model:checked="formModel.isEncrypted"
-              :disabled="formModel.isStatic"
-            >
+              :disabled="formModel.isStatic">
               {{ $t('AbpSettingManagement.DisplayName:IsEncrypted') }}
             </Checkbox>
           </FormItem>
           <FormItem
             :extra="$t('AbpSettingManagement.Description:IsVisibleToClients')"
             :label="$t('AbpSettingManagement.DisplayName:IsVisibleToClients')"
-            name="isVisibleToClients"
-          >
+            name="isVisibleToClients">
             <Checkbox
               v-model:checked="formModel.isVisibleToClients"
-              :disabled="formModel.isStatic"
-            >
+              :disabled="formModel.isStatic">
               {{ $t('AbpSettingManagement.DisplayName:IsVisibleToClients') }}
             </Checkbox>
           </FormItem>
@@ -222,8 +207,7 @@ function onPropDelete(prop: PropertyInfo) {
             :data="formModel.extraProperties"
             :disabled="formModel.isStatic"
             @change="onPropChange"
-            @delete="onPropDelete"
-          />
+            @delete="onPropDelete" />
         </TabPane>
       </Tabs>
     </Form>

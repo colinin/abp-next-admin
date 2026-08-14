@@ -288,8 +288,7 @@ onMounted(onGet);
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[GroupDefinitionsPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AbpPermissionManagement.PermissionDefinitions:AddNew') }}
       </Button>
     </template>
@@ -301,8 +300,7 @@ onMounted(onGet);
           trigger: 'row',
           rowField: 'name',
           childrenField: 'children',
-        }"
-      >
+        }">
         <template #tenant="{ row: permission }">
           <Tag color="blue">
             {{ multiTenancySidesMap[permission.multiTenancySide] }}
@@ -322,8 +320,7 @@ onMounted(onGet);
               block
               type="link"
               v-access:code="[GroupDefinitionsPermissions.Update]"
-              @click="onUpdate(permission)"
-            >
+              @click="onUpdate(permission)">
               {{ $t('AbpUi.Edit') }}
             </Button>
             <Button
@@ -333,8 +330,7 @@ onMounted(onGet);
               danger
               type="link"
               v-access:code="[GroupDefinitionsPermissions.Delete]"
-              @click="onDelete(permission)"
-            >
+              @click="onDelete(permission)">
               {{ $t('AbpUi.Delete') }}
             </Button>
           </div>

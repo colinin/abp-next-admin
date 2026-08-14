@@ -67,8 +67,8 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       formModel.value = { groups: [] };
       await onGet();
-      if (formModel.value?.groups.length > 0) {
-        activeTabKey.value = formModel.value.groups[0]?.name!;
+      if (formModel.value && formModel.value.groups[0]) {
+        activeTabKey.value = formModel.value.groups[0].name;
       }
     }
   },
@@ -209,13 +209,11 @@ async function onSubmit() {
         <TabPane
           v-for="(group, gi) in formModel.groups"
           :key="group.name"
-          :tab="group.displayName"
-        >
+          :tab="group.displayName">
           <Card :bordered="false" :title="group.displayName">
             <template
               v-for="(feature, fi) in group.features"
-              :key="feature.name"
-            >
+              :key="feature.name">
               <FormItem
                 v-if="feature.valueType !== null"
                 :name="['groups', gi, 'features', fi, 'value']"
@@ -223,32 +221,27 @@ async function onSubmit() {
                 :extra="feature.description"
                 :rules="
                   createRules(feature.displayName, feature.valueType.validator)
-                "
-              >
+                ">
                 <Checkbox
                   v-if="
                     feature.valueType.name === 'ToggleStringValueType' &&
                     feature.valueType.validator.name === 'BOOLEAN'
                   "
-                  v-model:checked="feature.value"
-                >
+                  v-model:checked="feature.value">
                   {{ feature.displayName }}
                 </Checkbox>
                 <div
                   v-else-if="
                     feature.valueType.name === 'FreeTextStringValueType'
-                  "
-                >
+                  ">
                   <InputNumber
                     v-if="feature.valueType.validator.name === 'NUMERIC'"
                     style="width: 100%"
-                    v-model:value="feature.value"
-                  />
+                    v-model:value="feature.value" />
                   <Input
                     v-else
                     v-model:value="feature.value"
-                    autocomplete="off"
-                  />
+                    autocomplete="off" />
                 </div>
                 <Select
                   v-else-if="
@@ -256,8 +249,7 @@ async function onSubmit() {
                   "
                   v-model:value="feature.value"
                   :options="feature.valueType.itemSource.items"
-                  :field-names="{ label: 'displayName', value: 'value' }"
-                />
+                  :field-names="{ label: 'displayName', value: 'value' }" />
               </FormItem>
             </template>
           </Card>

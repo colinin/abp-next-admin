@@ -67,7 +67,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   sideMouseLeave: [];
   toggleSidebar: [];
-  'update:sidebar-width': [value: number];
+  'update:sidebarWidth': [value: number];
 }>();
 const sidebarDraggable = defineModel<boolean>('sidebarDraggable', {
   default: true,
@@ -275,7 +275,7 @@ const mainStyle = computed(() => {
 
 // 计算 tabbar 的样式
 const tabbarStyle = computed((): CSSProperties => {
-  let width = '';
+  let width: string;
   let marginLeft = 0;
 
   // 如果不是混合导航，tabbar 的宽度为 100%
@@ -366,6 +366,17 @@ const footerWidth = computed(() => {
 
 const maskStyle = computed((): CSSProperties => {
   return { zIndex: props.zIndex };
+});
+
+/**
+ * 侧边栏 Logo 区域是否显示
+ */
+const sidebarHeaderHeight = computed(() => {
+  if (isMixedNav.value || !props.sidebarLogoVisible) {
+    return 0;
+  }
+
+  return props.headerHeight;
 });
 
 const showHeaderToggleButton = computed(() => {
@@ -510,7 +521,10 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT;
       :dom-visible="!isMobile"
       :extra-width="sidebarExtraWidth"
       :fixed-extra="sidebarExpandOnHover"
-      :header-height="isMixedNav ? 0 : headerHeight"
+      :header-height="sidebarHeaderHeight"
+      :extra-title-height="
+        isSidebarMixedNav || isHeaderMixedNav ? sidebarExtraTitleHeight : 0
+      "
       :is-sidebar-mixed="isSidebarMixedNav || isHeaderMixedNav"
       :margin-top="sidebarMarginTop"
       :mixed-width="sidebarMixedWidth"
@@ -520,9 +534,8 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT;
       :width="getSidebarWidth"
       :z-index="sidebarZIndex"
       @leave="() => emit('sideMouseLeave')"
-      @update:width="(val) => emit('update:sidebar-width', val)"
-    >
-      <template v-if="isSideMode && !isMixedNav" #logo>
+      @update:width="(val) => emit('update:sidebarWidth', val)">
+      <template v-if="isSideMode && !isMixedNav && sidebarLogoVisible" #logo>
         <slot name="logo"></slot>
       </template>
 
@@ -543,8 +556,7 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT;
 
     <div
       ref="contentRef"
-      class="flex flex-1 flex-col overflow-hidden transition-all duration-300 ease-in"
-    >
+      class="flex flex-1 flex-col overflow-hidden transition-all duration-300 ease-in">
       <div
         :class="[
           {
@@ -553,8 +565,7 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT;
           SCROLL_FIXED_CLASS,
         ]"
         :style="headerWrapperStyle"
-        class="overflow-hidden transition-all duration-200"
-      >
+        class="overflow-hidden transition-all duration-200">
         <LayoutHeader
           v-if="headerVisible"
           :full-width="!isSideMode"
@@ -565,7 +576,7 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT;
           :theme="headerTheme"
           :width="mainStyle.width"
           :z-index="headerZIndex"
-        >
+          :logo-visible="sidebarLogoVisible">
           <template v-if="showHeaderLogo" #logo>
             <slot name="logo"></slot>
           </template>
@@ -574,8 +585,7 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT;
             <VbenIconButton
               v-if="showHeaderToggleButton"
               class="my-0 mr-1 rounded-md"
-              @click="handleHeaderToggle"
-            >
+              @click="handleHeaderToggle">
               <IconifyIcon v-if="showSidebar" icon="ep:fold" />
               <IconifyIcon v-else icon="ep:expand" />
             </VbenIconButton>
@@ -586,8 +596,7 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT;
         <LayoutTabbar
           v-if="tabbarEnable"
           :height="tabbarHeight"
-          :style="tabbarStyle"
-        >
+          :style="tabbarStyle">
           <slot name="tabbar"></slot>
         </LayoutTabbar>
       </div>
@@ -603,8 +612,7 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT;
         :padding-right="contentPaddingRight"
         :padding-top="contentPaddingTop"
         :style="contentStyle"
-        class="transition-[margin-top] duration-200"
-      >
+        class="transition-[margin-top] duration-200">
         <slot name="content"></slot>
 
         <template #overlay>
@@ -618,8 +626,7 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT;
         :height="footerHeight"
         :show="!isFullContent"
         :width="footerWidth"
-        :z-index="zIndex"
-      >
+        :z-index="zIndex">
         <slot name="footer"></slot>
       </LayoutFooter>
     </div>
@@ -627,8 +634,7 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT;
     <div
       v-if="maskVisible"
       :style="maskStyle"
-      class="fixed left-0 top-0 h-full w-full bg-overlay transition-[background-color] duration-200"
-      @click="handleClickMask"
-    ></div>
+      class="fixed top-0 left-0 size-full bg-overlay transition-[background-color] duration-200"
+      @click="handleClickMask"></div>
   </div>
 </template>

@@ -25,8 +25,7 @@ const emit = defineEmits<{
         :node="root"
         :group-index="groupIndex"
         :base-indent-size="baseIndentSize"
-        @change="(feature, idx) => emit('change', feature, idx)"
-      />
+        @change="(feature, idx) => emit('change', feature, idx)" />
     </div>
   </Card>
 </template>

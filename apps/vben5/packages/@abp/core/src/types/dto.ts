@@ -293,14 +293,14 @@ interface ExtensionPropertyUiDto {
 }
 /** 扩展属性（用于请求代理，忽略） */
 interface ExtensionPropertyAttributeDto {
-  config: Dictionary<string, any>;
+  config: Dictionary<string>;
   typeSimple: string;
 }
 /** 扩展属性（用于请求代理，忽略） */
 interface ExtensionPropertyDto {
   api: ExtensionPropertyApiDto;
   attributes: ExtensionPropertyAttributeDto[];
-  configuration: Dictionary<string, any>;
+  configuration: Dictionary<string>;
   defaultValue: any;
   displayName?: LocalizableStringDto;
   type: string;
@@ -309,12 +309,12 @@ interface ExtensionPropertyDto {
 }
 /** 扩展属性（用于请求代理，忽略） */
 interface EntityExtensionDto {
-  configuration: Dictionary<string, any>;
+  configuration: Dictionary<string>;
   properties: Dictionary<string, ExtensionPropertyDto>;
 }
 /** 扩展属性（用于请求代理，忽略） */
 interface ModuleExtensionDto {
-  configuration: Dictionary<string, any>;
+  configuration: Dictionary<string>;
   entities: Dictionary<string, EntityExtensionDto>;
 }
 /** 扩展属性（用于请求代理，忽略） */

@@ -88,16 +88,14 @@ onMounted(() => {
           <List>
             <template
               v-for="notification in group.notifications"
-              :key="notification.name"
-            >
+              :key="notification.name">
               <ListItem>
                 <template #actions>
                   <Switch
                     v-model:checked="notification.isSubscribe"
                     @change="
                       (checked) => onSubscribed(notification, Boolean(checked))
-                    "
-                  />
+                    " />
                 </template>
                 <ListItemMeta>
                   <template #title>

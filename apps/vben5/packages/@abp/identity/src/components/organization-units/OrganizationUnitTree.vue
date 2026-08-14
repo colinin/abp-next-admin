@@ -193,8 +193,7 @@ watchEffect(() => {
       draggable
       @drop="onDrop"
       @right-click="onRightClick"
-      @select="onSelectChange"
-    >
+      @select="onSelectChange">
       <template #title="{ key: treeKey, title }">
         <Dropdown :trigger="['contextmenu']">
           <span> {{ title }}</span>

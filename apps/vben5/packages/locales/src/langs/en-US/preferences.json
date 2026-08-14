@@ -38,6 +38,7 @@
   "mode": "Mode",
   "general": "General",
   "language": "Language",
+  "timezone": "Timezone",
   "dynamicTitle": "Dynamic Title",
   "watermark": "Watermark",
   "watermarkContent": "Please input Watermark content",
@@ -46,7 +47,8 @@
     "title": "Preferences Postion",
     "header": "Header",
     "auto": "Auto",
-    "fixed": "Fixed"
+    "fixed": "Fixed",
+    "userDropdown": "User Dropdown"
   },
   "sidebar": {
     "buttons": "Show Buttons",
@@ -185,6 +187,7 @@
     "global": "Global",
     "search": "Global Search",
     "logout": "Logout",
+    "escape": "Close Current Window",
     "preferences": "Preferences"
   },
   "widget": {
@@ -196,6 +199,35 @@
     "notification": "Enable Notification",
     "sidebarToggle": "Enable Sidebar Toggle",
     "lockScreen": "Enable Lock Screen",
-    "refresh": "Enable Refresh"
+    "refresh": "Enable Refresh",
+    "timezone": "Enable Timezone"
+  },
+  "antd": {
+    "tabLabel": "Antd Extension",
+    "title": "Business Preferences",
+    "fields": {
+      "enableFormFullscreen": {
+        "label": "Enable Form Fullscreen Mode",
+        "tip": "Subprojects can read this extension configuration in their own business scenarios."
+      },
+      "tenantMode": {
+        "label": "Tenant Mode",
+        "options": {
+          "single": {
+            "label": "Single Tenant"
+          },
+          "multi": {
+            "label": "Multi Tenant"
+          }
+        }
+      },
+      "defaultTableSize": {
+        "label": "Default Page Size"
+      },
+      "reportTitle": {
+        "label": "Default Report Title",
+        "placeholder": "Please enter the default report title"
+      }
+    }
   }
 }

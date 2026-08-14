@@ -28,8 +28,7 @@ interface IdentityClaimTypeCreateOrUpdateDto extends ExtensibleObject {
   required: boolean;
 }
 
-interface IdentityClaimTypeCreateDto
-  extends IdentityClaimTypeCreateOrUpdateDto {
+interface IdentityClaimTypeCreateDto extends IdentityClaimTypeCreateOrUpdateDto {
   isStatic: boolean;
   name: string;
   valueType: ValueType;
@@ -37,8 +36,7 @@ interface IdentityClaimTypeCreateDto
 
 type IdentityClaimTypeUpdateDto = IdentityClaimTypeCreateOrUpdateDto;
 
-interface GetIdentityClaimTypePagedListInput
-  extends PagedAndSortedResultRequestDto {
+interface GetIdentityClaimTypePagedListInput extends PagedAndSortedResultRequestDto {
   filter?: string;
 }
 

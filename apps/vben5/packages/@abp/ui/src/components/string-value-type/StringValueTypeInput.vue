@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/custom-event-name-casing -->
 <script setup lang="ts">
 import type { LocalizableStringInfo } from '@abp/core';
+import type { SelectValue } from 'ant-design-vue/es/select';
 import type { RuleObject } from 'ant-design-vue/lib/form';
 import type { ColumnsType } from 'ant-design-vue/lib/table';
 
@@ -46,10 +47,10 @@ import {
 } from './valueType';
 
 interface Props {
-  allowDelete: boolean;
-  allowEdit: boolean;
-  disabled: boolean;
-  value: string;
+  allowDelete?: boolean;
+  allowEdit?: boolean;
+  disabled?: boolean;
+  value?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -59,10 +60,8 @@ const props = withDefaults(defineProps<Props>(), {
   value: '{}',
 });
 const emits = defineEmits<{
-  (event: 'update:value', data: string | undefined): void;
-  (event: 'change', data: string | undefined): void;
-  (event: 'change:valueType', data: string): void;
-  (event: 'change:validator', data: string): void;
+  (event: 'change' | 'update:value', data: string | undefined): void;
+  (event: 'change:validator' | 'change:valueType', data: string): void;
   (event: 'change:selection', data: SelectionStringValueItem[]): void;
 }>();
 const FormItemRest = Form.ItemRest;
@@ -350,8 +349,9 @@ function handleSubmit() {
       const findIndex = items.findIndex(
         (x) => serialize(x.displayText) === displayText,
       );
-      items[findIndex] &&
-        (items[findIndex].value = state.selection.form.model.value);
+      if (items[findIndex]) {
+        items[findIndex].value = state.selection.form.model.value;
+      }
     } else {
       items.push({
         displayText: deserialize(displayText),
@@ -403,8 +403,10 @@ defineExpose<StringValueTypeInstance>({
                 <Select
                   :disabled="props.disabled"
                   :value="state.valueType.name"
-                  @change="(value) => handleValueTypeChange(value?.toString())"
-                >
+                  @change="
+                    (value: SelectValue) =>
+                      handleValueTypeChange(value?.toString())
+                  ">
                   <Option value="FreeTextStringValueType">
                     {{ $t('component.value_type_nput.type.FREE_TEXT.name') }}
                   </Option>
@@ -423,31 +425,32 @@ defineExpose<StringValueTypeInstance>({
                 <Select
                   :disabled="props.disabled"
                   :value="state.valueType.validator.name"
-                  @change="(value) => handleValidatorChange(value?.toString())"
-                >
+                  @change="
+                    (value: SelectValue) =>
+                      handleValidatorChange(value?.toString())
+                  ">
                   <Option value="NULL">
                     {{ $t('component.value_type_nput.validator.NULL.name') }}
                   </Option>
                   <Option
                     value="BOOLEAN"
-                    :disabled="state.valueType.name !== 'ToggleStringValueType'"
-                  >
+                    :disabled="
+                      state.valueType.name !== 'ToggleStringValueType'
+                    ">
                     {{ $t('component.value_type_nput.validator.BOOLEAN.name') }}
                   </Option>
                   <Option
                     value="NUMERIC"
                     :disabled="
                       state.valueType.name !== 'FreeTextStringValueType'
-                    "
-                  >
+                    ">
                     {{ $t('component.value_type_nput.validator.NUMERIC.name') }}
                   </Option>
                   <Option
                     value="STRING"
                     :disabled="
                       state.valueType.name !== 'FreeTextStringValueType'
-                    "
-                  >
+                    ">
                     {{ $t('component.value_type_nput.validator.STRING.name') }}
                   </Option>
                 </Select>
@@ -461,8 +464,7 @@ defineExpose<StringValueTypeInstance>({
               <div v-if="state.valueType.name === 'FreeTextStringValueType'">
                 <div
                   v-if="state.valueType.validator.name === 'NUMERIC'"
-                  class="numeric"
-                >
+                  class="numeric">
                   <Row>
                     <Col :span="11">
                       <span>{{
@@ -490,8 +492,7 @@ defineExpose<StringValueTypeInstance>({
                         v-model:value="
                           (state.valueType.validator as NumericValueValidator)
                             .minValue
-                        "
-                      />
+                        " />
                     </Col>
                     <Col :span="2">
                       <div class="w-full"></div>
@@ -503,15 +504,13 @@ defineExpose<StringValueTypeInstance>({
                         v-model:value="
                           (state.valueType.validator as NumericValueValidator)
                             .maxValue
-                        "
-                      />
+                        " />
                     </Col>
                   </Row>
                 </div>
                 <div
                   v-else-if="state.valueType.validator.name === 'STRING'"
-                  class="string"
-                >
+                  class="string">
                   <Row style="margin-top: 10px">
                     <Col :span="24">
                       <Checkbox
@@ -520,8 +519,7 @@ defineExpose<StringValueTypeInstance>({
                         v-model:checked="
                           (state.valueType.validator as StringValueValidator)
                             .allowNull
-                        "
-                      >
+                        ">
                         {{
                           $t(
                             'component.value_type_nput.validator.STRING.allowNull',
@@ -547,8 +545,7 @@ defineExpose<StringValueTypeInstance>({
                         v-model:value="
                           (state.valueType.validator as StringValueValidator)
                             .regularExpression
-                        "
-                      />
+                        " />
                     </Col>
                   </Row>
                   <Row style="margin-top: 10px">
@@ -578,8 +575,7 @@ defineExpose<StringValueTypeInstance>({
                         v-model:value="
                           (state.valueType.validator as StringValueValidator)
                             .minLength
-                        "
-                      />
+                        " />
                     </Col>
                     <Col :span="2">
                       <div class="w-full"></div>
@@ -591,15 +587,13 @@ defineExpose<StringValueTypeInstance>({
                         v-model:value="
                           (state.valueType.validator as StringValueValidator)
                             .maxLength
-                        "
-                      />
+                        " />
                     </Col>
                   </Row>
                 </div>
               </div>
               <div
-                v-else-if="state.valueType.name === 'SelectionStringValueType'"
-              >
+                v-else-if="state.valueType.name === 'SelectionStringValueType'">
                 <Card class="selection">
                   <template #title>
                     <Row>
@@ -609,8 +603,7 @@ defineExpose<StringValueTypeInstance>({
                           v-if="
                             (state.valueType as SelectionStringValueType)
                               .itemSource.items.length <= 0
-                          "
-                        >
+                          ">
                           <span>{{
                             $t(
                               'component.value_type_nput.type.SELECTION.itemsNotBeEmpty',
@@ -643,8 +636,7 @@ defineExpose<StringValueTypeInstance>({
                     :data-source="
                       (state.valueType as SelectionStringValueType).itemSource
                         .items
-                    "
-                  >
+                    ">
                     <template #bodyCell="{ column, record }">
                       <template v-if="column.key === 'displayText'">
                         <span>{{ getDisplayName(record.displayText) }}</span>
@@ -654,8 +646,7 @@ defineExpose<StringValueTypeInstance>({
                           <Button
                             v-if="props.allowEdit"
                             type="link"
-                            @click="() => handleEdit(record)"
-                          >
+                            @click="() => handleEdit(record)">
                             <template #icon>
                               <EditOutlined />
                             </template>
@@ -669,8 +660,7 @@ defineExpose<StringValueTypeInstance>({
                             v-if="props.allowDelete"
                             type="link"
                             @click="() => handleDelete(record)"
-                            danger
-                          >
+                            danger>
                             <template #icon>
                               <DeleteOutlined />
                             </template>
@@ -697,27 +687,22 @@ defineExpose<StringValueTypeInstance>({
         class="form"
         v-bind="state.selection.form"
         :label-col="{ span: 6 }"
-        :wrapper-col="{ span: 18 }"
-      >
+        :wrapper-col="{ span: 18 }">
         <FormItem
           name="displayText"
           required
-          :label="$t('component.value_type_nput.type.SELECTION.displayText')"
-        >
+          :label="$t('component.value_type_nput.type.SELECTION.displayText')">
           <LocalizableInput
             :disabled="props.disabled || state.selection.form.editFlag"
-            v-model:value="state.selection.form.model.displayText"
-          />
+            v-model:value="state.selection.form.model.displayText" />
         </FormItem>
         <FormItem
           name="value"
           required
-          :label="$t('component.value_type_nput.type.SELECTION.value')"
-        >
+          :label="$t('component.value_type_nput.type.SELECTION.value')">
           <Input
             :disabled="props.disabled"
-            v-model:value="state.selection.form.model.value"
-          />
+            v-model:value="state.selection.form.model.value" />
         </FormItem>
       </Form>
     </Modal>

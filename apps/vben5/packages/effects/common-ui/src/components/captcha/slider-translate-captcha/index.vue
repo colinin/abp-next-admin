@@ -35,12 +35,12 @@ const emit = defineEmits<{
 }>();
 
 const PI: number = Math.PI;
-enum CanvasOpr {
-  // eslint-disable-next-line no-unused-vars
-  Clip = 'clip',
-  // eslint-disable-next-line no-unused-vars
-  Fill = 'fill',
-}
+const canvasOpr = {
+  clip: 'clip',
+  fill: 'fill',
+} as const;
+
+type CanvasOpr = (typeof canvasOpr)[keyof typeof canvasOpr];
 
 const modalValue = defineModel<boolean>({ default: false });
 
@@ -189,8 +189,8 @@ function draw(ctx1: CanvasRenderingContext2D, ctx2: CanvasRenderingContext2D) {
     3 * circleRadius,
     canvasHeight - (squareLength + 2 * circleRadius),
   );
-  drawPiece(ctx1, state.pieceX, state.pieceY, CanvasOpr.Fill);
-  drawPiece(ctx2, state.pieceX, state.pieceY, CanvasOpr.Clip);
+  drawPiece(ctx1, state.pieceX, state.pieceY, canvasOpr.fill);
+  drawPiece(ctx2, state.pieceX, state.pieceY, canvasOpr.clip);
 }
 
 // 绘制拼图切块
@@ -233,7 +233,11 @@ function drawPiece(
   ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
   ctx.stroke();
-  opr === CanvasOpr.Clip ? ctx.clip() : ctx.fill();
+  if (opr === canvasOpr.clip) {
+    ctx.clip();
+  } else {
+    ctx.fill();
+  }
   ctx.globalCompositeOperation = 'destination-over';
 }
 
@@ -261,32 +265,27 @@ onMounted(() => {
 <template>
   <div class="relative flex flex-col items-center">
     <div
-      class="border-border relative flex cursor-pointer overflow-hidden border shadow-md"
-    >
+      class="relative flex cursor-pointer overflow-hidden border border-border shadow-md">
       <canvas
         ref="puzzleCanvasRef"
         :width="canvasWidth"
         :height="canvasHeight"
-        @click="resume"
-      ></canvas>
+        @click="resume"></canvas>
       <canvas
         ref="pieceCanvasRef"
         :width="canvasWidth"
         :height="canvasHeight"
         :style="pieceStyle"
         class="absolute"
-        @click="resume"
-      ></canvas>
+        @click="resume"></canvas>
       <div
-        class="h-15 absolute bottom-3 left-0 z-10 block w-full text-center text-xs leading-[30px] text-white"
-      >
+        class="absolute bottom-3 left-0 z-10 block h-15 w-full text-center text-xs leading-[30px] text-white">
         <div
           v-if="state.showTip"
           :class="{
             'bg-success/80': state.isPassing,
             'bg-destructive/80': !state.isPassing,
-          }"
-        >
+          }">
           {{ verifyTip }}
         </div>
         <div v-if="!state.dragging" class="bg-black/30">
@@ -301,8 +300,7 @@ onMounted(() => {
       is-slot
       @end="handleDragEnd"
       @move="handleDragBarMove"
-      @start="handleStart"
-    >
+      @start="handleStart">
       <template v-for="(_, key) in $slots" :key="key" #[key]="slotProps">
         <slot :name="key" v-bind="slotProps"></slot>
       </template>

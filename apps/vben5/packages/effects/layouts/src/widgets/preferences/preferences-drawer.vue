@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SupportedLanguagesType } from '@vben/locales';
+import type { CustomPreferencesRecord } from '@vben/preferences';
 import type {
   BreadcrumbStyleType,
   BuiltinThemeType,
@@ -22,6 +23,7 @@ import {
   clearCache,
   preferences,
   resetPreferences,
+  updateCustomPreferences,
   usePreferences,
 } from '@vben/preferences';
 
@@ -43,6 +45,7 @@ import {
   ColorMode,
   Content,
   Copyright,
+  Custom,
   FontSize,
   Footer,
   General,
@@ -62,6 +65,7 @@ const emit = defineEmits<{ clearPreferencesAndLogout: [] }>();
 const message = globalShareState.getMessage();
 
 const appLocale = defineModel<SupportedLanguagesType>('appLocale');
+const appTimezone = defineModel<string>('appTimezone');
 const appDynamicTitle = defineModel<boolean>('appDynamicTitle');
 const appLayout = defineModel<LayoutType>('appLayout');
 const appColorGrayMode = defineModel<boolean>('appColorGrayMode');
@@ -70,7 +74,9 @@ const appContentCompact = defineModel<ContentCompactType>('appContentCompact');
 const appWatermark = defineModel<boolean>('appWatermark');
 const appWatermarkContent = defineModel<string>('appWatermarkContent');
 const appEnableCheckUpdates = defineModel<boolean>('appEnableCheckUpdates');
-const appEnableCopyPreferences = defineModel<boolean>('appEnableCopyPreferences');
+const appEnableCopyPreferences = defineModel<boolean>(
+  'appEnableCopyPreferences',
+);
 const appEnableStickyPreferencesNavigationBar = defineModel<boolean>(
   'appEnableStickyPreferencesNavigationBar',
 );
@@ -160,6 +166,9 @@ const shortcutKeysGlobalSearch = defineModel<boolean>(
 const shortcutKeysGlobalLogout = defineModel<boolean>(
   'shortcutKeysGlobalLogout',
 );
+const shortcutKeysGlobalEscape = defineModel<boolean>(
+  'shortcutKeysGlobalEscape',
+);
 
 const shortcutKeysGlobalLockScreen = defineModel<boolean>(
   'shortcutKeysGlobalLockScreen',
@@ -173,14 +182,18 @@ const widgetThemeToggle = defineModel<boolean>('widgetThemeToggle');
 const widgetSidebarToggle = defineModel<boolean>('widgetSidebarToggle');
 const widgetLockScreen = defineModel<boolean>('widgetLockScreen');
 const widgetRefresh = defineModel<boolean>('widgetRefresh');
+const widgetTimezone = defineModel<boolean>('widgetTimezone');
 
 const {
+  customPreferences,
+  diffCustomPreference,
   diffPreference,
   isDark,
   isFullContent,
   isHeaderNav,
   isHeaderSidebarNav,
   isMixedNav,
+  preferencesExtension,
   isSideMixedNav,
   isSideMode,
   isSideNav,
@@ -191,8 +204,42 @@ const [Drawer] = useVbenDrawer();
 
 const activeTab = ref('appearance');
 
+const customPreferencesTab = computed(() => {
+  return preferencesExtension.value;
+});
+
+const customTabLabel = computed(() => {
+  return customPreferencesTab.value?.tabLabel
+    ? $t(customPreferencesTab.value.tabLabel)
+    : '';
+});
+
+const customTabTitle = computed(() => {
+  const title =
+    customPreferencesTab.value?.title || customPreferencesTab.value?.tabLabel;
+  return title ? $t(title) : '';
+});
+
+const mergedDiffPreference = computed(() => {
+  const result: Record<string, unknown> = {};
+
+  if (diffPreference.value) {
+    Object.assign(result, diffPreference.value);
+  }
+
+  if (diffCustomPreference.value) {
+    result.custom = diffCustomPreference.value;
+  }
+
+  return Object.keys(result).length > 0 ? result : undefined;
+});
+
+const showCustomTab = computed(() => {
+  return (customPreferencesTab.value?.fields.length ?? 0) > 0;
+});
+
 const tabs = computed((): SegmentedItem[] => {
-  return [
+  const items: SegmentedItem[] = [
     {
       label: $t('preferences.appearance'),
       value: 'appearance',
@@ -210,6 +257,15 @@ const tabs = computed((): SegmentedItem[] => {
       value: 'general',
     },
   ];
+
+  if (showCustomTab.value) {
+    items.push({
+      label: customTabLabel.value,
+      value: 'custom',
+    });
+  }
+
+  return items;
 });
 
 const showBreadcrumbConfig = computed(() => {
@@ -222,7 +278,7 @@ const showBreadcrumbConfig = computed(() => {
 });
 
 async function handleCopy() {
-  await copy(JSON.stringify(diffPreference.value, null, 2));
+  await copy(JSON.stringify(mergedDiffPreference.value, null, 2));
 
   message.copyPreferencesSuccess?.(
     $t('preferences.copyPreferencesSuccessTitle'),
@@ -231,17 +287,21 @@ async function handleCopy() {
 }
 
 async function handleClearCache() {
-  resetPreferences();
-  clearCache();
+  await resetPreferences();
+  await clearCache();
   emit('clearPreferencesAndLogout');
 }
 
 async function handleReset() {
-  if (!diffPreference.value) {
+  if (!mergedDiffPreference.value) {
     return;
   }
-  resetPreferences();
+  await resetPreferences();
   await loadLocaleMessages(preferences.app.locale);
+}
+
+function handleCustomPreferencesUpdate(updates: CustomPreferencesRecord) {
+  updateCustomPreferences(updates);
 }
 </script>
 
@@ -250,20 +310,17 @@ async function handleReset() {
     <Drawer
       :description="$t('preferences.subtitle')"
       :title="$t('preferences.title')"
-      class="!border-0 sm:max-w-sm"
-    >
+      class="border-0! sm:max-w-sm">
       <template #extra>
         <div class="flex items-center">
           <VbenIconButton
-            :disabled="!diffPreference"
+            :disabled="!mergedDiffPreference"
             :tooltip="$t('preferences.resetTip')"
             class="relative"
-            @click="handleReset"
-          >
+            @click="handleReset">
             <span
-              v-if="diffPreference"
-              class="bg-primary absolute right-0.5 top-0.5 h-2 w-2 rounded"
-            ></span>
+              v-if="mergedDiffPreference"
+              class="absolute top-0.5 right-0.5 size-2 rounded-sm bg-primary"></span>
             <RotateCw class="size-4" />
           </VbenIconButton>
           <VbenIconButton
@@ -277,12 +334,10 @@ async function handleReset() {
               () =>
                 (appEnableStickyPreferencesNavigationBar =
                   !appEnableStickyPreferencesNavigationBar)
-            "
-          >
+            ">
             <PinOff
               v-if="appEnableStickyPreferencesNavigationBar"
-              class="size-4"
-            />
+              class="size-4" />
             <Pin v-else class="size-4" />
           </VbenIconButton>
         </div>
@@ -294,8 +349,7 @@ async function handleReset() {
           :tabs="tabs"
           :class="{
             'sticky-tabs-header': appEnableStickyPreferencesNavigationBar,
-          }"
-        >
+          }">
           <template #general>
             <Block :title="$t('preferences.general')">
               <General
@@ -303,9 +357,9 @@ async function handleReset() {
                 v-model:app-enable-check-updates="appEnableCheckUpdates"
                 v-model:app-enable-copy-preferences="appEnableCopyPreferences"
                 v-model:app-locale="appLocale"
+                v-model:app-timezone="appTimezone"
                 v-model:app-watermark="appWatermark"
-                v-model:app-watermark-content="appWatermarkContent"
-              />
+                v-model:app-watermark-content="appWatermarkContent" />
             </Block>
 
             <Block :title="$t('preferences.animation.title')">
@@ -313,8 +367,7 @@ async function handleReset() {
                 v-model:transition-enable="transitionEnable"
                 v-model:transition-loading="transitionLoading"
                 v-model:transition-name="transitionName"
-                v-model:transition-progress="transitionProgress"
-              />
+                v-model:transition-progress="transitionProgress" />
             </Block>
           </template>
           <template #appearance>
@@ -323,15 +376,13 @@ async function handleReset() {
                 v-model="themeMode"
                 v-model:theme-semi-dark-header="themeSemiDarkHeader"
                 v-model:theme-semi-dark-sidebar="themeSemiDarkSidebar"
-                v-model:theme-semi-dark-sidebar-sub="themeSemiDarkSidebarSub"
-              />
+                v-model:theme-semi-dark-sidebar-sub="themeSemiDarkSidebarSub" />
             </Block>
             <Block :title="$t('preferences.theme.builtin.title')">
               <BuiltinTheme
                 v-model="themeBuiltinType"
                 v-model:theme-color-primary="themeColorPrimary"
-                :is-dark="isDark"
-              />
+                :is-dark="isDark" />
             </Block>
             <Block :title="$t('preferences.theme.radius')">
               <Radius v-model="themeRadius" />
@@ -342,8 +393,7 @@ async function handleReset() {
             <Block :title="$t('preferences.other')">
               <ColorMode
                 v-model:app-color-gray-mode="appColorGrayMode"
-                v-model:app-color-weak-mode="appColorWeakMode"
-              />
+                v-model:app-color-weak-mode="appColorWeakMode" />
             </Block>
           </template>
           <template #layout>
@@ -366,8 +416,7 @@ async function handleReset() {
                 v-model:sidebar-collapsed-button="sidebarCollapsedButton"
                 v-model:sidebar-fixed-button="sidebarFixedButton"
                 :current-layout="appLayout"
-                :disabled="!isSideMode"
-              />
+                :disabled="!isSideMode" />
             </Block>
 
             <Block :title="$t('preferences.header.title')">
@@ -375,8 +424,7 @@ async function handleReset() {
                 v-model:header-enable="headerEnable"
                 v-model:header-menu-align="headerMenuAlign"
                 v-model:header-mode="headerMode"
-                :disabled="isFullContent"
-              />
+                :disabled="isFullContent" />
             </Block>
 
             <Block :title="$t('preferences.navigationMenu.title')">
@@ -385,8 +433,7 @@ async function handleReset() {
                 v-model:navigation-split="navigationSplit"
                 v-model:navigation-style-type="navigationStyleType"
                 :disabled="isFullContent"
-                :disabled-navigation-split="!isMixedNav"
-              />
+                :disabled-navigation-split="!isMixedNav" />
             </Block>
 
             <Block :title="$t('preferences.breadcrumb.title')">
@@ -399,8 +446,7 @@ async function handleReset() {
                 :disabled="
                   !showBreadcrumbConfig ||
                   !(isSideNav || isSideMixedNav || isHeaderSidebarNav)
-                "
-              />
+                " />
             </Block>
             <Block :title="$t('preferences.tabbar.title')">
               <Tabbar
@@ -414,8 +460,9 @@ async function handleReset() {
                 v-model:tabbar-style-type="tabbarStyleType"
                 v-model:tabbar-wheelable="tabbarWheelable"
                 v-model:tabbar-max-count="tabbarMaxCount"
-                v-model:tabbar-middle-click-to-close="tabbarMiddleClickToClose"
-              />
+                v-model:tabbar-middle-click-to-close="
+                  tabbarMiddleClickToClose
+                " />
             </Block>
             <Block :title="$t('preferences.widget.title')">
               <Widget
@@ -430,18 +477,16 @@ async function handleReset() {
                 v-model:widget-refresh="widgetRefresh"
                 v-model:widget-sidebar-toggle="widgetSidebarToggle"
                 v-model:widget-theme-toggle="widgetThemeToggle"
-              />
+                v-model:widget-timezone="widgetTimezone" />
             </Block>
             <Block :title="$t('preferences.footer.title')">
               <Footer
                 v-model:footer-enable="footerEnable"
-                v-model:footer-fixed="footerFixed"
-              />
+                v-model:footer-fixed="footerFixed" />
             </Block>
             <Block
               v-if="copyrightSettingShow"
-              :title="$t('preferences.copyright.title')"
-            >
+              :title="$t('preferences.copyright.title')">
               <Copyright
                 v-model:copyright-company-name="copyrightCompanyName"
                 v-model:copyright-company-site-link="copyrightCompanySiteLink"
@@ -449,8 +494,7 @@ async function handleReset() {
                 v-model:copyright-enable="copyrightEnable"
                 v-model:copyright-icp="copyrightIcp"
                 v-model:copyright-icp-link="copyrightIcpLink"
-                :disabled="!footerEnable"
-              />
+                :disabled="!footerEnable" />
             </Block>
           </template>
 
@@ -461,7 +505,15 @@ async function handleReset() {
                 v-model:shortcut-keys-global-search="shortcutKeysGlobalSearch"
                 v-model:shortcut-keys-lock-screen="shortcutKeysGlobalLockScreen"
                 v-model:shortcut-keys-logout="shortcutKeysGlobalLogout"
-              />
+                v-model:shortcut-keys-escape="shortcutKeysGlobalEscape" />
+            </Block>
+          </template>
+          <template #custom>
+            <Block :title="customTabTitle">
+              <Custom
+                :fields="customPreferencesTab?.fields || []"
+                :values="customPreferences"
+                @update="handleCustomPreferencesUpdate" />
             </Block>
           </template>
         </VbenSegmented>
@@ -470,22 +522,20 @@ async function handleReset() {
       <template #footer>
         <VbenButton
           v-if="appEnableCopyPreferences"
-          :disabled="!diffPreference"
+          :disabled="!mergedDiffPreference"
           class="mx-4 w-full"
           size="sm"
           variant="default"
-          @click="handleCopy"
-        >
+          @click="handleCopy">
           <Copy class="mr-2 size-3" />
           {{ $t('preferences.copyPreferences') }}
         </VbenButton>
         <VbenButton
-          :disabled="!diffPreference"
+          :disabled="!mergedDiffPreference"
           class="mr-4 w-full"
           size="sm"
           variant="ghost"
-          @click="handleClearCache"
-        >
+          @click="handleClearCache">
           {{ $t('preferences.clearAndLogout') }}
         </VbenButton>
       </template>
@@ -495,8 +545,6 @@ async function handleReset() {
 
 <style scoped>
 :deep(.sticky-tabs-header [role='tablist']) {
-  position: sticky;
-  top: -12px;
-  z-index: 9999;
+  @apply -top-3 z-9999 sticky;
 }
 </style>

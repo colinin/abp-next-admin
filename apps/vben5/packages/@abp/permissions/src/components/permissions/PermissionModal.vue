@@ -237,7 +237,9 @@ function checkChildrenGrant(current: PermissionTree, isGranted: boolean) {
   if (!isGranted) {
     const childKeys: string[] = [];
     children.forEach((node) => {
-      !isGranted && (node.isGranted = false);
+      if (!isGranted) {
+        node.isGranted = false;
+      }
       childKeys.push(node.name);
     });
     checkedNodeKeys.value = checkedNodeKeys.value.filter(
@@ -272,7 +274,9 @@ function getChildren(permissions: PermissionTree[]): PermissionTree[] {
   const children: PermissionTree[] = [];
   permissions.forEach((permission) => {
     children.push(permission);
-    permission.children && children.push(...getChildren(permission.children));
+    if (permission.children) {
+      children.push(...getChildren(permission.children));
+    }
   });
   return children;
 }
@@ -293,8 +297,7 @@ function onSearchPermissionGrant() {
         <Checkbox
           :disabled="modelState?.readonly"
           @change="onCheckAll"
-          v-bind="getPermissionState"
-        >
+          v-bind="getPermissionState">
           {{ $t('AbpPermissionManagement.SelectAllInAllTabs') }}
         </Checkbox>
         <Button type="primary" @click="onSearchPermissionGrant">
@@ -306,15 +309,13 @@ function onSearchPermissionGrant() {
         <template v-for="permission in permissionTree" :key="permission.name">
           <TabPane
             :tab="getPermissionTab(permission)"
-            :tab-key="permission.name"
-          >
+            :tab-key="permission.name">
             <Card :bordered="false" :title="permission.displayName">
               <div class="flex flex-col">
                 <Checkbox
                   :disabled="modelState?.readonly"
                   v-bind="getPermissionNodeState(permission)"
-                  @change="(e: any) => onCheckNodeAll(e, permission)"
-                >
+                  @change="(e: any) => onCheckNodeAll(e, permission)">
                   {{ $t('AbpPermissionManagement.SelectAllInThisTab') }}
                 </Checkbox>
                 <Divider />
@@ -335,8 +336,7 @@ function onSearchPermissionGrant() {
                       onCheckNode(permission, keys, info)
                   "
                   @expand="onExpandNode"
-                  @select="onSelectNode"
-                />
+                  @select="onSelectNode" />
               </div>
             </Card>
           </TabPane>

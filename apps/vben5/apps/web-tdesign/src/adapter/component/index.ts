@@ -1,6 +1,32 @@
+import type {
+  AutoCompleteProps,
+  ButtonProps,
+  CheckboxGroupProps,
+  CheckboxProps,
+  DatePickerProps,
+  DateRangePickerProps,
+  DividerProps,
+  InputNumberProps,
+  InputProps,
+  RadioGroupProps,
+  RadioProps,
+  SelectProps,
+  SpaceProps,
+  SwitchProps,
+  TextareaProps,
+  TimePickerProps,
+  TreeSelectProps,
+} from 'tdesign-vue-next';
+import type { TdRateProps } from 'tdesign-vue-next/es/rate/type';
+import type { UploadProps } from 'tdesign-vue-next/es/upload/types';
+
 import type { Component } from 'vue';
 
-import type { BaseFormComponentType } from '@vben/common-ui';
+import type {
+  ApiComponentSharedProps,
+  BaseFormComponentType,
+  IconPickerProps,
+} from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
 import { defineAsyncComponent, defineComponent, h, ref } from 'vue';
@@ -63,8 +89,8 @@ const TreeSelect = defineAsyncComponent(
 );
 const Upload = defineAsyncComponent(() => import('tdesign-vue-next/es/upload'));
 
-const withDefaultPlaceholder = <T extends Component>(
-  component: T,
+const withDefaultPlaceholder = (
+  component: Component,
   type: 'input' | 'select',
   componentProps: Recordable<any> = {},
 ) => {
@@ -126,6 +152,35 @@ export type ComponentType =
   | 'Upload'
   | BaseFormComponentType;
 
+/**
+ * 与 {@link ComponentType} 中注册的组件名一一对应，便于 Schema 上 `component` + `componentProps` 联动提示
+ */
+export interface ComponentPropsMap {
+  ApiSelect: ApiComponentSharedProps & SelectProps;
+  ApiTreeSelect: ApiComponentSharedProps & TreeSelectProps;
+  AutoComplete: AutoCompleteProps;
+  Checkbox: CheckboxProps;
+  CheckboxGroup: CheckboxGroupProps;
+  DatePicker: DatePickerProps;
+  DefaultButton: ButtonProps;
+  Divider: DividerProps;
+  IconPicker: IconPickerProps;
+  Input: InputProps;
+  InputNumber: InputNumberProps;
+  PrimaryButton: ButtonProps;
+  Radio: RadioProps;
+  RadioGroup: RadioGroupProps;
+  RangePicker: DateRangePickerProps;
+  Rate: TdRateProps;
+  Select: SelectProps;
+  Space: SpaceProps;
+  Switch: SwitchProps;
+  Textarea: TextareaProps;
+  TimePicker: TimePickerProps;
+  TreeSelect: TreeSelectProps;
+  Upload: UploadProps;
+}
+
 async function initComponentAdapter() {
   const components: Partial<Record<ComponentType, Component>> = {
     // 如果你的组件体积比较大，可以使用异步加载
@@ -165,7 +220,17 @@ async function initComponentAdapter() {
     DatePicker,
     // 自定义默认按钮
     DefaultButton: (props, { attrs, slots }) => {
-      return h(Button, { ...props, attrs, theme: 'default' }, slots);
+      let ghost = false;
+      let variant = props.variant;
+      if (props.variant === 'ghost') {
+        ghost = true;
+        variant = 'base';
+      }
+      return h(
+        Button,
+        { ...props, ghost, variant, attrs, theme: 'default' },
+        slots,
+      );
     },
     Divider,
     IconPicker: withDefaultPlaceholder(IconPicker, 'select', {
@@ -174,7 +239,9 @@ async function initComponentAdapter() {
       modelValueProp: 'value',
     }),
     Input: withDefaultPlaceholder(Input, 'input'),
-    InputNumber: withDefaultPlaceholder(InputNumber, 'input'),
+    InputNumber: withDefaultPlaceholder(InputNumber, 'input', {
+      style: { width: '100%' },
+    }),
     // InputPassword: withDefaultPlaceholder(InputPassword, 'input'),
     // Mentions: withDefaultPlaceholder(Mentions, 'input'),
     // 自定义主要按钮

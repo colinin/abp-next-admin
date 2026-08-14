@@ -105,8 +105,7 @@ async function onInit() {
     <MySetting
       :bind-items="externalLogins"
       @on-bind-init="onInit"
-      @on-confirm="onBindComfirm"
-    />
+      @on-confirm="onBindComfirm" />
     <WechatWorkUserBindModal @on-login="onBindWorkWeixin" />
   </Page>
 </template>

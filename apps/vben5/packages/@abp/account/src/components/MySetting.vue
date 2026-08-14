@@ -196,35 +196,29 @@ onMounted(async () => {
           <Menu
             v-model:selected-keys="selectedMenuKeys"
             :items="getEnabledMenus"
-            mode="inline"
-          />
+            mode="inline" />
         </div>
         <div class="h-[800px] basis-5/6 overflow-y-scroll">
           <BasicSettings
             v-if="selectedMenuKeys[0] === 'basic'"
             :profile="myProfile"
             @submit="onUpdateProfile"
-            @picture-change="onGetProfile"
-          />
+            @picture-change="onGetProfile" />
           <BindSettings
             v-else-if="selectedMenuKeys[0] === 'bind'"
             :items="bindItems"
-            @on-init="emits('onBindInit')"
-          />
+            @on-init="emits('onBindInit')" />
           <SecuritySettings
             v-else-if="selectedMenuKeys[0] === 'security'"
             :user-info="getUserInfo"
             @change-password="onChangePassword"
-            @change-phone-number="onChangePhoneNumber"
-          />
+            @change-phone-number="onChangePhoneNumber" />
           <NoticeSettings v-else-if="selectedMenuKeys[0] === 'notice'" />
           <AuthenticatorSettings
-            v-else-if="selectedMenuKeys[0] === 'authenticator'"
-          />
+            v-else-if="selectedMenuKeys[0] === 'authenticator'" />
           <SessionSettings v-else-if="selectedMenuKeys[0] === 'session'" />
           <PersonalDataSettings
-            v-else-if="selectedMenuKeys[0] === 'personal-data'"
-          />
+            v-else-if="selectedMenuKeys[0] === 'personal-data'" />
           <UserSettings v-else-if="selectedMenuKeys[0] === 'system-settings'" />
         </div>
       </div>

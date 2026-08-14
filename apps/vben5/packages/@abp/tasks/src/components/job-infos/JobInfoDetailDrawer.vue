@@ -125,16 +125,14 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
     <Tabs
       v-if="jobInfo"
       v-model:active-key="activeTabKey"
-      @change="(key) => onTabChange(key.toString())"
-    >
+      @change="(key) => onTabChange(key.toString())">
       <TabPane key="basic" :tab="$t('TaskManagement.BasicInfo')">
         <Descriptions
           :colon="false"
           :column="2"
           bordered
           size="small"
-          :label-style="{ minWidth: '120px' }"
-        >
+          :label-style="{ minWidth: '120px' }">
           <DescriptionsItem :label="$t('TaskManagement.DisplayName:Status')">
             <Tag :color="jobStatusColor[jobInfo.status]">
               {{ jobStatusMap[jobInfo.status] }}
@@ -159,24 +157,20 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
           </DescriptionsItem>
           <DescriptionsItem
             :label="$t('TaskManagement.DisplayName:Description')"
-            :span="2"
-          >
+            :span="2">
             <span>{{ jobInfo.description }}</span>
           </DescriptionsItem>
           <DescriptionsItem
             :label="$t('TaskManagement.DisplayName:Type')"
-            :span="2"
-          >
+            :span="2">
             <span>{{ jobInfo.type }}</span>
           </DescriptionsItem>
           <DescriptionsItem
-            :label="$t('TaskManagement.DisplayName:CreationTime')"
-          >
+            :label="$t('TaskManagement.DisplayName:CreationTime')">
             <span>{{ formatToDateTime(jobInfo.creationTime) }}</span>
           </DescriptionsItem>
           <DescriptionsItem
-            :label="$t('TaskManagement.DisplayName:LockTimeOut')"
-          >
+            :label="$t('TaskManagement.DisplayName:LockTimeOut')">
             <span>{{ jobInfo.lockTimeOut }}</span>
           </DescriptionsItem>
           <DescriptionsItem :label="$t('TaskManagement.DisplayName:BeginTime')">
@@ -194,19 +188,16 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
           </DescriptionsItem>
           <DescriptionsItem
             v-if="jobInfo.jobType === JobType.Period"
-            :label="$t('TaskManagement.DisplayName:Cron')"
-          >
+            :label="$t('TaskManagement.DisplayName:Cron')">
             <span>{{ jobInfo.cron }}</span>
           </DescriptionsItem>
           <DescriptionsItem
             v-else
-            :label="$t('TaskManagement.DisplayName:Interval')"
-          >
+            :label="$t('TaskManagement.DisplayName:Interval')">
             <span>{{ jobInfo.interval }}</span>
           </DescriptionsItem>
           <DescriptionsItem
-            :label="$t('TaskManagement.DisplayName:LastRunTime')"
-          >
+            :label="$t('TaskManagement.DisplayName:LastRunTime')">
             <span>{{
               jobInfo.lastRunTime
                 ? formatToDateTime(jobInfo.lastRunTime)
@@ -214,8 +205,7 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
             }}</span>
           </DescriptionsItem>
           <DescriptionsItem
-            :label="$t('TaskManagement.DisplayName:NextRunTime')"
-          >
+            :label="$t('TaskManagement.DisplayName:NextRunTime')">
             <span>{{
               jobInfo.nextRunTime
                 ? formatToDateTime(jobInfo.nextRunTime)
@@ -223,8 +213,7 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
             }}</span>
           </DescriptionsItem>
           <DescriptionsItem
-            :label="$t('TaskManagement.DisplayName:TriggerCount')"
-          >
+            :label="$t('TaskManagement.DisplayName:TriggerCount')">
             <span>{{ jobInfo.triggerCount }}</span>
           </DescriptionsItem>
           <DescriptionsItem :label="$t('TaskManagement.DisplayName:MaxCount')">
@@ -234,12 +223,11 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
             <span>{{ jobInfo.tryCount }}</span>
           </DescriptionsItem>
           <DescriptionsItem
-            :label="$t('TaskManagement.DisplayName:MaxTryCount')"
-          >
+            :label="$t('TaskManagement.DisplayName:MaxTryCount')">
             <span>{{ jobInfo.maxTryCount }}</span>
           </DescriptionsItem>
           <DescriptionsItem :label="$t('TaskManagement.DisplayName:Result')">
-            <h3 style="word-wrap: break-word; white-space: pre-line">
+            <h3 style="overflow-wrap: break-word; white-space: pre-line">
               {{ jobInfo.result }}
             </h3>
           </DescriptionsItem>
@@ -261,8 +249,7 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
             showSizeChanger: paginationInfo.show,
             onChange: onGetLogs,
             onShowSizeChange: onSizeChange,
-          }"
-        >
+          }">
           <template #renderItem="{ item }">
             <ListItem :key="item.id">
               <template #extra>
@@ -270,8 +257,7 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
                   placement="topLeft"
                   :title="$t('AbpUi.AreYouSure')"
                   :description="$t('AbpUi.ItemWillBeDeletedMessage')"
-                  @confirm="onDeleteLog(item)"
-                >
+                  @confirm="onDeleteLog(item)">
                   <Button block danger type="link">
                     <template #icon>
                       <DeleteOutlined class="inline size-5" />
@@ -284,15 +270,14 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
                   <SuccessIcon
                     v-if="!item.exception"
                     class="size-8"
-                    color="seagreen"
-                  />
+                    color="seagreen" />
                   <FailedIcon v-else class="size-8" color="orangered" />
                 </template>
                 <template #title>
                   <span>{{ jobInfo.name }}</span>
                 </template>
               </ListItemMeta>
-              <h3 style="word-wrap: break-word; white-space: pre-line">
+              <h3 style="overflow-wrap: break-word; white-space: pre-line">
                 {{ item.exception ?? item.message }}
               </h3>
             </ListItem>

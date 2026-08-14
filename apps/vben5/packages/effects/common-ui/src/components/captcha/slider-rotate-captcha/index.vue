@@ -84,12 +84,12 @@ function handleDragBarMove(data: SliderRotateVerifyPassingData) {
   state.dragging = true;
   const { imageSize, maxDegree } = props;
   const { moveX } = data;
-  const denominator = imageSize!;
+  const denominator = imageSize;
   if (denominator === 0) {
     return;
   }
   const currentRotate = Math.ceil(
-    (moveX / denominator) * 1.5 * maxDegree! * unref(getFactorRef),
+    (moveX / denominator) * 1.5 * maxDegree * unref(getFactorRef),
   );
   state.currentRotate = currentRotate;
   setImgRotate(state.randomRotate - currentRotate);
@@ -98,7 +98,7 @@ function handleDragBarMove(data: SliderRotateVerifyPassingData) {
 function handleImgOnLoad() {
   const { maxDegree, minDegree } = props;
   const ranRotate = Math.floor(
-    minDegree! + Math.random() * (maxDegree! - minDegree!),
+    minDegree + Math.random() * (maxDegree - minDegree),
   ); // 生成随机角度
   state.randomRotate = ranRotate;
   setImgRotate(ranRotate);
@@ -167,8 +167,7 @@ defineExpose({
   <div class="relative flex flex-col items-center">
     <div
       :style="getImgWrapStyleRef"
-      class="border-border relative cursor-pointer overflow-hidden rounded-full border shadow-md"
-    >
+      class="relative cursor-pointer overflow-hidden rounded-full border border-border shadow-md">
       <img
         :class="imgCls"
         :src="src"
@@ -176,18 +175,15 @@ defineExpose({
         alt="verify"
         class="w-full rounded-full"
         @click="resume"
-        @load="handleImgOnLoad"
-      />
+        @load="handleImgOnLoad" />
       <div
-        class="absolute bottom-3 left-0 z-10 block h-7 w-full text-center text-xs leading-[30px] text-white"
-      >
+        class="absolute bottom-3 left-0 z-10 block h-7 w-full text-center text-xs leading-[30px] text-white">
         <div
           v-if="state.showTip"
           :class="{
             'bg-success/80': state.isPassing,
             'bg-destructive/80': !state.isPassing,
-          }"
-        >
+          }">
           {{ verifyTip }}
         </div>
         <div v-if="!state.dragging" class="bg-black/30">
@@ -203,8 +199,7 @@ defineExpose({
       is-slot
       @end="handleDragEnd"
       @move="handleDragBarMove"
-      @start="handleStart"
-    >
+      @start="handleStart">
       <template v-for="(_, key) in $slots" :key="key" #[key]="slotProps">
         <slot :name="key" v-bind="slotProps"></slot>
       </template>

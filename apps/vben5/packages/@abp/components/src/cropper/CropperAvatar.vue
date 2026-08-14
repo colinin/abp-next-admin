@@ -85,14 +85,12 @@ defineExpose({ openModal, closeModal });
     <div
       :class="e(`image-wrapper`)"
       :style="getImageWrapperStyle"
-      @click="openModal"
-    >
+      @click="openModal">
       <div :class="e(`image-mask`)" :style="getImageWrapperStyle">
         <UploadIcon
           :width="getIconWidth"
           :style="getImageWrapperStyle"
-          color="#d6d6d6"
-        />
+          color="#d6d6d6" />
       </div>
       <img :src="sourceValue" v-if="sourceValue" alt="avatar" />
     </div>
@@ -100,16 +98,14 @@ defineExpose({ openModal, closeModal });
       :class="e(`upload-btn`)"
       @click="openModal"
       v-if="showBtn"
-      v-bind="btnProps"
-    >
+      v-bind="btnProps">
       {{ btnText ? btnText : t('cropper.selectImage') }}
     </Button>
 
     <Modal
       @upload-success="handleUploadSuccess"
       :upload-api="uploadApi"
-      :src="sourceValue"
-    />
+      :src="sourceValue" />
   </div>
 </template>
 

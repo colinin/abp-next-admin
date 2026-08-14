@@ -179,7 +179,9 @@ function onExpand() {
 }
 
 function handleExpand() {
-  props.expand && onExpand();
+  if (props.expand) {
+    onExpand();
+  }
 }
 </script>
 <template>
@@ -195,8 +197,7 @@ function handleExpand() {
       :disabled="
         !props.tooltip || isExpand || (props.tooltipWhenEllipsis && !isEllipsis)
       "
-      :side="placement"
-    >
+      :side="placement">
       <slot name="tooltip">
         <slot></slot>
       </slot>
@@ -205,7 +206,7 @@ function handleExpand() {
         <div
           ref="ellipsis"
           :class="{
-            '!cursor-pointer': expand,
+            'cursor-pointer!': expand,
             ['block truncate']: line === 1,
             [$style.ellipsisMultiLine]: line > 1,
           }"
@@ -215,8 +216,7 @@ function handleExpand() {
           }"
           class="cursor-text overflow-hidden"
           @click="handleExpand"
-          v-bind="$attrs"
-        >
+          v-bind="$attrs">
           <slot></slot>
         </div>
       </template>

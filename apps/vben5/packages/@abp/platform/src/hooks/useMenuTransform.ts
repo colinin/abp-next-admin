@@ -36,11 +36,15 @@ export function useMenuTransform() {
     const startupMenus = menus.filter((x) => x.startup);
     if (startupMenus.length > 0) {
       userStore.$patch((state) => {
-        state.userInfo && (state.userInfo.homePath = startupMenus[0]?.path);
+        if (state.userInfo) {
+          state.userInfo.homePath = startupMenus[0]?.path;
+        }
       });
     } else {
       userStore.$patch((state) => {
-        state.userInfo && (state.userInfo.homePath = undefined);
+        if (state.userInfo) {
+          state.userInfo.homePath = undefined;
+        }
       });
     }
     const combMenus = menus.map((item) => {

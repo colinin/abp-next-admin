@@ -51,7 +51,9 @@ watch(
 watch(
   () => props.value,
   (v, oldValue) => {
-    v !== oldValue && nextTick(init);
+    if (v !== oldValue) {
+      nextTick(init);
+    }
   },
   {
     immediate: true,

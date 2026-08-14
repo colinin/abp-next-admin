@@ -14,25 +14,25 @@ export interface RequireGlobalFeaturesStateChecker {
 }
 
 export class RequireGlobalFeaturesSimpleStateChecker<
-    TState extends IHasSimpleStateCheckers<TState>,
-  >
+  TState extends IHasSimpleStateCheckers<TState>,
+>
   implements ISimpleStateChecker<TState>, RequireGlobalFeaturesStateChecker
 {
-  _globalFeatureChecker: IGlobalFeatureChecker;
+  globalFeatureChecker: IGlobalFeatureChecker;
   globalFeatureNames: string[];
   name: string = 'G';
   requiresAll: boolean;
   constructor(
-    globalFeatureChecker: IGlobalFeatureChecker,
-    globalFeatureNames: string[],
-    requiresAll: boolean = false,
+    _globalFeatureChecker: IGlobalFeatureChecker,
+    _globalFeatureNames: string[],
+    _requiresAll: boolean = false,
   ) {
-    this._globalFeatureChecker = globalFeatureChecker;
-    this.globalFeatureNames = globalFeatureNames;
-    this.requiresAll = requiresAll;
+    this.globalFeatureChecker = _globalFeatureChecker;
+    this.globalFeatureNames = _globalFeatureNames;
+    this.requiresAll = _requiresAll;
   }
   isEnabled(_context: SimpleStateCheckerContext<TState>): boolean {
-    return this._globalFeatureChecker.isEnabled(
+    return this.globalFeatureChecker.isEnabled(
       this.globalFeatureNames,
       this.requiresAll,
     );

@@ -3,7 +3,7 @@ import type { VxeGridListeners, VxeGridProps } from '#/adapter/vxe-table';
 
 import { Page } from '@vben/common-ui';
 
-import { Button, message } from 'ant-design-vue';
+import { Button, message } from 'antdv-next';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 
@@ -43,7 +43,6 @@ const gridEvents: VxeGridListeners<RowType> = {
   },
 };
 
-// @ts-ignore
 const [Grid, gridApi] = useVbenVxeGrid<RowType>({
   // 放开注释查看表单组件的类型
   // formOptions: {
@@ -87,8 +86,7 @@ function changeLoading() {
 <template>
   <Page
     description="表格组件常用于快速开发数据展示与交互界面，示例数据为静态数据。该组件是对vxe-table进行简单的二次封装，大部分属性与方法与vxe-table保持一致。"
-    title="表格基础示例"
-  >
+    title="表格基础示例">
     <template #extra>
       <DocButton path="/components/common-ui/vben-vxe-table" />
     </template>

@@ -87,7 +87,9 @@ const [Modal, modalApi] = useVbenModal({
   fullscreenButton: false,
   onConfirm: onSubmit,
   async onOpenChange(isOpen) {
-    isOpen && (await onInit());
+    if (isOpen) {
+      await onInit();
+    }
   },
 });
 /** 初始化工作区数据 */
@@ -186,14 +188,12 @@ async function onSubmit() {
       :label-col="{ span: 6 }"
       :wrapper-col="{ span: 18 }"
       :disabled="!isAllowUpdate"
-      scroll-to-first-error
-    >
+      scroll-to-first-error>
       <Tabs>
         <TabPane key="basic" :tab="$t('AIManagement.BasicInfo')" force-render>
           <FormItem
             :label="$t('AIManagement.DisplayName:IsEnabled')"
-            name="isEnabled"
-          >
+            name="isEnabled">
             <Checkbox v-model:checked="formModel.isEnabled">
               {{ $t('AIManagement.DisplayName:IsEnabled') }}
             </Checkbox>
@@ -201,28 +201,23 @@ async function onSubmit() {
           <FormItem
             :label="$t('AIManagement.DisplayName:Name')"
             name="name"
-            required
-          >
+            required>
             <Input v-model:value="formModel.name" />
           </FormItem>
           <FormItem
             :label="$t('AIManagement.DisplayName:DisplayName')"
             name="displayName"
-            required
-          >
+            required>
             <LocalizableInput
               :disabled="!isAllowUpdate"
-              v-model:value="formModel.displayName"
-            />
+              v-model:value="formModel.displayName" />
           </FormItem>
           <FormItem
             :label="$t('AIManagement.DisplayName:Description')"
-            name="description"
-          >
+            name="description">
             <LocalizableInput
               :disabled="!isAllowUpdate"
-              v-model:value="formModel.description"
-            />
+              v-model:value="formModel.description" />
           </FormItem>
           <FormItem :label="$t('AIManagement.DisplayName:Tools')" name="tools">
             <Select
@@ -232,8 +227,7 @@ async function onSubmit() {
               :options="aiToolOptions"
               v-model:value="formModel.tools"
               mode="multiple"
-              @search="onSearchAIToolOptions"
-            >
+              @search="onSearchAIToolOptions">
               <template #option="{ label, description }">
                 {{ label }} ({{ description }})
               </template>
@@ -245,108 +239,90 @@ async function onSubmit() {
             <FormItem
               :label="$t('AIManagement.DisplayName:Provider')"
               name="provider"
-              required
-            >
+              required>
               <Select
                 :options="providerOptions"
                 v-model:value="formModel.provider"
-                @change="onProviderChange"
-              />
+                @change="onProviderChange" />
             </FormItem>
             <FormItem
               :label="$t('AIManagement.DisplayName:ModelName')"
               name="modelName"
-              required
-            >
+              required>
               <AutoComplete
                 v-model:value="formModel.modelName"
-                :options="modelOptions"
-              />
+                :options="modelOptions" />
             </FormItem>
             <FormItem
               :label="$t('AIManagement.DisplayName:ApiBaseUrl')"
-              name="apiBaseUrl"
-            >
+              name="apiBaseUrl">
               <Input v-model:value="formModel.apiBaseUrl" />
             </FormItem>
             <FormItem
               v-if="!formModel.id"
               :label="$t('AIManagement.DisplayName:ApiKey')"
-              name="apiKey"
-            >
+              name="apiKey">
               <Input v-model:value="formModel.apiKey" />
             </FormItem>
             <FormItem
               :label="$t('AIManagement.DisplayName:SystemPrompt')"
-              name="systemPrompt"
-            >
+              name="systemPrompt">
               <Textarea
                 allow-clear
                 v-model:value="formModel.systemPrompt"
                 :auto-size="{ minRows: 10 }"
-                show-count
-              />
+                show-count />
             </FormItem>
             <FormItem
               :label="$t('AIManagement.DisplayName:Instructions')"
-              name="instructions"
-            >
+              name="instructions">
               <Textarea
                 allow-clear
                 v-model:value="formModel.instructions"
                 :auto-size="{ minRows: 10 }"
-                show-count
-              />
+                show-count />
             </FormItem>
             <FormItem
               :label="$t('AIManagement.DisplayName:Temperature')"
               :extra="$t('AIManagement.Description:Temperature')"
-              name="temperature"
-            >
+              name="temperature">
               <InputNumber
                 v-model:value="formModel.temperature"
                 :max="2.0"
                 :min="0.0"
                 :step="0.1"
-                class="w-full"
-              />
+                class="w-full" />
             </FormItem>
             <FormItem
               :label="$t('AIManagement.DisplayName:MaxOutputTokens')"
               :extra="$t('AIManagement.Description:MaxOutputTokens')"
-              name="maxOutputTokens"
-            >
+              name="maxOutputTokens">
               <InputNumber
                 v-model:value="formModel.maxOutputTokens"
                 :min="0"
-                class="w-full"
-              />
+                class="w-full" />
             </FormItem>
             <FormItem
               :label="$t('AIManagement.DisplayName:FrequencyPenalty')"
               :extra="$t('AIManagement.Description:FrequencyPenalty')"
-              name="frequencyPenalty"
-            >
+              name="frequencyPenalty">
               <InputNumber
                 v-model:value="formModel.frequencyPenalty"
                 :max="2.0"
                 :min="-2.0"
                 :step="0.1"
-                class="w-full"
-              />
+                class="w-full" />
             </FormItem>
             <FormItem
               :label="$t('AIManagement.DisplayName:PresencePenalty')"
               :extra="$t('AIManagement.Description:PresencePenalty')"
-              name="presencePenalty"
-            >
+              name="presencePenalty">
               <InputNumber
                 v-model:value="formModel.presencePenalty"
                 :max="2.0"
                 :min="-2.0"
                 :step="0.1"
-                class="w-full"
-              />
+                class="w-full" />
             </FormItem>
           </div>
         </TabPane>

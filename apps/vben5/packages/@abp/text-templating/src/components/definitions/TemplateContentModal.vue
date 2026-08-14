@@ -147,8 +147,7 @@ async function onSubmit(values: Record<string, string>) {
     <Alert v-if="textTemplate?.isInlineLocalized" type="warning">
       <template #message>
         <MarkdownViewer
-          :value="$t('AbpTextTemplating.InlineContentDescription')"
-        />
+          :value="$t('AbpTextTemplating.InlineContentDescription')" />
       </template>
     </Alert>
     <Card :title="getCardTitle">

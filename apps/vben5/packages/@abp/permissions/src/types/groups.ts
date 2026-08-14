@@ -1,11 +1,9 @@
 import type { IHasExtraProperties } from '@abp/core';
 
-interface PermissionGroupDefinitionCreateOrUpdateDto
-  extends IHasExtraProperties {
+interface PermissionGroupDefinitionCreateOrUpdateDto extends IHasExtraProperties {
   displayName: string;
 }
-interface PermissionGroupDefinitionCreateDto
-  extends PermissionGroupDefinitionCreateOrUpdateDto {
+interface PermissionGroupDefinitionCreateDto extends PermissionGroupDefinitionCreateOrUpdateDto {
   name: string;
 }
 interface PermissionGroupDefinitionDto extends IHasExtraProperties {

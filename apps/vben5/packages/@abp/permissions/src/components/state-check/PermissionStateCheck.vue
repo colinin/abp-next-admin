@@ -111,8 +111,7 @@ onMounted(onInit);
       <Checkbox
         v-model:checked="modelValue.requiresAll"
         @blur="emits('blur')"
-        @change="onChange"
-      >
+        @change="onChange">
         {{
           $t('component.simple_state_checking.requirePermissions.requiresAll')
         }}
@@ -125,8 +124,7 @@ onMounted(onInit);
         :field-names="{ label: 'displayName', value: 'name' }"
         :value="getRequiredPermissions"
         @blur="emits('blur')"
-        @change="onPermissionsChange"
-      />
+        @change="onPermissionsChange" />
     </FormItemRest>
   </div>
 </template>

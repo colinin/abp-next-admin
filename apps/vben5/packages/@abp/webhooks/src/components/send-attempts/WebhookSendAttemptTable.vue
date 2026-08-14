@@ -342,8 +342,7 @@ async function onDeleteMany(keys: string[]) {
           v-if="hasAccessByCodes([WebhooksSendAttemptsPermissions.Resend])"
           :icon="h(SendMessageIcon)"
           type="primary"
-          @click="onSendMany(selectedKeys)"
-        >
+          @click="onSendMany(selectedKeys)">
           {{ $t('WebhooksManagement.Resend') }}
         </Button>
         <Button
@@ -351,8 +350,7 @@ async function onDeleteMany(keys: string[]) {
           :icon="h(DeleteOutlined)"
           type="primary"
           danger
-          @click="onDeleteMany(selectedKeys)"
-        >
+          @click="onDeleteMany(selectedKeys)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>
@@ -368,8 +366,7 @@ async function onDeleteMany(keys: string[]) {
           v-if="hasAccessByCodes([WebhooksSendAttemptsPermissions.Default])"
           :icon="h(EditOutlined)"
           type="link"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -377,8 +374,7 @@ async function onDeleteMany(keys: string[]) {
           :icon="h(DeleteOutlined)"
           danger
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown>
@@ -388,8 +384,7 @@ async function onDeleteMany(keys: string[]) {
                 v-if="
                   hasAccessByCodes([WebhooksSendAttemptsPermissions.Resend])
                 "
-                key="send"
-              >
+                key="send">
                 <div class="flex flex-row items-center gap-[4px]">
                   <SendMessageIcon color="green" />
                   {{ $t('WebhooksManagement.Resend') }}

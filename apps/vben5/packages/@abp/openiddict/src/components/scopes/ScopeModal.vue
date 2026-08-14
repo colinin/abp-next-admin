@@ -143,16 +143,14 @@ function onPropDelete(prop: PropertyInfo) {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTab">
         <!-- 基本信息 -->
         <TabPane key="basic" :tab="$t('AbpOpenIddict.BasicInfo')">
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:Name')"
             name="name"
-            required
-          >
+            required>
             <Input v-model:value="formModel.name" autocomplete="off" />
           </FormItem>
         </TabPane>
@@ -160,29 +158,25 @@ function onPropDelete(prop: PropertyInfo) {
         <TabPane key="dispalyName" :tab="$t('AbpOpenIddict.DisplayNames')">
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:DefaultDisplayName')"
-            name="displayName"
-          >
+            name="displayName">
             <Input v-model:value="formModel.displayName" autocomplete="off" />
           </FormItem>
           <DisplayNameTable
             :data="formModel.displayNames"
             @change="onDisplayNameChange"
-            @delete="onDisplayNameDelete"
-          />
+            @delete="onDisplayNameDelete" />
         </TabPane>
         <!-- 描述 -->
         <TabPane key="description" :tab="$t('AbpOpenIddict.Descriptions')">
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:DefaultDescription')"
-            name="description"
-          >
+            name="description">
             <Input v-model:value="formModel.description" autocomplete="off" />
           </FormItem>
           <DisplayNameTable
             :data="formModel.descriptions"
             @change="onDescriptionChange"
-            @delete="onDescriptionDelete"
-          />
+            @delete="onDescriptionDelete" />
         </TabPane>
         <!-- 资源 -->
         <TabPane key="resource" :tab="$t('AbpOpenIddict.Resources')">
@@ -198,16 +192,14 @@ function onPropDelete(prop: PropertyInfo) {
               $t('AbpOpenIddict.Assigned'),
               $t('AbpOpenIddict.Available'),
             ]"
-            class="tree-transfer"
-          />
+            class="tree-transfer" />
         </TabPane>
         <!-- 属性 -->
         <TabPane key="props" :tab="$t('AbpOpenIddict.Propertites')">
           <PropertyTable
             :data="formModel.properties"
             @change="onPropChange"
-            @delete="onPropDelete"
-          />
+            @delete="onPropDelete" />
         </TabPane>
       </Tabs>
     </Form>

@@ -172,8 +172,7 @@ onMounted(onInit);
     <WorkbenchHeader
       :avatar="userStore.userInfo?.avatar || preferences.app.defaultAvatar"
       :text="userStore.userInfo?.realName"
-      :notifier-count="unReadNotifilerCount"
-    >
+      :notifier-count="unReadNotifilerCount">
       <template #title>
         {{ getWelcomeTitle }}
       </template>
@@ -188,13 +187,11 @@ onMounted(onInit);
           :title="$t('workbench.content.favoriteMenu.title')"
           @add="onCreatingFavoriteMenu"
           @delete="onDeleteFavoriteMenu"
-          @click="(menu: FavoriteMenu) => $emit('navTo', menu)"
-        />
+          @click="(menu: FavoriteMenu) => $emit('navTo', menu)" />
         <WorkbenchTodo
           :items="todoList"
           class="mt-5"
-          :title="$t('workbench.content.todo.title')"
-        >
+          :title="$t('workbench.content.todo.title')">
           <template #empty>
             <Empty />
           </template>
@@ -203,8 +200,7 @@ onMounted(onInit);
       <div class="w-full lg:w-2/5">
         <WorkbenchTrends
           :items="unReadNotifilers"
-          :title="$t('workbench.content.trends.title')"
-        >
+          :title="$t('workbench.content.trends.title')">
           <template #empty>
             <Empty />
           </template>

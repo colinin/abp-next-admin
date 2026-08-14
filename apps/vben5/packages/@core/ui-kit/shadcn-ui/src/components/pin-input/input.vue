@@ -3,7 +3,7 @@ import type { PinInputProps } from './types';
 
 import { computed, onBeforeUnmount, ref, useId, watch } from 'vue';
 
-import { PinInput, PinInputGroup, PinInputInput } from '../../ui';
+import { PinInput, PinInputGroup, PinInputSlot } from '../../ui';
 import { VbenButton } from '../button';
 
 defineOptions({
@@ -59,9 +59,9 @@ function handleComplete(e: string[]) {
 async function handleSend(e: Event) {
   try {
     e?.preventDefault();
+    await handleSendCode();
     countdown.value = maxTime;
     startCountdown();
-    await handleSendCode();
   } catch (error) {
     console.error('Failed to send code:', error);
     // Consider emitting an error event or showing a notification
@@ -97,24 +97,21 @@ const pinType = 'text' as const;
     otp
     placeholder="○"
     :type="pinType"
-    @complete="handleComplete"
-  >
+    @complete="handleComplete">
     <div class="relative flex w-full">
       <PinInputGroup class="mr-2">
-        <PinInputInput
+        <PinInputSlot
           v-for="(item, index) in codeLength"
           :key="item"
-          :index="index"
-        />
+          :index="index" />
       </PinInputGroup>
       <VbenButton
         :disabled="disabled"
         :loading="btnLoading"
-        class="flex-grow"
+        class="grow"
         size="lg"
         variant="outline"
-        @click="handleSend"
-      >
+        @click="handleSend">
         {{ btnText }}
       </VbenButton>
     </div>

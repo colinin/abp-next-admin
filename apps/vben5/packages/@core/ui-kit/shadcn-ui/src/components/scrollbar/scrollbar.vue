@@ -94,30 +94,26 @@ function handleScroll(event: Event) {
   <ScrollArea
     :class="[cn(props.class), computedShadowClasses]"
     :on-scroll="handleScroll"
-    class="vben-scrollbar relative"
-  >
+    class="vben-scrollbar relative">
     <div
       v-if="showShadowTop"
       :class="{
         'opacity-100': !isAtTop,
-        'border-t border-border': shadowBorder && !isAtTop,
+        'border-border border-t': shadowBorder && !isAtTop,
       }"
-      class="scrollbar-top-shadow pointer-events-none absolute top-0 z-10 h-12 w-full opacity-0 transition-opacity duration-300 ease-in-out will-change-[opacity]"
-    ></div>
+      class="scrollbar-top-shadow pointer-events-none absolute top-0 z-10 h-12 w-full opacity-0 transition-opacity duration-300 ease-in-out will-change-[opacity]"></div>
     <slot></slot>
     <div
       v-if="showShadowBottom"
       :class="{
         'opacity-100': !isAtTop && !isAtBottom,
-        'border-b border-border': shadowBorder && !isAtTop && !isAtBottom,
+        'border-border border-b': shadowBorder && !isAtTop && !isAtBottom,
       }"
-      class="scrollbar-bottom-shadow pointer-events-none absolute bottom-0 z-10 h-12 w-full opacity-0 transition-opacity duration-300 ease-in-out will-change-[opacity]"
-    ></div>
+      class="scrollbar-bottom-shadow pointer-events-none absolute bottom-0 z-10 h-12 w-full opacity-0 transition-opacity duration-300 ease-in-out will-change-[opacity]"></div>
     <ScrollBar
       v-if="horizontal"
-      :class="scrollBarClass"
-      orientation="horizontal"
-    />
+      :class="cn(scrollBarClass)"
+      orientation="horizontal" />
   </ScrollArea>
 </template>
 

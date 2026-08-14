@@ -3,7 +3,7 @@ import { h } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
-import { Card } from 'ant-design-vue';
+import { Card } from 'antdv-next';
 
 import { useVbenForm } from '#/adapter/form';
 
@@ -94,8 +94,7 @@ const [CustomLayoutForm] = useVbenForm({
   <Page
     content-class="flex flex-col gap-4"
     description="使用tailwind自定义表单项的布局"
-    title="表单自定义布局"
-  >
+    title="表单自定义布局">
     <template #description>
       <div class="text-muted-foreground">
         <p>使用tailwind自定义表单项的布局，使用Divider分割表单。</p>

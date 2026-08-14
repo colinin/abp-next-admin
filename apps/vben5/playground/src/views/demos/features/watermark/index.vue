@@ -2,7 +2,7 @@
 import { Page } from '@vben/common-ui';
 import { useWatermark } from '@vben/hooks';
 
-import { Button, Card } from 'ant-design-vue';
+import { Button, Card } from 'antdv-next';
 
 const { destroyWatermark, updateWatermark, watermark } = useWatermark();
 
@@ -53,8 +53,7 @@ async function createWaterMark() {
         <a
           class="text-primary"
           href="https://zhensherlock.github.io/watermark-js-plus/"
-          target="_blank"
-        >
+          target="_blank">
           watermark-js-plus
         </a>
         开源插件，详细配置可见插件配置。
@@ -66,16 +65,14 @@ async function createWaterMark() {
         :disabled="!!watermark"
         class="mr-2"
         type="primary"
-        @click="recreateWaterMark"
-      >
+        @click="recreateWaterMark">
         创建水印
       </Button>
       <Button
         :disabled="!watermark"
         class="mr-2"
         type="primary"
-        @click="createWaterMark"
-      >
+        @click="createWaterMark">
         更新水印
       </Button>
       <Button :disabled="!watermark" danger @click="destroyWatermark">

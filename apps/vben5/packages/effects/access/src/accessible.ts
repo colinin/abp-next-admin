@@ -25,6 +25,7 @@ async function generateAccessible(
   const { router } = options;
 
   options.routes = cloneDeep(options.routes);
+
   // 生成路由
   const accessibleRoutes = await generateRoutes(mode, options);
 
@@ -101,8 +102,10 @@ async function generateRoutes(
         generateRoutesByFrontend(routes, roles || [], forbiddenComponent),
         generateRoutesByBackend(options),
       ]);
-
-      resultRoutes = [...frontend_resultRoutes, ...backend_resultRoutes];
+      resultRoutes = mergeRoutesByName(
+        backend_resultRoutes,
+        frontend_resultRoutes,
+      );
       break;
     }
   }
@@ -112,7 +115,7 @@ async function generateRoutes(
    * 1. 对未添加redirect的路由添加redirect
    * 2. 将懒加载的组件名称修改为当前路由的名称（如果启用了keep-alive的话）
    */
-  resultRoutes = mapTree(resultRoutes, (route) => {
+  resultRoutes = mapTree(resultRoutes, (route, parent) => {
     // 重新包装component，使用与路由名称相同的name以支持keep-alive的条件缓存。
     if (
       route.meta?.keepAlive &&
@@ -146,11 +149,77 @@ async function generateRoutes(
       return route;
     }
 
-    route.redirect = firstChild.path;
+    if (parent && parent.redirect) {
+      const parentSplit = (parent.redirect as string).split('/');
+      parentSplit.splice(-1, 2, route.path, firstChild.path);
+      const redirectPath = parentSplit.join('/');
+      route.redirect = redirectPath;
+    } else {
+      route.redirect = `${route.path}/${firstChild.path}`;
+    }
     return route;
   });
 
   return resultRoutes;
+}
+
+/**
+ * 根据 name 合并前后端路由
+ * @param baseRoutes 后端路由
+ * @param extraRoutes 前端路由
+ */
+function mergeRoutesByName(
+  baseRoutes: RouteRecordRaw[],
+  extraRoutes: RouteRecordRaw[],
+): RouteRecordRaw[] {
+  const result: RouteRecordRaw[] = [];
+  const routeMap = new Map<string, RouteRecordRaw>();
+
+  for (const route of baseRoutes) {
+    const clone = { ...route } as RouteRecordRaw;
+    result.push(clone);
+    if (clone.name && isString(clone.name)) {
+      routeMap.set(clone.name, clone);
+    }
+  }
+
+  for (const route of extraRoutes) {
+    if (
+      route.name &&
+      isString(route.name) &&
+      routeMap.has(route.name)
+    ) {
+      const existing = routeMap.get(route.name);
+      if (!existing) {
+        continue;
+      }
+      const existingChildren = existing.children ?? [];
+      const routeChildren = route.children ?? [];
+
+      const merged = {
+        ...route,
+        ...existing, // keep backend as base
+        meta: {
+          ...route.meta,
+          ...existing.meta, // backend meta wins on conflicts
+        },
+      } as RouteRecordRaw;
+
+      if (existingChildren.length > 0 || routeChildren.length > 0) {
+        merged.children = mergeRoutesByName(existingChildren, routeChildren);
+      }
+
+      Object.assign(existing, merged);
+    } else {
+      const clone = { ...route } as RouteRecordRaw;
+      result.push(clone);
+      if (clone.name && isString(clone.name)) {
+        routeMap.set(clone.name, clone);
+      }
+    }
+  }
+
+  return result;
 }
 
 export { generateAccessible };

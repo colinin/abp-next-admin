@@ -10,8 +10,8 @@ interface Fn<T = any, R = T> {
   (...arg: T[]): R;
 }
 
-export function useWindowSizeFn<T>(
-  fn: Fn<T>,
+export function useWindowSizeFn(
+  fn: Fn,
   wait = 150,
   options?: WindowSizeOptions,
 ) {

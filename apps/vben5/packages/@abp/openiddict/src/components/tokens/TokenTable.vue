@@ -268,8 +268,7 @@ onMounted(onSearchClient);
         class="w-full"
         show-search
         @change="onChangeClient"
-        @search="onSearchClient"
-      />
+        @search="onSearchClient" />
     </template>
     <template #required="{ row }">
       <div class="flex flex-row justify-center">
@@ -290,8 +289,7 @@ onMounted(onSearchClient);
             :icon="h(EditOutlined)"
             block
             type="link"
-            @click="onUpdate(row)"
-          >
+            @click="onUpdate(row)">
             {{ $t('AbpUi.Edit') }}
           </Button>
         </div>
@@ -302,8 +300,7 @@ onMounted(onSearchClient);
             danger
             type="link"
             v-access:code="[TokensPermissions.Delete]"
-            @click="onDelete(row)"
-          >
+            @click="onDelete(row)">
             {{ $t('AbpUi.Delete') }}
           </Button>
         </div>

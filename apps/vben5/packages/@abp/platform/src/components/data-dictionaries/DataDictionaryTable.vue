@@ -244,8 +244,7 @@ onMounted(onGet);
         v-if="isGranted([DataDictionaryPermissions.Create])"
         :icon="h(PlusOutlined)"
         type="primary"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AppPlatform.Data:AddNew') }}
       </Button>
     </template>
@@ -267,8 +266,7 @@ onMounted(onGet);
           :icon="h(EditOutlined)"
           block
           type="link"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -277,8 +275,7 @@ onMounted(onGet);
           block
           danger
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown
@@ -290,14 +287,12 @@ onMounted(onGet);
               ],
               false,
             )
-          "
-        >
+          ">
           <template #overlay>
             <Menu @click="(info) => onMenuClick(row, info)">
               <MenuItem
                 v-if="isGranted([DataDictionaryPermissions.Create])"
-                key="children"
-              >
+                key="children">
                 <div class="flex flex-row items-center gap-[4px]">
                   <PlusOutlined />
                   {{ $t('AppPlatform.Data:AddChildren') }}
@@ -305,8 +300,7 @@ onMounted(onGet);
               </MenuItem>
               <MenuItem
                 v-if="isGranted([DataDictionaryPermissions.ManageItems])"
-                key="items"
-              >
+                key="items">
                 <div class="flex flex-row items-center gap-[4px]">
                   <ItemsIcon />
                   {{ $t('AppPlatform.Data:Items') }}

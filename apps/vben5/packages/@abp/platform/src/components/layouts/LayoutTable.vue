@@ -206,8 +206,7 @@ function onDelete(row: LayoutDto) {
         v-if="isGranted([LayoutPermissions.Create])"
         :icon="h(PlusOutlined)"
         type="primary"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AppPlatform.Layout:AddNew') }}
       </Button>
     </template>
@@ -223,8 +222,7 @@ function onDelete(row: LayoutDto) {
           :icon="h(EditOutlined)"
           block
           type="link"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -233,8 +231,7 @@ function onDelete(row: LayoutDto) {
           block
           danger
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

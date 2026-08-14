@@ -77,8 +77,7 @@ function onChange(uri: string) {
   <VxeGrid
     :columns="columnsConfig"
     :data="getDataResource"
-    :toolbar-config="toolbarConfig"
-  >
+    :toolbar-config="toolbarConfig">
     <template #toolbar_buttons>
       <h3>{{ title }}</h3>
     </template>
@@ -91,8 +90,7 @@ function onChange(uri: string) {
       <div class="flex flex-row">
         <Popconfirm
           :title="`${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.uri])}`"
-          @confirm="onDelete(row)"
-        >
+          @confirm="onDelete(row)">
           <Button :icon="h(DeleteOutlined)" block danger type="link">
             {{ $t('AbpUi.Delete') }}
           </Button>

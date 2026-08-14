@@ -78,63 +78,53 @@ onMounted(onGet);
         <Menu
           v-model:selected-keys="selectedMenuKeys"
           :items="menuItems"
-          mode="inline"
-        />
+          mode="inline" />
       </div>
       <div class="basis-5/6">
         <Card
           v-if="selectedMenuKeys[0] === 'basic'"
           :bordered="false"
-          :title="$t('abp.account.settings.basicSettings')"
-        >
+          :title="$t('abp.account.settings.basicSettings')">
           <div class="flex flex-row">
             <div class="basis-2/4">
               <Form
                 :label-col="{ span: 6 }"
                 :model="formModel"
-                :wrapper-col="{ span: 18 }"
-              >
+                :wrapper-col="{ span: 18 }">
                 <FormItem
                   :label="$t('AbpAccount.DisplayName:UserName')"
                   name="userName"
-                  required
-                >
+                  required>
                   <Input
                     v-model:value="formModel.userName"
                     :disabled="
                       !isTrue('Abp.Identity.User.IsUserNameUpdateEnabled')
-                    "
-                  />
+                    " />
                 </FormItem>
                 <FormItem
                   :label="$t('AbpAccount.DisplayName:Email')"
                   name="email"
-                  required
-                >
+                  required>
                   <Input
                     v-model:value="formModel.email"
                     :disabled="
                       !isTrue('Abp.Identity.User.IsEmailUpdateEnabled')
                     "
-                    type="email"
-                  />
+                    type="email" />
                 </FormItem>
                 <FormItem
                   :label="$t('AbpAccount.DisplayName:PhoneNumber')"
-                  name="phoneNumber"
-                >
+                  name="phoneNumber">
                   <Input v-model:value="formModel.phoneNumber" />
                 </FormItem>
                 <FormItem
                   :label="$t('AbpAccount.DisplayName:Surname')"
-                  name="surname"
-                >
+                  name="surname">
                   <Input v-model:value="formModel.surname" />
                 </FormItem>
                 <FormItem
                   :label="$t('AbpAccount.DisplayName:Name')"
-                  name="name"
-                >
+                  name="name">
                   <Input v-model:value="formModel.name" />
                 </FormItem>
                 <FormItem>
@@ -142,8 +132,7 @@ onMounted(onGet);
                     <Button
                       style="min-width: 100px"
                       type="primary"
-                      @click="onSubmit"
-                    >
+                      @click="onSubmit">
                       {{ $t('AbpUi.Submit') }}
                     </Button>
                   </div>
@@ -162,8 +151,7 @@ onMounted(onGet);
                   :before-upload="onBeforeUpload"
                   :file-list="[]"
                   name="file"
-                  @change="onAvatarChange"
-                >
+                  @change="onAvatarChange">
                   <Button class="mt-4">
                     <UploadOutlined />
                     {{ $t('abp.account.settings.changeAvatar') }}

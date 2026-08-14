@@ -35,22 +35,24 @@ export interface RequirePermissionsStateChecker<
 }
 
 export class RequirePermissionsSimpleStateChecker<
-    TState extends IHasSimpleStateCheckers<TState>,
-  >
-  implements ISimpleStateChecker<TState>, RequirePermissionsStateChecker<TState>
+  TState extends IHasSimpleStateCheckers<TState>,
+>
+  implements
+    ISimpleStateChecker<TState>,
+    RequirePermissionsStateChecker<TState>
 {
-  _permissionChecker: IPermissionChecker;
   model: RequirePermissionsSimpleBatchStateCheckerModel<TState>;
   name: string = 'P';
+  permissionChecker: IPermissionChecker;
   constructor(
-    permissionChecker: IPermissionChecker,
-    model: RequirePermissionsSimpleBatchStateCheckerModel<TState>,
+    _permissionChecker: IPermissionChecker,
+    _model: RequirePermissionsSimpleBatchStateCheckerModel<TState>,
   ) {
-    this.model = model;
-    this._permissionChecker = permissionChecker;
+    this.model = _model;
+    this.permissionChecker = _permissionChecker;
   }
   isEnabled(_context: SimpleStateCheckerContext<TState>): boolean {
-    return this._permissionChecker.isGranted(
+    return this.permissionChecker.isGranted(
       this.model.permissions,
       this.model.requiresAll,
     );
@@ -67,8 +69,7 @@ export class RequirePermissionsSimpleStateChecker<
 
 export class RequirePermissionsSimpleBatchStateChecker<
   TState extends IHasSimpleStateCheckers<TState>,
-> implements ISimpleBatchStateChecker<TState>
-{
+> implements ISimpleBatchStateChecker<TState> {
   _permissionChecker: IPermissionChecker;
   models: RequirePermissionsSimpleBatchStateCheckerModel<TState>[];
   name: string = 'P';

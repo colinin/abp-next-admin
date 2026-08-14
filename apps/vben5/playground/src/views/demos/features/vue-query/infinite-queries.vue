@@ -2,7 +2,7 @@
 import type { IProducts } from './typing';
 
 import { useInfiniteQuery } from '@tanstack/vue-query';
-import { Button } from 'ant-design-vue';
+import { Button } from 'antdv-next';
 
 const LIMIT = 10;
 const fetchProducts = async ({ pageParam = 0 }): Promise<IProducts> => {
@@ -47,8 +47,7 @@ const {
       </ul>
       <Button
         :disabled="!hasNextPage || isFetchingNextPage"
-        @click="() => fetchNextPage()"
-      >
+        @click="() => fetchNextPage()">
         <span v-if="isFetchingNextPage">加载中...</span>
         <span v-else-if="hasNextPage">加载更多</span>
         <span v-else>没有更多了</span>

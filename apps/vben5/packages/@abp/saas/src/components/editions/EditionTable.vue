@@ -190,8 +190,7 @@ const onMenuClick = (row: EditionDto, info: MenuInfo) => {
         type="primary"
         v-access:code="[EditionsPermissions.Create]"
         @click="onCreate"
-        :icon="h(PlusOutlined)"
-      >
+        :icon="h(PlusOutlined)">
         {{ $t('AbpSaas.NewEdition') }}
       </Button>
     </template>
@@ -202,8 +201,7 @@ const onMenuClick = (row: EditionDto, info: MenuInfo) => {
           block
           type="link"
           v-access:code="[EditionsPermissions.Update]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -212,8 +210,7 @@ const onMenuClick = (row: EditionDto, info: MenuInfo) => {
           danger
           type="link"
           v-access:code="[EditionsPermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown>
@@ -225,15 +222,13 @@ const onMenuClick = (row: EditionDto, info: MenuInfo) => {
                   hasAccessByCodes([AuditLogPermissions.Default])
                 "
                 key="entity-changes"
-                :icon="h(AuditLogIcon)"
-              >
+                :icon="h(AuditLogIcon)">
                 {{ $t('AbpAuditLogging.EntitiesChanged') }}
               </MenuItem>
               <MenuItem
                 v-if="hasAccessByCodes([EditionsPermissions.ManageFeatures])"
                 key="features"
-                :icon="h(FeatureIcon)"
-              >
+                :icon="h(FeatureIcon)">
                 {{ $t('AbpSaas.ManageFeatures') }}
               </MenuItem>
             </Menu>

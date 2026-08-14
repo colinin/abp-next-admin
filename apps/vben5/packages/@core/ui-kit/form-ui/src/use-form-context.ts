@@ -29,9 +29,7 @@ export function useFormInitial(
   const slots = useSlots();
   const initialValues = generateInitialValues();
 
-  const form = useForm({
-    ...(Object.keys(initialValues)?.length ? { initialValues } : {}),
-  });
+  const form = useForm((Object.keys(initialValues)?.length ? { initialValues } : {}));
 
   const delegatedSlots = computed(() => {
     const resultSlots: string[] = [];

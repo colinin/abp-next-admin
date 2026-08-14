@@ -16,7 +16,7 @@ interface Props extends VbenButtonProps {
   tooltip?: string;
   tooltipDelayDuration?: number;
   tooltipSide?: 'bottom' | 'left' | 'right' | 'top';
-  variant?: ButtonVariants;
+  variant?: ButtonVariants['variant'];
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
   onClick: () => {},
   tooltipDelayDuration: 200,
   tooltipSide: 'bottom',
-  variant: 'icon',
+  variant: 'ghost',
 });
 
 const slots = useSlots();
@@ -39,24 +39,21 @@ const showTooltip = computed(() => !!slots.tooltip || !!props.tooltip);
     :disabled="disabled"
     :variant="variant"
     size="icon"
-    @click="onClick"
-  >
+    @click="onClick">
     <slot></slot>
   </VbenButton>
 
   <VbenTooltip
     v-else
     :delay-duration="tooltipDelayDuration"
-    :side="tooltipSide"
-  >
+    :side="tooltipSide">
     <template #trigger>
       <VbenButton
         :class="cn('rounded-full', props.class)"
         :disabled="disabled"
         :variant="variant"
         size="icon"
-        @click="onClick"
-      >
+        @click="onClick">
         <slot></slot>
       </VbenButton>
     </template>

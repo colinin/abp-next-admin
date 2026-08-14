@@ -8,12 +8,12 @@ export interface ValueValidator {
   isValid(value?: any): boolean;
   name: string;
 
-  properties: Dictionary<string, any>;
+  properties: Dictionary<string>;
 }
 
 export class AlwaysValidValueValidator implements ValueValidator {
   name = 'NULL';
-  properties: Dictionary<string, any>;
+  properties: Dictionary<string>;
   constructor() {
     this.properties = {};
   }
@@ -24,7 +24,7 @@ export class AlwaysValidValueValidator implements ValueValidator {
 
 export class BooleanValueValidator implements ValueValidator {
   name = 'BOOLEAN';
-  properties: Dictionary<string, any>;
+  properties: Dictionary<string>;
   constructor() {
     this.properties = {};
   }
@@ -39,7 +39,7 @@ export class BooleanValueValidator implements ValueValidator {
 
 export class NumericValueValidator implements ValueValidator {
   name = 'NUMERIC';
-  properties: Dictionary<string, any>;
+  properties: Dictionary<string>;
   get maxValue(): number | undefined {
     return Number(this.properties.MaxValue);
   }
@@ -80,7 +80,7 @@ export class NumericValueValidator implements ValueValidator {
 
 export class StringValueValidator implements ValueValidator {
   name = 'STRING';
-  properties: Dictionary<string, any>;
+  properties: Dictionary<string>;
   get allowNull(): boolean {
     return (
       String(this.properties.AllowNull ?? 'true')?.toLowerCase() === 'true'

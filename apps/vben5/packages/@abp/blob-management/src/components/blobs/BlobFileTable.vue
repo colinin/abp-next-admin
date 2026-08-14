@@ -257,8 +257,7 @@ watch(
           v-if="props.containerId"
           :icon="h(UploadOutlined)"
           type="primary"
-          @click="onUpload"
-        >
+          @click="onUpload">
           {{ $t('BlobManagement.Blobs:UploadFile') }}
         </Button>
       </template>
@@ -269,8 +268,7 @@ watch(
             :icon="h(EyeOutlined)"
             block
             type="link"
-            @click="onPreview(row)"
-          >
+            @click="onPreview(row)">
             {{ $t('BlobManagement.Blobs:Preview') }}
           </Button>
           <Button
@@ -278,8 +276,7 @@ watch(
             :icon="h(DownloadOutlined)"
             block
             type="link"
-            @click="onDownload(row)"
-          >
+            @click="onDownload(row)">
             {{ $t('BlobManagement.Blobs:Download') }}
           </Button>
           <Button
@@ -287,8 +284,7 @@ watch(
             danger
             block
             type="link"
-            @click="onDelete(row)"
-          >
+            @click="onDelete(row)">
             {{ $t('AbpUi.Delete') }}
           </Button>
         </div>

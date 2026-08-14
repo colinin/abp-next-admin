@@ -74,7 +74,9 @@ const [Modal, modalApi] = useVbenModal({
       try {
         modalApi.setState({ loading: true });
         const { name } = modalApi.getData<NotificationGroupDefinitionDto>();
-        name && (await onGet(name));
+        if (name) {
+          await onGet(name);
+        }
       } finally {
         modalApi.setState({ loading: false });
       }
@@ -97,6 +99,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
+  // oxlint-disable-next-line typescript/no-dynamic-delete
   delete formModel.value.extraProperties[prop.key];
 }
 </script>
@@ -107,50 +110,41 @@ function onPropDelete(prop: PropertyInfo) {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTab">
         <!-- 基本信息 -->
         <TabPane key="basic" :tab="$t('Notifications.BasicInfo')">
           <FormItem
             :label="$t('Notifications.DisplayName:Name')"
             name="name"
-            required
-          >
+            required>
             <Input
               v-model:value="formModel.name"
               :disabled="formModel.isStatic"
-              autocomplete="off"
-            />
+              autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('Notifications.DisplayName:DisplayName')"
             name="displayName"
-            required
-          >
+            required>
             <LocalizableInput
               v-model:value="formModel.displayName"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
           <FormItem
             :label="$t('Notifications.DisplayName:Description')"
-            name="description"
-          >
+            name="description">
             <LocalizableInput
               v-model:value="formModel.description"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
           <FormItem
             name="allowSubscriptionToClients"
             :label="$t('Notifications.DisplayName:AllowSubscriptionToClients')"
-            :extra="$t('Notifications.Description:AllowSubscriptionToClients')"
-          >
+            :extra="$t('Notifications.Description:AllowSubscriptionToClients')">
             <Checkbox
               :disabled="formModel.isStatic"
-              v-model:checked="formModel.allowSubscriptionToClients"
-            >
+              v-model:checked="formModel.allowSubscriptionToClients">
               {{ $t('Notifications.DisplayName:AllowSubscriptionToClients') }}
             </Checkbox>
           </FormItem>
@@ -161,8 +155,7 @@ function onPropDelete(prop: PropertyInfo) {
             :data="formModel.extraProperties"
             :disabled="formModel.isStatic"
             @change="onPropChange"
-            @delete="onPropDelete"
-          />
+            @delete="onPropDelete" />
         </TabPane>
       </Tabs>
     </Form>

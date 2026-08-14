@@ -1,8 +1,13 @@
 import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
 
+import type { ComponentPropsMap, ComponentType } from './component';
+
 import { h } from 'vue';
 
-import { setupVbenVxeTable, useVbenVxeGrid } from '@vben/plugins/vxe-table';
+import {
+  setupVbenVxeTable,
+  useVbenVxeGrid as useGrid,
+} from '@vben/plugins/vxe-table';
 
 import { Button, Image } from 'ant-design-vue';
 
@@ -40,9 +45,10 @@ setupVbenVxeTable({
 
     // 表格配置项可以用 cellRender: { name: 'CellImage' },
     vxeUI.renderer.add('CellImage', {
-      renderTableDefault(_renderOpts, params) {
+      renderTableDefault(renderOpts, params) {
+        const { props } = renderOpts;
         const { column, row } = params;
-        return h(Image, { src: row[column.field] });
+        return h(Image, { src: row[column.field], ...props });
       },
     });
 
@@ -64,6 +70,8 @@ setupVbenVxeTable({
   useVbenForm,
 });
 
-export { useVbenVxeGrid };
+export const useVbenVxeGrid = <T extends Record<string, any>>(
+  ...rest: Parameters<typeof useGrid<T, ComponentType, ComponentPropsMap>>
+) => useGrid<T, ComponentType, ComponentPropsMap>(...rest);
 
 export type * from '@vben/plugins/vxe-table';

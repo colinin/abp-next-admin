@@ -17,15 +17,13 @@ interface WebhookDefinitionCreateOrUpdateDto extends IHasExtraProperties {
   requiredFeatures?: string[];
 }
 
-interface WebhookDefinitionCreateDto
-  extends WebhookDefinitionCreateOrUpdateDto {
+interface WebhookDefinitionCreateDto extends WebhookDefinitionCreateOrUpdateDto {
   groupName: string;
   name: string;
 }
 
 interface WebhookDefinitionUpdateDto
-  extends IHasConcurrencyStamp,
-    WebhookDefinitionCreateOrUpdateDto {}
+  extends IHasConcurrencyStamp, WebhookDefinitionCreateOrUpdateDto {}
 
 interface WebhookDefinitionGetListInput {
   filter?: string;

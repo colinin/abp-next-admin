@@ -181,8 +181,7 @@ onMounted(onInit);
       <Button
         type="primary"
         v-access:code="[BookPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('Demo.NewBook') }}
       </Button>
     </template>
@@ -193,8 +192,7 @@ onMounted(onInit);
           :icon="h(EditOutlined)"
           type="link"
           block
-          @click="onEdit(row)"
-        >
+          @click="onEdit(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -203,8 +201,7 @@ onMounted(onInit);
           type="link"
           danger
           block
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

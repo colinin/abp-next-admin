@@ -177,8 +177,7 @@ function onDelete(row: BlobContainerDto) {
           danger
           block
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

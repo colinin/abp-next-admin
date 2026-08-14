@@ -190,8 +190,7 @@ async function onDelete(row: AIToolDefinitionRecordDto) {
         v-access:code="[AIToolDefinitionPermissions.Create]"
         :icon="h(PlusOutlined)"
         type="primary"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AIManagement.Tools:New') }}
       </Button>
     </template>
@@ -214,8 +213,7 @@ async function onDelete(row: AIToolDefinitionRecordDto) {
           :icon="h(EditOutlined)"
           block
           type="link"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -224,8 +222,7 @@ async function onDelete(row: AIToolDefinitionRecordDto) {
           block
           danger
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
       </div>

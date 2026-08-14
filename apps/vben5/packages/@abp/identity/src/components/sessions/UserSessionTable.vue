@@ -116,8 +116,7 @@ function onDelete(session: IdentitySessionDto) {
         <div class="pl-[5px]">
           <Tag
             v-if="row.sessionId === getCurrentUser?.sessionId"
-            color="#87d068"
-          >
+            color="#87d068">
             {{ $t('AbpIdentity.CurrentSession') }}
           </Tag>
         </div>
@@ -127,8 +126,7 @@ function onDelete(session: IdentitySessionDto) {
       <Descriptions :colon="false" :column="2" bordered size="small">
         <DescriptionItem
           :label="$t('AbpIdentity.DisplayName:SessionId')"
-          :span="2"
-        >
+          :span="2">
           {{ row.sessionId }}
         </DescriptionItem>
         <DescriptionItem :label="$t('AbpIdentity.DisplayName:Device')">
@@ -157,8 +155,7 @@ function onDelete(session: IdentitySessionDto) {
           v-if="getAllowRevokeSession(row)"
           danger
           size="small"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpIdentity.RevokeSession') }}
         </Button>
       </div>

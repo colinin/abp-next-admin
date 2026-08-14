@@ -553,8 +553,7 @@ onMounted(onInit);
           :src="preferences.logo.source"
           draggable="false"
           alt="logo"
-          :style="styles['logo-img']"
-        />
+          :style="styles['logo-img']" />
         <span :style="styles['logo-span']">{{ preferences.app.name }}</span>
       </div>
 
@@ -564,8 +563,7 @@ onMounted(onInit);
         type="link"
         :style="styles.addBtn"
         @click="onAddConversation"
-        :loading="conversationRequestLoading"
-      >
+        :loading="conversationRequestLoading">
         <PlusOutlined />
         {{ $t('AIManagement.Conversations:New') }}
       </Button>
@@ -577,8 +575,7 @@ onMounted(onInit);
         :items="conversationsItems"
         :style="styles.conversations"
         :active-key="activeConversation?.id"
-        @active-change="onConversationClick"
-      />
+        @active-change="onConversationClick" />
     </div>
 
     <div :style="styles.chat">
@@ -587,8 +584,7 @@ onMounted(onInit);
         ref="bubbleRef"
         :items="bubbleItems"
         :roles="bubbleRoles"
-        :style="styles.messages"
-      />
+        :style="styles.messages" />
 
       <!-- 🌟 输入框 -->
       <Sender
@@ -601,8 +597,7 @@ onMounted(onInit);
         :auto-size="{ minRows: 3 }"
         :placeholder="$t('AIManagement.ChatSendMessage')"
         @submit="onSubmit"
-        @change="(value) => (content = value)"
-      >
+        @change="(value) => (content = value)">
         <!-- <template #prefix>
           <Badge :dot="attachedFiles.length > 0 && !headerOpen">
             <Button type="text" @click="() => (headerOpen = !headerOpen)">

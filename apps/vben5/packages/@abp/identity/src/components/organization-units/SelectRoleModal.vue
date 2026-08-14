@@ -62,7 +62,9 @@ const [Modal, modalApi] = useVbenModal({
     emits('confirm', toValue(selectedRoles));
   },
   onOpenChange: async (isOpen: boolean) => {
-    isOpen && nextTick(onRefresh);
+    if (isOpen) {
+      nextTick(onRefresh);
+    }
   },
   title: $t('AbpIdentity.Roles'),
 });

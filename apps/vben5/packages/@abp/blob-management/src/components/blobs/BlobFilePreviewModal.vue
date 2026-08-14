@@ -215,7 +215,7 @@ async function processFileContent(content: Blob) {
       }
     } catch (error) {
       console.error('Read text error:', error);
-      throw new Error('Failed to read text file');
+      throw new Error('Failed to read text file', { cause: error });
     }
   }
 }
@@ -259,8 +259,7 @@ watch(blobData, (newVal, oldVal) => {
         <!-- 不支持预览 -->
         <Empty
           v-if="!isPreview"
-          :description="$t('BlobManagement.BlobCanNotPreviewMessage')"
-        >
+          :description="$t('BlobManagement.BlobCanNotPreviewMessage')">
           <template #image>
             <span class="text-6xl">🔍</span>
           </template>
@@ -276,16 +275,14 @@ watch(blobData, (newVal, oldVal) => {
           <VueOfficeExcel
             :key="excelComponentKey"
             :src="blobData"
-            @error="onError"
-          />
+            @error="onError" />
         </div>
 
         <!-- PDF预览 - 不做任何处理，保持原样 -->
         <VueOfficePdf
           v-else-if="blobType === 'pdf'"
           :src="blobData"
-          @error="onError"
-        />
+          @error="onError" />
 
         <!-- PPT预览 -->
         <div v-else-if="blobType === 'ppt'" class="office-preview-wrapper">
@@ -297,15 +294,13 @@ watch(blobData, (newVal, oldVal) => {
           <Image
             :src="blobData"
             :alt="blob?.name"
-            class="max-h-[80vh] max-w-full object-contain"
-          />
+            class="max-h-[80vh] max-w-full object-contain" />
         </div>
 
         <!-- 文本预览 -->
         <div v-else-if="blobType === 'text'" class="text-preview">
           <div
-            class="whitespace-pre-wrap rounded bg-gray-50 p-4 font-mono text-sm dark:bg-gray-800"
-          >
+            class="whitespace-pre-wrap rounded bg-gray-50 p-4 font-mono text-sm dark:bg-gray-800">
             {{ blobText }}
           </div>
         </div>

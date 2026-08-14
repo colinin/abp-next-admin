@@ -118,23 +118,20 @@ function onUpdate(row: IdentityClaimDto) {
               block
               type="link"
               v-access:code="[updatePolicy]"
-              @click="onUpdate(row)"
-            >
+              @click="onUpdate(row)">
               {{ $t('AbpUi.Edit') }}
             </Button>
           </div>
           <div class="basis-1/2">
             <Popconfirm
               :title="$t('AbpIdentity.WillDeleteClaim', [row.claimType])"
-              @confirm="onDelete(row)"
-            >
+              @confirm="onDelete(row)">
               <Button
                 :icon="h(DeleteOutlined)"
                 block
                 danger
                 type="link"
-                v-access:code="[deletePolicy]"
-              >
+                v-access:code="[deletePolicy]">
                 {{ $t('AbpUi.Delete') }}
               </Button>
             </Popconfirm>
@@ -149,8 +146,7 @@ function onUpdate(row: IdentityClaimDto) {
       :delete-policy="deletePolicy"
       :update-api="updateApi"
       :update-policy="updatePolicy"
-      @change="() => query()"
-    />
+      @change="() => query()" />
   </div>
 </template>
 

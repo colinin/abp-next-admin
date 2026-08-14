@@ -233,8 +233,7 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
         type="primary"
         v-access:code="[TenantsPermissions.Create]"
         @click="onCreate"
-        :icon="h(PlusOutlined)"
-      >
+        :icon="h(PlusOutlined)">
         {{ $t('AbpSaas.NewTenant') }}
       </Button>
     </template>
@@ -251,8 +250,7 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
           block
           type="link"
           v-access:code="[TenantsPermissions.Update]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -261,8 +259,7 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
           danger
           type="link"
           v-access:code="[TenantsPermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown>
@@ -273,23 +270,20 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
                   hasAccessByCodes([TenantsPermissions.ManageConnectionStrings])
                 "
                 key="connection-strings"
-                :icon="h(ConnectionIcon)"
-              >
+                :icon="h(ConnectionIcon)">
                 {{ $t('AbpSaas.ConnectionStrings') }}
               </MenuItem>
               <MenuItem
                 v-if="hasAccessByCodes([TenantsPermissions.ManageFeatures])"
                 key="features"
-                :icon="h(FeatureIcon)"
-              >
+                :icon="h(FeatureIcon)">
                 {{ $t('AbpSaas.ManageFeatures') }}
               </MenuItem>
               <MenuDivider />
               <MenuItem
                 v-if="hasAccessByCodes([TenantsPermissions.Impersonation])"
                 key="impersonation"
-                :icon="h(LoginOutlined)"
-              >
+                :icon="h(LoginOutlined)">
                 {{ $t('AbpSaas.ImpersonationTenant') }}
               </MenuItem>
               <MenuDivider />
@@ -299,8 +293,7 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
                   hasAccessByCodes([AuditLogPermissions.Default])
                 "
                 key="entity-changes"
-                :icon="h(AuditLogIcon)"
-              >
+                :icon="h(AuditLogIcon)">
                 {{ $t('AbpAuditLogging.EntitiesChanged') }}
               </MenuItem>
             </Menu>
@@ -312,8 +305,7 @@ const onMenuClick = (row: TenantDto, info: MenuInfo) => {
   </Grid>
   <TenantModal
     :data-base-options="dataBaseOptions"
-    @change="() => gridApi.query()"
-  />
+    @change="() => gridApi.query()" />
   <TenantConnectionStringsModal :data-base-options="dataBaseOptions" />
   <TenantFeatureModal />
   <TenantChangeDrawer />

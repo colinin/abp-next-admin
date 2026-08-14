@@ -136,16 +136,15 @@ function croppered() {
     }
     const fileReader: FileReader = new FileReader();
     fileReader.readAsDataURL(blob);
-    fileReader.onloadend = (e) => {
+    fileReader.addEventListener('loadend', (e) => {
       emits('cropend', {
         imgBase64: e.target?.result ?? '',
         imgInfo,
       });
-    };
-    // eslint-disable-next-line unicorn/prefer-add-event-listener
-    fileReader.onerror = () => {
+    });
+    fileReader.addEventListener('error', () => {
       emits('cropendError');
-    };
+    });
   }, 'image/png');
 }
 
@@ -182,8 +181,7 @@ function getRoundedCanvas() {
       :src="src"
       :alt="alt"
       :crossorigin="crossorigin"
-      :style="getImageStyle"
-    />
+      :style="getImageStyle" />
   </div>
 </template>
 <style scoped lang="scss">

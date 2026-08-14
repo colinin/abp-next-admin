@@ -5,7 +5,7 @@ import { computed } from 'vue';
 
 import { ProfilePasswordSetting, z } from '@vben/common-ui';
 
-import { message } from 'ant-design-vue';
+import { message } from 'antdv-next';
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
@@ -58,6 +58,5 @@ function handleSubmit() {
   <ProfilePasswordSetting
     class="w-1/3"
     :form-schema="formSchema"
-    @submit="handleSubmit"
-  />
+    @submit="handleSubmit" />
 </template>

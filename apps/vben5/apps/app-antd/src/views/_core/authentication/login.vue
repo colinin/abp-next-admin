@@ -162,8 +162,7 @@ onMounted(onInit);
       :form-schema="formSchema"
       :loading="authStore.loginLoading"
       :show-register="isTrue('Abp.Account.IsSelfRegistrationEnabled')"
-      @submit="onLogin"
-    >
+      @submit="onLogin">
       <!-- 第三方登录 -->
       <template #third-party-login>
         <ThirdPartyLogin />

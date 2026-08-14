@@ -115,7 +115,9 @@ const [Modal, modalApi] = useVbenModal({
         const { groupName, name } =
           modalApi.getData<NotificationDefinitionDto>();
         await onInit(groupName);
-        name && (await onGet(name));
+        if (name) {
+          await onGet(name);
+        }
       } finally {
         modalApi.setState({ loading: false });
       }
@@ -149,8 +151,8 @@ async function onInit(groupName?: string) {
       displayName: Lr(displayName.resourceName, displayName.name),
     };
   });
-  if (getGroupsRes.items.length === 1) {
-    formModel.value.groupName = getGroupsRes.items[0]!.name;
+  if (getGroupsRes.items.length === 1 && getGroupsRes.items[0]) {
+    formModel.value.groupName = getGroupsRes.items[0].name;
   }
 }
 function onPropChange(prop: PropertyInfo) {
@@ -159,6 +161,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
+  // oxlint-disable-next-line typescript/no-dynamic-delete
   delete formModel.value.extraProperties[prop.key];
 }
 </script>
@@ -169,129 +172,108 @@ function onPropDelete(prop: PropertyInfo) {
       ref="form"
       :label-col="{ span: 6 }"
       :model="formModel"
-      :wrapper-col="{ span: 18 }"
-    >
+      :wrapper-col="{ span: 18 }">
       <Tabs v-model:active-key="activeTab">
         <!-- 基本信息 -->
         <TabPane key="basic" :tab="$t('Notifications.BasicInfo')">
           <FormItem
             name="groupName"
             :label="$t('Notifications.DisplayName:GroupName')"
-            required
-          >
+            required>
             <Select
               :disabled="formModel.isStatic"
               :allow-clear="true"
               v-model:value="formModel.groupName"
               :options="notificationGroups"
-              :field-names="{ label: 'displayName', value: 'name' }"
-            />
+              :field-names="{ label: 'displayName', value: 'name' }" />
           </FormItem>
           <FormItem
             :label="$t('Notifications.DisplayName:Name')"
             name="name"
-            required
-          >
+            required>
             <Input
               v-model:value="formModel.name"
               :disabled="formModel.isStatic"
-              autocomplete="off"
-            />
+              autocomplete="off" />
           </FormItem>
           <FormItem
             :label="$t('Notifications.DisplayName:DisplayName')"
             name="displayName"
-            required
-          >
+            required>
             <LocalizableInput
               v-model:value="formModel.displayName"
-              :disabled="formModel.isStatic"
-            />
+              :disabled="formModel.isStatic" />
           </FormItem>
           <FormItem
             name="description"
-            :label="$t('Notifications.DisplayName:Description')"
-          >
+            :label="$t('Notifications.DisplayName:Description')">
             <LocalizableInput
               :disabled="formModel.isStatic"
               :allow-clear="true"
-              v-model:value="formModel.description"
-            />
+              v-model:value="formModel.description" />
           </FormItem>
           <FormItem
             name="allowSubscriptionToClients"
             :label="$t('Notifications.DisplayName:AllowSubscriptionToClients')"
-            :extra="$t('Notifications.Description:AllowSubscriptionToClients')"
-          >
+            :extra="$t('Notifications.Description:AllowSubscriptionToClients')">
             <Checkbox
               :disabled="formModel.isStatic"
-              v-model:checked="formModel.allowSubscriptionToClients"
-            >
+              v-model:checked="formModel.allowSubscriptionToClients">
               {{ $t('Notifications.DisplayName:AllowSubscriptionToClients') }}
             </Checkbox>
           </FormItem>
           <FormItem
             name="notificationType"
             :label="$t('Notifications.DisplayName:NotificationType')"
-            :extra="$t('Notifications.Description:NotificationType')"
-          >
+            :extra="$t('Notifications.Description:NotificationType')">
             <Select
               :disabled="formModel.isStatic"
               :allow-clear="true"
               v-model:value="formModel.notificationType"
-              :options="notificationTypeOptions"
-            />
+              :options="notificationTypeOptions" />
           </FormItem>
           <FormItem
             name="notificationLifetime"
             :label="$t('Notifications.DisplayName:NotificationLifetime')"
-            :extra="$t('Notifications.Description:NotificationLifetime')"
-          >
+            :extra="$t('Notifications.Description:NotificationLifetime')">
             <Select
               :disabled="formModel.isStatic"
               :allow-clear="true"
               v-model:value="formModel.notificationLifetime"
-              :options="notificationLifetimeOptions"
-            />
+              :options="notificationLifetimeOptions" />
           </FormItem>
           <FormItem
             name="contentType"
             :label="$t('Notifications.DisplayName:ContentType')"
-            :extra="$t('Notifications.Description:ContentType')"
-          >
+            :extra="$t('Notifications.Description:ContentType')">
             <Select
               :disabled="formModel.isStatic"
               :allow-clear="true"
               v-model:value="formModel.contentType"
-              :options="notificationContentTypeOptions"
-            />
+              :options="notificationContentTypeOptions" />
           </FormItem>
           <FormItem
             name="providers"
             :label="$t('Notifications.DisplayName:Providers')"
-            :extra="$t('Notifications.Description:Providers')"
-          >
+            :extra="$t('Notifications.Description:Providers')">
             <Select
               :disabled="formModel.isStatic"
               :allow-clear="true"
               mode="multiple"
               v-model:value="formModel.providers"
               :options="assignableProviders"
-              :field-names="{ label: 'name', value: 'name' }"
-            />
+              :field-names="{ label: 'name', value: 'name' }" />
           </FormItem>
           <FormItem
             name="template"
             :label="$t('Notifications.DisplayName:Template')"
-            :extra="$t('Notifications.Description:Template')"
-          >
+            :extra="$t('Notifications.Description:Template')">
             <Select
               :disabled="formModel.isStatic"
               :allow-clear="true"
               v-model:value="formModel.template"
               :options="assignableTemplates"
-              :field-names="{ label: 'name', value: 'name' }"
-            />
+              :field-names="{ label: 'name', value: 'name' }" />
           </FormItem>
         </TabPane>
         <!-- 属性 -->
@@ -300,8 +282,7 @@ function onPropDelete(prop: PropertyInfo) {
             :data="formModel.extraProperties"
             :disabled="formModel.isStatic"
             @change="onPropChange"
-            @delete="onPropDelete"
-          />
+            @delete="onPropDelete" />
         </TabPane>
       </Tabs>
     </Form>

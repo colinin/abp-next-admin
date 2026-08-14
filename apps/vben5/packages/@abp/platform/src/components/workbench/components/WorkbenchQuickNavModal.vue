@@ -120,8 +120,7 @@ async function onSubmit(values: Record<string, any>) {
           tree-icon
           v-bind="slotProps"
           :field-names="{ label: 'displayName', value: 'id' }"
-          :tree-data="availableMenus"
-        >
+          :tree-data="availableMenus">
           <template #title="item">
             <div class="flex flex-row items-center gap-1">
               <IconifyIcon v-if="item.meta?.icon" :icon="item.meta.icon" />

@@ -36,14 +36,13 @@ export const useAbpStore = defineStore(
             // The field {0} is invalid. --> The field {0} is invalid_
             let localeKey = key.replaceAll('.', '_');
             // The field {0} is invalid. --> The field {0} is invalid
-            localeKey.endsWith('_') &&
-              (localeKey = localeKey.slice(
-                0,
-                Math.max(0, localeKey.length - 1),
-              ));
+            if (localeKey.endsWith('_')) {
+              localeKey = localeKey.slice(0, Math.max(0, localeKey.length - 1));
+            }
             // _The field {0} is invalid --> The field {0} is invalid
-            localeKey.startsWith('_') &&
-              (localeKey = localeKey.slice(0, Math.max(1, localeKey.length)));
+            if (localeKey.startsWith('_')) {
+              localeKey = localeKey.slice(0, Math.max(1, localeKey.length));
+            }
             resourceLocales[localeKey] = resourcesByName.texts[key];
           });
           abpLocales[resource] = resourceLocales;

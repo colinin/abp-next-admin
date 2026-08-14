@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 import { Page } from '@vben/common-ui';
 import { useTabs } from '@vben/hooks';
 
-import { Button, Card, Input } from 'ant-design-vue';
+import { Button, Card, Input } from 'antdv-next';
 
 const router = useRouter();
 const newTabTitle = ref('');
@@ -80,8 +80,7 @@ function reset() {
         <Input
           v-model:value="newTabTitle"
           class="w-40"
-          placeholder="请输入新标题"
-        />
+          placeholder="请输入新标题" />
         <Button type="primary" @click="() => setTabTitle(newTabTitle)">
           修改
         </Button>

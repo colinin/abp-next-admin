@@ -1,6 +1,6 @@
 {
   "name": "@vben/common-ui",
-  "version": "5.6.0",
+  "version": "5.7.0",
   "homepage": "https://github.com/vbenjs/vue-vben-admin",
   "bugs": "https://github.com/vbenjs/vue-vben-admin/issues",
   "repository": {
@@ -28,6 +28,7 @@
     }
   },
   "dependencies": {
+    "@vben-core/design": "workspace:*",
     "@vben-core/form-ui": "workspace:*",
     "@vben-core/popup-ui": "workspace:*",
     "@vben-core/preferences": "workspace:*",
@@ -44,11 +45,13 @@
     "qrcode": "catalog:",
     "tippy.js": "catalog:",
     "vue": "catalog:",
-    "vue-json-viewer": "catalog:",
+    "vue-json-pretty": "catalog:",
     "vue-router": "catalog:",
     "vue-tippy": "catalog:"
   },
   "devDependencies": {
-    "@types/qrcode": "catalog:"
+    "@types/json-bigint": "catalog:",
+    "@types/qrcode": "catalog:",
+    "@vue/test-utils": "catalog:"
   }
 }

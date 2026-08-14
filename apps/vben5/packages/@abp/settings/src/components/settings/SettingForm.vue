@@ -106,7 +106,9 @@ function onValueChange(setting: SettingDetail) {
       value: String(setting.value),
     });
   } else {
-    settingsUpdateInput.value.settings[index]!.value = String(setting.value);
+    if (settingsUpdateInput.value.settings[index]) {
+      settingsUpdateInput.value.settings[index].value = String(setting.value);
+    }
   }
 }
 
@@ -133,29 +135,25 @@ onMounted(onGet);
           class="w-[100px]"
           post-icon="ant-design:setting-outlined"
           type="primary"
-          @click="onSubmit"
-        >
+          @click="onSubmit">
           {{ $t('AbpUi.Submit') }}
         </Button>
       </div>
     </template>
     <Form
       v-if="isEnabled(SettingManagementEnable)"
-      :label-col="{ span: 5 }"
-      :wrapper-col="{ span: 15 }"
-    >
+      :label-col="{ span: 6 }"
+      :wrapper-col="{ span: 18 }">
       <Tabs tab-position="left" type="card" v-model="activeTab">
         <TabPane
           v-for="(group, index) in settingGroups"
           :key="index"
-          :tab="group.displayName"
-        >
+          :tab="group.displayName">
           <Collapse :default-active-key="getExpandedCollapseKeys(group)">
             <CollapsePanel
               v-for="setting in group.settings"
               :key="setting.displayName"
-              :header="setting.displayName"
-            >
+              :header="setting.displayName">
               <template v-for="detail in setting.details" :key="detail.name">
                 <slot
                   v-if="detail.slot"
@@ -165,27 +163,23 @@ onMounted(onGet);
                       : onValueChange
                   "
                   :detail="detail"
-                  :name="detail.slot"
-                ></slot>
+                  :name="detail.slot"></slot>
                 <FormItem
                   v-else
                   :extra="detail.description"
-                  :label="detail.displayName"
-                >
+                  :label="detail.displayName">
                   <template v-if="detail.valueType === ValueType.String">
                     <InputPassword
                       v-if="detail.isEncrypted"
                       v-model:value="detail.value"
                       :placeholder="detail.description"
-                      @change="onValueChange(detail)"
-                    />
+                      @change="onValueChange(detail)" />
                     <Input
                       v-else
                       v-model:value="detail.value"
                       :placeholder="detail.description"
                       type="text"
-                      @change="onValueChange(detail)"
-                    />
+                      @change="onValueChange(detail)" />
                   </template>
                   <InputNumber
                     v-else-if="
@@ -195,8 +189,7 @@ onMounted(onGet);
                     v-model:value="detail.value"
                     :placeholder="detail.description"
                     class="w-full"
-                    @change="onValueChange(detail)"
-                  />
+                    @change="onValueChange(detail)" />
                   <DatePicker
                     v-else-if="detail.valueType === ValueType.Date"
                     :placeholder="detail.description"
@@ -204,8 +197,7 @@ onMounted(onGet);
                       detail.value ? dayjs(detail.value, 'YYYY-MM-DD') : ''
                     "
                     style="width: 100%"
-                    @change="onDateChange($event, detail)"
-                  />
+                    @change="onDateChange($event, detail)" />
                   <Select
                     v-if="detail.valueType === ValueType.Option"
                     v-model:value="detail.value"
@@ -213,8 +205,7 @@ onMounted(onGet);
                     :field-names="{ label: 'name', value: 'value' }"
                     :options="detail.options"
                     show-search
-                    @change="onValueChange(detail)"
-                  />
+                    @change="onValueChange(detail)" />
                   <!-- <SelectOption
                       v-for="option in detail.options"
                       :key="option.value"
@@ -226,8 +217,7 @@ onMounted(onGet);
                   <Checkbox
                     v-if="detail.valueType === ValueType.Boolean"
                     :checked="detail.value?.toLowerCase() === 'true'"
-                    @change="onCheckChange(detail)"
-                  >
+                    @change="onCheckChange(detail)">
                     {{ detail.displayName }}
                   </Checkbox>
                 </FormItem>
@@ -238,14 +228,14 @@ onMounted(onGet);
       </Tabs>
     </Form>
     <Empty
+      v-else
       :description="
         $t('AbpFeature.Volo_Feature:010001', {
           FeatureName: $t(
             'AbpSettingManagement.Feature:SettingManagementEnable',
           ),
         })
-      "
-    />
+      " />
   </Card>
 </template>
 

@@ -48,7 +48,7 @@ interface RuleCreator {
   /** 获取一个错误枚举验证消息 */
   mapEnumValidMessage(
     enumName: string,
-    args?: any[] | Record<string, string> | undefined,
+    args?: any[] | Record<string, string>  ,
   ): string;
 }
 

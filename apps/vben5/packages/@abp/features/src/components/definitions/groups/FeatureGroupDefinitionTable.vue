@@ -214,8 +214,7 @@ onMounted(onGet);
         :icon="h(PlusOutlined)"
         type="primary"
         v-access:code="[GroupDefinitionsPermissions.Create]"
-        @click="onCreate"
-      >
+        @click="onCreate">
         {{ $t('AbpFeatureManagement.GroupDefinitions:AddNew') }}
       </Button>
     </template>
@@ -226,8 +225,7 @@ onMounted(onGet);
           block
           type="link"
           v-access:code="[GroupDefinitionsPermissions.Update]"
-          @click="onUpdate(row)"
-        >
+          @click="onUpdate(row)">
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
@@ -237,8 +235,7 @@ onMounted(onGet);
           danger
           type="link"
           v-access:code="[GroupDefinitionsPermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown v-if="!row.isStatic">
@@ -247,8 +244,7 @@ onMounted(onGet);
               <MenuItem
                 v-if="hasAccessByCodes([FeatureDefinitionsPermissions.Create])"
                 key="features"
-                :icon="h(FeaturesOutlined)"
-              >
+                :icon="h(FeaturesOutlined)">
                 {{ $t('AbpFeatureManagement.GroupDefinitions:AddNew') }}
               </MenuItem>
             </Menu>

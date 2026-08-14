@@ -108,13 +108,17 @@ function handleMakeAll() {
 }
 
 async function handleLinkUser(token: string) {
-  const { currentUser, currentTenant } = abpStore.application!;
   const extraQueryParams: Record<string, string> = {
-    LinkUserId: currentUser.id!,
     LinkToken: token,
   };
-  if (currentTenant.id) {
-    extraQueryParams.LinkTenantId = currentTenant.id;
+  if (abpStore.application) {
+    const { currentUser, currentTenant } = abpStore.application;
+    if (currentUser.id) {
+      extraQueryParams.LinkUserId = currentUser.id;
+    }
+    if (currentTenant.id) {
+      extraQueryParams.LinkTenantId = currentTenant.id;
+    }
   }
   // 跳转登录页,交由后端处理
   await authStore.oidcLogin({
@@ -173,8 +177,7 @@ watch(
           :menus
           :tag-text="userInfo?.email"
           :text="userInfo?.realName"
-          @logout="handleLogout"
-        />
+          @logout="handleLogout" />
         <span class="mb-1 flex items-center text-sm font-medium">
           {{ description }}
         </span>
@@ -186,14 +189,12 @@ watch(
         :dot="showDot"
         :notifications="notifications"
         @clear="handleNoticeClear"
-        @make-all="handleMakeAll"
-      />
+        @make-all="handleMakeAll" />
     </template>
     <template #extra>
       <AuthenticationLoginExpiredModal
         v-model:open="accessStore.loginExpired"
-        :avatar
-      >
+        :avatar>
         <LoginForm />
       </AuthenticationLoginExpiredModal>
     </template>

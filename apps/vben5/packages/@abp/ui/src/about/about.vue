@@ -127,8 +127,7 @@ const devDependenciesItems = Object.keys(devDependencies).map((key) => ({
       <div
         v-for="customItem in customItems"
         :key="customItem.title"
-        class="card-box mt-6 p-5"
-      >
+        class="card-box mt-6 p-5">
         <div>
           <h5 class="text-foreground text-lg">{{ customItem.title }}</h5>
         </div>
@@ -136,8 +135,7 @@ const devDependenciesItems = Object.keys(devDependencies).map((key) => ({
           <dl class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             <template v-for="item in customItem.items" :key="item.title">
               <div
-                class="border-border border-t px-4 py-3 sm:col-span-1 sm:px-0"
-              >
+                class="border-border border-t px-4 py-3 sm:col-span-1 sm:px-0">
                 <dt class="text-foreground text-sm">
                   {{ item.title }}
                 </dt>

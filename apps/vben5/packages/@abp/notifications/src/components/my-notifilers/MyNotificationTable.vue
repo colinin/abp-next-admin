@@ -211,17 +211,17 @@ const [NotificationModal, modalApi] = useVbenModal({
 async function onClickRead(row: Notification) {
   modalApi.setData(row);
   modalApi.open();
-  await _onRead([row.id], NotificationReadState.Read);
+  await onRead([row.id], NotificationReadState.Read);
 }
 
 /** 行标记阅读状态 */
 async function onRowRead(row: Notification, info: MenuInfo) {
   switch (info.key) {
     case 'read': {
-      return await _onRead([row.id], NotificationReadState.Read);
+      return await onRead([row.id], NotificationReadState.Read);
     }
     case 'un-read': {
-      return await _onRead([row.id], NotificationReadState.UnRead);
+      return await onRead([row.id], NotificationReadState.UnRead);
     }
   }
 }
@@ -230,18 +230,18 @@ async function onRowRead(row: Notification, info: MenuInfo) {
 async function onBulkRead(info: MenuInfo) {
   switch (info.key) {
     case 'read': {
-      await _onRead(selectedKeys.value, NotificationReadState.Read);
+      await onRead(selectedKeys.value, NotificationReadState.Read);
       break;
     }
     case 'un-read': {
-      await _onRead(selectedKeys.value, NotificationReadState.UnRead);
+      await onRead(selectedKeys.value, NotificationReadState.UnRead);
       break;
     }
   }
   selectedKeys.value = [];
 }
 
-async function _onRead(idList: string[], state: NotificationReadState) {
+async function onRead(idList: string[], state: NotificationReadState) {
   try {
     gridApi.setLoading(true);
     await markReadStateApi({
@@ -305,8 +305,7 @@ const onDelete = (row: Notification) => {
         <ReadIcon
           v-if="row.state === NotificationReadState.Read"
           class="size-5"
-          color="#00DD00"
-        />
+          color="#00DD00" />
         <UnReadIcon v-else class="size-5" color="#FF7744" />
         <a href="javascript:(0);" @click="onClickRead(row)">{{ row.title }}</a>
       </div>
@@ -320,8 +319,7 @@ const onDelete = (row: Notification) => {
           :icon="h(DeleteOutlined)"
           danger
           type="link"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown>

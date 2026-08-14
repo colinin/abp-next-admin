@@ -118,8 +118,7 @@ async function onGet(id: string) {
             :column="1"
             bordered
             size="small"
-            :label-style="{ minWidth: '110px' }"
-          >
+            :label-style="{ minWidth: '110px' }">
             <DescriptionsItem :label="$t('AbpAuditLogging.TimeStamp')">
               {{ formatToDateTime(logModel.timeStamp) }}
             </DescriptionsItem>
@@ -139,8 +138,7 @@ async function onGet(id: string) {
             :column="1"
             bordered
             size="small"
-            :label-style="{ minWidth: '110px' }"
-          >
+            :label-style="{ minWidth: '110px' }">
             <DescriptionsItem :label="$t('AbpAuditLogging.ApplicationName')">
               {{ logModel.fields?.application }}
             </DescriptionsItem>
@@ -188,8 +186,7 @@ async function onGet(id: string) {
         <TabPane
           v-if="logModel.exceptions?.length > 0"
           key="exception"
-          :tab="$t('AbpAuditLogging.Exceptions')"
-        >
+          :tab="$t('AbpAuditLogging.Exceptions')">
           <ExceptionsGrid>
             <template #parameters="{ row }">
               <Descriptions
@@ -197,8 +194,7 @@ async function onGet(id: string) {
                 :colon="false"
                 :column="1"
                 bordered
-                size="small"
-              >
+                size="small">
                 <DescriptionsItem :label="$t('AbpAuditLogging.Class')">
                   {{ row.class }}
                 </DescriptionsItem>
@@ -212,8 +208,7 @@ async function onGet(id: string) {
                   <Textarea
                     readonly
                     :auto-size="{ minRows: 10 }"
-                    :value="row.stackTrace"
-                  />
+                    :value="row.stackTrace" />
                 </DescriptionsItem>
                 <DescriptionsItem :label="$t('AbpAuditLogging.HResult')">
                   {{ row.hResult }}

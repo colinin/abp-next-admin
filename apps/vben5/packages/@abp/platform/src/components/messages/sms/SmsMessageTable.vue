@@ -275,8 +275,7 @@ async function onMenuClick(row: SmsMessageDto, info: MenuInfo) {
           danger
           type="link"
           v-access:code="[SmsMessagesPermissions.Delete]"
-          @click="onDelete(row)"
-        >
+          @click="onDelete(row)">
           {{ $t('AbpUi.Delete') }}
         </Button>
         <Dropdown>
@@ -284,8 +283,7 @@ async function onMenuClick(row: SmsMessageDto, info: MenuInfo) {
             <Menu @click="(info) => onMenuClick(row, info)">
               <MenuItem
                 v-if="hasAccessByCodes([SmsMessagesPermissions.SendMessage])"
-                key="send"
-              >
+                key="send">
                 <div class="flex flex-row items-center gap-[4px]">
                   <SendMessageIcon color="green" />
                   {{ $t('AppPlatform.SendMessage') }}

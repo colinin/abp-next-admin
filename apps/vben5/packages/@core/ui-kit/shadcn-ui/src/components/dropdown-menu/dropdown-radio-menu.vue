@@ -34,15 +34,13 @@ function handleItemClick(value: string) {
                 ? 'bg-accent text-accent-foreground'
                 : ''
             "
-            class="mb-1 cursor-pointer text-foreground/80 data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground"
-            @click="handleItemClick(menu.value)"
-          >
+            class="text-foreground/80 data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground mb-1 cursor-pointer"
+            @click="handleItemClick(menu.value)">
             <component :is="menu.icon" v-if="menu.icon" class="mr-2 size-4" />
             <span
               v-if="!menu.icon"
               :class="menu.value === modelValue ? 'bg-foreground' : ''"
-              class="mr-2 size-1.5 rounded-full"
-            ></span>
+              class="mr-2 size-1.5 rounded-full"></span>
             {{ menu.label }}
           </DropdownMenuItem>
         </template>

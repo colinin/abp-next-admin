@@ -9,7 +9,7 @@ import type { ClassType } from '@vben-core/typings';
 
 import type { IContextMenuItem } from './interface';
 
-import { computed } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import { useForwardPropsEmits } from 'reka-ui';
 
@@ -35,6 +35,14 @@ const props = defineProps<
 
 const emits = defineEmits<ContextMenuRootEmits>();
 
+const NATIVE_CONTEXT_SELECTORS = [
+  'input',
+  'textarea',
+  'select',
+  '[contenteditable]:not([contenteditable="false"])',
+  '.allow-native-context',
+].join(', ');
+
 const delegatedProps = computed(() => {
   const {
     class: _cls,
@@ -59,18 +67,39 @@ function handleClick(menu: IContextMenuItem) {
   }
   menu?.handler?.(props.handlerData);
 }
+
+const triggerRef = ref<HTMLElement | null>(null);
+
+function onContextMenuCapture(e: MouseEvent) {
+  if ((e.target as HTMLElement).closest(NATIVE_CONTEXT_SELECTORS)) {
+    e.stopPropagation();
+  }
+}
+
+onMounted(() => {
+  triggerRef.value?.addEventListener('contextmenu', onContextMenuCapture, {
+    capture: true,
+  });
+});
+
+onUnmounted(() => {
+  triggerRef.value?.removeEventListener('contextmenu', onContextMenuCapture, {
+    capture: true,
+  });
+});
 </script>
 
 <template>
   <ContextMenu v-bind="forwarded">
     <ContextMenuTrigger as-child>
-      <slot></slot>
+      <div ref="triggerRef" class="contents">
+        <slot></slot>
+      </div>
     </ContextMenuTrigger>
     <ContextMenuContent
       :class="contentClass"
       v-bind="contentProps"
-      class="side-content z-popup"
-    >
+      class="side-content z-popup">
       <template v-for="menu in menusView" :key="menu.key">
         <ContextMenuItem
           v-if="!menu.hidden"
@@ -78,13 +107,11 @@ function handleClick(menu: IContextMenuItem) {
           :disabled="menu.disabled"
           :inset="menu.inset || !menu.icon"
           class="cursor-pointer"
-          @click="handleClick(menu)"
-        >
+          @click="handleClick(menu)">
           <component
             :is="menu.icon"
             v-if="menu.icon"
-            class="mr-2 size-4 text-lg"
-          />
+            class="mr-2 size-4 text-lg" />
 
           {{ menu.text }}
           <ContextMenuShortcut v-if="menu.shortcut">

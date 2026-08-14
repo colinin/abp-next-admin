@@ -86,6 +86,5 @@ async function handleLogin(values: Recordable<any>) {
     ref="codeLogin"
     :form-schema="formSchema"
     :loading="loading"
-    @submit="handleLogin"
-  />
+    @submit="handleLogin" />
 </template>
