@@ -22,42 +22,42 @@ public class WebhookTemplateCardQuoteArea
     [CanBeNull]
     [JsonProperty("url")]
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string? Url { get; set; }
     /// <summary>
     /// 点击跳转的小程序的appid，type是2时必填
     /// </summary>
     [CanBeNull]
     [JsonProperty("appid")]
     [JsonPropertyName("appid")]
-    public string AppId { get; set; }
+    public string? AppId { get; set; }
     /// <summary>
     /// 点击跳转的小程序的pagepath，type是2时选填
     /// </summary>
     [CanBeNull]
     [JsonProperty("pagepath")]
     [JsonPropertyName("pagepath")]
-    public string PagePath { get; set; }
+    public string? PagePath { get; set; }
     /// <summary>
     /// 引用文献样式的标题
     /// </summary>
     [CanBeNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
     /// <summary>
     /// 引用文献样式的引用文案
     /// </summary>
     [CanBeNull]
     [JsonProperty("quote_text")]
     [JsonPropertyName("quote_text")]
-    public string QuoteText { get; set; }
+    public string? QuoteText { get; set; }
     private WebhookTemplateCardQuoteArea(
         string title,
         int? type = null,
-        string url = null,
-        string appId = null,
-        string pagePath = null,
-        string quoteText = null)
+        string? url = null,
+        string? appId = null,
+        string? pagePath = null,
+        string? quoteText = null)
     {
         Title = title;
         QuoteText = quoteText;
@@ -72,7 +72,7 @@ public class WebhookTemplateCardQuoteArea
     /// <param name="title">引用文献样式的标题</param>
     /// <param name="quoteText">引用文献样式的引用文案</param>
     /// <returns></returns>
-    public static WebhookTemplateCardQuoteArea Default(string title, string quoteText = null)
+    public static WebhookTemplateCardQuoteArea Default(string title, string? quoteText = null)
     {
         Check.NotNullOrWhiteSpace(title, nameof(title));
 
@@ -85,7 +85,7 @@ public class WebhookTemplateCardQuoteArea
     /// <param name="url">点击跳转的url</param>
     /// <param name="quoteText">引用文献样式的引用文案</param>
     /// <returns></returns>
-    public static WebhookTemplateCardQuoteArea Link(string title, string url, string quoteText = null)
+    public static WebhookTemplateCardQuoteArea Link(string title, string url, string? quoteText = null)
     {
         Check.NotNullOrWhiteSpace(title, nameof(title));
         Check.NotNullOrWhiteSpace(url, nameof(url));
@@ -100,7 +100,7 @@ public class WebhookTemplateCardQuoteArea
     /// <param name="pagePath">跳转链接的小程序的pagepath</param>
     /// <param name="quoteText">引用文献样式的引用文案</param>
     /// <returns></returns>
-    public static WebhookTemplateCardQuoteArea MiniProgram(string title, string appId, string pagePath, string quoteText = null)
+    public static WebhookTemplateCardQuoteArea MiniProgram(string title, string appId, string pagePath, string? quoteText = null)
     {
         Check.NotNullOrWhiteSpace(title, nameof(title));
         Check.NotNullOrWhiteSpace(appId, nameof(appId));

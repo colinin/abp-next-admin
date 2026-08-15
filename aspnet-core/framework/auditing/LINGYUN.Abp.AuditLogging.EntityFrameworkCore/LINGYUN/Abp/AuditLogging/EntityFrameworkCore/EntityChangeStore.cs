@@ -30,7 +30,7 @@ public class EntityChangeStore : IEntityChangeStore, ITransientDependency
     }
 
 
-    public async virtual Task<EntityChange> GetAsync(
+    public async virtual Task<EntityChange?> GetAsync(
         Guid entityChangeId, 
         CancellationToken cancellationToken = default)
     {
@@ -46,8 +46,8 @@ public class EntityChangeStore : IEntityChangeStore, ITransientDependency
         DateTime? startTime = null,
         DateTime? endTime = null, 
         EntityChangeType? changeType = null, 
-        string entityId = null,
-        string entityTypeFullName = null, 
+        string? entityId = null,
+        string? entityTypeFullName = null, 
         CancellationToken cancellationToken = default)
     {
         return await AuditLogRepository.GetEntityChangeCountAsync(
@@ -61,15 +61,15 @@ public class EntityChangeStore : IEntityChangeStore, ITransientDependency
     }
 
     public async virtual Task<List<EntityChange>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = 50, 
         int skipCount = 0, 
         Guid? auditLogId = null,
         DateTime? startTime = null, 
         DateTime? endTime = null, 
         EntityChangeType? changeType = null, 
-        string entityId = null,
-        string entityTypeFullName = null, 
+        string? entityId = null,
+        string? entityTypeFullName = null, 
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
@@ -89,7 +89,7 @@ public class EntityChangeStore : IEntityChangeStore, ITransientDependency
         return ObjectMapper.Map<List<Volo.Abp.AuditLogging.EntityChange>, List<EntityChange>>(entityChanges);
     }
 
-    public async virtual Task<EntityChangeWithUsername> GetWithUsernameAsync(
+    public async virtual Task<EntityChangeWithUsername?> GetWithUsernameAsync(
         Guid entityChangeId, 
         CancellationToken cancellationToken = default)
     {

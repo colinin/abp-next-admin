@@ -36,8 +36,7 @@ public class AbpNotificationsExceptionSubscriber : AbpExceptionSubscriberBase
                     { "loglevel", context.LogLevel.ToString() },
                     { "stackTrace", context.Exception.ToString() },
                 }),
-            user: null,
-            CurrentTenant.Id,
-            NotificationSeverity.Error);
+            tenantId: CurrentTenant.Id,
+            severity: NotificationSeverity.Error);
     }
 }

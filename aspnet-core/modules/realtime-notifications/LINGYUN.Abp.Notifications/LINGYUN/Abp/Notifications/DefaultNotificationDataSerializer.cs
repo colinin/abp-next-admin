@@ -27,14 +27,14 @@ public class DefaultNotificationDataSerializer : INotificationDataSerializer, IS
                     title != null &&
                     title is not LocalizableStringInfo)
                 {
-                    var titleObj = JsonConvert.DeserializeObject<LocalizableStringInfo>(title.ToString());
+                    var titleObj = JsonConvert.DeserializeObject<LocalizableStringInfo>(title.ToString()!)!;
                     source.TrySetData("title", titleObj);
                 }
                 if (source.ExtraProperties.TryGetValue("message", out var message) && 
                     message != null &&
                     message is not LocalizableStringInfo)
                 {
-                    var messageObj = JsonConvert.DeserializeObject<LocalizableStringInfo>(message.ToString());
+                    var messageObj = JsonConvert.DeserializeObject<LocalizableStringInfo>(message.ToString()!)!;
                     source.TrySetData("message", messageObj);
                 }
 
@@ -42,7 +42,7 @@ public class DefaultNotificationDataSerializer : INotificationDataSerializer, IS
                     description != null &&
                     description is not LocalizableStringInfo)
                 {
-                    var descriptionObj = JsonConvert.DeserializeObject<LocalizableStringInfo>(description.ToString());
+                    var descriptionObj = JsonConvert.DeserializeObject<LocalizableStringInfo>(description.ToString()!)!;
                     source.TrySetData("description", descriptionObj);
                 }
             }
@@ -68,7 +68,7 @@ public class DefaultNotificationDataSerializer : INotificationDataSerializer, IS
         }
         else
         {
-            var titleInfo = source.TryGetData("title").As<LocalizableStringInfo>();
+            var titleInfo = source.TryGetData("title")!.As<LocalizableStringInfo>();
             var titleLocalizer = await _localizerFactory.CreateByResourceNameAsync(titleInfo.ResourceName);
             title = titleLocalizer[titleInfo.Name].Value;
             if (titleInfo.Values != null)
@@ -81,7 +81,7 @@ public class DefaultNotificationDataSerializer : INotificationDataSerializer, IS
                     }
                 }
             }
-            var messageInfo = source.TryGetData("message").As<LocalizableStringInfo>();
+            var messageInfo = source.TryGetData("message")!.As<LocalizableStringInfo>();
             var messageLocalizer = await _localizerFactory.CreateByResourceNameAsync(messageInfo.ResourceName); 
             message = messageLocalizer[messageInfo.Name].Value;
             if (messageInfo.Values != null)

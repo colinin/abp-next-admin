@@ -14,7 +14,7 @@ internal static class IJsonSerializerExtensions
         return serializer.Deserialize<List<TResult>>(source);
     }
 
-    public static Dictionary<TKey, TValue> DeserializeToDictionary<TKey, TValue>(this IJsonSerializer serializer, string source)
+    public static Dictionary<TKey, TValue> DeserializeToDictionary<TKey, TValue>(this IJsonSerializer serializer, string source) where TKey: notnull
     {
         if (source.IsNullOrWhiteSpace())
         {

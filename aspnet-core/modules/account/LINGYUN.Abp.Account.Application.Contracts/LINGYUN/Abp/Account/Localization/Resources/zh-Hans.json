@@ -10,6 +10,7 @@
     "InvalidVerifyCode": "验证码无效或已经过期!",
     "RequiredEmailAddress": "邮件地址必须输入",
     "InvalidPhoneNumber": "手机号无效",
+    "InvalidWeChatCode": "微信验证码无效或已过期!",
     "DuplicateWeChat": "微信号已经注册过!",
     "DisplayName:SmsVerifyCode": "短信验证码",
     "DisplayName:EmailVerifyCode": "邮件验证码",

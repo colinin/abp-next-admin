@@ -14,7 +14,7 @@ public class TemplateCardPushEvent : WeChatWorkEventMessage
     /// 与发送模板卡片消息时指定的task_id相同
     /// </summary>
     [XmlElement("TaskId")]
-    public string TaskId { get; set; }
+    public string TaskId { get; set; } = default!;
     /// <summary>
     /// 通用模板卡片的类型，类型有
     /// "text_notice", 
@@ -25,22 +25,22 @@ public class TemplateCardPushEvent : WeChatWorkEventMessage
     /// 五种
     /// </summary>
     [XmlElement("CardType")]
-    public string CardType { get; set; }
+    public string CardType { get; set; } = default!;
     /// <summary>
     /// 用于调用更新卡片接口的ResponseCode，72小时内有效，且只能使用一次
     /// </summary>
     [XmlElement("ResponseCode")]
-    public string ResponseCode { get; set; }
+    public string ResponseCode { get; set; } = default!;
     /// <summary>
     /// 与发送模板卡片消息时指定的按钮btn:key值相同
     /// </summary>
     [XmlElement("EventKey")]
-    public string EventKey { get; set; }
+    public string EventKey { get; set; } = default!;
     /// <summary>
     /// 事件KEY值
     /// </summary>
     [XmlElement("SelectedItems")]
-    public TemplateCardQuestionInfo QuestionInfo { get; set; }
+    public TemplateCardQuestionInfo QuestionInfo { get; set; } = default!;
     public override WeChatMessageEto ToEto()
     {
         return new WeChatWorkEventMessageEto<TemplateCardPushEvent>(this);
@@ -53,7 +53,7 @@ public class TemplateCardQuestionInfo
     /// 事件KEY值
     /// </summary>
     [XmlElement("SelectedItem")]
-    public List<TemplateCardQuestion> Items { get; set; }
+    public List<TemplateCardQuestion>? Items { get; set; }
 }
 
 public class TemplateCardQuestion
@@ -62,12 +62,12 @@ public class TemplateCardQuestion
     /// 问题的key值
     /// </summary>
     [XmlElement("QuestionKey")]
-    public string QuestionKey { get; set; }
+    public string QuestionKey { get; set; } = default!;
     /// <summary>
     /// 问题的key值
     /// </summary>
     [XmlArray("OptionIds")]
-    public List<TemplateCardQuestionOption> OptionIds { get; set; }
+    public List<TemplateCardQuestionOption>? OptionIds { get; set; }
 }
 
 public class TemplateCardQuestionOption
@@ -76,5 +76,5 @@ public class TemplateCardQuestionOption
     /// 问题的key值
     /// </summary>
     [XmlElement("OpitonId")]
-    public List<string> Items { get; set; }
+    public List<string>? Items { get; set; }
 }

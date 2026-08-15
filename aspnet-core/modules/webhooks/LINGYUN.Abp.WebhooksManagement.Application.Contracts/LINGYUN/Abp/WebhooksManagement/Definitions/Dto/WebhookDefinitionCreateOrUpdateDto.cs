@@ -9,10 +9,10 @@ public abstract class WebhookDefinitionCreateOrUpdateDto : IHasExtraProperties
 {
     [Required]
     [DynamicStringLength(typeof(WebhookDefinitionRecordConsts), nameof(WebhookDefinitionRecordConsts.MaxDisplayNameLength))]
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     [DynamicStringLength(typeof(WebhookDefinitionRecordConsts), nameof(WebhookDefinitionRecordConsts.MaxDescriptionLength))]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool IsEnabled { get; set; }
 

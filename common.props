@@ -3,13 +3,14 @@
 		<LangVersion>latest</LangVersion>
 		<Version>10.4.0</Version>
 		<Authors>colin</Authors>
-		<NoWarn>$(NoWarn);CS1591;CS0436;CS8618;NU1803</NoWarn>
+		<NoWarn>$(NoWarn);CS1591;CS0436;NU1803</NoWarn>
 		<PackageProjectUrl>https://github.com/colinin/abp-next-admin</PackageProjectUrl>
 		<PackageOutputPath>$(SolutionDir)LocalNuget</PackageOutputPath>
 		<PackageVersion>10.4.0</PackageVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/colinin/abp-next-admin</RepositoryUrl>
+		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild Condition="$(AssemblyName.StartsWith('LINGYUN'))">true</GeneratePackageOnBuild>
 	</PropertyGroup>
 	

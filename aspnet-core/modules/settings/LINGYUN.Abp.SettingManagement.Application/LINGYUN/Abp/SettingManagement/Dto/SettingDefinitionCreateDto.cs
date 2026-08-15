@@ -7,5 +7,5 @@ public class SettingDefinitionCreateDto : SettingDefinitionCreateOrUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(SettingDefinitionRecordConsts), nameof(SettingDefinitionRecordConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

@@ -27,21 +27,21 @@ public class ExternalLocalizationStoreCache : IExternalLocalizationStoreCache, I
     {
         var cacheItem = await ResourcesCache.GetAsync(LocalizationResourcesCacheItem.CacheKey);
 
-        return cacheItem.Resources
+        return cacheItem?.Resources
             .Where(x => x.IsEnabled)
             .Where(x => !LocalizationOptions.Resources.ContainsKey(x.Name))
             .Select(x => x.Name)
-            .ToArray();
+            .ToArray() ?? [];
     }
 
-    public virtual LocalizationResourceCacheItem GetResourceOrNull(string resourceName)
+    public virtual LocalizationResourceCacheItem? GetResourceOrNull(string resourceName)
     {
         var cacheItem = ResourceCache.Get(resourceName);
 
         return cacheItem?.IsEnabled == true ? cacheItem : null;
     }
 
-    public async virtual Task<LocalizationResourceCacheItem> GetResourceOrNullAsync(string resourceName)
+    public async virtual Task<LocalizationResourceCacheItem?> GetResourceOrNullAsync(string resourceName)
     {
         var cacheItem = await ResourceCache.GetAsync(resourceName);
 
@@ -55,6 +55,6 @@ public class ExternalLocalizationStoreCache : IExternalLocalizationStoreCache, I
         return cacheItem?.Resources
             .Where(x => x.IsEnabled)
             .Where(x => !LocalizationOptions.Resources.ContainsKey(x.Name))
-            .ToArray();
+            .ToArray() ?? [];
     }
 }

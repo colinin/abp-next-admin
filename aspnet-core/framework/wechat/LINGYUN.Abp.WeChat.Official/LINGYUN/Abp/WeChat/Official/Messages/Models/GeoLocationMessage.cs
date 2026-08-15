@@ -28,7 +28,7 @@ public class GeoLocationMessage : WeChatOfficialGeneralMessage
     /// 地理位置信息
     /// </summary>
     [XmlElement("Label")]
-    public string Label { get; set; }
+    public string Label { get; set; } = default!;
     public override WeChatMessageEto ToEto()
     {
         return new WeChatOfficialGeneralMessageEto<GeoLocationMessage>(this);

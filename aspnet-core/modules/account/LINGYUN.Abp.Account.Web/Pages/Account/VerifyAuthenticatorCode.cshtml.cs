@@ -9,15 +9,15 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
     public class VerifyAuthenticatorCodeModel : AccountPageModel
     {
         [BindProperty]
-        public VerifyAuthenticatorCodeInputModel Input { get; set; }
+        public VerifyAuthenticatorCodeInputModel Input { get; set; } = default!;
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; } = default!;
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrlHash { get; set; }
+        public string? ReturnUrlHash { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public bool RememberBrowser { get; set; }
@@ -56,6 +56,6 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
     public class VerifyAuthenticatorCodeInputModel
     {
         [Required]
-        public string VerifyCode { get; set; }
+        public string VerifyCode { get; set; } = default!;
     }
 }

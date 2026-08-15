@@ -36,8 +36,8 @@ public class MenuManager : DomainService
         string name,
         string component,
         string displayName,
-        string redirect = "",
-        string description = "",
+        string? redirect = null,
+        string? description = null,
         Guid? parentId = null,
         Guid? tenantId = null,
         bool isPublic = false)
@@ -116,7 +116,7 @@ public class MenuManager : DomainService
 
         foreach (var child in children)
         {
-            child.Code = CodeNumberGenerator.AppendCode(menu.Code, CodeNumberGenerator.GetRelativeCode(child.Code, oldCode));
+            child.Code = CodeNumberGenerator.AppendCode(menu.Code, CodeNumberGenerator.GetRelativeCode(child.Code, oldCode)!);
         }
     }
 
@@ -126,7 +126,7 @@ public class MenuManager : DomainService
         return false;
     }
 
-    public async virtual Task SetUserStartupMenuAsync(Guid userId, Guid? menuId = null, string framework = null)
+    public async virtual Task SetUserStartupMenuAsync(Guid userId, Guid? menuId = null, string? framework = null)
     {
         using (var unitOfWork = UnitOfWorkManager.Begin())
         {
@@ -147,7 +147,7 @@ public class MenuManager : DomainService
         }
     }
 
-    public async virtual Task SetUserMenusAsync(Guid userId, IEnumerable<Guid> menuIds, string framework = null)
+    public async virtual Task SetUserMenusAsync(Guid userId, IEnumerable<Guid> menuIds, string? framework = null)
     {
         using (var unitOfWork = UnitOfWorkManager.Begin())
         {
@@ -173,7 +173,7 @@ public class MenuManager : DomainService
         }
     }
 
-    public async virtual Task SetRoleStartupMenuAsync(string roleName, Guid? menuId = null, string framework = null)
+    public async virtual Task SetRoleStartupMenuAsync(string roleName, Guid? menuId = null, string? framework = null)
     {
         using (var unitOfWork = UnitOfWorkManager.Begin())
         {
@@ -194,7 +194,7 @@ public class MenuManager : DomainService
         }
     }
 
-    public async virtual Task SetRoleMenusAsync(string roleName, IEnumerable<Guid> menuIds, string framework = null)
+    public async virtual Task SetRoleMenusAsync(string roleName, IEnumerable<Guid> menuIds, string? framework = null)
     {
         using (var unitOfWork = UnitOfWorkManager.Begin())
         {
@@ -238,7 +238,7 @@ public class MenuManager : DomainService
         );
     }
 
-    public async virtual Task<Menu> GetLastChildOrNullAsync(Guid? parentId)
+    public async virtual Task<Menu?> GetLastChildOrNullAsync(Guid? parentId)
     {
         var children = await MenuRepository.GetChildrenAsync(parentId);
         return children.OrderBy(c => c.Code).LastOrDefault();
@@ -258,10 +258,10 @@ public class MenuManager : DomainService
 
         var code = await GetCodeOrDefaultAsync(parentId.Value);
 
-        return await MenuRepository.GetAllChildrenWithParentCodeAsync(code, parentId);
+        return await MenuRepository.GetAllChildrenWithParentCodeAsync(code!, parentId);
     }
 
-    public async virtual Task<string> GetCodeOrDefaultAsync(Guid id)
+    public async virtual Task<string?> GetCodeOrDefaultAsync(Guid id)
     {
         var menu = await MenuRepository.GetAsync(id);
         return menu?.Code;

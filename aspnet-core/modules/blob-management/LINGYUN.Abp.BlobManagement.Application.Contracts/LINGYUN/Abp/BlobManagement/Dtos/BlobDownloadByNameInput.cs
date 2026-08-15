@@ -10,9 +10,9 @@ public class BlobDownloadByNameInput
 
     [Required]
     [DynamicStringLength(typeof(BlobContainerConsts), nameof(BlobContainerConsts.MaxNameLength))]
-    public string ContainerName { get; set; }
+    public string ContainerName { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(BlobConsts), nameof(BlobConsts.MaxNameLength))]
-    public string BlobName { get; set; }
+    public string BlobName { get; set; } = default!;
 }

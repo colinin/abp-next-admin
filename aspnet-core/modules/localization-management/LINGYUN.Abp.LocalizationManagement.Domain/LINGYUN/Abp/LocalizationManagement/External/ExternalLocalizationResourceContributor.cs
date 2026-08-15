@@ -11,9 +11,9 @@ public class ExternalLocalizationResourceContributor : ILocalizationResourceCont
 {
     public bool IsDynamic => false;
 
-    protected LocalizationResourceBase Resource { get; private set; }
-    protected IExternalLocalizationStoreCache StoreCache { get; private set; }
-    protected IExternalLocalizationTextStoreCache TextStoreCache { get; private set; }
+    protected LocalizationResourceBase Resource { get; private set; } = default!;
+    protected IExternalLocalizationStoreCache StoreCache { get; private set; } = default!;
+    protected IExternalLocalizationTextStoreCache TextStoreCache { get; private set; } = default!;
 
     public virtual void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
     {
@@ -35,7 +35,7 @@ public class ExternalLocalizationResourceContributor : ILocalizationResourceCont
         }
     }
 
-    public virtual LocalizedString GetOrNull(string cultureName, string name)
+    public virtual LocalizedString? GetOrNull(string cultureName, string name)
     {
         var texts = TextStoreCache.GetTexts(Resource, cultureName);
 
@@ -54,10 +54,10 @@ public class ExternalLocalizationResourceContributor : ILocalizationResourceCont
 
         if (cacheItem == null || !cacheItem.IsEnabled)
         {
-            return Array.Empty<string>();
+            return [];
         }
 
-        return cacheItem.SupportedCultures;
+        return cacheItem.SupportedCultures ?? [];
     }
 
     public void Initialize(LocalizationResourceInitializationContext context)

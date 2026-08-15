@@ -53,7 +53,7 @@ public class WebhookDefinitionSerializer : IWebhookDefinitionSerializer, ITransi
             var webhookGroupRecord = new WebhookGroupDefinitionRecord(
                 GuidGenerator.Create(),
                 webhookGroup.Name,
-                LocalizableStringSerializer.Serialize(webhookGroup.DisplayName)
+                LocalizableStringSerializer.Serialize(webhookGroup.DisplayName)!
             );
 
             foreach (var property in webhookGroup.Properties)
@@ -71,12 +71,23 @@ public class WebhookDefinitionSerializer : IWebhookDefinitionSerializer, ITransi
     {
         using (CultureHelper.Use(CultureInfo.InvariantCulture))
         {
+            var displayName = webhook.Name;
+            string? description = null;
+            if (webhook.DisplayName != null)
+            {
+                displayName = LocalizableStringSerializer.Serialize(webhook.DisplayName)!;
+            }
+            if (webhook.Description != null)
+            {
+                description = LocalizableStringSerializer.Serialize(webhook.Description);
+            }
+
             var webhookRecord = new WebhookDefinitionRecord(
                 GuidGenerator.Create(),
-                webhookGroup?.Name,
+                webhookGroup.Name,
                 webhook.Name,
-                LocalizableStringSerializer.Serialize(webhook.DisplayName),
-                LocalizableStringSerializer.Serialize(webhook.Description),
+                displayName,
+                description,
                 true,
                 SerializeRequiredFeatures(webhook.RequiredFeatures)
             );
@@ -90,7 +101,7 @@ public class WebhookDefinitionSerializer : IWebhookDefinitionSerializer, ITransi
         }
     }
     
-    protected virtual string SerializeRequiredFeatures(List<string> requiredFeatures)
+    protected virtual string? SerializeRequiredFeatures(List<string> requiredFeatures)
     {
         return requiredFeatures.Any()
             ? requiredFeatures.JoinAsString(",")

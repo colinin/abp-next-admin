@@ -28,7 +28,7 @@ public class EfCoreMenuRepository : EfCoreRepository<IPlatformDbContext, Menu, G
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Menu> GetLastMenuAsync(
+    public async virtual Task<Menu?> FindLastMenuAsync(
         Guid? parentId = null,
         CancellationToken cancellationToken = default)
     {
@@ -66,7 +66,7 @@ public class EfCoreMenuRepository : EfCoreRepository<IPlatformDbContext, Menu, G
                       .AnyAsync(x => x.RoleName == roleName, GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Menu> FindByNameAsync(
+    public async virtual Task<Menu?> FindByNameAsync(
         string menuName,
         CancellationToken cancellationToken = default)
     {
@@ -75,8 +75,8 @@ public class EfCoreMenuRepository : EfCoreRepository<IPlatformDbContext, Menu, G
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Menu> FindMainAsync(
-        string framework = "",
+    public async virtual Task<Menu?> FindMainAsync(
+        string? framework = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
@@ -86,7 +86,7 @@ public class EfCoreMenuRepository : EfCoreRepository<IPlatformDbContext, Menu, G
 
     public async virtual Task<List<Menu>> GetRoleMenusAsync(
         string[] roles,
-        string framework = "",
+        string? framework = null,
         CancellationToken cancellationToken = default)
     {
         var menuQuery = (await GetDbSetAsync())
@@ -107,7 +107,7 @@ public class EfCoreMenuRepository : EfCoreRepository<IPlatformDbContext, Menu, G
     public async virtual Task<List<Menu>> GetUserMenusAsync(
         Guid userId, 
         string[] roles,
-        string framework = "",
+        string? framework = null,
         CancellationToken cancellationToken = default)
     {
         var menuQuery = (await GetDbSetAsync())
@@ -158,14 +158,14 @@ public class EfCoreMenuRepository : EfCoreRepository<IPlatformDbContext, Menu, G
     )
     {
         return await (await GetDbSetAsync())
-           .Where(x => x.Code.StartsWith(code) && x.Id != parentId.Value)
+           .Where(x => x.Code.StartsWith(code) && x.Id != parentId)
            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<Menu>> GetAllAsync(
-        string filter = "",
-        string sorting = nameof(Menu.Code),
-        string framework = "",
+        string? filter = null,
+        string? framework = null,
+        string? sorting = nameof(Menu.Code),
         Guid? parentId = null,
         Guid? layoutId = null,
         CancellationToken cancellationToken = default)
@@ -180,16 +180,16 @@ public class EfCoreMenuRepository : EfCoreRepository<IPlatformDbContext, Menu, G
             .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
             .WhereIf(!framework.IsNullOrWhiteSpace(), menu => menu.Framework.Equals(framework))
             .WhereIf(!filter.IsNullOrWhiteSpace(), menu =>
-                    menu.Path.Contains(filter) || menu.Name.Contains(filter) ||
-                    menu.DisplayName.Contains(filter) || menu.Description.Contains(filter) ||
-                    menu.Redirect.Contains(filter))
+                    menu.Path!.Contains(filter!) || menu.Name.Contains(filter!) ||
+                    menu.DisplayName.Contains(filter!) || menu.Description!.Contains(filter!) ||
+                    menu.Redirect!.Contains(filter!))
             .OrderBy(sorting)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<int> GetCountAsync(
-        string filter = "",
-        string framework = "",
+        string? filter = null,
+        string? framework = null,
         Guid? parentId = null,
         Guid? layoutId = null,
         CancellationToken cancellationToken = default)
@@ -199,18 +199,18 @@ public class EfCoreMenuRepository : EfCoreRepository<IPlatformDbContext, Menu, G
             .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
             .WhereIf(!framework.IsNullOrWhiteSpace(), menu => menu.Framework.Equals(framework))
             .WhereIf(!filter.IsNullOrWhiteSpace(), menu => 
-                    menu.Path.Contains(filter) || menu.Name.Contains(filter) ||
-                    menu.DisplayName.Contains(filter) || menu.Description.Contains(filter) ||
-                    menu.Redirect.Contains(filter))
+                    menu.Path!.Contains(filter!) || menu.Name.Contains(filter!) ||
+                    menu.DisplayName.Contains(filter!) || menu.Description!.Contains(filter!) ||
+                    menu.Redirect!.Contains(filter!))
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<Menu>> GetListAsync(
-        string filter = "",
-        string sorting = nameof(Menu.Code),
-        string framework = "",
+        string? filter = null,
+        string? framework = null,
         Guid? parentId = null,
         Guid? layoutId = null,
+        string? sorting = nameof(Menu.Code),
         int skipCount = 0, 
         int maxResultCount = 10, 
         CancellationToken cancellationToken = default)
@@ -225,9 +225,9 @@ public class EfCoreMenuRepository : EfCoreRepository<IPlatformDbContext, Menu, G
             .WhereIf(layoutId.HasValue, x => x.LayoutId == layoutId)
             .WhereIf(!framework.IsNullOrWhiteSpace(), menu => menu.Framework.Equals(framework))
             .WhereIf(!filter.IsNullOrWhiteSpace(), menu =>
-                    menu.Path.Contains(filter) || menu.Name.Contains(filter) ||
-                    menu.DisplayName.Contains(filter) || menu.Description.Contains(filter) ||
-                    menu.Redirect.Contains(filter))
+                    menu.Path!.Contains(filter!) || menu.Name.Contains(filter!) ||
+                    menu.DisplayName.Contains(filter!) || menu.Description!.Contains(filter!) ||
+                    menu.Redirect!.Contains(filter!))
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));

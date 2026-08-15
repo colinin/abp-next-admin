@@ -14,7 +14,7 @@ public static class TaskManagementDbContextModelCreatingExtensions
 {
     public static void ConfigureTaskManagement(
         this ModelBuilder builder,
-        Action<TaskManagementModelBuilderConfigurationOptions> optionsAction = null)
+        Action<TaskManagementModelBuilderConfigurationOptions>? optionsAction = null)
     {
         Check.NotNull(builder, nameof(builder));
 

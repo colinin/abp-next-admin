@@ -10,5 +10,5 @@ public interface IJobActionDefinitionManager
 
     IReadOnlyList<JobActionDefinition> GetAll();
 
-    JobActionDefinition GetOrNull(string name);
+    JobActionDefinition? GetOrNull(string name);
 }

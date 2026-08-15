@@ -57,7 +57,7 @@ public class FriendStore : IFriendStore, ITransientDependency
         Guid? tenantId,
         Guid userId,
         Guid friendId,
-        string remarkName = "",
+        string? remarkName = null,
         bool isStatic = false,
         CancellationToken cancellationToken = default)
     {
@@ -75,7 +75,7 @@ public class FriendStore : IFriendStore, ITransientDependency
             var userChatFriend = await _userChatFriendRepository
                 .FindByUserFriendIdAsync(friendId, userId);
 
-            userChatFriend.SetStatus(UserFriendStatus.Added);
+            userChatFriend!.SetStatus(UserFriendStatus.Added);
 
             await _userChatFriendRepository.UpdateAsync(userChatFriend, cancellationToken: cancellationToken);
         }
@@ -86,8 +86,8 @@ public class FriendStore : IFriendStore, ITransientDependency
         Guid? tenantId,
         Guid userId,
         Guid friendId,
-        string remarkName = "",
-        string description = "",
+        string? remarkName = null,
+        string? description = null,
         CancellationToken cancellationToken = default)
     {
         using (_currentTenant.Change(tenantId))
@@ -137,7 +137,7 @@ public class FriendStore : IFriendStore, ITransientDependency
     public async virtual Task<List<UserFriend>> GetListAsync(
         Guid? tenantId,
         Guid userId,
-        string sorting = nameof(UserFriend.UserId),
+        string? sorting = nameof(UserFriend.UserId),
         CancellationToken cancellationToken = default
         )
     {
@@ -150,7 +150,7 @@ public class FriendStore : IFriendStore, ITransientDependency
     public async virtual Task<int> GetCountAsync(
         Guid? tenantId,
         Guid userId,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         using (_currentTenant.Change(tenantId))
@@ -163,8 +163,8 @@ public class FriendStore : IFriendStore, ITransientDependency
     public async virtual Task<List<UserFriend>> GetPagedListAsync(
         Guid? tenantId,
         Guid userId,
-        string filter = "",
-        string sorting = nameof(UserFriend.UserId),
+        string? filter = null,
+        string? sorting = nameof(UserFriend.UserId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
@@ -192,7 +192,7 @@ public class FriendStore : IFriendStore, ITransientDependency
         }
     }
 
-    public async virtual Task<UserFriend> GetMemberAsync(
+    public async virtual Task<UserFriend?> GetMemberAsync(
         Guid? tenantId,
         Guid userId,
         Guid friendId,
@@ -253,7 +253,7 @@ public class FriendStore : IFriendStore, ITransientDependency
 
     protected async virtual Task<List<UserFriend>> GetAllFriendByCacheItemAsync(
         Guid userId,
-        string sorting = nameof(UserFriend.UserId),
+        string? sorting = nameof(UserFriend.UserId),
         CancellationToken cancellationToken = default
         )
     {

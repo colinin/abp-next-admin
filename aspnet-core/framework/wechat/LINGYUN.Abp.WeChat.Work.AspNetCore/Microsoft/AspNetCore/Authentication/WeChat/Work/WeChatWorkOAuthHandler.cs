@@ -57,9 +57,9 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
         // Check.NotNullOrEmpty(secret, nameof(secret));
 
         // 用配置项重写
-        Options.CorpId = corpId;
-        Options.ClientId = agentId;
-        Options.ClientSecret = secret;
+        Options.CorpId = corpId ?? "";
+        Options.ClientId = agentId ?? "";
+        Options.ClientSecret = secret ?? "";
 
         Options.TimeProvider ??= TimeProvider.System;
 
@@ -81,7 +81,7 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
             ? WeChatWorkOAuthConsts.AuthorizationEndpoint
             : WeChatWorkOAuthConsts.AuthorizationSsoEndpoint;
 
-        var parameters = new Dictionary<string, string>
+        var parameters = new Dictionary<string, string?>
         {
             { "appid", Options.CorpId },
             { "redirect_uri", redirectUri },
@@ -103,7 +103,7 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
     /// </summary> 
     protected async override Task<OAuthTokenResponse> ExchangeCodeAsync(OAuthCodeExchangeContext context)
     {
-        var parameters = new Dictionary<string, string>()
+        var parameters = new Dictionary<string, string?>()
         {
             { "corpid", Options.CorpId },
             { "corpsecret", Options.ClientSecret },
@@ -151,7 +151,7 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
             ? WeChatWorkOAuthConsts.UserDetailEndpoint
             : WeChatWorkOAuthConsts.UserInfoEndpoint;
 
-        var address = QueryHelpers.AddQueryString(userInfoEndpoint, new Dictionary<string, string>
+        var address = QueryHelpers.AddQueryString(userInfoEndpoint, new Dictionary<string, string?>
         {
             ["access_token"] = tokens.AccessToken,
             ["code"] = code
@@ -195,7 +195,7 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
 
         await Events.CreatingTicket(context);
 
-        return new AuthenticationTicket(context.Principal, context.Properties, Scheme.Name);
+        return new AuthenticationTicket(context.Principal!, context.Properties, Scheme.Name);
     }
 
     protected async override Task<HandleRequestResult> HandleRemoteAuthenticateAsync()
@@ -268,7 +268,7 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
             return HandleRequestResult.Fail("Code was not found.", properties);
         }
 
-        var codeExchangeContext = new OAuthCodeExchangeContext(properties, code, BuildRedirectUri(Options.CallbackPath));
+        var codeExchangeContext = new OAuthCodeExchangeContext(properties, code!, BuildRedirectUri(Options.CallbackPath));
         using var tokens = await ExchangeCodeAsync(codeExchangeContext);
 
         if (tokens.Error != null)
@@ -305,7 +305,7 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
                 {
                     // https://www.w3.org/TR/xmlschema-2/#dateTime
                     // https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx
-                    var expiresAt = Options.TimeProvider.GetUtcNow() + TimeSpan.FromSeconds(value);
+                    var expiresAt = Options.TimeProvider!.GetUtcNow() + TimeSpan.FromSeconds(value);
                     authTokens.Add(new AuthenticationToken
                     {
                         Name = "expires_at",
@@ -317,7 +317,7 @@ public class WeChatWorkOAuthHandler : OAuthHandler<WeChatWorkOAuthOptions>
             properties.StoreTokens(authTokens);
         }
 
-        var ticket = await CreateTicketAsync(code, identity, properties, tokens);
+        var ticket = await CreateTicketAsync(code!, identity, properties, tokens);
         if (ticket != null)
         {
             return HandleRequestResult.Success(ticket);

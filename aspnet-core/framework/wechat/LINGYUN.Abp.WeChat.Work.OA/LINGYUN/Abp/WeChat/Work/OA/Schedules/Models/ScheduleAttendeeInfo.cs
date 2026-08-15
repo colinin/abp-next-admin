@@ -14,7 +14,7 @@ public class ScheduleAttendeeInfo
     [NotNull]
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
     /// <summary>
     /// 日程参与者的接受状态
     /// </summary>

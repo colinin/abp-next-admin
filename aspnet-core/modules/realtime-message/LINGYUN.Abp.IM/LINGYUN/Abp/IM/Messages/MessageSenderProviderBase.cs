@@ -15,7 +15,7 @@ public abstract class MessageSenderProviderBase : IMessageSenderProvider, ITrans
     protected ILoggerFactory LoggerFactory => ServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 
     protected ILogger Logger => _lazyLogger.Value;
-    private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+    private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance, true);
 
     protected MessageSenderProviderBase(IAbpLazyServiceProvider serviceProvider)
     {

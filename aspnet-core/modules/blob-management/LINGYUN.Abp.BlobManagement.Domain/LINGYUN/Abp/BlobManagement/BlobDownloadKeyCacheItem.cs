@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.BlobManagement;
 [IgnoreMultiTenancy]
 public class BlobDownloadKeyCacheItem
 {
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
     public Guid BlobId { get; set; }
     public Guid? TenantId { get; set; }
     public BlobDownloadKeyCacheItem()

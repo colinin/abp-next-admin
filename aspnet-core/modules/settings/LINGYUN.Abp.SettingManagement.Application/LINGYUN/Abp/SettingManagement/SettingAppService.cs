@@ -69,7 +69,7 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
             await SettingManager.SetGlobalAsync(setting.Name, setting.Value);
         }
 
-        CurrentUnitOfWork.OnCompleted(async () =>
+        CurrentUnitOfWork!.OnCompleted(async () =>
         {
             // 发送刷新用户缓存事件
             await EventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData());
@@ -91,7 +91,7 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
                 await SettingManager.SetForTenantAsync(CurrentTenant.GetId(), setting.Name, setting.Value);
             }
 
-            CurrentUnitOfWork.OnCompleted(async () =>
+            CurrentUnitOfWork!.OnCompleted(async () =>
             {
                 // 发送刷新用户缓存事件
                 await EventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData());
@@ -114,7 +114,7 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
         return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
     }
 
-    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string? providerKey = null)
     {
         /*
          * 2020-11-19
@@ -158,8 +158,8 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
            await SettingManager.GetOrNullAsync(TimingSettingNames.TimeZone, providerName, providerKey),
            ValueType.Option,
            providerName)
-            .AddOptions(timezones.Select(timezone => new OptionDto(timezone.Name, timezone.Value)))
-            .RequiredPermission("SettingManagement.TimeZone");
+            ?.AddOptions(timezones.Select(timezone => new OptionDto(timezone.Name, timezone.Value)))
+            ?.RequiredPermission("SettingManagement.TimeZone");
         settingGroups.AddGroup(sysSettingGroup);
 
         #endregion
@@ -304,10 +304,10 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
             await SettingManager.GetOrNullAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.Session.ConcurrentLoginStrategy, providerName, providerKey),
             ValueType.Option,
             providerName)
-            .AddOption(L["ConcurrentLoginStrategy:None"], ConcurrentLoginStrategy.None.ToString())
-            .AddOption(L["ConcurrentLoginStrategy:LogoutFromSameTypeDevicesLimit"], ConcurrentLoginStrategy.LogoutFromSameTypeDevicesLimit.ToString())
-            .AddOption(L["ConcurrentLoginStrategy:LogoutFromSameTypeDevices"], ConcurrentLoginStrategy.LogoutFromSameTypeDevices.ToString())
-            .AddOption(L["ConcurrentLoginStrategy:LogoutFromAllDevices"], ConcurrentLoginStrategy.LogoutFromAllDevices.ToString());
+            ?.AddOption(L["ConcurrentLoginStrategy:None"], ConcurrentLoginStrategy.None.ToString())
+            ?.AddOption(L["ConcurrentLoginStrategy:LogoutFromSameTypeDevicesLimit"], ConcurrentLoginStrategy.LogoutFromSameTypeDevicesLimit.ToString())
+            ?.AddOption(L["ConcurrentLoginStrategy:LogoutFromSameTypeDevices"], ConcurrentLoginStrategy.LogoutFromSameTypeDevices.ToString())
+            ?.AddOption(L["ConcurrentLoginStrategy:LogoutFromAllDevices"], ConcurrentLoginStrategy.LogoutFromAllDevices.ToString());
         sessionSetting.AddDetail(
             await SettingDefinitionManager.GetAsync(LINGYUN.Abp.Identity.Settings.IdentitySettingNames.Session.LogoutFromSameTypeDevicesLimit),
             StringLocalizerFactory,
@@ -445,14 +445,14 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
                 await SettingManager.GetOrNullAsync(EmailSettingNames.DefaultFromAddress, providerName, providerKey),
                 ValueType.String,
                 providerName)
-                .RequiredPermission("SettingManagement.Emailing");
+                ?.RequiredPermission("SettingManagement.Emailing");
             defaultMailSetting.AddDetail(
                 await SettingDefinitionManager.GetAsync(EmailSettingNames.DefaultFromDisplayName),
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(EmailSettingNames.DefaultFromDisplayName, providerName, providerKey),
                 ValueType.String,
                 providerName)
-                .RequiredPermission("SettingManagement.Emailing");
+                ?.RequiredPermission("SettingManagement.Emailing");
 
             // 防止邮件设置泄露
             if (await AuthorizationService.IsGrantedAsync(AbpSettingManagementPermissions.Settings.Manager))
@@ -464,21 +464,21 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
                     await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.EnableSsl, providerName, providerKey),
                     ValueType.Boolean,
                     providerName)
-                    .RequiredPermission("SettingManagement.Emailing");
+                    ?.RequiredPermission("SettingManagement.Emailing");
                 smtpSetting.AddDetail(
                     await SettingDefinitionManager.GetAsync(EmailSettingNames.Smtp.UseDefaultCredentials),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.UseDefaultCredentials, providerName, providerKey),
                     ValueType.Boolean,
                     providerName)
-                    .RequiredPermission("SettingManagement.Emailing");
+                    ?.RequiredPermission("SettingManagement.Emailing");
                 smtpSetting.AddDetail(
                     await SettingDefinitionManager.GetAsync(EmailSettingNames.Smtp.Domain),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Domain, providerName, providerKey),
                     ValueType.String,
                     providerName)
-                    .RequiredPermission("SettingManagement.Emailing");
+                    ?.RequiredPermission("SettingManagement.Emailing");
                 smtpSetting.AddDetail(
                     await SettingDefinitionManager.GetAsync(EmailSettingNames.Smtp.Host),
                     StringLocalizerFactory,
@@ -491,21 +491,21 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
                     await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Port, providerName, providerKey),
                     ValueType.Number,
                     providerName)
-                    .RequiredPermission("SettingManagement.Emailing");
+                    ?.RequiredPermission("SettingManagement.Emailing");
                 smtpSetting.AddDetail(
                     await SettingDefinitionManager.GetAsync(EmailSettingNames.Smtp.UserName),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.UserName, providerName, providerKey),
                     ValueType.String,
                     providerName)
-                    .RequiredPermission("SettingManagement.Emailing");
+                    ?.RequiredPermission("SettingManagement.Emailing");
                 smtpSetting.AddDetail(
                     await SettingDefinitionManager.GetAsync(EmailSettingNames.Smtp.Password),
                     StringLocalizerFactory,
                     await SettingManager.GetOrNullAsync(EmailSettingNames.Smtp.Password, providerName, providerKey),
                     ValueType.String,
                     providerName)
-                    .RequiredPermission("SettingManagement.Emailing");
+                    ?.RequiredPermission("SettingManagement.Emailing");
                 // 一个占位符,用于展现发送测试邮件
                 smtpSetting.AddDetail(
                     new SettingDefinition(
@@ -516,8 +516,8 @@ public class SettingAppService : ApplicationService, ISettingAppService, ISettin
                     "",
                     ValueType.NoSet,
                     providerName)
-                    .WithSlot("send-test-email")
-                    .RequiredPermission("SettingManagement.Emailing");
+                    ?.WithSlot("send-test-email")
+                    ?.RequiredPermission("SettingManagement.Emailing");
             }
 
 

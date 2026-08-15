@@ -10,5 +10,5 @@ public class SendPhoneResetPasswordCodeDto
     [Phone]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
     [Display(Name = "PhoneNumber")]
-    public string PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = default!;
 }

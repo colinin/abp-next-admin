@@ -17,5 +17,5 @@ public class WeChatWorkGetPermitUserListResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("ids")]
     [JsonPropertyName("ids")]
-    public string[] Ids { get; set; }
+    public string[] Ids { get; set; } = default!;
 }

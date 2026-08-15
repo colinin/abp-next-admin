@@ -37,7 +37,7 @@ public class EfCoreUserMenuRepository : EfCoreRepository<IPlatformDbContext, Use
 
     public async virtual Task<List<UserMenu>> GetListByUserIdAsync(
         Guid userId,
-        string framework = null,
+        string? framework = null,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
@@ -62,9 +62,9 @@ public class EfCoreUserMenuRepository : EfCoreRepository<IPlatformDbContext, Use
         return await queryable.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Menu> FindStartupMenuAsync(
+    public async virtual Task<Menu?> FindStartupMenuAsync(
         Guid userId,
-        string framework = null,
+        string? framework = null,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();

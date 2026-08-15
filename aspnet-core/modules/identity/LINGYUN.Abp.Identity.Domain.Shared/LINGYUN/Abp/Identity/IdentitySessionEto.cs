@@ -11,17 +11,17 @@ public class IdentitySessionEto : EtoBase, IMultiTenant
 
     public Guid? TenantId { get; set; }
 
-    public string SessionId { get; set; }
+    public string SessionId { get; set; } = default!;
 
-    public string Device { get; set; }
+    public string Device { get; set; } = default!;
 
-    public string DeviceInfo { get; set; }
+    public string? DeviceInfo { get; set; }
 
     public Guid UserId { get; set; }
 
-    public string ClientId { get; set; }
+    public string? ClientId { get; set; }
 
-    public string IpAddresses { get; set; }
+    public string? IpAddresses { get; set; }
 
     public DateTime SignedIn { get; set; }
 
@@ -34,10 +34,10 @@ public class IdentitySessionEto : EtoBase, IMultiTenant
         Guid id,
         string sessionId,
         string device,
-        string deviceInfo,
+        string? deviceInfo,
         Guid userId,
-        string clientId,
-        string ipAddresses,
+        string? clientId,
+        string? ipAddresses,
         DateTime signedIn,
         DateTime? lastAccessed,
         Guid? tenantId = null)

@@ -51,7 +51,7 @@ public class FeedbackAppService : PlatformApplicationServiceBase, IFeedbackAppSe
 
         feedback = await _feedbackRepository.InsertAsync(feedback);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Feedback, FeedbackDto>(feedback);
     }
@@ -63,7 +63,7 @@ public class FeedbackAppService : PlatformApplicationServiceBase, IFeedbackAppSe
 
         await _feedbackRepository.DeleteAsync(feedback);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(PlatformPermissions.Feedback.Default)]
@@ -100,8 +100,8 @@ public class FeedbackAppService : PlatformApplicationServiceBase, IFeedbackAppSe
             return expression
                 .AndIf(Input.Status.HasValue, x => x.Status == Input.Status)
                 .AndIf(!Input.Category.IsNullOrWhiteSpace(), x => x.Category == Input.Category)
-                .AndIf(!Input.Filter.IsNullOrWhiteSpace(), x => x.Category.Contains(Input.Filter) ||
-                    x.Content.Contains(Input.Filter));
+                .AndIf(!Input.Filter.IsNullOrWhiteSpace(), x => x.Category.Contains(Input.Filter!) ||
+                    x.Content.Contains(Input.Filter!));
         }
     }
 }

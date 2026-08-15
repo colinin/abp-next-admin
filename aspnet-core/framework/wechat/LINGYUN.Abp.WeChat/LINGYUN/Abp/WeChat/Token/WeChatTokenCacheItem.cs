@@ -2,9 +2,9 @@
 
 public class WeChatTokenCacheItem
 {
-    public string AppId { get; set; }
+    public string AppId { get; set; } = default!;
 
-    public WeChatToken WeChatToken { get; set; }
+    public WeChatToken WeChatToken { get; set; } = default!;
     public WeChatTokenCacheItem()
     {
 

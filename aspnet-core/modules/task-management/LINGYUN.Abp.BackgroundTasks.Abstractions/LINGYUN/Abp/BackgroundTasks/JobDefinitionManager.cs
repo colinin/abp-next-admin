@@ -46,7 +46,7 @@ public class JobDefinitionManager : IJobDefinitionManager, ISingletonDependency
         return JobDefinitions.Value.Values.ToImmutableList();
     }
 
-    public virtual JobDefinition GetOrNull(string name)
+    public virtual JobDefinition? GetOrNull(string name)
     {
         return JobDefinitions.Value.GetOrDefault(name);
     }
@@ -64,7 +64,7 @@ public class JobDefinitionManager : IJobDefinitionManager, ISingletonDependency
 
             foreach (var provider in providers)
             {
-                provider.Define(new JobDefinitionContext(jobs));
+                provider?.Define(new JobDefinitionContext(jobs));
             }
         }
 

@@ -2,7 +2,7 @@
 
 public class JsApiTicketInfoCacheItem
 {
-    public string Ticket { get; set; }
+    public string Ticket { get; set; } = default!;
 
     public int ExpiresIn { get; set; }
 

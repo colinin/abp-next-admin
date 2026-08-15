@@ -148,13 +148,13 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
         if (!putTemplateResponse.IsValidResponse)
         {
             var errorBuilder = new StringBuilder();
-            if (putTemplateResponse.TryGetOriginalException(out var ex))
+            if (putTemplateResponse.TryGetOriginalException(out var ex) && ex != null)
             {
                 errorBuilder.AppendLine(ex.Message);
                 Logger.LogWarning(ex, "Failed to initialize index and audit log may not be retrieved.");
                 return;
             }
-            else if (putTemplateResponse.TryGetElasticsearchServerError(out var error))
+            else if (putTemplateResponse.TryGetElasticsearchServerError(out var error) && error != null)
             {
                 errorBuilder.AppendLine(error.ToString());
             }
@@ -220,13 +220,13 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
         if (!putTemplateResponse.IsValidResponse)
         {
             var errorBuilder = new StringBuilder();
-            if (putTemplateResponse.TryGetOriginalException(out var ex))
+            if (putTemplateResponse.TryGetOriginalException(out var ex) && ex != null)
             {
                 errorBuilder.AppendLine(ex.Message);
                 Logger.LogWarning(ex, "Failed to initialize index and security log may not be retrieved.");
                 return;
             }
-            else if (putTemplateResponse.TryGetElasticsearchServerError(out var error))
+            else if (putTemplateResponse.TryGetElasticsearchServerError(out var error) && error != null)
             {
                 errorBuilder.AppendLine(error.ToString());
             }

@@ -14,8 +14,11 @@ public class RulesEngineContributor : RuleContributorBase, ISingletonDependency
     private readonly IRulesEngine _ruleEngine;
     private readonly IWorkflowsResolver _workflowRulesResolver;
 
-    public RulesEngineContributor(IWorkflowsResolver workflowRulesResolver)
+    public RulesEngineContributor(
+        IRulesEngine ruleEngine,
+        IWorkflowsResolver workflowRulesResolver)
     {
+        _ruleEngine = ruleEngine;
         _workflowRulesResolver = workflowRulesResolver;
     }
 
@@ -24,7 +27,7 @@ public class RulesEngineContributor : RuleContributorBase, ISingletonDependency
         _workflowRulesResolver.Initialize(context);
     }
 
-    public override async Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default)
+    public override async Task ExecuteAsync<T>(T input, object[]? @params = null, CancellationToken cancellationToken = default)
     {
         var result = await _workflowRulesResolver.ResolveWorkflowsAsync(typeof(T));
 
@@ -39,7 +42,7 @@ public class RulesEngineContributor : RuleContributorBase, ISingletonDependency
         _workflowRulesResolver.Shutdown();
     }
 
-    protected async virtual Task ExecuteRulesAsync<T>(T input, Workflow[] workflows, object[] @params = null)
+    protected async virtual Task ExecuteRulesAsync<T>(T input, Workflow[] workflows, object[]? @params = null) where T : notnull
     {
         // TODO: 性能缺陷 规则文件每一次调用都会重复编译
         _ruleEngine.AddOrUpdateWorkflow(workflows);

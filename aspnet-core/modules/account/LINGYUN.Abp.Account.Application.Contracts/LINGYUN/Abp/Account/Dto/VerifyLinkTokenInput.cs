@@ -10,5 +10,5 @@ public class VerifyLinkTokenInput : LinkUserBaseDto
     /// 关联用户Token
     /// </summary>
     [Required]
-    public string Token { get; set; }
+    public string Token { get; set; } = default!;
 }

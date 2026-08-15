@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.Saas.Editions;
 
 public class Edition : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 {
-    public virtual string DisplayName { get; protected set; }
+    public virtual string DisplayName { get; protected set; } = default!;
 
     public virtual int EntityVersion { get; protected set; }
 

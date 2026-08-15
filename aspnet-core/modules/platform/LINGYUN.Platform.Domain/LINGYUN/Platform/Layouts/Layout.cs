@@ -12,7 +12,7 @@ public class Layout : Route
     /// <summary>
     /// 框架
     /// </summary>
-    public virtual string Framework { get; protected set; }
+    public virtual string Framework { get; protected set; } = default!;
     /// <summary>
     /// 约定的Meta采用哪种数据字典,主要是约束路由必须字段的一致性
     /// </summary>
@@ -27,8 +27,8 @@ public class Layout : Route
         [NotNull] string displayName,
         [NotNull] Guid dataId,
         [NotNull] string framework,
-        [CanBeNull] string redirect = "",
-        [CanBeNull] string description = "",
+        [CanBeNull] string? redirect = null,
+        [CanBeNull] string? description = null,
         [CanBeNull] Guid? tenantId = null) 
         : base(id, path, name, displayName, redirect, description, tenantId)
     {

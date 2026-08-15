@@ -14,7 +14,7 @@ public class ExternalContactTransferFailEvent : ExternalContactChangeEvent
     /// 接替失败的原因, customer_refused-客户拒绝， customer_limit_exceed-接替成员的客户数达到上限
     /// </summary>
     [XmlElement("FailReason")]
-    public string FailReason { get; set; }
+    public string FailReason { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {

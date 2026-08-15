@@ -112,7 +112,7 @@ public class AbpCAPConsumerServiceSelector : ConsumerServiceSelector
             );
         // TODO: 事件名称定义在事件参数类型,就无法创建多个订阅者类了,增加可选配置,让用户决定事件名称定义在哪里
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-        var topicAttr = method.GetCustomAttributes<TopicAttribute>(true);
+        var topicAttr = method!.GetCustomAttributes<TopicAttribute>(true);
         var topicAttributes = topicAttr.ToList();
 
         topicAttributes.Add(new CapSubscribeAttribute(eventName));
@@ -121,10 +121,10 @@ public class AbpCAPConsumerServiceSelector : ConsumerServiceSelector
         {
             SetSubscribeAttribute(attr);
 
-            var parameters = method.GetParameters()
+            var parameters = method!.GetParameters()
                 .Select(parameter => new ParameterDescriptor
                 {
-                    Name = parameter.Name,
+                    Name = parameter.Name!,
                     ParameterType = parameter.ParameterType,
                     IsFromCap = parameter.GetCustomAttributes(typeof(FromCapAttribute)).Any()
                 }).ToList();

@@ -20,8 +20,8 @@ public abstract class HttpRequestJobBase
     // 可选, 请求时指定区域性
     public const string PropertyCulture = "culture";
 
-    protected ICurrentTenant CurrentTenant { get; set; }
-    protected IJsonSerializer JsonSerializer { get; set; }
+    protected ICurrentTenant CurrentTenant { get; set; } = default!;
+    protected IJsonSerializer JsonSerializer { get; set; } = default!;
 
     protected virtual void InitJob(JobRunnableContext context)
     {
@@ -29,14 +29,14 @@ public abstract class HttpRequestJobBase
         JsonSerializer = context.GetRequiredService<IJsonSerializer>();
     }
 
-    protected async virtual Task<T> RequestAsync<T>(
+    protected async virtual Task<T?> RequestAsync<T>(
        JobRunnableContext context,
        HttpMethod httpMethod,
        string requestUrl,
-       object data = null,
+       object? data = null,
        string contentType = MimeTypes.Application.Json,
-       IReadOnlyDictionary<string, string> headers = null,
-       string clientName = null)
+       IReadOnlyDictionary<string, string>? headers = null,
+       string? clientName = null)
     {
         var response = await RequestAsync(
             context, 
@@ -78,10 +78,10 @@ public abstract class HttpRequestJobBase
         JobRunnableContext context,
         HttpMethod httpMethod,
         string requestUrl,
-        object data = null,
+        object? data = null,
         string contentType = MimeTypes.Application.Json,
-        IReadOnlyDictionary<string, string> headers = null,
-        string clientName = null)
+        IReadOnlyDictionary<string, string>? headers = null,
+        string? clientName = null)
     {
         context.TryGetString(PropertyCulture, out var culture);
         using (CultureHelper.Use(culture ?? "en"))
@@ -107,9 +107,9 @@ public abstract class HttpRequestJobBase
     protected virtual HttpRequestMessage BuildRequestMessage(
         HttpMethod httpMethod,
         string requestUrl,
-        object data = null,
+        object? data = null,
         string contentType = MimeTypes.Application.Json,
-        IReadOnlyDictionary<string, string> headers = null)
+        IReadOnlyDictionary<string, string>? headers = null)
     {
         var httpRequestMesasge = new HttpRequestMessage(httpMethod, requestUrl);
         if (data != null)
@@ -130,7 +130,7 @@ public abstract class HttpRequestJobBase
 
     protected virtual void AddHeaders(
         HttpRequestMessage requestMessage,
-        IReadOnlyDictionary<string, string> headers = null)
+        IReadOnlyDictionary<string, string>? headers = null)
     {
         if (CurrentTenant?.Id.HasValue == true)
         {

@@ -22,6 +22,6 @@ public static class ModelStateExtensions
 
         return modelState.Keys
             .Where(k => k.StartsWith(modelName + ".") || k == modelName)
-            .All(key => modelState[key].ValidationState == ModelValidationState.Valid);
+            .All(key => modelState[key]?.ValidationState == ModelValidationState.Valid);
     }
 }

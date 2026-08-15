@@ -150,7 +150,7 @@ public class QrCodeLoginProvider : IQrCodeLoginProvider, ITransientDependency
     {
         var user = await UserManager.FindByIdAsync(userId);
 
-        return await UserManager.GenerateUserTokenAsync(user,
+        return await UserManager.GenerateUserTokenAsync(user!,
             QrCodeLoginProviderConsts.Name,
             QrCodeLoginProviderConsts.Purpose);
     }

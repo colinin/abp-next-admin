@@ -30,7 +30,7 @@ public class EfCoreFeedbackRepository : EfCoreRepository<IPlatformDbContext, Fee
 
     public async virtual Task<List<Feedback>> GetListAsync(
         ISpecification<Feedback> specification,
-        string sorting = $"{nameof(Feedback.CreationTime)} DESC",
+        string? sorting = $"{nameof(Feedback.CreationTime)} DESC",
         int maxResultCount = 25, 
         int skipCount = 0, 
         CancellationToken cancellationToken = default)

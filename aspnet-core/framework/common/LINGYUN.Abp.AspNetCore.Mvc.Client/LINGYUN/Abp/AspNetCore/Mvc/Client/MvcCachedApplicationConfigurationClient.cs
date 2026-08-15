@@ -50,23 +50,25 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
             return configuration;
         }
 
-        configuration = await Cache.GetOrAddAsync(
-            cacheKey,
-            async () => await Proxy.Service.GetAsync(new ApplicationConfigurationRequestOptions()),
-            () => new DistributedCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(CurrentUser.IsAuthenticated 
-                ? MvcClientCacheOptions.UserCacheExpirationSeconds 
-                : MvcClientCacheOptions.AnonymousCacheExpirationSeconds)
-            }
-        );
-
-        if (httpContext != null)
+        var configurationDto = await Cache.GetAsync(cacheKey);
+        if (configurationDto != null)
         {
-            httpContext.Items[cacheKey] = configuration;
+            httpContext?.Items[cacheKey] = configurationDto;
+            return configurationDto;
         }
 
-        return configuration;
+        configurationDto = await Proxy.Service.GetAsync(new ApplicationConfigurationRequestOptions());
+
+        await Cache.SetAsync(cacheKey, configurationDto, new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(CurrentUser.IsAuthenticated
+                ? MvcClientCacheOptions.UserCacheExpirationSeconds
+                : MvcClientCacheOptions.AnonymousCacheExpirationSeconds)
+        });
+
+        httpContext?.Items[cacheKey] = configurationDto;
+
+        return configurationDto;
     }
 
     public ApplicationConfigurationDto Get()

@@ -31,7 +31,7 @@ public class EfCoreNotificationSendRecordRepository :
 
     public async virtual Task<List<NotificationSendRecordInfo>> GetListAsync(
         ISpecification<NotificationSendRecordInfo> specification,
-        string sorting = $"{nameof(NotificationSendRecordInfo.SendTime)} DESC",
+        string? sorting = $"{nameof(NotificationSendRecordInfo.SendTime)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default)

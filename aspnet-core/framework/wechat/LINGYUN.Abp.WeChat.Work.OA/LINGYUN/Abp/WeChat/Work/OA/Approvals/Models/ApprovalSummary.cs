@@ -15,7 +15,7 @@ public class ApprovalSummary
     [NotNull]
     [JsonProperty("summary_info")]
     [JsonPropertyName("summary_info")]
-    public List<ApprovalSummaryInfo> SummaryInfo { get; set; }
+    public List<ApprovalSummaryInfo> SummaryInfo { get; set; } = default!;
     public ApprovalSummary()
     {
 

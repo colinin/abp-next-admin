@@ -13,12 +13,12 @@ public class VideoMessage : WeChatOfficialGeneralMessage
     /// 视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
     /// </summary>
     [XmlElement("ThumbMediaId")]
-    public string ThumbMediaId { get; set; }
+    public string ThumbMediaId { get; set; } = default!;
     /// <summary>
     /// 视频消息媒体id，可以调用获取临时素材接口拉取数据。
     /// </summary>
     [XmlElement("MediaId")]
-    public string MediaId { get; set; }
+    public string MediaId { get; set; } = default!;
     public override WeChatMessageEto ToEto()
     {
         return new WeChatOfficialGeneralMessageEto<VideoMessage>(this);

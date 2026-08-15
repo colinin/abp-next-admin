@@ -21,7 +21,7 @@ public interface IWebhookSubscriptionRepository : IRepository<WebhookSubscriptio
 
     Task<List<WebhookSubscription>> GetListAsync(
         ISpecification<WebhookSubscription> specification,
-        string sorting = $"{nameof(WebhookSubscription.CreationTime)} DESC",
+        string? sorting = $"{nameof(WebhookSubscription.CreationTime)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);

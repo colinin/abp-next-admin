@@ -13,9 +13,9 @@ public interface IResourceRepository : IRepository<Resource, Guid>
         string name,
         CancellationToken cancellationToken = default);
 
-    Resource FindByName(string name);
+    Resource? FindByName(string name);
 
-    Task<Resource> FindByNameAsync(
+    Task<Resource?> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default);
 
@@ -28,7 +28,7 @@ public interface IResourceRepository : IRepository<Resource, Guid>
 
     Task<List<Resource>> GetListAsync(
         ISpecification<Resource> specification,
-        string sorting = nameof(Resource.Name),
+        string? sorting = nameof(Resource.Name),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);

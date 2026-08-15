@@ -20,7 +20,7 @@ namespace LINGYUN.Abp.Webhooks
 
         public Task<WebhookSendAttempt> GetAsync(Guid? tenantId, Guid id)
         {
-            return Task.FromResult<WebhookSendAttempt>(default);
+            return Task.FromResult<WebhookSendAttempt>(default!);
         }
 
         public Task<int> GetSendAttemptCountAsync(Guid? tenantId, Guid webhookId, Guid webhookSubscriptionId)
@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.Webhooks
 
         public Task<bool> HasXConsecutiveFailAsync(Guid? tenantId, Guid subscriptionId, int searchCount)
         {
-            return default;
+            return default!;
         }
 
         public Task<(int TotalCount, IReadOnlyCollection<WebhookSendAttempt> Webhooks)> GetAllSendAttemptsBySubscriptionAsPagedListAsync(Guid? tenantId, Guid subscriptionId, int maxResultCount,

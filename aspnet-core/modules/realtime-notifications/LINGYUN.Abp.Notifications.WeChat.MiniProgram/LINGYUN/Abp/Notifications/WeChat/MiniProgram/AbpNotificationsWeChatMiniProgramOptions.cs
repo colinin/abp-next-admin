@@ -8,7 +8,7 @@ public class AbpNotificationsWeChatMiniProgramOptions
     /// <summary>
     /// 默认小程序模板
     /// </summary>
-    public string DefaultTemplateId { get; set; }
+    public string DefaultTemplateId { get; set; } = default!;
     /// <summary>
     /// 默认跳转小程序类型
     /// </summary>

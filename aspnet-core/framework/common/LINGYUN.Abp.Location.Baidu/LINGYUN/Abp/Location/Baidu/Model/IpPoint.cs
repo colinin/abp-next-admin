@@ -4,8 +4,8 @@ namespace LINGYUN.Abp.Location.Baidu.Model;
 
 public class IpPoint
 {
-    public string X { get; set; }
-    public string Y { get; set; }
+    public string X { get; set; } = default!;
+    public string Y { get; set; } = default!;
 
     public Point ToPoint()
     {

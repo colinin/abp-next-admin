@@ -9,7 +9,7 @@ public interface INexusAssetManager
 {
     Task<NexusAssetListResult> ListAsync(
         [NotNull] string repository, 
-        string continuationToken = null, 
+        string? continuationToken = null, 
         CancellationToken cancellationToken = default);
 
     Task<NexusAsset> GetAsync(
@@ -20,7 +20,7 @@ public interface INexusAssetManager
         [NotNull] string id,
         CancellationToken cancellationToken = default);
 
-    Task<Stream> GetContentOrNullAsync(
+    Task<Stream?> GetContentOrNullAsync(
         [NotNull] NexusAsset asset,
         CancellationToken cancellationToken = default);
 }

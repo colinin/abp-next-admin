@@ -6,13 +6,13 @@ namespace LINGYUN.Platform.Datas;
 
 public class DataDto : EntityDto<Guid>
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string Code { get; set; }
+    public string Code { get; set; } = default!;
 
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public Guid? ParentId { get; set; }
 

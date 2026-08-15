@@ -60,9 +60,12 @@ public class AliyunSmsSender : ISmsSender, IAliyunSmsVerifyCodeSender
             await SendAsync(
                 new SmsVerifyCodeMessage(
                     smsMessage.PhoneNumber,
-                    new SmsVerifyCodeMessageParam(code.ToString(), "5"),
+                    new SmsVerifyCodeMessageParam(code.ToString()!, "5"),
                     signName?.ToString(),
-                    templateCode?.ToString()));
+                    templateCode?.ToString())
+                {
+                    Interval = 10
+                });
             return;
         }
 

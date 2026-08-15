@@ -15,7 +15,7 @@ public class TableControlConfig : ControlConfig
     [NotNull]
     [JsonProperty("table")]
     [JsonPropertyName("table")]
-    public TableConfig Table { get; set; }
+    public TableConfig Table { get; set; } = default!;
     public TableControlConfig()
     {
 
@@ -42,7 +42,7 @@ public class TableConfig
     [NotNull]
     [JsonProperty("children")]
     [JsonPropertyName("children")]
-    public List<Control> Children { get; set; }
+    public List<Control> Children { get; set; } = default!;
     public TableConfig()
     {
 

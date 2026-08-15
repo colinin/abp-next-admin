@@ -36,7 +36,7 @@ public static class WeChatXmlDataSerializeExtensions
         using var xmlReader = XmlReader.Create(stringReader);
         var serializer = GetTypedSerializer(objectType);
         var usingEvents = events ?? new XmlDeserializationEvents();
-        return (T)serializer.Deserialize(xmlReader, usingEvents);
+        return (T)serializer.Deserialize(xmlReader, usingEvents)!;
     }
 
     public static string SerializeWeChatMessage(this WeChatMessage message)

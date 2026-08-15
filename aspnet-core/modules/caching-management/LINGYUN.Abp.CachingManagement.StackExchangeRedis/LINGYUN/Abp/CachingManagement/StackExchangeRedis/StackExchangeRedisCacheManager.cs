@@ -41,8 +41,8 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
     {
         var type = typeof(RedisCache);
 
-        ConnectAsyncMethod = type.GetMethod("ConnectAsync", BindingFlags.Instance | BindingFlags.NonPublic);
-        MapMetadataMethod = type.GetMethod("MapMetadata", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static);
+        ConnectAsyncMethod = type.GetMethod("ConnectAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        MapMetadataMethod = type.GetMethod("MapMetadata", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static)!;
         AbsoluteExpirationKey = type.GetField("AbsoluteExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!.ToString()!;
         SlidingExpirationKey = type.GetField("SlidingExpirationKey", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!.ToString()!;
 
@@ -108,7 +108,7 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
         // scan 0 match * count 50000
         // redis有自定义的key排序,由传递的marker来确定下一次检索起始位
 
-        var nextCursor = request.Marker ?? "0";
+        var nextCursor = request.Marker.IsNullOrWhiteSpace() ? "0" : request.Marker;
         var scanKeys = new List<string>();
 
         if (!request.Prefix.IsNullOrWhiteSpace() || !request.Filter.IsNullOrWhiteSpace())
@@ -122,12 +122,12 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
                     break;
                 }
 
-                var scanArgs = new object[] { nextCursor, "MATCH", match, "COUNT", ManagementOptions.ScanCount };
+                var scanArgs = new object[] { nextCursor!, "MATCH", match, "COUNT", ManagementOptions.ScanCount };
                 var scanResult = await cache.ExecuteAsync("SCAN", scanArgs);
 
-                var results = (RedisResult[])scanResult;
-                nextCursor = (string)results[0];
-                scanKeys.AddRange((string[])results[1]);
+                var results = (RedisResult[])scanResult!;
+                nextCursor = (string?)results[0];
+                scanKeys.AddRange((string[])results[1]!);
 
                 dept++;
             } while (nextCursor != "0");
@@ -136,13 +136,13 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
         {
             var scanArgs = new object[] { nextCursor, "MATCH", match, "COUNT", ManagementOptions.ScanCount };
             var scanResult = await cache.ExecuteAsync("SCAN", scanArgs);
-            var results = (RedisResult[])scanResult;
+            var results = (RedisResult[])scanResult!;
 
             // 第一个返回结果 下一次检索起始位 0复位
             // 第二个返回结果为key列表
             // https://redis.io/commands/scan/
-            nextCursor = (string)results[0];
-            scanKeys.AddRange((string[])results[1]);
+            nextCursor = (string?)results[0];
+            scanKeys.AddRange((string[])results[1]!);
         }
 
         return new CackeKeysResponse(
@@ -248,7 +248,7 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
 
             await RedisCache.SetAsync(
                 cacheKey, 
-                value,
+                value!,
                 distributedCacheEntryOptions,
                 cancellationToken);
 
@@ -272,12 +272,12 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
 
     protected virtual ValueTask<IDatabase> ConnectAsync(CancellationToken token = default)
     {
-        return (ValueTask<IDatabase>)ConnectAsyncMethod.Invoke(RedisCache, new object[] { token });
+        return (ValueTask<IDatabase>)ConnectAsyncMethod.Invoke(RedisCache, new object[] { token })!;
     }
 
     protected virtual void MapMetadata(RedisValue[] results, out DateTimeOffset? absoluteExpiration, out TimeSpan? slidingExpiration)
     {
-        var parameters = new object[] { results, null, null };
+        var parameters = new object?[] { results, null, null };
         MapMetadataMethod.Invoke(this, parameters);
 
         absoluteExpiration = (DateTimeOffset?)parameters[1];

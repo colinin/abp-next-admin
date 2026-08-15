@@ -1,5 +1,6 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Core.Bulk;
+using Elastic.Transport.Products.Elasticsearch;
 using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.Logging;
 using System;
@@ -46,7 +47,7 @@ public class ElasticsearchAuditLogWriter : IAuditLogWriter, ITransientDependency
         if (!response.IsValidResponse)
         {
             _logger.LogWarning("Could not save the audit log object: " + Environment.NewLine + auditLog.ToString());
-            if (response.TryGetOriginalException(out var ex))
+            if (response.TryGetOriginalException(out var ex) && ex != null)
             {
                 _logger.LogWarning(ex, ex.Message);
             }

@@ -26,7 +26,7 @@ public class BackgroundJobAdapter<TArgs> : IJobRunnable
 
     public async virtual Task ExecuteAsync(JobRunnableContext context)
     {
-        object jobArgs = null;
+        object? jobArgs = null;
         if (context.TryGetString(nameof(TArgs), out var argsJson))
         {
             var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
@@ -38,7 +38,7 @@ public class BackgroundJobAdapter<TArgs> : IJobRunnable
         var jobContext = new JobExecutionContext(
             context.ServiceProvider,
             jobConfiguration.JobType,
-            jobArgs, 
+            jobArgs!, 
             context.CancellationToken);
         await JobExecuter.ExecuteAsync(jobContext);
     }

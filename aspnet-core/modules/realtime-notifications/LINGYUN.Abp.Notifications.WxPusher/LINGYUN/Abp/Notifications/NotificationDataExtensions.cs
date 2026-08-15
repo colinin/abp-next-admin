@@ -11,7 +11,7 @@ public static class NotificationDataExtensions
         notificationData.TrySetData(UrlKey, url);
     }
 
-    public static string GetUrlOrNull(
+    public static string? GetUrlOrNull(
         this NotificationData notificationData)
     {
         return notificationData.TryGetData(UrlKey)?.ToString();

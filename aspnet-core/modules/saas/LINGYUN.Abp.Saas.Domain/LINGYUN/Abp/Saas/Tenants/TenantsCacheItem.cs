@@ -15,11 +15,11 @@ public class TenantsCacheItem
     public List<TenantConfiguration> Tenants { get; set; }
     public TenantsCacheItem()
     {
-
+        Tenants = new List<TenantConfiguration>();
     }
     public TenantsCacheItem(List<TenantConfiguration> tenants)
     {
-        Tenants = tenants;
+        Tenants = tenants ?? [];
     }
     public static string CalculateCacheKey(bool includeDetails = false)
     {

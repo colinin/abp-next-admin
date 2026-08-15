@@ -8,8 +8,8 @@ public class RoleMenuStartupInput
 {
     [Required]
     [StringLength(80)]
-    public string RoleName { get; set; }
+    public string RoleName { get; set; } = default!;
 
     [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
-    public string Framework { get; set; }
+    public string? Framework { get; set; }
 }

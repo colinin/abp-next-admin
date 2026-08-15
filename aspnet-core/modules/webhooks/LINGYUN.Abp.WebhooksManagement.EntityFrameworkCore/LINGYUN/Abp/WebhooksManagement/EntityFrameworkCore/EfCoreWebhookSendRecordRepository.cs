@@ -33,7 +33,7 @@ public class EfCoreWebhookSendRecordRepository :
 
     public async virtual Task<List<WebhookSendRecord>> GetListAsync(
         ISpecification<WebhookSendRecord> specification, 
-        string sorting = $"{nameof(WebhookSendRecord.CreationTime)} DESC", 
+        string? sorting = $"{nameof(WebhookSendRecord.CreationTime)} DESC", 
         int maxResultCount = 10, 
         int skipCount = 10,
         bool includeDetails = false,
@@ -67,6 +67,6 @@ public class EfCoreWebhookSendRecordRepository :
             .WhereIf(filter.ResponseStatusCode.HasValue, x => x.ResponseStatusCode == filter.ResponseStatusCode)
             .WhereIf(filter.BeginCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.BeginCreationTime) >= 0)
             .WhereIf(filter.EndCreationTime.HasValue, x => x.CreationTime.CompareTo(filter.EndCreationTime) <= 0)
-            .WhereIf(!filter.Filter.IsNullOrWhiteSpace(), x => x.Response.Contains(filter.Filter));
+            .WhereIf(!filter.Filter.IsNullOrWhiteSpace(), x => x.Response!.Contains(filter.Filter!));
     }
 }

@@ -9,7 +9,7 @@ public class SubscribeMessageResponse
     public int ErrorCode { get; set; }
 
     [JsonProperty("errmsg")]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     public bool IsSuccessed => ErrorCode == 0;
 

@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.WebhooksManagement;
 
 public interface IWebhookDefinitionRecordRepository : IBasicRepository<WebhookDefinitionRecord, Guid>
 {
-    Task<WebhookDefinitionRecord> FindByNameAsync(
+    Task<WebhookDefinitionRecord?> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default);
 

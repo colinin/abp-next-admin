@@ -68,7 +68,7 @@ namespace LINGYUN.Abp.ProjectManagement.Projects
                 {
                     projectBuildArgs = projectBuildArgs.Union(
                         projectTemplate.ExtraProperties
-                            .Select(x => new { x.Key, Value = x.Value?.ToString() ?? "" }));
+                            .Select(x => new { x.Key, Value = x.Value?.ToString() }));
                 }
                 // 检查必须参数
                 var ignoredArgs = template.GetMustOptions().Where(x => !projectBuildArgs.Any(y => x.Key.Equals(y.Key)));

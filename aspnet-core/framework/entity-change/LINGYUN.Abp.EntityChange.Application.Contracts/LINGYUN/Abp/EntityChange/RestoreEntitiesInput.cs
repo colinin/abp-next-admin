@@ -6,5 +6,5 @@ namespace LINGYUN.Abp.EntityChange;
 public class RestoreEntitiesInput
 {
     [Required]
-    public List<RestoreEntityInput> Entities { get; set; }
+    public List<RestoreEntityInput> Entities { get; set; } = default!;
 }

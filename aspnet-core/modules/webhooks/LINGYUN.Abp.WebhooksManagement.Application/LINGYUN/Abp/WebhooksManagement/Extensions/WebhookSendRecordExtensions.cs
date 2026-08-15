@@ -37,7 +37,7 @@ public static class WebhookSendRecordExtensions
             return new Dictionary<string, string>();
         }
 
-        return JsonConvert.DeserializeObject<Dictionary<string, string>>(sendRecord.RequestHeaders);
+        return JsonConvert.DeserializeObject<Dictionary<string, string>>(sendRecord.RequestHeaders)!;
     }
 
     public static IDictionary<string, string> GetResponseHeaders(this WebhookSendRecord sendRecord)
@@ -47,6 +47,6 @@ public static class WebhookSendRecordExtensions
             return new Dictionary<string, string>();
         }
 
-        return JsonConvert.DeserializeObject<Dictionary<string, string>>(sendRecord.ResponseHeaders);
+        return JsonConvert.DeserializeObject<Dictionary<string, string>>(sendRecord.ResponseHeaders)!;
     }
 }

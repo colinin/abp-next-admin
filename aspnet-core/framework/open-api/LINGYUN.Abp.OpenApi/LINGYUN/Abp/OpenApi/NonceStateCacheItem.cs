@@ -7,7 +7,7 @@ public class NonceStateCacheItem
 {
     private const string CacheKeyFormat = "open-api,nonce:{0}";
 
-    public string Nonce { get; set; }
+    public string Nonce { get; set; } = default!;
 
     public NonceStateCacheItem()
     {

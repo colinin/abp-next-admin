@@ -51,7 +51,7 @@ public class ElasticsearchSecurityLogWriter : ISecurityLogWriter, ITransientDepe
         if (!response.IsValidResponse)
         {
             _logger.LogWarning("Could not save the security log object: " + Environment.NewLine + securityLog.ToString());
-            if (response.TryGetOriginalException(out var ex))
+            if (response.TryGetOriginalException(out var ex) && ex != null)
             {
                 _logger.LogWarning(ex, ex.Message);
             }

@@ -8,5 +8,5 @@ namespace LINGYUN.Abp.DataProtectionManagement;
 public class RoleEntityRuleEto : EntityRuleBaseEto
 {
     public Guid RoleId { get; set; }
-    public string RoleName { get; set; }
+    public string RoleName { get; set; } = default!;
 }

@@ -22,7 +22,7 @@ public class TencentSecretKeyCaculater
         }
     }
 
-    private static string HttpBuildQuery(IDictionary<string, string> querystring_arrays)
+    private static string HttpBuildQuery(IDictionary<string, string?> querystring_arrays)
     {
 
         StringBuilder sb = new StringBuilder();
@@ -37,7 +37,7 @@ public class TencentSecretKeyCaculater
         return sb.ToString();
     }
 
-    public static string CalcSecretKey(string url, string secretKey, IDictionary<string, string> querystring_arrays)
+    public static string CalcSecretKey(string url, string secretKey, IDictionary<string, string?> querystring_arrays)
     {
         var queryString = HttpBuildQuery(querystring_arrays);
 

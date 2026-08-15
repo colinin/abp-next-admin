@@ -15,7 +15,7 @@ public class ApprovalApplyData
     [NotNull]
     [JsonProperty("contents")]
     [JsonPropertyName("contents")]
-    public List<ControlData> Contents { get; set; }
+    public List<ControlData> Contents { get; set; } = default!;
     public ApprovalApplyData()
     {
 

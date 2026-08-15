@@ -14,10 +14,10 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account;
 public class LinkLoggedModel : AccountPageModel
 {
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; }
+    public string ReturnUrl { get; set; } = default!;
 
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrlHash { get; set; }
+    public string? ReturnUrlHash { get; set; }
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
@@ -27,7 +27,7 @@ public class LinkLoggedModel : AccountPageModel
     [BindProperty(SupportsGet = true)]
     public Guid? LinkTenantId { get; set; }
 
-    public string LinkTenantAndUserName { get; set; }
+    public string? LinkTenantAndUserName { get; set; }
 
     protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
     public IIdentityLinkUserAppService IdentityLinkUserAppService => LazyServiceProvider.LazyGetRequiredService<IIdentityLinkUserAppService>();

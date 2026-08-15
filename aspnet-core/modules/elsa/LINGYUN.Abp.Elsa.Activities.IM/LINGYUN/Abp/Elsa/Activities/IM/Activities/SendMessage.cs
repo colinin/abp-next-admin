@@ -19,7 +19,7 @@ public class SendMessage : AbpActivity
     private readonly IMessageSender _messageSender;
 
     [ActivityInput(Hint = "The message content.")]
-    public string Content { get; set; } //TODO: Other message type
+    public string Content { get; set; } = default!; //TODO: Other message type
 
     [ActivityInput(Hint = "Source user identity.")]
     public Guid FormUser { get; set; }
@@ -57,7 +57,7 @@ public class SendMessage : AbpActivity
         {
             chatMessage = ChatMessage.Group(
                 FormUser,
-                FormUserName,
+                FormUserName!,
                 GroupId,
                 Content,
                 _clock,
@@ -70,7 +70,7 @@ public class SendMessage : AbpActivity
         {
             chatMessage = ChatMessage.User(
                FormUser,
-               FormUserName,
+               FormUserName!,
                To.Value,
                Content,
                _clock,

@@ -18,5 +18,5 @@ public class WeChatWorkCreateStrategyTagResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("tag_group")]
     [JsonPropertyName("tag_group")]
-    public StrategyTagGroup TagGroup { get; set; }
+    public StrategyTagGroup TagGroup { get; set; } = default!;
 }

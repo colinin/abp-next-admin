@@ -41,32 +41,32 @@ public class LoginModel : AccountPageModel
 {
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; }
+    public string ReturnUrl { get; set; } = default!;
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrlHash { get; set; }
+    public string? ReturnUrlHash { get; set; }
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public LoginType LoginType { get; set; }
 
     [BindProperty(Name = "PasswordLoginInput")]
-    public PasswordLoginInputModel PasswordLoginInput { get; set; }
+    public PasswordLoginInputModel PasswordLoginInput { get; set; } = default!;
 
     [BindProperty(Name = "PhoneLoginInput")]
-    public PhoneLoginInputModel PhoneLoginInput { get; set; }
+    public PhoneLoginInputModel PhoneLoginInput { get; set; } = default!;
 
     [BindProperty(Name = "QrCodeLoginInput")]
-    public QrCodeLoginInputModel QrCodeLoginInput { get; set; }
+    public QrCodeLoginInputModel QrCodeLoginInput { get; set; } = default!;
 
     public bool EnableLocalLogin { get; set; }
 
     public bool ShowCancelButton { get; set; }
     public bool IsExternalLoginOnly => EnableLocalLogin == false && ExternalProviders?.Count() == 1;
-    public string ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
+    public string? ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
 
-    public IEnumerable<ExternalLoginProviderModel> ExternalProviders { get; set; }
+    public IEnumerable<ExternalLoginProviderModel> ExternalProviders { get; set; } = default!;
     public IEnumerable<ExternalLoginProviderModel> VisibleExternalProviders => ExternalProviders.Where(x => !x.DisplayName.IsNullOrWhiteSpace());
 
     protected IIdentityUserRepository UserRepository => LazyServiceProvider.LazyGetRequiredService<IIdentityUserRepository>();
@@ -86,7 +86,7 @@ public class LoginModel : AccountPageModel
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string LinkToken { get; set; }
+    public string? LinkToken { get; set; }
 
     public bool IsLinkLogin { get; set; }
 
@@ -278,7 +278,7 @@ public class LoginModel : AccountPageModel
         {
             Response.Cookies.Append(
                "__tenant",
-               tenantId.ToString(),
+               tenantId.Value.ToString(),
                new CookieOptions
                {
                    Path = "/",
@@ -369,7 +369,7 @@ public class LoginModel : AccountPageModel
         return await Task.FromResult(Challenge(properties, provider));
     }
 
-    public virtual async Task<IActionResult> OnGetExternalLoginCallbackAsync(string returnUrl = "", string returnUrlHash = "", string remoteError = null)
+    public virtual async Task<IActionResult> OnGetExternalLoginCallbackAsync(string returnUrl = "", string returnUrlHash = "", string? remoteError = null)
     {
         //TODO: Did not implemented Identity Server 4 sample for this method (see ExternalLoginCallback in Quickstart of IDS4 sample)
         /* Also did not implement these:
@@ -421,7 +421,7 @@ public class LoginModel : AccountPageModel
             return await HandleExternalLoginNotAllowed(loginInfo);
         }
 
-        IdentityUser user;
+        IdentityUser? user;
         if (result.Succeeded)
         {
             user = await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
@@ -499,7 +499,7 @@ public class LoginModel : AccountPageModel
     }
 
 
-    protected virtual async Task<IdentityUser> GetIdentityUserAsync(string userNameOrEmailAddress)
+    protected virtual async Task<IdentityUser?> GetIdentityUserAsync(string userNameOrEmailAddress)
     {
         return await UserManager.FindByNameAsync(userNameOrEmailAddress) ??
             await UserManager.FindByEmailAsync(userNameOrEmailAddress);
@@ -518,7 +518,7 @@ public class LoginModel : AccountPageModel
             {
                 externalProviderModels.Add(new ExternalLoginProviderModel
                 {
-                    Name = externalLoginProvider.Name,
+                    Name = externalLoginProvider!.Name,
                     AuthenticationScheme = scheme.Name,
                     DisplayName = externalLoginProvider.DisplayName,
                     ComponentType = externalLoginProvider.ComponentType,
@@ -529,7 +529,7 @@ public class LoginModel : AccountPageModel
         return externalProviderModels;
     }
 
-    protected virtual bool TryGetExternalLoginProvider(AuthenticationScheme scheme, List<ExternalLoginProviderModel> externalProviders, out ExternalLoginProviderModel externalLoginProvider)
+    protected virtual bool TryGetExternalLoginProvider(AuthenticationScheme scheme, List<ExternalLoginProviderModel> externalProviders, out ExternalLoginProviderModel? externalLoginProvider)
     {
         if (ReflectionHelper.IsAssignableToGenericType(scheme.HandlerType, typeof(RemoteAuthenticationHandler<>)))
         {
@@ -580,7 +580,7 @@ public class LoginModel : AccountPageModel
     protected async virtual Task<IActionResult> HandleUserNotAllowed()
     {
         var notAllowedUser = await GetIdentityUserAsync(PasswordLoginInput.UserNameOrEmailAddress);
-        if (await UserManager.CheckPasswordAsync(notAllowedUser, PasswordLoginInput.Password))
+        if (notAllowedUser != null && await UserManager.CheckPasswordAsync(notAllowedUser, PasswordLoginInput.Password))
         {
             // 用户必须修改密码
             if (notAllowedUser.ShouldChangePasswordOnNextLogin || await UserManager.ShouldPeriodicallyChangePasswordAsync(notAllowedUser))
@@ -630,7 +630,7 @@ public class LoginModel : AccountPageModel
         changePwdIdentity.AddClaim(new Claim(AbpClaimTypes.UserId, user.Id.ToString()));
         if (user.TenantId.HasValue)
         {
-            changePwdIdentity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString()));
+            changePwdIdentity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.Value.ToString()));
         }
 
         await HttpContext.SignInAsync(AbpAccountAuthenticationTypes.ShouldChangePassword, new ClaimsPrincipal(changePwdIdentity));
@@ -643,7 +643,7 @@ public class LoginModel : AccountPageModel
 
         if (user.TenantId.HasValue)
         {
-            identity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString()));
+            identity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.Value.ToString()));
         }
 
         await HttpContext.SignInAsync(AbpAccountAuthenticationTypes.ConfirmUserScheme, new ClaimsPrincipal(identity));
@@ -659,7 +659,7 @@ public class LoginModel : AccountPageModel
     {
         if (HttpContext?.Request?.Headers?.UserAgent.IsNullOrEmpty() == false)
         {
-            var userAgentInfo = HttpUserAgentParserProvider.Parse(HttpContext.Request.Headers.UserAgent);
+            var userAgentInfo = HttpUserAgentParserProvider.Parse(HttpContext.Request.Headers.UserAgent!);
             if (userAgentInfo.MobileDeviceType.IsNullOrWhiteSpace())
             {
                 QrCodeLoginInput.IsEnabled = true;
@@ -727,9 +727,9 @@ public class LoginModel : AccountPageModel
         {
             await IdentityLinkUserAppService.LinkAsync(new LinkUserInput
             {
-                UserId = LinkUserId.Value,
+                UserId = LinkUserId!.Value,
                 TenantId = LinkTenantId,
-                Token = LinkToken
+                Token = LinkToken!
             });
 
             await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
@@ -785,11 +785,11 @@ public class PhoneLoginInputModel : LoginInputModel
     [Phone]
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
-    public string PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = default!;
 
     [Required]
     [StringLength(6)]
-    public string Code { get; set; }
+    public string Code { get; set; } = default!;
 
     public bool RememberMe { get; set; }
 }
@@ -798,13 +798,13 @@ public class PasswordLoginInputModel : LoginInputModel
 {
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
-    public string UserNameOrEmailAddress { get; set; }
+    public string UserNameOrEmailAddress { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
     [DataType(DataType.Password)]
     [DisableAuditing]
-    public string Password { get; set; }
+    public string Password { get; set; } = default!;
 
     public bool RememberMe { get; set; }
 }
@@ -812,7 +812,7 @@ public class PasswordLoginInputModel : LoginInputModel
 public class QrCodeLoginInputModel : LoginInputModel
 {
     [HiddenInput]
-    public string Key { get; set; }
+    public string Key { get; set; } = default!;
 
     [HiddenInput]
     public bool IsEnabled { get; set; }

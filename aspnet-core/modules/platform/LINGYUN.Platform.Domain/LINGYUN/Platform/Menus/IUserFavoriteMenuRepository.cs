@@ -14,7 +14,7 @@ public interface IUserFavoriteMenuRepository : IBasicRepository<UserFavoriteMenu
         Guid menuId,
         CancellationToken cancellationToken = default);
 
-    Task<UserFavoriteMenu> FindByUserMenuAsync(
+    Task<UserFavoriteMenu?> FindByUserMenuAsync(
         Guid userId,
         Guid menuId,
         CancellationToken cancellationToken = default);
@@ -25,7 +25,7 @@ public interface IUserFavoriteMenuRepository : IBasicRepository<UserFavoriteMenu
 
     Task<List<UserFavoriteMenu>> GetFavoriteMenusAsync(
         Guid userId,
-        string framework = null,
+        string? framework = null,
         Guid? menuId = null,
-            CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default);
 }

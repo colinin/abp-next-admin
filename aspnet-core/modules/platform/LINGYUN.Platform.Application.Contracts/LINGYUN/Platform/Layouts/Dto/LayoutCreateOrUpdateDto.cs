@@ -8,19 +8,19 @@ public class LayoutCreateOrUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(RouteConsts), nameof(RouteConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(RouteConsts), nameof(RouteConsts.MaxDisplayNameLength))]
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     [DynamicStringLength(typeof(RouteConsts), nameof(RouteConsts.MaxDescriptionLength))]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     [Required]
     [DynamicStringLength(typeof(RouteConsts), nameof(RouteConsts.MaxPathLength))]
-    public string Path { get; set; }
+    public string Path { get; set; } = default!;
 
     [DynamicStringLength(typeof(RouteConsts), nameof(RouteConsts.MaxRedirectLength))]
-    public string Redirect { get; set; }
+    public string? Redirect { get; set; }
 }

@@ -41,7 +41,7 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
             input.ValueType
         );
         identityClaimType = await IdentityClaimTypeManager.CreateAsync(identityClaimType);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<IdentityClaimType, IdentityClaimTypeDto>(identityClaimType);
     }
@@ -49,18 +49,14 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
     [Authorize(IdentityPermissions.IdentityClaimType.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
-        var identityClaimType = await IdentityClaimTypeRepository.FindAsync(id);
-        if (identityClaimType == null)
-        {
-            return;
-        }
+        var identityClaimType = await IdentityClaimTypeRepository.GetAsync(id);
         CheckDeletionClaimType(identityClaimType);
         await IdentityClaimTypeRepository.DeleteAsync(identityClaimType);
     }
 
     public async virtual Task<IdentityClaimTypeDto> GetAsync(Guid id)
     {
-        var identityClaimType = await IdentityClaimTypeRepository.FindAsync(id);
+        var identityClaimType = await IdentityClaimTypeRepository.GetAsync(id);
 
         return ObjectMapper.Map<IdentityClaimType, IdentityClaimTypeDto>(identityClaimType);
     }
@@ -105,7 +101,7 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
         }
 
         identityClaimType = await IdentityClaimTypeManager.UpdateAsync(identityClaimType);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<IdentityClaimType, IdentityClaimTypeDto>(identityClaimType);
     }

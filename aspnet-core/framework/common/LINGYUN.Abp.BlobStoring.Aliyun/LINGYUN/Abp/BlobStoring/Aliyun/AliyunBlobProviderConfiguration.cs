@@ -34,7 +34,7 @@ public class AliyunBlobProviderConfiguration
     /// 签名版本（可选项：v1、v4）
     /// 默认: v1
     /// </summary>
-    public string SignatureVersion {
+    public string? SignatureVersion {
         get => _containerConfiguration.GetConfigurationOrDefault(AliyunBlobProviderConfigurationNames.SignatureVersion, DefaultSignatureVersion);
         set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.SignatureVersion, value);
     }
@@ -63,7 +63,7 @@ public class AliyunBlobProviderConfiguration
     /// <summary>
     /// 创建命名空间时防盗链列表
     /// </summary>
-    public List<string> CreateBucketReferer
+    public List<string>? CreateBucketReferer
     {
         get => _containerConfiguration.GetConfigurationOrDefault(AliyunBlobProviderConfigurationNames.CreateBucketReferer, new List<string>());
         set
@@ -85,7 +85,7 @@ public class AliyunBlobProviderConfiguration
         set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.PresignedGetExpirySeconds, value);
     }
 
-    public string Endpoint {
+    public string? Endpoint {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AliyunBlobProviderConfigurationNames.Endpoint, null);
         set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.Endpoint, value);
     }

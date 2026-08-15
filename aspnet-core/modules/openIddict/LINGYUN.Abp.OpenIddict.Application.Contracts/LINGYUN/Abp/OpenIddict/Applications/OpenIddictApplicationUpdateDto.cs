@@ -6,5 +6,5 @@ namespace LINGYUN.Abp.OpenIddict.Applications;
 [Serializable]
 public class OpenIddictApplicationUpdateDto : OpenIddictApplicationCreateOrUpdateDto, IHasConcurrencyStamp
 {
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

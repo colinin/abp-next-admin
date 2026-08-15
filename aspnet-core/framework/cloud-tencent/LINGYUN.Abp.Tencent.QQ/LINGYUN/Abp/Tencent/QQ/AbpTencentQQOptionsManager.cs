@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Options;
 using Volo.Abp.Settings;
 
@@ -34,20 +35,20 @@ public class AbpTencentQQOptionsManager : AbpDynamicOptionsManager<AbpTencentQQO
     protected async virtual Task<AbpTencentQQCacheItem> GetCacheItemAsync()
     {
         var cacheKey = AbpTencentQQCacheItem.CalculateCacheKey();
+        var cacheItem = TencentCache.Get<AbpTencentQQCacheItem>(cacheKey);
+        if (cacheItem == null)
+        {
+            var appId = await SettingProvider.GetOrNullAsync(TencentQQSettingNames.QQConnect.AppId);
+            var appKey = await SettingProvider.GetOrNullAsync(TencentQQSettingNames.QQConnect.AppKey);
+            var isMobile = await SettingProvider.IsTrueAsync(TencentQQSettingNames.QQConnect.IsMobile);
 
-        var cacheItem = await TencentCache.GetOrCreateAsync(
-            cacheKey,
-            async (cache) =>
-            {
-                var appId = await SettingProvider.GetOrNullAsync(TencentQQSettingNames.QQConnect.AppId);
-                var appKey = await SettingProvider.GetOrNullAsync(TencentQQSettingNames.QQConnect.AppKey);
-                var isMobile = await SettingProvider.IsTrueAsync(TencentQQSettingNames.QQConnect.IsMobile);
+            Check.NotNullOrWhiteSpace(appId, nameof(appId));
+            Check.NotNullOrWhiteSpace(appKey, nameof(appKey));
 
-                cache.SetAbsoluteExpiration(TimeSpan.FromMinutes(2d));
+            cacheItem = new AbpTencentQQCacheItem(appId, appKey, isMobile);
 
-                return new AbpTencentQQCacheItem(appId, appKey, isMobile);
-            });
-
+            TencentCache.Set(cacheKey, cacheItem, TimeSpan.FromMinutes(2d));
+        }
         return cacheItem;
     }
 }

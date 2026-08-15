@@ -9,8 +9,8 @@ namespace LINGYUN.Abp.Notifications;
 [Dependency(TryRegister = true)]
 public class NullDynamicNotificationDefinitionStore : IDynamicNotificationDefinitionStore, ISingletonDependency
 {
-    private readonly static Task<NotificationDefinition> CachedNotificationResult = Task.FromResult((NotificationDefinition)null);
-    private readonly static Task<NotificationGroupDefinition> CachedNotificationGroupResult = Task.FromResult((NotificationGroupDefinition)null);
+    private readonly static Task<NotificationDefinition?> CachedNotificationResult = Task.FromResult<NotificationDefinition?>(null);
+    private readonly static Task<NotificationGroupDefinition?> CachedNotificationGroupResult = Task.FromResult<NotificationGroupDefinition?>(null);
 
     private readonly static Task<IReadOnlyList<NotificationDefinition>> CachedNotificationsResult =
         Task.FromResult((IReadOnlyList<NotificationDefinition>)Array.Empty<NotificationDefinition>().ToImmutableList());
@@ -18,7 +18,7 @@ public class NullDynamicNotificationDefinitionStore : IDynamicNotificationDefini
     private readonly static Task<IReadOnlyList<NotificationGroupDefinition>> CachedGroupsResult =
         Task.FromResult((IReadOnlyList<NotificationGroupDefinition>)Array.Empty<NotificationGroupDefinition>().ToImmutableList());
 
-    public Task<NotificationDefinition> GetOrNullAsync(string name)
+    public Task<NotificationDefinition?> GetOrNullAsync(string name)
     {
         return CachedNotificationResult;
     }
@@ -28,7 +28,7 @@ public class NullDynamicNotificationDefinitionStore : IDynamicNotificationDefini
         return CachedNotificationsResult;
     }
 
-    public Task<NotificationGroupDefinition> GetGroupOrNullAsync(string name)
+    public Task<NotificationGroupDefinition?> GetGroupOrNullAsync(string name)
     {
         return CachedNotificationGroupResult;
     }

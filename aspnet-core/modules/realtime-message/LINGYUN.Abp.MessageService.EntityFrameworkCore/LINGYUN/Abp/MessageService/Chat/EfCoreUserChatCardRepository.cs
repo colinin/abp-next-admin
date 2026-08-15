@@ -20,7 +20,7 @@ public class EfCoreUserChatCardRepository : EfCoreRepository<IMessageServiceDbCo
     {
     }
 
-    public async virtual Task<UserChatCard> FindByUserIdAsync(
+    public async virtual Task<UserChatCard?> FindByUserIdAsync(
         Guid userId,
         CancellationToken cancellationToken = default)
     {
@@ -36,7 +36,7 @@ public class EfCoreUserChatCardRepository : EfCoreRepository<IMessageServiceDbCo
                 GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<UserCard> GetMemberAsync(Guid findUserId, CancellationToken cancellationToken = default)
+    public async virtual Task<UserCard?> GetMemberAsync(Guid findUserId, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .Where(ucc => ucc.UserId == findUserId)
@@ -45,26 +45,26 @@ public class EfCoreUserChatCardRepository : EfCoreRepository<IMessageServiceDbCo
     }
 
     public async virtual Task<int> GetMemberCountAsync(
-        string findUserName = "",
+        string? findUserName = null,
         int? startAge = null,
         int? endAge = null,
         Sex? sex = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-              .WhereIf(!findUserName.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(findUserName))
-              .WhereIf(startAge.HasValue, ucc => ucc.Age >= startAge.Value)
-              .WhereIf(endAge.HasValue, ucc => ucc.Age <= endAge.Value)
+              .WhereIf(!findUserName.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(findUserName!))
+              .WhereIf(startAge.HasValue, ucc => ucc.Age >= startAge)
+              .WhereIf(endAge.HasValue, ucc => ucc.Age <= endAge)
               .WhereIf(sex.HasValue, ucc => ucc.Sex == sex)
               .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<UserCard>> GetMembersAsync(
-        string findUserName = "",
+        string? findUserName = null,
         int? startAge = null,
         int? endAge = null,
         Sex? sex = null,
-        string sorting = nameof(UserChatCard.UserId),
+        string? sorting = nameof(UserChatCard.UserId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
@@ -74,9 +74,9 @@ public class EfCoreUserChatCardRepository : EfCoreRepository<IMessageServiceDbCo
             sorting = nameof(UserChatCard.UserId);
         }
         return await (await GetDbSetAsync())
-              .WhereIf(!findUserName.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(findUserName))
-              .WhereIf(startAge.HasValue, ucc => ucc.Age >= startAge.Value)
-              .WhereIf(endAge.HasValue, ucc => ucc.Age <= endAge.Value)
+              .WhereIf(!findUserName.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(findUserName!))
+              .WhereIf(startAge.HasValue, ucc => ucc.Age >= startAge)
+              .WhereIf(endAge.HasValue, ucc => ucc.Age <= endAge)
               .WhereIf(sex.HasValue, ucc => ucc.Sex == sex)
               .OrderBy(sorting)
               .PageBy(skipCount, maxResultCount)

@@ -6,5 +6,5 @@ public class WebhookGroupDefinitionCreateDto : WebhookGroupDefinitionCreateOrUpd
 {
     [Required]
     [DynamicStringLength(typeof(WebhookGroupDefinitionRecordConsts), nameof(WebhookGroupDefinitionRecordConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

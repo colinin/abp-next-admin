@@ -79,7 +79,7 @@ internal static class OpenIddictApplicationExtensions
         return entity;
     }
 
-    public static OpenIddictApplicationDto ToDto(this OpenIddictApplication entity, IJsonSerializer jsonSerializer)
+    public static OpenIddictApplicationDto? ToDto(this OpenIddictApplication entity, IJsonSerializer jsonSerializer)
     {
         if (entity == null)
         {

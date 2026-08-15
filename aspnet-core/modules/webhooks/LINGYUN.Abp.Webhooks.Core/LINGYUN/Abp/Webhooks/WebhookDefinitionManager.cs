@@ -31,7 +31,7 @@ internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonD
         _webhooksOptions = webhooksOptions.Value;
     }
 
-    public async virtual Task<WebhookDefinition> GetOrNullAsync(string name)
+    public async virtual Task<WebhookDefinition?> GetOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
@@ -65,7 +65,7 @@ internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonD
         };
     }
 
-    public async virtual Task<WebhookGroupDefinition> GetGroupOrNullAsync(string name)
+    public async virtual Task<WebhookGroupDefinition?> GetGroupOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
@@ -113,7 +113,7 @@ internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonD
             return false;
         }
 
-        if (webhookDefinition.RequiredFeatures?.Any() == false)
+        if (webhookDefinition.RequiredFeatures.Any() == false)
         {
             return true;
         }

@@ -47,7 +47,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
 
         subscription = await SubscriptionRepository.InsertAsync(subscription);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return subscription.ToWebhookSubscriptionDto();
     }
@@ -108,7 +108,7 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
 
         subscription = await SubscriptionRepository.UpdateAsync(subscription);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return subscription.ToWebhookSubscriptionDto();
     }
@@ -123,19 +123,29 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
             var group = new WebhookAvailableGroupDto
             {
                 Name = groupDefinition.Name,
-                DisplayName = groupDefinition.DisplayName?.Localize(StringLocalizerFactory),
             };
+            if (groupDefinition.DisplayName != null)
+            {
+                group.DisplayName = groupDefinition.DisplayName.Localize(StringLocalizerFactory);
+            }
 
             foreach (var webhookDefinition in groupDefinition.Webhooks.OrderBy(d => d.Name))
             {
                 if (await WebhookDefinitionManager.IsAvailableAsync(CurrentTenant.Id, webhookDefinition.Name))
                 {
-                    group.Webhooks.Add(new WebhookAvailableDto
+                    var webhook = new WebhookAvailableDto
                     {
                         Name = webhookDefinition.Name,
-                        Description = webhookDefinition.Description?.Localize(StringLocalizerFactory),
-                        DisplayName = webhookDefinition.DisplayName?.Localize(StringLocalizerFactory)
-                    });
+                    };
+                    if (webhookDefinition.DisplayName != null)
+                    {
+                        webhook.DisplayName = webhookDefinition.DisplayName.Localize(StringLocalizerFactory);
+                    }
+                    if (webhookDefinition.Description != null)
+                    {
+                        webhook.Description = webhookDefinition.Description.Localize(StringLocalizerFactory);
+                    }
+                    group.Webhooks.Add(webhook);
                 }
             }
 
@@ -200,9 +210,9 @@ public class WebhookSubscriptionAppService : WebhooksManagementAppServiceBase, I
                 .AndIf(Filter.EndCreationTime.HasValue, x => x.CreationTime <= Filter.EndCreationTime)
                 .AndIf(!Filter.WebhookUri.IsNullOrWhiteSpace(), x => x.WebhookUri == Filter.WebhookUri)
                 .AndIf(!Filter.Secret.IsNullOrWhiteSpace(), x => x.Secret == Filter.Secret)
-                .AndIf(!Filter.Webhooks.IsNullOrWhiteSpace(), x => x.Webhooks.Contains("\"" + Filter.Webhooks + "\""))
-                .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.WebhookUri.Contains(Filter.Filter) ||
-                    x.Secret.Contains(Filter.Filter) || x.Webhooks.Contains(Filter.Filter));
+                .AndIf(!Filter.Webhooks.IsNullOrWhiteSpace(), x => x.Webhooks!.Contains("\"" + Filter.Webhooks + "\""))
+                .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.WebhookUri.Contains(Filter.Filter!) ||
+                    x.Secret!.Contains(Filter.Filter!) || x.Webhooks!.Contains(Filter.Filter!));
         }
     }
 }

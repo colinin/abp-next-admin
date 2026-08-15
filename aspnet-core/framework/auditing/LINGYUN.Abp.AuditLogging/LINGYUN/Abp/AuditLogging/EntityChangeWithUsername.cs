@@ -2,7 +2,7 @@
 
 public class EntityChangeWithUsername
 {
-    public EntityChange EntityChange { get; set; }
+    public EntityChange EntityChange { get; set; } = default!;
 
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 }

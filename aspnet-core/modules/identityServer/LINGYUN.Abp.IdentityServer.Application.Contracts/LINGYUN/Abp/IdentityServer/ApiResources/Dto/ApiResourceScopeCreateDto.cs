@@ -13,13 +13,13 @@ public class ApiResourceScopeCreateDto
 
     [Required]
     [DynamicStringLength(typeof(ApiScopeConsts), nameof(ApiScopeConsts.NameMaxLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [DynamicStringLength(typeof(ApiScopeConsts), nameof(ApiScopeConsts.DisplayNameMaxLength))]
-    public string DisplayName { get; set; }
+    public string? DisplayName { get; set; }
 
     [DynamicStringLength(typeof(ApiScopeConsts), nameof(ApiScopeConsts.DescriptionMaxLength))]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool Required { get; set; }
 

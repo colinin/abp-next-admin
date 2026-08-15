@@ -74,7 +74,7 @@ public class StaticTemplateSaver : IStaticTemplateSaver, ITransientDependency
                 var templateDefinitionRecord = new TextTemplateDefinition(
                     GuidGenerator.Create(),
                     templateDefinition.Name,
-                    LocalizableStringSerializer.Serialize(templateDefinition.DisplayName),
+                    LocalizableStringSerializer.Serialize(templateDefinition.DisplayName)!,
                     templateDefinition.IsLayout,
                     templateDefinition.Layout,
                     templateDefinition.IsInlineLocalized,
@@ -118,7 +118,7 @@ public class StaticTemplateSaver : IStaticTemplateSaver, ITransientDependency
             var textTemplate = new TextTemplate(
                 GuidGenerator.Create(),
                 templateDefinition.Name,
-                LocalizableStringSerializer.Serialize(templateDefinition.DisplayName),
+                LocalizableStringSerializer.Serialize(templateDefinition.DisplayName)!,
                 content,
                 culture);
             saveNewTemplates.Add(textTemplate);

@@ -9,14 +9,13 @@ public class ClientCreateOrUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientIdMaxLength))]
-    public string ClientId { get; set; }
+    public string ClientId { get; set; } = default!;
 
-    [Required]
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientNameMaxLength))]
-    public string ClientName { get; set; }
+    public string? ClientName { get; set; }
 
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.DescriptionMaxLength))]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public List<ClientGrantTypeDto> AllowedGrantTypes { get; set; }
 

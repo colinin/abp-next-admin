@@ -8,8 +8,8 @@ namespace LINGYUN.Abp.Identity.Session;
 public class IdentitySessionChangeAccessedEvent : IMultiTenant
 {
     public Guid? TenantId { get; set; }
-    public string SessionId { get; set; }
-    public string IpAddresses { get; set; }
+    public string SessionId { get; set; } = default!;
+    public string? IpAddresses { get; set; }
     public DateTime LastAccessed { get; set; }
     public IdentitySessionChangeAccessedEvent()
     {
@@ -17,7 +17,7 @@ public class IdentitySessionChangeAccessedEvent : IMultiTenant
     }
     public IdentitySessionChangeAccessedEvent(
         string sessionId, 
-        string ipAddresses, 
+        string? ipAddresses, 
         DateTime lastAccessed,
         Guid? tenantId = null)
     {

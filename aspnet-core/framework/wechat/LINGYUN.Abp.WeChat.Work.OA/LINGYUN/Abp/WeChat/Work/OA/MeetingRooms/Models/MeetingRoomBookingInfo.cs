@@ -21,5 +21,5 @@ public class MeetingRoomBookingInfo
     [NotNull]
     [JsonProperty("schedule")]
     [JsonPropertyName("schedule")]
-    public MeetingRoomSchedule[] Schedule { get; set; }
+    public MeetingRoomSchedule[] Schedule { get; set; } = default!;
 }

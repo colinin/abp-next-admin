@@ -25,7 +25,7 @@ public class MessageSenderProviderManager : IMessageSenderProviderManager, ISing
             () => Options
                 .Providers
                 .Select(type => serviceProvider.GetRequiredService(type) as IMessageSenderProvider)
-                .ToList(),
+                .ToList()!,
             true
         );
     }

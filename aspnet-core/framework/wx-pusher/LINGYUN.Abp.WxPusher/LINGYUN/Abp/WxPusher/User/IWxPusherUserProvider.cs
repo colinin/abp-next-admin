@@ -23,7 +23,7 @@ public interface IWxPusherUserProvider
     Task<WxPusherPagedResult<UserProfile>> GetUserListAsync(
         int page = 1,
         int pageSize = 10,
-        string uid = null,
+        string? uid = null,
         bool? isBlock = null,
         FlowType? type = null,
         CancellationToken cancellationToken = default);

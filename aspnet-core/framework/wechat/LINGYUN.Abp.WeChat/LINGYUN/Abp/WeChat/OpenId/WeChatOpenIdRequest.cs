@@ -2,8 +2,8 @@
 
 public class WeChatOpenIdRequest
 {
-    public string BaseUrl { get; set; }
-    public string AppId { get; set; }
-    public string Secret { get; set; }
-    public string Code { get; set; }
+    public string BaseUrl { get; set; } = default!;
+    public string AppId { get; set; } = default!;
+    public string Secret { get; set; } = default!;
+    public string Code { get; set; } = default!;
 }

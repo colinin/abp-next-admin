@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.WeChat.Common.Messages;
+using System;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.WeChat.Work.Common.Messages;
@@ -12,7 +13,8 @@ public class WeChatWorkMessageResolveContributor : WeChatWorkMessageResolveContr
     protected override Task ResolveMessageAsync(IMessageResolveContext context, AbpWeChatWorkMessageResolveOptions options)
     {
         var messageType = context.GetMessageData("MsgType");
-        if (options.MessageMaps.TryGetValue(messageType, out var messageFactory))
+        if (!messageType.IsNullOrWhiteSpace() && 
+            options.MessageMaps.TryGetValue(messageType, out var messageFactory))
         {
             context.Message = messageFactory(context);
             context.Handled = true;

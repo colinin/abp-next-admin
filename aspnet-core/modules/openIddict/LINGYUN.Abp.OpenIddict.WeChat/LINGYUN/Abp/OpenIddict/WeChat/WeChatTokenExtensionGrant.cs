@@ -35,7 +35,7 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
     public abstract string LoginProvider { get; }
     public abstract string AuthenticationMethod { get; }
 
-    protected abstract Task<WeChatOpenId> FindOpenIdAsync(ExtensionGrantContext context, string code);
+    protected abstract Task<WeChatOpenId?> FindOpenIdAsync(ExtensionGrantContext context, string code);
 
     public async virtual Task<IActionResult> HandleAsync(ExtensionGrantContext context)
     {
@@ -55,7 +55,7 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
         {
             logger.LogWarning("Invalid grant type: wechat code not found");
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = localizer["InvalidGrant:WeChatCodeNotFound"]
@@ -64,17 +64,29 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        WeChatOpenId wechatOpenId;
+        WeChatOpenId? wechatOpenId;
         try
         {
             wechatOpenId = await FindOpenIdAsync(context, wechatCode);
         }
         catch (AbpWeChatException e)
         {
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = e.Message
+            });
+
+            return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+        if (wechatOpenId == null)
+        {
+            logger.LogWarning("Invalid grant type: WeChat authentication failed. Unable to obtain WeChat user information through the code: {}.", wechatCode);
+
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
+            {
+                [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = localizer["InvalidGrant:WeChatTokenInvalid"]
             });
 
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
@@ -93,7 +105,7 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
             {
                 logger.LogWarning("Invalid grant type: wechat openid {openid} not register", wechatOpenId.OpenId);
 
-                var properties = new AuthenticationProperties(new Dictionary<string, string>
+                var properties = new AuthenticationProperties(new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = localizer["InvalidGrant:WeChatNotRegister"]
@@ -122,7 +134,7 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
 
             logger.LogInformation("Authentication failed for username: {username}, reason: locked out", currentUser.UserName);
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = identityLocalizer["Volo.Abp.Identity:UserLockedOut"]
@@ -141,7 +153,7 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
         return Task.CompletedTask;
     }
 
-    protected virtual T GetRequiredService<T>(ExtensionGrantContext context)
+    protected virtual T GetRequiredService<T>(ExtensionGrantContext context) where T: notnull
     {
         return context.HttpContext.RequestServices.GetRequiredService<T>();
     }
@@ -204,7 +216,7 @@ public abstract class WeChatTokenExtensionGrant : ITokenExtensionGrant
         await identitySecurityLogManager.SaveAsync(logContext);
     }
 
-    protected virtual Task<string> FindClientIdAsync(ExtensionGrantContext context)
+    protected virtual Task<string?> FindClientIdAsync(ExtensionGrantContext context)
     {
         return Task.FromResult(context.Request.ClientId);
     }

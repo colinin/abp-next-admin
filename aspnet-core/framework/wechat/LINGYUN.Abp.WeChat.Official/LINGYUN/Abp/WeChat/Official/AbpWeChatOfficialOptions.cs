@@ -12,21 +12,21 @@ public class AbpWeChatOfficialOptions
     /// <summary>
     /// 公众号服务器消息Url
     /// </summary>
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
     /// <summary>
     /// 公众号AppId
     /// </summary>
-    public string AppId { get; set; }
+    public string AppId { get; set; } = default!;
     /// <summary>
     /// 公众号AppSecret
     /// </summary>
-    public string AppSecret { get; set; }
+    public string AppSecret { get; set; } = default!;
     /// <summary>
     /// 公众号消息解密Token
     /// </summary>
-    public string Token { get; set; }
+    public string Token { get; set; } = default!;
     /// <summary>
     /// 公众号消息解密AESKey
     /// </summary>
-    public string EncodingAESKey { get; set; }
+    public string EncodingAESKey { get; set; } = default!;
 }

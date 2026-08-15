@@ -10,7 +10,7 @@ public class SendMessageResult
     /// 状态码
     /// </summary>
     [JsonProperty("code")]
-    public int Code { get; set; }
+    public int Code { get; set; } = default!;
     /// <summary>
     /// 消息标识
     /// </summary>
@@ -38,12 +38,12 @@ public class SendMessageResult
     /// 状态
     /// </summary>
     [JsonProperty("status")]
-    public string Status { get; set; }
+    public string Status { get; set; } = default!;
     /// <summary>
     /// 用户标识
     /// </summary>
     [JsonProperty("uid")]
-    public string Uid { get; set; }
+    public string Uid { get; set; } = default!;
     /// <summary>
     /// 群组标识
     /// </summary>

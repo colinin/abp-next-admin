@@ -7,11 +7,11 @@ public class EmailMessageHeaderDto
 {
     [Required]
     [DynamicStringLength(typeof(EmailMessageHeaderConsts), nameof(EmailMessageHeaderConsts.MaxKeyLength))]
-    public string Key { get; set; }
+    public string Key { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(EmailMessageHeaderConsts), nameof(EmailMessageHeaderConsts.MaxValueLength))]
-    public string Value { get; set; }
+    public string Value { get; set; } = default!;
     public EmailMessageHeaderDto()
     {
 

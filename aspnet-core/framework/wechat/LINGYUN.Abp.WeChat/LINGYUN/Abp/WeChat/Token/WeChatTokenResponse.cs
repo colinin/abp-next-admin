@@ -12,17 +12,17 @@ public class WeChatTokenResponse
     /// 错误码
     /// </summary>
     [JsonProperty("errcode")]
-    public int ErrorCode { get; set; }
+    public int ErrorCode { get; set; } = default!;
     /// <summary>
     /// 错误消息
     /// </summary>
     [JsonProperty("errmsg")]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
     /// <summary>
     /// 访问令牌
     /// </summary>
     [JsonProperty("access_token")]
-    public string AccessToken { get; set; }
+    public string AccessToken { get; set; } = default!;
     /// <summary>
     /// 过期时间,单位(s)
     /// </summary>
@@ -33,7 +33,7 @@ public class WeChatTokenResponse
     {
         if(ErrorCode != 0)
         {
-            throw new AbpWeChatException(ErrorCode.ToString(), ErrorMessage);
+            throw new AbpWeChatException(ErrorCode.ToString(), ErrorMessage!);
         }
         return new WeChatToken(AccessToken, ExpiresIn);
     }

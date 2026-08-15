@@ -12,7 +12,7 @@ public static class NotificationDataExtensions
         notificationData.TrySetData(WebhookKey, url);
     }
 
-    public static string GetWebhookOrNull(
+    public static string? GetWebhookOrNull(
         this NotificationData notificationData)
     {
         return notificationData.TryGetData(WebhookKey)?.ToString();
@@ -25,7 +25,7 @@ public static class NotificationDataExtensions
         notificationData.TrySetData(CallbackUrlKey, callbackUrl);
     }
 
-    public static string GetCallbackUrlOrNull(
+    public static string? GetCallbackUrlOrNull(
         this NotificationData notificationData)
     {
         return notificationData.TryGetData(CallbackUrlKey)?.ToString();

@@ -28,7 +28,7 @@ public class EfCoreResourceRepository : EfCoreRepository<ILocalizationDbContext,
     }
 
     [Obsolete("Use FindAsync() method.")]
-    public virtual Resource FindByName(string name)
+    public virtual Resource? FindByName(string name)
     {
         using (Volo.Abp.Uow.UnitOfWorkManager.DisableObsoleteDbContextCreationWarning.SetScoped(true))
         {
@@ -36,7 +36,7 @@ public class EfCoreResourceRepository : EfCoreRepository<ILocalizationDbContext,
         }
     }
 
-    public async virtual Task<Resource> FindByNameAsync(
+    public async virtual Task<Resource?> FindByNameAsync(
         string name, 
         CancellationToken cancellationToken = default)
     {
@@ -61,7 +61,7 @@ public class EfCoreResourceRepository : EfCoreRepository<ILocalizationDbContext,
 
     public async virtual Task<List<Resource>> GetListAsync(
         ISpecification<Resource> specification,
-        string sorting = nameof(Resource.Name),
+        string? sorting = nameof(Resource.Name),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default)

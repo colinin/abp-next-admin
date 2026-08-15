@@ -26,9 +26,9 @@ public class NotificationData : IHasExtraProperties
     /// </summary>
     public const string CultureKey = "C";
 
-    public virtual string Type => GetType().FullName;
+    public virtual string Type => GetType().FullName!;
 
-    public object this[string key]
+    public object? this[string key]
     {
         get
         {
@@ -40,7 +40,7 @@ public class NotificationData : IHasExtraProperties
         }
     }
 
-    public ExtraPropertyDictionary ExtraProperties { get; set; }
+    public ExtraPropertyDictionary ExtraProperties { get; set; } = default!;
 
     public NotificationData()
     {
@@ -63,8 +63,8 @@ public class NotificationData : IHasExtraProperties
         LocalizableStringInfo message,
         DateTime createTime,
         string formUser,
-        LocalizableStringInfo description = null,
-        string culture = null)
+        LocalizableStringInfo? description = null,
+        string? culture = null)
     {
         TrySetData("title", title);
         TrySetData("message", message);
@@ -147,11 +147,11 @@ public class NotificationData : IHasExtraProperties
         return data;
     }
 
-    public object TryGetData(string key)
+    public object? TryGetData(string key)
     {
         return this.GetProperty(key);
     }
-    public void TrySetData(string key, object value)
+    public void TrySetData(string key, object? value)
     {
         this.SetProperty(key, value);
     }

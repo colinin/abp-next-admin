@@ -14,14 +14,14 @@ public class UserIdentifier
     /// <summary>
     /// 用户名
     /// </summary>
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 
     public UserIdentifier()
     {
 
     }
 
-    public UserIdentifier(Guid userId, string userName)
+    public UserIdentifier(Guid userId, string? userName)
     {
         UserId = userId;
         UserName = userName;

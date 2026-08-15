@@ -18,5 +18,5 @@ public class CropTagGroup : TagGroup
     [NotNull]
     [JsonProperty("tag")]
     [JsonPropertyName("tag")]
-    public CropTag[] Tag { get; set; }
+    public CropTag[] Tag { get; set; } = default!;
 }

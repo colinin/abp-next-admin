@@ -21,7 +21,7 @@ public class EfCoreUserChatFriendRepository : EfCoreRepository<IMessageServiceDb
     {
     }
 
-    public async virtual Task<UserChatFriend> FindByUserFriendIdAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
+    public async virtual Task<UserChatFriend?> FindByUserFriendIdAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .Where(ucf => ucf.UserId == userId && ucf.FrientId == friendId)
@@ -30,7 +30,7 @@ public class EfCoreUserChatFriendRepository : EfCoreRepository<IMessageServiceDb
 
     public async virtual Task<List<UserFriend>> GetAllMembersAsync(
         Guid userId,
-        string sorting = nameof(UserChatFriend.RemarkName),
+        string? sorting = nameof(UserChatFriend.RemarkName),
          CancellationToken cancellationToken = default)
     {
         if (sorting.IsNullOrWhiteSpace())
@@ -68,7 +68,7 @@ public class EfCoreUserChatFriendRepository : EfCoreRepository<IMessageServiceDb
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<UserFriend> GetMemberAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
+    public async virtual Task<UserFriend?> GetMemberAsync(Guid userId, Guid friendId, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
         var userFriendQuery = from ucf in dbContext.Set<UserChatFriend>()
@@ -101,8 +101,8 @@ public class EfCoreUserChatFriendRepository : EfCoreRepository<IMessageServiceDb
 
     public async virtual Task<List<UserFriend>> GetMembersAsync(
         Guid userId,
-        string filter = "",
-        string sorting = nameof(UserChatFriend.UserId),
+        string? filter = null,
+        string? sorting = nameof(UserChatFriend.UserId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
@@ -114,12 +114,12 @@ public class EfCoreUserChatFriendRepository : EfCoreRepository<IMessageServiceDb
         var dbContext = await GetDbContextAsync();
         // 过滤用户资料
         var userChatCardQuery = dbContext.Set<UserChatCard>()
-            .WhereIf(!filter.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(filter) || ucc.NickName.Contains(filter));
+            .WhereIf(!filter.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(filter!) || ucc.NickName!.Contains(filter!));
 
         // 过滤好友资料
         var userChatFriendQuery = dbContext.Set<UserChatFriend>()
             .Where(ucf => ucf.Status == UserFriendStatus.Added)
-            .WhereIf(!filter.IsNullOrWhiteSpace(), ucf => ucf.RemarkName.Contains(filter));
+            .WhereIf(!filter.IsNullOrWhiteSpace(), ucf => ucf.RemarkName!.Contains(filter!));
 
         // 组合查询
         var userFriendQuery = from ucf in userChatFriendQuery
@@ -194,15 +194,15 @@ public class EfCoreUserChatFriendRepository : EfCoreRepository<IMessageServiceDb
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<int> GetMembersCountAsync(Guid userId, string filter = "", CancellationToken cancellationToken = default)
+    public async virtual Task<int> GetMembersCountAsync(Guid userId, string? filter = null, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
         var userChatCardQuery = dbContext.Set<UserChatCard>()
-             .WhereIf(!filter.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(filter) || ucc.NickName.Contains(filter));
+             .WhereIf(!filter.IsNullOrWhiteSpace(), ucc => ucc.UserName.Contains(filter!) || ucc.NickName!.Contains(filter!));
 
         var userChatFriendQuery = dbContext.Set<UserChatFriend>()
             .Where(ucf => ucf.Status == UserFriendStatus.Added)
-            .WhereIf(!filter.IsNullOrWhiteSpace(), ucf => ucf.RemarkName.Contains(filter));
+            .WhereIf(!filter.IsNullOrWhiteSpace(), ucf => ucf.RemarkName!.Contains(filter!));
 
         var userFriendQuery = from ucf in userChatFriendQuery
                               join ucc in userChatCardQuery

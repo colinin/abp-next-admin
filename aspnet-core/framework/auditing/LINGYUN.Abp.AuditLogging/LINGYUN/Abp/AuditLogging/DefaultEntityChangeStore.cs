@@ -44,10 +44,10 @@ public class DefaultEntityChangeStore : IEntityChangeStore, ISingletonDependency
         return Task.FromResult(new List<EntityChange>());
     }
 
-    public Task<EntityChangeWithUsername> GetWithUsernameAsync(Guid entityChangeId, CancellationToken cancellationToken = default)
+    public Task<EntityChangeWithUsername?> GetWithUsernameAsync(Guid entityChangeId, CancellationToken cancellationToken = default)
     {
         EntityChangeWithUsername? entityChange = null;
-        return Task.FromResult(entityChange!);
+        return Task.FromResult(entityChange);
     }
 
     public Task<List<EntityChangeWithUsername>> GetWithUsernameAsync(string entityId, string entityTypeFullName, CancellationToken cancellationToken = default)

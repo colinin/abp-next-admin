@@ -42,7 +42,7 @@ public class TextTemplateCacheItemInvalidator :
         await Cache.RemoveAsync(cacheKey);
     }
 
-    protected virtual string CalculateCacheKey(string name, string culture = null)
+    protected virtual string CalculateCacheKey(string name, string? culture = null)
     {
         return TextTemplateContentCacheItem.CalculateCacheKey(name, culture);
     }

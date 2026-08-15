@@ -7,15 +7,15 @@ namespace LINGYUN.Abp.LocalizationManagement;
 
 public abstract class LocalizationAppServiceBase : ApplicationService
 {
-    protected ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetService<ILocalEventBus>();
+    protected ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>();
     protected LocalizationAppServiceBase()
     {
         LocalizationResource = typeof(LocalizationManagementResource);
         ObjectMapperContext = typeof(AbpLocalizationManagementApplicationModule);
     }
 
-    protected async virtual Task PublishDynamicLocalizationRefreshEvent<TEvent>(TEvent @event)
+    protected async virtual Task PublishDynamicLocalizationRefreshEvent<TEvent>(TEvent @event) where TEvent : notnull
     {
-        await LocalEventBus?.PublishAsync(@event.GetType(), @event);
+        await LocalEventBus.PublishAsync(@event.GetType(), @event);
     }
 }

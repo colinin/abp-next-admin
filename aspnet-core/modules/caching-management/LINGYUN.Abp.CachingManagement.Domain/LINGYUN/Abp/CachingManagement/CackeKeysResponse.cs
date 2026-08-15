@@ -4,12 +4,12 @@ namespace LINGYUN.Abp.CachingManagement;
 
 public class CackeKeysResponse
 {
-    public string NextMarker { get; }
+    public string? NextMarker { get; }
 
     public IEnumerable<string> Keys { get; }
 
     public CackeKeysResponse(
-        string nextMarker,
+        string? nextMarker,
         IEnumerable<string> keys)
     {
         NextMarker = nextMarker;

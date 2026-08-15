@@ -11,8 +11,8 @@ namespace LINGYUN.Abp.LocalizationManagement;
 public class LocalizationTextCacheItem
 {
     private const string CacheKeyFormat = "r:{0},c:{1}";
-    public string ResourceName { get; set; }
-    public string CultureName { get; set; }
+    public string ResourceName { get; set; } = default!;
+    public string CultureName { get; set; } = default!;
     public Dictionary<string, string> Texts { get; set; }
     public LocalizationTextCacheItem()
     {

@@ -17,7 +17,7 @@ public class UpdateCalendarEvent : WeChatWorkEventMessage
     /// 日历ID
     /// </summary>
     [XmlElement("CalId")]
-    public string CalId { get; set; }
+    public string CalId { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {

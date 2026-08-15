@@ -13,8 +13,8 @@ public class Notification : Entity<long>, IMultiTenant, IHasCreationTime, IHasEx
     public virtual NotificationType Type { get; set; }
     public virtual NotificationContentType ContentType { get; set; }
     public virtual long NotificationId { get; protected set; }
-    public virtual string NotificationName { get; protected set; }
-    public virtual string NotificationTypeName { get; protected set; }
+    public virtual string NotificationName { get; protected set; } = default!;
+    public virtual string NotificationTypeName { get; protected set; } = default!;
     public virtual DateTime? ExpirationTime { get; set; }
     public virtual DateTime CreationTime { get; set; }
     public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }

@@ -11,7 +11,7 @@ public static class MessageServiceDbContextModelCreatingExtensions
 {
     public static void ConfigureMessageService(
        this ModelBuilder builder,
-       Action<MessageServiceModelBuilderConfigurationOptions> optionsAction = null)
+       Action<MessageServiceModelBuilderConfigurationOptions>? optionsAction = null)
     {
         Check.NotNull(builder, nameof(builder));
 

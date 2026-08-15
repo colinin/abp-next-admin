@@ -22,11 +22,11 @@ public class AuditLogAppService : AuditingApplicationServiceBase, IAuditLogAppSe
         AuditLogManager = auditLogManager;
     }
 
-    public async virtual Task<AuditLogDto> GetAsync(Guid id)
+    public async virtual Task<AuditLogDto?> GetAsync(Guid id)
     {
         var auditLog = await AuditLogManager.GetAsync(id, includeDetails: true);
 
-        return ObjectMapper.Map<AuditLog, AuditLogDto>(auditLog);
+        return ObjectMapper.Map<AuditLog?, AuditLogDto?>(auditLog);
     }
 
     public async virtual Task<PagedResultDto<AuditLogDto>> GetListAsync(AuditLogGetByPagedDto input)

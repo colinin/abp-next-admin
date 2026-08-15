@@ -17,5 +17,5 @@ public class WeChatWorkConvertToOpenIdResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("openid")]
     [JsonPropertyName("openid")]
-    public string OpenId { get; set; }
+    public string OpenId { get; set; } = default!;
 }

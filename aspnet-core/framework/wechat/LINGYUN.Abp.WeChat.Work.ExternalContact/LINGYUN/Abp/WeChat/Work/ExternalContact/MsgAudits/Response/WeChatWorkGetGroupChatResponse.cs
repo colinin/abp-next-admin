@@ -18,14 +18,14 @@ public class WeChatWorkGetGroupChatResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("roomname")]
     [JsonPropertyName("roomname")]
-    public string RoomName { get; set; }
+    public string RoomName { get; set; } = default!;
     /// <summary>
     /// roomid对应的群创建者，userid
     /// </summary>
     [NotNull]
     [JsonProperty("creator")]
     [JsonPropertyName("creator")]
-    public string Creator { get; set; }
+    public string Creator { get; set; } = default!;
     /// <summary>
     /// roomid对应的群创建时间
     /// </summary>
@@ -46,5 +46,5 @@ public class WeChatWorkGetGroupChatResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("members")]
     [JsonPropertyName("members")]
-    public RoomMember[] Members { get; set; }
+    public RoomMember[] Members { get; set; } = default!;
 }

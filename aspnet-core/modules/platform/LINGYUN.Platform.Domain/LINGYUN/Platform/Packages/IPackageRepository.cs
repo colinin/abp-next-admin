@@ -9,14 +9,14 @@ namespace LINGYUN.Platform.Packages;
 
 public interface IPackageRepository : IBasicRepository<Package, Guid>
 {
-    Task<Package> FindByNameAsync(
+    Task<Package?> FindByNameAsync(
         string name,
         bool includeDetails = true,
         CancellationToken cancellationToken = default);
 
-    Task<Package> FindLatestAsync(
+    Task<Package?> FindLatestAsync(
         string name,
-        string version = null,
+        string? version = null,
         bool includeDetails = true,
         CancellationToken cancellationToken = default);
 
@@ -26,7 +26,7 @@ public interface IPackageRepository : IBasicRepository<Package, Guid>
 
     Task<List<Package>> GetListAsync(
         Specification<Package> specification,
-        string sorting = $"{nameof(Package.Version)} DESC",
+        string? sorting = $"{nameof(Package.Version)} DESC",
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);

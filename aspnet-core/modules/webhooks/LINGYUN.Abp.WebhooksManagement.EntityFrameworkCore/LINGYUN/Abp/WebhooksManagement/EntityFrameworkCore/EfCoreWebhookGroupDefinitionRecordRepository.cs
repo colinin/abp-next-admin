@@ -20,7 +20,7 @@ public class EfCoreWebhookGroupDefinitionRecordRepository :
     {
     }
 
-    public async Task<WebhookGroupDefinitionRecord> FindByNameAsync(
+    public async Task<WebhookGroupDefinitionRecord?> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default)
     {

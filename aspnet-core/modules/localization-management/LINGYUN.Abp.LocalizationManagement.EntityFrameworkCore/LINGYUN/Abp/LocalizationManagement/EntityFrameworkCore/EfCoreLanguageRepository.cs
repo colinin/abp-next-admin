@@ -19,7 +19,7 @@ public class EfCoreLanguageRepository : EfCoreRepository<ILocalizationDbContext,
     {
     }
 
-    public async virtual Task<Language> FindByCultureNameAsync(
+    public async virtual Task<Language?> FindByCultureNameAsync(
         string cultureName,
         CancellationToken cancellationToken = default)
     {
@@ -44,7 +44,7 @@ public class EfCoreLanguageRepository : EfCoreRepository<ILocalizationDbContext,
 
     public async virtual Task<List<Language>> GetListAsync(
         ISpecification<Language> specification,
-        string sorting = nameof(Language.CultureName),
+        string? sorting = nameof(Language.CultureName),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default)

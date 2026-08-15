@@ -17,7 +17,7 @@ public class ExternalProfile
     [NotNull]
     [JsonProperty("external_corp_name")]
     [JsonPropertyName("external_corp_name")]
-    public string ExternalCorpName {  get; set; }
+    public string ExternalCorpName {  get; set; } = default!;
     /// <summary>
     /// 视频号属性。须从企业绑定到企业微信的视频号中选择，可在“我的企业”页中查看绑定的视频号。
     /// 第三方仅通讯录应用可获取；对于非第三方创建的成员，第三方通讯录应用也不可获取
@@ -25,12 +25,12 @@ public class ExternalProfile
     [NotNull]
     [JsonProperty("wechat_channels")]
     [JsonPropertyName("wechat_channels")]
-    public List<WechatChannel> WechatChannels { get; set; }
+    public List<WechatChannel> WechatChannels { get; set; } = default!;
     /// <summary>
     /// 属性列表
     /// </summary>
     [NotNull]
     [JsonProperty("external_attr")]
     [JsonPropertyName("external_attr")]
-    public List<ExternalAttribute> ExternalAttributes { get; set; }
+    public List<ExternalAttribute> ExternalAttributes { get; set; } = default!;
 }

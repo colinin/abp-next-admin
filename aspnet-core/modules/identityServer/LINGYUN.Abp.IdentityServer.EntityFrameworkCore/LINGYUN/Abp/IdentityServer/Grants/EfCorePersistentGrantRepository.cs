@@ -25,16 +25,16 @@ public class EfCorePersistentGrantRepository : PersistentGrantRepository, IPersi
     {
     }
 
-    public async virtual Task<long> GetCountAsync(string subjectId = null, string filter = null, CancellationToken cancellation = default)
+    public async virtual Task<long> GetCountAsync(string? subjectId = null, string? filter = null, CancellationToken cancellation = default)
     {
         return await (await GetDbSetAsync())
             .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId.Equals(subjectId))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
-                x.Type.Contains(filter) || x.ClientId.Contains(filter) || x.Key.Contains(filter))
+                x.Type.Contains(filter!) || x.ClientId.Contains(filter!) || x.Key.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellation));
     }
 
-    public async virtual Task<List<PersistedGrant>> GetListAsync(string subjectId = null, string filter = null, string sorting = "CreationTime", int skipCount = 1, int maxResultCount = 10, CancellationToken cancellation = default)
+    public async virtual Task<List<PersistedGrant>> GetListAsync(string? subjectId = null, string? filter = null, string? sorting = "CreationTime", int skipCount = 1, int maxResultCount = 10, CancellationToken cancellation = default)
     {
         if (sorting.IsNullOrWhiteSpace())
         {
@@ -43,7 +43,7 @@ public class EfCorePersistentGrantRepository : PersistentGrantRepository, IPersi
         return await (await GetDbSetAsync())
             .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId.Equals(subjectId))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
-                x.Type.Contains(filter) || x.ClientId.Contains(filter) || x.Key.Contains(filter))
+                x.Type.Contains(filter!) || x.ClientId.Contains(filter!) || x.Key.Contains(filter!))
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellation));
     }

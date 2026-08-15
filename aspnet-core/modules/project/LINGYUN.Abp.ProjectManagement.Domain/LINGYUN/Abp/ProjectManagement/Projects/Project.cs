@@ -6,17 +6,17 @@ namespace LINGYUN.Abp.ProjectManagement.Projects
 {
     public class Project : AuditedAggregateRoot<Guid>
     {
-        public virtual string Name { get; protected set; }
-        public virtual string Version { get; protected set; }
+        public virtual string Name { get; protected set; } = default!;
+        public virtual string Version { get; protected set; } = default!;
         public virtual BuildStatus Status { get; protected set; }
         public virtual DateTime? BuildTime { get; protected set; }
-        public virtual string BuildError { get; protected set; }
-        public virtual string PackageIconUrl { get; protected set; }
-        public virtual string PackageProjectUrl { get; protected set; }
-        public virtual string PackageLicenseExpression { get; protected set; }
+        public virtual string? BuildError { get; protected set; }
+        public virtual string? PackageIconUrl { get; protected set; }
+        public virtual string? PackageProjectUrl { get; protected set; }
+        public virtual string? PackageLicenseExpression { get; protected set; }
         public virtual RepositoryType? RepositoryType { get; protected set; }
-        public virtual string RepositoryUrl { get; protected set; }
-        public virtual string Template { get; protected set; }
+        public virtual string? RepositoryUrl { get; protected set; }
+        public virtual string Template { get; protected set; } = default!;
         protected Project() { }
         public Project(
             Guid id,
@@ -56,7 +56,7 @@ namespace LINGYUN.Abp.ProjectManagement.Projects
             BuildError = GetBaseExceptionError(ex);
         }
 
-        private static string GetBaseExceptionError(Exception ex)
+        private static string GetBaseExceptionError(Exception? ex)
         {
             if (ex == null)
             {

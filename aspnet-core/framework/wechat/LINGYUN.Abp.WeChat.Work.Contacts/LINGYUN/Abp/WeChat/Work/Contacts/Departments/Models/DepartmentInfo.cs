@@ -21,7 +21,7 @@ public class DepartmentInfo : Department
     [NotNull]
     [JsonProperty("department_leader")]
     [JsonPropertyName("department_leader")]
-    public string[] DepartmentLeader { get; set; }
+    public string[] DepartmentLeader { get; set; } = default!;
     /// <summary>
     /// 父部门id。根部门为1
     /// </summary>

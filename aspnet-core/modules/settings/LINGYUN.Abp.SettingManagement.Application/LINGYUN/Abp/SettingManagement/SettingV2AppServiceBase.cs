@@ -30,7 +30,7 @@ public abstract class SettingV2AppServiceBase : ApplicationService
         LocalizationResource = typeof(AbpSettingManagementResource);
     }
 
-    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string? providerKey = null)
     {
         var result = new SettingGroupResult();
 
@@ -93,6 +93,10 @@ public abstract class SettingV2AppServiceBase : ApplicationService
 
         foreach (var settingGroups in settingDefines.GroupBy(x => x.GetGroupOrNull()).OrderBy(x => x.Key?.Order ?? 9999))
         {
+            if (settingGroups.Key == null)
+            {
+                continue;
+            }
             if (!await IsEnabledSettingResource(settingGroups.Key))
             {
                 continue;
@@ -100,6 +104,10 @@ public abstract class SettingV2AppServiceBase : ApplicationService
             var groupDto = CreateSettingGroup(settingGroups.Key);
             foreach (var settings in settingGroups.GroupBy(x => x.GetParentOrNull()).OrderBy(x => x.Key?.Order ?? 9999))
             {
+                if (settings.Key == null)
+                {
+                    continue;
+                }
                 if (!await IsEnabledSettingResource(settings.Key))
                 {
                     continue;
@@ -124,25 +132,25 @@ public abstract class SettingV2AppServiceBase : ApplicationService
                     if (valueType == ValueType.Option)
                     {
                         var options = setting.GetOptions();
-                        settingDetailsDto.AddOptions(options.Select(option => new OptionDto(option.Name, option.Value)));
+                        settingDetailsDto?.AddOptions(options.Select(option => new OptionDto(option.Name, option.Value)));
                     }
 
                     var slot = setting.GetSlotOrNull();
                     if (!slot.IsNullOrWhiteSpace())
                     {
-                        settingDetailsDto.WithSlot(slot);
+                        settingDetailsDto?.WithSlot(slot);
                     }
 
                     var requiredFeatures = setting.GetRequiredFeatures();
                     if (requiredFeatures.Any())
                     {
-                        settingDetailsDto.RequiredFeature(requiredFeatures.ToArray());
+                        settingDetailsDto?.RequiredFeature(requiredFeatures.ToArray());
                     }
 
                     var requiredPermissions = setting.GetRequiredPermissions();
                     if (requiredPermissions.Any())
                     {
-                        settingDetailsDto.RequiredPermission(requiredPermissions.ToArray());
+                        settingDetailsDto?.RequiredPermission(requiredPermissions.ToArray());
                     }
                 }
 

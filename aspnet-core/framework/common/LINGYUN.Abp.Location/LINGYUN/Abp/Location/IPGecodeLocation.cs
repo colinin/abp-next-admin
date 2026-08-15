@@ -7,7 +7,7 @@ public class IPGecodeLocation
     /// <summary>
     /// IP地址
     /// </summary>
-    public string IpAddress { get; set; }
+    public string IpAddress { get; set; } = default!;
     /// <summary>
     /// 定位坐标
     /// </summary>
@@ -15,23 +15,23 @@ public class IPGecodeLocation
     /// <summary>
     /// 国家
     /// </summary>
-    public string Country { get; set; }
+    public string? Country { get; set; }
     /// <summary>
     /// 城市
     /// </summary>
-    public string City { get; set; }
+    public string? City { get; set; }
     /// <summary>
     /// 省份
     /// </summary>
-    public string Province { get; set; }
+    public string? Province { get; set; }
     /// <summary>
     /// 区县
     /// </summary>
-    public string District { get; set; }
+    public string? District { get; set; }
     /// <summary>
     /// adcode
     /// </summary>
-    public string AdCode { get; set; }
+    public string? AdCode { get; set; }
 
     public IDictionary<string, object> Additionals { get; } = new Dictionary<string, object>();
 

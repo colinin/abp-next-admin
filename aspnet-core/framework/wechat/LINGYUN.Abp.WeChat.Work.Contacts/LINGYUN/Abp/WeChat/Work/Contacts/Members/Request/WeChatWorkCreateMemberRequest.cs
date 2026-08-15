@@ -181,6 +181,15 @@ public class WeChatWorkCreateMemberRequest : WeChatWorkRequest
     [JsonProperty("main_department")]
     [JsonPropertyName("main_department")]
     public int? MainDepartment { get; set; }
+
+    public WeChatWorkCreateMemberRequest(
+        string userId,
+        string name)
+    {
+        UserId = userId;
+        Name = name;
+    }
+
     protected override void Validate()
     {
         Check.NotNullOrWhiteSpace(UserId, nameof(UserId), 64, 1);

@@ -29,14 +29,14 @@ public interface IIdentitySessionStore
     Task<IdentitySession> CreateAsync(
         string sessionId,
         string device,
-        string deviceInfo,
+        string? deviceInfo,
         Guid userId,
-        string clientId,
-        string ipAddresses,
+        string? clientId,
+        string? ipAddresses,
         DateTime signedIn,
         DateTime? lastAccessed = null,
-        string ipRegion = null,
-        string userName = null,
+        string? ipRegion = null,
+        string? userName = null,
         Guid? tenantId = null,
         CancellationToken cancellationToken = default);
     /// <summary>
@@ -64,7 +64,7 @@ public interface IIdentitySessionStore
     /// <param name="id">会话key</param>
     /// <param name="cancellationToken"></param>
     /// <returns>如果存在返回 <seealso cref="IdentitySession"/> 的实例, 否则返回 null.</returns>
-    Task<IdentitySession> FindAsync(
+    Task<IdentitySession?> FindAsync(
         Guid id,
         CancellationToken cancellationToken = default);
     /// <summary>
@@ -83,7 +83,7 @@ public interface IIdentitySessionStore
     /// <param name="sessionId">会话id</param>
     /// <param name="cancellationToken"></param>
     /// <returns>如果存在返回 <seealso cref="IdentitySession"/> 的实例, 否则返回 null.</returns>
-    Task<IdentitySession> FindAsync(
+    Task<IdentitySession?> FindAsync(
         string sessionId,
         CancellationToken cancellationToken = default);
     /// <summary>
@@ -93,7 +93,7 @@ public interface IIdentitySessionStore
     /// <param name="device">设备</param>
     /// <param name="cancellationToken"></param>
     /// <returns>如果存在返回 <seealso cref="IdentitySession"/> 的实例, 否则返回 null.</returns>
-    Task<IdentitySession> FindLastAsync(
+    Task<IdentitySession?> FindLastAsync(
         Guid userId,
         string device,
         CancellationToken cancellationToken = default);
@@ -168,7 +168,7 @@ public interface IIdentitySessionStore
     /// <returns></returns>
     Task RevokeWithAsync(
         Guid userId,
-        string device = null,
+        string? device = null,
         Guid? exceptSessionId = null,
         int maxCount = 0,
         CancellationToken cancellationToken = default);

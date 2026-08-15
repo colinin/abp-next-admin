@@ -7,9 +7,9 @@ namespace LINGYUN.Abp.AIManagement.Tools.Dtos;
 [Serializable]
 public class AIToolDefinitionRecordDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string Provider { get; set; }
+    public string Provider { get; set; } = default!;
 
     public string? Description { get; set; }
 
@@ -21,5 +21,5 @@ public class AIToolDefinitionRecordDto : ExtensibleAuditedEntityDto<Guid>, IHasC
 
     public string? StateCheckers { get; set; }
 
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

@@ -14,7 +14,7 @@ public class WeChatWorkTagChangeMemberResponse : WeChatWorkResponse
     [CanBeNull]
     [JsonProperty("invalidlist")]
     [JsonPropertyName("invalidlist")]
-    public string InvalidList { get; set; }
+    public string? InvalidList { get; set; }
     /// <summary>
     /// 若部分partylist非法，则返回
     /// </summary>

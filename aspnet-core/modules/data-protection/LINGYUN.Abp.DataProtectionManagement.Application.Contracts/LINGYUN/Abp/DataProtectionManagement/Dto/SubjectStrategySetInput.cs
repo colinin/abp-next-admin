@@ -10,11 +10,11 @@ public class SubjectStrategySetInput
 
     [Required]
     [DynamicStringLength(typeof(SubjectStrategyConsts), nameof(SubjectStrategyConsts.MaxSubjectNameLength))]
-    public string SubjectName { get; set; }
+    public string SubjectName { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(SubjectStrategyConsts), nameof(SubjectStrategyConsts.MaxSubjectNameLength))]
-    public string SubjectId { get; set; }
+    public string SubjectId { get; set; } = default!;
 
     public DataAccessStrategy Strategy { get; set; }
 }

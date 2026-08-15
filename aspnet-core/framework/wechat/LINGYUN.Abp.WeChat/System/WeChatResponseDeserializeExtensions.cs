@@ -6,6 +6,6 @@ public static class WeChatResponseDeserializeExtensions
 {
     public static T DeserializeObject<T>(this string responseContent) where T : WeChatResponse
     {
-        return JsonConvert.DeserializeObject<T>(responseContent);
+        return JsonConvert.DeserializeObject<T>(responseContent)!;
     }
 }

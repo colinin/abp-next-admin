@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LINGYUN.Abp.AIManagement.Tools;
 public interface IDynamicAIToolDefinitionStoreInMemoryCache
 {
-    string CacheStamp { get; set; }
+    string? CacheStamp { get; set; }
 
     SemaphoreSlim SyncSemaphore { get; }
 

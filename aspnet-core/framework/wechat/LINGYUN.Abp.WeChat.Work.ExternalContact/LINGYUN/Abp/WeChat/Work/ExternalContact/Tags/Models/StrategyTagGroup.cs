@@ -18,5 +18,5 @@ public class StrategyTagGroup : TagGroup
     [NotNull]
     [JsonProperty("tag")]
     [JsonPropertyName("tag")]
-    public StrategyTag[] Tag { get; set; }
+    public StrategyTag[] Tag { get; set; } = default!;
 }

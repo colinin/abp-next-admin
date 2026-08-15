@@ -47,7 +47,7 @@ public class NotificationGroupDefinitionAppService : AbpNotificationsApplication
 
         await _definitionGroupRecordRepository.InsertAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
     }
@@ -63,7 +63,7 @@ public class NotificationGroupDefinitionAppService : AbpNotificationsApplication
 
         await _definitionGroupRecordRepository.DeleteAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<NotificationGroupDefinitionDto> GetAsync(string name)
@@ -103,7 +103,7 @@ public class NotificationGroupDefinitionAppService : AbpNotificationsApplication
         UpdateByInput(definitionRecord, input);
         definitionRecord = await _definitionGroupRecordRepository.UpdateAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
     }

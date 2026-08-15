@@ -11,11 +11,11 @@ namespace LINGYUN.Abp.WeChat.Work.Authorize;
 public class NullWeChatWorkUserClaimProvider : IWeChatWorkUserClaimProvider
 {
     public readonly static IWeChatWorkUserClaimProvider Instance = new NullWeChatWorkUserClaimProvider(); 
-    public Task<string> FindUserIdentifierAsync(
+    public Task<string?> FindUserIdentifierAsync(
         Guid userId, 
         CancellationToken cancellationToken = default)
     {
-        string findUserId = null;
+        string? findUserId = null;
         return Task.FromResult(findUserId);
     }
 

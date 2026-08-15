@@ -17,13 +17,13 @@ public class WebhookSendRecord : Entity<Guid>, IHasCreationTime, IHasModificatio
 
     public virtual Guid WebhookSubscriptionId { get; protected set; }
 
-    public virtual string Response { get; protected set; }
+    public virtual string? Response { get; protected set; }
 
     public virtual HttpStatusCode? ResponseStatusCode { get; set; }
 
-    public virtual string RequestHeaders { get; protected set; }
+    public virtual string? RequestHeaders { get; protected set; }
 
-    public virtual string ResponseHeaders { get; protected set; }
+    public virtual string? ResponseHeaders { get; protected set; }
 
     public virtual bool SendExactSameData { get; set; }
 
@@ -31,7 +31,7 @@ public class WebhookSendRecord : Entity<Guid>, IHasCreationTime, IHasModificatio
 
     public virtual DateTime? LastModificationTime { get; set; }
 
-    public virtual WebhookEventRecord WebhookEvent { get; protected set; }
+    public virtual WebhookEventRecord WebhookEvent { get; protected set; } = default!;
 
     protected WebhookSendRecord()
     {
@@ -50,16 +50,16 @@ public class WebhookSendRecord : Entity<Guid>, IHasCreationTime, IHasModificatio
     }
 
     public void SetResponse(
-        string response,
+        string? response,
         HttpStatusCode? statusCode = null,
-        string responseHeaders = null)
+        string? responseHeaders = null)
     {
         Response = Check.Length(response, nameof(response), WebhookSendRecordConsts.MaxResponseLength);
         ResponseStatusCode = statusCode;
         ResponseHeaders = Check.Length(responseHeaders, nameof(responseHeaders), WebhookSendRecordConsts.MaxHeadersLength);
     }
 
-    public void SetRequestHeaders(string requestHeaders = null)
+    public void SetRequestHeaders(string? requestHeaders = null)
     {
         RequestHeaders = Check.Length(requestHeaders, nameof(requestHeaders), WebhookSendRecordConsts.MaxHeadersLength);
     }

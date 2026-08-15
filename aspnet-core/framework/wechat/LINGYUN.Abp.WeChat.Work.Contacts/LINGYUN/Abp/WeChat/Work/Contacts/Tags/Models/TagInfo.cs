@@ -21,5 +21,5 @@ public class TagInfo
     [NotNull]
     [JsonProperty("tagname")]
     [JsonPropertyName("tagname")]
-    public string TagName { get; set; }
+    public string TagName { get; set; } = default!;
 }

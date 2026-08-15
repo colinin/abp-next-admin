@@ -18,7 +18,7 @@ public class WeChatWorkGetCustomerStrategyRangeResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("range")]
     [JsonPropertyName("range")]
-    public CustomerStrategyRange[] Range { get; set; }
+    public CustomerStrategyRange[] Range { get; set; } = default!;
     /// <summary>
     /// 分页游标，用于查询下一个分页的数据，无更多数据时不返回
     /// </summary>

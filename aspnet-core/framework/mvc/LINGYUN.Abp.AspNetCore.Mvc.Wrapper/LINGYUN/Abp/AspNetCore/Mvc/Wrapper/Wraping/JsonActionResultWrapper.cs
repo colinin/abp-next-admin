@@ -11,7 +11,7 @@ public class JsonActionResultWrapper : IActionResultWrapper
 {
     public void Wrap(FilterContext context)
     {
-        JsonResult jsonResult = null;
+        JsonResult? jsonResult = null;
 
         switch (context)
         {
@@ -33,7 +33,7 @@ public class JsonActionResultWrapper : IActionResultWrapper
         {
             var options = context.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
 
-            jsonResult.Value = new WrapResult(options.CodeWithSuccess, jsonResult.Value);
+            jsonResult.Value = new WrapResult<object?>(options.CodeWithSuccess, jsonResult.Value);
         }
     }
 }

@@ -36,14 +36,14 @@ public interface IUserNotificationRepository : IBasicRepository<UserNotification
 
     Task<int> GetCountAsync(
         Guid userId,
-        string filter = "",
+        string? filter = null,
         NotificationReadState? readState = null,
         CancellationToken cancellationToken = default);
 
     Task<List<UserNotificationInfo>> GetListAsync(
         Guid userId, 
-        string filter = "", 
-        string sorting = nameof(Notification.CreationTime),
+        string? filter = null, 
+        string? sorting = nameof(Notification.CreationTime),
         NotificationReadState? readState = null,
         int skipCount = 0, 
         int maxResultCount = 10,
@@ -57,7 +57,7 @@ public interface IUserNotificationRepository : IBasicRepository<UserNotification
     Task<List<UserNotificationInfo>> GetListAsync(
         Guid userId,
         ISpecification<UserNotificationInfo> specification,
-        string sorting = nameof(Notification.CreationTime),
+        string? sorting = nameof(Notification.CreationTime),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);

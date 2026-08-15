@@ -57,7 +57,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
         await UserPictureProvider.SetPictureAsync(user, input.File.GetStream(), pictureId);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<IRemoteStreamContent> GetPictureAsync()
@@ -130,7 +130,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
         (await UserManager.SetTwoFactorEnabledWithAccountConfirmedAsync(user, input.Enabled)).CheckErrors();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeInput input)
@@ -153,7 +153,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         var template = await SettingProvider.GetOrNullAsync(Identity.Settings.IdentitySettingNames.User.SmsPhoneNumberConfirmed);
         var token = await UserManager.GenerateChangePhoneNumberTokenAsync(user, input.NewPhoneNumber);
         // 发送验证码
-        await SmsSecurityCodeSender.SendAsync(input.NewPhoneNumber, token, template);
+        await SmsSecurityCodeSender.SendAsync(input.NewPhoneNumber, token, template!);
 
         securityTokenCacheItem = new SecurityTokenCacheItem(token, user.Id, user.ConcurrencyStamp);
         await SecurityTokenCache
@@ -175,7 +175,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         // 更换手机号
         (await UserManager.ChangePhoneNumberAsync(user, input.NewPhoneNumber, input.Code)).CheckErrors();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.NewPhoneNumber, "SmsChangePhoneNumber");
         await SecurityTokenCache.RemoveAsync(securityTokenCacheKey);
@@ -248,7 +248,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
             unformattedKey = await UserManager.GetAuthenticatorKeyAsync(user);
         }
 
-        var authenticatorUri = AuthenticatorUriGenerator.Generate(userEmail, unformattedKey);
+        var authenticatorUri = AuthenticatorUriGenerator.Generate(userEmail!, unformattedKey!);
 
         return new AuthenticatorDto
         {
@@ -278,11 +278,11 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return new AuthenticatorRecoveryCodeDto
         {
-            RecoveryCodes = recoveryCodes.ToList(),
+            RecoveryCodes = recoveryCodes?.ToList(),
         };
     }
 
@@ -308,11 +308,15 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
-    private static string FormatKey(string unformattedKey)
+    private static string? FormatKey(string? unformattedKey)
     {
+        if (unformattedKey.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
         var result = new StringBuilder();
         var currentPosition = 0;
         while (currentPosition + 4 < unformattedKey.Length)

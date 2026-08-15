@@ -22,7 +22,7 @@ public class SM4StringEncryptionService : StringEncryptionService
     {
     }
 
-    public override string Decrypt(string cipherText, string passPhrase = null, byte[] salt = null)
+    public override string? Decrypt(string? cipherText, string? passPhrase = null, byte[]? salt = null)
     {
         if (string.IsNullOrEmpty(cipherText))
         {
@@ -33,11 +33,7 @@ public class SM4StringEncryptionService : StringEncryptionService
         salt ??= Options.DefaultSalt;
 
         var cipherTextBytes = Convert.FromBase64String(cipherText);
-
-        using var password = new Rfc2898DeriveBytes(passPhrase, salt);
-        // 128-bit key
-        var keyBytes = password.GetBytes(16);
-
+        var keyBytes = Rfc2898DeriveBytes.Pbkdf2(passPhrase, salt, 1000, HashAlgorithmName.SHA256, 16);
         var cipher = new PaddedBufferedBlockCipher(new CbcBlockCipher(new SM4Engine()), new Pkcs7Padding());
         cipher.Init(false, new ParametersWithIV(new KeyParameter(keyBytes), Options.InitVectorBytes));
 
@@ -46,7 +42,7 @@ public class SM4StringEncryptionService : StringEncryptionService
         return Encoding.UTF8.GetString(decryptTextBytes);
     }
 
-    public override string Encrypt(string plainText, string passPhrase = null, byte[] salt = null)
+    public override string? Encrypt(string? plainText, string? passPhrase = null, byte[]? salt = null)
     {
         if (plainText == null)
         {
@@ -57,10 +53,7 @@ public class SM4StringEncryptionService : StringEncryptionService
         salt ??= Options.DefaultSalt;
 
         var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-        using var password = new Rfc2898DeriveBytes(passPhrase, salt);
-        // 128-bit key
-        var keyBytes = password.GetBytes(16);
-
+        var keyBytes = Rfc2898DeriveBytes.Pbkdf2(passPhrase, salt, 1000, HashAlgorithmName.SHA256, 16);
         var cipher = new PaddedBufferedBlockCipher(new CbcBlockCipher(new SM4Engine()), new Pkcs7Padding());
         cipher.Init(true, new ParametersWithIV(new KeyParameter(keyBytes), Options.InitVectorBytes));
 

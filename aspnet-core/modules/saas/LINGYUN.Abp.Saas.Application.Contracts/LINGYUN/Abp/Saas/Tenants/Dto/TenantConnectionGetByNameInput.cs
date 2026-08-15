@@ -11,5 +11,5 @@ public class TenantConnectionGetByNameInput
 
     [Required]
     [DynamicStringLength(typeof(TenantConnectionStringConsts), nameof(TenantConnectionStringConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

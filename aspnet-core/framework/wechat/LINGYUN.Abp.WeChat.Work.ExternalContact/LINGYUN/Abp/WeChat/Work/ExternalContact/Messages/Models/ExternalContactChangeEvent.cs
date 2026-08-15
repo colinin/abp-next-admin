@@ -11,15 +11,15 @@ public abstract class ExternalContactChangeEvent : WeChatWorkEventMessage
     /// 变更类型
     /// </summary>
     [XmlElement("ChangeType")]
-    public string ChangeType { get; set; }
+    public string ChangeType { get; set; } = default!;
     /// <summary>
     /// 企业服务人员的UserID
     /// </summary>
     [XmlElement("UserID")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
     /// <summary>
     /// 外部联系人的userid，注意不是企业成员的账号
     /// </summary>
     [XmlElement("ExternalUserID")]
-    public string ExternalUserId { get; set; }
+    public string ExternalUserId { get; set; } = default!;
 }

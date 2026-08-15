@@ -93,7 +93,7 @@ public class AbpIdempotentActionFilter : IAsyncActionFilter, ITransientDependenc
         var exceptionHandlingOptions = context.ExecutingContext.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
 
         var errorInfo = new RemoteServiceErrorResponse(
-            errorInfoConverter.Convert(context.GrantResult.Exception, options =>
+            errorInfoConverter.Convert(context.GrantResult.Exception!, options =>
             {
                 options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
                 options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;

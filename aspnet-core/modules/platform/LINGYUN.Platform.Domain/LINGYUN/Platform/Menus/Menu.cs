@@ -13,15 +13,15 @@ public class Menu : Route
     /// <summary>
     /// 框架
     /// </summary>
-    public virtual string Framework { get; set; }
+    public virtual string Framework { get; set; } = default!;
     /// <summary>
     /// 菜单编号
     /// </summary>
-    public virtual string Code { get; set; }
+    public virtual string Code { get; set; } = default!;
     /// <summary>
     /// 菜单布局页,Layout的路径
     /// </summary>
-    public virtual string Component { get; set; }
+    public virtual string Component { get; set; } = default!;
     /// <summary>
     /// 所属的父菜单
     /// </summary>
@@ -47,8 +47,8 @@ public class Menu : Route
         [NotNull] string component,
         [NotNull] string displayName,
         [NotNull] string framework,
-        string redirect = "",
-        string description = "",
+        string? redirect = null,
+        string? description = null,
         Guid? parentId = null,
         Guid? tenantId = null) 
         : base(id, path, name, displayName, redirect, description, tenantId)

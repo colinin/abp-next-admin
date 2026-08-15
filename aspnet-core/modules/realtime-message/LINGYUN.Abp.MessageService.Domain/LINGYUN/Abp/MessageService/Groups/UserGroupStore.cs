@@ -61,7 +61,7 @@ public class UserGroupStore : IUserGroupStore, ITransientDependency
         }
     }
 
-    public async Task<GroupUserCard> GetUserGroupCardAsync(
+    public async Task<GroupUserCard?> GetUserGroupCardAsync(
         Guid? tenantId,
         long groupId,
         Guid userId,
@@ -128,7 +128,7 @@ public class UserGroupStore : IUserGroupStore, ITransientDependency
     public async Task<List<GroupUserCard>> GetMembersAsync(
         Guid? tenantId,
         long groupId,
-        string sorting = nameof(GroupUserCard.UserId),
+        string? sorting = nameof(GroupUserCard.UserId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)

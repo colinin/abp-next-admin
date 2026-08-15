@@ -90,7 +90,7 @@ public class TaskServiceDataSeeder : ITransientDependency
             Source = JobSource.System,
             LockTimeOut = Options.JobFetchLockTimeOut,
             TenantId = tenantId,
-            Type = typeof(BackgroundPollingJob).AssemblyQualifiedName,
+            Type = typeof(BackgroundPollingJob).AssemblyQualifiedName!,
         };
     }
 
@@ -111,7 +111,7 @@ public class TaskServiceDataSeeder : ITransientDependency
             Priority = JobPriority.High,
             Source = JobSource.System,
             TenantId = tenantId,
-            Type = typeof(BackgroundCleaningJob).AssemblyQualifiedName,
+            Type = typeof(BackgroundCleaningJob).AssemblyQualifiedName!,
         };
     }
 
@@ -133,7 +133,7 @@ public class TaskServiceDataSeeder : ITransientDependency
             Priority = JobPriority.High,
             Source = JobSource.System,
             TenantId = tenantId,
-            Type = typeof(BackgroundCheckingJob).AssemblyQualifiedName,
+            Type = typeof(BackgroundCheckingJob).AssemblyQualifiedName!,
         };
     }
 }

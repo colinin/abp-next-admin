@@ -34,14 +34,14 @@ public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBas
     {
         var authorization = await _authorizationManager.FindByIdAsync(_identifierConverter.ToString(id));
 
-        await _authorizationManager.DeleteAsync(authorization);
+        await _authorizationManager.DeleteAsync(authorization!);
     }
 
     public async virtual Task<OpenIddictAuthorizationDto> GetAsync(Guid id)
     {
         var authorization = await _authorizationRepository.GetAsync(id);
 
-        return authorization.ToDto(JsonSerializer);
+        return authorization.ToDto(JsonSerializer)!;
     }
 
     public async virtual Task<PagedResultDto<OpenIddictAuthorizationDto>> GetListAsync(OpenIddictAuthorizationGetListInput input)

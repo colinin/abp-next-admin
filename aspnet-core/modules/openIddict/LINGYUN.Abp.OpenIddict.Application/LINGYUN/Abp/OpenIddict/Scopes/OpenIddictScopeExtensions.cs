@@ -28,7 +28,7 @@ internal static class OpenIddictScopeExtensions
         return entity;
     }
 
-    public static OpenIddictScopeDto ToDto(this OpenIddictScope entity, IJsonSerializer jsonSerializer)
+    public static OpenIddictScopeDto? ToDto(this OpenIddictScope entity, IJsonSerializer jsonSerializer)
     {
         if (entity == null)
         {

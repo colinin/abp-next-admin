@@ -7,7 +7,7 @@ public interface IRuleContributor
 {
     void Initialize(RulesInitializationContext context);
 
-    Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default);
+    Task ExecuteAsync<T>(T input, object[]? @params = null, CancellationToken cancellationToken = default) where T: notnull;
 
     void Shutdown();
 }

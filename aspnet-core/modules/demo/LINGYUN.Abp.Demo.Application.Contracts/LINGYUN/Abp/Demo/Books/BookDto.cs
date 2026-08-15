@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.Demo.Books;
 public class BookDto : AuditedEntityDto<Guid>
 {
     [DisplayName("名称")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [DisplayName("类型")]
     public BookType Type { get; set; }
@@ -20,5 +20,5 @@ public class BookDto : AuditedEntityDto<Guid>
     public Guid AuthorId { get; set; }
 
     [DisplayName("作者")]
-    public string AuthorName { get; set; }
+    public string AuthorName { get; set; } = default!;
 }

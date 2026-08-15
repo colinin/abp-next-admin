@@ -4,7 +4,7 @@ public class PushPlusTokenCacheItem
 {
     public const string KeyFormat = "t:{0};s:{1}";
 
-    public string AccessKey { get; set; }
+    public string AccessKey { get; set; } = default!;
 
     public int ExpiresIn { get; set; }
 

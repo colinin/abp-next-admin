@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.LocalizationManagement;
 
 public interface ILanguageRepository : IRepository<Language, Guid>
 {
-    Task<Language> FindByCultureNameAsync(
+    Task<Language?> FindByCultureNameAsync(
         string cultureName,
         CancellationToken cancellationToken = default);
 
@@ -22,7 +22,7 @@ public interface ILanguageRepository : IRepository<Language, Guid>
 
     Task<List<Language>> GetListAsync(
         ISpecification<Language> specification,
-        string sorting = nameof(Language.CultureName),
+        string? sorting = nameof(Language.CultureName),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);

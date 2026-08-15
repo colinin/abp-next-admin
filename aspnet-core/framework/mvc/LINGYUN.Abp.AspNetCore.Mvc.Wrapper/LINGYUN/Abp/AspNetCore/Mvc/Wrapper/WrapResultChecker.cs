@@ -47,7 +47,7 @@ public class WrapResultChecker : IWrapResultChecker, ISingletonDependency
             return false;
         }
 
-        return CheckForException(context.Exception);
+        return CheckForException(context.Exception!);
     }
 
     public bool WrapOnExecution(FilterContext context)

@@ -14,14 +14,14 @@ public class WebhookTemplateCardSource
     [CanBeNull]
     [JsonProperty("icon_url")]
     [JsonPropertyName("icon_url")]
-    public string IconUrl { get; set; }
+    public string? IconUrl { get; set; }
     /// <summary>
     /// 来源图片的描述，建议不超过13个字
     /// </summary>
     [CanBeNull]
     [JsonProperty("desc")]
     [JsonPropertyName("desc")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 来源文字的颜色，目前支持：0(默认) 灰色，1 黑色，2 红色，3 绿色
     /// </summary>
@@ -30,8 +30,8 @@ public class WebhookTemplateCardSource
     [JsonPropertyName("desc_color")]
     public int? DescriptionColor { get; set; }
     private WebhookTemplateCardSource(
-        string iconUrl = null,
-        string description = null,
+        string? iconUrl = null,
+        string? description = null,
         int? descriptionColor = 0)
     {
         IconUrl = iconUrl;
@@ -44,7 +44,7 @@ public class WebhookTemplateCardSource
     /// <param name="iconUrl">来源图片的url</param>
     /// <param name="description">来源图片的描述</param>
     /// <returns></returns>
-    public static WebhookTemplateCardSource Grey(string iconUrl, string description = null)
+    public static WebhookTemplateCardSource Grey(string iconUrl, string? description = null)
     {
         return new WebhookTemplateCardSource(iconUrl, description, 0);
     }
@@ -54,7 +54,7 @@ public class WebhookTemplateCardSource
     /// <param name="iconUrl">来源图片的url</param>
     /// <param name="description">来源图片的描述</param>
     /// <returns></returns>
-    public static WebhookTemplateCardSource Black(string iconUrl, string description = null)
+    public static WebhookTemplateCardSource Black(string iconUrl, string? description = null)
     {
         return new WebhookTemplateCardSource(iconUrl, description, 1);
     }
@@ -64,7 +64,7 @@ public class WebhookTemplateCardSource
     /// <param name="iconUrl">来源图片的url</param>
     /// <param name="description">来源图片的描述</param>
     /// <returns></returns>
-    public static WebhookTemplateCardSource Red(string iconUrl, string description = null)
+    public static WebhookTemplateCardSource Red(string iconUrl, string? description = null)
     {
         return new WebhookTemplateCardSource(iconUrl, description, 2);
     }
@@ -74,7 +74,7 @@ public class WebhookTemplateCardSource
     /// <param name="iconUrl">来源图片的url</param>
     /// <param name="description">来源图片的描述</param>
     /// <returns></returns>
-    public static WebhookTemplateCardSource Green(string iconUrl, string description = null)
+    public static WebhookTemplateCardSource Green(string iconUrl, string? description = null)
     {
         return new WebhookTemplateCardSource(iconUrl, description, 3);
     }

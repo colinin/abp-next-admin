@@ -10,13 +10,13 @@ public class DataItem : FullAuditedAggregateRoot<Guid>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
 
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
 
-    public virtual string DisplayName { get; set; }
+    public virtual string DisplayName { get; set; } = default!;
 
-    public virtual string DefaultValue { get; set; }
+    public virtual string? DefaultValue { get; set; }
 
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
 
     public virtual bool AllowBeNull { get;  set; }
 
@@ -33,9 +33,9 @@ public class DataItem : FullAuditedAggregateRoot<Guid>, IMultiTenant
         [NotNull] Guid dataId,
         [NotNull] string name,
         [NotNull] string displayName,
-        [CanBeNull] string defaultValue = null,
+        [CanBeNull] string? defaultValue = null,
         ValueType valueType = ValueType.String,
-        string description = "",
+        string? description = null,
         bool allowBeNull = true,
         Guid? tenantId = null)
     {

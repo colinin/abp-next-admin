@@ -14,12 +14,12 @@ namespace LINGYUN.Abp.Webhooks
         /// <summary>
         /// Subscription webhook endpoint
         /// </summary>
-        public string WebhookUri { get; set; }
+        public string WebhookUri { get; set; } = default!;
 
         /// <summary>
         /// Webhook secret
         /// </summary>
-        public string Secret { get; set; }
+        public string? Secret { get; set; }
 
         /// <summary>
         /// Is subscription active

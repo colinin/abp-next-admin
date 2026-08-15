@@ -25,11 +25,11 @@ public class PackageAppService : PlatformApplicationServiceBase, IPackageAppServ
         _packageRepository = packageRepository;
     }
 
-    public async virtual Task<PackageDto> GetLatestAsync(PackageGetLatestInput input)
+    public async virtual Task<PackageDto?> GetLatestAsync(PackageGetLatestInput input)
     {
         var package = await _packageRepository.FindLatestAsync(input.Name, input.Version);
 
-        return ObjectMapper.Map<Package, PackageDto>(package);
+        return ObjectMapper.Map<Package?, PackageDto?>(package);
     }
 
     [Authorize(PlatformPermissions.Package.Create)]
@@ -57,7 +57,7 @@ public class PackageAppService : PlatformApplicationServiceBase, IPackageAppServ
 
         package = await _packageRepository.InsertAsync(package);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Package, PackageDto>(package);
     }
@@ -67,7 +67,7 @@ public class PackageAppService : PlatformApplicationServiceBase, IPackageAppServ
     {
         await _packageRepository.DeleteAsync(id);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(PlatformPermissions.Package.ManageBlobs)]
@@ -93,7 +93,7 @@ public class PackageAppService : PlatformApplicationServiceBase, IPackageAppServ
 
         await _packageRepository.UpdateAsync(package);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<PackageBlob, PackageBlobDto>(packageBlob);
     }
@@ -106,26 +106,30 @@ public class PackageAppService : PlatformApplicationServiceBase, IPackageAppServ
         var package = await _packageRepository.GetAsync(id);
 
         var packageBlob = package.FindBlob(input.Name);
+        if (packageBlob != null)
+        {
+            await _blobManager.RemoveBlobAsync(package, packageBlob);
 
-        await _blobManager.RemoveBlobAsync(package, packageBlob);
+            package.RemoveBlob(input.Name);
 
-        package.RemoveBlob(input.Name);
-
-        await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork!.SaveChangesAsync();
+        }
     }
 
     public async virtual Task<IRemoteStreamContent> DownloadBlobAsync(Guid id, PackageBlobDownloadInput input)
     {
+        var stream = Stream.Null;
         var package = await _packageRepository.GetAsync(id);
         var packageBlob = package.FindBlob(input.Name);
-
-        Stream stream;
-        using (CurrentTenant.Change(null))
+        if (packageBlob != null)
         {
-            stream = await _blobManager.DownloadBlobAsync(package, packageBlob);
+            using (CurrentTenant.Change(null))
+            {
+                stream = await _blobManager.DownloadBlobAsync(package, packageBlob);
+            }
         }
 
-        return new RemoteStreamContent(stream, packageBlob.Name, packageBlob.ContentType);
+        return new RemoteStreamContent(stream, packageBlob?.Name, packageBlob?.ContentType);
     }
 
     public async virtual Task<PackageDto> GetAsync(Guid id)
@@ -164,7 +168,7 @@ public class PackageAppService : PlatformApplicationServiceBase, IPackageAppServ
 
         package = await _packageRepository.UpdateAsync(package);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Package, PackageDto>(package);
     }

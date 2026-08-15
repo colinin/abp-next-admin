@@ -18,7 +18,7 @@ public class WeChatWorkGetUnassignedListResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("info")]
     [JsonPropertyName("info")]
-    public UnassignedCustomerInfo[] Info { get; set; }
+    public UnassignedCustomerInfo[] Info { get; set; } = default!;
     /// <summary>
     /// 是否是最后一条记录
     /// </summary>

@@ -5,7 +5,7 @@ namespace LINGYUN.Abp.Location.Baidu.Model;
 
 public class Content
 {
-    public string Address { get; set; }
+    public string Address { get; set; } = default!;
 
     [JsonProperty("address_detail")]
     [JsonPropertyName("address_detail")]

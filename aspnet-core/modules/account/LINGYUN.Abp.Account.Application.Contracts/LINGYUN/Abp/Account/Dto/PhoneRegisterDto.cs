@@ -12,30 +12,30 @@ public class PhoneRegisterDto
     [Phone]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
     [Display(Name = "PhoneNumber")]
-    public string PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = default!;
 
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxNameLength))]
     [DisplayName("Name")]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
     [DisplayName("UserName")]
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 
     [EmailAddress]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
     [DisplayName("EmailAddress")]
-    public string EmailAddress { get; set; }
+    public string? EmailAddress { get; set; }
 
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
     [DataType(DataType.Password)]
     [DisplayName("Password")]
     [DisableAuditing]
-    public string Password { get; set; }
+    public string? Password { get; set; }
 
     [Required]
     [StringLength(6,MinimumLength = 6)]
     [DisableAuditing]
     [DisplayName("DisplayName:SmsVerifyCode")]
-    public string Code { get; set; }
+    public string Code { get; set; } = default!;
 }

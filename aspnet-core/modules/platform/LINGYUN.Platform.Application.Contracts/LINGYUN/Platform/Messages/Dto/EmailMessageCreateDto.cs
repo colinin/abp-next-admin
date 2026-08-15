@@ -13,21 +13,21 @@ public class EmailMessageCreateDto : IHasExtraProperties
 {
     [Required]
     [DynamicStringLength(typeof(MessageConsts), nameof(MessageConsts.MaxReceiverLength))]
-    public string To { get; set; }
+    public string To { get; set; } = default!;
 
     [Required]
-    public string Content { get; set; }
+    public string Content { get; set; } = default!;
 
     [DynamicStringLength(typeof(EmailMessageConsts), nameof(EmailMessageConsts.MaxFromLength))]
-    public string From { get; set; }
+    public string? From { get; set; }
 
     [DynamicStringLength(typeof(EmailMessageConsts), nameof(EmailMessageConsts.MaxSubjectLength))]
-    public string Subject { get; set; }
+    public string? Subject { get; set; }
 
     public bool IsBodyHtml { get; set; } = true;
 
     [DynamicStringLength(typeof(MessageConsts), nameof(MessageConsts.MaxReceiverLength))]
-    public string CC { get; set; }
+    public string? CC { get; set; }
 
     public bool Normalize { get; set; }
 
@@ -36,29 +36,31 @@ public class EmailMessageCreateDto : IHasExtraProperties
     public DeliveryNotificationOptions? DeliveryNotificationOptions { get; set; }
 
     [DisableAuditing]
-    public IRemoteStreamContent[] Attachments { get; set; }
+    public IRemoteStreamContent[]? Attachments { get; set; }
 
-    public List<EmailMessageHeaderDto> Headers { get; set; }
+    public List<EmailMessageHeaderDto>? Headers { get; set; }
     public ExtraPropertyDictionary ExtraProperties { get; set; }
 
     public EmailMessageCreateDto()
     {
-
+        ExtraProperties = new ExtraPropertyDictionary();
     }
 
     public EmailMessageCreateDto(
         [NotNull] string to,
-        [NotNull] string content, 
-        string from = null,
-        string subject = null, 
+        [CanBeNull] string? content, 
+        string? from = null,
+        string? subject = null, 
         bool isBodyHtml = true, 
-        string cc = null)
+        string? cc = null)
     {
         To = to;
-        Content = content;
+        Content = content ?? "";
         From = from;
         Subject = subject;
         IsBodyHtml = isBodyHtml;
         CC = cc;
+
+        ExtraProperties = new ExtraPropertyDictionary();
     }
 }

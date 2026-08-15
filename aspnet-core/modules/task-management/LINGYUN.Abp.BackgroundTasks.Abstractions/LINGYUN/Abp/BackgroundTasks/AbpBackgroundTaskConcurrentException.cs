@@ -21,7 +21,7 @@ public class AbpBackgroundTaskConcurrentException : AbpJobExecutionException
     /// </summary>
     /// <param name="jobType">Execute job type</param>
     /// <param name="innerException">Inner exception</param>
-    public AbpBackgroundTaskConcurrentException(Type jobType, Exception innerException)
+    public AbpBackgroundTaskConcurrentException(Type jobType, Exception? innerException = null)
         : base(
             jobType,
             $"This job {jobType.Name} cannot be performed because it has been locked by another performer",
@@ -35,7 +35,7 @@ public class AbpBackgroundTaskConcurrentException : AbpJobExecutionException
     /// <param name="jobType">Execute job type</param>
     /// <param name="message">Exception message</param>
     /// <param name="innerException">Inner exception</param>
-    public AbpBackgroundTaskConcurrentException(Type jobType, string message, Exception innerException)
+    public AbpBackgroundTaskConcurrentException(Type jobType, string message, Exception? innerException = null)
         : base(jobType, message, innerException)
     {
     }

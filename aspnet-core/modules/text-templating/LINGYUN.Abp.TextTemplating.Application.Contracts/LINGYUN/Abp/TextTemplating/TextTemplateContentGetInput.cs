@@ -7,8 +7,8 @@ public class TextTemplateContentGetInput
 {
     [Required]
     [DynamicStringLength(typeof(TextTemplateConsts), nameof(TextTemplateConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [DynamicStringLength(typeof(TextTemplateConsts), nameof(TextTemplateConsts.MaxCultureLength))]
-    public string Culture { get; set; }
+    public string? Culture { get; set; }
 }

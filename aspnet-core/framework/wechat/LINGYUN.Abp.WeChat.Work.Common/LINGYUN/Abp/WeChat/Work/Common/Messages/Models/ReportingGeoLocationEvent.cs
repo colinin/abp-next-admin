@@ -28,7 +28,7 @@ public class ReportingGeoLocationEvent : WeChatWorkEventMessage
     /// app类型，在企业微信固定返回wxwork，在微信不返回该字段
     /// </summary>
     [XmlElement("AppType")]
-    public string AppType { get; set; }
+    public string? AppType { get; set; }
     public override WeChatMessageEto ToEto()
     {
         return new WeChatWorkEventMessageEto<ReportingGeoLocationEvent>(this);

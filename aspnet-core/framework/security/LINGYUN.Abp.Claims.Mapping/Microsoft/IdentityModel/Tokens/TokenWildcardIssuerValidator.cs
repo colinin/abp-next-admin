@@ -103,7 +103,7 @@ public static class TokenWildcardIssuerValidator
             });
     };
 
-    private static string SerializeAsSingleCommaDelimitedString(IEnumerable<string> strings)
+    private static string SerializeAsSingleCommaDelimitedString(IEnumerable<string>? strings)
     {
         if (strings == null)
         {

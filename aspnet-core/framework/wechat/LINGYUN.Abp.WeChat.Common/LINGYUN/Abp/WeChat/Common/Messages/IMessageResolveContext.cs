@@ -7,5 +7,5 @@ public interface IMessageResolveContext : IServiceProviderAccessor
     string Origin { get; }
     XDocument MessageData { get; }
     bool Handled { get; set; }
-    WeChatMessage Message { get; set; }
+    WeChatMessage? Message { get; set; }
 }

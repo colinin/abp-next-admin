@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.EntityChange;
 public abstract class EntityChangeAppService<TEntity> : ApplicationService, IEntityChangeAppService
     where TEntity : class
 {
-    protected virtual string GetListPolicy { get; set; }
+    protected virtual string? GetListPolicy { get; set; }
 
     protected IEntityChangeStore EntityChangeStore { get; }
 

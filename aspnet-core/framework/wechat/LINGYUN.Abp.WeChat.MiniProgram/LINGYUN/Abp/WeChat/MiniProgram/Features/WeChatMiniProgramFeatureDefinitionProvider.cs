@@ -17,13 +17,13 @@ public class WeChatMiniProgramFeatureDefinitionProvider : FeatureDefinitionProvi
         //    displayName: L("Features:WeChat.MiniProgram"),
         //    description: L("Features:WeChat.MiniProgramDesc"));
 
-        var miniProgramEnableFeature = group.AddFeature(
+        var miniProgramEnableFeature = group?.AddFeature(
             name: WeChatMiniProgramFeatures.Enable,
             defaultValue: true.ToString(),
             displayName: L("Features:WeChat.MiniProgram.Enable"),
             description: L("Features:WeChat.MiniProgram.EnableDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
-        miniProgramEnableFeature.CreateChild(
+        miniProgramEnableFeature?.CreateChild(
             name: WeChatMiniProgramFeatures.EnableAuthorization,
             defaultValue: true.ToString(),
             displayName: L("Features:WeChat.MiniProgram.EnableAuthorization"),
@@ -31,19 +31,19 @@ public class WeChatMiniProgramFeatureDefinitionProvider : FeatureDefinitionProvi
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
 
 
-        var messageEnableFeature = group.AddFeature(
+        var messageEnableFeature = group?.AddFeature(
             name: WeChatMiniProgramFeatures.Messages.Enable,
             defaultValue: true.ToString(),
             displayName: L("Features:WeChat.MiniProgram.EnableMessages"),
             description: L("Features:WeChat.MiniProgram.EnableMessagesDesc"),
             valueType: new ToggleStringValueType(new BooleanValueValidator()));
-        messageEnableFeature.CreateChild(
+        messageEnableFeature?.CreateChild(
             name: WeChatMiniProgramFeatures.Messages.SendLimit,
             defaultValue: WeChatMiniProgramFeatures.Messages.DefaultSendLimit.ToString(),
             displayName: L("Features:WeChat.MiniProgram.SendLimit"),
             description: L("Features:WeChat.MiniProgram.SendLimitDesc"),
             valueType: new FreeTextStringValueType(new NumericValueValidator(1, 100_0000)));
-        messageEnableFeature.CreateChild(
+        messageEnableFeature?.CreateChild(
             name: WeChatMiniProgramFeatures.Messages.SendLimitInterval,
             defaultValue: WeChatMiniProgramFeatures.Messages.DefaultSendLimitInterval.ToString(),
             displayName: L("Features:WeChat.MiniProgram.SendLimitInterval"),

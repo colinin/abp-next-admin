@@ -7,5 +7,5 @@ public class FeatureGroupDefinitionCreateDto : FeatureGroupDefinitionCreateOrUpd
 {
     [Required]
     [DynamicStringLength(typeof(FeatureGroupDefinitionRecordConsts), nameof(FeatureGroupDefinitionRecordConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

@@ -30,7 +30,7 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
     {
     }
 
-    public async virtual Task<GroupMessage> GetGroupMessageAsync(
+    public async virtual Task<GroupMessage?> GetGroupMessageAsync(
         long id,
         CancellationToken cancellationToken = default)
     {
@@ -43,8 +43,8 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
     public async virtual Task<List<GroupMessage>> GetGroupMessagesAsync(
         long groupId,
         MessageType? type = null,
-        string filter = "",
-        string sorting = nameof(UserMessage.MessageId),
+        string? filter = null,
+        string? sorting = nameof(UserMessage.MessageId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
@@ -58,7 +58,7 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
             .Where(x => x.GroupId.Equals(groupId))
             .Where(x => x.State == MessageState.Send || x.State == MessageState.Read)
             .WhereIf(type.HasValue, x => x.Type.Equals(type))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter!) || x.SendUserName.Contains(filter!))
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .AsNoTracking()
@@ -70,7 +70,7 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
     public async virtual Task<long> GetGroupMessagesCountAsync(
         long groupId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         var groupMessagesCount = await (await GetDbContextAsync()).Set<GroupMessage>()
@@ -78,7 +78,7 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
             .Where(x => x.GroupId.Equals(groupId))
             .Where(x => x.State == MessageState.Send || x.State == MessageState.Read)
             .WhereIf(type.HasValue, x => x.Type.Equals(type))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter!) || x.SendUserName.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellationToken));
         return groupMessagesCount;
     }
@@ -87,8 +87,8 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
         Guid sendUserId,
         long groupId,
         MessageType? type = null,
-        string filter = "",
-        string sorting = nameof(UserMessage.MessageId),
+        string? filter = null,
+        string? sorting = nameof(UserMessage.MessageId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
@@ -101,7 +101,7 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
             .Distinct()
             .Where(x => x.GroupId.Equals(groupId) && x.CreatorId.Equals(sendUserId))
             .WhereIf(type != null, x => x.Type.Equals(type))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter!) || x.SendUserName.Contains(filter!))
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .AsNoTracking()
@@ -114,13 +114,13 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
         Guid sendUserId,
         long groupId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         var groupMessagesCount = await (await GetDbContextAsync()).Set<GroupMessage>()
               .Where(x => x.GroupId.Equals(groupId) && x.CreatorId.Equals(sendUserId))
               .WhereIf(type != null, x => x.Type.Equals(type))
-              .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
+              .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter!) || x.SendUserName.Contains(filter!))
               .LongCountAsync(GetCancellationToken(cancellationToken));
         return groupMessagesCount;
     }
@@ -128,13 +128,13 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
     public async virtual Task<long> GetCountAsync(
         long groupId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbContextAsync()).Set<GroupMessage>()
             .Where(x => x.GroupId.Equals(groupId))
             .WhereIf(type != null, x => x.Type.Equals(type))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter!) || x.SendUserName.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -142,18 +142,18 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
         Guid sendUserId,
         Guid receiveUserId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbContextAsync()).Set<UserMessage>()
             .Where(x => (x.CreatorId.Equals(sendUserId) && x.ReceiveUserId.Equals(receiveUserId)) ||
                          x.CreatorId.Equals(receiveUserId) && x.ReceiveUserId.Equals(sendUserId))
             .WhereIf(type != null, x => x.Type.Equals(type))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter!) || x.SendUserName.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<UserMessage> GetUserMessageAsync(
+    public async virtual Task<UserMessage?> GetUserMessageAsync(
         long id,
         CancellationToken cancellationToken = default)
     {
@@ -166,7 +166,7 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
     public async virtual Task<List<LastChatMessage>> GetLastMessagesAsync(
         Guid userId,
         MessageState? state = null,
-        string sorting = nameof(LastChatMessage.SendTime),
+        string? sorting = nameof(LastChatMessage.SendTime),
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
     {
@@ -193,7 +193,7 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
             {
                 Content = um.Content,
                 SendTime = um.CreationTime,
-                FormUserId = um.CreatorId.Value,
+                FormUserId = um.CreatorId!.Value,
                 FormUserName = um.SendUserName,
                 Object = ucc.NickName,
                 AvatarUrl = ucc.AvatarUrl,
@@ -221,7 +221,7 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
                 {
                     Content = gm.Content,
                     SendTime = gm.CreationTime,
-                    FormUserId = gm.CreatorId.Value,
+                    FormUserId = gm.CreatorId!.Value,
                     FormUserName = gm.SendUserName,
                     Object = cg.Name,
                     AvatarUrl = cg.AvatarUrl,
@@ -245,8 +245,8 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
         Guid sendUserId,
         Guid receiveUserId,
         MessageType? type = null,
-        string filter = "",
-        string sorting = nameof(UserMessage.MessageId),
+        string? filter = null,
+        string? sorting = nameof(UserMessage.MessageId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
@@ -260,7 +260,7 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
                          x.CreatorId.Equals(receiveUserId) && x.ReceiveUserId.Equals(sendUserId))
             .WhereIf(type.HasValue, x => x.Type.Equals(type))
             .Where(x => x.State == MessageState.Send || x.State == MessageState.Read)
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter!) || x.SendUserName.Contains(filter!))
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .AsNoTracking()
@@ -273,7 +273,7 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
         Guid sendUserId,
         Guid receiveUserId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         var userMessagesCount = await (await GetDbContextAsync()).Set<UserMessage>()
@@ -281,7 +281,7 @@ public class EfCoreMessageRepository : EfCoreRepository<IMessageServiceDbContext
                          x.CreatorId.Equals(receiveUserId) && x.ReceiveUserId.Equals(sendUserId))
             .WhereIf(type.HasValue, x => x.Type.Equals(type))
             .Where(x => x.State == MessageState.Send || x.State == MessageState.Read)
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter) || x.SendUserName.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Content.Contains(filter!) || x.SendUserName.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellationToken));
 
         return userMessagesCount;

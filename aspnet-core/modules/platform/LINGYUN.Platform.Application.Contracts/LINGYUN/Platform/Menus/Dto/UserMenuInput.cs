@@ -13,7 +13,7 @@ public class UserMenuInput
 
 
     [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
-    public string Framework { get; set; }
+    public string? Framework { get; set; }
 
     public Guid? StartupMenuId { get; set; }
 

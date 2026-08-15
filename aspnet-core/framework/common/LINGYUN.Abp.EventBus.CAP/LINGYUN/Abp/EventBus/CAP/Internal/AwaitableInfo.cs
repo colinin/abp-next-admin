@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace LINGYUN.Abp.EventBus.CAP.Internal;
 
+#nullable disable
 internal readonly struct AwaitableInfo
 {
     public Type AwaiterType { get; }
@@ -114,3 +115,4 @@ internal readonly struct AwaitableInfo
         return true;
     }
 }
+#nullable enable

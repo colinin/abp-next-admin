@@ -15,9 +15,9 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 {
     protected const string DefaultConnectionStringName = Volo.Abp.Data.ConnectionStrings.DefaultConnectionStringName;
 
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
 
-    public virtual string NormalizedName { get; protected set; }
+    public virtual string? NormalizedName { get; protected set; }
 
     public virtual bool IsActive { get; set; }
 
@@ -27,7 +27,7 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 
     public virtual Guid? EditionId { get; set; }
 
-    public virtual Edition Edition { get; set; }
+    public virtual Edition Edition { get; set; } = default!;
 
     public virtual int EntityVersion { get; protected set; }
 
@@ -38,11 +38,11 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
         ConnectionStrings = new Collection<TenantConnectionString>();
     }
 
-    protected internal Tenant(Guid id, [NotNull] string name, [CanBeNull] string normalizedName)
+    protected internal Tenant(Guid id, [NotNull] string name, [CanBeNull] string? normalizedName)
         : base(id)
     {
         SetName(name);
-        SetNormalizedName(normalizedName);
+        SetNormalizedName(normalizedName ?? name);
 
         ConnectionStrings = new Collection<TenantConnectionString>();
     }
@@ -58,13 +58,13 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
     }
 
     [CanBeNull]
-    public virtual string FindDefaultConnectionString()
+    public virtual string? FindDefaultConnectionString()
     {
         return FindConnectionString(DefaultConnectionStringName);
     }
 
     [CanBeNull]
-    public virtual string FindConnectionString(string name)
+    public virtual string? FindConnectionString(string name)
     {
         return ConnectionStrings.FirstOrDefault(c => c.Name == name)?.Value;
     }
@@ -108,7 +108,7 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), TenantConsts.MaxNameLength);
     }
 
-    protected internal virtual void SetNormalizedName([CanBeNull] string normalizedName)
+    protected internal virtual void SetNormalizedName([CanBeNull] string? normalizedName)
     {
         NormalizedName = normalizedName;
         AddLocalEvent(new TenantChangedEvent(Id, NormalizedName));

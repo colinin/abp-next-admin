@@ -38,7 +38,7 @@ public class WxPusherSettingAppService : ApplicationService, IWxPusherSettingApp
         return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
     }
 
-    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string? providerKey = null)
     {
         var settingGroups = new SettingGroupResult();
         var wxPusherSettingGroup = new SettingGroupDto(L["DisplayName:WxPusher"], L["Description:WxPusher"]);

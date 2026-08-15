@@ -17,5 +17,5 @@ public class WeChatWorkOpengIdToChatIdResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("chat_id")]
     [JsonPropertyName("chat_id")]
-    public string ChatId { get; set; }
+    public string ChatId { get; set; } = default!;
 }

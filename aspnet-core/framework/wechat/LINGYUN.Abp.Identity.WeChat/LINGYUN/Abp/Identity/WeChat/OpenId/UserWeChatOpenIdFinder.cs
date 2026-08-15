@@ -20,21 +20,21 @@ public class UserWeChatOpenIdFinder : IUserWeChatOpenIdFinder
         UserManager = userManager;
     }
 
-    public async virtual Task<string> FindByUserIdAsync(Guid userId, string provider)
+    public async virtual Task<string?> FindByUserIdAsync(Guid userId, string provider)
     {
         var user = await UserManager.FindByIdAsync(userId.ToString());
 
         return GetUserOpenIdOrNull(user, provider);
     }
 
-    public async virtual Task<string> FindByUserNameAsync(string userName, string provider)
+    public async virtual Task<string?> FindByUserNameAsync(string userName, string provider)
     {
         var user = await UserManager.FindByNameAsync(userName);
 
         return GetUserOpenIdOrNull(user, provider);
     }
 
-    protected string GetUserOpenIdOrNull(IdentityUser user, string provider)
+    protected string? GetUserOpenIdOrNull(IdentityUser? user, string provider)
     {
         // 微信扩展登录后openid存储在Login中
         var userLogin = user?.Logins

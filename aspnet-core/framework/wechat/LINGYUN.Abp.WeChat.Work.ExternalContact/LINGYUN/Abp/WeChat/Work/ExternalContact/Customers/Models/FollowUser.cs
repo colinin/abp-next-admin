@@ -15,7 +15,7 @@ public class FollowUser
     [NotNull]
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
     /// <summary>
     /// 发起添加的userid<br />
     /// 如果成员主动添加，为成员的userid；<br />
@@ -25,7 +25,7 @@ public class FollowUser
     [NotNull]
     [JsonProperty("oper_userid")]
     [JsonPropertyName("oper_userid")]
-    public string OperUserId { get; set; }
+    public string OperUserId { get; set; } = default!;
     /// <summary>
     /// 企业自定义的state参数，用于区分客户具体是通过哪个「联系我」或获客链接添加
     /// </summary>

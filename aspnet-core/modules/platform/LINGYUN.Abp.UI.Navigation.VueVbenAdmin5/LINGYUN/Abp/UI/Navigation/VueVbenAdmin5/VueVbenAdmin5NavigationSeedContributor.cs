@@ -53,7 +53,7 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
 
         var layout = await SeedDefaultLayoutAsync(layoutData, uiDataItem);
 
-        var latMenu = await MenuRepository.GetLastMenuAsync();
+        var latMenu = await MenuRepository.FindLastMenuAsync();
 
         if (int.TryParse(CodeNumberGenerator.GetLastCode(latMenu?.Code ?? "0"), out int _lastNumber))
         {
@@ -76,7 +76,7 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
                 continue;
             }
 
-            var menuMeta = new Dictionary<string, object>(menu.ExtraProperties)
+            var menuMeta = new Dictionary<string, object?>(menu.ExtraProperties)
             {
                 ["icon"] = menu.Icon ?? "",
                 ["order"] = menu.Order
@@ -88,7 +88,7 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
                 name:           menu.Name,
                 path:           menu.Url,
                 code:           CodeNumberGenerator.CreateCode(GetNextCode()),
-                component:      layout.Path,
+                component:      layout.Path!,
                 displayName:    menu.DisplayName,
                 redirect:       menu.Redirect,
                 description:    menu.Description,
@@ -116,7 +116,7 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
                 continue;
             }
 
-            var menuMeta = new Dictionary<string, object>(item.ExtraProperties)
+            var menuMeta = new Dictionary<string, object?>(item.ExtraProperties)
             {
                 ["icon"] = item.Icon ?? "",
                 ["order"] = item.Order
@@ -128,7 +128,7 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
                 name: item.Name,
                 path: item.Url,
                 code: CodeNumberGenerator.AppendCode(menu.Code, CodeNumberGenerator.CreateCode(index)),
-                component: item.Component.IsNullOrWhiteSpace() ? layout.Path : item.Component,
+                component: item.Component.IsNullOrWhiteSpace() ? layout.Path! : item.Component,
                 displayName: item.DisplayName,
                 redirect: item.Redirect,
                 description: item.Description,
@@ -151,17 +151,17 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
         string code,
         string component,
         string displayName,
-        string redirect = "",
-        string description = "",
+        string? redirect = null,
+        string? description = null,
         Guid? parentId = null,
         Guid? tenantId = null,
-        Dictionary<string, object> meta = null,
-        string[] roles = null,
-        Guid[] users = null,
+        Dictionary<string, object?>? meta = null,
+        string[]? roles = null,
+        Guid[]? users = null,
         bool isPublic = false
         )
     {
-        var menuMeta = new Dictionary<string, object>();
+        var menuMeta = new Dictionary<string, object?>();
         foreach (var item in data.Items)
         {
             menuMeta[item.Name] = item.DefaultValue;
@@ -231,7 +231,7 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
 
         await DataDictionaryDataSeeder.SeedAsync(data);
 
-        return data.FindItem(Options.UI);
+        return data.FindItem(Options.UI)!;
     }
 
     private async Task<Layout> SeedDefaultLayoutAsync(Data data, DataItem uiDataItem)

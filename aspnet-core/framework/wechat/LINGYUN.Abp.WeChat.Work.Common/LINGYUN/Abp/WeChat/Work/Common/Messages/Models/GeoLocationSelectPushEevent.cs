@@ -13,17 +13,17 @@ public class GeoLocationSelectPushEevent : WeChatWorkEventMessage
     /// 事件KEY值
     /// </summary>
     [XmlElement("EventKey")]
-    public string EventKey { get; set; }
+    public string EventKey { get; set; } = default!;
     /// <summary>
     /// 发送的位置信息
     /// </summary>
     [XmlElement("SendLocationInfo")]
-    public LocationInfo SendLocationInfo { get; set; }
+    public LocationInfo SendLocationInfo { get; set; } = default!;
     /// <summary>
     /// app类型，在企业微信固定返回wxwork，在微信不返回该字段
     /// </summary>
     [XmlElement("AppType")]
-    public string AppType { get; set; }
+    public string? AppType { get; set; }
 
     public override WeChatMessageEto ToEto()
     {
@@ -52,10 +52,10 @@ public class LocationInfo
     /// 地理位置信息
     /// </summary>
     [XmlElement("Label")]
-    public string Label { get; set; }
+    public string? Label { get; set; }
     /// <summary>
     /// POI的名字，可能为空
     /// </summary>
     [XmlElement("Poiname")]
-    public string PoiName { get; set; }
+    public string? PoiName { get; set; }
 }

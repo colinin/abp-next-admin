@@ -11,7 +11,7 @@ public class VerifyLinkUserDto
     /// <summary>
     /// 关联用户名
     /// </summary>
-    public string LinkUserName { get; set; }
+    public string? LinkUserName { get; set; }
     /// <summary>
     /// 关联租户Id
     /// </summary>
@@ -19,7 +19,7 @@ public class VerifyLinkUserDto
     /// <summary>
     /// 关联租户名
     /// </summary>
-    public string LinkTenantName { get; set; }
+    public string? LinkTenantName { get; set; }
     /// <summary>
     /// 是否已关联
     /// </summary>

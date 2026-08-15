@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 
 namespace LINGYUN.Abp.EventBus.CAP.Internal;
 
+#nullable disable
 internal readonly struct CoercedAwaitableInfo
 {
     public AwaitableInfo AwaitableInfo { get; }
@@ -51,3 +52,4 @@ internal readonly struct CoercedAwaitableInfo
         return false;
     }
 }
+#nullable enable

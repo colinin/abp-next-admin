@@ -7,9 +7,9 @@ public interface IWebhookDefinitionContext
 {
     WebhookGroupDefinition AddGroup(
         [NotNull] string name,
-        ILocalizableString displayName = null);
+        ILocalizableString? displayName = null);
 
-    WebhookGroupDefinition GetGroupOrNull(string name);
+    WebhookGroupDefinition? GetGroupOrNull(string name);
 
     void RemoveGroup(string name);
 }

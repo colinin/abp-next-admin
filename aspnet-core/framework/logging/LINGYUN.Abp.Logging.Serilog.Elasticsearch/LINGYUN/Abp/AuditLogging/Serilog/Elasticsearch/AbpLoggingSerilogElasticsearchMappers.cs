@@ -25,7 +25,7 @@ public partial class SerilogFieldToLogFieldMapper : MapperBase<SerilogField, Log
 
     public override void AfterMap(SerilogField source, LogField destination)
     {
-        destination.Id = source.UniqueId.ToString();
+        destination.Id = source.UniqueId?.ToString();
     }
 }
 

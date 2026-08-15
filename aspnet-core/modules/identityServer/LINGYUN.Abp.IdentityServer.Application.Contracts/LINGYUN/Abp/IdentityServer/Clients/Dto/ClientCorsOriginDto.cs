@@ -2,5 +2,5 @@
 
 public class ClientCorsOriginDto
 {
-    public string Origin { get; set; }
+    public string Origin { get; set; } = default!;
 }

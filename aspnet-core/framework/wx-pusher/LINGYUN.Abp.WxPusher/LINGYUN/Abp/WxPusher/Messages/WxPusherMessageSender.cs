@@ -25,12 +25,12 @@ public class WxPusherMessageSender : WxPusherRequestProvider, IWxPusherMessageSe
         WxPusherFeatureNames.Message.SendLimitInterval,
         LimitPolicy.Days)]
     public async virtual Task<List<SendMessageResult>> SendAsync(
-        string content, 
-        string summary = "", 
-        MessageContentType contentType = MessageContentType.Text, 
-        List<int> topicIds = null, 
-        List<string> uids = null,
-        string url = "",
+        string content,
+        string? summary = null,
+        MessageContentType contentType = MessageContentType.Text,
+        List<int>? topicIds = null,
+        List<string>? uids = null,
+        string? url = null,
         CancellationToken cancellationToken = default)
     {
         var token = await WxPusherTokenProvider.GetTokenAsync(cancellationToken);

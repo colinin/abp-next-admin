@@ -57,12 +57,12 @@ public class BackgroundJobLogAppService : TaskManagementApplicationService, IBac
             Expression<Func<BackgroundJobLog, bool>> expression = _ => true;
 
             return expression
-                .AndIf(!Input.JobId.IsNullOrWhiteSpace(), x => x.JobId.Equals(Input.JobId))
-                .AndIf(!Input.Type.IsNullOrWhiteSpace(), x => x.JobType.Contains(Input.Type))
-                .AndIf(!Input.Group.IsNullOrWhiteSpace(), x => x.JobGroup.Equals(Input.Group))
-                .AndIf(!Input.Name.IsNullOrWhiteSpace(), x => x.JobName.Equals(Input.Name))
-                .AndIf(!Input.Filter.IsNullOrWhiteSpace(), x => x.JobName.Contains(Input.Filter) ||
-                    x.JobGroup.Contains(Input.Filter) || x.JobType.Contains(Input.Filter) || x.Message.Contains(Input.Filter))
+                .AndIf(!Input.JobId.IsNullOrWhiteSpace(), x => x.JobId == Input.JobId)
+                .AndIf(!Input.Type.IsNullOrWhiteSpace(), x => x.JobType!.Contains(Input.Type!))
+                .AndIf(!Input.Group.IsNullOrWhiteSpace(), x => x.JobGroup == Input.Group)
+                .AndIf(!Input.Name.IsNullOrWhiteSpace(), x => x.JobName == Input.Name)
+                .AndIf(!Input.Filter.IsNullOrWhiteSpace(), x => x.JobName!.Contains(Input.Filter!) ||
+                    x.JobGroup!.Contains(Input.Filter!) || x.JobType!.Contains(Input.Filter!) || x.Message!.Contains(Input.Filter!))
                 .AndIf(Input.HasExceptions.HasValue, x => !string.IsNullOrWhiteSpace(x.Exception))
                 .AndIf(Input.BeginRunTime.HasValue, x => x.RunTime >= Input.BeginRunTime)
                 .AndIf(Input.EndRunTime.HasValue, x => x.RunTime <= Input.EndRunTime);

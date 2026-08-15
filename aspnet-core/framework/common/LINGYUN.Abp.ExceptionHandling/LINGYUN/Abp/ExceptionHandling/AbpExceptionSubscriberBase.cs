@@ -14,12 +14,12 @@ public abstract class AbpExceptionSubscriberBase : ExceptionSubscriber
     protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected AbpExceptionHandlingOptions Options { get; }
 
-    public IAbpLazyServiceProvider ServiceProvider { get; set; }
+    public IAbpLazyServiceProvider ServiceProvider { get; set; } = default!;
 
-    protected ILoggerFactory LoggerFactory => ServiceProvider.LazyGetService<ILoggerFactory>();
+    protected ILoggerFactory? LoggerFactory => ServiceProvider.LazyGetService<ILoggerFactory>();
 
     protected ILogger Logger => _lazyLogger.Value;
-    private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+    private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance, true);
 
 
     protected AbpExceptionSubscriberBase(

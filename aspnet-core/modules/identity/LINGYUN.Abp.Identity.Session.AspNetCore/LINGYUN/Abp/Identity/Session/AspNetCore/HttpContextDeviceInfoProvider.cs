@@ -27,10 +27,14 @@ public class HttpContextDeviceInfoProvider : IDeviceInfoProvider, ITransientDepe
         Options = options.Value;
     }
 
-    public string ClientIpAddress => WebClientInfoProvider.ClientIpAddress;
+    public string? ClientIpAddress => WebClientInfoProvider.ClientIpAddress;
 
     public async virtual Task<DeviceInfo> GetDeviceInfoAsync()
     {
+        if (WebClientInfoProvider.BrowserInfo.IsNullOrWhiteSpace())
+        {
+            return new DeviceInfo("unknown", "unknown", "unknown", "unknown");
+        }
         var deviceInfo = BrowserDeviceInfo.Parse(HttpUserAgentParser, WebClientInfoProvider.BrowserInfo);
         var ipAddress = WebClientInfoProvider.ClientIpAddress;
         var ipRegion = "";
@@ -53,7 +57,7 @@ public class HttpContextDeviceInfoProvider : IDeviceInfoProvider, ITransientDepe
             ipRegion);
     }
 
-    protected async virtual Task<string> GetRegion(string ipAddress)
+    protected async virtual Task<string?> GetRegion(string ipAddress)
     {
         var locationInfo = await IPLocationResolver.ResolveAsync(ipAddress);
         return locationInfo.Location?.Remarks;
@@ -62,9 +66,9 @@ public class HttpContextDeviceInfoProvider : IDeviceInfoProvider, ITransientDepe
     private class BrowserDeviceInfo
     {
         public string Device { get; }
-        public string Description { get; }
+        public string? Description { get; }
 
-        public BrowserDeviceInfo(string device, string description)
+        public BrowserDeviceInfo(string device, string? description)
         {
             Device = device;
             Description = description;
@@ -72,8 +76,8 @@ public class HttpContextDeviceInfoProvider : IDeviceInfoProvider, ITransientDepe
 
         public static BrowserDeviceInfo Parse(IHttpUserAgentParserProvider httpUserAgentParserProvider, string browserInfo)
         {
-            string device = null;
-            string deviceInfo = null;
+            var device = "unknown";
+            string? deviceInfo = null;
             if (!browserInfo.IsNullOrWhiteSpace())
             {
                 var httpUserAgentInformation = httpUserAgentParserProvider.Parse(browserInfo);

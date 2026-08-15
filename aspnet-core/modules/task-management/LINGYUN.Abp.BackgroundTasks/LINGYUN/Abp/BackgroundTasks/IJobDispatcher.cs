@@ -29,7 +29,7 @@ public interface IJobDispatcher
     /// <returns></returns>
     Task<bool> DispatchAsync(
         IEnumerable<JobInfo> jobs,
-        string nodeName = null,
+        string? nodeName = null,
         Guid? tenantId = null,
         CancellationToken cancellationToken = default);
     /// <summary>

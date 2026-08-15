@@ -21,7 +21,7 @@ public class Blob : AuditedAggregateRoot<Guid>, IMultiTenant
 
     public virtual Guid? ParentId { get; protected set; }
 
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
 
     public virtual BlobType Type { get; protected set; }
 
@@ -31,9 +31,9 @@ public class Blob : AuditedAggregateRoot<Guid>, IMultiTenant
 
     public virtual DateTime? ExpirationTime { get; protected set; }
 
-    public virtual string Provider { get; protected set; }
+    public virtual string Provider { get; protected set; } = default!;
 
-    public virtual string FullName { get; protected set; }
+    public virtual string FullName { get; protected set; } = default!;
 
     public virtual long DownloadCount { get; protected set; }
 

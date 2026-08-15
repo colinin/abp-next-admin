@@ -32,20 +32,20 @@ public class RegisterModel : AccountPageModel
 {
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; }
+    public string ReturnUrl { get; set; } = default!;
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrlHash { get; set; }
+    public string? ReturnUrlHash { get; set; }
 
     [BindProperty]
-    public PostInput Input { get; set; }
+    public PostInput Input { get; set; } = default!;
 
     [BindProperty(SupportsGet = true)]
     public bool IsExternalLogin { get; set; }
 
     [BindProperty(SupportsGet = true)]
-    public string ExternalLoginAuthSchema { get; set; }
+    public string? ExternalLoginAuthSchema { get; set; }
 
     #region LinkUser
     [HiddenInput]
@@ -58,7 +58,7 @@ public class RegisterModel : AccountPageModel
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string LinkToken { get; set; }
+    public string? LinkToken { get; set; }
 
     protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
 
@@ -66,11 +66,11 @@ public class RegisterModel : AccountPageModel
 
     #endregion
 
-    public IEnumerable<ExternalLoginProviderModel> ExternalProviders { get; set; }
+    public IEnumerable<ExternalLoginProviderModel> ExternalProviders { get; set; } = default!;
     public IEnumerable<ExternalLoginProviderModel> VisibleExternalProviders => ExternalProviders.Where(x => !string.IsNullOrWhiteSpace(x.DisplayName));
     public bool EnableLocalRegister { get; set; }
     public bool IsExternalLoginOnly => EnableLocalRegister == false && ExternalProviders?.Count() == 1;
-    public string ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
+    public string? ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
 
     protected IExternalProviderService ExternalProviderService { get; }
     protected IAuthenticationSchemeProvider SchemeProvider { get; }
@@ -100,7 +100,7 @@ public class RegisterModel : AccountPageModel
         {
             if (IsExternalLoginOnly)
             {
-                return await OnPostExternalLogin(ExternalLoginScheme);
+                return await OnPostExternalLogin(ExternalLoginScheme!);
             }
 
             Alerts.Warning(L["SelfRegistrationDisabledMessage"]);
@@ -265,7 +265,7 @@ public class RegisterModel : AccountPageModel
             {
                 externalProviderModels.Add(new ExternalLoginProviderModel
                 {
-                    Name = externalLoginProvider.Name,
+                    Name = externalLoginProvider!.Name,
                     AuthenticationScheme = scheme.Name,
                     DisplayName = externalLoginProvider.DisplayName,
                     ComponentType = externalLoginProvider.ComponentType,
@@ -276,7 +276,7 @@ public class RegisterModel : AccountPageModel
         return externalProviderModels;
     }
 
-    protected virtual bool TryGetExternalLoginProvider(AuthenticationScheme scheme, List<ExternalLoginProviderModel> externalProviders, out ExternalLoginProviderModel externalLoginProvider)
+    protected virtual bool TryGetExternalLoginProvider(AuthenticationScheme scheme, List<ExternalLoginProviderModel> externalProviders, out ExternalLoginProviderModel? externalLoginProvider)
     {
         if (ReflectionHelper.IsAssignableToGenericType(scheme.HandlerType, typeof(RemoteAuthenticationHandler<>)))
         {
@@ -304,9 +304,9 @@ public class RegisterModel : AccountPageModel
         {
             await IdentityLinkUserAppService.LinkAsync(new LinkUserInput
             {
-                UserId = LinkUserId.Value,
+                UserId = LinkUserId!.Value,
                 TenantId = LinkTenantId,
-                Token = LinkToken
+                Token = LinkToken!
             });
 
             await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
@@ -358,18 +358,18 @@ public class RegisterModel : AccountPageModel
     {
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
-        public string UserName { get; set; }
+        public string UserName { get; set; } = default!;
 
         [Required]
         [EmailAddress]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
-        public string EmailAddress { get; set; }
+        public string EmailAddress { get; set; } = default!;
 
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
         [DataType(DataType.Password)]
         [DisableAuditing]
-        public string Password { get; set; }
+        public string Password { get; set; } = default!;
     }
 }
 

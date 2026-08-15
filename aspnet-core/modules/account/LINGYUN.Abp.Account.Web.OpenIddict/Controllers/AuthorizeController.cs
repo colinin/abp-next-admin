@@ -77,7 +77,7 @@ public class AuthorizeController : Volo.Abp.OpenIddict.Controllers.AuthorizeCont
             {
                 return Forbid(
                     authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                    properties: new AuthenticationProperties(new Dictionary<string, string>
+                    properties: new AuthenticationProperties(new Dictionary<string, string?>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.LoginRequired,
                         [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The user is not logged in."
@@ -141,7 +141,7 @@ public class AuthorizeController : Volo.Abp.OpenIddict.Controllers.AuthorizeCont
         }
 
         // Retrieve the application details from the database.
-        var application = await ApplicationManager.FindByClientIdAsync(request.ClientId) ??
+        var application = await ApplicationManager.FindByClientIdAsync(request.ClientId!) ??
             throw new InvalidOperationException(L["DetailsConcerningTheCallingClientApplicationCannotBeFound"]);
 
         // Retrieve the permanent authorizations associated with the user and the calling client application.
@@ -159,7 +159,7 @@ public class AuthorizeController : Volo.Abp.OpenIddict.Controllers.AuthorizeCont
             case OpenIddictConstants.ConsentTypes.External when !authorizations.Any():
                 return Forbid(
                     authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                    properties: new AuthenticationProperties(new Dictionary<string, string>
+                    properties: new AuthenticationProperties(new Dictionary<string, string?>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.ConsentRequired,
                         [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The logged in user is not allowed to access this client application."
@@ -199,7 +199,7 @@ public class AuthorizeController : Volo.Abp.OpenIddict.Controllers.AuthorizeCont
                     authorization = await AuthorizationManager.CreateAsync(
                         principal: principal,
                         subject: await UserManager.GetUserIdAsync(user),
-                        client: await ApplicationManager.GetIdAsync(application),
+                        client: (await ApplicationManager.GetIdAsync(application))!,
                         type: OpenIddictConstants.AuthorizationTypes.Permanent,
                         scopes: principal.GetScopes());
                 }
@@ -216,7 +216,7 @@ public class AuthorizeController : Volo.Abp.OpenIddict.Controllers.AuthorizeCont
             case OpenIddictConstants.ConsentTypes.Systematic when request.HasPromptValue(OpenIddictConstants.PromptValues.None):
                 return Forbid(
                     authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                    properties: new AuthenticationProperties(new Dictionary<string, string>
+                    properties: new AuthenticationProperties(new Dictionary<string, string?>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.ConsentRequired,
                         [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Interactive user consent is required."
@@ -252,7 +252,7 @@ public class AuthorizeController : Volo.Abp.OpenIddict.Controllers.AuthorizeCont
                    throw new InvalidOperationException(L["TheUserDetailsCannotBbeRetrieved"]);
 
         // Retrieve the application details from the database.
-        var application = await ApplicationManager.FindByClientIdAsync(request.ClientId) ??
+        var application = await ApplicationManager.FindByClientIdAsync(request.ClientId!) ??
             throw new InvalidOperationException(L["DetailsConcerningTheCallingClientApplicationCannotBeFound"]);
 
         // Retrieve the permanent authorizations associated with the user and the calling client application.
@@ -270,7 +270,7 @@ public class AuthorizeController : Volo.Abp.OpenIddict.Controllers.AuthorizeCont
         {
             return Forbid(
                 authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                properties: new AuthenticationProperties(new Dictionary<string, string>
+                properties: new AuthenticationProperties(new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.ConsentRequired,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The logged in user is not allowed to access this client application."
@@ -311,7 +311,7 @@ public class AuthorizeController : Volo.Abp.OpenIddict.Controllers.AuthorizeCont
             authorization = await AuthorizationManager.CreateAsync(
                 principal: principal,
                 subject: await UserManager.GetUserIdAsync(user),
-                client: await ApplicationManager.GetIdAsync(application),
+                client: (await ApplicationManager.GetIdAsync(application))!,
                 type: OpenIddictConstants.AuthorizationTypes.Permanent,
                 scopes: principal.GetScopes());
         }

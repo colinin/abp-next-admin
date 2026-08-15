@@ -44,10 +44,12 @@ public static class AbpDataProtectionDbContextModelBuilderExtensions
 
             b.Property(p => p.Role)
              .HasColumnName(nameof(DataAuthBase<TEntity, TKey>.Role))
-             .HasMaxLength(32);
+             .HasMaxLength(32)
+             .IsRequired(false);
             b.Property(p => p.OrganizationUnit)
              .HasColumnName(nameof(DataAuthBase<TEntity, TKey>.OrganizationUnit))
-             .HasMaxLength(20);
+             .HasMaxLength(20)
+             .IsRequired(false);
 
             b.HasIndex(p => p.Role);
             b.HasIndex(p => p.OrganizationUnit);

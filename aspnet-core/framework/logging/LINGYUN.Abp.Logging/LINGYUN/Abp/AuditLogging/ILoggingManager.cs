@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.Logging;
 
 public interface ILoggingManager
 {
-    Task<LogInfo> GetAsync(
+    Task<LogInfo?> GetAsync(
         string id,
         CancellationToken cancellationToken = default);
 
@@ -16,32 +16,32 @@ public interface ILoggingManager
         DateTime? startTime = null,
         DateTime? endTime = null,
         LogLevel? level = null,
-        string machineName = null,
-        string environment = null,
-        string application = null,
-        string context = null,
-        string requestId = null,
-        string requestPath = null,
-        string correlationId = null,
+        string? machineName = null,
+        string? environment = null,
+        string? application = null,
+        string? context = null,
+        string? requestId = null,
+        string? requestPath = null,
+        string? correlationId = null,
         int? processId = null,
         int? threadId = null,
         bool? hasException = null,
         CancellationToken cancellationToken = default);
 
     Task<List<LogInfo>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = 50,
         int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
         LogLevel? level = null,
-        string machineName = null,
-        string environment = null,
-        string application = null,
-        string context = null,
-        string requestId = null,
-        string requestPath = null,
-        string correlationId = null,
+        string? machineName = null,
+        string? environment = null,
+        string? application = null,
+        string? context = null,
+        string? requestId = null,
+        string? requestPath = null,
+        string? correlationId = null,
         int? processId = null,
         int? threadId = null,
         bool? hasException = null,

@@ -8,15 +8,15 @@ public abstract class WorkspaceDefinitionRecordCreateOrUpdateDto : ExtensibleObj
 {
     [Required]
     [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxProviderLength))]
-    public string Provider { get; set; }
+    public string Provider { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxModelNameLength))]
-    public string ModelName { get; set; }
+    public string ModelName { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxDisplayNameLength))]
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxDescriptionLength))]
     public string? Description { get; set; }

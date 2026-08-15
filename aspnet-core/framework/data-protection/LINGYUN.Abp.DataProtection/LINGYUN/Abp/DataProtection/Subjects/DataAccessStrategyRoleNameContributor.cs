@@ -15,7 +15,7 @@ public class DataAccessStrategyRoleNameContributor : IDataAccessStrategyContribu
 {
     public string Name => RolePermissionValueProvider.ProviderName;
 
-    public async virtual Task<DataAccessStrategyState> GetOrNullAsync(DataAccessStrategyContributorContext context)
+    public async virtual Task<DataAccessStrategyState?> GetOrNullAsync(DataAccessStrategyContributorContext context)
     {
         var states = new List<DataAccessStrategyState>();
         var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();

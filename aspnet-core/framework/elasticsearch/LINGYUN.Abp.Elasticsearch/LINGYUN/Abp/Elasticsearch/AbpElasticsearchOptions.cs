@@ -21,7 +21,9 @@ namespace LINGYUN.Abp.Elasticsearch
         /// Defaults to false.
         /// </summary>
         public bool DisableDirectStreaming { get; set; }
-        public string NodeUris { get; set; }
+
+        public string NodeUris { get; set; } = default!;
+
         public int ConnectionLimit { get; set; }
         /// <summary>
         /// `Base64ApiKey` for Elastic Cloud style encoded api keys
@@ -43,11 +45,10 @@ namespace LINGYUN.Abp.Elasticsearch
         /// Default: 60s
         /// </summary>
         public TimeSpan RequestTimeout { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public IRequestInvoker RequestInvoker { get; set; }
-        public SourceSerializerFactory SerializerFactory { get; set; }
+
+        public IRequestInvoker RequestInvoker { get; set; } = default!;
+
+        public SourceSerializerFactory SerializerFactory { get; set; } = default!;
 
         public AbpElasticsearchOptions()
         {
@@ -55,6 +56,7 @@ namespace LINGYUN.Abp.Elasticsearch
             // Default: 60s
             // See: https://www.elastic.co/docs/reference/elasticsearch/clients/dotnet/_options_on_elasticsearchclientsettings
             RequestTimeout = TimeSpan.FromSeconds(60);
+            RequestInvoker = new HttpRequestInvoker();
         }
 
         internal IElasticsearchClientSettings CreateClientSettings()

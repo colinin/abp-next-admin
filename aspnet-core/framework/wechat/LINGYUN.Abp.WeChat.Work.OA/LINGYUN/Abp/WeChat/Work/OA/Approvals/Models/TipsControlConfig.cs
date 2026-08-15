@@ -16,7 +16,7 @@ public class TipsControlConfig : ControlConfig
     [NotNull]
     [JsonProperty("tips")]
     [JsonPropertyName("tips")]
-    public TipsConfig Tips { get; set; }
+    public TipsConfig Tips { get; set; } = default!;
     public TipsControlConfig()
     {
 
@@ -36,7 +36,7 @@ public class TipsConfig
     [NotNull]
     [JsonProperty("tips_content")]
     [JsonPropertyName("tips_content")]
-    public List<TipsContent> TipsContents { get; set; }
+    public List<TipsContent> TipsContents { get; set; } = default!;
     public TipsConfig()
     {
 
@@ -56,14 +56,14 @@ public class TipsContent
     [NotNull]
     [JsonProperty("text")]
     [JsonPropertyName("text")]
-    public TipsContentText Text { get; set; }
+    public TipsContentText Text { get; set; } = default!;
     /// <summary>
     /// 多语言名称
     /// </summary>
     [NotNull]
     [JsonProperty("lang")]
     [JsonPropertyName("lang")]
-    public string Lang { get; set; }
+    public string Lang { get; set; } = default!;
     public TipsContent()
     {
 
@@ -84,7 +84,7 @@ public class TipsContentText
     [NotNull]
     [JsonProperty("sub_text")]
     [JsonPropertyName("sub_text")]
-    public List<TipsContentSubText> SubText { get; set; }
+    public List<TipsContentSubText> SubText { get; set; } = default!;
     public TipsContentText()
     {
 
@@ -111,7 +111,7 @@ public class TipsContentSubText
     [NotNull]
     [JsonProperty("content")]
     [JsonPropertyName("content")]
-    public SubTextContent Content { get; set; }
+    public SubTextContent Content { get; set; } = default!;
     public TipsContentSubText()
     {
 
@@ -146,7 +146,7 @@ public class TipsContentPlainText : SubTextContent
     [NotNull]
     [JsonProperty("content")]
     [JsonPropertyName("content")]
-    public string Content { get; set; }
+    public string Content { get; set; } = default!;
 }
 
 public class TipsContentLinkText : SubTextContent
@@ -157,7 +157,7 @@ public class TipsContentLinkText : SubTextContent
     [NotNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
     /// <summary>
     /// 链接url，不能超过600个字符
     /// </summary>
@@ -165,5 +165,5 @@ public class TipsContentLinkText : SubTextContent
     [StringLength(600)]
     [JsonProperty("url")]
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
 }

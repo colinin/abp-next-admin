@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundWorkers;
@@ -63,9 +62,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager
         var workerType = ProxyHelper.GetUnProxiedType(worker);
         if (workerType != null && Options.JobDispatcherSelectors.IsMatch(workerType))
         {
-            var selector = Options
-                .JobDispatcherSelectors
-                .FirstOrDefault(x => x.Predicate(workerType));
+            var selector = Options.JobDispatcherSelectors.GetJobTypeSelector(workerType);
 
             jobInfo.Interval = selector.Interval ?? jobInfo.Interval;
             jobInfo.LockTimeOut = selector.LockTimeOut ?? jobInfo.LockTimeOut;

@@ -9,9 +9,9 @@ public class WebhooksEventData
 {
     public Guid?[] TenantIds { get; set; }
 
-    public string WebhookName { get; set; }
+    public string WebhookName { get; set; } = default!;
 
-    public string Data { get; set; }
+    public string? Data { get; set; }
 
     public bool SendExactSameData { get; set; }
 
@@ -25,10 +25,10 @@ public class WebhooksEventData
 
     public WebhooksEventData(
         string webhookName,
-        string data, 
+        string? data, 
         bool sendExactSameData = false, 
-        WebhookHeader headers = null,
-        Guid?[] tenantIds = null)
+        WebhookHeader? headers = null,
+        Guid?[]? tenantIds = null)
     {
         WebhookName = webhookName;
         Data = data;

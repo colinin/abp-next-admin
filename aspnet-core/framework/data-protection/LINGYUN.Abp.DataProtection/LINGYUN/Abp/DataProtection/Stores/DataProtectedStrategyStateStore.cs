@@ -12,7 +12,7 @@ public class DataProtectedStrategyStateStore : IDataProtectedStrategyStateStore,
         _cache = cache;
     }
 
-    public async virtual Task<DataAccessStrategyState> GetOrNullAsync(string subjectName, string subjectId)
+    public async virtual Task<DataAccessStrategyState?> GetOrNullAsync(string subjectName, string subjectId)
     {
         var cacheItem = await _cache.GetAsync(subjectName, subjectId);
         if (cacheItem == null )

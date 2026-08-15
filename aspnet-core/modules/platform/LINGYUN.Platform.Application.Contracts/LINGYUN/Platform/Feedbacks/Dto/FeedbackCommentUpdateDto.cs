@@ -3,5 +3,5 @@
 namespace LINGYUN.Platform.Feedbacks;
 public class FeedbackCommentUpdateDto : FeedbackCommentCreateOrUpdateDto, IHasConcurrencyStamp
 {
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

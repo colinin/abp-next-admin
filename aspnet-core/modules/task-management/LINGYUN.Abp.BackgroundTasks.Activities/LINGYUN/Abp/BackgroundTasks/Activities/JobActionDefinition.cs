@@ -22,7 +22,7 @@ public class JobActionDefinition
     /// <summary>
     /// 描述
     /// </summary>
-    public ILocalizableString Description { get; }
+    public ILocalizableString? Description { get; }
     /// <summary>
     /// 参数列表
     /// </summary>
@@ -40,7 +40,7 @@ public class JobActionDefinition
         [NotNull] JobActionType type,
         [NotNull] ILocalizableString displayName,
         [NotNull] IList<JobActionParamter> paramters,
-        ILocalizableString description = null)
+        ILocalizableString? description = null)
     {
         Name = name;
         Type = type;

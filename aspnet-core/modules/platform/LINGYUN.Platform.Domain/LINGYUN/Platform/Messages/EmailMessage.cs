@@ -9,10 +9,10 @@ using Volo.Abp;
 namespace LINGYUN.Platform.Messages;
 public class EmailMessage : Message
 {
-    public virtual string From { get; set; }
-    public virtual string Subject { get; private set; }
+    public virtual string? From { get; set; }
+    public virtual string? Subject { get; private set; }
     public virtual bool IsBodyHtml { get; private set; }
-    public virtual string CC { get; private set; }
+    public virtual string? CC { get; private set; }
     public virtual bool Normalize { get; set; }
     public virtual MailPriority? Priority { get; set; }
     public virtual TransferEncoding? BodyTransferEncoding { get; set; }
@@ -27,13 +27,13 @@ public class EmailMessage : Message
     public EmailMessage(
         Guid id,
         string to,
-        string from,
-        string subject,
+        string? from,
+        string? subject,
         string body,
         bool isBodyHtml = false,
-        string cc = null,
+        string? cc = null,
         Guid? userId = null,
-        string userName = null)
+        string ?userName = null)
         : base(id, to, body, userId, userName)
     {
         From = Check.Length(from, nameof(from), EmailMessageConsts.MaxFromLength);

@@ -20,14 +20,14 @@ public class BookAppService : DemoApplicationServiceBase, IBookAppService //impl
     private readonly IAuthorRepository _authorRepository;
     private readonly AuthorManager _authorManager;
 
-    private readonly IExporterProvider _exporterProvider;
-    private readonly IImporterProvider _importerProvider;
+    private readonly IExcelExporterProvider _exporterProvider;
+    private readonly IExcelImporterProvider _importerProvider;
 
     protected IDataAccessEntityTypeInfoProvider EntityTypeInfoProvider => LazyServiceProvider.LazyGetRequiredService<IDataAccessEntityTypeInfoProvider>();
 
     public BookAppService(
-        IExporterProvider exporterProvider,
-        IImporterProvider importerProvider,
+        IExcelExporterProvider exporterProvider,
+        IExcelImporterProvider importerProvider,
         IBookRepository bookRepository,
         AuthorManager authorManager,
         IAuthorRepository authorRepository)

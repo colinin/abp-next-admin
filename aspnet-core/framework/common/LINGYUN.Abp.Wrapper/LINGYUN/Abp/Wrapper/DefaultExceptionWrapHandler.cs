@@ -11,7 +11,7 @@ public class DefaultExceptionWrapHandler : IExceptionWrapHandler
     {
         if (context.Exception is IHasErrorCode exceptionWithErrorCode)
         {
-            string errorCode;
+            string? errorCode;
             if (!exceptionWithErrorCode.Code.IsNullOrWhiteSpace() &&
                 exceptionWithErrorCode.Code.Contains(":"))
             {
@@ -22,7 +22,10 @@ public class DefaultExceptionWrapHandler : IExceptionWrapHandler
                 errorCode = exceptionWithErrorCode.Code;
             }
 
-            context.WithCode(errorCode);
+            if (!errorCode.IsNullOrWhiteSpace())
+            {
+                context.WithCode(errorCode);
+            }
         }
 
         // 没有处理的异常代码统一用配置代码处理

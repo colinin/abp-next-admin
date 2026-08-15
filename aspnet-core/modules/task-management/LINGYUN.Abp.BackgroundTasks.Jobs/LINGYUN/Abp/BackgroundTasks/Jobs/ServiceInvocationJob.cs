@@ -64,6 +64,9 @@ public class ServiceInvocationJob : IJobRunnable
         var type = context.GetString(PropertyService);
         var method = context.GetString(PropertyMethod);
         var serviceType = Type.GetType(type, true);
+
+        Check.NotNull(serviceType, nameof(serviceType));
+
         var serviceMethod = serviceType.GetMethod(method, BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
         if (serviceMethod == null)
         {
@@ -76,6 +79,8 @@ public class ServiceInvocationJob : IJobRunnable
                 }
             }
         }
+        Check.NotNull(serviceMethod, nameof(serviceMethod));
+
         context.TryGetString(PropertyCulture, out var culture);
         context.TryGetString(PropertyProvider, out var provider);
         provider ??= "http";
@@ -120,12 +125,12 @@ public class ServiceInvocationJob : IJobRunnable
         if (context.TryGetString(PropertyData, out var data))
         {
             var json = JsonNode.Parse(data);
-            foreach ( var param in methodParamters)
+            foreach(var param in methodParamters)
             {
-                var input = json[param.Name];
+                var input = json![param.Name!];
                 if (input != null)
                 {
-                    invokeParameters.Add(input.Deserialize(param.ParameterType));
+                    invokeParameters.Add(input.Deserialize(param.ParameterType!)!);
                 }
             }
         }
@@ -133,14 +138,14 @@ public class ServiceInvocationJob : IJobRunnable
         if (serviceMethod.ReturnType.GenericTypeArguments.IsNullOrEmpty())
         {
             // 直接调用
-            var taskProxy = (Task)serviceMethod.Invoke(clientProxy, invokeParameters.ToArray());
+            var taskProxy = (Task)serviceMethod.Invoke(clientProxy, invokeParameters.ToArray())!;
             await taskProxy;
         }
         else
         {
             // 有返回值的调用
             var returnType = serviceMethod.ReturnType.GenericTypeArguments[0];
-            var callResult = serviceMethod.Invoke(clientProxy, invokeParameters.ToArray());
+            var callResult = serviceMethod.Invoke(clientProxy, invokeParameters.ToArray())!;
             var result = (Task)callResult;
             context.SetResult(await GetResultAsync(result, returnType));
         }
@@ -208,11 +213,11 @@ public class ServiceInvocationJob : IJobRunnable
             serviceMethod);
 
         // 调用参数
-        var invokeParameters = new Dictionary<string, object>();
+        var invokeParameters = new Dictionary<string, object?>();
         if (context.TryGetString(PropertyData, out var data))
         {
             var jsonSerializer = context.GetRequiredService<IJsonSerializer>();
-            invokeParameters = jsonSerializer.Deserialize<Dictionary<string, object>>(data);
+            invokeParameters = jsonSerializer.Deserialize<Dictionary<string, object?>>(data);
         }
 
         // 构造服务代理上下文
@@ -225,7 +230,7 @@ public class ServiceInvocationJob : IJobRunnable
         {
             // 直接调用
             var taskProxy = (Task)DaprClientProxyMethod
-                .Invoke(clientProxy, new object[] { clientProxyRequestContext });
+                .Invoke(clientProxy, new object[] { clientProxyRequestContext })!;
             await taskProxy;
         }
         else
@@ -234,7 +239,7 @@ public class ServiceInvocationJob : IJobRunnable
             var returnType = serviceMethod.ReturnType.GenericTypeArguments[0];
             var result = (Task)DaprCallRequestAsyncMethod
                 .MakeGenericMethod(returnType)
-                .Invoke(this, new object[] { context });
+                .Invoke(this, new object[] { context })!;
 
             context.SetResult(await GetResultAsync(result, returnType));
         }
@@ -265,6 +270,6 @@ public class ServiceInvocationJob : IJobRunnable
             .MakeGenericType(resultType)
             .GetProperty(nameof(Task<object>.Result), BindingFlags.Instance | BindingFlags.Public);
         Check.NotNull(resultProperty, nameof(resultProperty));
-        return resultProperty.GetValue(task);
+        return resultProperty.GetValue(task)!;
     }
 }

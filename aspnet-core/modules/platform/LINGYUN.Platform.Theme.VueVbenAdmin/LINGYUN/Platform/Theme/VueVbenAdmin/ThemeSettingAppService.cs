@@ -248,7 +248,7 @@ public class ThemeSettingAppService : ApplicationService, IThemeSettingAppServic
         };
     }
 
-    protected virtual string GetSettingValue(IEnumerable<SettingValue> settings, string name, string defaultValue = null)
+    protected virtual string? GetSettingValue(IEnumerable<SettingValue> settings, string name, string? defaultValue = null)
     {
         var settingValue = settings.FirstOrDefault(x => x.Name == name)?.Value;
 

@@ -41,7 +41,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
 
-    public async virtual Task<List<JobInfo>> GetRuningListAsync(int maxResultCount, string nodeName = null, CancellationToken cancellationToken = default)
+    public async virtual Task<List<JobInfo>> GetRuningListAsync(int maxResultCount, string? nodeName = null, CancellationToken cancellationToken = default)
     {
         var specification = new ExpressionSpecification<BackgroundJobInfo>(
             x => x.NodeName == nodeName && x.Status == JobStatus.Running);
@@ -61,7 +61,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
         return ObjectMapper.Map<List<BackgroundJobInfo>, List<JobInfo>>(jobInfos);
     }
 
-    public async virtual Task<JobInfo> FindAsync(
+    public async virtual Task<JobInfo?> FindAsync(
         string jobId,
         CancellationToken cancellationToken = default)
     {
@@ -95,7 +95,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                     jobInfo.Name,
                     jobInfo.Group,
                     jobInfo.Type,
-                    jobInfo.Args,
+                    jobInfo.Args!,
                     jobInfo.BeginTime,
                     jobInfo.EndTime,
                     jobInfo.Priority,
@@ -125,7 +125,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
                         backgroundJobInfo.SetPersistentJob(jobInfo.Interval);
                         break;
                     case JobType.Period:
-                        backgroundJobInfo.SetPeriodJob(jobInfo.Cron);
+                        backgroundJobInfo.SetPeriodJob(jobInfo.Cron!);
                         break;
                 }
 
@@ -173,7 +173,7 @@ public class BackgroundJobStore : IJobStore, ITransientDependency
     public async virtual Task<List<JobInfo>> CleanupAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
-        string nodeName = null,
+        string? nodeName = null,
         CancellationToken cancellationToken = default)
     {
         using var unitOfWork = UnitOfWorkManager.Begin();

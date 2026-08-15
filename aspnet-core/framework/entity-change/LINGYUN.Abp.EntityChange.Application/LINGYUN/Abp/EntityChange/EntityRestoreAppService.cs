@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.EntityChange;
 public abstract class EntityRestoreAppService<TEntity, TKey> : EntityChangeAppService<TEntity>, IEntityRestoreAppService
     where TEntity : class, IEntity<TKey>
 {
-    protected virtual string RestorePolicy { get; set; }
+    protected virtual string? RestorePolicy { get; set; }
 
     protected IRepository<TEntity, TKey> Repository { get; }
 
@@ -40,7 +40,7 @@ public abstract class EntityRestoreAppService<TEntity, TKey> : EntityChangeAppSe
             await RestoreEntityByAuditLogAsync(restoreEntity);
         }
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task RestoreEntityAsync(RestoreEntityInput input)
@@ -52,7 +52,7 @@ public abstract class EntityRestoreAppService<TEntity, TKey> : EntityChangeAppSe
 
         await RestoreEntityByAuditLogAsync(input);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     protected virtual TKey MapToEntityKey(string entityId)

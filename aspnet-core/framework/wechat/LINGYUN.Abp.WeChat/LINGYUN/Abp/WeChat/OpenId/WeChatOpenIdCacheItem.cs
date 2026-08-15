@@ -4,9 +4,10 @@ namespace LINGYUN.Abp.WeChat.OpenId;
 
 public class WeChatOpenIdCacheItem
 {
-    public string Code { get; set; }
+    public string Code { get; set; } = default!;
 
-    public WeChatOpenId WeChatOpenId { get; set; }
+    public WeChatOpenId WeChatOpenId { get; set; } = default!;
+
     public WeChatOpenIdCacheItem()
     {
 

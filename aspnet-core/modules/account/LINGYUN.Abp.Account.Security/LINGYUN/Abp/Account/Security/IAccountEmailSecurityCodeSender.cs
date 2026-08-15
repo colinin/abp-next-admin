@@ -34,8 +34,8 @@ public interface IAccountEmailSecurityCodeSender
         string userEmail,
         string confirmToken,
         string appName,
-        string returnUrl = null,
-        string returnUrlHash = null,
+        string? returnUrl = null,
+        string? returnUrlHash = null,
         Guid? userTenantId = null
     );
 }

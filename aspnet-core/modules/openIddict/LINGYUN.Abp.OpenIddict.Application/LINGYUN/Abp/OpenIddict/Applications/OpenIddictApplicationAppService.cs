@@ -88,7 +88,7 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
             await _applicationManager.UpdateAsync(application.ToModel(), input.ClientSecret);
         }
 
-        application = await _applicationRepository.FindAsync(id);
+        application = await _applicationRepository.GetAsync(id);
 
         return application.ToDto(JsonSerializer);
     }

@@ -8,9 +8,12 @@ namespace LINGYUN.Abp.ProjectManagement.Templates
 {
     public class Template : AggregateRoot<Guid>
     {
-        public virtual string Name { get; protected set; }
+        public virtual string Name { get; protected set; } = default!;
         public virtual ICollection<TemplateOptions> Options { get; protected set; }
-        protected Template() { }
+        protected Template() 
+        {
+            Options = new Collection<TemplateOptions>();
+        }
         public Template(
             Guid id,
             string name)

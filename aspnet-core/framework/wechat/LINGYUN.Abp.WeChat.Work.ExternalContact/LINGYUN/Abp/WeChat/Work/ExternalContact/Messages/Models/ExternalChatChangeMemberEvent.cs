@@ -21,12 +21,12 @@ public abstract class ExternalChatChangeMemberEvent : ExternalChatUpdateEvent
     /// 变更前的群成员版本号
     /// </summary>
     [XmlElement("LastMemVer")]
-    public string LastMemVer { get; set; }
+    public string LastMemVer { get; set; } = default!;
     /// <summary>
     /// 变更后的群成员版本号
     /// </summary>
     [XmlElement("CurMemVer")]
-    public string CurMemVer { get; set; }
+    public string CurMemVer { get; set; } = default!;
 }
 
 public class ExternalChatChangeMember
@@ -35,5 +35,5 @@ public class ExternalChatChangeMember
     /// 成员Id
     /// </summary>
     [XmlElement("Item")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
 }

@@ -13,14 +13,14 @@ public interface IUserSubscribeRepository : IBasicRepository<UserSubscribe, long
         Guid userId,
         CancellationToken cancellationToken = default);
 
-    Task<UserSubscribe> GetUserSubscribeAsync(
+    Task<UserSubscribe?> GetUserSubscribeAsync(
         string notificationName,
         Guid userId,
         CancellationToken cancellationToken = default);
 
     Task<List<UserSubscribe>> GetUserSubscribesAsync(
         string notificationName,
-        IEnumerable<Guid> userIds = null, 
+        IEnumerable<Guid>? userIds = null, 
         CancellationToken cancellationToken = default);
 
     Task<List<string>> GetUserSubscribesAsync(
@@ -54,7 +54,7 @@ public interface IUserSubscribeRepository : IBasicRepository<UserSubscribe, long
 
     Task<List<UserSubscribe>> GetUserSubscribesAsync(
         Guid userId, 
-        string sorting = nameof(UserSubscribe.Id),
+        string? sorting = nameof(UserSubscribe.Id),
         int skipCount = 1, 
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);

@@ -81,7 +81,7 @@ public class SendEmailJob : IJobRunnable
                 catch { }
             }
 
-            object model = null;
+            object? model = null;
             if (context.TryGetString(PropertyModel, out var modelString) && !modelString.IsNullOrWhiteSpace())
             {
                 try

@@ -56,7 +56,7 @@ public class TextAppService : ApplicationService, ITextAppService
                 .Select(r => r.Value)
                 .Union(await _externalLocalizationStore.GetResourcesAsync())
                 .DistinctBy(r => r.ResourceName)
-                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.Contains(input.Filter))
+                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.Contains(input.Filter!))
                 .OrderBy(r => r.ResourceName);
 
             foreach (var resource in filterResources)
@@ -72,7 +72,7 @@ public class TextAppService : ApplicationService, ITextAppService
                 .Union(await _externalLocalizationStore.GetResourcesAsync())
                 .DistinctBy(r => r.ResourceName)
                 .Where(l => l.ResourceName.Equals(input.ResourceName))
-                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.Contains(input.Filter))
+                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.Contains(input.Filter!))
                 .FirstOrDefault();
             if (resource != null)
             {
@@ -88,7 +88,7 @@ public class TextAppService : ApplicationService, ITextAppService
         LocalizationResourceBase resource,
         string cultureName,
         string targetCultureName,
-        string filter = null,
+        string? filter = null,
         bool? onlyNull = null)
     {
         var result = new List<TextDifferenceDto>();
@@ -100,7 +100,7 @@ public class TextAppService : ApplicationService, ITextAppService
         using (CultureHelper.Use(cultureName, cultureName))
         {
             localizedStrings = (await localizer.GetAllStringsAsync(true, false, true))
-                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter!))
                 .OrderBy(l => l.Name);
         }
 
@@ -113,7 +113,7 @@ public class TextAppService : ApplicationService, ITextAppService
             using (CultureHelper.Use(targetCultureName, targetCultureName))
             {
                 targetLocalizedStrings = (await localizer.GetAllStringsAsync(false, false, true))
-                    .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter))
+                    .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter!))
                     .OrderBy(l => l.Name);
             }
         }

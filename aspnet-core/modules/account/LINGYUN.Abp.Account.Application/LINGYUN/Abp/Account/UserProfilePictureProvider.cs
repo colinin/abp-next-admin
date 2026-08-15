@@ -31,7 +31,7 @@ public class UserProfileUserPictureProvider : IUserPictureProvider
         AccountBlobContainer = accountBlobContainer;
     }
 
-    public async virtual Task SetPictureAsync(IdentityUser user, Stream stream, string fileName = null)
+    public async virtual Task SetPictureAsync(IdentityUser user, Stream stream, string? fileName = null)
     {
         var userId = user.Id.ToString("N");
         var pictureBlobId = fileName ?? $"{GuidGenerator.Create():n}.jpg";

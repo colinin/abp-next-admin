@@ -10,7 +10,10 @@ namespace LINGYUN.Abp.ProjectManagement.Projects
         public virtual Guid ProjectId { get; protected set; }
         public virtual Guid TemplateId { get; protected set; }
         public virtual ICollection<ProjectOptions> Options { get; protected set; }
-        protected ProjectTemplate() { }
+        protected ProjectTemplate() 
+        {
+            Options = new Collection<ProjectOptions>();
+        }
         public ProjectTemplate(
             Guid id,
             Guid projectId,

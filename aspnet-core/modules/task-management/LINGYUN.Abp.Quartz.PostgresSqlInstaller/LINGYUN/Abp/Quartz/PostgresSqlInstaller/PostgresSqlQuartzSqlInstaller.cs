@@ -66,7 +66,7 @@ public class PostgresSqlQuartzSqlInstaller : IQuartzSqlInstaller
 
         var builder = new NpgsqlConnectionStringBuilder(connectionString);
 
-        var dataBaseName = await CreateDataBaseIfNotExists(builder.Database, builder);
+        var dataBaseName = await CreateDataBaseIfNotExists(builder.Database!, builder);
 
         builder.Database = dataBaseName;
 

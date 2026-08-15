@@ -91,13 +91,13 @@ public class WeChatWorkNotificationPublishProvider : NotificationPublishProvider
         string agentId,
         string title,
         string content,
-        string description = "",
-        string toUser = null,
-        string toParty = null,
-        string toTag = null,
+        string? description = "",
+        string? toUser = null,
+        string? toParty = null,
+        string? toTag = null,
         CancellationToken cancellationToken = default)
     {
-        WeChatWorkMessage message = null;
+        WeChatWorkMessage? message = null;
 
         switch (context.Notification.ContentType)
         {

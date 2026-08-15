@@ -170,13 +170,6 @@
     <Project Path="framework/features/LINGYUN.Abp.FeatureManagement.Client/LINGYUN.Abp.FeatureManagement.Client.csproj" />
     <Project Path="framework/features/LINGYUN.Abp.Features.Client/LINGYUN.Abp.Features.Client.csproj" />
   </Folder>
-  <Folder Name="/framework/hangfire/">
-    <Project Path="framework/common/LINGYUN.Abp.BackgroundJobs.Hangfire/LINGYUN.Abp.BackgroundJobs.Hangfire.csproj" />
-    <Project Path="framework/common/LINGYUN.Abp.BackgroundWorkers.Hangfire/LINGYUN.Abp.BackgroundWorkers.Hangfire.csproj" />
-    <Project Path="framework/common/LINGYUN.Abp.Hangfire.Dashboard/LINGYUN.Abp.Hangfire.Dashboard.csproj" />
-    <Project Path="framework/common/LINGYUN.Abp.Hangfire.MySqlStorage/LINGYUN.Abp.Hangfire.Storage.MySql.csproj" />
-    <Project Path="framework/common/LINGYUN.Abp.Hangfire.Storage.SqlServer/LINGYUN.Abp.Hangfire.Storage.SqlServer.csproj" />
-  </Folder>
   <Folder Name="/framework/localization/">
     <Project Path="framework/localization/LINGYUN.Abp.AspNetCore.Mvc.Localization/LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
     <Project Path="framework/localization/LINGYUN.Abp.Localization.CultureMap/LINGYUN.Abp.Localization.CultureMap.csproj" />

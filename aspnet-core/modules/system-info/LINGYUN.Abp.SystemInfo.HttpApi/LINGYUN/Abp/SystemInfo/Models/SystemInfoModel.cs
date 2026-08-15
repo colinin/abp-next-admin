@@ -5,5 +5,5 @@ public class SystemInfoModel
     /// <summary>
     /// 组件状态集合
     /// </summary>
-    public ComponentInfoModel[] Components { get; set; }
+    public ComponentInfoModel[] Components { get; set; } = default!;
 }

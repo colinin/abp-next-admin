@@ -36,6 +36,6 @@ internal class JobEventProvider : IJobEventProvider, ISingletonDependency
                 .Select(p => _serviceProvider.GetRequiredService(p) as IJobEvent)
                 .ToList();
 
-        return jobEvents;
+        return jobEvents!;
     }
 }

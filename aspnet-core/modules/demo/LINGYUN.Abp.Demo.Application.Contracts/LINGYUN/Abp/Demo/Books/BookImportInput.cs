@@ -5,5 +5,5 @@ namespace LINGYUN.Abp.Demo.Books;
 public class BookImportInput
 {
     [Required]
-    public IRemoteStreamContent Content { get; set; }   
+    public IRemoteStreamContent Content { get; set; } = default!;
 }

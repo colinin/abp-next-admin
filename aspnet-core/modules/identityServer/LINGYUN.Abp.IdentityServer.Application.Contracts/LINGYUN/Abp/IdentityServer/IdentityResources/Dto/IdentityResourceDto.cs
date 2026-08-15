@@ -6,11 +6,11 @@ namespace LINGYUN.Abp.IdentityServer.IdentityResources;
 
 public class IdentityResourceDto : ExtensibleAuditedEntityDto<Guid>
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
+
+    public string? DisplayName { get; set; }
     
-    public string DisplayName { get; set; }
-    
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool Enabled { get; set; }
 

@@ -31,37 +31,39 @@ public abstract class AbstractTencentCloudClientFactory<TClient>
 
     protected async virtual Task<TencentCloudClientCacheItem> GetClientCacheItemAsync()
     {
-        return await ClientCache.GetOrCreateAsync(
-            TencentCloudClientCacheItem.CalculateCacheKey("client-options"),
-            async (cache) =>
+        var cacheKey = TencentCloudClientCacheItem.CalculateCacheKey("client-options");
+        var cacheItem = ClientCache.Get<TencentCloudClientCacheItem>(cacheKey);
+        if (cacheItem == null)
+        {
+            var secretId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretId);
+            var secretKey = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretKey);
+            var endpoint = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.EndPoint);
+            var durationSecond = await SettingProvider.GetAsync(TencentCloudSettingNames.DurationSecond, 3600);
+
+            Check.NotNullOrWhiteSpace(secretId, TencentCloudSettingNames.SecretId);
+            Check.NotNullOrWhiteSpace(secretKey, TencentCloudSettingNames.SecretKey);
+
+
+            var method = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.HttpMethod);
+            var webProxy = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.WebProxy);
+            var timeout = await SettingProvider.GetAsync(TencentCloudSettingNames.Connection.Timeout, 60);
+
+            cacheItem = new TencentCloudClientCacheItem
             {
-                var secretId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretId);
-                var secretKey = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretKey);
-                var endpoint = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.EndPoint);
-                var durationSecond = await SettingProvider.GetAsync(TencentCloudSettingNames.DurationSecond, 3600);
+                SecretId = secretId,
+                SecretKey = secretKey,
+                // 连接区域
+                EndPoint = endpoint,
+                DurationSecond = durationSecond,
+                HttpMethod = method,
+                WebProxy = webProxy,
+                Timeout = timeout,
+            };
 
-                Check.NotNullOrWhiteSpace(secretId, TencentCloudSettingNames.SecretId);
-                Check.NotNullOrWhiteSpace(secretKey, TencentCloudSettingNames.SecretKey);
+            ClientCache.Set(cacheKey, cacheItem, TimeSpan.FromSeconds(durationSecond));
+        }
 
-
-                var method = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.HttpMethod);
-                var webProxy = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.WebProxy);
-                var timeout = await SettingProvider.GetAsync(TencentCloudSettingNames.Connection.Timeout, 60);
-
-                cache.SetAbsoluteExpiration(TimeSpan.FromSeconds(durationSecond));
-
-                return new TencentCloudClientCacheItem
-                {
-                    SecretId = secretId,
-                    SecretKey = secretKey,
-                    // 连接区域
-                    EndPoint = endpoint,
-                    DurationSecond = durationSecond,
-                    HttpMethod = method,
-                    WebProxy = webProxy,
-                    Timeout = timeout,
-                };
-            });
+        return cacheItem;
     }
 }
 
@@ -89,36 +91,38 @@ public abstract class AbstractTencentCloudClientFactory<TClient, TConfiguration>
 
     protected async virtual Task<TencentCloudClientCacheItem> GetClientCacheItemAsync()
     {
-        return await ClientCache.GetOrCreateAsync(
-            TencentCloudClientCacheItem.CalculateCacheKey("client-options"),
-            async (cache) =>
+        var cacheKey = TencentCloudClientCacheItem.CalculateCacheKey("client-options");
+        var cacheItem = ClientCache.Get<TencentCloudClientCacheItem>(cacheKey);
+        if (cacheItem == null)
+        {
+            var secretId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretId);
+            var secretKey = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretKey);
+            var endpoint = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.EndPoint);
+            var durationSecond = await SettingProvider.GetAsync(TencentCloudSettingNames.DurationSecond, 3600);
+
+            Check.NotNullOrWhiteSpace(secretId, TencentCloudSettingNames.SecretId);
+            Check.NotNullOrWhiteSpace(secretKey, TencentCloudSettingNames.SecretKey);
+
+
+            var method = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.HttpMethod);
+            var webProxy = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.WebProxy);
+            var timeout = await SettingProvider.GetAsync(TencentCloudSettingNames.Connection.Timeout, 60);
+
+            cacheItem = new TencentCloudClientCacheItem
             {
-                var secretId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretId);
-                var secretKey = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.SecretKey);
-                var endpoint = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.EndPoint);
-                var durationSecond = await SettingProvider.GetAsync(TencentCloudSettingNames.DurationSecond, 3600);
+                SecretId = secretId,
+                SecretKey = secretKey,
+                // 连接区域
+                EndPoint = endpoint,
+                DurationSecond = durationSecond,
+                HttpMethod = method,
+                WebProxy = webProxy,
+                Timeout = timeout,
+            };
 
-                Check.NotNullOrWhiteSpace(secretId, TencentCloudSettingNames.SecretId);
-                Check.NotNullOrWhiteSpace(secretKey, TencentCloudSettingNames.SecretKey);
+            ClientCache.Set(cacheKey, cacheItem, TimeSpan.FromSeconds(durationSecond));
+        }
 
-
-                var method = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.HttpMethod);
-                var webProxy = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Connection.WebProxy);
-                var timeout = await SettingProvider.GetAsync(TencentCloudSettingNames.Connection.Timeout, 60);
-
-                cache.SetAbsoluteExpiration(TimeSpan.FromSeconds(durationSecond));
-
-                return new TencentCloudClientCacheItem
-                {
-                    SecretId = secretId,
-                    SecretKey = secretKey,
-                    // 连接区域
-                    EndPoint = endpoint,
-                    DurationSecond = durationSecond,
-                    HttpMethod = method,
-                    WebProxy = webProxy,
-                    Timeout = timeout,
-                };
-            });
+        return cacheItem;
     }
 }

@@ -11,7 +11,7 @@ public static class DaprRemoteServiceConfigurationExtensions
     public const string DaprApiToken = "DaprApiToken";
 
     [CanBeNull]
-    public static string GetApiToken([NotNull] this RemoteServiceConfiguration configuration)
+    public static string? GetApiToken([NotNull] this RemoteServiceConfiguration configuration)
     {
         Check.NotNullOrEmpty(configuration, nameof(configuration));
 

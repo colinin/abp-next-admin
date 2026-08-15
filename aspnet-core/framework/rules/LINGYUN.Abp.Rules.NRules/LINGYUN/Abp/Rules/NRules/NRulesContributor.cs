@@ -29,7 +29,7 @@ public class NRulesContributor : RuleContributorBase, ISingletonDependency
             .Load(loader => loader.From(_options.DefinitionRules));
     }
 
-    public override Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default)
+    public override Task ExecuteAsync<T>(T input, object[]? @params = null, CancellationToken cancellationToken = default)
     {
         using (var scope = _serviceProvider.CreateScope())
         {

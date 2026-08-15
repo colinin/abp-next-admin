@@ -27,17 +27,17 @@ public class JobDefinition
     /// <summary>
     /// 描述
     /// </summary>
-    public ILocalizableString Description { get; }
+    public ILocalizableString? Description { get; }
     /// <summary>
     /// 参数列表
     /// </summary>
-    public IReadOnlyList<JobDefinitionParamter> Paramters { get; }
+    public IReadOnlyList<JobDefinitionParamter>? Paramters { get; }
     public JobDefinition(
         [NotNull] string name,
         [NotNull] Type jobType,
         [NotNull] ILocalizableString displayName,
-        [CanBeNull] IReadOnlyList<JobDefinitionParamter> paramters = null,
-        [CanBeNull] ILocalizableString description = null,
+        [CanBeNull] IReadOnlyList<JobDefinitionParamter>? paramters = null,
+        [CanBeNull] ILocalizableString? description = null,
         bool isVisibleToClients = true)
     {
         Name = name;

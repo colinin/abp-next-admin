@@ -52,7 +52,7 @@ public class WebhookArticleMessage
     [StringLength(512)]
     [JsonProperty("description")]
     [JsonPropertyName("description")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 点击后跳转的链接。
     /// </summary>
@@ -66,7 +66,7 @@ public class WebhookArticleMessage
     [CanBeNull]
     [JsonProperty("picurl")]
     [JsonPropertyName("picurl")]
-    public string PictureUrl { get; set; }
+    public string? PictureUrl { get; set; }
     /// <summary>
     /// 创建一个图文消息
     /// </summary>

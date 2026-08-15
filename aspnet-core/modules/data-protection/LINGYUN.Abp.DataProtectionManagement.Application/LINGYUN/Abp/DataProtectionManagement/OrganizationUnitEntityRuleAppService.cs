@@ -72,10 +72,10 @@ public class OrganizationUnitEntityRuleAppService : DataProtectionManagementAppl
                     entityRule.Operation,
                     entityRule.FilterGroup)
                 {
-                    AccessedProperties = input.AccessedProperties.ToList()
+                    AccessedProperties = input.AccessedProperties?.ToList() ?? []
                 }));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<OrganizationUnitEntityRule, OrganizationUnitEntityRuleDto>(entityRule);
     }
@@ -111,10 +111,10 @@ public class OrganizationUnitEntityRuleAppService : DataProtectionManagementAppl
                     entityRule.Operation,
                     entityRule.FilterGroup)
                 {
-                    AccessedProperties = input.AccessedProperties.ToList()
+                    AccessedProperties = input.AccessedProperties?.ToList() ?? []
                 }));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<OrganizationUnitEntityRule, OrganizationUnitEntityRuleDto>(entityRule);
     }

@@ -14,12 +14,12 @@ public class Department
     [NotNull]
     [JsonProperty("name")]
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 部门id
     /// </summary>
     [NotNull]
     [JsonProperty("id")]
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
 }

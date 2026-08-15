@@ -15,7 +15,7 @@ public class ApprovalControlValue
     [CanBeNull]
     [JsonProperty("text")]
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public string? Text { get; set; }
     /// <summary>
     /// 数字内容，即申请人在此控件填写的数字内容
     /// </summary>
@@ -36,42 +36,42 @@ public class ApprovalControlValue
     [NotNull]
     [JsonProperty("members")]
     [JsonPropertyName("members")]
-    public List<MemberValue> Members { get; set; }
+    public List<MemberValue> Members { get; set; } = default!;
     /// <summary>
     /// 所选部门内容，即申请人在此控件选择的部门，多选模式下可能有多个
     /// </summary>
     [NotNull]
     [JsonProperty("departments")]
     [JsonPropertyName("departments")]
-    public List<DepartmentValue> Departments { get; set; }
+    public List<DepartmentValue> Departments { get; set; } = default!;
     /// <summary>
     /// 附件列表
     /// </summary>
     [NotNull]
     [JsonProperty("files")]
     [JsonPropertyName("files")]
-    public List<FileValue> Files { get; set; }
+    public List<FileValue> Files { get; set; } = default!;
     /// <summary>
     /// 明细内容，一个明细控件可能包含多个子明细
     /// </summary>
     [NotNull]
     [JsonProperty("children")]
     [JsonPropertyName("children")]
-    public List<ApprovalDataChildrenValue> Children { get; set; }
+    public List<ApprovalDataChildrenValue> Children { get; set; } = default!;
     /// <summary>
     /// 选择内容
     /// </summary>
     [CanBeNull]
     [JsonProperty("selector")]
     [JsonPropertyName("selector")]
-    public SelectorValue Selector { get; set; }
+    public SelectorValue? Selector { get; set; }
     /// <summary>
     /// 关联审批单
     /// </summary>
     [NotNull]
     [JsonProperty("related_approval")]
     [JsonPropertyName("related_approval")]
-    public List<RelatedApprovalValue> RelatedApproval { get; set; }
+    public List<RelatedApprovalValue> RelatedApproval { get; set; } = default!;
 }
 
 public class ApprovalDataChildrenValue
@@ -82,5 +82,5 @@ public class ApprovalDataChildrenValue
     [NotNull]
     [JsonProperty("list")]
     [JsonPropertyName("list")]
-    public List<ApprovalControlData> List { get; set; }
+    public List<ApprovalControlData> List { get; set; } = default!;
 }

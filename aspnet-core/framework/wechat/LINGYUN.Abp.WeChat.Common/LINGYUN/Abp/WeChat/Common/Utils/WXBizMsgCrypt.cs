@@ -17,7 +17,7 @@ using System.Security.Cryptography;
 //-40009 :  base64加密异常
 //-40010 :  base64解密异常
 namespace LINGYUN.Abp.WeChat.Common.Utils;
-
+#nullable disable
 public class WXBizMsgCrypt
 {
     string m_sToken;
@@ -260,3 +260,4 @@ public class WXBizMsgCrypt
         return 0;
     }
 }
+#nullable enable

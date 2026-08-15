@@ -83,7 +83,7 @@ public class AbpAccountWebModule : AbpModule
                 });
 
             options.ScriptBundles
-                .Configure(typeof(ManageModel).FullName,
+                .Configure(typeof(ManageModel).FullName!,
                     bundle =>
                     {
                         // Client Proxies
@@ -110,7 +110,7 @@ public class AbpAccountWebModule : AbpModule
                     bundle.AddContributors(typeof(ChangePasswordScriptContributor));
                 });
             options.ScriptBundles
-                .Configure(typeof(Pages.Account.LoginModel).FullName, bundle =>
+                .Configure(typeof(Pages.Account.LoginModel).FullName!, bundle =>
                 {
                     bundle.AddFiles("/client-proxies/account-proxy.js");
                     bundle.AddFiles("/client-proxies/qrcode-proxy.js");

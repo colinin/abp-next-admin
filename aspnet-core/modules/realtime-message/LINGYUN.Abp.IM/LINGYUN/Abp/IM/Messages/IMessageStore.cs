@@ -29,7 +29,7 @@ public interface IMessageStore
         Guid? tenantId,
         long groupId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取群组聊天记录
@@ -46,8 +46,8 @@ public interface IMessageStore
         Guid? tenantId,
         long groupId,
         MessageType? type = null,
-        string filter = "",
-        string sorting = nameof(ChatMessage.MessageId),
+        string? filter = null,
+        string? sorting = nameof(ChatMessage.MessageId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);
@@ -64,7 +64,7 @@ public interface IMessageStore
         Guid? tenantId,
         Guid userId,
         MessageState? state = null,
-        string sorting = nameof(LastChatMessage.SendTime),
+        string? sorting = nameof(LastChatMessage.SendTime),
         int maxResultCount = 10,
         CancellationToken cancellationToken = default
         );
@@ -82,7 +82,7 @@ public interface IMessageStore
         Guid sendUserId,
         Guid receiveUserId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = "",
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取用户聊天记录
@@ -102,8 +102,8 @@ public interface IMessageStore
         Guid sendUserId,
         Guid receiveUserId,
         MessageType? type = null,
-        string filter = "",
-        string sorting = nameof(ChatMessage.MessageId),
+        string? filter = null,
+        string? sorting = nameof(ChatMessage.MessageId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);

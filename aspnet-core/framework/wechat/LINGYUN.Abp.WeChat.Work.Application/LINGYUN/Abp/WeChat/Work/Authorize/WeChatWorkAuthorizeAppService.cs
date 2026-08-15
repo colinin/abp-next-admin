@@ -33,7 +33,7 @@ public class WeChatWorkAuthorizeAppService : ApplicationService, IWeChatWorkAuth
         var state = _encryptionService.Encrypt(userId);
         var redirectUri = await _appUrlProvider.GetUrlAsync(AbpWeChatWorkGlobalConsts.ProviderName, urlName);
 
-        return await _authorizeGenerator.GenerateOAuth2AuthorizeAsync(redirectUri, state, responseType, scope);
+        return await _authorizeGenerator.GenerateOAuth2AuthorizeAsync(redirectUri, state!, responseType, scope);
     }
 
     public async virtual Task<string> GenerateOAuth2LoginAsync(
@@ -44,6 +44,6 @@ public class WeChatWorkAuthorizeAppService : ApplicationService, IWeChatWorkAuth
         var state = _encryptionService.Encrypt(userId);
         var redirectUri = await _appUrlProvider.GetUrlAsync(AbpWeChatWorkGlobalConsts.ProviderName, urlName);
 
-        return await _authorizeGenerator.GenerateOAuth2LoginAsync(redirectUri, state, loginType);
+        return await _authorizeGenerator.GenerateOAuth2LoginAsync(redirectUri, state!, loginType);
     }
 }

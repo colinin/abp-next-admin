@@ -19,7 +19,7 @@ public class DataAccessUserIdContributor : IDataAccessSubjectContributor
         if (currentUser.IsAuthenticated)
         {
             var resourceStore = context.ServiceProvider.GetRequiredService<IDataProtectedResourceStore>();
-            var resource = await resourceStore.GetAsync(Name, currentUser.Id.ToString(), context.EntityTypeFullName, context.Operation);
+            var resource = await resourceStore.GetAsync(Name, currentUser.Id.ToString()!, context.EntityTypeFullName, context.Operation);
             if (resource?.FilterGroup != null)
             {
                 groups.Add(resource.FilterGroup);
@@ -35,7 +35,7 @@ public class DataAccessUserIdContributor : IDataAccessSubjectContributor
         if (currentUser.IsAuthenticated)
         {
             var resourceStore = context.ServiceProvider.GetRequiredService<IDataProtectedResourceStore>();
-            var resource = await resourceStore.GetAsync(Name, currentUser.Id.ToString(), context.EntityTypeFullName, context.Operation);
+            var resource = await resourceStore.GetAsync(Name, currentUser.Id.ToString()!, context.EntityTypeFullName, context.Operation);
             if (resource?.AccessedProperties.Any() == true)
             {
                 allowProperties.AddIfNotContains(resource.AccessedProperties);

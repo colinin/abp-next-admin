@@ -119,7 +119,7 @@ public class AbpBackgroundTasksOptions
     /// <summary>
     /// 指定运行节点
     /// </summary>
-    public string NodeName { get; set; }
+    public string? NodeName { get; set; }
     public AbpBackgroundTasksOptions()
     {
         JobFetchEnabled = false;

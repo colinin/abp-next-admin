@@ -3,7 +3,6 @@ using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
-using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
@@ -61,7 +60,6 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
-    typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(AbpQuartzPostgresSqlInstallerModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),

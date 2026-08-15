@@ -29,7 +29,7 @@ public class AbpDataProtectedWritePropertiesInterceptor : SaveChangesInterceptor
                     var allowProperties = new List<string>();
                     var entity = entry.Entity;
                     var entityType = entry.Entity.GetType();
-                    var subjectContext = new DataAccessSubjectContributorContext(entityType.FullName, DataAccessOperation.Write, LazyServiceProvider);
+                    var subjectContext = new DataAccessSubjectContributorContext(entityType.FullName!, DataAccessOperation.Write, LazyServiceProvider);
                     foreach (var contributor in DataProtectionOptions.Value.SubjectContributors)
                     {
                         var properties = await contributor.GetAccessdProperties(subjectContext);

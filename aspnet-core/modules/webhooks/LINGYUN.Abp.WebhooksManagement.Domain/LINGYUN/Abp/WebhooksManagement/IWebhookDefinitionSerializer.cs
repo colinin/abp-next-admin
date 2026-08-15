@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using LINGYUN.Abp.Webhooks;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,5 +14,5 @@ public interface IWebhookDefinitionSerializer
 
     Task<WebhookDefinitionRecord> SerializeAsync(
         WebhookDefinition Webhook,
-        [CanBeNull] WebhookGroupDefinition WebhookGroup);
+        WebhookGroupDefinition WebhookGroup);
 }

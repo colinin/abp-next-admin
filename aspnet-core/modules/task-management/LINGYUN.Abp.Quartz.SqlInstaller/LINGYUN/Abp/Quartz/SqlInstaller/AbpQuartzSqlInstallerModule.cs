@@ -24,7 +24,10 @@ public class AbpQuartzSqlInstallerModule : AbpModule
         {
             foreach (var settingKey in abpQuartzOptions.Properties.AllKeys)
             {
-                options[settingKey] = abpQuartzOptions.Properties[settingKey];
+                if (!string.IsNullOrWhiteSpace(settingKey))
+                {
+                    options[settingKey] = abpQuartzOptions.Properties[settingKey];
+                }
             }
 
             if (abpQuartzOptions.Properties[StdSchedulerFactory.PropertyJobStoreType] == null)
@@ -43,14 +46,17 @@ public class AbpQuartzSqlInstallerModule : AbpModule
         if (configuration.GetValue("Quartz:UsePersistentStore", false))
         {
             var driverDelegateType = configuration[$"Quartz:Properties:quartz.jobStore.driverDelegateType"];
-            // 初始化 Quartz 数据库
-            var installs = context.ServiceProvider.GetServices<IQuartzSqlInstaller>();
-
-            foreach (var install in installs)
+            if (!string.IsNullOrWhiteSpace(driverDelegateType))
             {
-                if (install.CanInstall(driverDelegateType))
+                // 初始化 Quartz 数据库
+                var installs = context.ServiceProvider.GetServices<IQuartzSqlInstaller>();
+
+                foreach (var install in installs)
                 {
-                    await install.InstallAsync();
+                    if (install.CanInstall(driverDelegateType))
+                    {
+                        await install.InstallAsync();
+                    }
                 }
             }
         }

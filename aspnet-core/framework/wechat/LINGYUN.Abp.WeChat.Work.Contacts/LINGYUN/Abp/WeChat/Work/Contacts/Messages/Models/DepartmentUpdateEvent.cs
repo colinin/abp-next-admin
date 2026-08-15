@@ -16,7 +16,7 @@ public abstract class DepartmentUpdateEvent : WeChatWorkEventMessage
     /// 部门名称
     /// </summary>
     [XmlElement("Name")]
-    public int Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 父部门id
     /// </summary>

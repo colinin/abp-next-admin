@@ -20,17 +20,17 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         [Required]
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ConfirmToken { get; set; }
+        public string ConfirmToken { get; set; } = default!;
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; } = default!;
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrlHash { get; set; }
+        public string? ReturnUrlHash { get; set; }
 
-        public IMyProfileAppService MyProfileAppService { get; set; }
+        public IMyProfileAppService MyProfileAppService => LazyServiceProvider.LazyGetRequiredService<IMyProfileAppService>();
 
         public EmailConfirmModel()
         {

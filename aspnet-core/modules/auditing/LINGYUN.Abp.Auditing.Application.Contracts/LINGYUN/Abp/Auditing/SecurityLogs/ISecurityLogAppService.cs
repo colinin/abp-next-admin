@@ -9,7 +9,7 @@ public interface ISecurityLogAppService : IApplicationService
 {
     Task<PagedResultDto<SecurityLogDto>> GetListAsync(SecurityLogGetByPagedDto input);
 
-    Task<SecurityLogDto> GetAsync(Guid id);
+    Task<SecurityLogDto?> GetAsync(Guid id);
 
     Task DeleteAsync(Guid id);
 

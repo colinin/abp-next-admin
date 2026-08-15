@@ -42,7 +42,7 @@ public class TencentCloudSettingAppService : ApplicationService, ITencentCloudSe
         return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
     }
 
-    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string? providerKey = null)
     {
         var settingGroups = new SettingGroupResult();
 
@@ -61,7 +61,7 @@ public class TencentCloudSettingAppService : ApplicationService, ITencentCloudSe
                 await SettingManager.GetOrNullAsync(TencentCloudSettingNames.EndPoint, providerName, providerKey),
                 ValueType.Option,
                 providerName)
-                .AddOptions(GetAvailableRegionOptions());
+                ?.AddOptions(GetAvailableRegionOptions());
             basicSetting.AddDetail(
                 await SettingDefinitionManager.GetAsync(TencentCloudSettingNames.SecretId),
                 StringLocalizerFactory,
@@ -94,8 +94,8 @@ public class TencentCloudSettingAppService : ApplicationService, ITencentCloudSe
                 await SettingManager.GetOrNullAsync(TencentCloudSettingNames.Connection.HttpMethod, providerName, providerKey),
                 ValueType.Option,
                 providerName)
-                .AddOption("POST", "POST")
-                .AddOption("GET", "GET");
+                ?.AddOption("POST", "POST")
+                ?.AddOption("GET", "GET");
             connectionSetting.AddDetail(
                 await SettingDefinitionManager.GetAsync(TencentCloudSettingNames.Connection.Timeout),
                 StringLocalizerFactory,

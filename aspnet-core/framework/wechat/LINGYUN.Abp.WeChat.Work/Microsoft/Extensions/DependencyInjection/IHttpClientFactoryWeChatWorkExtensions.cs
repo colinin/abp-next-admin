@@ -5,7 +5,7 @@ using System.Net.Http;
 namespace Microsoft.Extensions.DependencyInjection;
 public static class IHttpClientFactoryWeChatWorkExtensions
 {
-    internal static IServiceCollection AddApiClient(this IServiceCollection services, Action<HttpClient> configureClient = null)
+    internal static IServiceCollection AddApiClient(this IServiceCollection services, Action<HttpClient>? configureClient = null)
     {
         services.AddHttpClient(AbpWeChatWorkGlobalConsts.ApiClient,
             options =>
@@ -23,7 +23,7 @@ public static class IHttpClientFactoryWeChatWorkExtensions
         return httpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.ApiClient);
     }
 
-    internal static IServiceCollection AddOAuthClient(this IServiceCollection services, Action<HttpClient> configureClient = null)
+    internal static IServiceCollection AddOAuthClient(this IServiceCollection services, Action<HttpClient>? configureClient = null)
     {
         services.AddHttpClient(AbpWeChatWorkGlobalConsts.OAuthClient,
             options =>
@@ -41,7 +41,7 @@ public static class IHttpClientFactoryWeChatWorkExtensions
         return httpClientFactory.CreateClient(AbpWeChatWorkGlobalConsts.OAuthClient);
     }
 
-    internal static IServiceCollection AddLoginClient(this IServiceCollection services, Action<HttpClient> configureClient = null)
+    internal static IServiceCollection AddLoginClient(this IServiceCollection services, Action<HttpClient>? configureClient = null)
     {
         services.AddHttpClient(AbpWeChatWorkGlobalConsts.LoginClient,
             options =>

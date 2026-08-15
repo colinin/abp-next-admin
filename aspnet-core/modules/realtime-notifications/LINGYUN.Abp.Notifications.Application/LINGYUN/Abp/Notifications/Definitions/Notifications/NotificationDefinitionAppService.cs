@@ -54,7 +54,7 @@ public class NotificationDefinitionAppService : AbpNotificationsApplicationServi
 
         await _definitionRecordRepository.InsertAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
     }
@@ -70,7 +70,7 @@ public class NotificationDefinitionAppService : AbpNotificationsApplicationServi
 
         await _definitionRecordRepository.DeleteAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<NotificationDefinitionDto> GetAsync(string name)
@@ -88,7 +88,7 @@ public class NotificationDefinitionAppService : AbpNotificationsApplicationServi
         Expression<Func<NotificationDefinitionRecord, bool>> expression = _ => true;
         if (!input.Filter.IsNullOrWhiteSpace())
         {
-            expression = expression.And(x => x.Name.Contains(input.Filter) || x.DisplayName.Contains(input.Filter));
+            expression = expression.And(x => x.Name.Contains(input.Filter) || x.DisplayName!.Contains(input.Filter));
         }
         if (!input.Template.IsNullOrWhiteSpace())
         {
@@ -130,7 +130,7 @@ public class NotificationDefinitionAppService : AbpNotificationsApplicationServi
         UpdateByInput(definitionRecord, input);
         definitionRecord = await _definitionRecordRepository.UpdateAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
     }
@@ -163,7 +163,7 @@ public class NotificationDefinitionAppService : AbpNotificationsApplicationServi
         {
             record.Description = input.Description;
         }
-        string allowedProviders = null;
+        string? allowedProviders = null;
         if (!input.Providers.IsNullOrEmpty())
         {
             allowedProviders = input.Providers.JoinAsString(",");

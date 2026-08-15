@@ -17,7 +17,7 @@ public class DynamicWebhookDefinitionStoreInMemoryCache :
     IDynamicWebhookDefinitionStoreCache,
     ISingletonDependency
 {
-    public string CacheStamp { get; set; }
+    public string? CacheStamp { get; set; }
     
     protected IDictionary<string, WebhookGroupDefinition> WebhookGroupDefinitions { get; }
     protected IDictionary<string, WebhookDefinition> WebhookDefinitions { get; }
@@ -74,7 +74,7 @@ public class DynamicWebhookDefinitionStoreInMemoryCache :
         return Task.CompletedTask;
     }
 
-    public WebhookDefinition GetWebhookOrNull(string name)
+    public WebhookDefinition? GetWebhookOrNull(string name)
     {
         return WebhookDefinitions.GetOrDefault(name);
     }
@@ -84,7 +84,7 @@ public class DynamicWebhookDefinitionStoreInMemoryCache :
         return WebhookDefinitions.Values.ToList();
     }
 
-    public WebhookGroupDefinition GetWebhookGroupOrNull(string name)
+    public WebhookGroupDefinition? GetWebhookGroupOrNull(string name)
     {
         return WebhookGroupDefinitions.GetOrDefault(name);
     }
@@ -98,7 +98,7 @@ public class DynamicWebhookDefinitionStoreInMemoryCache :
         WebhookGroupDefinition webhookGroup,
         WebhookDefinitionRecord webhookRecord)
     {
-        ILocalizableString description = null;
+        ILocalizableString? description = null;
         if (!webhookRecord.Description.IsNullOrWhiteSpace())
         {
             description = LocalizableStringSerializer.Deserialize(webhookRecord.Description);

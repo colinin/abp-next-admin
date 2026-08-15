@@ -6,19 +6,19 @@ namespace LINGYUN.Abp.WebhooksManagement;
 
 public class WebhookSubscriptionGetListInput : PagedAndSortedResultRequestDto
 {
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
 
     public Guid? TenantId { get; set; }
 
     [DynamicStringLength(typeof(WebhookSubscriptionConsts), nameof(WebhookSubscriptionConsts.MaxWebhookUriLength))]
-    public string WebhookUri { get; set; }
+    public string? WebhookUri { get; set; }
 
     [DynamicStringLength(typeof(WebhookSubscriptionConsts), nameof(WebhookSubscriptionConsts.MaxSecretLength))]
-    public string Secret { get; set; }
+    public string? Secret { get; set; }
 
     public bool? IsActive { get; set; }
 
-    public string Webhooks { get; set; }
+    public string? Webhooks { get; set; }
 
     public DateTime? BeginCreationTime { get; set; }
 

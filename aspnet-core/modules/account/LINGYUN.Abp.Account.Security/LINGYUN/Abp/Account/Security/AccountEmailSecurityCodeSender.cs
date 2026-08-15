@@ -65,8 +65,8 @@ public class AccountEmailSecurityCodeSender :
         string userEmail,
         string confirmToken,
         string appName,
-        string returnUrl = null, 
-        string returnUrlHash = null,
+        string? returnUrl = null, 
+        string? returnUrlHash = null,
         Guid? userTenantId = null)
     {
         Debug.Assert(CurrentTenant.Id == userTenantId, "This method can only work for current tenant!");

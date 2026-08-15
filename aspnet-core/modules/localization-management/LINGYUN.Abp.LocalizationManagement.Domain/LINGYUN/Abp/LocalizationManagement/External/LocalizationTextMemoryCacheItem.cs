@@ -7,7 +7,7 @@ public class LocalizationTextMemoryCacheItem
 {
     private const string CacheKeyFormat = "r:{0},c:{1}";
 
-    public string CacheStamp { get; }
+    public string CacheStamp { get; } = default!;
 
     public DateTime LastCheckTime { get; set; }
 

@@ -10,5 +10,5 @@ public class UserMenuStartupInput
 
 
     [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
-    public string Framework { get; set; }
+    public string? Framework { get; set; }
 }

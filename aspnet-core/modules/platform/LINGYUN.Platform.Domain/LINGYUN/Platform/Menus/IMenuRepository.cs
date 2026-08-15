@@ -17,7 +17,7 @@ public interface IMenuRepository : IBasicRepository<Menu, Guid>
     /// <param name="parentId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Menu> GetLastMenuAsync(
+    Task<Menu?> FindLastMenuAsync(
         Guid? parentId = null,
         CancellationToken cancellationToken = default);
     /// <summary>
@@ -26,7 +26,7 @@ public interface IMenuRepository : IBasicRepository<Menu, Guid>
     /// <param name="menuName"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Menu> FindByNameAsync(
+    Task<Menu?> FindByNameAsync(
         string menuName,
         CancellationToken cancellationToken = default);
     /// <summary>
@@ -35,8 +35,8 @@ public interface IMenuRepository : IBasicRepository<Menu, Guid>
     /// <param name="platformType"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Menu> FindMainAsync(
-        string framework = "",
+    Task<Menu?> FindMainAsync(
+        string? framework = null,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取子节点
@@ -71,7 +71,7 @@ public interface IMenuRepository : IBasicRepository<Menu, Guid>
     Task<List<Menu>> GetUserMenusAsync(
         Guid userId,
         string[] roles,
-        string framework = "",
+        string? framework = null,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 查找角色可访问菜单
@@ -82,30 +82,30 @@ public interface IMenuRepository : IBasicRepository<Menu, Guid>
     /// <returns></returns>
     Task<List<Menu>> GetRoleMenusAsync(
         string[] roles,
-        string framework = "",
+        string? framework = null,
         CancellationToken cancellationToken = default);
 
     Task<int> GetCountAsync(
-        string filter = "",
-        string framework = "",
+        string? filter =null,
+        string? framework = null,
         Guid? parentId = null,
         Guid? layoutId = null,
         CancellationToken cancellationToken = default);
 
     Task<List<Menu>> GetListAsync(
-        string filter = "",
-        string sorting = nameof(Menu.Code),
-        string framework = "",
+        string? filter = null,
+        string? framework = null,
         Guid? parentId = null,
         Guid? layoutId = null,
+        string? sorting = nameof(Menu.Code),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);
 
     Task<List<Menu>> GetAllAsync(
-        string filter = "",
-        string sorting = nameof(Menu.Code),
-        string framework = "",
+        string? filter = null,
+        string? framework = null,
+        string? sorting = nameof(Menu.Code),
         Guid? parentId = null,
         Guid? layoutId = null,
         CancellationToken cancellationToken = default);

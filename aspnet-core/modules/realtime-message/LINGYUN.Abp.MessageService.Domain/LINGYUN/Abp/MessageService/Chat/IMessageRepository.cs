@@ -25,11 +25,11 @@ public interface IMessageRepository
         GroupMessage groupMessage,
         CancellationToken cancellationToken = default);
 
-    Task<UserMessage> GetUserMessageAsync(
+    Task<UserMessage?> GetUserMessageAsync(
         long id,
         CancellationToken cancellationToken = default);
 
-    Task<GroupMessage> GetGroupMessageAsync(
+    Task<GroupMessage?> GetGroupMessageAsync(
         long id,
         CancellationToken cancellationToken = default);
 
@@ -37,26 +37,26 @@ public interface IMessageRepository
         Guid sendUserId,
         Guid receiveUserId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default);
 
     Task<long> GetCountAsync(
         long groupId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default);
 
     Task<long> GetCountAsync(
         Guid sendUserId,
         Guid receiveUserId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default);
 
     Task<List<LastChatMessage>> GetLastMessagesAsync(
         Guid userId,
         MessageState? state = null,
-        string sorting = nameof(LastChatMessage.SendTime),
+        string? sorting = nameof(LastChatMessage.SendTime),
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);
 
@@ -64,8 +64,8 @@ public interface IMessageRepository
         Guid sendUserId,
         Guid receiveUserId,
         MessageType? type = null,
-        string filter = "",
-        string sorting = nameof(UserMessage.MessageId),
+        string? filter = null,
+        string? sorting = nameof(UserMessage.MessageId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);
@@ -73,14 +73,14 @@ public interface IMessageRepository
     Task<long> GetGroupMessagesCountAsync(
         long groupId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default);
 
     Task<List<GroupMessage>> GetGroupMessagesAsync(
         long groupId,
         MessageType? type = null,
-        string filter = "",
-        string sorting = nameof(UserMessage.MessageId),
+        string? filter = null,
+        string? sorting = nameof(UserMessage.MessageId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);
@@ -89,15 +89,15 @@ public interface IMessageRepository
         Guid sendUserId,
         long groupId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default);
 
     Task<List<GroupMessage>> GetUserGroupMessagesAsync(
         Guid sendUserId,
         long groupId,
         MessageType? type = null,
-        string filter = "",
-        string sorting = nameof(UserMessage.MessageId),
+        string? filter = null,
+        string? sorting = nameof(UserMessage.MessageId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);

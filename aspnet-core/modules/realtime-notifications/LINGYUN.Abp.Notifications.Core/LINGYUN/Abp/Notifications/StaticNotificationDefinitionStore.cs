@@ -73,14 +73,14 @@ public class StaticNotificationDefinitionStore : IStaticNotificationDefinitionSt
 
             foreach (var provider in providers)
             {
-                provider.Define(context);
+                provider?.Define(context);
             }
         }
 
         return context.Groups;
     }
 
-    public virtual Task<NotificationDefinition> GetOrNullAsync(string name)
+    public virtual Task<NotificationDefinition?> GetOrNullAsync(string name)
     {
         return Task.FromResult(NotificationDefinitions.GetOrDefault(name));
     }
@@ -92,7 +92,7 @@ public class StaticNotificationDefinitionStore : IStaticNotificationDefinitionSt
         );
     }
 
-    public virtual Task<NotificationGroupDefinition> GetGroupOrNullAsync(string name)
+    public virtual Task<NotificationGroupDefinition?> GetGroupOrNullAsync(string name)
     {
         return Task.FromResult(NotificationGroupDefinitions.GetOrDefault(name));
     }

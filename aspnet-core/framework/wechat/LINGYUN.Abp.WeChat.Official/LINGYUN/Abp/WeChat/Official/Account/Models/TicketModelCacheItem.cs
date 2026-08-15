@@ -1,11 +1,11 @@
 ﻿namespace LINGYUN.Abp.WeChat.Official.Account.Models;
 public class TicketModelCacheItem
 {
-    public string Ticket { get; set; }
+    public string Ticket { get; set; } = default!;
 
     public int ExpireSeconds { get; set; }
 
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
 
     public TicketModelCacheItem()
     {

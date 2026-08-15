@@ -8,9 +8,9 @@ public class FeatureDefinitionCreateDto : FeatureDefinitionCreateOrUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(FeatureDefinitionRecordConsts), nameof(FeatureDefinitionRecordConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(FeatureGroupDefinitionRecordConsts), nameof(FeatureGroupDefinitionRecordConsts.MaxNameLength))]
-    public string GroupName { get; set; }
+    public string GroupName { get; set; } = default!;
 }

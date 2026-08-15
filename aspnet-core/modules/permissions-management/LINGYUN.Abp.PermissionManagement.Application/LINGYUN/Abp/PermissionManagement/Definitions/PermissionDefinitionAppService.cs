@@ -89,7 +89,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
 
         definitionRecord = await _definitionRepository.InsertAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
     }
@@ -105,7 +105,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
 
         await _definitionRepository.DeleteAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<PermissionDefinitionDto> GetAsync(string name)
@@ -144,7 +144,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
 
         definitionRecord = await _definitionBasicRepository.UpdateAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
     }
@@ -178,7 +178,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
         {
             record.ManagementPermissionName = input.ManagementPermissionName;
         }
-        string providers = null;
+        string? providers = null;
         if (!input.Providers.IsNullOrEmpty())
         {
             providers = input.Providers.JoinAsString(",");
@@ -200,7 +200,10 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
             {
                 // 校验格式
                 var permissionDefinition = await _staticPermissionDefinitionStore.GetOrNullAsync(PermissionManagementPermissionNames.Definition.Default);
-                var _ = _simpleStateCheckerSerializer.DeserializeArray(input.StateCheckers, permissionDefinition);
+                if (permissionDefinition != null && !input.StateCheckers.IsNullOrWhiteSpace())
+                {
+                    var _ = _simpleStateCheckerSerializer.DeserializeArray(input.StateCheckers, permissionDefinition);
+                }
 
                 record.StateCheckers = input.StateCheckers;
             }
@@ -217,7 +220,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
         }
     }
 
-    protected async virtual Task<PermissionDefinitionRecord> FindByNameAsync(string name)
+    protected async virtual Task<PermissionDefinitionRecord?> FindByNameAsync(string name)
     {
         var DefinitionFilter = await _definitionBasicRepository.GetQueryableAsync();
 

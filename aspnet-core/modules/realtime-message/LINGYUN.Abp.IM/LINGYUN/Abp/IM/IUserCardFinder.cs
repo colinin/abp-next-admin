@@ -20,7 +20,7 @@ public interface IUserCardFinder
     /// <returns></returns>
     Task<int> GetCountAsync(
         Guid? tenantId,
-        string findUserName = "",
+        string? findUserName = null,
         int? startAge = null,
         int? endAge = null,
         Sex? sex = null);
@@ -38,7 +38,7 @@ public interface IUserCardFinder
     /// <returns></returns>
     Task<List<UserCard>> GetListAsync(
         Guid? tenantId,
-        string findUserName = "",
+        string? findUserName = null,
         int? startAge = null,
         int? endAge = null,
         Sex? sex = null,
@@ -51,7 +51,7 @@ public interface IUserCardFinder
     /// <param name="tenantId"></param>
     /// <param name="findUserId"></param>
     /// <returns></returns>
-    Task<UserCard> GetMemberAsync(
+    Task<UserCard?> GetMemberAsync(
         Guid? tenantId,
         Guid findUserId);
 }

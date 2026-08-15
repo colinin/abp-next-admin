@@ -31,14 +31,14 @@ public class AuditLogManager : IAuditLogManager, ITransientDependency
     public async virtual Task<long> GetCountAsync(
         DateTime? startTime = null,
         DateTime? endTime = null,
-        string httpMethod = null,
-        string url = null,
+        string? httpMethod = null,
+        string? url = null,
         Guid? userId = null,
-        string userName = null,
-        string applicationName = null,
-        string correlationId = null,
-        string clientId = null,
-        string clientIpAddress = null,
+        string? userName = null,
+        string? applicationName = null,
+        string? correlationId = null,
+        string? clientId = null,
+        string? clientIpAddress = null,
         int? maxExecutionDuration = null,
         int? minExecutionDuration = null,
         bool? hasException = null,
@@ -64,19 +64,19 @@ public class AuditLogManager : IAuditLogManager, ITransientDependency
     }
 
     public async virtual Task<List<AuditLog>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = 50,
         int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
-        string httpMethod = null,
-        string url = null,
+        string? httpMethod = null,
+        string? url = null,
         Guid? userId = null,
-        string userName = null,
-        string applicationName = null,
-        string correlationId = null,
-        string clientId = null,
-        string clientIpAddress = null,
+        string? userName = null,
+        string? applicationName = null,
+        string? correlationId = null,
+        string? clientId = null,
+        string? clientIpAddress = null,
         int? maxExecutionDuration = null,
         int? minExecutionDuration = null,
         bool? hasException = null,
@@ -108,7 +108,7 @@ public class AuditLogManager : IAuditLogManager, ITransientDependency
         return ObjectMapper.Map<List<Volo.Abp.AuditLogging.AuditLog>, List<AuditLog>>(auditLogs);
     }
 
-    public async virtual Task<AuditLog> GetAsync(
+    public async virtual Task<AuditLog?> GetAsync(
         Guid id,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)

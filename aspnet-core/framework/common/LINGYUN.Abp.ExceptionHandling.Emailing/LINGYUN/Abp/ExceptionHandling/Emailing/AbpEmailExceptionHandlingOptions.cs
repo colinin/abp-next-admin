@@ -12,19 +12,19 @@ public class AbpEmailExceptionHandlingOptions
     /// <summary>
     /// 默认邮件标题
     /// </summary>
-    public string DefaultTitle { get; set; }
+    public string? DefaultTitle { get; set; }
     /// <summary>
     /// 默认邮件内容头
     /// </summary>
-    public string DefaultContentHeader { get; set; }
+    public string? DefaultContentHeader { get; set; }
     /// <summary>
     /// 默认邮件内容底
     /// </summary>
-    public string DefaultContentFooter { get; set; }
+    public string? DefaultContentFooter { get; set; }
     /// <summary>
     /// 默认异常收件人
     /// </summary>
-    public string DefaultReceiveEmail { get; set; }
+    public string? DefaultReceiveEmail { get; set; }
     /// <summary>
     /// 异常类型指定收件人处理映射列表
     /// </summary>
@@ -60,9 +60,9 @@ public class AbpEmailExceptionHandlingOptions
         }
     }
 
-    public string GetReceivedEmailOrDefault(Type exceptionType)
+    public string? GetReceivedEmailOrDefault(Type exceptionType)
     {
-        if (Handlers.TryGetValue(exceptionType, out string receivedUsers))
+        if (Handlers.TryGetValue(exceptionType, out var receivedUsers))
         {
             return receivedUsers;
         }

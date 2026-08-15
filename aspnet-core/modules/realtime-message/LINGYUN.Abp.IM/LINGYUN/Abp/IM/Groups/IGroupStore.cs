@@ -27,7 +27,7 @@ public interface IGroupStore
     /// <returns></returns>
     Task<int> GetCountAsync(
         Guid? tenantId,
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取群组列表
@@ -41,8 +41,8 @@ public interface IGroupStore
     /// <returns></returns>
     Task<List<Group>> GetListAsync(
         Guid? tenantId,
-        string filter = null,
-        string sorting = nameof(Group.Name),
+        string? filter = null,
+        string? sorting = nameof(Group.Name),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);

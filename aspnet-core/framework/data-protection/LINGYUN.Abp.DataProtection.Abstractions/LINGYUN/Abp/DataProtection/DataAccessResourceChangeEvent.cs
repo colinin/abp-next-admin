@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.DataProtection;
 public class DataAccessResourceChangeEvent
 {
     public bool IsEnabled { get; set; }
-    public DataAccessResource Resource { get; set; }
+    public DataAccessResource Resource { get; set; } = default!;
     public DataAccessResourceChangeEvent()
     {
 

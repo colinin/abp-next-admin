@@ -12,15 +12,15 @@ public class EntityTypeInfo : AuditedAggregateRoot<Guid>
     /// <summary>
     /// 名称
     /// </summary>
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
     /// <summary>
     /// 显示名称
     /// </summary>
-    public virtual string DisplayName { get; protected set; }
+    public virtual string DisplayName { get; protected set; } = default!;
     /// <summary>
     /// 类型全名
     /// </summary>
-    public virtual string TypeFullName { get; protected set; }
+    public virtual string TypeFullName { get; protected set; } = default!;
     /// <summary>
     /// 是否启用数据审计
     /// </summary>
@@ -49,7 +49,7 @@ public class EntityTypeInfo : AuditedAggregateRoot<Guid>
         Properties = new Collection<EntityPropertyInfo>();
     }
 
-    public EntityPropertyInfo FindProperty(string name)
+    public EntityPropertyInfo? FindProperty(string name)
     {
         return Properties.FirstOrDefault(x => x.Name == name);
     }

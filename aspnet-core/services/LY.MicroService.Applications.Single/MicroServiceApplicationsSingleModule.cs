@@ -161,9 +161,9 @@ namespace LY.MicroService.Applications.Single;
     // 平台模块 实体框架
     typeof(PlatformEntityFrameworkCoreModule),
     // 平台模块 VueVbenAdmin设置
-    typeof(PlatformSettingsVueVbenAdminModule),
+    // typeof(PlatformSettingsVueVbenAdminModule),
     // 平台模块 VueVbenAdmin主题
-    typeof(PlatformThemeVueVbenAdminModule),
+    // typeof(PlatformThemeVueVbenAdminModule),
     // 平台模块 Vben2路由
     // typeof(AbpUINavigationVueVbenAdminModule),
     // 平台模块 Vben5路由

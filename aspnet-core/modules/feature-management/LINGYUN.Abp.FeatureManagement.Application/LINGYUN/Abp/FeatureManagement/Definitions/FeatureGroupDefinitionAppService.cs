@@ -49,7 +49,7 @@ public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase,
 
         await _groupDefinitionRepository.InsertAsync(groupDefinitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return GroupDefinitionRecordToDto(groupDefinitionRecord);
     }
@@ -65,7 +65,7 @@ public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase,
 
         await _groupDefinitionRepository.DeleteAsync(groupDefinitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<FeatureGroupDefinitionDto> GetAsync(string name)
@@ -104,7 +104,7 @@ public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase,
         UpdateByInput(groupDefinitionRecord, input);
         groupDefinitionRecord = await _groupDefinitionBasicRepository.UpdateAsync(groupDefinitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return GroupDefinitionRecordToDto(groupDefinitionRecord);
     }
@@ -131,7 +131,7 @@ public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase,
         }
     }
 
-    protected async virtual Task<FeatureGroupDefinitionRecord> FindByNameAsync(string name)
+    protected async virtual Task<FeatureGroupDefinitionRecord?> FindByNameAsync(string name)
     {
         var groupDefinitionRecord = await _groupDefinitionBasicRepository.FindAsync(x => x.Name == name);
 

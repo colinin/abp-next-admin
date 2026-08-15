@@ -17,9 +17,9 @@ public class EntityPropertyChange
 
     public string? OriginalValue { get; set; }
 
-    public string PropertyName { get; set; }
+    public string PropertyName { get; set; } = default!;
 
-    public string PropertyTypeFullName { get; set; }
+    public string PropertyTypeFullName { get; set; } = default!;
 
     public EntityPropertyChange()
     {

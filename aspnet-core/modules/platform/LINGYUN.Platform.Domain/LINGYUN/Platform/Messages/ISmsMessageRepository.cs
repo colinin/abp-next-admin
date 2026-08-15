@@ -14,7 +14,7 @@ public interface ISmsMessageRepository : IBasicRepository<SmsMessage, Guid>
 
     Task<List<SmsMessage>> GetListAsync(
         ISpecification<SmsMessage> specification,
-        string sorting = $"{nameof(Message.CreationTime)} DESC",
+        string? sorting = $"{nameof(Message.CreationTime)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);

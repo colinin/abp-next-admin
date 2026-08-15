@@ -6,9 +6,9 @@ namespace LINGYUN.Abp.BlobManagement;
 public class BlobDownloadEto : IMultiTenant
 {
     public Guid? TenantId { get; set; }
-    public string Provider { get; set; }
-    public string ContainerName { get; set; }
-    public string FullName { get; set; }
+    public string Provider { get; set; } = default!;
+    public string ContainerName { get; set; } = default!;
+    public string FullName { get; set; } = default!;
     public BlobDownloadEto()
     {
 

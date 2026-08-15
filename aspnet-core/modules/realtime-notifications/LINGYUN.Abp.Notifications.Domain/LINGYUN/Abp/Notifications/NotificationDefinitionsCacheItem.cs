@@ -31,10 +31,10 @@ public class NotificationDefinitionsCacheItem
 
 public class NotificationDefinitionCacheItem
 {
-    public string Name { get; set; }
-    public string GroupName { get; set; }
-    public string DisplayName { get; set; }
-    public string Description { get; set; }
+    public string Name { get; set; } = default!;
+    public string GroupName { get; set; } = default!;
+    public string? DisplayName { get; set; }
+    public string? Description { get; set; }
     public NotificationLifetime Lifetime { get; set; }
     public NotificationType NotificationType { get; set; }
     public NotificationContentType ContentType { get; set; }
@@ -50,12 +50,12 @@ public class NotificationDefinitionCacheItem
     public NotificationDefinitionCacheItem(
         string name, 
         string groupName,
-        string displayName = null, 
-        string description = null,
+        string? displayName = null, 
+        string? description = null,
         NotificationLifetime lifetime = NotificationLifetime.Persistent,
         NotificationType notificationType = NotificationType.Application,
         NotificationContentType contentType = NotificationContentType.Text,
-        List<string> providers = null,
+        List<string>? providers = null,
         bool allowSubscriptionToClients  = false)
     {
         Name = name;

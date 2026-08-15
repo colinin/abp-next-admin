@@ -7,14 +7,14 @@ namespace LINGYUN.Abp.Notifications;
 public class NotificationSendRecord : Entity<long>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual string Provider { get; protected set; }
+    public virtual string Provider { get; protected set; } = default!;
     public virtual DateTime SendTime { get; protected set; }
     public virtual Guid UserId { get; protected set; }
-    public virtual string UserName { get; protected set; }
+    public virtual string UserName { get; protected set; } = default!;
     public virtual long NotificationId { get; protected set; }
-    public virtual string NotificationName { get; protected set; }
+    public virtual string NotificationName { get; protected set; } = default!;
     public virtual NotificationSendState State { get; protected set; }
-    public virtual string Reason { get; protected set; }
+    public virtual string? Reason { get; protected set; }
     protected NotificationSendRecord()
     {
     }
@@ -23,17 +23,17 @@ public class NotificationSendRecord : Entity<long>, IMultiTenant
         string provider,
         DateTime sendTime, 
         Guid userId, 
-        string userName, 
+        string? userName, 
         long notificationId, 
         string notificationName,
         NotificationSendState state,
-        string reason = null,
+        string? reason = null,
         Guid? tenantId = null)
     {
         Provider = Check.NotNullOrWhiteSpace(provider, nameof(provider), NotificationSendRecordConsts.MaxProviderLength);
         SendTime = sendTime;
         UserId = userId;
-        UserName = Check.Length(userName, nameof(userName), SubscribeConsts.MaxUserNameLength);
+        UserName = Check.Length(userName, nameof(userName), SubscribeConsts.MaxUserNameLength) ?? "/";
         NotificationId = notificationId;
         NotificationName = Check.NotNullOrWhiteSpace(notificationName, nameof(notificationName), NotificationConsts.MaxNameLength);
         State = state;

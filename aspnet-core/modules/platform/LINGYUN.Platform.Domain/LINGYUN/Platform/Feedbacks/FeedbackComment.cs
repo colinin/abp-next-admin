@@ -10,8 +10,8 @@ namespace LINGYUN.Platform.Feedbacks;
 public class FeedbackComment : AuditedEntity<Guid>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual string Capacity { get; protected set; }
-    public virtual string Content { get; set; }
+    public virtual string Capacity { get; protected set; } = default!;
+    public virtual string Content { get; set; } = default!;
     public virtual Guid FeedbackId { get; protected set; }
     protected FeedbackComment()
     {

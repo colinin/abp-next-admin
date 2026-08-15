@@ -51,7 +51,7 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
 
         await PublishDynamicLocalizationRefreshEvent(new DynamicResourceRefreshEventData(resource.Name));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Resource, ResourceDto>(resource);
     }
@@ -65,7 +65,7 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
 
         await PublishDynamicLocalizationRefreshEvent(new DynamicResourceRefreshEventData(resource.Name));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(LocalizationManagementPermissions.Resource.Update)]
@@ -81,7 +81,7 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
 
         await PublishDynamicLocalizationRefreshEvent(new DynamicResourceRefreshEventData(resource.Name));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Resource, ResourceDto>(resource);
     }
@@ -92,7 +92,7 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
         if (!input.Filter.IsNullOrWhiteSpace())
         {
             predicate = predicate.And(x => x.Name.Contains(input.Filter) ||
-                x.DisplayName.Contains(input.Filter) || x.Description.Contains(input.Filter));
+                x.DisplayName!.Contains(input.Filter) || x.Description!.Contains(input.Filter));
         }
 
         var specification = new Volo.Abp.Specifications.ExpressionSpecification<Resource>(predicate);

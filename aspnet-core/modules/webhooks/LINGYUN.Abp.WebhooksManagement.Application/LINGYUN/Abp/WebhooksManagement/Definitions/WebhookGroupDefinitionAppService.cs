@@ -46,7 +46,7 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
 
         await _webhookGroupDefinitionRecordRepository.InsertAsync(webhookGroupDefinitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(webhookGroupDefinitionRecord);
     }
@@ -61,7 +61,7 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
         CheckIsStaticDefinitionRecord(definitionRecord);
         await _webhookGroupDefinitionRecordRepository.DeleteAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<WebhookGroupDefinitionDto> GetAsync(string name)
@@ -113,12 +113,12 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
 
         definitionRecord = await _webhookGroupDefinitionRecordRepository.UpdateAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
     }
 
-    protected async virtual Task<WebhookGroupDefinitionRecord> FindByNameAsync(string name)
+    protected async virtual Task<WebhookGroupDefinitionRecord?> FindByNameAsync(string name)
     {
         return await _webhookGroupDefinitionRecordRepository.FindByNameAsync(name);
     }

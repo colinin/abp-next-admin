@@ -5,5 +5,5 @@ public interface IDeviceInfoProvider
 {
     Task<DeviceInfo> GetDeviceInfoAsync();
 
-    string ClientIpAddress { get; }
+    string? ClientIpAddress { get; }
 }

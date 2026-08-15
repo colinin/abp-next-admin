@@ -7,8 +7,8 @@ namespace LINGYUN.Platform.Feedbacks;
 public class FeedbackAttachment : CreationAuditedEntity<Guid>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual string Name { get; protected set; }
-    public virtual string Url { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
+    public virtual string Url { get; protected set; } = default!;
     public virtual long Size { get; protected set; }
     public virtual Guid FeedbackId { get; protected set; }
     protected FeedbackAttachment()

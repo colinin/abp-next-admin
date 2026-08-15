@@ -53,7 +53,7 @@ public class AbpDaprClientWrapperModule : AbpModule
                         };
                     }
 
-                    return jsonSerializer.Serialize(wrapResult.Result);
+                    return jsonSerializer.Serialize(wrapResult.Result!);
                 }
 
                 return stringContent;

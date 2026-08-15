@@ -10,7 +10,7 @@ public class SecurityTokenCacheItem
     /// <summary>
     /// 用于验证的Token
     /// </summary>
-    public string Token { get; set; }
+    public string Token { get; set; } = default!;
     /// <summary>
     /// 用于验证的用户Id
     /// </summary>
@@ -18,7 +18,7 @@ public class SecurityTokenCacheItem
     /// <summary>
     /// 用于验证的安全令牌
     /// </summary>
-    public string SecurityToken { get; set; }
+    public string SecurityToken { get; set; } = default!;
 
     public SecurityTokenCacheItem()
     {

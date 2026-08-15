@@ -12,22 +12,22 @@ public class BackgroundJobInfoCreateDto : BackgroundJobInfoCreateOrUpdateDto
     /// </summary>
     [Required]
     [DynamicStringLength(typeof(BackgroundJobInfoConsts), nameof(BackgroundJobInfoConsts.MaxNameLength))] 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 任务分组
     /// </summary>
     [Required]
     [DynamicStringLength(typeof(BackgroundJobInfoConsts), nameof(BackgroundJobInfoConsts.MaxGroupLength))] 
-    public string Group { get; set; }
+    public string Group { get; set; } = default!;
     /// <summary>
     /// 任务类型
     /// </summary>
     [Required]
     [DynamicStringLength(typeof(BackgroundJobInfoConsts), nameof(BackgroundJobInfoConsts.MaxTypeLength))] 
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
 
     [DynamicStringLength(typeof(BackgroundJobInfoConsts), nameof(BackgroundJobInfoConsts.MaxNodeNameLength))]
-    public string NodeName { get; set; }
+    public string? NodeName { get; set; }
     /// <summary>
     /// 开始时间
     /// </summary>

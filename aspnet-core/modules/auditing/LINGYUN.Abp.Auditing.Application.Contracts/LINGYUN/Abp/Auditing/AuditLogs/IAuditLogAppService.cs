@@ -9,7 +9,7 @@ public interface IAuditLogAppService : IApplicationService
 {
     Task<PagedResultDto<AuditLogDto>> GetListAsync(AuditLogGetByPagedDto input);
 
-    Task<AuditLogDto> GetAsync(Guid id);
+    Task<AuditLogDto?> GetAsync(Guid id);
 
     Task DeleteAsync(Guid id);
 

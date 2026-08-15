@@ -27,7 +27,7 @@ public class IdempotentInterceptor : AbpInterceptor, ITransientDependency
             return;
         }
 
-        var targetType = ProxyHelper.GetUnProxiedType(invocation.TargetObject);
+        var targetType = ProxyHelper.GetUnProxiedType(invocation.TargetObject!);
 
         var keyNormalizerContext = new IdempotentKeyNormalizerContext(
             targetType,

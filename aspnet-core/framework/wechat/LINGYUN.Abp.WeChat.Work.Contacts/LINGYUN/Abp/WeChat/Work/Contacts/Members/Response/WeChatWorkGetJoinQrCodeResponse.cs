@@ -17,5 +17,5 @@ public class WeChatWorkGetJoinQrCodeResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("join_qrcode")]
     [JsonPropertyName("join_qrcode")]
-    public string JoinQrcCode { get; set; }
+    public string JoinQrcCode { get; set; } = default!;
 }

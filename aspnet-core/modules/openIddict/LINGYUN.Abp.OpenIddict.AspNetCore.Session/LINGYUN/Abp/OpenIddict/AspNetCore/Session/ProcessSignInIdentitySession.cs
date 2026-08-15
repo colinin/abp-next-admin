@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.Identity.Session;
 using Microsoft.Extensions.Options;
 using OpenIddict.Server;
+using System;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.OpenIddict.AspNetCore.Session;
@@ -30,7 +31,8 @@ public class ProcessSignInIdentitySession : IOpenIddictServerHandler<OpenIddictS
 
     public async virtual ValueTask HandleAsync(OpenIddictServerEvents.ProcessSignInContext context)
     {
-        if (AbpOpenIddictAspNetCoreSessionOptions.PersistentSessionGrantTypes.Contains(context.Request.GrantType) &&
+        if (!context.Request.GrantType.IsNullOrWhiteSpace() &&
+            AbpOpenIddictAspNetCoreSessionOptions.PersistentSessionGrantTypes.Contains(context.Request.GrantType) &&
             context.Principal != null)
         {
             await IdentitySessionManager.SaveSessionAsync(context.Principal, context.CancellationToken);

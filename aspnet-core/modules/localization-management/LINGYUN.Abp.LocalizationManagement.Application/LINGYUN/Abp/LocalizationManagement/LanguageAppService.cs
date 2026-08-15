@@ -44,11 +44,10 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
 
         using (CultureHelper.Use(input.CultureName, input.UiCultureName))
         {
-
             var language = new Language(
                 GuidGenerator.Create(),
                 input.CultureName,
-                input.UiCultureName,
+                input.UiCultureName ?? input.CultureName,
                 input.DisplayName,
                 CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
 
@@ -56,7 +55,7 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
 
             await PublishDynamicLocalizationRefreshEvent(new DynamicLanguageRefreshEventData(language.CultureName));
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork!.SaveChangesAsync();
 
             return ObjectMapper.Map<Language, LanguageDto>(language);
         }
@@ -71,7 +70,7 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
 
         await PublishDynamicLocalizationRefreshEvent(new DynamicLanguageRefreshEventData(language.CultureName));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(LocalizationManagementPermissions.Language.Update)]
@@ -85,7 +84,7 @@ public class LanguageAppService : LocalizationAppServiceBase, ILanguageAppServic
 
         await PublishDynamicLocalizationRefreshEvent(new DynamicLanguageRefreshEventData(language.CultureName));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Language, LanguageDto>(language);
     }

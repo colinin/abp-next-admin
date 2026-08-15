@@ -22,9 +22,9 @@ public class LanguageAppService : ApplicationService, ILanguageAppService
     public async virtual Task<ListResultDto<LanguageDto>> GetListAsync(GetLanguageWithFilterDto input)
     {
         var languages = (await _languageProvider.GetLanguagesAsync())
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.CultureName.IndexOf(input.Filter, StringComparison.OrdinalIgnoreCase) >= 0
-                     || x.UiCultureName.IndexOf(input.Filter, StringComparison.OrdinalIgnoreCase) >= 0
-                     || x.DisplayName.IndexOf(input.Filter, StringComparison.OrdinalIgnoreCase) >= 0);
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.CultureName.IndexOf(input.Filter!, StringComparison.OrdinalIgnoreCase) >= 0
+                     || x.UiCultureName.IndexOf(input.Filter!, StringComparison.OrdinalIgnoreCase) >= 0
+                     || x.DisplayName.IndexOf(input.Filter!, StringComparison.OrdinalIgnoreCase) >= 0);
 
         return new ListResultDto<LanguageDto>(
             languages.Select(l => new LanguageDto

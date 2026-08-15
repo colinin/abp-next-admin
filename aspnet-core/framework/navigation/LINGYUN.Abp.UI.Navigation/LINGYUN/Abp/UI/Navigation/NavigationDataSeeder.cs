@@ -68,6 +68,6 @@ public class NavigationDataSeeder : ITransientDependency
         return _options
             .NavigationSeedContributors
             .Select(type => _serviceProvider.GetRequiredService(type) as INavigationSeedContributor)
-            .ToList();
+            .ToList()!;
     }
 }

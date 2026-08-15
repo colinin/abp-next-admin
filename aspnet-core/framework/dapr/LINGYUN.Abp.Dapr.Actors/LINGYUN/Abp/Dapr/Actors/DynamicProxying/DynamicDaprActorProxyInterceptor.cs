@@ -141,7 +141,7 @@ public class DynamicDaprActorProxyInterceptor<TService> : AbpInterceptor, ITrans
             // 创建强类型代理
             var actorProxy = proxyFactory.CreateActorProxy<TService>(actorId, actorType);
             // 远程调用
-            var task = (Task)invocation.Method.Invoke(actorProxy, invocation.Arguments);
+            var task = (Task)invocation.Method.Invoke(actorProxy, invocation.Arguments)!;
             await task;
 
             // 存在返回值
@@ -150,8 +150,8 @@ public class DynamicDaprActorProxyInterceptor<TService> : AbpInterceptor, ITrans
                 // 处理返回值
                 invocation.ReturnValue = typeof(Task<>)
                     .MakeGenericType(invocation.Method.ReturnType.GenericTypeArguments[0])
-                    .GetProperty(nameof(Task<object>.Result), BindingFlags.Public | BindingFlags.Instance)
-                    .GetValue(task);
+                    .GetProperty(nameof(Task<object>.Result), BindingFlags.Public | BindingFlags.Instance)!
+                    .GetValue(task)!;
             }
         }
         catch (ActorMethodInvocationException amie) // 其他异常忽略交给框架处理

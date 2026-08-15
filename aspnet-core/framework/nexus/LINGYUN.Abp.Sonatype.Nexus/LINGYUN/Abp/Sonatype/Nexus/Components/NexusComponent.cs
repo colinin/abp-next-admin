@@ -9,22 +9,22 @@ namespace LINGYUN.Abp.Sonatype.Nexus.Components;
 public class NexusComponent
 {
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
 
     [JsonPropertyName("repository")]
-    public string Repository { get; set; }
+    public string Repository { get; set; } = default!;
 
     [JsonPropertyName("format")]
-    public string Format { get; set; }
+    public string? Format { get; set; }
 
     [JsonPropertyName("group")]
-    public string Group { get; set; }
+    public string? Group { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [JsonPropertyName("version")]
-    public string Version { get; set; }
+    public string Version { get; set; } = default!;
 
     [JsonPropertyName("assets")]
     public List<NexusAsset> Assets { get; set; }

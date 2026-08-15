@@ -351,12 +351,12 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 };
 
                 var id = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
-                id.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Principal.FindFirstValue(ClaimTypes.PrimarySid)));
-                id.AddClaim(new Claim(ClaimTypes.Name, result.Principal.FindFirstValue(ClaimTypes.Name)));
+                id.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Principal.FindFirstValue(ClaimTypes.PrimarySid)!));
+                id.AddClaim(new Claim(ClaimTypes.Name, result.Principal.FindFirstValue(ClaimTypes.Name)!));
 
                 await HttpContext.SignInAsync(IdentityConstants.ExternalScheme, new ClaimsPrincipal(id), props);
 
-                return Redirect(props.RedirectUri);
+                return Redirect(props.RedirectUri!);
             }
 
             return Challenge(AccountOptions.WindowsAuthenticationSchemeName);

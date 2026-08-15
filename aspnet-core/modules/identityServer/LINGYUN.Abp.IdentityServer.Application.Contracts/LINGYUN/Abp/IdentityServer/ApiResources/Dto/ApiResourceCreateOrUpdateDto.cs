@@ -7,14 +7,14 @@ namespace LINGYUN.Abp.IdentityServer.ApiResources;
 public class ApiResourceCreateOrUpdateDto
 {
     [DynamicStringLength(typeof(ApiResourceConsts), nameof(ApiResourceConsts.DisplayNameMaxLength))]
-    public string DisplayName { get; set; }
+    public string? DisplayName { get; set; }
 
     [DynamicStringLength(typeof(ApiResourceConsts), nameof(ApiResourceConsts.DescriptionMaxLength))]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool Enabled { get; set; }
 
-    public string AllowedAccessTokenSigningAlgorithms { get; set; }
+    public string? AllowedAccessTokenSigningAlgorithms { get; set; }
 
     public bool ShowInDiscoveryDocument { get; set; }
 

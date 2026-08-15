@@ -9,7 +9,7 @@ internal class ExternalProfileNewtonsoftJsonConverter : JsonConverter<ExternalPr
 {
     public override bool CanWrite => true;
 
-    public override void WriteJson(JsonWriter writer, ExternalProfile value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, ExternalProfile? value, JsonSerializer serializer)
     {
         writer.WriteStartObject();
 
@@ -34,7 +34,7 @@ internal class ExternalProfileNewtonsoftJsonConverter : JsonConverter<ExternalPr
         writer.WriteEndObject();
     }
 
-    public override ExternalProfile ReadJson(JsonReader reader, Type objectType, ExternalProfile existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override ExternalProfile? ReadJson(JsonReader reader, Type objectType, ExternalProfile? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         var jObject = JObject.Load(reader);
 

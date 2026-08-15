@@ -8,16 +8,16 @@ namespace LINGYUN.Abp.Sonatype.Nexus.Services.CoreUI.Assets;
 public class CoreUIAssetData
 {
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [JsonPropertyName("format")]
-    public string Format { get; set; }
+    public string? Format { get; set; }
 
     [JsonPropertyName("contentType")]
-    public string ContentType { get; set; }
+    public string? ContentType { get; set; }
 
     [JsonPropertyName("blobUpdated")]
     public DateTime? BlobUpdated { get; set; }
@@ -26,29 +26,29 @@ public class CoreUIAssetData
     public DateTime? BlobCreated { get; set; }
 
     [JsonPropertyName("createdBy")]
-    public string CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
 
     [JsonPropertyName("createdByIp")]
-    public string CreatedByIp { get; set; }
+    public string? CreatedByIp { get; set; }
 
     [JsonPropertyName("blobRef")]
-    public string BlobRef { get; set; }
+    public string? BlobRef { get; set; }
 
     [JsonPropertyName("componentId")]
-    public string ComponentId { get; set; }
+    public string? ComponentId { get; set; }
 
     [JsonPropertyName("lastDownloaded")]
-    public string LastDownloaded { get; set; }
+    public string? LastDownloaded { get; set; }
 
     [JsonPropertyName("containingRepositoryName")]
-    public string ContainingRepositoryName { get; set; }
+    public string? ContainingRepositoryName { get; set; }
 
     [JsonPropertyName("repositoryName")]
-    public string RepositoryName { get; set; }
+    public string? RepositoryName { get; set; }
 
     [JsonPropertyName("size")]
     public long Size { get; set; }
 
     [JsonPropertyName("attributes")]
-    public Dictionary<string, Dictionary<string, object>> Attributes { get; set; }
+    public Dictionary<string, Dictionary<string, object>>? Attributes { get; set; }
 }
