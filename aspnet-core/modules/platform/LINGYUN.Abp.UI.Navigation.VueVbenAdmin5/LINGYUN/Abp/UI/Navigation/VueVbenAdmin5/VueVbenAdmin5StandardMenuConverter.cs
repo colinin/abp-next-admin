@@ -20,7 +20,7 @@ public class VueVbenAdmin5StandardMenuConverter : IStandardMenuConverter, ISingl
 
         if (menu.ExtraProperties.TryGetValue("icon", out var icon))
         {
-            standardMenu.Icon = icon.ToString();
+            standardMenu.Icon = icon?.ToString();
         }
 
         return standardMenu;

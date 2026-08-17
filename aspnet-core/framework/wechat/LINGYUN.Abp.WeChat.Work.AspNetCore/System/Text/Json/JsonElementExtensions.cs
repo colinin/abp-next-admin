@@ -44,7 +44,7 @@ namespace System.Text.Json
 
         public static int GetRootInt32(this JsonDocument json, string key, int defaultValue = 0)
         {
-            if (json.RootElement.TryGetProperty(key, out var property) && property.TryGetInt32(out int value))
+            if (json.RootElement.TryGetProperty(key, out var property) && property.TryGetInt32(out var value))
             {
                 return value;
             }
@@ -53,7 +53,7 @@ namespace System.Text.Json
 
         public static int GetInt32(this JsonElement json, string key, int defaultValue = 0)
         {
-            if (json.TryGetProperty(key, out var property) && property.TryGetInt32(out int value))
+            if (json.TryGetProperty(key, out var property) && property.TryGetInt32(out var value))
             {
                 return value;
             }

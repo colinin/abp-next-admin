@@ -91,6 +91,6 @@ public class OpenIddictAuthorizationAppService : OpenIddictApplicationServiceBas
         var entites = await AsyncExecuter.ToListAsync(queryable);
 
         return new PagedResultDto<OpenIddictAuthorizationDto>(totalCount,
-            entites.Select(entity => entity.ToDto(JsonSerializer)).ToList());
+            entites.Select(entity => entity.ToDto(JsonSerializer)!).ToList());
     }
 }

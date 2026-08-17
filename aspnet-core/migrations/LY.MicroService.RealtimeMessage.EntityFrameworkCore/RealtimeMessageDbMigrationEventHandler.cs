@@ -68,7 +68,7 @@ public class RealtimeMessageDbMigrationEventHandler : EfCoreDatabaseMigrationEve
                 new NotificationTemplate(
                     TenantNotificationNames.NewTenantRegistered,
                     formUser: adminEmailAddress,
-                    data: new Dictionary<string, object>
+                    data: new Dictionary<string, object?>
                     {
                             { "name", eventData.Name },
                             { "email", adminEmailAddress },

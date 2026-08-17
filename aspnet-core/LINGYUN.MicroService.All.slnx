@@ -99,10 +99,6 @@
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.IP.Location/LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging/LINGYUN.Abp.AuditLogging.csproj" />
   </Folder>
-  <Folder Name="/framework/authentication/">
-    <Project Path="framework/authentication/LINGYUN.Abp.Authentication.QQ/LINGYUN.Abp.Authentication.QQ.csproj" />
-    <Project Path="framework/authentication/LINGYUN.Abp.Authentication.WeChat/LINGYUN.Abp.Authentication.WeChat.csproj" />
-  </Folder>
   <Folder Name="/framework/authorization/">
     <Project Path="framework/authorization/LINGYUN.Abp.Authorization.OrganizationUnits/LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
   </Folder>

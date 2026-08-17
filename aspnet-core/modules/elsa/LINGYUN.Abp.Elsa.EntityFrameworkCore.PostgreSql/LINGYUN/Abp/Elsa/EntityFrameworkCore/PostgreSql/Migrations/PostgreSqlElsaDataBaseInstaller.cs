@@ -48,7 +48,7 @@ public class PostgreSqlElsaDataBaseInstaller : IElsaDataBaseInstaller, ITransien
 
         var builder = new NpgsqlConnectionStringBuilder(connectionString);
 
-        var dataBaseName = await CreateDataBaseIfNotExists(builder.Database, builder);
+        var dataBaseName = await CreateDataBaseIfNotExists(builder.Database!, builder);
 
         builder.Database = dataBaseName;
 

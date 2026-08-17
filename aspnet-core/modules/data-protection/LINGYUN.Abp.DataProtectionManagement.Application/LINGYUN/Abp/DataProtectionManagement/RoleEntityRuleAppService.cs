@@ -31,7 +31,7 @@ public class RoleEntityRuleAppService : DataProtectionManagementApplicationServi
     {
         var entityTypeInfo = await _entityTypeInfoRepository.GetAsync(input.EntityTypeId);
         var entityRule = await _roleEntityRuleRepository.FindEntityRuleAsync(input.RoleName, entityTypeInfo.TypeFullName, input.Operation);
-        return ObjectMapper.Map<RoleEntityRule, RoleEntityRuleDto>(entityRule);
+        return ObjectMapper.Map<RoleEntityRule, RoleEntityRuleDto>(entityRule!);
     }
 
     [Authorize(DataProtectionManagementPermissionNames.RoleEntityRule.Create)]

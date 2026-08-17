@@ -43,7 +43,7 @@ public class WorkflowsResolver : IWorkflowsResolver, ITransientDependency
 
                 if (context.HasResolved())
                 {
-                    result.Workflows.AddRange(context.Workflows);
+                    result.Workflows.AddRange(context.Workflows!);
 
                     if (!_options.MergingWorkflows)
                     {

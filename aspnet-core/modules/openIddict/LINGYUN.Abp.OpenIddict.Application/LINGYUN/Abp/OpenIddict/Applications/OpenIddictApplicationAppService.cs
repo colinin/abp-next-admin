@@ -28,7 +28,7 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
     {
         var application = await _applicationRepository.GetAsync(id);
 
-        return application.ToDto(JsonSerializer);
+        return application.ToDto(JsonSerializer)!;
     }
 
     public async virtual Task<PagedResultDto<OpenIddictApplicationDto>> GetListAsync(OpenIddictApplicationGetListInput input)
@@ -37,7 +37,7 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
         var entites = await _applicationRepository.GetListAsync(input.Sorting, input.SkipCount, input.MaxResultCount, input.Filter);
 
         return new PagedResultDto<OpenIddictApplicationDto>(totalCount,
-            entites.Select(entity => entity.ToDto(JsonSerializer)).ToList());
+            entites.Select(entity => entity.ToDto(JsonSerializer)!).ToList());
     }
 
     [Authorize(AbpOpenIddictPermissions.Applications.Create)]
@@ -60,7 +60,7 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
 
         application = await _applicationRepository.FindByClientIdAsync(input.ClientId);
 
-        return application.ToDto(JsonSerializer);
+        return application.ToDto(JsonSerializer)!;
     }
 
     [Authorize(AbpOpenIddictPermissions.Applications.Update)]
@@ -90,7 +90,7 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
 
         application = await _applicationRepository.GetAsync(id);
 
-        return application.ToDto(JsonSerializer);
+        return application.ToDto(JsonSerializer)!;
     }
 
     [Authorize(AbpOpenIddictPermissions.Applications.Delete)]

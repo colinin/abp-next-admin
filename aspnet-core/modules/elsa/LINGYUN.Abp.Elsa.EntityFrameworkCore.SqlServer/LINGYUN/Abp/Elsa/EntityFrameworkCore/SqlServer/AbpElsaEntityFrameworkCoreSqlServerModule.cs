@@ -45,9 +45,11 @@ public class AbpElsaEntityFrameworkCoreSqlServerModule : AbpModule
         var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
         if (configuration.GetValue<bool>("Elsa:Features:DefaultPersistence:EntityFrameworkCore:SqlServer:Enabled"))
         {
-            await context.ServiceProvider
-                .GetService<SqlServerElsaDataBaseInstaller>()
-                ?.InstallAsync();
+            var sqlInstaller = context.ServiceProvider.GetService<SqlServerElsaDataBaseInstaller>();
+            if (sqlInstaller != null)
+            {
+                await sqlInstaller.InstallAsync();
+            }
         }
     }
 }

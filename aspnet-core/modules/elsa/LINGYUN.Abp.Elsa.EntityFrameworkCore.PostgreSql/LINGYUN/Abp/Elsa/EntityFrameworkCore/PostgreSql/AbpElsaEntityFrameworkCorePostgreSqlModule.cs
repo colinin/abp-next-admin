@@ -45,9 +45,11 @@ public class AbpElsaEntityFrameworkCorePostgreSqlModule : AbpModule
         var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
         if (configuration.GetValue<bool>("Elsa:Features:DefaultPersistence:EntityFrameworkCore:PostgreSql:Enabled"))
         {
-            await context.ServiceProvider
-                .GetService<PostgreSqlElsaDataBaseInstaller>()
-                ?.InstallAsync();
+            var sqlInstaller = context.ServiceProvider.GetService<PostgreSqlElsaDataBaseInstaller>();
+            if (sqlInstaller != null)
+            {
+                await sqlInstaller.InstallAsync();
+            }
         }
     }
 }

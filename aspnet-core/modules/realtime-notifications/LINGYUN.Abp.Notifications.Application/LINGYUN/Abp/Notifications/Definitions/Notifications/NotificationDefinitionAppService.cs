@@ -179,7 +179,7 @@ public class NotificationDefinitionAppService : AbpNotificationsApplicationServi
         }
     }
 
-    protected async virtual Task<NotificationDefinitionRecord> FindRecordByNameAsync(string name)
+    protected async virtual Task<NotificationDefinitionRecord?> FindRecordByNameAsync(string name)
     {
         return await _definitionRecordRepository.FindByNameAsync(name);
     }

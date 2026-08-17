@@ -23,7 +23,7 @@ public class SubjectStrategyAppService : DataProtectionManagementApplicationServ
     {
         var subjectStrategy = await _repository.FindBySubjectAsync(input.SubjectName, input.SubjectId);
 
-        return ObjectMapper.Map<SubjectStrategy, SubjectStrategyDto>(subjectStrategy);
+        return ObjectMapper.Map<SubjectStrategy, SubjectStrategyDto>(subjectStrategy!);
     }
 
     [Authorize(DataProtectionManagementPermissionNames.SubjectStrategy.Change)]

@@ -53,7 +53,7 @@ public class IdentitySessionCacheItem
 
     public IdentitySessionCacheItem(
         string device,
-        string deviceInfo,
+        string? deviceInfo,
         Guid userId,
         string sessionId,
         string? clientId,

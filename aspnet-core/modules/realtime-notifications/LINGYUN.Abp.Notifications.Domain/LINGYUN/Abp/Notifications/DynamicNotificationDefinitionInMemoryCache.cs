@@ -47,14 +47,20 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
 
         foreach (var notificationGroupRecord in notificationGroupRecords)
         {
+            ILocalizableString? displayName = null;
+            if (!notificationGroupRecord.DisplayName.IsNullOrWhiteSpace())
+            {
+                displayName = LocalizableStringSerializer.Deserialize(notificationGroupRecord.DisplayName);
+            }
             ILocalizableString? description = null;
             if (!notificationGroupRecord.Description.IsNullOrWhiteSpace())
             {
                 description = LocalizableStringSerializer.Deserialize(notificationGroupRecord.Description);
             }
+
             var notificationGroup = context.AddGroup(
                 notificationGroupRecord.Name,
-                LocalizableStringSerializer.Deserialize(notificationGroupRecord.DisplayName),
+                displayName,
                 description,
                 notificationGroupRecord.AllowSubscriptionToClients
             );

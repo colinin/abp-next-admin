@@ -13,16 +13,16 @@ public class RuleRecord : AuditedAggregateRoot<Guid>, IMultiTenant
     public virtual Guid? TenantId { get; protected set; }
     public virtual Guid? ParentId { get; protected set; }
     public virtual bool Enabled { get; set; }
-    public virtual string Name { get; protected set; }
-    public virtual string Operator { get; protected set; }
-    public virtual string ErrorMessage { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
+    public virtual string? Operator { get; protected set; }
+    public virtual string ErrorMessage { get; protected set; } = default!;
     public virtual RuleExpressionType RuleExpressionType { get; set; }
-    public virtual string InjectWorkflows { get; set; }
-    public virtual string Expression { get; protected set; }
-    public virtual string SuccessEvent { get; set; }
-    public virtual ICollection<RuleParamRecord> LocalParams { get; protected set; }
-    public virtual RuleActionRecord OnSuccess { get; protected set; }
-    public virtual RuleActionRecord OnFailure { get; protected set; }
+    public virtual string? InjectWorkflows { get; set; }
+    public virtual string Expression { get; protected set; } = default!;
+    public virtual string? SuccessEvent { get; set; }
+    public virtual ICollection<RuleParamRecord> LocalParams { get; protected set; } = default!;
+    public virtual RuleActionRecord OnSuccess { get; protected set; } = default!;
+    public virtual RuleActionRecord OnFailure { get; protected set; } = default!;
     protected RuleRecord()
     {
         ExtraProperties = new ExtraPropertyDictionary();
@@ -34,7 +34,7 @@ public class RuleRecord : AuditedAggregateRoot<Guid>, IMultiTenant
         string name, 
         string errorMessage, 
         string expression,
-        string @operator = null,
+        string? @operator = null,
         Guid? parentId = null,
         Guid? tenantId = null)
         : base(id)

@@ -136,7 +136,7 @@ public class NotificationGroupDefinitionAppService : AbpNotificationsApplication
         }
     }
 
-    protected async virtual Task<NotificationDefinitionGroupRecord> FindByNameAsync(string name)
+    protected async virtual Task<NotificationDefinitionGroupRecord?> FindByNameAsync(string name)
     {
         var definitionRecord = await _definitionGroupRecordRepository.FindByNameAsync(name);
 

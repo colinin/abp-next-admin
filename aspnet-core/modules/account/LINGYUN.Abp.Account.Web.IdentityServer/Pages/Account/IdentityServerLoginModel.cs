@@ -274,7 +274,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             SetTenantCookies(qrCodeInfo.TenantId);
             using (CurrentTenant.Change(qrCodeInfo.TenantId))
             {
-                var user = await UserManager.FindByIdAsync(qrCodeInfo.UserId);
+                var user = await UserManager.FindByIdAsync(qrCodeInfo.UserId!);
                 if (user == null)
                 {
                     // TODO: 用户验证无效?

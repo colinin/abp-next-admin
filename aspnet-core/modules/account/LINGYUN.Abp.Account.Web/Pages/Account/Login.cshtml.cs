@@ -322,7 +322,7 @@ public class LoginModel : AccountPageModel
         SetTenantCookies(qrCodeInfo.TenantId);
         using (CurrentTenant.Change(qrCodeInfo.TenantId))
         {
-            var user = await UserManager.FindByIdAsync(qrCodeInfo.UserId);
+            var user = await UserManager.FindByIdAsync(qrCodeInfo.UserId!);
             if (user == null)
             {
                 // TODO: 用户验证无效?
@@ -669,7 +669,7 @@ public class LoginModel : AccountPageModel
 
     #region LinkUser
 
-    public async virtual Task<string> GetWithoutLinkReturnUrlAsync(string returnUrl, string returnUrlHash)
+    public async virtual Task<string> GetWithoutLinkReturnUrlAsync(string returnUrl, string? returnUrlHash = null)
     {
         var redirectUrl = await base.GetRedirectUrlAsync(returnUrl, returnUrlHash);
 

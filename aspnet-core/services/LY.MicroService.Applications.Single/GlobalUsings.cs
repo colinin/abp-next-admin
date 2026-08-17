@@ -135,8 +135,6 @@ global using LINGYUN.Platform;
 global using LINGYUN.Platform.EntityFrameworkCore;
 global using LINGYUN.Platform.HttpApi;
 global using LINGYUN.Platform.Localization;
-global using LINGYUN.Platform.Settings.VueVbenAdmin;
-global using LINGYUN.Platform.Theme.VueVbenAdmin;
 global using LY.MicroService.Applications.Single.Bundling;
 global using LY.MicroService.Applications.Single.EntityFrameworkCore.MySql;
 global using LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql;

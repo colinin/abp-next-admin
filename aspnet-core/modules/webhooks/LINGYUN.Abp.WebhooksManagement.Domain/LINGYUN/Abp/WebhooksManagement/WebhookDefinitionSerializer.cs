@@ -50,10 +50,16 @@ public class WebhookDefinitionSerializer : IWebhookDefinitionSerializer, ITransi
     {
         using (CultureHelper.Use(CultureInfo.InvariantCulture))
         {
+            var displayName = webhookGroup.Name;
+            if (webhookGroup.DisplayName != null)
+            {
+                displayName = LocalizableStringSerializer.Serialize(webhookGroup.DisplayName)!;
+            }
+
             var webhookGroupRecord = new WebhookGroupDefinitionRecord(
                 GuidGenerator.Create(),
                 webhookGroup.Name,
-                LocalizableStringSerializer.Serialize(webhookGroup.DisplayName)!
+                displayName
             );
 
             foreach (var property in webhookGroup.Properties)

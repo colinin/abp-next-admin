@@ -31,7 +31,7 @@ public class OrganizationUnitEntityRuleAppService : DataProtectionManagementAppl
     {
         var entityTypeInfo = await _entityTypeInfoRepository.GetAsync(input.EntityTypeId);
         var entityRule = await _organizationUnitEntityRuleRepository.FindEntityRuleAsync(input.OrgCode, entityTypeInfo.TypeFullName, input.Operation);
-        return ObjectMapper.Map<OrganizationUnitEntityRule, OrganizationUnitEntityRuleDto>(entityRule);
+        return ObjectMapper.Map<OrganizationUnitEntityRule, OrganizationUnitEntityRuleDto>(entityRule!);
     }
 
     [Authorize(DataProtectionManagementPermissionNames.OrganizationUnitEntityRule.Create)]

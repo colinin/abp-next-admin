@@ -29,7 +29,7 @@ public class AbpNotificationsExceptionSubscriber : AbpExceptionSubscriberBase
             new NotificationTemplate(
                 NotificationsCommonNotificationNames.ExceptionHandling,
                 formUser: "System",
-                data: new Dictionary<string, object>
+                data: new Dictionary<string, object?>
                 {
                     { "header", "An application exception has occurred" },
                     { "footer", $"Copyright to LY Colin © {DateTime.Now.Year}" },

@@ -20,7 +20,7 @@ public class MySecurityLogAppService : AccountApplicationServiceBase, IMySecurit
     {
         var securityLog = await SecurityLogManager.GetAsync(id, includeDetails: true);
 
-        return ObjectMapper.Map<SecurityLog, SecurityLogDto>(securityLog);
+        return ObjectMapper.Map<SecurityLog, SecurityLogDto>(securityLog!);
     }
 
     public async virtual Task<PagedResultDto<SecurityLogDto>> GetListAsync(SecurityLogGetListInput input)

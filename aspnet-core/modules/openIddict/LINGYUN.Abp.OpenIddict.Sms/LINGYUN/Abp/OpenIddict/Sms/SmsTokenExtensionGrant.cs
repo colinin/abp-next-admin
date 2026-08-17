@@ -47,8 +47,8 @@ public class SmsTokenExtensionGrant : ITokenExtensionGrant
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        var phoneToken = phoneTokenParam.Value.ToString();
-        var phoneNumber = phoneNumberParam.Value.ToString();
+        var phoneToken = phoneTokenParam.Value.ToString()!;
+        var phoneNumber = phoneNumberParam.Value.ToString()!;
 
         await identityOptions.SetAsync();
 

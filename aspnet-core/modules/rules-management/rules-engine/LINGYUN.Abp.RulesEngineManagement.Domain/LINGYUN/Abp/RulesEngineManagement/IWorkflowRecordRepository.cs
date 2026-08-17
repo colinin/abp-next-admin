@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Repositories;
 namespace LINGYUN.Abp.RulesEngineManagement;
 public interface IWorkflowRecordRepository : IRepository<WorkflowRecord, Guid>
 {
-    Task<WorkflowRecord> FindByNameAsync(
+    Task<WorkflowRecord?> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default);
 

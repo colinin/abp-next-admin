@@ -27,9 +27,13 @@ public class WorkflowStore : IWorkflowStore, ITransientDependency
         RuleRepository = ruleRepository;
     }
 
-    public async virtual Task<Workflow> GetWorkflowAsync(string workflowName, CancellationToken cancellationToken = default)
+    public async virtual Task<Workflow?> GetWorkflowAsync(string workflowName, CancellationToken cancellationToken = default)
     {
         var workflowRecord = await WorkflowRepository.FindByNameAsync(workflowName, cancellationToken);
+        if (workflowRecord == null)
+        {
+            return null;
+        }
 
         var workflow = await MapToWorkflow(workflowRecord);
 
@@ -44,7 +48,7 @@ public class WorkflowStore : IWorkflowStore, ITransientDependency
             async (cache) =>
             {
                 var workflows = new List<Workflow>();
-                var workflowRecords = await WorkflowRepository.GetListAsync(inputType.FullName, cancellationToken);
+                var workflowRecords = await WorkflowRepository.GetListAsync(inputType.FullName!, cancellationToken);
 
                 foreach (var workflowRecord in workflowRecords)
                 {
@@ -57,7 +61,7 @@ public class WorkflowStore : IWorkflowStore, ITransientDependency
                 return workflows;
             });
 
-        return workflows;
+        return workflows!;
     }
 
     protected async virtual Task<Workflow> MapToWorkflow(WorkflowRecord workflowRecord)

@@ -45,9 +45,11 @@ public class AbpElsaEntityFrameworkCoreMySqlModule : AbpModule
         var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
         if (configuration.GetValue<bool>("Elsa:Features:DefaultPersistence:EntityFrameworkCore:MySql:Enabled"))
         {
-            await context.ServiceProvider
-                .GetService<MySqlElsaDataBaseInstaller>()
-                ?.InstallAsync();
+            var sqlInstaller = context.ServiceProvider.GetService<MySqlElsaDataBaseInstaller>();
+            if (sqlInstaller != null)
+            {
+                await sqlInstaller.InstallAsync();
+            }
         }
     }
 }

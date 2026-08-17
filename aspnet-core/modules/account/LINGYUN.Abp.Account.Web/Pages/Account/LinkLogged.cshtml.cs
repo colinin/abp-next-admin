@@ -27,7 +27,7 @@ public class LinkLoggedModel : AccountPageModel
     [BindProperty(SupportsGet = true)]
     public Guid? LinkTenantId { get; set; }
 
-    public string? LinkTenantAndUserName { get; set; }
+    public string LinkTenantAndUserName { get; set; } = default!;
 
     protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
     public IIdentityLinkUserAppService IdentityLinkUserAppService => LazyServiceProvider.LazyGetRequiredService<IIdentityLinkUserAppService>();
@@ -47,7 +47,7 @@ public class LinkLoggedModel : AccountPageModel
         }
         LinkTenantAndUserName = !validLinkUser.LinkTenantName.IsNullOrWhiteSpace() 
             ? $"{validLinkUser.LinkTenantName}\\{validLinkUser.LinkUserName}" 
-            : validLinkUser.LinkUserName;
+            : validLinkUser.LinkUserName!;
 
         return Page();
     }
@@ -90,7 +90,7 @@ public class LinkLoggedModel : AccountPageModel
         return Page();
     }
 
-    public virtual Task<string> GetReturnUrlAsync(string returnUrl, string returnUrlHash)
+    public virtual Task<string> GetReturnUrlAsync(string returnUrl, string? returnUrlHash = null)
     {
         return base.GetRedirectUrlAsync(returnUrl, returnUrlHash);
     }

@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.TaskManagement;
 
 public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<string>, IHasConcurrencyStamp
 {
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
     /// <summary>
     /// 任务名称
     /// </summary>

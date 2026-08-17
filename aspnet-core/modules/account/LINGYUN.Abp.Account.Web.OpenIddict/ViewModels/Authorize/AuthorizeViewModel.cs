@@ -10,7 +10,7 @@ public class AuthorizeViewModel
     [HiddenInput]
     public string? Scope { get; set; }
 
-    public List<ScopeItemViewModel>? AvailableScopes { get; set; }
+    public List<ScopeItemViewModel> AvailableScopes { get; set; } = new List<ScopeItemViewModel>();
 }
 
 public class ScopeItemViewModel
