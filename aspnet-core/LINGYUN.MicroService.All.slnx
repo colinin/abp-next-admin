@@ -308,6 +308,7 @@
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.FileSystem/LINGYUN.Abp.BlobManagement.FileSystem.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.HttpApi.Client/LINGYUN.Abp.BlobManagement.HttpApi.Client.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.HttpApi/LINGYUN.Abp.BlobManagement.HttpApi.csproj" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.MimeCheck/LINGYUN.Abp.BlobManagement.MimeCheck.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Minio/LINGYUN.Abp.BlobManagement.Minio.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.SettingManagement/LINGYUN.Abp.BlobManagement.SettingManagement.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Tencent/LINGYUN.Abp.BlobManagement.Tencent.csproj" />
