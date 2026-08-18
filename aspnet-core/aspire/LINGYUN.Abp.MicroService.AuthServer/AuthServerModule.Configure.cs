@@ -116,13 +116,10 @@ public partial class AuthServerModule
         {
             builder.AddValidation(options =>
             {
-                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
-                if (validAudiences?.Count > 0)
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<string[]>();
+                if (validAudiences?.Length > 0)
                 {
-                    foreach (var audience in validAudiences)
-                    {
-                        options.AddAudiences(audience);
-                    }
+                    options.AddAudiences(validAudiences);
                 }
 
                 options.UseLocalServer();
@@ -426,6 +423,11 @@ public partial class AuthServerModule
                 {
                     options.TokenValidationParameters.ValidIssuers = validIssuers;
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                }
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
+                if (validAudiences?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidAudiences = validAudiences;
                 }
             });
 

@@ -64,7 +64,7 @@ IResourceBuilder<ProjectResource> AddDotNetProject<TDbMigrator, TProject>(
     string portName,
     string serviceSuffix = "Service",
     string migratorSuffix = "Migrator",
-    IResourceBuilder<ProjectResource>? waitProject = null) 
+    params IResourceBuilder<ProjectResource>[]? waitProjects) 
     where TDbMigrator : IProjectMetadata, new()
     where TProject : IProjectMetadata, new()
 {
@@ -109,9 +109,12 @@ IResourceBuilder<ProjectResource> AddDotNetProject<TDbMigrator, TProject>(
             .WaitFor(abpDb);
     }
 
-    if (waitProject != null)
+    if (waitProjects != null)
     {
-        service.WaitFor(waitProject);
+        foreach (var waitProject in waitProjects)
+        {
+            service = service.WaitFor(waitProject);
+        }
     }
 
     return service;
@@ -139,7 +142,7 @@ var authServer = AddDotNetProject<
     migratorSuffix:     "Migrator",
     port:               44385,
     portName:           "auth", 
-    waitProject:        localizationService);
+    waitProjects:        localizationService);
 
 // AdminService
 var adminService = AddDotNetProject<
@@ -151,7 +154,7 @@ var adminService = AddDotNetProject<
     migratorSuffix:     "Migrator",
     port:               30010,
     portName:           "admin",
-    waitProject:        authServer);
+    waitProjects:        authServer);
 
 // IdentityService
 AddDotNetProject<
@@ -163,7 +166,7 @@ AddDotNetProject<
     migratorSuffix:     "Migrator",
     port:               30015,
     portName:           "identity",
-    waitProject:        authServer);
+    waitProjects:        authServer);
 
 // TaskService
 var taskService = AddDotNetProject<
@@ -175,7 +178,7 @@ var taskService = AddDotNetProject<
     migratorSuffix:     "Migrator",
     port:               30040, 
     portName:           "task", 
-    waitProject:        adminService)
+    waitProjects:        adminService)
     .WithHttpHealthCheck("/health/service");
 
 // MessageService
@@ -188,7 +191,7 @@ AddDotNetProject<
     migratorSuffix:     "Migrator", 
     port:               30020, 
     portName:           "message", 
-    waitProject:        taskService);
+    waitProjects:        taskService);
 
 // WebhookService
 AddDotNetProject<
@@ -200,7 +203,7 @@ AddDotNetProject<
     migratorSuffix:     "Migrator",
     port:               30045,
     portName:           "webhook", 
-    waitProject:        taskService);
+    waitProjects:        taskService);
 
 // PlatformService
 AddDotNetProject<
@@ -212,7 +215,7 @@ AddDotNetProject<
     migratorSuffix:     "Migrator",
     port:               30025, 
     portName:           "platform",
-    waitProject:        adminService);
+    waitProjects:        adminService);
 
 // WeChatService
 builder.AddProject<Projects.LINGYUN_Abp_MicroService_WeChatService>("WeChatService")
@@ -252,7 +255,7 @@ AddDotNetProject<
     migratorSuffix: "Migrator",
     port: 30070,
     portName: "ai",
-    waitProject: localizationService);
+    waitProjects: localizationService);
 
 // ApiGateway
 var apigateway = builder.AddProject<Projects.LINGYUN_Abp_MicroService_ApiGateway>("ApiGateway")

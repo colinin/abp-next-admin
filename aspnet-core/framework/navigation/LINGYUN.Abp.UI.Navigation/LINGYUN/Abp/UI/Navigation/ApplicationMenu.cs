@@ -105,6 +105,19 @@ public class ApplicationMenu : IHasMenuItems, IHasExtraProperties
         return menuItem;
     }
 
+    public ApplicationMenu WithRoles(string[] roles)
+    {
+        this.SetProperty("roles", roles.JoinAsString(";"));
+        return this;
+    }
+
+    public string[] GetRoles()
+    {
+        var roles = this.GetProperty<string>("roles") ?? "";
+
+        return roles.Split(";");
+    }
+
     public override string ToString()
     {
         return $"[ApplicationMenu] Name = {Name}";

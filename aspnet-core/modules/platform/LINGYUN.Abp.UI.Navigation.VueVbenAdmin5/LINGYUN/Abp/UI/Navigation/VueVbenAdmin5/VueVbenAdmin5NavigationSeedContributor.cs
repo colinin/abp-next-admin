@@ -6,6 +6,7 @@ using LINGYUN.Platform.Utils;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -81,6 +82,7 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
                 ["icon"] = menu.Icon ?? "",
                 ["order"] = menu.Order
             };
+            var roles = menu.GetRoles();
 
             var seedMenu = await SeedMenuAsync(
                 layout:         layout,
@@ -95,7 +97,7 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
                 parentId:       null,
                 tenantId:       layout.TenantId,
                 meta:           menuMeta,
-                roles:          new string[] { "admin" });
+                roles:          roles.Union(["admin"]).ToArray());
 
             await SeedDefinitionMenuItemsAsync(layout, data, seedMenu, menu.Items, multiTenancySides);
         }
@@ -121,21 +123,22 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
                 ["icon"] = item.Icon ?? "",
                 ["order"] = item.Order
             };
+            var roles = item.GetRoles();
 
             var seedMenu = await SeedMenuAsync(
-                layout: layout,
-                data: data,
-                name: item.Name,
-                path: item.Url,
-                code: CodeNumberGenerator.AppendCode(menu.Code, CodeNumberGenerator.CreateCode(index)),
-                component: item.Component.IsNullOrWhiteSpace() ? layout.Path! : item.Component,
-                displayName: item.DisplayName,
-                redirect: item.Redirect,
-                description: item.Description,
-                parentId: menu.Id,
-                tenantId: menu.TenantId,
-                meta: menuMeta,
-                roles: new string[] { "admin" });
+                layout:         layout,
+                data:           data,
+                name:           item.Name,
+                path:           item.Url,
+                code:           CodeNumberGenerator.AppendCode(menu.Code, CodeNumberGenerator.CreateCode(index)),
+                component:      item.Component.IsNullOrWhiteSpace() ? layout.Path! : item.Component,
+                displayName:    item.DisplayName,
+                redirect:       item.Redirect,
+                description:    item.Description,
+                parentId:       menu.Id,
+                tenantId:       menu.TenantId,
+                meta:           menuMeta,
+                roles:          roles.Union(["admin"]).ToArray());
 
             await SeedDefinitionMenuItemsAsync(layout, data, seedMenu, item.Items, multiTenancySides);
 
@@ -189,7 +192,7 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
 
         if (roles != null)
         {
-            foreach (var role in roles)
+            foreach (var role in roles.Distinct())
             {
                 await RouteDataSeeder.SeedRoleMenuAsync(role, menu, tenantId);
             }
@@ -197,7 +200,7 @@ public class VueVbenAdmin5NavigationSeedContributor : NavigationSeedContributor
 
         if (users != null)
         {
-            foreach (var user in users)
+            foreach (var user in users.Distinct())
             {
                 await RouteDataSeeder.SeedUserMenuAsync(user, menu, tenantId);
             }

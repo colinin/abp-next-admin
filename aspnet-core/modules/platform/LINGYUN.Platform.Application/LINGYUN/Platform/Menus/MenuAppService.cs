@@ -86,8 +86,7 @@ public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
     public async virtual Task<ListResultDto<MenuDto>> GetAllAsync(MenuGetAllInput input)
     {
         var menus = await MenuRepository.GetAllAsync(
-            input.Filter, input.Sorting,
-            input.Framework, input.ParentId, input.LayoutId);
+            input.Filter, input.Framework, input.ParentId, input.LayoutId, input.Sorting);
 
         return new ListResultDto<MenuDto>(
             ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus));

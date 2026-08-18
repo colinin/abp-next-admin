@@ -6,6 +6,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
+using Volo.Abp.Roles;
 
 namespace LINGYUN.Abp.MicroService.AuthServer.DataSeeds;
 public class IdentityUserRoleDataSeeder : ITransientDependency
@@ -54,7 +55,7 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
     {
         await IdentityOptions.SetAsync();
 
-        const string adminRoleName = "admin";
+        const string adminRoleName = AbpRoleConsts.AdminRoleName;
         var adminUserName = context[AdminUserNamePropertyName] as string ?? AdminUserNameDefaultValue;
 
         Guid adminRoleId;
@@ -86,10 +87,9 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
         var adminEmailAddress = context[AdminEmailPropertyName] as string ?? AdminEmailDefaultValue;
         var adminPassword = context[AdminPasswordPropertyName] as string ?? AdminPasswordDefaultValue;
 
-        var adminUser = await UserManager.FindByNameAsync(adminUserName);
-        if (adminUser == null)
+        if (await UserManager.FindByNameAsync(adminUserName) == null)
         {
-            adminUser = new IdentityUser(
+            var adminUser = new IdentityUser(
                 adminUserId,
                 adminUserName,
                 adminEmailAddress,
@@ -106,7 +106,7 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
     private async Task SeedDefaultRoleAsync(DataSeedContext context)
     {
         const string defaultRoleName = "Users";
-        if (await RoleManager.FindByNameAsync(defaultRoleName) != null)
+        if (await RoleManager.FindByNameAsync(defaultRoleName) == null)
         {
             var roleId = GuidGenerator.Create();
             var defaultRole = new IdentityRole(
