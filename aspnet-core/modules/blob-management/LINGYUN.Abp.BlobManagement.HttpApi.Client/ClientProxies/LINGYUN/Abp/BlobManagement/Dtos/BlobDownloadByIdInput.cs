@@ -9,11 +9,7 @@ using Volo.Abp.ObjectExtending;
 // ReSharper disable once CheckNamespace
 namespace LINGYUN.Abp.BlobManagement.Dtos;
 
-public class BlobDownloadByNameInput
+public class BlobDownloadByIdInput
 {
-    public Guid? TenantId { get; set; }
-
-    public string ContainerName { get; set; }
-
-    public string BlobName { get; set; }
+    public string Key { get; set; }
 }

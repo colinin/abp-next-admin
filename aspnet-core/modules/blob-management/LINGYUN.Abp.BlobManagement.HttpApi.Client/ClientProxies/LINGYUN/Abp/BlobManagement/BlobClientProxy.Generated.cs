@@ -51,17 +51,25 @@ public partial class BlobClientProxy : ClientProxyBase<IBlobAppService>, IBlobAp
         });
     }
 
-    public virtual async Task<IRemoteStreamContent> GetContentAsync(Guid id)
+    public virtual async Task<IRemoteStreamContent> DownloadAsync(BlobDownloadByIdInput input)
     {
-        return await RequestAsync<IRemoteStreamContent>(nameof(GetContentAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<IRemoteStreamContent>(nameof(DownloadAsync), new ClientProxyRequestTypeValue
         {
-            { typeof(Guid), id }
+            { typeof(BlobDownloadByIdInput), input }
         });
     }
 
-    public virtual async Task<IRemoteStreamContent> GetContentByNameAsync(BlobDownloadByNameInput input)
+    public virtual async Task<IRemoteStreamContent> PreviewAsync(BlobDownloadByIdInput input)
     {
-        return await RequestAsync<IRemoteStreamContent>(nameof(GetContentByNameAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<IRemoteStreamContent>(nameof(PreviewAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(BlobDownloadByIdInput), input }
+        });
+    }
+
+    public virtual async Task<IRemoteStreamContent> DownloadByNameAsync(BlobDownloadByNameInput input)
+    {
+        return await RequestAsync<IRemoteStreamContent>(nameof(DownloadByNameAsync), new ClientProxyRequestTypeValue
         {
             { typeof(BlobDownloadByNameInput), input }
         });
@@ -80,6 +88,22 @@ public partial class BlobClientProxy : ClientProxyBase<IBlobAppService>, IBlobAp
         return await RequestAsync<PagedResultDto<BlobDto>>(nameof(GetListAsync), new ClientProxyRequestTypeValue
         {
             { typeof(BlobGetPagedListInput), input }
+        });
+    }
+
+    public virtual async Task<string> GenerateDownloadUrlAsync(Guid id)
+    {
+        return await RequestAsync<string>(nameof(GenerateDownloadUrlAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id }
+        });
+    }
+
+    public virtual async Task<string> GeneratePreviewUrlAsync(Guid id)
+    {
+        return await RequestAsync<string>(nameof(GeneratePreviewUrlAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id }
         });
     }
 }
