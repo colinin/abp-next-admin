@@ -19,14 +19,14 @@ public class WeChatWorkTemplateResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("template_names")]
     [JsonPropertyName("template_names")]
-    public List<TemplateName> TemplateNames { get; set; }
+    public List<TemplateName> TemplateNames { get; set; } = default!;
     /// <summary>
     /// 审批模版控件设置，由多个表单控件及其内容组成，其中包含需要对控件赋值的信息
     /// </summary>
     [NotNull]
     [JsonProperty("template_content")]
     [JsonPropertyName("template_content")]
-    public TemplateContent TemplateContent { get; set; }
+    public TemplateContent TemplateContent { get; set; } = default!;
     public WeChatWorkTemplateResponse()
     {
 

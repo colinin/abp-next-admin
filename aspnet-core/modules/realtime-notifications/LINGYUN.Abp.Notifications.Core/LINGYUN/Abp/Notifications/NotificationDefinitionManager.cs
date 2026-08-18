@@ -35,7 +35,7 @@ public class NotificationDefinitionManager : INotificationDefinitionManager, ITr
         return notification;
     }
 
-    public async virtual Task<NotificationDefinition> GetOrNullAsync(string name)
+    public async virtual Task<NotificationDefinition?> GetOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
@@ -58,7 +58,7 @@ public class NotificationDefinitionManager : INotificationDefinitionManager, ITr
         };
     }
 
-    public async virtual Task<NotificationGroupDefinition> GetGroupOrNullAsync(string name)
+    public async virtual Task<NotificationGroupDefinition?> GetGroupOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 

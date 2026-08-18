@@ -10,7 +10,7 @@ public class EditionEto : IHasEntityVersion
 {
     public Guid Id { get; set; }
 
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     public int EntityVersion { get; set; }
 }

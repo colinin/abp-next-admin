@@ -4,19 +4,19 @@ public class SmsVerifyCodeMessage
     /// <summary>
     /// 方案名称，如果不填则为“默认方案”。最多不超过 20 个字符。
     /// </summary>
-    public string SchemeName { get; set; }
+    public string? SchemeName { get; set; }
     /// <summary>
     /// 号码国家编码。默认为 86，目前也仅支持中国国内号码发送。
     /// </summary>
-    public string CountryCode { get; set; }
+    public string? CountryCode { get; set; }
     /// <summary>
     /// 上行短信扩展码。上行短信指发送给通信服务提供商的短信，用于定制某种服务、完成查询，或是办理某种业务等，需要收费，按运营商普通短信资费进行扣费。
     /// </summary>
-    public string SmsUpExtendCode { get; set; }
+    public string? SmsUpExtendCode { get; set; }
     /// <summary>
     /// 外部流水号。
     /// </summary>
-    public string OutId { get; set; }
+    public string? OutId { get; set; }
     /// <summary>
     /// 验证码长度支持 4～8 位长度，默认是 4 位。
     /// </summary>
@@ -65,11 +65,11 @@ public class SmsVerifyCodeMessage
     /// <summary>
     /// 签名名称。暂不支持使用自定义签名，请使用系统赠送的签名。
     /// </summary>
-    public string SignName { get; }
+    public string? SignName { get; }
     /// <summary>
     /// 短信模板 CODE。参数SignName选择赠送签名时，必须搭配赠送模板下发短信。您可在赠送模板配置页面选择适用您业务场景的模板。
     /// </summary>
-    public string TemplateCode { get; }
+    public string? TemplateCode { get; }
     /// <summary>
     /// 短信模板参数。
     /// </summary>
@@ -77,8 +77,8 @@ public class SmsVerifyCodeMessage
     public SmsVerifyCodeMessage(
         string phoneNumber, 
         SmsVerifyCodeMessageParam templateParam,
-        string signName = null,
-        string templateCode = null)
+        string? signName = null,
+        string? templateCode = null)
     {
         PhoneNumber = phoneNumber;
         TemplateParam = templateParam;

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Volo.Abp.Authorization.Permissions;
 public static class IPermissionDefinitionManagerExtensions
 {
-    public async static Task<PermissionGroupDefinition> GetGroupOrNullAsync(
+    public async static Task<PermissionGroupDefinition?> GetGroupOrNullAsync(
         this IPermissionDefinitionManager permissionDefinitionManager,
         string name
         )

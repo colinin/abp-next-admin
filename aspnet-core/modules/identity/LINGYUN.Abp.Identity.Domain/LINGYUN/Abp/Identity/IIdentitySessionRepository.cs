@@ -8,14 +8,14 @@ using Volo.Abp.Specifications;
 namespace LINGYUN.Abp.Identity;
 public interface IIdentitySessionRepository : Volo.Abp.Identity.IIdentitySessionRepository
 {
-    Task<IdentitySession> FindLastAsync(
+    Task<IdentitySession?> FindLastAsync(
         Guid userId, 
-        string device = null, 
+        string? device = null, 
         CancellationToken cancellationToken = default);
 
     Task<List<IdentitySession>> GetListAsync(
         Guid userId,
-        string device,
+        string? device = null,
         Guid? exceptSessionId = null,
         int maxResultCount = 0,
         CancellationToken cancellationToken = default);
@@ -30,7 +30,7 @@ public interface IIdentitySessionRepository : Volo.Abp.Identity.IIdentitySession
 
     Task<List<IdentitySession>> GetListAsync(
         ISpecification<IdentitySession> specification,
-        string sorting = $"{nameof(IdentitySession.SignedIn)} DESC",
+        string? sorting = $"{nameof(IdentitySession.SignedIn)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);

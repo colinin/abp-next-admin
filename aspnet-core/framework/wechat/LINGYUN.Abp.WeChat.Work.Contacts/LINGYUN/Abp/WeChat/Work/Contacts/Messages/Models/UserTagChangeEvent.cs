@@ -14,27 +14,27 @@ public class UserTagChangeEvent : WeChatWorkEventMessage
     /// 标签Id
     /// </summary>
     [XmlElement("TagId")]
-    public string TagId { get; set; }
+    public string TagId { get; set; } = default!;
     /// <summary>
     /// 标签中新增的成员userid列表，用逗号分隔
     /// </summary>
     [XmlElement("AddUserItems", IsNullable = true)]
-    public string AddUserItems { get; set; }
+    public string? AddUserItems { get; set; }
     /// <summary>
     /// 标签中删除的成员userid列表，用逗号分隔
     /// </summary>
     [XmlElement("DelUserItems", IsNullable = true)]
-    public string DelUserItems { get; set; }
+    public string? DelUserItems { get; set; }
     /// <summary>
     /// 标签中新增的部门id列表，用逗号分隔
     /// </summary>
     [XmlElement("AddPartyItems", IsNullable = true)]
-    public string AddPartyItems { get; set; }
+    public string? AddPartyItems { get; set; }
     /// <summary>
     /// 标签中删除的部门id列表，用逗号分隔
     /// </summary>
     [XmlElement("DelPartyItems", IsNullable = true)]
-    public string DelPartyItems { get; set; }
+    public string? DelPartyItems { get; set; }
     public override WeChatMessageEto ToEto()
     {
         return new WeChatWorkEventMessageEto<UserTagChangeEvent>(this);

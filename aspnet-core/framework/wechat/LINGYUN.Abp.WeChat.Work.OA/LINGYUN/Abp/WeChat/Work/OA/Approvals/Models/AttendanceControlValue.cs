@@ -15,7 +15,7 @@ public class AttendanceControlValue : ControlValue
     [NotNull]
     [JsonProperty("attendance")]
     [JsonPropertyName("attendance")]
-    public AttendanceValue Attendance { get; set; }
+    public AttendanceValue Attendance { get; set; } = default!;
     public AttendanceControlValue()
     {
 
@@ -35,7 +35,7 @@ public class AttendanceValue
     [NotNull]
     [JsonProperty("date_range")]
     [JsonPropertyName("date_range")]
-    public DateRangeValue DateRange { get; set; }
+    public DateRangeValue DateRange { get; set; } = default!;
     /// <summary>
     /// 假勤组件类型：1-请假；3-出差；4-外出；5-加班
     /// </summary>
@@ -49,7 +49,7 @@ public class AttendanceValue
     [CanBeNull]
     [JsonProperty("slice_info")]
     [JsonPropertyName("slice_info")]
-    public AttendanceSliceInfo SliceInfo { get; set; }
+    public AttendanceSliceInfo? SliceInfo { get; set; }
 }
 
 public class AttendanceSliceInfo
@@ -67,7 +67,7 @@ public class AttendanceSliceInfo
     [NotNull]
     [JsonProperty("day_items")]
     [JsonPropertyName("day_items")]
-    public List<AttendanceSliceDayItem> DayItems { get; set; }
+    public List<AttendanceSliceDayItem> DayItems { get; set; } = default!;
     public AttendanceSliceInfo()
     {
 

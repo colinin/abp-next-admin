@@ -7,9 +7,9 @@ using Volo.Abp.Domain.Entities.Auditing;
 namespace LINGYUN.Abp.AIManagement.Tools;
 public class AIToolDefinitionRecord : AuditedAggregateRoot<Guid>
 {
-    public string Name { get; private set; }
+    public string Name { get; private set; } = default!;
 
-    public string Provider { get; private set; }
+    public string Provider { get; private set; } = default!;
 
     public string? Description { get; set; }
 

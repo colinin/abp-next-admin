@@ -6,5 +6,5 @@ public abstract class FeedbackCommentCreateOrUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(FeedbackCommentConsts), nameof(FeedbackCommentConsts.MaxContentLength))]
-    public string Content { get; set; }
+    public string Content { get; set; } = default!;
 }

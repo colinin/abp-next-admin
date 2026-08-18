@@ -31,7 +31,7 @@ public class OrganizationUnitEntityRuleAppService : DataProtectionManagementAppl
     {
         var entityTypeInfo = await _entityTypeInfoRepository.GetAsync(input.EntityTypeId);
         var entityRule = await _organizationUnitEntityRuleRepository.FindEntityRuleAsync(input.OrgCode, entityTypeInfo.TypeFullName, input.Operation);
-        return ObjectMapper.Map<OrganizationUnitEntityRule, OrganizationUnitEntityRuleDto>(entityRule);
+        return ObjectMapper.Map<OrganizationUnitEntityRule, OrganizationUnitEntityRuleDto>(entityRule!);
     }
 
     [Authorize(DataProtectionManagementPermissionNames.OrganizationUnitEntityRule.Create)]
@@ -72,10 +72,10 @@ public class OrganizationUnitEntityRuleAppService : DataProtectionManagementAppl
                     entityRule.Operation,
                     entityRule.FilterGroup)
                 {
-                    AccessedProperties = input.AccessedProperties.ToList()
+                    AccessedProperties = input.AccessedProperties?.ToList() ?? []
                 }));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<OrganizationUnitEntityRule, OrganizationUnitEntityRuleDto>(entityRule);
     }
@@ -111,10 +111,10 @@ public class OrganizationUnitEntityRuleAppService : DataProtectionManagementAppl
                     entityRule.Operation,
                     entityRule.FilterGroup)
                 {
-                    AccessedProperties = input.AccessedProperties.ToList()
+                    AccessedProperties = input.AccessedProperties?.ToList() ?? []
                 }));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<OrganizationUnitEntityRule, OrganizationUnitEntityRuleDto>(entityRule);
     }

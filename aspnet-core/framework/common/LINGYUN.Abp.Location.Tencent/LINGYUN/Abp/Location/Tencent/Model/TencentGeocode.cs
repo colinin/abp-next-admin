@@ -39,5 +39,5 @@ public class GeocodeAddressInfo
     /// 行政区划代码
     /// </summary>
     [JsonProperty("adcode")]
-    public string AdCode { get; set; }
+    public string AdCode { get; set; } = default!;
 }

@@ -8,11 +8,11 @@ public class MenuItemDto : RouteDto
     /// <summary>
     /// 菜单编号
     /// </summary>
-    public string Code { get; set; }
+    public string Code { get; set; } = default!;
     /// <summary>
     /// 菜单组件
     /// </summary>
-    public string Component { get; set; }
+    public string Component { get; set; } = default!;
     /// <summary>
     /// 子菜单列表
     /// </summary>

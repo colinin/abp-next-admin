@@ -6,6 +6,6 @@ namespace LINGYUN.Abp.BlobManagement.Dtos;
 
 public class BlobContainerDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
-    public string Name { get; set; }
-    public string ConcurrencyStamp { get; set; }
+    public string Name { get; set; } = default!;
+    public string ConcurrencyStamp { get; set; } = default!;
 }

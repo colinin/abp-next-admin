@@ -9,10 +9,10 @@ public class WeChatWorkAppChatUpdateRequest : WeChatWorkAppChatRequest
     public WeChatWorkAppChatUpdateRequest(
         string agentId,
         string chatId,
-        string name = null,
-        string owner = null,
-        List<string> addUsers = null,
-        List<string> delUsers = null)
+        string? name = null,
+        string? owner = null,
+        List<string>? addUsers = null,
+        List<string>? delUsers = null)
         : base(agentId)
     {
         Name = name;
@@ -28,7 +28,7 @@ public class WeChatWorkAppChatUpdateRequest : WeChatWorkAppChatRequest
     [CanBeNull]
     [JsonProperty("name")]
     [JsonPropertyName("name")]
-    public virtual string Name { get; set; }
+    public virtual string? Name { get; set; }
     /// <summary>
     /// 新群主的id。
     /// 若不需更新，请忽略此参数。课程群聊群主必须在设置的群主列表内
@@ -36,21 +36,21 @@ public class WeChatWorkAppChatUpdateRequest : WeChatWorkAppChatRequest
     [CanBeNull]
     [JsonProperty("owner")]
     [JsonPropertyName("owner")]
-    public virtual string Owner { get; set; }
+    public virtual string? Owner { get; set; }
     /// <summary>
     /// 添加成员的id列表
     /// </summary>
     [CanBeNull]
     [JsonProperty("add_user_list")]
     [JsonPropertyName("add_user_list")]
-    public virtual List<string> AddUsers { get; set; }
+    public virtual List<string>? AddUsers { get; set; }
     /// <summary>
     /// 踢出成员的id列表
     /// </summary>
     [CanBeNull]
     [JsonProperty("del_user_list")]
     [JsonPropertyName("del_user_list")]
-    public virtual List<string> DelUsers { get; set; }
+    public virtual List<string>? DelUsers { get; set; }
     /// <summary>
     /// 群聊id
     /// </summary>

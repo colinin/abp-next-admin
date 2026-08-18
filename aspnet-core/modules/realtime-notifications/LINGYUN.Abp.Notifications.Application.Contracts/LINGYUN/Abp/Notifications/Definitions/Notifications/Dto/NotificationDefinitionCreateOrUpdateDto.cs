@@ -8,14 +8,14 @@ namespace LINGYUN.Abp.Notifications.Definitions.Notifications;
 public abstract class NotificationDefinitionCreateOrUpdateDto : IHasExtraProperties
 {
     [DynamicStringLength(typeof(NotificationDefinitionRecordConsts), nameof(NotificationDefinitionRecordConsts.MaxTemplateLength))]
-    public string Template { get; set; }
+    public string? Template { get; set; }
 
     [Required]
     [DynamicStringLength(typeof(NotificationDefinitionRecordConsts), nameof(NotificationDefinitionRecordConsts.MaxDisplayNameLength))]
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     [DynamicStringLength(typeof(NotificationDefinitionRecordConsts), nameof(NotificationDefinitionRecordConsts.MaxDescriptionLength))]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool AllowSubscriptionToClients { get; set; }
 

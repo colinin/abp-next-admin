@@ -12,7 +12,7 @@ using Volo.Abp.SimpleStateChecking;
 namespace LINGYUN.Abp.AIManagement.Workspaces;
 public class DynamicWorkspaceDefinitionStoreInMemoryCache : IDynamicWorkspaceDefinitionStoreInMemoryCache, ISingletonDependency
 {
-    public string CacheStamp { get; set; }
+    public string? CacheStamp { get; set; }
     protected IDictionary<string, WorkspaceDefinition> WorkspaceDefinitions { get; }
     protected IStringEncryptionService StringEncryptionService { get; }
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }

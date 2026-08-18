@@ -3,7 +3,6 @@ using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
-using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Dapr.Client.Wrapper;
@@ -60,7 +59,6 @@ namespace LY.MicroService.WebhooksManagement;
     typeof(AbpWebhooksEventBusModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
-    typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(AbpQuartzMySqlInstallerModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),

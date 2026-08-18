@@ -10,19 +10,19 @@ namespace LINGYUN.Abp.Identity;
 
 public interface IIdentityUserInactiveRepository : IBasicRepository<IdentityUserInactive, long>
 {
-    Task<IdentityUserInactive> FindByUserIdAsync(
+    Task<IdentityUserInactive?> FindByUserIdAsync(
         Guid userId,
         CancellationToken cancellationToken = default);
 
     Task<int> GetInactiveUserCountAsync(
         DateTime threshold,
-        IEnumerable<Guid> exceptUserIds = null,
+        IEnumerable<Guid>? exceptUserIds = null,
         CancellationToken cancellationToken = default);
 
     Task<List<IdentityUser>> GetInactiveUserListAsync(
         DateTime threshold,
-        IEnumerable<Guid> exceptUserIds = null,
-        string sorting = nameof(IdentityUser.LastSignInTime),
+        IEnumerable<Guid>? exceptUserIds = null,
+        string? sorting = nameof(IdentityUser.LastSignInTime),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);
@@ -33,7 +33,7 @@ public interface IIdentityUserInactiveRepository : IBasicRepository<IdentityUser
 
     Task<List<IdentityUserInactive>> GetListAsync(
         ISpecification<IdentityUserInactive> specification,
-        string sorting = nameof(IdentityUserInactive.CreationTime),
+        string? sorting = nameof(IdentityUserInactive.CreationTime),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);

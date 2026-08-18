@@ -10,5 +10,5 @@ public class BlobFileCreateIntegrationDto : BlobFileGetByNameIntegrationDto
 
     [DisableAuditing]
     [DisableValidation]
-    public IRemoteStreamContent File { get; set; }
+    public IRemoteStreamContent File { get; set; } = default!;
 }

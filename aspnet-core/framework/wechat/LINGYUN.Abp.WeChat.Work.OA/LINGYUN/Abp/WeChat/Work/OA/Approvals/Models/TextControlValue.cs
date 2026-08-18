@@ -14,7 +14,7 @@ public class TextControlValue : ControlValue
     [NotNull]
     [JsonProperty("text")]
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public string Text { get; set; } = default!;
     public TextControlValue()
     {
 

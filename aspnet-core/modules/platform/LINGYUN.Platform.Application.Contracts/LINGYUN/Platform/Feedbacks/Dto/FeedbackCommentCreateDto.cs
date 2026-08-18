@@ -6,5 +6,5 @@ public class FeedbackCommentCreateDto : FeedbackCommentCreateOrUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(FeedbackCommentConsts), nameof(FeedbackCommentConsts.MaxCapacityLength))]
-    public string Capacity { get; set; }
+    public string Capacity { get; set; } = default!;
 }

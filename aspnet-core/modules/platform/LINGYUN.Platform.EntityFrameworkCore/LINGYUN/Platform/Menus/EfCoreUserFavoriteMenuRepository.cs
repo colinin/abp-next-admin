@@ -30,7 +30,7 @@ public class EfCoreUserFavoriteMenuRepository :
 
     public async virtual Task<List<UserFavoriteMenu>> GetFavoriteMenusAsync(
         Guid userId,
-        string framework = null,
+        string? framework = null,
         Guid? menuId = null,
         CancellationToken cancellationToken = default)
     {
@@ -54,7 +54,7 @@ public class EfCoreUserFavoriteMenuRepository :
                 GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<UserFavoriteMenu> FindByUserMenuAsync(
+    public async virtual Task<UserFavoriteMenu?> FindByUserMenuAsync(
         Guid userId, 
         Guid menuId, 
         CancellationToken cancellationToken = default)

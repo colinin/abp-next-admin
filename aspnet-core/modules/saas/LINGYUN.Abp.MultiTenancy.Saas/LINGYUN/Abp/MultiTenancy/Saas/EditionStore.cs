@@ -25,12 +25,12 @@ public class EditionStore : IEditionStore, ITransientDependency
         Cache = cache;
     }
 
-    public async virtual Task<EditionInfo> FindByTenantAsync(Guid tenantId)
+    public async virtual Task<EditionInfo?> FindByTenantAsync(Guid tenantId)
     {
-        return (await GetCacheItemAsync(tenantId)).Value;
+        return (await GetCacheItemAsync(tenantId))?.Value;
     }
 
-    protected async virtual Task<EditionCacheItem> GetCacheItemAsync(Guid tenantId)
+    protected async virtual Task<EditionCacheItem?> GetCacheItemAsync(Guid tenantId)
     {
         var cacheKey = CalculateCacheKey(tenantId);
 
@@ -47,9 +47,9 @@ public class EditionStore : IEditionStore, ITransientDependency
         }
     }
 
-    protected async virtual Task<EditionCacheItem> SetCacheAsync(string cacheKey, [CanBeNull] TenantDto tenant)
+    protected async virtual Task<EditionCacheItem?> SetCacheAsync(string cacheKey, [CanBeNull] TenantDto tenant)
     {
-        EditionInfo editionInfo = null;
+        EditionInfo? editionInfo = null;
         if (tenant != null && tenant.EditionId.HasValue && !tenant.EditionName.IsNullOrWhiteSpace())
         {
             editionInfo = new EditionInfo(tenant.EditionId.Value, tenant.EditionName);

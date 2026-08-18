@@ -13,22 +13,22 @@ public class WeChatOpenIdResponse
     /// 错误码
     /// </summary>
     [JsonProperty("errcode")]
-    public string ErrorCode { get; set; }
+    public string ErrorCode { get; set; } = default!;
     /// <summary>
     /// 会话密钥
     /// </summary>
     [JsonProperty("session_key")]
-    public string SessionKey { get; set; }
+    public string SessionKey { get; set; } = default!;
     /// <summary>
     /// 用户唯一标识
     /// </summary>
     [JsonProperty("openid")]
-    public string OpenId { get; set; }
+    public string OpenId { get; set; } = default!;
     /// <summary>
     /// 用户在开放平台的唯一标识符，在满足 UnionID 下发条件的情况下会返回
     /// </summary>
     [JsonProperty("unionid")]
-    public string UnionId { get; set; }
+    public string? UnionId { get; set; }
     /// <summary>
     /// 错误消息
     /// </summary>

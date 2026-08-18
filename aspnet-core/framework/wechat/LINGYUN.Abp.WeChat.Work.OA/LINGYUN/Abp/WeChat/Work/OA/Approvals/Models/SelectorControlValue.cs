@@ -16,7 +16,7 @@ public class SelectorControlValue : ControlValue
     [NotNull]
     [JsonProperty("selector")]
     [JsonPropertyName("selector")]
-    public SelectorValue Selector { get; set; }
+    public SelectorValue Selector { get; set; } = default!;
     public SelectorControlValue()
     {
 
@@ -36,14 +36,14 @@ public class SelectorValue
     [NotNull]
     [JsonProperty("type")]
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     /// <summary>
     /// 多选选项，多选属性的选择控件允许输入多个
     /// </summary>
     [NotNull]
     [JsonProperty("options")]
     [JsonPropertyName("options")]
-    public List<SelectorValueOption> Options { get; set; }
+    public List<SelectorValueOption> Options { get; set; } = default!;
     public SelectorValue()
     {
 
@@ -83,14 +83,14 @@ public class SelectorValueOption
     [NotNull]
     [JsonProperty("key")]
     [JsonPropertyName("key")]
-    public string Key { get; set; }
+    public string Key { get; set; } = default!;
     /// <summary>
     /// 选项值，若配置了多语言则会包含中英文的选项值
     /// </summary>
     [NotNull]
     [JsonProperty("value")]
     [JsonPropertyName("value")]
-    public List<SelectorValueOptionValue> Value { get; set; }
+    public List<SelectorValueOptionValue> Value { get; set; } = default!;
     public SelectorValueOption()
     {
 
@@ -112,14 +112,14 @@ public class SelectorValueOptionValue
     [StringLength(40)]
     [JsonProperty("text")]
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public string Text { get; set; } = default!;
     /// <summary>
     /// 多语言名称
     /// </summary>
     [NotNull]
     [JsonProperty("lang")]
     [JsonPropertyName("lang")]
-    public string Lang { get; set; }
+    public string Lang { get; set; } = default!;
     public SelectorValueOptionValue()
     {
 

@@ -21,7 +21,7 @@ public class EfCoreIdentityUserInactiveRepository : EfCoreRepository<IIdentityDb
     {
     }
 
-    public async virtual Task<IdentityUserInactive> FindByUserIdAsync(
+    public async virtual Task<IdentityUserInactive?> FindByUserIdAsync(
         Guid userId,
         CancellationToken cancellationToken = default)
     {
@@ -32,7 +32,7 @@ public class EfCoreIdentityUserInactiveRepository : EfCoreRepository<IIdentityDb
 
     public async virtual Task<int> GetInactiveUserCountAsync(
         DateTime threshold,
-        IEnumerable<Guid> exceptUserIds = null,
+        IEnumerable<Guid>? exceptUserIds = null,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
@@ -40,7 +40,7 @@ public class EfCoreIdentityUserInactiveRepository : EfCoreRepository<IIdentityDb
             .Select(x => x.UserId);
 
         return await dbContext.Set<IdentityUser>()
-            .WhereIf(exceptUserIds?.Count() > 0, x => !exceptUserIds.Contains(x.Id))
+            .WhereIf(exceptUserIds?.Count() > 0, x => !exceptUserIds!.Contains(x.Id))
             .Where(x => !ignoreUserIds.Contains(x.Id))
             .Where(x => x.IsActive &&
                 ((x.LastSignInTime.HasValue && x.LastSignInTime < threshold) ||
@@ -52,8 +52,8 @@ public class EfCoreIdentityUserInactiveRepository : EfCoreRepository<IIdentityDb
 
     public async virtual Task<List<IdentityUser>> GetInactiveUserListAsync(
         DateTime threshold,
-        IEnumerable<Guid> exceptUserIds = null,
-        string sorting = nameof(IdentityUser.LastSignInTime),
+        IEnumerable<Guid>? exceptUserIds = null,
+        string? sorting = nameof(IdentityUser.LastSignInTime),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default)
@@ -63,7 +63,7 @@ public class EfCoreIdentityUserInactiveRepository : EfCoreRepository<IIdentityDb
             .Select(x => x.UserId);
 
         return await dbContext.Set<IdentityUser>()
-            .WhereIf(exceptUserIds?.Count() > 0, x => !exceptUserIds.Contains(x.Id))
+            .WhereIf(exceptUserIds?.Count() > 0, x => !exceptUserIds!.Contains(x.Id))
             .Where(x => !ignoreUserIds.Contains(x.Id))
             .Where(x => x.IsActive &&
                 ((x.LastSignInTime.HasValue && x.LastSignInTime < threshold) ||
@@ -86,7 +86,7 @@ public class EfCoreIdentityUserInactiveRepository : EfCoreRepository<IIdentityDb
 
     public async virtual Task<List<IdentityUserInactive>> GetListAsync(
         ISpecification<IdentityUserInactive> specification,
-        string sorting = nameof(IdentityUserInactive.CreationTime),
+        string? sorting = nameof(IdentityUserInactive.CreationTime),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default)

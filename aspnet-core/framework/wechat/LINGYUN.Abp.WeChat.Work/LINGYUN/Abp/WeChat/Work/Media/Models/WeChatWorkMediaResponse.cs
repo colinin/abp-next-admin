@@ -13,15 +13,15 @@ public class WeChatWorkMediaResponse : WeChatWorkResponse
     /// 普通文件(file)
     /// </remarks>
     [JsonProperty("type")]
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     /// <summary>
     /// 媒体文件上传后获取的唯一标识，3天内有效
     /// </summary>
     [JsonProperty("media_id")]
-    public string MediaId { get; set; }
+    public string MediaId { get; set; } = default!;
     /// <summary>
     /// 媒体文件上传时间戳
     /// </summary>
     [JsonProperty("created_at")]
-    public string CreatedAt { get; set; }
+    public string CreatedAt { get; set; } = default!;
 }

@@ -21,7 +21,7 @@ public class WriteBlob : BlobActivity
         Hint = "The bytes to write.",
         SupportedSyntaxes = new[] { SyntaxNames.JavaScript },
         DefaultSyntax = SyntaxNames.JavaScript)]
-    public byte[] Bytes { get; set; }
+    public byte[] Bytes { get; set; } = default!;
 
     public WriteBlob(IBlobContainer<ElsaBlobContainer> blobContainer)
         : base(blobContainer)

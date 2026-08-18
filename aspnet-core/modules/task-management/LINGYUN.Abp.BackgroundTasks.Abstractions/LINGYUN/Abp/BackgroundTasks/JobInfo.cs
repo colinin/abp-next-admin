@@ -8,7 +8,7 @@ public class JobInfo
     /// <summary>
     /// 任务标识
     /// </summary>
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
     /// <summary>
     /// 租户标识
     /// </summary>
@@ -16,19 +16,19 @@ public class JobInfo
     /// <summary>
     /// 任务名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 任务分组
     /// </summary>
-    public string Group { get; set; }
+    public string Group { get; set; } = default!;
     /// <summary>
     /// 任务类型
     /// </summary>
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     /// <summary>
     /// 返回参数
     /// </summary>
-    public string Result { get; set; }
+    public string? Result { get; set; }
     /// <summary>
     /// 作业来源
     /// </summary>
@@ -44,7 +44,7 @@ public class JobInfo
     /// <summary>
     /// 描述
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 创建时间
     /// </summary>
@@ -72,7 +72,7 @@ public class JobInfo
     /// <summary>
     /// Cron表达式，如果是周期性任务需要指定
     /// </summary>
-    public string Cron { get; set; }
+    public string? Cron { get; set; }
     /// <summary>
     /// 触发次数
     /// </summary>
@@ -112,7 +112,7 @@ public class JobInfo
     /// <summary>
     /// 指定运行节点
     /// </summary>
-    public string NodeName { get; set; }
+    public string? NodeName { get; set; }
     /// <summary>
     /// 计算作业可触发次数
     /// </summary>

@@ -9,9 +9,9 @@ namespace LINGYUN.Abp.SettingManagement;
 
 public class SettingDto
 {
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public List<SettingDetailsDto> Details { get; set; } = new List<SettingDetailsDto>();
 
@@ -32,7 +32,7 @@ public class SettingDto
     public SettingDetailsDto? AddDetail(
         SettingDefinition setting, 
         IStringLocalizerFactory factory, 
-        string value, 
+        string? value, 
         ValueType type,
         string keepProvider = "")
     {

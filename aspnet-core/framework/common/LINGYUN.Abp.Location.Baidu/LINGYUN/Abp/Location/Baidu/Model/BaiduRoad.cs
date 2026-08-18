@@ -5,9 +5,9 @@
 /// </summary>
 public class BaiduRoad 
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 传入的坐标点距离道路的大概距离
     /// </summary>
-    public string Distance { get; set; }
+    public string? Distance { get; set; }
 }

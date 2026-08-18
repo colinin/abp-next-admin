@@ -70,5 +70,6 @@ public class WeChatWorkCreateCustomerStrategyRequest : WeChatWorkRequest
         StrategyName = strategyName;
         AdminList = adminList;
         Privilege = privilege ?? CustomerStrategyPrivilege.Default();
+        Range = range ?? [];
     }
 }

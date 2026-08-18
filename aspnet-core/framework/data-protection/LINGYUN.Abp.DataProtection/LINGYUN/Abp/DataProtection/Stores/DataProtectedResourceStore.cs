@@ -12,7 +12,7 @@ public class DataProtectedResourceStore : IDataProtectedResourceStore, ITransien
         _cache = cache;
     }
 
-    public virtual DataAccessResource Get(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation)
+    public virtual DataAccessResource? Get(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation)
     {
         var cacheItem = _cache.GetCache(subjectName, subjectId, entityTypeFullName, operation);
         if (cacheItem == null)
@@ -30,7 +30,7 @@ public class DataProtectedResourceStore : IDataProtectedResourceStore, ITransien
         };
     }
 
-    public async virtual Task<DataAccessResource> GetAsync(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation)
+    public async virtual Task<DataAccessResource?> GetAsync(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation)
     {
         var cacheItem = await _cache.GetCacheAsync(subjectName, subjectId, entityTypeFullName, operation);
         if (cacheItem == null)

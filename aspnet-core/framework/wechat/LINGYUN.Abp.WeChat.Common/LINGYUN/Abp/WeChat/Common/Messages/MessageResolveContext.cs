@@ -8,7 +8,7 @@ public class MessageResolveContext : IMessageResolveContext
     public string Origin { get; }
     public XDocument MessageData { get; }
     public bool Handled { get; set; }
-    public WeChatMessage Message { get; set; }
+    public WeChatMessage? Message { get; set; }
 
     public bool HasResolvedMessage()
     {

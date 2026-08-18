@@ -20,7 +20,7 @@ public class JavaScriptTypeConvert : IJavaScriptTypeConvert, ISingletonDependenc
         var availableComparator = new List<DataAccessFilterOperate>();
         if (propertyType.IsNullableType())
         {
-            propertyType = propertyType.GetGenericArguments().FirstOrDefault();
+            propertyType = propertyType.GetGenericArguments().First();
         }
 
         if (typeof(Enum).IsAssignableFrom(propertyType))

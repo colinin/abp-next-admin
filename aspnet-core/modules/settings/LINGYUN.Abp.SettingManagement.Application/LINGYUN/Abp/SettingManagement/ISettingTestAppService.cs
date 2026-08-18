@@ -12,5 +12,5 @@ public class SendTestEmailInput
 {
     [Required]
     [EmailAddress]
-    public string EmailAddress { get; set; }
+    public string EmailAddress { get; set; } = default!;
 }

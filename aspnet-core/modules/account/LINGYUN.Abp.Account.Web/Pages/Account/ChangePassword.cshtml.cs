@@ -29,38 +29,38 @@ public class ChangePasswordInputModel
     [Display(Name = "DisplayName:CurrentPassword")]
     [DataType(DataType.Password)]
     [DisableAuditing]
-    public string CurrentPassword { get; set; }
+    public string CurrentPassword { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
     [Display(Name = "DisplayName:NewPassword")]
     [DataType(DataType.Password)]
     [DisableAuditing]
-    public string NewPassword { get; set; }
+    public string NewPassword { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
     [Display(Name = "DisplayName:NewPasswordConfirm")]
     [DataType(DataType.Password)]
     [DisableAuditing]
-    public string NewPasswordConfirm { get; set; }
+    public string NewPasswordConfirm { get; set; } = default!;
 }
 
 public class ChangePasswordModel : AccountPageModel
 {
     [BindProperty]
-    public UserInfoModel UserInfo { get; set; }
+    public UserInfoModel? UserInfo { get; set; }
 
     [BindProperty]
-    public ChangePasswordInputModel Input { get; set; }
+    public ChangePasswordInputModel Input { get; set; } = default!;
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; }
+    public string ReturnUrl { get; set; } = default!;
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrlHash { get; set; }
+    public string? ReturnUrlHash { get; set; }
 
     [BindProperty(SupportsGet = true)]
     public bool RememberMe { get; set; }
@@ -150,7 +150,7 @@ public class ChangePasswordModel : AccountPageModel
         return RedirectToPage("/Login", new { ReturnUrl, ReturnUrlHash });
     }
 
-    protected async virtual Task<UserInfoModel> GetCurrentUser()
+    protected async virtual Task<UserInfoModel?> GetCurrentUser()
     {
         var result = await HttpContext.AuthenticateAsync(AbpAccountAuthenticationTypes.ShouldChangePassword);
 
@@ -160,7 +160,7 @@ public class ChangePasswordModel : AccountPageModel
             return null;
         }
 
-        var tenantId = result.Principal.FindTenantId();
+        var tenantId = result?.Principal?.FindTenantId();
         using (CurrentTenant.Change(tenantId, null))
         {
             var identityUser = await UserManager.FindByIdAsync(userId.Value.ToString());

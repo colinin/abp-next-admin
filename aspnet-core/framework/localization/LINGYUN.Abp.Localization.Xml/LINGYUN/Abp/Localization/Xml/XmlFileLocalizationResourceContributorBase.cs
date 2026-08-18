@@ -14,8 +14,8 @@ public abstract class XmlFileLocalizationResourceContributorBase : ILocalization
 {
     private readonly string _filePath;
 
-    private IFileProvider _fileProvider;
-    private Dictionary<string, ILocalizationDictionary> _dictionaries;
+    private IFileProvider _fileProvider = default!;
+    private Dictionary<string, ILocalizationDictionary>? _dictionaries;
     private bool _subscribedForChanges;
     private readonly object _syncObj = new object();
 
@@ -33,7 +33,7 @@ public abstract class XmlFileLocalizationResourceContributorBase : ILocalization
         Check.NotNull(_fileProvider, nameof(_fileProvider));
     }
 
-    public virtual LocalizedString GetOrNull(string cultureName, string name)
+    public virtual LocalizedString? GetOrNull(string cultureName, string name)
     {
         return GetDictionaries().GetOrDefault(cultureName)?.GetOrNull(name);
     }

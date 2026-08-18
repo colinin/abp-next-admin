@@ -100,7 +100,7 @@ public class NotificationDataSeeder : ITransientDependency
                 new NotificationTemplate(
                     TenantNotificationNames.NewTenantRegistered,
                     formUser: adminEmailAddress,
-                    data: new Dictionary<string, object>
+                    data: new Dictionary<string, object?>
                     {
                         { "name", adminUserName },
                         { "email", adminEmailAddress },

@@ -47,7 +47,7 @@ public class WebhookNotificationPublishProvider : NotificationPublishProvider
             else
             {
                 await WebhookPublisher.PublishAsync(
-                    webhookNotificationContext.Webhook.WebhookName,
+                    webhookNotificationContext.Webhook!.WebhookName,
                     webhookNotificationContext.Webhook.Data,
                     context.Notification.TenantId,
                     webhookNotificationContext.Webhook.SendExactSameData,

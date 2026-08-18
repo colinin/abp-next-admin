@@ -7,7 +7,7 @@ public class BlobUploadFileValidateCacheItem
     public string[] AllowedExtensions { get; set; }
     public BlobUploadFileValidateCacheItem()
     {
-
+        AllowedExtensions = new string[0];
     }
 
     public BlobUploadFileValidateCacheItem(

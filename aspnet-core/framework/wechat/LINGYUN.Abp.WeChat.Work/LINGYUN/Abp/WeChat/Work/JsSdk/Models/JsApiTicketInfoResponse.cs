@@ -10,7 +10,7 @@ public class JsApiTicketInfoResponse : WeChatWorkResponse
     /// </summary>
     [JsonProperty("ticket")]
     [JsonPropertyName("ticket")]
-    public string Ticket { get; set; }
+    public string Ticket { get; set; } = default!;
     /// <summary>
     /// 凭证的有效时间（秒）
     /// </summary>

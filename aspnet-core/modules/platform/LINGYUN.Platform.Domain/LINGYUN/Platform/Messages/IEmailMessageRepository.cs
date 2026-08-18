@@ -14,7 +14,7 @@ public interface IEmailMessageRepository : IBasicRepository<EmailMessage, Guid>
 
     Task<List<EmailMessage>> GetListAsync(
         ISpecification<EmailMessage> specification,
-        string sorting = $"{nameof(Message.CreationTime)} DESC",
+        string? sorting = $"{nameof(Message.CreationTime)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);

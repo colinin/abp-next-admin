@@ -16,8 +16,7 @@ public static class GlobalModuleFeaturesDictionaryEditionsExtensions
                 .GetOrAdd(
                     GlobalEditionsFeatures.ModuleName,
                     _ => new GlobalEditionsFeatures(modules.FeatureManager)
-                )
-            as GlobalEditionsFeatures;
+                ).As<GlobalEditionsFeatures>();
     }
 
     public static GlobalModuleFeaturesDictionary Editions(

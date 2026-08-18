@@ -9,5 +9,5 @@ public class UserFavoriteMenuCreateDto : UserFavoriteMenuCreateOrUpdateDto
     [Required]
     [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
 
-    public string Framework { get; set; }
+    public string Framework { get; set; } = default!;
 }

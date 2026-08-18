@@ -4,5 +4,5 @@ namespace LINGYUN.Platform.Portal;
 
 public class EnterpriseUpdateDto : EnterpriseCreateOrUpdateDto, IHasConcurrencyStamp
 {
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

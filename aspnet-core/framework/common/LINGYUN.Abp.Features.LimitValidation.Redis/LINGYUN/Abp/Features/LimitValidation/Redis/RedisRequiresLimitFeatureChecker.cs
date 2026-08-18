@@ -22,10 +22,10 @@ public class RedisRequiresLimitFeatureChecker : IRequiresLimitFeatureChecker
 
     public ILogger<RedisRequiresLimitFeatureChecker> Logger { protected get; set; }
 
-    private volatile ConnectionMultiplexer _connection;
-    private volatile ConfigurationOptions _redisConfig;
-    private IDatabaseAsync _redis;
-    private IServer _server;
+    private volatile ConnectionMultiplexer? _connection;
+    private volatile ConfigurationOptions? _redisConfig;
+    private IDatabaseAsync _redis = default!;
+    private IServer _server = default!;
 
     private readonly IClock _clock;
     private readonly IVirtualFileProvider _virtualFileProvider;

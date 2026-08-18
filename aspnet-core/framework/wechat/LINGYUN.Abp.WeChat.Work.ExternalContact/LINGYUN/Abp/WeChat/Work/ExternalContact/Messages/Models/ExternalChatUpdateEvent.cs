@@ -15,5 +15,5 @@ public abstract class ExternalChatUpdateEvent : ExternalChatChangeEvent
     /// change_notice : 群公告变更
     /// </summary>
     [XmlElement("UpdateDetail")]
-    public string UpdateDetail { get; set; }
+    public string UpdateDetail { get; set; } = default!;
 }

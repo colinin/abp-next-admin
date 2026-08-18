@@ -12,7 +12,7 @@ public class WeChatOfficialFeatureDefinitionProvider : FeatureDefinitionProvider
     {
         var group = context.GetGroupOrNull(WeChatFeatures.GroupName);
 
-        var officialEnableFeature = group.AddFeature(
+        var officialEnableFeature = group?.AddFeature(
             name: WeChatOfficialFeatures.Enable,
             defaultValue: true.ToString(),
             displayName: L("Features:WeChat.Official.Enable"),

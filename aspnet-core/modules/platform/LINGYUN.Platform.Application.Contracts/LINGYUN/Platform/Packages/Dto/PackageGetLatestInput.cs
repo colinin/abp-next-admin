@@ -7,8 +7,8 @@ public class PackageGetLatestInput
 {
     [Required]
     [DynamicMaxLength(typeof(PackageConsts), nameof(PackageConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [DynamicMaxLength(typeof(PackageConsts), nameof(PackageConsts.MaxVersionLength))]
-    public string Version { get; set; }
+    public string? Version { get; set; }
 }

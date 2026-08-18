@@ -8,7 +8,7 @@ public class PushPlusToken
     /// 访问令牌，后续请求需加到header中
     /// </summary>
     [JsonProperty("accessKey")]
-    public string AccessKey { get; set; }
+    public string AccessKey { get; set; } = default!;
     /// <summary>
     /// 过期时间，过期后需要重新获取
     /// </summary>

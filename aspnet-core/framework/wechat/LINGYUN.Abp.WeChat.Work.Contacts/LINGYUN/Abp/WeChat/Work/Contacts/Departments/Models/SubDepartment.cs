@@ -14,7 +14,7 @@ public class SubDepartment
     [NotNull]
     [JsonProperty("id")]
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
     /// <summary>
     /// 父部门id。根部门为1。
     /// </summary>

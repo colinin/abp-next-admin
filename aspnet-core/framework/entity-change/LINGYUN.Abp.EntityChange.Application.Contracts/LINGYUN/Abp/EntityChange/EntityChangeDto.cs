@@ -13,9 +13,9 @@ public class EntityChangeDto : ExtensibleEntityDto<Guid>
 
     public Guid? EntityTenantId { get; set; }
 
-    public string EntityId { get; set; }
+    public string EntityId { get; set; } = default!;
 
-    public string EntityTypeFullName { get; set; }
+    public string EntityTypeFullName { get; set; } = default!;
 
     public List<EntityPropertyChangeDto> PropertyChanges { get; set; }
 

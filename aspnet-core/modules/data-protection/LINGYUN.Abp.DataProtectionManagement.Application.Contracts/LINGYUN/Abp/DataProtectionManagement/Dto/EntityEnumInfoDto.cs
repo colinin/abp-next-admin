@@ -8,13 +8,13 @@ public class EntityEnumInfoDto : EntityDto<Guid>
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 显示名称
     /// </summary>
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
     /// <summary>
     /// 枚举值
     /// </summary>
-    public string Value { get; set; }
+    public string Value { get; set; } = default!;
 }

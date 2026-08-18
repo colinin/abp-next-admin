@@ -18,12 +18,12 @@ public class GdprInfo : Entity<Guid>
     /// <summary>
     /// 用于存储个人数据
     /// </summary>
-    public virtual string Data { get; protected set; }
+    public virtual string Data { get; protected set; } = default!;
 
     /// <summary>
     /// 表示收集个人数据的模块
     /// </summary>
-    public virtual string Provider { get; protected set; }
+    public virtual string Provider { get; protected set; } = default!;
 
     protected GdprInfo()
     {

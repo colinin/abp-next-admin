@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Volo.Abp.Features;
 public static class FeatureGroupDefinitionExtensions
 {
-    public static FeatureDefinition GetFeatureOrNull(
+    public static FeatureDefinition? GetFeatureOrNull(
         this FeatureGroupDefinition group,
         [NotNull] string name)
     {
@@ -13,7 +13,7 @@ public static class FeatureGroupDefinitionExtensions
         return GetFeatureOrNullRecursively(group.Features, name);
     }
 
-    private static FeatureDefinition GetFeatureOrNullRecursively(
+    private static FeatureDefinition? GetFeatureOrNullRecursively(
         IReadOnlyList<FeatureDefinition> features,
         string name)
     {

@@ -9,7 +9,7 @@ public abstract class MessageModel : WeChatRequest
     /// </summary>
     [JsonProperty("msgtype")]
     [JsonPropertyName("msgtype")]
-    public string MsgType { get; }
+    public string MsgType { get; } = default!;
     protected MessageModel(string msgType)
     {
         MsgType = msgType;

@@ -6,5 +6,5 @@ public class WorkspaceDefinitionRecordCreateDto : WorkspaceDefinitionRecordCreat
 {
     [Required]
     [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

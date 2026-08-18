@@ -8,5 +8,5 @@ namespace LINGYUN.Abp.Saas.Tenants;
 public class TenantDeletedEto : TenantEto
 {
     public RecycleStrategy Strategy { get; set; }
-    public string DefaultConnectionString { get; set; }
+    public string? DefaultConnectionString { get; set; }
 }

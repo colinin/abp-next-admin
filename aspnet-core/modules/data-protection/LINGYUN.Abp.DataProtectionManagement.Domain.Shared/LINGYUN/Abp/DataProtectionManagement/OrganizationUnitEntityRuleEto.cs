@@ -8,5 +8,5 @@ namespace LINGYUN.Abp.DataProtectionManagement;
 public class OrganizationUnitEntityRuleEto : EntityRuleBaseEto
 {
     public Guid OrgId { get; set; }
-    public string OrgCode { get; set; }
+    public string OrgCode { get; set; } = default!;
 }

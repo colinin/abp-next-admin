@@ -43,14 +43,14 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
     public async virtual Task<long> GetCountAsync(
         DateTime? startTime = null,
         DateTime? endTime = null,
-        string httpMethod = null,
-        string url = null,
+        string? httpMethod = null,
+        string? url = null,
         Guid? userId = null,
-        string userName = null,
-        string applicationName = null,
-        string correlationId = null,
-        string clientId = null,
-        string clientIpAddress = null,
+        string? userName = null,
+        string? applicationName = null,
+        string? correlationId = null,
+        string? clientId = null,
+        string? clientIpAddress = null,
         int? maxExecutionDuration = null,
         int? minExecutionDuration = null,
         bool? hasException = null,
@@ -87,19 +87,19 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
     }
 
     public async virtual Task<List<AuditLog>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = 50,
         int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
-        string httpMethod = null,
-        string url = null,
+        string? httpMethod = null,
+        string? url = null,
         Guid? userId = null,
-        string userName = null,
-        string applicationName = null,
-        string correlationId = null,
-        string clientId = null,
-        string clientIpAddress = null,
+        string? userName = null,
+        string? applicationName = null,
+        string? correlationId = null,
+        string? clientId = null,
+        string? clientIpAddress = null,
         int? maxExecutionDuration = null,
         int? minExecutionDuration = null,
         bool? hasException = null,
@@ -159,7 +159,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         return searchResponse.Documents.ToList();
     }
 
-    public async virtual Task<AuditLog> GetAsync(
+    public async virtual Task<AuditLog?> GetAsync(
         Guid id,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
@@ -212,14 +212,14 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
     protected virtual List<Query> BuildQueryDescriptor(
         DateTime? startTime = null,
         DateTime? endTime = null,
-        string httpMethod = null,
-        string url = null,
+        string? httpMethod = null,
+        string? url = null,
         Guid? userId = null,
-        string userName = null,
-        string applicationName = null,
-        string correlationId = null,
-        string clientId = null,
-        string clientIpAddress = null,
+        string? userName = null,
+        string? applicationName = null,
+        string? correlationId = null,
+        string? clientId = null,
+        string? clientIpAddress = null,
         int? maxExecutionDuration = null,
         int? minExecutionDuration = null,
         bool? hasException = null,
@@ -346,7 +346,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
     };
     protected virtual string GetField(string field)
     {
-        if (_fieldMaps.TryGetValue(field, out string mapField))
+        if (_fieldMaps.TryGetValue(field, out var mapField))
         {
             return _elasticsearchOptions.FieldCamelCase ? mapField.ToCamelCase() : mapField.ToPascalCase();
         }

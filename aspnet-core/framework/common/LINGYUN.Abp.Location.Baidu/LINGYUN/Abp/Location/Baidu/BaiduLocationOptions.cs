@@ -7,11 +7,11 @@ public class BaiduLocationOptions
     /// <summary>
     /// 用户申请注册的key
     /// </summary>
-    public string AccessKey { get; set; }
+    public string AccessKey { get; set; } = default!;
     /// <summary>
     /// 用户申请注册的AccessSecret
     /// </summary>
-    public string AccessSecret { get; set; }
+    public string AccessSecret { get; set; } = default!;
     /// <summary>
     /// 坐标的类型，目前支持的坐标类型包括：
     /// bd09ll（百度经纬度坐标）

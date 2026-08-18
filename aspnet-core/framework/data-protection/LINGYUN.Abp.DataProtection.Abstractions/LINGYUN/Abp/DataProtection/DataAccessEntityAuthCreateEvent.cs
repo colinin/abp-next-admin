@@ -9,11 +9,11 @@ namespace LINGYUN.Abp.DataProtection;
 public class DataAccessEntityAuthCreateEvent : IMultiTenant
 {
     public Guid? TenantId { get; set; }
-    public string[] EntityKeys { get; set; }
-    public string EntityKeyType { get; set; }
-    public string EntityType { get; set; }
-    public string[] Roles { get; set; }
-    public string[] OrganizationUnits { get; set; }
+    public string[] EntityKeys { get; set; } = default!;
+    public string EntityKeyType { get; set; } = default!;
+    public string EntityType { get; set; } = default!;
+    public string[]? Roles { get; set; }
+    public string[]? OrganizationUnits { get; set; }
     public DataAccessEntityAuthCreateEvent()
     {
 
@@ -22,8 +22,8 @@ public class DataAccessEntityAuthCreateEvent : IMultiTenant
         string entityType,
         string entityKeyType,
         string[] entityKeys,
-        string[] roles = null, 
-        string[] organizationUnits = null,
+        string[]? roles = null, 
+        string[]? organizationUnits = null,
         Guid? tenantId = null)
     {
         EntityType = entityType;

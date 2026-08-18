@@ -97,12 +97,12 @@ public static class NotificationDefinitionExtensions
     /// 获取标题跳转页面
     /// </summary>
     /// <param name="notification"></param>
-    public static string GetUrlOrNull(
+    public static string? GetUrlOrNull(
         this NotificationDefinition notification)
     {
         if (notification.Properties.TryGetValue(UrlKey, out var urlDefine))
         {
-            return urlDefine.ToString();
+            return urlDefine?.ToString();
         }
 
         return null;

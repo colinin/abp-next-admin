@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.Notifications;
 
 public interface IDynamicNotificationDefinitionStoreCache
 {
-    string CacheStamp { get; set; }
+    string? CacheStamp { get; set; }
 
     SemaphoreSlim SyncSemaphore { get; }
 
@@ -17,11 +17,11 @@ public interface IDynamicNotificationDefinitionStoreCache
         List<NotificationDefinitionGroupRecord> webhookGroupRecords,
         List<NotificationDefinitionRecord> webhookRecords);
 
-    NotificationDefinition GetNotificationOrNull(string name);
+    NotificationDefinition? GetNotificationOrNull(string name);
 
     IReadOnlyList<NotificationDefinition> GetNotifications();
 
-    NotificationGroupDefinition GetNotificationGroupOrNull(string name);
+    NotificationGroupDefinition? GetNotificationGroupOrNull(string name);
 
     IReadOnlyList<NotificationGroupDefinition> GetGroups();
 }

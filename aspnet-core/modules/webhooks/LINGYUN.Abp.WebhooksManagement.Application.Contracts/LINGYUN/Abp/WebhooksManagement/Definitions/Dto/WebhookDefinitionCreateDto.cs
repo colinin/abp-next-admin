@@ -8,9 +8,9 @@ public class WebhookDefinitionCreateDto : WebhookDefinitionCreateOrUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(WebhookDefinitionRecordConsts), nameof(WebhookGroupDefinitionRecordConsts.MaxNameLength))]
-    public string GroupName { get; set; }
+    public string GroupName { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(WebhookDefinitionRecordConsts), nameof(WebhookDefinitionRecordConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

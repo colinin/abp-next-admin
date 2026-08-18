@@ -5,5 +5,5 @@ namespace LINGYUN.Abp.MultiTenancy.Editions;
 
 public interface IEditionStore
 {
-    Task<EditionInfo> FindByTenantAsync(Guid tenantId);
+    Task<EditionInfo?> FindByTenantAsync(Guid tenantId);
 }

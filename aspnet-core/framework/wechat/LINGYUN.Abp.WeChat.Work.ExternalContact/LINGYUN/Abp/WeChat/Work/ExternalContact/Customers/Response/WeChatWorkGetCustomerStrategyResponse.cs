@@ -18,5 +18,5 @@ public class WeChatWorkGetCustomerStrategyResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("strategy")]
     [JsonPropertyName("strategy")]
-    public CustomerStrategyInfo Strategy { get; set; }
+    public CustomerStrategyInfo Strategy { get; set; } = default!;
 }

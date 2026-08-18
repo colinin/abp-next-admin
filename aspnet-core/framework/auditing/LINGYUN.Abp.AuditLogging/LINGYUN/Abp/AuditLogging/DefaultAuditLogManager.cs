@@ -76,7 +76,7 @@ public class DefaultAuditLogManager : IAuditLogManager, ISingletonDependency
         return Task.FromResult("");
     }
 
-    public virtual Task<AuditLog> GetAsync(
+    public virtual Task<AuditLog?> GetAsync(
         Guid id, 
         bool includeDetails = false, 
         CancellationToken cancellationToken = default)
@@ -84,7 +84,7 @@ public class DefaultAuditLogManager : IAuditLogManager, ISingletonDependency
         Logger.LogDebug("No audit log manager is available!");
 
         AuditLog? auditLog = null;
-        return Task.FromResult(auditLog!);
+        return Task.FromResult(auditLog);
     }
 
     public virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)

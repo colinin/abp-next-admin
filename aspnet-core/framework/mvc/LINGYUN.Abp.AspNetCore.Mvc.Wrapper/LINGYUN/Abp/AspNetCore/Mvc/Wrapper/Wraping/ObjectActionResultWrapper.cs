@@ -11,7 +11,7 @@ public class ObjectActionResultWrapper : IActionResultWrapper
 {
     public void Wrap(FilterContext context)
     {
-        ObjectResult objectResult = null;
+        ObjectResult? objectResult = null;
 
         switch (context)
         {
@@ -41,7 +41,7 @@ public class ObjectActionResultWrapper : IActionResultWrapper
             }
             else
             {
-                objectResult.Value = new WrapResult(options.CodeWithSuccess, objectResult.Value);
+                objectResult.Value = new WrapResult<object?>(options.CodeWithSuccess, objectResult.Value);
             }
 
             objectResult.DeclaredType = typeof(WrapResult);

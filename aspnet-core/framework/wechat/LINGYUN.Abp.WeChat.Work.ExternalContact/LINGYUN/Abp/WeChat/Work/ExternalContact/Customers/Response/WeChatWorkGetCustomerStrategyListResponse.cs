@@ -18,7 +18,7 @@ public class WeChatWorkGetCustomerStrategyListResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("strategy")]
     [JsonPropertyName("strategy")]
-    public CustomerStrategy[] Strategy { get; set; }
+    public CustomerStrategy[] Strategy { get; set; } = default!;
     /// <summary>
     /// 分页游标，用于查询下一个分页的数据，无更多数据时不返回
     /// </summary>

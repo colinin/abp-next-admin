@@ -8,17 +8,17 @@ public class PushPlusResponse<T>
     /// 状态码
     /// </summary>
     [JsonProperty("code")]
-    public string Code { get; set; }
+    public string Code { get; set; } = default!;
     /// <summary>
     /// 错误消息
     /// </summary>
     [JsonProperty("msg")]
-    public string Message { get; set; }
+    public string Message { get; set; } = default!;
     /// <summary>
     /// 返回数据
     /// </summary>
     [JsonProperty("data")]
-    public T Data { get; set; }
+    public T? Data { get; set; }
     /// <summary>
     /// 是否调用成功
     /// </summary>
@@ -45,7 +45,7 @@ public class PushPlusResponse<T>
     {
         ThrowOfFailed();
 
-        return Data;
+        return Data!;
     }
 
     public void ThrowOfFailed()

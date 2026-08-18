@@ -5,7 +5,7 @@ namespace LINGYUN.Platform.Portal;
 
 public class EnterpriseGetListInput : PagedAndSortedResultRequestDto
 {
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
 
     public DateTime? BeginRegistrationDate { get; set; }
 

@@ -15,7 +15,7 @@ public interface IWebhookSendRecordRepository : IRepository<WebhookSendRecord, G
 
     Task<List<WebhookSendRecord>> GetListAsync(
         ISpecification<WebhookSendRecord> specification, 
-        string sorting = $"{nameof(WebhookSendRecord.CreationTime)} DESC",
+        string? sorting = $"{nameof(WebhookSendRecord.CreationTime)} DESC",
         int maxResultCount = 10,
         int skipCount = 10,
         bool includeDetails = false,

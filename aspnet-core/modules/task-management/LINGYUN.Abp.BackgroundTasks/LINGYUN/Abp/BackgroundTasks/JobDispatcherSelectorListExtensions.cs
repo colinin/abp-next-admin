@@ -18,7 +18,7 @@ public static class JobDispatcherSelectorListExtensions
     /// <remarks>
     /// Tips: 仅作用于适用于<see cref="IBackgroundJobManager" /> 接口的作业预配置
     /// </remarks>
-    public static void AddJob<TJob>([NotNull] this IJobDispatcherSelectorList selectors, [CanBeNull] Action<JobTypeSelector> setup = null)
+    public static void AddJob<TJob>([NotNull] this IJobDispatcherSelectorList selectors, [CanBeNull] Action<JobTypeSelector>? setup = null)
     {
         Check.NotNull(selectors, nameof(selectors));
 
@@ -52,7 +52,7 @@ public static class JobDispatcherSelectorListExtensions
     /// <remarks>
     /// Tips: 仅作用于适用于<see cref="IBackgroundWorker" /> 接口的作业预配置
     /// </remarks>
-    public static void AddWorker<TWorker>([NotNull] this IJobDispatcherSelectorList selectors, [CanBeNull] Action<JobTypeSelector> setup = null)
+    public static void AddWorker<TWorker>([NotNull] this IJobDispatcherSelectorList selectors, [CanBeNull] Action<JobTypeSelector>? setup = null)
         where TWorker : IBackgroundWorker
     {
         Check.NotNull(selectors, nameof(selectors));

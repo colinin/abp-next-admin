@@ -38,7 +38,7 @@ public class SmsTokenExtensionGrant : ITokenExtensionGrant
         {
             logger.LogInformation("Invalid grant type: phone number or token code not found");
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = localizer["InvalidGrant:PhoneOrTokenCodeNotFound"]
@@ -47,19 +47,19 @@ public class SmsTokenExtensionGrant : ITokenExtensionGrant
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        var phoneToken = phoneTokenParam.Value.ToString();
-        var phoneNumber = phoneNumberParam.Value.ToString();
+        var phoneToken = phoneTokenParam.Value.ToString()!;
+        var phoneNumber = phoneNumberParam.Value.ToString()!;
 
         await identityOptions.SetAsync();
 
         var userRepo = GetRequiredService<IIdentityUserRepository>(context);
 
-        var currentUser = await userRepo.FindByPhoneNumberAsync(phoneNumber);
+        var currentUser = await userRepo.FindByPhoneNumberAsync(phoneNumber!);
         if (currentUser == null)
         {
             logger.LogInformation("Invalid grant type: phone number not register");
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = localizer["InvalidGrant:PhoneNumberNotRegister"]
@@ -75,7 +75,7 @@ public class SmsTokenExtensionGrant : ITokenExtensionGrant
 
             var identityLocalizer = GetRequiredService<IStringLocalizer<IdentityResource>>(context);
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = identityLocalizer["Volo.Abp.Identity:UserLockedOut"]
@@ -107,7 +107,7 @@ public class SmsTokenExtensionGrant : ITokenExtensionGrant
 
             await SaveSecurityLogAsync(context, currentUser, SmsTokenExtensionGrantConsts.SecurityCodeFailed);
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = errorDescription
@@ -119,7 +119,7 @@ public class SmsTokenExtensionGrant : ITokenExtensionGrant
         return await SetSuccessResultAsync(context, currentUser, logger);
     }
 
-    protected virtual T GetRequiredService<T>(ExtensionGrantContext context)
+    protected virtual T GetRequiredService<T>(ExtensionGrantContext context) where T: notnull
     {
         return context.HttpContext.RequestServices.GetRequiredService<T>();
     }
@@ -167,7 +167,7 @@ public class SmsTokenExtensionGrant : ITokenExtensionGrant
         await identitySecurityLogManager.SaveAsync(logContext);
     }
 
-    protected virtual Task<string> FindClientIdAsync(ExtensionGrantContext context)
+    protected virtual Task<string?> FindClientIdAsync(ExtensionGrantContext context)
     {
         return Task.FromResult(context.Request.ClientId);
     }

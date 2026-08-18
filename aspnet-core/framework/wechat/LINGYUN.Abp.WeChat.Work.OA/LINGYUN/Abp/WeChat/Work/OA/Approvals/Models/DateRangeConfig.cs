@@ -14,7 +14,7 @@ public class DateRangeConfig
     [NotNull]
     [JsonProperty("type")]
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     /// <summary>
     /// 0-自然日；1-工作日
     /// </summary>

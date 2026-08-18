@@ -51,7 +51,7 @@ public class WebhookDefinitionAppService : WebhooksManagementAppServiceBase, IWe
 
         await _webhookDefinitionRecordRepository.InsertAsync(webhookDefinitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(webhookDefinitionRecord);
     }
@@ -66,7 +66,7 @@ public class WebhookDefinitionAppService : WebhooksManagementAppServiceBase, IWe
         CheckIsStaticDefinitionRecord(definitionRecord);
         await _webhookDefinitionRecordRepository.DeleteAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<WebhookDefinitionDto> GetAsync(string name)
@@ -111,12 +111,12 @@ public class WebhookDefinitionAppService : WebhooksManagementAppServiceBase, IWe
         UpdateByInput(definitionRecord, input);
         definitionRecord = await _webhookDefinitionRecordRepository.UpdateAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
     }
 
-    protected async virtual Task<WebhookDefinitionRecord> FindByNameAsync(string name)
+    protected async virtual Task<WebhookDefinitionRecord?> FindByNameAsync(string name)
     {
         return await _webhookDefinitionRecordRepository.FindByNameAsync(name);
     }
@@ -148,7 +148,7 @@ public class WebhookDefinitionAppService : WebhooksManagementAppServiceBase, IWe
             record.DisplayName = input.DisplayName;
         }
 
-        string requiredFeatures = null;
+        string? requiredFeatures = null;
         if (!input.RequiredFeatures.IsNullOrEmpty())
         {
             requiredFeatures = input.RequiredFeatures.JoinAsString(",");

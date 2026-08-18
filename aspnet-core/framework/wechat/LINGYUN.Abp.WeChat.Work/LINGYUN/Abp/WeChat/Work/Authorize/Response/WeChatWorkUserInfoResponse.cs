@@ -12,11 +12,11 @@ public class WeChatWorkUserInfoResponse : WeChatWorkResponse
     /// </summary>
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
     /// <summary>
     /// 成员票据，最大为512字节，有效期为1800s
     /// </summary>
     [JsonProperty("user_ticket")]
     [JsonPropertyName("user_ticket")]
-    public string UserTicket { get; set; }
+    public string UserTicket { get; set; } = default!;
 }

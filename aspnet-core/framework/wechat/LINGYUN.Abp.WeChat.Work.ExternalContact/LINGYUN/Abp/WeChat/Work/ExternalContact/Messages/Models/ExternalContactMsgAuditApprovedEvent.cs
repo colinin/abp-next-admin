@@ -14,7 +14,7 @@ public class ExternalContactMsgAuditApprovedEvent : ExternalContactChangeEvent
     /// 欢迎语code，可用于发送欢迎语
     /// </summary>
     [XmlElement("WelcomeCode")]
-    public string WelcomeCode { get; set; }
+    public string WelcomeCode { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {

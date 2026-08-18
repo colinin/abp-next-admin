@@ -7,11 +7,11 @@ namespace LINGYUN.Abp.DataProtection;
 public abstract class DataAuthBase<TEntity, TKey> : Entity<long>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual TKey EntityId { get; protected set; }
-    public virtual TEntity Entity { get; protected set; }
-    public virtual string EntityType { get; protected set; }
-    public virtual string Role { get; protected set; }
-    public virtual string OrganizationUnit { get; protected set; }
+    public virtual TKey EntityId { get; protected set; } = default!;
+    public virtual TEntity Entity { get; protected set; } = default!;
+    public virtual string EntityType { get; protected set; } = default!;
+    public virtual string? Role { get; protected set; }
+    public virtual string? OrganizationUnit { get; protected set; }
     protected DataAuthBase()
     {
 
@@ -28,6 +28,6 @@ public abstract class DataAuthBase<TEntity, TKey> : Entity<long>, IMultiTenant
         Role = role;
         OrganizationUnit = organizationUnit;
 
-        EntityType = typeof(TEntity).FullName;
+        EntityType = typeof(TEntity).FullName!;
     }
 }

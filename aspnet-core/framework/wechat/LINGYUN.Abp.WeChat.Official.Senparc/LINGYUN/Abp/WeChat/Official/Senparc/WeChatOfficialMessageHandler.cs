@@ -15,8 +15,8 @@ public class WeChatOfficialMessageHandler : MessageHandler<WeChatOfficialMessage
         PostModel postModel, 
         int maxRecordCount = 0, 
         bool onlyAllowEncryptMessage = false, 
-        DeveloperInfo developerInfo = null,
-        IServiceProvider serviceProvider = null) 
+        DeveloperInfo? developerInfo = null,
+        IServiceProvider? serviceProvider = null) 
         : base(inputStream, postModel, maxRecordCount, onlyAllowEncryptMessage, developerInfo, serviceProvider)
     {
     }

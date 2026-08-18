@@ -30,14 +30,14 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
     public async virtual Task<IdentitySession> CreateAsync(
         string sessionId,
         string device,
-        string deviceInfo,
+        string? deviceInfo,
         Guid userId,
-        string clientId,
-        string ipAddresses,
+        string? clientId,
+        string? ipAddresses,
         DateTime signedIn,
         DateTime? lastAccessed = null,
-        string ipRegion = null,
-        string userName = null,
+        string? ipRegion = null,
+        string? userName = null,
         Guid? tenantId = null,
         CancellationToken cancellationToken = default)
     {
@@ -85,7 +85,7 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
         return await IdentitySessionRepository.GetAsync(id, cancellationToken: cancellationToken);
     }
 
-    public async virtual Task<IdentitySession> FindAsync(
+    public async virtual Task<IdentitySession?> FindAsync(
         Guid id,
         CancellationToken cancellationToken = default)
     {
@@ -99,14 +99,14 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
         return await IdentitySessionRepository.GetAsync(sessionId, cancellationToken: cancellationToken);
     }
 
-    public async virtual Task<IdentitySession> FindAsync(
+    public async virtual Task<IdentitySession?> FindAsync(
         string sessionId,
         CancellationToken cancellationToken = default)
     {
         return await IdentitySessionRepository.FindAsync(sessionId, cancellationToken: cancellationToken);
     }
 
-    public async virtual Task<IdentitySession> FindLastAsync(
+    public async virtual Task<IdentitySession?> FindLastAsync(
         Guid userId,
         string device,
         CancellationToken cancellationToken = default)
@@ -161,7 +161,7 @@ public class IdentitySessionStore : IIdentitySessionStore, ITransientDependency
 
     public async virtual Task RevokeWithAsync(
         Guid userId,
-        string device = null,
+        string? device = null,
         Guid? exceptSessionId = null,
         int maxCount = 0,
         CancellationToken cancellationToken = default)

@@ -10,5 +10,5 @@ public class EntityChangeGetListInput : PagedAndSortedResultRequestDto
     public DateTime? StartTime { get; set; }
     public DateTime? EndTime { get; set; }
     public EntityChangeType? ChangeType { get; set; }
-    public string EntityId { get; set; }
+    public string? EntityId { get; set; }
 }

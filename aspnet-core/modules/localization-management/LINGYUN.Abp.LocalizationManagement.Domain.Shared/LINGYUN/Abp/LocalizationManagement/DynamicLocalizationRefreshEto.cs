@@ -2,7 +2,7 @@
 
 public class DynamicLanguageRefreshEventData
 {
-    public string CultureName { get; set; }
+    public string CultureName { get; set; } = default!;
     public DynamicLanguageRefreshEventData()
     {
 
@@ -16,7 +16,7 @@ public class DynamicLanguageRefreshEventData
 
 public class DynamicResourceRefreshEventData
 {
-    public string ResourceName { get; set; }
+    public string ResourceName { get; set; } = default!;
     public DynamicResourceRefreshEventData()
     {
 
@@ -30,8 +30,8 @@ public class DynamicResourceRefreshEventData
 
 public class DynamicTextRefreshEventData
 {
-    public string ResourceName { get; set; }
-    public string CultureName { get; set; }
+    public string ResourceName { get; set; } = default!;
+    public string CultureName { get; set; } = default!;
     public DynamicTextRefreshEventData()
     {
 

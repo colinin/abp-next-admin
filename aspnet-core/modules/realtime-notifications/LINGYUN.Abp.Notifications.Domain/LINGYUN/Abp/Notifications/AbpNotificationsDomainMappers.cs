@@ -25,7 +25,7 @@ public partial class NotificationToNotificationInfoMapper : MapperBase<Notificat
         if (source != null)
         {
             var dataType = Type.GetType(source.NotificationTypeName);
-            var data = Activator.CreateInstance(dataType);
+            var data = Activator.CreateInstance(dataType!);
             if (data is NotificationData notificationData)
             {
                 notificationData.ExtraProperties = source.ExtraProperties;
@@ -57,7 +57,7 @@ public partial class UserNotificationInfoToNotificationInfoMapper : MapperBase<U
         if (source != null)
         {
             var dataType = Type.GetType(source.NotificationTypeName);
-            var data = Activator.CreateInstance(dataType);
+            var data = Activator.CreateInstance(dataType!);
             if (data is NotificationData notificationData)
             {
                 notificationData.ExtraProperties = source.ExtraProperties;

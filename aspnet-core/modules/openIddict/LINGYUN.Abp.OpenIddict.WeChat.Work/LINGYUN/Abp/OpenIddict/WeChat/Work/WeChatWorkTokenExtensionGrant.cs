@@ -49,7 +49,7 @@ public class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
         {
             logger.LogWarning("Invalid grant type: code not found");
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = localizer["InvalidGrant:AgentIdOrCodeNotFound"]
@@ -78,7 +78,7 @@ public class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
                 {
                     logger.LogWarning("Invalid grant type: wechat work user {userId} not register", userInfo.UserId);
 
-                    var properties = new AuthenticationProperties(new Dictionary<string, string>
+                    var properties = new AuthenticationProperties(new Dictionary<string, string?>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                         [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = localizer["InvalidGrant:UserIdNotRegister"]
@@ -107,7 +107,7 @@ public class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
 
                 logger.LogInformation("Authentication failed for username: {username}, reason: locked out", currentUser.UserName);
 
-                var properties = new AuthenticationProperties(new Dictionary<string, string>
+                var properties = new AuthenticationProperties(new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = identityLocalizer["Volo.Abp.Identity:UserLockedOut"]
@@ -122,7 +122,7 @@ public class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
         }
         catch (AbpWeChatWorkException wwe)
         {
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = wwe.Code
@@ -137,7 +137,7 @@ public class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
         return Task.CompletedTask;
     }
 
-    protected virtual T GetRequiredService<T>(ExtensionGrantContext context)
+    protected virtual T GetRequiredService<T>(ExtensionGrantContext context) where T: notnull
     {
         return context.HttpContext.RequestServices.GetRequiredService<T>();
     }
@@ -190,7 +190,7 @@ public class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
         await identitySecurityLogManager.SaveAsync(logContext);
     }
 
-    protected virtual Task<string> FindClientIdAsync(ExtensionGrantContext context)
+    protected virtual Task<string?> FindClientIdAsync(ExtensionGrantContext context)
     {
         return Task.FromResult(context.Request.ClientId);
     }

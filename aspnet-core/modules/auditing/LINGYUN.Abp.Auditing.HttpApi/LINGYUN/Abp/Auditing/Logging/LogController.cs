@@ -25,7 +25,7 @@ public class LogController : AbpControllerBase, ILogAppService
 
     [HttpGet]
     [Route("{id}")]
-    public async virtual Task<LogDto> GetAsync(string id)
+    public async virtual Task<LogDto?> GetAsync(string id)
     {
         return await _service.GetAsync(id);
     }

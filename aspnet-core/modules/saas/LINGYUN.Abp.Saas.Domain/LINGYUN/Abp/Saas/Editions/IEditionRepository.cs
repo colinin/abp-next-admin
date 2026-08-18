@@ -12,22 +12,22 @@ public interface IEditionRepository : IBasicRepository<Edition, Guid>
         Guid id,
         CancellationToken cancellationToken = default);
 
-    Task<Edition> FindByDisplayNameAsync(
+    Task<Edition?> FindByDisplayNameAsync(
         string displayName,
         CancellationToken cancellationToken = default);
 
-    Task<Edition> FindByTenantIdAsync(
+    Task<Edition?> FindByTenantIdAsync(
         Guid tenantId,
         CancellationToken cancellationToken = default);
 
     Task<List<Edition>> GetListAsync(
-        string sorting = null,
+        string? filter = null,
+        string? sorting = nameof(Edition.DisplayName),
         int maxResultCount = 10,
         int skipCount = 0,
-        string filter = null,
         CancellationToken cancellationToken = default);
 
     Task<long> GetCountAsync(
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default);
 }

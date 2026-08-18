@@ -14,7 +14,7 @@ public abstract class AuditLoggingQueue<TLog>
     private readonly int _batchSize;
     private readonly int _maxConcurrency;
 
-    private volatile Task _consumerTask;
+    private volatile Task? _consumerTask;
     private readonly SemaphoreSlim _flushSemaphore;
     private readonly CancellationTokenSource _cts = new CancellationTokenSource();
     protected AuditLoggingQueue(

@@ -76,7 +76,7 @@ public class PackageController : PlatformControllerBase, IPackageAppService
     [Route("{Name}/latest")]
     [Route("{Name}/latest/{Version}")]
     [AllowAnonymous]
-    public virtual Task<PackageDto> GetLatestAsync(PackageGetLatestInput input)
+    public virtual Task<PackageDto?> GetLatestAsync(PackageGetLatestInput input)
     {
         return _service.GetLatestAsync(input);
     }

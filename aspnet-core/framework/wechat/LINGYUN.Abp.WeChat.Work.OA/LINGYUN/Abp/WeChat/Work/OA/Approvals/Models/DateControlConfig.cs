@@ -14,7 +14,7 @@ public class DateControlConfig : ControlConfig
     [NotNull]
     [JsonProperty("date")]
     [JsonPropertyName("date")]
-    public DateConfig Date { get; set; }
+    public DateConfig Date { get; set; } = default!;
     public DateControlConfig()
     {
 
@@ -34,5 +34,5 @@ public class DateConfig
     [NotNull]
     [JsonProperty("type")]
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
 }

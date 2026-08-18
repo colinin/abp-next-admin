@@ -24,7 +24,7 @@ public class ApplicationMenu : IHasMenuItems, IHasExtraProperties
     /// 说明
     /// </summary>
     [CanBeNull]
-    public string Description { get; }
+    public string? Description { get; }
     /// <summary>
     /// 路径
     /// </summary>
@@ -34,17 +34,17 @@ public class ApplicationMenu : IHasMenuItems, IHasExtraProperties
     /// 组件
     /// </summary>
     [CanBeNull]
-    public string Component { get;  }
+    public string? Component { get;  }
     /// <summary>
     /// 重定向
     /// </summary>
     [CanBeNull]
-    public string Redirect { get; }
+    public string? Redirect { get; }
     /// <summary>
     /// 图标
     /// </summary>
     [CanBeNull] 
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
     /// <summary>
     /// 排序
     /// </summary>
@@ -73,9 +73,9 @@ public class ApplicationMenu : IHasMenuItems, IHasExtraProperties
         [NotNull] string displayName,
         [NotNull] string url,
         [CanBeNull] string component,
-        string description = null,
-        string icon = null,
-        string redirect = null,
+        string? description = null,
+        string? icon = null,
+        string? redirect = null,
         int order = DefaultOrder,
         MultiTenancySides multiTenancySides = MultiTenancySides.Both)
     {

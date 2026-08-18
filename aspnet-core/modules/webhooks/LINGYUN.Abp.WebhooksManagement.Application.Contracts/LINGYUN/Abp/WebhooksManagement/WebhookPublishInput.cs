@@ -9,11 +9,11 @@ public class WebhookPublishInput
 {
     [Required]
     [DynamicStringLength(typeof(WebhookEventRecordConsts), nameof(WebhookEventRecordConsts.MaxWebhookNameLength))]
-    public string WebhookName { get; set; }
+    public string WebhookName { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(WebhookEventRecordConsts), nameof(WebhookEventRecordConsts.MaxDataLength))]
-    public string Data { get; set; }
+    public string Data { get; set; } = default!;
 
     public bool SendExactSameData { get; set; }
 

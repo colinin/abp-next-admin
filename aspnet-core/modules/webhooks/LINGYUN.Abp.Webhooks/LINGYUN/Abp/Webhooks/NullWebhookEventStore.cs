@@ -18,7 +18,7 @@ namespace LINGYUN.Abp.Webhooks
 
         public Task<WebhookEvent> GetAsync(Guid? tenantId, Guid id)
         {
-            return Task.FromResult<WebhookEvent>(default);
+            return Task.FromResult<WebhookEvent>(default!);
         }
     }
 }

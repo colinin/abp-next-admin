@@ -13,12 +13,12 @@ public abstract class WeChatMessage
     /// 开发者微信号
     /// </summary>
     [XmlElement("ToUserName")]
-    public string ToUserName { get; set; }
+    public string ToUserName { get; set; } = default!;
     /// <summary>
     /// 发送方账号（一个OpenID）
     /// </summary>
     [XmlElement("FromUserName")]
-    public string FromUserName { get; set; }
+    public string FromUserName { get; set; } = default!;
     /// <summary>
     /// 消息创建时间 （整型）
     /// </summary>
@@ -28,7 +28,7 @@ public abstract class WeChatMessage
     /// 消息类型，event
     /// </summary>
     [XmlElement("MsgType")]
-    public string MsgType { get; set; }
+    public string MsgType { get; set; } = default!;
 
     public abstract WeChatMessageEto ToEto();
 

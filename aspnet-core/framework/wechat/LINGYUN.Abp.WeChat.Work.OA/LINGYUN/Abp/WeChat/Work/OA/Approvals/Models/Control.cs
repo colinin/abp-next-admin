@@ -16,12 +16,12 @@ public class Control
     [NotNull]
     [JsonProperty("property")]
     [JsonPropertyName("property")]
-    public ControlInfo Property { get; set; }
+    public ControlInfo Property { get; set; } = default!;
     /// <summary>
     /// 控件配置
     /// </summary>
     [CanBeNull]
     [JsonProperty("config")]
     [JsonPropertyName("config")]
-    public ControlConfig Config { get; set; }
+    public ControlConfig? Config { get; set; }
 }

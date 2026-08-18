@@ -5,7 +5,7 @@ namespace LINGYUN.Abp.Notifications;
 
 public static class NotificationDataMappingDictionaryItemExtensions
 {
-    public static NotificationDataMappingDictionaryItem GetOrNullDefault(
+    public static NotificationDataMappingDictionaryItem? GetOrNullDefault(
         this IEnumerable<NotificationDataMappingDictionaryItem> items,
         string name)
     {

@@ -27,7 +27,7 @@ public class TaskManagementJobPublisher : IJobPublisher, ITransientDependency
             Cron = job.Cron,
             MaxCount = job.MaxCount,
             MaxTryCount = job.MaxTryCount,
-            Args = new ExtraPropertyDictionary(job.Args),
+            Args = new ExtraPropertyDictionary(job.Args!),
             BeginTime = job.BeginTime,
             Description = job.Description,
             EndTime = job.EndTime,

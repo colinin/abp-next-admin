@@ -35,7 +35,7 @@ public class DataAppService : PlatformApplicationServiceBase, IDataAppService
         if (children.Any())
         {
             var lastChildren = children.OrderBy(x => x.Code).FirstOrDefault();
-            code = CodeNumberGenerator.CalculateNextCode(lastChildren.Code);
+            code = CodeNumberGenerator.CalculateNextCode(lastChildren?.Code);
         }
         else
         {
@@ -57,7 +57,7 @@ public class DataAppService : PlatformApplicationServiceBase, IDataAppService
             );
 
         data = await DataRepository.InsertAsync(data);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Data, DataDto>(data);
     }
@@ -78,7 +78,8 @@ public class DataAppService : PlatformApplicationServiceBase, IDataAppService
 
     public async virtual Task<DataDto> GetAsync(string name)
     {
-        var data = await DataRepository.FindByNameAsync(name);
+        var data = await DataRepository.FindByNameAsync(name)
+            ?? throw new UserFriendlyException(L["DataNotFound", name]);
 
         return ObjectMapper.Map<Data, DataDto>(data);
     }
@@ -118,7 +119,7 @@ public class DataAppService : PlatformApplicationServiceBase, IDataAppService
         data.ParentId = input.ParentId;
 
         data = await DataRepository.UpdateAsync(data);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Data, DataDto>(data);
     }
@@ -146,7 +147,7 @@ public class DataAppService : PlatformApplicationServiceBase, IDataAppService
         }
 
         data = await DataRepository.UpdateAsync(data);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Data, DataDto>(data);
     }
@@ -176,7 +177,7 @@ public class DataAppService : PlatformApplicationServiceBase, IDataAppService
         dataItem.AllowBeNull = input.AllowBeNull;
 
         await DataRepository.UpdateAsync(data);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(PlatformPermissions.DataDictionary.ManageItems)]
@@ -199,7 +200,7 @@ public class DataAppService : PlatformApplicationServiceBase, IDataAppService
             input.AllowBeNull);
 
         await DataRepository.UpdateAsync(data);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(PlatformPermissions.DataDictionary.ManageItems)]
@@ -209,6 +210,6 @@ public class DataAppService : PlatformApplicationServiceBase, IDataAppService
         data.RemoveItem(name);
 
         await DataRepository.UpdateAsync(data);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 }

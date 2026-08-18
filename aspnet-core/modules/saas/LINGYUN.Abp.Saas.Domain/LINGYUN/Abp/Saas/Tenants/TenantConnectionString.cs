@@ -9,9 +9,9 @@ public class TenantConnectionString : Entity
 {
     public virtual Guid TenantId { get; protected set; }
 
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
 
-    public virtual string Value { get; protected set; }
+    public virtual string Value { get; protected set; } = default!;
 
     protected TenantConnectionString()
     {

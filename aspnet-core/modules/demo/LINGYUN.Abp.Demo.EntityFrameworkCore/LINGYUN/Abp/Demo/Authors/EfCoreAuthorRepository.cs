@@ -24,7 +24,7 @@ public class EfCoreAuthorRepository
     public async Task<List<Author>> GetListAsync(
         int skipCount,
         int maxResultCount,
-        string sorting,
+        string? sorting = nameof(Author.Name),
         string? filter = null)
     {
         var dbSet = await GetDbSetAsync();
@@ -33,7 +33,7 @@ public class EfCoreAuthorRepository
                 !filter.IsNullOrWhiteSpace(),
                 author => author.Name.Contains(filter!)
             )
-            .OrderBy(sorting)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(Author.Name) : sorting)
             .Skip(skipCount)
             .Take(maxResultCount)
             .ToListAsync();

@@ -15,5 +15,5 @@ public class TemplateContent
     [NotNull]
     [JsonProperty("controls")]
     [JsonPropertyName("controls")]
-    public List<Control> Controls { get; set; }
+    public List<Control> Controls { get; set; } = default!;
 }

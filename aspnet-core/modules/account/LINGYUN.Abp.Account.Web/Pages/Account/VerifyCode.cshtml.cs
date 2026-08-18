@@ -16,25 +16,25 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
 
         [BindProperty]
-        public VerifyCodeInputModel Input { get; set; }
+        public VerifyCodeInputModel Input { get; set; } = default!;
         /// <summary>
         /// 双因素认证提供程序
         /// </summary>
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string Provider { get; set; }
+        public string Provider { get; set; } = default!;
         /// <summary>
         /// 重定向Url
         /// </summary>
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; } = default!;
         /// <summary>
         /// 
         /// </summary>
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrlHash { get; set; }
+        public string? ReturnUrlHash { get; set; }
         /// <summary>
         /// 是否记住登录状态
         /// </summary>
@@ -53,7 +53,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string LinkToken { get; set; }
+        public string? LinkToken { get; set; }
 
         protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
 
@@ -118,9 +118,9 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
             {
                 await IdentityLinkUserAppService.LinkAsync(new LinkUserInput
                 {
-                    UserId = LinkUserId.Value,
+                    UserId = LinkUserId!.Value,
                     TenantId = LinkTenantId,
-                    Token = LinkToken
+                    Token = LinkToken!
                 });
 
                 await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
@@ -179,6 +179,6 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         /// 发送的验证码
         /// </summary>
         [Required]
-        public string VerifyCode { get; set; }
+        public string VerifyCode { get; set; } = default!;
     }
 }

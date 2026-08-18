@@ -63,7 +63,7 @@ public class XmlLocalizationFile
 public class CultureInfo
 {
     [XmlAttribute("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     public CultureInfo()
     {
@@ -79,10 +79,10 @@ public class CultureInfo
 public class LocalizationText
 {
     [XmlAttribute("key")]
-    public string Key { get; set; }
+    public string Key { get; set; } = default!;
 
     [XmlAttribute("value")]
-    public string Value { get; set; }
+    public string Value { get; set; } = default!;
 
     public LocalizationText()
     {

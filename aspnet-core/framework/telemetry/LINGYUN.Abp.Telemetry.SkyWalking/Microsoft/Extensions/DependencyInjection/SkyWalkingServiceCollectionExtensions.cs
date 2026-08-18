@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 internal static class SkyWalkingServiceCollectionExtensions
 {
-    public static IServiceCollection AddSkyWalking(this IServiceCollection services, Action<SkyApmExtensions> extensionsSetup = null)
+    public static IServiceCollection AddSkyWalking(this IServiceCollection services, Action<SkyApmExtensions>? extensionsSetup = null)
     {
         Check.NotNull(extensionsSetup, nameof(extensionsSetup));
 
@@ -91,8 +91,8 @@ internal static class SkyWalkingServiceCollectionExtensions
     private static IServiceCollection AddSampling(this IServiceCollection services)
     {
         services.AddSingleton<SimpleCountSamplingInterceptor>();
-        services.AddSingleton((Func<IServiceProvider, ISamplingInterceptor>)((IServiceProvider p) => p.GetService<SimpleCountSamplingInterceptor>()));
-        services.AddSingleton((Func<IServiceProvider, IExecutionService>)((IServiceProvider p) => p.GetService<SimpleCountSamplingInterceptor>()));
+        services.AddSingleton((Func<IServiceProvider, ISamplingInterceptor>)((IServiceProvider p) => p.GetRequiredService<SimpleCountSamplingInterceptor>()));
+        services.AddSingleton((Func<IServiceProvider, IExecutionService>)((IServiceProvider p) => p.GetRequiredService<SimpleCountSamplingInterceptor>()));
         services.AddSingleton<ISamplingInterceptor, RandomSamplingInterceptor>();
         services.AddSingleton<ISamplingInterceptor, IgnorePathSamplingInterceptor>();
         return services;

@@ -16,14 +16,14 @@ public class WebhookTextNoticeCardMessage : WebhookTemplateCardMessage
     [CanBeNull]
     [JsonProperty("sub_title_text")]
     [JsonPropertyName("sub_title_text")]
-    public string SubTitleText { get; set; }
+    public string? SubTitleText { get; set; }
     /// <summary>
     /// 关键数据样式
     /// </summary>
     [CanBeNull]
     [JsonProperty("emphasis_content")]
     [JsonPropertyName("emphasis_content")]
-    public WebhookTemplateCardEmphasisContent EmphasisContent { get; set; }
+    public WebhookTemplateCardEmphasisContent? EmphasisContent { get; set; }
     /// <summary>
     /// 创建一个Webhook 文本通知模版卡片消息体
     /// </summary>
@@ -38,13 +38,13 @@ public class WebhookTextNoticeCardMessage : WebhookTemplateCardMessage
     /// <exception cref="ArgumentException"></exception>
     public WebhookTextNoticeCardMessage(
         WebhookTemplateCardAction action,
-        WebhookTemplateCardMainTitle mainTitle = null,
-        string subTitleText = null,
-        WebhookTemplateCardEmphasisContent emphasisContent = null,
-        WebhookTemplateCardSource source = null,
-        WebhookTemplateCardQuoteArea quoteArea = null,
-        List<WebhookTemplateCardHorizontalContent> horizontalContents = null,
-        List<WebhookTemplateCardJump> jumps = null) 
+        WebhookTemplateCardMainTitle? mainTitle = null,
+        string? subTitleText = null,
+        WebhookTemplateCardEmphasisContent? emphasisContent = null,
+        WebhookTemplateCardSource? source = null,
+        WebhookTemplateCardQuoteArea? quoteArea = null,
+        List<WebhookTemplateCardHorizontalContent>? horizontalContents = null,
+        List<WebhookTemplateCardJump>? jumps = null) 
         : base("text_notice", action, mainTitle, source, quoteArea, horizontalContents, jumps)
     {
         MainTitle = mainTitle;

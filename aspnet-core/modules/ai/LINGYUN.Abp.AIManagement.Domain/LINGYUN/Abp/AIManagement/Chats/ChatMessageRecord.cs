@@ -9,7 +9,7 @@ public abstract class ChatMessageRecord : AuditedAggregateRoot<Guid>, IMultiTena
 {
     public Guid? TenantId { get; private set; }
 
-    public string Workspace { get; private set; }
+    public string Workspace { get; private set; } = default!;
 
     public ChatRole Role { get; private set; }
 

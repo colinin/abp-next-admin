@@ -10,12 +10,12 @@ public class SendEmailConfirmCodeDto
     [EmailAddress]
     [Display(Name = "EmailAddress")]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
-    public string Email { get; set; }
+    public string Email { get; set; } = default!;
 
     [Required]
-    public string AppName { get; set; }
+    public string AppName { get; set; } = default!;
 
-    public string ReturnUrl { get; set; }
+    public string? ReturnUrl { get; set; }
 
-    public string ReturnUrlHash { get; set; }
+    public string? ReturnUrlHash { get; set; }
 }

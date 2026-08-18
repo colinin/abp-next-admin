@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
@@ -32,14 +33,14 @@ public class GroupStore : IGroupStore, ITransientDependency
     {
         using (_currentTenant.Change(tenantId))
         {
-            var group = await _groupRepository.FindByIdAsync(long.Parse(groupId), cancellationToken);
+            var group = await _groupRepository.GetByIdAsync(long.Parse(groupId), cancellationToken);
             return _objectMapper.Map<ChatGroup, Group>(group);
         }
     }
 
     public async virtual Task<int> GetCountAsync(
         Guid? tenantId,
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         using (_currentTenant.Change(tenantId))
@@ -50,8 +51,8 @@ public class GroupStore : IGroupStore, ITransientDependency
 
     public async virtual Task<List<Group>> GetListAsync(
         Guid? tenantId,
-        string filter = null,
-        string sorting = nameof(Group.Name),
+        string? filter = null,
+        string? sorting = nameof(Group.Name),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)

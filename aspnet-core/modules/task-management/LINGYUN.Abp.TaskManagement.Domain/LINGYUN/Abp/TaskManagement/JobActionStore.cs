@@ -25,7 +25,7 @@ public class JobActionStore : IJobActionStore, ITransientDependency
         return jobActions.Select(action => new JobAction
         {
             Name = action.Name,
-            Paramters = action.Paramters
+            Paramters = action.Paramters!
         }).ToList();
     }
 }

@@ -6,12 +6,12 @@ namespace LINGYUN.Abp.Identity.QrCode;
 [IgnoreMultiTenancy]
 public class QrCodeCacheItem
 {
-    public string Key { get; set; }
-    public string Token { get; set; }
+    public string Key { get; set; } = default!;
+    public string? Token { get; set; }
     public QrCodeStatus Status { get; set; }
-    public string UserId { get; set; }
-    public string UserName { get; set; }
-    public string Picture { get; set; }
+    public string? UserId { get; set; }
+    public string? UserName { get; set; }
+    public string? Picture { get; set; }
     public Guid? TenantId { get; set; }
     public QrCodeCacheItem()
     {

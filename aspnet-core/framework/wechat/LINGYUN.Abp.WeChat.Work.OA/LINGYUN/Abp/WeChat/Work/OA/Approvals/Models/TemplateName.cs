@@ -14,14 +14,14 @@ public class TemplateName
     [NotNull]
     [JsonProperty("text")]
     [JsonPropertyName("text")]
-    public string Text {  get; set; }
+    public string Text {  get; set; } = default!;
     /// <summary>
     /// 多语言名称
     /// </summary>
     [NotNull]
     [JsonProperty("lang")]
     [JsonPropertyName("lang")]
-    public string Lang { get; set; }
+    public string Lang { get; set; } = default!;
     public TemplateName()
     {
 

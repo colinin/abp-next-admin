@@ -18,10 +18,10 @@ public class DefaultLoggingManager : ILoggingManager, ISingletonDependency
         Logger = NullLogger<DefaultLoggingManager>.Instance;
     }
 
-    public Task<LogInfo> GetAsync(string id, CancellationToken cancellationToken = default)
+    public Task<LogInfo?> GetAsync(string id, CancellationToken cancellationToken = default)
     {
         Logger.LogDebug("No logging manager is available!");
-        LogInfo logInfo = null;
+        LogInfo? logInfo = null;
         return Task.FromResult(logInfo);
     }
 
@@ -29,13 +29,13 @@ public class DefaultLoggingManager : ILoggingManager, ISingletonDependency
         DateTime? startTime = null, 
         DateTime? endTime = null,
         LogLevel? level = null,
-        string machineName = null,
-        string environment = null,
-        string application = null,
-        string context = null, 
-        string requestId = null,
-        string requestPath = null, 
-        string correlationId = null, 
+        string? machineName = null,
+        string? environment = null,
+        string? application = null,
+        string? context = null, 
+        string? requestId = null,
+        string? requestPath = null, 
+        string? correlationId = null, 
         int? processId = null, 
         int? threadId = null,
         bool? hasException = null,
@@ -46,19 +46,19 @@ public class DefaultLoggingManager : ILoggingManager, ISingletonDependency
     }
 
     public Task<List<LogInfo>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = 50, 
         int skipCount = 0, 
         DateTime? startTime = null,
         DateTime? endTime = null,
         LogLevel? level = null,
-         string machineName = null,
-        string environment = null,
-        string application = null,
-        string context = null,
-        string requestId = null, 
-        string requestPath = null,
-        string correlationId = null, 
+        string? machineName = null,
+        string? environment = null,
+        string? application = null,
+        string? context = null,
+        string? requestId = null, 
+        string? requestPath = null,
+        string? correlationId = null, 
         int? processId = null, 
         int? threadId = null,
         bool? hasException = null,

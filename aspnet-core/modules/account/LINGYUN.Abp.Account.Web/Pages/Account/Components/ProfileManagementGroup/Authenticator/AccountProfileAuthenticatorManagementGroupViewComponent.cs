@@ -33,12 +33,12 @@ public class AccountProfileAuthenticatorManagementGroupViewComponent : AbpViewCo
     {
         public bool IsAuthenticated { get; set; }
 
-        public string SharedKey { get; set; }
+        public string? SharedKey { get; set; }
 
-        public string AuthenticatorUri { get; set; }
+        public string? AuthenticatorUri { get; set; }
 
         [Required]
         [StringLength(6)]
-        public string AuthenticatorCode { get; set; }
+        public string AuthenticatorCode { get; set; } = default!;
     }
 }

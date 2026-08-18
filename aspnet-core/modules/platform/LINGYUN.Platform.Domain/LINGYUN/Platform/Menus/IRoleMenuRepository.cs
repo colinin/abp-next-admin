@@ -22,11 +22,11 @@ public interface IRoleMenuRepository : IBasicRepository<RoleMenu, Guid>
 
     Task<List<RoleMenu>> GetListByRoleNameAsync(
         string roleName,
-        string framework = null,
+        string? framework = null,
         CancellationToken cancellationToken = default);
 
-    Task<Menu> FindStartupMenuAsync(
+    Task<Menu?> FindStartupMenuAsync(
         IEnumerable<string> roleNames,
-        string framework = null,
+        string? framework = null,
         CancellationToken cancellationToken = default);
 }

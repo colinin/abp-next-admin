@@ -2,5 +2,5 @@
 
 public class GetResourceWithFilterDto
 {
-    public string Filter { get; set; }  
+    public string? Filter { get; set; }  
 }

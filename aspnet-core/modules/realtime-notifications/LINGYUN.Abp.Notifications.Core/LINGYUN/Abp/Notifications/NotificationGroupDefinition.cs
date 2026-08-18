@@ -23,27 +23,27 @@ public class NotificationGroupDefinition
         get => _displayName;
         set => _displayName = Check.NotNull(value, nameof(value));
     }
-    private ILocalizableString _displayName;
+    private ILocalizableString _displayName = default!;
     /// <summary>
     /// 通知组说明
     /// </summary>
     [CanBeNull]
-    public ILocalizableString Description { get; set; }
+    public ILocalizableString? Description { get; set; }
     public bool AllowSubscriptionToClients { get; set; }
     public IReadOnlyList<NotificationDefinition> Notifications => _notifications.ToImmutableList();
     private readonly List<NotificationDefinition> _notifications;
 
-    public Dictionary<string, object> Properties { get; }
+    public Dictionary<string, object?> Properties { get; }
 
-    public object this[string name] {
+    public object? this[string name] {
         get => Properties.GetOrDefault(name);
         set => Properties[name] = value;
     }
 
     public static NotificationGroupDefinition Create(
         string name,
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
         bool allowSubscriptionToClients = false)
     {
         return new NotificationGroupDefinition(name, displayName, description, allowSubscriptionToClients);
@@ -51,8 +51,8 @@ public class NotificationGroupDefinition
 
     protected internal NotificationGroupDefinition(
         string name,
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
         bool allowSubscriptionToClients = false)
     {
         Name = name;
@@ -62,13 +62,13 @@ public class NotificationGroupDefinition
 
         _notifications = new List<NotificationDefinition>();
 
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
     }
 
     public virtual NotificationDefinition AddNotification(
         string name,
-       ILocalizableString displayName = null,
-       ILocalizableString description = null,
+       ILocalizableString? displayName = null,
+       ILocalizableString? description = null,
        NotificationType notificationType = NotificationType.Application,
        NotificationLifetime lifetime = NotificationLifetime.Persistent,
        NotificationContentType contentType = NotificationContentType.Text,
@@ -89,7 +89,7 @@ public class NotificationGroupDefinition
         return notification;
     }
 
-    public NotificationDefinition GetNotificationOrNull([NotNull] string name)
+    public NotificationDefinition? GetNotificationOrNull([NotNull] string name)
     {
         Check.NotNull(name, nameof(name));
 

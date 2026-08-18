@@ -20,18 +20,19 @@ public class DataAccessCurrentUserContributor : IDataAccessKeywordContributor
         var conversionType = context.Expression.Body.Type;
         var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
 
+        // TODO: Guid? == Guid?
         var userId = CastTo(currentUser.Id, conversionType);
 
         // entity.Where(x => x.CreatorId == CurrentUser.Id);
         return Expression.Constant(userId, conversionType);
     }
 
-    private static object CastTo(object value, Type conversionType)
+    private static object CastTo(object? value, Type conversionType)
     {
         if (conversionType == typeof(Guid) || conversionType == typeof(Guid?))
         {
-            return TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString()!)!;
+            return TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value?.ToString()!)!;
         }
-        return Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
+        return Convert.ChangeType(value!, conversionType, CultureInfo.InvariantCulture);
     }
 }

@@ -29,43 +29,43 @@ public class WebhookTemplateCardImageTextArea
     [NotNull]
     [JsonProperty("url")]
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string? Url { get; set; }
     /// <summary>
     /// 点击跳转的小程序的appid，type是2时必填
     /// </summary>
     [CanBeNull]
     [JsonProperty("appid")]
     [JsonPropertyName("appid")]
-    public string AppId { get; set; }
+    public string? AppId { get; set; }
     /// <summary>
     /// 点击跳转的小程序的pagepath，type是2时选填
     /// </summary>
     [CanBeNull]
     [JsonProperty("pagepath")]
     [JsonPropertyName("pagepath")]
-    public string PagePath { get; set; }
+    public string? PagePath { get; set; }
     /// <summary>
     /// 左图右文样式的标题
     /// </summary>
     [CanBeNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
     /// <summary>
     /// 左图右文样式的描述
     /// </summary>
     [CanBeNull]
     [JsonProperty("desc")]
     [JsonPropertyName("desc")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     private WebhookTemplateCardImageTextArea(
         string imageUrl,
         int? type = null, 
-        string url = null,
-        string appId = null,
-        string pagePath = null,
-        string title = null,
-        string description = null)
+        string? url = null,
+        string? appId = null,
+        string? pagePath = null,
+        string? title = null,
+        string? description = null)
     {
         Type = type;
         ImageUrl = imageUrl;
@@ -86,8 +86,8 @@ public class WebhookTemplateCardImageTextArea
     public static WebhookTemplateCardImageTextArea Link(
         string imageUrl,
         string url,
-        string title = null,
-        string description = null)
+        string? title = null,
+        string? description = null)
     {
         Check.NotNullOrWhiteSpace(imageUrl, nameof(imageUrl));
         Check.NotNullOrWhiteSpace(url, nameof(url));
@@ -107,8 +107,8 @@ public class WebhookTemplateCardImageTextArea
         string imageUrl, 
         string appId, 
         string pagePath,
-        string title = null,
-        string description = null)
+        string? title = null,
+        string? description = null)
     {
         Check.NotNullOrWhiteSpace(imageUrl, nameof(imageUrl));
         Check.NotNullOrWhiteSpace(appId, nameof(appId));

@@ -20,7 +20,7 @@ public class ClientFeatureValueProvider : FeatureValueProvider
         CurrentClient = currentClient;
     }
 
-    public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
+    public async override Task<string?> GetOrNullAsync(FeatureDefinition feature)
     {
         if (!CurrentClient.IsAuthenticated)
         {

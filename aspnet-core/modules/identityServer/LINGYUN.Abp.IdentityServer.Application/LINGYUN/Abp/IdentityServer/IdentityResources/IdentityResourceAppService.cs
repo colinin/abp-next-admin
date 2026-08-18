@@ -51,7 +51,7 @@ public class IdentityResourceAppService : AbpIdentityServerAppServiceBase, IIden
             input.ShowInDiscoveryDocument);
         await UpdateApiResourceByInputAsync(identityResource, input);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         identityResource = await IdentityResourceRepository.InsertAsync(identityResource);
 
@@ -65,7 +65,7 @@ public class IdentityResourceAppService : AbpIdentityServerAppServiceBase, IIden
         await UpdateApiResourceByInputAsync(identityResource, input);
         identityResource = await IdentityResourceRepository.UpdateAsync(identityResource);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<IdentityResource, IdentityResourceDto>(identityResource);
     }

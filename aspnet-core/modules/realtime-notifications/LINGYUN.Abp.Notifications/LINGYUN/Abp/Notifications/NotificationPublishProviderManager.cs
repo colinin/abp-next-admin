@@ -21,7 +21,7 @@ public class NotificationPublishProviderManager : INotificationPublishProviderMa
              () => options.Value
                  .PublishProviders
                  .Select(type => serviceProvider.GetRequiredService(type) as INotificationPublishProvider)
-                 .ToList(),
+                 .ToList()!,
              true
          );
     }

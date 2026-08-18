@@ -14,23 +14,23 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
     /// <summary>
     /// 任务名称
     /// </summary>
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
     /// <summary>
     /// 任务分组
     /// </summary>
-    public virtual string Group { get; protected set; }
+    public virtual string Group { get; protected set; } = default!;
     /// <summary>
     /// 任务类型
     /// </summary>
-    public virtual string Type { get; protected set; }
+    public virtual string Type { get; protected set; } = default!;
     /// <summary>
     /// 上一次执行结果
     /// </summary>
-    public virtual string Result { get; protected set; }
+    public virtual string? Result { get; protected set; }
     /// <summary>
     /// 任务参数
     /// </summary>
-    public virtual ExtraPropertyDictionary Args { get; set; }
+    public virtual ExtraPropertyDictionary Args { get; set; } = default!;
     /// <summary>
     /// 任务状态
     /// </summary>
@@ -42,7 +42,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
     /// <summary>
     /// 描述
     /// </summary>
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
     /// <summary>
     /// 任务独占超时时长（秒）
     /// 0或更小不生效
@@ -71,7 +71,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
     /// <summary>
     /// Cron表达式，如果是持续任务需要指定
     /// </summary>
-    public virtual string Cron { get; protected set; }
+    public virtual string? Cron { get; protected set; }
     /// <summary>
     /// 作业来源
     /// </summary>
@@ -110,7 +110,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
     /// <summary>
     /// 指定作业运行节点
     /// </summary>
-    public virtual string NodeName { get; protected set; }
+    public virtual string? NodeName { get; protected set; }
     protected BackgroundJobInfo() { }
 
     public BackgroundJobInfo(
@@ -118,14 +118,14 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
         string name,
         string group,
         string type,
-        IDictionary<string, object> args,
+        IDictionary<string, object?> args,
         DateTime beginTime,
         DateTime? endTime = null,
         JobPriority priority = JobPriority.Normal,
         JobSource source = JobSource.None,
         int maxCount = 0,
         int maxTryCount = 50,
-        string nodeName = null,
+        string? nodeName = null,
         Guid? tenantId = null) : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), BackgroundJobInfoConsts.MaxNameLength);
@@ -148,7 +148,10 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
         Args = new ExtraPropertyDictionary();
         if (args != null)
         {
-            Args.AddIfNotContains(args);
+            foreach (var arg in args)
+            {
+                Args[arg.Key] = arg.Value;
+            }
         }
     }
 
@@ -180,7 +183,7 @@ public class BackgroundJobInfo : AuditedAggregateRoot<string>, IMultiTenant
         NextRunTime = nextRunTime;
     }
 
-    public void SetResult(string result)
+    public void SetResult(string? result)
     {
         if (result.IsNullOrWhiteSpace())
         {

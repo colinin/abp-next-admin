@@ -26,7 +26,7 @@ public class QuartzJobCreator : IQuartzJobCreator, ISingletonDependency
         Logger = NullLogger<QuartzJobCreator>.Instance;
     }
 
-    public IJobDetail CreateJob(JobInfo job)
+    public IJobDetail? CreateJob(JobInfo job)
     {
         var jobDefinition = JobDefinitionManager.GetOrNull(job.Type);
         var jobType = jobDefinition?.JobType ?? Type.GetType(job.Type);
@@ -76,14 +76,14 @@ public class QuartzJobCreator : IQuartzJobCreator, ISingletonDependency
         return jobBuilder.Build();
     }
 
-    public ITrigger CreateTrigger(JobInfo job)
+    public ITrigger? CreateTrigger(JobInfo job)
     {
         var triggerBuilder = TriggerBuilder.Create();
 
         switch (job.JobType)
         {
             case JobType.Period:
-                if (!CronExpression.IsValidExpression(job.Cron))
+                if (job.Cron.IsNullOrWhiteSpace() || !CronExpression.IsValidExpression(job.Cron))
                 {
                     Logger.LogWarning($"The task: {job.Group} - {job.Name} periodic task Cron expression was invalid and the task trigger could not be created.");
                     return null;

@@ -52,7 +52,7 @@ public class SettingV2AppService : SettingV2AppServiceBase, ISettingV2AppService
             }
         }
 
-        CurrentUnitOfWork.OnCompleted(async () =>
+        CurrentUnitOfWork!.OnCompleted(async () =>
         {
             await EventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData());
         });

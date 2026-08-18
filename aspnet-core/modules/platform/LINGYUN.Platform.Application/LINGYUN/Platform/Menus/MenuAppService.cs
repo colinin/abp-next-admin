@@ -99,9 +99,9 @@ public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
         var count = await MenuRepository.GetCountAsync(input.Filter, input.Framework, input.ParentId, input.LayoutId);
 
         var menus = await MenuRepository.GetListAsync(
-            input.Filter, input.Sorting,
-            input.Framework, input.ParentId, input.LayoutId,
-            input.SkipCount, input.MaxResultCount);
+            input.Filter, input.Framework, 
+            input.ParentId, input.LayoutId,
+            input.Sorting, input.SkipCount, input.MaxResultCount);
 
         return new PagedResultDto<MenuDto>(count,
             ObjectMapper.Map<List<Menu>, List<MenuDto>>(menus));
@@ -129,7 +129,7 @@ public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
         // 利用布局约定的数据字典来校验必须的路由元数据,元数据的加入是为了适配多端路由
         foreach (var dataItem in data.Items)
         {
-            if (!input.Meta.TryGetValue(dataItem.Name, out object meta))
+            if (!input.Meta.TryGetValue(dataItem.Name, out var meta))
             {
                 if (!dataItem.AllowBeNull)
                 {
@@ -147,7 +147,7 @@ public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
             }
         }
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Menu, MenuDto>(menu);
     }
@@ -162,7 +162,7 @@ public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
         var data = await DataRepository.GetAsync(layout.DataId);
         foreach (var dataItem in data.Items)
         {
-            if (!input.Meta.TryGetValue(dataItem.Name, out object meta))
+            if (!input.Meta.TryGetValue(dataItem.Name, out var meta))
             {
                 if (!dataItem.AllowBeNull)
                 {
@@ -222,7 +222,7 @@ public class MenuAppService : PlatformApplicationServiceBase, IMenuAppService
         menu.IsPublic = input.IsPublic;
 
         await MenuManager.UpdateAsync(menu);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Menu, MenuDto>(menu);
     }

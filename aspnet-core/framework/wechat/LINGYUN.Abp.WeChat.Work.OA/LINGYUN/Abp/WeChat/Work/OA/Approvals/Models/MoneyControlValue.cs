@@ -14,7 +14,7 @@ public class MoneyControlValue : ControlValue
     [NotNull]
     [JsonProperty("new_money")]
     [JsonPropertyName("new_money")]
-    public string NewMoney { get; set; }
+    public string NewMoney { get; set; } = default!;
     public MoneyControlValue()
     {
 

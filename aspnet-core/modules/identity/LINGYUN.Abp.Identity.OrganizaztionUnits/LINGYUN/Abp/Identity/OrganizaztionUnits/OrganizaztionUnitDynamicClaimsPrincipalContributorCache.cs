@@ -59,15 +59,19 @@ public class OrganizaztionUnitDynamicClaimsPrincipalContributorCache : IdentityD
 
             var userRoles = cacheItems.Claims
                 .FindAll(x => x.Type == AbpClaimTypes.Role)
+                .Where(x => !x.Value.IsNullOrWhiteSpace())
                 .Select(x => x.Value)
                 .Distinct();
 
-            var roleOus = await IdentityRoleRepository.GetOrganizationUnitsAsync(userRoles);
-            foreach (var roleOu in roleOus)
+            if (userRoles != null)
             {
-                if (!cacheItems.Claims.Any(x => x.Type == AbpOrganizationUnitClaimTypes.OrganizationUnit && x.Value == roleOu.Code))
+                var roleOus = await IdentityRoleRepository.GetOrganizationUnitsAsync(userRoles!);
+                foreach (var roleOu in roleOus)
                 {
-                    cacheItems.Claims.Add(new AbpDynamicClaim(AbpOrganizationUnitClaimTypes.OrganizationUnit, roleOu.Code));
+                    if (!cacheItems.Claims.Any(x => x.Type == AbpOrganizationUnitClaimTypes.OrganizationUnit && x.Value == roleOu.Code))
+                    {
+                        cacheItems.Claims.Add(new AbpDynamicClaim(AbpOrganizationUnitClaimTypes.OrganizationUnit, roleOu.Code));
+                    }
                 }
             }
 

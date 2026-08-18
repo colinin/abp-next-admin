@@ -84,11 +84,7 @@ public abstract class WeChatWorkTokenProviderBase
 
         var client = HttpClientFactory.CreateWeChatWorkApiClient();
 
-        var request = new WeChatWorkTokenRequest
-        {
-            CorpId = corpId,
-            CorpSecret = secret,
-        };
+        var request = new WeChatWorkTokenRequest(corpId, secret);
 
         var tokenResponse = await client.GetTokenAsync(request, cancellationToken);
         var token = tokenResponse.ToWeChatWorkToken();

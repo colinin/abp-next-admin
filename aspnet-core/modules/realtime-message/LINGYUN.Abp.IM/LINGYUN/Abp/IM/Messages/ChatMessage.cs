@@ -18,14 +18,14 @@ public class ChatMessage : IHasExtraProperties
     /// <summary>
     /// 群组标识
     /// </summary>
-    public string GroupId { get; set; }
+    public string GroupId { get; set; } = default!;
     /// <summary>
     /// 消息标识
     /// </summary>
     /// <remarks>
     /// 调用者无需关注此字段,将由服务自动生成
     /// </remarks>
-    public string MessageId { get; set; }
+    public string MessageId { get; set; } = default!;
     /// <summary>
     /// 发送者标识
     /// </summary>
@@ -33,7 +33,7 @@ public class ChatMessage : IHasExtraProperties
     /// <summary>
     /// 发送者名称
     /// </summary>
-    public string FormUserName { get; set; }
+    public string FormUserName { get; set; } = default!;
     /// <summary>
     /// 接收用户标识
     /// </summary>
@@ -45,7 +45,7 @@ public class ChatMessage : IHasExtraProperties
     /// 消息内容
     /// </summary>
     [DisableAuditing]
-    public string Content { get; set; }
+    public string Content { get; set; } = default!;
     /// <summary>
     /// 发送时间
     /// </summary>

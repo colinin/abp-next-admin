@@ -11,7 +11,7 @@ public class TransferCustomerResult
     [NotNull]
     [JsonProperty("external_userid")]
     [JsonPropertyName("external_userid")]
-    public string ExternalUserid { get; set; }
+    public string ExternalUserid { get; set; } = default!;
     /// <summary>
     /// 接替状态
     /// </summary>

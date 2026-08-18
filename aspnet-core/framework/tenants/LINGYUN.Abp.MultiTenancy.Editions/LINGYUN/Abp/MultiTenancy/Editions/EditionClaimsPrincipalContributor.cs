@@ -26,6 +26,10 @@ public class EditionClaimsPrincipalContributor : IAbpClaimsPrincipalContributor,
         }
 
         var claimsIdentity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+        if (claimsIdentity == null)
+        {
+            return;
+        }
         if (claimsIdentity.FindAll(x => x.Type == AbpClaimTypes.EditionId).Any())
         {
             return;

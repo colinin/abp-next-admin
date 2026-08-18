@@ -17,5 +17,5 @@ public class WeChatWorkApplyEventResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("sp_no")]
     [JsonPropertyName("sp_no")]
-    public string SpNo { get; set; }
+    public string SpNo { get; set; } = default!;
 }

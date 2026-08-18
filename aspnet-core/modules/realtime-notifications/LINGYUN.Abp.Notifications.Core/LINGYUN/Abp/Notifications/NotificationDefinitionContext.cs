@@ -16,8 +16,8 @@ public class NotificationDefinitionContext : INotificationDefinitionContext
 
     public NotificationGroupDefinition AddGroup(
         [NotNull] string name, 
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
         bool allowSubscriptionToClients = true)
     {
         Check.NotNull(name, nameof(name));
@@ -30,7 +30,7 @@ public class NotificationDefinitionContext : INotificationDefinitionContext
         return Groups[name] = new NotificationGroupDefinition(name, displayName, description, allowSubscriptionToClients);
     }
 
-    public NotificationGroupDefinition GetGroupOrNull(string name)
+    public NotificationGroupDefinition? GetGroupOrNull(string name)
     {
         Check.NotNull(name, nameof(name));
 

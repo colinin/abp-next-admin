@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.AuditLogging;
 
 public interface IAuditLogManager
 {
-    Task<AuditLog> GetAsync(
+    Task<AuditLog?> GetAsync(
         Guid id,
         bool includeDetails = false,
         CancellationToken cancellationToken = default);

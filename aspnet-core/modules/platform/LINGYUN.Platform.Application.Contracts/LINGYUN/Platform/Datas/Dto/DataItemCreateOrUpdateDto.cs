@@ -12,13 +12,13 @@ public class DataItemCreateOrUpdateDto : IValidatableObject
 {
     [Required]
     [DynamicStringLength(typeof(DataItemConsts), nameof(DataItemConsts.MaxDisplayNameLength))]
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     [DynamicStringLength(typeof(DataItemConsts), nameof(DataItemConsts.MaxValueLength))]
-    public string DefaultValue { get; set; }
+    public string? DefaultValue { get; set; }
 
     [DynamicStringLength(typeof(DataItemConsts), nameof(DataItemConsts.MaxDescriptionLength))]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool AllowBeNull { get; set; }
 

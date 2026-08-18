@@ -33,7 +33,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         _serviceProvider = serviceProvider;
     }
 
-    public async virtual Task<LambdaExpression> Build(Type entityType, DataAccessOperation operation, DataAccessFilterGroup group = null)
+    public async virtual Task<LambdaExpression> Build(Type entityType, DataAccessOperation operation, DataAccessFilterGroup? group = null)
     {
         // Func<TEntity, bool>
         var func = typeof(Func<,>).MakeGenericType(entityType, typeof(bool));
@@ -54,16 +54,15 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
             exp = GetExpression(entityType, group);
         }
 
-        var typeName = entityType.FullName;
         var subjectFilterGroups = new List<DataAccessFilterGroup>();
-        var subjectContext = new DataAccessSubjectContributorContext(typeName, operation, _serviceProvider);
+        var subjectContext = new DataAccessSubjectContributorContext(entityType.FullName!, operation, _serviceProvider);
         foreach (var contributor in _options.SubjectContributors)
         {
             var subjectFilterGroup = await contributor.GetFilterGroups(subjectContext);
             subjectFilterGroups.AddRange(subjectFilterGroup);
         }
 
-        LambdaExpression subExp = null;
+        LambdaExpression? subExp = null;
 
         if (subjectFilterGroups.Count == 0 &&
             _options.DefaultEntityFilters.TryGetValue(entityType, out var filterFunc))
@@ -90,7 +89,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         return exp;
     }
 
-    public async virtual Task<Expression<Func<TEntity, bool>>> Build<TEntity>(DataAccessOperation operation, DataAccessFilterGroup group = null)
+    public async virtual Task<Expression<Func<TEntity, bool>>> Build<TEntity>(DataAccessOperation operation, DataAccessFilterGroup? group = null)
     {
         var entityType = typeof(TEntity);
         Expression<Func<TEntity, bool>> exp = _ => true;
@@ -105,16 +104,15 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
             exp = GetExpression<TEntity>(group);
         }
 
-        var typeName = typeof(TEntity).FullName;
         var subjectFilterGroups = new List<DataAccessFilterGroup>();
-        var subjectContext = new DataAccessSubjectContributorContext(typeName, operation, _serviceProvider);
+        var subjectContext = new DataAccessSubjectContributorContext(typeof(TEntity).FullName!, operation, _serviceProvider);
         foreach (var contributor in _options.SubjectContributors)
         {
             var subjectFilterGroup = await contributor.GetFilterGroups(subjectContext);
             subjectFilterGroups.AddRange(subjectFilterGroup);
         }
 
-        Expression<Func<TEntity, bool>> subExp = null;
+        Expression<Func<TEntity, bool>>? subExp = null;
         foreach ( var subGroup in subjectFilterGroups)
         {
             subExp = subExp == null ? GetExpression<TEntity>(subGroup) : subExp.Or(GetExpression<TEntity>(subGroup));
@@ -218,7 +216,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
         return rule.IsLeft ? operateContributor.BuildExpression(constant, expression.Body) : operateContributor.BuildExpression(expression.Body, constant);
     }
 
-    private static LambdaExpression GetPropertyLambdaExpression(ParameterExpression param, DataAccessFilterRule rule)
+    private static LambdaExpression? GetPropertyLambdaExpression(ParameterExpression param, DataAccessFilterRule rule)
     {
         var propertyNames = rule.Field.Split('.');
         Expression propertyAccess = param;
@@ -273,7 +271,7 @@ public class EntityTypeFilterBuilder : IEntityTypeFilterBuilder, ITransientDepen
                 return Expression.Constant(valueArray, arrayType);
             }
 
-            var valueType = rule.Value.GetType();
+            var valueType = rule.Value!.GetType();
 
             if (valueType.IsArrayOrListType())
             {

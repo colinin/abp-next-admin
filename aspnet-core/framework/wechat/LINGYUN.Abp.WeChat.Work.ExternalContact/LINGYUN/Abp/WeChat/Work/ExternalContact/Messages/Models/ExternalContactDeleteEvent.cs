@@ -14,7 +14,7 @@ public class ExternalContactDeleteEvent : ExternalContactChangeEvent
     /// 删除客户的操作来源，DELETE_BY_TRANSFER表示此客户是因在职继承自动被转接成员删除
     /// </summary>
     [XmlElement("Source")]
-    public string Source { get; set; }
+    public string Source { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {

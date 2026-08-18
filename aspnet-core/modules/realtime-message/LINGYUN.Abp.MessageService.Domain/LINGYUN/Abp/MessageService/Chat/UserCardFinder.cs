@@ -22,7 +22,7 @@ public class UserCardFinder : IUserCardFinder, ITransientDependency
 
     public async virtual Task<int> GetCountAsync(
         Guid? tenantId,
-        string findUserName = "", 
+        string? findUserName = null,
         int? startAge = null, 
         int? endAge = null, 
         Sex? sex = null)
@@ -35,8 +35,8 @@ public class UserCardFinder : IUserCardFinder, ITransientDependency
     }
 
     public async virtual Task<List<UserCard>> GetListAsync(
-        Guid? tenantId, 
-        string findUserName = "", 
+        Guid? tenantId,
+        string? findUserName = null,
         int? startAge = null, 
         int? endAge = null,
         Sex? sex = null, 
@@ -52,7 +52,7 @@ public class UserCardFinder : IUserCardFinder, ITransientDependency
         }
     }
 
-    public async virtual Task<UserCard> GetMemberAsync(Guid? tenantId, Guid findUserId)
+    public async virtual Task<UserCard?> GetMemberAsync(Guid? tenantId, Guid findUserId)
     {
         using (_currentTenant.Change(tenantId))
         {

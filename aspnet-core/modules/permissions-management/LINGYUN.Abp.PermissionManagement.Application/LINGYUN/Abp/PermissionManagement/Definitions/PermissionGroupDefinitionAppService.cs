@@ -51,7 +51,7 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
 
         groupDefinitionRecord = await _groupDefinitionRepository.InsertAsync(groupDefinitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(groupDefinitionRecord);
     }
@@ -67,7 +67,7 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
 
         await _groupDefinitionRepository.DeleteAsync(groupDefinitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<PermissionGroupDefinitionDto> GetAsync(string name)
@@ -107,12 +107,12 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
 
         groupDefinitionRecord = await _groupDefinitionBasicRepository.UpdateAsync(groupDefinitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(groupDefinitionRecord);
     }
 
-    protected async virtual Task<PermissionGroupDefinitionRecord> FindByNameAsync(string name)
+    protected async virtual Task<PermissionGroupDefinitionRecord?> FindByNameAsync(string name)
     {
         var groupDefinitionFilter = await _groupDefinitionBasicRepository.GetQueryableAsync();
 

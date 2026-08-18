@@ -14,16 +14,16 @@ public abstract class NotificationPublishProvider : INotificationPublishProvider
 {
     public abstract string Name { get; }
 
-    public IAbpLazyServiceProvider ServiceProvider { protected get; set; }
+    public IAbpLazyServiceProvider ServiceProvider { protected get; set; } = default!;
 
     public ILoggerFactory LoggerFactory => ServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 
     protected ILogger Logger => _lazyLogger.Value;
-    private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+    private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance, true);
 
     public ICancellationTokenProvider CancellationTokenProvider => ServiceProvider.LazyGetService<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
 
-    private IEnumerable<INotificationPublishInterceptor> _interceptors;
+    private IEnumerable<INotificationPublishInterceptor>? _interceptors;
     protected IEnumerable<INotificationPublishInterceptor> Interceptors =>
         _interceptors ??= ServiceProvider.LazyGetService<IEnumerable<INotificationPublishInterceptor>>()
                           ?? Enumerable.Empty<INotificationPublishInterceptor>();

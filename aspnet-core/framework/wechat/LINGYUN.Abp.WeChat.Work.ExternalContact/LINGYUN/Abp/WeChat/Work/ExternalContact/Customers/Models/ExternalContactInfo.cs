@@ -15,7 +15,7 @@ public class ExternalContactInfo
     [NotNull]
     [JsonProperty("external_userid")]
     [JsonPropertyName("external_userid")]
-    public string ExternalUserId { get; set; }
+    public string ExternalUserId { get; set; } = default!;
     /// <summary>
     /// 外部联系人的名称
     /// </summary>
@@ -26,7 +26,7 @@ public class ExternalContactInfo
     [NotNull]
     [JsonProperty("name")]
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 外部联系人头像
     /// </summary>

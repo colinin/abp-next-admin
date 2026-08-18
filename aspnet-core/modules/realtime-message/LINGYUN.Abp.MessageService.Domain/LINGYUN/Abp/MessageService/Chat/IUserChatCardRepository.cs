@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.MessageService.Chat;
 
 public interface IUserChatCardRepository : IBasicRepository<UserChatCard, long>
 {
-    Task<UserChatCard> FindByUserIdAsync(
+    Task<UserChatCard?> FindByUserIdAsync(
         Guid userId,
         CancellationToken cancellationToken = default);
 
@@ -18,23 +18,23 @@ public interface IUserChatCardRepository : IBasicRepository<UserChatCard, long>
         CancellationToken cancellationToken = default);
 
     Task<int> GetMemberCountAsync(
-        string findUserName = "",
+        string? findUserName = null,
         int? startAge = null,
         int? endAge = null,
         Sex? sex = null,
         CancellationToken cancellationToken = default);
 
     Task<List<UserCard>> GetMembersAsync(
-        string findUserName = "",
+        string? findUserName = null,
         int? startAge = null,
         int? endAge = null,
         Sex? sex = null,
-        string sorting = nameof(UserChatCard.UserId),
+        string? sorting = nameof(UserChatCard.UserId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);
 
-    Task<UserCard> GetMemberAsync(
+    Task<UserCard?> GetMemberAsync(
         Guid findUserId,
         CancellationToken cancellationToken = default);
 }

@@ -10,13 +10,13 @@ namespace LINGYUN.Abp.WebhooksManagement;
 public class WebhookSubscription : CreationAuditedEntity<Guid>, IHasConcurrencyStamp
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual string WebhookUri { get; protected set; }
-    public virtual string Secret { get; protected set; }
+    public virtual string WebhookUri { get; protected set; } = default!;
+    public virtual string? Secret { get; protected set; }
     public virtual bool IsActive { get; set; }
-    public virtual string Webhooks { get; protected set; }
-    public virtual string Headers { get; protected set; }
-    public virtual string Description { get; set; }
-    public virtual string ConcurrencyStamp { get; set; }
+    public virtual string? Webhooks { get; protected set; }
+    public virtual string? Headers { get; protected set; }
+    public virtual string? Description { get; set; }
+    public virtual string ConcurrencyStamp { get; set; } = default!;
     public virtual int? TimeoutDuration { get; set; }
 
     protected WebhookSubscription()
@@ -25,9 +25,9 @@ public class WebhookSubscription : CreationAuditedEntity<Guid>, IHasConcurrencyS
     public WebhookSubscription(
         Guid id,
         string webhookUri,
-        string webhooks,
-        string headers,
-        string secret = null,
+        string? webhooks,
+        string? headers,
+        string? secret = null,
         Guid? tenantId = null) : base(id)
     {
         SetWebhookUri(webhookUri);
@@ -44,7 +44,7 @@ public class WebhookSubscription : CreationAuditedEntity<Guid>, IHasConcurrencyS
         TenantId = tenantId;
     }
 
-    public void SetSecret(string secret)
+    public void SetSecret(string? secret)
     {
         Secret = Check.Length(secret, nameof(secret), WebhookSubscriptionConsts.MaxSecretLength);
     }
@@ -54,12 +54,12 @@ public class WebhookSubscription : CreationAuditedEntity<Guid>, IHasConcurrencyS
         WebhookUri = Check.NotNullOrWhiteSpace(webhookUri, nameof(webhookUri), WebhookSubscriptionConsts.MaxWebhookUriLength);
     }
 
-    public void SetWebhooks(string webhooks)
+    public void SetWebhooks(string? webhooks)
     {
         Webhooks = Check.Length(webhooks, nameof(webhooks), WebhookSubscriptionConsts.MaxWebhooksLength);
     }
 
-    public void SetHeaders(string headers)
+    public void SetHeaders(string? headers)
     {
         Headers = Check.Length(headers, nameof(headers), WebhookSubscriptionConsts.MaxHeadersLength);
     }

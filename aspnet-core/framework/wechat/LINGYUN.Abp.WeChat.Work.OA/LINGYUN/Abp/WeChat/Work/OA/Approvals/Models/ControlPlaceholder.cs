@@ -16,14 +16,14 @@ public class ControlPlaceholder
     [StringLength(80)]
     [JsonProperty("text")]
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public string Text { get; set; } = default!;
     /// <summary>
     /// 显示语言，中文：zh_CN（注意不是zh-CN）；若text填写，则该项为必填
     /// </summary>
     [NotNull]
     [JsonProperty("lang")]
     [JsonPropertyName("lang")]
-    public string Lang { get; set; }
+    public string Lang { get; set; } = default!;
     public ControlPlaceholder()
     {
 

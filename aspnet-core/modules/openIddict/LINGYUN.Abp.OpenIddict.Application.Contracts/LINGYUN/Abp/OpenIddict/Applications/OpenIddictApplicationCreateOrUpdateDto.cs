@@ -9,15 +9,15 @@ namespace LINGYUN.Abp.OpenIddict.Applications;
 public abstract class OpenIddictApplicationCreateOrUpdateDto : ExtensibleObject
 {
     [DisableAuditing]
-    public string ClientSecret { get; set; }
+    public string? ClientSecret { get; set; }
 
     [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ClientTypeMaxLength))]
-    public string ClientType { get; set; }
+    public string? ClientType { get; set; }
 
     [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ConsentTypeMaxLength))]
-    public string ConsentType { get; set; }
+    public string? ConsentType { get; set; }
 
-    public string DisplayName { get; set; }
+    public string? DisplayName { get; set; }
 
     public Dictionary<string, string> DisplayNames { get; set; } = new Dictionary<string, string>();
 
@@ -37,11 +37,11 @@ public abstract class OpenIddictApplicationCreateOrUpdateDto : ExtensibleObject
     public OpenIddictApplicationSettingsDto Settings { get; set; } = new OpenIddictApplicationSettingsDto();
 
     [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ApplicationTypeMaxLength))]
-    public string ApplicationType { get; set; }
+    public string? ApplicationType { get; set; }
 
-    public string ClientUri { get; set; }
+    public string? ClientUri { get; set; }
 
-    public string LogoUri { get; set; }
+    public string? LogoUri { get; set; }
 
-    public string FrontChannelLogoutUri { get; set; }
+    public string? FrontChannelLogoutUri { get; set; }
 }

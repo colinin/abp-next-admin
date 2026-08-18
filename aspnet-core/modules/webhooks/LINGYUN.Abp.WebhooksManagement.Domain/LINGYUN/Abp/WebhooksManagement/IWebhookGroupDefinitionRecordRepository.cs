@@ -8,7 +8,7 @@ using Volo.Abp.Specifications;
 namespace LINGYUN.Abp.WebhooksManagement;
 public interface IWebhookGroupDefinitionRecordRepository : IBasicRepository<WebhookGroupDefinitionRecord, Guid>
 {
-    Task<WebhookGroupDefinitionRecord> FindByNameAsync(
+    Task<WebhookGroupDefinitionRecord?> FindByNameAsync(
         string name, 
         CancellationToken cancellationToken = default);
 

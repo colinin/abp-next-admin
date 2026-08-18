@@ -10,6 +10,7 @@
     "InvalidVerifyCode": "The verification code is invalid or expired!",
     "RequiredEmailAddress": "Email address required",
     "InvalidPhoneNumber": "Invalid phone number",
+    "InvalidWeChatCode": "The WeChat verification code is invalid or has expired!",
     "DuplicateWeChat": "The wechat has been registered!",
     "DisplayName:SmsVerifyCode": "SMS verification code",
     "DisplayName:EmailVerifyCode": "Mail verification code",

@@ -9,7 +9,7 @@ public static class NotificationsDbContextModelCreatingExtensions
 {
     public static void ConfigureNotifications(
        this ModelBuilder builder,
-       Action<AbpNotificationsModelBuilderConfigurationOptions> optionsAction = null)
+       Action<AbpNotificationsModelBuilderConfigurationOptions>? optionsAction = null)
     {
         Check.NotNull(builder, nameof(builder));
 
@@ -82,7 +82,7 @@ public static class NotificationsDbContextModelCreatingExtensions
 
     public static void ConfigureNotificationsDefinition(
        this ModelBuilder builder,
-       Action<AbpNotificationsModelBuilderConfigurationOptions> optionsAction = null)
+       Action<AbpNotificationsModelBuilderConfigurationOptions>? optionsAction = null)
     {
         Check.NotNull(builder, nameof(builder));
 

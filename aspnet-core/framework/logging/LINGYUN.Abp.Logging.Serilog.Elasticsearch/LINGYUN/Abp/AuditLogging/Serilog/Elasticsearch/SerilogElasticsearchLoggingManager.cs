@@ -55,7 +55,7 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     /// <param name="id">时间类型或者转换为timestamp都可以查询</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async virtual Task<LogInfo> GetAsync(
+    public async virtual Task<LogInfo?> GetAsync(
         string id,
         CancellationToken cancellationToken = default)
     {
@@ -129,20 +129,20 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
                 cancellationToken);
         }
 
-        return _objectMapper.Map<SerilogInfo, LogInfo>(response.Documents.FirstOrDefault());
+        return _objectMapper.Map<SerilogInfo?, LogInfo?>(response.Documents.FirstOrDefault());
     }
 
     public async virtual Task<long> GetCountAsync(
         DateTime? startTime = null,
         DateTime? endTime = null,
         LogLevel? level = null,
-        string machineName = null,
-        string environment = null,
-        string application = null,
-        string context = null,
-        string requestId = null,
-        string requestPath = null,
-        string correlationId = null,
+        string? machineName = null,
+        string? environment = null,
+        string? application = null,
+        string? context = null,
+        string? requestId = null,
+        string? requestPath = null,
+        string? correlationId = null,
         int? processId = null,
         int? threadId = null,
         bool? hasException = null,
@@ -196,19 +196,19 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public async virtual Task<List<LogInfo>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = 50,
         int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
         LogLevel? level = null,
-        string machineName = null,
-        string environment = null,
-        string application = null,
-        string context = null,
-        string requestId = null,
-        string requestPath = null,
-        string correlationId = null,
+        string? machineName = null,
+        string? environment = null,
+        string? application = null,
+        string? context = null,
+        string? requestId = null,
+        string? requestPath = null,
+        string? correlationId = null,
         int? processId = null,
         int? threadId = null,
         bool? hasException = null,
@@ -256,13 +256,13 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
         DateTime? startTime = null,
         DateTime? endTime = null,
         LogLevel? level = null,
-        string machineName = null,
-        string environment = null,
-        string application = null,
-        string context = null,
-        string requestId = null,
-        string requestPath = null,
-        string correlationId = null,
+        string? machineName = null,
+        string? environment = null,
+        string? application = null,
+        string? context = null,
+        string? requestId = null,
+        string? requestPath = null,
+        string? correlationId = null,
         int? processId = null,
         int? threadId = null,
         bool? hasException = null)

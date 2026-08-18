@@ -8,7 +8,7 @@ public class BookImportDto
     [Required]
     [StringLength(128)]
     [DisplayName("名称")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [Required]
     [DisplayName("类型")]
@@ -26,5 +26,5 @@ public class BookImportDto
     public Guid AuthorId { get; set; }
 
     [DisplayName("作者")]
-    public string AuthorName { get; set; }
+    public string AuthorName { get; set; } = default!;
 }

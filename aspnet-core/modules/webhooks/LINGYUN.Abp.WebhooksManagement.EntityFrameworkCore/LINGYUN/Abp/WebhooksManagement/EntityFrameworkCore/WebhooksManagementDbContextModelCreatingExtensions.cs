@@ -9,7 +9,7 @@ public static class WebhooksManagementDbContextModelCreatingExtensions
 {
     public static void ConfigureWebhooksManagement(
         this ModelBuilder builder,
-        Action<WebhooksManagementModelBuilderConfigurationOptions> optionsAction = null)
+        Action<WebhooksManagementModelBuilderConfigurationOptions>? optionsAction = null)
     {
         Check.NotNull(builder, nameof(builder));
 

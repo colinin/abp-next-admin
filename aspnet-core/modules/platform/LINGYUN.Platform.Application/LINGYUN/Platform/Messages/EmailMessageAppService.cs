@@ -29,7 +29,7 @@ public class EmailMessageAppService : PlatformApplicationServiceBase, IEmailMess
 
         await _emailMessageRepository.DeleteAsync(emailMessage);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<EmailMessageDto> GetAsync(Guid id)
@@ -65,7 +65,7 @@ public class EmailMessageAppService : PlatformApplicationServiceBase, IEmailMess
 
         await _emailMessageRepository.UpdateAsync(emailMessage);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     private class EmailMessageGetListSpecification : Volo.Abp.Specifications.Specification<EmailMessage>
@@ -81,13 +81,13 @@ public class EmailMessageAppService : PlatformApplicationServiceBase, IEmailMess
             Expression<Func<EmailMessage, bool>> expression = _ => true;
 
             return expression
-                .AndIf(!Input.EmailAddress.IsNullOrWhiteSpace(), x => x.Receiver.Contains(Input.EmailAddress))
-                .AndIf(!Input.Subject.IsNullOrWhiteSpace(), x => x.Subject.Contains(Input.Subject))
-                .AndIf(!Input.Content.IsNullOrWhiteSpace(), x => x.Content.Contains(Input.Content))
-                .AndIf(!Input.From.IsNullOrWhiteSpace(), x => x.From.Contains(Input.From))
-                .AndIf(!Input.Filter.IsNullOrWhiteSpace(), x => x.From.Contains(Input.Filter) ||
-                    x.Receiver.Contains(Input.Filter) || x.Content.Contains(Input.Filter) || 
-                    x.Subject.Contains(Input.Filter))
+                .AndIf(!Input.EmailAddress.IsNullOrWhiteSpace(), x => x.Receiver.Contains(Input.EmailAddress!))
+                .AndIf(!Input.Subject.IsNullOrWhiteSpace(), x => x.Subject!.Contains(Input.Subject!))
+                .AndIf(!Input.Content.IsNullOrWhiteSpace(), x => x.Content.Contains(Input.Content!))
+                .AndIf(!Input.From.IsNullOrWhiteSpace(), x => x.From!.Contains(Input.From!))
+                .AndIf(!Input.Filter.IsNullOrWhiteSpace(), x => x.From!.Contains(Input.Filter!) ||
+                    x.Receiver.Contains(Input.Filter!) || x.Content.Contains(Input.Filter!) || 
+                    x.Subject!.Contains(Input.Filter!))
                 .AndIf(Input.Status.HasValue, x => x.Status == Input.Status)
                 .AndIf(Input.Priority.HasValue, x => x.Priority == Input.Priority)
                 .AndIf(Input.BeginSendTime.HasValue, x => x.SendTime >= Input.BeginSendTime)

@@ -36,7 +36,7 @@ public class AbpJobExecutionException : AbpException
     /// <param name="jobType">Execute job type</param>
     /// <param name="message">Exception message</param>
     /// <param name="innerException">Inner exception</param>
-    public AbpJobExecutionException(Type jobType, string message, Exception innerException)
+    public AbpJobExecutionException(Type jobType, string message, Exception? innerException = null)
         : base(message, innerException)
     {
         JobType = jobType;

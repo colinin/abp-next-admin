@@ -17,7 +17,7 @@ namespace LINGYUN.Abp.Webhooks
         /// </para>
         /// </param>
         /// <param name="headers">Headers to send. Publisher uses subscription defined webhook by default. You can add additional headers from here. If subscription already has given header, publisher uses the one you give here.</param>
-        Task PublishAsync(string webhookName, object data, bool sendExactSameData = false, WebhookHeader headers = null);
+        Task PublishAsync(string webhookName, object data, bool sendExactSameData = false, WebhookHeader? headers = null);
 
         /// <summary>
         /// Sends webhooks to given tenant's subscriptions
@@ -34,7 +34,7 @@ namespace LINGYUN.Abp.Webhooks
         /// </para>
         /// </param>
         /// <param name="headers">Headers to send. Publisher uses subscription defined webhook by default. You can add additional headers from here. If subscription already has given header, publisher uses the one you give here.</param>
-        Task PublishAsync(string webhookName, object data, Guid? tenantId, bool sendExactSameData = false, WebhookHeader headers = null);
+        Task PublishAsync(string webhookName, object data, Guid? tenantId, bool sendExactSameData = false, WebhookHeader? headers = null);
 
         /// <summary>
         /// Sends webhooks to given tenant's subscriptions
@@ -51,6 +51,6 @@ namespace LINGYUN.Abp.Webhooks
         /// </para>
         /// </param>
         /// <param name="headers">Headers to send. Publisher uses subscription defined webhook by default. You can add additional headers from here. If subscription already has given header, publisher uses the one you give here.</param>
-        Task PublishAsync(Guid?[] tenantIds, string webhookName, object data, bool sendExactSameData = false, WebhookHeader headers = null);
+        Task PublishAsync(Guid?[] tenantIds, string webhookName, object data, bool sendExactSameData = false, WebhookHeader? headers = null);
     }
 }

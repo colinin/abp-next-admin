@@ -16,15 +16,15 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
     public class SendCodeModel : AccountPageModel
     {
         [BindProperty]
-        public SendCodeInputModel Input { get; set; }
+        public SendCodeInputModel Input { get; set; } = default!;
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; } = default!;
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrlHash { get; set; }
+        public string? ReturnUrlHash { get; set; }
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
@@ -40,9 +40,9 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string LinkToken { get; set; }
+        public string? LinkToken { get; set; }
 
-        public IEnumerable<SelectListItem> Providers { get; set; }
+        public IEnumerable<SelectListItem> Providers { get; set; } = default!;
 
         protected ISmsSender SmsSender { get; }
 
@@ -117,7 +117,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 Check.NotNullOrWhiteSpace(templateCode, nameof(IdentitySettingNames.User.SmsUserSignin));
 
                 // TODO: 以后扩展短信模板发送
-                var smsMessage = new SmsMessage(phoneNumber, code);
+                var smsMessage = new SmsMessage(phoneNumber!, code);
                 smsMessage.Properties.Add("code", code);
                 smsMessage.Properties.Add("TemplateCode", templateCode);
 
@@ -139,6 +139,6 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
     public class SendCodeInputModel
     {
-        public string SelectedProvider { get; set; }
+        public string SelectedProvider { get; set; } = default!;
     }
 }

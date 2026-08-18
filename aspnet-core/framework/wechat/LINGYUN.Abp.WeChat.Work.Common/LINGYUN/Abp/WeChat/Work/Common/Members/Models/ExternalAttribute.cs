@@ -14,7 +14,7 @@ public abstract class ExternalAttribute
     [NotNull]
     [JsonProperty("name")]
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 属性类型
     /// </summary>

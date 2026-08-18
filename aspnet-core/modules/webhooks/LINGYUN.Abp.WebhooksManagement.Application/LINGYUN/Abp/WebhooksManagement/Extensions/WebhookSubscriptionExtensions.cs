@@ -24,7 +24,7 @@ public static class WebhookSubscriptionExtensions
         };
     }
 
-    public static string ToSubscribedWebhooksString(this WebhookSubscriptionCreateOrUpdateInput webhookSubscription)
+    public static string? ToSubscribedWebhooksString(this WebhookSubscriptionCreateOrUpdateInput webhookSubscription)
     {
         if (webhookSubscription.Webhooks.Any())
         {
@@ -34,7 +34,7 @@ public static class WebhookSubscriptionExtensions
         return null;
     }
 
-    public static string ToWebhookHeadersString(this WebhookSubscriptionCreateOrUpdateInput webhookSubscription)
+    public static string? ToWebhookHeadersString(this WebhookSubscriptionCreateOrUpdateInput webhookSubscription)
     {
         if (webhookSubscription.Headers.Any())
         {

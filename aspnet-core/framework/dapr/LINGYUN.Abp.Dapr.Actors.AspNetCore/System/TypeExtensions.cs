@@ -11,7 +11,7 @@ internal static class TypeExtensions
 {
     public static bool IsActor(this Type actorType)
     {
-        Type baseType = actorType.GetTypeInfo().BaseType;
+        var baseType = actorType.GetTypeInfo().BaseType;
         while (baseType != null)
         {
             if (baseType == typeof(Actor))
@@ -35,7 +35,7 @@ internal static class TypeExtensions
         return list.ToArray();
     }
 
-    public static RemoteServiceAttribute GetRemoteServiceAttribute(this Type type)
+    public static RemoteServiceAttribute? GetRemoteServiceAttribute(this Type type)
     {
         return type.GetInterfaces()
             .Where(t => t.IsDefined(typeof(RemoteServiceAttribute), false))
@@ -43,17 +43,17 @@ internal static class TypeExtensions
             .FirstOrDefault();
     }
 
-    public static Type GetNonActorParentType(this Type type)
+    public static Type? GetNonActorParentType(this Type type)
     {
-        List<Type> list = new List<Type>(type.GetInterfaces());
+        var list = new List<Type>(type.GetInterfaces());
         if (list.RemoveAll((Type t) => t == typeof(IActor)) == 0)
         {
             return type;
         }
 
-        foreach (Type item in list)
+        foreach (var item in list)
         {
-            Type nonActorParentType = item.GetNonActorParentType();
+            var nonActorParentType = item.GetNonActorParentType();
             if (nonActorParentType != null)
             {
                 return nonActorParentType;

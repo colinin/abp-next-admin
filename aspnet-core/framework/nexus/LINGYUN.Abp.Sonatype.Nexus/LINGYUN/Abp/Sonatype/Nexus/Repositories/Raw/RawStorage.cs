@@ -7,11 +7,11 @@ namespace LINGYUN.Abp.Sonatype.Nexus.Repositories.Raw;
 public class RawStorage
 {
     [JsonPropertyName("blobStoreName")]
-    public string BlobStoreName { get; set; }
+    public string BlobStoreName { get; set; } = default!;
 
     [JsonPropertyName("strictContentTypeValidation")]
     public bool StrictContentTypeValidation { get; set; }
 
     [JsonPropertyName("RawGroup")]
-    public RawGroup Group { get; set; }
+    public RawGroup Group { get; set; } = default!;
 }

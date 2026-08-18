@@ -7,5 +7,5 @@ public class PackageBlobDownloadInput
 {
     [Required]
     [DynamicMaxLength(typeof(PackageBlobConsts), nameof(PackageBlobConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

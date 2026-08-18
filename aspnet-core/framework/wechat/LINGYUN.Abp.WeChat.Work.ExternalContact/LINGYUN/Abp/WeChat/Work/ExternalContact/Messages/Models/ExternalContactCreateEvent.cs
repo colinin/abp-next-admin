@@ -14,12 +14,12 @@ public class ExternalContactCreateEvent : ExternalContactChangeEvent
     /// 添加此用户的「联系我」方式配置的state参数，或在获客链接中指定的customer_channel参数，可用于识别添加此用户的渠道
     /// </summary>
     [XmlElement("State")]
-    public string State { get; set; }
+    public string State { get; set; } = default!;
     /// <summary>
     /// 欢迎语code，可用于发送欢迎语
     /// </summary>
     [XmlElement("WelcomeCode")]
-    public string WelcomeCode { get; set; }
+    public string WelcomeCode { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {

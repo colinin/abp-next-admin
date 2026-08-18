@@ -20,16 +20,19 @@ namespace LINGYUN.Abp.TaskManagement;
 public class BackgroundJobInfoAppService : DynamicQueryableAppService<BackgroundJobInfo, BackgroundJobInfoDto>, IBackgroundJobInfoAppService
 {
     protected AbpBackgroundTasksOptions Options { get; }
+    protected ICronValidator CronValidator { get; }
     protected BackgroundJobManager BackgroundJobManager { get; }
     protected IJobDefinitionManager JobDefinitionManager { get; }
     protected IBackgroundJobInfoRepository BackgroundJobInfoRepository { get; }
 
     public BackgroundJobInfoAppService(
+        ICronValidator cronValidator,
         BackgroundJobManager backgroundJobManager,
         IJobDefinitionManager jobDefinitionManager,
         IBackgroundJobInfoRepository backgroundJobInfoRepository,
         IOptions<AbpBackgroundTasksOptions> options)
     {
+        CronValidator = cronValidator;
         BackgroundJobManager = backgroundJobManager;
         JobDefinitionManager = jobDefinitionManager;
         BackgroundJobInfoRepository = backgroundJobInfoRepository;
@@ -53,19 +56,28 @@ public class BackgroundJobInfoAppService : DynamicQueryableAppService<Background
             {
                 Name = jobDefinition.Name,
                 DisplayName = jobDefinition.DisplayName.Localize(StringLocalizerFactory),
-                Description = jobDefinition.Description?.Localize(StringLocalizerFactory),
             };
-
-            foreach (var jobParamter in jobDefinition.Paramters)
+            if (jobDefinition.Description != null)
             {
-                job.Paramters.Add(
-                    new BackgroundJobParamterDto
+                job.Description = jobDefinition.Description.Localize(StringLocalizerFactory);
+            }
+
+            if (jobDefinition.Paramters != null)
+            {
+                foreach (var jobParamter in jobDefinition.Paramters)
+                {
+                    var backgroundJobParamter = new BackgroundJobParamterDto
                     {
                         Name = jobParamter.Name,
                         Required = jobParamter.Required,
                         DisplayName = jobParamter.DisplayName.Localize(StringLocalizerFactory),
-                        Description = jobParamter.Description?.Localize(StringLocalizerFactory),
-                    });
+                    };
+                    if (jobParamter.Description != null)
+                    {
+                        backgroundJobParamter.Description = jobParamter.Description.Localize(StringLocalizerFactory);
+                    }
+                    job.Paramters.Add(backgroundJobParamter);
+                }
             }
 
             jobs.Add(job);
@@ -100,11 +112,11 @@ public class BackgroundJobInfoAppService : DynamicQueryableAppService<Background
             input.NodeName ?? Options.NodeName,
             CurrentTenant.Id);
 
-        UpdateByInput(backgroundJobInfo, input);
+        await UpdateByInput(backgroundJobInfo, input);
 
         await BackgroundJobManager.CreateAsync(backgroundJobInfo);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<BackgroundJobInfo, BackgroundJobInfoDto>(backgroundJobInfo);
     }
@@ -219,7 +231,7 @@ public class BackgroundJobInfoAppService : DynamicQueryableAppService<Background
 
         var resetJob = backgroundJobInfo.JobType == input.JobType;
 
-        UpdateByInput(backgroundJobInfo, input);
+        await UpdateByInput(backgroundJobInfo, input);
 
         backgroundJobInfo.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
@@ -342,7 +354,7 @@ public class BackgroundJobInfoAppService : DynamicQueryableAppService<Background
         return await AsyncExecuter.ToListAsync(quaryble);
     }
 
-    protected virtual void UpdateByInput(BackgroundJobInfo backgroundJobInfo, BackgroundJobInfoCreateOrUpdateDto input)
+    protected async virtual Task UpdateByInput(BackgroundJobInfo backgroundJobInfo, BackgroundJobInfoCreateOrUpdateDto input)
     {
         backgroundJobInfo.IsEnabled = input.IsEnabled;
         backgroundJobInfo.LockTimeOut = input.LockTimeOut;
@@ -361,7 +373,14 @@ public class BackgroundJobInfoAppService : DynamicQueryableAppService<Background
                 backgroundJobInfo.SetPersistentJob(input.Interval);
                 break;
             case JobType.Period:
-                backgroundJobInfo.SetPeriodJob(input.Cron);
+                if (!await CronValidator.ValidateAsync(input.Cron))
+                {
+                    throw new BusinessException(
+                        TaskManagementErrorCodes.InvalidCronExpression,
+                        $"Invalid CRON expression: [{input.Cron}]!")
+                        .WithData("Cron", input.Cron ?? "");
+                }
+                backgroundJobInfo.SetPeriodJob(input.Cron!);
                 break;
         }
     }
@@ -394,7 +413,7 @@ public class BackgroundJobInfoAppService : DynamicQueryableAppService<Background
 
         return await AsyncExecuter.ToListAsync(
             queryable.Where(condition)
-                .PageBy(pageRequest.SkipCount, pageRequest.MaxResultCount)
-                .OrderBy(sorting));
+                .OrderBy(sorting)
+                .PageBy(pageRequest.SkipCount, pageRequest.MaxResultCount));
     }
 }

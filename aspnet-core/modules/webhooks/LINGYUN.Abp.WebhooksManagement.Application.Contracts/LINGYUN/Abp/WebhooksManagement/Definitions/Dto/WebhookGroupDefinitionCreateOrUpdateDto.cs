@@ -7,7 +7,7 @@ public abstract class WebhookGroupDefinitionCreateOrUpdateDto : IHasExtraPropert
 {
     [Required]
     [DynamicStringLength(typeof(WebhookGroupDefinitionRecordConsts), nameof(WebhookGroupDefinitionRecordConsts.MaxDisplayNameLength))]
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     public ExtraPropertyDictionary ExtraProperties { get; set; } = new ExtraPropertyDictionary();
 }

@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Quartz;
 using Volo.Abp.VirtualFileSystem;
 using static Quartz.SchedulerBuilder;

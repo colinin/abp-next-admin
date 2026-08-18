@@ -11,7 +11,7 @@ public class TencentReGeocode
     /// 地址描述
     /// </summary>
     [JsonProperty("address")]
-    public string Address { get; set; }
+    public string? Address { get; set; }
     /// <summary>
     /// 位置描述
     /// </summary>

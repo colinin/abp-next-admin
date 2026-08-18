@@ -54,7 +54,7 @@ public class BaiduLocationHttpClient : ITransientDependency
         }
         var requestUrl = BuildRequestUrl(baiduMapUrl, baiduMapPath, requestParamters);
         var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
-        var baiduLocationResponse = JsonConvert.DeserializeObject<BaiduIpGeocodeResponse>(responseContent);
+        var baiduLocationResponse = JsonConvert.DeserializeObject<BaiduIpGeocodeResponse>(responseContent)!;
         if (!baiduLocationResponse.IsSuccess())
         {
             var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
@@ -84,7 +84,7 @@ public class BaiduLocationHttpClient : ITransientDependency
         return location;
     }
 
-    public async virtual Task<GecodeLocation> GeocodeAsync(string address, string city = null)
+    public async virtual Task<GecodeLocation> GeocodeAsync(string address, string? city = null)
     {
         var requestParamters = new Dictionary<string, string>
         {
@@ -106,7 +106,7 @@ public class BaiduLocationHttpClient : ITransientDependency
         }
         var requestUrl = BuildRequestUrl(baiduMapUrl, baiduMapPath, requestParamters);
         var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
-        var baiduLocationResponse = JsonConvert.DeserializeObject<BaiduGeocodeResponse>(responseContent);
+        var baiduLocationResponse = JsonConvert.DeserializeObject<BaiduGeocodeResponse>(responseContent)!;
         if (!baiduLocationResponse.IsSuccess())
         {
             var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
@@ -157,7 +157,7 @@ public class BaiduLocationHttpClient : ITransientDependency
 
         var requestUrl = BuildRequestUrl(baiduMapUrl, baiduMapPath, requestParamters);
         var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
-        var baiduLocationResponse = JsonConvert.DeserializeObject<BaiduReGeocodeResponse>(responseContent);
+        var baiduLocationResponse = JsonConvert.DeserializeObject<BaiduReGeocodeResponse>(responseContent)!;
         if (!baiduLocationResponse.IsSuccess())
         {
             var localizerFactory = ServiceProvider.GetRequiredService<IStringLocalizerFactory>();
@@ -173,16 +173,16 @@ public class BaiduLocationHttpClient : ITransientDependency
         }
         var location = new ReGeocodeLocation
         {
-            Street = baiduLocationResponse.Result.AddressComponent.Street,
-            AdCode = baiduLocationResponse.Result.AddressComponent.AdCode.ToString(),
+            Street = baiduLocationResponse.Result.AddressComponent?.Street,
+            AdCode = baiduLocationResponse.Result.AddressComponent?.AdCode,
             Address = baiduLocationResponse.Result.FormattedAddress,
             FormattedAddress = baiduLocationResponse.Result.SematicDescription,
-            City = baiduLocationResponse.Result.AddressComponent.City,
-            Country = baiduLocationResponse.Result.AddressComponent.Country,
-            District = baiduLocationResponse.Result.AddressComponent.District,
-            Number = baiduLocationResponse.Result.AddressComponent.StreetNumber,
-            Province = baiduLocationResponse.Result.AddressComponent.Province,
-            Town = baiduLocationResponse.Result.AddressComponent.Town,
+            City = baiduLocationResponse.Result.AddressComponent?.City,
+            Country = baiduLocationResponse.Result.AddressComponent?.Country,
+            District = baiduLocationResponse.Result.AddressComponent?.District,
+            Number = baiduLocationResponse.Result.AddressComponent?.StreetNumber,
+            Province = baiduLocationResponse.Result.AddressComponent?.Province,
+            Town = baiduLocationResponse.Result.AddressComponent?.Town,
             Pois = baiduLocationResponse.Result.Pois.Select(p =>
             {
                 var poi = new Poi
@@ -208,8 +208,8 @@ public class BaiduLocationHttpClient : ITransientDependency
         if (location.Pois.Any())
         {
             var nearPoi = location.Pois.OrderBy(x => x.Distance).FirstOrDefault();
-            location.Address = nearPoi.Address;
-            location.FormattedAddress = nearPoi.Name;
+            location.Address = nearPoi?.Address;
+            location.FormattedAddress = nearPoi?.Name;
         }
         location.AddAdditional("BaiduLocation", baiduLocationResponse.Result);
 

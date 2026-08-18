@@ -14,7 +14,7 @@ public class MemberTextAttribute : MemberAttribute
     [NotNull]
     [JsonProperty("text")]
     [JsonPropertyName("text")]
-    public MemberTextModel Text { get; set; }
+    public MemberTextModel Text { get; set; } = default!;
 }
 
 public class MemberTextModel
@@ -25,5 +25,5 @@ public class MemberTextModel
     [NotNull]
     [JsonProperty("value")]
     [JsonPropertyName("value")]
-    public string Value { get; set; }
+    public string Value { get; set; } = default!;
 }

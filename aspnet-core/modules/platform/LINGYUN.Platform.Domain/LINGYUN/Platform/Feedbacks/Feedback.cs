@@ -12,8 +12,8 @@ namespace LINGYUN.Platform.Feedbacks;
 public class Feedback : FullAuditedAggregateRoot<Guid>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual string Content { get; set; }
-    public virtual string Category { get; protected set; }
+    public virtual string Content { get; set; } = default!;
+    public virtual string Category { get; protected set; } = default!;
     public virtual FeedbackStatus Status { get; protected set; }
     public virtual ICollection<FeedbackComment> Comments { get; protected set; }
     public virtual ICollection<FeedbackAttachment> Attachments { get; protected set; }
@@ -71,7 +71,7 @@ public class Feedback : FullAuditedAggregateRoot<Guid>, IMultiTenant
         return attachment;
     }
 
-    public FeedbackAttachment FindAttachment(string name)
+    public FeedbackAttachment? FindAttachment(string name)
     {
         return Attachments.FirstOrDefault(x => x.Name == name);
     }

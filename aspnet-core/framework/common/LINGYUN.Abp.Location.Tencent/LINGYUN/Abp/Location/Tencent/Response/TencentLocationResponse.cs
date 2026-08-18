@@ -20,12 +20,12 @@ public abstract class TencentLocationResponse
     /// 状态说明
     /// </summary>
     [JsonProperty("message")]
-    public string Message { get; set; }
+    public string Message { get; set; } = default!;
     /// <summary>
     /// 本次请求的唯一标识
     /// </summary>
     [JsonProperty("request_id")]
-    public string RequestId { get; set; }
+    public string RequestId { get; set; } = default!;
     /// <summary>
     /// 是否请求成功
     /// </summary>

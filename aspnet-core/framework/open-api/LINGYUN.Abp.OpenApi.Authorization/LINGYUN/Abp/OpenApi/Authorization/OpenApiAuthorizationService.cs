@@ -188,7 +188,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             queryDictionary.TryAdd("nonce", nonce.ToString());
             queryDictionary.TryAdd("t", timeStampString.ToString());
 
-            var requiredSign = CalculationSignature(httpContext.Request.Path.Value, queryDictionary);
+            var requiredSign = CalculationSignature(httpContext.Request.Path.Value!, queryDictionary);
             if (!string.Equals(requiredSign, sign.ToString()))
             {
                 var exception = new BusinessException(
@@ -243,8 +243,8 @@ namespace LINGYUN.Abp.OpenApi.Authorization
                     exceptionWrapHandlerFactory.CreateFor(exceptionWrapContext).Wrap(exceptionWrapContext);
 
                     var wrapResult = new WrapResult(
-                        exceptionWrapContext.ErrorInfo.Code,
-                        exceptionWrapContext.ErrorInfo.Message,
+                        exceptionWrapContext.ErrorInfo.Code!,
+                        exceptionWrapContext.ErrorInfo.Message!,
                         exceptionWrapContext.ErrorInfo.Details);
 
                     context.Response.Clear();
@@ -258,7 +258,7 @@ namespace LINGYUN.Abp.OpenApi.Authorization
             }
 
             context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-            await context.Response.WriteAsync(errorInfo.Message);
+            await context.Response.WriteAsync(errorInfo.Message!);
         }
 
         private static string CalculationSignature(string url, IDictionary<string, string> queryDictionary)

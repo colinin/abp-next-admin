@@ -10,10 +10,10 @@ public class PushPlusTopicForMe : PushPlusTopic
     /// 联系方式
     /// </summary>
     [JsonProperty("contact")]
-    public string Contact { get; set; }
+    public string? Contact { get; set; }
     /// <summary>
     /// 群组简介
     /// </summary>
     [JsonProperty("introduction")]
-    public string Introduction { get; set; }
+    public string? Introduction { get; set; }
 }

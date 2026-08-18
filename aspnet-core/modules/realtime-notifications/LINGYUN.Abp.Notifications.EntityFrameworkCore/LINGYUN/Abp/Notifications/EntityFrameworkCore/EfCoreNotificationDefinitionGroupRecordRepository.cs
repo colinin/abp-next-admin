@@ -23,7 +23,7 @@ public class EfCoreNotificationDefinitionGroupRecordRepository :
     {
     }
 
-    public async virtual Task<NotificationDefinitionGroupRecord> FindByNameAsync(
+    public async virtual Task<NotificationDefinitionGroupRecord?> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default)
     {

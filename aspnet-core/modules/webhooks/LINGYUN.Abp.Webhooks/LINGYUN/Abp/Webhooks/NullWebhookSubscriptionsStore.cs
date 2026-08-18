@@ -14,12 +14,12 @@ namespace LINGYUN.Abp.Webhooks
 
         public Task<WebhookSubscriptionInfo> GetAsync(Guid id)
         {
-            return Task.FromResult<WebhookSubscriptionInfo>(default);
+            return Task.FromResult<WebhookSubscriptionInfo>(default!);
         }
 
         public WebhookSubscriptionInfo Get(Guid id)
         {
-            return default;
+            return default!;
         }
 
         public Task InsertAsync(WebhookSubscriptionInfo webhookSubscription)

@@ -31,7 +31,7 @@ public class RoleEntityRuleAppService : DataProtectionManagementApplicationServi
     {
         var entityTypeInfo = await _entityTypeInfoRepository.GetAsync(input.EntityTypeId);
         var entityRule = await _roleEntityRuleRepository.FindEntityRuleAsync(input.RoleName, entityTypeInfo.TypeFullName, input.Operation);
-        return ObjectMapper.Map<RoleEntityRule, RoleEntityRuleDto>(entityRule);
+        return ObjectMapper.Map<RoleEntityRule, RoleEntityRuleDto>(entityRule!);
     }
 
     [Authorize(DataProtectionManagementPermissionNames.RoleEntityRule.Create)]
@@ -72,10 +72,10 @@ public class RoleEntityRuleAppService : DataProtectionManagementApplicationServi
                     entityRule.Operation,
                     entityRule.FilterGroup)
                 {
-                    AccessedProperties = input.AccessedProperties?.ToList()
+                    AccessedProperties = input.AccessedProperties?.ToList() ?? []
                 }));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<RoleEntityRule, RoleEntityRuleDto>(entityRule);
     }
@@ -112,10 +112,10 @@ public class RoleEntityRuleAppService : DataProtectionManagementApplicationServi
                     entityRule.Operation,
                     entityRule.FilterGroup)
                 {
-                    AccessedProperties = input.AccessedProperties?.ToList()
+                    AccessedProperties = input.AccessedProperties?.ToList() ?? []
                 }));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<RoleEntityRule, RoleEntityRuleDto>(entityRule);
     }

@@ -14,7 +14,7 @@ public class DeleteDepartmentEvent : WeChatWorkEventMessage
     /// 部门Id
     /// </summary>
     [XmlElement("Id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {

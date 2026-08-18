@@ -18,5 +18,5 @@ public class WeChatWorkGetCalendarListResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("calendar_list")]
     [JsonPropertyName("calendar_list")]
-    public CalendarInfo[] CalendarList { get; set; }
+    public CalendarInfo[] CalendarList { get; set; } = default!;
 }

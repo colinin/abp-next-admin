@@ -11,14 +11,14 @@ public abstract class TagGroup
     [NotNull]
     [JsonProperty("group_id")]
     [JsonPropertyName("group_id")]
-    public string GroupId { get; set; }
+    public string GroupId { get; set; } = default!;
     /// <summary>
     /// 标签组名称
     /// </summary>
     [NotNull]
     [JsonProperty("group_name")]
     [JsonPropertyName("group_name")]
-    public string GroupName { get; set; }
+    public string GroupName { get; set; } = default!;
     /// <summary>
     /// 标签组创建时间
     /// </summary>

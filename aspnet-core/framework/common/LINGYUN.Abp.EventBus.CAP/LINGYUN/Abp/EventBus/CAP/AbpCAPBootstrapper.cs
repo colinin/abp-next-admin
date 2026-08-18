@@ -15,7 +15,7 @@ public class AbpCAPBootstrapper : IBootstrapper
     private readonly ILogger<IBootstrapper> _logger;
     private readonly IServiceProvider _serviceProvider;
 
-    private CancellationTokenSource _cts;
+    private CancellationTokenSource? _cts;
     private bool _disposed;
     private IEnumerable<IProcessingServer> _processors = default!;
 

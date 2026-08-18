@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.TextTemplating;
 
 public interface ITemplateDefinitionStoreCache
 {
-    string CacheStamp { get; set; }
+    string? CacheStamp { get; set; }
 
     SemaphoreSlim SyncSemaphore { get; }
 
@@ -18,7 +18,7 @@ public interface ITemplateDefinitionStoreCache
         List<TextTemplateDefinition> templateDefinitionRecords,
         IReadOnlyList<TemplateDefinition> templateDefinitions);
 
-    TemplateDefinition GetOrNull(string name);
+    TemplateDefinition? GetOrNull(string name);
 
     IReadOnlyList<TemplateDefinition> GetAll();
 }

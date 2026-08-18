@@ -9,5 +9,5 @@ public class UserJoinGroupDto
 
     [Required]
     [StringLength(100)]
-    public string JoinInfo { get; set; }
+    public string JoinInfo { get; set; } = default!;
 }

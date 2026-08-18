@@ -15,14 +15,14 @@ public partial class IdentitySessionToIdentitySessionEtoMapper : MapperBase<Iden
     public override partial void Map(IdentitySession source, IdentitySessionEto destination);
 
     [UserMapping(Default = false)]
-    private static Dictionary<string, string> TryGetProperties(IdentitySession source)
+    private static Dictionary<string, string?> TryGetProperties(IdentitySession source)
     {
-        var properties = new Dictionary<string, string>();
+        var properties = new Dictionary<string, string?>();
         if (source != null && source.ExtraProperties != null)
         {
             foreach (var property in source.ExtraProperties)
             {
-                properties[property.Key] = property.Value.ToString();
+                properties[property.Key] = property.Value?.ToString();
             }
         }
         return properties;

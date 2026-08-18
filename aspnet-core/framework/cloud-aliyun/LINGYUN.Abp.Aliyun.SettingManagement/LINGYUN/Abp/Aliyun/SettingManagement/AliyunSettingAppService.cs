@@ -40,7 +40,7 @@ public class AliyunSettingAppService : ApplicationService, IAliyunSettingAppServ
         return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
     }
 
-    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string? providerKey = null)
     {
         var settingGroups = new SettingGroupResult();
 
@@ -59,7 +59,7 @@ public class AliyunSettingAppService : ApplicationService, IAliyunSettingAppServ
                 await SettingManager.GetOrNullAsync(AliyunSettingNames.Authorization.RegionId, providerName, providerKey),
                 ValueType.Option,
                 providerName)
-                .AddOptions(GetAvailableRegionOptions());
+                ?.AddOptions(GetAvailableRegionOptions());
             ramSetting.AddDetail(
                 await SettingDefinitionManager.GetAsync(AliyunSettingNames.Authorization.AccessKeyId),
                 StringLocalizerFactory,

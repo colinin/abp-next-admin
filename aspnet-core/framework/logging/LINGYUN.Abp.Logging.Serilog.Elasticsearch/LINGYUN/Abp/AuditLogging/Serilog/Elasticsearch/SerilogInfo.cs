@@ -16,11 +16,11 @@ public class SerilogInfo
     public LogEventLevel Level { get; set; }
 
     [JsonPropertyName(ElasticsearchJsonFormatter.RenderedMessagePropertyName)]
-    public string Message { get; set; }
+    public string? Message { get; set; }
 
     [JsonPropertyName("fields")]
-    public SerilogField Fields { get; set; }
+    public SerilogField Fields { get; set; } = default!;
 
     [JsonPropertyName("exceptions")]
-    public List<SerilogException> Exceptions { get; set; }
+    public List<SerilogException>? Exceptions { get; set; }
 }

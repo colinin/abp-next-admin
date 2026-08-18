@@ -13,7 +13,7 @@ public interface IPackageAppService :
         PackageCreateDto,
         PackageUpdateDto>
 {
-    Task<PackageDto> GetLatestAsync(PackageGetLatestInput input);
+    Task<PackageDto?> GetLatestAsync(PackageGetLatestInput input);
 
     Task<PackageBlobDto> UploadBlobAsync(
         Guid id,

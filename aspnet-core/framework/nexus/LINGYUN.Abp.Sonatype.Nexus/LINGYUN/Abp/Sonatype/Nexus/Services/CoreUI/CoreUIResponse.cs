@@ -7,17 +7,17 @@ namespace LINGYUN.Abp.Sonatype.Nexus.Services.CoreUI;
 public class CoreUIResponse<TResult>
 {
     [JsonPropertyName("action")]
-    public string Action { get; set; }
+    public string Action { get; set; } = default!;
 
     [JsonPropertyName("method")]
-    public string Method { get; set; }
+    public string Method { get; set; } = default!;
 
     [JsonPropertyName("tid")]
     public long Tid { get; set; }
 
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string? Type { get; set; }
 
     [JsonPropertyName("result")]
-    public TResult Result { get; set; }
+    public TResult Result { get; set; } = default!;
 }

@@ -11,7 +11,7 @@ public class WeChatMessage
     /// 签名计算方法参考: https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/2.0/api/Before_Develop/Message_encryption_and_decryption.html
     /// </remarks>
     [JsonPropertyName("signature")]
-    public string Signature { get; set; }
+    public string Signature { get; set; } = default!;
     /// <summary>
     /// 时间戳。与nonce结合使用，用于防止请求重放攻击。
     /// </summary>
@@ -21,5 +21,5 @@ public class WeChatMessage
     /// 随机数。与timestamp结合使用，用于防止请求重放攻击。
     /// </summary>
     [JsonPropertyName("nonce")]
-    public string Nonce { get; set; }
+    public string Nonce { get; set; } = default!;
 }

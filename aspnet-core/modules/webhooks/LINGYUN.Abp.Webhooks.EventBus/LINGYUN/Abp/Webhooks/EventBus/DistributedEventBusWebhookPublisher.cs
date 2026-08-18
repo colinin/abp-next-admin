@@ -20,7 +20,7 @@ public class DistributedEventBusWebhookPublisher : IWebhookPublisher, ITransient
         string webhookName, 
         object data, 
         bool sendExactSameData = false, 
-        WebhookHeader headers = null)
+        WebhookHeader? headers = null)
     {
         var eventData = new WebhooksEventData(
             webhookName,
@@ -36,7 +36,7 @@ public class DistributedEventBusWebhookPublisher : IWebhookPublisher, ITransient
         object data, 
         Guid? tenantId, 
         bool sendExactSameData = false, 
-        WebhookHeader headers = null)
+        WebhookHeader? headers = null)
     {
         var eventData = new WebhooksEventData(
             webhookName,
@@ -53,7 +53,7 @@ public class DistributedEventBusWebhookPublisher : IWebhookPublisher, ITransient
         string webhookName, 
         object data, 
         bool sendExactSameData = false, 
-        WebhookHeader headers = null)
+        WebhookHeader? headers = null)
     {
         var eventData = new WebhooksEventData(
             webhookName,

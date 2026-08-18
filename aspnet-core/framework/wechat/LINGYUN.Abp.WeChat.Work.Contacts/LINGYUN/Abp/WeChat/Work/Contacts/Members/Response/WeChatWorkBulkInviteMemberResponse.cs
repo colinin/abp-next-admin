@@ -17,19 +17,19 @@ public class WeChatWorkBulkInviteMemberResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("invaliduser")]
     [JsonPropertyName("invaliduser")]
-    public string[] InvalidUser { get; set; }
+    public string[] InvalidUser { get; set; } = default!;
     /// <summary>
     /// 非法部门列表
     /// </summary>
     [NotNull]
     [JsonProperty("invalidparty")]
     [JsonPropertyName("invalidparty")]
-    public int[] InvalidParty { get; set; }
+    public int[] InvalidParty { get; set; } = default!;
     /// <summary>
     /// 非法标签列表
     /// </summary>
     [NotNull]
     [JsonProperty("invalidtag")]
     [JsonPropertyName("invalidtag")]
-    public int[] InvalidTag { get; set; }
+    public int[] InvalidTag { get; set; } = default!;
 }

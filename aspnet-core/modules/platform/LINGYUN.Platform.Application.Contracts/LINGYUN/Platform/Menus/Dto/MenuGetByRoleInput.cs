@@ -8,8 +8,8 @@ public class MenuGetByRoleInput
 {
     [Required]
     [StringLength(80)]
-    public string Role { get; set; }
+    public string Role { get; set; } = default!;
 
     [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
-    public string Framework { get; set; }
+    public string? Framework { get; set; }
 }

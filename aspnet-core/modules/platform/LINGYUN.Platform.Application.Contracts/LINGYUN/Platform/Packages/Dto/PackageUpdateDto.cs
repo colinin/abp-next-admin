@@ -4,5 +4,5 @@ namespace LINGYUN.Platform.Packages;
 
 public class PackageUpdateDto : PackageCreateOrUpdateDto, IHasConcurrencyStamp
 {
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

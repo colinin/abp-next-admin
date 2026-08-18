@@ -58,12 +58,12 @@ public class AbpAccountWebOpenIddictModule : AbpModule
         Configure<AbpBundlingOptions>(options =>
         {
             options.ScriptBundles
-                .Add(typeof(SelectAccountModel).FullName, bundle =>
+                .Add(typeof(SelectAccountModel).FullName!, bundle =>
                 {
                     bundle.AddFiles("/Pages/Account/SelectAccount.js");
                 });
             options.StyleBundles
-                .Add(typeof(SelectAccountModel).FullName, bundle =>
+                .Add(typeof(SelectAccountModel).FullName!, bundle =>
                 {
                     bundle.AddFiles("/css/select-account.css");
                 });

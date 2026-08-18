@@ -5,7 +5,7 @@ namespace LINGYUN.Abp.Serilog.Enrichers.Application;
 
 public class ApplicationNameEnricher : ILogEventEnricher
 {
-    LogEventProperty _cachedProperty;
+    LogEventProperty? _cachedProperty;
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         logEvent.AddPropertyIfAbsent(GetLogEventProperty(propertyFactory));

@@ -13,7 +13,7 @@ public class PushPlusMessage
     /// webhook-第三方webhook
     /// </summary>
     [JsonProperty("channel")]
-    public string Channel { get; set; }
+    public string Channel { get; set; } = default!;
     /// <summary>
     /// 消息类型;
     /// 1-一对一消息,
@@ -25,17 +25,17 @@ public class PushPlusMessage
     /// 消息短链码;可用于查询消息发送结果
     /// </summary>
     [JsonProperty("shortCode")]
-    public string ShortCode { get; set; }
+    public string ShortCode { get; set; } = default!;
     /// <summary>
     /// 消息标题
     /// </summary>
     [JsonProperty("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
     /// <summary>
     /// 群组名称，一对多消息才有值
     /// </summary>
     [JsonProperty("topicName")]
-    public string TopicName { get; set; }
+    public string? TopicName { get; set; }
     /// <summary>
     /// 更新日期
     /// </summary>

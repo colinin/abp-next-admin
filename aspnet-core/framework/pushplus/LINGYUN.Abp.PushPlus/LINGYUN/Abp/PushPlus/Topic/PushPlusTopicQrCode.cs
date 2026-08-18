@@ -8,7 +8,7 @@ public class PushPlusTopicQrCode
     /// 群组二维码图片路径
     /// </summary>
     [JsonProperty("qrCodeImgUrl")]
-    public string QrCodeImgUrl { get; set; }
+    public string QrCodeImgUrl { get; set; } = default!;
     /// <summary>
     /// 二维码类型；
     /// 0-临时二维码，

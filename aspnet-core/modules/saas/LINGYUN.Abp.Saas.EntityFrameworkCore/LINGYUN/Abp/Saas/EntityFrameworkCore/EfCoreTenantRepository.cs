@@ -20,7 +20,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
 
     }
 
-    public async override Task<Tenant> FindAsync(Guid id, bool includeDetails = true, CancellationToken cancellationToken = default)
+    public async override Task<Tenant?> FindAsync(Guid id, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
         var tenantDbSet = dbContext.Set<Tenant>()
@@ -55,7 +55,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
             .FirstOrDefaultAsync(t => t.Id == id, GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Tenant> FindByNameAsync(
+    public async virtual Task<Tenant?> FindByNameAsync(
         string name,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
@@ -70,7 +70,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
             var queryable = from tenant in tenantDbSet
                     join edition in editionDbSet on tenant.EditionId equals edition.Id into eg
                     from e in eg.DefaultIfEmpty()
-                    where tenant.Name.Equals(name) || tenant.NormalizedName.Equals(name)
+                    where tenant.Name.Equals(name) || tenant.NormalizedName!.Equals(name)
                     orderby tenant.Id
                     select new
                     {
@@ -93,7 +93,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
     }
 
     [Obsolete("Use FindByNameAsync method.")]
-    public virtual Tenant FindByName(string name, bool includeDetails = true)
+    public virtual Tenant? FindByName(string name, bool includeDetails = true)
     {
         var tenantDbSet = DbContext.Set<Tenant>()
                 .IncludeDetails(includeDetails);
@@ -104,7 +104,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
             var queryable = from tenant in tenantDbSet
                             join edition in editionDbSet on tenant.EditionId equals edition.Id into eg
                             from e in eg.DefaultIfEmpty()
-                            where tenant.Name.Equals(name) || tenant.NormalizedName.Equals(name)
+                            where tenant.Name.Equals(name) || tenant.NormalizedName!.Equals(name)
                             orderby tenant.Id
                             select new
                             {
@@ -127,7 +127,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
     }
 
     [Obsolete("Use FindAsync method.")]
-    public virtual Tenant FindById(Guid id, bool includeDetails = true)
+    public virtual Tenant? FindById(Guid id, bool includeDetails = true)
     {
         var tenantDbSet = DbContext.Set<Tenant>()
                 .IncludeDetails(includeDetails);
@@ -161,10 +161,10 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
     }
 
     public async virtual Task<List<Tenant>> GetListAsync(
-        string sorting = null,
-        int maxResultCount = int.MaxValue,
+        string? filter = null,
+        string? sorting = nameof(Tenant.Name),
+        int maxResultCount = 10,
         int skipCount = 0,
-        string filter = null,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
@@ -180,7 +180,7 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
                 .IncludeDetails(includeDetails);
 
             tenantDbSet = tenantDbSet
-               .WhereIf(!filter.IsNullOrWhiteSpace(), u => u.Name.Contains(filter))
+               .WhereIf(!filter.IsNullOrWhiteSpace(), u => u.Name.Contains(filter!))
                .OrderBy(sorting);
 
             var combinedResult = await (from tenant in tenantDbSet
@@ -213,19 +213,18 @@ public class EfCoreTenantRepository : EfCoreRepository<ISaasDbContext, Tenant, G
         }
 
         return await (await GetDbSetAsync())
-            .WhereIf(!filter.IsNullOrWhiteSpace(), u => u.Name.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), u => u.Name.Contains(filter!))
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public async virtual Task<long> GetCountAsync(string? filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync())
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
-                u =>
-                    u.Name.Contains(filter)
+                u => u.Name.Contains(filter!)
             ).CountAsync(cancellationToken: cancellationToken);
     }
 

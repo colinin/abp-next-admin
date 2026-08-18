@@ -6,5 +6,5 @@ namespace LINGYUN.Platform.Menus;
 [EventName("platform.menus.menu")]
 public class MenuEto : RouteEto
 {
-    public string Framework { get; set; }
+    public string Framework { get; set; } = default!;
 }

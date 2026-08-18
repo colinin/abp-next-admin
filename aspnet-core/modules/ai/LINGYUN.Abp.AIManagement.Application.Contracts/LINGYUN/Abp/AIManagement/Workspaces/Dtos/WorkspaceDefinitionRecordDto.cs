@@ -7,13 +7,13 @@ namespace LINGYUN.Abp.AIManagement.Workspaces.Dtos;
 [Serializable]
 public class WorkspaceDefinitionRecordDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string Provider { get; set; }
+    public string Provider { get; set; } = default!;
 
-    public string ModelName { get; set; }
+    public string ModelName { get; set; } = default!;
 
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     public string? Description { get; set; }
 
@@ -35,9 +35,9 @@ public class WorkspaceDefinitionRecordDto : ExtensibleAuditedEntityDto<Guid>, IH
 
     public bool IsSystem { get; set; }
 
-    public string[] Tools { get; set; }
+    public string[]? Tools { get; set; }
 
     public string? StateCheckers { get; set; }
 
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

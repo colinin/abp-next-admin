@@ -13,9 +13,9 @@ public class EditionConfigurationProvider : IEditionConfigurationProvider, ITran
         EditionStore = editionStore;
     }
 
-    public async virtual Task<EditionConfiguration> GetAsync(Guid? tenantId = null)
+    public async virtual Task<EditionConfiguration?> GetAsync(Guid? tenantId = null)
     {
-        EditionConfiguration edition = null;
+        EditionConfiguration? edition = null;
         if (tenantId.HasValue)
         {
             var editionInfo = await EditionStore.FindByTenantAsync(tenantId.Value);

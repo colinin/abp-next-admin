@@ -133,7 +133,7 @@ public static class ServiceCollectionDaprClientProxyExtensions
                 return Activator.CreateInstance(
                     typeof(DaprClientProxy<>).MakeGenericType(type),
                     service
-                );
+                )!;
             });
 
         return services;

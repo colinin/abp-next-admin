@@ -8,27 +8,27 @@ namespace LINGYUN.Abp.TaskManagement;
 
 public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<string>, IHasConcurrencyStamp
 {
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
     /// <summary>
     /// 任务名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 任务分组
     /// </summary>
-    public string Group { get; set; }
+    public string Group { get; set; } = default!;
     /// <summary>
     /// 任务类型
     /// </summary>
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     /// <summary>
     /// 返回参数
     /// </summary>
-    public string Result { get; set; }
+    public string? Result { get; set; }
     /// <summary>
     /// 任务参数
     /// </summary>
-    public ExtraPropertyDictionary Args { get; set; }
+    public ExtraPropertyDictionary Args { get; set; } = new ExtraPropertyDictionary();
     /// <summary>
     /// 任务状态
     /// </summary>
@@ -36,7 +36,7 @@ public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<string>, IHasConc
     /// <summary>
     /// 描述
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 开始时间
     /// </summary>
@@ -60,7 +60,7 @@ public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<string>, IHasConc
     /// <summary>
     /// Cron表达式，如果是持续任务需要指定
     /// </summary>
-    public string Cron { get; set; }
+    public string? Cron { get; set; }
     /// <summary>
     /// 触发次数
     /// </summary>
@@ -108,5 +108,5 @@ public class BackgroundJobInfoDto : ExtensibleAuditedEntityDto<string>, IHasConc
     /// <summary>
     /// 指定作业运行节点
     /// </summary>
-    public string NodeName { get; set; }
+    public string? NodeName { get; set; }
 }

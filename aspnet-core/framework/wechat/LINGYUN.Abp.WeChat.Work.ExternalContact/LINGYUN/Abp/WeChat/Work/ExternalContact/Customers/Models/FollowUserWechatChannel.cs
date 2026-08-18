@@ -14,7 +14,7 @@ public class FollowUserWechatChannel
     [NotNull]
     [JsonProperty("nickname")]
     [JsonPropertyName("nickname")]
-    public string NickName { get; set; }
+    public string NickName { get; set; } = default!;
     /// <summary>
     /// 视频号添加场景
     /// </summary>

@@ -21,7 +21,7 @@ public class FollowUserTag
     [NotNull]
     [JsonProperty("tag_name")]
     [JsonPropertyName("tag_name")]
-    public string TagName { get; set; }
+    public string TagName { get; set; } = default!;
     /// <summary>
     /// 该成员添加此外部联系人所打标签类型
     /// </summary>

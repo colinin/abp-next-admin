@@ -12,7 +12,7 @@ public class VueVbenAdminStandardMenuConverter : IStandardMenuConverter, ISingle
         {
             Icon = "",
             Name = menu.Name,
-            Path = menu.Path,
+            Path = menu.Path!,
             DisplayName = menu.DisplayName,
             Description = menu.Description,
             Redirect = menu.Redirect,
@@ -20,7 +20,7 @@ public class VueVbenAdminStandardMenuConverter : IStandardMenuConverter, ISingle
 
         if (menu.ExtraProperties.TryGetValue("icon", out var icon))
         {
-            standardMenu.Icon = icon.ToString();
+            standardMenu.Icon = icon?.ToString();
         }
 
         return standardMenu;

@@ -18,5 +18,5 @@ public class WeChatWorkGetMeetingRoomListResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("meetingroom_list")]
     [JsonPropertyName("meetingroom_list")]
-    public MeetingRoomInfo[] MeetingRoomList { get; set; }
+    public MeetingRoomInfo[] MeetingRoomList { get; set; } = default!;
 }

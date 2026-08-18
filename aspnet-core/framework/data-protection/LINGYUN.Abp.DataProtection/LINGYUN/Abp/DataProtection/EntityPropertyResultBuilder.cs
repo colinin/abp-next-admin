@@ -38,9 +38,8 @@ public class EntityPropertyResultBuilder : IEntityPropertyResultBuilder, ITransi
             return selector;
         }
 
-        var typeName = entityType.FullName;
         var allowProperties = new List<string>();
-        var subjectContext = new DataAccessSubjectContributorContext(typeName, operation, _serviceProvider);
+        var subjectContext = new DataAccessSubjectContributorContext(entityType.FullName!, operation, _serviceProvider);
         foreach (var contributor in _options.SubjectContributors)
         {
             var properties = await contributor.GetAccessdProperties(subjectContext);
@@ -86,9 +85,8 @@ public class EntityPropertyResultBuilder : IEntityPropertyResultBuilder, ITransi
             return selector;
         }
 
-        var typeName = typeof(TEntity).FullName;
         var allowProperties = new List<string>();
-        var subjectContext = new DataAccessSubjectContributorContext(typeName, operation, _serviceProvider);
+        var subjectContext = new DataAccessSubjectContributorContext(typeof(TEntity).FullName!, operation, _serviceProvider);
         foreach (var contributor in _options.SubjectContributors)
         {
             var properties = await contributor.GetAccessdProperties(subjectContext);

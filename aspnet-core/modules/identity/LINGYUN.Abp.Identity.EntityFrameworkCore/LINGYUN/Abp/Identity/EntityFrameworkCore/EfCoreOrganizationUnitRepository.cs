@@ -31,7 +31,7 @@ public class EfCoreOrganizationUnitRepository : Volo.Abp.Identity.EntityFramewor
 
     public async virtual Task<List<OrganizationUnit>> GetListAsync(
         ISpecification<OrganizationUnit> specification,
-        string sorting = nameof(OrganizationUnit.Code),
+        string? sorting = nameof(OrganizationUnit.Code),
         int maxResultCount = 10,
         int skipCount = 0,
         bool includeDetails = false,

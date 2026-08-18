@@ -10,13 +10,13 @@ public static class CodeNumberGenerator
     {
         if (numbers.IsNullOrEmpty())
         {
-            return null;
+            throw new ArgumentNullException(nameof(numbers), "numbers can not be null or empty.");
         }
 
         return numbers.Select(number => number.ToString(new string(PlatformConsts.CodePrefix, PlatformConsts.CodeUnitLength))).JoinAsString(".");
     }
 
-    public static string AppendCode(string parentCode, string childCode)
+    public static string AppendCode(string? parentCode, string childCode)
     {
         if (childCode.IsNullOrEmpty())
         {
@@ -31,7 +31,7 @@ public static class CodeNumberGenerator
         return parentCode + "." + childCode;
     }
 
-    public static string GetRelativeCode(string code, string parentCode)
+    public static string? GetRelativeCode(string code, string? parentCode)
     {
         if (code.IsNullOrEmpty())
         {
@@ -51,7 +51,7 @@ public static class CodeNumberGenerator
         return code.Substring(parentCode.Length + 1);
     }
 
-    public static string CalculateNextCode(string code)
+    public static string CalculateNextCode(string? code)
     {
         if (code.IsNullOrEmpty())
         {
@@ -75,7 +75,7 @@ public static class CodeNumberGenerator
         return splittedCode[splittedCode.Length - 1];
     }
 
-    public static string GetParentCode(string code)
+    public static string? GetParentCode(string code)
     {
         if (code.IsNullOrEmpty())
         {

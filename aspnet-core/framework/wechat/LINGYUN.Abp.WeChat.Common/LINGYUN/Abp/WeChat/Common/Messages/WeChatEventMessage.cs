@@ -10,5 +10,5 @@ public abstract class WeChatEventMessage : WeChatMessage
     /// 事件类型
     /// </summary>
     [XmlElement("Event")]
-    public string Event { get; set; }
+    public string Event { get; set; } = default!;
 }

@@ -5,7 +5,7 @@ using Volo.Abp;
 namespace LINGYUN.Abp.AIManagement.Chats;
 public class TextChatMessageRecord : ChatMessageRecord
 {
-    public string Content { get; private set; }
+    public string Content { get; private set; } = default!;
 
     public TextChatMessageRecord()
     {

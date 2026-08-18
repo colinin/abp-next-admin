@@ -67,7 +67,7 @@ public class CacheAppService : ApplicationService, ICacheAppService
             sldExpr = input.SlidingExpiration.Value - Clock.Now;
         }
 
-        await CacheManager.SetAsync(input.Key, input.Value, absExpir, sldExpr);
+        await CacheManager.SetAsync(input.Key, input.Value ?? "", absExpir, sldExpr);
     }
 
     [Authorize(CachingManagementPermissionNames.Cache.Refresh)]

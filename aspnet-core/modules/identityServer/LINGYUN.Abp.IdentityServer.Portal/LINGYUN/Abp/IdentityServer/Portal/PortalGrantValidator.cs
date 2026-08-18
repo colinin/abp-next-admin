@@ -197,7 +197,7 @@ public class PortalGrantValidator : IExtensionGrantValidator
 
             var currentUser = await _userManager.GetUserAsync(resourceOwnerContext.Result.Subject);
 
-            await _events.RaiseAsync(new UserLoginSuccessEvent(userName, currentUser.Id.ToString(), currentUser.Name, clientId: resourceOwnerContext.Request.ClientId));
+            await _events.RaiseAsync(new UserLoginSuccessEvent(userName, currentUser!.Id.ToString(), currentUser.Name, clientId: resourceOwnerContext.Request.ClientId));
 
             await SetSuccessResultAsync(context, currentUser);
         }
@@ -242,7 +242,7 @@ public class PortalGrantValidator : IExtensionGrantValidator
         await _identitySecurityLogManager.SaveAsync(logContext);
     }
 
-    protected virtual Task<string> FindClientIdAsync(ExtensionGrantValidationContext context)
+    protected virtual Task<string?> FindClientIdAsync(ExtensionGrantValidationContext context)
     {
         return Task.FromResult(context.Request?.Client?.ClientId);
     }
@@ -257,7 +257,7 @@ public class PortalGrantValidator : IExtensionGrantValidator
             customClaims.Add(
                 new Claim(
                     AbpClaimTypes.TenantId,
-                    user.TenantId?.ToString()
+                    user.TenantId.Value.ToString()
                 )
             );
         }
@@ -265,7 +265,7 @@ public class PortalGrantValidator : IExtensionGrantValidator
         return Task.CompletedTask;
     }
 
-    private Task RaiseFailedResourceOwnerAuthenticationEventAsync(string userName, string error, string clientId)
+    private Task RaiseFailedResourceOwnerAuthenticationEventAsync(string userName, string? error, string? clientId)
     {
         return _events.RaiseAsync(new UserLoginFailureEvent(userName, error, interactive: false, clientId: clientId));
     }

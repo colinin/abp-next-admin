@@ -3,7 +3,6 @@ using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
-using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
@@ -79,7 +78,6 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpIdentityWeChatWorkModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
-    typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpMessageServiceEntityFrameworkCoreModule),
     typeof(AbpNotificationsEntityFrameworkCoreModule),

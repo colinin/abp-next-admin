@@ -73,7 +73,7 @@ public class AbpIdentitySessionEventServiceHandler : IAbpIdentityServerEventServ
             }
             if (CurrentTenant.IsAvailable)
             {
-                claimsIdentity.AddClaim(new Claim(AbpClaimTypes.TenantId, CurrentTenant.Id.ToString()));
+                claimsIdentity.AddClaim(new Claim(AbpClaimTypes.TenantId, CurrentTenant.Id!.Value.ToString()));
             }
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
             using (CurrentPrincipalAccessor.Change(claimsPrincipal))

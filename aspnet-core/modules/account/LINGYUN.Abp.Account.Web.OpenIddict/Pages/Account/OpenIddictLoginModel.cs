@@ -47,7 +47,7 @@ namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
                 // TODO: Find a proper cancel way.
                 // ShowCancelButton = true;
 
-                PasswordLoginInput.UserNameOrEmailAddress = request.LoginHint;
+                PasswordLoginInput.UserNameOrEmailAddress = request.LoginHint!;
 
                 //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
                 var tenant = request.GetParameter(TenantResolverConsts.DefaultTenantKey)?.ToString();
@@ -137,8 +137,8 @@ namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
                 };
 
                 var id = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
-                id.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Principal.FindFirstValue(ClaimTypes.PrimarySid)));
-                id.AddClaim(new Claim(ClaimTypes.Name, result.Principal.FindFirstValue(ClaimTypes.Name)));
+                id.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Principal.FindFirstValue(ClaimTypes.PrimarySid)!));
+                id.AddClaim(new Claim(ClaimTypes.Name, result.Principal.FindFirstValue(ClaimTypes.Name)!));
 
                 await HttpContext.SignInAsync(IdentityConstants.ExternalScheme, new ClaimsPrincipal(id), props);
 

@@ -5,7 +5,7 @@ namespace LINGYUN.Abp.OpenIddict.Authorizations;
 
 internal static class OpenIddictAuthorizationExtensions
 {
-    public static OpenIddictAuthorizationDto ToDto(this OpenIddictAuthorization entity, IJsonSerializer jsonSerializer)
+    public static OpenIddictAuthorizationDto? ToDto(this OpenIddictAuthorization entity, IJsonSerializer jsonSerializer)
     {
         if (entity == null)
         {

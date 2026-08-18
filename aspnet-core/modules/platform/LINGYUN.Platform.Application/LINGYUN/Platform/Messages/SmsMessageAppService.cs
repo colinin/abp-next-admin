@@ -29,7 +29,7 @@ public class SmsMessageAppService : PlatformApplicationServiceBase, ISmsMessageA
 
         await _smsMessageRepository.DeleteAsync(smsMessage);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<SmsMessageDto> GetAsync(Guid id)
@@ -65,7 +65,7 @@ public class SmsMessageAppService : PlatformApplicationServiceBase, ISmsMessageA
 
         await _smsMessageRepository.UpdateAsync(smsMessage);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     private class SmsMessageGetListSpecification : Volo.Abp.Specifications.Specification<SmsMessage>
@@ -81,8 +81,8 @@ public class SmsMessageAppService : PlatformApplicationServiceBase, ISmsMessageA
             Expression<Func<SmsMessage, bool>> expression = _ => true;
 
             return expression
-                .AndIf(!Input.PhoneNumber.IsNullOrWhiteSpace(), x => x.Receiver.Contains(Input.PhoneNumber))
-                .AndIf(!Input.Content.IsNullOrWhiteSpace(), x => x.Content.Contains(Input.Content))
+                .AndIf(!Input.PhoneNumber.IsNullOrWhiteSpace(), x => x.Receiver.Contains(Input.PhoneNumber!))
+                .AndIf(!Input.Content.IsNullOrWhiteSpace(), x => x.Content.Contains(Input.Content!))
                 .AndIf(Input.Status.HasValue, x => x.Status == Input.Status)
                 .AndIf(Input.BeginSendTime.HasValue, x => x.SendTime >= Input.BeginSendTime)
                 .AndIf(Input.EndSendTime.HasValue, x => x.SendTime <= Input.EndSendTime);

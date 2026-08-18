@@ -26,23 +26,30 @@ namespace LINGYUN.Abp.Webhooks
 
         public async virtual Task<WebhookPayload> GetWebhookPayloadAsync(WebhookSenderArgs webhookSenderArgs)
         {
-            var data = JsonConvert.DeserializeObject(webhookSenderArgs.Data);
+            object? data = null;
+            if (!webhookSenderArgs.Data.IsNullOrWhiteSpace())
+            {
+                data = JsonConvert.DeserializeObject(webhookSenderArgs.Data);
+            }
 
             var attemptNumber = await WebhookSendAttemptStore.GetSendAttemptCountAsync(
                 webhookSenderArgs.TenantId,
                 webhookSenderArgs.WebhookEventId,
                 webhookSenderArgs.WebhookSubscriptionId);
 
-            return new WebhookPayload(
+            var payload = new WebhookPayload(
                 webhookSenderArgs.WebhookEventId.ToString(),
                 webhookSenderArgs.WebhookName,
-                attemptNumber)
+                attemptNumber);
+            if (data != null)
             {
-                Data = data
-            };
+                payload.Data = data;
+            }
+
+            return payload;
         }
 
-        public virtual void SignWebhookRequest(HttpRequestMessage request, string serializedBody, string secret)
+        public virtual void SignWebhookRequest(HttpRequestMessage request, string? serializedBody, string? secret)
         {
             Check.NotNull(request, nameof(request));
             Check.NotNullOrWhiteSpace(serializedBody, nameof(serializedBody));
@@ -58,7 +65,7 @@ namespace LINGYUN.Abp.Webhooks
             }
         }
 
-        public async virtual Task<string> GetSerializedBodyAsync(WebhookSenderArgs webhookSenderArgs)
+        public async virtual Task<string?> GetSerializedBodyAsync(WebhookSenderArgs webhookSenderArgs)
         {
             if (webhookSenderArgs.SendExactSameData)
             {
@@ -79,7 +86,7 @@ namespace LINGYUN.Abp.Webhooks
             Guid? tenantId, 
             HttpStatusCode? statusCode, 
             string content,
-            IDictionary<string, string> requestHeaders = null,
-            IDictionary<string, string> responseHeaders = null);
+            IDictionary<string, string>? requestHeaders = null,
+            IDictionary<string, string>? responseHeaders = null);
     }
 }

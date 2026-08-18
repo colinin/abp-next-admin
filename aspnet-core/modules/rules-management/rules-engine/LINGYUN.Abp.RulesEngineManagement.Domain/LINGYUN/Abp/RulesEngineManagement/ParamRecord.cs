@@ -7,8 +7,8 @@ namespace LINGYUN.Abp.RulesEngineManagement;
 public class ParamRecord : Entity<Guid>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual string Name { get; protected set; }
-    public virtual string Expression { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
+    public virtual string Expression { get; protected set; } = default!;
     protected ParamRecord()
     {
 

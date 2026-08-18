@@ -34,7 +34,7 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         return Task.FromResult(jobs);
     }
 
-    public virtual Task<List<JobInfo>> GetRuningListAsync(int maxResultCount, string nodeName = null, CancellationToken cancellationToken = default)
+    public virtual Task<List<JobInfo>> GetRuningListAsync(int maxResultCount, string? nodeName = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -68,14 +68,14 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
         return Task.FromResult(jobs);
     }
 
-    public Task<JobInfo> FindAsync(
+    public Task<JobInfo?> FindAsync(
         string jobId,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         var job = _memoryJobStore.FirstOrDefault(x => x.Id.Equals(jobId));
-        return Task.FromResult(job);
+        return Task.FromResult<JobInfo?>(job);
     }
 
     public virtual Task StoreAsync(
@@ -133,7 +133,7 @@ internal class InMemoryJobStore : IJobStore, ISingletonDependency
     public virtual Task<List<JobInfo>> CleanupAsync(
         int maxResultCount, 
         TimeSpan jobExpiratime,
-        string nodeName = null, 
+        string? nodeName = null, 
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();

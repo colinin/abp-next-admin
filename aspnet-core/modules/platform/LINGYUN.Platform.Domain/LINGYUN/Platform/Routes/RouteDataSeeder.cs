@@ -38,9 +38,9 @@ public class RouteDataSeeder : IRouteDataSeeder, ITransientDependency
         string path, 
         string displayName,
         Guid dataId, 
-        string framework, 
-        string redirect = "", 
-        string description = "",
+        string framework,
+        string? redirect = null,
+        string? description = null,
         Guid? tenantId = null, 
         CancellationToken cancellationToken = default)
     {
@@ -69,12 +69,12 @@ public class RouteDataSeeder : IRouteDataSeeder, ITransientDependency
         string code,
         string component,
         string displayName,
-        string redirect = "", 
-        string description = "",
+        string? redirect = null,
+        string? description = null,
         Guid? parentId = null,
         Guid? tenantId = null,
         bool isPublic = false,
-        IDictionary<string, object> meta = null,
+        IDictionary<string, object?>? meta = null,
         CancellationToken cancellationToken = default)
     {
         if (parentId.HasValue)

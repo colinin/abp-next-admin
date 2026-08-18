@@ -10,11 +10,11 @@ public abstract class EntityRuleBase : AuditedAggregateRoot<Guid>, IMultiTenant
     public virtual Guid? TenantId { get; protected set; }
     public virtual bool IsEnabled { get; set; }
     public virtual DataAccessOperation Operation { get; set; }
-    public virtual DataAccessFilterGroup FilterGroup { get; set; }
+    public virtual DataAccessFilterGroup? FilterGroup { get; set; }
     public virtual Guid EntityTypeId { get; protected set; }
-    public virtual string EntityTypeFullName { get; protected set; }
-    public virtual EntityTypeInfo EntityTypeInfo { get; protected set; }
-    public virtual string AccessedProperties { get; set; }
+    public virtual string EntityTypeFullName { get; protected set; } = default!;
+    public virtual EntityTypeInfo EntityTypeInfo { get; protected set; } = default!;
+    public virtual string? AccessedProperties { get; set; }
     protected EntityRuleBase()
     {
     }
@@ -24,8 +24,8 @@ public abstract class EntityRuleBase : AuditedAggregateRoot<Guid>, IMultiTenant
         Guid entityTypeId, 
         string enetityTypeFullName, 
         DataAccessOperation operation, 
-        string accessedProperties = null,
-        DataAccessFilterGroup filterGroup = null, 
+        string? accessedProperties = null,
+        DataAccessFilterGroup? filterGroup = null, 
         Guid? tenantId = null)
         : base(id)
     {

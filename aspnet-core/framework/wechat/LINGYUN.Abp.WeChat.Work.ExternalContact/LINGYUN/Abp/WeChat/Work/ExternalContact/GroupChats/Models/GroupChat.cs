@@ -14,7 +14,7 @@ public class GroupChat
     [NotNull]
     [JsonProperty("chat_id")]
     [JsonPropertyName("chat_id")]
-    public string ChatId { get; set; }
+    public string ChatId { get; set; } = default!;
     /// <summary>
     /// 客户群跟进状态
     /// </summary>

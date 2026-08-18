@@ -8,11 +8,11 @@ public class BlobDto : ExtensibleAuditedEntityDto<Guid>
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 全名
     /// </summary>
-    public string FullName { get; set; }
+    public string FullName { get; set; } = default!;
     /// <summary>
     /// 类型
     /// </summary>

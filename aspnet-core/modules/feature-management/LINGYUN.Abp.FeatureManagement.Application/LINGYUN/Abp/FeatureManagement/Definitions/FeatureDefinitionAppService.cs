@@ -87,7 +87,7 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
 
         await _definitionRepository.InsertAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
     }
@@ -103,7 +103,7 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
 
         await _definitionRepository.DeleteAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<FeatureDefinitionDto> GetAsync(string name)
@@ -140,7 +140,7 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         UpdateByInput(definitionRecord, input);
         definitionRecord = await _definitionBasicRepository.UpdateAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
     }
@@ -174,7 +174,7 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         {
             record.DefaultValue = input.DefaultValue;
         }
-        string allowedProviders = null;
+        string? allowedProviders = null;
         if (!input.AllowedProviders.IsNullOrEmpty())
         {
             allowedProviders = input.AllowedProviders.JoinAsString(",");
@@ -208,7 +208,7 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         }
     }
 
-    protected async virtual Task<FeatureDefinitionRecord> FindRecordByNameAsync(string name)
+    protected async virtual Task<FeatureDefinitionRecord?> FindRecordByNameAsync(string name)
     {
         var DefinitionFilter = await _definitionBasicRepository.GetQueryableAsync();
 

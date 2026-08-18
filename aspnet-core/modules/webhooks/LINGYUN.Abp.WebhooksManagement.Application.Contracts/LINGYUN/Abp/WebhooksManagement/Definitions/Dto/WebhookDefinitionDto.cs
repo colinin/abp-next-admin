@@ -5,13 +5,13 @@ namespace LINGYUN.Abp.WebhooksManagement.Definitions.Dto;
 
 public class WebhookDefinitionDto : IHasExtraProperties
 {
-    public string GroupName { get; set; }
+    public string GroupName { get; set; } = default!;
 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool IsEnabled { get; set; }
 

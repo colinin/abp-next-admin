@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,10 +20,13 @@ public class EfCoreTextTemplateRepository :
     {
     }
 
-    public async virtual Task<TextTemplate> FindByNameAsync(string name, string culture = null, CancellationToken cancellationToken = default)
+    public async virtual Task<TextTemplate?> FindByNameAsync(
+        string name, 
+        string? culture = null, 
+        CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .Where(x => x.Name.Equals(name) && x.Culture.Equals(culture))
+            .Where(x => x.Name.Equals(name) && x.Culture == culture)
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 }

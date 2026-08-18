@@ -10,17 +10,17 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
     public class SendEmailConfirmModel : AccountPageModel
     {
         [BindProperty(SupportsGet = true)]
-        public string Email { get; set; }
+        public string Email { get; set; } = default!;
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; } = default!;
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrlHash { get; set; }
+        public string? ReturnUrlHash { get; set; }
 
-        public IMyProfileAppService MyProfileAppService { get; set; }
+        public IMyProfileAppService MyProfileAppService => LazyServiceProvider.LazyGetRequiredService<IMyProfileAppService>();
 
         public SendEmailConfirmModel()
         {
@@ -29,7 +29,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
         public virtual Task<IActionResult> OnGetAsync()
         {
-            Email = CurrentUser.Email;
+            Email = CurrentUser.Email!;
 
             return Task.FromResult<IActionResult>(Page());
         }

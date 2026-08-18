@@ -18,7 +18,7 @@ public class SendPushPlusMessageResult
     /// 发送失败原因
     /// </summary>
     [JsonProperty("errorMessage")]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
     /// <summary>
     /// 更新时间
     /// </summary>

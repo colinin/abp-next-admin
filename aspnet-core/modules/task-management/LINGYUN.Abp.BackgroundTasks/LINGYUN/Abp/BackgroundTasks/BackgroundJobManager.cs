@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Guids;
@@ -59,9 +58,9 @@ public class BackgroundJobManager : IBackgroundJobManager
          var jobId = GuidGenerator.Create();
          var jobArgs = new Dictionary<string, object>
          {
-             { nameof(TArgs), JsonSerializer.Serialize(args) },
-             { "ArgsType", jobConfiguration.ArgsType.AssemblyQualifiedName },
-             { "JobType", jobConfiguration.JobType.AssemblyQualifiedName },
+             { nameof(TArgs), JsonSerializer.Serialize(args!) },
+             { "ArgsType", jobConfiguration.ArgsType.AssemblyQualifiedName! },
+             { "JobType", jobConfiguration.JobType.AssemblyQualifiedName! },
              { "JobName", jobConfiguration.JobName },
          };
          var jobInfo = new JobInfo
@@ -80,14 +79,12 @@ public class BackgroundJobManager : IBackgroundJobManager
             // 确保不会被轮询入队
             Status = JobStatus.None,
             NodeName = TasksOptions.NodeName,
-            Type = typeof(BackgroundJobAdapter<TArgs>).AssemblyQualifiedName,
+            Type = typeof(BackgroundJobAdapter<TArgs>).AssemblyQualifiedName!,
         };
 
         if (TasksOptions.JobDispatcherSelectors.IsMatch(jobConfiguration.JobType))
         {
-            var selector = TasksOptions
-                .JobDispatcherSelectors
-                .FirstOrDefault(x => x.Predicate(jobConfiguration.JobType));
+            var selector = TasksOptions.JobDispatcherSelectors.GetJobTypeSelector(jobConfiguration.JobType);
 
             jobInfo.Interval = selector.Interval ?? jobInfo.Interval;
             jobInfo.LockTimeOut = selector.LockTimeOut ?? jobInfo.LockTimeOut;

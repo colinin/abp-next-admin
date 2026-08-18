@@ -10,12 +10,12 @@ public abstract class PicturePushEvent : WeChatWorkEventMessage
     /// 事件KEY值
     /// </summary>
     [XmlElement("EventKey")]
-    public string EventKey { get; set; }
+    public string EventKey { get; set; } = default!;
     /// <summary>
     /// 事件KEY值
     /// </summary>
     [XmlElement("SendPicsInfo")]
-    public PictureInfo SendPicsInfo { get; set; }
+    public PictureInfo SendPicsInfo { get; set; } = default!;
 }
 
 public class PictureInfo
@@ -29,7 +29,7 @@ public class PictureInfo
     /// 发送的图片数量
     /// </summary>
     [XmlArrayItem("Item")]
-    public Picture Picture { get; set; }
+    public Picture? Picture { get; set; }
 }
 
 [XmlRoot("PicList")]
@@ -39,5 +39,5 @@ public class Picture
     /// 图片的MD5值，开发者若需要，可用于验证接收到图片
     /// </summary>
     [XmlElement("PicMd5Sum")]
-    public string PicMd5Sum { get; set; }
+    public string PicMd5Sum { get; set; } = default!;
 }

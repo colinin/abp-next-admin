@@ -32,7 +32,7 @@ public class EfCoreTextRepository : EfCoreRepository<ILocalizationDbContext, Tex
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Text> GetByCultureKeyAsync(
+    public async virtual Task<Text?> GetByCultureKeyAsync(
         string resourceName,
         string cultureName,
         string key,
@@ -47,9 +47,9 @@ public class EfCoreTextRepository : EfCoreRepository<ILocalizationDbContext, Tex
     public async virtual Task<int> GetDifferenceCountAsync(
         string cultureName,
         string targetCultureName,
-        string resourceName = null,
+        string? resourceName = null,
         bool? onlyNull = null,
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         return await (await BuildTextDifferenceQueryAsync(
@@ -62,7 +62,7 @@ public class EfCoreTextRepository : EfCoreRepository<ILocalizationDbContext, Tex
     }
 
     [Obsolete("Use GetListAsync")]
-    public virtual List<Text> GetList(string resourceName = null, string cultureName = null)
+    public virtual List<Text> GetList(string? resourceName = null, string? cultureName = null)
     {
         return DbSet
             .WhereIf(!resourceName.IsNullOrWhiteSpace(), x => x.ResourceName.Equals(resourceName))
@@ -71,8 +71,8 @@ public class EfCoreTextRepository : EfCoreRepository<ILocalizationDbContext, Tex
     }
 
     public async virtual Task<List<Text>> GetListAsync(
-        string resourceName = null,
-        string cultureName = null,
+        string? resourceName = null,
+        string? cultureName = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
@@ -84,9 +84,9 @@ public class EfCoreTextRepository : EfCoreRepository<ILocalizationDbContext, Tex
     public async virtual Task<List<TextDifference>> GetDifferencePagedListAsync(
         string cultureName,
         string targetCultureName,
-        string resourceName = null,
+        string? resourceName = null,
         bool? onlyNull = null,
-        string filter = null,
+        string? filter = null,
         string sorting = nameof(TextDifference.Key),
         int skipCount = 1,
         int maxResultCount = 10,
@@ -106,9 +106,9 @@ public class EfCoreTextRepository : EfCoreRepository<ILocalizationDbContext, Tex
     protected async virtual Task<IQueryable<TextDifference>> BuildTextDifferenceQueryAsync(
         string cultureName,
         string targetCultureName,
-        string resourceName = null,
+        string? resourceName = null,
         bool? onlyNull = null,
-        string filter = null,
+        string? filter = null,
         string sorting = nameof(TextDifference.Key))
     {
         if (sorting.IsNullOrWhiteSpace())
@@ -119,7 +119,7 @@ public class EfCoreTextRepository : EfCoreRepository<ILocalizationDbContext, Tex
         var textQuery = (await GetDbSetAsync())
             .Where(x => x.CultureName.Equals(cultureName))
             .WhereIf(!resourceName.IsNullOrWhiteSpace(), x => x.ResourceName.Equals(resourceName))
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Key.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Key.Contains(filter!))
             .OrderBy(sorting);
 
         var targetTextQuery = (await GetDbSetAsync())

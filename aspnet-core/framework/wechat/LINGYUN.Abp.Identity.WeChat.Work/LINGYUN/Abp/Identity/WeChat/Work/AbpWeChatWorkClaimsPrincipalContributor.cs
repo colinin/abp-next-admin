@@ -20,17 +20,21 @@ public class AbpWeChatWorkClaimsPrincipalContributor : IAbpClaimsPrincipalContri
             return;
         }
         var userId = claimsIdentity.FindUserId();
-        if (userId.HasValue)
+        if (!userId.HasValue)
         {
-            var userClaimProvider = context.ServiceProvider.GetService<IWeChatWorkUserClaimProvider>();
+            return;
+        }
+        var userClaimProvider = context.ServiceProvider.GetService<IWeChatWorkUserClaimProvider>();
+        if (userClaimProvider == null)
+        {
+            return;
+        }
+        var weChatWorkUserId = await userClaimProvider.FindUserIdentifierAsync(userId.Value);
+        if (!weChatWorkUserId.IsNullOrWhiteSpace())
+        {
+            claimsIdentity.AddOrReplace(new Claim(AbpWeChatWorkClaimTypes.UserId, weChatWorkUserId));
 
-            var weChatWorkUserId = await userClaimProvider?.FindUserIdentifierAsync(userId.Value);
-            if (!weChatWorkUserId.IsNullOrWhiteSpace())
-            {
-                claimsIdentity.AddOrReplace(new Claim(AbpWeChatWorkClaimTypes.UserId, weChatWorkUserId));
-
-                context.ClaimsPrincipal.AddIdentityIfNotContains(claimsIdentity);
-            }
+            context.ClaimsPrincipal.AddIdentityIfNotContains(claimsIdentity);
         }
     }
 }

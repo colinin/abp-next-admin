@@ -8,5 +8,5 @@ public class DataItemCreateDto : DataItemCreateOrUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(DataItemConsts), nameof(DataItemConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

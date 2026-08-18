@@ -19,25 +19,25 @@ public interface IUserChatFriendRepository : IBasicRepository<UserChatFriend, lo
         Guid frientId,
         CancellationToken cancellationToken = default);
 
-    Task<UserChatFriend> FindByUserFriendIdAsync(
+    Task<UserChatFriend?> FindByUserFriendIdAsync(
         Guid userId,
         Guid friendId,
         CancellationToken cancellationToken = default);
 
     Task<List<UserFriend>> GetAllMembersAsync(
         Guid userId,
-        string sorting = nameof(UserChatFriend.RemarkName),
+        string? sorting = nameof(UserChatFriend.RemarkName),
          CancellationToken cancellationToken = default);
 
     Task<int> GetMembersCountAsync(
         Guid userId,
-        string filter = "",
+        string? filter = null,
          CancellationToken cancellationToken = default);
 
     Task<List<UserFriend>> GetMembersAsync(
         Guid userId,
-        string filter = "",
-        string sorting = nameof(UserChatFriend.UserId),
+        string? filter = null,
+        string? sorting = nameof(UserChatFriend.UserId),
         int skipCount = 0,
         int maxResultCount = 10,
          CancellationToken cancellationToken = default);
@@ -48,7 +48,7 @@ public interface IUserChatFriendRepository : IBasicRepository<UserChatFriend, lo
         int maxResultCount = 10,
          CancellationToken cancellationToken = default);
 
-    Task<UserFriend> GetMemberAsync(
+    Task<UserFriend?> GetMemberAsync(
         Guid userId,
         Guid friendId,
         CancellationToken cancellationToken = default);

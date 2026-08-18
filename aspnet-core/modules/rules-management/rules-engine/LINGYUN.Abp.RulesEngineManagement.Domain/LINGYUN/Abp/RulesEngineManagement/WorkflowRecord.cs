@@ -11,11 +11,11 @@ namespace LINGYUN.Abp.RulesEngineManagement;
 public class WorkflowRecord : AuditedAggregateRoot<Guid>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual string Name { get; protected set; }
-    public virtual string TypeFullName { get; protected set; }
-    public virtual string InjectWorkflows { get; protected set; }
-    public virtual ICollection<WorkflowParamRecord> GlobalParams { get; protected set; }
-    public virtual ICollection<WorkflowRuleRecord> Rules { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
+    public virtual string TypeFullName { get; protected set; } = default!;
+    public virtual string? InjectWorkflows { get; protected set; }
+    public virtual ICollection<WorkflowParamRecord> GlobalParams { get; protected set; } = default!;
+    public virtual ICollection<WorkflowRuleRecord> Rules { get; protected set; } = default!;
     protected WorkflowRecord()
     {
         ExtraProperties = new ExtraPropertyDictionary();
@@ -26,7 +26,7 @@ public class WorkflowRecord : AuditedAggregateRoot<Guid>, IMultiTenant
         Guid id,
         string name, 
         string typeFullName, 
-        string injectWorkflows = null,
+        string? injectWorkflows = null,
         Guid? tenantId = null)
         : base(id)
     {

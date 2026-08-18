@@ -35,7 +35,7 @@ public class QrCodeTokenExtensionGrant : ITokenExtensionGrant
             logger.LogInformation("The user has not passed the QR code Key required for scanning and login.");
 
             var properties = new AuthenticationProperties(
-                new Dictionary<string, string>
+                new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The Qr code is invalid."
@@ -52,7 +52,7 @@ public class QrCodeTokenExtensionGrant : ITokenExtensionGrant
             logger.LogInformation("The QR code Key {0} is invalid or the user has not scanned the QR code.", qrcodeKey);
 
             var properties = new AuthenticationProperties(
-                new Dictionary<string, string>
+                new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The Qr code is invalid."
@@ -73,11 +73,11 @@ public class QrCodeTokenExtensionGrant : ITokenExtensionGrant
 
         using (currentTenant.Change(tenantId))
         {
-            var user = await userManager.FindByIdAsync(qrCodeInfo.UserId);
+            var user = await userManager.FindByIdAsync(qrCodeInfo.UserId!);
             if (user == null)
             {
                 var properties = new AuthenticationProperties(
-                    new Dictionary<string, string>
+                    new Dictionary<string, string?>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                         [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Invalid user id."
@@ -90,7 +90,7 @@ public class QrCodeTokenExtensionGrant : ITokenExtensionGrant
             {
                 logger.LogInformation("Authentication failed for username: {username}, reason: the user token is invalid", user.UserName);
 
-                var properties = new AuthenticationProperties(new Dictionary<string, string>
+                var properties = new AuthenticationProperties(new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = OpenIddictResources.GetResourceString(OpenIddictResources.ID2019),
@@ -106,7 +106,7 @@ public class QrCodeTokenExtensionGrant : ITokenExtensionGrant
             {
                 logger.LogInformation("Authentication failed for username: {username}, reason: locked out", user.UserName);
 
-                var properties = new AuthenticationProperties(new Dictionary<string, string>
+                var properties = new AuthenticationProperties(new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The user account has been locked out due to invalid login attempts. Please wait a while and try again.",
@@ -123,12 +123,12 @@ public class QrCodeTokenExtensionGrant : ITokenExtensionGrant
         }
     }
 
-    protected virtual T GetRequiredService<T>(ExtensionGrantContext context)
+    protected virtual T GetRequiredService<T>(ExtensionGrantContext context) where T: notnull
     {
         return context.HttpContext.RequestServices.GetRequiredService<T>();
     }
 
-    protected virtual Task<string> FindClientIdAsync(ExtensionGrantContext context)
+    protected virtual Task<string?> FindClientIdAsync(ExtensionGrantContext context)
     {
         return Task.FromResult(context.Request.ClientId);
     }

@@ -9,7 +9,7 @@ public static class LocalizationDbContextModelBuilderExtensions
 {
     public static void ConfigureLocalization(
         this ModelBuilder builder,
-       Action<LocalizationModelBuilderConfigurationOptions> optionsAction = null)
+       Action<LocalizationModelBuilderConfigurationOptions>? optionsAction = null)
     {
         Check.NotNull(builder, nameof(builder));
 

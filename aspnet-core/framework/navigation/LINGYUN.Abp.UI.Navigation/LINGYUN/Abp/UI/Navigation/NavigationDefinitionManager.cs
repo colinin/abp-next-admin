@@ -44,7 +44,7 @@ public class NavigationDefinitionManager : INavigationDefinitionManager, ISingle
 
             foreach (var provider in providers)
             {
-                provider.Define(new NavigationDefinitionContext(settings));
+                provider?.Define(new NavigationDefinitionContext(settings));
             }
         }
 

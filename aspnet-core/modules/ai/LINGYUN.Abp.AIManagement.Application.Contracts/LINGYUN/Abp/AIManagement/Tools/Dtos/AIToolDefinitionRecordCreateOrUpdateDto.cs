@@ -7,7 +7,7 @@ public abstract class AIToolDefinitionRecordCreateOrUpdateDto : ExtensibleObject
 {
     [Required]
     [DynamicStringLength(typeof(AIToolDefinitionRecordConsts), nameof(AIToolDefinitionRecordConsts.MaxProviderLength))]
-    public string Provider { get; set; }
+    public string Provider { get; set; } = default!;
 
     [DynamicStringLength(typeof(AIToolDefinitionRecordConsts), nameof(AIToolDefinitionRecordConsts.MaxDescriptionLength))]
     public string? Description { get; set; }

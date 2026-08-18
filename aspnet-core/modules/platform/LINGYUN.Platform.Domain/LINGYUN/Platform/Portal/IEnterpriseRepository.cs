@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Repositories;
 namespace LINGYUN.Platform.Portal;
 public interface IEnterpriseRepository : IRepository<Enterprise, Guid>
 {
-    Task<Enterprise> FindByNameAsync(
+    Task<Enterprise?> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default);
 

@@ -9,13 +9,13 @@ public class NotificationSendDto
     [Required]
     [StringLength(NotificationConsts.MaxNameLength)]
     [DisplayName("Notifications:Name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [DisplayName("Notifications:Data")]
-    public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
+    public Dictionary<string, object?> Data { get; set; } = new Dictionary<string, object?>();
 
     [DisplayName("Notifications:Culture")]
-    public string Culture { get; set; }
+    public string? Culture { get; set; }
 
     [DisplayName("Notifications:ToUserId")]
     public List<UserIdentifier> ToUsers { get; set; } = new List<UserIdentifier>();

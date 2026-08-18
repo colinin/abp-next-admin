@@ -5,15 +5,15 @@ public class Group
     /// <summary>
     /// 群组标识
     /// </summary>
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
     /// <summary>
     /// 群组名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 群组头像
     /// </summary>
-    public string AvatarUrl { get; set; }
+    public string? AvatarUrl { get; set; }
     /// <summary>
     /// 允许匿名聊天
     /// </summary>

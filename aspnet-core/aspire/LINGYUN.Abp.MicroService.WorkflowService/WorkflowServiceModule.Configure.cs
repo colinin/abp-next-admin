@@ -3,7 +3,6 @@ using Elsa;
 using Elsa.Options;
 using Elsa.Rebus.RabbitMq;
 using LINGYUN.Abp.BackgroundTasks;
-using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -45,7 +44,6 @@ using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
 using ConsoleStartup = Elsa.Activities.Console.Startup;
-using EmailStartup = Elsa.Activities.Email.Startup;
 using HttpStartup = Elsa.Activities.Http.Startup;
 using JavaScriptStartup = Elsa.Scripting.JavaScript.Startup;
 using TemporalQuartzStartup = Elsa.Activities.Temporal.Quartz.Startup;
@@ -150,7 +148,6 @@ public partial class WorkflowServiceModule
                 typeof(HttpStartup),
                 typeof(UserTaskStartup),
                 typeof(TemporalQuartzStartup),
-                typeof(EmailStartup),
                 typeof(JavaScriptStartup),
                 typeof(WebhooksStartup),
             };

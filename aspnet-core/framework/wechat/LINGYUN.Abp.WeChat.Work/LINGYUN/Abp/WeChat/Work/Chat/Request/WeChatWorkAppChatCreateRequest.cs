@@ -10,8 +10,8 @@ public class WeChatWorkAppChatCreateRequest : WeChatWorkAppChatRequest
         string agentId,
         string name,
         List<string> users,
-        string owner = null,
-        string chatId = null)
+        string? owner = null,
+        string? chatId = null)
         : base(agentId)
     {
         Name = name;
@@ -34,7 +34,7 @@ public class WeChatWorkAppChatCreateRequest : WeChatWorkAppChatRequest
     [CanBeNull]
     [JsonProperty("owner")]
     [JsonPropertyName("owner")]
-    public virtual string Owner { get; set; }
+    public virtual string? Owner { get; set; }
     /// <summary>
     /// 群成员id列表。
     /// 至少2人，至多2000人
@@ -52,5 +52,5 @@ public class WeChatWorkAppChatCreateRequest : WeChatWorkAppChatRequest
     [CanBeNull]
     [JsonProperty("chatid")]
     [JsonPropertyName("chatid")]
-    public virtual string ChatId { get; set; }
+    public virtual string? ChatId { get; set; }
 }

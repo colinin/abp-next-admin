@@ -14,7 +14,7 @@ public class ChangePhoneNumberInput
     [Phone]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
     [Display(Name = "PhoneNumber")]
-    public string NewPhoneNumber { get; set; }
+    public string NewPhoneNumber { get; set; } = default!;
     /// <summary>
     /// 安全验证码
     /// </summary>
@@ -22,5 +22,5 @@ public class ChangePhoneNumberInput
     [DisableAuditing]
     [StringLength(6, MinimumLength = 6)]
     [Display(Name = "SmsVerifyCode")]
-    public string Code { get; set; }
+    public string Code { get; set; } = default!;
 }

@@ -14,21 +14,21 @@ public class UserAgreeInfo
     [NotNull]
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
     /// <summary>
     /// 外部成员的exteranalopenid
     /// </summary>
     [NotNull]
     [JsonProperty("exteranalopenid")]
     [JsonPropertyName("exteranalopenid")]
-    public string ExteranalOpenId { get; set; }
+    public string ExteranalOpenId { get; set; } = default!;
     /// <summary>
     /// 同意:"Agree"，不同意:"Disagree"
     /// </summary>
     [NotNull]
     [JsonProperty("agree_status")]
     [JsonPropertyName("agree_status")]
-    public string AgreeStatus { get; set; }
+    public string AgreeStatus { get; set; } = default!;
     /// <summary>
     /// 同意状态改变的具体时间，utc时间
     /// </summary>

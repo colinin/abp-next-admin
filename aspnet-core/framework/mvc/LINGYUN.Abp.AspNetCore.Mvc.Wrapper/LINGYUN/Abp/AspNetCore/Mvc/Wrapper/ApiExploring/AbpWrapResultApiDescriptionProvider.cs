@@ -66,7 +66,7 @@ public class AbpWrapResultApiDescriptionProvider : IApiDescriptionProvider, ITra
             {
                 var returnType = AsyncHelper.UnwrapTask(actionDescriptor.MethodInfo.ReturnType);
 
-                Type wrapResultType = null;
+                Type? wrapResultType = null;
                 if (returnType == null || returnType == typeof(void))
                 {
                     wrapResultType = typeof(WrapResult);

@@ -5,5 +5,5 @@ namespace LINGYUN.Abp.Account;
 public class ConfirmEmailInput
 {
     [Required]
-    public string ConfirmToken { get; set; }
+    public string ConfirmToken { get; set; } = default!;
 }

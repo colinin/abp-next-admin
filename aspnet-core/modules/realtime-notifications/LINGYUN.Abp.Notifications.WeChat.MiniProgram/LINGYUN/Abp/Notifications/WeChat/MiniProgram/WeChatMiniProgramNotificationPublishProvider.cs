@@ -58,7 +58,7 @@ public class WeChatMiniProgramNotificationPublishProvider : NotificationPublishP
 
             Logger.LogDebug($"Get wechat weapp template id: {templateId}");
 
-            var redirect = GetOrDefault(context.Notification.Data, "RedirectPage", null);
+            var redirect = GetOrDefault(context.Notification.Data, "RedirectPage", "");
             Logger.LogDebug($"Get wechat weapp redirect page: {redirect ?? "null"}");
 
             var weAppState = GetOrDefault(context.Notification.Data, "WeAppState", Options.Value.DefaultState);
@@ -75,12 +75,17 @@ public class WeChatMiniProgramNotificationPublishProvider : NotificationPublishP
                 // 发送小程序订阅消息
                 await SubscribeMessager
                     .SendAsync(
-                        identifier.UserId, templateId, redirect, weAppLang,
-                        weAppState, context.Notification.Data.ExtraProperties, cancellationToken);
+                        identifier.UserId, 
+                        templateId, 
+                        redirect, 
+                        weAppLang,
+                        weAppState, 
+                        context.Notification.Data.ExtraProperties, 
+                        cancellationToken);
             }
             else
             {
-                var weChatWeAppNotificationData = new SubscribeMessage(templateId, redirect, weAppState, weAppLang);
+                var weChatWeAppNotificationData = new SubscribeMessage(openId, templateId, redirect, weAppState, weAppLang);
                 // 写入模板数据
                 weChatWeAppNotificationData.WriteData(context.Notification.Data.ExtraProperties);
 
@@ -101,11 +106,11 @@ public class WeChatMiniProgramNotificationPublishProvider : NotificationPublishP
 
     protected string GetOrDefault(NotificationData data, string key, string defaultValue)
     {
-        if (data.ExtraProperties.TryGetValue(key, out var value))
+        if (data.ExtraProperties.TryGetValue(key, out var value) && value != null)
         {
             // 取得了数据就删除对应键值
             // data.Properties.Remove(key);
-            return value.ToString();
+            return value.ToString()!;
         }
         return defaultValue;
     }

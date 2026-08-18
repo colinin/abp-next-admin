@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Features.Client;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
@@ -24,7 +25,7 @@ public class ClientFeatureManagementProvider : FeatureManagementProvider, ITrans
 
     protected override Task<string> NormalizeProviderKeyAsync(string providerKey)
     {
-        if (providerKey != null)
+        if (CurrentClient.Id.IsNullOrWhiteSpace() || providerKey != null)
         {
             return base.NormalizeProviderKeyAsync(providerKey);
         }

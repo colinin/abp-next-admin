@@ -68,7 +68,7 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
 
         settingDefinitionRecord = await _settingRepository.InsertAsync(settingDefinitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(settingDefinitionRecord);
     }
@@ -84,7 +84,7 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
 
         await _settingRepository.DeleteAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<SettingDefinitionDto> GetAsync(string name)
@@ -147,12 +147,12 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
         UpdateByInput(definitionRecord, input);
         definitionRecord = await _settingRepository.UpdateAsync(definitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(definitionRecord);
     }
 
-    protected async virtual Task<SettingDefinitionRecord> FindByNameAsync(string name)
+    protected async virtual Task<SettingDefinitionRecord?> FindByNameAsync(string name)
     {
         return await _settingRepository.FindAsync(x => x.Name == name);
     }
@@ -200,10 +200,6 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
 
     protected virtual SettingDefinitionDto DefinitionRecordToDto(SettingDefinitionRecord definitionRecord)
     {
-        if (definitionRecord == null)
-        {
-            return null;
-        }
         var dto = new SettingDefinitionDto
         {
             Name = definitionRecord.Name,

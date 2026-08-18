@@ -8,16 +8,16 @@ namespace LINGYUN.Abp.Sonatype.Nexus.Repositories;
 public class NexusRepositoryListResult
 {
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [JsonPropertyName("format")]
-    public string Format { get; set; }
+    public string? Format { get; set; }
 
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string? Type { get; set; }
 
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string? Url { get; set; }
 
     [JsonPropertyName("attributes")]
     public Dictionary<string, object> Attributes { get; set; }

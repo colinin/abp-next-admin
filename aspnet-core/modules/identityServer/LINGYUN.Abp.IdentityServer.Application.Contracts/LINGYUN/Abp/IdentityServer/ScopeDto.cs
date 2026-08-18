@@ -2,5 +2,5 @@
 
 public class ScopeDto
 {
-    public string Scope { get; set; }
+    public string Scope { get; set; } = default!;
 }

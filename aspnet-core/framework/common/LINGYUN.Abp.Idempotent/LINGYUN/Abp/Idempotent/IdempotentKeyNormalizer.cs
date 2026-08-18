@@ -36,7 +36,9 @@ public class IdempotentKeyNormalizer : IIdempotentKeyNormalizer, ITransientDepen
                 var index = 0;
                 foreach (var key in attr.KeyMap)
                 {
-                    if (context.ArgumentsDictionary.TryGetValue(key, out var value))
+                    if (context.ArgumentsDictionary != null && 
+                        context.ArgumentsDictionary.TryGetValue(key, out var value) &&
+                        value != null)
                     {
                         var objectToString = _jsonSerializer.Serialize(value);
                         var objectMd5 = objectToString.ToMd5();
@@ -52,7 +54,7 @@ public class IdempotentKeyNormalizer : IIdempotentKeyNormalizer, ITransientDepen
         }
         else
         {
-            var args = context.ArgumentsDictionary.ToImmutableArray();
+            var args = context.ArgumentsDictionary?.ToImmutableArray() ?? [];
             for (var i = 0; i < args.Length; i++)
             {
                 var arg = args[i];

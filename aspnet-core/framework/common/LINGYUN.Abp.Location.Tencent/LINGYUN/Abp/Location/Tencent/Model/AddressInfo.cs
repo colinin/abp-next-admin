@@ -8,42 +8,42 @@ namespace LINGYUN.Abp.Location.Tencent.Model;
 public class AddressInfo
 {
     [JsonProperty("adcode")]
-    public string AdCode { get; set; }
+    public string AdCode { get; set; } = default!;
     /// <summary>
     /// 城市代码
     /// </summary>
     [JsonProperty("city_code")]
-    public string CityCode { get; set; }
+    public string? CityCode { get; set; }
     /// <summary>
     /// 行政区划代码
     /// </summary>
     [JsonProperty("nation_code")]
-    public string NationCode { get; set; }
+    public string? NationCode { get; set; }
     /// <summary>
     /// 行政区划名称
     /// </summary>
     [JsonProperty("name")]
-    public string Name { get; set; }
+    public string? Name { get; set; }
     /// <summary>
     /// 国家
     /// </summary>
     [JsonProperty("nation")]
-    public string Nation { get; set; }
+    public string? Nation { get; set; }
     /// <summary>
     /// 省/直辖市
     /// </summary>
     [JsonProperty("province")]
-    public string Province { get; set; }
+    public string? Province { get; set; }
     /// <summary>
     /// 市/地级区 及同级行政区划
     /// </summary>
     [JsonProperty("city")]
-    public string City { get; set; }
+    public string? City { get; set; }
     /// <summary>
     /// 区/县级市 及同级行政区划
     /// </summary>
     [JsonProperty("district")]
-    public string District { get; set; }
+    public string? District { get; set; }
     /// <summary>
     /// 行政区划中心点坐标
     /// </summary>

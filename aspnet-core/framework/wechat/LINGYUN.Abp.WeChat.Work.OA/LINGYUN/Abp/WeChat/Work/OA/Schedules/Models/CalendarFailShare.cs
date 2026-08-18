@@ -21,12 +21,12 @@ public class CalendarFailShare
     [NotNull]
     [JsonProperty("errmsg")]
     [JsonPropertyName("errmsg")]
-    public string ErrorMessage { get; set; }
+    public string ErrorMessage { get; set; } = default!;
     /// <summary>
     /// 日历通知范围成员的id
     /// </summary>
     [NotNull]
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
 }

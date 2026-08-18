@@ -21,7 +21,7 @@ public class MeetingRoomInfo
     [NotNull]
     [JsonProperty("name")]
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 会议室容纳人数
     /// </summary>
@@ -56,7 +56,7 @@ public class MeetingRoomInfo
     [NotNull]
     [JsonProperty("equipment")]
     [JsonPropertyName("equipment")]
-    public int[] Equipment { get; set; }
+    public int[] Equipment { get; set; } = default!;
     /// <summary>
     /// 会议室坐标
     /// </summary>

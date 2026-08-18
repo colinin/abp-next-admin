@@ -5,12 +5,12 @@ public static class IMessageResolveContextExtensions
 {
     public static bool HasMessageKey(this IMessageResolveContext context, string key)
     {
-        return context.MessageData.Root.Element(key) != null;
+        return context.MessageData.Root?.Element(key) != null;
     }
 
-    public static string GetMessageData(this IMessageResolveContext context, string key)
+    public static string? GetMessageData(this IMessageResolveContext context, string key)
     {
-        return context.MessageData.Root.Element(key)?.Value;
+        return context.MessageData.Root?.Element(key)?.Value;
     }
 
     public static T GetWeChatMessage<T>(this IMessageResolveContext context) where T : WeChatMessage

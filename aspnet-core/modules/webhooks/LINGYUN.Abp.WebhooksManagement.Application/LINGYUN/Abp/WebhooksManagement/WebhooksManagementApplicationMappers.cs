@@ -31,7 +31,7 @@ public partial class WebhookSendRecordToWebhookSendRecordDtoMapper : MapperBase<
     }
 
     [UserMapping(Ignore = true)]
-    private static IDictionary<string, string> TryGetRequestHeaders(string requestHeaders)
+    private static IDictionary<string, string> TryGetRequestHeaders(string? requestHeaders)
     {
         var result = new Dictionary<string, string>();
 
@@ -39,7 +39,7 @@ public partial class WebhookSendRecordToWebhookSendRecordDtoMapper : MapperBase<
         {
             try
             {
-                result = JsonConvert.DeserializeObject<Dictionary<string, string>>(requestHeaders);
+                result = JsonConvert.DeserializeObject<Dictionary<string, string>>(requestHeaders)!;
             }
             catch { }
         }
@@ -48,7 +48,7 @@ public partial class WebhookSendRecordToWebhookSendRecordDtoMapper : MapperBase<
     }
 
     [UserMapping(Ignore = true)]
-    private static IDictionary<string, string> TryGetResponseHeaders(string responseHeaders)
+    private static IDictionary<string, string> TryGetResponseHeaders(string? responseHeaders)
     {
         var result = new Dictionary<string, string>();
 
@@ -56,7 +56,7 @@ public partial class WebhookSendRecordToWebhookSendRecordDtoMapper : MapperBase<
         {
             try
             {
-                result = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseHeaders);
+                result = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseHeaders)!;
             }
             catch { }
         }

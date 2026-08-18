@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.Rules.RulesEngine;
 public interface IWorkflowsResolveContext : IServiceProviderAccessor
 {
     [CanBeNull]
-    IEnumerable<Workflow> Workflows { get; set; }
+    IEnumerable<Workflow>? Workflows { get; set; }
 
     [NotNull]
     Type Type { get; }

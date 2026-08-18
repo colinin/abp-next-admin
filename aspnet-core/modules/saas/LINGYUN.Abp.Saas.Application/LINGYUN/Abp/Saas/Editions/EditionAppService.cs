@@ -30,7 +30,7 @@ public class EditionAppService : AbpSaasAppServiceBase, IEditionAppService
 
         await EditionRepository.InsertAsync(edition);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Edition, EditionDto>(edition);
     }
@@ -54,10 +54,10 @@ public class EditionAppService : AbpSaasAppServiceBase, IEditionAppService
     {
         var totalCount = await EditionRepository.GetCountAsync(input.Filter);
         var editions = await EditionRepository.GetListAsync(
+            input.Filter,
             input.Sorting,
             input.MaxResultCount,
-            input.SkipCount,
-            input.Filter
+            input.SkipCount
         );
 
         return new PagedResultDto<EditionDto>(
@@ -80,7 +80,7 @@ public class EditionAppService : AbpSaasAppServiceBase, IEditionAppService
 
         await EditionRepository.UpdateAsync(edition);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Edition, EditionDto>(edition);
     }

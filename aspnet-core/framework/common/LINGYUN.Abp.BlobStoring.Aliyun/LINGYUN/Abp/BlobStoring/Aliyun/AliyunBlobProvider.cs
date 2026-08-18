@@ -61,7 +61,7 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
         return await BlobExistsAsync(ossClient, args, blobName);
     }
 
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public override async Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
         using var ossClient = await GetOssClientAsync(args);
         var blobName = AliyunBlobNameCalculator.Calculate(args);

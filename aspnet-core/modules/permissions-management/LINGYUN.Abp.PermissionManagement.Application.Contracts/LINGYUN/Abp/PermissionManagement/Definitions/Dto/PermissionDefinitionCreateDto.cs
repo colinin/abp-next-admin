@@ -8,9 +8,9 @@ public class PermissionDefinitionCreateDto : PermissionDefinitionCreateOrUpdateD
 {
     [Required]
     [DynamicStringLength(typeof(PermissionDefinitionRecordConsts), nameof(PermissionDefinitionRecordConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(PermissionGroupDefinitionRecordConsts), nameof(PermissionGroupDefinitionRecordConsts.MaxNameLength))]
-    public string GroupName { get; set; }
+    public string GroupName { get; set; } = default!;
 }

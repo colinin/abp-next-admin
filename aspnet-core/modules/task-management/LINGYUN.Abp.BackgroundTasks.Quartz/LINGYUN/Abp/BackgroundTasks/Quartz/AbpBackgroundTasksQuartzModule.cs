@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Quartz;
 using Volo.Abp;
 using Volo.Abp.Modularity;
@@ -10,6 +11,11 @@ namespace LINGYUN.Abp.BackgroundTasks.Quartz;
 [DependsOn(typeof(AbpQuartzModule))]
 public class AbpBackgroundTasksQuartzModule : AbpModule
 {
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.Replace(ServiceDescriptor.Singleton<ICronValidator, QuartzCronValidator>());
+    }
+
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var _scheduler = context.ServiceProvider.GetRequiredService<IScheduler>();

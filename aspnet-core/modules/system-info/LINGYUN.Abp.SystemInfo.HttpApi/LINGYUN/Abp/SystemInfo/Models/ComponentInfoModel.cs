@@ -17,8 +17,8 @@ public class ComponentInfoModel
     /// <summary>
     /// 组件状态集合
     /// </summary>
-    public Dictionary<string, object> Details { get; set; }
-    public ComponentInfoModel(string name, ComponentKeyModel[] keys, Dictionary<string, object> details)
+    public Dictionary<string, object?> Details { get; set; }
+    public ComponentInfoModel(string name, ComponentKeyModel[] keys, Dictionary<string, object?> details)
     {
         Name = name;
         Keys = keys;

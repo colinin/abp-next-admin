@@ -4,15 +4,15 @@ using Volo.Abp.Application.Dtos;
 namespace LINGYUN.Abp.Account;
 public class IdentitySessionDto : ExtensibleEntityDto<Guid>
 {
-    public string SessionId { get; set; }
+    public string SessionId { get; set; } = default!;
 
-    public string Device { get; set; }
+    public string? Device { get; set; }
 
-    public string DeviceInfo { get; set; }
+    public string? DeviceInfo { get; set; }
 
-    public string ClientId { get; set; }
+    public string? ClientId { get; set; }
 
-    public string IpAddresses { get; set; }
+    public string? IpAddresses { get; set; }
 
     public Guid UserId { get; set; }
 

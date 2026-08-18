@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.Notifications;
 
 public interface INotificationDefinitionGroupRecordRepository : IBasicRepository<NotificationDefinitionGroupRecord, Guid>
 {
-    Task<NotificationDefinitionGroupRecord> FindByNameAsync(
+    Task<NotificationDefinitionGroupRecord?> FindByNameAsync(
         string name, 
         CancellationToken cancellationToken = default);
 

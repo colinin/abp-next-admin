@@ -52,12 +52,14 @@ public class FeedbackAttachmentAppService : PlatformApplicationServiceBase, IFee
         }
 
         var attachment = feedback.FindAttachment(input.Name);
+        if (attachment != null)
+        {
+            feedback.RemoveAttachment(attachment.Name);
 
-        feedback.RemoveAttachment(attachment.Name);
+            await CurrentUnitOfWork!.SaveChangesAsync();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
-
-        await _feedbackAttachmentManager.DeleteAsync(attachment);
+            await _feedbackAttachmentManager.DeleteAsync(attachment);
+        }
     }
 
     protected async virtual Task<FeedbackAttachment> GetFeedbackAttachmentAsync(FeedbackAttachmentGetInput input)

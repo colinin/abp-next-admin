@@ -2,7 +2,7 @@
 
 public abstract class DynamicLocalizationInitializerEto
 {
-    public string[] Keys { get; set; }
+    public string[] Keys { get; set; } = default!;
     protected DynamicLocalizationInitializerEto()
     {
 

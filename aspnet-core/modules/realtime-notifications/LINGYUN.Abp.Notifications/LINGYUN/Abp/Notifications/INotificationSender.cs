@@ -22,10 +22,10 @@ public interface INotificationSender
     Task<string> SendNofiterAsync(
         string name,
         NotificationData data,
-        IEnumerable<UserIdentifier> users = null,
+        IEnumerable<UserIdentifier>? users = null,
         Guid? tenantId = null,
         NotificationSeverity severity = NotificationSeverity.Info,
-        IEnumerable<string> useProviders = null);
+        IEnumerable<string>? useProviders = null);
     /// <summary>
     /// 发送模板通知
     /// </summary>
@@ -39,8 +39,8 @@ public interface INotificationSender
     Task<string> SendNofiterAsync(
         string name,
         NotificationTemplate template,
-        IEnumerable<UserIdentifier> users = null,
+        IEnumerable<UserIdentifier>? users = null,
         Guid? tenantId = null,
         NotificationSeverity severity = NotificationSeverity.Info,
-        IEnumerable<string> useProviders = null);
+        IEnumerable<string>? useProviders = null);
 }

@@ -35,9 +35,9 @@ public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITime
             ?? UnspecifiedTimeZone;
     }
 
-    public async virtual Task SetMyTimezoneAsync(string timezone)
+    public async virtual Task SetMyTimezoneAsync(string? timezone)
     {
-        if (timezone.Equals(UnspecifiedTimeZone, StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(timezone, UnspecifiedTimeZone, StringComparison.OrdinalIgnoreCase))
         {
             timezone = null;
         }
@@ -72,9 +72,9 @@ public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITime
     }
 
     [Authorize(Volo.Abp.SettingManagement.SettingManagementPermissions.TimeZone)]
-    public async virtual Task UpdateAsync(string timezone)
+    public async virtual Task UpdateAsync(string? timezone)
     {
-        if (timezone.Equals(UnspecifiedTimeZone, StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(timezone, UnspecifiedTimeZone, StringComparison.OrdinalIgnoreCase))
         {
             timezone = null;
         }

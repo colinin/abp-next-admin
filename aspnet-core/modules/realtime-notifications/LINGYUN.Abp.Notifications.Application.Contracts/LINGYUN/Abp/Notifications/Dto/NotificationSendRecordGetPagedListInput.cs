@@ -3,7 +3,6 @@ using Volo.Abp.Application.Dtos;
 
 namespace LINGYUN.Abp.Notifications;
 
-#nullable enable
 public class NotificationSendRecordGetPagedListInput : PagedAndSortedResultRequestDto
 {
     public string? Provider { get; set; }
@@ -13,4 +12,3 @@ public class NotificationSendRecordGetPagedListInput : PagedAndSortedResultReque
     public string? NotificationName { get; set; }
     public NotificationSendState? State { get; set; }
 }
-#nullable disable

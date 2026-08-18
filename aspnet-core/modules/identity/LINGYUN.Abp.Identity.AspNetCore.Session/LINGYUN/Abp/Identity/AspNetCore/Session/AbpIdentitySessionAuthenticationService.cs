@@ -26,20 +26,23 @@ public class AbpIdentitySessionAuthenticationService : AuthenticationService
         IdentitySessionManager = identitySessionManager;
     }
 
-    public async override Task SignInAsync(HttpContext context, string scheme, ClaimsPrincipal principal, AuthenticationProperties properties)
+    public async override Task SignInAsync(HttpContext context, string? scheme, ClaimsPrincipal principal, AuthenticationProperties? properties)
     {
         await base.SignInAsync(context, scheme, principal, properties);
 
-        if (SessionSignInOptions.SignInSessionEnabled && SessionSignInOptions.AuthenticationSchemes.Contains(scheme))
+        if (SessionSignInOptions.SignInSessionEnabled && 
+            !scheme.IsNullOrWhiteSpace() && 
+            SessionSignInOptions.AuthenticationSchemes.Contains(scheme))
         {
             // Save the user session.
             await IdentitySessionManager.SaveSessionAsync(principal);
         }
     }
 
-    public async override Task SignOutAsync(HttpContext context, string scheme, AuthenticationProperties properties)
+    public async override Task SignOutAsync(HttpContext context, string? scheme, AuthenticationProperties? properties)
     {
         if (SessionSignInOptions.SignOutSessionEnabled &&
+            !scheme.IsNullOrWhiteSpace() &&
             SessionSignInOptions.AuthenticationSchemes.Contains(scheme))
         {
             var sessionId = context.User?.FindSessionId();

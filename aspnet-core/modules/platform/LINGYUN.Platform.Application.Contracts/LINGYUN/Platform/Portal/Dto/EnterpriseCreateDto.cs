@@ -10,5 +10,5 @@ public class EnterpriseCreateDto : EnterpriseCreateOrUpdateDto
     /// </summary>
     [Required]
     [DynamicStringLength(typeof(EnterpriseConsts), nameof(EnterpriseConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

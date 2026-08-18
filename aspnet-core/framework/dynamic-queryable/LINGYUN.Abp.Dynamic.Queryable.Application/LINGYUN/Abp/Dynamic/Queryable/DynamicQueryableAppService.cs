@@ -42,7 +42,7 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
             var dynamicParamter = new DynamicParamterDto
             {
                 Name = propertyInfo.Name,
-                Type = propertyInfo.PropertyType.FullName,
+                Type = propertyInfo.PropertyType.FullName!,
                 Description = localizedProp.Value ?? propertyInfo.Name,
                 JavaScriptType = propertyTypeMap.JavaScriptType,
                 AvailableComparator = propertyTypeMap.AvailableComparator
@@ -120,7 +120,7 @@ public abstract class DynamicQueryableAppService<TEntity, TEntityDto> : Applicat
         if (propertyType.IsNullableType())
         {
             isNullableType = true;
-            propertyType = propertyType.GetGenericArguments().FirstOrDefault();
+            propertyType = propertyType.GetGenericArguments().First();
         }
 
         if (typeof(Enum).IsAssignableFrom(propertyType))

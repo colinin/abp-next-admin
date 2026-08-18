@@ -16,7 +16,7 @@ public class ApprovalSummaryInfo
     [StringLength(20)]
     [JsonProperty("text")]
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public string Text { get; set; } = default!;
     /// <summary>
     /// 摘要行显示语言，中文：zh_CN（注意不是zh-CN），英文：en。
     /// </summary>
@@ -24,7 +24,7 @@ public class ApprovalSummaryInfo
     [StringLength(30)]
     [JsonProperty("lang")]
     [JsonPropertyName("lang")]
-    public string Lang { get; set; }
+    public string Lang { get; set; } = default!;
     public ApprovalSummaryInfo()
     {
 

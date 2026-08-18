@@ -28,10 +28,10 @@ public class ServerValidationTokenCheckIdentitySession : IOpenIddictServerHandle
 
     public async virtual ValueTask HandleAsync(OpenIddictServerEvents.ValidateTokenContext context)
     {
-        var tenantId = context.Principal.FindTenantId();
+        var tenantId = context.Principal?.FindTenantId();
         using (CurrentTenant.Change(tenantId))
         {
-            if (!await IdentitySessionChecker.ValidateSessionAsync(context.Principal))
+            if (!await IdentitySessionChecker.ValidateSessionAsync(context.Principal!))
             {
                 context.Logger.LogWarning("The token is no longer valid because the user's session expired.");
                 // Errors.InvalidToken --->  401

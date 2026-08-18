@@ -23,13 +23,13 @@ public class CreateTicketModel : WeChatRequest
     /// </remarks>
     [JsonProperty("action_name")]
     [JsonPropertyName("action_name")]
-    public string ActionName { get; private set; }
+    public string ActionName { get; private set; } = default!;
     /// <summary>
     /// 二维码详细信息
     /// </summary>
     [JsonProperty("action_info")]
     [JsonPropertyName("action_info")]
-    public Scene SceneInfo { get; private set; }
+    public Scene SceneInfo { get; private set; } = default!;
     private CreateTicketModel()
     {
 

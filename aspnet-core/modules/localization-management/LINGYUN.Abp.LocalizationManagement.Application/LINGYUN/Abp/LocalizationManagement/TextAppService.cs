@@ -107,7 +107,7 @@ public class TextAppService : LocalizationAppServiceBase, ITextAppService
 
         await PublishDynamicLocalizationRefreshEvent(new DynamicTextRefreshEventData(text.ResourceName, text.CultureName));
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(LocalizationManagementPermissions.Text.Delete)]
@@ -120,7 +120,7 @@ public class TextAppService : LocalizationAppServiceBase, ITextAppService
 
             await PublishDynamicLocalizationRefreshEvent(new DynamicTextRefreshEventData(text.ResourceName, text.CultureName));
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork!.SaveChangesAsync();
         }
     }
 
@@ -135,7 +135,7 @@ public class TextAppService : LocalizationAppServiceBase, ITextAppService
 
             await PublishDynamicLocalizationRefreshEvent(new DynamicTextRefreshEventData(text.ResourceName, text.CultureName));
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork!.SaveChangesAsync();
         }
     }
 }

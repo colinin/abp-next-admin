@@ -67,7 +67,7 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
         await IdentityOptions.SetAsync();
 
         const string adminRoleName = "admin";
-        var adminUserName = context?[AdminUserNamePropertyName] as string ?? AdminUserNameDefaultValue;
+        var adminUserName = context[AdminUserNamePropertyName] as string ?? AdminUserNameDefaultValue;
 
         Guid adminRoleId;
 
@@ -91,7 +91,7 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
         else
         {
             var adminRole = await RoleManager.FindByNameAsync(adminRoleName);
-            adminRoleId = adminRole.Id;
+            adminRoleId = adminRole!.Id;
         }
 
         var adminUserId = GuidGenerator.Create();
@@ -100,8 +100,8 @@ public class IdentityUserRoleDataSeeder : ITransientDependency
         {
             adminUserId = adminUserGuid;
         }
-        var adminEmailAddress = context?[AdminEmailPropertyName] as string ?? AdminEmailDefaultValue;
-        var adminPassword = context?[AdminPasswordPropertyName] as string ?? AdminPasswordDefaultValue;
+        var adminEmailAddress = context[AdminEmailPropertyName] as string ?? AdminEmailDefaultValue;
+        var adminPassword = context[AdminPasswordPropertyName] as string ?? AdminPasswordDefaultValue;
 
         Logger.LogInformation("Check admin user {adminUserName} exists.", adminUserName);
 

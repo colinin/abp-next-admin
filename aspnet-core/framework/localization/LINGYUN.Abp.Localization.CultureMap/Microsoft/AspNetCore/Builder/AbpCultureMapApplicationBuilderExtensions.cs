@@ -7,7 +7,7 @@ public static class AbpCultureMapApplicationBuilderExtensions
 {
     public static IApplicationBuilder UseMapRequestLocalization(
         this IApplicationBuilder app,
-        Action<RequestLocalizationOptions> optionsAction = null)
+        Action<RequestLocalizationOptions>? optionsAction = null)
     {
         return app.UseAbpRequestLocalization(options =>
         {

@@ -25,5 +25,5 @@ public class WeChatWorkGetUserIdListResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("dept_user")]
     [JsonPropertyName("dept_user")]
-    public DepartmentUser[] DepartmentUser { get; set; }
+    public DepartmentUser[] DepartmentUser { get; set; } = default!;
 }

@@ -6,14 +6,14 @@ using Volo.Abp.Domain.Entities;
 namespace LINGYUN.Abp.TextTemplating;
 public class TextTemplateDefinition : AggregateRoot<Guid>, IHasExtraProperties
 {
-    public virtual string Name { get; protected set; }
-    public virtual string DisplayName { get; set; }
+    public virtual string Name { get; protected set; } = default!;
+    public virtual string DisplayName { get; set; } = default!;
     public virtual bool IsLayout { get; set; }
-    public virtual string Layout { get; set; }
+    public virtual string? Layout { get; set; }
     public virtual bool IsInlineLocalized { get; set; }
-    public virtual string DefaultCultureName { get; set; }
-    public virtual string LocalizationResourceName { get; set; }
-    public virtual string RenderEngine { get; set; }
+    public virtual string? DefaultCultureName { get; set; }
+    public virtual string? LocalizationResourceName { get; set; }
+    public virtual string? RenderEngine { get; set; }
     public virtual bool IsStatic { get; set; }
     protected TextTemplateDefinition()
     {
@@ -25,11 +25,11 @@ public class TextTemplateDefinition : AggregateRoot<Guid>, IHasExtraProperties
         string name,
         string displayName,
         bool isLayout = false,
-        string layout = null,
+        string? layout = null,
         bool isInlineLocalized = false, 
-        string defaultCultureName = null, 
-        string localizationResourceName = null,
-        string renderEngine = null)
+        string? defaultCultureName = null, 
+        string? localizationResourceName = null,
+        string? renderEngine = null)
         : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), TextTemplateDefinitionConsts.MaxNameLength);

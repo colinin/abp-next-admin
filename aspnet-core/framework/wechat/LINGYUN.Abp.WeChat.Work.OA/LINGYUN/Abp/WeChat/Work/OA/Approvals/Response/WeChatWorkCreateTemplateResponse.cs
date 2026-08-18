@@ -17,5 +17,5 @@ public class WeChatWorkCreateTemplateResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("template_id")]
     [JsonPropertyName("template_id")]
-    public string TemplateId { get; set; }
+    public string TemplateId { get; set; } = default!;
 }

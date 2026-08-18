@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Volo.Abp.Content;
@@ -22,22 +23,22 @@ public class PlatformEmailSender : IEmailSender
         _service = service;
     }
 
-    public virtual Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs additionalEmailSendingArgs = null)
+    public virtual Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
         return SendAsync(from: null, to, subject, body, isBodyHtml, additionalEmailSendingArgs);
     }
 
-    public virtual Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs additionalEmailSendingArgs = null)
+    public virtual Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
         return SendAsync(from, to, subject, body, isBodyHtml, additionalEmailSendingArgs);
     }
 
-    public virtual Task SendAsync(string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs additionalEmailSendingArgs = null)
+    public virtual Task SendAsync(string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
         return SendAsync(from: null, to, subject, body, isBodyHtml, additionalEmailSendingArgs);
     }
 
-    public async virtual Task SendAsync(string from, string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs additionalEmailSendingArgs = null)
+    public async virtual Task SendAsync(string? from, string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
         var createInput = new EmailMessageCreateDto(
             to,
@@ -56,13 +57,16 @@ public class PlatformEmailSender : IEmailSender
 
             foreach (var attachment in additionalEmailSendingArgs.Attachments)
             {
-                var stream = new MemoryStream(attachment.File.Length);
+                if (attachment.File != null)
+                {
+                    var stream = new MemoryStream(attachment.File.Length);
 
-                await stream.WriteAsync(attachment.File, 0, attachment.File.Length);
+                    await stream.WriteAsync(attachment.File, 0, attachment.File.Length);
 
-                stream.Seek(0, SeekOrigin.Begin);
+                    stream.Seek(0, SeekOrigin.Begin);
 
-                attachments.Add(new RemoteStreamContent(stream, attachment.Name));
+                    attachments.Add(new RemoteStreamContent(stream, attachment.Name));
+                }
             }
 
             createInput.Attachments = attachments.ToArray();
@@ -119,7 +123,7 @@ public class PlatformEmailSender : IEmailSender
                 var value = mail.Headers.Get(key);
                 if (!value.IsNullOrWhiteSpace())
                 {
-                    headers.Add(new EmailMessageHeaderDto(key, value));
+                    headers.Add(new EmailMessageHeaderDto(key!, value));
                 }
             }
             createInput.Headers = headers;

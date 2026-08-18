@@ -16,35 +16,35 @@ public class Enterprise : FullAuditedAggregateRoot<Guid>
     /// <summary>
     /// 名称
     /// </summary>
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
     /// <summary>
     /// 英文名称
     /// </summary>
-    public virtual string EnglishName { get; set; }
+    public virtual string? EnglishName { get; set; }
     /// <summary>
     /// Logo
     /// </summary>
-    public virtual string Logo { get; set; }
+    public virtual string? Logo { get; set; }
     /// <summary>
     /// 地址
     /// </summary>
-    public virtual string Address { get; set; }
+    public virtual string? Address { get; set; }
     /// <summary>
     /// 法人代表
     /// </summary>
-    public virtual string LegalMan { get; set; }
+    public virtual string? LegalMan { get; set; }
     /// <summary>
     /// 税务登记号
     /// </summary>
-    public virtual string TaxCode { get; set; }
+    public virtual string? TaxCode { get; set; }
     /// <summary>
     /// 组织机构代码
     /// </summary>
-    public virtual string OrganizationCode { get; protected set; }
+    public virtual string? OrganizationCode { get; protected set; }
     /// <summary>
     /// 注册代码
     /// </summary>
-    public virtual string RegistrationCode { get; protected set; }
+    public virtual string? RegistrationCode { get; protected set; }
     /// <summary>
     /// 注册日期
     /// </summary>
@@ -62,10 +62,10 @@ public class Enterprise : FullAuditedAggregateRoot<Guid>
     public Enterprise(
         Guid id,
         string name,
-        string address, 
-        string taxCode, 
-        string organizationCode = null, 
-        string registrationCode = null, 
+        string? address = null, 
+        string? taxCode = null, 
+        string? organizationCode = null, 
+        string? registrationCode = null, 
         DateTime? registrationDate = null, 
         DateTime? expirationDate = null,
         Guid? tenantId = null)
@@ -88,19 +88,19 @@ public class Enterprise : FullAuditedAggregateRoot<Guid>
         TenantId = tenantId;
     }
 
-    public void SetName(string name, string englishName = null)
+    public void SetName(string name, string? englishName = null)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), EnterpriseConsts.MaxNameLength);
         EnglishName = Check.Length(englishName, nameof(englishName), EnterpriseConsts.MaxEnglishNameLength);
     }
 
-    public void SetOrganization(string organizationCode)
+    public void SetOrganization(string? organizationCode)
     {
         OrganizationCode = Check.Length(organizationCode, nameof(organizationCode), EnterpriseConsts.MaxOrganizationCodeLength);
     }
 
     public void SetRegistration(
-        string registrationCode,
+        string? registrationCode,
         DateTime? registrationDate = null,
         DateTime? expirationDate = null)
     {

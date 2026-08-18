@@ -59,7 +59,7 @@ public class ApiResourceAppService : AbpIdentityServerAppServiceBase, IApiResour
 
         apiResource = await ApiResourceRepository.InsertAsync(apiResource);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource);
     }
@@ -73,7 +73,7 @@ public class ApiResourceAppService : AbpIdentityServerAppServiceBase, IApiResour
 
         apiResource = await ApiResourceRepository.UpdateAsync(apiResource);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource);
     }
@@ -84,7 +84,7 @@ public class ApiResourceAppService : AbpIdentityServerAppServiceBase, IApiResour
         var apiResource = await ApiResourceRepository.GetAsync(id);
         await ApiResourceRepository.DeleteAsync(apiResource);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     protected async virtual Task UpdateApiResourceByInputAsync(ApiResource apiResource, ApiResourceCreateOrUpdateDto input)
@@ -100,8 +100,7 @@ public class ApiResourceAppService : AbpIdentityServerAppServiceBase, IApiResour
         {
             apiResource.DisplayName = input.DisplayName;
         }
-        if (apiResource.Description?.Equals(input.Description, StringComparison.InvariantCultureIgnoreCase)
-            == false)
+        if (apiResource.Description?.Equals(input.Description, StringComparison.InvariantCultureIgnoreCase) == false)
         {
             apiResource.Description = input.Description;
         }

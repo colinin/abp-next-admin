@@ -4,5 +4,5 @@ namespace LINGYUN.Abp.LocalizationManagement;
 
 public class LanguageGetPagedListInput : PagedAndSortedResultRequestDto
 {
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
 }

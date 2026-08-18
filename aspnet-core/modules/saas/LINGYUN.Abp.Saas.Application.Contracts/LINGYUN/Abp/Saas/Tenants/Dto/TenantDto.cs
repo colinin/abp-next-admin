@@ -6,13 +6,13 @@ namespace LINGYUN.Abp.Saas.Tenants;
 
 public class TenantDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string NormalizedName { get; set; }
+    public string NormalizedName { get; set; } = default!;
 
     public Guid? EditionId { get; set; }
 
-    public string EditionName { get; set; }
+    public string? EditionName { get; set; }
 
     public bool IsActive { get; set; }
 
@@ -20,5 +20,5 @@ public class TenantDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 
     public DateTime? DisableTime { get; set; }
 
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

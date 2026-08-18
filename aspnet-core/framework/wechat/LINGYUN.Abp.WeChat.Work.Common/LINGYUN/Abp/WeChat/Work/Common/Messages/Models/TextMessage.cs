@@ -13,7 +13,7 @@ public class TextMessage : WeChatWorkGeneralMessage
     /// 文本消息内容
     /// </summary>
     [XmlElement("Content")]
-    public string Content { get; set; }
+    public string Content { get; set; } = default!;
     public override WeChatMessageEto ToEto()
     {
         return new WeChatWorkGeneralMessageEto<TextMessage>(this);

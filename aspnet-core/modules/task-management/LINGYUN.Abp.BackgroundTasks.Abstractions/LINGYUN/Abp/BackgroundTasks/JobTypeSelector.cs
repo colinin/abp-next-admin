@@ -8,8 +8,8 @@ public class JobTypeSelector : NamedTypeSelector
         string name,
         Func<Type, bool> predicate,
         int? lockTimeOut = null, 
-        string nodeName = null, 
-        string cron = null,
+        string? nodeName = null, 
+        string? cron = null,
         JobPriority? priority = null, 
         int? interval = null,
         int? maxCount = null, 
@@ -33,7 +33,7 @@ public class JobTypeSelector : NamedTypeSelector
     /// <summary>
     /// 指定运行节点
     /// </summary>
-    public string NodeName { get; set; }
+    public string? NodeName { get; set; }
     /// <summary>
     /// 任务优先级
     /// </summary>
@@ -41,7 +41,7 @@ public class JobTypeSelector : NamedTypeSelector
     /// <summary>
     /// Cron表达式，如果是周期性任务需要指定
     /// </summary>
-    public string Cron { get; set; }
+    public string? Cron { get; set; }
     /// <summary>
     /// 间隔时间，单位秒，与Cron表达式冲突
     /// </summary>

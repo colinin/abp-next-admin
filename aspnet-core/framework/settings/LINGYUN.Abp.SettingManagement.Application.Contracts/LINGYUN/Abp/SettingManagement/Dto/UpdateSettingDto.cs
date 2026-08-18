@@ -8,8 +8,8 @@ public class UpdateSettingDto
 {
     [Required]
     [DynamicStringLength(typeof(SettingConsts), nameof(SettingConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [DynamicStringLength(typeof(SettingConsts), nameof(SettingConsts.MaxValueLength))]
-    public string Value { get; set; }
+    public string? Value { get; set; }
 }

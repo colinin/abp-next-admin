@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.DataProtection.EntityFrameworkCore
     {
         public AbpDataProtectionModelBuilderConfigurationOptions(
            [NotNull] string tablePrefix = "",
-           [CanBeNull] string schema = null)
+           [CanBeNull] string? schema = null)
            : base(
                tablePrefix,
                schema)

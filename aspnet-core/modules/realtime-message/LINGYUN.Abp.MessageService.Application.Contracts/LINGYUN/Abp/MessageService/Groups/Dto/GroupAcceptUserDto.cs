@@ -14,5 +14,5 @@ public class GroupAcceptUserDto
     public bool AllowAccept { get; set; } = true;
 
     [StringLength(64)]
-    public string RejectReason { get; set; }
+    public string? RejectReason { get; set; }
 }

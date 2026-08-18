@@ -96,7 +96,7 @@ public class ExternalLocalizationTextStoreCache : IExternalLocalizationTextStore
         await GetAndRefreshMemoryCacheItemAsync(resourceName, cultureName);
     }
 
-    protected async virtual Task<ExternalLocalizationTextCacheItem> GetAndRefreshMemoryCacheItemAsync(string resourceName, string cultureName)
+    protected async virtual Task<ExternalLocalizationTextCacheItem?> GetAndRefreshMemoryCacheItemAsync(string resourceName, string cultureName)
     {
         var cacheKey = ExternalLocalizationTextCacheItem.CalculateCacheKey(resourceName, cultureName);
         var cacheItem = await DistributedCache.GetAsync(cacheKey);

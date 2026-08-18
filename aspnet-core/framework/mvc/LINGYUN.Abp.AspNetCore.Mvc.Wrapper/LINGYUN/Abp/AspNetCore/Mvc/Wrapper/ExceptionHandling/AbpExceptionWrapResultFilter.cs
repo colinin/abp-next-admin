@@ -17,6 +17,8 @@ using Volo.Abp.ExceptionHandling;
 
 namespace LINGYUN.Abp.AspNetCore.Mvc.Wrapper.ExceptionHandling;
 
+#pragma warning disable CS8625
+
 [Dependency(ReplaceServices = true)]
 [ExposeServices(typeof(AbpExceptionFilter))]
 public class AbpExceptionWrapResultFilter : AbpExceptionFilter, ITransientDependency
@@ -44,7 +46,6 @@ public class AbpExceptionWrapResultFilter : AbpExceptionFilter, ITransientDepend
             {
                 await context.HttpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
                         .HandleAsync(context.Exception.As<AbpAuthorizationException>(), context.HttpContext);
-
                 context.Exception = null;
 
                 return;
@@ -84,10 +85,11 @@ public class AbpExceptionWrapResultFilter : AbpExceptionFilter, ITransientDepend
         httpResponseWrapper.Wrap(responseWrapperContext);
 
         context.Result = new ObjectResult(new WrapResult(
-            exceptionWrapContext.ErrorInfo.Code,
-            exceptionWrapContext.ErrorInfo.Message,
+            exceptionWrapContext.ErrorInfo.Code!,
+            exceptionWrapContext.ErrorInfo.Message!,
             exceptionWrapContext.ErrorInfo.Details));
 
         context.Exception = null; //Handled!
     }
 }
+#pragma warning restore CS8625

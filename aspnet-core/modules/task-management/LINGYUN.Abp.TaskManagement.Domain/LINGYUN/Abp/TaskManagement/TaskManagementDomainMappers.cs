@@ -17,7 +17,7 @@ public partial class BackgroundJobInfoToJobInfoMapper : MapperBase<BackgroundJob
 
     public override void AfterMap(BackgroundJobInfo source, JobInfo destination)
     {
-        destination.Args = source.Args;
+        destination.Args = source.Args!;
     }
 }
 

@@ -10,6 +10,6 @@ public class EntityChangeGetByPagedDto : PagedAndSortedResultRequestDto
     public DateTime? StartTime { get; set; }
     public DateTime? EndTime { get; set; }
     public EntityChangeType? ChangeType { get; set; }
-    public string EntityId { get; set; }
-    public string EntityTypeFullName { get; set; }
+    public string? EntityId { get; set; }
+    public string? EntityTypeFullName { get; set; }
 }

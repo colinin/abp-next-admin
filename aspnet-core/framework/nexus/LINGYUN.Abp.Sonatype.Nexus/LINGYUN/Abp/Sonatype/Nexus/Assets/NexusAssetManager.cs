@@ -60,7 +60,7 @@ public class NexusAssetManager : INexusAssetManager, ISingletonDependency
         return nexusAsset;
     }
 
-    public async virtual Task<Stream> GetContentOrNullAsync([NotNull] NexusAsset asset, CancellationToken cancellationToken = default)
+    public async virtual Task<Stream?> GetContentOrNullAsync([NotNull] NexusAsset asset, CancellationToken cancellationToken = default)
     {
         if (asset == null || asset.DownloadUrl.IsNullOrWhiteSpace())
         {
@@ -72,7 +72,7 @@ public class NexusAssetManager : INexusAssetManager, ISingletonDependency
         return await client.GetStreamAsync(asset.DownloadUrl);
     }
 
-    public async virtual Task<NexusAssetListResult> ListAsync([NotNull] string repository, string continuationToken = null, CancellationToken cancellationToken = default)
+    public async virtual Task<NexusAssetListResult> ListAsync([NotNull] string repository, string? continuationToken = null, CancellationToken cancellationToken = default)
     {
         var client = HttpClientFactory.CreateClient(SonatypeNexusConsts.ApiClient);
 

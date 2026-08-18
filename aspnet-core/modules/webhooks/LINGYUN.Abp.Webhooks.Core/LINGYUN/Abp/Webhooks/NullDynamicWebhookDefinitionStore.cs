@@ -9,9 +9,9 @@ namespace LINGYUN.Abp.Webhooks;
 [Dependency(TryRegister = true)]
 public class NullDynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ISingletonDependency
 {
-    private readonly static Task<WebhookDefinition> CachedWebhookResult = Task.FromResult((WebhookDefinition)null);
+    private readonly static Task<WebhookDefinition?> CachedWebhookResult = Task.FromResult((WebhookDefinition?)null);
 
-    private readonly static Task<WebhookGroupDefinition> CachedWebhookGroupResult = Task.FromResult((WebhookGroupDefinition)null);
+    private readonly static Task<WebhookGroupDefinition?> CachedWebhookGroupResult = Task.FromResult((WebhookGroupDefinition?)null);
 
     private readonly static Task<IReadOnlyList<WebhookDefinition>> CachedWebhooksResult =
         Task.FromResult((IReadOnlyList<WebhookDefinition>)Array.Empty<WebhookDefinition>().ToImmutableList());
@@ -19,7 +19,7 @@ public class NullDynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore,
     private readonly static Task<IReadOnlyList<WebhookGroupDefinition>> CachedGroupsResult =
         Task.FromResult((IReadOnlyList<WebhookGroupDefinition>)Array.Empty<WebhookGroupDefinition>().ToImmutableList());
 
-    public Task<WebhookDefinition> GetOrNullAsync(string name)
+    public Task<WebhookDefinition?> GetOrNullAsync(string name)
     {
         return CachedWebhookResult;
     }
@@ -34,7 +34,7 @@ public class NullDynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore,
         return CachedGroupsResult;
     }
 
-    public Task<WebhookGroupDefinition> GetGroupOrNullAsync(string name)
+    public Task<WebhookGroupDefinition?> GetGroupOrNullAsync(string name)
     {
         return CachedWebhookGroupResult;
     }

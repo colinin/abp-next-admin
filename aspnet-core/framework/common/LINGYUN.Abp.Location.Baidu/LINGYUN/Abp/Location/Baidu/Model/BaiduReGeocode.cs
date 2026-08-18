@@ -11,22 +11,22 @@ public class BaiduReGeocode
     /// </summary>
     [JsonProperty("location")]
     [JsonPropertyName("location")]
-    public BaiduLocation Location { get; set; }
+    public BaiduLocation Location { get; set; } = default!;
     /// <summary>
     /// 结构化地址信息
     /// </summary>
     [JsonProperty("formatted_address")]
     [JsonPropertyName("formatted_address")]
-    public string FormattedAddress { get; set; }
+    public string? FormattedAddress { get; set; }
     /// <summary>
     /// 坐标所在商圈信息，如 "人民大学,中关村,苏州街"。
     /// 最多返回3个。
     /// </summary>
-    public string Business { get; set; }
+    public string? Business { get; set; }
     /// <summary>
     /// 地址元素列表
     /// </summary>
-    public AddressComponent AddressComponent { get; set; }
+    public AddressComponent? AddressComponent { get; set; }
     /// <summary>
     /// 周边poi数组
     /// </summary>
@@ -44,7 +44,7 @@ public class BaiduReGeocode
     /// </summary>
     [JsonProperty("sematic_description")]
     [JsonPropertyName("sematic_description")]
-    public string SematicDescription { get; set; }
+    public string? SematicDescription { get; set; }
     public BaiduReGeocode()
     {
         AddressComponent = new AddressComponent();

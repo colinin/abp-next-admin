@@ -2,5 +2,5 @@
 
 public class UserClaimDto
 {
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
 }

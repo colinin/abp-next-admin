@@ -23,18 +23,18 @@ public class EfCoreGroupRepository : EfCoreRepository<IMessageServiceDbContext, 
     }
 
     public async virtual Task<int> GetCountAsync(
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
-                x.Name.Contains(filter) || x.Tag.Contains(filter))
+                x.Name.Contains(filter!) || x.Tag!.Contains(filter!))
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<ChatGroup>> GetListAsync(
-        string filter = null,
-        string sorting = nameof(ChatGroup.Name),
+        string? filter = null,
+        string? sorting = nameof(ChatGroup.Name),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
@@ -45,13 +45,13 @@ public class EfCoreGroupRepository : EfCoreRepository<IMessageServiceDbContext, 
         }
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
-                x.Name.Contains(filter) || x.Tag.Contains(filter))
+                x.Name.Contains(filter!) || x.Tag!.Contains(filter!))
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<ChatGroup> FindByIdAsync(
+    public async virtual Task<ChatGroup?> FindByIdAsync(
         long id,
         CancellationToken cancellationToken = default)
     {

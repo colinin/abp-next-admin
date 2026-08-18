@@ -125,7 +125,7 @@ public class DynamicLocalizationInitializerEventHandler :
             return;
         }
 
-        await SaveLanguagesAsync(cacheItems.Select(kv => kv.Value).ToArray());
+        await SaveLanguagesAsync(cacheItems.Select(kv => kv.Value!).ToArray());
 
         Logger.LogInformation("Refresh language cache items.");
         await RefreshLanguagesCacheAsync();
@@ -178,7 +178,7 @@ public class DynamicLocalizationInitializerEventHandler :
             return;
         }
 
-        await SaveResourcesAsync(cacheItems.Select(kv => kv.Value).ToArray());
+        await SaveResourcesAsync(cacheItems.Select(kv => kv.Value!).ToArray());
 
         Logger.LogInformation("Refresh resource cache items.");
         await RefreshResourcesCacheAsync();
@@ -201,7 +201,7 @@ public class DynamicLocalizationInitializerEventHandler :
         var allTexts = await TextRepository.GetListAsync(eventData.ResourceName, eventData.CultureName);
         foreach (var text in allTexts)
         {
-            setTexts[text.Key] = text.Value;
+            setTexts[text.Key] = text.Value ?? "";
         }
 
         var textCacheKey = LocalizationTextCacheItem.CalculateCacheKey(eventData.ResourceName, eventData.CultureName);
@@ -242,10 +242,10 @@ public class DynamicLocalizationInitializerEventHandler :
             return;
         }
 
-        await SaveTextsAsync(cacheItems);
+        await SaveTextsAsync(cacheItems!);
 
         Logger.LogInformation("Refresh text cache items.");
-        await RefreshTextsCacheAsync(cacheItems);
+        await RefreshTextsCacheAsync(cacheItems!);
 
         await DynamicResourceCache.RemoveManyAsync(eventData.Keys);
 
@@ -433,7 +433,7 @@ public class DynamicLocalizationInitializerEventHandler :
             var allTexts = await TextRepository.GetListAsync(cacheItem.ResourceName, cacheItem.CultureName);
             foreach (var text in allTexts)
             {
-                setTexts[text.Key] = text.Value;
+                setTexts[text.Key] = text.Value ?? "";
             }
 
             var textCacheKey = LocalizationTextCacheItem.CalculateCacheKey(cacheItem.ResourceName, cacheItem.CultureName);

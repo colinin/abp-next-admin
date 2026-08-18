@@ -6,13 +6,13 @@ namespace LINGYUN.Abp.WeChat.OpenId;
 
 public class NullUserWeChatOpenIdFinder : IUserWeChatOpenIdFinder, ISingletonDependency
 {
-    public Task<string> FindByUserIdAsync(Guid userId, string provider)
+    public Task<string?> FindByUserIdAsync(Guid userId, string provider)
     {
-        return Task.FromResult("");
+        return Task.FromResult<string?>(null);
     }
 
-    public Task<string> FindByUserNameAsync(string userName, string provider)
+    public Task<string?> FindByUserNameAsync(string userName, string provider)
     {
-        return Task.FromResult("");
+        return Task.FromResult<string?>(null);
     }
 }

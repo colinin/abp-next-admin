@@ -22,7 +22,7 @@ public class ExternalLocalizationStore : IExternalLocalizationStore, ITransientD
         StoreCache = storeCache;
     }
 
-    public virtual LocalizationResourceBase GetResourceOrNull(string resourceName)
+    public virtual LocalizationResourceBase? GetResourceOrNull(string resourceName)
     {
         var cacheItem = StoreCache.GetResourceOrNull(resourceName);
 
@@ -34,7 +34,7 @@ public class ExternalLocalizationStore : IExternalLocalizationStore, ITransientD
         return CreateNonTypedLocalizationResource(cacheItem);
     }
 
-    public async virtual Task<LocalizationResourceBase> GetResourceOrNullAsync(string resourceName)
+    public async virtual Task<LocalizationResourceBase?> GetResourceOrNullAsync(string resourceName)
     {
         var cacheItem = await StoreCache.GetResourceOrNullAsync(resourceName);
 
@@ -78,7 +78,7 @@ public class ExternalLocalizationStore : IExternalLocalizationStore, ITransientD
             cacheItem.Name,
             cacheItem.DefaultCulture);
 
-        if (cacheItem.BaseResources.Length > 0)
+        if (cacheItem.BaseResources?.Length > 0)
         {
             localizationResource.AddBaseResources(cacheItem.BaseResources);
         }

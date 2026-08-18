@@ -9,7 +9,7 @@ namespace LINGYUN.Abp.RulesEngineManagement;
 public class ActionRecord : Entity<Guid>, IMultiTenant, IHasExtraProperties
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
     public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
     protected ActionRecord()
     {

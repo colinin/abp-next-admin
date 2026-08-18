@@ -9,12 +9,12 @@ public class WebhookEvent
     /// <summary>
     /// Webhook unique name <see cref="WebhookDefinition.Name"/>
     /// </summary>
-    public string WebhookName { get; set; }
+    public string WebhookName { get; set; } = default!;
 
     /// <summary>
     /// Webhook data as JSON string.
     /// </summary>
-    public string Data { get; set; }
+    public string? Data { get; set; }
 
     public DateTime CreationTime { get; set; }
 
