@@ -14,7 +14,7 @@ public class BlobDto : ExtensibleAuditedEntityDto<Guid>
 {
     public string Name { get; set; }
 
-    public string Path { get; set; }
+    public string FullName { get; set; }
 
     public BlobType Type { get; set; }
 

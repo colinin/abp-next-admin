@@ -45,9 +45,9 @@ public partial class BlobIntegrationClientProxy : ClientProxyBase<IBlobIntegrati
         });
     }
 
-    public virtual async Task<IRemoteStreamContent> GetContentAsync(BlobFileGetByNameIntegrationDto input)
+    public virtual async Task<IRemoteStreamContent> DownloadAsync(BlobFileGetByNameIntegrationDto input)
     {
-        return await RequestAsync<IRemoteStreamContent>(nameof(GetContentAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<IRemoteStreamContent>(nameof(DownloadAsync), new ClientProxyRequestTypeValue
         {
             { typeof(BlobFileGetByNameIntegrationDto), input }
         });

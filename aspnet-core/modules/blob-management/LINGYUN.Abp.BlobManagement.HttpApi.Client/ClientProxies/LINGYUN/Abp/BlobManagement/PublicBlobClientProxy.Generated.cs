@@ -19,17 +19,17 @@ namespace LINGYUN.Abp.BlobManagement;
 [ExposeServices(typeof(IPublicBlobAppService), typeof(PublicBlobClientProxy))]
 public partial class PublicBlobClientProxy : ClientProxyBase<IPublicBlobAppService>, IPublicBlobAppService
 {
-    public virtual async Task<IRemoteStreamContent> GetContentAsync(Guid id)
+    public virtual async Task<IRemoteStreamContent> DownloadAsync(Guid id)
     {
-        return await RequestAsync<IRemoteStreamContent>(nameof(GetContentAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<IRemoteStreamContent>(nameof(DownloadAsync), new ClientProxyRequestTypeValue
         {
             { typeof(Guid), id }
         });
     }
 
-    public virtual async Task<IRemoteStreamContent> GetContentByNameAsync(string name)
+    public virtual async Task<IRemoteStreamContent> DownloadByNameAsync(string name)
     {
-        return await RequestAsync<IRemoteStreamContent>(nameof(GetContentByNameAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<IRemoteStreamContent>(nameof(DownloadByNameAsync), new ClientProxyRequestTypeValue
         {
             { typeof(string), name }
         });

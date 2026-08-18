@@ -14,6 +14,10 @@
 		<GeneratePackageOnBuild Condition="$(AssemblyName.StartsWith('LINGYUN'))">true</GeneratePackageOnBuild>
 	</PropertyGroup>
 	
+	<PropertyGroup Condition="$(AssemblyName.EndsWith('HttpApi.Client'))">
+		<NoWarn>$(NoWarn);CS8618</NoWarn>
+	</PropertyGroup>
+	
 	<ItemGroup>
 		<Compile Remove="LocalNuget\**" />
 		<EmbeddedResource Remove="LocalNuget\**" />
