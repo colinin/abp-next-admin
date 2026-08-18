@@ -106,6 +106,7 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
             component: "",
             description: "账户管理",
             icon: "mdi:account-outline")
+            .WithRoles(["Users"])
             .SetProperty("hideInMenu", "true")
             .SetProperty("title", "abp.account.title");
 
@@ -117,6 +118,8 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
                 component: "/account/my-settings/index",
                 icon: "tdesign:user-setting",
                 description: "个人设置")
+            .WithRoles(["Users"])
+            .SetProperty("hideInMenu", "true")
             .SetProperty("title", "abp.account.settings.title")
          );
 
@@ -133,6 +136,7 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
             description: "仪表盘",
             icon: "lucide:layout-dashboard",
             order: -1)
+            .WithRoles(["Users"])
             .SetProperty("title", "page.dashboard.title");
 
         dashboard.AddItem(
@@ -155,6 +159,7 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
                component: "/dashboard/workspace/index",
                icon: "carbon:workspace",
                description: "工作台")
+           .WithRoles(["Users"])
            .SetProperty("title", "page.dashboard.workspace")
         );
 

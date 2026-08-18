@@ -165,9 +165,9 @@ public class EfCoreMenuRepository : EfCoreRepository<IPlatformDbContext, Menu, G
     public async virtual Task<List<Menu>> GetAllAsync(
         string? filter = null,
         string? framework = null,
-        string? sorting = nameof(Menu.Code),
         Guid? parentId = null,
         Guid? layoutId = null,
+        string? sorting = nameof(Menu.Code),
         CancellationToken cancellationToken = default)
     {
         if (sorting.IsNullOrWhiteSpace())

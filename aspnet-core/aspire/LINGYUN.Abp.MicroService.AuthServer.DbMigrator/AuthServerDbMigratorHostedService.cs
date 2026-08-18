@@ -36,6 +36,11 @@ public class AuthServerDbMigratorHostedService : IHostedService
             .GetRequiredService<AuthServerDbMigrationService>()
             .CheckAndApplyDatabaseMigrationsAsync();
 
+        await application
+            .ServiceProvider
+            .GetRequiredService<AuthServerInitializeDataSeeder>()
+            .SeedAsync(new DataSeedContext());
+
         await application.ShutdownAsync();
 
         _hostApplicationLifetime.StopApplication();

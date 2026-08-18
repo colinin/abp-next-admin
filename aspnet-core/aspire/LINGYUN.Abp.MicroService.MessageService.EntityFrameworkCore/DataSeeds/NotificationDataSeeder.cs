@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.MicroService.MessageService.DataSeeds;
 
@@ -28,43 +27,7 @@ public class NotificationDataSeeder : ITransientDependency
 
     public virtual async Task SeedAsync(DataSeedContext context)
     {
-        await SubscribeDefaultNotifierAsync(context);
         await SeedWelcomeNotifierAsync(context);
-    }
-
-    public async virtual Task SubscribeDefaultNotifierAsync(DataSeedContext context)
-    {
-        if (!context.Properties.TryGetValue(MessageServiceDataSeedConsts.AdminUserIdPropertyName, out var userIdString) ||
-            !Guid.TryParse(userIdString?.ToString(), out var adminUserId))
-        {
-
-            return;
-        }
-        var adminUserName = context.Properties.GetOrDefault(MessageServiceDataSeedConsts.AdminUserNamePropertyName)?.ToString() 
-            ?? MessageServiceDataSeedConsts.AdminUserNameDefaultValue;
-        var userIdentifer = new UserIdentifier(adminUserId, adminUserName);
-        // 订阅内置通知
-        await NotificationSubscriptionManager
-            .SubscribeAsync(
-                context.TenantId,
-                userIdentifer,
-                DefaultNotifications.SystemNotice);
-        await NotificationSubscriptionManager
-            .SubscribeAsync(
-                context.TenantId,
-                userIdentifer,
-                DefaultNotifications.OnsideNotice);
-        await NotificationSubscriptionManager
-            .SubscribeAsync(
-                context.TenantId,
-                userIdentifer,
-                DefaultNotifications.ActivityNotice);
-        // 订阅用户欢迎消息
-        await NotificationSubscriptionManager
-            .SubscribeAsync(
-                context.TenantId,
-                userIdentifer,
-                UserNotificationNames.WelcomeToApplication);
     }
 
     public async virtual Task SeedWelcomeNotifierAsync(DataSeedContext context)

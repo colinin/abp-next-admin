@@ -86,8 +86,7 @@ public class IdentitySessionAccessEventHandler :
     [UnitOfWork]
     public async virtual Task HandleEventAsync(IdentityUserSessionPasswordChangedEto eventData)
     {
-        if (!eventData.SessionId.IsNullOrWhiteSpace() &&
-            Guid.TryParse(eventData.SessionId, out var exceptSessionId))
+        if (!eventData.SessionId.IsNullOrWhiteSpace())
         {
             // 用户密码更新使会话过期
             var lockKey = $"{nameof(IdentitySessionAccessEventHandler)}_{nameof(IdentityUserSessionPasswordChangedEto)}";
@@ -103,7 +102,9 @@ public class IdentitySessionAccessEventHandler :
 
             Logger.LogDebug("Due to the password update of user {Id}, all sessions have been revoked.", eventData.Id);
 
-            await IdentitySessionStore.RevokeAllAsync(eventData.Id, exceptSessionId);
+            var session = await IdentitySessionStore.FindAsync(eventData.SessionId);
+
+            await IdentitySessionStore.RevokeAllAsync(eventData.Id, session?.Id);
         }
     }
 
