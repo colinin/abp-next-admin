@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.AuditLogging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Specifications;
 using Volo.Abp.Uow;
+
+using VoloAuditLog = Volo.Abp.AuditLogging.AuditLog;
 
 namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 
 [Dependency(ReplaceServices = true)]
-public class AuditLogManager : IAuditLogManager, ITransientDependency
+public class EfCoreAuditLogManager : IAuditLogManager, ITransientDependency
 {
     protected IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> ObjectMapper { get; }
-    protected IAuditLogRepository AuditLogRepository { get; }
+    protected IEfCoreAuditLogRepository AuditLogRepository { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-    public AuditLogManager(
-        IAuditLogRepository auditLogRepository,
+    public EfCoreAuditLogManager(
         IUnitOfWorkManager unitOfWorkManager,
+        IEfCoreAuditLogRepository auditLogRepository,
         IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> objectMapper)
     {
         ObjectMapper = objectMapper;
@@ -27,6 +29,39 @@ public class AuditLogManager : IAuditLogManager, ITransientDependency
         UnitOfWorkManager = unitOfWorkManager;
     }
 
+    public async virtual Task<long> GetCountAsync(
+        ISpecification<AuditLog> specification,
+        CancellationToken cancellationToken = default)
+    {
+        var converter = new AuditLogExpressionQueryConverter();
+        var resetSpec = new ExpressionSpecification<VoloAuditLog>(
+            converter.Convert(specification.ToExpression()));
+
+        return await AuditLogRepository.GetCountAsync(resetSpec, cancellationToken);
+    }
+
+    public async virtual Task<List<AuditLog>> GetListAsync(
+        ISpecification<AuditLog> specification,
+        string? sorting = null,
+        int maxResultCount = 50,
+        int skipCount = 0,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var converter = new AuditLogExpressionQueryConverter();
+        var resetSpec = new ExpressionSpecification<VoloAuditLog>(
+            converter.Convert(specification.ToExpression()));
+
+        var auditLogs = await AuditLogRepository.GetListAsync(
+            resetSpec,
+            sorting,
+            maxResultCount,
+            skipCount,
+            includeDetails,
+            cancellationToken);
+
+        return ObjectMapper.Map<List<VoloAuditLog>, List<AuditLog>>(auditLogs);
+    }
 
     public async virtual Task<long> GetCountAsync(
         DateTime? startTime = null,
@@ -105,7 +140,7 @@ public class AuditLogManager : IAuditLogManager, ITransientDependency
             includeDetails,
             cancellationToken);
 
-        return ObjectMapper.Map<List<Volo.Abp.AuditLogging.AuditLog>, List<AuditLog>>(auditLogs);
+        return ObjectMapper.Map<List<VoloAuditLog>, List<AuditLog>>(auditLogs);
     }
 
     public async virtual Task<AuditLog?> GetAsync(
@@ -115,7 +150,7 @@ public class AuditLogManager : IAuditLogManager, ITransientDependency
     {
         var auditLog = await AuditLogRepository.GetAsync(id, includeDetails, cancellationToken);
 
-        return ObjectMapper.Map<Volo.Abp.AuditLogging.AuditLog, AuditLog>(auditLog);
+        return ObjectMapper.Map<VoloAuditLog, AuditLog>(auditLog);
     }
 
     public async virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)

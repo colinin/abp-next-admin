@@ -4,7 +4,6 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace />
 		<IsPackable>false</IsPackable>
-		<Configurations>Debug;Release;PostgreSQL</Configurations>
 		<Platforms>AnyCPU</Platforms>
 	</PropertyGroup>
 
