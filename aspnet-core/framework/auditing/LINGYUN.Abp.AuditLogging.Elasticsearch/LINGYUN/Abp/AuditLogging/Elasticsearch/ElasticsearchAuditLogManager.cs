@@ -519,7 +519,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
                     }))
                     .SourceIncludes(x => x.Id)
                     .SearchAfter(firstHit.Sort.ToList())
-                    .Size(1),
+                    .Size(remaining),
             cancellationToken);
 
         if (!secondResponse.IsSuccess() || secondResponse.Hits == null || !secondResponse.Hits.Any())
