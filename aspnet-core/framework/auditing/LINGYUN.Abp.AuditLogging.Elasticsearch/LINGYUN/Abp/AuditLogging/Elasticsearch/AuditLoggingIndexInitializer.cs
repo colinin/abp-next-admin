@@ -51,7 +51,7 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
     protected async virtual Task InitlizeAuditLogIndexTemplate(ElasticsearchClient client, string dateTimeFormat, CancellationToken cancellationToken = default)
     {
         var indexName = _nameNormalizer.NormalizeIndex("audit-log");
-        var indexPatterns = new[] { indexName + "-*" };
+        var indexPatterns = new[] { indexName + "*" };
         var indexTemplateName = indexName + "-generic";
 
         var indexTemplateExists = await client.Indices.ExistsIndexTemplateAsync(indexTemplateName, cancellationToken);
@@ -72,16 +72,16 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
                     .Dynamic(DynamicMapping.False)
                     .Properties<AuditLog>(pd =>
                     {
-                        pd.Text(k => k.Id, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                        pd.Text(t => t.ApplicationName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(64))));
-                        pd.Text(k => k.UserId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Keyword(k => k.Id, p => p.IgnoreAbove(36));
+                        pd.Text(t => t.ApplicationName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(128))));
+                        pd.Keyword(k => k.UserId, p => p.IgnoreAbove(36));
                         pd.Text(t => t.UserName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
-                        pd.Text(k => k.TenantId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                        pd.Text(t => t.TenantName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(64))));
-                        pd.Text(k => k.ImpersonatorUserId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Keyword(k => k.TenantId, p => p.IgnoreAbove(36));
+                        pd.Text(t => t.TenantName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(128))));
+                        pd.Keyword(k => k.ImpersonatorUserId, p => p.IgnoreAbove(36));
                         pd.Text(t => t.ImpersonatorUserName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
-                        pd.Text(k => k.ImpersonatorTenantId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                        pd.Text(t => t.ImpersonatorTenantName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(64))));
+                        pd.Keyword(k => k.ImpersonatorTenantId, p => p.IgnoreAbove(36));
+                        pd.Text(t => t.ImpersonatorTenantName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(128))));
                         pd.Date(d => d.ExecutionTime, d => d.Format(dateTimeFormat));
                         pd.IntegerNumber(n => n.ExecutionDuration);
                         pd.Text(k => k.ClientIpAddress, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
@@ -91,20 +91,20 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
                         pd.Text(k => k.BrowserInfo, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(512))));
                         pd.Text(k => k.HttpMethod, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
                         pd.Text(k => k.Url, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(1024))));
-                        pd.Text(k => k.Exceptions, p => p.Store(true).Index(false));
-                        pd.Text(k => k.Comments, p => p.Store(true).Index(false));
+                        pd.Text(k => k.Exceptions, p => p.Norms(false).IndexOptions(IndexOptions.Docs));
+                        pd.Text(k => k.Comments, p => p.Norms(false).IndexOptions(IndexOptions.Docs));
                         pd.IntegerNumber(n => n.HttpStatusCode);
                         pd.Nested(n => n.EntityChanges, np =>
                         {
                             np.Dynamic(DynamicMapping.False);
                             np.Properties(npd =>
                             {
-                                npd.Text(nameof(EntityChange.Id), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                npd.Text(nameof(EntityChange.AuditLogId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                npd.Text(nameof(EntityChange.TenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                npd.Keyword(nameof(EntityChange.Id), p => p.IgnoreAbove(36));
+                                npd.Keyword(nameof(EntityChange.AuditLogId), p => p.IgnoreAbove(36));
+                                npd.Keyword(nameof(EntityChange.TenantId), p => p.IgnoreAbove(36));
                                 npd.Date(nameof(EntityChange.ChangeTime), d => d.Format(dateTimeFormat));
                                 npd.ByteNumber(nameof(EntityChange.ChangeType));
-                                npd.Text(nameof(EntityChange.EntityTenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                npd.Keyword(nameof(EntityChange.EntityTenantId), p => p.IgnoreAbove(36));
                                 npd.Text(nameof(EntityChange.EntityId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(128))));
                                 npd.Text(nameof(EntityChange.EntityTypeFullName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
                                 npd.Nested(nameof(EntityChange.PropertyChanges), pc =>
@@ -112,9 +112,9 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
                                     pc.Dynamic(DynamicMapping.False);
                                     pc.Properties(pcn =>
                                     {
-                                        pcn.Text(nameof(EntityPropertyChange.Id), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                        pcn.Text(nameof(EntityPropertyChange.TenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                        pcn.Text(nameof(EntityPropertyChange.EntityChangeId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                        pcn.Keyword(nameof(EntityPropertyChange.Id), p => p.IgnoreAbove(36));
+                                        pcn.Keyword(nameof(EntityPropertyChange.TenantId), p => p.IgnoreAbove(36));
+                                        pcn.Keyword(nameof(EntityPropertyChange.EntityChangeId), p => p.IgnoreAbove(36));
                                         pcn.Text(nameof(EntityPropertyChange.NewValue), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
                                         pcn.Text(nameof(EntityPropertyChange.OriginalValue), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
                                         pcn.Text(nameof(EntityPropertyChange.PropertyName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
@@ -129,12 +129,12 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
                             np.Dynamic(DynamicMapping.False);
                             np.Properties(npd =>
                             {
-                                npd.Text(nameof(AuditLogAction.Id), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                npd.Text(nameof(AuditLogAction.TenantId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                                npd.Text(nameof(AuditLogAction.AuditLogId), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                                npd.Keyword(nameof(AuditLogAction.Id), p => p.IgnoreAbove(36));
+                                npd.Keyword(nameof(AuditLogAction.TenantId), p => p.IgnoreAbove(36));
+                                npd.Keyword(nameof(AuditLogAction.AuditLogId), p => p.IgnoreAbove(36));
                                 npd.Text(nameof(AuditLogAction.ServiceName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
                                 npd.Text(nameof(AuditLogAction.MethodName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
-                                npd.Text(nameof(AuditLogAction.Parameters), p => p.Store(true).Index(false));
+                                npd.Text(nameof(AuditLogAction.Parameters), p => p.Norms(false).IndexOptions(IndexOptions.Docs));
                                 npd.Date(nameof(AuditLogAction.ExecutionTime), d => d.Format(dateTimeFormat));
                                 npd.IntegerNumber(nameof(AuditLogAction.ExecutionDuration));
                                 npd.Flattened(nameof(AuditLogAction.ExtraProperties), f => f.DepthLimit(5).EagerGlobalOrdinals(false));
@@ -176,7 +176,7 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
     protected async virtual Task InitlizeSecurityLogIndexTemplate(ElasticsearchClient client, string dateTimeFormat, CancellationToken cancellationToken = default)
     {
         var indexName = _nameNormalizer.NormalizeIndex("security-log");
-        var indexPatterns = new[] { indexName + "-*" };
+        var indexPatterns = new[] { indexName + "*" };
         var indexTemplateName = indexName + "-generic";
 
         var indexTemplateExists = await client.Indices.ExistsIndexTemplateAsync(indexTemplateName, cancellationToken);
@@ -198,12 +198,12 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
                     mp.Dynamic(DynamicMapping.False);
                     mp.Properties<SecurityLog>(pd =>
                     {
-                        pd.Text(k => k.Id, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
-                        pd.Text(k => k.TenantId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Keyword(k => k.Id, p => p.IgnoreAbove(36));
+                        pd.Keyword(k => k.TenantId, p => p.IgnoreAbove(36));
                         pd.Text(k => k.ApplicationName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
                         pd.Text(k => k.Identity, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
                         pd.Text(k => k.Action, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
-                        pd.Text(k => k.UserId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(36))));
+                        pd.Keyword(k => k.UserId, p => p.IgnoreAbove(36));
                         pd.Text(k => k.UserName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(64))));
                         pd.Text(k => k.TenantName, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(64))));
                         pd.Text(k => k.ClientId, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
