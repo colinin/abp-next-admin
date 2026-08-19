@@ -31,7 +31,7 @@ public class EfCoreAuditLogWriter : IAuditLogWriter, ITransientDependency
         GuidGenerator = guidGenerator;
     }
 
-    public async virtual Task WriteAsync(AuditLogInfo auditLogInfo, CancellationToken cancellationToken = default)
+    public async virtual Task<string> WriteAsync(AuditLogInfo auditLogInfo, CancellationToken cancellationToken = default)
     {
         using (var uow = UnitOfWorkManager.Begin(true))
         {
@@ -40,6 +40,8 @@ public class EfCoreAuditLogWriter : IAuditLogWriter, ITransientDependency
             await AuditLogRepository.InsertAsync(auditLog);
 
             await uow.CompleteAsync();
+
+            return auditLog.Id.ToString();
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.AuditLogging;
 
@@ -55,8 +56,19 @@ public interface IAuditLogManager
         int? maxExecutionDuration = null,
         int? minExecutionDuration = null,
         bool? hasException = null, 
-        HttpStatusCode? httpStatusCode = null, 
+        HttpStatusCode? httpStatusCode = null,
         bool includeDetails = false, 
         CancellationToken cancellationToken = default);
 
+    Task<long> GetCountAsync(
+        ISpecification<AuditLog> specification,
+        CancellationToken cancellationToken = default);
+
+    Task<List<AuditLog>> GetListAsync(
+        ISpecification<AuditLog> specification,
+        string? sorting = null,
+        int maxResultCount = 50,
+        int skipCount = 0,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default);
 }
