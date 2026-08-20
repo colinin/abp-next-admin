@@ -7,38 +7,36 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Elasticsearch;
 
 /// <summary>
 /// 表达式查询转换器 - 将 LINQ 表达式转换为 Elasticsearch Query
 /// </summary>
-/// <typeparam name="TDocument">文档类型</typeparam>
-public class ExpressionQueryTranslator<TDocument>
+public class ExpressionQueryTranslator : IExpressionQueryTranslator, ISingletonDependency
 {
-    private readonly bool _defaultNestedBehavior;
-    private readonly IndexMappingInfo _mappingInfo;
+    private readonly IIndexMappingProvider _indexMappingProvider;
 
-    /// <summary>
-    /// 构造函数（使用已有的映射信息）
-    /// </summary>
     public ExpressionQueryTranslator(
-        IndexMappingInfo mappingInfo,
-        bool defaultNestedBehavior = false)
+        IIndexMappingProvider indexMappingProvider)
     {
-        _mappingInfo = mappingInfo;
-        _defaultNestedBehavior = defaultNestedBehavior;
+        _indexMappingProvider = indexMappingProvider;
     }
 
     /// <summary>
-    /// 同步翻译表达式（需要已加载映射）
+    /// 翻译表达式
     /// </summary>
-    public virtual Query Translate(Expression<Func<TDocument, bool>> expression)
+    public async virtual Task<Query> TranslateAsync<TDocument>(string indexName, Expression<Func<TDocument, bool>> expression)
     {
+        Check.NotNullOrWhiteSpace(indexName, nameof(indexName));
         Check.NotNull(expression, nameof(expression));
 
-        return TranslateNode(expression.Body, prefix: null, _mappingInfo);
+        var indexMapping = await _indexMappingProvider.GetMappingAsync(indexName);
+
+        return TranslateNode(expression.Body, prefix: null, indexMapping);
     }
 
     #region 节点翻译
@@ -555,9 +553,7 @@ public class ExpressionQueryTranslator<TDocument>
             inner = TranslateNode(predicate.Body, prefix: collectionField.Path, mappingInfo);
         }
 
-        var shouldUseNested = collectionField.IsNested ||
-                              (mappingInfo?.IsNested(collectionField.Path) ?? false) ||
-                              _defaultNestedBehavior;
+        var shouldUseNested = collectionField.IsNested || (mappingInfo?.IsNested(collectionField.Path) ?? false);
 
         return shouldUseNested
             ? new NestedQuery(collectionField.Path, inner)

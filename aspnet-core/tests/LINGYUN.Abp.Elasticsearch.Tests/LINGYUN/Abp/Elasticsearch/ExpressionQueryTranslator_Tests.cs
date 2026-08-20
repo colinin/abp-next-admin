@@ -4,38 +4,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace LINGYUN.Abp.Elasticsearch.Tests;
 
-public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
+public abstract class ExpressionQueryTranslatorTests<TStartupModule> : AbpIntegratedTest<TStartupModule>
+    where TStartupModule : IAbpModule
 {
-    private readonly IIndexMappingProvider _indexMappingProvider;
+    private readonly IExpressionQueryTranslator _expressionQueryTranslator;
 
     public ExpressionQueryTranslatorTests()
     {
-        _indexMappingProvider = GetRequiredService<IIndexMappingProvider>();
-    }
-
-    private async Task<ExpressionQueryTranslator<TDocument>> CreateTranslator<TDocument>(
-        bool defaultNestedBehavior = false)
-    {
-        var indexMapping = await _indexMappingProvider.GetMappingAsync(TestDocumentIndexNames.Index);
-        return new ExpressionQueryTranslator<TDocument>(
-            indexMapping,
-            defaultNestedBehavior);
+        _expressionQueryTranslator = GetRequiredService<IExpressionQueryTranslator>();
     }
 
     #region 基础查询测试
 
     [Fact]
-    public async Task Translate_ConstantTrue_ReturnsMatchAllQuery()
+    public async virtual Task Translate_ConstantTrue_ReturnsMatchAllQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => true);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => true);
 
         // Assert
         query.ShouldNotBeNull();
@@ -43,27 +34,14 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_ConstantFalse_ReturnsMatchNoneQuery()
+    public async virtual Task Translate_ConstantFalse_ReturnsMatchNoneQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => false);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => false);
 
         // Assert
         query.ShouldNotBeNull();
         query.MatchNone.ShouldNotBeNull();
-    }
-
-    [Fact]
-    public async Task Translate_NullExpression_ThrowsArgumentNullException()
-    {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
-        // Act & Assert
-        Should.Throw<ArgumentNullException>(() => translator.Translate(null!));
     }
 
     #endregion
@@ -71,14 +49,11 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     #region 相等性查询测试
 
     [Fact]
-    public async Task Translate_Equal_NumericField_ReturnsTermQuery()
+    public async virtual Task Translate_Equal_NumericField_ReturnsTermQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
         var idValue = 100;
-        var query = translator.Translate(x => x.Id == idValue);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Id == idValue);
 
         // Assert
         query.ShouldNotBeNull();
@@ -88,14 +63,11 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_Equal_StringField_ReturnsTermQueryWithKeyword()
+    public async virtual Task Translate_Equal_StringField_ReturnsTermQueryWithKeyword()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
         var stringValue = "test";
-        var query = translator.Translate(x => x.Name == stringValue);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name == stringValue);
 
         // Assert
         query.ShouldNotBeNull();
@@ -105,14 +77,11 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_Equal_BooleanField_ReturnsTermQuery()
+    public async virtual Task Translate_Equal_BooleanField_ReturnsTermQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
         var boolValue = true;
-        var query = translator.Translate(x => x.IsActive == boolValue);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.IsActive == boolValue);
 
         // Assert
         query.ShouldNotBeNull();
@@ -122,14 +91,11 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_Equal_EnumField_ReturnsTermQuery()
+    public async virtual Task Translate_Equal_EnumField_ReturnsTermQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
         var enumValue = TestEnum.Active;
-        var query = translator.Translate(x => x.Status == enumValue);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Status == enumValue);
 
         // Assert
         query.ShouldNotBeNull();
@@ -139,14 +105,11 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_Equal_StringEnumField_ReturnsTermQueryWithString()
+    public async virtual Task Translate_Equal_StringEnumField_ReturnsTermQueryWithString()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
         var enumValue = TestEnum.Pending;
-        var query = translator.Translate(x => x.StringValueStatus == enumValue);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.StringValueStatus == enumValue);
 
         // Assert
         query.ShouldNotBeNull();
@@ -156,13 +119,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_NotEqual_StringField_ReturnsBoolMustNot()
+    public async virtual Task Translate_NotEqual_StringField_ReturnsBoolMustNot()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Name != "test");
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name != "test");
 
         // Assert
         query.ShouldNotBeNull();
@@ -177,14 +137,11 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_Equal_NullableEnumField_ReturnsTermQuery()
+    public async virtual Task Translate_Equal_NullableEnumField_ReturnsTermQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
         var enumValue = TestEnum.Inactive;
-        var query = translator.Translate(x => x.NullableStatus == enumValue);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.NullableStatus == enumValue);
 
         // Assert
         query.ShouldNotBeNull();
@@ -194,13 +151,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_Equal_DecimalField_ReturnsTermQuery()
+    public async virtual Task Translate_Equal_DecimalField_ReturnsTermQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Salary == 5000.50m);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Salary == 5000.50m);
 
         // Assert
         query.ShouldNotBeNull();
@@ -209,14 +163,13 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_Equal_NullableDateField_ReturnsDateRangeQuery()
+    public async virtual Task Translate_Equal_NullableDateField_ReturnsDateRangeQuery()
     {
         // Arrange
-        var translator = await CreateTranslator<TestDocument>();
         var date = new DateTime(2024, 3, 15, 10, 30, 0);
 
         // Act
-        var query = translator.Translate(x => x.UpdatedTime == date);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.UpdatedTime == date);
 
         // Assert
         query.ShouldNotBeNull();
@@ -231,13 +184,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     #region Null 比较测试
 
     [Fact]
-    public async Task Translate_EqualNull_ReturnsMustNotExistsQuery()
+    public async virtual Task Translate_EqualNull_ReturnsMustNotExistsQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Name == null);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name == null);
 
         // Assert
         query.ShouldNotBeNull();
@@ -252,13 +202,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_NotEqualNull_ReturnsExistsQuery()
+    public async virtual Task Translate_NotEqualNull_ReturnsExistsQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Name != null);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name != null);
 
         // Assert
         query.ShouldNotBeNull();
@@ -267,13 +214,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_NullableType_IsNull_ReturnsMustNotExists()
+    public async virtual Task Translate_NullableType_IsNull_ReturnsMustNotExists()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.UpdatedTime == null);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.UpdatedTime == null);
 
         // Assert
         query.ShouldNotBeNull();
@@ -284,13 +228,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_NullableType_IsNotNull_ReturnsExistsQuery()
+    public async virtual Task Translate_NullableType_IsNotNull_ReturnsExistsQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.UpdatedTime != null);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.UpdatedTime != null);
 
         // Assert
         query.ShouldNotBeNull();
@@ -299,13 +240,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_NullableEnum_IsNull_ReturnsMustNotExists()
+    public async virtual Task Translate_NullableEnum_IsNull_ReturnsMustNotExists()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.NullableStatus == null);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.NullableStatus == null);
 
         // Assert
         query.ShouldNotBeNull();
@@ -320,13 +258,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     #region 逻辑运算测试
 
     [Fact]
-    public async Task Translate_AndAlso_TwoConditions_ReturnsBoolFilterWithTwoQueries()
+    public async virtual Task Translate_AndAlso_TwoConditions_ReturnsBoolFilterWithTwoQueries()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Age > 18 && x.IsActive == true);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Age > 18 && x.IsActive == true);
 
         // Assert
         query.ShouldNotBeNull();
@@ -336,13 +271,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_AndAlso_ThreeConditions_ReturnsBoolFilterWithThreeQueries()
+    public async virtual Task Translate_AndAlso_ThreeConditions_ReturnsBoolFilterWithThreeQueries()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Age > 18 && x.IsActive == true && x.Name != null);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Age > 18 && x.IsActive == true && x.Name != null);
 
         // Assert
         query.ShouldNotBeNull();
@@ -352,13 +284,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_OrElse_TwoConditions_ReturnsBoolShouldWithTwoQueries()
+    public async virtual Task Translate_OrElse_TwoConditions_ReturnsBoolShouldWithTwoQueries()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Age > 18 || x.IsActive == true);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Age > 18 || x.IsActive == true);
 
         // Assert
         query.ShouldNotBeNull();
@@ -370,13 +299,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_OrElse_ThreeConditions_ReturnsBoolShouldWithThreeQueries()
+    public async virtual Task Translate_OrElse_ThreeConditions_ReturnsBoolShouldWithThreeQueries()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Age > 18 || x.IsActive == true || x.Name != null);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Age > 18 || x.IsActive == true || x.Name != null);
 
         // Assert
         query.ShouldNotBeNull();
@@ -388,13 +314,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_AndAlsoWithOrElse_ReturnsNestedBoolQuery()
+    public async virtual Task Translate_AndAlsoWithOrElse_ReturnsNestedBoolQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => (x.Age > 18 || x.IsActive == true) && x.Name != null);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => (x.Age > 18 || x.IsActive == true) && x.Name != null);
 
         // Assert
         query.ShouldNotBeNull();
@@ -411,13 +334,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_Not_ReturnsNegatedBooleanQuery()
+    public async virtual Task Translate_Not_ReturnsNegatedBooleanQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => !x.IsActive);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => !x.IsActive);
 
         // Assert
         query.ShouldNotBeNull();
@@ -428,13 +348,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_Not_OnComparison_ReturnsMustNotQuery()
+    public async virtual Task Translate_Not_OnComparison_ReturnsMustNotQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => !(x.Age > 18));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => !(x.Age > 18));
 
         // Assert
         query.ShouldNotBeNull();
@@ -449,13 +366,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     #region 范围查询测试
 
     [Fact]
-    public async Task Translate_GreaterThan_ReturnsRangeQuery()
+    public async virtual Task Translate_GreaterThan_ReturnsRangeQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Age > 18);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Age > 18);
 
         // Assert
         query.ShouldNotBeNull();
@@ -466,13 +380,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_GreaterThanOrEqual_ReturnsRangeQuery()
+    public async virtual Task Translate_GreaterThanOrEqual_ReturnsRangeQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Age >= 18);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Age >= 18);
 
         // Assert
         query.ShouldNotBeNull();
@@ -483,13 +394,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_LessThan_ReturnsRangeQuery()
+    public async virtual Task Translate_LessThan_ReturnsRangeQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Age < 65);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Age < 65);
 
         // Assert
         query.ShouldNotBeNull();
@@ -500,13 +408,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_LessThanOrEqual_ReturnsRangeQuery()
+    public async virtual Task Translate_LessThanOrEqual_ReturnsRangeQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Age <= 65);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Age <= 65);
 
         // Assert
         query.ShouldNotBeNull();
@@ -517,14 +422,13 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_DateComparison_GreaterThan_ReturnsDateRangeQuery()
+    public async virtual Task Translate_DateComparison_GreaterThan_ReturnsDateRangeQuery()
     {
         // Arrange
-        var translator = await CreateTranslator<TestDocument>();
         var date = new DateTime(2024, 1, 15);
 
         // Act
-        var query = translator.Translate(x => x.CreatedTime > date);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.CreatedTime > date);
 
         // Assert
         query.ShouldNotBeNull();
@@ -534,15 +438,14 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_DateComparison_BetweenDates_ReturnsDateRangeQuery()
+    public async virtual Task Translate_DateComparison_BetweenDates_ReturnsDateRangeQuery()
     {
         // Arrange
-        var translator = await CreateTranslator<TestDocument>();
         var startDate = new DateTime(2024, 1, 1);
         var endDate = new DateTime(2024, 12, 31);
 
         // Act
-        var query = translator.Translate(x => x.CreatedTime >= startDate && x.CreatedTime <= endDate);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.CreatedTime >= startDate && x.CreatedTime <= endDate);
 
         // Assert
         query.ShouldNotBeNull();
@@ -555,13 +458,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_DecimalComparison_ReturnsRangeQuery()
+    public async virtual Task Translate_DecimalComparison_ReturnsRangeQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Salary >= 3000.50m);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Salary >= 3000.50m);
 
         // Assert
         query.ShouldNotBeNull();
@@ -575,13 +475,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     #region 字符串方法测试
 
     [Fact]
-    public async Task Translate_StringContains_KeywordField_ReturnsWildcardQuery()
+    public async virtual Task Translate_StringContains_KeywordField_ReturnsWildcardQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Name!.Contains("test"));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name!.Contains("test"));
 
         // Assert
         query.ShouldNotBeNull();
@@ -591,13 +488,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_StringStartsWith_KeywordField_ReturnsWildcardQuery()
+    public async virtual Task Translate_StringStartsWith_KeywordField_ReturnsWildcardQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Name!.StartsWith("test"));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name!.StartsWith("test"));
 
         // Assert
         query.ShouldNotBeNull();
@@ -607,13 +501,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_StringEndsWith_KeywordField_ReturnsWildcardQuery()
+    public async virtual Task Translate_StringEndsWith_KeywordField_ReturnsWildcardQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Name!.EndsWith("test"));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name!.EndsWith("test"));
 
         // Assert
         query.ShouldNotBeNull();
@@ -623,13 +514,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_StringContains_WildcardField_ReturnsWildcardQuery()
+    public async virtual Task Translate_StringContains_WildcardField_ReturnsWildcardQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Exceptions!.Contains("error"));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Exceptions!.Contains("error"));
 
         // Assert
         query.ShouldNotBeNull();
@@ -639,13 +527,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_StringContains_TextWithoutKeyword_ReturnsMatchPhraseQuery()
+    public async virtual Task Translate_StringContains_TextWithoutKeyword_ReturnsMatchPhraseQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Description!.Contains("hello world"));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Description!.Contains("hello world"));
 
         // Assert
         query.ShouldNotBeNull();
@@ -655,13 +540,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_StringStartsWith_TextWithoutKeyword_ReturnsMatchPhrasePrefixQuery()
+    public async virtual Task Translate_StringStartsWith_TextWithoutKeyword_ReturnsMatchPhrasePrefixQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Description!.StartsWith("hello"));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Description!.StartsWith("hello"));
 
         // Assert
         query.ShouldNotBeNull();
@@ -671,13 +553,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_StringContains_EscapesWildcardCharacters()
+    public async virtual Task Translate_StringContains_EscapesWildcardCharacters()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Name!.Contains("test*value"));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name!.Contains("test*value"));
 
         // Assert
         query.ShouldNotBeNull();
@@ -686,13 +565,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_StringContains_EscapesQuestionMark()
+    public async virtual Task Translate_StringContains_EscapesQuestionMark()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Name!.Contains("test?value"));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name!.Contains("test?value"));
 
         // Assert
         query.ShouldNotBeNull();
@@ -701,13 +577,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_StringEquals_ReturnsTermQuery()
+    public async virtual Task Translate_StringEquals_ReturnsTermQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Name!.Equals("test"));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name!.Equals("test"));
 
         // Assert
         query.ShouldNotBeNull();
@@ -722,14 +595,13 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     #region 集合方法测试
 
     [Fact]
-    public async Task Translate_EnumerableContains_Tags_ReturnsTermsQuery()
+    public async virtual Task Translate_EnumerableContains_Tags_ReturnsTermsQuery()
     {
         // Arrange
-        var translator = await CreateTranslator<TestDocument>();
         var tags = new List<string> { "tag1", "tag2", "tag3" };
 
         // Act
-        var query = translator.Translate(x => tags.Contains(x.Name!));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => tags.Contains(x.Name!));
 
         // Assert
         query.ShouldNotBeNull();
@@ -738,14 +610,13 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_CollectionContains_SingleItem_ReturnsTermQuery()
+    public async virtual Task Translate_CollectionContains_SingleItem_ReturnsTermQuery()
     {
         // Arrange
-        var translator = await CreateTranslator<TestDocument>();
         var tags = new List<string> { "tag1" };
 
         // Act
-        var query = translator.Translate(x => tags.Contains(x.Name!));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => tags.Contains(x.Name!));
 
         // Assert
         query.ShouldNotBeNull();
@@ -754,14 +625,13 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_EnumerableContains_EmptyCollection_ReturnsMatchNoneQuery()
+    public async virtual Task Translate_EnumerableContains_EmptyCollection_ReturnsMatchNoneQuery()
     {
         // Arrange
-        var translator = await CreateTranslator<TestDocument>();
         var tags = new List<string>();
 
         // Act
-        var query = translator.Translate(x => tags.Contains(x.Name!));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => tags.Contains(x.Name!));
 
         // Assert
         query.ShouldNotBeNull();
@@ -769,13 +639,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_EnumerableAny_WithoutPredicate_ReturnsNestedExistsQuery()
+    public async virtual Task Translate_EnumerableAny_WithoutPredicate_ReturnsNestedExistsQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Items!.Any());
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Items!.Any());
 
         // Assert
         query.ShouldNotBeNull();
@@ -785,13 +652,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_EnumerableAny_WithPredicate_ReturnsNestedQuery()
+    public async virtual Task Translate_EnumerableAny_WithPredicate_ReturnsNestedQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Items!.Any(i => i.Id == 10));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Items!.Any(i => i.Id == 10));
 
         // Assert
         query.ShouldNotBeNull();
@@ -802,13 +666,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_EnumerableAny_WithComplexPredicate_ReturnsNestedBoolQuery()
+    public async virtual Task Translate_EnumerableAny_WithComplexPredicate_ReturnsNestedBoolQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Items!.Any(i => i.Price > 100 && i.Price < 1000));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Items!.Any(i => i.Price > 100 && i.Price < 1000));
 
         // Assert
         query.ShouldNotBeNull();
@@ -820,13 +681,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_EnumerableAll_ReturnsNestedQuery()
+    public async virtual Task Translate_EnumerableAll_ReturnsNestedQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Items!.All(i => i.Price > 0));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Items!.All(i => i.Price > 0));
 
         // Assert
         query.ShouldNotBeNull();
@@ -840,13 +698,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     #region 嵌套属性测试
 
     [Fact]
-    public async Task Translate_NestedObjectProperty_ReturnsQueryWithNestedPath()
+    public async virtual Task Translate_NestedObjectProperty_ReturnsQueryWithNestedPath()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Address!.City == "Beijing");
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Address!.City == "Beijing");
 
         // Assert
         query.ShouldNotBeNull();
@@ -855,13 +710,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_NestedObjectStringContains_ReturnsWildcardQuery()
+    public async virtual Task Translate_NestedObjectStringContains_ReturnsWildcardQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Address!.City!.Contains("bei"));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Address!.City!.Contains("bei"));
 
         // Assert
         query.ShouldNotBeNull();
@@ -871,13 +723,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_NestedObjectProperty_NotEqualNull_ReturnsExistsQuery()
+    public async virtual Task Translate_NestedObjectProperty_NotEqualNull_ReturnsExistsQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Address!.City != null);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Address!.City != null);
 
         // Assert
         query.ShouldNotBeNull();
@@ -890,13 +739,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     #region Nullable 属性测试
 
     [Fact]
-    public async Task Translate_NullableDate_HasValue_ReturnsExistsQuery()
+    public async virtual Task Translate_NullableDate_HasValue_ReturnsExistsQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.UpdatedTime.HasValue);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.UpdatedTime.HasValue);
 
         // Assert
         query.ShouldNotBeNull();
@@ -909,16 +755,15 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     #region 复杂表达式测试
 
     [Fact]
-    public async Task Translate_ComplexExpression_ReturnsCorrectQuery()
+    public async virtual Task Translate_ComplexExpression_ReturnsCorrectQuery()
     {
         // Arrange
-        var translator = await CreateTranslator<TestDocument>();
         var minAge = 18;
         var maxAge = 65;
         var namePrefix = "test";
 
         // Act
-        var query = translator.Translate(x =>
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x =>
             (x.Age >= minAge && x.Age <= maxAge) &&
             (x.Name != null && x.Name.StartsWith(namePrefix)) &&
             x.IsActive == true &&
@@ -976,15 +821,14 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_ExpressionWithCapturedVariable_ReturnsCorrectQuery()
+    public async virtual Task Translate_ExpressionWithCapturedVariable_ReturnsCorrectQuery()
     {
         // Arrange
-        var translator = await CreateTranslator<TestDocument>();
         var targetName = "John";
         var targetAge = 30;
 
         // Act
-        var query = translator.Translate(x => x.Name == targetName && x.Age == targetAge);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name == targetName && x.Age == targetAge);
 
         // Assert
         query.ShouldNotBeNull();
@@ -1003,14 +847,13 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_ExpressionWithDateTimeVariable_ReturnsDateRangeQuery()
+    public async virtual Task Translate_ExpressionWithDateTimeVariable_ReturnsDateRangeQuery()
     {
         // Arrange
-        var translator = await CreateTranslator<TestDocument>();
         var targetDate = new DateTime(2024, 6, 15);
 
         // Act
-        var query = translator.Translate(x => x.CreatedTime == targetDate);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.CreatedTime == targetDate);
 
         // Assert
         query.ShouldNotBeNull();
@@ -1025,23 +868,18 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     #region 边界情况测试
 
     [Fact]
-    public async Task Translate_UnsupportedMethod_ThrowsNotSupportedException()
+    public async virtual Task Translate_UnsupportedMethod_ThrowsNotSupportedException()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act & Assert
-        Should.Throw<NotSupportedException>(() => translator.Translate(x => x.Name!.ToUpper() == "TEST"));
+        await Should.ThrowAsync<NotSupportedException>(async () => 
+            await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name!.ToUpper() == "TEST"));
     }
 
     [Fact]
-    public async Task Translate_MultipleWhereConditions_ReturnsCorrectQuery()
+    public async virtual Task Translate_MultipleWhereConditions_ReturnsCorrectQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x =>
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x =>
             (x.Age > 18 || x.Age < 65) &&
             x.Name != null &&
             !x.IsActive);
@@ -1054,14 +892,13 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_NestedAnyWithContains_ReturnsNestedTermsQuery()
+    public async virtual Task Translate_NestedAnyWithContains_ReturnsNestedTermsQuery()
     {
         // Arrange
-        var translator = await CreateTranslator<TestDocument>();
         var validIds = new List<int> { 1, 2, 3, 4, 5 };
 
         // Act
-        var query = translator.Translate(x => x.Items!.Any(i => validIds.Contains(i.Id)));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Items!.Any(i => validIds.Contains(i.Id)));
 
         // Assert
         query.ShouldNotBeNull();
@@ -1072,13 +909,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_StringEquals_NullValue_ReturnsMustNotExists()
+    public async virtual Task Translate_StringEquals_NullValue_ReturnsMustNotExists()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Name!.Equals(null));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name!.Equals(null));
 
         // Assert
         query.ShouldNotBeNull();
@@ -1089,13 +923,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     }
 
     [Fact]
-    public async Task Translate_NotEqual_NullableEnum_ReturnsCorrectQuery()
+    public async virtual Task Translate_NotEqual_NullableEnum_ReturnsCorrectQuery()
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.NullableStatus != TestEnum.Active);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.NullableStatus != TestEnum.Active);
 
         // Assert
         query.ShouldNotBeNull();
@@ -1116,13 +947,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     [InlineData(TestEnum.Active, 1)]
     [InlineData(TestEnum.Inactive, 2)]
     [InlineData(TestEnum.Pending, 3)]
-    public async Task Translate_Equal_EnumField_ReturnsCorrectValue(TestEnum enumValue, long expectedValue)
+    public async virtual Task Translate_Equal_EnumField_ReturnsCorrectValue(TestEnum enumValue, long expectedValue)
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Status == enumValue);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Status == enumValue);
 
         // Assert
         query.ShouldNotBeNull();
@@ -1135,13 +963,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     [InlineData(18)]
     [InlineData(30)]
     [InlineData(65)]
-    public async Task Translate_GreaterThan_VariousAges_ReturnsCorrectRange(int age)
+    public async virtual Task Translate_GreaterThan_VariousAges_ReturnsCorrectRange(int age)
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Age > age);
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Age > age);
 
         // Assert
         query.ShouldNotBeNull();
@@ -1155,13 +980,10 @@ public class ExpressionQueryTranslatorTests : AbpElasticsearchTestBase
     [InlineData("test")]
     [InlineData("hello")]
     [InlineData("world")]
-    public async Task Translate_StringContains_VariousValues_ReturnsCorrectWildcard(string searchValue)
+    public async virtual Task Translate_StringContains_VariousValues_ReturnsCorrectWildcard(string searchValue)
     {
-        // Arrange
-        var translator = await CreateTranslator<TestDocument>();
-
         // Act
-        var query = translator.Translate(x => x.Name!.Contains(searchValue));
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name!.Contains(searchValue));
 
         // Assert
         query.ShouldNotBeNull();

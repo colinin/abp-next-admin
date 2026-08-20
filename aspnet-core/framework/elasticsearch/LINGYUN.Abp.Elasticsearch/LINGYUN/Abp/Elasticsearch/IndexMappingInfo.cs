@@ -107,7 +107,7 @@ public class IndexMappingInfo
 
         // 检查路径的父级是否是 Nested
         var parts = path.Split('.');
-        for (int i = 0; i < parts.Length - 1; i++)
+        for (var i = 0; i < parts.Length - 1; i++)
         {
             var parentPath = string.Join(".", parts.Take(i + 1));
             if (IsNested(parentPath))
@@ -125,7 +125,7 @@ public class IndexMappingInfo
     public string? GetNestedParentPath(string path)
     {
         var parts = path.Split('.');
-        for (int i = parts.Length - 1; i >= 0; i--)
+        for (var i = parts.Length - 1; i >= 0; i--)
         {
             var parentPath = string.Join(".", parts.Take(i + 1));
             if (IsNested(parentPath))
