@@ -12,24 +12,24 @@ namespace LINGYUN.Abp.Elasticsearch;
 
 public class ExpressionQueryService : IExpressionQueryService, ITransientDependency
 {
-    private readonly IElasticsearchClientFactory _clientFactory;
-    private readonly IExpressionQueryTranslator _expressionQueryTranslator;
+    protected IElasticsearchClientFactory ClientFactory { get; }
+    protected IExpressionQueryTranslator ExpressionQueryTranslator { get; }
 
     public ExpressionQueryService(
         IElasticsearchClientFactory clientFactory,
         IExpressionQueryTranslator expressionQueryTranslator)
     {
-        _clientFactory = clientFactory;
-        _expressionQueryTranslator = expressionQueryTranslator;
+        ClientFactory = clientFactory;
+        ExpressionQueryTranslator = expressionQueryTranslator;
     }
 
     public async virtual Task<long> GetCountAsync<TDocument>(
         string indexName,
         Expression<Func<TDocument, bool>> expression,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default) where TDocument : class
     {
-        var client = _clientFactory.Create();
-        var query = await _expressionQueryTranslator.TranslateAsync(indexName, expression);
+        var client = ClientFactory.Create();
+        var query = await ExpressionQueryTranslator.TranslateAsync(indexName, expression);
 
         var response = await client.CountAsync<TDocument>(dsl =>
             dsl.Indices(indexName).Query(query),
@@ -46,10 +46,10 @@ public class ExpressionQueryService : IExpressionQueryService, ITransientDepende
         int skipCount = 0,
         Fields? sourceExcludes = null,
         Fields? sourceIncludes = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default) where TDocument : class
     {
-        var client = _clientFactory.Create();
-        var query = await _expressionQueryTranslator.TranslateAsync(indexName, expression);
+        var client = ClientFactory.Create();
+        var query = await ExpressionQueryTranslator.TranslateAsync(indexName, expression);
 
         SortOptions[]? sorts = null;
         if (!sorting.IsNullOrWhiteSpace())
@@ -61,7 +61,10 @@ public class ExpressionQueryService : IExpressionQueryService, ITransientDepende
             {
                 new SortOptions
                 {
-                    Field = new FieldSort(new Field(sorting)),
+                    Field = new FieldSort(new Field(sorting))
+                    {
+                        Order = sortOrder,
+                    },
                 }
             };
         }

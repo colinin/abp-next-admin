@@ -155,6 +155,7 @@
     <Project Path="framework/efcore/LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting/LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting.csproj" />
   </Folder>
   <Folder Name="/framework/elasticsearch/">
+    <Project Path="framework/elasticsearch/LINGYUN.Abp.Elasticsearch.EsqlQuery/LINGYUN.Abp.Elasticsearch.EsqlQuery.csproj" Id="ef34fa8c-55e4-4976-852b-20e94c355ab5" />
     <Project Path="framework/elasticsearch/LINGYUN.Abp.Elasticsearch/LINGYUN.Abp.Elasticsearch.csproj" />
   </Folder>
   <Folder Name="/framework/entity-change/">
@@ -525,6 +526,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/LINGYUN.Abp.Aliyun.Tests/LINGYUN.Abp.Aliyun.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.AuditLogging.Elasticsearch.Tests/LINGYUN.Abp.AuditLogging.Elasticsearch.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.AuditLogging.Tests/LINGYUN.Abp.AuditLogging.Tests.csproj" Id="a360d3e3-0cef-433c-a866-77abd64d8a52" />
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Nexus.Tests/LINGYUN.Abp.BlobStoring.Nexus.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.DataProtection.Tests/LINGYUN.Abp.DataProtection.Tests.csproj" />
@@ -538,6 +540,8 @@
     <Project Path="tests/LINGYUN.Abp.Localization.Xml.Tests/LINGYUN.Abp.Localization.Xml.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Baidu.Tests/LINGYUN.Abp.Location.Baidu.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Tencent.Tests/LINGYUN.Abp.Location.Tencent.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.Logging.Serilog.Elasticsearch.Tests/LINGYUN.Abp.Logging.Serilog.Elasticsearch.Tests.csproj" Id="d9b9a706-000c-4344-8eac-27ee78fcbb2a" />
+    <Project Path="tests/LINGYUN.Abp.Logging.Tests/LINGYUN.Abp.Logging.Tests.csproj" Id="1e05270f-6652-443d-b76f-5d4360f2722e" />
     <Project Path="tests/LINGYUN.Abp.Rules.RulesEngine.Tests/LINGYUN.Abp.Rules.RulesEngine.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Sms.Platform.Tests/LINGYUN.Abp.Sms.Platform.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.TestBase/LINGYUN.Abp.TestsBase.csproj" />

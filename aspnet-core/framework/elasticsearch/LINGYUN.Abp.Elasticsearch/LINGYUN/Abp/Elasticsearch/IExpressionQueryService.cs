@@ -20,7 +20,7 @@ public interface IExpressionQueryService
     Task<long> GetCountAsync<TDocument>(
         string indexName, 
         Expression<Func<TDocument, bool>> expression,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default) where TDocument : class;
     /// <summary>
     /// 查询符合条件的文档列表
     /// </summary>
@@ -42,5 +42,5 @@ public interface IExpressionQueryService
         int skipCount = 0,
         Fields? sourceExcludes = null,
         Fields? sourceIncludes = null,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default) where TDocument : class;
 }
