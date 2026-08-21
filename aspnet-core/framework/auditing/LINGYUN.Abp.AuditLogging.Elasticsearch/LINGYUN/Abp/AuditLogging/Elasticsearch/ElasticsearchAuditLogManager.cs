@@ -1,10 +1,8 @@
 ﻿using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.Mapping;
 using Elastic.Clients.Elasticsearch.QueryDsl;
 using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,23 +18,26 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
 [Dependency(ReplaceServices = true)]
 public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependency
 {
-    private readonly AbpElasticsearchOptions _elasticsearchOptions;
     private readonly IIndexNameNormalizer _indexNameNormalizer;
     private readonly IElasticsearchClientFactory _clientFactory;
+    private readonly IIndexMappingProvider _indexMappingProvider;
+    private readonly IExpressionQueryService _expressionQueryService;
     private readonly IClock _clock;
 
     public ILogger<ElasticsearchAuditLogManager> Logger { protected get; set; }
 
     public ElasticsearchAuditLogManager(
         IClock clock,
+        IElasticsearchClientFactory clientFactory,
         IIndexNameNormalizer indexNameNormalizer,
-        IOptions<AbpElasticsearchOptions> elasticsearchOptions,
-        IElasticsearchClientFactory clientFactory)
+        IIndexMappingProvider indexMappingProvider,
+        IExpressionQueryService expressionQueryService)
     {
         _clock = clock;
         _clientFactory = clientFactory;
-        _elasticsearchOptions = elasticsearchOptions.Value;
         _indexNameNormalizer = indexNameNormalizer;
+        _indexMappingProvider = indexMappingProvider;
+        _expressionQueryService = expressionQueryService;
 
         Logger = NullLogger<ElasticsearchAuditLogManager>.Instance;
     }
@@ -45,16 +46,12 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         ISpecification<AuditLog> specification,
         CancellationToken cancellationToken = default)
     {
-        var client = _clientFactory.Create();
-        var actionsIsNested = await GetActionsIsNested(client, cancellationToken);
-        var translator = new AuditLogExpressionQueryTranslator(actionsIsNested);
-        var query = translator.Translate(specification.ToExpression());
+        var indexName = CreateIndex();
 
-        var response = await client.CountAsync<AuditLog>(dsl =>
-            dsl.Indices(CreateIndex()).Query(query),
+        return await _expressionQueryService.GetCountAsync(
+            indexName,
+            specification.ToExpression(),
             cancellationToken);
-
-        return response.Count;
     }
 
     public async virtual Task<List<AuditLog>> GetListAsync(
@@ -65,21 +62,41 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        var client = _clientFactory.Create();
-        var actionsIsNested = await GetActionsIsNested(client, cancellationToken);
-        var translator = new AuditLogExpressionQueryTranslator(actionsIsNested);
-        var query = translator.Translate(specification.ToExpression());
+        var indexName = CreateIndex();
 
-        var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
-            ? SortOrder.Asc : SortOrder.Desc;
-        sorting = !sorting.IsNullOrWhiteSpace()
-            ? sorting.Split()[0]
-            : nameof(AuditLog.ExecutionTime);
-        // ES最大支持10000, 超出这个长度后升级为使用Search_After方案
+        var sortingField = sorting;
+        if (sortingField.IsNullOrWhiteSpace())
+        {
+            var indexMapping = await _indexMappingProvider.GetMappingAsync(indexName, cancellationToken);
+            if (indexMapping != null)
+            {
+                var sortingFieldMap = indexMapping.Fields
+                    .Where(x => x.Key.Equals(sortingField, StringComparison.CurrentCultureIgnoreCase))
+                    .Select(x => x.Value)
+                    .FirstOrDefault();
+                if (sortingFieldMap != null)
+                {
+                    sortingField = sortingFieldMap.Path;
+                }
+            }
+        }
 
-        return skipCount >= 10000
-            ? await SearchAfterAuditLogs(client, query, sorting, sortOrder, maxResultCount, skipCount, includeDetails, cancellationToken)
-            : await SearchFromSizeAuditLogs(client, query, sorting, sortOrder, maxResultCount, skipCount, includeDetails, cancellationToken);
+        return await _expressionQueryService.GetListAsync(
+            indexName,
+            specification.ToExpression(),
+            sortingField,
+            maxResultCount,
+            skipCount,
+            sourceExcludes: includeDetails == true
+                ? Fields.FromFields(
+                [
+                    new Field("Actions"),
+                    new Field("Comments"),
+                    new Field("EntityChanges"),
+                    new Field("Exceptions"),
+                ])
+                : null,
+            cancellationToken: cancellationToken);
     }
 
     public async virtual Task<long> GetCountAsync(
@@ -99,9 +116,12 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         HttpStatusCode? httpStatusCode = null,
         CancellationToken cancellationToken = default)
     {
+        var indexName = CreateIndex();
         var client = _clientFactory.Create();
+        var indexMapping = await _indexMappingProvider.GetMappingAsync(indexName, cancellationToken);
 
         var querys = BuildQueryDescriptor(
+            indexMapping,
             startTime,
             endTime,
             httpMethod,
@@ -118,7 +138,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             httpStatusCode);
 
         var response = await client.CountAsync<AuditLog>(dsl =>
-            dsl.Indices(CreateIndex())
+            dsl.Indices(indexName)
                .Query(new BoolQuery
                {
                    Must = querys
@@ -149,15 +169,14 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
+        var indexName = CreateIndex();
         var client = _clientFactory.Create();
+        var indexMapping = await _indexMappingProvider.GetMappingAsync(indexName, cancellationToken);
 
-        var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
-            ? SortOrder.Asc : SortOrder.Desc;
-        sorting = !sorting.IsNullOrWhiteSpace()
-            ? sorting.Split()[0]
-            : nameof(AuditLog.ExecutionTime);
+        var sorts = GetOrDefaultSort(indexMapping, sorting);
 
         var querys = BuildQueryDescriptor(
+            indexMapping,
             startTime,
             endTime,
             httpMethod,
@@ -176,9 +195,25 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         var query = new BoolQuery { Must = querys };
 
         // ES最大支持10000, 超出这个长度后升级为使用Search_After方案
-        return skipCount >= 10000
-            ? await SearchAfterAuditLogs(client, query, sorting, sortOrder, maxResultCount, skipCount, includeDetails, cancellationToken)
-            : await SearchFromSizeAuditLogs(client, query, sorting, sortOrder, maxResultCount, skipCount, includeDetails, cancellationToken);
+        return skipCount >= 10000 && sorts != null
+            ? await SearchAfterAuditLogs(
+                client, 
+                indexName,
+                query,
+                sorts,
+                maxResultCount,
+                skipCount,
+                includeDetails,
+                cancellationToken)
+            : await SearchFromSizeAuditLogs(
+                client,
+                indexName,
+                query,
+                sorts,
+                maxResultCount,
+                skipCount,
+                includeDetails,
+                cancellationToken);
     }
 
     public async virtual Task<AuditLog?> GetAsync(
@@ -232,6 +267,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
     }
 
     protected virtual List<Query> BuildQueryDescriptor(
+        IndexMappingInfo indexMappingInfo,
         DateTime? startTime = null,
         DateTime? endTime = null,
         string? httpMethod = null,
@@ -251,63 +287,63 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
 
         if (startTime.HasValue)
         {
-            queries.Add(new DateRangeQuery(GetField(nameof(AuditLog.ExecutionTime)))
+            queries.Add(new DateRangeQuery(GetField(indexMappingInfo, nameof(AuditLog.ExecutionTime)))
             {
                 Gte = _clock.Normalize(startTime.Value)
             });
         }
         if (endTime.HasValue)
         {
-            queries.Add(new DateRangeQuery(GetField(nameof(AuditLog.ExecutionTime)))
+            queries.Add(new DateRangeQuery(GetField(indexMappingInfo, nameof(AuditLog.ExecutionTime)))
             {
                 Lte = _clock.Normalize(endTime.Value)
             });
         }
         if (!httpMethod.IsNullOrWhiteSpace())
         {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.HttpMethod)), httpMethod));
+            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.HttpMethod)), httpMethod));
         }
         if (!url.IsNullOrWhiteSpace())
         {
-            queries.Add(new WildcardQuery(GetField(nameof(AuditLog.Url)))
+            queries.Add(new WildcardQuery(GetField(indexMappingInfo, nameof(AuditLog.Url)))
             {
                 Value = $"*{url}*"
             });
         }
         if (userId.HasValue)
         {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.UserId)), userId.Value.ToString()));
+            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.UserId)), userId.Value.ToString()));
         }
         if (!userName.IsNullOrWhiteSpace())
         {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.UserName)), userName));
+            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.UserName)), userName));
         }
         if (!applicationName.IsNullOrWhiteSpace())
         {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.ApplicationName)), applicationName));
+            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.ApplicationName)), applicationName));
         }
         if (!correlationId.IsNullOrWhiteSpace())
         {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.CorrelationId)), correlationId));
+            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.CorrelationId)), correlationId));
         }
         if (!clientId.IsNullOrWhiteSpace())
         {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.ClientId)), clientId));
+            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.ClientId)), clientId));
         }
         if (!clientIpAddress.IsNullOrWhiteSpace())
         {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.ClientIpAddress)), clientIpAddress));
+            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.ClientIpAddress)), clientIpAddress));
         }
         if (maxExecutionDuration.HasValue)
         {
-            queries.Add(new NumberRangeQuery(GetField(nameof(AuditLog.ExecutionDuration)))
+            queries.Add(new NumberRangeQuery(GetField(indexMappingInfo, nameof(AuditLog.ExecutionDuration)))
             {
                 Lte = maxExecutionDuration.Value
             });
         }
         if (minExecutionDuration.HasValue)
         {
-            queries.Add(new NumberRangeQuery(GetField(nameof(AuditLog.ExecutionDuration)))
+            queries.Add(new NumberRangeQuery(GetField(indexMappingInfo, nameof(AuditLog.ExecutionDuration)))
             {
                 Gte = minExecutionDuration.Value
             });
@@ -318,7 +354,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         {
             if (hasException.Value)
             {
-                queries.Add(new ExistsQuery(GetField("Exceptions")));
+                queries.Add(new ExistsQuery(GetField(indexMappingInfo, nameof(AuditLog.Exceptions))));
             }
             else
             {
@@ -326,7 +362,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
                 {
                     MustNot = new List<Query>
                     {
-                        new ExistsQuery(GetField("Exceptions"))
+                        new ExistsQuery(GetField(indexMappingInfo, nameof(AuditLog.Exceptions)))
                     }
                 });
             }
@@ -334,53 +370,32 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
 
         if (httpStatusCode.HasValue)
         {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.HttpStatusCode)), ((int)httpStatusCode.Value).ToString()));
+            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.HttpStatusCode)), ((int)httpStatusCode.Value).ToString()));
         }
 
         return queries;
     }
 
-    private async Task<bool> GetActionsIsNested(ElasticsearchClient client, CancellationToken cancellationToken = default)
-    {
-        var actionsIsNested = false;
-
-        var response = await client.Indices.GetMappingAsync<AuditLog>(
-            d => d.Indices(CreateIndex()),
-            cancellationToken);
-
-        foreach (var mapping in response.Mappings)
-        {
-            if (mapping.Value.Mappings?.Properties is IDictionary<PropertyName, IProperty> properties &&
-                properties.TryGetValue("Actions", out var actionsProperty))
-            {
-                actionsIsNested = actionsProperty is NestedProperty;
-                break;
-            }
-        }
-
-        return actionsIsNested;
-    }
-
     private async Task<List<AuditLog>> SearchFromSizeAuditLogs(
         ElasticsearchClient client,
+        string indexName,
         Query query,
-        string sorting,
-        SortOrder sortOrder,
-        int maxResultCount,
-        int skipCount,
+        SortOptions[]? sorts = null,
+        int maxResultCount = 50,
+        int skipCount = 0,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         var searchResponse = await client.SearchAsync<AuditLog>(dsl =>
         {
-            dsl.Indices(CreateIndex())
+            dsl.Indices(indexName)
                 .Query(query)
-                .Sort(s => s.Field(new FieldSort(GetField(sorting))
-                {
-                    Order = sortOrder
-                }))
                .From(skipCount)
                .Size(maxResultCount);
+            if (sorts != null)
+            {
+                dsl.Sort(sorts);
+            }
 
             if (!includeDetails)
             {
@@ -402,19 +417,19 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
 
     private async Task<List<AuditLog>> SearchAfterAuditLogs(
         ElasticsearchClient client,
+        string indexName,
         Query query,
-        string sorting,
-        SortOrder sortOrder,
-        int maxResultCount,
-        int skipCount,
+        SortOptions[] sorts,
+        int maxResultCount = 50,
+        int skipCount = 0,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         var searchAfter = await GetSearchAfterValue(
             client,
+            indexName,
             query,
-            sorting,
-            sortOrder,
+            sorts,
             skipCount,
             cancellationToken);
 
@@ -425,12 +440,9 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
 
         var searchResponse = await client.SearchAsync<AuditLog>(dsl =>
         {
-            dsl.Indices(CreateIndex())
+            dsl.Indices(indexName)
                 .Query(query)
-                .Sort(s => s.Field(new FieldSort(GetField(sorting))
-                {
-                    Order = sortOrder
-                }))
+                .Sort(sorts)
                 .Size(maxResultCount)
                 .SearchAfter(searchAfter);
 
@@ -454,9 +466,9 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
 
     private async Task<List<FieldValue>?> GetSearchAfterValue(
         ElasticsearchClient client,
+        string indexName,
         Query query,
-        string sorting,
-        SortOrder sortOrder,
+        SortOptions[] sorts,
         int skipCount,
         CancellationToken cancellationToken = default)
     {
@@ -464,12 +476,9 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         if (skipCount < 10000)
         {
             var response = await client.SearchAsync<AuditLog>(
-                dsl => dsl.Indices(CreateIndex())
+                dsl => dsl.Indices(indexName)
                     .Query(query)
-                    .Sort(s => s.Field(new FieldSort(GetField(sorting))
-                    {
-                        Order = sortOrder
-                    }))
+                    .Sort(sorts)
                     .SourceIncludes(x => x.Id)
                     .From(skipCount)
                     .Size(1), 
@@ -486,12 +495,9 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
 
         // 获取第9999条数据Hits作为searchAfter
         var firstResponse = await client.SearchAsync<AuditLog>(
-            dsl => dsl.Indices(CreateIndex())
+            dsl => dsl.Indices(indexName)
                     .Query(query)
-                    .Sort(s => s.Field(new FieldSort(GetField(sorting))
-                    {
-                        Order = sortOrder
-                    }))
+                    .Sort(sorts)
                     .SourceIncludes(x => x.Id)
                     .From(9999)
                     .Size(1), 
@@ -511,12 +517,9 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         var remaining = skipCount - 10000;
         // 获取skipCount最近一条数据作为searchAfter
         var secondResponse = await client.SearchAsync<AuditLog>(
-            dsl => dsl.Indices(CreateIndex())
+            dsl => dsl.Indices(indexName)
                     .Query(query)
-                    .Sort(s => s.Field(new FieldSort(GetField(sorting))
-                    {
-                        Order = sortOrder
-                    }))
+                    .Sort(sorts)
                     .SourceIncludes(x => x.Id)
                     .SearchAfter(firstHit.Sort.ToList())
                     .Size(remaining),
@@ -546,35 +549,45 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         return _indexNameNormalizer.NormalizeIndex("audit-log");
     }
 
-    protected virtual string GetField(string field)
+    private static SortOptions[]? GetOrDefaultSort(IndexMappingInfo indexMappingInfo, string? sorting = null)
     {
-        if (_auditLogFieldMaps.TryGetValue(field, out var mapField))
+        var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
+            ? SortOrder.Asc : SortOrder.Desc;
+        sorting = !sorting.IsNullOrWhiteSpace()
+            ? sorting.Split()[0]
+            : nameof(AuditLog.ExecutionTime);
+
+        SortOptions[]? sorts = null;
+        if (sorting.IsNullOrWhiteSpace())
         {
-            return _elasticsearchOptions.FieldCamelCase ? mapField.ToCamelCase() : mapField.ToPascalCase();
+            var sortingFieldMap = indexMappingInfo.Fields
+                    .Where(x => x.Key.Equals(sorting, StringComparison.CurrentCultureIgnoreCase))
+                    .Select(x => x.Value)
+                    .FirstOrDefault();
+            if (sortingFieldMap != null)
+            {
+                sorting = sortingFieldMap.Path;
+            }
+            if (!sorting.IsNullOrWhiteSpace())
+            {
+                sorts = new SortOptions[1]
+                {
+                    new SortOptions
+                    {
+                        Field = new FieldSort(new Field(sorting))
+                        {
+                            Order = sortOrder,
+                        },
+                    }
+                };
+            }
         }
 
-        return _elasticsearchOptions.FieldCamelCase ? field.ToCamelCase() : field.ToPascalCase();
+        return sorts;
     }
 
-    private readonly static IDictionary<string, string> _auditLogFieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
+    private static string GetField(IndexMappingInfo indexMappingInfo, string fieldFullPath)
     {
-        { "Id", "Id.keyword" },
-        { "ApplicationName", "ApplicationName.keyword" },
-        { "UserId", "UserId.keyword" },
-        { "UserName", "UserName.keyword" },
-        { "TenantId", "TenantId.keyword" },
-        { "TenantName", "TenantName.keyword" },
-        { "ImpersonatorUserId", "ImpersonatorUserId.keyword" },
-        { "ImpersonatorTenantId", "ImpersonatorTenantId.keyword" },
-        { "ClientName", "ClientName.keyword" },
-        { "ClientIpAddress", "ClientIpAddress.keyword" },
-        { "ClientId", "ClientId.keyword" },
-        { "CorrelationId", "CorrelationId.keyword" },
-        { "BrowserInfo", "BrowserInfo.keyword" },
-        { "HttpMethod", "HttpMethod.keyword" },
-        { "Url", "Url.keyword" },
-        { "ExecutionDuration", "ExecutionDuration" },
-        { "ExecutionTime", "ExecutionTime" },
-        { "HttpStatusCode", "HttpStatusCode" },
-    };
+        return indexMappingInfo.GetExactFieldPath(fieldFullPath);
+    }
 }

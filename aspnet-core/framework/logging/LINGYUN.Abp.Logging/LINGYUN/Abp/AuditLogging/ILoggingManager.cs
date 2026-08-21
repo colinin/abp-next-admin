@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.Logging;
 
@@ -46,5 +47,16 @@ public interface ILoggingManager
         int? threadId = null,
         bool? hasException = null,
         bool includeDetails = false,
+        CancellationToken cancellationToken = default);
+
+    Task<long> GetCountAsync(
+        ISpecification<LogInfo> specification,
+        CancellationToken cancellationToken = default);
+
+    Task<List<LogInfo>> GetListAsync(
+        ISpecification<LogInfo> specification,
+        string? sorting = null,
+        int maxResultCount = 50,
+        int skipCount = 0,
         CancellationToken cancellationToken = default);
 }

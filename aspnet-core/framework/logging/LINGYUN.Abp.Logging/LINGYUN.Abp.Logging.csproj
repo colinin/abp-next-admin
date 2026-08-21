@@ -14,7 +14,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Core" />
+		<PackageReference Include="Volo.Abp.Specifications" />
 	</ItemGroup>
 
 </Project>

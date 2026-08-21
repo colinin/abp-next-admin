@@ -134,7 +134,7 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
                                 npd.Keyword(nameof(AuditLogAction.AuditLogId), p => p.IgnoreAbove(36));
                                 npd.Text(nameof(AuditLogAction.ServiceName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
                                 npd.Text(nameof(AuditLogAction.MethodName), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(256))));
-                                npd.Text(nameof(AuditLogAction.Parameters), p => p.Norms(false).IndexOptions(IndexOptions.Docs));
+                                npd.Wildcard(nameof(AuditLogAction.Parameters));
                                 npd.Date(nameof(AuditLogAction.ExecutionTime), d => d.Format(dateTimeFormat));
                                 npd.IntegerNumber(nameof(AuditLogAction.ExecutionDuration));
                                 npd.Flattened(nameof(AuditLogAction.ExtraProperties), f => f.DepthLimit(5).EagerGlobalOrdinals(false));

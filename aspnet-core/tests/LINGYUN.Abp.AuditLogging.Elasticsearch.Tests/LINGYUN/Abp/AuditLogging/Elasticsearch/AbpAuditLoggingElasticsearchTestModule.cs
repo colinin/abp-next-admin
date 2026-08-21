@@ -1,6 +1,5 @@
 using Elastic.Clients.Elasticsearch;
 using LINGYUN.Abp.Elasticsearch;
-using LINGYUN.Abp.Tests;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -11,7 +10,7 @@ using Volo.Abp.Modularity;
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch
 {
     [DependsOn(
-        typeof(AbpTestsBaseModule),
+        typeof(AbpAuditLoggingTestModule),
         typeof(AbpAuditLoggingElasticsearchModule))]
     public class AbpAuditLoggingElasticsearchTestModule : AbpModule
     {

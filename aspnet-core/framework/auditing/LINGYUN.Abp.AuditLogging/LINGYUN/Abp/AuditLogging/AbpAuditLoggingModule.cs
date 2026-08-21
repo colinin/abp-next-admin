@@ -9,6 +9,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
+using Volo.Abp.Specifications;
 using Volo.Abp.Threading;
 
 namespace LINGYUN.Abp.AuditLogging;
@@ -16,6 +17,7 @@ namespace LINGYUN.Abp.AuditLogging;
 [DependsOn(
     typeof(AbpAuditingModule),
     typeof(AbpGuidsModule),
+    typeof(AbpSpecificationsModule),
     typeof(AbpExceptionHandlingModule))]
 public class AbpAuditLoggingModule : AbpModule
 {

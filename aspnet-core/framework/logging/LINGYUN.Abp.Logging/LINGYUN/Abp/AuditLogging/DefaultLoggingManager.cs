@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.Logging;
 
@@ -63,6 +64,25 @@ public class DefaultLoggingManager : ILoggingManager, ISingletonDependency
         int? threadId = null,
         bool? hasException = null,
         bool includeDetails = false, 
+        CancellationToken cancellationToken = default)
+    {
+        Logger.LogDebug("No logging manager is available!");
+        return Task.FromResult(new List<LogInfo>());
+    }
+
+    public Task<long> GetCountAsync(
+        ISpecification<LogInfo> specification,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.LogDebug("No logging manager is available!");
+        return Task.FromResult(0L);
+    }
+
+    public Task<List<LogInfo>> GetListAsync(
+        ISpecification<LogInfo> specification,
+        string? sorting = null,
+        int maxResultCount = 50,
+        int skipCount = 0,
         CancellationToken cancellationToken = default)
     {
         Logger.LogDebug("No logging manager is available!");
