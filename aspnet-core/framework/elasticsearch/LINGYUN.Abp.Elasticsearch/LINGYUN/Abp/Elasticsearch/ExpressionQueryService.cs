@@ -241,23 +241,18 @@ public class ExpressionQueryService : IExpressionQueryService, ITransientDepende
             return null;
         }
 
-        var remaining = skipCount - 10000;
         // 获取skipCount最近一条数据作为searchAfter
         var secondResponse = await client.SearchAsync<TDocument>(
             dsl => dsl.Indices(indexName)
                     .Query(query)
-                    .Sort(sorts)
+                    // 反转排序取第一个数据作为起始索引
+                    .Sort(sorts.Select(x => x).Reverse().ToArray())
                     .SourceIncludes([])
                     .SearchAfter(firstHit.Sort.ToList())
-                    .Size(remaining),
+                    .Size(1),
             cancellationToken);
 
         if (!secondResponse.IsSuccess() || secondResponse.Hits == null || !secondResponse.Hits.Any())
-        {
-            return null;
-        }
-
-        if (secondResponse.Hits.Count < remaining)
         {
             return null;
         }

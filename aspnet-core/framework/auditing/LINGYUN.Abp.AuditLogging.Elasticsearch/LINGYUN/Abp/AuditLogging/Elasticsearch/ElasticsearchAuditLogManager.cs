@@ -145,6 +145,11 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
                }),
             cancellationToken);
 
+        if (response.TryGetErrorMessage(out var errorMessage))
+        {
+            Logger.LogWarning("Query audit log count failed: {errorMessage}", errorMessage);
+        }
+
         return response.Count;
     }
 
@@ -407,8 +412,9 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             }
         }, cancellationToken);
 
-        if (!searchResponse.IsSuccess())
+        if (searchResponse.TryGetErrorMessage(out var errorMessage))
         {
+            Logger.LogWarning("Query audit log failed: {errorMessage}", errorMessage);
             return [];
         }
 
@@ -456,8 +462,9 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             }
         }, cancellationToken);
 
-        if (!searchResponse.IsSuccess())
+        if (searchResponse.TryGetErrorMessage(out var errorMessage))
         {
+            Logger.LogWarning("Query audit log failed: {errorMessage}", errorMessage);
             return [];
         }
 
@@ -514,23 +521,18 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             return null;
         }
 
-        var remaining = skipCount - 10000;
         // 获取skipCount最近一条数据作为searchAfter
         var secondResponse = await client.SearchAsync<AuditLog>(
             dsl => dsl.Indices(indexName)
                     .Query(query)
-                    .Sort(sorts)
+                    // 反转排序取第一个数据作为起始索引
+                    .Sort(sorts.Select(x => x).Reverse().ToArray())
                     .SourceIncludes(x => x.Id)
                     .SearchAfter(firstHit.Sort.ToList())
-                    .Size(remaining),
+                    .Size(1),
             cancellationToken);
 
         if (!secondResponse.IsSuccess() || secondResponse.Hits == null || !secondResponse.Hits.Any())
-        {
-            return null;
-        }
-
-        if (secondResponse.Hits.Count < remaining)
         {
             return null;
         }
@@ -558,29 +560,26 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             : nameof(AuditLog.ExecutionTime);
 
         SortOptions[]? sorts = null;
-        if (sorting.IsNullOrWhiteSpace())
-        {
-            var sortingFieldMap = indexMappingInfo.Fields
+        var sortingFieldMap = indexMappingInfo.Fields
                     .Where(x => x.Key.Equals(sorting, StringComparison.CurrentCultureIgnoreCase))
                     .Select(x => x.Value)
                     .FirstOrDefault();
-            if (sortingFieldMap != null)
+        if (sortingFieldMap != null)
+        {
+            sorting = sortingFieldMap.Path;
+        }
+        if (!sorting.IsNullOrWhiteSpace())
+        {
+            sorts = new SortOptions[1]
             {
-                sorting = sortingFieldMap.Path;
-            }
-            if (!sorting.IsNullOrWhiteSpace())
-            {
-                sorts = new SortOptions[1]
+                new SortOptions
                 {
-                    new SortOptions
+                    Field = new FieldSort(new Field(sorting))
                     {
-                        Field = new FieldSort(new Field(sorting))
-                        {
-                            Order = sortOrder,
-                        },
-                    }
-                };
-            }
+                        Order = sortOrder,
+                    },
+                }
+            };
         }
 
         return sorts;
