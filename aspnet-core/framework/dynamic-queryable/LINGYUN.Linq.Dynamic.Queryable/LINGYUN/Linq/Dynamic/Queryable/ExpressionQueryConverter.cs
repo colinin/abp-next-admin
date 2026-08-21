@@ -4,38 +4,31 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-using VoloAuditLog = Volo.Abp.AuditLogging.AuditLog;
+namespace LINGYUN.Linq.Dynamic.Queryable;
 
-namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
-
-/// <summary>
-/// 审计日志表达式树转换器
-/// </summary>
-internal class AuditLogExpressionQueryConverter : ExpressionVisitor
+public class ExpressionQueryConverter<TSource, TTarget> : ExpressionVisitor
 {
     private readonly IReadOnlyDictionary<Type, Type> _typeMap;
     private readonly Dictionary<ParameterExpression, ParameterExpression> _parameterMap = new();
 
-    public AuditLogExpressionQueryConverter()
-        : this(BuildDefaultTypeMap())
-    {
-    }
-
-    public AuditLogExpressionQueryConverter(IReadOnlyDictionary<Type, Type> typeMap)
+    public ExpressionQueryConverter(IReadOnlyDictionary<Type, Type> typeMap)
     {
         _typeMap = typeMap ?? throw new ArgumentNullException(nameof(typeMap));
     }
 
-    public Expression<Func<VoloAuditLog, bool>> Convert(Expression<Func<AuditLog, bool>> expression)
+    public Expression<Func<TTarget, bool>> Convert(Expression<Func<TSource, bool>> expression)
     {
-        ArgumentNullException.ThrowIfNull(expression);
+        if (expression == null)
+        {
+            throw new ArgumentNullException(nameof(expression));
+        }
 
         _parameterMap.Clear();
-        var rootParameter = Expression.Parameter(typeof(VoloAuditLog), expression.Parameters[0].Name);
+        var rootParameter = Expression.Parameter(typeof(TTarget), expression.Parameters[0].Name);
         _parameterMap[expression.Parameters[0]] = rootParameter;
 
         var body = Visit(expression.Body);
-        return Expression.Lambda<Func<VoloAuditLog, bool>>(body, rootParameter);
+        return Expression.Lambda<Func<TTarget, bool>>(body, rootParameter);
     }
 
     protected override Expression VisitLambda<T>(Expression<T> node)
@@ -115,6 +108,19 @@ internal class AuditLogExpressionQueryConverter : ExpressionVisitor
             var operand = Visit(node.Operand);
             return Expression.Quote(operand);
         }
+
+        if (node.NodeType is ExpressionType.Convert or ExpressionType.ConvertChecked)
+        {
+            var operand = Visit(node.Operand);
+            var resultType = _typeMap.TryGetValue(node.Type, out var mappedType) ? mappedType : node.Type;
+
+            if (operand.Type == resultType)
+            {
+                return operand;
+            }
+            return Expression.Convert(operand, resultType);
+        }
+
         return base.VisitUnary(node);
     }
 
@@ -125,16 +131,5 @@ internal class AuditLogExpressionQueryConverter : ExpressionVisitor
             return Expression.Constant(Enum.ToObject(targetType, System.Convert.ToInt64(enumValue)), targetType);
         }
         return base.VisitConstant(node);
-    }
-
-    private static Dictionary<Type, Type> BuildDefaultTypeMap()
-    {
-        return new Dictionary<Type, Type>
-        {
-            [typeof(AuditLog)] = typeof(VoloAuditLog),
-            [typeof(AuditLogAction)] = typeof(Volo.Abp.AuditLogging.AuditLogAction),
-            [typeof(EntityChange)] = typeof(Volo.Abp.AuditLogging.EntityChange),
-            [typeof(EntityPropertyChange)] = typeof(Volo.Abp.AuditLogging.EntityPropertyChange),
-        };
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LINGYUN.Linq.Dynamic.Queryable;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
@@ -15,6 +16,14 @@ namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 [Dependency(ReplaceServices = true)]
 public class EfCoreAuditLogManager : IAuditLogManager, ITransientDependency
 {
+    private readonly static Dictionary<Type, Type> _defaultTypeMap = new Dictionary<Type, Type>
+    {
+        [typeof(AuditLog)] = typeof(VoloAuditLog),
+        [typeof(AuditLogAction)] = typeof(Volo.Abp.AuditLogging.AuditLogAction),
+        [typeof(EntityChange)] = typeof(Volo.Abp.AuditLogging.EntityChange),
+        [typeof(EntityPropertyChange)] = typeof(Volo.Abp.AuditLogging.EntityPropertyChange),
+    };
+
     protected IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> ObjectMapper { get; }
     protected IEfCoreAuditLogRepository AuditLogRepository { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
@@ -33,7 +42,7 @@ public class EfCoreAuditLogManager : IAuditLogManager, ITransientDependency
         ISpecification<AuditLog> specification,
         CancellationToken cancellationToken = default)
     {
-        var converter = new AuditLogExpressionQueryConverter();
+        var converter = new ExpressionQueryConverter<AuditLog, VoloAuditLog>(_defaultTypeMap);
         var resetSpec = new ExpressionSpecification<VoloAuditLog>(
             converter.Convert(specification.ToExpression()));
 
@@ -48,7 +57,7 @@ public class EfCoreAuditLogManager : IAuditLogManager, ITransientDependency
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        var converter = new AuditLogExpressionQueryConverter();
+        var converter = new ExpressionQueryConverter<AuditLog, VoloAuditLog>(_defaultTypeMap);
         var resetSpec = new ExpressionSpecification<VoloAuditLog>(
             converter.Convert(specification.ToExpression()));
 

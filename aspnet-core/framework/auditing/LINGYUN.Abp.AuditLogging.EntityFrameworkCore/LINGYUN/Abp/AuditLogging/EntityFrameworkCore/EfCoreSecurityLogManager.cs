@@ -10,13 +10,13 @@ using Volo.Abp.Uow;
 namespace LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 
 [Dependency(ReplaceServices = true)]
-public class SecurityLogManager : ISecurityLogManager, ITransientDependency
+public class EfCoreSecurityLogManager : ISecurityLogManager, ITransientDependency
 {
     protected IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> ObjectMapper { get; }
     protected IIdentitySecurityLogRepository IdentitySecurityLogRepository { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-    public SecurityLogManager(
+    public EfCoreSecurityLogManager(
         IObjectMapper<AbpAuditLoggingEntityFrameworkCoreModule> objectMapper,
         IIdentitySecurityLogRepository identitySecurityLogRepository,
         IUnitOfWorkManager unitOfWorkManager)
