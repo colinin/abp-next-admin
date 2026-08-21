@@ -1,13 +1,14 @@
 ﻿using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.IndexManagement;
 using Elastic.Clients.Elasticsearch.Mapping;
-using Elastic.Transport.Products.Elasticsearch;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.Elasticsearch;
@@ -26,40 +27,46 @@ public class ElasticsearchIndexMappingProvider : IIndexMappingProvider, ITransie
         _cache = cache;
     }
 
-    public async Task<IndexMappingInfo> GetMappingAsync(string indexName, CancellationToken cancellationToken = default)
+    public async Task<IndexMappingInfo> GetMappingAsync(string indexPattern, CancellationToken cancellationToken = default)
     {
-        var cacheKey = $"es_mapping_{indexName}";
+        var cacheKey = $"es_mapping_{indexPattern}";
 
         var cacheItem = _cache.Get<IndexMappingInfo>(cacheKey);
         if (cacheItem == null)
         {
             var client = _clientFactory.Create();
-            var response = await client.Indices.GetMappingAsync(indexName, cancellationToken);
-
-            if (!response.IsSuccess())
+            var request = new GetMappingRequest(indexPattern)
             {
-                var errorBuilder = new StringBuilder();
-                if (response.TryGetOriginalException(out var ex) && ex != null)
-                {
-                    errorBuilder.AppendLine(ex.Message);
-                }
-                else if (response.TryGetElasticsearchServerError(out var error) && error != null)
-                {
-                    errorBuilder.AppendLine(error.ToString());
-                }
-                else
-                {
-                    errorBuilder.AppendLine(response.DebugInformation);
-                }
-                throw new Exception($"Failed to get mapping for index {indexName}: {errorBuilder.ToString()}");
+                IgnoreUnavailable = true,
+                AllowNoIndices = true,
+                ExpandWildcards = [ExpandWildcard.Open]
+            };
+            var response = await client.Indices.GetMappingAsync(request, cancellationToken);
+
+            if (response.TryGetErrorMessage(out var errorMessage))
+            {
+                throw new AbpException($"Failed to get mapping for index {indexPattern}: {errorMessage}");
             }
 
-            if (!response.Mappings.TryGetValue(indexName, out var indexMappingRecord))
+            var indexName = indexPattern.EndsWith("*") ? indexPattern.Substring(0, indexPattern.Length - 1) : indexPattern;
+            var indexMappings = response.GetMappingFor(indexName);
+            if (indexMappings == null)
             {
-                throw new Exception($"Index {indexName} not found in response");
+                foreach (var indexMappingRecord in response.Mappings)
+                {
+                    if (indexMappingRecord.Key.StartsWith(indexName))
+                    {
+                        indexMappings = indexMappingRecord.Value.Mappings;
+                        break;
+                    }
+                }
+                if (indexMappings == null)
+                {
+                    throw new AbpException($"Index {indexPattern} not found in response");
+                }
             }
 
-            cacheItem = ParseMapping(indexMappingRecord.Mappings, indexName);
+            cacheItem = ParseMapping(indexMappings, indexPattern);
 
             _cache.Set(cacheKey, cacheItem, _cacheDuration);
         }

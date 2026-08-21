@@ -1,5 +1,6 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Core.Bulk;
+using Elastic.Clients.Elasticsearch.IndexManagement;
 using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.Logging;
 using System;
@@ -48,17 +49,10 @@ public class ElasticsearchSecurityLogWriter : ISecurityLogWriter, ITransientDepe
                       .Id(securityLog.Id),
             cancellationToken);
 
-        if (!response.IsValidResponse)
+        if (response.TryGetErrorMessage(out var errorMessage))
         {
             _logger.LogWarning("Could not save the security log object: " + Environment.NewLine + securityLog.ToString());
-            if (response.TryGetOriginalException(out var ex) && ex != null)
-            {
-                _logger.LogWarning(ex, ex.Message);
-            }
-            else if (response.ElasticsearchServerError != null)
-            {
-                _logger.LogWarning(response.ElasticsearchServerError.ToString());
-            }
+            _logger.LogWarning(errorMessage);
         }
     }
 

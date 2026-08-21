@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Serilog.Events;
+using Serilog.Formatting.Elasticsearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -195,6 +196,10 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
                                         (t) => t.Field(GetField(indexMapping, "fields.UniqueId")).Value(id)))))
                        .Size(1),
                 cancellationToken);
+            if (response.TryGetErrorMessage(out var errorMessage))
+            {
+                Logger.LogWarning("Query logs failed: {errorMessage}", errorMessage);
+            }
         }
 
         return _objectMapper.Map<SerilogInfo?, LogInfo?>(response.Documents.FirstOrDefault());
@@ -240,6 +245,10 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
             dsl.Indices(indexName)
                .Query(log => log.Bool(b => b.Must(querys.ToArray()))),
             cancellationToken);
+        if (response.TryGetErrorMessage(out var errorMessage))
+        {
+            Logger.LogWarning("Query log count failed: {errorMessage}", errorMessage);
+        }
 
         return response.Count;
     }
@@ -469,8 +478,9 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
             }
         }, cancellationToken);
 
-        if (!searchResponse.IsSuccess())
+        if (searchResponse.TryGetErrorMessage(out var errorMessage))
         {
+            Logger.LogWarning("Query log failed: {errorMessage}", errorMessage);
             return [];
         }
 
@@ -506,8 +516,9 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
                 .SearchAfter(searchAfter);
         }, cancellationToken);
 
-        if (!searchResponse.IsSuccess())
+        if (searchResponse.TryGetErrorMessage(out var errorMessage))
         {
+            Logger.LogWarning("Query log failed: {errorMessage}", errorMessage);
             return [];
         }
 
@@ -563,23 +574,18 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
             return null;
         }
 
-        var remaining = skipCount - 10000;
         // 获取skipCount最近一条数据作为searchAfter
         var secondResponse = await client.SearchAsync<SerilogInfo>(
             dsl => dsl.Indices(CreateIndex())
                     .Query(query)
-                    .Sort(sorts)
+                    // 反转排序取第一个数据作为起始索引
+                    .Sort(sorts.Select(x => x).Reverse().ToArray())
                     .SourceIncludes(x => x.Level)
                     .SearchAfter(firstHit.Sort.ToList())
-                    .Size(remaining),
+                    .Size(1),
             cancellationToken);
 
         if (!secondResponse.IsSuccess() || secondResponse.Hits == null || !secondResponse.Hits.Any())
-        {
-            return null;
-        }
-
-        if (secondResponse.Hits.Count < remaining)
         {
             return null;
         }
@@ -621,32 +627,29 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
             ? SortOrder.Asc : SortOrder.Desc;
         sorting = !sorting.IsNullOrWhiteSpace()
             ? sorting.Split()[0]
-            : nameof(SerilogInfo.TimeStamp);
+            : ElasticsearchJsonFormatter.TimestampPropertyName;
 
         SortOptions[]? sorts = null;
-        if (sorting.IsNullOrWhiteSpace())
+        var sortingFieldMap = indexMappingInfo.Fields
+            .Where(x => x.Key.Equals(sorting, StringComparison.CurrentCultureIgnoreCase))
+            .Select(x => x.Value)
+            .FirstOrDefault();
+        if (sortingFieldMap != null)
         {
-            var sortingFieldMap = indexMappingInfo.Fields
-                    .Where(x => x.Key.Equals(sorting, StringComparison.CurrentCultureIgnoreCase))
-                    .Select(x => x.Value)
-                    .FirstOrDefault();
-            if (sortingFieldMap != null)
+            sorting = sortingFieldMap.Path;
+        }
+        if (!sorting.IsNullOrWhiteSpace())
+        {
+            sorts = new SortOptions[1]
             {
-                sorting = sortingFieldMap.Path;
-            }
-            if (!sorting.IsNullOrWhiteSpace())
-            {
-                sorts = new SortOptions[1]
+                new SortOptions
                 {
-                    new SortOptions
+                    Field = new FieldSort(new Field(sorting))
                     {
-                        Field = new FieldSort(new Field(sorting))
-                        {
-                            Order = sortOrder,
-                        },
-                    }
-                };
-            }
+                        Order = sortOrder,
+                    },
+                }
+            };
         }
 
         return sorts;
