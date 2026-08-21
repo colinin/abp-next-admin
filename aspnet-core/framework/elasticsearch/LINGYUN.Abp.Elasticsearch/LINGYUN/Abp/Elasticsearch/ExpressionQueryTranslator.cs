@@ -16,7 +16,7 @@ namespace LINGYUN.Abp.Elasticsearch;
 /// <summary>
 /// 表达式查询转换器 - 将 LINQ 表达式转换为 Elasticsearch Query
 /// </summary>
-public class ExpressionQueryTranslator : IExpressionQueryTranslator, ISingletonDependency
+public partial class ExpressionQueryTranslator : IExpressionQueryTranslator, ISingletonDependency
 {
     private readonly IIndexMappingProvider _indexMappingProvider;
 
@@ -484,14 +484,8 @@ public class ExpressionQueryTranslator : IExpressionQueryTranslator, ISingletonD
             return TranslateEnumerableMethod(node, prefix, mappingInfo);
         }
 
-        // string.Equals 需放在其他方法前
-        if (node.Method.Name == nameof(string.Equals))
-        {
-            return TranslateStringEquals(node, prefix, mappingInfo);
-        }
-
         // 字符串方法
-        if (node.Method.DeclaringType == typeof(string) && node.Object != null)
+        if (node.Method.DeclaringType == typeof(string))
         {
             return TranslateStringMethod(node, prefix, mappingInfo);
         }
@@ -510,341 +504,6 @@ public class ExpressionQueryTranslator : IExpressionQueryTranslator, ISingletonD
 
         throw new NotSupportedException(
             $"Unsupported method invocation {node.Method.DeclaringType?.Name}.{node.Method.Name}");
-    }
-
-    /// <summary>
-    /// 翻译 Enumerable 方法
-    /// </summary>
-    private Query TranslateEnumerableMethod(MethodCallExpression node, string? prefix, IndexMappingInfo? mappingInfo)
-    {
-        switch (node.Method.Name)
-        {
-            case nameof(Enumerable.Any):
-                return TranslateEnumerableAny(node, prefix, mappingInfo);
-
-            case nameof(Enumerable.Contains):
-                return TranslateEnumerableContains(node, prefix, mappingInfo);
-
-            case nameof(Enumerable.All):
-                return TranslateEnumerableAll(node, prefix, mappingInfo);
-
-            default:
-                throw new NotSupportedException($"Unsupported Enumerable method {node.Method.Name}");
-        }
-    }
-
-    /// <summary>
-    /// 翻译 Enumerable.Any
-    /// </summary>
-    private Query TranslateEnumerableAny(MethodCallExpression node, string? prefix, IndexMappingInfo? mappingInfo)
-    {
-        var collectionField = ResolveField(node.Arguments[0], prefix, mappingInfo);
-
-        Query inner;
-        if (node.Arguments.Count == 1)
-        {
-            // .Any() 检查集合是否存在
-            inner = new ExistsQuery { Field = collectionField.Path };
-        }
-        else
-        {
-            // .Any(predicate)
-            var predicate = UnwrapLambda(node.Arguments[1]);
-            inner = TranslateNode(predicate.Body, prefix: collectionField.Path, mappingInfo);
-        }
-
-        var shouldUseNested = collectionField.IsNested || (mappingInfo?.IsNested(collectionField.Path) ?? false);
-
-        return shouldUseNested
-            ? new NestedQuery(collectionField.Path, inner)
-            : inner;
-    }
-
-    /// <summary>
-    /// 翻译 Enumerable.Contains
-    /// </summary>
-    private Query TranslateEnumerableContains(MethodCallExpression node, string? prefix, IndexMappingInfo? mappingInfo)
-    {
-        Expression collectionExpr;
-        Expression valueExpr;
-
-        if (node.Object != null)
-        {
-            // list.Contains(value)
-            collectionExpr = node.Object;
-            valueExpr = node.Arguments[0];
-        }
-        else
-        {
-            // Enumerable.Contains(list, value)
-            collectionExpr = node.Arguments[0];
-            valueExpr = node.Arguments[1];
-        }
-
-        var field = ResolveField(collectionExpr, prefix, mappingInfo);
-        var value = Evaluate(valueExpr);
-
-        return BuildTermsQuery(field, value!);
-    }
-
-    /// <summary>
-    /// 翻译 Enumerable.All
-    /// </summary>
-    private Query TranslateEnumerableAll(MethodCallExpression node, string? prefix, IndexMappingInfo? mappingInfo)
-    {
-        var collectionField = ResolveField(node.Arguments[0], prefix, mappingInfo);
-        var predicate = UnwrapLambda(node.Arguments[1]);
-
-        var inner = TranslateNode(predicate.Body, prefix: collectionField.Path, mappingInfo);
-
-        return new NestedQuery(collectionField.Path, inner);
-    }
-
-    /// <summary>
-    /// 翻译字符串方法
-    /// </summary>
-    private Query TranslateStringMethod(MethodCallExpression node, string? prefix, IndexMappingInfo? mappingInfo)
-    {
-        var field = ResolveField(node.Object!, prefix, mappingInfo);
-        var value = (string)Evaluate(node.Arguments[0])!;
-        var fieldMapping = mappingInfo?.GetField(field.Path);
-        var escapedValue = EscapeWildcard(value);
-
-        return node.Method.Name switch
-        {
-            nameof(string.Contains) => TranslateContains(field, fieldMapping, value),
-            nameof(string.StartsWith) => TranslateStartsWith(field, fieldMapping, value),
-            nameof(string.EndsWith) => TranslateEndsWith(field, fieldMapping, value),
-            _ => throw new NotSupportedException($"Unsupported string method {node.Method.Name}"),
-        };
-    }
-
-    /// <summary>
-    /// 翻译 Contains
-    /// </summary>
-    private Query TranslateContains(FieldInfo field, FieldMappingInfo? fieldMapping, string value)
-    {
-        // 1. Wildcard 类型 - 直接使用通配符查询（最优）
-        if (field.IsWildcard || fieldMapping?.IsWildcard == true)
-        {
-            return new WildcardQuery
-            {
-                Field = field.Path,
-                Value = "*" + EscapeWildcard(value) + "*"
-            };
-        }
-
-        // 2. Keyword 类型 - 使用通配符查询
-        if (field.IsKeyword || fieldMapping?.IsKeyword == true)
-        {
-            return new WildcardQuery
-            {
-                Field = field.Path,
-                Value = "*" + EscapeWildcard(value) + "*"
-            };
-        }
-
-        // 3. Text 类型
-        if (field.IsText || fieldMapping?.IsText == true)
-        {
-            // 3.1 如果有 keyword 子字段，使用 .keyword 进行通配符查询
-            if (fieldMapping?.Properties?.ContainsKey("keyword") == true)
-            {
-                return new WildcardQuery
-                {
-                    Field = $"{field.Path}.keyword",
-                    Value = "*" + EscapeWildcard(value) + "*"
-                };
-            }
-
-            // 3.2 没有 keyword 子字段，使用 MatchPhrase 进行全文搜索
-            // 注意：这不是精确的 Contains，而是分词后的短语匹配
-            return new MatchPhraseQuery
-            {
-                Field = field.Path,
-                Query = value
-            };
-        }
-
-        // 4. 默认 - 尝试使用通配符
-        return new WildcardQuery
-        {
-            Field = field.Path,
-            Value = "*" + EscapeWildcard(value) + "*"
-        };
-    }
-
-    /// <summary>
-    /// 翻译 StartsWith
-    /// </summary>
-    private Query TranslateStartsWith(FieldInfo field, FieldMappingInfo? fieldMapping, string value)
-    {
-        var pattern = EscapeWildcard(value) + "*";
-
-        // Wildcard 类型
-        if (field.IsWildcard || fieldMapping?.IsWildcard == true)
-        {
-            return new WildcardQuery { Field = field.Path, Value = pattern };
-        }
-
-        // Keyword 类型或 Text 有 keyword 子字段
-        if (field.IsKeyword || fieldMapping?.IsKeyword == true ||
-            (fieldMapping?.IsText == true && fieldMapping?.Properties?.ContainsKey("keyword") == true))
-        {
-            var fieldPath = fieldMapping?.IsText == true && fieldMapping?.Properties?.ContainsKey("keyword") == true
-                ? $"{field.Path}.keyword"
-                : field.Path;
-            return new WildcardQuery { Field = fieldPath, Value = pattern };
-        }
-
-        // Text 类型无 keyword 子字段
-        if (field.IsText || fieldMapping?.IsText == true)
-        {
-            return new MatchPhrasePrefixQuery
-            {
-                Field = field.Path,
-                Query = value
-            };
-        }
-
-        return new WildcardQuery { Field = field.Path, Value = pattern };
-    }
-
-    /// <summary>
-    /// 翻译 EndsWith
-    /// </summary>
-    private Query TranslateEndsWith(FieldInfo field, FieldMappingInfo? fieldMapping, string value)
-    {
-        var pattern = "*" + EscapeWildcard(value);
-
-        // Wildcard 类型
-        if (field.IsWildcard || fieldMapping?.IsWildcard == true)
-        {
-            return new WildcardQuery { Field = field.Path, Value = pattern };
-        }
-
-        // Keyword 类型或 Text 有 keyword 子字段
-        if (field.IsKeyword || fieldMapping?.IsKeyword == true ||
-            (fieldMapping?.IsText == true && fieldMapping?.Properties?.ContainsKey("keyword") == true))
-        {
-            var fieldPath = fieldMapping?.IsText == true && fieldMapping?.Properties?.ContainsKey("keyword") == true
-                ? $"{field.Path}.keyword"
-                : field.Path;
-            return new WildcardQuery { Field = fieldPath, Value = pattern };
-        }
-
-        // Text 类型无 keyword 子字段
-        if (field.IsText || fieldMapping?.IsText == true)
-        {
-            return new MatchPhraseQuery
-            {
-                Field = field.Path,
-                Query = value
-            };
-        }
-
-        return new WildcardQuery { Field = field.Path, Value = pattern };
-    }
-
-    /// <summary>
-    /// 翻译 string.Equals
-    /// </summary>
-    private Query TranslateStringEquals(MethodCallExpression node, string? prefix, IndexMappingInfo? mappingInfo)
-    {
-        Expression fieldExpression;
-        Expression valueExpression;
-
-        if (node.Object != null)
-        {
-            fieldExpression = node.Object;
-            valueExpression = node.Arguments[0];
-        }
-        else
-        {
-            fieldExpression = node.Arguments[0];
-            valueExpression = node.Arguments[1];
-        }
-
-        var field = ResolveField(fieldExpression, prefix, mappingInfo);
-        var value = Evaluate(valueExpression);
-
-        if (value == null)
-        {
-            return new BoolQuery { MustNot = new Query[] { new ExistsQuery { Field = field.Path } } };
-        }
-
-        return BuildEquality(field, value);
-    }
-
-    /// <summary>
-    /// 翻译 Enum.HasFlag
-    /// </summary>
-    private Query TranslateEnumHasFlag(MethodCallExpression node, string? prefix, IndexMappingInfo? mappingInfo)
-    {
-        var field = ResolveField(node.Object!, prefix, mappingInfo);
-        var flag = Evaluate(node.Arguments[0]);
-
-        if (flag == null)
-        {
-            throw new NotSupportedException("Cannot use null flag in Enum.HasFlag");
-        }
-
-        var flagValue = Convert.ToInt64(flag);
-        return new TermQuery { Field = field.Path, Value = flagValue };
-    }
-
-    /// <summary>
-    /// 翻译集合 Contains
-    /// </summary>
-    private Query TranslateCollectionContains(MethodCallExpression node, string? prefix, IndexMappingInfo? mappingInfo)
-    {
-        // list.Contains(value) 或 hashSet.Contains(value)
-        // node.Object = 集合实例 (可能是一个变量或常量)
-        // node.Arguments[0] = value (要检查的值)
-
-        // 尝试获取集合的值
-        var collectionValue = Evaluate(node.Object!);
-
-        // 如果集合是常量且可枚举，构建 TermsQuery
-        if (collectionValue is IEnumerable enumerable && collectionValue is not string)
-        {
-            var values = enumerable.Cast<object>().Select(NormalizeValue).ToList();
-            if (values.Count == 0)
-            {
-                return new MatchNoneQuery();
-            }
-            if (values.Count == 1)
-            {
-                // 如果集合只有一个值，使用 TermQuery
-                return BuildEquality(ResolveField(node.Arguments[0], prefix, mappingInfo), values[0]);
-            }
-            // 多个值使用 TermsQuery
-            var field = ResolveField(node.Arguments[0], prefix, mappingInfo);
-            return new TermsQuery { Field = field.Path, Terms = new TermsQueryField(values) };
-        }
-
-        // 如果值是可枚举集合
-        var value = Evaluate(node.Arguments[0]);
-        if (value is IEnumerable enumerableValue && value is not string)
-        {
-            var values = enumerableValue.Cast<object>().Select(NormalizeValue).ToList();
-            if (values.Count == 0)
-            {
-                return new MatchNoneQuery();
-            }
-            if (values.Count == 1)
-            {
-                return BuildEquality(ResolveField(node.Object!, prefix, mappingInfo), values[0]);
-            }
-            var field = ResolveField(node.Object!, prefix, mappingInfo);
-            return new TermsQuery { Field = field.Path, Terms = new TermsQueryField(values) };
-        }
-
-        // 默认：检查字段是否在集合中
-        // 这种情况下，我们使用 TermsQuery 但需要从外部获取集合值
-        // 由于无法在编译时确定，使用 TermQuery 进行单值匹配
-        var defaultField = ResolveField(node.Arguments[0], prefix, mappingInfo);
-        return BuildEquality(defaultField, value!);
     }
 
     #endregion
@@ -1057,27 +716,79 @@ public class ExpressionQueryTranslator : IExpressionQueryTranslator, ISingletonD
     /// </summary>
     private static object? Evaluate(Expression expression)
     {
+        // 如果是常量表达式，直接返回值
         if (expression is ConstantExpression constant)
         {
             return constant.Value;
         }
 
+        // 如果是参数表达式，无法求值
+        if (expression is ParameterExpression)
+        {
+            throw new InvalidOperationException($"Cannot evaluate parameter expression: {expression}");
+        }
+
         // 处理成员访问（捕获外部变量）
         if (expression is MemberExpression memberExpr)
         {
-            object? obj = null;
-            if (memberExpr.Expression != null)
-            {
-                obj = Evaluate(memberExpr.Expression);
-            }
-
+            // 检查是否是字段或属性访问
             if (memberExpr.Member is System.Reflection.FieldInfo fieldInfo)
             {
-                return fieldInfo.GetValue(obj);
+                // 如果是静态字段
+                if (fieldInfo.IsStatic)
+                {
+                    return fieldInfo.GetValue(null);
+                }
+
+                // 如果是实例字段，需要先求值实例
+                if (memberExpr.Expression != null)
+                {
+                    var obj = Evaluate(memberExpr.Expression);
+                    if (obj != null)
+                    {
+                        return fieldInfo.GetValue(obj);
+                    }
+                }
+
+                // 如果无法求值，尝试编译整个表达式
+                try
+                {
+                    return Expression.Lambda(memberExpr).Compile().DynamicInvoke();
+                }
+                catch
+                {
+                    throw new InvalidOperationException($"Cannot evaluate member expression: {memberExpr}");
+                }
             }
+
             if (memberExpr.Member is PropertyInfo propertyInfo)
             {
-                return propertyInfo.GetValue(obj);
+                // 如果是静态属性
+                var getMethod = propertyInfo.GetGetMethod();
+                if (getMethod != null && getMethod.IsStatic)
+                {
+                    return propertyInfo.GetValue(null);
+                }
+
+                // 如果是实例属性，需要先求值实例
+                if (memberExpr.Expression != null)
+                {
+                    var obj = Evaluate(memberExpr.Expression);
+                    if (obj != null)
+                    {
+                        return propertyInfo.GetValue(obj);
+                    }
+                }
+
+                // 如果无法求值，尝试编译整个表达式
+                try
+                {
+                    return Expression.Lambda(memberExpr).Compile().DynamicInvoke();
+                }
+                catch
+                {
+                    throw new InvalidOperationException($"Cannot evaluate member expression: {memberExpr}");
+                }
             }
         }
 
@@ -1097,11 +808,18 @@ public class ExpressionQueryTranslator : IExpressionQueryTranslator, ISingletonD
         {
             try
             {
-                return Expression.Lambda(methodCall).Compile().DynamicInvoke();
+                // 尝试编译并执行
+                var lambda = Expression.Lambda(methodCall);
+                return lambda.Compile().DynamicInvoke();
             }
-            catch
+            catch (InvalidOperationException)
             {
-                return null;
+                // 如果包含参数引用，无法编译
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Cannot evaluate method call: {methodCall}", ex);
             }
         }
 
@@ -1111,6 +829,8 @@ public class ExpressionQueryTranslator : IExpressionQueryTranslator, ISingletonD
             var values = newArray.Expressions.Select(Evaluate).ToArray();
             return values;
         }
+
+        // 默认尝试编译执行
 
         return Expression.Lambda(expression).Compile().DynamicInvoke();
     }
@@ -1238,114 +958,6 @@ public class ExpressionQueryTranslator : IExpressionQueryTranslator, ISingletonD
     private static bool IsHasValueAccess(MemberExpression member)
     {
         return IsNullableHasValue(member);
-    }
-
-    #endregion
-
-    #region 字段解析
-
-    /// <summary>
-    /// 解析字段
-    /// </summary>
-    protected virtual FieldInfo ResolveField(Expression expression, string? prefix, IndexMappingInfo? mappingInfo)
-    {
-        var current = expression;
-        while (current is UnaryExpression { NodeType: ExpressionType.Convert or ExpressionType.ConvertChecked } unary)
-        {
-            current = unary.Operand;
-        }
-
-        var names = new Stack<string>();
-        Type? leafType = null;
-        string? leafName = null;
-
-        // 收集成员路径
-        while (current is MemberExpression member)
-        {
-            leafName ??= member.Member.Name;
-            leafType ??= GetMemberType(member.Member);
-            names.Push(ResolveFieldName(member.Member));
-            current = member.Expression!;
-        }
-
-        if (current is not ParameterExpression && current is not ConstantExpression)
-        {
-            throw new NotSupportedException($"Unable to parse as field path: {expression}");
-        }
-
-        var path = string.Join(".", names);
-
-        // 应用前缀
-        if (!string.IsNullOrEmpty(prefix) && path.Length > 0)
-        {
-            path = prefix + "." + path;
-        }
-        else if (path.Length == 0)
-        {
-            path = prefix ?? string.Empty;
-        }
-
-        // 获取字段映射信息
-        var finalMapping = mappingInfo?.GetField(path);
-
-        // 如果是 text 类型且有 keyword 子字段，自动使用 .keyword
-        if (finalMapping?.IsText == true && finalMapping.Properties?.ContainsKey("keyword") == true)
-        {
-            path = $"{path}.keyword";
-            finalMapping = mappingInfo?.GetField(path);
-        }
-
-        // 如果 leafType 为 null，使用 expression.Type
-        var type = leafType ?? expression.Type;
-        var underlyingType = Nullable.GetUnderlyingType(type) ?? type;
-
-        return new FieldInfo(
-            path,
-            underlyingType,
-            leafName ?? string.Empty,
-            finalMapping?.IsKeyword ?? false,
-            finalMapping?.IsText ?? false,
-            finalMapping?.IsWildcard ?? false,
-            finalMapping?.IsNested ?? false || (mappingInfo?.IsNested(path) ?? false),
-            finalMapping?.IsDate ?? false,
-            finalMapping?.IsNumeric ?? false,
-            finalMapping?.IsBoolean ?? false,
-            finalMapping?.IsRange ?? false,
-            finalMapping?.Format,
-            finalMapping?.HasMultiFields ?? false
-        );
-    }
-
-    /// <summary>
-    /// 获取成员的实际类型
-    /// </summary>
-    private static Type GetMemberType(MemberInfo member)
-    {
-        return member switch
-        {
-            System.Reflection.FieldInfo field => field.FieldType,
-            PropertyInfo property => property.PropertyType,
-            MethodInfo method => method.ReturnType,
-            _ => typeof(object)
-        };
-    }
-
-    /// <summary>
-    /// 解析字段名称
-    /// </summary>
-    private static string ResolveFieldName(MemberInfo member)
-    {
-        // 检查 JsonPropertyName 属性
-        if (member is PropertyInfo property)
-        {
-            var jsonName = property.GetCustomAttribute<JsonPropertyNameAttribute>();
-            if (jsonName != null && !string.IsNullOrWhiteSpace(jsonName.Name))
-            {
-                return jsonName.Name;
-            }
-        }
-
-        return member.Name;
     }
 
     #endregion

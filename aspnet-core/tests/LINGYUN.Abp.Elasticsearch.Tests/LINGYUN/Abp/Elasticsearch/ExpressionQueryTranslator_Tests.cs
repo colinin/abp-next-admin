@@ -1,11 +1,15 @@
-﻿using Elastic.Clients.Elasticsearch.QueryDsl;
+﻿using Elastic.Clients.Elasticsearch.Mapping;
+using Elastic.Clients.Elasticsearch.QueryDsl;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
+using Volo.Abp.Threading;
 using Xunit;
 
 namespace LINGYUN.Abp.Elasticsearch.Tests;
@@ -13,12 +17,109 @@ namespace LINGYUN.Abp.Elasticsearch.Tests;
 public abstract class ExpressionQueryTranslatorTests<TStartupModule> : AbpIntegratedTest<TStartupModule>
     where TStartupModule : IAbpModule
 {
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
     private readonly IExpressionQueryTranslator _expressionQueryTranslator;
 
     public ExpressionQueryTranslatorTests()
     {
         _expressionQueryTranslator = GetRequiredService<IExpressionQueryTranslator>();
     }
+
+    #region 索引初始化
+
+    protected override void AfterInitialize()
+    {
+        AsyncHelper.RunSync(async () => await ApplicationInitializationAsync());
+    }
+
+    public override void Dispose()
+    {
+        AsyncHelper.RunSync(async () => await ApplicationShutdownAsync());
+    }
+
+    protected async virtual Task ApplicationInitializationAsync()
+    {
+        var clientFactory = GetRequiredService<IElasticsearchClientFactory>();
+        var client = clientFactory.Create();
+        var indexPatterns = new[] { TestDocumentIndexNames.Index + "*" };
+        var indexTemplateName = TestDocumentIndexNames.Index + "-generic";
+        var dateTimeFormat = "yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis";
+
+        var indexTemplateExists = await client.Indices.ExistsIndexTemplateAsync(indexTemplateName, _cancellationTokenSource.Token);
+        if (indexTemplateExists.Exists)
+        {
+            await client.Indices.DeleteIndexTemplateAsync(indexTemplateName, _cancellationTokenSource.Token);
+        }
+        var putTemplateResponse = await client.Indices.PutIndexTemplateAsync(indexTemplateName, setup =>
+        {
+            setup.IndexPatterns(indexPatterns);
+            setup.Priority(100);
+            setup.Version(1);
+            setup.Template(template =>
+            {
+                template.Mappings(mp => mp
+                    .Dynamic(DynamicMapping.False)
+                    .Properties<TestDocument>(pd =>
+                    {
+                        pd.IntegerNumber(k => k.Id);
+                        pd.Text(k => k.Name, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(100))));
+                        pd.Text(t => t.Description);
+                        pd.IntegerNumber(k => k.Age);
+                        pd.DoubleNumber(k => k.Salary);
+                        pd.Boolean(k => k.IsActive);
+                        pd.Date(k => k.CreatedTime, d => d.Format(dateTimeFormat));
+                        pd.Date(k => k.UpdatedTime, d => d.Format(dateTimeFormat));
+                        pd.ByteNumber(k => k.Status);
+                        pd.ByteNumber(k => k.NullableStatus);
+                        pd.Text(k => k.StringValueStatus, p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(100))));
+                        pd.Keyword(k => k.Tags);
+                        pd.Wildcard(k => k.Exceptions);
+                        pd.Nested(n => n.Items, np =>
+                        {
+                            np.Dynamic(DynamicMapping.False);
+                            np.Properties(npd =>
+                            {
+                                npd.IntegerNumber(nameof(SubDocument.Id));
+                                npd.Text(nameof(SubDocument.Name), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(100))));
+                                npd.DoubleNumber(nameof(SubDocument.Price));
+                            });
+                        });
+                        pd.Nested(n => n.Address, np =>
+                        {
+                            np.Dynamic(DynamicMapping.False);
+                            np.Properties(npd =>
+                            {
+                                npd.Text(nameof(Address.City), p => p.Fields(f => f.Keyword("keyword", k => k.IgnoreAbove(255))));
+                                npd.Text(nameof(Address.Street));
+                            });
+                        });
+                    }));
+            });
+        }, _cancellationTokenSource.Token);
+
+        await client.Indices.DeleteAsync(TestDocumentIndexNames.Index, _cancellationTokenSource.Token);
+        await client.IndexAsync(
+            new TestDocument(),
+            dsl => dsl.Index(TestDocumentIndexNames.Index),
+            _cancellationTokenSource.Token);
+    }
+
+    protected async virtual Task ApplicationShutdownAsync()
+    {
+        var clientFactory = GetRequiredService<IElasticsearchClientFactory>();
+        var client = clientFactory.Create();
+        var indexTemplateName = TestDocumentIndexNames.Index + "-generic";
+        var indexTemplateExists = await client.Indices.ExistsIndexTemplateAsync(indexTemplateName, _cancellationTokenSource.Token);
+        if (indexTemplateExists.Exists)
+        {
+            await client.Indices.DeleteIndexTemplateAsync(indexTemplateName, _cancellationTokenSource.Token);
+        }
+        await client.Indices.DeleteAsync(TestDocumentIndexNames.Index, _cancellationTokenSource.Token);
+
+        _cancellationTokenSource.Cancel();
+    }
+
+    #endregion
 
     #region 基础查询测试
 

@@ -46,6 +46,7 @@ public class ExpressionQueryService : IExpressionQueryService, ITransientDepende
         int skipCount = 0,
         Fields? sourceExcludes = null,
         Fields? sourceIncludes = null,
+        object[]? beginMarker = null,
         CancellationToken cancellationToken = default) where TDocument : class
     {
         var client = ClientFactory.Create();
@@ -79,7 +80,8 @@ public class ExpressionQueryService : IExpressionQueryService, ITransientDepende
                 maxResultCount,
                 skipCount, 
                 sourceExcludes, 
-                sourceIncludes, 
+                sourceIncludes,
+                beginMarker,
                 cancellationToken)
             : await SearchFromSize<TDocument>(
                 client,
@@ -137,19 +139,28 @@ public class ExpressionQueryService : IExpressionQueryService, ITransientDepende
         string indexName,
         Query query,
         SortOptions[] sorts,
-        int maxResultCount = 50,
-        int skipCount = 0,
+        int maxResultCount,
+        int skipCount,
         Fields? sourceExcludes = null,
         Fields? sourceIncludes = null,
+        object[]? beginMarker = null,
         CancellationToken cancellationToken = default)
     {
-        var searchAfter = await GetSearchAfterValue<TDocument>(
-            client,
-            indexName,
-            query,
-            sorts,
-            skipCount,
-            cancellationToken);
+        List<FieldValue>? searchAfter = null;
+        if (beginMarker != null)
+        {
+            searchAfter = beginMarker.Select(FieldValue.FromValue).ToList();
+        }
+        else
+        {
+            searchAfter = await GetSearchAfterValue<TDocument>(
+                client,
+                indexName,
+                query,
+                sorts,
+                skipCount,
+                cancellationToken);
+        }
 
         if (searchAfter == null || !searchAfter.Any())
         {

@@ -32,6 +32,7 @@ public interface IExpressionQueryService
     /// <param name="skipCount">跳过数据大小</param>
     /// <param name="sourceExcludes">包含字段</param>
     /// <param name="sourceIncludes">忽略字段</param>
+    /// <param name="beginMarker">排序起始字段</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<List<TDocument>> GetListAsync<TDocument>(
@@ -42,5 +43,6 @@ public interface IExpressionQueryService
         int skipCount = 0,
         Fields? sourceExcludes = null,
         Fields? sourceIncludes = null,
+        object[]? beginMarker = null,
         CancellationToken cancellationToken = default) where TDocument : class;
 }
