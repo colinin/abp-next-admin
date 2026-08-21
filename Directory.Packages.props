@@ -144,6 +144,7 @@
     <PackageVersion Include="Volo.Abp.SettingManagement.Web" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.Swashbuckle" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.Sms" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.Specifications" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.TestBase" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.TextTemplating.Core" Version="$(VoloAbpPackageVersion)" />
     <PackageVersion Include="Volo.Abp.TextTemplating.Scriban" Version="$(VoloAbpPackageVersion)" />
