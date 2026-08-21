@@ -1,12 +1,10 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Mapping;
-using Elastic.Transport.Products.Elasticsearch;
 using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
