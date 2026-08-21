@@ -691,6 +691,186 @@ public abstract class ExpressionQueryTranslatorTests<TStartupModule> : AbpIntegr
         value.ShouldBe("test");
     }
 
+    [Fact]
+    public async virtual Task Translate_StringCompareTo_ReturnsTermQuery()
+    {
+        // Act
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name!.CompareTo("test") == 0);
+
+        // Assert
+        query.ShouldNotBeNull();
+        query.Term.ShouldNotBeNull();
+        query.Term.Field.ToString().ShouldBe("Name.keyword");
+        query.Term.Value.TryGetString(out var value).ShouldBeTrue();
+        value.ShouldBe("test");
+    }
+
+    [Fact]
+    public async virtual Task Translate_StringIndexOf_ReturnsWildcardQuery()
+    {
+        // Act
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => x.Name!.IndexOf("test") >= 0);
+
+        // Assert
+        query.ShouldNotBeNull();
+        query.Wildcard.ShouldNotBeNull();
+        query.Wildcard.Field.ToString().ShouldBe("Name.keyword");
+        query.Wildcard.Value.ShouldBe("*test*");
+    }
+
+    [Fact]
+    public async virtual Task Translate_StringIsNullOrEmpty_ReturnsBoolShouldQuery()
+    {
+        // Act
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => string.IsNullOrEmpty(x.Name));
+
+        // Assert
+        query.ShouldNotBeNull();
+        query.Bool.ShouldNotBeNull();
+        query.Bool.Should.ShouldNotBeNull();
+        query.Bool.Should.Count.ShouldBe(2);
+        query.Bool.MinimumShouldMatch.ShouldNotBeNull();
+        query.Bool.MinimumShouldMatch.Value1.ShouldBe(1);
+
+        // 验证包含 Exists 查询（must_not）
+        var nullCheckQuery = query.Bool.Should.FirstOrDefault(q => q.Bool?.MustNot != null);
+        nullCheckQuery.ShouldNotBeNull();
+        nullCheckQuery.Bool.ShouldNotBeNull();
+        nullCheckQuery.Bool.MustNot.ShouldNotBeNull();
+        nullCheckQuery.Bool.MustNot.Count.ShouldBe(1);
+        nullCheckQuery.Bool.MustNot.First().Exists.ShouldNotBeNull();
+
+        // 验证包含空字符串 Term 查询
+        var emptyStringQuery = query.Bool.Should.FirstOrDefault(q => q.Term != null);
+        emptyStringQuery.ShouldNotBeNull();
+        emptyStringQuery.Term.ShouldNotBeNull();
+        emptyStringQuery.Term.Value.TryGetString(out var value).ShouldBeTrue();
+        value.ShouldBe(string.Empty);
+    }
+
+    [Fact]
+    public async virtual Task Translate_StringIsNullOrWhiteSpace_ReturnsBoolShouldQuery()
+    {
+        // Act
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index, x => string.IsNullOrWhiteSpace(x.Name));
+
+        // Assert
+        query.ShouldNotBeNull();
+        query.Bool.ShouldNotBeNull();
+        query.Bool.Should.ShouldNotBeNull();
+        query.Bool.Should.Count.ShouldBe(3);
+        query.Bool.MinimumShouldMatch.ShouldNotBeNull();
+        query.Bool.MinimumShouldMatch.Value1.ShouldBe(1);
+
+        // 验证包含 Exists 查询（must_not）
+        var nullCheckQuery = query.Bool.Should.FirstOrDefault(q => q.Bool?.MustNot != null);
+        nullCheckQuery.ShouldNotBeNull();
+        nullCheckQuery.Bool.ShouldNotBeNull();
+        nullCheckQuery.Bool.MustNot.ShouldNotBeNull();
+        nullCheckQuery.Bool.MustNot.Count.ShouldBe(1);
+        nullCheckQuery.Bool.MustNot.First().Exists.ShouldNotBeNull();
+
+        // 验证包含空字符串 Term 查询
+        var emptyStringQuery = query.Bool.Should.FirstOrDefault(q => q.Term != null);
+        emptyStringQuery.ShouldNotBeNull();
+        emptyStringQuery.Term.ShouldNotBeNull();
+        emptyStringQuery.Term.Value.TryGetString(out var termValue).ShouldBeTrue();
+        termValue.ShouldBe(string.Empty);
+
+        // 验证包含正则表达式查询
+        var regexpQuery = query.Bool.Should.FirstOrDefault(q => q.Regexp != null);
+        regexpQuery.ShouldNotBeNull();
+        regexpQuery.Regexp.ShouldNotBeNull();
+        regexpQuery.Regexp.Value.ShouldBe(@"^\s*$");
+    }
+
+    [Fact]
+    public async virtual Task Translate_StringEquals_WithStringComparisonOrdinal_ReturnsTermQuery()
+    {
+        // Act
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index,
+            x => x.Name!.Equals("test", StringComparison.Ordinal));
+
+        // Assert
+        query.ShouldNotBeNull();
+        query.Term.ShouldNotBeNull();
+        query.Term.Field.ToString().ShouldBe("Name.keyword");
+        query.Term.Value.TryGetString(out var value).ShouldBeTrue();
+        value.ShouldBe("test");
+    }
+
+    [Fact]
+    public async virtual Task Translate_StringEquals_WithStringComparisonIgnoreCase_ReturnsTermQuery()
+    {
+        // Act
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index,
+            x => x.Name!.Equals("test", StringComparison.OrdinalIgnoreCase));
+
+        // Assert
+        query.ShouldNotBeNull();
+        query.Term.ShouldNotBeNull();
+        query.Term.Field.ToString().ShouldBe("Name.keyword");
+        query.Term.Value.TryGetString(out var value).ShouldBeTrue();
+        value.ShouldBe("test");
+    }
+
+    [Fact]
+    public async virtual Task Translate_StaticStringEquals_ReturnsTermQuery()
+    {
+        // Act
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index,
+            x => string.Equals(x.Name, "test"));
+
+        // Assert
+        query.ShouldNotBeNull();
+        query.Term.ShouldNotBeNull();
+        query.Term.Field.ToString().ShouldBe("Name.keyword");
+        query.Term.Value.TryGetString(out var value).ShouldBeTrue();
+        value.ShouldBe("test");
+    }
+
+    [Fact]
+    public async virtual Task Translate_StringContains_WithEmptyString_ReturnsWildcardQueryWithOnlyWildcards()
+    {
+        // Act
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index,
+            x => x.Name!.Contains(string.Empty));
+
+        // Assert
+        query.ShouldNotBeNull();
+        query.Wildcard.ShouldNotBeNull();
+        query.Wildcard.Field.ToString().ShouldBe("Name.keyword");
+        query.Wildcard.Value.ShouldBe("**");
+    }
+
+    [Fact]
+    public async virtual Task Translate_StringContains_WildcardField_EscapesBackslash()
+    {
+        // Act
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index,
+            x => x.Exceptions!.Contains("test\\value"));
+
+        // Assert
+        query.ShouldNotBeNull();
+        query.Wildcard.ShouldNotBeNull();
+        query.Wildcard.Field.ToString().ShouldBe("Exceptions");
+        query.Wildcard.Value.ShouldBe("*test\\\\value*");
+    }
+
+    [Fact]
+    public async virtual Task Translate_StringEndsWith_TextWithoutKeyword_ReturnsMatchPhraseQuery()
+    {
+        // Act
+        var query = await _expressionQueryTranslator.TranslateAsync<TestDocument>(TestDocumentIndexNames.Index,
+            x => x.Description!.EndsWith("world"));
+
+        // Assert
+        query.ShouldNotBeNull();
+        query.MatchPhrase.ShouldNotBeNull();
+        query.MatchPhrase.Field.ToString().ShouldBe("Description");
+        query.MatchPhrase.Query.ShouldBe("world");
+    }
+
     #endregion
 
     #region 集合方法测试
