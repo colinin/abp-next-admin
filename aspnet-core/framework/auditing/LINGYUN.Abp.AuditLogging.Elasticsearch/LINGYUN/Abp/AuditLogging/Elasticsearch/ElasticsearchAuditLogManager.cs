@@ -526,7 +526,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             dsl => dsl.Indices(indexName)
                     .Query(query)
                     // 反转排序取第一个数据作为起始索引
-                    .Sort(sorts.Select(x => x).Reverse().ToArray())
+                    .Sort(sorts.ReverseSort()!.ToArray())
                     .SourceIncludes(x => x.Id)
                     .SearchAfter(firstHit.Sort.ToList())
                     .Size(1),
