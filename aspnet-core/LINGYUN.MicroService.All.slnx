@@ -530,6 +530,7 @@
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Nexus.Tests/LINGYUN.Abp.BlobStoring.Nexus.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.DataProtection.Tests/LINGYUN.Abp.DataProtection.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.Elasticsearch.EsqlQuery.Tests/LINGYUN.Abp.Elasticsearch.EsqlQuery.Tests.csproj" Id="52d961a7-c89d-4fca-ad35-8c7f3588aeb9" />
     <Project Path="tests/LINGYUN.Abp.Elasticsearch.Tests/LINGYUN.Abp.Elasticsearch.Tests.csproj" Id="056a13a4-8fbb-4437-adc8-fe76d0869880" />
     <Project Path="tests/LINGYUN.Abp.Emailing.Platform.Tests/LINGYUN.Abp.Emailing.Platform.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.EntityFrameworkCore.Tests/LINGYUN.Abp.EntityFrameworkCore.Tests.csproj" />
