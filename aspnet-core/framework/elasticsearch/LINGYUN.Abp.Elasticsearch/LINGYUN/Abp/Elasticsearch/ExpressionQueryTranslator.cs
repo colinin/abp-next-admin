@@ -213,6 +213,12 @@ public partial class ExpressionQueryTranslator : IExpressionQueryTranslator, ISi
     /// </summary>
     protected virtual Query TranslateComparison(BinaryExpression node, string? prefix, IndexMappingInfo? mappingInfo)
     {
+        var methodCallQuery = TryTranslateMethodComparison(node, prefix, mappingInfo);
+        if (methodCallQuery != null)
+        {
+            return methodCallQuery;
+        }
+
         var (fieldExpression, valueExpression) = ResolveOperands(node);
         var field = ResolveField(fieldExpression, prefix, mappingInfo);
 

@@ -289,6 +289,116 @@ public partial class ExpressionQueryTranslator
     }
 
     /// <summary>
+    /// 翻译 string.CompareTo 比较
+    /// </summary>
+    private Query? TranslateStringCompareToComparison(
+        MethodCallExpression methodCall,
+        Expression constantExpression,
+        ExpressionType comparisonType,
+        string? prefix,
+        IndexMappingInfo? mappingInfo)
+    {
+        var compareValue = Evaluate(constantExpression)?.ToString() ?? string.Empty;
+
+        // CompareTo 返回值：
+        // 0: 相等
+        // > 0: 当前字符串在排序顺序中位于参数之后
+        // < 0: 当前字符串在排序顺序中位于参数之前
+
+        switch (comparisonType)
+        {
+            case ExpressionType.Equal:
+                // CompareTo == 0 表示相等
+                var (field, value) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
+                return BuildEquality(field, value);
+
+            case ExpressionType.NotEqual:
+                // CompareTo != 0 表示不相等
+                var (notEqualField, notEqualValue) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
+                var notEqualQuery = BuildEquality(notEqualField, notEqualValue);
+                return new BoolQuery
+                {
+                    MustNot = new Query[] { notEqualQuery }
+                };
+
+            case ExpressionType.GreaterThan:
+                // CompareTo > 0 表示当前字段值大于比较值
+                // 这可以简化处理，但这里先返回 null 让默认处理逻辑处理
+                return null;
+
+            case ExpressionType.GreaterThanOrEqual:
+                // CompareTo >= 0 表示当前字段值大于或等于比较值
+                return null;
+
+            case ExpressionType.LessThan:
+                // CompareTo < 0 表示当前字段值小于比较值
+                return null;
+
+            case ExpressionType.LessThanOrEqual:
+                // CompareTo <= 0 表示当前字段值小于或等于比较值
+                return null;
+
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>
+    /// 翻译 string.IndexOf 比较
+    /// </summary>
+    private Query? TranslateStringIndexOfComparison(
+        MethodCallExpression methodCall,
+        Expression constantExpression,
+        ExpressionType comparisonType,
+        string? prefix,
+        IndexMappingInfo? mappingInfo)
+    {
+        var indexValue = Evaluate(constantExpression)?.ToString() ?? string.Empty;
+
+        // IndexOf 返回值：
+        // >= 0: 找到了子字符串
+        // < 0: 没有找到子字符串
+
+        switch (comparisonType)
+        {
+            case ExpressionType.GreaterThanOrEqual:
+            case ExpressionType.GreaterThan:
+                // IndexOf >= 0 表示包含
+                var (field, value) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
+                var fieldMapping = mappingInfo?.GetField(field.Path);
+                return TranslateStringContains(field, fieldMapping, value);
+
+            case ExpressionType.LessThan:
+            case ExpressionType.LessThanOrEqual:
+                // IndexOf < 0 表示不包含
+                var (notContainsField, notContainsValue) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
+                var notContainsFieldMapping = mappingInfo?.GetField(notContainsField.Path);
+                var containsQuery = TranslateStringContains(notContainsField, notContainsFieldMapping, notContainsValue);
+                return new BoolQuery
+                {
+                    MustNot = new Query[] { containsQuery }
+                };
+
+            case ExpressionType.Equal:
+                // IndexOf == 某个值，这里简化处理，只处理 == -1（不包含）的情况
+                if (indexValue == "-1")
+                {
+                    var (eqField, eqValue) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
+                    var eqFieldMapping = mappingInfo?.GetField(eqField.Path);
+                    var eqContainsQuery = TranslateStringContains(eqField, eqFieldMapping, eqValue);
+                    return new BoolQuery
+                    {
+                        MustNot = new Query[] { eqContainsQuery }
+                    };
+                }
+                return null;
+
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>
     /// 翻译字符串实例方法（获取字段和值）
     /// </summary>
     private (FieldInfo Field, string Value) GetStringMethodOperands(MethodCallExpression node, string? prefix, IndexMappingInfo? mappingInfo)
