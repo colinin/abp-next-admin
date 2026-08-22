@@ -9,6 +9,7 @@ using Volo.Abp.Collections;
 namespace LINGYUN.Abp.AI;
 public class AbpAICoreOptions
 {
+    public DynamicWorkspaceStrategy DynamicWorkspaceStrategy { get; set; }
     public ITypeList<IWorkspaceDefinitionProvider> DefinitionProviders { get; }
     public ITypeList<IChatClientProvider> ChatClientProviders { get; }
     public ITypeList<IKernelProvider> KernelProviders { get; }
@@ -20,6 +21,7 @@ public class AbpAICoreOptions
 
     public AbpAICoreOptions()
     {
+        DynamicWorkspaceStrategy = DynamicWorkspaceStrategy.Merge;
         DefinitionProviders = new TypeList<IWorkspaceDefinitionProvider>();
         ChatClientProviders = new TypeList<IChatClientProvider>();
         KernelProviders = new TypeList<IKernelProvider>();

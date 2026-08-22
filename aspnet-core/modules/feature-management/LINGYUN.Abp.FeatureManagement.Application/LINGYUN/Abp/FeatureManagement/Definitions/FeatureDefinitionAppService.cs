@@ -121,7 +121,7 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         Expression<Func<FeatureDefinitionRecord, bool>> predicate = _ => true;
         if (!input.GroupName.IsNullOrWhiteSpace())
         {
-            predicate = predicate.And(x => x.Name == input.GroupName);
+            predicate = predicate.And(x => x.GroupName == input.GroupName);
         }
         var definitionRecords = await _definitionBasicRepository.GetListAsync(predicate);
         featureDtoList.AddRange(definitionRecords.Select(DefinitionRecordToDto));

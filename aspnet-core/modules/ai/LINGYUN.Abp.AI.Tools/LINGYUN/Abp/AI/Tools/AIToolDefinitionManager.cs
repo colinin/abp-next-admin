@@ -39,8 +39,21 @@ public class AIToolDefinitionManager : IAIToolDefinitionManager, ISingletonDepen
     {
         Check.NotNull(name, nameof(name));
 
-        return await StaticStore.GetOrNullAsync(name) ??
-               await DynamicStore.GetOrNullAsync(name);
+        var staticDefinition = await StaticStore.GetOrNullAsync(name);
+        var dynamicDefinition = await DynamicStore.GetOrNullAsync(name);
+
+        if (staticDefinition != null && dynamicDefinition != null)
+        {
+            return AIToolOptions.DynamicAItoolStrategy switch
+            {
+                DynamicAItoolStrategy.Ignore => staticDefinition,
+                DynamicAItoolStrategy.Covering => dynamicDefinition,
+                DynamicAItoolStrategy.Merge => MergeAITool(staticDefinition, dynamicDefinition),
+                _ => MergeAITool(staticDefinition, dynamicDefinition)
+            };
+        }
+
+        return staticDefinition ?? dynamicDefinition;
     }
 
     public virtual async Task<IReadOnlyList<AIToolDefinition>> GetAllAsync()

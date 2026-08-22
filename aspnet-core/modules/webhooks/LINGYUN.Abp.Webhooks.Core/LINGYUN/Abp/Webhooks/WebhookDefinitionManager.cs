@@ -35,8 +35,21 @@ internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonD
     {
         Check.NotNull(name, nameof(name));
 
-        return await _staticStore.GetOrNullAsync(name) ??
-               await _dynamicStore.GetOrNullAsync(name);
+        var staticDefinition = await _staticStore.GetOrNullAsync(name);
+        var dynamicDefinition = await _dynamicStore.GetOrNullAsync(name);
+
+        if (staticDefinition != null && dynamicDefinition != null)
+        {
+            return _webhooksOptions.DynamicWebhookStrategy switch
+            {
+                DynamicWebhookStrategy.Ignore => staticDefinition,
+                DynamicWebhookStrategy.Covering => dynamicDefinition,
+                DynamicWebhookStrategy.Merge => MergeWebhook(staticDefinition, dynamicDefinition),
+                _ => staticDefinition
+            };
+        }
+
+        return staticDefinition ?? dynamicDefinition;
     }
 
     public async virtual Task<WebhookDefinition> GetAsync(string name)
@@ -69,8 +82,26 @@ internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonD
     {
         Check.NotNull(name, nameof(name));
 
-        return await _staticStore.GetGroupOrNullAsync(name) ??
-               await _dynamicStore.GetGroupOrNullAsync(name);
+        var staticDefinition = await _staticStore.GetGroupOrNullAsync(name);
+        var dynamicDefinition = await _dynamicStore.GetGroupOrNullAsync(name);
+
+        if (staticDefinition != null && dynamicDefinition != null)
+        {
+            switch (_webhooksOptions.DynamicWebhookStrategy)
+            {
+                case DynamicWebhookStrategy.Ignore:
+                    return staticDefinition;
+                case DynamicWebhookStrategy.Covering:
+                    return dynamicDefinition;
+                case DynamicWebhookStrategy.Merge:
+                    MergeGroupWebhooks(staticDefinition, dynamicDefinition);
+                    return staticDefinition;
+                default:
+                    return staticDefinition;
+            }
+        }
+
+        return staticDefinition ?? dynamicDefinition;
     }
 
     public async virtual Task<WebhookGroupDefinition> GetGroupAsync(string name)

@@ -1,11 +1,10 @@
 ﻿using JetBrains.Annotations;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Features;
+
+#nullable enable
 
 [Dependency(ReplaceServices = true)]
 public class MergeFeatureDefinitionManager : FeatureDefinitionManager
@@ -15,6 +14,26 @@ public class MergeFeatureDefinitionManager : FeatureDefinitionManager
         IDynamicFeatureDefinitionStore dynamicStore)
         : base(staticStore, dynamicStore)
     {
+    }
+
+    public async override Task<FeatureDefinition?> GetOrNullAsync(string name)
+    {
+        Check.NotNull(name, nameof(name));
+
+        var staticDefinition = await StaticStore.GetOrNullAsync(name);
+        var dynamicDefinition = await DynamicStore.GetOrNullAsync(name);
+
+        if (staticDefinition != null && dynamicDefinition != null)
+        {
+            MergeFeatureMetadata(staticDefinition, dynamicDefinition);
+
+            foreach (var child in dynamicDefinition.Children)
+            {
+                MergeChildFeature(staticDefinition, child);
+            }
+        }
+
+        return staticDefinition ?? dynamicDefinition;
     }
 
     public async override Task<IReadOnlyList<FeatureDefinition>> GetAllAsync()
@@ -222,7 +241,7 @@ public class MergeFeatureDefinitionManager : FeatureDefinitionManager
     }
 
 
-    public static FeatureDefinition GetFeatureOrNull(
+    public static FeatureDefinition? GetFeatureOrNull(
         FeatureGroupDefinition group,
         [NotNull] string name)
     {
@@ -231,7 +250,7 @@ public class MergeFeatureDefinitionManager : FeatureDefinitionManager
         return GetFeatureOrNullRecursively(group.Features, name);
     }
 
-    private static FeatureDefinition GetFeatureOrNullRecursively(
+    private static FeatureDefinition? GetFeatureOrNullRecursively(
         IReadOnlyList<FeatureDefinition> features,
         string name)
     {
@@ -252,3 +271,4 @@ public class MergeFeatureDefinitionManager : FeatureDefinitionManager
         return null;
     }
 }
+#nullable disable

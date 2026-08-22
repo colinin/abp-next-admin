@@ -1,29 +1,39 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Threading.Tasks;
+﻿using System.Collections.Immutable;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Settings;
 
+#nullable enable
+
 [Dependency(ReplaceServices = true)]
 public class MergeSettingDefinitionManager : SettingDefinitionManager
 {
-    private readonly IStaticSettingDefinitionStore _staticStore;
-    private readonly IDynamicSettingDefinitionStore _dynamicStore;
-
     public MergeSettingDefinitionManager(
         IStaticSettingDefinitionStore staticStore,
         IDynamicSettingDefinitionStore dynamicStore)
         : base(staticStore, dynamicStore)
     {
-        _staticStore = staticStore;
-        _dynamicStore = dynamicStore;
+    }
+
+    public async override Task<SettingDefinition?> GetOrNullAsync(string name)
+    {
+        Check.NotNull(name, nameof(name));
+
+        var staticDefinition = await StaticStore.GetOrNullAsync(name);
+        var dynamicDefinition = await DynamicStore.GetOrNullAsync(name);
+
+        if (staticDefinition != null && dynamicDefinition != null)
+        {
+            MergeSetting(staticDefinition, dynamicDefinition);
+        }
+
+        return staticDefinition ?? dynamicDefinition;
     }
 
     public async override Task<IReadOnlyList<SettingDefinition>> GetAllAsync()
     {
-        var staticSettings = await _staticStore.GetAllAsync();
-        var dynamicSettings = await _dynamicStore.GetAllAsync();
+        var staticSettings = await StaticStore.GetAllAsync();
+        var dynamicSettings = await DynamicStore.GetAllAsync();
 
         var mergedSettings = new Dictionary<string, SettingDefinition>();
 
@@ -70,4 +80,5 @@ public class MergeSettingDefinitionManager : SettingDefinitionManager
         }
     }
 }
+#nullable disable
 

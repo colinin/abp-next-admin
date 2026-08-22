@@ -39,8 +39,21 @@ public class NotificationDefinitionManager : INotificationDefinitionManager, ITr
     {
         Check.NotNull(name, nameof(name));
 
-        return await _staticStore.GetOrNullAsync(name) ??
-               await _dynamicStore.GetOrNullAsync(name);
+        var staticDefinition = await _staticStore.GetOrNullAsync(name);
+        var dynamicDefinition = await _dynamicStore.GetOrNullAsync(name);
+
+        if (staticDefinition != null && dynamicDefinition != null)
+        {
+            return _notificationsOptions.DynamicNotificationStrategy switch
+            {
+                DynamicNotificationStrategy.Ignore => staticDefinition,
+                DynamicNotificationStrategy.Covering => dynamicDefinition,
+                DynamicNotificationStrategy.Merge => MergeNotification(staticDefinition, dynamicDefinition),
+                _ => staticDefinition
+            };
+        }
+
+        return staticDefinition ?? dynamicDefinition;
     }
 
     public async virtual Task<IReadOnlyList<NotificationDefinition>> GetNotificationsAsync()
@@ -62,8 +75,26 @@ public class NotificationDefinitionManager : INotificationDefinitionManager, ITr
     {
         Check.NotNull(name, nameof(name));
 
-        return await _staticStore.GetGroupOrNullAsync(name) ??
-               await _dynamicStore.GetGroupOrNullAsync(name);
+        var staticDefinition = await _staticStore.GetGroupOrNullAsync(name);
+        var dynamicDefinition = await _dynamicStore.GetGroupOrNullAsync(name);
+
+        if (staticDefinition != null && dynamicDefinition != null)
+        {
+            switch (_notificationsOptions.DynamicNotificationStrategy)
+            {
+                case DynamicNotificationStrategy.Ignore:
+                    return staticDefinition;
+                case DynamicNotificationStrategy.Covering:
+                    return dynamicDefinition;
+                case DynamicNotificationStrategy.Merge:
+                    MergeGroupNotifications(staticDefinition, dynamicDefinition);
+                    return staticDefinition;
+                default:
+                    return staticDefinition;
+            }
+        }
+
+        return staticDefinition ?? dynamicDefinition;
     }
 
     public async virtual Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync()
