@@ -1,6 +1,7 @@
 using LINGYUN.Abp.BlobManagement.MimeCheck;
 using LINGYUN.Abp.Identity.AspNetCore;
 using LINGYUN.Abp.Identity.Jobs;
+using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 using LINGYUN.Abp.Notifications.Calendar;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 
@@ -397,6 +398,7 @@ namespace LY.MicroService.Applications.Single;
 
     // 虚拟文件浏览器 Mvc视图
     typeof(AbpVirtualFileExplorerWebModule),
+    typeof(AbpLoggingSerilogElasticsearchModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreMvcIdempotentWrapperModule),

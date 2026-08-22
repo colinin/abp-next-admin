@@ -123,7 +123,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
         Expression<Func<PermissionDefinitionRecord, bool>> predicate = _ => true;
         if (!input.GroupName.IsNullOrWhiteSpace())
         {
-            predicate = predicate.And(x => x.Name == input.GroupName);
+            predicate = predicate.And(x => x.GroupName == input.GroupName);
         }
         var permissionDefinitions = await _definitionBasicRepository.GetListAsync(predicate);
         permissionDtoList.AddRange(permissionDefinitions.Select(DefinitionRecordToDto));

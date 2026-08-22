@@ -1,20 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Features;
 
-namespace LY.MicroService.BackendAdmin.Overrides;
+namespace Volo.Abp.Features;
+
+#nullable enable
 
 [Dependency(ReplaceServices = true)]
 public class MergeFeatureDefinitionManager : FeatureDefinitionManager
 {
     public MergeFeatureDefinitionManager(
-        IStaticFeatureDefinitionStore staticStore, 
-        IDynamicFeatureDefinitionStore dynamicStore) 
+        IStaticFeatureDefinitionStore staticStore,
+        IDynamicFeatureDefinitionStore dynamicStore)
         : base(staticStore, dynamicStore)
     {
+    }
+
+    public async override Task<FeatureDefinition?> GetOrNullAsync(string name)
+    {
+        Check.NotNull(name, nameof(name));
+
+        var staticDefinition = await StaticStore.GetOrNullAsync(name);
+        var dynamicDefinition = await DynamicStore.GetOrNullAsync(name);
+
+        if (staticDefinition != null && dynamicDefinition != null)
+        {
+            MergeFeatureMetadata(staticDefinition, dynamicDefinition);
+
+            foreach (var child in dynamicDefinition.Children)
+            {
+                MergeChildFeature(staticDefinition, child);
+            }
+        }
+
+        return staticDefinition ?? dynamicDefinition;
     }
 
     public async override Task<IReadOnlyList<FeatureDefinition>> GetAllAsync()
@@ -80,7 +102,7 @@ public class MergeFeatureDefinitionManager : FeatureDefinitionManager
     {
         foreach (var sourceFeature in source.Features)
         {
-            var existingFeature = target.GetFeatureOrNull(sourceFeature.Name);
+            var existingFeature = GetFeatureOrNull(target, sourceFeature.Name);
 
             if (existingFeature == null)
             {
@@ -220,4 +242,36 @@ public class MergeFeatureDefinitionManager : FeatureDefinitionManager
         target.IsVisibleToClients = target.IsVisibleToClients || source.IsVisibleToClients;
         target.IsAvailableToHost = target.IsAvailableToHost || source.IsAvailableToHost;
     }
+
+
+    public static FeatureDefinition? GetFeatureOrNull(
+        FeatureGroupDefinition group,
+        [NotNull] string name)
+    {
+        Check.NotNull(name, nameof(name));
+
+        return GetFeatureOrNullRecursively(group.Features, name);
+    }
+
+    private static FeatureDefinition? GetFeatureOrNullRecursively(
+        IReadOnlyList<FeatureDefinition> features,
+        string name)
+    {
+        foreach (var feature in features)
+        {
+            if (feature.Name == name)
+            {
+                return feature;
+            }
+
+            var childFeature = GetFeatureOrNullRecursively(feature.Children, name);
+            if (childFeature != null)
+            {
+                return childFeature;
+            }
+        }
+
+        return null;
+    }
 }
+#nullable disable

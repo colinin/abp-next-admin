@@ -4,17 +4,35 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.TextTemplating;
 
-namespace LY.MicroService.BackendAdmin.Overrides;
+namespace Volo.Abp.TextTemplatin;
+
+#nullable enable
 
 [Dependency(ReplaceServices = true)]
 public class MergeTemplateDefinitionManager : TemplateDefinitionManager
 {
     public MergeTemplateDefinitionManager(
-        IStaticTemplateDefinitionStore staticStore, 
-        IDynamicTemplateDefinitionStore dynamicStore) 
+        IStaticTemplateDefinitionStore staticStore,
+        IDynamicTemplateDefinitionStore dynamicStore)
         : base(staticStore, dynamicStore)
     {
     }
+
+    public async override Task<TemplateDefinition?> GetOrNullAsync(string name)
+    {
+        Check.NotNull(name, nameof(name));
+
+        var staticDefinition = await StaticStore.GetOrNullAsync(name);
+        var dynamicDefinition = await DynamicStore.GetOrNullAsync(name);
+
+        if (staticDefinition != null && dynamicDefinition != null)
+        {
+            MergeTemplate(staticDefinition, dynamicDefinition);
+        }
+
+        return staticDefinition ?? dynamicDefinition;
+    }
+
     public async override Task<IReadOnlyList<TemplateDefinition>> GetAllAsync()
     {
         var staticTemplates = await StaticStore.GetAllAsync();
@@ -83,3 +101,4 @@ public class MergeTemplateDefinitionManager : TemplateDefinitionManager
         return mergedTemplate;
     }
 }
+#nullable disable
