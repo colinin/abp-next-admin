@@ -83,6 +83,7 @@ public class DefaultLoggingManager : ILoggingManager, ISingletonDependency
         string? sorting = null,
         int maxResultCount = 50,
         int skipCount = 0,
+        bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         Logger.LogDebug("No logging manager is available!");

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace LINGYUN.Abp.Elasticsearch;
 /// <summary>
@@ -13,14 +15,24 @@ public class IndexMappingInfo
     public string IndexName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 文档类型
+    /// </summary>
+    public Type? DocumentType { get; set; }
+
+    /// <summary>
     /// 所有字段映射（扁平化）
     /// </summary>
-    public Dictionary<string, FieldMappingInfo> Fields { get; set; } = new();
+    public Dictionary<string, FieldMappingInfo> Fields { get; set; } = new Dictionary<string, FieldMappingInfo>(StringComparer.CurrentCultureIgnoreCase);
+
+    /// <summary>
+    /// 按 CLR 属性路径索引的字段映射
+    /// </summary>
+    public Dictionary<string, FieldMappingInfo> ClrFields { get; set; } = new Dictionary<string, FieldMappingInfo>(StringComparer.CurrentCultureIgnoreCase);
 
     /// <summary>
     /// Nested 字段映射
     /// </summary>
-    public Dictionary<string, NestedMappingInfo> NestedFields { get; set; } = new();
+    public Dictionary<string, NestedMappingInfo> NestedFields { get; set; } = new Dictionary<string, NestedMappingInfo>(StringComparer.CurrentCultureIgnoreCase);
 
     /// <summary>
     /// Keyword 字段列表
@@ -62,6 +74,33 @@ public class IndexMappingInfo
     public FieldMappingInfo? GetField(string path)
     {
         return Fields.GetOrDefault(path);
+    }
+
+    /// <summary>
+    /// 根据 CLR 属性路径获取字段映射信息
+    /// </summary>
+    public FieldMappingInfo? GetFieldByClrPath(string clrPath)
+    {
+        return ClrFields.GetOrDefault(clrPath);
+    }
+
+    /// <summary>
+    /// 根据 CLR 属性表达式获取字段映射信息
+    /// </summary>
+    public FieldMappingInfo? GetFieldByExpression<TDocument>(Expression<Func<TDocument, object?>> expression)
+    {
+        var clrPath = GetPropertyPath(expression);
+        return GetFieldByClrPath(clrPath);
+    }
+
+    /// <summary>
+    /// 根据 CLR 属性表达式获取 ES 字段路径
+    /// </summary>
+    public string? GetElasticsearchFieldPath<TDocument>(Expression<Func<TDocument, object?>> expression)
+    {
+        var clrPath = GetPropertyPath(expression);
+        var field = GetFieldByClrPath(clrPath);
+        return field?.Path;
     }
 
     /// <summary>
@@ -135,5 +174,44 @@ public class IndexMappingInfo
         }
 
         return null;
+    }
+    /// <summary>
+    /// 将 CLR 属性路径转换为 ES 字段路径
+    /// </summary>
+    public string? ConvertClrPathToElasticsearchPath(string clrPath)
+    {
+        var field = GetFieldByClrPath(clrPath);
+        return field?.Path;
+    }
+
+    /// <summary>
+    /// 将 ES 字段路径转换为 CLR 属性路径
+    /// </summary>
+    public string? ConvertElasticsearchPathToClrPath(string esPath)
+    {
+        var field = GetField(esPath);
+        return field?.ClrPath;
+    }
+
+    private static string GetPropertyPath<TDocument>(Expression<Func<TDocument, object?>> expression)
+    {
+        var parts = new List<string>();
+        var currentExpression = expression.Body;
+
+        while (currentExpression is MemberExpression memberExpression)
+        {
+            parts.Insert(0, memberExpression.Member.Name);
+            currentExpression = memberExpression.Expression!;
+        }
+
+        // 处理转换表达式
+        if (currentExpression is UnaryExpression unaryExpression &&
+            unaryExpression.NodeType == ExpressionType.Convert &&
+            unaryExpression.Operand is MemberExpression convertMemberExpression)
+        {
+            parts.Insert(0, convertMemberExpression.Member.Name);
+        }
+
+        return string.Join(".", parts);
     }
 }

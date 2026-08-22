@@ -12,7 +12,7 @@ public static class SortOptionsExtenssions
         {
             return sortOptions;
         }
-        var newSort = sortOptions.Select(sort =>
+        return sortOptions.Select(sort =>
         {
             if (sort.Field != null)
             {
@@ -21,10 +21,6 @@ public static class SortOptionsExtenssions
                     : SortOrder.Asc;
             }
             return sort;
-        }).ToArray();
-
-        newSort.Reverse();
-
-        return newSort;
+        }).Reverse();
     }
 }
