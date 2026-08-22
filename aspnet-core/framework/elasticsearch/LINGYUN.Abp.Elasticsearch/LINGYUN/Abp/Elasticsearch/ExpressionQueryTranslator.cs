@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
@@ -34,7 +33,7 @@ public partial class ExpressionQueryTranslator : IExpressionQueryTranslator, ISi
         Check.NotNullOrWhiteSpace(indexName, nameof(indexName));
         Check.NotNull(expression, nameof(expression));
 
-        var indexMapping = await _indexMappingProvider.GetMappingAsync(indexName);
+        var indexMapping = await _indexMappingProvider.GetMappingAsync<TDocument>(indexName);
 
         return TranslateNode(expression.Body, prefix: null, indexMapping);
     }

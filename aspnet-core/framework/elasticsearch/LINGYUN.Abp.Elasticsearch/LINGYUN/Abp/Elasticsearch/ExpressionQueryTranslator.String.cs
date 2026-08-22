@@ -298,45 +298,34 @@ public partial class ExpressionQueryTranslator
         string? prefix,
         IndexMappingInfo? mappingInfo)
     {
-        var compareValue = Evaluate(constantExpression)?.ToString() ?? string.Empty;
-
-        // CompareTo 返回值：
-        // 0: 相等
-        // > 0: 当前字符串在排序顺序中位于参数之后
-        // < 0: 当前字符串在排序顺序中位于参数之前
+        var (field, compareValue) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
+        var compareResult = Convert.ToInt32(Evaluate(constantExpression));
 
         switch (comparisonType)
         {
-            case ExpressionType.Equal:
+            case ExpressionType.Equal when compareResult == 0:
                 // CompareTo == 0 表示相等
-                var (field, value) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
-                return BuildEquality(field, value);
+                return BuildEquality(field, compareValue);
 
-            case ExpressionType.NotEqual:
+            case ExpressionType.NotEqual when compareResult == 0:
                 // CompareTo != 0 表示不相等
-                var (notEqualField, notEqualValue) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
-                var notEqualQuery = BuildEquality(notEqualField, notEqualValue);
-                return new BoolQuery
-                {
-                    MustNot = new Query[] { notEqualQuery }
-                };
+                return BuildNotEqualQuery(field, compareValue);
 
-            case ExpressionType.GreaterThan:
+            case ExpressionType.GreaterThan when compareResult == 0:
                 // CompareTo > 0 表示当前字段值大于比较值
-                // 这可以简化处理，但这里先返回 null 让默认处理逻辑处理
-                return null;
+                return BuildRange(field, greaterThan: compareValue);
 
-            case ExpressionType.GreaterThanOrEqual:
+            case ExpressionType.GreaterThanOrEqual when compareResult == 0:
                 // CompareTo >= 0 表示当前字段值大于或等于比较值
-                return null;
+                return BuildRange(field, greaterThanOrEqualTo: compareValue);
 
-            case ExpressionType.LessThan:
+            case ExpressionType.LessThan when compareResult == 0:
                 // CompareTo < 0 表示当前字段值小于比较值
-                return null;
+                return BuildRange(field, lessThan: compareValue);
 
-            case ExpressionType.LessThanOrEqual:
+            case ExpressionType.LessThanOrEqual when compareResult == 0:
                 // CompareTo <= 0 表示当前字段值小于或等于比较值
-                return null;
+                return BuildRange(field, lessThanOrEqualTo: compareValue);
 
             default:
                 return null;
@@ -353,45 +342,27 @@ public partial class ExpressionQueryTranslator
         string? prefix,
         IndexMappingInfo? mappingInfo)
     {
-        var indexValue = Evaluate(constantExpression)?.ToString() ?? string.Empty;
-
-        // IndexOf 返回值：
-        // >= 0: 找到了子字符串
-        // < 0: 没有找到子字符串
+        // 获取字段和搜索值
+        var (field, searchValue) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
+        var indexResult = Convert.ToInt32(Evaluate(constantExpression));
+        var fieldMapping = mappingInfo?.GetField(field.Path);
 
         switch (comparisonType)
         {
-            case ExpressionType.GreaterThanOrEqual:
-            case ExpressionType.GreaterThan:
-                // IndexOf >= 0 表示包含
-                var (field, value) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
-                var fieldMapping = mappingInfo?.GetField(field.Path);
-                return TranslateStringContains(field, fieldMapping, value);
+            case ExpressionType.GreaterThanOrEqual when indexResult >= 0:
+            case ExpressionType.GreaterThan when indexResult > -1:
+            case ExpressionType.NotEqual when indexResult == -1:
+                // IndexOf >= 0, IndexOf > -1, IndexOf != -1 表示包含
+                return TranslateStringContains(field, fieldMapping, searchValue);
 
-            case ExpressionType.LessThan:
-            case ExpressionType.LessThanOrEqual:
-                // IndexOf < 0 表示不包含
-                var (notContainsField, notContainsValue) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
-                var notContainsFieldMapping = mappingInfo?.GetField(notContainsField.Path);
-                var containsQuery = TranslateStringContains(notContainsField, notContainsFieldMapping, notContainsValue);
+            case ExpressionType.LessThan when indexResult <= 0:
+            case ExpressionType.Equal when indexResult == -1:
+                // IndexOf == -1, IndexOf < 0 表示不包含
+                var containsQuery = TranslateStringContains(field, fieldMapping, searchValue);
                 return new BoolQuery
                 {
                     MustNot = new Query[] { containsQuery }
                 };
-
-            case ExpressionType.Equal:
-                // IndexOf == 某个值，这里简化处理，只处理 == -1（不包含）的情况
-                if (indexValue == "-1")
-                {
-                    var (eqField, eqValue) = GetStringMethodOperands(methodCall, prefix, mappingInfo);
-                    var eqFieldMapping = mappingInfo?.GetField(eqField.Path);
-                    var eqContainsQuery = TranslateStringContains(eqField, eqFieldMapping, eqValue);
-                    return new BoolQuery
-                    {
-                        MustNot = new Query[] { eqContainsQuery }
-                    };
-                }
-                return null;
 
             default:
                 return null;

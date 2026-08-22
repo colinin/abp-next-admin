@@ -9,7 +9,9 @@ public class FieldMappingInfo
     public string Name { get; set; } = string.Empty;
     public string Type { get; set; } = string.Empty;
     public Type? ClrType { get; set; }
+    public string ClrPath { get; set; } = string.Empty;
 
+    public bool IsMultiField { get; set; }
     public bool IsKeyword { get; set; }
     public bool IsText { get; set; }
     public bool IsWildcard { get; set; }
@@ -32,7 +34,10 @@ public class FieldMappingInfo
 
     public string GetKeywordPath()
     {
-        if (IsKeyword) return Path;
+        if (IsKeyword)
+        {
+            return Path;
+        }
 
         // 如果是 text 类型且有 keyword 子字段
         if (IsText && Properties?.ContainsKey("keyword") == true)

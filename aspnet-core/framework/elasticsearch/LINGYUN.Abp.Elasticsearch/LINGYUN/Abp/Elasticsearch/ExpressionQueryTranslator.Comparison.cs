@@ -39,7 +39,7 @@ public partial class ExpressionQueryTranslator
         IndexMappingInfo? mappingInfo)
     {
         // 限定string方法调用
-        if (methodCall.Method.DeclaringType != typeof(string))
+        if (methodCall.Method.DeclaringType == typeof(string))
         {
             return methodCall.Method.Name switch
             {

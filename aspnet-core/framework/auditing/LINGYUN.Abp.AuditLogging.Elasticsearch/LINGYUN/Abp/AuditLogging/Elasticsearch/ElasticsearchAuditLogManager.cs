@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -67,7 +68,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         var sortingField = sorting;
         if (sortingField.IsNullOrWhiteSpace())
         {
-            var indexMapping = await _indexMappingProvider.GetMappingAsync(indexName, cancellationToken);
+            var indexMapping = await _indexMappingProvider.GetMappingAsync<AuditLog>(indexName, cancellationToken);
             if (indexMapping != null)
             {
                 var sortingFieldMap = indexMapping.Fields
@@ -87,13 +88,13 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             sortingField,
             maxResultCount,
             skipCount,
-            sourceExcludes: includeDetails == true
+            sourceExcludes: includeDetails == false
                 ? Fields.FromFields(
                 [
-                    new Field("Actions"),
-                    new Field("Comments"),
-                    new Field("EntityChanges"),
-                    new Field("Exceptions"),
+                    new Field(nameof(AuditLog.Actions)),
+                    new Field(nameof(AuditLog.Comments)),
+                    new Field(nameof(AuditLog.EntityChanges)),
+                    new Field(nameof(AuditLog.Exceptions)),
                 ])
                 : null,
             cancellationToken: cancellationToken);
@@ -116,41 +117,31 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         HttpStatusCode? httpStatusCode = null,
         CancellationToken cancellationToken = default)
     {
-        var indexName = CreateIndex();
         var client = _clientFactory.Create();
-        var indexMapping = await _indexMappingProvider.GetMappingAsync(indexName, cancellationToken);
 
-        var querys = BuildQueryDescriptor(
-            indexMapping,
-            startTime,
-            endTime,
-            httpMethod,
-            url,
-            userId,
-            userName,
-            applicationName,
-            correlationId,
-            clientId,
-            clientIpAddress,
-            maxExecutionDuration,
-            minExecutionDuration,
-            hasException,
-            httpStatusCode);
+        Expression<Func<AuditLog, bool>> expression = _ => true;
 
-        var response = await client.CountAsync<AuditLog>(dsl =>
-            dsl.Indices(indexName)
-               .Query(new BoolQuery
-               {
-                   Must = querys
-               }),
+        expression = expression
+            .AndIf(startTime.HasValue, x => x.ExecutionTime >= _clock.Normalize(startTime!.Value))
+            .AndIf(endTime.HasValue, x => x.ExecutionTime <= _clock.Normalize(endTime!.Value))
+            .AndIf(!httpMethod.IsNullOrWhiteSpace(), x => x.HttpMethod == httpMethod)
+            .AndIf(!url.IsNullOrWhiteSpace(), x => x.Url!.Contains(url!))
+            .AndIf(userId.HasValue, x => x.UserId == userId)
+            .AndIf(!userName.IsNullOrWhiteSpace(), x => x.UserName == userName)
+            .AndIf(!applicationName.IsNullOrWhiteSpace(), x => x.ApplicationName == applicationName)
+            .AndIf(!correlationId.IsNullOrWhiteSpace(), x => x.CorrelationId == correlationId)
+            .AndIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+            .AndIf(!clientIpAddress.IsNullOrWhiteSpace(), x => x.ClientIpAddress == clientIpAddress)
+            .AndIf(maxExecutionDuration.HasValue, x => x.ExecutionDuration >= maxExecutionDuration)
+            .AndIf(minExecutionDuration.HasValue, x => x.ExecutionDuration <= minExecutionDuration)
+            .AndIf(hasException == true, x => x.Exceptions != null)
+            .AndIf(hasException == false, x => x.Exceptions == null)
+            .AndIf(httpStatusCode.HasValue, x => x.HttpStatusCode == (int)httpStatusCode!);
+
+        return await _expressionQueryService.GetCountAsync(
+            CreateIndex(),
+            expression,
             cancellationToken);
-
-        if (response.TryGetErrorMessage(out var errorMessage))
-        {
-            Logger.LogWarning("Query audit log count failed: {errorMessage}", errorMessage);
-        }
-
-        return response.Count;
     }
 
     public async virtual Task<List<AuditLog>> GetListAsync(
@@ -174,51 +165,47 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        var indexName = CreateIndex();
         var client = _clientFactory.Create();
-        var indexMapping = await _indexMappingProvider.GetMappingAsync(indexName, cancellationToken);
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = $"{nameof(AuditLog.ExecutionTime)} DESC";
+        }
 
-        var sorts = GetOrDefaultSort(indexMapping, sorting);
+        Expression<Func<AuditLog, bool>> expression = _ => true;
 
-        var querys = BuildQueryDescriptor(
-            indexMapping,
-            startTime,
-            endTime,
-            httpMethod,
-            url,
-            userId,
-            userName,
-            applicationName,
-            correlationId,
-            clientId,
-            clientIpAddress,
-            maxExecutionDuration,
-            minExecutionDuration,
-            hasException,
-            httpStatusCode);
+        expression = expression
+            .AndIf(startTime.HasValue, x => x.ExecutionTime >= _clock.Normalize(startTime!.Value))
+            .AndIf(endTime.HasValue, x => x.ExecutionTime <= _clock.Normalize(endTime!.Value))
+            .AndIf(!httpMethod.IsNullOrWhiteSpace(), x => x.HttpMethod == httpMethod)
+            .AndIf(!url.IsNullOrWhiteSpace(), x => x.Url!.Contains(url!))
+            .AndIf(userId.HasValue, x => x.UserId == userId)
+            .AndIf(!userName.IsNullOrWhiteSpace(), x => x.UserName == userName)
+            .AndIf(!applicationName.IsNullOrWhiteSpace(), x => x.ApplicationName == applicationName)
+            .AndIf(!correlationId.IsNullOrWhiteSpace(), x => x.CorrelationId == correlationId)
+            .AndIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+            .AndIf(!clientIpAddress.IsNullOrWhiteSpace(), x => x.ClientIpAddress == clientIpAddress)
+            .AndIf(maxExecutionDuration.HasValue, x => x.ExecutionDuration >= maxExecutionDuration)
+            .AndIf(minExecutionDuration.HasValue, x => x.ExecutionDuration <= minExecutionDuration)
+            .AndIf(hasException == true, x => x.Exceptions != null)
+            .AndIf(hasException == false, x => x.Exceptions == null)
+            .AndIf(httpStatusCode.HasValue, x => x.HttpStatusCode == (int)httpStatusCode!);
 
-        var query = new BoolQuery { Must = querys };
-
-        // ES最大支持10000, 超出这个长度后升级为使用Search_After方案
-        return skipCount >= 10000 && sorts != null
-            ? await SearchAfterAuditLogs(
-                client, 
-                indexName,
-                query,
-                sorts,
-                maxResultCount,
-                skipCount,
-                includeDetails,
-                cancellationToken)
-            : await SearchFromSizeAuditLogs(
-                client,
-                indexName,
-                query,
-                sorts,
-                maxResultCount,
-                skipCount,
-                includeDetails,
-                cancellationToken);
+        return await _expressionQueryService.GetListAsync(
+            CreateIndex(),
+            expression,
+            sorting: sorting,
+            maxResultCount: maxResultCount,
+            skipCount: skipCount,
+            sourceExcludes: includeDetails == false
+                ? Fields.FromFields(
+                [
+                    new Field(nameof(AuditLog.Actions)),
+                    new Field(nameof(AuditLog.Comments)),
+                    new Field(nameof(AuditLog.EntityChanges)),
+                    new Field(nameof(AuditLog.Exceptions)),
+                ])
+                : null,
+            cancellationToken: cancellationToken);
     }
 
     public async virtual Task<AuditLog?> GetAsync(
@@ -271,322 +258,8 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             cancellationToken);
     }
 
-    protected virtual List<Query> BuildQueryDescriptor(
-        IndexMappingInfo indexMappingInfo,
-        DateTime? startTime = null,
-        DateTime? endTime = null,
-        string? httpMethod = null,
-        string? url = null,
-        Guid? userId = null,
-        string? userName = null,
-        string? applicationName = null,
-        string? correlationId = null,
-        string? clientId = null,
-        string? clientIpAddress = null,
-        int? maxExecutionDuration = null,
-        int? minExecutionDuration = null,
-        bool? hasException = null,
-        HttpStatusCode? httpStatusCode = null)
-    {
-        var queries = new List<Query>();
-
-        if (startTime.HasValue)
-        {
-            queries.Add(new DateRangeQuery(GetField(indexMappingInfo, nameof(AuditLog.ExecutionTime)))
-            {
-                Gte = _clock.Normalize(startTime.Value)
-            });
-        }
-        if (endTime.HasValue)
-        {
-            queries.Add(new DateRangeQuery(GetField(indexMappingInfo, nameof(AuditLog.ExecutionTime)))
-            {
-                Lte = _clock.Normalize(endTime.Value)
-            });
-        }
-        if (!httpMethod.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.HttpMethod)), httpMethod));
-        }
-        if (!url.IsNullOrWhiteSpace())
-        {
-            queries.Add(new WildcardQuery(GetField(indexMappingInfo, nameof(AuditLog.Url)))
-            {
-                Value = $"*{url}*"
-            });
-        }
-        if (userId.HasValue)
-        {
-            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.UserId)), userId.Value.ToString()));
-        }
-        if (!userName.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.UserName)), userName));
-        }
-        if (!applicationName.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.ApplicationName)), applicationName));
-        }
-        if (!correlationId.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.CorrelationId)), correlationId));
-        }
-        if (!clientId.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.ClientId)), clientId));
-        }
-        if (!clientIpAddress.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.ClientIpAddress)), clientIpAddress));
-        }
-        if (maxExecutionDuration.HasValue)
-        {
-            queries.Add(new NumberRangeQuery(GetField(indexMappingInfo, nameof(AuditLog.ExecutionDuration)))
-            {
-                Lte = maxExecutionDuration.Value
-            });
-        }
-        if (minExecutionDuration.HasValue)
-        {
-            queries.Add(new NumberRangeQuery(GetField(indexMappingInfo, nameof(AuditLog.ExecutionDuration)))
-            {
-                Gte = minExecutionDuration.Value
-            });
-        }
-
-
-        if (hasException.HasValue)
-        {
-            if (hasException.Value)
-            {
-                queries.Add(new ExistsQuery(GetField(indexMappingInfo, nameof(AuditLog.Exceptions))));
-            }
-            else
-            {
-                queries.Add(new BoolQuery
-                {
-                    MustNot = new List<Query>
-                    {
-                        new ExistsQuery(GetField(indexMappingInfo, nameof(AuditLog.Exceptions)))
-                    }
-                });
-            }
-        }
-
-        if (httpStatusCode.HasValue)
-        {
-            queries.Add(new TermQuery(GetField(indexMappingInfo, nameof(AuditLog.HttpStatusCode)), ((int)httpStatusCode.Value).ToString()));
-        }
-
-        return queries;
-    }
-
-    private async Task<List<AuditLog>> SearchFromSizeAuditLogs(
-        ElasticsearchClient client,
-        string indexName,
-        Query query,
-        SortOptions[]? sorts = null,
-        int maxResultCount = 50,
-        int skipCount = 0,
-        bool includeDetails = false,
-        CancellationToken cancellationToken = default)
-    {
-        var searchResponse = await client.SearchAsync<AuditLog>(dsl =>
-        {
-            dsl.Indices(indexName)
-                .Query(query)
-               .From(skipCount)
-               .Size(maxResultCount);
-            if (sorts != null)
-            {
-                dsl.Sort(sorts);
-            }
-
-            if (!includeDetails)
-            {
-                dsl.SourceExcludes(
-                    ex => ex.Actions,
-                    ex => ex.Comments,
-                    ex => ex.Exceptions,
-                    ex => ex.EntityChanges);
-            }
-        }, cancellationToken);
-
-        if (searchResponse.TryGetErrorMessage(out var errorMessage))
-        {
-            Logger.LogWarning("Query audit log failed: {errorMessage}", errorMessage);
-            return [];
-        }
-
-        return searchResponse.Documents.ToList();
-    }
-
-    private async Task<List<AuditLog>> SearchAfterAuditLogs(
-        ElasticsearchClient client,
-        string indexName,
-        Query query,
-        SortOptions[] sorts,
-        int maxResultCount = 50,
-        int skipCount = 0,
-        bool includeDetails = false,
-        CancellationToken cancellationToken = default)
-    {
-        var searchAfter = await GetSearchAfterValue(
-            client,
-            indexName,
-            query,
-            sorts,
-            skipCount,
-            cancellationToken);
-
-        if (searchAfter == null || !searchAfter.Any())
-        {
-            return [];
-        }
-
-        var searchResponse = await client.SearchAsync<AuditLog>(dsl =>
-        {
-            dsl.Indices(indexName)
-                .Query(query)
-                .Sort(sorts)
-                .Size(maxResultCount)
-                .SearchAfter(searchAfter);
-
-            if (!includeDetails)
-            {
-                dsl.SourceExcludes(
-                    ex => ex.Actions,
-                    ex => ex.Comments,
-                    ex => ex.Exceptions,
-                    ex => ex.EntityChanges);
-            }
-        }, cancellationToken);
-
-        if (searchResponse.TryGetErrorMessage(out var errorMessage))
-        {
-            Logger.LogWarning("Query audit log failed: {errorMessage}", errorMessage);
-            return [];
-        }
-
-        return searchResponse.Documents.ToList();
-    }
-
-    private async Task<List<FieldValue>?> GetSearchAfterValue(
-        ElasticsearchClient client,
-        string indexName,
-        Query query,
-        SortOptions[] sorts,
-        int skipCount,
-        CancellationToken cancellationToken = default)
-    {
-        // 10000以内直接取最后一条数据
-        if (skipCount < 10000)
-        {
-            var response = await client.SearchAsync<AuditLog>(
-                dsl => dsl.Indices(indexName)
-                    .Query(query)
-                    .Sort(sorts)
-                    .SourceIncludes(x => x.Id)
-                    .From(skipCount)
-                    .Size(1), 
-                cancellationToken);
-
-            if (!response.IsSuccess() || response.Hits == null || !response.Hits.Any())
-            {
-                return null;
-            }
-
-            var hit = response.Hits.FirstOrDefault();
-            return hit?.Sort?.ToList();
-        }
-
-        // 获取第9999条数据Hits作为searchAfter
-        var firstResponse = await client.SearchAsync<AuditLog>(
-            dsl => dsl.Indices(indexName)
-                    .Query(query)
-                    .Sort(sorts)
-                    .SourceIncludes(x => x.Id)
-                    .From(9999)
-                    .Size(1), 
-            cancellationToken);
-
-        if (!firstResponse.IsSuccess() || firstResponse.Hits == null || !firstResponse.Hits.Any())
-        {
-            return null;
-        }
-
-        var firstHit = firstResponse.Hits.FirstOrDefault();
-        if (firstHit?.Sort == null || !firstHit.Sort.Any())
-        {
-            return null;
-        }
-
-        // 获取skipCount最近一条数据作为searchAfter
-        var secondResponse = await client.SearchAsync<AuditLog>(
-            dsl => dsl.Indices(indexName)
-                    .Query(query)
-                    // 反转排序取第一个数据作为起始索引
-                    .Sort(sorts.ReverseSort()!.ToArray())
-                    .SourceIncludes(x => x.Id)
-                    .SearchAfter(firstHit.Sort.ToList())
-                    .Size(1),
-            cancellationToken);
-
-        if (!secondResponse.IsSuccess() || secondResponse.Hits == null || !secondResponse.Hits.Any())
-        {
-            return null;
-        }
-
-        var lastHit = secondResponse.Hits.LastOrDefault();
-        if (lastHit?.Sort == null || !lastHit.Sort.Any())
-        {
-            return null;
-        }
-
-        return lastHit.Sort.ToList();
-    }
-
     protected virtual string CreateIndex()
     {
         return _indexNameNormalizer.NormalizeIndex("audit-log");
-    }
-
-    private static SortOptions[]? GetOrDefaultSort(IndexMappingInfo indexMappingInfo, string? sorting = null)
-    {
-        var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
-            ? SortOrder.Asc : SortOrder.Desc;
-        sorting = !sorting.IsNullOrWhiteSpace()
-            ? sorting.Split()[0]
-            : nameof(AuditLog.ExecutionTime);
-
-        SortOptions[]? sorts = null;
-        var sortingFieldMap = indexMappingInfo.Fields
-                    .Where(x => x.Key.Equals(sorting, StringComparison.CurrentCultureIgnoreCase))
-                    .Select(x => x.Value)
-                    .FirstOrDefault();
-        if (sortingFieldMap != null)
-        {
-            sorting = sortingFieldMap.Path;
-        }
-        if (!sorting.IsNullOrWhiteSpace())
-        {
-            sorts = new SortOptions[1]
-            {
-                new SortOptions
-                {
-                    Field = new FieldSort(new Field(sorting))
-                    {
-                        Order = sortOrder,
-                    },
-                }
-            };
-        }
-
-        return sorts;
-    }
-
-    private static string GetField(IndexMappingInfo indexMappingInfo, string fieldFullPath)
-    {
-        return indexMappingInfo.GetExactFieldPath(fieldFullPath);
     }
 }
