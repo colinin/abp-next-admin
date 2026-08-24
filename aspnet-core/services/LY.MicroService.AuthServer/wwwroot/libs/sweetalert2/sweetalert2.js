@@ -1,5 +1,5 @@
 /*!
-* sweetalert2 v11.26.24
+* sweetalert2 v11.26.25
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -399,13 +399,7 @@
     if (!className) {
       return false;
     }
-    const classList = className.split(/\s+/);
-    for (let i = 0; i < classList.length; i++) {
-      if (!elem.classList.contains(classList[i])) {
-        return false;
-      }
-    }
-    return true;
+    return className.split(/\s+/).every(cls => elem.classList.contains(cls));
   };
 
   /**
@@ -526,15 +520,8 @@
    * @param {string} className
    * @returns {HTMLElement | undefined}
    */
-  const getDirectChildByClass = (elem, className) => {
-    const children = Array.from(elem.children);
-    for (let i = 0; i < children.length; i++) {
-      const child = children[i];
-      if (child instanceof HTMLElement && hasClass(child, className)) {
-        return child;
-      }
-    }
-  };
+  const getDirectChildByClass = (elem, className) => (/** @type {HTMLElement | undefined} */
+  Array.from(elem.children).find(child => child instanceof HTMLElement && hasClass(child, className)));
 
   /**
    * @param {HTMLElement} elem
@@ -1194,10 +1181,11 @@
    * @param {HTMLInputElement} input
    */
   const removeAttributes = input => {
-    for (let i = 0; i < input.attributes.length; i++) {
-      const attrName = input.attributes[i].name;
-      if (!['id', 'type', 'value', 'style'].includes(attrName)) {
-        input.removeAttribute(attrName);
+    for (const {
+      name
+    } of Array.from(input.attributes)) {
+      if (!['id', 'type', 'value', 'style'].includes(name)) {
+        input.removeAttribute(name);
       }
     }
   };
@@ -1568,9 +1556,9 @@
     const popupBackgroundColor = window.getComputedStyle(popup).getPropertyValue('background-color');
     /** @type {NodeListOf<HTMLElement>} */
     const successIconParts = popup.querySelectorAll('[class^=swal2-success-circular-line], .swal2-success-fix');
-    for (let i = 0; i < successIconParts.length; i++) {
-      successIconParts[i].style.backgroundColor = popupBackgroundColor;
-    }
+    successIconParts.forEach(part => {
+      part.style.backgroundColor = popupBackgroundColor;
+    });
   };
 
   /**
@@ -2130,13 +2118,7 @@
   const handleTab = event => {
     const targetElement = event.target;
     const focusableElements = getFocusableElements();
-    let btnIndex = -1;
-    for (let i = 0; i < focusableElements.length; i++) {
-      if (targetElement === focusableElements[i]) {
-        btnIndex = i;
-        break;
-      }
-    }
+    const btnIndex = focusableElements.findIndex(el => el === targetElement);
 
     // don't prevent default for iframes (Firefox fix)
     // https://github.com/sweetalert2/sweetalert2/issues/2931
@@ -2847,9 +2829,7 @@
    * @param {SweetAlertInputValue} inputValue
    * @returns {boolean}
    */
-  const isSelected = (optionValue, inputValue) => {
-    return Boolean(inputValue) && inputValue !== null && inputValue !== undefined && inputValue.toString() === optionValue.toString();
-  };
+  const isSelected = (optionValue, inputValue) => Boolean(inputValue) && inputValue != null && inputValue.toString() === optionValue.toString();
 
   /**
    * @param {SweetAlert} instance
@@ -3032,14 +3012,7 @@
     removeClass([domCache.popup, domCache.actions], swalClasses.loading);
     domCache.popup.removeAttribute('aria-busy');
     domCache.popup.removeAttribute('data-loading');
-    domCache.confirmButton.disabled = false;
-    domCache.denyButton.disabled = false;
-    domCache.cancelButton.disabled = false;
-    const focusedElement = privateProps.focusedElement.get(this);
-    if (focusedElement instanceof HTMLElement && document.activeElement === document.body) {
-      focusedElement.focus();
-    }
-    privateProps.focusedElement.delete(this);
+    this.enableButtons();
   }
 
   /**
@@ -3094,9 +3067,9 @@
     if (input.type === 'radio') {
       /** @type {NodeListOf<HTMLInputElement>} */
       const radios = popup.querySelectorAll(`[name="${swalClasses.radio}"]`);
-      for (let i = 0; i < radios.length; i++) {
-        radios[i].disabled = disabled;
-      }
+      radios.forEach(radio => {
+        radio.disabled = disabled;
+      });
     } else {
       input.disabled = disabled;
     }
@@ -4801,7 +4774,7 @@
     };
   });
   SweetAlert.DismissReason = DismissReason;
-  SweetAlert.version = '11.26.24';
+  SweetAlert.version = '11.26.25';
 
   const Swal = SweetAlert;
   // @ts-ignore
