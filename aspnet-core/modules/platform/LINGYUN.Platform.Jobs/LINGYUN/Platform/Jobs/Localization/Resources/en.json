@@ -1,0 +1,13 @@
+{
+    "culture": "en",
+    "texts": {
+        "SmsMessageRetrySendJob": "Re-sending of SMS message job",
+        "EmailMessageRetrySendJob": "Re-sending of Email message job",
+        "DisplayName:RecentSnedFailedHours": "The latest failure in sending occurred at",
+        "Description:RecentSnedFailedHours": "Recent failure sending time, unit: hours, default: 2 hours.",
+        "DisplayName:PropertyMaxOfFailedAttempts": "Maximum number of failure attempts",
+        "Description:PropertyMaxOfFailedAttempts": "Maximum number of failures, default: 3.",
+        "DisplayName:PropertyPollingBatchCount": "Polling batch count",
+        "Description:PropertyPollingBatchCount": "Polling batch count, default: 100."
+    }
+}
