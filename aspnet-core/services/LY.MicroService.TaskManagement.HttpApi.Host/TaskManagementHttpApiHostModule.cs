@@ -25,6 +25,8 @@ using LINGYUN.Abp.TaskManagement;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Telemetry.OpenTelemetry;
 using LINGYUN.Abp.Telemetry.SkyWalking;
+using LINGYUN.Platform.EntityFrameworkCore;
+using LINGYUN.Platform.Jobs;
 using LY.MicroService.TaskManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -65,6 +67,7 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpBackgroundTasksNotificationsModule),
     typeof(AbpElasticsearchJobsModule),
     typeof(AbpIdentityJobsModule),
+    typeof(PlatformJobsModule),
     typeof(TaskManagementApplicationModule),
     typeof(TaskManagementHttpApiModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
@@ -74,6 +77,7 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(PlatformEntityFrameworkCoreModule),
     typeof(TaskManagementMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpCachingStackExchangeRedisModule),

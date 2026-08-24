@@ -342,6 +342,7 @@
     <Project Path="modules/platform/LINGYUN.Platform.EntityFrameworkCore/LINGYUN.Platform.EntityFrameworkCore.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.HttpApi.Client/LINGYUN.Platform.HttpApi.Client.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.HttpApi/LINGYUN.Platform.HttpApi.csproj" />
+    <Project Path="modules/platform/LINGYUN.Platform.Jobs/LINGYUN.Platform.Jobs.csproj" />
   </Folder>
   <Folder Name="/modules/saas/">
     <Project Path="modules/saas/LINGYUN.Abp.Saas.Application.Contracts/LINGYUN.Abp.Saas.Application.Contracts.csproj" />

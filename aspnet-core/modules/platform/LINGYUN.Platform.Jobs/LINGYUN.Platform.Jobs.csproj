@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\..\configureawait.props" />
+    <Import Project="..\..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <AssemblyName>LINGYUN.Platform.Jobs</AssemblyName>
+        <PackageId>LINGYUN.Platform.Jobs</PackageId>
+        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+        <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="LINGYUN\Platform\Jobs\Localization\Resources\*.json" />
+        <EmbeddedResource Include="LINGYUN\Platform\Jobs\Localization\Resources\*.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\task-management\LINGYUN.Abp.BackgroundTasks.Abstractions\LINGYUN.Abp.BackgroundTasks.Abstractions.csproj" />
+        <ProjectReference Include="..\LINGYUN.Platform.Domain\LINGYUN.Platform.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

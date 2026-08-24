@@ -3,6 +3,7 @@ using LINGYUN.Abp.Identity.AspNetCore;
 using LINGYUN.Abp.Identity.Jobs;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 using LINGYUN.Abp.Notifications.Calendar;
+using LINGYUN.Platform.Jobs;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 
 namespace LY.MicroService.Applications.Single;
@@ -276,6 +277,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpBackgroundTasksQuartzModule),
     // 后台任务模块 身份认证模块作业
     typeof(AbpIdentityJobsModule),
+    // 后台任务模块 平台管理模块作业
+    typeof(PlatformJobsModule),
 
     // 数据审计模块 应用服务
     typeof(AbpDataProtectionManagementApplicationModule),
