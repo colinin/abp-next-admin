@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LINGYUN.Abp.Dynamic.Definitions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -12,127 +12,76 @@ using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Webhooks;
 
-internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonDependency
+public class WebhookDefinitionManager :
+    DynamicDefinitionManager<WebhookGroupDefinition, WebhookDefinition>,
+    IWebhookDefinitionManager,
+    ITransientDependency
 {
-    private readonly AbpWebhooksOptions _webhooksOptions;
-    private readonly IServiceProvider _serviceProvider;
-    private readonly IStaticWebhookDefinitionStore _staticStore;
-    private readonly IDynamicWebhookDefinitionStore _dynamicStore;
+    protected IServiceProvider ServiceProvider { get; }
+    protected IStaticWebhookDefinitionStore StaticStore { get; }
+    protected IDynamicWebhookDefinitionStore DynamicStore { get; }
 
     public WebhookDefinitionManager(
         IServiceProvider serviceProvider,
-        IStaticWebhookDefinitionStore staticStore,
-        IDynamicWebhookDefinitionStore dynamicStore,
-        IOptions<AbpWebhooksOptions> webhooksOptions)
+       IStaticWebhookDefinitionStore staticStore,
+       IDynamicWebhookDefinitionStore dynamicStore,
+       IOptions<AbpDynamicDefinitionsOptions> options)
+       : base(options)
     {
-        _serviceProvider = serviceProvider;
-        _staticStore = staticStore;
-        _dynamicStore = dynamicStore;
-        _webhooksOptions = webhooksOptions.Value;
-    }
-
-    public async virtual Task<WebhookDefinition?> GetOrNullAsync(string name)
-    {
-        Check.NotNull(name, nameof(name));
-
-        var staticDefinition = await _staticStore.GetOrNullAsync(name);
-        var dynamicDefinition = await _dynamicStore.GetOrNullAsync(name);
-
-        if (staticDefinition != null && dynamicDefinition != null)
-        {
-            return _webhooksOptions.DynamicWebhookStrategy switch
-            {
-                DynamicWebhookStrategy.Ignore => staticDefinition,
-                DynamicWebhookStrategy.Covering => dynamicDefinition,
-                DynamicWebhookStrategy.Merge => MergeWebhook(staticDefinition, dynamicDefinition),
-                _ => staticDefinition
-            };
-        }
-
-        return staticDefinition ?? dynamicDefinition;
+        ServiceProvider = serviceProvider;
+        StaticStore = staticStore;
+        DynamicStore = dynamicStore;
     }
 
     public async virtual Task<WebhookDefinition> GetAsync(string name)
     {
-        var webhook = await GetOrNullAsync(name);
-        if (webhook == null)
-        {
-            throw new AbpException("Undefined webhook: " + name);
-        }
-
-        return webhook;
+        return await GetOrNullAsync(name) ?? throw new AbpException("Undefined webhook: " + name);
     }
 
-    public async virtual Task<IReadOnlyList<WebhookDefinition>> GetWebhooksAsync()
+    public async virtual Task<WebhookGroupDefinition> GetGroupAsync(string name)
     {
-        var staticWebhooks = await _staticStore.GetWebhooksAsync();
-        var dynamicWebhooks = await _dynamicStore.GetWebhooksAsync();
-
-        // 根据策略处理Webhook定义
-        return _webhooksOptions.DynamicWebhookStrategy switch
-        {
-            DynamicWebhookStrategy.Ignore => await GetWebhooksWithIgnoreStrategy(staticWebhooks, dynamicWebhooks),
-            DynamicWebhookStrategy.Covering => await GetWebhooksWithCoveringStrategy(staticWebhooks, dynamicWebhooks),
-            DynamicWebhookStrategy.Merge => await GetWebhooksWithMergeStrategy(staticWebhooks, dynamicWebhooks),
-            _ => await GetWebhooksWithIgnoreStrategy(staticWebhooks, dynamicWebhooks)
-        };
+        return await GetGroupOrNullAsync(name) ?? throw new AbpException("Undefined webhook group: " + name);
     }
 
     public async virtual Task<WebhookGroupDefinition?> GetGroupOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
-        var staticDefinition = await _staticStore.GetGroupOrNullAsync(name);
-        var dynamicDefinition = await _dynamicStore.GetGroupOrNullAsync(name);
+        var staticGroupDefinition = await StaticStore.GetGroupOrNullAsync(name);
+        var dynamicGroupDefinition = await DynamicStore.GetGroupOrNullAsync(name);
 
-        if (staticDefinition != null && dynamicDefinition != null)
-        {
-            switch (_webhooksOptions.DynamicWebhookStrategy)
-            {
-                case DynamicWebhookStrategy.Ignore:
-                    return staticDefinition;
-                case DynamicWebhookStrategy.Covering:
-                    return dynamicDefinition;
-                case DynamicWebhookStrategy.Merge:
-                    MergeGroupWebhooks(staticDefinition, dynamicDefinition);
-                    return staticDefinition;
-                default:
-                    return staticDefinition;
-            }
-        }
-
-        return staticDefinition ?? dynamicDefinition;
-    }
-
-    public async virtual Task<WebhookGroupDefinition> GetGroupAsync(string name)
-    {
-        var webhookGroup = await GetGroupOrNullAsync(name);
-        if (webhookGroup == null)
-        {
-            throw new AbpException("Undefined webhook group: " + name);
-        }
-
-        return webhookGroup;
+        return await GetGroupDefinitionAsync(staticGroupDefinition, dynamicGroupDefinition);
     }
 
     public async virtual Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsAsync()
     {
-        var staticGroups = await _staticStore.GetGroupsAsync();
-        var dynamicGroups = await _dynamicStore.GetGroupsAsync();
+        var staticGroupDefinitions = await StaticStore.GetGroupsAsync();
+        var dynamicGroupDefinitions = await DynamicStore.GetGroupsAsync();
 
-        // 根据策略处理分组定义
-        return _webhooksOptions.DynamicWebhookStrategy switch
-        {
-            DynamicWebhookStrategy.Ignore => await GetGroupsWithIgnoreStrategy(staticGroups, dynamicGroups),
-            DynamicWebhookStrategy.Covering => await GetGroupsWithCoveringStrategy(staticGroups, dynamicGroups),
-            DynamicWebhookStrategy.Merge => await GetGroupsWithMergeStrategy(staticGroups, dynamicGroups),
-            _ => await GetGroupsWithIgnoreStrategy(staticGroups, dynamicGroups)
-        };
+        return await GetGroupDefinitionsAsync(staticGroupDefinitions, dynamicGroupDefinitions);
     }
 
-    public async Task<bool> IsAvailableAsync(Guid? tenantId, string name)
+    public async virtual Task<WebhookDefinition?> GetOrNullAsync(string name)
     {
-        if (tenantId == null) // host allowed to subscribe all webhooks
+        Check.NotNull(name, nameof(name));
+
+        var staticDefinition = await StaticStore.GetOrNullAsync(name);
+        var dynamicDefinition = await DynamicStore.GetOrNullAsync(name);
+
+        return await GetDefinitionAsync(staticDefinition, dynamicDefinition);
+    }
+
+    public async virtual Task<IReadOnlyList<WebhookDefinition>> GetWebhooksAsync()
+    {
+        var staticDefinitions = await StaticStore.GetWebhooksAsync();
+        var dynamicDefinitions = await DynamicStore.GetWebhooksAsync();
+
+        return await GetDefinitionsAsync(staticDefinitions, dynamicDefinitions);
+    }
+
+    public async virtual Task<bool> IsAvailableAsync(Guid? tenantId, string name)
+    {
+        if (tenantId == null)
         {
             return true;
         }
@@ -149,8 +98,8 @@ internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonD
             return true;
         }
 
-        var currentTenant = _serviceProvider.GetRequiredService<ICurrentTenant>();
-        var featureChecker = _serviceProvider.GetRequiredService<IFeatureChecker>();
+        var currentTenant = ServiceProvider.GetRequiredService<ICurrentTenant>();
+        var featureChecker = ServiceProvider.GetRequiredService<IFeatureChecker>();
         using (currentTenant.Change(tenantId))
         {
             if (!await featureChecker.IsEnabledAsync(true, webhookDefinition.RequiredFeatures.ToArray()))
@@ -162,111 +111,34 @@ internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonD
         return true;
     }
 
-    #region Webhook定义策略
-
-    /// <summary>
-    /// 忽略策略：静态优先，过滤掉同名的动态Webhook
-    /// </summary>
-    protected virtual Task<IReadOnlyList<WebhookDefinition>> GetWebhooksWithIgnoreStrategy(
-        IReadOnlyList<WebhookDefinition> staticWebhooks,
-        IReadOnlyList<WebhookDefinition> dynamicWebhooks)
+    protected override string GetDefinitionKey(WebhookDefinition definition)
     {
-        var staticWebhookNames = staticWebhooks
-            .Select(p => p.Name)
-            .ToImmutableHashSet();
-
-        return Task.FromResult<IReadOnlyList<WebhookDefinition>>(
-            staticWebhooks
-                .Concat(dynamicWebhooks.Where(d => !staticWebhookNames.Contains(d.Name)))
-                .ToImmutableList()
-        );
+        return definition.Name;
     }
 
-    /// <summary>
-    /// 覆盖策略：动态完全覆盖静态Webhook
-    /// </summary>
-    protected virtual Task<IReadOnlyList<WebhookDefinition>> GetWebhooksWithCoveringStrategy(
-        IReadOnlyList<WebhookDefinition> staticWebhooks,
-        IReadOnlyList<WebhookDefinition> dynamicWebhooks)
+    protected override string GetGroupDefinitionKey(WebhookGroupDefinition groupDefinition)
     {
-        var dynamicWebhookNames = dynamicWebhooks
-            .Select(p => p.Name)
-            .ToImmutableHashSet();
-
-        // 动态Webhook完全覆盖静态Webhook
-        var result = dynamicWebhooks
-            .Concat(staticWebhooks.Where(s => !dynamicWebhookNames.Contains(s.Name)))
-            .ToImmutableList();
-
-        return Task.FromResult<IReadOnlyList<WebhookDefinition>>(result);
+        return groupDefinition.Name;
     }
 
-    /// <summary>
-    /// 合并策略：合并静态和动态Webhook，创建新实例
-    /// </summary>
-    protected virtual Task<IReadOnlyList<WebhookDefinition>> GetWebhooksWithMergeStrategy(
-        IReadOnlyList<WebhookDefinition> staticWebhooks,
-        IReadOnlyList<WebhookDefinition> dynamicWebhooks)
+    protected override Task<WebhookDefinition> MergeDefinitionAsync(WebhookDefinition targetDefinition, WebhookDefinition sourceDefinition)
     {
-        var mergedWebhooks = new Dictionary<string, WebhookDefinition>();
+        var displayName = sourceDefinition.DisplayName ?? targetDefinition.DisplayName;
+        var description = sourceDefinition.Description ?? targetDefinition.Description;
 
-        // 先添加所有静态Webhook
-        foreach (var staticWebhook in staticWebhooks)
-        {
-            mergedWebhooks[staticWebhook.Name] = staticWebhook;
-        }
-
-        // 合并动态Webhook
-        foreach (var dynamicWebhook in dynamicWebhooks)
-        {
-            if (mergedWebhooks.TryGetValue(dynamicWebhook.Name, out var existingWebhook))
-            {
-                // Webhook已存在，创建新的合并Webhook
-                var mergedWebhook = MergeWebhook(existingWebhook, dynamicWebhook);
-                mergedWebhooks[dynamicWebhook.Name] = mergedWebhook;
-            }
-            else
-            {
-                // 添加新的动态Webhook
-                mergedWebhooks[dynamicWebhook.Name] = dynamicWebhook;
-            }
-        }
-
-        return Task.FromResult<IReadOnlyList<WebhookDefinition>>(mergedWebhooks.Values.ToImmutableList());
-    }
-
-    /// <summary>
-    /// 合并两个Webhook定义，返回新的 WebhookDefinition 实例
-    /// </summary>
-    protected virtual WebhookDefinition MergeWebhook(
-        WebhookDefinition staticWebhook,
-        WebhookDefinition dynamicWebhook)
-    {
-        // 决定使用哪个显示名称（优先使用动态的）
-        var displayName = dynamicWebhook.DisplayName ?? staticWebhook.DisplayName;
-
-        // 决定使用哪个描述（优先使用动态的）
-        var description = dynamicWebhook.Description ?? staticWebhook.Description;
-
-        // 创建新的Webhook实例（WebhookDefinition的Name是只读的）
         var mergedWebhook = new WebhookDefinition(
-            staticWebhook.Name, // 保持名称不变
+            targetDefinition.Name,
             displayName,
             description
-        );
-
-        // 设置分组名称（优先使用动态的）
-        if (!string.IsNullOrEmpty(dynamicWebhook.GroupName))
+        )
         {
-            mergedWebhook.GroupName = dynamicWebhook.GroupName;
-        }
-        else if (!string.IsNullOrEmpty(staticWebhook.GroupName))
-        {
-            mergedWebhook.GroupName = staticWebhook.GroupName;
-        }
+            GroupName =
+                !string.IsNullOrWhiteSpace(sourceDefinition.GroupName)
+                ? sourceDefinition.GroupName
+                : targetDefinition.GroupName
+        };
 
-        // 合并必需的功能特性
-        foreach (var feature in staticWebhook.RequiredFeatures)
+        foreach (var feature in targetDefinition.RequiredFeatures)
         {
             if (!mergedWebhook.RequiredFeatures.Contains(feature))
             {
@@ -274,125 +146,42 @@ internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonD
             }
         }
 
-        foreach (var feature in dynamicWebhook.RequiredFeatures)
+        foreach (var feature in sourceDefinition.RequiredFeatures)
         {
             if (!mergedWebhook.RequiredFeatures.Contains(feature))
             {
                 mergedWebhook.RequiredFeatures.Add(feature);
             }
         }
-
-        // 合并属性（动态覆盖静态）
-        foreach (var property in staticWebhook.Properties)
+        
+        foreach (var property in targetDefinition.Properties)
         {
             mergedWebhook.Properties[property.Key] = property.Value;
         }
 
-        foreach (var property in dynamicWebhook.Properties)
+        foreach (var property in sourceDefinition.Properties)
         {
             mergedWebhook.Properties[property.Key] = property.Value;
         }
 
-        return mergedWebhook;
+        return Task.FromResult(mergedWebhook);
     }
 
-    #endregion
-
-    #region 分组定义策略
-
-    /// <summary>
-    /// 忽略策略：静态优先，过滤掉同名的动态分组
-    /// </summary>
-    protected virtual Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsWithIgnoreStrategy(
-        IReadOnlyList<WebhookGroupDefinition> staticGroups,
-        IReadOnlyList<WebhookGroupDefinition> dynamicGroups)
+    protected override Task MergeGroupDefinitionAsync(WebhookGroupDefinition targetGroupDefinition, WebhookGroupDefinition sourceGroupDefinition)
     {
-        var staticGroupNames = staticGroups
-            .Select(p => p.Name)
-            .ToImmutableHashSet();
-
-        return Task.FromResult<IReadOnlyList<WebhookGroupDefinition>>(
-            staticGroups
-                .Concat(dynamicGroups.Where(d => !staticGroupNames.Contains(d.Name)))
-                .ToImmutableList()
-        );
-    }
-
-    /// <summary>
-    /// 覆盖策略：动态完全覆盖静态分组
-    /// </summary>
-    protected virtual Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsWithCoveringStrategy(
-        IReadOnlyList<WebhookGroupDefinition> staticGroups,
-        IReadOnlyList<WebhookGroupDefinition> dynamicGroups)
-    {
-        var dynamicGroupNames = dynamicGroups
-            .Select(p => p.Name)
-            .ToImmutableHashSet();
-
-        var result = dynamicGroups
-            .Concat(staticGroups.Where(s => !dynamicGroupNames.Contains(s.Name)))
-            .ToImmutableList();
-
-        return Task.FromResult<IReadOnlyList<WebhookGroupDefinition>>(result);
-    }
-
-    /// <summary>
-    /// 合并策略：合并静态和动态分组
-    /// </summary>
-    protected virtual Task<IReadOnlyList<WebhookGroupDefinition>> GetGroupsWithMergeStrategy(
-        IReadOnlyList<WebhookGroupDefinition> staticGroups,
-        IReadOnlyList<WebhookGroupDefinition> dynamicGroups)
-    {
-        var mergedGroups = new Dictionary<string, WebhookGroupDefinition>();
-
-        // 先添加所有静态分组
-        foreach (var staticGroup in staticGroups)
+        foreach (var sourceWebhook in sourceGroupDefinition.Webhooks)
         {
-            mergedGroups[staticGroup.Name] = staticGroup;
-        }
-
-        // 合并动态分组
-        foreach (var dynamicGroup in dynamicGroups)
-        {
-            if (mergedGroups.TryGetValue(dynamicGroup.Name, out var existingGroup))
-            {
-                // 分组已存在，合并Webhook
-                MergeGroupWebhooks(existingGroup, dynamicGroup);
-            }
-            else
-            {
-                // 添加新的动态分组
-                mergedGroups[dynamicGroup.Name] = dynamicGroup;
-            }
-        }
-
-        return Task.FromResult<IReadOnlyList<WebhookGroupDefinition>>(
-            mergedGroups.Values.ToImmutableList()
-        );
-    }
-
-    /// <summary>
-    /// 合并分组的Webhook列表
-    /// </summary>
-    private void MergeGroupWebhooks(WebhookGroupDefinition target, WebhookGroupDefinition source)
-    {
-        foreach (var sourceWebhook in source.Webhooks)
-        {
-            var existingWebhook = target.GetWebhookOrNull(sourceWebhook.Name);
+            var existingWebhook = targetGroupDefinition.GetWebhookOrNull(sourceWebhook.Name);
 
             if (existingWebhook == null)
             {
-                // Webhook不存在，直接添加
-                var newWebhook = target.AddWebhook(
+                var newWebhook = targetGroupDefinition.AddWebhook(
                     sourceWebhook.Name,
                     sourceWebhook.DisplayName,
                     sourceWebhook.Description
                 );
+                newWebhook.GroupName = targetGroupDefinition.Name;
 
-                // 设置分组名称
-                newWebhook.GroupName = target.Name;
-
-                // 复制必需的功能特性
                 foreach (var feature in sourceWebhook.RequiredFeatures)
                 {
                     if (!newWebhook.RequiredFeatures.Contains(feature))
@@ -401,7 +190,6 @@ internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonD
                     }
                 }
 
-                // 复制属性
                 foreach (var property in sourceWebhook.Properties)
                 {
                     newWebhook.Properties[property.Key] = property.Value;
@@ -409,13 +197,11 @@ internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonD
             }
             else
             {
-                // Webhook已存在，合并属性
                 foreach (var property in sourceWebhook.Properties)
                 {
                     existingWebhook.Properties[property.Key] = property.Value;
                 }
 
-                // 合并必需的功能特性
                 foreach (var feature in sourceWebhook.RequiredFeatures)
                 {
                     if (!existingWebhook.RequiredFeatures.Contains(feature))
@@ -424,23 +210,19 @@ internal class WebhookDefinitionManager : IWebhookDefinitionManager, ISingletonD
                     }
                 }
 
-                // 更新显示名称（如果源提供了）
                 if (sourceWebhook.DisplayName != null)
                 {
                     existingWebhook.DisplayName = sourceWebhook.DisplayName;
                 }
 
-                // 更新描述（如果源提供了）
                 if (sourceWebhook.Description != null)
                 {
                     existingWebhook.Description = sourceWebhook.Description;
                 }
 
-                // 更新分组名称（确保保持一致）
-                existingWebhook.GroupName = target.Name;
+                existingWebhook.GroupName = targetGroupDefinition.Name;
             }
         }
+        return Task.CompletedTask;
     }
-
-    #endregion
 }
