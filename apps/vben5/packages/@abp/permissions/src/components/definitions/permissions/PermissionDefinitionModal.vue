@@ -16,6 +16,7 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
+  isNullOrWhiteSpace,
   listToTree,
   useLocalization,
   useLocalizationSerializer,
@@ -94,9 +95,15 @@ const [Modal, modalApi] = useVbenModal({
   },
   onConfirm: async () => {
     await form.value?.validate();
+    const input = toValue(formModel);
     const api = isEditModel.value
-      ? updateApi(formModel.value.name, toValue(formModel))
-      : createApi(toValue(formModel));
+      ? updateApi(formModel.value.name, input)
+      : createApi({
+          ...input,
+          name: isNullOrWhiteSpace(input.parentName)
+            ? input.name
+            : `${input.parentName}.${input.name}`,
+        });
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
@@ -121,9 +128,11 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        const { groupName, name } = modalApi.getData<PermissionDefinitionDto>();
+        const { groupName, name, parentName } =
+          modalApi.getData<PermissionDefinitionDto>();
         name && (await onGet(name));
         await Promise.all([onInitGroups(groupName), onInitProviders()]);
+        formModel.value.parentName = parentName;
       } finally {
         modalApi.setState({ loading: false });
       }
@@ -251,6 +260,7 @@ function onPropDelete(prop: PropertyInfo) {
           >
             <Input
               v-model:value="formModel.name"
+              :addon-before="`${formModel.parentName ?? ''}`"
               :disabled="formModel.isStatic"
               autocomplete="off"
             />

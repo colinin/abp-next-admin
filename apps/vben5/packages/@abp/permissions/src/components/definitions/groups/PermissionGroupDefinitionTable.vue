@@ -10,7 +10,6 @@ import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
-import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { sortby, useLocalization, useLocalizationSerializer } from '@abp/core';
@@ -34,8 +33,6 @@ defineOptions({
 });
 
 const MenuItem = Menu.Item;
-
-const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 
 const permissionGroups = ref<PermissionGroupDefinitionDto[]>([]);
 
@@ -87,6 +84,11 @@ const gridOptions: VxeGridProps<PermissionGroupDefinitionDto> = {
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
       width: 220,
+      visible: hasAccessByCodes([
+        PermissionDefinitionsPermissions.Create,
+        GroupDefinitionsPermissions.Delete,
+        GroupDefinitionsPermissions.Update,
+      ]),
     },
   ],
   exportConfig: {},
@@ -221,7 +223,7 @@ onMounted(onGet);
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
-        <div :class="`${row.isStatic ? 'w-full' : 'basis-1/3'}`">
+        <div class="basis-1/3">
           <Button
             :icon="h(EditOutlined)"
             block
@@ -232,42 +234,39 @@ onMounted(onGet);
             {{ $t('AbpUi.Edit') }}
           </Button>
         </div>
-        <template v-if="!row.isStatic">
-          <div class="basis-1/3">
-            <Button
-              :icon="h(DeleteOutlined)"
-              block
-              danger
-              type="link"
-              v-access:code="[GroupDefinitionsPermissions.Delete]"
-              @click="onDelete(row)"
-            >
-              {{ $t('AbpUi.Delete') }}
-            </Button>
-          </div>
-          <div class="basis-1/3">
-            <Dropdown>
-              <template #overlay>
-                <Menu @click="(info) => onMenuClick(row, info)">
-                  <MenuItem
-                    v-if="
-                      hasAccessByCodes([
-                        PermissionDefinitionsPermissions.Create,
-                      ])
-                    "
-                    key="permissions"
-                    :icon="h(PermissionsOutlined)"
-                  >
-                    {{
-                      $t('AbpPermissionManagement.PermissionDefinitions:AddNew')
-                    }}
-                  </MenuItem>
-                </Menu>
-              </template>
-              <Button :icon="h(EllipsisOutlined)" type="link" />
-            </Dropdown>
-          </div>
-        </template>
+        <div class="basis-1/3">
+          <Button
+            :icon="h(DeleteOutlined)"
+            block
+            danger
+            type="link"
+            v-if="hasAccessByCodes([GroupDefinitionsPermissions.Delete])"
+            :disabled="row.isStatic"
+            @click="onDelete(row)"
+          >
+            {{ $t('AbpUi.Delete') }}
+          </Button>
+        </div>
+        <div class="basis-1/3">
+          <Dropdown>
+            <template #overlay>
+              <Menu @click="(info) => onMenuClick(row, info)">
+                <MenuItem
+                  v-if="
+                    hasAccessByCodes([PermissionDefinitionsPermissions.Create])
+                  "
+                  key="permissions"
+                  :icon="h(PlusOutlined)"
+                >
+                  {{
+                    $t('AbpPermissionManagement.PermissionDefinitions:AddNew')
+                  }}
+                </MenuItem>
+              </Menu>
+            </template>
+            <Button :icon="h(EllipsisOutlined)" type="link" />
+          </Dropdown>
+        </div>
       </div>
     </template>
   </Grid>

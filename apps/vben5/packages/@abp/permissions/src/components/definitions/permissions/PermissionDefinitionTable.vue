@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { VbenFormProps } from '@vben/common-ui';
 
 import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
@@ -14,23 +16,26 @@ import {
   useLocalization,
   useLocalizationSerializer,
 } from '@abp/core';
-import { useVbenVxeGrid } from '@abp/ui';
+import { useMessage, useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
+  EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal, Tag } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
 
 import { usePermissionDefinitionsApi } from '../../../api/usePermissionDefinitionsApi';
 import { usePermissionGroupDefinitionsApi } from '../../../api/usePermissionGroupDefinitionsApi';
-import { GroupDefinitionsPermissions } from '../../../constants/permissions';
+import { PermissionDefinitionsPermissions } from '../../../constants/permissions';
 import { useTypesMap } from './types';
 
 defineOptions({
   name: 'PermissionDefinitionTable',
 });
+
+const MenuItem = Menu.Item;
 
 interface PermissionVo {
   children: PermissionVo[];
@@ -51,6 +56,8 @@ interface PermissionGroupVo {
 
 const permissionGroups = ref<PermissionGroupVo[]>([]);
 
+const message = useMessage();
+const { hasAccessByCodes } = useAccess();
 const { Lr } = useLocalization();
 const { deserialize } = useLocalizationSerializer();
 const { multiTenancySidesMap, providersMap } = useTypesMap();
@@ -193,7 +200,12 @@ const subGridColumns: VxeGridProps<PermissionVo>['columns'] = [
     fixed: 'right',
     slots: { default: 'action' },
     title: $t('AbpUi.Actions'),
-    width: 180,
+    width: 260,
+    visible: hasAccessByCodes([
+      PermissionDefinitionsPermissions.Create,
+      PermissionDefinitionsPermissions.Delete,
+      PermissionDefinitionsPermissions.Update,
+    ]),
   },
 ];
 
@@ -278,6 +290,19 @@ function onDelete(row: PermissionGroupVo) {
   });
 }
 
+function onMenuClick(row: PermissionVo, info: MenuInfo) {
+  switch (info.key) {
+    case 'permissions': {
+      modalApi.setData({
+        groupName: row.groupName,
+        parentName: row.name,
+      });
+      modalApi.open();
+      break;
+    }
+  }
+}
+
 onMounted(onGet);
 </script>
 
@@ -287,7 +312,7 @@ onMounted(onGet);
       <Button
         :icon="h(PlusOutlined)"
         type="primary"
-        v-access:code="[GroupDefinitionsPermissions.Create]"
+        v-access:code="[PermissionDefinitionsPermissions.Create]"
         @click="onCreate"
       >
         {{ $t('AbpPermissionManagement.PermissionDefinitions:AddNew') }}
@@ -321,22 +346,44 @@ onMounted(onGet);
               :icon="h(EditOutlined)"
               block
               type="link"
-              v-access:code="[GroupDefinitionsPermissions.Update]"
+              v-access:code="[PermissionDefinitionsPermissions.Update]"
               @click="onUpdate(permission)"
             >
               {{ $t('AbpUi.Edit') }}
             </Button>
             <Button
-              v-if="!permission.isStatic"
               :icon="h(DeleteOutlined)"
               block
               danger
               type="link"
-              v-access:code="[GroupDefinitionsPermissions.Delete]"
+              v-access:code="[PermissionDefinitionsPermissions.Delete]"
+              :disabled="permission.isStatic"
               @click="onDelete(permission)"
             >
               {{ $t('AbpUi.Delete') }}
             </Button>
+            <Dropdown>
+              <template #overlay>
+                <Menu
+                  @click="(info: MenuInfo) => onMenuClick(permission, info)"
+                >
+                  <MenuItem
+                    v-if="
+                      hasAccessByCodes([
+                        PermissionDefinitionsPermissions.Create,
+                      ])
+                    "
+                    key="permissions"
+                    :icon="h(PlusOutlined)"
+                  >
+                    {{
+                      $t('AbpPermissionManagement.PermissionDefinitions:AddNew')
+                    }}
+                  </MenuItem>
+                </Menu>
+              </template>
+              <Button :icon="h(EllipsisOutlined)" type="link" />
+            </Dropdown>
           </div>
         </template>
       </VxeGrid>
