@@ -8,7 +8,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Localization;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Security.Encryption;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Settings;
@@ -18,19 +18,19 @@ namespace LINGYUN.Abp.SettingManagement;
 [Authorize(SettingManagementPermissions.Definition.Default)]
 public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISettingDefinitionAppService
 {
+    private readonly ILocalEventBus _eventBus;
     private readonly IStringEncryptionService _stringEncryptionService;
     private readonly ISettingValueProviderManager _settingValueProviderManager;
-    private readonly ILocalizableStringSerializer _localizableStringSerializer;
     private readonly IRepository<SettingDefinitionRecord, Guid> _settingRepository;
 
     public SettingDefinitionAppService(
+        ILocalEventBus eventBus,
         IStringEncryptionService stringEncryptionService, 
-        ILocalizableStringSerializer localizableStringSerializer,
         IRepository<SettingDefinitionRecord, Guid> settingRepository,
         ISettingValueProviderManager settingValueProviderManager)
     {
+        _eventBus = eventBus;
         _stringEncryptionService = stringEncryptionService;
-        _localizableStringSerializer = localizableStringSerializer;
         _settingRepository = settingRepository;
         _settingValueProviderManager = settingValueProviderManager;
     }
@@ -70,6 +70,8 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
 
         await CurrentUnitOfWork!.SaveChangesAsync();
 
+        await _eventBus.PublishAsync(new StaticSettingDefinitionChangedEvent());
+
         return DefinitionRecordToDto(settingDefinitionRecord);
     }
 
@@ -83,6 +85,8 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
         CheckIsStaticDefinitionRecord(definitionRecord);
 
         await _settingRepository.DeleteAsync(definitionRecord);
+
+        await _eventBus.PublishAsync(new StaticSettingDefinitionChangedEvent());
 
         await CurrentUnitOfWork!.SaveChangesAsync();
     }
@@ -148,6 +152,8 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
         definitionRecord = await _settingRepository.UpdateAsync(definitionRecord);
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await _eventBus.PublishAsync(new StaticSettingDefinitionChangedEvent());
 
         return DefinitionRecordToDto(definitionRecord);
     }
