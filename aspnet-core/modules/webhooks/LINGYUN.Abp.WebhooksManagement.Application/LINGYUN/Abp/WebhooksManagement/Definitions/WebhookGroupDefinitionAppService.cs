@@ -100,10 +100,19 @@ public class WebhookGroupDefinitionAppService : WebhooksManagementAppServiceBase
 
         CheckIsStaticDefinitionRecord(definitionRecord);
 
-        definitionRecord.ExtraProperties.Clear();
-        foreach (var property in input.ExtraProperties)
+
+        if (!definitionRecord.HasSameExtraProperties(input))
         {
-            definitionRecord.SetProperty(property.Key, property.Value);
+            var isStatic = definitionRecord.GetProperty(nameof(WebhookGroupDefinitionDto.IsStatic), true);
+
+            definitionRecord.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                definitionRecord.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            definitionRecord.SetProperty(nameof(WebhookGroupDefinitionDto.IsStatic), isStatic);
         }
 
         if (!string.Equals(definitionRecord.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))

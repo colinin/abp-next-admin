@@ -172,10 +172,18 @@ public class NotificationDefinitionAppService : AbpNotificationsApplicationServi
         {
             record.Providers = allowedProviders;
         }
-        record.ExtraProperties.Clear();
-        foreach (var property in input.ExtraProperties)
+        if (!record.HasSameExtraProperties(input))
         {
-            record.SetProperty(property.Key, property.Value);
+            var isStatic = record.GetProperty(nameof(NotificationDefinitionDto.IsStatic), true);
+
+            record.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                record.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            record.SetProperty(nameof(NotificationDefinitionDto.IsStatic), isStatic);
         }
     }
 

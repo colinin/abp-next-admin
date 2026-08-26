@@ -196,11 +196,18 @@ public class SettingDefinitionAppService : SettingManagementAppServiceBase, ISet
         record.IsEncrypted = input.IsEncrypted;
         record.IsVisibleToClients = input.IsVisibleToClients;
         record.Providers = input.Providers?.JoinAsString(",");
-        record.ExtraProperties.Clear();
-
-        foreach (var property in input.ExtraProperties)
+        if (!record.HasSameExtraProperties(input))
         {
-            record.ExtraProperties.Add(property.Key, property.Value);
+            var isStatic = record.GetProperty(nameof(SettingDefinitionDto.IsStatic), true);
+
+            record.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                record.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            record.SetProperty(nameof(SettingDefinitionDto.IsStatic), isStatic);
         }
     }
 

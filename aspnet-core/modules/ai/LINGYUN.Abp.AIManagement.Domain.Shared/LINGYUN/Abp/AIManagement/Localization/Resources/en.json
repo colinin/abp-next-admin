@@ -62,6 +62,7 @@
     "Tools:Edit": "Edit Tool",
     "DesignConversationNamePrompt": "Based on the user's question, generate a concise and descriptive conversation title, with the length limited to  {0} characters or less.",
     "Settings:AIManagement": "Artificia Intelligence",
-    "Settings:AIManagement.ChatMessage": "Chats"
+    "Settings:AIManagement.ChatMessage": "Chats",
+    "ResetApiKey": "Reset Api Key"
   }
 }

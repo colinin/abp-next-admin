@@ -197,11 +197,18 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
         {
             record.Providers = providers;
         }
-        
-        record.ExtraProperties.Clear();
-        foreach (var property in input.ExtraProperties)
+        if (!record.HasSameExtraProperties(input))
         {
-            record.SetProperty(property.Key, property.Value);
+            var isStatic = record.GetProperty(nameof(PermissionDefinitionDto.IsStatic), true);
+
+            record.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                record.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            record.SetProperty(nameof(PermissionDefinitionDto.IsStatic), isStatic);
         }
 
         try

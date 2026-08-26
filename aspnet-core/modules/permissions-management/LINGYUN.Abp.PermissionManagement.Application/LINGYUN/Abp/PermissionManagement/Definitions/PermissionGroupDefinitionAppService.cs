@@ -144,10 +144,18 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
 
     protected virtual void UpdateByInput(PermissionGroupDefinitionRecord record, PermissionGroupDefinitionCreateOrUpdateDto input)
     {
-        record.ExtraProperties.Clear();
-        foreach (var property in input.ExtraProperties)
+        if (!record.HasSameExtraProperties(input))
         {
-            record.SetProperty(property.Key, property.Value);
+            var isStatic = record.GetProperty(nameof(PermissionGroupDefinitionDto.IsStatic), true);
+
+            record.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                record.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            record.SetProperty(nameof(PermissionGroupDefinitionDto.IsStatic), isStatic);
         }
         if (!string.Equals(record.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
         {

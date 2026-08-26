@@ -2,6 +2,7 @@
 using LINGYUN.Abp.AIManagement.Localization;
 using LINGYUN.Abp.AIManagement.Permissions;
 using LINGYUN.Abp.AIManagement.Tools.Dtos;
+using LINGYUN.Abp.AIManagement.Workspaces.Dtos;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
@@ -12,7 +13,6 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Data;
-using Volo.Abp.Domain.Entities;
 
 namespace LINGYUN.Abp.AIManagement.Tools;
 public class AIToolDefinitionAppService :
@@ -133,6 +133,7 @@ public class AIToolDefinitionAppService :
                 entity.ExtraProperties.Add(property.Key, property.Value);
             }
         }
+        entity.SetProperty(nameof(AIToolDefinitionRecordDto.IsStatic), false);
 
         return entity;
     }
@@ -156,12 +157,16 @@ public class AIToolDefinitionAppService :
 
         if (!entity.HasSameExtraProperties(updateInput))
         {
+            var isStatic = entity.GetProperty(nameof(AIToolDefinitionRecordDto.IsStatic), true);
+
             entity.ExtraProperties.Clear();
 
             foreach (var property in updateInput.ExtraProperties)
             {
                 entity.ExtraProperties.Add(property.Key, property.Value);
             }
+
+            entity.SetProperty(nameof(AIToolDefinitionRecordDto.IsStatic), isStatic);
         }
 
         entity.SetConcurrencyStampIfNotNull(updateInput.ConcurrencyStamp);

@@ -193,10 +193,19 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         {
             record.AllowedProviders = allowedProviders;
         }
-        record.ExtraProperties.Clear();
-        foreach (var property in input.ExtraProperties)
+
+        if (!record.HasSameExtraProperties(input))
         {
-            record.SetProperty(property.Key, property.Value);
+            var isStatic = record.GetProperty(nameof(FeatureDefinitionDto.IsStatic), true);
+
+            record.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                record.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            record.SetProperty(nameof(FeatureDefinitionDto.IsStatic), isStatic);
         }
         try
         {
