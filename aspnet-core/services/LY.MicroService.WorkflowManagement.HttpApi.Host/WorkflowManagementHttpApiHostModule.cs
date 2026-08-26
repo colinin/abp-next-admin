@@ -7,6 +7,7 @@ using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Elsa;
 using LINGYUN.Abp.Elsa.Activities;
 using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
@@ -87,6 +88,7 @@ namespace LY.MicroService.WorkflowManagement;
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpAspNetCoreMvcNewtonsoftModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpAutofacModule)
     )]

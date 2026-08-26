@@ -88,6 +88,7 @@
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.IP2Region\LINGYUN.Abp.IP2Region.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj" />
+		<ProjectReference Include="..\..\framework\dynamic-definition\LINGYUN.Abp.Dynamic.Definitions\LINGYUN.Abp.Dynamic.Definitions.csproj" />
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj" />
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj" />

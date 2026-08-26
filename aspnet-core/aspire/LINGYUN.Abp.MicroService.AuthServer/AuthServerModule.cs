@@ -7,6 +7,7 @@ using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Exporter.MiniSoftware;
@@ -74,6 +75,7 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpExporterMiniSoftwareModule),
     typeof(AbpEmailingPlatformModule),

@@ -146,6 +146,10 @@
     <Project Path="framework/data-protection/LINGYUN.Abp.DataProtection.EntityFrameworkCore/LINGYUN.Abp.DataProtection.EntityFrameworkCore.csproj" />
     <Project Path="framework/data-protection/LINGYUN.Abp.DataProtection/LINGYUN.Abp.DataProtection.csproj" />
   </Folder>
+  <Folder Name="/framework/dynamic-definition/">
+    <Project Path="framework/dynamic-definition/LINGYUN.Abp.Dynamic.Definitions/LINGYUN.Abp.Dynamic.Definitions.csproj" Id="6b19229f-012f-436a-b2b4-16ef943eb3fa" />
+    <Project Path="framework/dynamic-definition/LINGYUN.Abp.Dynamic.Definitions.Core/LINGYUN.Abp.Dynamic.Definitions.Core.csproj" Id="4cc5fdb2-2b0b-4937-a5b5-1c2afbc0c071" />
+  </Folder>
   <Folder Name="/framework/dynamic-queryable/">
     <Project Path="framework/dynamic-queryable/LINGYUN.Abp.Dynamic.Queryable.Application.Contracts/LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj" />
     <Project Path="framework/dynamic-queryable/LINGYUN.Abp.Dynamic.Queryable.Application/LINGYUN.Abp.Dynamic.Queryable.Application.csproj" />
