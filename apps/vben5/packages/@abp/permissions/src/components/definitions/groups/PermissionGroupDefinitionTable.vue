@@ -223,50 +223,42 @@ onMounted(onGet);
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
-        <div class="basis-1/3">
-          <Button
-            :icon="h(EditOutlined)"
-            block
-            type="link"
-            v-access:code="[GroupDefinitionsPermissions.Update]"
-            @click="onUpdate(row)"
-          >
-            {{ $t('AbpUi.Edit') }}
-          </Button>
-        </div>
-        <div class="basis-1/3">
-          <Button
-            :icon="h(DeleteOutlined)"
-            block
-            danger
-            type="link"
-            v-if="hasAccessByCodes([GroupDefinitionsPermissions.Delete])"
-            :disabled="row.isStatic"
-            @click="onDelete(row)"
-          >
-            {{ $t('AbpUi.Delete') }}
-          </Button>
-        </div>
-        <div class="basis-1/3">
-          <Dropdown>
-            <template #overlay>
-              <Menu @click="(info) => onMenuClick(row, info)">
-                <MenuItem
-                  v-if="
-                    hasAccessByCodes([PermissionDefinitionsPermissions.Create])
-                  "
-                  key="permissions"
-                  :icon="h(PlusOutlined)"
-                >
-                  {{
-                    $t('AbpPermissionManagement.PermissionDefinitions:AddNew')
-                  }}
-                </MenuItem>
-              </Menu>
-            </template>
-            <Button :icon="h(EllipsisOutlined)" type="link" />
-          </Dropdown>
-        </div>
+        <Button
+          :icon="h(EditOutlined)"
+          block
+          type="link"
+          v-access:code="[GroupDefinitionsPermissions.Update]"
+          @click="onUpdate(row)"
+        >
+          {{ $t('AbpUi.Edit') }}
+        </Button>
+        <Button
+          :icon="h(DeleteOutlined)"
+          block
+          danger
+          type="link"
+          v-access:code="[GroupDefinitionsPermissions.Delete]"
+          :disabled="row.isStatic"
+          @click="onDelete(row)"
+        >
+          {{ $t('AbpUi.Delete') }}
+        </Button>
+        <Dropdown>
+          <template #overlay>
+            <Menu @click="(info) => onMenuClick(row, info)">
+              <MenuItem
+                v-if="
+                  hasAccessByCodes([PermissionDefinitionsPermissions.Create])
+                "
+                key="permissions"
+                :icon="h(PlusOutlined)"
+              >
+                {{ $t('AbpPermissionManagement.PermissionDefinitions:AddNew') }}
+              </MenuItem>
+            </Menu>
+          </template>
+          <Button :icon="h(EllipsisOutlined)" type="link" />
+        </Dropdown>
       </div>
     </template>
   </Grid>
