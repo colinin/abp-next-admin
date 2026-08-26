@@ -10,20 +10,25 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.FeatureManagement.Definitions;
 
 [Authorize(FeatureManagementPermissionNames.GroupDefinition.Default)]
 public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase, IFeatureGroupDefinitionAppService
 {
+    private readonly ILocalEventBus _eventBus;
     private readonly IFeatureGroupDefinitionRecordRepository _groupDefinitionRepository;
     private readonly IRepository<FeatureGroupDefinitionRecord, Guid> _groupDefinitionBasicRepository;
 
     public FeatureGroupDefinitionAppService(
+        ILocalEventBus eventBus,
         IFeatureGroupDefinitionRecordRepository groupDefinitionRepository, 
         IRepository<FeatureGroupDefinitionRecord, Guid> groupDefinitionBasicRepository)
     {
+        _eventBus = eventBus;
         _groupDefinitionRepository = groupDefinitionRepository;
         _groupDefinitionBasicRepository = groupDefinitionBasicRepository;
     }
@@ -51,6 +56,8 @@ public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase,
 
         await CurrentUnitOfWork!.SaveChangesAsync();
 
+        await _eventBus.PublishAsync(new StaticFeatureDefinitionChangedEvent());
+
         return GroupDefinitionRecordToDto(groupDefinitionRecord);
     }
 
@@ -66,6 +73,8 @@ public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase,
         await _groupDefinitionRepository.DeleteAsync(groupDefinitionRecord);
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await _eventBus.PublishAsync(new StaticFeatureDefinitionChangedEvent());
     }
 
     public async virtual Task<FeatureGroupDefinitionDto> GetAsync(string name)
@@ -105,6 +114,8 @@ public class FeatureGroupDefinitionAppService : FeatureManagementAppServiceBase,
         groupDefinitionRecord = await _groupDefinitionBasicRepository.UpdateAsync(groupDefinitionRecord);
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await _eventBus.PublishAsync(new StaticFeatureDefinitionChangedEvent());
 
         return GroupDefinitionRecordToDto(groupDefinitionRecord);
     }
