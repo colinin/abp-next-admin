@@ -17,8 +17,9 @@ public class DeepSeekChatClientProvider : OpenAIChatClientProvider
     public override ChatModel[] GetModels()
     {
         return [
-            new ChatModel("deepseek-chat", "DeepSeek-V3", "DeepSeek-Chat是全能高效的“快枪手”，擅长日常对话与通用任务"),
-            new ChatModel("deepseek-reasoner", "DeepSeek-R1", "DeepSeek-Reasoner是深思熟虑的“解题家”，专攻复杂推理与逻辑难题"),
+            new ChatModel("deepseek-v4-flash", "deepseek-v4-flash"),
+            new ChatModel("deepseek-v4-pro", "deepseek-v4-pro"),
+            new ChatModel("deepseek-v4-flash-vision-exp", "deepseek-v4-flash-vision-exp"),
         ];
     }
 }

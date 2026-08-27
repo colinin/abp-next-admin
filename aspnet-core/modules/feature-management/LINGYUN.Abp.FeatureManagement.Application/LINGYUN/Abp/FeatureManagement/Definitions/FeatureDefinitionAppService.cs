@@ -11,6 +11,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Features;
 using Volo.Abp.Validation;
@@ -20,6 +21,7 @@ namespace LINGYUN.Abp.FeatureManagement.Definitions;
 [Authorize(FeatureManagementPermissionNames.Definition.Default)]
 public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFeatureDefinitionAppService
 {
+    private readonly ILocalEventBus _eventBus;
     private readonly StringValueTypeSerializer _stringValueTypeSerializer;
     private readonly IFeatureValueProviderManager _featureValueProviderManager;
     private readonly IFeatureDefinitionRecordRepository _definitionRepository;
@@ -27,12 +29,14 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
     private readonly IRepository<FeatureGroupDefinitionRecord, Guid> _groupDefinitionBasicRepository;
 
     public FeatureDefinitionAppService(
+        ILocalEventBus eventBus,
         StringValueTypeSerializer stringValueTypeSerializer,
         IFeatureValueProviderManager featureValueProviderManager,
         IFeatureDefinitionRecordRepository definitionRepository, 
         IRepository<FeatureDefinitionRecord, Guid> definitionBasicRepository,
         IRepository<FeatureGroupDefinitionRecord, Guid> groupDefinitionBasicRepository)
     {
+        _eventBus = eventBus;
         _stringValueTypeSerializer = stringValueTypeSerializer;
         _featureValueProviderManager = featureValueProviderManager;
         _definitionRepository = definitionRepository;
@@ -89,6 +93,8 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
 
         await CurrentUnitOfWork!.SaveChangesAsync();
 
+        await _eventBus.PublishAsync(new StaticFeatureDefinitionChangedEvent());
+
         return DefinitionRecordToDto(definitionRecord);
     }
 
@@ -104,6 +110,8 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         await _definitionRepository.DeleteAsync(definitionRecord);
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await _eventBus.PublishAsync(new StaticFeatureDefinitionChangedEvent());
     }
 
     public async virtual Task<FeatureDefinitionDto> GetAsync(string name)
@@ -141,6 +149,8 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         definitionRecord = await _definitionBasicRepository.UpdateAsync(definitionRecord);
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await _eventBus.PublishAsync(new StaticFeatureDefinitionChangedEvent());
 
         return DefinitionRecordToDto(definitionRecord);
     }
@@ -183,10 +193,19 @@ public class FeatureDefinitionAppService : FeatureManagementAppServiceBase, IFea
         {
             record.AllowedProviders = allowedProviders;
         }
-        record.ExtraProperties.Clear();
-        foreach (var property in input.ExtraProperties)
+
+        if (!record.HasSameExtraProperties(input))
         {
-            record.SetProperty(property.Key, property.Value);
+            var isStatic = record.GetProperty(nameof(FeatureDefinitionDto.IsStatic), true);
+
+            record.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                record.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            record.SetProperty(nameof(FeatureDefinitionDto.IsStatic), isStatic);
         }
         try
         {

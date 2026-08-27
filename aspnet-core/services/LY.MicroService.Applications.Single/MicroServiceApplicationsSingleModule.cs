@@ -1,4 +1,5 @@
 using LINGYUN.Abp.BlobManagement.MimeCheck;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Identity.AspNetCore;
 using LINGYUN.Abp.Identity.Jobs;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
@@ -408,6 +409,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpMailKitModule),
     typeof(AbpAutofacModule),

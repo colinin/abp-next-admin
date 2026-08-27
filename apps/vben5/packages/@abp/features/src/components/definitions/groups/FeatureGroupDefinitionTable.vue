@@ -10,7 +10,6 @@ import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
-import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { sortby, useLocalization, useLocalizationSerializer } from '@abp/core';
@@ -34,8 +33,6 @@ defineOptions({
 });
 
 const MenuItem = Menu.Item;
-
-const FeaturesOutlined = createIconifyIcon('pajamas:feature-flag');
 
 const featureGroups = ref<FeatureGroupDefinitionDto[]>([]);
 
@@ -87,6 +84,11 @@ const gridOptions: VxeGridProps<FeatureGroupDefinitionDto> = {
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
       width: 220,
+      visible: hasAccessByCodes([
+        FeatureDefinitionsPermissions.Create,
+        GroupDefinitionsPermissions.Delete,
+        GroupDefinitionsPermissions.Update,
+      ]),
     },
   ],
   exportConfig: {},
@@ -231,25 +233,25 @@ onMounted(onGet);
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
-          v-if="!row.isStatic"
           :icon="h(DeleteOutlined)"
           block
           danger
           type="link"
           v-access:code="[GroupDefinitionsPermissions.Delete]"
+          :disabled="row.isStatic"
           @click="onDelete(row)"
         >
           {{ $t('AbpUi.Delete') }}
         </Button>
-        <Dropdown v-if="!row.isStatic">
+        <Dropdown>
           <template #overlay>
             <Menu @click="(info) => onMenuClick(row, info)">
               <MenuItem
                 v-if="hasAccessByCodes([FeatureDefinitionsPermissions.Create])"
                 key="features"
-                :icon="h(FeaturesOutlined)"
+                :icon="h(PlusOutlined)"
               >
-                {{ $t('AbpFeatureManagement.GroupDefinitions:AddNew') }}
+                {{ $t('AbpFeatureManagement.FeatureDefinitions:AddNew') }}
               </MenuItem>
             </Menu>
           </template>

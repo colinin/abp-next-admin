@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 
 namespace LINGYUN.Abp.WebhooksManagement.Definitions;
 
@@ -134,9 +135,18 @@ public class WebhookDefinitionAppService : WebhooksManagementAppServiceBase, IWe
     {
         record.IsEnabled = input.IsEnabled;
         record.ExtraProperties.Clear();
-        foreach (var property in input.ExtraProperties)
+        if (!record.HasSameExtraProperties(input))
         {
-            record.SetProperty(property.Key, property.Value);
+            var isStatic = record.GetProperty(nameof(WebhookDefinitionDto.IsStatic), true);
+
+            record.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                record.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            record.SetProperty(nameof(WebhookDefinitionDto.IsStatic), isStatic);
         }
 
         if (!string.Equals(record.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))

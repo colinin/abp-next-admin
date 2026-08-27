@@ -10,15 +10,12 @@ public class AbpNotificationsOptions
     /// </summary>
     public ITypeList<INotificationDefinitionProvider> DefinitionProviders { get; }
 
-    public DynamicNotificationStrategy DynamicNotificationStrategy { get; set; }
-
     public HashSet<string> DeletedNotifications { get; }
 
     public HashSet<string> DeletedNotificationGroups { get; }
 
     public AbpNotificationsOptions()
     {
-        DynamicNotificationStrategy = DynamicNotificationStrategy.Merge;
         DefinitionProviders = new TypeList<INotificationDefinitionProvider>();
 
         DeletedNotifications = new HashSet<string>();

@@ -12,6 +12,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SimpleStateChecking;
 using Volo.Abp.Validation;
@@ -21,6 +22,7 @@ namespace LINGYUN.Abp.PermissionManagement.Definitions;
 [Authorize(PermissionManagementPermissionNames.Definition.Default)]
 public class PermissionDefinitionAppService : PermissionManagementAppServiceBase, IPermissionDefinitionAppService
 {
+    private readonly ILocalEventBus _eventBus;
     private readonly ISimpleStateCheckerSerializer _simpleStateCheckerSerializer;
     private readonly IStaticPermissionDefinitionStore _staticPermissionDefinitionStore;
     private readonly IPermissionValueProviderManager _permissionValueProviderManager;
@@ -29,6 +31,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
     private readonly IRepository<PermissionGroupDefinitionRecord, Guid> _groupDefinitionBasicRepository;
 
     public PermissionDefinitionAppService(
+        ILocalEventBus eventBus,
         IStaticPermissionDefinitionStore staticPermissionDefinitionStore,
         IPermissionValueProviderManager permissionValueProviderManager,
         ISimpleStateCheckerSerializer simpleStateCheckerSerializer,
@@ -36,6 +39,7 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
         IRepository<PermissionDefinitionRecord, Guid> definitionBasicRepository,
         IRepository<PermissionGroupDefinitionRecord, Guid> groupDefinitionBasicRepository)
     {
+        _eventBus = eventBus;
         _staticPermissionDefinitionStore = staticPermissionDefinitionStore;
         _permissionValueProviderManager = permissionValueProviderManager;
         _simpleStateCheckerSerializer = simpleStateCheckerSerializer;
@@ -91,6 +95,8 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
 
         await CurrentUnitOfWork!.SaveChangesAsync();
 
+        await _eventBus.PublishAsync(new StaticPermissionDefinitionChangedEvent());
+
         return DefinitionRecordToDto(definitionRecord);
     }
 
@@ -106,6 +112,8 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
         await _definitionRepository.DeleteAsync(definitionRecord);
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await _eventBus.PublishAsync(new StaticPermissionDefinitionChangedEvent());
     }
 
     public async virtual Task<PermissionDefinitionDto> GetAsync(string name)
@@ -145,6 +153,8 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
         definitionRecord = await _definitionBasicRepository.UpdateAsync(definitionRecord);
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await _eventBus.PublishAsync(new StaticPermissionDefinitionChangedEvent());
 
         return DefinitionRecordToDto(definitionRecord);
     }
@@ -187,11 +197,18 @@ public class PermissionDefinitionAppService : PermissionManagementAppServiceBase
         {
             record.Providers = providers;
         }
-        
-        record.ExtraProperties.Clear();
-        foreach (var property in input.ExtraProperties)
+        if (!record.HasSameExtraProperties(input))
         {
-            record.SetProperty(property.Key, property.Value);
+            var isStatic = record.GetProperty(nameof(PermissionDefinitionDto.IsStatic), true);
+
+            record.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                record.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            record.SetProperty(nameof(PermissionDefinitionDto.IsStatic), isStatic);
         }
 
         try

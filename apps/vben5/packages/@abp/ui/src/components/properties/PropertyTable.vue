@@ -57,7 +57,7 @@ const getTableColumns = computed((): TableColumnsType<PropertyInfo> => {
     {
       align: 'left',
       dataIndex: 'value',
-      width: 500,
+      width: 'auto',
       ellipsis: true,
       title: $t('component.extra_property_dictionary.value'),
     },

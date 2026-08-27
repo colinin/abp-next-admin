@@ -120,11 +120,6 @@ public class NotificationGroupDefinitionAppService : AbpNotificationsApplication
     protected virtual void UpdateByInput(NotificationDefinitionGroupRecord record, NotificationGroupDefinitionCreateOrUpdateDto input)
     {
         record.AllowSubscriptionToClients = input.AllowSubscriptionToClients;
-        record.ExtraProperties.Clear();
-        foreach (var property in input.ExtraProperties)
-        {
-            record.SetProperty(property.Key, property.Value);
-        }
 
         if (!string.Equals(record.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
         {
@@ -133,6 +128,19 @@ public class NotificationGroupDefinitionAppService : AbpNotificationsApplication
         if (!string.Equals(record.Description, input.Description, StringComparison.InvariantCultureIgnoreCase))
         {
             record.Description = input.Description;
+        }
+        if (!record.HasSameExtraProperties(input))
+        {
+            var isStatic = record.GetProperty(nameof(NotificationGroupDefinitionDto.IsStatic), true);
+
+            record.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                record.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            record.SetProperty(nameof(NotificationGroupDefinitionDto.IsStatic), isStatic);
         }
     }
 

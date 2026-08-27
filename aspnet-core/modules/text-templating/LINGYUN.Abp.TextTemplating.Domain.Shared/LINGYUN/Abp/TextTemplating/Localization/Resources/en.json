@@ -38,7 +38,7 @@
     "TemplateContentUpdated": "The template content has been updated",
     "TemplateContentRestoredToDefault": "The template content is restored to the default value.",
     "CustomizePerCulture": "Customize per culture",
-    "InlineContentDescription": "This template uses inline localization. You can use the <b>L<\/b> function to localize a text, like <b>{{L \"Hello\"}}<\/b>. If you still want to define a completely new template for a culture, use the \"Customize per culture\" button. <br /> To get more information about syntax and other details, please check the <a href=\"https://docs.abp.io/en/abp/latest/Text-Templating\" target=\"_blank\">Text Templates documentation<\/a>..",
+    "InlineContentDescription": "This template uses inline localization. You can use the **L** function to localize a text, like **&#123;&#123;L \"Hello\"&#125;&#125;**. If you still want to define a completely new template for a culture, use the \"Customize per culture\" button.  \nTo get more information about syntax and other details, please check the [Text Templates documentation](https://docs.abp.io/en/abp/latest/Text-Templating).",
     "RestoreTemplateToDefault": "Revert to the default template",
     "RestoreTemplateToDefaultMessage": "Are you sure? This is a built-in template. This operation restores the template to its default properties.",
     "TemplateUpdated": "Template properties have been updated",

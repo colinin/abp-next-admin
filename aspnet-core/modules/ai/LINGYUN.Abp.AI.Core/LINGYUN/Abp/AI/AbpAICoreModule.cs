@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.AI.Internal;
 using LINGYUN.Abp.AI.Localization;
 using LINGYUN.Abp.AI.Workspaces;
+using LINGYUN.Abp.Dynamic.Definitions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,8 @@ namespace LINGYUN.Abp.AI;
     typeof(AbpAIModule),
     typeof(AbpGuidsModule),
     typeof(AbpTimingModule),
-    typeof(AbpLocalizationModule))]
+    typeof(AbpLocalizationModule),
+    typeof(AbpDynamicDefinitionsCoreModule))]
 public class AbpAICoreModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -52,6 +54,11 @@ public class AbpAICoreModule : AbpModule
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
             options.MapCodeNamespace(AbpAIErrorCodes.Namespace, typeof(AbpAIResource));
+        });
+
+        Configure<AbpDynamicDefinitionsOptions>(options =>
+        {
+            options.MapStrategy<WorkspaceDefinition>(DynamicDefinitionStrategy.Merge);
         });
     }
 

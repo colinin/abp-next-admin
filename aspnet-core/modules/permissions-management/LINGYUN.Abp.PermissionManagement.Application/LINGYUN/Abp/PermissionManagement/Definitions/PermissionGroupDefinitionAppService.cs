@@ -8,8 +8,10 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.PermissionManagement;
 
 namespace LINGYUN.Abp.PermissionManagement.Definitions;
@@ -17,13 +19,16 @@ namespace LINGYUN.Abp.PermissionManagement.Definitions;
 [Authorize(PermissionManagementPermissionNames.GroupDefinition.Default)]
 public class PermissionGroupDefinitionAppService : PermissionManagementAppServiceBase, IPermissionGroupDefinitionAppService
 {
+    private readonly ILocalEventBus _eventBus;
     private readonly IPermissionGroupDefinitionRecordRepository _groupDefinitionRepository;
     private readonly IRepository<PermissionGroupDefinitionRecord, Guid> _groupDefinitionBasicRepository;
 
     public PermissionGroupDefinitionAppService(
+        ILocalEventBus eventBus,
         IPermissionGroupDefinitionRecordRepository groupDefinitionRepository, 
         IRepository<PermissionGroupDefinitionRecord, Guid> groupDefinitionBasicRepository)
     {
+        _eventBus = eventBus;
         _groupDefinitionRepository = groupDefinitionRepository;
         _groupDefinitionBasicRepository = groupDefinitionBasicRepository;
     }
@@ -53,6 +58,8 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
 
         await CurrentUnitOfWork!.SaveChangesAsync();
 
+        await _eventBus.PublishAsync(new StaticPermissionDefinitionChangedEvent());
+
         return DefinitionRecordToDto(groupDefinitionRecord);
     }
 
@@ -68,6 +75,8 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
         await _groupDefinitionRepository.DeleteAsync(groupDefinitionRecord);
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await _eventBus.PublishAsync(new StaticPermissionDefinitionChangedEvent());
     }
 
     public async virtual Task<PermissionGroupDefinitionDto> GetAsync(string name)
@@ -109,6 +118,8 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
 
         await CurrentUnitOfWork!.SaveChangesAsync();
 
+        await _eventBus.PublishAsync(new StaticPermissionDefinitionChangedEvent());
+
         return DefinitionRecordToDto(groupDefinitionRecord);
     }
 
@@ -133,10 +144,18 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
 
     protected virtual void UpdateByInput(PermissionGroupDefinitionRecord record, PermissionGroupDefinitionCreateOrUpdateDto input)
     {
-        record.ExtraProperties.Clear();
-        foreach (var property in input.ExtraProperties)
+        if (!record.HasSameExtraProperties(input))
         {
-            record.SetProperty(property.Key, property.Value);
+            var isStatic = record.GetProperty(nameof(PermissionGroupDefinitionDto.IsStatic), true);
+
+            record.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                record.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            record.SetProperty(nameof(PermissionGroupDefinitionDto.IsStatic), isStatic);
         }
         if (!string.Equals(record.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
         {

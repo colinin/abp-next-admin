@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LINGYUN.Abp.Dynamic.Definitions;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using Volo.Abp.Features;
@@ -6,12 +7,23 @@ using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Webhooks;
 
-[DependsOn(typeof(AbpFeaturesModule))]
+[DependsOn(
+    typeof(AbpDynamicDefinitionsCoreModule),
+    typeof(AbpFeaturesModule))]
 public class AbpWebhooksCoreModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         AutoAddDefinitionProviders(context.Services);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpDynamicDefinitionsOptions>(options =>
+        {
+            options.MapStrategy<WebhookDefinition>(DynamicDefinitionStrategy.Merge);
+            options.MapStrategy<WebhookGroupDefinition>(DynamicDefinitionStrategy.Merge);
+        });
     }
 
     private static void AutoAddDefinitionProviders(IServiceCollection services)

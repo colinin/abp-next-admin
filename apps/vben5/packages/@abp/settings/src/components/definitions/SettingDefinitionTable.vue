@@ -7,6 +7,7 @@ import type { SettingDefinitionDto } from '../../types/definitions';
 
 import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
@@ -29,6 +30,7 @@ defineOptions({
 const settingGroups = ref<SettingDefinitionDto[]>([]);
 
 const { Lr } = useLocalization();
+const { hasAccessByCodes } = useAccess();
 const { deserialize } = useLocalizationSerializer();
 const { deleteApi, getListApi } = useDefinitionsApi();
 
@@ -75,6 +77,10 @@ const gridOptions: VxeGridProps<SettingDefinitionDto> = {
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
       width: 180,
+      visible: hasAccessByCodes([
+        SettingDefinitionsPermissions.Update,
+        SettingDefinitionsPermissions.DeleteOrRestore,
+      ]),
     },
   ],
   exportConfig: {},
@@ -192,29 +198,26 @@ onMounted(onGet);
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
-        <div :class="row.isStatic ? 'w-full' : 'basis-1/2'">
-          <Button
-            :icon="h(EditOutlined)"
-            block
-            type="link"
-            v-access:code="[SettingDefinitionsPermissions.Update]"
-            @click="onUpdate(row)"
-          >
-            {{ $t('AbpUi.Edit') }}
-          </Button>
-        </div>
-        <div v-if="!row.isStatic" class="basis-1/2">
-          <Button
-            :icon="h(DeleteOutlined)"
-            block
-            danger
-            type="link"
-            v-access:code="[SettingDefinitionsPermissions.DeleteOrRestore]"
-            @click="onDelete(row)"
-          >
-            {{ $t('AbpUi.Delete') }}
-          </Button>
-        </div>
+        <Button
+          :icon="h(EditOutlined)"
+          block
+          type="link"
+          v-access:code="[SettingDefinitionsPermissions.Update]"
+          @click="onUpdate(row)"
+        >
+          {{ $t('AbpUi.Edit') }}
+        </Button>
+        <Button
+          :icon="h(DeleteOutlined)"
+          block
+          danger
+          type="link"
+          v-access:code="[SettingDefinitionsPermissions.DeleteOrRestore]"
+          :disabled="row.isStatic"
+          @click="onDelete(row)"
+        >
+          {{ $t('AbpUi.Delete') }}
+        </Button>
       </div>
     </template>
   </Grid>
