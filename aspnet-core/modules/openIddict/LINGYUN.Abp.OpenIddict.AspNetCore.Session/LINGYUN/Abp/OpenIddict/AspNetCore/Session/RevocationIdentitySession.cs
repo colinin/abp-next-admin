@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Abp.Identity.Session;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using OpenIddict.Server;
 using System;
 using System.Security.Principal;
@@ -11,6 +13,7 @@ namespace LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 /// </summary>
 public class RevocationIdentitySession : IOpenIddictServerHandler<OpenIddictServerEvents.HandleRevocationRequestContext>
 {
+    public ILogger<RevocationIdentitySession> Logger { protected get; set; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IIdentitySessionManager IdentitySessionManager { get; }
 
@@ -28,6 +31,8 @@ public class RevocationIdentitySession : IOpenIddictServerHandler<OpenIddictServ
     {
         CurrentTenant = currentTenant;
         IdentitySessionManager = identitySessionManager;
+
+        Logger = NullLogger<RevocationIdentitySession>.Instance;
     }
 
     public async virtual ValueTask HandleAsync(OpenIddictServerEvents.HandleRevocationRequestContext context)
