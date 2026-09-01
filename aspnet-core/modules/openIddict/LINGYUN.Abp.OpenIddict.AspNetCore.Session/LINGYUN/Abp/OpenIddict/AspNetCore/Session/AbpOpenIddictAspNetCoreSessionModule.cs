@@ -37,6 +37,10 @@ public class AbpOpenIddictAspNetCoreSessionModule : AbpModule
         Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
         {
             options.PersistentSessionGrantTypes.Add(GrantTypes.Password);
+            options.ValidationSessionEndpointTypes.Add(OpenIddictServerEndpointType.Token);
+            options.ValidationSessionEndpointTypes.Add(OpenIddictServerEndpointType.UserInfo);
+            options.ValidationSessionEndpointTypes.Add(OpenIddictServerEndpointType.Introspection);
+            options.ValidationSessionEndpointTypes.Add(OpenIddictServerEndpointType.Revocation);
         });
 
         context.Services.Add(ValidationTokenCheckIdentitySession.Descriptor.ServiceDescriptor);
