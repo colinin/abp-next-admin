@@ -9,14 +9,14 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account;
 public class EmailConfirmConfirmationModel : AccountPageModel
 {
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; } = default!;
+    public string? ReturnUrl { get; set; }
 
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrlHash { get; set; }
 
     public async virtual Task<IActionResult> OnGetAsync()
     {
-        ReturnUrl = await GetRedirectUrlAsync(ReturnUrl, ReturnUrlHash);
+        ReturnUrl = await GetRedirectUrlAsync(ReturnUrl!, ReturnUrlHash);
 
         return Page();
     }

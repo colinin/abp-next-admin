@@ -28,7 +28,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         /// </summary>
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrl { get; set; } = default!;
+        public string? ReturnUrl { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -96,7 +96,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 // Clear the dynamic claims cache.
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-                return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+                return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
             }
             if (result.IsLockedOut)
             {

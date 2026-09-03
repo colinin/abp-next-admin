@@ -56,7 +56,7 @@ public class ChangePasswordModel : AccountPageModel
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; } = default!;
+    public string? ReturnUrl { get; set; }
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
@@ -135,7 +135,7 @@ public class ChangePasswordModel : AccountPageModel
                         UserName = user.UserName
                     });
                     await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
-                    return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+                    return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
                 }
                 catch (Exception ex)
                 {

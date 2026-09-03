@@ -13,7 +13,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public string ReturnUrl { get; set; } = default!;
+        public string? ReturnUrl { get; set; }
 
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
@@ -37,7 +37,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
             var result = await SignInManager.TwoFactorAuthenticatorSignInAsync(Input.VerifyCode, RememberMe, RememberBrowser);
             if (result.Succeeded)
             {
-                return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+                return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
             }
             if (result.IsLockedOut)
             {

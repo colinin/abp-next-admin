@@ -41,7 +41,7 @@ public class LoginModel : AccountPageModel
 {
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; } = default!;
+    public string? ReturnUrl { get; set; }
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
@@ -217,7 +217,7 @@ public class LoginModel : AccountPageModel
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-        return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+        return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
     }
 
     public async virtual Task<IActionResult> OnPostPhoneNumberLogin(string action)
@@ -269,7 +269,7 @@ public class LoginModel : AccountPageModel
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-        return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+        return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
     }
 
     protected virtual void SetTenantCookies(Guid? tenantId = null)
@@ -356,7 +356,7 @@ public class LoginModel : AccountPageModel
             // Clear the dynamic claims cache.
             await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-            return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+            return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
         }
     }
 
@@ -669,9 +669,9 @@ public class LoginModel : AccountPageModel
 
     #region LinkUser
 
-    public async virtual Task<string> GetWithoutLinkReturnUrlAsync(string returnUrl, string? returnUrlHash = null)
+    public async virtual Task<string> GetWithoutLinkReturnUrlAsync(string? returnUrl, string? returnUrlHash = null)
     {
-        var redirectUrl = await base.GetRedirectUrlAsync(returnUrl, returnUrlHash);
+        var redirectUrl = await base.GetRedirectUrlAsync(returnUrl!, returnUrlHash);
 
         // 使用正则表达式移除 LinkUser 参数
         redirectUrl = Regex.Replace(redirectUrl, @"[&?]LinkToken=[^&]*", "");
