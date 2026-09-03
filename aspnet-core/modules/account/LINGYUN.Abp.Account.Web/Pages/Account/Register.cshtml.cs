@@ -32,7 +32,7 @@ public class RegisterModel : AccountPageModel
 {
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; } = default!;
+    public string? ReturnUrl { get; set; }
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
