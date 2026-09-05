@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>LINGYUN.Abp.ElsaNext.Studio.Translations</RootNamespace>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.Studio.Translations</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.Studio.Translations</PackageId>
+		<Description>ABP-hosted localization for the Elsa Studio UI (en/zh-Hans). Registers the Elsa
+		Studio UI copy extracted from the official Elsa.Studio.Translations resx as ABP virtual-JSON
+		resources, so any ABP server-side consumer can translate Elsa Studio copy with the standard
+		IStringLocalizer API, and exposes an Elsa ILocalizationProvider bridge backed by it.</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Localization\**\*.json" />
+		<None Remove="Localization\**\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Localization" />
+		<PackageReference Include="Elsa.Studio.Core" />
+	</ItemGroup>
+
+</Project>

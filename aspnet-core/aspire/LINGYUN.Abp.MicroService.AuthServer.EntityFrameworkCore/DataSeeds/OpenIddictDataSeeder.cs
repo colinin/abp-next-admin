@@ -576,5 +576,51 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
             };
             await PermissionDataSeeder.SeedAsync(ClientPermissionValueProvider.ProviderName, oauthClientId, oauthClientPermissions);
         }
+
+        var elsaStudioClientId = configurationSection["ElsaStudioClient:ClientId"];
+        if (!elsaStudioClientId.IsNullOrWhiteSpace())
+        {
+            Logger.LogInformation("Seeding application {elsaStudioClientId}...", elsaStudioClientId);
+
+            var elsaStudioClientSecret = configurationSection["ElsaStudioClient:ClientSecret"];
+            var elsaStudioClientRootUrls = configurationSection.GetSection("ElsaStudioClient:RootUrls").Get<List<string>>() ?? [];
+
+            var elsaStudioClientRedirectUrls = new List<string>();
+            var elsaStudioClientPostLogoutRedirectUrls = new List<string>();
+            elsaStudioClientRootUrls.ForEach(url =>
+            {
+                elsaStudioClientRedirectUrls.Add(url.EnsureEndsWith('/'));
+                elsaStudioClientRedirectUrls.Add(url.EnsureEndsWith('/') + "signin-oidc");
+                elsaStudioClientRedirectUrls.Add(url.EnsureEndsWith('/') + "swagger/oauth2-redirect.html");
+
+                elsaStudioClientPostLogoutRedirectUrls.Add(url.EnsureEndsWith('/'));
+                elsaStudioClientPostLogoutRedirectUrls.Add(url.EnsureEndsWith('/') + "signout-oidc");
+                elsaStudioClientPostLogoutRedirectUrls.Add(url.EnsureEndsWith('/') + "signout-callback-oidc");
+            });
+
+            await CreateOrUpdateApplicationAsync(
+                OpenIddictConstants.ApplicationTypes.Web,
+                elsaStudioClientId,
+                !elsaStudioClientSecret.IsNullOrWhiteSpace() 
+                    ? OpenIddictConstants.ClientTypes.Confidential
+                    : OpenIddictConstants.ClientTypes.Public,
+                OpenIddictConstants.ConsentTypes.Implicit,
+                "Abp Elsa Studio Client",
+                elsaStudioClientSecret,
+                [OpenIddictConstants.GrantTypes.AuthorizationCode,
+                 OpenIddictConstants.GrantTypes.RefreshToken,
+                 OpenIddictConstants.GrantTypes.Password],
+                [OpenIddictConstants.Scopes.OpenId,
+                OpenIddictConstants.Scopes.Email,
+                OpenIddictConstants.Scopes.Roles,
+                OpenIddictConstants.Scopes.Address,
+                OpenIddictConstants.Scopes.Phone,
+                OpenIddictConstants.Scopes.Profile,
+                OpenIddictConstants.Scopes.OfflineAccess,
+                 scope,
+                "workflow-service"],
+                elsaStudioClientRedirectUrls,
+                elsaStudioClientPostLogoutRedirectUrls);
+        }
     }
 }

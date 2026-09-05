@@ -1,0 +1,46 @@
+@using LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.Services
+
+@inject ElsaStudioDashboardText Text
+
+@if (Context.Snapshot != null)
+{
+    var metrics = Context.Snapshot.Overview.WorkflowInstances;
+    var healthMetrics = new[]
+    {
+        new HealthMetric(Text["Running"], Text.Count(metrics.Running), Text["Current active instances"], Icons.Material.Outlined.PlayCircle, Color.Info),
+        new HealthMetric(Text["Completed"], Text.Count(metrics.Completed), Text.RangeCaption(Context.SelectedRange), Icons.Material.Outlined.CheckCircle, Color.Success),
+        new HealthMetric(Text["Faulted"], Text.Count(metrics.Faulted), Text.RangeCaption(Context.SelectedRange), Icons.Material.Outlined.ErrorOutline, metrics.Faulted > 0 ? Color.Error : Color.Default),
+        new HealthMetric(Text["Suspended"], Text.Count(metrics.Suspended), Text["Current suspended instances"], Icons.Material.Outlined.PauseCircle, metrics.Suspended > 0 ? Color.Warning : Color.Default),
+        new HealthMetric(Text["Avg duration"], Text.Duration(metrics.AverageDuration), Text.RangeCaption(Context.SelectedRange), Icons.Material.Outlined.Timer, Color.Default),
+        new HealthMetric(Text["Needs attention"], Text.Count(Context.Snapshot.NeedsAttention.Findings.Count), Text["Prioritized findings"], Icons.Material.Outlined.ReportProblem, Context.Snapshot.NeedsAttention.Findings.Count > 0 ? Color.Warning : Color.Success)
+    };
+
+    <div class="dashboard-operational-health">
+        <MudText Typo="Typo.subtitle1" Class="dashboard-operational-health-heading">@Text["Operational health"]</MudText>
+
+        <div class="dashboard-operational-health-metrics">
+            @foreach (var metric in healthMetrics)
+            {
+                <div class="dashboard-operational-health-metric">
+                    @MetricContent(metric)
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public DashboardWidgetContext Context { get; set; } = null!;
+    [Parameter] public DashboardWidgetDescriptor Descriptor { get; set; } = null!;
+
+    private RenderFragment<HealthMetric> MetricContent => metric => @<text>
+        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Spacing="2">
+            <MudText Typo="Typo.overline">@metric.Label</MudText>
+            <MudIcon Icon="@metric.Icon" Size="Size.Small" Color="@metric.Color" />
+        </MudStack>
+        <MudText Typo="Typo.h5" Color="@metric.Color" Class="dashboard-operational-health-value">@metric.Value</MudText>
+        <MudText Typo="Typo.caption" Class="dashboard-operational-health-caption">@metric.Caption</MudText>
+    </text>;
+
+    private sealed record HealthMetric(string Label, string Value, string Caption, string Icon, Color Color);
+}

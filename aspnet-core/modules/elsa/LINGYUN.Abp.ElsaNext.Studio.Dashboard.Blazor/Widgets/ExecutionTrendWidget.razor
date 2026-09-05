@@ -1,0 +1,59 @@
+@using LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.Services
+
+@inject ElsaStudioDashboardText Text
+
+@if (Context.Snapshot != null)
+{
+    var response = Context.Snapshot.Trend;
+
+    <MudPaper Outlined="true" Elevation="0" Class="dashboard-panel dashboard-section dashboard-chart-panel" Style="@DashboardStyles.ChartPanel">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="dashboard-section-header" Style="@DashboardStyles.SectionHeader">
+            <MudText Typo="Typo.subtitle1">@Text["Execution trend"]</MudText>
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="1" Class="dashboard-trend-actions" Style="@DashboardStyles.TrendActions">
+                <MudText Typo="Typo.caption" Class="dashboard-muted">@RangeCaption(response)</MudText>
+            </MudStack>
+        </MudStack>
+
+        @if (Context.Loading)
+        {
+            <MudSkeleton Height="220px" Animation="Animation.Wave" />
+        }
+        else if (response.Buckets.Count == 0)
+        {
+            <MudAlert Severity="Severity.Info" Dense="true" Variant="Variant.Text">@Text["No workflow activity in this range."]</MudAlert>
+        }
+        else
+        {
+            <div class="dashboard-trend-chart-frame">
+                <MudChart T="double"
+                          Class="dashboard-trend-chart"
+                          ChartType="ChartType.Line"
+                          ChartSeries="@Series(response)"
+                          ChartLabels="@Labels(response)"
+                          Width="100%"
+                          Height="220px"
+                          MatchBoundsToSize="true" />
+            </div>
+        }
+    </MudPaper>
+}
+
+@code {
+    [Parameter] public DashboardWidgetContext Context { get; set; } = null!;
+    [Parameter] public DashboardWidgetDescriptor Descriptor { get; set; } = null!;
+
+    private string RangeCaption(DashboardTrendResponse response) =>
+        $"{Text.DateTime(response.From)} - {Text.DateTime(response.To)}";
+
+    private string[] Labels(DashboardTrendResponse response) => response.Buckets
+        .Select(x => Text.TrendLabel(x.From, response.Granularity))
+        .ToArray();
+
+    private List<ChartSeries<double>> Series(DashboardTrendResponse response) =>
+    [
+        new() { Name = Text["Started"], Data = response.Buckets.Select(x => (double)x.CreatedOrStarted).ToArray() },
+        new() { Name = Text["Finished"], Data = response.Buckets.Select(x => (double)x.Finished).ToArray() },
+        new() { Name = Text["Faulted"], Data = response.Buckets.Select(x => (double)x.Faulted).ToArray() },
+        new() { Name = Text["Suspended"], Data = response.Buckets.Select(x => (double)x.Suspended).ToArray() }
+    ];
+}

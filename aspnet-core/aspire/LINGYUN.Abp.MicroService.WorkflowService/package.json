@@ -1,0 +1,8 @@
+{
+  "version": "10.6.0",
+  "name": "aspire-workflow-service",
+  "private": true,
+  "dependencies": {
+    "@abp/aspnetcore.components.server.basictheme": "10.6.0"
+  }
+}

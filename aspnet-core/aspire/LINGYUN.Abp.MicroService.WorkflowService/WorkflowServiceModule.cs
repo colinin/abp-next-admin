@@ -2,16 +2,17 @@
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
-using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
-using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
-using LINGYUN.Abp.Elsa;
-using LINGYUN.Abp.Elsa.Activities;
-using LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql;
-using LINGYUN.Abp.Elsa.Notifications;
+using LINGYUN.Abp.ElsaNext.Agents.Blazor;
+using LINGYUN.Abp.ElsaNext.Secrets.Blazor;
+using LINGYUN.Abp.ElsaNext.Server;
+using LINGYUN.Abp.ElsaNext.Studio.Blazor;
+using LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor;
+using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor;
+using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -19,20 +20,19 @@ using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.Quartz.PostgresSqlInstaller;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
-using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
+using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
+using Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.NewtonsoftJson;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
@@ -52,29 +52,33 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpBlobStoringBlobManagementModule),
-    typeof(AbpElsaModule),
-    typeof(AbpElsaServerModule),
-    typeof(AbpElsaActivitiesModule),
-    typeof(AbpElsaNotificationsModule),
+    typeof(AbpElsaNextServerModule),
+    typeof(AbpElsaNextStudioBlazorModule),
+    typeof(AbpElsaNextAgentsBlazorModule),
+    typeof(AbpElsaNextSecretsBlazorModule),
+    typeof(AbpElsaNextStudioDashboardBlazorModule),
+    typeof(AbpElsaNextStudioDiagnosticsOpenTelemetryBlazorModule),
+    typeof(AbpElsaNextStudioDiagnosticsStructuredLogsBlazorModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpBackgroundTasksQuartzModule),
-    typeof(AbpBackgroundTasksDistributedLockingModule),
-    typeof(AbpQuartzPostgresSqlInstallerModule),
-    typeof(TaskManagementEntityFrameworkCoreModule),
+    //typeof(AbpBackgroundTasksQuartzModule),
+    //typeof(AbpBackgroundTasksDistributedLockingModule),
+    //typeof(AbpQuartzPostgresSqlInstallerModule),
+    //typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
-    typeof(AbpElsaEntityFrameworkCorePostgreSqlModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
     typeof(AbpTextTemplatingScribanModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpAspNetCoreMvcModule),
+    typeof(AbpAspNetCoreComponentsServerMudBlazorBasicThemeModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpLocalizationCultureMapModule),
@@ -83,7 +87,6 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpSmsPlatformModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpClaimsMappingModule),
-    typeof(AbpAspNetCoreMvcNewtonsoftModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpDynamicDefinitionsModule),
     typeof(AbpIdentitySessionAspNetCoreModule),
@@ -120,15 +123,13 @@ public partial class WorkflowServiceModule : AbpModule
         ConfigureAuditing(configuration);
         ConfigureIdentity(configuration);
         ConfigureMultiTenancy(configuration);
-        ConfigureEndpoints(context.Services);
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
+        ConfigureElsa(context.Services, configuration);
         ConfigureSwagger(context.Services, configuration);
         ConfigureBlobStoring(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
         ConfigureBackgroundTasks(context.Services, configuration);
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
-
-        context.Services.AddRazorPages();
     }
 }

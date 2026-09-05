@@ -1,24 +1,21 @@
-﻿using Elsa.Common.Features;
-using Elsa.Common.Multitenancy;
+﻿using Elsa.Common.Multitenancy;
 using Elsa.Extensions;
 using Elsa.Features.Services;
-using Elsa.Tenants.Extensions;
 using Elsa.Workflows;
 using LINGYUN.Abp.ElsaNext.Localization;
 using LINGYUN.Abp.ElsaNext.Multitenancy;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Features;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.ElsaNext;
 
 [DependsOn(
-    typeof(AbpAutoMapperModule),
     typeof(AbpFeaturesModule),
     typeof(AbpThreadingModule),
     typeof(AbpJsonModule))]
@@ -34,19 +31,7 @@ public class AbpElsaNextModule : AbpModule
         {
             elsa
              .AddActivitiesFrom<AbpElsaNextModule>()
-             .AddWorkflowsFrom<AbpElsaNextModule>()
-             .UseTenants(tenants =>
-             {
-                 tenants.ConfigureMultitenancy(options =>
-                 {
-                     options.TenantResolverPipelineBuilder.Append<AbpTenantResolver>();
-                 });
-             });
-
-            elsa.Configure<MultitenancyFeature>(feature =>
-            {
-                feature.UseTenantsProvider<AbpTenantsProvider>();
-            });
+             .AddWorkflowsFrom<AbpElsaNextModule>();
 
             elsaModule.Configure(elsa);
         });
@@ -54,9 +39,16 @@ public class AbpElsaNextModule : AbpModule
         context.Services.Replace(
             ServiceDescriptor.Singleton<IIdentityGenerator, AbpElsaIdentityGenerator>());
 
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpElsaNextModule>();
+        });
+
         Configure<AbpLocalizationOptions>(options =>
         {
-            options.Resources.Add<ElsaNextResource>("en");
+            options.Resources
+                .Add<ElsaNextResource>("en")
+                .AddVirtualJson("/LINGYUN/Abp/ElsaNext/Localization/Resources");
         });
     }
 }
