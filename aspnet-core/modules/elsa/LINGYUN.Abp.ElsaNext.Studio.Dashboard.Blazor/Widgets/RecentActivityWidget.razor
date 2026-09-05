@@ -65,7 +65,7 @@
 
     // Official deep links target the standalone Studio host routes; this ABP host hosts the
     // instance viewer at /elsa/workflows/instances/{id}, so build that link directly.
-    private static string InstanceUrl(DashboardRecentActivityItem item) => $"workflows/instances/{item.InstanceId}";
+    private static string InstanceUrl(DashboardRecentActivityItem item) => $"workflows/instances/{item.InstanceId}/view";
 
     private string LocalizedStatus(string? status) => string.IsNullOrWhiteSpace(status) ? string.Empty : Text[status];
 
