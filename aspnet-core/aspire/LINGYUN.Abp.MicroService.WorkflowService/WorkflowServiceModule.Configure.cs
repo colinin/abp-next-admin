@@ -50,6 +50,7 @@ using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.Roles;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
@@ -333,7 +334,7 @@ public partial class WorkflowServiceModule
         Configure<PermissionManagementOptions>(options =>
         {
             options.IsDynamicPermissionStoreEnabled = true;
-            options.SaveStaticPermissionsToDatabase = false;
+            options.SaveStaticPermissionsToDatabase = true;
         });
     }
 
@@ -365,7 +366,7 @@ public partial class WorkflowServiceModule
         {
             options.IsDynamicClaimsEnabled = true;
             options.RemoteRefreshUrl = configuration["App:RefreshClaimsUrl"] + options.RemoteRefreshUrl;
-
+            options.DynamicClaims.Add(Elsa.PermissionNames.ClaimType);
         });
     }
 
@@ -485,10 +486,15 @@ public partial class WorkflowServiceModule
                 options.Events.OnTokenValidated = async context =>
                 {
                     await previousOnTokenValidated(context);
+
                     if (context.Principal?.Identity?.IsAuthenticated == true)
                     {
-                        context.Principal.AddIdentity(new ClaimsIdentity(
-                            new[] { new Claim(Elsa.PermissionNames.ClaimType, Elsa.PermissionNames.All) }));
+                        var roleClaims = context.Principal.FindAll(AbpClaimTypes.Role);
+                        if (roleClaims.Any(x => x.Value.Equals(AbpRoleConsts.AdminRoleName, StringComparison.CurrentCultureIgnoreCase)))
+                        {
+                            context.Principal.AddIdentity(new ClaimsIdentity(
+                                new[] { new Claim(Elsa.PermissionNames.ClaimType, Elsa.PermissionNames.All) }));
+                        }
                     }
                 };
             })

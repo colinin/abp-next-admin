@@ -14,6 +14,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="LINGYUN\Abp\ElsaNext\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\ElsaNext\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Features" />
 		<PackageReference Include="Volo.Abp.Guids" />
 		<PackageReference Include="Volo.Abp.Timing" />

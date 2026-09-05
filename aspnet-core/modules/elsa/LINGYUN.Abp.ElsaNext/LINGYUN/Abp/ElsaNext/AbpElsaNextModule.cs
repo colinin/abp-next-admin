@@ -1,7 +1,6 @@
 ﻿using Elsa.Common.Multitenancy;
 using Elsa.Extensions;
 using Elsa.Features.Services;
-using Elsa.ShellFeatures;
 using Elsa.Workflows;
 using LINGYUN.Abp.ElsaNext.Localization;
 using LINGYUN.Abp.ElsaNext.Multitenancy;
@@ -12,6 +11,7 @@ using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
+using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.ElsaNext;
 
@@ -39,9 +39,16 @@ public class AbpElsaNextModule : AbpModule
         context.Services.Replace(
             ServiceDescriptor.Singleton<IIdentityGenerator, AbpElsaIdentityGenerator>());
 
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AbpElsaNextModule>();
+        });
+
         Configure<AbpLocalizationOptions>(options =>
         {
-            options.Resources.Add<ElsaNextResource>("en");
+            options.Resources
+                .Add<ElsaNextResource>("en")
+                .AddVirtualJson("/LINGYUN/Abp/ElsaNext/Localization/Resources");
         });
     }
 }
