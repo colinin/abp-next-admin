@@ -9,6 +9,7 @@ using Elsa.Secrets.Persistence.EFCore.Extensions;
 using Elsa.Secrets.Persistence.EFCore.Sqlite.Extensions;
 using Elsa.Studio.Authentication.OpenIdConnect.HttpMessageHandlers;
 using Elsa.Studio.Workflows.Designer.Extensions;
+using LINGYUN.Abp.ElsaNext.Permissions;
 using LINGYUN.Abp.ElsaNext.Studio.Blazor;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
@@ -24,6 +25,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
@@ -41,6 +43,7 @@ using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Auditing;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
@@ -489,6 +492,19 @@ public partial class WorkflowServiceModule
 
                     if (context.Principal?.Identity?.IsAuthenticated == true)
                     {
+                        //var options = context.HttpContext.RequestServices.GetRequiredService<IOptions<AbpElsaPermissionMapOptions>>();
+                        //var permissionChecker = context.HttpContext.RequestServices.GetRequiredService<IPermissionChecker>();
+                        //var permissionNames = options.Value.PermissionMaps.Select(x => x.Source).ToArray();
+                        //var checkResult = await permissionChecker.IsGrantedAsync(context.Principal, permissionNames);
+
+                        //var grantPermissions = checkResult.Result.Where(x => x.Value == PermissionGrantResult.Granted).Select(x => x.Key);
+
+                        //var elsaPermissions = options.Value.PermissionMaps.Where(x => grantPermissions.Contains(x.Source))
+                        //    .Select(x => new Claim("permissions", x.Target))
+                        //    .ToList();
+
+                        //context.Principal.AddIdentity(new ClaimsIdentity(elsaPermissions));
+
                         var roleClaims = context.Principal.FindAll(AbpClaimTypes.Role);
                         if (roleClaims.Any(x => x.Value.Equals(AbpRoleConsts.AdminRoleName, StringComparison.CurrentCultureIgnoreCase)))
                         {

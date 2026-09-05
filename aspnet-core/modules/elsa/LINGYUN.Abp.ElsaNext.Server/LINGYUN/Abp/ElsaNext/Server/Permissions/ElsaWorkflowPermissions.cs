@@ -6,7 +6,7 @@ public static class ElsaWorkflowPermissions
 {
     public static class Definitions
     {
-        public const string Default = "workflows-definitions";
+        public const string Default = "workflow-definitions";
         public const string Read = ElsaPermissionVerbs.Read + ":" + Default;
         public const string Write = ElsaPermissionVerbs.Write + ":" + Default;
         public const string Delete = ElsaPermissionVerbs.Delete + ":" + Default;
@@ -18,7 +18,7 @@ public static class ElsaWorkflowPermissions
     }
     public static class Instances
     {
-        public const string Default = "workflows-instances";
+        public const string Default = "workflow-instances";
         public const string Read = ElsaPermissionVerbs.Read + ":" + Default;
         public const string Write = ElsaPermissionVerbs.Write + ":" + Default;
         public const string Delete = ElsaPermissionVerbs.Delete + ":" + Default;

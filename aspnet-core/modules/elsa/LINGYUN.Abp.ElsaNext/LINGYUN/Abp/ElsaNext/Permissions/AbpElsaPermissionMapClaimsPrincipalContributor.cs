@@ -14,7 +14,7 @@
 //    public async override Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
 //    {
 //        var claimsIdentity = context.ClaimsPrincipal.Identities.First();
-//        if (!claimsIdentity.IsAuthenticated || claimsIdentity.FindFirst(PermissionClaimType) != null)
+//        if (!claimsIdentity.IsAuthenticated)
 //        {
 //            return;
 //        }
@@ -22,14 +22,14 @@
 //        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpElsaPermissionMapOptions>>();
 //        var permissionChecker = context.ServiceProvider.GetRequiredService<IPermissionChecker>();
 //        var permissionNames = options.Value.PermissionMaps.Select(x => x.Source).ToArray();
-//        var checkResult = await permissionChecker.IsGrantedAsync(permissionNames);
+//        var checkResult = await permissionChecker.IsGrantedAsync(context.ClaimsPrincipal, permissionNames);
 
 //        var grantPermissions = checkResult.Result.Where(x => x.Value == PermissionGrantResult.Granted).Select(x => x.Key);
 
 //        // PermissionNames.ClaimType => permissions
 //        // Permission.ToString()  => $"{Verb}{Separator}{Resource}";
 //        var elsaPermissions = options.Value.PermissionMaps.Where(x => grantPermissions.Contains(x.Source))
-//            .Select(x => new AbpDynamicClaim("permissions", x.Target))
+//            .Select(x => new AbpDynamicClaim(PermissionClaimType, x.Target))
 //            .ToList();
 
 //        await AddDynamicClaimsAsync(context, claimsIdentity, elsaPermissions);
