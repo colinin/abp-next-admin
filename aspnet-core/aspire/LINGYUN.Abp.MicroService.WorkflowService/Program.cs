@@ -1,20 +1,25 @@
-﻿using LINGYUN.Abp.Identity.Session.AspNetCore;
+﻿using Elsa.Extensions;
+using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.MicroService.WorkflowService;
+using LINGYUN.Abp.MicroService.WorkflowService.Components;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Serilog;
 using System;
 using System.IO;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 using Volo.Abp.IO;
 using Volo.Abp.Modularity.PlugIns;
 
 Log.Information("Starting WorkflowService Host...");
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseStaticWebAssets();
 builder.Host.AddAppSettingsSecretsJson()
     .UseAutofac()
     .ConfigureAppConfiguration((context, config) =>
@@ -27,7 +32,7 @@ builder.Host.AddAppSettingsSecretsJson()
     .UseSerilog((context, provider, config) =>
     {
         config.ReadFrom.Configuration(context.Configuration);
-    });
+    }, writeToProviders: true);
 
 builder.AddServiceDefaults();
 
@@ -49,18 +54,19 @@ await app.InitializeApplicationAsync();
 app.MapDefaultEndpoints();
 
 app.UseForwardedHeaders();
-// 本地化
-app.UseMapRequestLocalization();
-app.UseCorrelationId();
-app.MapAbpStaticAssets();
-app.UseRouting();
 app.UseCors();
+app.UseCorrelationId();
+app.UseMapRequestLocalization();
+app.UseRouting();
+app.UseStaticFiles();
+app.MapAbpStaticAssets();
 app.UseAuthentication();
 app.UseJwtTokenMiddleware();
 app.UseMultiTenancy();
 app.UseAbpSession();
 app.UseDynamicClaims();
 app.UseAuthorization();
+app.UseAntiforgery();
 app.UseSwagger();
 app.UseAbpSwaggerUI(options =>
 {
@@ -70,9 +76,15 @@ app.UseAbpSwaggerUI(options =>
     options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
     options.OAuthScopes(configuration["AuthServer:Audience"]);
 });
+app.UseWorkflowsApi(); // Use Elsa API endpoints.
+app.UseWorkflows(); // Use Elsa middleware for HTTP Endpoint activities.
 app.UseAuditing();
 app.UseAbpSerilogEnrichers();
-app.UseConfiguredEndpoints();
-app.UseHttpActivities();
+app.UseConfiguredEndpoints(builder =>
+{
+    builder.MapRazorComponents<App>()
+        .AddInteractiveServerRenderMode()
+        .AddAdditionalAssemblies(builder.ServiceProvider.GetRequiredService<IOptions<AbpRouterOptions>>().Value.AdditionalAssemblies.ToArray());
+});
 
 await app.RunAsync();

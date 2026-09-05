@@ -1,0 +1,9 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Menu:ElsaStudio": "Elsa 工作室",
+    "Menu:WorkflowDefinitions": "工作流定义",
+    "Menu:WorkflowInstances": "工作流实例",
+    "Menu:Settings": "设置"
+  }
+}

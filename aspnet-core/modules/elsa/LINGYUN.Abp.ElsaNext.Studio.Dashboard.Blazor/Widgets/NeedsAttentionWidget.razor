@@ -1,0 +1,42 @@
+@using LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.Services
+
+@inject ElsaStudioDashboardText Text
+
+@if (Context.Snapshot != null)
+{
+    var findings = Context.Snapshot.NeedsAttention.Findings;
+    var capability = Context.Snapshot.NeedsAttention.Capability;
+
+    <MudPaper Outlined="true" Elevation="0" Class="dashboard-panel dashboard-section" Style="@DashboardStyles.Panel">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="dashboard-section-header" Style="@DashboardStyles.SectionHeader">
+            <MudText Typo="Typo.subtitle1">@Text["Needs attention"]</MudText>
+            <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="@DashboardUiMapper.CapabilityColor(capability)">@Text.CapabilityLabel(capability)</MudChip>
+        </MudStack>
+
+        @if (findings.Count == 0)
+        {
+            <MudAlert Severity="Severity.Success" Dense="true" Variant="Variant.Text" Icon="@Icons.Material.Outlined.CheckCircle">
+                @Text["No active findings in the selected range."]
+            </MudAlert>
+        }
+        else
+        {
+            <MudList T="DashboardFinding" Dense="true" Class="dashboard-finding-list" Style="@DashboardStyles.FindingList">
+                @foreach (var item in findings.OrderBy(x => x.Priority).Take(8))
+                {
+                    <MudListItem T="DashboardFinding" Value="@item" Icon="@DashboardUiMapper.SeverityIcon(item.Severity)" IconColor="@DashboardUiMapper.SeverityColor(item.Severity)">
+                        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Spacing="2" Class="dashboard-finding-row" Style="@DashboardStyles.FindingRow">
+                            <MudText Typo="Typo.body2">@item.Message</MudText>
+                            <MudChip T="string" Size="Size.Small" Variant="Variant.Text" Color="@DashboardUiMapper.SeverityColor(item.Severity)">@item.Severity</MudChip>
+                        </MudStack>
+                    </MudListItem>
+                }
+            </MudList>
+        }
+    </MudPaper>
+}
+
+@code {
+    [Parameter] public DashboardWidgetContext Context { get; set; } = null!;
+    [Parameter] public DashboardWidgetDescriptor Descriptor { get; set; } = null!;
+}

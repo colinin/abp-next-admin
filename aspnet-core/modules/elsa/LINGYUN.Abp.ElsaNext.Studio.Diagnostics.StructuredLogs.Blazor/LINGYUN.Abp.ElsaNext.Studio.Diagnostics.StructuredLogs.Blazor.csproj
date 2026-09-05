@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor</PackageId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Official Elsa Studio structured-logs module (rc2): services, SignalR observer, API client
+		     and the viewer page component reused by this module's ABP page (see Pages/). -->
+		<PackageReference Include="Elsa.Diagnostics.StructuredLogs" />
+		<PackageReference Include="Elsa.Studio.Diagnostics.StructuredLogs.Dashboard" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.Studio.Blazor\LINGYUN.Abp.ElsaNext.Studio.Blazor.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Localization\**\*.json" />
+	</ItemGroup>
+
+</Project>

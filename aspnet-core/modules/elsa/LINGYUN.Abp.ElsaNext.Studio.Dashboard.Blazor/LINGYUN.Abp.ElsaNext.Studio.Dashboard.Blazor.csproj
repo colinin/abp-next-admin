@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor</PackageId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Elsa Studio Dashboard (official, rc2): page shell, zones, models and API client. The
+		     workflow widgets are re-implemented in this module (Widgets/) as localized copies. -->
+		<PackageReference Include="Elsa.Studio.Dashboard" />
+		<!-- 使用自定义仪表板组件 -->
+		<!--<PackageReference Include="Elsa.Studio.Workflows.Dashboard" />-->
+		<PackageReference Include="Elsa.Workflows.Runtime.Dashboard" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.Studio.Blazor\LINGYUN.Abp.ElsaNext.Studio.Blazor.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Localization\**\*.json" />
+	</ItemGroup>
+
+</Project>

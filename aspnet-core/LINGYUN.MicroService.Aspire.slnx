@@ -130,8 +130,8 @@
     <Project Path="framework/data-protection/LINGYUN.Abp.DataProtection/LINGYUN.Abp.DataProtection.csproj" />
   </Folder>
   <Folder Name="/framework/dynamic-definition/">
-    <Project Path="framework/dynamic-definition/LINGYUN.Abp.Dynamic.Definitions/LINGYUN.Abp.Dynamic.Definitions.csproj" />
     <Project Path="framework/dynamic-definition/LINGYUN.Abp.Dynamic.Definitions.Core/LINGYUN.Abp.Dynamic.Definitions.Core.csproj" />
+    <Project Path="framework/dynamic-definition/LINGYUN.Abp.Dynamic.Definitions/LINGYUN.Abp.Dynamic.Definitions.csproj" />
   </Folder>
   <Folder Name="/framework/dynamic-queryable/">
     <Project Path="framework/dynamic-queryable/LINGYUN.Abp.Dynamic.Queryable.Application.Contracts/LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj" />
@@ -551,6 +551,19 @@
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Notifications/LINGYUN.Abp.Elsa.Notifications.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa.Server/LINGYUN.Abp.Elsa.Server.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa/LINGYUN.Abp.Elsa.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/">
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Agents.Blazor/LINGYUN.Abp.ElsaNext.Agents.Blazor.csproj" Id="fc82705b-186b-4d0d-80d2-473f08596b48" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Agents/LINGYUN.Abp.ElsaNext.Agents.csproj" Id="8699b2ee-5d73-4e7e-9f52-4ec02e5c8c52" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Secrets.Blazor/LINGYUN.Abp.ElsaNext.Secrets.Blazor.csproj" Id="14b89b15-df06-4965-bd5d-2beaeb0179a6" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Secrets/LINGYUN.Abp.ElsaNext.Secrets.csproj" Id="f49baa76-12c5-4294-b942-fc6f5d49d3e6" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Server/LINGYUN.Abp.ElsaNext.Server.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Blazor/LINGYUN.Abp.ElsaNext.Studio.Blazor.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor/LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor.csproj" Id="86b1ee1c-6266-4003-8ab2-67aa497ea217" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Translations/LINGYUN.Abp.ElsaNext.Studio.Translations.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext/LINGYUN.Abp.ElsaNext.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/LINGYUN.Abp.Aliyun.Tests/LINGYUN.Abp.Aliyun.Tests.csproj" />

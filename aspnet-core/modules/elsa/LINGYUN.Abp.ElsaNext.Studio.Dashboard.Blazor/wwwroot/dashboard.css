@@ -1,0 +1,208 @@
+/* Elsa Studio Dashboard visuals for the localized dashboard page/widgets (this module).
+   The ABP Blazor theme layout does not load Razor Class Library scoped-css bundles, so these
+   rules are global (class names are dashboard-specific) and injected by the page via <HeadContent>.
+   Mirrors the official Elsa.Studio.Dashboard / Elsa.Studio.Workflows.Dashboard scoped css. */
+
+.dashboard-shell {
+    width: 100%;
+    max-width: none;
+    min-height: 100%;
+    padding: 24px 32px 32px;
+    box-sizing: border-box;
+    background: var(--mud-palette-background);
+}
+
+.dashboard-header {
+    gap: 12px 16px;
+    margin-bottom: 14px;
+}
+
+.dashboard-muted {
+    color: var(--mud-palette-text-secondary);
+}
+
+.dashboard-panel {
+    border-radius: 8px;
+    background: var(--mud-palette-surface);
+}
+
+.dashboard-shell .dashboard-panel {
+    border-radius: 8px;
+    background: var(--mud-palette-surface);
+}
+
+.dashboard-empty-state {
+    text-align: center;
+}
+
+.dashboard-metrics {
+    margin-bottom: 8px;
+}
+
+.dashboard-card-link {
+    color: inherit;
+    display: block;
+    height: 100%;
+}
+
+.dashboard-shell .dashboard-card-link {
+    color: inherit;
+    display: block;
+    height: 100%;
+}
+
+.dashboard-shell .dashboard-metric-card {
+    min-height: 104px;
+    height: 100%;
+    padding: 12px;
+    transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.dashboard-shell .dashboard-metric-card-clickable:hover,
+.dashboard-shell .dashboard-metric-card-clickable:focus-within {
+    border-color: var(--mud-palette-primary);
+    background: rgba(var(--mud-palette-primary-rgb), 0.04);
+}
+
+.dashboard-shell .dashboard-metric-value {
+    line-height: 1.1;
+    margin-top: 6px;
+}
+
+.dashboard-main-stack {
+    margin-top: 8px;
+}
+
+.dashboard-activity-grid {
+    margin-top: 0;
+}
+
+.dashboard-shell .dashboard-section {
+    padding: 14px;
+}
+
+.dashboard-shell .dashboard-section-header {
+    margin-bottom: 10px;
+}
+
+.dashboard-shell .dashboard-chart-panel {
+    min-height: 320px;
+}
+
+.dashboard-shell .dashboard-finding-list {
+    margin: -6px;
+}
+
+.dashboard-shell .dashboard-finding-row {
+    width: 100%;
+    min-width: 0;
+}
+
+.dashboard-shell .dashboard-finding-row .mud-typography {
+    min-width: 0;
+}
+
+.dashboard-shell .dashboard-row-warning {
+    background: rgba(var(--mud-palette-warning-rgb), 0.08);
+}
+
+.dashboard-shell .dashboard-diagnostics-block {
+    border: 1px solid var(--mud-palette-lines-default);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.dashboard-shell .dashboard-diagnostics-value {
+    min-height: 28px;
+}
+
+.dashboard-shell .mud-table-cell {
+    padding: 6px 10px;
+}
+
+/* Operational health metrics (localized copy of the official metrics widget) */
+
+.dashboard-operational-health {
+    margin-bottom: 8px;
+}
+
+.dashboard-operational-health-heading {
+    margin-bottom: 14px;
+}
+
+.dashboard-operational-health-metrics {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.dashboard-operational-health-metric {
+    background: var(--mud-palette-surface);
+    border: 1px solid var(--mud-palette-lines-default);
+    border-radius: 8px;
+    min-width: 0;
+    padding: 12px 14px;
+    transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.dashboard-operational-health-metric:hover,
+.dashboard-operational-health-metric:focus-within {
+    border-color: var(--mud-palette-primary);
+}
+
+.dashboard-operational-health-value {
+    line-height: 1.1;
+    margin-top: 8px;
+}
+
+.dashboard-operational-health-caption {
+    color: var(--mud-palette-text-secondary);
+}
+
+/* Execution trend chart (localized copy of the official trend widget) */
+
+.dashboard-trend-chart-frame {
+    width: 100%;
+    min-width: 0;
+    height: 260px;
+}
+
+.dashboard-trend-chart-frame .dashboard-trend-chart {
+    width: 100% !important;
+    min-width: 0;
+}
+
+.dashboard-trend-chart-frame .dashboard-trend-chart svg {
+    width: 100% !important;
+    max-width: 100%;
+}
+
+.dashboard-trend-chart-frame .mud-chart-legend {
+    width: 100%;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+
+
+@media (max-width: 768px) {
+    .dashboard-shell {
+        padding: 16px;
+    }
+
+    .dashboard-header {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .dashboard-shell .dashboard-section {
+        padding: 12px;
+    }
+}
+
+
+@media (max-width: 720px) {
+    .dashboard-trend-chart-frame {
+        height: 260px;
+    }
+}

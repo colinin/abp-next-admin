@@ -1,0 +1,9 @@
+{
+  "culture": "en",
+  "texts": {
+    "Menu:ElsaStudio": "Elsa Studio",
+    "Menu:WorkflowDefinitions": "Workflow Definitions",
+    "Menu:WorkflowInstances": "Workflow Instances",
+    "Menu:Settings": "Settings"
+  }
+}

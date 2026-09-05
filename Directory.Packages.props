@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>10.0.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.17.0</ElsaPackageVersion>
-		<ElsaNextPackageVersion>3.6.0</ElsaNextPackageVersion>
+		<ElsaNextPackageVersion>3.8.0-rc2</ElsaNextPackageVersion>
 		<VoloAbpPackageVersion>10.6.0</VoloAbpPackageVersion>
 		<LINGYUNAbpPackageVersion>10.6.0</LINGYUNAbpPackageVersion>
 		<MicrosoftExtensionsPackageVersion>10.0.9</MicrosoftExtensionsPackageVersion>
@@ -14,6 +14,7 @@
 	<!-- Abp Framework -->
 	<ItemGroup>
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="5.6.0" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Components.Server.MudBlazorLeptonXLiteTheme" Version="5.6.0" />
 		<PackageVersion Include="Volo.Abp.AI" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Core" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Account.Application" Version="$(VoloAbpPackageVersion)" />
@@ -28,8 +29,14 @@
 		<PackageVersion Include="Volo.Abp.Account.Web.OpenIddict" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Authentication.OpenIdConnect" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Components.Web.Theming" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Components.WebAssembly" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Components.WebAssembly.Theming" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme.Bundling" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.Client.Common" Version="$(VoloAbpPackageVersion)" />
@@ -48,6 +55,7 @@
 		<PackageVersion Include="Volo.Abp.Authorization" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Authorization.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Autofac" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.Autofac.WebAssembly" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AutoMapper" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.BackgroundJobs" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.BackgroundJobs.Abstractions" Version="$(VoloAbpPackageVersion)" />
@@ -148,6 +156,7 @@
 		<PackageVersion Include="Volo.Abp.TestBase" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.TextTemplating.Core" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.TextTemplating.Scriban" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.TickerQ" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Timing" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.Threading" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.UI.Navigation" Version="$(VoloAbpPackageVersion)" />
@@ -162,9 +171,9 @@
 		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
+		<PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.9" />
 		<PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
@@ -227,20 +236,76 @@
 	</ItemGroup>
 	<!-- Elsa Next-->
 	<ItemGroup>
+		<PackageVersion Include="CShells.AspNetCore" Version="0.0.28" />
+		<PackageVersion Include="Elsa.Agents" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Agents.Activities" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Agents.Api" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Agents.Core" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Agents.OpenAI" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Agents.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Api.Client" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Core.BlazorServer" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Login.BlazorServer" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Localization.BlazorServer" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Core.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Login.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Translations" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Studio.Agents" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Scheduling" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Dashboard.Api" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Diagnostics.OpenTelemetry" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Diagnostics.StructuredLogs" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Expressions.CSharp" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Expressions.JavaScript" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Expressions.Liquid" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.ExternalAuthentication.OpenIdConnect" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.ExternalAuthentication.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Http" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Identity" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.OpenTelemetry" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Scheduling.Quartz" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Scheduling.Quartz.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Secrets" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Secrets.Api" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Secrets.JavaScript" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Secrets.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Secrets" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Agents" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Authentication.Abstractions" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Authentication.ElsaIdentity.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Authentication.ElsaIdentity.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Authentication.ElsaIdentity.UI" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Authentication.OpenIdConnect.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Authentication.OpenIdConnect.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Authentication.UI" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Authentication.Themes" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Core" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Core.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Core.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Dashboard" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Diagnostics.ConsoleLogs.Dashboard" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Diagnostics.OpenTelemetry.Dashboard" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Diagnostics.StructuredLogs.Dashboard" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.DomInterop" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Http.Webhooks" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Login.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Login.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Login" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Localization" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Localization.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Localization.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Translations" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.OpenIdConnect.BlazorServer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Settings" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Shell" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.WorkflowContexts" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Workflows" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Workflows.Dashboard" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Workflows.Designer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Scheduling" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Persistence.EFCore" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Persistence.EFCore.MySQL" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Persistence.EFCore.PostgreSql" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
+		<!--<PackageVersion Include="Elsa.UserTasks" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.UserTasks.Persistence.EFCore" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.UserTasks.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />-->
+		<PackageVersion Include="Elsa.Workflows.Runtime.Dashboard" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(MicrosoftAspNetCorePackageVersion)" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(MicrosoftAspNetCorePackageVersion)" />
 	</ItemGroup>
@@ -278,6 +343,7 @@
 	</ItemGroup>
 	<!-- OpenTelemetry -->
 	<ItemGroup>
+		<PackageVersion Include="OpenTelemetry" Version="1.17.0" />
 		<PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.17.0" />
 		<PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.17.0" />
 		<PackageVersion Include="OpenTelemetry.Exporter.Zipkin" Version="1.17.0" />
@@ -320,6 +386,7 @@
 		<PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="23.26.300" />
 		<PackageVersion Include="Npgsql" Version="10.0.0" />
 		<PackageVersion Include="Microsoft.Data.SqlClient" Version="7.0.2" />
+		<PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.9" />
 		<PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="10.0.9" />
 	</ItemGroup>
 	<!-- Other -->
@@ -392,6 +459,7 @@
 		<PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.9" />
 		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
 		<PackageVersion Include="TencentCloudSDK" Version="3.0.1273" />
+		<PackageVersion Include="TickerQ" Version="10.4.0" />
 		<PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />
 		<PackageVersion Include="Yarp.Telemetry.Consumption" Version="2.3.0" />
 	</ItemGroup>

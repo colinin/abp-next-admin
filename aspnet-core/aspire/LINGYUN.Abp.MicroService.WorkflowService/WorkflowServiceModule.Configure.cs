@@ -1,11 +1,21 @@
 ﻿using DotNetCore.CAP;
-using Elsa;
-using Elsa.Options;
-using Elsa.Rebus.RabbitMq;
-using LINGYUN.Abp.BackgroundTasks;
+using Elsa.Agents;
+using Elsa.Extensions;
+using Elsa.Features.Services;
+using Elsa.Persistence.EFCore.Extensions;
+using Elsa.Persistence.EFCore.Modules.Management;
+using Elsa.Persistence.EFCore.Modules.Runtime;
+using Elsa.Secrets.Persistence.EFCore.Extensions;
+using Elsa.Secrets.Persistence.EFCore.Sqlite.Extensions;
+using Elsa.Studio.Authentication.OpenIdConnect.HttpMessageHandlers;
+using Elsa.Studio.Workflows.Designer.Extensions;
+using LINGYUN.Abp.ElsaNext.Studio.Blazor;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
+using LINGYUN.Abp.MicroService.WorkflowService.Extensions;
+using LINGYUN.Abp.MicroService.WorkflowService.Navigation;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using Localization.Resources.AbpUi;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,15 +27,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using Quartz;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Volo.Abp.AspNetCore.Components.Web;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Auditing;
@@ -38,18 +50,11 @@ using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.Quartz;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
+using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
-using ConsoleStartup = Elsa.Activities.Console.Startup;
-using HttpStartup = Elsa.Activities.Http.Startup;
-using JavaScriptStartup = Elsa.Scripting.JavaScript.Startup;
-using TemporalQuartzStartup = Elsa.Activities.Temporal.Quartz.Startup;
-using UserTaskStartup = Elsa.Activities.UserTask.Startup;
-using WebhooksListEndpoint = Elsa.Webhooks.Api.Endpoints.List;
-using WebhooksStartup = Elsa.Activities.Webhooks.Startup;
 
 namespace LINGYUN.Abp.MicroService.WorkflowService;
 
@@ -105,102 +110,109 @@ public partial class WorkflowServiceModule
 
     private void PreConfigureQuartz(IConfiguration configuration)
     {
-        PreConfigure<AbpQuartzOptions>(options =>
-        {
-            // 如果使用持久化存储, 则配置quartz持久层
-            if (configuration.GetSection("Quartz:UsePersistentStore").Get<bool>())
-            {
-                var settings = configuration.GetSection("Quartz:Properties").Get<Dictionary<string, string>>();
-                if (settings != null)
-                {
-                    foreach (var setting in settings)
-                    {
-                        options.Properties[setting.Key] = setting.Value;
-                    }
-                }
+        //PreConfigure<AbpQuartzOptions>(options =>
+        //{
+        //    // 如果使用持久化存储, 则配置quartz持久层
+        //    if (configuration.GetSection("Quartz:UsePersistentStore").Get<bool>())
+        //    {
+        //        var settings = configuration.GetSection("Quartz:Properties").Get<Dictionary<string, string>>();
+        //        if (settings != null)
+        //        {
+        //            foreach (var setting in settings)
+        //            {
+        //                options.Properties[setting.Key] = setting.Value;
+        //            }
+        //        }
 
-                options.Configurator += (config) =>
-                {
-                    config.UsePersistentStore(store =>
-                    {
-                        store.UseProperties = false;
-                        store.UseNewtonsoftJsonSerializer();
-                    });
-                };
-            }
-        });
+        //        options.Configurator += (config) =>
+        //        {
+        //            config.UsePersistentStore(store =>
+        //            {
+        //                store.UseProperties = false;
+        //                store.UseNewtonsoftJsonSerializer();
+        //            });
+        //        };
+        //    }
+        //});
     }
 
     private void ConfigureBackgroundTasks(IServiceCollection services, IConfiguration configuration)
     {
-        Configure<AbpBackgroundTasksOptions>(options =>
-        {
-            options.NodeName = services.GetApplicationName();
-        });
+        //Configure<AbpBackgroundTasksOptions>(options =>
+        //{
+        //    options.NodeName = services.GetApplicationName();
+        //});
     }
 
     private void PreConfigureElsa(IServiceCollection services, IConfiguration configuration)
     {
-        var elsaSection = configuration.GetSection("Elsa");
-        var startups = new[]
+        PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
+        {
+            options.IsBlazorWebApp = true;
+        });
+        PreConfigure<IModule>(elsa =>
+        {
+            elsa.UseWorkflowManagement(management =>
             {
-                typeof(ConsoleStartup),
-                typeof(HttpStartup),
-                typeof(UserTaskStartup),
-                typeof(TemporalQuartzStartup),
-                typeof(JavaScriptStartup),
-                typeof(WebhooksStartup),
-            };
+                management.UseEntityFrameworkCore(ef => ef.UseSqlite());
+            });
 
-        PreConfigure<ElsaOptionsBuilder>(elsa =>
+            elsa.UseWorkflowRuntime(runtime =>
+            {
+                runtime.UseEntityFrameworkCore(ef => ef.UseSqlite());
+            });
+
+            elsa.UseAgentPersistence(agent =>
+            {
+                agent.UseEntityFrameworkCore(ef => ef.UseSqlite());
+            });
+
+            elsa.UseSecrets(secret =>
+            {
+                secret.UseEntityFrameworkCore(ef => ef.UseSqlite());
+            });
+
+            elsa.UseQuartz(quartz =>
+            {
+                quartz.UseSqlite();
+            });
+
+            elsa.UseScheduling(scheduling =>
+            {
+                scheduling.UseQuartzScheduler();
+            });
+        });
+
+        PreConfigure<AbpElsaNextStudioBlazorOptions>(options =>
         {
-            elsa
-                .AddActivitiesFrom<WorkflowServiceModule>()
-                .AddWorkflowsFrom<WorkflowServiceModule>()
-                .AddFeatures(startups, configuration)
-                .ConfigureWorkflowChannels(options => elsaSection.GetSection("WorkflowChannels").Bind(options))
-                .UseRabbitMq(elsaSection["Rebus:RabbitMQ:Connection"]);
-
-            elsa.DistributedLockingOptionsBuilder
-                .UseProviderFactory(sp => name =>
+            options.BackendApiConfig.ConfigureHttpClientBuilder = options =>
+            {
+                options.AuthenticationHandler = typeof(OidcAuthenticatingApiHttpMessageHandler);
+                options.ConfigureHttpClient = (_, client) =>
                 {
-                    var provider = sp.GetRequiredService<IDistributedLockProvider>();
-
-                    return provider.CreateLock(name);
-                });
+                    // Set a long time out to simplify debugging both Elsa Studio and the Elsa Server backend.
+                    client.Timeout = TimeSpan.FromHours(1);
+                };
+            };
         });
 
-        services.AddNotificationHandlersFrom<WorkflowServiceModule>();
-
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
-        {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(WebhooksListEndpoint).Assembly);
-        });
+        services.AddRazorComponents()
+            .AddInteractiveServerComponents(options =>
+            {
+                options.RootComponents.RegisterCustomElsaStudioElements();
+            });
     }
 
-    private void ConfigureEndpoints(IServiceCollection services)
+    private void ConfigureElsa(IServiceCollection services, IConfiguration configuration)
     {
-        // 不需要
-        //Configure<AbpEndpointRouterOptions>(options =>
+        //Configure<AbpElsaNextShellOptions>(options =>
         //{
-        //    options.EndpointConfigureActions.Add(
-        //        (context) =>
-        //        {
-        //            context.Endpoints.MapFallbackToPage("/_Host");
-        //        });
+        //    options.WithFeature<SqliteWorkflowPersistenceShellFeature>();
         //});
-        var preActions = services.GetPreConfigureActions<AbpAspNetCoreMvcOptions>();
 
-        services.AddAbpApiVersioning(options =>
+        services.AddOpenIdConnectAuth(options =>
         {
-            options.ReportApiVersions = true;
-            options.AssumeDefaultVersionWhenUnspecified = true;
-
-            //options.ApiVersionReader = new HeaderApiVersionReader("api-version"); //Supports header too
-            //options.ApiVersionReader = new MediaTypeApiVersionReader(); //Supports accept header too
-        }, mvcOptions =>
-        {
-            mvcOptions.ConfigureAbp(preActions.Configure());
+            configuration.GetSection("Authentication:OpenIdConnect").Bind(options);
         });
     }
 
@@ -295,6 +307,16 @@ public partial class WorkflowServiceModule
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
             options.ExposeIntegrationServices = true;
+        });
+
+        Configure<AbpNavigationOptions>(options =>
+        {
+            options.MenuContributors.Add(new UserMenuContributor());
+        });
+
+        Configure<AbpRouterOptions>(options =>
+        {
+            options.AppAssembly = typeof(WorkflowServiceModule).Assembly;
         });
     }
 
@@ -411,6 +433,9 @@ public partial class WorkflowServiceModule
         {
             options.Languages.Add(new LanguageInfo("en", "en", "English"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+
+            options.Resources.Get<AbpUiResource>()
+                .AddVirtualJson("/Localization/Resources");
         });
 
         Configure<AbpLocalizationCultureMapOptions>(options =>
@@ -438,7 +463,7 @@ public partial class WorkflowServiceModule
             options.AutoValidate = false;
         });
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services.AddAuthentication()
             .AddAbpJwtBearer(options =>
             {
                 configuration.GetSection("AuthServer").Bind(options);
@@ -454,7 +479,20 @@ public partial class WorkflowServiceModule
                 {
                     options.TokenValidationParameters.ValidAudiences = validAudiences;
                 }
-            });
+
+                options.Events ??= new JwtBearerEvents();
+                var previousOnTokenValidated = options.Events.OnTokenValidated;
+                options.Events.OnTokenValidated = async context =>
+                {
+                    await previousOnTokenValidated(context);
+                    if (context.Principal?.Identity?.IsAuthenticated == true)
+                    {
+                        context.Principal.AddIdentity(new ClaimsIdentity(
+                            new[] { new Claim(Elsa.PermissionNames.ClaimType, Elsa.PermissionNames.All) }));
+                    }
+                };
+            })
+            ;
 
         services
             .AddDataProtection()

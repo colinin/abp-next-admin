@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.Studio.Blazor</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.Studio.Blazor</PackageId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Localization" />
+		<PackageReference Include="Volo.Abp.UI.Navigation" />
+		<PackageReference Include="Volo.Abp.VirtualFileSystem" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext\LINGYUN.Abp.ElsaNext.csproj" />
+		<!-- ABP-hosted Elsa Studio UI copy (en/zh-Hans) + Elsa ILocalizationProvider bridge. -->
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.Studio.Translations\LINGYUN.Abp.ElsaNext.Studio.Translations.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Elsa Studio, Blazor Server hosting pieces (Elsa.Studio 3.8.0-rc2). -->
+		<PackageReference Include="Elsa.Studio.Core.BlazorServer" />
+		<PackageReference Include="Elsa.Studio.Settings" />
+		<PackageReference Include="Elsa.Studio.Shell" />
+		<PackageReference Include="Elsa.Studio.Workflows" />
+		<PackageReference Include="Elsa.Studio.Workflows.Designer" />
+		<PackageReference Include="Elsa.Api.Client" />
+		<PackageReference Include="Elsa.Studio.Authentication.Abstractions" />
+		<PackageReference Include="Elsa.Studio.Localization.BlazorServer" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Localization\**\*.json" />
+	</ItemGroup>
+
+</Project>

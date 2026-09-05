@@ -1,0 +1,137 @@
+@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
+
+<MudGrid Class="mb-3">
+    <MudItem xs="12" md="6">
+        <MudCard Style="height: 100%;">
+            <MudCardContent>
+                @if (!IsAuthenticated)
+                {
+                    <MudText Typo="Typo.h5" Class="mb-2">欢迎使用 Elsa 工作室</MudText>
+                    <MudText Typo="Typo.body1" Class="mud-text-secondary mb-2">
+                        以 Blazor Server 模式集成的 Elsa 工作流工作室：服务端渲染与交互，接口调用在服务端完成，凭据不出浏览器。
+                    </MudText>
+                    <MudButton Href="/Account/Login" Variant="Variant.Filled" Color="Color.Primary" Class="mb-4"
+                               StartIcon="@Icons.Material.Filled.Login">登录</MudButton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h5" Class="mb-2">欢迎回来</MudText>
+                    <MudText Typo="Typo.body1" Class="mud-text-secondary mb-3">
+                        通过左侧菜单进入 <strong>Elsa 工作室</strong>：管理工作流定义与实例，打开设计器进行可视化编排。
+                    </MudText>
+                    <MudButton StartIcon="@Icons.Material.Filled.AccountTree" Variant="Variant.Text" Color="Color.Primary"
+                               OnClick="GoDefinitions">工作流定义</MudButton>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" md="6">
+        <MudCard Style="height: 100%;">
+            <MudCardContent>
+                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mb-2">
+                    <MudIcon Icon="@Icons.Material.Filled.Info" Class="me-1" />关于
+                </MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary mb-3">
+                    服务端 Blazor Server（SignalR）承载 Elsa Studio；认证走外部 OIDC AuthServer 授权码 + PKCE；
+                    Studio 页面以 ABP 子页面呈现（路由在菜单中定义）。
+                </MudText>
+                <MudDivider Class="my-2" />
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                    集成模块：LINGYUN.Abp.ElsaNext.Studio.Blazor
+                </MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<MudGrid>
+    <MudItem xs="12" lg="4">
+        <MudCard Style="height: 100%;">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">More from ABP.IO</MudText>
+            </MudCardHeader>
+            <MudCardContent Class="pt-0">
+                <MudList T="string" Dense="true">
+                    <MudListItem Icon="@Icons.Material.Filled.Check" IconColor="Color.Primary"
+                                 Href="https://github.com/abpframework/abp/releases" Target="_blank">
+                        Latest Release Logs
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.Check" IconColor="Color.Primary"
+                                 Href="https://abp.io/video-courses/essentials" Target="_blank">
+                        Video Courses
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.Check" IconColor="Color.Primary"
+                                 Href="https://docs.abp.io/en/abp/latest/Samples/Index" Target="_blank">
+                        Samples
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.Check" IconColor="Color.Primary"
+                                 Href="https://abp.io/books" Target="_blank">
+                        Books
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.Check" IconColor="Color.Primary"
+                                 Href="https://abp.io/faq" Target="_blank">
+                        FAQ
+                    </MudListItem>
+                </MudList>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" lg="8">
+        <MudCard Style="height: 100%;">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">Follow us on Social Media</MudText>
+            </MudCardHeader>
+            <MudCardContent Class="pt-0">
+                <MudGrid Spacing="0">
+                    <MudItem xs="12" sm="6">
+                        <MudList T="string" Dense="true">
+                            <MudListItem Href="https://twitter.com/abpframework" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.Twitter" IconColor="Color.Primary">
+                                X.com (Twitter)
+                            </MudListItem>
+                            <MudListItem Href="https://community.abp.io/discord" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.Discord" IconColor="Color.Primary">
+                                Discord
+                            </MudListItem>
+                            <MudListItem Href="https://stackoverflow.com/questions/tagged/abp" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.StackOverflow" IconColor="Color.Primary">
+                                Stack Overflow
+                            </MudListItem>
+                        </MudList>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudList T="string" Dense="true">
+                            <MudListItem Href="@("https://www.youtube.com/@Volosoft")" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.YouTube" IconColor="Color.Error">
+                                YouTube
+                            </MudListItem>
+                            <MudListItem Href="https://www.instagram.com/abpframework/" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.Instagram" IconColor="Color.Secondary">
+                                Instagram
+                            </MudListItem>
+                            <MudListItem Href="https://github.com/abpframework/abp" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.GitHub" IconColor="Color.Dark">
+                                GitHub
+                            </MudListItem>
+                        </MudList>
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private bool IsAuthenticated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        IsAuthenticated = state.User.Identity?.IsAuthenticated == true;
+    }
+
+    private void GoDefinitions() => Navigation.NavigateTo("/elsa/workflows/definitions");
+}
