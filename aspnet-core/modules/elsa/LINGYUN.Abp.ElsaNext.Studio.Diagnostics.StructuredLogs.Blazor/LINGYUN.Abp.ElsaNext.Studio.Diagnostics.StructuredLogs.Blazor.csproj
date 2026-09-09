@@ -19,6 +19,7 @@
 		<!-- Official Elsa Studio structured-logs module (rc2): services, SignalR observer, API client
 		     and the viewer page component reused by this module's ABP page (see Pages/). -->
 		<PackageReference Include="Elsa.Diagnostics.StructuredLogs" />
+		<PackageReference Include="Elsa.Diagnostics.StructuredLogs.Dashboard" />
 		<PackageReference Include="Elsa.Studio.Diagnostics.StructuredLogs.Dashboard" />
 	</ItemGroup>
 
@@ -27,7 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Content Include="Remove\**\*.json" />
 		<EmbeddedResource Include="Localization\**\*.json" />
 	</ItemGroup>
-
 </Project>

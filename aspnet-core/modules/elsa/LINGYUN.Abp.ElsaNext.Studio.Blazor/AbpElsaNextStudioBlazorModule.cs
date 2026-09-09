@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -28,7 +29,8 @@ namespace LINGYUN.Abp.ElsaNext.Studio.Blazor;
     typeof(AbpLocalizationModule),
     typeof(AbpUiNavigationModule),
     typeof(AbpVirtualFileSystemModule),
-    typeof(AbpAspNetCoreComponentsWebThemingMudBlazorModule))]
+    typeof(AbpAspNetCoreComponentsWebThemingMudBlazorModule),
+    typeof(AbpAspNetCoreMvcUiBundlingAbstractionsModule))]
 public class AbpElsaNextStudioBlazorModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

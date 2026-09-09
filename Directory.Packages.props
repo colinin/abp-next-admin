@@ -42,6 +42,7 @@
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.Client.Common" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.Contracts" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.NewtonsoftJson" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="$(VoloAbpPackageVersion)" />

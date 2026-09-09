@@ -4,10 +4,12 @@
 @inject ILocalizer Localizer
 
 @using Elsa.Studio.Diagnostics.StructuredLogs.UI.Pages
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Bundling
 
 <HeadContent>
-    <link rel="stylesheet" href="_content/Elsa.Studio.Diagnostics.StructuredLogs/structuredLogs.css" />
-    <link rel="stylesheet" href="_content/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor/structuredLogs-overrides.css" />
+@*     <link rel="stylesheet" href="_content/Elsa.Studio.Diagnostics.StructuredLogs/structuredLogs.css" />
+    <link rel="stylesheet" href="_content/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor/structuredLogs-overrides.css" /> *@
+    <AbpStyles BundleName="@typeof(StructuredLogs).FullName" />
 </HeadContent>
 
 <PageTitle>@Localizer["Logs"]</PageTitle>
