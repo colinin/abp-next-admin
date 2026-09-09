@@ -4,33 +4,11 @@
 @inject ILocalizer Localizer
 
 @using Elsa.Studio.Diagnostics.StructuredLogs.UI.Pages
-@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Bundling
 
 <HeadContent>
-@*     <link rel="stylesheet" href="_content/Elsa.Studio.Diagnostics.StructuredLogs/structuredLogs.css" />
-    <link rel="stylesheet" href="_content/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor/structuredLogs-overrides.css" /> *@
-    <AbpStyles BundleName="@typeof(StructuredLogs).FullName" />
+    <link rel="stylesheet" href="_content/Elsa.Studio.Diagnostics.StructuredLogs/structuredLogs.css" />
+    <link rel="stylesheet" href="_content/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor/structuredLogs-overrides.css" />
 </HeadContent>
 
-<PageTitle>@Localizer["Logs"]</PageTitle>
+<StructuredLogs />
 
-@if (_interactive)
-{
-    <StructuredLogs />
-}
-
-@code {
-    private bool _interactive;
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (!firstRender || _interactive)
-            return;
-
-        // The official viewer subscribes to the SignalR live hub on init; mounting it only after
-        // the circuit is interactive keeps the static SSR prerender from hanging on that first
-        // frame (same approach as the workflow instance viewer).
-        _interactive = true;
-        StateHasChanged();
-    }
-}
