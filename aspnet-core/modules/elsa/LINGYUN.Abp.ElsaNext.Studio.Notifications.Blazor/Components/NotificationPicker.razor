@@ -1,4 +1,4 @@
-﻿@using Elsa.Api.Client.Shared.UIHints.DropDown
+﻿@using LINGYUN.Abp.ElsaNext.Studio.Blazor.Components
 @inject ILocalizer Localizer
 
 @inherits StudioComponentBase
@@ -6,25 +6,18 @@
     var inputDescriptor = EditorContext.InputDescriptor;
     var displayName = inputDescriptor.DisplayName;
     var description = inputDescriptor.Description;
-    var selectedValue = GetSelectedValue();
 }
 
 <ExpressionInput EditorContext="@EditorContext">
     <ChildContent>
-        <MudSelectExtended 
-            T="SelectListItem" 
-            Label="@Localizer[displayName]" 
-            Variant="Variant.Outlined" 
-            HelperText="@Localizer[description]" 
-            Margin="Margin.Dense" 
-            Value="@selectedValue" 
-            SearchBox="true"
-            OnSearchStringChange="OnSearch"
-            ItemCollection="@_items"
-            ToStringFunc="@(item => item?.Text ?? "")"
-            ValueChanged="OnValueChanged"
-            ReadOnly="EditorContext.IsReadOnly"
-            Disabled="EditorContext.IsReadOnly">
-        </MudSelectExtended>
+        <MudTextFieldEx Value="@(_selectedItem?.Text ?? string.Empty)"
+                            Label="@Localizer[displayName]"
+                            HelperText="@Localizer[description]"
+                            Variant="Variant.Outlined"
+                            Margin="Margin.Dense"
+                            ReadOnly="true"
+                            Disabled="EditorContext.IsReadOnly"
+                            OnFieldClick="@(_ => OpenSelectDialogAsync())"
+                            AdornmentIcons="GetAdornmentIcons()" />
     </ChildContent>
 </ExpressionInput>
