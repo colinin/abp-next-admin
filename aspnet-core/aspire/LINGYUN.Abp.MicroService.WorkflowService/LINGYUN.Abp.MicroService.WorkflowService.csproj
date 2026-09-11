@@ -19,6 +19,7 @@
 		<PackageReference Include="DotNetCore.CAP.PostgreSql" />
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
 		<PackageReference Include="Elsa.Agents.Persistence.EFCore.Sqlite" />
+		<PackageReference Include="Elsa.AI.Persistence.EFCore.Sqlite" />
 		<PackageReference Include="Elsa.Persistence.EFCore.Sqlite" />
 		<PackageReference Include="Elsa.Scheduling.Quartz.EFCore.Sqlite" />
 		<PackageReference Include="Elsa.Secrets.Persistence.EFCore.Sqlite" />
@@ -93,6 +94,8 @@
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Notifications\LINGYUN.Abp.ElsaNext.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Secrets.Blazor\LINGYUN.Abp.ElsaNext.Secrets.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Server\LINGYUN.Abp.ElsaNext.Server.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.AI.Blazor\LINGYUN.Abp.ElsaNext.Studio.AI.Blazor.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Alterations.Blazor\LINGYUN.Abp.ElsaNext.Studio.Alterations.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Blazor\LINGYUN.Abp.ElsaNext.Studio.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor\LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor\LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor.csproj" />

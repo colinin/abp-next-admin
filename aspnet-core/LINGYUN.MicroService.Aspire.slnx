@@ -556,6 +556,7 @@
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Agents.Blazor/LINGYUN.Abp.ElsaNext.Agents.Blazor.csproj" Id="fc82705b-186b-4d0d-80d2-473f08596b48" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Agents/LINGYUN.Abp.ElsaNext.Agents.csproj" Id="8699b2ee-5d73-4e7e-9f52-4ec02e5c8c52" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.AI/LINGYUN.Abp.ElsaNext.AI.csproj" Id="d90d0e07-be50-45d5-aa45-1a917203cc3b" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Alterations/LINGYUN.Abp.ElsaNext.Alterations.csproj" Id="1e5e1733-8c5c-4ede-9ee8-7f6ae1e85bb6" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.BlobStoring/LINGYUN.Abp.ElsaNext.BlobStoring.csproj" Id="ab3ed7c4-918e-40ae-84d6-f98d9ff9c6b1" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Email/LINGYUN.Abp.ElsaNext.Email.csproj" Id="c8cd2bd2-05f2-44b7-ab7b-7943f00f849e" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Labels/LINGYUN.Abp.ElsaNext.Labels.csproj" Id="b2b88f48-e8a2-4760-85f5-d5a3ffffa6f8" />
@@ -564,6 +565,7 @@
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Secrets/LINGYUN.Abp.ElsaNext.Secrets.csproj" Id="f49baa76-12c5-4294-b942-fc6f5d49d3e6" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Server/LINGYUN.Abp.ElsaNext.Server.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.AI.Blazor/LINGYUN.Abp.ElsaNext.Studio.AI.Blazor.csproj" Id="3246ab91-4cdc-4349-9eb6-e65eef1da0bd" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Alterations.Blazor/LINGYUN.Abp.ElsaNext.Studio.Alterations.Blazor.csproj" Id="eb1220d6-31cf-4f73-a9fc-494d30de61df" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Blazor/LINGYUN.Abp.ElsaNext.Studio.Blazor.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor/LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor.csproj" Id="86b1ee1c-6266-4003-8ab2-67aa497ea217" />

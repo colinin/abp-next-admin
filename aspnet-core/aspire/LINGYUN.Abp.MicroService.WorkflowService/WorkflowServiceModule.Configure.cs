@@ -1,10 +1,11 @@
 ﻿using DotNetCore.CAP;
 using Elsa.Agents;
-using Elsa.AI.Persistence.EFCore.Features;
 using Elsa.AI.Persistence.EFCore.Sqlite.Extensions;
+using Elsa.Alterations.Extensions;
 using Elsa.Extensions;
 using Elsa.Features.Services;
 using Elsa.Persistence.EFCore.Extensions;
+using Elsa.Persistence.EFCore.Modules.Alterations;
 using Elsa.Persistence.EFCore.Modules.Labels;
 using Elsa.Persistence.EFCore.Modules.Management;
 using Elsa.Persistence.EFCore.Modules.Runtime;
@@ -12,7 +13,6 @@ using Elsa.Secrets.Persistence.EFCore.Extensions;
 using Elsa.Secrets.Persistence.EFCore.Sqlite.Extensions;
 using Elsa.Studio.Authentication.OpenIdConnect.HttpMessageHandlers;
 using Elsa.Studio.Workflows.Designer.Extensions;
-using LINGYUN.Abp.ElsaNext.Permissions;
 using LINGYUN.Abp.ElsaNext.Studio.Blazor;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
@@ -31,7 +31,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
@@ -49,7 +48,6 @@ using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Auditing;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
 using Volo.Abp.EntityFrameworkCore;
@@ -160,7 +158,9 @@ public partial class WorkflowServiceModule
         {
             options.IsBlazorWebApp = true;
         });
+
         services.AddAIPersistenceStores(options => options.UseSqlite());
+
         PreConfigure<IModule>(elsa =>
         {
             elsa.UseWorkflowManagement(management =>
@@ -171,6 +171,11 @@ public partial class WorkflowServiceModule
             elsa.UseWorkflowRuntime(runtime =>
             {
                 runtime.UseEntityFrameworkCore(ef => ef.UseSqlite());
+            });
+
+            elsa.UseAlterations(alteration =>
+            {
+                alteration.UseEntityFrameworkCore(ef => ef.UseSqlite());
             });
 
             elsa.UseAgentPersistence(agent =>
@@ -225,6 +230,8 @@ public partial class WorkflowServiceModule
         //{
         //    options.WithFeature<SqliteWorkflowPersistenceShellFeature>();
         //});
+
+        // EndpointSecurityOptions.DisableSecurity();
 
         services.AddOpenIdConnectAuth(options =>
         {
