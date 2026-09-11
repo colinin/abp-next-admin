@@ -2,19 +2,12 @@ using Elsa.Studio.Contracts;
 using Elsa.Studio.Dashboard.Models;
 using Elsa.Studio.Dashboard.Services;
 using Elsa.Studio.Dashboard.Widgets;
-using Elsa.Studio.Localization;
 using LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.Services;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
 namespace LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.Pages;
 
-/// <summary>
-/// Elsa Studio dashboard page (official Elsa.Studio.Dashboard content hosted under
-/// <c>/elsa/workflows/dashboard</c>). The dashboard service reads the Elsa dashboard API with the
-/// circuit session token; the widgets (metrics/trend/activity/...) come from the official
-/// dashboard modules.
-/// </summary>
 public partial class Dashboard : IAsyncDisposable
 {
     private CancellationTokenSource? _loadCancellationTokenSource;
@@ -86,18 +79,6 @@ public partial class Dashboard : IAsyncDisposable
 
     protected override async Task OnInitializedAsync()
     {
-        // Features register their widgets into the (singleton) widget registry during
-        // InitializeFeaturesAsync; the official host triggers this from its own startup tasks, so
-        // do it here to be safe when hosting the page standalone in an ABP layout.
-        try
-        {
-            await FeatureService.InitializeFeaturesAsync();
-        }
-        catch (Exception)
-        {
-            // Remote feature discovery is unavailable (e.g. backend feature API down); the page
-            // still renders the DI-registered widgets.
-        }
         await RefreshAsync();
     }
 
