@@ -27,6 +27,9 @@
                       Dense="true"
                       Hover="true"
                       Breakpoint="Breakpoint.None"
+                      MultiSelection="@AllowMultiple"
+                      SelectedItems="_selectedItems"
+                      SelectedItemsChanged="OnSelectedItemsChanged"
                       OnRowClick="OnRowClickAsync">
                 <HeaderContent>
                     <MudTh>@Localizer["Name"]</MudTh>
@@ -35,7 +38,14 @@
                 <RowTemplate>
                     <MudTd DataLabel="@Localizer["Name"]">@context.Text</MudTd>
                     <MudTd DataLabel="" Style="text-align:right">
-                        @if (context.Value == SelectedValue)
+                        @if (AllowMultiple)
+                        {
+                            @if (_selectedItems.Contains(context))
+                            {
+                                <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" Size="Size.Small" />
+                            }
+                        }
+                        else if (context.Value == SelectedValue)
                         {
                             <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" Size="Size.Small" />
                         }
@@ -54,6 +64,10 @@
         </MudStack>
     </DialogContent>
     <DialogActions>
+        @if (AllowMultiple)
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ConfirmAsync">@Localizer["Select"]</MudButton>
+        }
         <MudButton Variant="Variant.Text" OnClick="CancelAsync">@Localizer["Cancel"]</MudButton>
     </DialogActions>
 </MudDialog>
@@ -63,13 +77,18 @@
 
     private MudTable<SelectListItem>? _table;
     private string? _searchText;
+    private HashSet<SelectListItem> _selectedItems = [];
     private CancellationTokenSource? _debounceCancellationTokenSource;
 
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
 
     [Parameter] public string Title { get; set; } = string.Empty;
 
+    [Parameter] public bool AllowMultiple { get; set; }
+
     [Parameter] public string? SelectedValue { get; set; }
+
+    [Parameter] public IReadOnlyCollection<string> SelectedValues { get; set; } = [];
 
     [Inject] protected IIdentityUserRepository IdentityUserRepository { get; set; } = null!;
 
@@ -119,8 +138,22 @@
             cancellationToken: cancellationToken);
 
         var items = users
-            .Select(user => new SelectListItem(user.Name ?? user.UserName, user.Id.ToString()))
+            .Select(user => new SelectListItem(
+                user.Name.IsNullOrWhiteSpace() ? user.UserName : user.Name, 
+                user.Id.ToString()))
             .ToList();
+
+        if (AllowMultiple && SelectedValues.Count > 0)
+        {
+            var selectedItems = new HashSet<SelectListItem>(_selectedItems);
+
+            foreach (var item in items.Where(x => SelectedValues.Contains(x.Value)))
+            {
+                selectedItems.Add(item);
+            }
+
+            _selectedItems = selectedItems;
+        }
 
         return new TableData<SelectListItem>
         {
@@ -129,9 +162,43 @@
         };
     }
 
+    private void OnSelectedItemsChanged(HashSet<SelectListItem> selectedItems)
+    {
+        _selectedItems = selectedItems;
+    }
+
     private async Task OnRowClickAsync(TableRowClickEventArgs<SelectListItem> args)
     {
-        await SelectAsync(args.Item);
+        if (!AllowMultiple)
+        {
+            await SelectAsync(args.Item);
+            return;
+        }
+
+        ToggleSelection(args.Item);
+    }
+
+    private void ToggleSelection(SelectListItem? item)
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        var selectedItems = new HashSet<SelectListItem>(_selectedItems);
+
+        if (!selectedItems.Remove(item))
+        {
+            selectedItems.Add(item);
+        }
+
+        _selectedItems = selectedItems;
+    }
+
+    private Task ConfirmAsync()
+    {
+        MudDialog.Close(DialogResult.Ok<IReadOnlyList<SelectListItem>>(_selectedItems.ToList()));
+        return Task.CompletedTask;
     }
 
     private Task SelectAsync(SelectListItem? item)

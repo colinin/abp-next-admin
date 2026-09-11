@@ -1,6 +1,7 @@
 @using Elsa.Api.Client.Shared.UIHints.DropDown
 @using Elsa.Studio.Models
 @using LINGYUN.Abp.ElsaNext.Studio.Blazor.Components
+@using System.Text.Json
 @using Volo.Abp.Identity
 @inject ILocalizer Localizer
 
@@ -13,33 +14,41 @@
 
 <ExpressionInput EditorContext="@EditorContext">
     <ChildContent>
-        <MudTextFieldEx Value="@(_selectedItem?.Text ?? string.Empty)"
-                            Label="@Localizer[displayName]"
-                            HelperText="@Localizer[description]"
-                            Variant="Variant.Outlined"
-                            Margin="Margin.Dense"
-                            ReadOnly="true"
-                            Disabled="EditorContext.IsReadOnly"
-                            OnFieldClick="@(_ => OpenSelectDialogAsync())"
-                            AdornmentIcons="GetAdornmentIcons()" />
+        <MudTextFieldEx Value="@SelectedText"
+                        Label="@Localizer[displayName]"
+                        HelperText="@Localizer[description]"
+                        Variant="Variant.Outlined"
+                        Margin="Margin.Dense"
+                        ReadOnly="true"
+                        Disabled="EditorContext.IsReadOnly"
+                        OnFieldClick="@(_ => OpenSelectDialogAsync())"
+                        AdornmentIcons="GetAdornmentIcons()" />
     </ChildContent>
 </ExpressionInput>
 
 @code {
-    private SelectListItem? _selectedItem;
+    private readonly List<SelectListItem> _selectedItems = [];
+
+    [Parameter] public bool AllowMultiple { get; set; }
 
     [Parameter] public DisplayInputEditorContext EditorContext { get; set; } = null!;
 
     [Inject] protected IIdentityUserRepository IdentityUserRepository { get; set; } = null!;
     [Inject] protected IDialogService DialogService { get; set; } = null!;
 
+    private string SelectedText => string.Join(", ", _selectedItems.Select(x => x.Text));
+
     protected override async Task OnInitializedAsync()
     {
-        var selectedItem = await ResolveSelectedItemAsync();
+        var selectedItems = await ResolveSelectedItemsAsync();
 
-        if (selectedItem != null)
+        if (selectedItems.Count > 0)
         {
-            await InvokeAsync(() => _selectedItem = selectedItem);
+            await InvokeAsync(() =>
+            {
+                _selectedItems.Clear();
+                _selectedItems.AddRange(selectedItems);
+            });
         }
     }
 
@@ -54,7 +63,9 @@
         var parameters = new DialogParameters<IdentityUserSelectDialog>
         {
             { x => x.Title, Localizer[inputDescriptor.DisplayName ?? inputDescriptor.Name] },
-            { x => x.SelectedValue, _selectedItem?.Value }
+            { x => x.AllowMultiple, AllowMultiple },
+            { x => x.SelectedValue, _selectedItems.FirstOrDefault()?.Value },
+            { x => x.SelectedValues, _selectedItems.Select(x => x.Value).ToArray() }
         };
         var options = new DialogOptions
         {
@@ -66,12 +77,31 @@
         var dialog = await DialogService.ShowAsync<IdentityUserSelectDialog>(string.Empty, parameters, options);
         var result = await dialog.Result;
 
-        if (result is { Canceled: false, Data: SelectListItem item })
+        if (result is not { Canceled: false })
+        {
+            return;
+        }
+
+        if (result.Data is SelectListItem selectedItem)
         {
             await InvokeAsync(async () =>
             {
-                _selectedItem = item;
-                await EditorContext.UpdateValueOrLiteralExpressionAsync(item.Value);
+                _selectedItems.Clear();
+                _selectedItems.Add(selectedItem);
+                await EditorContext.UpdateValueOrLiteralExpressionAsync(selectedItem.Value);
+            });
+
+            return;
+        }
+
+        if (result.Data is IReadOnlyList<SelectListItem> selectedItems)
+        {
+            await InvokeAsync(async () =>
+            {
+                _selectedItems.Clear();
+                _selectedItems.AddRange(selectedItems);
+
+                await EditorContext.UpdateValueOrObjectExpressionAsync(_selectedItems.Select(x => x.Value).ToList());
             });
         }
     }
@@ -89,7 +119,7 @@
         {
             Icon = Icons.Material.Filled.Clear,
             Tooltip = Localizer["Clear"],
-            Visible = _selectedItem != null,
+            Visible = _selectedItems.Count > 0,
             Disabled = EditorContext.IsReadOnly,
             OnClick = ClearAsync
         }
@@ -99,18 +129,33 @@
     {
         await InvokeAsync(async () =>
         {
-            _selectedItem = null;
-            await EditorContext.UpdateValueOrLiteralExpressionAsync(string.Empty);
+            _selectedItems.Clear();
+
+            if (AllowMultiple)
+            {
+                await EditorContext.UpdateValueOrObjectExpressionAsync(new List<string>());
+            }
+            else
+            {
+                await EditorContext.UpdateValueOrLiteralExpressionAsync(string.Empty);
+            }
         });
     }
 
-    private async Task<SelectListItem?> ResolveSelectedItemAsync()
+    private async Task<IReadOnlyList<SelectListItem>> ResolveSelectedItemsAsync()
+    {
+        return AllowMultiple
+            ? await ResolveSelectedUsersAsync()
+            : await ResolveSelectedUserAsync();
+    }
+
+    private async Task<IReadOnlyList<SelectListItem>> ResolveSelectedUserAsync()
     {
         var value = EditorContext.GetLiteralValueOrDefault();
 
         if (string.IsNullOrWhiteSpace(value))
         {
-            return null;
+            return [];
         }
 
         if (Guid.TryParse(value, out var userId))
@@ -119,10 +164,63 @@
 
             if (user != null)
             {
-                return new SelectListItem(user.Name ?? user.UserName, user.Id.ToString());
+                return [new SelectListItem(user.Name ?? user.UserName, user.Id.ToString())];
             }
         }
 
-        return new SelectListItem(value, value);
+        return [new SelectListItem(value, value)];
+    }
+
+    private async Task<IReadOnlyList<SelectListItem>> ResolveSelectedUsersAsync()
+    {
+        var values = ParseSelectedValues(EditorContext.GetObjectValueOrDefault());
+
+        if (values.Count == 0)
+        {
+            return [];
+        }
+
+        var userIds = values.Where(x => Guid.TryParse(x, out _)).Select(Guid.Parse).ToList();
+        List<IdentityUser> users = [];
+
+        if (userIds.Count > 0)
+        {
+            users = await IdentityUserRepository.GetListByIdsAsync(userIds);
+        }
+
+        var names = users.ToDictionary(x => x.Id.ToString(), x => x.Name ?? x.UserName, StringComparer.OrdinalIgnoreCase);
+
+        return values
+            .Select(value => new SelectListItem(names.TryGetValue(value, out var name) ? name : value, value))
+            .ToList();
+    }
+
+    private static IReadOnlyList<string> ParseSelectedValues(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return [];
+        }
+
+        var trimmed = value.Trim();
+
+        try
+        {
+            if (trimmed.StartsWith('['))
+            {
+                return JsonSerializer.Deserialize<List<string>>(trimmed) ?? [];
+            }
+
+            if (trimmed.StartsWith('"'))
+            {
+                var single = JsonSerializer.Deserialize<string>(trimmed);
+                return string.IsNullOrWhiteSpace(single) ? [] : [single];
+            }
+        }
+        catch (JsonException)
+        {
+        }
+
+        return trimmed.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 }

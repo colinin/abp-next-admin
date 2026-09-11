@@ -61,7 +61,7 @@ public class SendNotification : CodeActivity
 
     [Input(
         Description = "The recipients email addresses.", 
-        UIHint = AbpElsaUIHints.UserPicker)]
+        UIHint = AbpElsaUIHints.UserPickerMultiple)]
     public Input<ICollection<Guid>> To { get; set; } = null!;
 
     [Input(
