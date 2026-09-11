@@ -1,8 +1,11 @@
 using Elsa.Extensions;
 using Elsa.Features.Services;
+using Elsa.Workflows.Api.RealTime.Hubs;
 using LINGYUN.Abp.ElsaNext.Localization;
 using LINGYUN.Abp.ElsaNext.Permissions;
 using LINGYUN.Abp.ElsaNext.Server.Permissions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -60,6 +63,14 @@ public class AbpElsaNextServerModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<AbpEndpointRouterOptions>(options =>
+        {
+            options.EndpointConfigureActions.Add((context) =>
+            {
+                context.Endpoints.MapHub<WorkflowInstanceHub>("/elsa/hubs/workflow-instance");
+            });
+        });
+
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<AbpElsaNextServerModule>();

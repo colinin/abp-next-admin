@@ -20,6 +20,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Elsa.Api.Common" VersionOverride="$(ElsaNextPackageVersion)" />
 		<PackageReference Include="Elsa.Dashboard.Api" VersionOverride="$(ElsaNextPackageVersion)" />
 		<PackageReference Include="Elsa.Expressions.CSharp" VersionOverride="$(ElsaNextPackageVersion)" />
