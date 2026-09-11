@@ -1,0 +1,111 @@
+@namespace LINGYUN.Abp.ElsaNext.Studio.Blazor.Components
+@using System.Globalization
+
+<div class="@Classname" style="@WrapperStyle" @onclick="HandleFieldClickAsync">
+    <MudTextField T="string"
+                  Value="@Value"
+                  ValueChanged="ValueChanged"
+                  Label="@Label"
+                  HelperText="@HelperText"
+                  Placeholder="@Placeholder"
+                  Variant="@Variant"
+                  Margin="@Margin"
+                  ReadOnly="@ReadOnly"
+                  Disabled="@Disabled"
+                  Immediate="@Immediate"
+                  InputType="@InputType" />
+
+    @if (_visibleIcons.Length > 0)
+    {
+        <div style="@IconContainerStyle" @onclick:stopPropagation="true">
+            @foreach (var icon in _visibleIcons)
+            {
+                var definition = icon;
+
+                <MudTooltip Text="@definition.Tooltip" Disabled="@string.IsNullOrWhiteSpace(definition.Tooltip)">
+                    <MudIconButton Icon="@definition.Icon"
+                                   Size="@(Margin == Margin.Dense ? Size.Small : Size.Medium)"
+                                   Color="@definition.Color"
+                                   Disabled="@definition.Disabled"
+                                   aria-label="@(definition.AriaLabel ?? definition.Tooltip)"
+                                   OnClick="@(() => InvokeIconAsync(definition))" />
+                </MudTooltip>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .abp-elsa-adornment-text-field input {
+        padding-inline-end: var(--abp-elsa-adornment-space, 8px);
+    }
+</style>
+
+@code {
+    private const string WrapperClassname = "abp-elsa-adornment-text-field";
+
+    private MudTextFieldExIcon[] _visibleIcons = [];
+
+    [Parameter] public string? Value { get; set; }
+
+    [Parameter] public EventCallback<string?> ValueChanged { get; set; }
+
+    [Parameter] public string? Label { get; set; }
+
+    [Parameter] public string? HelperText { get; set; }
+
+    [Parameter] public string? Placeholder { get; set; }
+
+    [Parameter] public Variant Variant { get; set; } = Variant.Outlined;
+
+    [Parameter] public Margin Margin { get; set; } = Margin.Dense;
+
+    [Parameter] public bool ReadOnly { get; set; }
+
+    [Parameter] public bool Disabled { get; set; }
+
+    [Parameter] public bool Immediate { get; set; } = true;
+
+    [Parameter] public InputType InputType { get; set; } = InputType.Text;
+
+    [Parameter] public IReadOnlyList<MudTextFieldExIcon>? AdornmentIcons { get; set; }
+
+    [Parameter] public EventCallback<MouseEventArgs> OnFieldClick { get; set; }
+
+    [Parameter] public double AdornmentHeight { get; set; } = 40;
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter] public string? Style { get; set; }
+
+    private string Classname => string.IsNullOrWhiteSpace(Class) ? WrapperClassname : $"{WrapperClassname} {Class}";
+
+    private string WrapperStyle =>
+        $"position: relative; --abp-elsa-adornment-space: {((_visibleIcons.Length * 32) + 8).ToString(CultureInfo.InvariantCulture)}px; " +
+        $"cursor: {(OnFieldClick.HasDelegate && !Disabled ? "pointer" : "default")}; {Style}";
+
+    private string IconContainerStyle =>
+        $"position: absolute; top: 0; right: 8px; height: {AdornmentHeight.ToString(CultureInfo.InvariantCulture)}px; " +
+        "display: flex; align-items: center; gap: 2px; z-index: 1;";
+
+    protected override void OnParametersSet()
+    {
+        _visibleIcons = AdornmentIcons?.Where(x => x.Visible).ToArray() ?? [];
+    }
+
+    private async Task InvokeIconAsync(MudTextFieldExIcon icon)
+    {
+        if (icon.OnClick != null)
+        {
+            await icon.OnClick();
+        }
+    }
+
+    private async Task HandleFieldClickAsync()
+    {
+        if (!Disabled && OnFieldClick.HasDelegate)
+        {
+            await OnFieldClick.InvokeAsync();
+        }
+    }
+}

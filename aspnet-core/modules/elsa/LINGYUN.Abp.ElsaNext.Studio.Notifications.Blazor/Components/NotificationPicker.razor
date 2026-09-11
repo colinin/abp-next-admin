@@ -1,0 +1,23 @@
+﻿@using LINGYUN.Abp.ElsaNext.Studio.Blazor.Components
+@inject ILocalizer Localizer
+
+@inherits StudioComponentBase
+@{
+    var inputDescriptor = EditorContext.InputDescriptor;
+    var displayName = inputDescriptor.DisplayName;
+    var description = inputDescriptor.Description;
+}
+
+<ExpressionInput EditorContext="@EditorContext">
+    <ChildContent>
+        <MudTextFieldEx Value="@(_selectedItem?.Text ?? string.Empty)"
+                            Label="@Localizer[displayName]"
+                            HelperText="@Localizer[description]"
+                            Variant="Variant.Outlined"
+                            Margin="Margin.Dense"
+                            ReadOnly="true"
+                            Disabled="EditorContext.IsReadOnly"
+                            OnFieldClick="@(_ => OpenSelectDialogAsync())"
+                            AdornmentIcons="GetAdornmentIcons()" />
+    </ChildContent>
+</ExpressionInput>

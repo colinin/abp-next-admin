@@ -1,0 +1,12 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Path of the blob.": "文件存储路径。",
+    "Blob exists whether overwrite.": "覆盖已有文件。",
+    "The file data to save. This can be a stream, binary data, a string, a form file or a collection of files.": "要保存的文件数据。可以是流、二进制数据、字符串、表单文件或一组文件。",
+    "BlobStoring": "对象存储",
+    "Delete Blob": "删除文件",
+    "Read Blob": "打开文件",
+    "Save Blob": "保存文件"
+  }
+}

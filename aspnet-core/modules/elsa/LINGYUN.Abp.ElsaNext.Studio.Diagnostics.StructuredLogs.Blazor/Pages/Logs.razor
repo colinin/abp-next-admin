@@ -1,0 +1,14 @@
+@page "/diagnostics/structured-logs"
+@attribute [Authorize]
+@inherits StudioComponentBase
+@inject ILocalizer Localizer
+
+@using Elsa.Studio.Diagnostics.StructuredLogs.UI.Pages
+
+<HeadContent>
+    <link rel="stylesheet" href="_content/Elsa.Studio.Diagnostics.StructuredLogs/structuredLogs.css" />
+    <link rel="stylesheet" href="_content/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor/structuredLogs-overrides.css" />
+</HeadContent>
+
+<StructuredLogs />
+

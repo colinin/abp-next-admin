@@ -1,0 +1,49 @@
+@using LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.Services
+
+@inject ElsaStudioDashboardText Text
+
+@if (Context.Snapshot?.Hotspots != null)
+{
+    var response = Context.Snapshot.Hotspots;
+
+    <MudPaper Outlined="true" Elevation="0" Class="dashboard-panel dashboard-section" Style="@DashboardStyles.Panel">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="dashboard-section-header" Style="@DashboardStyles.SectionHeader">
+            <MudText Typo="Typo.subtitle1">@Text["Workflow hotspots"]</MudText>
+            <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@MetricLabel(response.Metric)</MudChip>
+        </MudStack>
+
+        @if (response.Items.Count == 0)
+        {
+            <MudAlert Severity="Severity.Info" Dense="true" Variant="Variant.Text">@Text["No hotspots in this range."]</MudAlert>
+        }
+        else
+        {
+            <MudTable T="DashboardHotspot" Items="@response.Items" Dense="true" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm">
+                <HeaderContent>
+                    <MudTh>@Text["Workflow"]</MudTh>
+                    <MudTh>@Text["Value"]</MudTh>
+                    <MudTh>@Text["Avg duration"]</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="@Text["Workflow"]">
+                        <MudStack Spacing="0">
+                            <MudText Typo="Typo.body2">@DisplayName(context)</MudText>
+                            <MudText Typo="Typo.caption" Class="dashboard-muted">@context.DefinitionId</MudText>
+                        </MudStack>
+                    </MudTd>
+                    <MudTd DataLabel="@Text["Value"]">@Text.Count(context.Value)</MudTd>
+                    <MudTd DataLabel="@Text["Avg duration"]">@Text.Duration(context.AverageDuration)</MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </MudPaper>
+}
+
+@code {
+    [Parameter] public DashboardWidgetContext Context { get; set; } = null!;
+    [Parameter] public DashboardWidgetDescriptor Descriptor { get; set; } = null!;
+
+    private string MetricLabel(string? metric) => string.IsNullOrWhiteSpace(metric) ? string.Empty : Text[metric];
+
+    private static string DisplayName(DashboardHotspot item) => string.IsNullOrWhiteSpace(item.WorkflowName) ? item.DefinitionId : item.WorkflowName!;
+}

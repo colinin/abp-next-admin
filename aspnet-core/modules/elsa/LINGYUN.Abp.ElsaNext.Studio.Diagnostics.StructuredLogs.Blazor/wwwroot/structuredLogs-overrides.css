@@ -1,0 +1,51 @@
+/* Overrides for the official structured-logs viewer: rows grow with the message up to a few
+   clamped lines instead of inflating the whole list (or forcing horizontal scrolling in auto
+   mode). Loaded after the official structuredLogs.css by the module page. */
+
+.structured-logs-surface .structured-log-row {
+    width: auto;
+    grid-template-columns: 24px 18px 96px 42px minmax(120px, 190px) minmax(190px, 330px) minmax(120px, 220px) minmax(0, 1fr);
+}
+
+.structured-logs-surface .structured-log-message {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.structured-log-exception {
+    max-height: 96px;
+    overflow: auto;
+}
+
+@media (max-width: 1280px) {
+    .structured-logs-surface .structured-log-row {
+        grid-template-columns: 24px 18px 96px 42px minmax(120px, 190px) minmax(160px, 1fr);
+    }
+
+    .structured-logs-surface .structured-log-source,
+    .structured-logs-surface .structured-log-category,
+    .structured-logs-surface .structured-log-correlation {
+        display: none;
+    }
+}
+
+@media (max-width: 960px) {
+    .structured-logs-surface .structured-log-row {
+        grid-template-columns: 24px 18px 92px 40px minmax(160px, 1fr);
+        width: auto;
+    }
+
+    .structured-logs-surface .structured-log-source,
+    .structured-logs-surface .structured-log-category,
+    .structured-logs-surface .structured-log-correlation {
+        display: none;
+    }
+
+    .structured-log-exception {
+        grid-column: 5;
+    }
+}

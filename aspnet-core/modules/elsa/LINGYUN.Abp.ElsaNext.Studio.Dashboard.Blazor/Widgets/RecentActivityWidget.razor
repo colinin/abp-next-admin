@@ -1,0 +1,101 @@
+@using LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.Services
+@inject NavigationManager NavigationManager
+@inject ElsaStudioDashboardText Text
+
+@if (Context.Snapshot != null)
+{
+    var items = Context.Snapshot.RecentActivity.Items;
+
+    <MudPaper Outlined="true" Elevation="0" Class="dashboard-panel dashboard-section" Style="@DashboardStyles.Panel">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="dashboard-section-header" Style="@DashboardStyles.SectionHeader">
+            <MudText Typo="Typo.subtitle1">@Text["Recent workflow activity"]</MudText>
+            <MudText Typo="Typo.caption" Class="dashboard-muted">@items.Count @(items.Count == 1 ? Text["item"] : Text["items"])</MudText>
+        </MudStack>
+
+        <MudTable T="DashboardRecentActivityItem" Items="@items" Dense="true" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm" RowClassFunc="GetRowClass" OnRowClick="OnRowClick">
+            <HeaderContent>
+                <MudTh>@Text["Workflow / instance"]</MudTh>
+                <MudTh>@Text["Status"]</MudTh>
+                <MudTh>@Text["Sub status"]</MudTh>
+                <MudTh>@Text["Incidents"]</MudTh>
+                <MudTh>@Text["Duration"]</MudTh>
+                <MudTh>@Text["Updated"]</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="@Text["Workflow / instance"]">
+                    <MudStack Spacing="0">
+                        <MudText Typo="Typo.body2">@DisplayName(context)</MudText>
+                        <MudText Typo="Typo.caption" Class="dashboard-muted">@context.InstanceId</MudText>
+                    </MudStack>
+                </MudTd>
+                <MudTd DataLabel="@Text["Status"]">
+                    <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="@StatusColor(context.Status)">@LocalizedStatus(context.Status)</MudChip>
+                </MudTd>
+                <MudTd DataLabel="@Text["Sub status"]">
+                    <MudChip T="string" Size="Size.Small" Variant="Variant.Text" Color="@SubStatusColor(context.SubStatus)">@LocalizedStatus(context.SubStatus)</MudChip>
+                </MudTd>
+                <MudTd DataLabel="@Text["Incidents"]">@Text.Count(context.IncidentCount)</MudTd>
+                <MudTd DataLabel="@Text["Duration"]">@Text.Duration(context.Duration)</MudTd>
+                <MudTd DataLabel="@Text["Updated"]">@Text.RelativeTimestamp(context.UpdatedAt ?? context.FinishedAt ?? context.CreatedAt)</MudTd>
+                <MudTd>
+                    <MudTooltip Text="@Text["Open workflow instance"]">
+                        <MudIconButton Icon="@Icons.Material.Outlined.OpenInNew" Size="Size.Small" Href="@InstanceUrl(context)" aria-label="@($"{Text["Open workflow instance"]} {context.InstanceId}")" />
+                    </MudTooltip>
+                </MudTd>
+            </RowTemplate>
+            <NoRecordsContent>
+                <MudAlert Severity="Severity.Info" Dense="true" Variant="Variant.Text">@Text["No workflow instances changed in this range."]</MudAlert>
+            </NoRecordsContent>
+        </MudTable>
+    </MudPaper>
+}
+
+@code {
+    [Parameter] public DashboardWidgetContext Context { get; set; } = null!;
+    [Parameter] public DashboardWidgetDescriptor Descriptor { get; set; } = null!;
+
+    private void OnRowClick(TableRowClickEventArgs<DashboardRecentActivityItem> args)
+    {
+        if (args.Item == null)
+            return;
+
+        NavigationManager.NavigateTo(InstanceUrl(args.Item));
+    }
+
+    // Official deep links target the standalone Studio host routes; this ABP host hosts the
+    // instance viewer at /elsa/workflows/instances/{id}, so build that link directly.
+    private static string InstanceUrl(DashboardRecentActivityItem item) => $"workflows/instances/{item.InstanceId}/view";
+
+    private string LocalizedStatus(string? status) => string.IsNullOrWhiteSpace(status) ? string.Empty : Text[status];
+
+    private static string DisplayName(DashboardRecentActivityItem item) => string.IsNullOrWhiteSpace(item.WorkflowName) ? item.DefinitionId : item.WorkflowName!;
+
+    private static string GetRowClass(DashboardRecentActivityItem item, int rowNumber)
+    {
+        return item.SubStatus is "Faulted" or "Interrupted" || item.IncidentCount > 0 ? "dashboard-row-warning" : string.Empty;
+    }
+
+    private static Color StatusColor(string status)
+    {
+        return status switch
+        {
+            "Running" => Color.Info,
+            "Finished" or "Completed" => Color.Success,
+            "Faulted" => Color.Error,
+            _ => Color.Default
+        };
+    }
+
+    private static Color SubStatusColor(string subStatus)
+    {
+        return subStatus switch
+        {
+            "Faulted" => Color.Error,
+            "Interrupted" or "Suspended" => Color.Warning,
+            "Finished" or "Completed" => Color.Success,
+            _ => Color.Default
+        };
+    }
+}
+
