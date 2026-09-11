@@ -1,0 +1,128 @@
+@using Elsa.Api.Client.Shared.UIHints.DropDown
+@using Elsa.Studio.Models
+@using LINGYUN.Abp.ElsaNext.Studio.Blazor.Components
+@using Volo.Abp.Identity
+@inject ILocalizer Localizer
+
+@inherits StudioComponentBase
+@{
+    var inputDescriptor = EditorContext.InputDescriptor;
+    var displayName = inputDescriptor.DisplayName;
+    var description = inputDescriptor.Description;
+}
+
+<ExpressionInput EditorContext="@EditorContext">
+    <ChildContent>
+        <MudTextFieldEx Value="@(_selectedItem?.Text ?? string.Empty)"
+                            Label="@Localizer[displayName]"
+                            HelperText="@Localizer[description]"
+                            Variant="Variant.Outlined"
+                            Margin="Margin.Dense"
+                            ReadOnly="true"
+                            Disabled="EditorContext.IsReadOnly"
+                            OnFieldClick="@(_ => OpenSelectDialogAsync())"
+                            AdornmentIcons="GetAdornmentIcons()" />
+    </ChildContent>
+</ExpressionInput>
+
+@code {
+    private SelectListItem? _selectedItem;
+
+    [Parameter] public DisplayInputEditorContext EditorContext { get; set; } = null!;
+
+    [Inject] protected IIdentityUserRepository IdentityUserRepository { get; set; } = null!;
+    [Inject] protected IDialogService DialogService { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var selectedItem = await ResolveSelectedItemAsync();
+
+        if (selectedItem != null)
+        {
+            await InvokeAsync(() => _selectedItem = selectedItem);
+        }
+    }
+
+    private async Task OpenSelectDialogAsync()
+    {
+        if (EditorContext.IsReadOnly)
+        {
+            return;
+        }
+
+        var inputDescriptor = EditorContext.InputDescriptor;
+        var parameters = new DialogParameters<IdentityUserSelectDialog>
+        {
+            { x => x.Title, Localizer[inputDescriptor.DisplayName ?? inputDescriptor.Name] },
+            { x => x.SelectedValue, _selectedItem?.Value }
+        };
+        var options = new DialogOptions
+        {
+            CloseOnEscapeKey = true,
+            FullWidth = true,
+            MaxWidth = MaxWidth.Medium
+        };
+
+        var dialog = await DialogService.ShowAsync<IdentityUserSelectDialog>(string.Empty, parameters, options);
+        var result = await dialog.Result;
+
+        if (result is { Canceled: false, Data: SelectListItem item })
+        {
+            await InvokeAsync(async () =>
+            {
+                _selectedItem = item;
+                await EditorContext.UpdateValueOrLiteralExpressionAsync(item.Value);
+            });
+        }
+    }
+
+    private MudTextFieldExIcon[] GetAdornmentIcons() =>
+    [
+        new()
+        {
+            Icon = Icons.Material.Filled.Search,
+            Tooltip = Localizer["Search"],
+            Disabled = EditorContext.IsReadOnly,
+            OnClick = OpenSelectDialogAsync
+        },
+        new()
+        {
+            Icon = Icons.Material.Filled.Clear,
+            Tooltip = Localizer["Clear"],
+            Visible = _selectedItem != null,
+            Disabled = EditorContext.IsReadOnly,
+            OnClick = ClearAsync
+        }
+    ];
+
+    private async Task ClearAsync()
+    {
+        await InvokeAsync(async () =>
+        {
+            _selectedItem = null;
+            await EditorContext.UpdateValueOrLiteralExpressionAsync(string.Empty);
+        });
+    }
+
+    private async Task<SelectListItem?> ResolveSelectedItemAsync()
+    {
+        var value = EditorContext.GetLiteralValueOrDefault();
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        if (Guid.TryParse(value, out var userId))
+        {
+            var user = await IdentityUserRepository.FindAsync(userId);
+
+            if (user != null)
+            {
+                return new SelectListItem(user.Name ?? user.UserName, user.Id.ToString());
+            }
+        }
+
+        return new SelectListItem(value, value);
+    }
+}
