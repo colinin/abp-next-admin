@@ -47,6 +47,7 @@
 		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" />
 		<PackageReference Include="Volo.Abp.Json" />
 		<PackageReference Include="Volo.Abp.Swashbuckle" />
+		<PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
@@ -71,6 +72,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobStoring.BlobManagement\LINGYUN.Abp.BlobStoring.BlobManagement.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
+		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.EntityFrameworkCore\LINGYUN.Abp.Notifications.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj" />
@@ -84,12 +86,18 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Agents.Blazor\LINGYUN.Abp.ElsaNext.Agents.Blazor.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.BlobStoring\LINGYUN.Abp.ElsaNext.BlobStoring.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Email\LINGYUN.Abp.ElsaNext.Email.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Notifications\LINGYUN.Abp.ElsaNext.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Secrets.Blazor\LINGYUN.Abp.ElsaNext.Secrets.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Server\LINGYUN.Abp.ElsaNext.Server.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Blazor\LINGYUN.Abp.ElsaNext.Studio.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor\LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor\LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor\LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor\LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor\LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor\LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

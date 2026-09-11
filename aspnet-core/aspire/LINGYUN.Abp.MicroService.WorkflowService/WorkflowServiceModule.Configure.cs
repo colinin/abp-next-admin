@@ -15,6 +15,7 @@ using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.MicroService.WorkflowService.Extensions;
 using LINGYUN.Abp.MicroService.WorkflowService.Navigation;
+using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Localization.Resources.AbpUi;
 using Medallion.Threading;
@@ -22,6 +23,7 @@ using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -329,6 +331,15 @@ public partial class WorkflowServiceModule
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<WorkflowServiceModule>("LINGYUN.Abp.MicroService.WorkflowService");
+        });
+    }
+
+    private void ConfigureNotificationsManagement()
+    {
+        Configure<AbpNotificationsManagementOptions>(options =>
+        {
+            options.IsDynamicNotificationsStoreEnabled = true;
+            options.SaveStaticNotificationsToDatabase = false;
         });
     }
 

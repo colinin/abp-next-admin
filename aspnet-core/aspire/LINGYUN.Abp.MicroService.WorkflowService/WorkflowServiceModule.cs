@@ -7,12 +7,18 @@ using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.ElsaNext.Agents.Blazor;
+using LINGYUN.Abp.ElsaNext.BlobStoring;
+using LINGYUN.Abp.ElsaNext.Email;
+using LINGYUN.Abp.ElsaNext.Notifications;
 using LINGYUN.Abp.ElsaNext.Secrets.Blazor;
 using LINGYUN.Abp.ElsaNext.Server;
 using LINGYUN.Abp.ElsaNext.Studio.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor;
+using LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor;
+using LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor;
+using LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -20,6 +26,7 @@ using LINGYUN.Abp.Http.Client.Wrapper;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Notifications.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -38,6 +45,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
+using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -52,6 +60,9 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpBlobStoringBlobManagementModule),
+    typeof(AbpElsaNextBlobStoringModule),
+    typeof(AbpElsaNextEmailModule),
+    typeof(AbpElsaNextNotificationsModule),
     typeof(AbpElsaNextServerModule),
     typeof(AbpElsaNextStudioBlazorModule),
     typeof(AbpElsaNextAgentsBlazorModule),
@@ -59,6 +70,9 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpElsaNextStudioDashboardBlazorModule),
     typeof(AbpElsaNextStudioDiagnosticsOpenTelemetryBlazorModule),
     typeof(AbpElsaNextStudioDiagnosticsStructuredLogsBlazorModule),
+    typeof(AbpElsaNextStudioIdentityBlazorModule),
+    typeof(AbpElsaNextStudioNotificationsBlazorModule),
+    typeof(AbpElsaNextStudioSaasBlazorModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
@@ -70,7 +84,9 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpNotificationsEntityFrameworkCoreModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
@@ -117,6 +133,7 @@ public partial class WorkflowServiceModule : AbpModule
         ConfigureDbContext();
         ConfigureLocalization();
         ConfigureVirtualFileSystem();
+        ConfigureNotificationsManagement();
         ConfigurePermissionManagement();
         ConfigureTiming(configuration);
         ConfigureCaching(configuration);
