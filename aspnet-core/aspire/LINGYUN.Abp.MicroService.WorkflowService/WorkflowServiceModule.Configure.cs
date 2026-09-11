@@ -3,6 +3,7 @@ using Elsa.Agents;
 using Elsa.Extensions;
 using Elsa.Features.Services;
 using Elsa.Persistence.EFCore.Extensions;
+using Elsa.Persistence.EFCore.Modules.Labels;
 using Elsa.Persistence.EFCore.Modules.Management;
 using Elsa.Persistence.EFCore.Modules.Runtime;
 using Elsa.Secrets.Persistence.EFCore.Extensions;
@@ -172,6 +173,11 @@ public partial class WorkflowServiceModule
             elsa.UseAgentPersistence(agent =>
             {
                 agent.UseEntityFrameworkCore(ef => ef.UseSqlite());
+            });
+
+            elsa.UseLabels(label =>
+            {
+                label.UseEntityFrameworkCore(ef => ef.UseSqlite());
             });
 
             elsa.UseSecrets(secret =>

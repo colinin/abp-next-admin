@@ -256,6 +256,7 @@
 		<PackageVersion Include="Elsa.ExternalAuthentication.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Http" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Identity" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Labels" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.OpenTelemetry" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Scheduling.Quartz" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Scheduling.Quartz.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
@@ -283,6 +284,7 @@
 		<PackageVersion Include="Elsa.Studio.Diagnostics.StructuredLogs.Dashboard" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.DomInterop" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Http.Webhooks" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Labels" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Login.BlazorServer" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Login.BlazorWasm" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Login" Version="$(ElsaNextPackageVersion)" />

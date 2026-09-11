@@ -9,6 +9,7 @@ using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.ElsaNext.Agents.Blazor;
 using LINGYUN.Abp.ElsaNext.BlobStoring;
 using LINGYUN.Abp.ElsaNext.Email;
+using LINGYUN.Abp.ElsaNext.Labels;
 using LINGYUN.Abp.ElsaNext.Notifications;
 using LINGYUN.Abp.ElsaNext.Secrets.Blazor;
 using LINGYUN.Abp.ElsaNext.Server;
@@ -17,6 +18,7 @@ using LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor;
+using LINGYUN.Abp.ElsaNext.Studio.Labels.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor;
@@ -65,6 +67,7 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpElsaNextBlobStoringModule),
     typeof(AbpElsaNextEmailModule),
+    typeof(AbpElsaNextLabelsModule),
     typeof(AbpElsaNextNotificationsModule),
     typeof(AbpElsaNextWebhooksModule),
     typeof(AbpElsaNextServerModule),
@@ -75,6 +78,7 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpElsaNextStudioDiagnosticsOpenTelemetryBlazorModule),
     typeof(AbpElsaNextStudioDiagnosticsStructuredLogsBlazorModule),
     typeof(AbpElsaNextStudioIdentityBlazorModule),
+    typeof(AbpElsaNextStudioLabelsBlazorModule),
     typeof(AbpElsaNextStudioNotificationsBlazorModule),
     typeof(AbpElsaNextStudioSaasBlazorModule),
     typeof(AbpElsaNextStudioWebhooksBlazorModule),

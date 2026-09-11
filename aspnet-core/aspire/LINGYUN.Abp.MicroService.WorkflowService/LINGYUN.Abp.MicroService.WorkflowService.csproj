@@ -89,6 +89,7 @@
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Agents.Blazor\LINGYUN.Abp.ElsaNext.Agents.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.BlobStoring\LINGYUN.Abp.ElsaNext.BlobStoring.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Email\LINGYUN.Abp.ElsaNext.Email.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Labels\LINGYUN.Abp.ElsaNext.Labels.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Notifications\LINGYUN.Abp.ElsaNext.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Secrets.Blazor\LINGYUN.Abp.ElsaNext.Secrets.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Server\LINGYUN.Abp.ElsaNext.Server.csproj" />
@@ -97,6 +98,7 @@
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor\LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor\LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor\LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Labels.Blazor\LINGYUN.Abp.ElsaNext.Studio.Labels.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor\LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor\LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor\LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor.csproj" />
