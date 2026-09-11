@@ -1,0 +1,30 @@
+﻿@using Elsa.Api.Client.Shared.UIHints.DropDown
+@inject ILocalizer Localizer
+
+@inherits StudioComponentBase
+@{
+    var inputDescriptor = EditorContext.InputDescriptor;
+    var displayName = inputDescriptor.DisplayName;
+    var description = inputDescriptor.Description;
+    var selectedValue = GetSelectedValue();
+}
+
+<ExpressionInput EditorContext="@EditorContext">
+    <ChildContent>
+        <MudSelectExtended 
+            T="SelectListItem" 
+            Label="@Localizer[displayName]" 
+            Variant="Variant.Outlined" 
+            HelperText="@Localizer[description]" 
+            Margin="Margin.Dense" 
+            Value="@selectedValue" 
+            SearchBox="true"
+            OnSearchStringChange="OnSearch"
+            ItemCollection="@_items"
+            ToStringFunc="@(item => item?.Text ?? "")"
+            ValueChanged="OnValueChanged"
+            ReadOnly="EditorContext.IsReadOnly"
+            Disabled="EditorContext.IsReadOnly">
+        </MudSelectExtended>
+    </ChildContent>
+</ExpressionInput>
