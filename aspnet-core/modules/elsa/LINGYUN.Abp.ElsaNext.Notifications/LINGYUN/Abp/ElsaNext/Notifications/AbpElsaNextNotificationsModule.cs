@@ -2,6 +2,7 @@
 using LINGYUN.Abp.ElsaNext.Localization;
 using LINGYUN.Abp.ElsaNext.Notifications.Extensions;
 using LINGYUN.Abp.Notifications;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -34,5 +35,7 @@ public class AbpElsaNextNotificationsModule : AbpModule
                 .Get<ElsaNextResource>()
                 .AddVirtualJson("/LINGYUN/Abp/ElsaNext/Notifications/Localization/Resources");
         });
+
+        context.Services.AddNotificationHandlersFrom<AbpElsaNextNotificationsModule>();
     }
 }
