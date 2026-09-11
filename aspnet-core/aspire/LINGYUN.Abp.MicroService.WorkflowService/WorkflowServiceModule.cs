@@ -19,6 +19,8 @@ using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor;
+using LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor;
+using LINGYUN.Abp.ElsaNext.Webhooks;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -31,6 +33,7 @@ using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -63,6 +66,7 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpElsaNextBlobStoringModule),
     typeof(AbpElsaNextEmailModule),
     typeof(AbpElsaNextNotificationsModule),
+    typeof(AbpElsaNextWebhooksModule),
     typeof(AbpElsaNextServerModule),
     typeof(AbpElsaNextStudioBlazorModule),
     typeof(AbpElsaNextAgentsBlazorModule),
@@ -73,6 +77,7 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpElsaNextStudioIdentityBlazorModule),
     typeof(AbpElsaNextStudioNotificationsBlazorModule),
     typeof(AbpElsaNextStudioSaasBlazorModule),
+    typeof(AbpElsaNextStudioWebhooksBlazorModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
@@ -87,6 +92,7 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpNotificationsEntityFrameworkCoreModule),
+    typeof(WebhooksManagementEntityFrameworkCoreModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
@@ -135,6 +141,7 @@ public partial class WorkflowServiceModule : AbpModule
         ConfigureVirtualFileSystem();
         ConfigureNotificationsManagement();
         ConfigurePermissionManagement();
+        ConfigureWebhooksManagement();
         ConfigureTiming(configuration);
         ConfigureCaching(configuration);
         ConfigureAuditing(configuration);

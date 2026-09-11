@@ -82,6 +82,7 @@
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.Quartz.PostgresSqlInstaller\LINGYUN.Abp.Quartz.PostgresSqlInstaller.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.TaskManagement.EntityFrameworkCore\LINGYUN.Abp.TaskManagement.EntityFrameworkCore.csproj" />-->
 		<ProjectReference Include="..\..\modules\text-templating\LINGYUN.Abp.TextTemplating.EntityFrameworkCore\LINGYUN.Abp.TextTemplating.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore\LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -98,6 +99,8 @@
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor\LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor\LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor\LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor\LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Webhooks\LINGYUN.Abp.ElsaNext.Webhooks.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

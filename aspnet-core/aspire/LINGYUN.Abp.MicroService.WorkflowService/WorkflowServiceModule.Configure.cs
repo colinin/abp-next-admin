@@ -17,6 +17,7 @@ using LINGYUN.Abp.MicroService.WorkflowService.Extensions;
 using LINGYUN.Abp.MicroService.WorkflowService.Navigation;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.WebhooksManagement;
 using Localization.Resources.AbpUi;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -349,6 +350,15 @@ public partial class WorkflowServiceModule
         {
             options.IsDynamicPermissionStoreEnabled = true;
             options.SaveStaticPermissionsToDatabase = true;
+        });
+    }
+
+    private void ConfigureWebhooksManagement()
+    {
+        Configure<WebhooksManagementOptions>(options =>
+        {
+            options.IsDynamicWebhookStoreEnabled = true;
+            options.SaveStaticWebhooksToDatabase = false;
         });
     }
 
