@@ -1,0 +1,18 @@
+﻿@inject ILocalizer Localizer
+@inherits StudioComponentBase
+
+<MudDialog>
+    <DialogContent>
+        <EditForm EditContext="_editContext" OnValidSubmit="OnValidSubmit">
+            <FluentValidationValidator @ref="_fluentValidationValidator" Validator="_validator" DisableAssemblyScanning="true" />
+            <MudStack>
+                <MudTextField Label="@Localizer["Key"]" ReadOnly="_isEdit" @bind-Value="_model.Key" For="@(() => _model.Key)" HelperText="@Localizer["The key of the property."]" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                <MudTextField Label="@Localizer["Value"]" @bind-Value="_model.Value" For="@(() => _model.Value)" HelperText="@Localizer["The value of the property."]" Variant="Variant.Outlined" Margin="Margin.Dense" />
+            </MudStack>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="OnCancelClicked">@Localizer["Cancel"]</MudButton>
+        <MudButton Color="Color.Primary" OnClick="OnSubmitClicked">@Localizer["Ok"]</MudButton>
+    </DialogActions>
+</MudDialog>

@@ -9,6 +9,7 @@ using Elsa.Studio.WorkflowContexts.Extensions;
 using Elsa.Studio.Workflows.Designer.Options;
 using Elsa.Studio.Workflows.Extensions;
 using LINGYUN.Abp.ElsaNext.Localization;
+using LINGYUN.Abp.ElsaNext.Studio.Blazor.Extensions;
 using LINGYUN.Abp.ElsaNext.Studio.Blazor.Navigation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -81,6 +82,7 @@ public class AbpElsaNextStudioBlazorModule : AbpModule
         context.Services.AddWorkflowsModule();
         context.Services.AddWorkflowContextsModule();
         context.Services.AddSettingsModule();
+        context.Services.AddAbpElsaStudioModule();
 
         Configure<DesignerOptions>(configuration.GetSection("DesignerOptions"));
 
