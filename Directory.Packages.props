@@ -244,6 +244,8 @@
 		<PackageVersion Include="Elsa.Agents.Core" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Agents.OpenAI" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Agents.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.AI.Copilot" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.AI.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Api.Client" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Dashboard.Api" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Diagnostics.OpenTelemetry" Version="$(ElsaNextPackageVersion)" />
@@ -267,6 +269,7 @@
 		<PackageVersion Include="Elsa.Studio.Secrets" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Agents" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.AI" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Authentication.Abstractions" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Authentication.ElsaIdentity.BlazorServer" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Authentication.ElsaIdentity.BlazorWasm" Version="$(ElsaNextPackageVersion)" />

@@ -13,6 +13,7 @@ using LINGYUN.Abp.ElsaNext.Labels;
 using LINGYUN.Abp.ElsaNext.Notifications;
 using LINGYUN.Abp.ElsaNext.Secrets.Blazor;
 using LINGYUN.Abp.ElsaNext.Server;
+using LINGYUN.Abp.ElsaNext.Studio.AI.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor;
@@ -74,6 +75,7 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpElsaNextStudioBlazorModule),
     typeof(AbpElsaNextAgentsBlazorModule),
     typeof(AbpElsaNextSecretsBlazorModule),
+    typeof(AbpElsaNextStudioAIBlazorModule),
     typeof(AbpElsaNextStudioDashboardBlazorModule),
     typeof(AbpElsaNextStudioDiagnosticsOpenTelemetryBlazorModule),
     typeof(AbpElsaNextStudioDiagnosticsStructuredLogsBlazorModule),

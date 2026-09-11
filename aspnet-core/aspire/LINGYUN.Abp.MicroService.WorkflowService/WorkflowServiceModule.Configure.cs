@@ -1,5 +1,7 @@
 ﻿using DotNetCore.CAP;
 using Elsa.Agents;
+using Elsa.AI.Persistence.EFCore.Features;
+using Elsa.AI.Persistence.EFCore.Sqlite.Extensions;
 using Elsa.Extensions;
 using Elsa.Features.Services;
 using Elsa.Persistence.EFCore.Extensions;
@@ -158,6 +160,7 @@ public partial class WorkflowServiceModule
         {
             options.IsBlazorWebApp = true;
         });
+        services.AddAIPersistenceStores(options => options.UseSqlite());
         PreConfigure<IModule>(elsa =>
         {
             elsa.UseWorkflowManagement(management =>
