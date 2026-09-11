@@ -5,10 +5,10 @@ using Elsa.OpenTelemetry.Middleware;
 using Elsa.Studio.Diagnostics.OpenTelemetry.Dashboard.Extensions;
 using Elsa.Studio.Diagnostics.OpenTelemetry.Extensions;
 using Elsa.Workflows.Telemetry;
+using LINGYUN.Abp.ElsaNext.Localization;
 using LINGYUN.Abp.ElsaNext.Studio.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor.Extensions;
 using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor.Navigation;
-using LINGYUN.Abp.ElsaNext.Studio.Translations.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore;
@@ -63,7 +63,7 @@ public class AbpElsaNextStudioDiagnosticsOpenTelemetryBlazorModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Get<ElsaStudioResource>()
+                .Get<ElsaNextResource>()
                 .AddVirtualJson("/Localization/Resources/ElsaStudioOpenTelemetryBlazor");
         });
 

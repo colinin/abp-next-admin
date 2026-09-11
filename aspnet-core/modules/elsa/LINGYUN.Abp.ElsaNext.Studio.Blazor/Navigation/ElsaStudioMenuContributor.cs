@@ -1,4 +1,4 @@
-using LINGYUN.Abp.ElsaNext.Studio.Translations.Localization;
+using LINGYUN.Abp.ElsaNext.Localization;
 using Volo.Abp.UI.Navigation;
 
 namespace LINGYUN.Abp.ElsaNext.Studio.Blazor.Navigation;
@@ -17,7 +17,7 @@ public class ElsaStudioMenuContributor : IMenuContributor
 
     private static void AddStudioMenu(MenuConfigurationContext context)
     {
-        var l = context.GetLocalizer<ElsaStudioResource>();
+        var l = context.GetLocalizer<ElsaNextResource>();
 
         var elsaStudioMenu = new ApplicationMenuItem(
             ElsaStudioMenus.GroupName,

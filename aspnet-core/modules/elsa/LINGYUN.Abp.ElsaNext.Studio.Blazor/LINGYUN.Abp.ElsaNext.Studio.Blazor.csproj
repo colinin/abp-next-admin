@@ -21,15 +21,13 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext\LINGYUN.Abp.ElsaNext.csproj" />
-		<!-- ABP-hosted Elsa Studio UI copy (en/zh-Hans) + Elsa ILocalizationProvider bridge. -->
-		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.Studio.Translations\LINGYUN.Abp.ElsaNext.Studio.Translations.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<!-- Elsa Studio, Blazor Server hosting pieces (Elsa.Studio 3.8.0-rc2). -->
 		<PackageReference Include="Elsa.Studio.Core.BlazorServer" />
 		<PackageReference Include="Elsa.Studio.Settings" />
 		<PackageReference Include="Elsa.Studio.Shell" />
+		<PackageReference Include="Elsa.Studio.WorkflowContexts" />
 		<PackageReference Include="Elsa.Studio.Workflows" />
 		<PackageReference Include="Elsa.Studio.Workflows.Designer" />
 		<PackageReference Include="Elsa.Api.Client" />

@@ -248,6 +248,7 @@
 		<PackageVersion Include="Elsa.Dashboard.Api" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Diagnostics.OpenTelemetry" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Diagnostics.StructuredLogs" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Diagnostics.StructuredLogs.Dashboard" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Expressions.CSharp" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Expressions.JavaScript" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Expressions.Liquid" Version="$(ElsaNextPackageVersion)" />

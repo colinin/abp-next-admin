@@ -1,5 +1,5 @@
-﻿using LINGYUN.Abp.ElsaNext.Studio.Blazor.Navigation;
-using LINGYUN.Abp.ElsaNext.Studio.Translations.Localization;
+﻿using LINGYUN.Abp.ElsaNext.Localization;
+using LINGYUN.Abp.ElsaNext.Studio.Blazor.Navigation;
 using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
 
@@ -12,7 +12,7 @@ public class ElsaStudioAgentsMenuContributor : IMenuContributor
         if (context.Menu.Name == StandardMenus.Main)
         {
             var menu = context.Menu;
-            var l = context.GetLocalizer<ElsaStudioResource>();
+            var l = context.GetLocalizer<ElsaNextResource>();
 
             var group = menu.GetMenuItemOrNull(ElsaStudioMenus.GroupName);
             group?.AddItem(new ApplicationMenuItem(

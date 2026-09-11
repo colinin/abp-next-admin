@@ -3,10 +3,10 @@ using Elsa.Extensions;
 using Elsa.Features.Services;
 using Elsa.Studio.Diagnostics.StructuredLogs.Dashboard.Extensions;
 using Elsa.Studio.Diagnostics.StructuredLogs.Extensions;
+using LINGYUN.Abp.ElsaNext.Localization;
 using LINGYUN.Abp.ElsaNext.Studio.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor.Extensions;
 using LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor.Navigation;
-using LINGYUN.Abp.ElsaNext.Studio.Translations.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore;
@@ -55,7 +55,7 @@ public class AbpElsaNextStudioDiagnosticsStructuredLogsBlazorModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Get<ElsaStudioResource>()
+                .Get<ElsaNextResource>()
                 .AddVirtualJson("/Localization/Resources/ElsaStudioStructuredLogsBlazor");
         });
 

@@ -1,7 +1,7 @@
 ﻿using Elsa.Studio.Extensions;
 using LINGYUN.Abp.ElsaNext.Agents.Blazor.Navigation;
+using LINGYUN.Abp.ElsaNext.Localization;
 using LINGYUN.Abp.ElsaNext.Studio.Blazor;
-using LINGYUN.Abp.ElsaNext.Studio.Translations.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 using Volo.Abp.Localization;
@@ -38,7 +38,7 @@ public class AbpElsaNextAgentsBlazorModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Get<ElsaStudioResource>()
+                .Get<ElsaNextResource>()
                 .AddVirtualJson("/Localization/Resources/AgentsBlazor");
         });
 

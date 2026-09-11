@@ -5,12 +5,11 @@ using Elsa.Studio.Localization.Models;
 using Elsa.Studio.Models;
 using Elsa.Studio.Settings.Extensions;
 using Elsa.Studio.Shell.Extensions;
+using Elsa.Studio.WorkflowContexts.Extensions;
 using Elsa.Studio.Workflows.Designer.Options;
 using Elsa.Studio.Workflows.Extensions;
 using LINGYUN.Abp.ElsaNext.Localization;
 using LINGYUN.Abp.ElsaNext.Studio.Blazor.Navigation;
-using LINGYUN.Abp.ElsaNext.Studio.Translations;
-using LINGYUN.Abp.ElsaNext.Studio.Translations.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor;
@@ -25,7 +24,6 @@ namespace LINGYUN.Abp.ElsaNext.Studio.Blazor;
 
 [DependsOn(
     typeof(AbpElsaNextModule),
-    typeof(AbpElsaNextStudioTranslationsModule),
     typeof(AbpLocalizationModule),
     typeof(AbpUiNavigationModule),
     typeof(AbpVirtualFileSystemModule),
@@ -69,8 +67,7 @@ public class AbpElsaNextStudioBlazorModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Get<ElsaStudioResource>()
-                .AddBaseTypes(typeof(ElsaNextResource))
+                .Get<ElsaNextResource>()
                 .AddVirtualJson("/Localization/Resources/ElsaStudioBlazor");
         });
 
@@ -82,6 +79,7 @@ public class AbpElsaNextStudioBlazorModule : AbpModule
         context.Services.AddRemoteBackend(elsaNextStudioBlazoeOptions.BackendApiConfig);
 
         context.Services.AddWorkflowsModule();
+        context.Services.AddWorkflowContextsModule();
         context.Services.AddSettingsModule();
 
         Configure<DesignerOptions>(configuration.GetSection("DesignerOptions"));
@@ -94,6 +92,6 @@ public class AbpElsaNextStudioBlazorModule : AbpModule
                 options.SupportedCultures = abpLocalizationOptions.Languages.Select(x => x.CultureName).ToArray();
             }
         });
-        context.Services.AddElsaStudioTranslations();
+        context.Services.AddAbpElsaStudioLocalizer();
     }
 }
