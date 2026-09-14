@@ -8,6 +8,8 @@ using Elsa.Studio.Authentication.OpenIdConnect.Contracts;
 using Elsa.Studio.Authentication.OpenIdConnect.Models;
 using Elsa.Studio.Authentication.OpenIdConnect.Services;
 using Elsa.Studio.Contracts;
+using LINGYUN.Abp.MicroService.WorkflowService.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -49,6 +51,7 @@ public static class ElsaStudioServiceCollectionExtensions
         services.AddSingleton(options);
         services.AddScoped<ITokenProvider, ServerTokenProvider>();
         services.AddScoped<IHttpConnectionOptionsConfigurator, OidcHttpConnectionOptionsConfigurator>();
+        services.AddSingleton<IAuthenticationSchemeProvider, ElsaApiAuthenticationSchemeProvider>();
 
         // Shared token refresh service used by both session refresh and backend API token acquisition
         services.AddScoped<TokenRefreshService>();
