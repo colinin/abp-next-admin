@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Elsa.Agents.Persistence.EFCore.PostgreSql" />
+		<PackageReference Include="Elsa.AI.Persistence.EFCore.PostgreSql" />
+		<PackageReference Include="Elsa.Persistence.EFCore.PostgreSql" />
+		<PackageReference Include="Elsa.Scheduling.Quartz.EFCore.PostgreSql" />
+		<PackageReference Include="Elsa.Secrets.Persistence.EFCore.PostgreSql" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.EntityFrameworkCore\LINGYUN.Abp.ElsaNext.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+
+</Project>

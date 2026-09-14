@@ -10,7 +10,7 @@ public class AbpElsaNextAIModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        var configuration = context.Configuration.GetSection("Elsa:AI");
+        var configuration = context.Configuration.GetSection("Elsa:Weaver");
         PreConfigure<IModule>(elsa =>
         {
             elsa.UseAbpAI(ai =>

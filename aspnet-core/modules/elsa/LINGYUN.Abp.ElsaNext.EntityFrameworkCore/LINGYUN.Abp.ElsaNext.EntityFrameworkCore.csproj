@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\..\configureawait.props" />
 	<Import Project="..\..\..\..\common.props" />
@@ -14,12 +14,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Elsa.Persistence.EFCore" VersionOverride="$(ElsaNextPackageVersion)" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore" />
+		<PackageReference Include="Elsa.Persistence.EFCore" />
+		<PackageReference Include="Elsa.Agents.Persistence.EFCore" />
+		<PackageReference Include="Elsa.AI.Persistence.EFCore" />
+		<PackageReference Include="Elsa.Secrets.Persistence.EFCore" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext\LINGYUN.Abp.ElsaNext.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.AI\LINGYUN.Abp.ElsaNext.AI.csproj" />
 	</ItemGroup>
 
 </Project>

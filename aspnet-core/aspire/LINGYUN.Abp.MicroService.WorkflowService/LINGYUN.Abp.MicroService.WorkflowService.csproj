@@ -90,6 +90,10 @@
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Agents.Blazor\LINGYUN.Abp.ElsaNext.Agents.Blazor.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.BlobStoring\LINGYUN.Abp.ElsaNext.BlobStoring.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Email\LINGYUN.Abp.ElsaNext.Email.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.EntityFrameworkCore.MySQL\LINGYUN.Abp.ElsaNext.EntityFrameworkCore.MySQL.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql\LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.EntityFrameworkCore.Sqlite\LINGYUN.Abp.ElsaNext.EntityFrameworkCore.Sqlite.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.EntityFrameworkCore.SqlServer\LINGYUN.Abp.ElsaNext.EntityFrameworkCore.SqlServer.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Labels\LINGYUN.Abp.ElsaNext.Labels.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Notifications\LINGYUN.Abp.ElsaNext.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Secrets.Blazor\LINGYUN.Abp.ElsaNext.Secrets.Blazor.csproj" />

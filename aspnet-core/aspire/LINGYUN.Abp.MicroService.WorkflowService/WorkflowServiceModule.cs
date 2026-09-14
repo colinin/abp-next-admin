@@ -9,6 +9,11 @@ using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.ElsaNext.Agents.Blazor;
 using LINGYUN.Abp.ElsaNext.BlobStoring;
 using LINGYUN.Abp.ElsaNext.Email;
+using LINGYUN.Abp.ElsaNext.EntityFrameworkCore;
+using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.MySQL;
+using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql;
+using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.Sqlite;
+using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.SqlServer;
 using LINGYUN.Abp.ElsaNext.Labels;
 using LINGYUN.Abp.ElsaNext.Notifications;
 using LINGYUN.Abp.ElsaNext.Secrets.Blazor;
@@ -67,6 +72,7 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpBlobStoringBlobManagementModule),
+
     typeof(AbpElsaNextBlobStoringModule),
     typeof(AbpElsaNextEmailModule),
     typeof(AbpElsaNextLabelsModule),
@@ -86,6 +92,10 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpElsaNextStudioNotificationsBlazorModule),
     typeof(AbpElsaNextStudioSaasBlazorModule),
     typeof(AbpElsaNextStudioWebhooksBlazorModule),
+    typeof(AbpElsaNextEntityFrameworkCoreMySQLModule),
+    typeof(AbpElsaNextEntityFrameworkCorePostgreSqlModule),
+    typeof(AbpElsaNextEntityFrameworkCoreSqliteModule),
+    typeof(AbpElsaNextEntityFrameworkCoreSqlServerModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),

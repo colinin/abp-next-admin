@@ -35,7 +35,9 @@ public static class ElsaStudioServiceCollectionExtensions
         // Ensure we always request the minimal identity scopes.
         var configuredScopes = options.AuthenticationScopes?.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct(StringComparer.OrdinalIgnoreCase).ToArray() ?? Array.Empty<string>();
         if (configuredScopes.Length == 0)
+        {
             configuredScopes = ["openid", "profile", "offline_access"];
+        }
         options.AuthenticationScopes = configuredScopes;
 
         // Set Blazor Server defaults for callback paths if not explicitly specified.

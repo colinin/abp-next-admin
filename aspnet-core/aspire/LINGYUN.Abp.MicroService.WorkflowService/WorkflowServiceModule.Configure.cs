@@ -1,16 +1,6 @@
 ﻿using DotNetCore.CAP;
-using Elsa.Agents;
-using Elsa.AI.Persistence.EFCore.Sqlite.Extensions;
-using Elsa.Alterations.Extensions;
 using Elsa.Extensions;
-using Elsa.Features.Services;
 using Elsa.Persistence.EFCore.Extensions;
-using Elsa.Persistence.EFCore.Modules.Alterations;
-using Elsa.Persistence.EFCore.Modules.Labels;
-using Elsa.Persistence.EFCore.Modules.Management;
-using Elsa.Persistence.EFCore.Modules.Runtime;
-using Elsa.Secrets.Persistence.EFCore.Extensions;
-using Elsa.Secrets.Persistence.EFCore.Sqlite.Extensions;
 using Elsa.Studio.Authentication.OpenIdConnect.HttpMessageHandlers;
 using Elsa.Studio.Workflows.Designer.Extensions;
 using LINGYUN.Abp.ElsaNext.Studio.Blazor;
@@ -43,6 +33,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 using Volo.Abp.AspNetCore.Mvc;
@@ -157,51 +148,6 @@ public partial class WorkflowServiceModule
         PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
         {
             options.IsBlazorWebApp = true;
-        });
-
-        services.AddAIPersistenceStores(options => options.UseSqlite());
-
-        PreConfigure<IModule>(elsa =>
-        {
-            elsa.UseWorkflowManagement(management =>
-            {
-                management.UseEntityFrameworkCore(ef => ef.UseSqlite());
-            });
-
-            elsa.UseWorkflowRuntime(runtime =>
-            {
-                runtime.UseEntityFrameworkCore(ef => ef.UseSqlite());
-            });
-
-            elsa.UseAlterations(alteration =>
-            {
-                alteration.UseEntityFrameworkCore(ef => ef.UseSqlite());
-            });
-
-            elsa.UseAgentPersistence(agent =>
-            {
-                agent.UseEntityFrameworkCore(ef => ef.UseSqlite());
-            });
-
-            elsa.UseLabels(label =>
-            {
-                label.UseEntityFrameworkCore(ef => ef.UseSqlite());
-            });
-
-            elsa.UseSecrets(secret =>
-            {
-                secret.UseEntityFrameworkCore(ef => ef.UseSqlite());
-            });
-
-            elsa.UseQuartz(quartz =>
-            {
-                quartz.UseSqlite();
-            });
-
-            elsa.UseScheduling(scheduling =>
-            {
-                scheduling.UseQuartzScheduler();
-            });
         });
 
         PreConfigure<AbpElsaNextStudioBlazorOptions>(options =>
@@ -523,6 +469,17 @@ public partial class WorkflowServiceModule
 
                 options.Events ??= new JwtBearerEvents();
                 var previousOnTokenValidated = options.Events.OnTokenValidated;
+                options.Events.OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+                    var path = context.HttpContext.Request.Path;
+                    if (!string.IsNullOrEmpty(accessToken) &&
+                        (path.StartsWithSegments("/elsa/api")))
+                    {
+                        context.Token = accessToken;
+                    }
+                    return Task.CompletedTask;
+                };
                 options.Events.OnTokenValidated = async context =>
                 {
                     await previousOnTokenValidated(context);

@@ -171,12 +171,17 @@
 	<ItemGroup>
 		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(MicrosoftAspNetCorePackageVersion)" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(MicrosoftAspNetCorePackageVersion)" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="$(MicrosoftAspNetCorePackageVersion)" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(MicrosoftAspNetCorePackageVersion)" />
+		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="$(MicrosoftAspNetCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.9" />
 		<PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
@@ -237,17 +242,26 @@
 	</ItemGroup>
 	<!-- Elsa Next-->
 	<ItemGroup>
+		<PackageVersion Include="AppAny.Quartz.EntityFrameworkCore.Migrations" Version="0.5.1"/>
 		<PackageVersion Include="CShells.AspNetCore" Version="0.0.28" />
 		<PackageVersion Include="Elsa.Agents" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Agents.Activities" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Agents.Api" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Agents.Core" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Agents.OpenAI" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Agents.Persistence.EFCore" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Agents.Persistence.EFCore.PostgreSql" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Agents.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Agents.Persistence.EFCore.SqlServer" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.AI.Copilot" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.AI.Persistence.EFCore" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.AI.Persistence.EFCore.PostgreSql" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.AI.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.AI.Persistence.EFCore.SqlServer" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Alterations" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Api.Client" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Api.Common" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Common" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Dashboard.Api" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Diagnostics.OpenTelemetry" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Diagnostics.StructuredLogs" Version="$(ElsaNextPackageVersion)" />
@@ -261,12 +275,19 @@
 		<PackageVersion Include="Elsa.Identity" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Labels" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.OpenTelemetry" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Scheduling" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Scheduling.Quartz" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Scheduling.Quartz.EFCore" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Scheduling.Quartz.EFCore.PostgreSql" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Scheduling.Quartz.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Scheduling.Quartz.EFCore.SqlServer" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Secrets" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Secrets.Api" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Secrets.JavaScript" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Secrets.Persistence.EFCore" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Secrets.Persistence.EFCore.PostgreSql" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Secrets.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Secrets.Persistence.EFCore.SqlServer" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Secrets" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Agents" Version="$(ElsaNextPackageVersion)" />
@@ -299,24 +320,24 @@
 		<PackageVersion Include="Elsa.Studio.Translations" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.OpenIdConnect.BlazorServer" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Settings" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.Shared" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Shell" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.WorkflowContexts" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Workflows" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Workflows.Dashboard" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Workflows.Designer" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Elsa.Scheduling" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Persistence.EFCore" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Persistence.EFCore.Common" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Persistence.EFCore.MySQL" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Persistence.EFCore.Oracle" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Persistence.EFCore.PostgreSql" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Persistence.EFCore.SqlServer" Version="$(ElsaNextPackageVersion)" />
 		<!--<PackageVersion Include="Elsa.UserTasks" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.UserTasks.Persistence.EFCore" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.UserTasks.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />-->
+		<PackageVersion Include="Elsa.Workflows.Runtime" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Workflows.Runtime.Dashboard" Version="$(ElsaNextPackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(MicrosoftAspNetCorePackageVersion)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(MicrosoftAspNetCorePackageVersion)" />
 	</ItemGroup>
 	<!-- DotNetCore.CAP -->
 	<ItemGroup>

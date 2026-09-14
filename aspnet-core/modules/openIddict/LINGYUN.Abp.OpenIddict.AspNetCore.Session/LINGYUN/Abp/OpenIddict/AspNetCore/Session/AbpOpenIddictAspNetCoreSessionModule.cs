@@ -2,6 +2,7 @@
 using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using OpenIddict.Server;
 using OpenIddict.Validation;
 using Volo.Abp.Modularity;
 using static OpenIddict.Abstractions.OpenIddictConstants;
@@ -37,6 +38,8 @@ public class AbpOpenIddictAspNetCoreSessionModule : AbpModule
         Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
         {
             options.PersistentSessionGrantTypes.Add(GrantTypes.Password);
+            options.PersistentSessionGrantTypes.Add(GrantTypes.AuthorizationCode);
+
             options.ValidationSessionEndpointTypes.Add(OpenIddictServerEndpointType.Token);
             options.ValidationSessionEndpointTypes.Add(OpenIddictServerEndpointType.UserInfo);
             options.ValidationSessionEndpointTypes.Add(OpenIddictServerEndpointType.Introspection);

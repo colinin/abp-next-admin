@@ -11,10 +11,10 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Net.Mail;
-using System.Net.Mime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Content;
 using Volo.Abp.Emailing;
 using Volo.Abp.Json;
 
@@ -160,13 +160,23 @@ public class SendEmail : Activity
                         var fileName = $"Attachment-{++index}";
                         var byteStream = new MemoryStream(bytes.Length);
                         await byteStream.WriteAsync(bytes, cancellationToken);
-                        mailMessage.Attachments.Add(new Attachment(byteStream, new ContentType { Name = fileName }));
+                        mailMessage.Attachments.Add(new Attachment(byteStream, fileName));
+                        break;
+                    }
+                case IRemoteStreamContent remoteStreamContent:
+                    {
+                        var fileName = $"Attachment-{++index}";
+                        mailMessage.Attachments.Add(
+                            new Attachment(
+                                remoteStreamContent.GetStream(), 
+                                remoteStreamContent.FileName ?? $"Attachment-{++index}",
+                                remoteStreamContent.ContentType));
                         break;
                     }
                 case Stream stream:
                     {
                         var fileName = $"Attachment-{++index}";
-                        mailMessage.Attachments.Add(new Attachment(stream, new ContentType { Name = fileName }));
+                        mailMessage.Attachments.Add(new Attachment(stream, fileName));
                         break;
                     }
                 case Attachment attachment:
@@ -180,7 +190,7 @@ public class SendEmail : Activity
                         var fileName = emailAttachment.Name ?? $"Attachment-{++index}";
                         var emailAttachmentStream = new MemoryStream(emailAttachment.File.Length);
                         await emailAttachmentStream.WriteAsync(emailAttachment.File, cancellationToken);
-                        mailMessage.Attachments.Add(new Attachment(emailAttachmentStream, new ContentType { Name = fileName }));
+                        mailMessage.Attachments.Add(new Attachment(emailAttachmentStream, fileName));
                         break;
                     }
                 case ExpandoObject expandoObject:
@@ -188,18 +198,17 @@ public class SendEmail : Activity
                         var dictionary = new Dictionary<string, object>(expandoObject!, StringComparer.OrdinalIgnoreCase);
                         var fileName = dictionary.GetValue<string>("FileName") ?? $"Attachment-{++index}";
                         var contentType = dictionary.GetValue<string>("ContentType") ?? "application/octet-stream";
-                        var parsedContentType = new ContentType(contentType);
                         var content = dictionary.GetValue<object>("Content");
 
                         if (content is byte[] bytes)
                         {
                             var byteStream = new MemoryStream(bytes.Length);
                             await byteStream.WriteAsync(bytes, cancellationToken);
-                            mailMessage.Attachments.Add(new Attachment(byteStream, new ContentType { Name = fileName }));
+                            mailMessage.Attachments.Add(new Attachment(byteStream, fileName, contentType));
                         }
                         else if (content is Stream stream)
                         {
-                            mailMessage.Attachments.Add(new Attachment(stream, new ContentType { Name = fileName }));
+                            mailMessage.Attachments.Add(new Attachment(stream, fileName, contentType));
                         }
 
                         break;
@@ -213,7 +222,7 @@ public class SendEmail : Activity
                         var jsonBytes = Encoding.UTF8.GetBytes(json);
                         var byteStream = new MemoryStream(jsonBytes.Length);
                         await byteStream.WriteAsync(jsonBytes, cancellationToken);
-                        mailMessage.Attachments.Add(new Attachment(byteStream, new ContentType { Name = fileName }));
+                        mailMessage.Attachments.Add(new Attachment(byteStream, fileName));
                         break;
                     }
             }
@@ -223,7 +232,7 @@ public class SendEmail : Activity
     private static void AttachLocalFile(MailMessage mailMessage, string path)
     {
         var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-        mailMessage.Attachments.Add(new Attachment(stream, new ContentType{ Name = Path.GetFileName(path) }));
+        mailMessage.Attachments.Add(new Attachment(stream, Path.GetFileName(path)));
     }
 
     private async static Task AttachOnlineFileAsync(ActivityExecutionContext context, MailMessage mailMessage, Uri url, CancellationToken cancellationToken)
@@ -233,7 +242,7 @@ public class SendEmail : Activity
         var response = await downloader.DownloadAsync(url, cancellationToken);
         var contentStream = await response.Content.ReadAsStreamAsync(cancellationToken);
         var contentType = response.Content.Headers.ContentType?.MediaType ?? "application/binary";
-        mailMessage.Attachments.Add(new Attachment(contentStream, new ContentType(contentType) { Name = fileName }));
+        mailMessage.Attachments.Add(new Attachment(contentStream, fileName));
     }
 
     private static IEnumerable InterpretAttachmentsModel(object attachments)

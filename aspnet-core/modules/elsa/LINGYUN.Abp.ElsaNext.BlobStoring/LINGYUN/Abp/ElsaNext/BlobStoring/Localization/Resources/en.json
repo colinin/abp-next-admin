@@ -4,6 +4,7 @@
     "Path of the blob.": "Path of the blob.",
     "Blob exists whether overwrite.": "Blob exists whether overwrite.",
     "The file data to save. This can be a stream, binary data, a string, a form file or a collection of files.": "The file data to save. This can be a stream, binary data, a string, a form file or a collection of files.",
+    "The blob content stream.": "The blob content stream.",
     "BlobStoring": "Blob Storing",
     "Delete Blob": "Delete a blob.",
     "Read Blob.": "Read a blob.",
