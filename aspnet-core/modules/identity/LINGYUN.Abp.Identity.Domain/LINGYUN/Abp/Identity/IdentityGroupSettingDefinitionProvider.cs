@@ -230,7 +230,7 @@ public class IdentityGroupSettingDefinitionProvider : SettingDefinitionProvider
     {
         context.GetOrNull(IdentitySettingNames.OrganizationUnit.MaxUserMembershipCount)
             ?.WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
-            ?.WithParent("OrganizationUnit", L("Settings:Identity.OrganizationUnit"), order: 6)
+            ?.WithParent("OrganizationUnit", L("Settings:Identity.OrganizationUnit"), order: 7)
             ?.WithOrder(0)
             ?.WithValueType(ValueType.Number)
             ?.ReplaceProviders(

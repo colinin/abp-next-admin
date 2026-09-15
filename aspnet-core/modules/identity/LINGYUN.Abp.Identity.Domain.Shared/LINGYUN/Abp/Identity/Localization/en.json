@@ -73,6 +73,12 @@
     "Description:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit": "Limit the login times of devices of the same type. The sessions that exceed the limit will be deregistered.",
     "DisplayName:Abp.Identity.Link.UserLoginUri": "User Login Uri",
     "Description:Abp.Identity.Link.UserLoginUri": "Set up a user login link for redirecting external authenticated users.",
+    "DisplayName:Abp.Identity.TwoFactorBehaviour": "Two Factor behaviour",
+    "Description:Abp.Identity.TwoFactorBehaviour": "Two Factor behaviour",
+    "DisplayName:Abp.Identity.UsersCanChange": "Allow users to change their Two Factor.",
+    "Description:Abp.Identity.UsersCanChange": "Allow users to change their Two Factor.",
+    "DisplayName:Abp.Identity.AdminRoleForceEnabled": "Administrator role is forcibly enabled",
+    "Description:Abp.Identity.AdminRoleForceEnabled": "The administrator role is required to use secondary authentication when logging in.",
     "DisplayName:Identity.Link": "Link",
     "Description:Identity.Link": "Used for setting up external access links",
     "DisplayName:NewPhoneNumber": "New Phone Number",
@@ -110,6 +116,9 @@
     "ConcurrentLoginStrategy:LogoutFromSameTypeDevicesLimit": "Logout From SameType Devices Limit",
     "ConcurrentLoginStrategy:LogoutFromSameTypeDevices": "Logout From Same Type Devices",
     "ConcurrentLoginStrategy:LogoutFromAllDevices": "Logout From AllDevices",
+    "IdentityTwoFactorBehaviour:Optional": "Optional",
+    "IdentityTwoFactorBehaviour:Disabled": "Disabled",
+    "IdentityTwoFactorBehaviour:Forced": "Forced",
     "Notifications:AbpIdentity": "Identity",
     "Notifications:SessionExpiration": "Session Expiration",
     "Notifications:SessionExpirationMessage": "Your Device {Device} session has expired or is logged in elsewhere, please log in again if necessary.",
@@ -126,6 +135,10 @@
     "Settings:Identity.OrganizationUnit": "OrganizationUnit",
     "Settings:Identity.Session": "Session",
     "Settings:Identity.Link": "Link",
-    "ImpersonationUser": "Impersonation"
+    "Settings:Identity.TwoFactor": "TwoFactor",
+    "ImpersonationUser": "Impersonation",
+    "Features:Identity": "Identity",
+    "Features:Identity.TwoFactor": "Two factor behaviour",
+    "Features:Identity.TwoFactorDesc": "Set two factor behaviour. Optional values: Optional,Disabled,Forced"
   }
 }
