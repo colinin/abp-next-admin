@@ -42,6 +42,17 @@ public static class IdentitySettingNames
         public const string LogoutFromSameTypeDevicesLimit = SessionPrefix + ".LogoutFromSameTypeDevicesLimit";
     }
 
+    public static class TwoFactor
+    {
+        private const string TwoFactorPrefix = Prefix + ".TwoFactor";
+
+        public const string Behaviour = TwoFactorPrefix + ".Behaviour";
+
+        public const string AdminRoleForceEnabled = TwoFactorPrefix + ".AdminRoleForceEnabled";
+
+        public const string UsersCanChange = TwoFactorPrefix + ".UsersCanChange";
+    }
+
     public static class Link
     {
         private const string LinkPrefix = Prefix + ".Link";

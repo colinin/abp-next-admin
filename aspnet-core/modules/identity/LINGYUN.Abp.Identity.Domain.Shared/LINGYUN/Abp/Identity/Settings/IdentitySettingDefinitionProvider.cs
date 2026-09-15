@@ -98,6 +98,57 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
             .WithParent("User", L("Settings:Identity.User"), order: 1)
             .WithOrder(4)
             .WithValueType(ValueType.Number),
+
+            new SettingDefinition(
+                name: IdentitySettingNames.TwoFactor.Behaviour,
+                defaultValue: IdentityTwoFactorBehaviour.Optional.ToString(),
+                displayName: L("DisplayName:Abp.Identity.TwoFactorBehaviour"),
+                description: L("Description:Abp.Identity.TwoFactorBehaviour"),
+                isVisibleToClients: false)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("TwoFactor", L("Settings:Identity.TwoFactor"), order: 5)
+            .WithOrder(0)
+            .WithOptions([
+                new NameValue<string>(stringLocalizer["IdentityTwoFactorBehaviour:Optional"].Value, IdentityTwoFactorBehaviour.Optional.ToString()),
+                new NameValue<string>(stringLocalizer["IdentityTwoFactorBehaviour:Disabled"].Value, IdentityTwoFactorBehaviour.Disabled.ToString()),
+                new NameValue<string>(stringLocalizer["IdentityTwoFactorBehaviour:Forced"].Value, IdentityTwoFactorBehaviour.Forced.ToString()),
+            ]),
+            new SettingDefinition(
+                name: IdentitySettingNames.TwoFactor.AdminRoleForceEnabled,
+                defaultValue: true.ToString(),
+                displayName: L("DisplayName:Abp.Identity.AdminRoleForceEnabled"),
+                description: L("Description:Abp.Identity.AdminRoleForceEnabled"),
+                isVisibleToClients: false)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("TwoFactor", L("Settings:Identity.TwoFactor"), order: 5)
+            .WithOrder(1)
+            .WithValueType(ValueType.Boolean),
+            new SettingDefinition(
+                name: IdentitySettingNames.TwoFactor.UsersCanChange,
+                defaultValue: true.ToString(),
+                displayName: L("DisplayName:Abp.Identity.UsersCanChange"),
+                description: L("Description:Abp.Identity.UsersCanChange"),
+                isVisibleToClients: false)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("TwoFactor", L("Settings:Identity.TwoFactor"), order: 5)
+            .WithOrder(2)
+            .WithValueType(ValueType.Boolean),
+
             new SettingDefinition(
                 name: IdentitySettingNames.Session.ConcurrentLoginStrategy,
                 defaultValue: ConcurrentLoginStrategy.None.ToString(),
@@ -110,7 +161,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
             .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
-            .WithParent("Session", L("Settings:Identity.Session"), order: 5)
+            .WithParent("Session", L("Settings:Identity.Session"), order: 6)
             .WithOrder(0)
             .WithOptions([
                 new NameValue<string>(stringLocalizer["ConcurrentLoginStrategy:None"].Value, ConcurrentLoginStrategy.None.ToString()),
@@ -130,7 +181,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
             .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
-            .WithParent("Session", L("Settings:Identity.Session"), order: 5)
+            .WithParent("Session", L("Settings:Identity.Session"), order: 6)
             .WithOrder(1)
             .WithValueType(ValueType.Number),
 
@@ -146,7 +197,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName)
             .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
-            .WithParent("Link", L("Settings:Identity.Link"), order: 7)
+            .WithParent("Link", L("Settings:Identity.Link"), order: 8)
             .WithOrder(0)
             .WithValueType(ValueType.String)
         );
