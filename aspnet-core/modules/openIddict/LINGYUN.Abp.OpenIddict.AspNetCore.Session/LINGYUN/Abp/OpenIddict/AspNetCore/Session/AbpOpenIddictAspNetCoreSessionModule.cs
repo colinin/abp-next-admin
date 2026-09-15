@@ -2,6 +2,7 @@
 using LINGYUN.Abp.Identity.Session;
 using LINGYUN.Abp.Identity.Session.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using OpenIddict.Server;
 using OpenIddict.Validation;
 using Volo.Abp.Modularity;
 using static OpenIddict.Abstractions.OpenIddictConstants;
