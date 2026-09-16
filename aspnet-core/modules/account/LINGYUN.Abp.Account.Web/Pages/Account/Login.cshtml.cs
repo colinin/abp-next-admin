@@ -3,7 +3,6 @@ using LINGYUN.Abp.Account.Web.ExternalProviders;
 using LINGYUN.Abp.Account.Web.Models;
 using LINGYUN.Abp.Identity.QrCode;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -28,6 +27,7 @@ using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.Reflection;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
@@ -208,6 +208,12 @@ public class LoginModel : AccountPageModel
         var user = await GetIdentityUserAsync(PasswordLoginInput.UserNameOrEmailAddress);
 
         Debug.Assert(user != null, nameof(user) + " != null");
+
+        if (!user.EmailConfirmed &&
+            await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail))
+        {
+            return await HandleUserEmailConfirm();
+        }
 
         if (IsLinkLogin)
         {
@@ -575,6 +581,19 @@ public class LoginModel : AccountPageModel
     {
         Alerts.Warning(L["UserLockedOutMessage"]);
         return Task.FromResult<IActionResult>(Page());
+    }
+
+    protected virtual Task<IActionResult> HandleUserEmailConfirm()
+    {
+        return Task.FromResult<IActionResult>(RedirectToPage("UserEmailConfirm", new
+        {
+            returnUrl = ReturnUrl,
+            returnUrlHash = ReturnUrlHash,
+            rememberMe = PasswordLoginInput.RememberMe,
+            linkUserId = LinkUserId,
+            linkTenantId = LinkTenantId,
+            linkToken = LinkToken,
+        }));
     }
 
     protected async virtual Task<IActionResult> HandleUserNotAllowed()

@@ -56,6 +56,15 @@ public class AbpAccountWebModule : AbpModule
 
         context.Services
             .AddAuthentication()
+            .AddCookie(AbpAccountAuthenticationTypes.ConfirmUserScheme, options =>
+            {
+                options.LoginPath = new PathString("/Account/Login");
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5.0);
+                options.Events = new CookieAuthenticationEvents
+                {
+                    OnValidatePrincipal = SecurityStampValidator.ValidatePrincipalAsync
+                };
+            })
             .AddCookie(AbpAccountAuthenticationTypes.ShouldChangePassword, options =>
             {
                 options.LoginPath = new PathString("/Account/Login");

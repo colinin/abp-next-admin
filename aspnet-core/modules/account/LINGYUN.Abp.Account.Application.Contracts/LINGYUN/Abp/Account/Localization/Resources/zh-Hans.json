@@ -87,6 +87,7 @@
     "RevertImpersonationWarning": "您将从当前账户退出, 回到您之前登录的账户!",
     "TwoFactorAuth": "二次认证",
     "UseAuthenticator": "使用验证器代码",
-    "Continue": "继续"
+    "Continue": "继续",
+    "EmailConfirmationSentMessage": "验证链接已发送至你的电子邮件, 请验证后重新登录."
   }
 }

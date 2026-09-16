@@ -87,6 +87,7 @@
     "RevertImpersonationWarning": "You will log out of your current account and return to the account you previously logged in with!",
     "TwoFactorAuth": "Two Factor Auth",
     "UseAuthenticator": "Use Authenticator",
-    "Continue": "Continue"
+    "Continue": "Continue",
+    "EmailConfirmationSentMessage": "The verification link has been sent to your email. Please verify it and then log in again."
   }
 }

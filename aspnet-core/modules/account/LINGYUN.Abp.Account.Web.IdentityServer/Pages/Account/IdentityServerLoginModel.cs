@@ -21,6 +21,7 @@ using Volo.Abp.Account.Settings;
 using Volo.Abp.Account.Web;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.IdentityServer.AspNetIdentity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
@@ -177,6 +178,13 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             var user = await GetIdentityUserAsync(PasswordLoginInput.UserNameOrEmailAddress);
 
             Debug.Assert(user != null, nameof(user) + " != null");
+
+            if (!user.EmailConfirmed &&
+                await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail))
+            {
+                return await HandleUserEmailConfirm();
+            }
+
             await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
 
             // Clear the dynamic claims cache.
