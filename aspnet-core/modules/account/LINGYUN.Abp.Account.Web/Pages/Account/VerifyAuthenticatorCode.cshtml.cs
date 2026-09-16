@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Web.Pages.Account;
@@ -24,6 +25,18 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
         [HiddenInput]
         public bool RememberMe { get; set; }
+
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public Guid? LinkUserId { get; set; }
+
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public Guid? LinkTenantId { get; set; }
+
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public string? LinkToken { get; set; }
 
         public virtual IActionResult OnGet()
         {

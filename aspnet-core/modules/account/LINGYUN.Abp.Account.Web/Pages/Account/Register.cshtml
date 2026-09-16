@@ -27,7 +27,13 @@
 
             <strong>
                 @L["AlreadyRegistered"]
-                <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Login"]</a>
+                <a href="@Url.Page("./Login", new {
+                       returnUrl = Model.ReturnUrl, 
+                       returnUrlHash = Model.ReturnUrlHash,
+                       linkUserId = Model.LinkUserId?.ToString(),
+                       linkTenantId = Model.LinkTenantId?.ToString(),
+                       linkToken = Model.LinkToken,
+                })" class="text-decoration-none">@L["Login"]</a>
             </strong>
 
             @if (Model.EnableLocalRegister || Model.IsExternalLogin)
@@ -43,7 +49,13 @@
         {
             <div class="mt-2">
                 <h5>@L["OrRegisterWith"]</h5>
-                <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-all-route-data="@(new Dictionary<string, string?> {
+                        { "returnUrl", Model.ReturnUrl },
+                        { "returnUrlHash", Model.ReturnUrlHash } ,
+                        { "linkUserId", Model.LinkUserId?.ToString() },
+                        { "linkTenantId", Model.LinkTenantId?.ToString() },
+                        { "linkToken", Model.LinkToken?.ToString() }
+                    })" method="post">
                     @foreach (var provider in Model.VisibleExternalProviders)
                     {
                         @await Component.InvokeAsync(provider.ComponentType, provider);

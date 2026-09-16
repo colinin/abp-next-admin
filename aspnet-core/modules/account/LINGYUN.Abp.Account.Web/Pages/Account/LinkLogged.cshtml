@@ -1,13 +1,9 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization;
 @using Volo.Abp.Account.Localization;
-@using Volo.Abp.MultiTenancy;
-@using Volo.Abp.Users;
 @model LINGYUN.Abp.Account.Web.Pages.Account.LinkLoggedModel
 @inject Volo.Abp.AspNetCore.Mvc.UI.Layout.IPageLayout PageLayout
 @inject IHtmlLocalizer<AccountResource> L
-@inject ICurrentUser CurrentUser
-@inject ICurrentTenant CurrentTenant
 @{
     PageLayout.Content.Title = L["LinkLogged"].Value;
 }

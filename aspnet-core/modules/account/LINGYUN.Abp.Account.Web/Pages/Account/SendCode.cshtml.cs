@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Web.Pages.Account;
+using Volo.Abp.Data;
 using Volo.Abp.Sms;
 
 namespace LINGYUN.Abp.Account.Web.Pages.Account
@@ -69,8 +70,28 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 Alerts.Warning(L["TwoFactorAuthenticationInvaidUser"]);
                 return Page();
             }
-            var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(user);
-            Providers = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
+
+            var validTwoFactorProviders = await UserManager.GetValidTwoFactorProvidersAsync(user);
+            var authenticatorProvider = validTwoFactorProviders.FirstOrDefault(provider => provider == UserManager.Options.Tokens.AuthenticatorTokenProvider);
+            if (!authenticatorProvider.IsNullOrWhiteSpace() && !user.GetProperty(UserManager.Options.Tokens.AuthenticatorTokenProvider, false))
+            {
+                validTwoFactorProviders.Remove(authenticatorProvider);
+            }
+
+            Providers = validTwoFactorProviders.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
+
+            if (!Providers.Any())
+            {
+                return RedirectToPage("TwoFactorAuth", new
+                {
+                    returnUrl = ReturnUrl,
+                    returnUrlHash = ReturnUrlHash,
+                    rememberMe = RememberMe,
+                    linkUserId = LinkUserId,
+                    linkTenantId = LinkTenantId,
+                    linkToken = LinkToken,
+                });
+            }
 
             return Page();
         }

@@ -38,9 +38,11 @@
     "Authenticator:UseQrCode": "使用二维码",
     "Authenticator:InputCode": "手动输入密码",
     "Authenticator:CopyToClipboard": "复制到剪切板",
+    "Authenticator:PrintRecoverCodes": "打印代码",
     "ValidAuthenticator": "验证身份验证器",
     "ValidAuthenticatorDesc": "您的双因素身份验证应用程序将生成一个代码，请在下框中输入该代码并确认。",
     "ValidAuthenticator:Valid": "验证",
+    "InvalidAuthenticatorCode": "验证器代码无效!",
     "RecoveryCode": "恢复代码",
     "RecoveryCodeDesc": "将这些代码保存在安全的地方,如果您丢失了设备而又没有恢复代码,您将无法访问您的账户。",
     "ResetAuthenticator": "重置验证器",
@@ -82,6 +84,9 @@
     "Settings:Identity.Account": "用户账户",
     "ImpersonatorUser": "模拟用户",
     "ImpersonatorWarning": "您将从当前账户退出, 使用 {0} 的身份访问系统!",
-    "RevertImpersonationWarning": "您将从当前账户退出, 回到您之前登录的账户!"
+    "RevertImpersonationWarning": "您将从当前账户退出, 回到您之前登录的账户!",
+    "TwoFactorAuth": "二次认证",
+    "UseAuthenticator": "使用验证器代码",
+    "Continue": "继续"
   }
 }
