@@ -10,13 +10,16 @@ using Microsoft.Extensions.Options;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
 using Volo.Abp.Clients;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
+using Volo.Abp.Users;
 using Volo.Abp.Validation;
 using IIdentityUserRepository = LINGYUN.Abp.Identity.IIdentityUserRepository;
 
@@ -30,6 +33,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
     protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
     protected AbpWeChatMiniProgramOptionsFactory MiniProgramOptionsFactory { get; }
     protected IDistributedCache<SecurityTokenCacheItem> SecurityTokenCache { get; }
+    protected IAccountEmailSecurityCodeSender EmailSecurityCodeSender { get; }
 
     public AccountAppService(
         IWeChatOpenIdFinder weChatOpenIdFinder,
@@ -37,7 +41,8 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         IAccountSmsSecurityCodeSender securityCodeSender,
         IDistributedCache<SecurityTokenCacheItem> securityTokenCache,
         AbpWeChatMiniProgramOptionsFactory miniProgramOptionsFactory,
-        IdentitySecurityLogManager identitySecurityLogManager)
+        IdentitySecurityLogManager identitySecurityLogManager,
+        IAccountEmailSecurityCodeSender emailSecurityCodeSender)
     {
         UserRepository = userRepository;
         WeChatOpenIdFinder = weChatOpenIdFinder;
@@ -45,6 +50,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         SecurityTokenCache = securityTokenCache;
         MiniProgramOptionsFactory = miniProgramOptionsFactory;
         IdentitySecurityLogManager = identitySecurityLogManager;
+        EmailSecurityCodeSender = emailSecurityCodeSender;
     }
 
     public async virtual Task RegisterAsync(WeChatRegisterDto input)
@@ -345,6 +351,44 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         var code = await UserManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
 
         await sender.SendLoginCodeAsync(code, user.UserName, user.Email);
+    }
+
+    public async virtual Task SendEmailConfirmLinkAsync(SendUserEmailConfirmCodeDto input)
+    {
+        var user = await UserManager.GetByIdAsync(input.UserId);
+
+        if (user.EmailConfirmed)
+        {
+            throw new BusinessException(Identity.IdentityErrorCodes.DuplicateConfirmEmailAddress);
+        }
+
+        var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmToken = WebUtility.UrlEncode(token);
+
+        await EmailSecurityCodeSender.SendConfirmLinkAsync(
+            user.Id,
+            user.Email,
+            confirmToken,
+            input.AppName,
+            input.ReturnUrl,
+            input.ReturnUrlHash,
+            user.TenantId);
+    }
+
+    public async virtual Task ConfirmEmailAsync(ConfirmUserEmailInput input)
+    {
+        await IdentityOptions.SetAsync();
+
+        var user = await UserManager.GetByIdAsync(input.UserId);
+
+        var confirmToken = HttpUtility.UrlDecode(input.ConfirmToken); ;
+        (await UserManager.ConfirmEmailAsync(user, confirmToken)).CheckErrors();
+
+        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+        {
+            Identity = IdentitySecurityLogIdentityConsts.Identity,
+            Action = IdentitySecurityLogActionConsts.ChangeEmail
+        });
     }
 
     public async virtual Task<ListResultDto<NameValue>> GetTwoFactorProvidersAsync(GetTwoFactorProvidersInput input)

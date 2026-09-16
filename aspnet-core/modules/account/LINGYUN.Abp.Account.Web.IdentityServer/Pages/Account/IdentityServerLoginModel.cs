@@ -179,12 +179,6 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
 
             Debug.Assert(user != null, nameof(user) + " != null");
 
-            if (!user.EmailConfirmed &&
-                await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail))
-            {
-                return await HandleUserEmailConfirm(user);
-            }
-
             await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
 
             // Clear the dynamic claims cache.

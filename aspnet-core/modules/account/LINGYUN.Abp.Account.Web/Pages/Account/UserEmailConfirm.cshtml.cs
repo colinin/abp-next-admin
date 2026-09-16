@@ -39,7 +39,12 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         [BindProperty(SupportsGet = true)]
         public string? LinkToken { get; set; }
 
-        public IMyProfileAppService MyProfileAppService => LazyServiceProvider.LazyGetRequiredService<IMyProfileAppService>();
+        protected IAccountAppService LAbpAccountAppService { get; }
+
+        public UserEmailConfirmModel(IAccountAppService accountAppService)
+        {
+            LAbpAccountAppService = accountAppService;
+        }
 
         public async virtual Task<IActionResult> OnGetAsync()
         {
@@ -59,6 +64,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 });
             }
 
+            Input.UserId = user.Id;
             Input.EmailAddress = user.Email;
 
             return Page();
@@ -66,12 +72,12 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
         public async virtual Task<IActionResult> OnPostAsync()
         {
-            await MyProfileAppService.SendEmailConfirmLinkAsync(
-                new SendEmailConfirmCodeDto
+            await LAbpAccountAppService.SendEmailConfirmLinkAsync(
+                new SendUserEmailConfirmCodeDto
                 {
                     AppName = "MVC",
-                    Email = Input.EmailAddress,
-                    ReturnUrl = ReturnUrl,
+                    UserId = Input.UserId,
+                    ReturnUrl = ReturnUrl ?? "/Account/Login",
                     ReturnUrlHash = ReturnUrlHash,
                 });
             AlreadySend = true;
@@ -105,5 +111,9 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         [EmailAddress]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
         public string EmailAddress { get; set; } = default!;
+
+        [Required]
+        [HiddenInput]
+        public Guid UserId { get; set; }
     }
 }

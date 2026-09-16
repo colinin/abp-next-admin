@@ -55,6 +55,20 @@ public class AccountController : AbpControllerBase, IAccountAppService
     }
 
     [HttpPost]
+    [Route("email/send-confirm-link")]
+    public async virtual Task SendEmailConfirmLinkAsync(SendUserEmailConfirmCodeDto input)
+    {
+        await AccountAppService.SendEmailConfirmLinkAsync(input);
+    }
+
+    [HttpPost]
+    [Route("email/confirm")]
+    public async virtual Task ConfirmEmailAsync(ConfirmUserEmailInput input)
+    {
+        await AccountAppService.ConfirmEmailAsync(input);
+    }
+
+    [HttpPost]
     [Route("phone/send-register-code")]
     public async virtual Task SendPhoneRegisterCodeAsync(SendPhoneRegisterCodeDto input)
     {

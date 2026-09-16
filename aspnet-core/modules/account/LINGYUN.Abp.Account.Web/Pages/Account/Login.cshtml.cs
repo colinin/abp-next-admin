@@ -209,12 +209,6 @@ public class LoginModel : AccountPageModel
 
         Debug.Assert(user != null, nameof(user) + " != null");
 
-        if (!user.EmailConfirmed &&
-            await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail))
-        {
-            return await HandleUserEmailConfirm(user);
-        }
-
         if (IsLinkLogin)
         {
             return await HandleLinkUserLogin(user);
@@ -614,6 +608,12 @@ public class LoginModel : AccountPageModel
                     rememberMe = PasswordLoginInput.RememberMe,
                 });
             }
+        }
+        if (notAllowedUser != null &&
+            !notAllowedUser.EmailConfirmed &&
+            await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail))
+        {
+            return await HandleUserEmailConfirm(notAllowedUser);
         }
         Alerts.Warning(L["LoginIsNotAllowed"]);
         return Page();

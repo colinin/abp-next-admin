@@ -231,7 +231,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
         {
             Identity = IdentitySecurityLogIdentityConsts.Identity,
-            Action = "ConfirmEmail"
+            Action = IdentitySecurityLogActionConsts.ChangeEmail
         });
     }
 

@@ -8,6 +8,7 @@
     <div class="card-body p-5">
         <h4>@L["EmailConfirm"]</h4>
         <form method="post">
+            <input asp-for="Input.UserId" />
             <div class="mb-3">
                 <label asp-for="Input.EmailAddress" class="form-label"></label>
                 <input asp-for="Input.EmailAddress" class="form-control" readonly />
@@ -19,7 +20,7 @@
                 {
                     <abp-button type="submit" button-type="Primary" class="btn-block btn-lg">@L["SendVerifyCode"]</abp-button>
                 }
-                <a abp-button="Primary"
+                <a abp-button="Secondary"
                    asp-page="./Login"
                    asp-all-route-data="@(new Dictionary<string, string?> {
                        { "returnUrl", Model.ReturnUrl },
