@@ -104,7 +104,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 defaultValue: IdentityTwoFactorBehaviour.Optional.ToString(),
                 displayName: L("DisplayName:Abp.Identity.TwoFactorBehaviour"),
                 description: L("Description:Abp.Identity.TwoFactorBehaviour"),
-                isVisibleToClients: false)
+                isVisibleToClients: true)
             .WithProviders(
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,
@@ -138,7 +138,7 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 defaultValue: true.ToString(),
                 displayName: L("DisplayName:Abp.Identity.UsersCanChange"),
                 description: L("Description:Abp.Identity.UsersCanChange"),
-                isVisibleToClients: false)
+                isVisibleToClients: true)
             .WithProviders(
                 DefaultValueSettingValueProvider.ProviderName,
                 ConfigurationSettingValueProvider.ProviderName,

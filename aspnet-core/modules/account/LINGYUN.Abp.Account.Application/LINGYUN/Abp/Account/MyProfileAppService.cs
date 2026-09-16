@@ -2,6 +2,7 @@
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.Security;
 using LINGYUN.Abp.Identity.Session;
+using LINGYUN.Abp.Identity.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
@@ -31,6 +32,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
     protected IDistributedCache<SecurityTokenCacheItem> SecurityTokenCache { get; }
     protected Identity.IIdentityUserRepository UserRepository { get; }
     protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
+    protected IdentityTwoFactorManager IdentityTwoFactorManager => LazyServiceProvider.LazyGetRequiredService<IdentityTwoFactorManager>();
     protected IAccountSmsSecurityCodeSender SmsSecurityCodeSender => LazyServiceProvider.LazyGetRequiredService<IAccountSmsSecurityCodeSender>();
     protected IAccountEmailSecurityCodeSender EmailSecurityCodeSender => LazyServiceProvider.LazyGetRequiredService<IAccountEmailSecurityCodeSender>();
     protected IAuthenticatorUriGenerator AuthenticatorUriGenerator => LazyServiceProvider.LazyGetRequiredService<IAuthenticatorUriGenerator>();
@@ -120,11 +122,19 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
     public async virtual Task ChangeTwoFactorEnabledAsync(TwoFactorEnabledDto input)
     {
-        // Removed See: https://github.com/abpframework/abp/pull/7719
-        //if (!await SettingProvider.IsTrueAsync(IdentitySettingNames.TwoFactor.UsersCanChange))
-        //{
-        //    throw new BusinessException(Volo.Abp.Identity.IdentityErrorCodes.CanNotChangeTwoFactor);
-        //}
+        if (!await SettingProvider.IsTrueAsync(IdentitySettingNames.TwoFactor.UsersCanChange))
+        {
+            throw new BusinessException(
+                Volo.Abp.Identity.IdentityErrorCodes.CanNotChangeTwoFactor,
+                "It's not allowed to change two factor setting!");
+        }
+
+        if (!input.Enabled && await IdentityTwoFactorManager.IsForcedEnableAsync())
+        {
+            throw new BusinessException(
+                Volo.Abp.Identity.IdentityErrorCodes.UsersCanNotChangeTwoFactor,
+                "You can't change your two factor setting!");
+        }
         // TODO: Abp官方移除了双因素的设置,不排除以后会增加,如果在用户接口中启用了双因素认证,可能造成登录失败!
         var user = await GetCurrentUserAsync();
 
