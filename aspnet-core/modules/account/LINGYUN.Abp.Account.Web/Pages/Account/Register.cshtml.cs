@@ -173,13 +173,50 @@ public class RegisterModel : AccountPageModel
                     await HandleLinkUserLogin(user);
                 }
 
+                if (await UserManager.GetTwoFactorEnabledAsync(user))
+                {
+                    var result = await SignInManager.PasswordSignInAsync(
+                        Input.UserName,
+                        Input.Password,
+                        false,
+                        true
+                    );
+
+                    if (result.Succeeded)
+                    {
+                        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+                        return Redirect(ReturnUrl ?? "~/");
+                    }
+
+                    if (result.RequiresTwoFactor)
+                    {
+                        return RedirectToPage("SendCode", new
+                        {
+                            returnUrl = ReturnUrl,
+                            returnUrlHash = ReturnUrlHash,
+                            linkUserId = LinkUserId,
+                            linkTenantId = LinkTenantId,
+                            linkToken = LinkToken,
+                        });
+                    }
+
+                    return RedirectToPage("Login", new
+                    {
+                        returnUrl = ReturnUrl,
+                        returnUrlHash = ReturnUrlHash,
+                        linkUserId = LinkUserId,
+                        linkTenantId = LinkTenantId,
+                        linkToken = LinkToken,
+                    });
+                }
+
                 await SignInManager.SignInAsync(user, isPersistent: true);
 
                 // Clear the dynamic claims cache.
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
             }
 
-            return Redirect(ReturnUrl ?? "~/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
+            return Redirect(ReturnUrl ?? "~/");
         }
         catch (BusinessException e)
         {

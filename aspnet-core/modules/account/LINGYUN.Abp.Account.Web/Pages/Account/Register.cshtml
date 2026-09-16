@@ -54,7 +54,7 @@
                         { "returnUrlHash", Model.ReturnUrlHash } ,
                         { "linkUserId", Model.LinkUserId?.ToString() },
                         { "linkTenantId", Model.LinkTenantId?.ToString() },
-                        { "linkToken", Model.LinkToken?.ToString() }
+                        { "linkToken", Model.LinkToken }
                     })" method="post">
                     @foreach (var provider in Model.VisibleExternalProviders)
                     {
