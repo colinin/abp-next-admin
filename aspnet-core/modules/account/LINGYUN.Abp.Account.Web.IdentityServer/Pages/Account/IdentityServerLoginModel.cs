@@ -182,7 +182,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             if (!user.EmailConfirmed &&
                 await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail))
             {
-                return await HandleUserEmailConfirm();
+                return await HandleUserEmailConfirm(user);
             }
 
             await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
@@ -190,7 +190,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             // Clear the dynamic claims cache.
             await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-            return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+            return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
         }
 
         public override async Task<IActionResult> OnPostPhoneNumberLogin(string action)
@@ -245,7 +245,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             // Clear the dynamic claims cache.
             await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-            return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+            return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
         }
 
         public override async Task<IActionResult> OnPostQrCodeLogin(string action)
@@ -313,7 +313,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 // Clear the dynamic claims cache.
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-                return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+                return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
             }
         }
 
@@ -339,7 +339,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 Error = AuthorizationError.AccessDenied
             });
 
-            return Redirect(ReturnUrl);
+            return Redirect(ReturnUrl!);
         }
 
         protected virtual async Task<IActionResult> ProcessWindowsLoginAsync()

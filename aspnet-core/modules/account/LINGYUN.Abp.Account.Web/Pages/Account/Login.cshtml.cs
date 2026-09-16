@@ -212,7 +212,7 @@ public class LoginModel : AccountPageModel
         if (!user.EmailConfirmed &&
             await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail))
         {
-            return await HandleUserEmailConfirm();
+            return await HandleUserEmailConfirm(user);
         }
 
         if (IsLinkLogin)
@@ -583,9 +583,10 @@ public class LoginModel : AccountPageModel
         return Task.FromResult<IActionResult>(Page());
     }
 
-    protected virtual Task<IActionResult> HandleUserEmailConfirm()
+    protected async virtual Task<IActionResult> HandleUserEmailConfirm(IdentityUser user)
     {
-        return Task.FromResult<IActionResult>(RedirectToPage("UserEmailConfirm", new
+        await StoreConfirmUserAsync(user);
+        return RedirectToPage("UserEmailConfirm", new
         {
             returnUrl = ReturnUrl,
             returnUrlHash = ReturnUrlHash,
@@ -593,7 +594,7 @@ public class LoginModel : AccountPageModel
             linkUserId = LinkUserId,
             linkTenantId = LinkTenantId,
             linkToken = LinkToken,
-        }));
+        });
     }
 
     protected async virtual Task<IActionResult> HandleUserNotAllowed()
