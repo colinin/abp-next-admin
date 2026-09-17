@@ -13,9 +13,22 @@
                 <input asp-for="Input.VerifyCode" class="form-control" />
                 <span asp-validation-for="Input.VerifyCode" class="text-danger"></span>
             </div>
-            <div class="mt-2">
-                <abp-input asp-for="RememberBrowser" />
-            </div>
+            <abp-row class="mt-2">
+                <abp-column>
+                    <abp-input asp-for="Input.RememberBrowser" />
+                </abp-column>
+                <abp-column>
+                    <a href="@Url.Page("./UseRecoveryCodes", new
+                       {
+                           returnUrl = Model.ReturnUrl,
+                           returnUrlHash = Model.ReturnUrlHash,
+                           rememberMe = Model.RememberMe.ToString(),
+                           linkUserId = Model.LinkUserId?.ToString(),
+                           linkTenantId = Model.LinkTenantId?.ToString(),
+                           linkToken = Model.LinkToken
+                       })">@L["UseRecoveryCodes"]</a>
+                </abp-column>
+            </abp-row>
             <div class="d-grid gap-2">
                 <abp-button type="submit" button-type="Primary" class="btn-block btn-lg">@L["VerifyAuthenticatorCode"]</abp-button>
                 <a abp-button="Secondary"

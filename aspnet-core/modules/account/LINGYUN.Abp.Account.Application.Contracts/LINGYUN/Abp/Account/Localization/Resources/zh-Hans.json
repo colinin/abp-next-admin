@@ -89,6 +89,12 @@
     "TwoFactorAuth": "二次认证",
     "UseAuthenticator": "使用验证器代码",
     "Continue": "继续",
-    "EmailConfirmationSentMessage": "验证链接已发送至你的电子邮件, 请验证后重新登录."
+    "EmailConfirmationSentMessage": "验证链接已发送至你的电子邮件, 请验证后重新登录.",
+    "UseRecoveryCodes": "使用恢复代码",
+    "UseRecoveryCodesDesc": "输入一个恢复代码以登录。",
+    "RecoveryCodePlaceholder": "请输入恢复代码",
+    "VerifyRecoveryCode": "验证恢复代码",
+    "InvalidRecoveryCode": "恢复代码无效。",
+    "BackToVerifyCode": "返回验证码"
   }
 }

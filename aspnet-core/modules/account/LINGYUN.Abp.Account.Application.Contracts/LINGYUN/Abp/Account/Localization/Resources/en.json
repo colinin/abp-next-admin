@@ -89,6 +89,12 @@
     "TwoFactorAuth": "Two Factor Auth",
     "UseAuthenticator": "Use Authenticator",
     "Continue": "Continue",
-    "EmailConfirmationSentMessage": "The verification link has been sent to your email. Please verify it and then log in again."
+    "EmailConfirmationSentMessage": "The verification link has been sent to your email. Please verify it and then log in again.",
+    "UseRecoveryCodes": "Use Recovery Codes",
+    "UseRecoveryCodesDesc": "Enter one of your recovery codes to sign in.",
+    "RecoveryCodePlaceholder": "Enter recovery code",
+    "VerifyRecoveryCode": "Verify Recovery Code",
+    "InvalidRecoveryCode": "Invalid recovery code.",
+    "BackToVerifyCode": "Back to verification code"
   }
 }
