@@ -43,6 +43,7 @@
     "ValidAuthenticator": "Valid Authenticator",
     "ValidAuthenticatorDesc": "Your two factor authentication application will generate a code, please enter the code in the box below and confirm.",
     "ValidAuthenticator:Valid": "Valid",
+    "AuthenticatorCodeValidSuccessfully": "The validator code verification has been successful. Please save the recovery code!",
     "InvalidAuthenticatorCode": "Invalid validator code!",
     "RecoveryCode": "Recovery Code",
     "RecoveryCodeDesc": "Save these codes in a safe place. If you lose your device and do not recover the code, you will not be able to access your account.",
