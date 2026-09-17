@@ -52,9 +52,11 @@ public static class IdentitySettingNames
 
         public const string Behaviour = TwoFactorPrefix + ".Behaviour";
 
+        public const string UsersCanChange = TwoFactorPrefix + ".UsersCanChange";
+
         public const string AdminRoleForceEnabled = TwoFactorPrefix + ".AdminRoleForceEnabled";
 
-        public const string UsersCanChange = TwoFactorPrefix + ".UsersCanChange";
+        public const string ProhibitDefaultAdminRole = TwoFactorPrefix + ".ProhibitDefaultAdminRole";
     }
 
     public static class Link

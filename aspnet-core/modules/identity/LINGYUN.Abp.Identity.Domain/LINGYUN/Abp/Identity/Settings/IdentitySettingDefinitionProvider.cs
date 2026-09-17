@@ -134,21 +134,6 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 new NameValue<string>(stringLocalizer["IdentityTwoFactorBehaviour:Forced"].Value, IdentityTwoFactorBehaviour.Forced.ToString()),
             ]),
             new SettingDefinition(
-                name: IdentitySettingNames.TwoFactor.AdminRoleForceEnabled,
-                defaultValue: true.ToString(),
-                displayName: L("DisplayName:Abp.Identity.AdminRoleForceEnabled"),
-                description: L("Description:Abp.Identity.AdminRoleForceEnabled"),
-                isVisibleToClients: false)
-            .WithProviders(
-                DefaultValueSettingValueProvider.ProviderName,
-                ConfigurationSettingValueProvider.ProviderName,
-                GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName)
-            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
-            .WithParent("TwoFactor", L("Settings:Identity.TwoFactor"), order: 5)
-            .WithOrder(1)
-            .WithValueType(ValueType.Boolean),
-            new SettingDefinition(
                 name: IdentitySettingNames.TwoFactor.UsersCanChange,
                 defaultValue: true.ToString(),
                 displayName: L("DisplayName:Abp.Identity.UsersCanChange"),
@@ -161,7 +146,37 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
                 TenantSettingValueProvider.ProviderName)
             .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
             .WithParent("TwoFactor", L("Settings:Identity.TwoFactor"), order: 5)
+            .WithOrder(1)
+            .WithValueType(ValueType.Boolean),
+            new SettingDefinition(
+                name: IdentitySettingNames.TwoFactor.AdminRoleForceEnabled,
+                defaultValue: true.ToString(),
+                displayName: L("DisplayName:Abp.Identity.AdminRoleForceEnabled"),
+                description: L("Description:Abp.Identity.AdminRoleForceEnabled"),
+                isVisibleToClients: false)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("TwoFactor", L("Settings:Identity.TwoFactor"), order: 5)
             .WithOrder(2)
+            .WithValueType(ValueType.Boolean),
+            new SettingDefinition(
+                name: IdentitySettingNames.TwoFactor.ProhibitDefaultAdminRole,
+                defaultValue: true.ToString(),
+                displayName: L("DisplayName:Abp.Identity.ProhibitDefaultAdminRole"),
+                description: L("Description:Abp.Identity.ProhibitDefaultAdminRole"),
+                isVisibleToClients: false)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("TwoFactor", L("Settings:Identity.TwoFactor"), order: 5)
+            .WithOrder(3)
             .WithValueType(ValueType.Boolean),
 
             new SettingDefinition(
