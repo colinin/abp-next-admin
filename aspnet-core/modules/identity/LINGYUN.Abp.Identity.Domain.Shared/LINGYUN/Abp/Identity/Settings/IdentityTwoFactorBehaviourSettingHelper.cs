@@ -12,7 +12,7 @@ public static class IdentityTwoFactorBehaviourSettingHelper
     {
         Check.NotNull(settingProvider, nameof(settingProvider));
 
-        var value = await settingProvider.GetOrNullAsync(IdentitySettingNames.TwoFactor.Behaviour);
+        var value = await settingProvider.GetOrNullAsync(IdentitySettingNames.Security.TwoFactorBehaviour);
         if (!value.IsNullOrWhiteSpace() && Enum.TryParse<IdentityTwoFactorBehaviour>(value, out var behaviour))
         {
             return behaviour;

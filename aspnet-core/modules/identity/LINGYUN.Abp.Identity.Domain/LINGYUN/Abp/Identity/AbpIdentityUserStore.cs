@@ -46,7 +46,7 @@ public class AbpIdentityUserStore : IdentityUserStore
 
         if (!user.TwoFactorEnabled &&
             await IsInRoleAsync(user, AbpRoleConsts.AdminRoleName, cancellationToken) &&
-            await SettingProvider.IsTrueAsync(IdentitySettingNames.TwoFactor.AdminRoleForceEnabled))
+            await SettingProvider.IsTrueAsync(IdentitySettingNames.Security.AdminRoleTwoFactorForceEnabled))
         {
             await SetTwoFactorEnabledAsync(user, true, cancellationToken);
         }

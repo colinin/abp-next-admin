@@ -122,7 +122,7 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
     public async virtual Task ChangeTwoFactorEnabledAsync(TwoFactorEnabledDto input)
     {
-        if (!await SettingProvider.IsTrueAsync(IdentitySettingNames.TwoFactor.UsersCanChange))
+        if (!await SettingProvider.IsTrueAsync(IdentitySettingNames.Security.UsersCanChangeTwoFactor))
         {
             throw new BusinessException(
                 Volo.Abp.Identity.IdentityErrorCodes.CanNotChangeTwoFactor,

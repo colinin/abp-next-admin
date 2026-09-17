@@ -46,17 +46,17 @@ public static class IdentitySettingNames
         public const string LogoutFromSameTypeDevicesLimit = SessionPrefix + ".LogoutFromSameTypeDevicesLimit";
     }
 
-    public static class TwoFactor
+    public static class Security
     {
-        private const string TwoFactorPrefix = Prefix + ".TwoFactor";
+        private const string SecurityPrefix = Prefix + ".Security";
 
-        public const string Behaviour = TwoFactorPrefix + ".Behaviour";
+        public const string TwoFactorBehaviour = SecurityPrefix + ".TwoFactorBehaviour";
 
-        public const string UsersCanChange = TwoFactorPrefix + ".UsersCanChange";
+        public const string UsersCanChangeTwoFactor = SecurityPrefix + ".UsersCanChangeTwoFactor";
 
-        public const string AdminRoleForceEnabled = TwoFactorPrefix + ".AdminRoleForceEnabled";
+        public const string AdminRoleTwoFactorForceEnabled = SecurityPrefix + ".AdminRoleTwoFactorForceEnabled";
 
-        public const string ProhibitDefaultAdminRole = TwoFactorPrefix + ".ProhibitDefaultAdminRole";
+        public const string ProhibitDefaultAdminRole = SecurityPrefix + ".ProhibitDefaultAdminRole";
     }
 
     public static class Link

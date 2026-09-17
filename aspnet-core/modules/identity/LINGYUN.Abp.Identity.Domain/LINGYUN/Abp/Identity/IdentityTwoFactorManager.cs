@@ -81,7 +81,7 @@ public class IdentityTwoFactorManager : DomainService
             return true;
         }
 
-        if (isInAdminRole && await SettingProvider.IsTrueAsync(IdentitySettingNames.TwoFactor.AdminRoleForceEnabled))
+        if (isInAdminRole && await SettingProvider.IsTrueAsync(IdentitySettingNames.Security.AdminRoleTwoFactorForceEnabled))
         {
             return true;
         }
