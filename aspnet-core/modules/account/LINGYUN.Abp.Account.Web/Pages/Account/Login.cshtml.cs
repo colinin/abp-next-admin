@@ -3,7 +3,6 @@ using LINGYUN.Abp.Account.Web.ExternalProviders;
 using LINGYUN.Abp.Account.Web.Models;
 using LINGYUN.Abp.Identity.QrCode;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -28,6 +27,7 @@ using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.Reflection;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
@@ -577,6 +577,20 @@ public class LoginModel : AccountPageModel
         return Task.FromResult<IActionResult>(Page());
     }
 
+    protected async virtual Task<IActionResult> HandleUserEmailConfirm(IdentityUser user)
+    {
+        await StoreConfirmUserAsync(user);
+        return RedirectToPage("UserEmailConfirm", new
+        {
+            returnUrl = ReturnUrl,
+            returnUrlHash = ReturnUrlHash,
+            rememberMe = PasswordLoginInput.RememberMe,
+            linkUserId = LinkUserId,
+            linkTenantId = LinkTenantId,
+            linkToken = LinkToken,
+        });
+    }
+
     protected async virtual Task<IActionResult> HandleUserNotAllowed()
     {
         var notAllowedUser = await GetIdentityUserAsync(PasswordLoginInput.UserNameOrEmailAddress);
@@ -594,6 +608,12 @@ public class LoginModel : AccountPageModel
                     rememberMe = PasswordLoginInput.RememberMe,
                 });
             }
+        }
+        if (notAllowedUser != null &&
+            !notAllowedUser.EmailConfirmed &&
+            await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail))
+        {
+            return await HandleUserEmailConfirm(notAllowedUser);
         }
         Alerts.Warning(L["LoginIsNotAllowed"]);
         return Page();

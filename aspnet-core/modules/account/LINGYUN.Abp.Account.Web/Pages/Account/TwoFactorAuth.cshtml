@@ -1,0 +1,103 @@
+﻿@page
+@using LINGYUN.Abp.Account.Web.Pages.Account
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using Volo.Abp.Account.Localization;
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout;
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+@model LINGYUN.Abp.Account.Web.Pages.Account.TwoFactorAuthModel
+@inject IPageLayout PageLayout
+@inject IThemeManager ThemeManager
+@inject IHtmlLocalizer<AccountResource> L
+
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+    PageLayout.Content.Title = L["TwoFactor"].Value;
+}
+
+@section styles
+{
+    <abp-style-bundle name="@typeof(TwoFactorAuthModel).FullName">
+        <abp-style src="/Pages/Account/TwoFactorAuth.css" />
+    </abp-style-bundle>
+    <style>
+
+    </style>
+}
+
+@section scripts
+{
+    <abp-script-bundle name="@typeof(TwoFactorAuthModel).FullName">
+        <abp-script src="/Pages/Account/TwoFactorAuth.js" />
+    </abp-script-bundle>
+}
+
+<div class="card mt-3 shadow-sm rounded">
+    <div class="card-body p-5">
+        <h4>@L["Authenticator"]</h4>
+        <p class="mb-3">@L["AuthenticatorDesc"]</p>
+        <form method="post" class="mt-2">
+            <input asp-for="AuthenticatorUri" id="AuthenticatorUri" type="hidden" />
+
+            @if (!string.IsNullOrWhiteSpace(@Model.AuthenticatorUri))
+            {
+                <div class="authenticator-columns mb-3">
+                    <div class="auth-col">
+                        <div class="auth-col-inner">
+                            <h5>@L["Authenticator:UseQrCode"]</h5>
+                            <div id="QrCode" class="mt-1"></div>
+                        </div>
+                    </div>
+                    <div class="auth-col">
+                        <div class="auth-col-inner">
+                            <h5>@L["Authenticator:InputCode"]</h5>
+                            <button type="button" id="copySharedKey" class="btn btn-outline-primary btn-sm align-self-start">
+                                @L["Authenticator:CopyToClipboard"]
+                            </button>
+                            <div id="sharedKey" class="bg-light rounded mt-1 p-2">
+                                <code>@Model.SharedKey</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="mb-3">
+                <label asp-for="Input.Password" class="form-label"></label>
+                <div class="input-group">
+                    <input asp-for="Input.Password" type="password" class="form-control" autocomplete="off" />
+                    <button class="btn btn-secondary password-visibility-button" type="button"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                </div>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Input.Code" class="form-label"></label>
+                <input asp-for="Input.Code" class="form-control" />
+                <span asp-validation-for="Input.Code" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <input type="checkbox" asp-for="Input.RememberBrowser" class="form-check-input" />
+                <label asp-for="Input.RememberBrowser" class="form-label"></label>
+            </div>
+
+            <div class="d-grid gap-2">
+                <abp-button type="submit" button-type="Primary" class="btn-block btn-lg">
+                    @L["UseAuthenticator"]
+                </abp-button>
+                <a abp-button="Secondary"
+                   asp-page="./Login"
+                   asp-all-route-data="@(new Dictionary<string, string?> {
+                      { "returnUrl", Model.ReturnUrl },
+                      { "returnUrlHash", Model.ReturnUrlHash },
+                      { "rememberMe", Model.RememberMe.ToString() },
+                      { "linkUserId", Model.LinkUserId?.ToString() },
+                      { "linkTenantId", Model.LinkTenantId?.ToString() },
+                      { "linkToken", Model.LinkToken }
+                  })">
+                    <i class="fa fa-long-arrow-left"></i> @L["BackToLogin"]
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

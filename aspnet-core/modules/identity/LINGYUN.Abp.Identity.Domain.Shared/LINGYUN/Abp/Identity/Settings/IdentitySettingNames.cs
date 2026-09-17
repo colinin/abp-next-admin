@@ -26,6 +26,10 @@ public static class IdentitySettingNames
         /// 短信验证码重复间隔时间
         /// </summary>
         public const string SmsRepetInterval = UserPrefix + ".SmsRepetInterval";
+        /// <summary>
+        /// 邮件注册验证码重复间隔时间
+        /// </summary>
+        public const string EmailRegisterRepetInterval = UserPrefix + ".EmailRegisterRepetInterval";
     }
 
     public static class Session
@@ -40,6 +44,19 @@ public static class IdentitySettingNames
         /// 限制相同设备登录数量
         /// </summary>
         public const string LogoutFromSameTypeDevicesLimit = SessionPrefix + ".LogoutFromSameTypeDevicesLimit";
+    }
+
+    public static class Security
+    {
+        private const string SecurityPrefix = Prefix + ".Security";
+
+        public const string TwoFactorBehaviour = SecurityPrefix + ".TwoFactorBehaviour";
+
+        public const string UsersCanChangeTwoFactor = SecurityPrefix + ".UsersCanChangeTwoFactor";
+
+        public const string AdminRoleTwoFactorForceEnabled = SecurityPrefix + ".AdminRoleTwoFactorForceEnabled";
+
+        public const string ProhibitDefaultAdminRole = SecurityPrefix + ".ProhibitDefaultAdminRole";
     }
 
     public static class Link

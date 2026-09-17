@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Web.Pages.Account;
@@ -19,11 +20,21 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         [BindProperty(SupportsGet = true)]
         public string? ReturnUrlHash { get; set; }
 
+        [HiddenInput]
         [BindProperty(SupportsGet = true)]
-        public bool RememberBrowser { get; set; }
+        public bool RememberMe { get; set; }
 
         [HiddenInput]
-        public bool RememberMe { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public Guid? LinkUserId { get; set; }
+
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public Guid? LinkTenantId { get; set; }
+
+        [HiddenInput]
+        [BindProperty(SupportsGet = true)]
+        public string? LinkToken { get; set; }
 
         public virtual IActionResult OnGet()
         {
@@ -34,7 +45,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
         public virtual async Task<IActionResult> OnPostAsync()
         {
-            var result = await SignInManager.TwoFactorAuthenticatorSignInAsync(Input.VerifyCode, RememberMe, RememberBrowser);
+            var result = await SignInManager.TwoFactorAuthenticatorSignInAsync(Input.VerifyCode, RememberMe, Input.RememberBrowser);
             if (result.Succeeded)
             {
                 return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
@@ -57,5 +68,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
     {
         [Required]
         public string VerifyCode { get; set; } = default!;
+
+        public bool RememberBrowser { get; set; }
     }
 }

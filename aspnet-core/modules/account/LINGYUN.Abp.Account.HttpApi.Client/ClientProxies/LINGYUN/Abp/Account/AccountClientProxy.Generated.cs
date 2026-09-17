@@ -17,19 +17,19 @@ namespace LINGYUN.Abp.Account;
 [ExposeServices(typeof(IAccountAppService), typeof(AccountClientProxy))]
 public partial class AccountClientProxy : ClientProxyBase<IAccountAppService>, IAccountAppService
 {
-    public virtual async Task RegisterAsync(WeChatRegisterDto input)
-    {
-        await RequestAsync(nameof(RegisterAsync), new ClientProxyRequestTypeValue
-        {
-            { typeof(WeChatRegisterDto), input }
-        });
-    }
-
     public virtual async Task RegisterAsync(PhoneRegisterDto input)
     {
         await RequestAsync(nameof(RegisterAsync), new ClientProxyRequestTypeValue
         {
             { typeof(PhoneRegisterDto), input }
+        });
+    }
+
+    public virtual async Task RegisterAsync(WeChatRegisterDto input)
+    {
+        await RequestAsync(nameof(RegisterAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(WeChatRegisterDto), input }
         });
     }
 
@@ -54,6 +54,22 @@ public partial class AccountClientProxy : ClientProxyBase<IAccountAppService>, I
         await RequestAsync(nameof(SendEmailSigninCodeAsync), new ClientProxyRequestTypeValue
         {
             { typeof(SendEmailSigninCodeDto), input }
+        });
+    }
+
+    public virtual async Task SendEmailConfirmLinkAsync(SendUserEmailConfirmCodeDto input)
+    {
+        await RequestAsync(nameof(SendEmailConfirmLinkAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(SendUserEmailConfirmCodeDto), input }
+        });
+    }
+
+    public virtual async Task ConfirmEmailAsync(ConfirmUserEmailInput input)
+    {
+        await RequestAsync(nameof(ConfirmEmailAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(ConfirmUserEmailInput), input }
         });
     }
 

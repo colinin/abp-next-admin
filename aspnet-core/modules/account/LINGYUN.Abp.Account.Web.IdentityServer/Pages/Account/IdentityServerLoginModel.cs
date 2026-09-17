@@ -21,6 +21,7 @@ using Volo.Abp.Account.Settings;
 using Volo.Abp.Account.Web;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.IdentityServer.AspNetIdentity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
@@ -177,12 +178,13 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             var user = await GetIdentityUserAsync(PasswordLoginInput.UserNameOrEmailAddress);
 
             Debug.Assert(user != null, nameof(user) + " != null");
+
             await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
 
             // Clear the dynamic claims cache.
             await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-            return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+            return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
         }
 
         public override async Task<IActionResult> OnPostPhoneNumberLogin(string action)
@@ -237,7 +239,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             // Clear the dynamic claims cache.
             await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-            return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+            return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
         }
 
         public override async Task<IActionResult> OnPostQrCodeLogin(string action)
@@ -305,7 +307,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 // Clear the dynamic claims cache.
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-                return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+                return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
             }
         }
 
@@ -331,7 +333,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 Error = AuthorizationError.AccessDenied
             });
 
-            return Redirect(ReturnUrl);
+            return Redirect(ReturnUrl!);
         }
 
         protected virtual async Task<IActionResult> ProcessWindowsLoginAsync()
