@@ -1,15 +1,18 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout;
 @model LINGYUN.Abp.Account.Web.Pages.Account.UseRecoveryCodesModel
 @inject IHtmlLocalizer<AccountResource> L
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["UseRecoveryCodes"].Value;
+}
 
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
-        <h4>@L["UseRecoveryCodes"]</h4>
-        <p class="mb-3">@L["UseRecoveryCodesDesc"]</p>
-
         <form method="post" class="mt-4">
+            <p class="mb-3">@L["UseRecoveryCodesDesc"]</p>
             <div class="mb-3">
                 <label asp-for="Input.RecoveryCode" class="form-label"></label>
                 <input asp-for="Input.RecoveryCode"

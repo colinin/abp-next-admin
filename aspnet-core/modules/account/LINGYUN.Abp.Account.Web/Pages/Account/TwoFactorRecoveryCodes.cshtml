@@ -2,11 +2,12 @@
 @using LINGYUN.Abp.Account.Web.Pages.Account
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout;
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 @model LINGYUN.Abp.Account.Web.Pages.Account.TwoFactorRecoveryCodesModel
-@inject IThemeManager ThemeManager
 @inject IHtmlLocalizer<AccountResource> L
-@inject Volo.Abp.AspNetCore.Mvc.UI.Layout.IPageLayout PageLayout
+@inject IPageLayout PageLayout
+@inject IThemeManager ThemeManager
 @{
     Layout = ThemeManager.CurrentTheme.GetAccountLayout();
     PageLayout.Content.Title = L["RecoveryCode"].Value;

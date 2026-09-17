@@ -1,12 +1,16 @@
 ﻿@page
-@inject IHtmlLocalizer<AccountResource> L
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @model LINGYUN.Abp.Account.Web.Pages.Account.UserEmailConfirmModel
-@inject Volo.Abp.AspNetCore.Mvc.UI.Layout.IPageLayout PageLayout
+@inject IHtmlLocalizer<AccountResource> L
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["EmailConfirm"].Value;
+}
+
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
-        <h4>@L["EmailConfirm"]</h4>
         <form method="post">
             <input asp-for="Input.UserId" />
             <div class="mb-3">

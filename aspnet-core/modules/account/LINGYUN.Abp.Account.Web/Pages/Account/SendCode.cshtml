@@ -1,12 +1,17 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @model LINGYUN.Abp.Account.Web.Pages.Account.SendCodeModel
 @inject IHtmlLocalizer<AccountResource> L
+@inject IPageLayout PageLayout
+
+@{
+    PageLayout.Content.Title = L["TwoFactor"].Value;
+}
 
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
-        <h4>@L["TwoFactor"]</h4>
         <form method="post" class="mt-4">
             <abp-input asp-for="RememberMe" />
             <input asp-for="ReturnUrl" />

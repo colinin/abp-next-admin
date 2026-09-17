@@ -2,15 +2,16 @@
 @using LINGYUN.Abp.Account.Web.Pages.Account
 @using Microsoft.AspNetCore.Mvc.Localization;
 @using Volo.Abp.Account.Localization;
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout;
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 @model LINGYUN.Abp.Account.Web.Pages.Account.TwoFactorAuthModel
+@inject IPageLayout PageLayout
 @inject IThemeManager ThemeManager
-@inject Volo.Abp.AspNetCore.Mvc.UI.Layout.IPageLayout PageLayout
 @inject IHtmlLocalizer<AccountResource> L
 
 @{
     Layout = ThemeManager.CurrentTheme.GetAccountLayout();
-    PageLayout.Content.Title = L["TwoFactorAuth"].Value;
+    PageLayout.Content.Title = L["TwoFactor"].Value;
 }
 
 @section styles
