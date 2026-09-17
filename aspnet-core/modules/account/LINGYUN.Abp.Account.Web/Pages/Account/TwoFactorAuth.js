@@ -11,6 +11,26 @@
         var QR_MIN = 140;
         var QR_MAX = 260;
 
+        $(".password-visibility-button").click(function (e) {
+            let button = $(this);
+            let passwordInput = button.parent().find("input");
+            if (!passwordInput) {
+                return;
+            }
+
+            if (passwordInput.attr("type") === "password") {
+                passwordInput.attr("type", "text");
+            }
+            else {
+                passwordInput.attr("type", "password");
+            }
+
+            let icon = button.find("i");
+            if (icon) {
+                icon.toggleClass("fa-eye-slash").toggleClass("fa-eye");
+            }
+        });
+
         $("#copySharedKey").on("click", function () {
             var text = $("#sharedKey code").text().trim();
             if (!text) return;

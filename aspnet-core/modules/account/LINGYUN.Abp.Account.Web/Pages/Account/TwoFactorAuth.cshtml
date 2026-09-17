@@ -63,7 +63,10 @@
 
             <div class="mb-3">
                 <label asp-for="Input.Password" class="form-label"></label>
-                <input asp-for="Input.Password" class="form-control" />
+                <div class="input-group">
+                    <input asp-for="Input.Password" type="password" class="form-control" autocomplete="off" />
+                    <button class="btn btn-secondary password-visibility-button" type="button"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                </div>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
 
