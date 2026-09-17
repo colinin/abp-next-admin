@@ -49,6 +49,22 @@ public partial class AccountClientProxy : ClientProxyBase<IAccountAppService>, I
         });
     }
 
+    public virtual async Task SendEmailRegisterCodeAsync(SendEmailRegisterCodeDto input)
+    {
+        await RequestAsync(nameof(SendEmailRegisterCodeAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(SendEmailRegisterCodeDto), input }
+        });
+    }
+
+    public virtual async Task<bool> VerifyEmailRegisterCodeAsync(VerifyEmailRegisterCodeInput input)
+    {
+        return await RequestAsync<bool>(nameof(VerifyEmailRegisterCodeAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(VerifyEmailRegisterCodeInput), input }
+        });
+    }
+
     public virtual async Task SendEmailSigninCodeAsync(SendEmailSigninCodeDto input)
     {
         await RequestAsync(nameof(SendEmailSigninCodeAsync), new ClientProxyRequestTypeValue
