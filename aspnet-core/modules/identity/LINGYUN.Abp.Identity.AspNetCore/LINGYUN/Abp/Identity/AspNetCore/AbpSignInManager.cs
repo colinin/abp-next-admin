@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Roles;
 using Volo.Abp.Settings;
 
 using VoloAbpSignInManager = Volo.Abp.Identity.AspNetCore.AbpSignInManager;
@@ -38,6 +39,13 @@ public class AbpSignInManager : VoloAbpSignInManager
         {
             return true;
         }
+
+        var isInAdminRole = await UserManager.IsInRoleAsync(user, AbpRoleConsts.AdminRoleName);
+        if (await IdentityTwoFactorManager.GetTwoFactorEnabledAsync(user, isInAdminRole))
+        {
+            return true;
+        }
+
         return await base.IsTwoFactorEnabledAsync(user);
     }
 }

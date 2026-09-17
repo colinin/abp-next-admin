@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Identity.Features;
 using LINGYUN.Abp.Identity.Settings;
+using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Features;
@@ -68,13 +69,19 @@ public class IdentityTwoFactorManager : DomainService
         return false;
     }
 
-    public virtual async Task<bool> GetTwoFactorEnabledAsync(IdentityUser user)
+    public virtual async Task<bool> GetTwoFactorEnabledAsync(IdentityUser user, bool isInAdminRole = false)
     {
         if (await IsForcedDisableAsync())
         {
             return false;
         }
+
         if (await IsForcedEnableAsync())
+        {
+            return true;
+        }
+
+        if (isInAdminRole && await SettingProvider.IsTrueAsync(IdentitySettingNames.TwoFactor.AdminRoleForceEnabled))
         {
             return true;
         }

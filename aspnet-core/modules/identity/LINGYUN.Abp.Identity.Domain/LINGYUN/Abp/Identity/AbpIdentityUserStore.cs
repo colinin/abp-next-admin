@@ -60,6 +60,8 @@ public class AbpIdentityUserStore : IdentityUserStore
 
         Check.NotNull(user, nameof(user));
 
-        return await IdentityTwoFactorManager.GetTwoFactorEnabledAsync(user);
+        var isInAdminRole = await IsInRoleAsync(user, AbpRoleConsts.AdminRoleName, cancellationToken);
+
+        return await IdentityTwoFactorManager.GetTwoFactorEnabledAsync(user, isInAdminRole);
     }
 }
