@@ -12,6 +12,7 @@ public class AbpIdentityAspNetCoreModule : AbpModule
         PreConfigure<IdentityBuilder>(builder =>
         {
             builder
+                .AddTokenProvider<AbpEmailAddressRegisterTokenProvider>(AbpEmailAddressRegisterTokenProvider.ProviderName)
                 .AddTokenProvider<AbpPhoneNumberRegisterTokenProvider>(AbpPhoneNumberRegisterTokenProvider.ProviderName)
                 .AddSignInManager<AbpSignInManager>();
         });

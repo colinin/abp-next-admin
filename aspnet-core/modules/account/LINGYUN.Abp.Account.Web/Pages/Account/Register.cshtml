@@ -1,13 +1,31 @@
 ﻿@page
+@using LINGYUN.Abp.Account.Web.Pages.Account
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 @model LINGYUN.Abp.Account.Web.Pages.Account.RegisterModel
 @inject IHtmlLocalizer<AccountResource> L
+@inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
+
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+    PageLayout.Content.Title = L["Register"].Value;
+}
+
+@section scripts
+{
+    <abp-script-bundle name="@typeof(RegisterModel).FullName">
+        <abp-script src="/client-proxies/account-proxy.js" />
+        <abp-script src="/Pages/Account/Register.js" />
+    </abp-script-bundle>
+}
 
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
         <h4>@L["Register"]</h4>
-        <form method="post" class="mt-4">
+        <form method="post" class="mt-4" id="RegisterForm">
             <input asp-for="ReturnUrl" />
             <input asp-for="ReturnUrlHash" />
             @if (Model.EnableLocalRegister || Model.IsExternalLogin)
@@ -17,7 +35,20 @@
 
             @if (Model.EnableLocalRegister || Model.IsExternalLogin)
             {
-                <abp-input asp-for="Input.EmailAddress" />
+                <abp-input asp-for="Input.EmailAddress" id="EmailAddressInput" />
+
+                @if (Model.RequireEmailVerificationToRegister)
+                {
+                    <div class="mb-3">
+                        <input asp-for="SendEmailVerifyCodeInternal" id="SendEmailVerifyCodeInternal" />
+                        <label asp-for="Input.VerifyCode" class="form-label"></label>
+                        <div class="input-group">
+                            <input asp-for="Input.VerifyCode" class="form-control" required />
+                            <button class="btn btn-secondary" type="button" id="SendVerifyCodeButton">@L["SendVerifyCode"]</button>
+                        </div>
+                        <span asp-validation-for="Input.VerifyCode" class="text-danger"></span>
+                    </div>
+                }
             }
 
             @if (!Model.IsExternalLogin && Model.EnableLocalRegister)

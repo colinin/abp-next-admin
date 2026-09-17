@@ -95,6 +95,8 @@
     "RecoveryCodePlaceholder": "请输入恢复代码",
     "VerifyRecoveryCode": "验证恢复代码",
     "InvalidRecoveryCode": "恢复代码无效。",
-    "BackToVerifyCode": "返回验证码"
+    "BackToVerifyCode": "返回验证码",
+    "EmailVerifyCodeIsRequired": "邮件验证码不可为空!",
+    "DuplicateEmailAddress": "邮箱地址已经存在!"
   }
 }

@@ -67,6 +67,8 @@
     "Description:Abp.Identity.User.SmsPhoneNumberConfirmed": "The user confirms the mobile phone verification code template",
     "DisplayName:Abp.Identity.User.SmsRepetInterval": "SMS verification code validity(min)",
     "Description:Abp.Identity.User.SmsRepetInterval": "The valid time for the user to send SMS verification code, unit m, default 3min",
+    "DisplayName:Abp.Identity.User.EmailRegisterRepetInterval": "Email register verify code validity(min)",
+    "Description:Abp.Identity.User.EmailRegisterRepetInterval": "The minimum time interval for the repeated sending of email registration verification codes, measured in minutes.",
     "DisplayName:Abp.Identity.Session.ConcurrentLoginStrategy": "Concurrent login strategy",
     "Description:Abp.Identity.Session.ConcurrentLoginStrategy": "There is a setting in the identity section to prevent concurrent login.",
     "DisplayName:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit": "Same Type Devices Login Limit",

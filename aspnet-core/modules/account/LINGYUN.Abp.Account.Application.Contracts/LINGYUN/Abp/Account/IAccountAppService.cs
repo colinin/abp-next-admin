@@ -44,6 +44,18 @@ public interface IAccountAppService : IApplicationService
     /// <returns></returns>
     Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input);
     /// <summary>
+    /// 发送邮件注册验证码
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task SendEmailRegisterCodeAsync(SendEmailRegisterCodeDto input);
+    /// <summary>
+    /// 验证邮件注册验证码
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task<bool> VerifyEmailRegisterCodeAsync(VerifyEmailRegisterCodeInput input);
+    /// <summary>
     /// 发送邮件登录验证码
     /// </summary>
     /// <param name="input"></param>

@@ -26,6 +26,10 @@ public static class IdentitySettingNames
         /// 短信验证码重复间隔时间
         /// </summary>
         public const string SmsRepetInterval = UserPrefix + ".SmsRepetInterval";
+        /// <summary>
+        /// 邮件注册验证码重复间隔时间
+        /// </summary>
+        public const string EmailRegisterRepetInterval = UserPrefix + ".EmailRegisterRepetInterval";
     }
 
     public static class Session

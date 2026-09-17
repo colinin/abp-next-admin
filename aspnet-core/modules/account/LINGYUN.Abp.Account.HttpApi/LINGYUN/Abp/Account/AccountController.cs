@@ -48,6 +48,20 @@ public class AccountController : AbpControllerBase, IAccountAppService
     }
 
     [HttpPost]
+    [Route("email/send-register-code")]
+    public async virtual Task SendEmailRegisterCodeAsync(SendEmailRegisterCodeDto input)
+    {
+        await AccountAppService.SendEmailRegisterCodeAsync(input);
+    }
+
+    [HttpPost]
+    [Route("email/verify-register-code")]
+    public async virtual Task<bool> VerifyEmailRegisterCodeAsync(VerifyEmailRegisterCodeInput input)
+    {
+        return await AccountAppService.VerifyEmailRegisterCodeAsync(input);
+    }
+
+    [HttpPost]
     [Route("email/send-signin-code")]
     public async virtual Task SendEmailSigninCodeAsync(SendEmailSigninCodeDto input)
     {

@@ -19,7 +19,6 @@ using Volo.Abp.Caching;
 using Volo.Abp.Clients;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
-using Volo.Abp.Users;
 using Volo.Abp.Validation;
 using IIdentityUserRepository = LINGYUN.Abp.Identity.IIdentityUserRepository;
 
@@ -332,16 +331,92 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
                 });
     }
 
+    public async virtual Task SendEmailRegisterCodeAsync(SendEmailRegisterCodeDto input)
+    {
+        await CheckSelfRegistrationAsync();
+        await CheckNewUserEmailNotBeUsedAsync(input.EmailAddress);
+
+        var interval = await SettingProvider.GetAsync(IdentitySettingNames.User.EmailRegisterRepetInterval, 1);
+        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateEmailCacheKey(
+            input.EmailAddress,
+            UserTwoFactorTokenProviderConsts.EmailAddressRegisterPurpose);
+        var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
+        if (securityTokenCacheItem != null)
+        {
+            throw new UserFriendlyException(L["SendRepeatEmailVerifyCode", interval]);
+        }
+
+        var tempNewUser = new IdentityUser(
+            GuidGenerator.Create(),
+            input.EmailAddress,
+            input.EmailAddress,
+            CurrentTenant.Id);
+        tempNewUser.SetEmailAddressRegisterUser();
+
+        await UserStore.SetSecurityStampAsync(tempNewUser, Guid.NewGuid().ToString("n"));
+
+        var code = await UserManager.GenerateUserTokenAsync(
+            tempNewUser,
+            UserTwoFactorTokenProviderConsts.EmailAddressRegisterTokenProvider,
+            UserTwoFactorTokenProviderConsts.EmailAddressRegisterPurpose);
+
+        securityTokenCacheItem = new SecurityTokenCacheItem(code, tempNewUser.Id, await UserManager.GetSecurityStampAsync(tempNewUser));
+
+        var sender = LazyServiceProvider.LazyGetRequiredService<IAccountEmailSecurityCodeSender>();
+
+        await sender.SendLoginCodeAsync(code, input.EmailAddress, input.EmailAddress);
+
+        await SecurityTokenCache
+            .SetAsync(securityTokenCacheKey, securityTokenCacheItem,
+                new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(interval)
+                });
+    }
+
+    public async virtual Task<bool> VerifyEmailRegisterCodeAsync(VerifyEmailRegisterCodeInput input)
+    {
+        var securityTokenCacheKey = SecurityTokenCacheItem.CalculateEmailCacheKey(
+            input.EmailAddress,
+            UserTwoFactorTokenProviderConsts.EmailAddressRegisterPurpose);
+        var securityTokenCacheItem = await SecurityTokenCache.GetAsync(securityTokenCacheKey);
+        if (securityTokenCacheItem == null)
+        {
+            return false;
+        }
+
+        // 验证码是否有效
+        if (input.VerifyCode.Equals(securityTokenCacheItem.Token))
+        {
+            var tempNewUser = new IdentityUser(
+                securityTokenCacheItem.UserId,
+                input.EmailAddress,
+                input.EmailAddress,
+                CurrentTenant.Id);
+            tempNewUser.SetPhoneNumberRegisterUser();
+            await UserStore.SetSecurityStampAsync(tempNewUser, securityTokenCacheItem.SecurityToken);
+
+            if (await UserManager.VerifyUserTokenAsync(
+                tempNewUser,
+                UserTwoFactorTokenProviderConsts.EmailAddressRegisterTokenProvider,
+                UserTwoFactorTokenProviderConsts.EmailAddressRegisterPurpose,
+                input.VerifyCode))
+            {
+                await SecurityTokenCache.RemoveAsync(securityTokenCacheKey);
+
+                return true;
+            }
+        }
+        return false;
+    }
+
     public async virtual Task SendEmailSigninCodeAsync(SendEmailSigninCodeDto input)
     {
         var sender = LazyServiceProvider.LazyGetRequiredService<IAccountEmailSecurityCodeSender>();
 
-        var user = await UserManager.FindByEmailAsync(input.EmailAddress);
+        var user = await UserManager.FindByEmailAsync(input.EmailAddress) 
+            ?? throw new UserFriendlyException(L["UserNotRegisterd"]);
 
-        if (user == null)
-        {
-            throw new UserFriendlyException(L["UserNotRegisterd"]);
-        }
         if (!user.EmailConfirmed)
         {
             throw new UserFriendlyException(L["UserEmailNotConfirmed"]);
@@ -427,6 +502,14 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         if (await UserRepository.IsPhoneNumberUedAsync(phoneNumber))
         {
             throw new UserFriendlyException(L["DuplicatePhoneNumber"]);
+        }
+    }
+
+    protected async virtual Task CheckNewUserEmailNotBeUsedAsync(string emailAddress)
+    {
+        if (await UserRepository.FindByNormalizedEmailAsync(emailAddress, includeDetails: false) != null)
+        {
+            throw new UserFriendlyException(L["DuplicateEmailAddress"]);
         }
     }
 

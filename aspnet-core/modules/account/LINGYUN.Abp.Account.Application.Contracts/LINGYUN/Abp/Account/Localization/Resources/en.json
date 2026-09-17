@@ -95,6 +95,8 @@
     "RecoveryCodePlaceholder": "Enter recovery code",
     "VerifyRecoveryCode": "Verify Recovery Code",
     "InvalidRecoveryCode": "Invalid recovery code.",
-    "BackToVerifyCode": "Back to verification code"
+    "BackToVerifyCode": "Back to verification code",
+    "EmailVerifyCodeIsRequired": "The email verify code is required!",
+    "DuplicateEmailAddress": "The email address already exists!"
   }
 }

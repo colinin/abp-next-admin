@@ -98,6 +98,21 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
             .WithParent("User", L("Settings:Identity.User"), order: 1)
             .WithOrder(4)
             .WithValueType(ValueType.Number),
+            new SettingDefinition(
+                name: IdentitySettingNames.User.EmailRegisterRepetInterval,
+                defaultValue: "1",
+                displayName: L("DisplayName:Abp.Identity.User.EmailRegisterRepetInterval"),
+                description: L("Description:Abp.Identity.User.EmailRegisterRepetInterval"),
+                isVisibleToClients: false)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("User", L("Settings:Identity.User"), order: 1)
+            .WithOrder(5)
+            .WithValueType(ValueType.Number),
 
             new SettingDefinition(
                 name: IdentitySettingNames.TwoFactor.Behaviour,
