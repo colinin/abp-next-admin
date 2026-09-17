@@ -143,9 +143,10 @@ public class TwoFactorAuthModel : AccountPageModel
     public class TwoFactorInputModel
     {
         [Required]
-        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
-        [DataType(DataType.Password)]
         [DisableAuditing]
+        [DataType(DataType.Password)]
+        [DisplayName("DisplayName:UserPassword")]
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
         public string Password { get; set; } = default!;
 
         [Required]

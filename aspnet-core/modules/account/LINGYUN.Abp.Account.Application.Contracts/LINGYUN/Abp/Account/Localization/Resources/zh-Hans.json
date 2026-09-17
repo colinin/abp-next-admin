@@ -20,6 +20,7 @@
     "DisplayName:Code": "验证码",
     "DisplayName:LinkUserName": "用户名",
     "DisplayName:DirectlyLinked": "直接关联",
+    "DisplayName:UserPassword": "用户密码",
     "TwoFactor": "双因素身份验证",
     "TwoFactor:Enabled": "启用双因素认证",
     "TwoFactor:Email": "邮箱验证",

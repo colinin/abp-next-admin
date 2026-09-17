@@ -129,13 +129,7 @@ public class AbpAccountWebModule : AbpModule
             options.ScriptBundles
                 .Configure(typeof(Pages.Account.TwoFactorAuthModel).FullName!, bundle =>
                 {
-                    bundle.AddFiles("/Pages/Account/TwoFactorAuth.js");
                     bundle.AddContributors(typeof(QRCodeScriptContributor));
-                });
-            options.ScriptBundles
-                .Configure(typeof(Pages.Account.TwoFactorRecoveryCodesModel).FullName!, bundle =>
-                {
-                    bundle.AddFiles("/Pages/Account/TwoFactorRecoveryCodes.js");
                 });
         });
     }
