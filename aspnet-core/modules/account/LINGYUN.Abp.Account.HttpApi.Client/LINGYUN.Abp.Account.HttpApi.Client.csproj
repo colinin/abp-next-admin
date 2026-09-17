@@ -14,19 +14,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="ClientProxies\account-generate-proxy.json" />
+		<None Remove="ClientProxies\*.json" />
+		<EmbeddedResource Include="ClientProxies\*.json" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Include="ClientProxies\account-generate-proxy.json" />
-	</ItemGroup>
-
+	
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Account.HttpApi.Client" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>

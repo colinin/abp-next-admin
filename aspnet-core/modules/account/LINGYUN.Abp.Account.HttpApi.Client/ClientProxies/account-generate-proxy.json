@@ -119,6 +119,40 @@
                   }
                 },
                 {
+                  "name": "SendEmailRegisterCodeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto",
+                      "typeSimple": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "VerifyEmailRegisterCodeAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput, LINGYUN.Abp.Account.Application.Contracts",
+                      "type": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput",
+                      "typeSimple": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Boolean",
+                    "typeSimple": "boolean"
+                  }
+                },
+                {
                   "name": "SendEmailSigninCodeAsync",
                   "parametersOnMethod": [
                     {
@@ -299,6 +333,82 @@
               "returnValue": {
                 "type": "System.Void",
                 "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "authorizeDatas": [],
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+            },
+            "SendEmailRegisterCodeAsyncByInput": {
+              "uniqueName": "SendEmailRegisterCodeAsyncByInput",
+              "name": "SendEmailRegisterCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/email/send-register-code",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto",
+                  "typeSimple": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "authorizeDatas": [],
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+            },
+            "VerifyEmailRegisterCodeAsyncByInput": {
+              "uniqueName": "VerifyEmailRegisterCodeAsyncByInput",
+              "name": "VerifyEmailRegisterCodeAsync",
+              "httpMethod": "POST",
+              "url": "api/account/email/verify-register-code",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput",
+                  "typeSimple": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput",
+                  "typeSimple": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Boolean",
+                "typeSimple": "boolean"
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
