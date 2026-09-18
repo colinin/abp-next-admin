@@ -1,0 +1,12 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "The sender's email address.": "发件人的电子邮件地址。",
+    "The recipients email addresses.": "收件人的电子邮件地址。",
+    "The CC recipient email addresses.": "CC收件人电子邮件地址。",
+    "The BCC recipients email addresses.": "BCC收件人邮箱地址。",
+    "The subject of the email message.": "邮件主题。",
+    "The attachments to send with the email message. Can be (an array of) a fully-qualified file path, URL, stream, byte array or instances of EmailAttachment.": "随邮件发送的附件。可以是（一个数组）完全限定的文件路径、URL、流、字节数组，或 EmailAttachment 类的实例。",
+    "The body of the email message.": "邮件正文。"
+  }
+}

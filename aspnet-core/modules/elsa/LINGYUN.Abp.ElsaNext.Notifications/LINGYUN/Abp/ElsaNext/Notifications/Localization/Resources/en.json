@@ -1,0 +1,18 @@
+{
+  "culture": "en",
+  "texts": {
+    "Notifications": "Notifications",
+    "Send Notification": "Send Notification",
+    "Send an notification.": "Send an notification.",
+    "The name of the registered notification.": "The name of the registered notification.",
+    "The notification title.": "The notification title.",
+    "The notification content.": "The notification content.",
+    "The notification description.": "The notification description.",
+    "The notification template name.": "The notification template name.",
+    "The notification additional attributes.": "The notification additional attributes.",
+    "The tenant id for sending the notification.": "The tenant id for sending the notification.",
+    "The recipients email addresses.": "The recipients email addresses.",
+    "The notifications severity.": "The notifications severity.",
+    "The notification id.": "The notification id."
+  }
+}

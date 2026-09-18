@@ -1,0 +1,12 @@
+{
+  "culture": "en",
+  "texts": {
+    "Path of the blob.": "Path of the blob.",
+    "Blob exists whether overwrite.": "Blob exists whether overwrite.",
+    "The file data to save. This can be a stream, binary data, a string, a form file or a collection of files.": "The file data to save. This can be a stream, binary data, a string, a form file or a collection of files.",
+    "BlobStoring": "Blob Storing",
+    "Delete Blob": "Delete a blob.",
+    "Read Blob.": "Read a blob.",
+    "Save Blob.": "Save a blob."
+  }
+}

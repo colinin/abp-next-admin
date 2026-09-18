@@ -1,0 +1,18 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Notifications": "消息通知",
+    "Send Notification": "发送通知",
+    "Send an notification.": "发送通知。",
+    "The name of the registered notification.": "已注册的通知名称。",
+    "The notification title.": "通知标题。",
+    "The notification content.": "通知内容。",
+    "The notification description.": "通知描述。",
+    "The notification template name.": "通知模板，使用模板消息时标题、内容、描述内容无效。",
+    "The notification additional attributes.": "通知属性。",
+    "The tenant id for sending the notification.": "将要发送通知的租户Id。",
+    "The recipients email addresses.": "接收通知的用户Id集合。",
+    "The notifications severity.": "通知严重程度。",
+    "The notification id.": "通知Id。"
+  }
+}

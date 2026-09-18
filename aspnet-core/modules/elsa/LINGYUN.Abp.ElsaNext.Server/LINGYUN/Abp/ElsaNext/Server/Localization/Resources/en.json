@@ -1,0 +1,9 @@
+{
+  "culture": "en",
+  "texts": {
+    "Permission:Definitions": "工作流定义",
+    "Permission:Instances": "工作流实例",
+    "Permission:Variables": "变量",
+    "Permission:Versions": "版本"
+  }
+}

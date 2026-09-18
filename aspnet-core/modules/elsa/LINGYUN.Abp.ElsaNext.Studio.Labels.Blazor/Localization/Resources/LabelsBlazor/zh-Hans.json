@@ -1,0 +1,25 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Menu:Labels": "标签",
+    "Labels": "标签",
+    "The name of the label.": "标签名称。",
+    "The name of the new label.": "新标签的名称。",
+    "A description about the label.": "标签说明。",
+    "A brief description of the label.": "标签的简要说明。",
+    "The color of the label.": "标签的颜色。",
+    "No Labels found": "未找到标签",
+    "Label": "标签",
+    "Bulk actions": "批量操作",
+    "Delete": "删除",
+    "Create Label": "创建标签",
+    "General": "通用",
+    "Name": "名称",
+    "Description": "说明",
+    "Color": "颜色",
+    "Loading": "加载中",
+    "Save": "保存",
+    "Cancel": "取消",
+    "Ok": "确定"
+  }
+}

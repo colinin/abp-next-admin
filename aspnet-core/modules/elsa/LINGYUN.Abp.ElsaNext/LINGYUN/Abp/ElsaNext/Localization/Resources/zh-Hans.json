@@ -1,0 +1,14 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:Elsa": "Elsa工作流",
+    "Permission:Create": "新增",
+    "Permission:Update": "编辑",
+    "Permission:Delete": "删除",
+    "Permission:Execute": "触发",
+    "Permission:Publish": "发布",
+    "Permission:Retract": "撤销",
+    "Permission:Refresh": "刷新",
+    "Permission:Reload": "重载"
+  }
+}
