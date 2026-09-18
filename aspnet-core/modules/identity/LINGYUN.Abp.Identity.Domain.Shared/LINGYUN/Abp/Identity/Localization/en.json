@@ -74,6 +74,8 @@
     "Description:Abp.Identity.Session.ConcurrentLoginStrategy": "There is a setting in the identity section to prevent concurrent login.",
     "DisplayName:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit": "Same Type Devices Login Limit",
     "Description:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit": "Limit the login times of devices of the same type. The sessions that exceed the limit will be deregistered.",
+    "DisplayName:Abp.Identity.SignIn.RequireCaptchaVerification": "Require Captcha Verification",
+    "Description:Abp.Identity.SignIn.RequireCaptchaVerification": "During password login, a verification code check is required.",
     "DisplayName:Abp.Identity.Link.UserLoginUri": "User Login Uri",
     "Description:Abp.Identity.Link.UserLoginUri": "Set up a user login link for redirecting external authenticated users.",
     "DisplayName:Abp.Identity.TwoFactorBehaviour": "Two Factor behaviour",

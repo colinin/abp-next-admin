@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.Account.Security;
 using LINGYUN.Abp.Account.Web.Bundling;
 using LINGYUN.Abp.Account.Web.ProfileManagement;
+using LINGYUN.Abp.Captcha;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.AspNetCore.QrCode;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -26,6 +27,7 @@ namespace LINGYUN.Abp.Account.Web;
     typeof(VoloAbpAccountWebModule),
     typeof(AbpAccountSecurityModule),
     typeof(AbpIdentityDomainModule),
+    typeof(AbpCaptchaAbstractionsModule),
     typeof(AbpIdentityAspNetCoreQrCodeModule),
     typeof(AbpAccountApplicationContractsModule))]
 public class AbpAccountWebModule : AbpModule

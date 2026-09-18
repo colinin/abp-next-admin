@@ -57,6 +57,15 @@ public static class IdentitySettingNames
         public const string AdminRoleTwoFactorForceEnabled = SecurityPrefix + ".AdminRoleTwoFactorForceEnabled";
 
         public const string ProhibitDefaultAdminRole = SecurityPrefix + ".ProhibitDefaultAdminRole";
+
+        public const string UseCaptcha = SecurityPrefix + ".ProhibitDefaultAdminRole";
+    }
+
+    public static class SignIn
+    {
+        private const string SignInPrefix = "Abp.Identity.SignIn";
+
+        public const string RequireCaptchaVerification = SignInPrefix + ".RequireCaptchaVerification";
     }
 
     public static class Link
