@@ -22,7 +22,8 @@ public class IdentityRoleDefaultRoleChangeHandler :
     }
     public async virtual Task HandleEventAsync(EntityChangedEventData<IdentityRole> eventData)
     {
-        if (eventData.Entity.Name.Equals(AbpRoleConsts.AdminRoleName, StringComparison.CurrentCultureIgnoreCase) &&
+        if (eventData.Entity.IsDefault &&
+            eventData.Entity.Name.Equals(AbpRoleConsts.AdminRoleName, StringComparison.CurrentCultureIgnoreCase) &&
             await SettingProvider.IsTrueAsync(IdentitySettingNames.Security.ProhibitDefaultAdminRole))
         {
             throw new BusinessException(

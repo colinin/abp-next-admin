@@ -238,6 +238,7 @@ onMounted(onGet);
       </Tabs>
     </Form>
     <Empty
+      v-else
       :description="
         $t('AbpFeature.Volo_Feature:010001', {
           FeatureName: $t(

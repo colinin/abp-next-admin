@@ -44,8 +44,9 @@ public class DefaultIdentitySessionChecker : IIdentitySessionChecker, ITransient
 
     public async virtual Task<bool> ValidateSessionAsync(ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken = default)
     {
+        var userId = claimsPrincipal.FindImpersonatorUserId() ?? claimsPrincipal.FindUserId();
         var sessionId = claimsPrincipal.FindSessionId();
-        if (sessionId.IsNullOrWhiteSpace())
+        if (!userId.HasValue || sessionId.IsNullOrWhiteSpace())
         {
             Logger.LogDebug("No user session id found.");
             return false;
@@ -54,7 +55,15 @@ public class DefaultIdentitySessionChecker : IIdentitySessionChecker, ITransient
         var identitySessionCacheItem = await IdentitySessionCache.GetAsync(sessionId, cancellationToken);
         if (identitySessionCacheItem == null)
         {
-            Logger.LogDebug($"No user session cache found for: {sessionId}.");
+            Logger.LogDebug("No user session cache found for: {sessionId}.", sessionId);
+            return false;
+        }
+        if (identitySessionCacheItem.UserId != userId.Value)
+        {
+            Logger.LogWarning("User session does not match. There might be a forged token. User ID: {userId}, Session ID: {sessionId}",
+                userId, sessionId);
+            Logger.LogWarning("The session is insecure and the leaked tokens have been forcibly cleared.");
+            await IdentitySessionCache.RemoveAsync(sessionId, cancellationToken);
             return false;
         }
 
