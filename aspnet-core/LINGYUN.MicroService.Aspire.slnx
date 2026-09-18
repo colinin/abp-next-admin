@@ -130,6 +130,7 @@
     <Project Path="framework/data-protection/LINGYUN.Abp.DataProtection/LINGYUN.Abp.DataProtection.csproj" />
   </Folder>
   <Folder Name="/framework/dynamic-definition/">
+    <Project Path="framework/dynamic-definition/LINGYUN.Abp.Dynamic.Definitions.Core/LINGYUN.Abp.Dynamic.Definitions.Core.csproj" />
     <Project Path="framework/dynamic-definition/LINGYUN.Abp.Dynamic.Definitions/LINGYUN.Abp.Dynamic.Definitions.csproj" />
     <Project Path="framework/dynamic-definition/LINGYUN.Abp.Dynamic.Definitions.Core/LINGYUN.Abp.Dynamic.Definitions.Core.csproj" />
   </Folder>
@@ -324,6 +325,10 @@
     <Project Path="modules/caching-management/LINGYUN.Abp.CachingManagement.Domain/LINGYUN.Abp.CachingManagement.Domain.csproj" />
     <Project Path="modules/caching-management/LINGYUN.Abp.CachingManagement.HttpApi/LINGYUN.Abp.CachingManagement.HttpApi.csproj" />
     <Project Path="modules/caching-management/LINGYUN.Abp.CachingManagement.StackExchangeRedis/LINGYUN.Abp.CachingManagement.StackExchangeRedis.csproj" />
+  </Folder>
+  <Folder Name="/modules/captcha/">
+    <Project Path="modules/captcha/LINGYUN.Abp.Captcha.Abstractions/LINGYUN.Abp.Captcha.Abstractions.csproj" Id="06e085b5-82e8-426b-ac59-496a3d4d9ca3" />
+    <Project Path="modules/captcha/LINGYUN.Abp.LazyCaptcha/LINGYUN.Abp.LazyCaptcha.csproj" />
   </Folder>
   <Folder Name="/modules/data-protection/">
     <Project Path="modules/data-protection/LINGYUN.Abp.DataProtectionManagement.Application.Contracts/LINGYUN.Abp.DataProtectionManagement.Application.Contracts.csproj" />
