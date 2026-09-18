@@ -1,0 +1,11 @@
+﻿.captcha-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.captcha-img {
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}

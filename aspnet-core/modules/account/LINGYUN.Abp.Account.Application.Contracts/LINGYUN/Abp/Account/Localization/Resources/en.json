@@ -21,6 +21,7 @@
     "DisplayName:LinkUserName": "User Name",
     "DisplayName:DirectlyLinked": "Directly Linked",
     "DisplayName:UserPassword": "User Password",
+    "DisplayName:CaptchaCode": "Captcha Code",
     "TwoFactor": "Two factor authentication",
     "TwoFactor:Enabled": "TwoFactor Enabled",
     "TwoFactor:Email": "Email",

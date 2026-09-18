@@ -10,6 +10,20 @@ $(function () {
     var l = abp.localization.getResource('AbpAccount');
     var il = abp.localization.getResource('AbpIdentity');
 
+    $('#CaptchaImg').click(function (e) {
+        e.preventDefault();
+        var captchaIdInput = document.getElementById('CaptchaId');
+        fetch('?handler=Captcha', { method: 'GET' })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                if (!data.captchaImage) return;
+                document.getElementById('CaptchaImg').src = data.captchaImage;
+                if (captchaIdInput) {
+                    captchaIdInput.value = data.captchaId;
+                }
+            });
+    });
+
     $("#SendVerifyCodeButton").click(function (e) {
         const button = $(this);
         e.preventDefault();

@@ -123,6 +123,21 @@ public class IdentityGroupSettingDefinitionProvider : SettingDefinitionProvider
                 ConfigurationSettingValueProvider.ProviderName,
                 GlobalSettingValueProvider.ProviderName,
                 TenantSettingValueProvider.ProviderName);
+        context.Add(new SettingDefinition(
+            name: Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification,
+            defaultValue: "",
+            displayName: L("DisplayName:Abp.Identity.SignIn.RequireCaptchaVerification"),
+            description: L("Description:Abp.Identity.SignIn.RequireCaptchaVerification"),
+            isVisibleToClients: false)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("SignIn", L("Settings:Identity.SignIn"), order: 2)
+            .WithOrder(4)
+            .WithValueType(ValueType.Boolean));
     }
 
     private static void SetPasswordSettingGroup(ISettingDefinitionContext context)

@@ -74,6 +74,8 @@
     "Description:Abp.Identity.Session.ConcurrentLoginStrategy": "用户重复登录会话策略",
     "DisplayName:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit": "允许相同类型设备登录次数",
     "Description:Abp.Identity.Session.LogoutFromSameTypeDevicesLimit": "限制相同类型设备登录次数,超出限制的会话将被注销.",
+    "DisplayName:Abp.Identity.SignIn.RequireCaptchaVerification": "需要验证码",
+    "Description:Abp.Identity.SignIn.RequireCaptchaVerification": "密码登录时需要通过验证码校验.",
     "DisplayName:Abp.Identity.Link.UserLoginUri": "用户登录链接",
     "Description:Abp.Identity.Link.UserLoginUri": "设置用户登录链接,用于外部认证用户重定向.",
     "DisplayName:Abp.Identity.TwoFactorBehaviour": "双因素身份验证行为",

@@ -273,7 +273,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 return Page();
             }
 
-            SetTenantCookies(qrCodeInfo.TenantId);
+            EnsureTenantCookie(qrCodeInfo.TenantId);
             using (CurrentTenant.Change(qrCodeInfo.TenantId))
             {
                 var user = await UserManager.FindByIdAsync(qrCodeInfo.UserId!);
