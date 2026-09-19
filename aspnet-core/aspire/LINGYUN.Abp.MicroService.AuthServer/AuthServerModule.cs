@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.Account;
+using LINGYUN.Abp.Account.Web.LazyCaptcha;
 using LINGYUN.Abp.Account.Web.OAuth;
 using LINGYUN.Abp.Account.Web.OpenIddict;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
@@ -48,6 +49,8 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
+    // 使用 LazyCaptcha 验证码组件
+    typeof(AbpAccountWebLazyCaptchaModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAccountWebOAuthModule),
     typeof(AbpBlobStoringBlobManagementModule),
