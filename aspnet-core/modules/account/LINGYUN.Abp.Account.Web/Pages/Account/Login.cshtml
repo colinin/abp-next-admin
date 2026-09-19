@@ -1,5 +1,6 @@
 ﻿@page
 @using LINGYUN.Abp.Account.Web.Pages.Account
+@using LINGYUN.Abp.Account.Web.Pages.Account.Components.Captcha
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
 @using Volo.Abp.Account.Settings
@@ -16,14 +17,12 @@
 @{
     Layout = ThemeManager.CurrentTheme.GetAccountLayout();
     PageLayout.Content.Title = L["Login"].Value;
-
-    var captchaImage = ViewData["CaptchaImage"] as string;
 }
 
 @section styles
 {
     <abp-style-bundle name="@typeof(LoginModel).FullName">
-        <abp-style src="/Pages/Account/Login.css" />
+
     </abp-style-bundle>
 }
 
@@ -44,7 +43,7 @@
     {
         <abp-tabs id="LoginFormTabs">
             <abp-tab title="@L["PasswordLogin"].Value" active="Model.LoginType == LoginType.Password" header-name="PasswordLogin">
-                <form method="post" class="mt-4" asp-page-handler="PasswordLogin">
+                <form method="post" class="mt-4" asp-page-handler="PasswordLogin" id="PasswordLoginForm">
                     <input asp-for="ReturnUrl" />
                     <input asp-for="ReturnUrlHash" />
                     <input asp-for="LinkTenantId" />
@@ -67,14 +66,7 @@
 
                     @if (Model.EnableCaptchaLogin)
                     {
-                        <div class="mb-3">
-                            <label asp-for="PasswordLoginInput.CaptchaCode" class="form-label"></label>
-                            <div class="input-group">
-                                <input class="form-control" autocomplete="off" asp-for="PasswordLoginInput.CaptchaCode" required />
-                                <img src="@captchaImage" class="captcha-img" id="CaptchaImg" />
-                            </div>
-                            <span asp-validation-for="PasswordLoginInput.CaptchaCode"></span>
-                        </div>
+                        @await Component.InvokeAsync(Model.CaptchaOptions.Value.ComponentType, new CaptchaViewComponentModel { PasswordLoginInput = @Model.PasswordLoginInput })
                     }
 
                     <abp-row class="mb-3">
@@ -100,7 +92,7 @@
                         </strong>
                     }
                     <div class="d-grid gap-2">
-                        <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
+                        <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3" id="PasswordLogin_Button">@L["Login"]</abp-button>
                         @if (Model.ShowCancelButton)
                         {
                             <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
@@ -179,7 +171,6 @@
                 @foreach (var provider in Model.VisibleExternalProviders)
                 {
                     @await Component.InvokeAsync(provider.ComponentType, provider)
-                                ;
                 }
             </form>
         </div>

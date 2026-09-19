@@ -61,6 +61,15 @@
     "Settings:TenantCloud": "腾讯云服务",
     "Settings:TenantCloud.ConnectionSetting": "连接配置",
     "Settings:TenantCloud.SmsSetting": "短信配置",
-    "Settings:TenantCloud.BasicSetting": "基础配置"
+    "Settings:TenantCloud.BasicSetting": "基础配置",
+    "Settings:TenantCloud.Captcha": "天御验证码",
+    "DisplayName:CaptchaAppId": "验证码应用ID",
+    "Description:CaptchaAppId": "验证码应用ID。登录 验证码控制台，在验证列表的【密钥】列，即可查看到CaptchaAppId。",
+    "DisplayName:CaptchaSecretKey": "验证码应用密钥",
+    "Description:CaptchaSecretKey": "验证码应用密钥。登录 验证码控制台，在验证列表的【密钥】列，即可查看到AppSecretKey。",
+    "DisplayName:CaptchaAppIdEncryptedType": "验证码应用ID加密方式",
+    "Description:CaptchaAppIdEncryptedType": "如果指定加密方式, CaptchaAppid 鉴权通过前端传递加密符, 可有效防止因 CaptchaAppid 泄露导致的资源盗刷风险.",
+    "DisplayName:CaptchaAppIdEncryptedExpireTime": "过期时间",
+    "Description:CaptchaAppIdEncryptedExpireTime": "密文有效期，单位：秒，最大 86400 秒，即 24 小时。"
   }
 }

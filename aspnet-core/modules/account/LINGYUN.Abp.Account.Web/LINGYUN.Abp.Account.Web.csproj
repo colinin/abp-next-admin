@@ -41,7 +41,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\captcha\LINGYUN.Abp.Captcha.Abstractions\LINGYUN.Abp.Captcha.Abstractions.csproj" />
 		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
 		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.AspNetCore.QrCode\LINGYUN.Abp.Identity.AspNetCore.QrCode.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
