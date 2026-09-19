@@ -10,20 +10,6 @@ $(function () {
     var l = abp.localization.getResource('AbpAccount');
     var il = abp.localization.getResource('AbpIdentity');
 
-    $('#CaptchaImg').click(function (e) {
-        e.preventDefault();
-        var captchaIdInput = document.getElementById('CaptchaId');
-        fetch('?handler=Captcha', { method: 'GET' })
-            .then(function (res) { return res.json(); })
-            .then(function (data) {
-                if (!data.captchaImage) return;
-                document.getElementById('CaptchaImg').src = data.captchaImage;
-                if (captchaIdInput) {
-                    captchaIdInput.value = data.captchaId;
-                }
-            });
-    });
-
     $("#SendVerifyCodeButton").click(function (e) {
         const button = $(this);
         e.preventDefault();
@@ -154,5 +140,18 @@ $(function () {
             checkQrCodeTimer = undefined;
             isQrCodeInitialized = false;
         }
+    }
+
+    var $captchaContainer = $('#PasswordLoginCaptcha');
+    var $captchaCode = $('#PasswordLoginInput_CaptchaCode');
+
+    if ($captchaContainer && $captchaCode) {
+        $captchaContainer.on('input change', '[data-captcha-code]', function () {
+            $captchaCode.val($(this).val());
+        });
+
+        $('#PasswordLoginForm').on('submit', function () {
+            $captchaCode.val($captchaContainer.find('[data-captcha-code]').val());
+        });
     }
 });

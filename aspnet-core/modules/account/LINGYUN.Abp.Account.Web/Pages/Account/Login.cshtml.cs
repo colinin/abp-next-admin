@@ -1,7 +1,7 @@
 using LINGYUN.Abp.Account.Dto;
+using LINGYUN.Abp.Account.Web.Captcha;
 using LINGYUN.Abp.Account.Web.ExternalProviders;
 using LINGYUN.Abp.Account.Web.Models;
-using LINGYUN.Abp.Captcha;
 using LINGYUN.Abp.Identity.QrCode;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -65,13 +65,14 @@ public class LoginModel : AccountPageModel
     public bool EnableLocalLogin { get; set; }
     public bool ShowCancelButton { get; set; }
     public bool EnableCaptchaLogin { get; set; }
+    public IOptions<AbpAccountCaptchaOptions> CaptchaOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpAccountCaptchaOptions>>();
+
     public bool IsExternalLoginOnly => EnableLocalLogin == false && ExternalProviders?.Count() == 1;
     public string? ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
 
     public IEnumerable<ExternalLoginProviderModel> ExternalProviders { get; set; } = default!;
     public IEnumerable<ExternalLoginProviderModel> VisibleExternalProviders => ExternalProviders.Where(x => !x.DisplayName.IsNullOrWhiteSpace());
 
-    protected ICodeCaptchaProvider? CodeCaptchaProvider => LazyServiceProvider.LazyGetService<ICodeCaptchaProvider>();
     protected IIdentityUserRepository UserRepository => LazyServiceProvider.LazyGetRequiredService<IIdentityUserRepository>();
     protected IQrCodeLoginProvider QrCodeLoginProvider => LazyServiceProvider.LazyGetRequiredService<IQrCodeLoginProvider>();
     protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
@@ -115,23 +116,6 @@ public class LoginModel : AccountPageModel
         IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
     }
 
-    public virtual async Task<IActionResult> OnGetCaptchaAsync()
-    {
-        if (!EnableCaptchaLogin)
-        {
-            return new JsonResult(new { captchaId = "", captchaImage = "" });
-        }
-        var captchaId = EnsureCaptchaIdCookie();
-        await CodeCaptchaProvider!.RemoveAsync(captchaId);
-        var captchaData = await CodeCaptchaProvider!.GenerateAsync(captchaId);
-
-        return new JsonResult(new
-        {
-            captchaId = captchaId,
-            captchaImage = $"data:image/png;base64,{Convert.ToBase64String(captchaData.Data)}"
-        });
-    }
-
     public virtual async Task<IActionResult> OnGetAsync()
     {
         LoginType = LoginType.Password;
@@ -141,11 +125,10 @@ public class LoginModel : AccountPageModel
 
         AllowQrCodeLoginIfNotMobileDevice();
 
-        await RefreshCaptchaData();
-
         ExternalProviders = await GetExternalProviders();
 
         EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+        EnableCaptchaLogin = await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification);
 
         if (IsExternalLoginOnly)
         {
@@ -178,35 +161,24 @@ public class LoginModel : AccountPageModel
         ExternalProviders = await GetExternalProviders();
 
         EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+        EnableCaptchaLogin = await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification);
 
         ModelState.RemoveModelErrors(nameof(PhoneLoginInput));
         ModelState.RemoveModelErrors(nameof(QrCodeLoginInput));
 
-        if (EnableCaptchaLogin && PasswordLoginInput.CaptchaCode.IsNullOrWhiteSpace())
-        {
-            ModelState.AddModelError(
-                "PasswordLoginInput.CaptchaCode",
-                L["InvalidVerifyCode"]
-            );
-        }
-
         if (!TryValidateModel(PasswordLoginInput, nameof(PasswordLoginInput)))
         {
-            await RefreshCaptchaData();
             return Page();
         }
 
         if (EnableCaptchaLogin)
         {
-            var captchaId = EnsureCaptchaIdCookie();
-            var isValid = await CodeCaptchaProvider!.ValidateAsync(
-                captchaId,
-                PasswordLoginInput.CaptchaCode!
+            var isValid = await CaptchaOptions.Value.CaptchaValidator.ValidateAsync(
+                new CaptchaValidatorContext(LazyServiceProvider, PasswordLoginInput.CaptchaCode!)
             );
             if (!isValid)
             {
-                ModelState.AddModelError("PasswordLoginInput.CaptchaCode", L["InvalidVerifyCode"]);
-                await RefreshCaptchaData();
+                Alerts.Danger(L["InvalidVerifyCode"]);
                 return Page();
             }
         }
@@ -694,38 +666,10 @@ public class LoginModel : AccountPageModel
         await HttpContext.SignInAsync(AbpAccountAuthenticationTypes.ConfirmUserScheme, new ClaimsPrincipal(identity));
     }
 
-    protected async virtual Task<IActionResult> HandleUserNameOrPasswordInvalid()
+    protected virtual Task<IActionResult> HandleUserNameOrPasswordInvalid()
     {
         Alerts.Danger(L["InvalidUserNameOrPassword"]);
-        await RefreshCaptchaData();
-        return Page();
-    }
-
-    protected async virtual Task RefreshCaptchaData()
-    {
-        ViewData["CaptchaImage"] = "";
-        try
-        {
-            if (CodeCaptchaProvider != null &&
-                await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification))
-            {
-                EnableCaptchaLogin = true;
-
-                var captchaId = EnsureCaptchaIdCookie();
-                await CodeCaptchaProvider!.RemoveAsync(captchaId);
-                var captchaData = await CodeCaptchaProvider!.GenerateAsync(captchaId);
-                var base64 = Convert.ToBase64String(captchaData.Data);
-                ViewData["CaptchaImage"] = $"data:image/png;base64,{base64}";
-            }
-            else
-            {
-                EnableCaptchaLogin = false;
-            }
-        }
-        catch (Exception ex)
-        {
-
-        }
+        return Task.FromResult<IActionResult>(Page());
     }
 
     protected virtual void AllowQrCodeLoginIfNotMobileDevice()
@@ -738,27 +682,6 @@ public class LoginModel : AccountPageModel
                 QrCodeLoginInput.IsEnabled = true;
             }
         }
-    }
-
-    protected virtual string EnsureCaptchaIdCookie()
-    {
-        if (!Request.Cookies.TryGetValue(CaptchaKeywords.CaptchaIdCookieName, out var captchaId))
-        {
-            captchaId = GuidGenerator.Create().ToString("N");
-        }
-
-        HttpContext.Response.Cookies.Append(
-            CaptchaKeywords.CaptchaIdCookieName,
-            captchaId,
-            new CookieOptions
-            {
-                Path = "/",
-                HttpOnly = false,
-                IsEssential = true,
-                Expires = DateTimeOffset.Now.AddHours(1)
-            });
-
-        return captchaId;
     }
 
     protected virtual void EnsureTenantCookie(Guid? tenantId = null)
@@ -921,7 +844,6 @@ public class PasswordLoginInputModel : LoginInputModel
     [DisableAuditing]
     public string Password { get; set; } = default!;
 
-    [StringLength(10)]
     public string? CaptchaCode { get; set; }
 
     public bool RememberMe { get; set; }
