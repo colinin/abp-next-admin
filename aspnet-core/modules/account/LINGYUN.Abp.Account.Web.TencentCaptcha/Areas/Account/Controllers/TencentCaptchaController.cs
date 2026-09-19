@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.Account.Web.TencentCaptcha.Models;
 using LINGYUN.Abp.Account.Web.TencentCaptcha.Security;
-using LINGYUN.Abp.Account.Web.TencentCaptcha.Settings;
+using LINGYUN.Abp.Tencent.Settings;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Security.Cryptography;
@@ -33,11 +33,11 @@ public class TencentCaptchaController : AbpControllerBase
     [HttpGet("config")]
     public async virtual Task<CaptchaConfigModel> GetCaptchaConfigAsync()
     {
-        var captchaAppId = await SettingProvider.GetOrNullAsync(TencentCaptchaSettingNames.CaptchaAppId);
+        var captchaAppId = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Captcha.CaptchaAppId);
 
-        Check.NotNullOrWhiteSpace(captchaAppId, TencentCaptchaSettingNames.CaptchaAppId);
+        Check.NotNullOrWhiteSpace(captchaAppId, TencentCloudSettingNames.Captcha.CaptchaAppId);
 
-        var aidEncryptedType = await SettingProvider.GetOrNullAsync(TencentCaptchaSettingNames.CaptchaAppIdEncryptedType);
+        var aidEncryptedType = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Captcha.CaptchaAppIdEncryptedType);
         if (aidEncryptedType.IsNullOrWhiteSpace())
         {
             return new CaptchaConfigModel
@@ -47,10 +47,10 @@ public class TencentCaptchaController : AbpControllerBase
         }
         else
         {
-            var appSecretKey = await SettingProvider.GetOrNullAsync(TencentCaptchaSettingNames.AppSecretKey);
-            Check.NotNullOrWhiteSpace(appSecretKey, TencentCaptchaSettingNames.AppSecretKey);
+            var appSecretKey = await SettingProvider.GetOrNullAsync(TencentCloudSettingNames.Captcha.AppSecretKey);
+            Check.NotNullOrWhiteSpace(appSecretKey, TencentCloudSettingNames.Captcha.AppSecretKey);
 
-            var expireTime = await SettingProvider.GetAsync(TencentCaptchaSettingNames.CaptchaAppIdEncryptedExpireTime, 300L);
+            var expireTime = await SettingProvider.GetAsync(TencentCloudSettingNames.Captcha.CaptchaAppIdEncryptedExpireTime, 300L);
             if (expireTime <= 0 || expireTime > MaxExpireTimeSeconds)
             {
                 expireTime = MaxExpireTimeSeconds;

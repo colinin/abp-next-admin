@@ -141,17 +141,4 @@ $(function () {
             isQrCodeInitialized = false;
         }
     }
-
-    var $captchaContainer = $('#PasswordLoginCaptcha');
-    var $captchaCode = $('#PasswordLoginInput_CaptchaCode');
-
-    if ($captchaContainer && $captchaCode) {
-        $captchaContainer.on('input change', '[data-captcha-code]', function () {
-            $captchaCode.val($(this).val());
-        });
-
-        $('#PasswordLoginForm').on('submit', function () {
-            $captchaCode.val($captchaContainer.find('[data-captcha-code]').val());
-        });
-    }
 });

@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Abp.Account.Web.Captcha;
-using LINGYUN.Abp.Account.Web.TencentCaptcha.Settings;
 using LINGYUN.Abp.Tencent.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -31,19 +30,19 @@ public class TencentCaptchaValidator : ICaptchaValidator
                 [
                     TencentCloudSettingNames.SecretId,
                     TencentCloudSettingNames.SecretKey,
-                    TencentCaptchaSettingNames.CaptchaAppId,
-                    TencentCaptchaSettingNames.AppSecretKey
+                    TencentCloudSettingNames.Captcha.CaptchaAppId,
+                    TencentCloudSettingNames.Captcha.AppSecretKey
                 ]);
 
             var secretId = tencentSettings.FirstOrDefault(x => x.Name == TencentCloudSettingNames.SecretId)?.Value;
             var secretKey = tencentSettings.FirstOrDefault(x => x.Name == TencentCloudSettingNames.SecretKey)?.Value;
-            var captchaAppId = tencentSettings.FirstOrDefault(x => x.Name == TencentCaptchaSettingNames.CaptchaAppId)?.Value;
-            var appSecretKey = tencentSettings.FirstOrDefault(x => x.Name == TencentCaptchaSettingNames.AppSecretKey)?.Value;
+            var captchaAppId = tencentSettings.FirstOrDefault(x => x.Name == TencentCloudSettingNames.Captcha.CaptchaAppId)?.Value;
+            var appSecretKey = tencentSettings.FirstOrDefault(x => x.Name == TencentCloudSettingNames.Captcha.AppSecretKey)?.Value;
 
             Check.NotNullOrWhiteSpace(secretId, TencentCloudSettingNames.SecretId);
             Check.NotNullOrWhiteSpace(secretKey, TencentCloudSettingNames.SecretKey);
-            Check.NotNullOrWhiteSpace(captchaAppId, TencentCaptchaSettingNames.CaptchaAppId);
-            Check.NotNullOrWhiteSpace(appSecretKey, TencentCaptchaSettingNames.AppSecretKey);
+            Check.NotNullOrWhiteSpace(captchaAppId, TencentCloudSettingNames.Captcha.CaptchaAppId);
+            Check.NotNullOrWhiteSpace(appSecretKey, TencentCloudSettingNames.Captcha.AppSecretKey);
 
             var client = new CaptchaClient(
                 new TencentCloud.Common.Credential
