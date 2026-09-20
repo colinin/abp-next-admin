@@ -15,55 +15,53 @@ public class LazyCaptchaValidator : ICaptchaValidator
 {
     public async virtual Task<bool> ValidateAsync(CaptchaValidatorContext context)
     {
-        if (!context.CaptchaCode.IsNullOrWhiteSpace())
+        var identitySecurityLogManager = context.ServiceProvider.GetRequiredService<IdentitySecurityLogManager>();
+        var httpContextAccessor = context.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
+        var currentClient = context.ServiceProvider.GetRequiredService<ICurrentClient>();
+        var logger = context.ServiceProvider.GetService<ILogger<LazyCaptchaValidator>>();
+
+        var logContext = new IdentitySecurityLogContext
         {
-            var identitySecurityLogManager = context.ServiceProvider.GetRequiredService<IdentitySecurityLogManager>();
-            var httpContextAccessor = context.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
-            var currentClient = context.ServiceProvider.GetRequiredService<ICurrentClient>();
-            var logger = context.ServiceProvider.GetService<ILogger<LazyCaptchaValidator>>();
+            Identity = IdentitySecurityLogIdentityConsts.Identity,
+            ClientId = currentClient.Id,
+            UserName = context.UserName,
+        };
+        logContext.WithProperty("Captcha", "LazyCaptcha");
 
-            var logContext = new IdentitySecurityLogContext
+        try
+        {
+            if (!context.CaptchaCode.IsNullOrWhiteSpace() &&
+                httpContextAccessor.HttpContext != null &&
+                httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(CaptchaKeywords.CaptchaIdCookieName, out var captchaId))
             {
-                Identity = IdentitySecurityLogIdentityConsts.Identity,
-                ClientId = currentClient.Id,
-                UserName = context.UserName,
-            };
-            logContext.WithProperty("Captcha", "LazyCaptcha");
-
+                logContext.WithProperty("CaptchaId", captchaId);
+                var captcha = context.ServiceProvider.GetRequiredService<ICodeCaptchaProvider>();
+                if (await captcha.ValidateAsync(captchaId, context.CaptchaCode))
+                {
+                    logContext.Action = IdentitySecurityLogExtendActionConsts.CaptchaSucceeded;
+                    return true;
+                }
+            }
+            logContext.WithProperty("CaptchaId", "captchaId is invalid");
+            logContext.Action = IdentitySecurityLogExtendActionConsts.CaptchaFailed;
+        }
+        catch (Exception ex)
+        {
+            logContext.Action = IdentitySecurityLogExtendActionConsts.CaptchaError;
+            logger?.LogWarning(ex, "Error occurred while invoking Lazy captcha service.");
+        }
+        finally
+        {
             try
             {
-                if (httpContextAccessor.HttpContext != null &&
-                httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(CaptchaKeywords.CaptchaIdCookieName, out var captchaId))
-                {
-                    logContext.WithProperty("CaptchaId", captchaId);
-                    var captcha = context.ServiceProvider.GetRequiredService<ICodeCaptchaProvider>();
-                    if (await captcha.ValidateAsync(captchaId, context.CaptchaCode))
-                    {
-                        logContext.Action = IdentitySecurityLogExtendActionConsts.CaptchaSucceeded;
-                        return true;
-                    }
-                }
-                logContext.WithProperty("CaptchaId", "captchaId is invalid");
-                logContext.Action = IdentitySecurityLogExtendActionConsts.CaptchaFailed;
+                await identitySecurityLogManager.SaveAsync(logContext);
             }
             catch (Exception ex)
             {
-                logContext.Action = IdentitySecurityLogExtendActionConsts.CaptchaError;
-                logger?.LogWarning(ex, "Error occurred while invoking Lazy captcha service.");
-            }
-            finally
-            {
-                try
-                {
-                    await identitySecurityLogManager.SaveAsync(logContext);
-                }
-                catch (Exception ex)
-                {
-                    logger?.LogWarning(ex, "Failed to write the captcha security log!");
-                }
+                logger?.LogWarning(ex, "Failed to write the captcha security log!");
             }
         }
-        
+
         return false;
     }
 }
