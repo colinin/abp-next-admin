@@ -1,4 +1,5 @@
 using LINGYUN.Abp.Account.Dto;
+using LINGYUN.Abp.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -6,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Security.Claims;
 
 namespace LINGYUN.Abp.Account.Web.Pages.Account
@@ -92,8 +94,22 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 // Clear the dynamic claims cache.
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                {
+                    Identity = IdentitySecurityLogIdentityConsts.Identity,
+                    Action = IdentitySecurityLogExtendActionConsts.LoginTwoFactorSucceeded,
+                    UserName = user.UserName
+                });
+
                 return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
             }
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = user.UserName
+            });
             if (result.IsLockedOut)
             {
                 Logger.LogWarning(7, "User account locked out.");
