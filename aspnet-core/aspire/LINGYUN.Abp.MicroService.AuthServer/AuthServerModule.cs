@@ -2,8 +2,10 @@
 using LINGYUN.Abp.Account.Web.LazyCaptcha;
 using LINGYUN.Abp.Account.Web.OAuth;
 using LINGYUN.Abp.Account.Web.OpenIddict;
+using LINGYUN.Abp.Account.Web.TencentCaptcha;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.MultiTenancy;
+using LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
@@ -49,7 +51,7 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
     // 使用 LazyCaptcha 验证码组件
-    typeof(AbpAccountWebLazyCaptchaModule),
+    // typeof(AbpAccountWebLazyCaptchaModule),
     // 使用 腾讯云天御 验证码组件, 需配置好腾讯云相关参数
     // typeof(AbpAccountWebTencentCaptchaModule),
     typeof(AbpAccountWebOpenIddictModule),
@@ -78,6 +80,7 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpDynamicDefinitionsModule),
