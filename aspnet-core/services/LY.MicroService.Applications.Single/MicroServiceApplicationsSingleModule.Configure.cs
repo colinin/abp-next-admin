@@ -1,4 +1,3 @@
-using Swashbuckle.AspNetCore.SwaggerGen;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LY.MicroService.Applications.Single;

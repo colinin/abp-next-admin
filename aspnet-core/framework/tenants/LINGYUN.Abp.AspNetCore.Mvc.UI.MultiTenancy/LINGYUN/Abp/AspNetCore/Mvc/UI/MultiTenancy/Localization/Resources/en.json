@@ -1,0 +1,7 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "SelectTenantHint": "Please select one of the tenants.",
+    "InputTenantName": "Input Tenant Name"
+  }
+}

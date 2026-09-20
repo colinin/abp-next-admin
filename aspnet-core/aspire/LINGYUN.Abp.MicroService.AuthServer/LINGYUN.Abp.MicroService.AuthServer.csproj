@@ -8,6 +8,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Content Remove="Pages\**\*.js" />
+		<EmbeddedResource Include="Pages\**\*.js" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="AgileConfig.Client" />
 		<PackageReference Include="DotNetCore.CAP.Dashboard" />
 		<PackageReference Include="DotNetCore.CAP.PostgreSql" />
@@ -50,6 +55,7 @@
 		<ProjectReference Include="..\..\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
 		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
 		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.AspNetCore.MultiTenancy\LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
+		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy\LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -90,7 +96,7 @@
 		<PropertyGroup>
 			<PackageJsonPath>$(MSBuildProjectDirectory)\package.json</PackageJsonPath>
 		</PropertyGroup>
-		
+
 		<Exec Command="abp install-libs" Condition="Exists('$(PackageJsonPath)')" WorkingDirectory="$(MSBuildProjectDirectory)" IgnoreExitCode="false" />
 	</Target>
 

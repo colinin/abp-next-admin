@@ -223,6 +223,7 @@
   </Folder>
   <Folder Name="/framework/tenants/">
     <Project Path="framework/tenants/LINGYUN.Abp.AspNetCore.MultiTenancy/LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
+    <Project Path="framework/tenants/LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy/LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy.csproj" Id="4bbf3c3c-0b54-49ca-9fb9-56abeae87e04" />
     <Project Path="framework/tenants/LINGYUN.Abp.MultiTenancy.Editions/LINGYUN.Abp.MultiTenancy.Editions.csproj" />
   </Folder>
   <Folder Name="/framework/tracking/">

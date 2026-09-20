@@ -1,12 +1,3 @@
-using LINGYUN.Abp.BlobManagement.MimeCheck;
-using LINGYUN.Abp.Dynamic.Definitions;
-using LINGYUN.Abp.Identity.AspNetCore;
-using LINGYUN.Abp.Identity.Jobs;
-using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
-using LINGYUN.Abp.Notifications.Calendar;
-using LINGYUN.Platform.Jobs;
-using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
-
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
@@ -408,6 +399,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAspNetCoreMvcIdempotentWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpHttpClientIdentityModelWebModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpDynamicDefinitionsModule),
     typeof(AbpSwashbuckleModule),

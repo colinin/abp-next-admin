@@ -246,6 +246,7 @@
   </Folder>
   <Folder Name="/framework/tenants/">
     <Project Path="framework/tenants/LINGYUN.Abp.AspNetCore.MultiTenancy/LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
+    <Project Path="framework/tenants/LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy/LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy.csproj" />
     <Project Path="framework/tenants/LINGYUN.Abp.MultiTenancy.Editions/LINGYUN.Abp.MultiTenancy.Editions.csproj" />
   </Folder>
   <Folder Name="/framework/wechat/">
