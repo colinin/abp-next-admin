@@ -174,7 +174,10 @@ public class LoginModel : AccountPageModel
         if (EnableCaptchaLogin)
         {
             var isValid = await CaptchaOptions.Value.CaptchaValidator.ValidateAsync(
-                new CaptchaValidatorContext(LazyServiceProvider, PasswordLoginInput.CaptchaCode!)
+                new CaptchaValidatorContext(
+                    LazyServiceProvider, 
+                    PasswordLoginInput.CaptchaCode!, 
+                    PasswordLoginInput.UserNameOrEmailAddress)
             );
             if (!isValid)
             {

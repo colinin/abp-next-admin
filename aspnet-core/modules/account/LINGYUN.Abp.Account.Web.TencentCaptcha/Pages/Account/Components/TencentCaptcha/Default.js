@@ -17,21 +17,21 @@
         e.preventDefault();
         await initTencentCaptcha();
         if (!captcha) {
-            abp.notify.warn(l("CaptchaInitFailed"));
             return;
         }
         captcha.show();
     });
 
     function captchaCallback(res) {
-        if (res.ret === 0) {
+        if (res.ret === 0 && !res.errorCode) {
             captchaVerified = true;
             appendFormField(captchaCodeField, `${res.randstr};${res.ticket}`);
             loginForm.trigger('submit');
         } else {
             captchaVerified = false;
             removeFormField(captchaCodeField);
-            console.warn('captcha valid error, ret:', res.ret);
+            console.warn(`captcha valid failed, errorCode: ${res.errorCode}, errorMessage: ${res.errorMessage}`);
+            abp.notify.warn(l("CaptchaInitFailed"));
         }
     }
 
@@ -50,7 +50,15 @@
                 }
             }
         } catch (error) {
-            console.warn('captcha init error:', error);
+            captcha = null;
+            console.warn('captcha init failed, error:', error);
+            callback({
+                ret: 0,
+                randstr: '@' + Math.random().toString(36).substr(2),
+                ticket: ticket,
+                errorCode: 1001,
+                errorMessage: 'jsload_error',
+            });
         }
     }
 

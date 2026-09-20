@@ -1,9 +1,11 @@
+using LINGYUN.Abp.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Web.Pages.Account;
+using Volo.Abp.Identity;
 
 namespace LINGYUN.Abp.Account.Web.Pages.Account
 {
@@ -45,9 +47,23 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
         public virtual async Task<IActionResult> OnPostAsync()
         {
+            var user = await SignInManager.GetTwoFactorAuthenticationUserAsync();
+            if (user == null)
+            {
+                Alerts.Warning(L["TwoFactorAuthenticationInvaidUser"]);
+                return Page();
+            }
+
             var result = await SignInManager.TwoFactorAuthenticatorSignInAsync(Input.VerifyCode, RememberMe, Input.RememberBrowser);
             if (result.Succeeded)
             {
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                {
+                    Identity = IdentitySecurityLogIdentityConsts.Identity,
+                    Action = IdentitySecurityLogExtendActionConsts.LoginTwoFactorSucceeded,
+                    UserName = user.UserName
+                });
+
                 return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
             }
             if (result.IsLockedOut)

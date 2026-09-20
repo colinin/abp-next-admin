@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -60,6 +61,13 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         await UserPictureProvider.SetPictureAsync(user, input.File.GetStream(), pictureId);
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+        {
+            Identity = IdentitySecurityLogIdentityConsts.Identity,
+            Action = IdentitySecurityLogExtendActionConsts.ChangeProfilePicture,
+            UserName = user.UserName,
+        });
     }
 
     public async virtual Task<IRemoteStreamContent> GetPictureAsync()
@@ -107,7 +115,16 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
     public async virtual Task RevokeSessionAsync(string sessionId)
     {
+        var user = await GetCurrentUserAsync();
+
         await IdentitySessionManager.RevokeSessionAsync(sessionId);
+
+        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+        {
+            Identity = IdentitySecurityLogIdentityConsts.Identity,
+            Action = IdentitySecurityLogExtendActionConsts.RevokeSession,
+            UserName = user.UserName,
+        }.WithProperty("SessionId", sessionId));
     }
 
     public async virtual Task<TwoFactorEnabledDto> GetTwoFactorEnabledAsync()
@@ -141,6 +158,15 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         (await UserManager.SetTwoFactorEnabledWithAccountConfirmedAsync(user, input.Enabled)).CheckErrors();
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+        {
+            Identity = IdentitySecurityLogIdentityConsts.Identity,
+            Action = input.Enabled 
+                ? IdentitySecurityLogActionConsts.TwoFactorEnabled 
+                : IdentitySecurityLogActionConsts.TwoFactorDisabled,
+            UserName = user.UserName,
+        });
     }
 
     public async virtual Task SendChangePhoneNumberCodeAsync(SendChangePhoneNumberCodeInput input)
@@ -189,6 +215,13 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
         var securityTokenCacheKey = SecurityTokenCacheItem.CalculateSmsCacheKey(input.NewPhoneNumber, "SmsChangePhoneNumber");
         await SecurityTokenCache.RemoveAsync(securityTokenCacheKey);
+
+        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+        {
+            Identity = IdentitySecurityLogIdentityConsts.Identity,
+            Action = IdentitySecurityLogActionConsts.ChangePhoneNumber,
+            UserName = user.UserName,
+        });
     }
 
     public async virtual Task SendEmailConfirmLinkAsync(SendEmailConfirmCodeDto input)
@@ -231,7 +264,8 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
         {
             Identity = IdentitySecurityLogIdentityConsts.Identity,
-            Action = IdentitySecurityLogActionConsts.ChangeEmail
+            Action = IdentitySecurityLogActionConsts.ChangeEmail,
+            UserName = user.UserName,
         });
     }
 
@@ -290,6 +324,13 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
 
         await CurrentUnitOfWork!.SaveChangesAsync();
 
+        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+        {
+            Identity = IdentitySecurityLogIdentityConsts.Identity,
+            Action = IdentitySecurityLogExtendActionConsts.VerifyAuthenticator,
+            UserName = user.UserName
+        });
+
         return new AuthenticatorRecoveryCodeDto
         {
             RecoveryCodes = recoveryCodes?.ToList(),
@@ -317,6 +358,13 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         }
 
         (await UserManager.UpdateAsync(user)).CheckErrors();
+
+        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+        {
+            Identity = IdentitySecurityLogIdentityConsts.Identity,
+            Action = IdentitySecurityLogExtendActionConsts.ResetAuthenticator,
+            UserName = user.UserName
+        });
 
         await CurrentUnitOfWork!.SaveChangesAsync();
     }

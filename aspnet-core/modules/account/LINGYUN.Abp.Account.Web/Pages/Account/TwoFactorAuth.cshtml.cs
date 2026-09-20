@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Identity.Security;
+﻿using LINGYUN.Abp.Identity;
+using LINGYUN.Abp.Identity.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.Account.Web.Pages.Account;
@@ -101,6 +103,12 @@ public class TwoFactorAuthModel : AccountPageModel
         var result = await SignInManager.TwoFactorAuthenticatorSignInAsync(Input.Code, RememberMe, Input.RememberBrowser);
         if (!result.Succeeded)
         {
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogExtendActionConsts.LoginTwoFactorFailed,
+                UserName = user.UserName
+            });
             Alerts.Danger(L["InvalidAuthenticatorCode"]);
             return Page();
         }
@@ -110,6 +118,13 @@ public class TwoFactorAuthModel : AccountPageModel
         user.SetProperty(UserManager.Options.Tokens.AuthenticatorTokenProvider, true);
 
         (await UserManager.UpdateAsync(user)).CheckErrors();
+
+        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+        {
+            Identity = IdentitySecurityLogIdentityConsts.Identity,
+            Action = IdentitySecurityLogExtendActionConsts.LoginTwoFactorSucceeded,
+            UserName = user.UserName
+        });
 
         return RedirectToPage("TwoFactorRecoveryCodes", new
         {

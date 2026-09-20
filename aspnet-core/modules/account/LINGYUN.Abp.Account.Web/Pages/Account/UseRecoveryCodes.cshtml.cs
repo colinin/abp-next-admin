@@ -1,4 +1,5 @@
 using LINGYUN.Abp.Account.Dto;
+using LINGYUN.Abp.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -77,6 +78,12 @@ public class UseRecoveryCodesModel : AccountPageModel
 
         if (!result.Succeeded)
         {
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogExtendActionConsts.LoginRecoveryCodeFailed,
+                UserName = user.UserName
+            });
             Alerts.Danger(L["InvalidRecoveryCode"]);
             return Page();
         }
@@ -90,6 +97,13 @@ public class UseRecoveryCodesModel : AccountPageModel
         {
             await HandleLinkUserLogin(user);
         }
+
+        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+        {
+            Identity = IdentitySecurityLogIdentityConsts.Identity,
+            Action = IdentitySecurityLogExtendActionConsts.LoginRecoveryCodeSucceeded,
+            UserName = user.UserName
+        });
 
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
