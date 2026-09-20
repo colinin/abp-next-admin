@@ -7,6 +7,6 @@ public class NullCaptchaViewComponent : CaptchaViewComponentBase
 {
     public override Task<IViewComponentResult> InvokeAsync(CaptchaViewComponentModel model)
     {
-        return Task.FromResult<IViewComponentResult>(View("Default"));
+        return Task.FromResult<IViewComponentResult>(View("~/Pages/Account/Components/Captcha/Default.cshtml", model));
     }
 }
