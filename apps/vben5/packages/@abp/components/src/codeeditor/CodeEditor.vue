@@ -5,6 +5,8 @@ import { computed } from 'vue';
 
 import { isString } from '@vben-core/shared/utils';
 
+import { isNullOrWhiteSpace } from '@abp/core';
+
 import CodeMirror from '../codemirror/CodeMirror.vue';
 import { MODE } from '../codemirror/types';
 
@@ -20,6 +22,11 @@ const props = defineProps({
   },
   readonly: { type: Boolean },
   value: { default: '', type: [String, Object] },
+  options: {
+    required: false,
+    type: Object as PropType<CodeMirror.EditorConfiguration>,
+    default: () => {},
+  },
 });
 
 const emit = defineEmits<{
@@ -35,6 +42,9 @@ const getValue = computed(() => {
   }
   let result = value;
   if (isString(value)) {
+    if (isNullOrWhiteSpace(value)) {
+      return undefined;
+    }
     try {
       result = JSON.parse(value);
     } catch {
@@ -56,6 +66,7 @@ function handleValueChange(v: string) {
       :mode="mode"
       :readonly="readonly"
       :value="getValue"
+      :options="options"
       @change="handleValueChange"
     />
   </div>

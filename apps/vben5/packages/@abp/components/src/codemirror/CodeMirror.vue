@@ -15,7 +15,7 @@ import {
 
 import { usePreferences } from '@vben-core/preferences';
 
-import { useWindowSizeFn } from '@abp/core';
+import { isNullOrWhiteSpace, useWindowSizeFn } from '@abp/core';
 import { useDebounceFn } from '@vueuse/core';
 import CodeMirror from 'codemirror';
 
@@ -42,6 +42,11 @@ const props = defineProps({
   },
   readonly: { default: false, type: Boolean },
   value: { default: '', type: String },
+  options: {
+    required: false,
+    type: Object as PropType<CodeMirror.EditorConfiguration>,
+    default: () => {},
+  },
 });
 
 const emit = defineEmits(['change']);
@@ -59,7 +64,7 @@ watch(
     await nextTick();
     const oldValue = editor?.getValue();
     if (value !== oldValue) {
-      const jsonVal = value ? JSON.stringify(JSON.parse(value), null, 2) : '';
+      const jsonVal = isNullOrWhiteSpace(value) ? '' : JSON.stringify(JSON.parse(value), null, 2);
       editor?.setValue(jsonVal || '');
       setTimeout(refresh, 50);
     }
@@ -99,6 +104,7 @@ async function init() {
     autoCloseTags: true,
     foldGutter: true,
     gutters: ['CodeMirror-linenumbers'],
+    ...props.options,
   };
 
   editor = CodeMirror(el.value!, {

@@ -44,4 +44,7 @@ public abstract class OpenIddictApplicationCreateOrUpdateDto : ExtensibleObject
     public string? LogoUri { get; set; }
 
     public string? FrontChannelLogoutUri { get; set; }
+
+    [DisableAuditing]
+    public string? JsonWebKeySet { get; set; }
 }
