@@ -69,11 +69,11 @@ public class DefaultIdentitySessionChecker : IIdentitySessionChecker, ITransient
 
         // Implementation https://github.com/abpio/abp-commercial-docs/blob/dev/en/modules/identity/session-management.md#how-it-works
 
-        var lastAccressedTime = identitySessionCacheItem.LastAccessed;
+        var lastAccessedTime = identitySessionCacheItem.LastAccessed;
         var accressedTime = Clock.Now;
 
-        if (lastAccressedTime.HasValue &&
-            lastAccressedTime.Value < accressedTime.Subtract(SessionCheckOptions.KeepAccessTimeSpan))
+        if (lastAccessedTime.HasValue &&
+            lastAccessedTime.Value < accressedTime.Subtract(SessionCheckOptions.KeepAccessTimeSpan))
         {
             // 更新缓存中的访问地址以及客户端Ip地址
             identitySessionCacheItem.LastAccessed = accressedTime;
@@ -89,15 +89,15 @@ public class DefaultIdentitySessionChecker : IIdentitySessionChecker, ITransient
             //    identitySessionCacheItem.ExpiraIn = (expirainTime.Value - timestamp) * 1000;
             //}
 
-            Logger.LogDebug($"Refresh the user access info in the cache from {sessionId}.");
+            Logger.LogDebug("Refresh the user access info in the cache from {sessionId}.", sessionId);
             await IdentitySessionCache.RefreshAsync(sessionId, identitySessionCacheItem, cancellationToken);
         }
 
         // 避免某些场景频繁去刷新持久化设施
-        if (lastAccressedTime.HasValue &&
-            lastAccressedTime.Value < accressedTime.Subtract(SessionCheckOptions.SessionSyncTimeSpan))
+        if (lastAccessedTime.HasValue &&
+            lastAccessedTime.Value < accressedTime.Subtract(SessionCheckOptions.SessionSyncTimeSpan))
         {
-            Logger.LogDebug($"Publishes the cache synchronization user session event from {sessionId}.");
+            Logger.LogDebug("Publishes the cache synchronization user session event from {sessionId}.", sessionId);
             // 发布事件, 使持久化设施从缓存同步
             var eventData = new IdentitySessionChangeAccessedEvent(
                 identitySessionCacheItem.SessionId,

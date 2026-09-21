@@ -4,14 +4,8 @@ using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.MicroService.AuthServer.Ui.Branding;
-using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
 using LINGYUN.Abp.OpenIddict.Impersonation;
-using LINGYUN.Abp.OpenIddict.LinkUser;
-using LINGYUN.Abp.OpenIddict.Portal;
-using LINGYUN.Abp.OpenIddict.Sms;
-using LINGYUN.Abp.OpenIddict.WeChat;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
-using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Abp.Wrapper;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -290,17 +284,6 @@ public partial class AuthServerModule
         {
             options.IsDynamicClaimsEnabled = true;
             options.IsRemoteRefreshEnabled = false;
-        });
-
-        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
-        {
-            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(ImpersonationTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
-            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
         });
     }
     private void ConfigureVirtualFileSystem()

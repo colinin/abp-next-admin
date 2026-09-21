@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.Aliyun.SettingManagement;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobManagement.SettingManagement;
@@ -16,7 +17,6 @@ using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FeatureManagement;
 using LINGYUN.Abp.FeatureManagement.HttpApi;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
@@ -105,12 +105,8 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
-
     // 重写模板引擎支持外部本地化
     typeof(AbpTextTemplatingScribanModule),
-
-    typeof(AbpIdentitySessionAspNetCoreModule),
-
     typeof(BackendAdminMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
@@ -122,6 +118,7 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpEmailingPlatformModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpDynamicDefinitionsModule),
@@ -188,8 +185,6 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         app.UseJwtTokenMiddleware();
         // 多租户
         app.UseMultiTenancy();
-        // 会话
-        app.UseAbpSession();
         // jwt
         app.UseDynamicClaims();
         // 授权

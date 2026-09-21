@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.Account;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
@@ -16,7 +17,6 @@ using LINGYUN.Abp.Gdpr.Identity;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.AspNetCore;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.OpenIddict;
@@ -78,8 +78,8 @@ namespace LINGYUN.Abp.MicroService.IdentityService;
     typeof(AbpEmailingPlatformModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpDynamicDefinitionsModule),

@@ -387,9 +387,6 @@ public partial class AIServiceModule
             options.TokenCookie.SameSite = SameSiteMode.Lax;
         });
 
-        services.AddAlwaysAllowAuthorization();
-        services.AddAlwaysAllowSession();
-
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddAbpJwtBearer(options =>
             {
