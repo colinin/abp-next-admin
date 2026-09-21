@@ -14,6 +14,7 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
 {
     public const string EngineName = "Scriban";
     public override string Name => EngineName;
+    public override bool IsSandboxed => true;
 
     public ScribanTemplateRenderingEngine(
         ITemplateDefinitionManager templateDefinitionManager,

@@ -15,6 +15,7 @@ using System.Collections.Immutable;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Security;
@@ -185,6 +186,14 @@ public class AuthorizeController : Volo.Abp.OpenIddict.Controllers.AuthorizeCont
                     principal.Identities.FirstOrDefault()?.AddClaim(claim);
                 }
 
+                // 需透传会话Id,避免创建多个会话
+                var claimsIdentity = principal.Identities.FirstOrDefault();
+                var sessionId = result.Principal.FindSessionId();
+                if (!sessionId.IsNullOrWhiteSpace())
+                {
+                    claimsIdentity?.AddClaim(new Claim(AbpClaimTypes.SessionId, sessionId));
+                }
+
                 // Note: in this sample, the granted scopes match the requested scope
                 // but you may want to allow the user to uncheck specific scopes.
                 // For that, simply restrict the list of scopes before calling SetScopes.
@@ -287,10 +296,21 @@ public class AuthorizeController : Volo.Abp.OpenIddict.Controllers.AuthorizeCont
         }
 
         var result = await HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
-        if (result.Succeeded && result.Properties != null && result.Properties.IsPersistent)
+        if (result.Succeeded)
         {
-            var claim = new Claim(AbpClaimTypes.RememberMe, true.ToString()).SetDestinations(OpenIddictConstants.Destinations.AccessToken);
-            principal.Identities.FirstOrDefault()?.AddClaim(claim);
+            if (result.Properties != null && result.Properties.IsPersistent)
+            {
+                var claim = new Claim(AbpClaimTypes.RememberMe, true.ToString()).SetDestinations(OpenIddictConstants.Destinations.AccessToken);
+                principal.Identities.FirstOrDefault()?.AddClaim(claim);
+            }
+            
+            // 需透传会话Id,避免创建多个会话
+            var claimsIdentity = principal.Identities.FirstOrDefault();
+            var sessionId = result.Principal.FindSessionId();
+            if (!sessionId.IsNullOrWhiteSpace())
+            {
+                claimsIdentity?.AddClaim(new Claim(AbpClaimTypes.SessionId, sessionId));
+            }
         }
         var scopes = Request.Form["selected_scopes"].ToString()?.Split(" ").ToImmutableArray() ?? [];
         if (scopes.IsNullOrEmpty())
@@ -313,7 +333,7 @@ public class AuthorizeController : Volo.Abp.OpenIddict.Controllers.AuthorizeCont
                 subject: await UserManager.GetUserIdAsync(user),
                 client: (await ApplicationManager.GetIdAsync(application))!,
                 type: OpenIddictConstants.AuthorizationTypes.Permanent,
-                scopes: principal.GetScopes());
+                scopes: scopes);
         }
 
         principal.SetAuthorizationId(await AuthorizationManager.GetIdAsync(authorization));

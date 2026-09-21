@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.OpenApi.Authorization;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -34,10 +34,10 @@ namespace LINGYUN.MicroService.OpenApi.Gateway;
     typeof(AbpDataModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpOpenApiAuthorizationModule),
-    typeof(AbpCachingStackExchangeRedisModule),
-    typeof(AbpIdentitySessionAspNetCoreModule)
+    typeof(AbpCachingStackExchangeRedisModule)
 )]
 public class OpenApiGatewayModule : AbpModule
 {
@@ -177,8 +177,6 @@ public class OpenApiGatewayModule : AbpModule
         app.UseOpenApiAuthorization();
         // 认证
         app.UseAuthentication();
-        // 会话
-        app.UseAbpSession();
         // 令牌
         app.UseDynamicClaims();
         // 授权

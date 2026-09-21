@@ -1,4 +1,3 @@
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.MicroService.PlatformService;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Serilog;
@@ -60,7 +59,6 @@ try
     // 多租户
     app.UseMultiTenancy();
     // 会话
-    app.UseAbpSession();
     app.UseDynamicClaims();
     // 授权
     app.UseAuthorization();

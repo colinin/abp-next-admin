@@ -1,6 +1,7 @@
 using LINGYUN.Abp.Account;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
@@ -16,7 +17,6 @@ using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Gdpr.Identity;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.OpenIddict;
@@ -80,7 +80,7 @@ namespace LY.MicroService.AuthServer;
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpHttpClientIdentityModelWebModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpDynamicDefinitionsModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
@@ -150,8 +150,6 @@ public partial class AuthServerHttpApiHostModule : AbpModule
         app.UseAuthentication();
         // 多租户
         app.UseMultiTenancy();
-        // 会话
-        app.UseAbpSession();
         // 动态身份
         app.UseDynamicClaims();
         // 授权

@@ -243,17 +243,6 @@ public partial class MicroServiceApplicationsSingleModule
             options.DisableTransportSecurityRequirement = true;
         });
 
-        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
-        {
-            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
-            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(QrCodeLoginProviderConsts.GrantType);
-        });
-
         Configure<OpenIddictServerOptions>(options =>
         {
             var lifetime = configuration.GetSection("OpenIddict:Lifetime");
@@ -863,7 +852,7 @@ public partial class MicroServiceApplicationsSingleModule
             options.ExposeIntegrationServices = true;
         });
 
-        Configure<AbpIdentitySessionAspNetCoreOptions>(options =>
+        Configure<AbpAspNetCoreSessionOptions>(options =>
         {
             // abp 9.0版本可存储登录IP地域, 开启IP解析
             options.IsParseIpLocation = true;

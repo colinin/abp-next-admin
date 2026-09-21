@@ -5,6 +5,7 @@ using LINGYUN.Abp.AI.Tools.Mcp;
 using LINGYUN.Abp.AIManagement;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
@@ -12,7 +13,6 @@ using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
@@ -48,8 +48,6 @@ namespace LINGYUN.Abp.MicroService.AIService;
     // 重写模板引擎支持外部本地化
     typeof(AbpTextTemplatingScribanModule),
 
-    typeof(AbpIdentitySessionAspNetCoreModule),
-
     typeof(AbpAIOllamaModule),
     typeof(AbpAIToolsModule),
     typeof(AbpAIToolsHttpModule),
@@ -66,6 +64,7 @@ namespace LINGYUN.Abp.MicroService.AIService;
     typeof(AbpEmailingPlatformModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpDynamicDefinitionsModule),

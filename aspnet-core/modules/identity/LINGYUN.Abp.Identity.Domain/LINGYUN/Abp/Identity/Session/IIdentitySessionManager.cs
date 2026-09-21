@@ -18,6 +18,17 @@ public interface IIdentitySessionManager
         ClaimsPrincipal claimsPrincipal,
         CancellationToken cancellationToken = default);
     /// <summary>
+    /// 保存会话
+    /// </summary>
+    /// <param name="clientId">客户端Id</param>
+    /// <param name="claimsPrincipal">用户身份主体</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task SaveSessionAsync(
+        string? clientId,
+        ClaimsPrincipal claimsPrincipal,
+        CancellationToken cancellationToken = default);
+    /// <summary>
     /// 撤销用户会话
     /// </summary>
     /// <param name="sessionId">会话id</param>

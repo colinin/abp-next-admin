@@ -1,7 +1,4 @@
 using LY.MicroService.Applications.Single;
-using Serilog;
-using Volo.Abp.IO;
-using Volo.Abp.Modularity.PlugIns;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.AddAppSettingsSecretsJson()
@@ -58,17 +55,19 @@ app.UseAuthentication();
 app.UseAbpOpenIddictValidation();
 app.UseMultiTenancy();
 app.UseUnitOfWork();
-app.UseAbpSession();
 app.UseDynamicClaims();
 app.UseAuthorization();
-app.UseSwagger();
-app.UseAbpSwaggerUI(options =>
+if (app.Environment.IsDevelopment())
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Single APP API");
+    app.UseSwagger();
+    app.UseAbpSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Single APP API");
 
-    options.OAuthClientId(app.Configuration["AuthServer:SwaggerClientId"]);
-    options.OAuthScopes(app.Configuration["AuthServer:Audience"]);
-});
+        options.OAuthClientId(app.Configuration["AuthServer:SwaggerClientId"]);
+        options.OAuthScopes(app.Configuration["AuthServer:Audience"]);
+    });
+}
 app.UseAuditing();
 app.UseAbpSerilogEnrichers();
 app.UseConfiguredEndpoints();
