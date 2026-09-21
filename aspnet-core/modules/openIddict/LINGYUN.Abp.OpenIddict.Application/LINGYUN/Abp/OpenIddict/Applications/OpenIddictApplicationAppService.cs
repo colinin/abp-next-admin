@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.OpenIddict.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,8 +56,13 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
         };
 
         application = input.ToEntity(application, JsonSerializer);
+        var applicationModel = application.ToModel();
+        if (!input.JsonWebKeySet.IsNullOrWhiteSpace())
+        {
+            applicationModel.JsonWebKeySet = new JsonWebKeySet(input.JsonWebKeySet);
+        }
 
-        await _applicationManager.CreateAsync(application.ToModel(), input.ClientSecret);
+        await _applicationManager.CreateAsync(applicationModel, input.ClientSecret);
 
         application = await _applicationRepository.FindByClientIdAsync(input.ClientId);
 
@@ -68,24 +74,22 @@ public class OpenIddictApplicationAppService : OpenIddictApplicationServiceBase,
     {
         var application = await _applicationRepository.GetAsync(id);
 
-        //if (!string.Equals(application.ClientId, input.ClientId) && 
-        //    await _applicationRepository.FindByClientIdAsync(input.ClientId) != null)
-        //{
-        //    throw new BusinessException(OpenIddictApplicationErrorCodes.Applications.ClientIdExisted)
-        //        .WithData(nameof(OpenIddictApplicationCreateDto.ClientId), input.ClientId);
-        //}
-
         application.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
         application = input.ToEntity(application, JsonSerializer);
+        var applicationModel = application.ToModel();
+        if (!input.JsonWebKeySet.IsNullOrWhiteSpace())
+        {
+            applicationModel.JsonWebKeySet = new JsonWebKeySet(input.JsonWebKeySet);
+        }
 
         if (input.ClientSecret.IsNullOrWhiteSpace())
         {
-            await _applicationManager.UpdateAsync(application.ToModel());
+            await _applicationManager.UpdateAsync(applicationModel);
         }
         else
         {
-            await _applicationManager.UpdateAsync(application.ToModel(), input.ClientSecret);
+            await _applicationManager.UpdateAsync(applicationModel, input.ClientSecret);
         }
 
         application = await _applicationRepository.GetAsync(id);
