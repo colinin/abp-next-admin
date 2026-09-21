@@ -24,9 +24,10 @@ namespace LINGYUN.Abp.Elasticsearch.EsqlQuery;
 public class EsqlExpressionQueryService : ExpressionQueryService, ITransientDependency
 {
     public EsqlExpressionQueryService(
-        IElasticsearchClientFactory clientFactory, 
+        IElasticsearchClientFactory clientFactory,
+        IIndexMappingProvider indexMappingProvider,
         IExpressionQueryTranslator expressionQueryTranslator) 
-        : base(clientFactory, expressionQueryTranslator)
+        : base(clientFactory, indexMappingProvider, expressionQueryTranslator)
     {
     }
 
