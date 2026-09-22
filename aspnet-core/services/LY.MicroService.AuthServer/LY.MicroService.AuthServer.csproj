@@ -65,6 +65,7 @@
 		<ProjectReference Include="..\..\migrations\LY.MicroService.AuthServer.EntityFrameworkCore\LY.MicroService.AuthServer.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.AliyunCaptcha\LINGYUN.Abp.Account.Web.AliyunCaptcha.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.LazyCaptcha\LINGYUN.Abp.Account.Web.LazyCaptcha.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OAuth\LINGYUN.Abp.Account.Web.OAuth.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OpenIddict\LINGYUN.Abp.Account.Web.OpenIddict.csproj" />

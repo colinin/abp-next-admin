@@ -1,0 +1,130 @@
+﻿@page
+@using LINGYUN.Abp.Account.Web.Pages.Account
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+@model LINGYUN.Abp.Account.Web.Pages.Account.PhoneNumberLoginModel
+@inject IHtmlLocalizer<AccountResource> L
+@inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
+@inject Volo.Abp.Settings.ISettingProvider SettingProvider
+
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+    PageLayout.Content.Title = L["Login"].Value;
+}
+
+@section scripts
+{
+    <abp-script-bundle name="@typeof(PhoneNumberLoginModel).FullName">
+        <abp-script src="/client-proxies/account-proxy.js" />
+        <abp-script src="/Pages/Account/PhonNumberLogin.js" />
+    </abp-script-bundle>
+}
+
+<div class="account-module-form">
+    @if (Model.IsLinkLogin)
+    {
+        <abp-alert alert-type="Warning">
+            @L["LinkAccountWarning", await Model.GetWithoutLinkReturnUrlAsync(Model.ReturnUrl, Model.ReturnUrlHash)]
+        </abp-alert>
+    }
+
+    @if (Model.EnableLocalLogin)
+    {
+        <abp-tabs id="LoginFormTabs">
+            <abp-tab-link title="@L["PasswordLogin"].Value" name="PasswordLogin" href="@Url.Page("./Login", new
+                          {
+                              returnUrl = Model.ReturnUrl,
+                              returnUrlHash = Model.ReturnUrlHash,
+                              linkUserId = Model.LinkUserId?.ToString(),
+                              linkTenantId = Model.LinkTenantId?.ToString(),
+                              linkToken = Model.LinkToken
+                          })">
+            </abp-tab-link>
+            <abp-tab title="@L["PhoneNumberLogin"].Value" active="true" name="PhoneNumberLogin" href="#PhoneNumberLogin">
+                <form method="post" class="mt-4" id="InputForm">
+                    <input asp-for="ReturnUrl" />
+                    <input asp-for="ReturnUrlHash" />
+                    <input asp-for="LinkTenantId" />
+                    <input asp-for="LinkUserId" />
+                    <input asp-for="LinkToken" />
+                    <div class="mb-3">
+                        <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                        <input asp-for="Input.PhoneNumber" class="form-control" id="PhoneNumberInput" />
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Code" class="form-label"></label>
+                        <div class="input-group">
+                            <input asp-for="Input.Code" class="form-control" />
+                            <button class="btn btn-secondary" type="button" id="SendVerifyCodeButton">@L["SendVerifyCode"]</button>
+                        </div>
+                        <span asp-validation-for="Input.Code" class="text-danger"></span>
+                    </div>
+
+                    <abp-row class="mb-3">
+                        <abp-column>
+                            <input type="checkbox" class="form-check-input"
+                                   name="Input.RememberMe"
+                                   value="true"
+                            @(Model.Input?.RememberMe == true ? "checked" : "")
+                                   id="Input_RememberMe" />
+                            <label class="form-check-label" for="Input_RememberMe">
+                                @L["RememberMe"]
+                            </label>
+                        </abp-column>
+                    </abp-row>
+                    <div class="d-grid gap-2">
+                        <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
+                        @if (Model.ShowCancelButton)
+                        {
+                            <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
+                        }
+                    </div>
+                </form>
+            </abp-tab>
+            @if (Model.EnableQrCodeLogin)
+            {
+                <abp-tab-link title="@L["ScanQrCodeLogin"].Value" name="ScanQrCodeLogin" href="@Url.Page("./ScanQrCodeLogin", new
+                              {
+                                  returnUrl = Model.ReturnUrl,
+                                  returnUrlHash = Model.ReturnUrlHash,
+                                  linkUserId = Model.LinkUserId?.ToString(),
+                                  linkTenantId = Model.LinkTenantId?.ToString(),
+                                  linkToken = Model.LinkToken
+                              })">
+                </abp-tab-link>
+            }
+        </abp-tabs>
+    }
+
+    @if (Model.VisibleExternalProviders.Any())
+    {
+        <div class="mt-2">
+            <h5>@L["OrLoginWith"]</h5>
+            <form asp-page="./Login" asp-page-handler="ExternalLogin" method="post" asp-all-route-data="@(new Dictionary<string, string?> {
+                       { "returnUrl", Model.ReturnUrl },
+                       { "returnUrlHash", Model.ReturnUrlHash },
+                       { "linkUserId", Model.LinkUserId?.ToString() },
+                       { "linkTenantId", Model.LinkTenantId?.ToString() },
+                       { "linkToken", Model.LinkToken }
+                   })">
+                @foreach (var provider in Model.VisibleExternalProviders)
+                {
+                    @await Component.InvokeAsync(provider.ComponentType, provider)
+                }
+            </form>
+        </div>
+    }
+
+    @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+    {
+        <div class="alert alert-warning">
+            <strong>@L["InvalidLoginRequest"]</strong>
+            @L["ThereAreNoLoginSchemesConfiguredForThisClient"]
+        </div>
+    }
+</div>

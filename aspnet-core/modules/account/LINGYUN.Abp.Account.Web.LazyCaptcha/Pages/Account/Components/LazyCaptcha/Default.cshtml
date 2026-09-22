@@ -6,10 +6,10 @@
 @model LINGYUN.Abp.Account.Web.LazyCaptcha.Pages.Account.Components.LazyCaptcha.LazyCaptchaViewComponentModel
 
 <div class="mb-3">
-    <label asp-for="PasswordLoginInput.CaptchaCode" class="form-label"></label>
+    <label asp-for="Input.CaptchaCode" class="form-label"></label>
     <div class="input-group">
-        <input asp-for="PasswordLoginInput.CaptchaCode" class="form-control" autocomplete="off" id="CaptchaCode" required />
+        <input asp-for="Input.CaptchaCode" class="form-control" autocomplete="off" id="CaptchaCode" required />
         <img class="captcha-img" id="CaptchaImg" />
     </div>
-    <span asp-validation-for="PasswordLoginInput.CaptchaCode" class="text-danger"></span>
+    <span asp-validation-for="Input.CaptchaCode" class="text-danger"></span>
 </div>

@@ -1,0 +1,16 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "DisplayName:Aliyun.Captcha": "验证码服务",
+    "DisplayName:SceneId": "场景唯一标识",
+    "Description:SceneId": "验证码场景的唯一标识,在控制台中获取.",
+    "DisplayName:Prefix": "身份标",
+    "Description:Prefix": "身份标,在控制台概览页面的实例基本信息卡片区域获取.",
+    "DisplayName:UseEncryptedSceneId": "场景标识加密",
+    "Description:UseEncryptedSceneId": "前端验证码是否使用加密场景标识,该模式可有效防止因 sceneId 泄露而导致的服务盗用或恶意调用.",
+    "DisplayName:EKey": "加密的密钥",
+    "Description:EKey": "加密的密钥,在控制台概览页面右上方区域,获取用于加密的密钥（ekey）.",
+    "DisplayName:EncryptedExpireTimeSec": "加密字符串的有效时长",
+    "Description:EncryptedExpireTimeSec": "加密字符串的有效时长（单位：秒,取值范围为 1 至 86400（即 1秒 至 24小时）."
+  }
+}

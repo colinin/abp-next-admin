@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.SettingManagement;
+using LINGYUN.Abp.Tencent.Captcha.Settings;
 using LINGYUN.Abp.Tencent.Features;
 using LINGYUN.Abp.Tencent.Localization;
 using LINGYUN.Abp.Tencent.QQ.Settings;
@@ -163,6 +164,38 @@ public class TencentCloudSettingAppService : ApplicationService, ITencentCloudSe
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(TencentQQSettingNames.QQConnect.IsMobile, providerName, providerKey),
                 ValueType.Boolean,
+                providerName);
+
+            #endregion
+
+            #region 验证码
+
+            var captchaSetting = settingGroup.AddSetting(
+                L["Settings:TenantCloud.Captcha"], L["Settings:TenantCloud.Captcha"]);
+
+            captchaSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(TencentCaptchaSettingNames.CaptchaAppId),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentCaptchaSettingNames.CaptchaAppId, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            captchaSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(TencentCaptchaSettingNames.AppSecretKey),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentCaptchaSettingNames.AppSecretKey, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            captchaSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(TencentCaptchaSettingNames.CaptchaAppIdEncryptedType),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentCaptchaSettingNames.CaptchaAppIdEncryptedType, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            captchaSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(TencentCaptchaSettingNames.CaptchaAppIdEncryptedExpireTime),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentCaptchaSettingNames.CaptchaAppIdEncryptedExpireTime, providerName, providerKey),
+                ValueType.Number,
                 providerName);
 
             #endregion

@@ -11,7 +11,8 @@ public class TencentCaptchaScriptBundleContributor : BundleContributor
     public async override Task ConfigureBundleAsync(BundleConfigurationContext context)
     {
         var settingProvider = context.LazyServiceProvider.GetRequiredService<ISettingProvider>();
-        if (await settingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification))
+        if (await settingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification) &&
+            await settingProvider.GetOrNullAsync(Identity.Settings.IdentitySettingNames.SignIn.CaptchaComponent) == "TencentCaptcha")
         {
             context.Files.AddIfNotContains("/client-proxies/tencent-captcha-proxy.js");
             context.Files.AddIfNotContains("https://turing.captcha.qcloud.com/TJCaptcha.js");

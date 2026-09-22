@@ -6,5 +6,5 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account.Components.Captcha;
 
 public abstract class CaptchaViewComponentBase : AbpViewComponent
 {
-    public abstract Task<IViewComponentResult> InvokeAsync(CaptchaViewComponentModel model);
+    public abstract Task<IViewComponentResult> InvokeAsync();
 }

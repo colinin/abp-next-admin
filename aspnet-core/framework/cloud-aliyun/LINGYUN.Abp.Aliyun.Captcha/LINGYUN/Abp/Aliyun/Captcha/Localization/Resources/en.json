@@ -1,0 +1,16 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "DisplayName:Aliyun.Captcha": "Captcha",
+    "DisplayName:SceneId": "Scene id",
+    "Description:SceneId": "The Scene Id for the verification code scenario, obtained in the console.",
+    "DisplayName:Prefix": "Prefix",
+    "Description:Prefix": "Obtain it in the instance basic information card area of the console overview page.",
+    "DisplayName:UseEncryptedSceneId": "Use encrypted scene id",
+    "Description:UseEncryptedSceneId": "This mode can effectively prevent service theft or malicious invocation caused by the leakage of sceneId.",
+    "DisplayName:EKey": "E key",
+    "Description:EKey": "The encrypted key can be obtained in the upper right area of the console overview page. It is the key used for encryption (ekey).",
+    "DisplayName:EncryptedExpireTimeSec": "Encrypted expire time sec",
+    "Description:EncryptedExpireTimeSec": "The valid duration of the encrypted string (in seconds, with a range of 1 to 86400, which is from 1 second to 24 hours)."
+  }
+}

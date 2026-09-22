@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Abp.Account;
+using LINGYUN.Abp.Account.Web.AliyunCaptcha;
+using LINGYUN.Abp.Account.Web.LazyCaptcha;
 using LINGYUN.Abp.Account.Web.OAuth;
 using LINGYUN.Abp.Account.Web.OpenIddict;
 using LINGYUN.Abp.Account.Web.TencentCaptcha;
@@ -48,9 +50,11 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
     // 使用 LazyCaptcha 验证码组件
-    // typeof(AbpAccountWebLazyCaptchaModule),
-    // 使用 腾讯云天御 验证码组件, 需配置好腾讯云相关参数
-    // typeof(AbpAccountWebTencentCaptchaModule),
+    typeof(AbpAccountWebLazyCaptchaModule),
+    // 使用 腾讯云验证码组件, 需配置好腾讯云相关参数
+    typeof(AbpAccountWebTencentCaptchaModule),
+    // 使用 阿里云验证码组件, 需配置好阿里云相关参数
+    typeof(AbpAccountWebAliyunCaptchaModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAccountWebOAuthModule),
     typeof(AbpBlobStoringBlobManagementModule),

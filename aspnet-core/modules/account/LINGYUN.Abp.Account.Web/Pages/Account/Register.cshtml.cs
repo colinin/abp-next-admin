@@ -1,4 +1,5 @@
 using LINGYUN.Abp.Account.Dto;
+using LINGYUN.Abp.Account.Web.Captcha;
 using LINGYUN.Abp.Account.Web.ExternalProviders;
 using LINGYUN.Abp.Account.Web.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -25,8 +26,8 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using IAbpAccountAppService = Volo.Abp.Account.IAccountAppService;
-using ILAbpAccountAppService = LINGYUN.Abp.Account.IAccountAppService;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
+using ILAbpAccountAppService = LINGYUN.Abp.Account.IAccountAppService;
 
 namespace LINGYUN.Abp.Account.Web.Pages.Account;
 
@@ -66,6 +67,10 @@ public class RegisterModel : AccountPageModel
     [BindProperty(SupportsGet = true)]
     public string? LinkToken { get; set; }
 
+    public bool EnableCaptchaLogin { get; set; }
+    public CaptchaComponent CaptchaComponent { get; private set; } = default!;
+    public ICaptchaComponentProvider CaptchaComponentProvider => LazyServiceProvider.LazyGetRequiredService<ICaptchaComponentProvider>();
+
     protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
 
     public IIdentityLinkUserAppService IdentityLinkUserAppService => LazyServiceProvider.LazyGetRequiredService<IIdentityLinkUserAppService>();
@@ -102,8 +107,15 @@ public class RegisterModel : AccountPageModel
         AccountOptions = accountOptions.Value;
     }
 
+    protected async virtual Task InitCaptchaComponent()
+    {
+        EnableCaptchaLogin = await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification);
+        CaptchaComponent = await CaptchaComponentProvider.GetComponentOrDefaultAsync();
+    }
+
     public virtual async Task<IActionResult> OnGetAsync()
     {
+        await InitCaptchaComponent();
         ExternalProviders = await GetExternalProviders();
         RequireEmailVerificationToRegister = await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireEmailVerificationToRegister);
         if (RequireEmailVerificationToRegister)
@@ -158,6 +170,7 @@ public class RegisterModel : AccountPageModel
     {
         try
         {
+            await InitCaptchaComponent();
             ExternalProviders = await GetExternalProviders();
 
             if (!await CheckSelfRegistrationAsync())

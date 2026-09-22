@@ -1,6 +1,5 @@
 ﻿using LINGYUN.Abp.Tencent.Features;
 using LINGYUN.Abp.Tencent.Localization;
-using Volo.Abp;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
@@ -15,7 +14,6 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
         context.Add(GetBasicSettings());
         context.Add(GetConnectionSettings());
         context.Add(GetSmsSettings());
-        context.Add(GetCaptchaSettings());
     }
 
     private SettingDefinition[] GetConnectionSettings()
@@ -199,78 +197,6 @@ public class TencentCloudSettingDefinitionProvider : SettingDefinitionProvider
                 .WithParent("BasicSetting", L("DisplayName:TenantCloud.BasicSetting"), order: 1)
                 .WithOrder(3)
                 .WithValueType(ValueType.Number),
-        };
-    }
-
-    private SettingDefinition[] GetCaptchaSettings()
-    {
-        return new SettingDefinition[]
-        {
-            new SettingDefinition(
-                    TencentCloudSettingNames.Captcha.CaptchaAppId,
-                    displayName: L("DisplayName:CaptchaAppId"),
-                    description: L("Description:CaptchaAppId"),
-                    isVisibleToClients: false,
-                    isEncrypted: true
-                )
-                .WithProviders(
-                    DefaultValueSettingValueProvider.ProviderName,
-                    ConfigurationSettingValueProvider.ProviderName,
-                    GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName)
-                .WithGroup(GroupName, L("Settings:TenantCloud"))
-                .WithParent("Captcha", L("DisplayName:TenantCloud.Captcha"), order: 20)
-                .WithOrder(1)
-                .WithValueType(ValueType.String),
-            new SettingDefinition(
-                    TencentCloudSettingNames.Captcha.AppSecretKey,
-                    displayName: L("DisplayName:CaptchaSecretKey"),
-                    description: L("Description:CaptchaSecretKey"),
-                    isVisibleToClients: false,
-                    isEncrypted: true
-                )
-                .WithProviders(
-                    DefaultValueSettingValueProvider.ProviderName,
-                    ConfigurationSettingValueProvider.ProviderName,
-                    GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName)
-                .WithGroup(GroupName, L("Settings:TenantCloud"))
-                .WithParent("Captcha", L("DisplayName:TenantCloud.Captcha"), order: 20)
-                .WithOrder(2)
-                .WithValueType(ValueType.String),
-            new SettingDefinition(
-                    TencentCloudSettingNames.Captcha.CaptchaAppIdEncryptedType,
-                    displayName: L("DisplayName:CaptchaAppIdEncryptedType"),
-                    description: L("Description:CaptchaAppIdEncryptedType"),
-                    isVisibleToClients: false
-                )
-                .WithProviders(
-                    DefaultValueSettingValueProvider.ProviderName,
-                    ConfigurationSettingValueProvider.ProviderName,
-                    GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName)
-                .WithGroup(GroupName, L("Settings:TenantCloud"))
-                .WithParent("Captcha", L("DisplayName:TenantCloud.Captcha"), order: 20)
-                .WithOrder(3)
-                .WithOptions([
-                    new NameValue<string>("cbc","cbc"),
-                    new NameValue<string>("gcm","gcm")]),
-            new SettingDefinition(
-                    TencentCloudSettingNames.Captcha.CaptchaAppIdEncryptedExpireTime,
-                    defaultValue: 300.ToString(),
-                    displayName: L("DisplayName:CaptchaAppIdEncryptedExpireTime"),
-                    description: L("Description:CaptchaAppIdEncryptedExpireTime"),
-                    isVisibleToClients: false
-                )
-                .WithProviders(
-                    DefaultValueSettingValueProvider.ProviderName,
-                    ConfigurationSettingValueProvider.ProviderName,
-                    GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName)
-                .WithGroup(GroupName, L("Settings:TenantCloud"))
-                .WithParent("Captcha", L("DisplayName:TenantCloud.Captcha"), order: 20)
-                .WithOrder(4)
-                .WithValueType(ValueType.Number)
         };
     }
 

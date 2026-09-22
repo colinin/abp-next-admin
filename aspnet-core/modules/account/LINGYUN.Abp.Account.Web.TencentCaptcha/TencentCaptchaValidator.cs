@@ -1,13 +1,11 @@
 ﻿using LINGYUN.Abp.Account.Web.Captcha;
 using LINGYUN.Abp.Identity;
-using LINGYUN.Abp.Tencent.Settings;
+using LINGYUN.Abp.Tencent.Captcha;
+using LINGYUN.Abp.Tencent.Captcha.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using TencentCloud.Captcha.V20190722;
 using TencentCloud.Captcha.V20190722.Models;
 using TencentCloud.Common;
 using Volo.Abp;
@@ -50,33 +48,16 @@ public class TencentCaptchaValidator : ICaptchaValidator
             }
 
             var webClientInfoProvider = context.ServiceProvider.GetRequiredService<IWebClientInfoProvider>();
+            var clientFactory = context.ServiceProvider.GetRequiredService<ICaptchaClientFactory>();
             var settingProvider = context.ServiceProvider.GetRequiredService<ISettingProvider>();
 
-            var tencentSettings = await settingProvider.GetAllAsync(
-                [
-                    TencentCloudSettingNames.SecretId,
-                    TencentCloudSettingNames.SecretKey,
-                    TencentCloudSettingNames.Captcha.CaptchaAppId,
-                    TencentCloudSettingNames.Captcha.AppSecretKey
-                ]);
+            var captchaAppId = await settingProvider.GetOrNullAsync(TencentCaptchaSettingNames.CaptchaAppId);
+            var appSecretKey = await settingProvider.GetOrNullAsync(TencentCaptchaSettingNames.AppSecretKey);
 
-            var secretId = tencentSettings.FirstOrDefault(x => x.Name == TencentCloudSettingNames.SecretId)?.Value;
-            var secretKey = tencentSettings.FirstOrDefault(x => x.Name == TencentCloudSettingNames.SecretKey)?.Value;
-            var captchaAppId = tencentSettings.FirstOrDefault(x => x.Name == TencentCloudSettingNames.Captcha.CaptchaAppId)?.Value;
-            var appSecretKey = tencentSettings.FirstOrDefault(x => x.Name == TencentCloudSettingNames.Captcha.AppSecretKey)?.Value;
+            Check.NotNullOrWhiteSpace(captchaAppId, TencentCaptchaSettingNames.CaptchaAppId);
+            Check.NotNullOrWhiteSpace(appSecretKey, TencentCaptchaSettingNames.AppSecretKey);
 
-            Check.NotNullOrWhiteSpace(secretId, TencentCloudSettingNames.SecretId);
-            Check.NotNullOrWhiteSpace(secretKey, TencentCloudSettingNames.SecretKey);
-            Check.NotNullOrWhiteSpace(captchaAppId, TencentCloudSettingNames.Captcha.CaptchaAppId);
-            Check.NotNullOrWhiteSpace(appSecretKey, TencentCloudSettingNames.Captcha.AppSecretKey);
-
-            var client = new CaptchaClient(
-                new Credential
-                {
-                    SecretId = secretId,
-                    SecretKey = secretKey
-                },
-                "");
+            var client = await clientFactory.CreateAsync();
 
             var response = await client.DescribeCaptchaResult(
                 new DescribeCaptchaResultRequest
@@ -110,9 +91,21 @@ public class TencentCaptchaValidator : ICaptchaValidator
         }
         catch (TencentCloudSDKException ex)
         {
-            logContext.Action = IdentitySecurityLogExtendActionConsts.CaptchaError;
             logger?.LogWarning(ex, "Error occurred while invoking Tencent Cloud captcha service, RequestId: {requestId}, Error: {code}: {message}",
                     ex.RequestId, ex.ErrorCode, ex.Message);
+            if (ex.RequestId.IsNullOrWhiteSpace())
+            {
+                // 业务容灾, 请求腾讯云失败时默认验证通过
+                // 参考源码, 网络请求失败时没有RequestId字段
+                logContext.Action = IdentitySecurityLogExtendActionConsts.CaptchaSucceeded;
+                return true;
+            }
+            logContext.Action = IdentitySecurityLogExtendActionConsts.CaptchaError;
+        }
+        catch (Exception ex)
+        {
+            logContext.Action = IdentitySecurityLogExtendActionConsts.CaptchaError;
+            logger?.LogWarning(ex, "Error occurred while invoking Tencent Cloud captcha service, Error: {message}", ex.Message);
         }
         finally
         {

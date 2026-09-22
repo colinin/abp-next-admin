@@ -115,6 +115,7 @@
     <Project Path="framework/cli/LINGYUN.Abp.Cli/LINGYUN.Abp.Cli.csproj" />
   </Folder>
   <Folder Name="/framework/cloud-aliyun/">
+    <Project Path="framework/cloud-aliyun/LINGYUN.Abp.Aliyun.Captcha/LINGYUN.Abp.Aliyun.Captcha.csproj" />
     <Project Path="framework/cloud-aliyun/LINGYUN.Abp.Aliyun.SettingManagement/LINGYUN.Abp.Aliyun.SettingManagement.csproj" />
     <Project Path="framework/cloud-aliyun/LINGYUN.Abp.Aliyun/LINGYUN.Abp.Aliyun.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.BlobStoring.Aliyun/LINGYUN.Abp.BlobStoring.Aliyun.csproj" />
@@ -123,6 +124,7 @@
   <Folder Name="/framework/cloud-tencent/">
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.BlobStoring.Tencent/LINGYUN.Abp.BlobStoring.Tencent.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Sms.Tencent/LINGYUN.Abp.Sms.Tencent.csproj" />
+    <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent.Captcha/LINGYUN.Abp.Tencent.Captcha.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent.QQ/LINGYUN.Abp.Tencent.QQ.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent.SettingManagement/LINGYUN.Abp.Tencent.SettingManagement.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent/LINGYUN.Abp.Tencent.csproj" />
@@ -298,6 +300,7 @@
     <Project Path="modules/account/LINGYUN.Abp.Account.HttpApi/LINGYUN.Abp.Account.HttpApi.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.OAuth/LINGYUN.Abp.Account.OAuth.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Security/LINGYUN.Abp.Account.Security.csproj" />
+    <Project Path="modules/account/LINGYUN.Abp.Account.Web.AliyunCaptcha/LINGYUN.Abp.Account.Web.AliyunCaptcha.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.LazyCaptcha/LINGYUN.Abp.Account.Web.LazyCaptcha.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.OAuth/LINGYUN.Abp.Account.Web.OAuth.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.OpenIddict/LINGYUN.Abp.Account.Web.OpenIddict.csproj" />

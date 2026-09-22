@@ -1,4 +1,4 @@
-﻿namespace LINGYUN.Abp.Account.Web.TencentCaptcha.Security;
+﻿namespace LINGYUN.Abp.Tencent.Captcha.Security;
 
 public interface ICaptchaAppIdEncryptorFactory
 {

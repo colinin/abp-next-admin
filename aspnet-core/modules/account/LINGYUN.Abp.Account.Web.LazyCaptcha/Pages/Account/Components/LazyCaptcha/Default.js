@@ -5,7 +5,7 @@
     });
 
     function refreshCaptchaImage() {
-        labp.account.captcha.refresh().then(function (result) {
+        labp.account.captcha.lazyRefresh().then(function (result) {
             if (!result.captchaImage) return;
             document.getElementById('CaptchaImg').src = result.captchaImage;
         });

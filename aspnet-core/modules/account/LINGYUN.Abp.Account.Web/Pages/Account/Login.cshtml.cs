@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -29,7 +28,6 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Identity.Settings;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
@@ -49,34 +47,28 @@ public class LoginModel : AccountPageModel
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrlHash { get; set; }
 
-    [HiddenInput]
+
     [BindProperty(SupportsGet = true)]
-    public LoginType LoginType { get; set; }
+    public PasswordLoginInputModel Input { get; set; } = default!;
 
-    [BindProperty(Name = "PasswordLoginInput")]
-    public PasswordLoginInputModel PasswordLoginInput { get; set; } = default!;
-
-    [BindProperty(Name = "PhoneLoginInput")]
-    public PhoneLoginInputModel PhoneLoginInput { get; set; } = default!;
-
-    [BindProperty(Name = "QrCodeLoginInput")]
-    public QrCodeLoginInputModel QrCodeLoginInput { get; set; } = default!;
-
-    public bool EnableLocalLogin { get; set; }
     public bool ShowCancelButton { get; set; }
+    public bool EnableLocalLogin { get; set; }
+    public bool EnableQrCodeLogin { get; set; }
     public bool EnableCaptchaLogin { get; set; }
-    public IOptions<AbpAccountCaptchaOptions> CaptchaOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpAccountCaptchaOptions>>();
-
+    public CaptchaComponent CaptchaComponent { get; private set; } = default!;
+    public ICaptchaComponentProvider CaptchaComponentProvider => LazyServiceProvider.LazyGetRequiredService<ICaptchaComponentProvider>();
     public bool IsExternalLoginOnly => EnableLocalLogin == false && ExternalProviders?.Count() == 1;
-    public string? ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
-
     public IEnumerable<ExternalLoginProviderModel> ExternalProviders { get; set; } = default!;
     public IEnumerable<ExternalLoginProviderModel> VisibleExternalProviders => ExternalProviders.Where(x => !x.DisplayName.IsNullOrWhiteSpace());
-
+    protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache => LazyServiceProvider.LazyGetRequiredService<IdentityDynamicClaimsPrincipalContributorCache>();
     protected IIdentityUserRepository UserRepository => LazyServiceProvider.LazyGetRequiredService<IIdentityUserRepository>();
     protected IQrCodeLoginProvider QrCodeLoginProvider => LazyServiceProvider.LazyGetRequiredService<IQrCodeLoginProvider>();
     protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
     protected IHttpUserAgentParserProvider HttpUserAgentParserProvider => LazyServiceProvider.LazyGetRequiredService<IHttpUserAgentParserProvider>();
+    public IIdentityLinkUserAppService IdentityLinkUserAppService => LazyServiceProvider.LazyGetRequiredService<IIdentityLinkUserAppService>();
+    protected IExternalProviderService ExternalProviderService => LazyServiceProvider.LazyGetRequiredService<IExternalProviderService>();
+    protected IAuthenticationSchemeProvider SchemeProvider => LazyServiceProvider.LazyGetRequiredService<IAuthenticationSchemeProvider>();
+    protected AbpAccountOptions AccountOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpAccountOptions>>().Value;
 
     #region LinkUser
 
@@ -94,41 +86,24 @@ public class LoginModel : AccountPageModel
 
     public bool IsLinkLogin { get; set; }
 
-    public IIdentityLinkUserAppService IdentityLinkUserAppService => LazyServiceProvider.LazyGetRequiredService<IIdentityLinkUserAppService>();
-
     #endregion
 
-    protected IExternalProviderService ExternalProviderService { get; }
-    protected IAuthenticationSchemeProvider SchemeProvider { get; }
-    protected AbpAccountOptions AccountOptions { get; }
-    protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
-    public LoginModel(
-        IExternalProviderService externalProviderService,
-        IAuthenticationSchemeProvider schemeProvider,
-        IOptions<AbpAccountOptions> accountOptions,
-        IOptions<IdentityOptions> identityOptions,
-        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache) 
+    protected async virtual Task InitCaptchaComponent()
     {
-        ExternalProviderService = externalProviderService;
-        SchemeProvider = schemeProvider;
-        IdentityOptions = identityOptions;
-        AccountOptions = accountOptions.Value;
-        IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
+        EnableCaptchaLogin = await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification);
+        CaptchaComponent = await CaptchaComponentProvider.GetComponentOrDefaultAsync();
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
-        LoginType = LoginType.Password;
-        PhoneLoginInput = new PhoneLoginInputModel();
-        QrCodeLoginInput = new QrCodeLoginInputModel();
-        PasswordLoginInput = new PasswordLoginInputModel();
+        Input = new PasswordLoginInputModel();
 
         AllowQrCodeLoginIfNotMobileDevice();
 
+        await InitCaptchaComponent();
         ExternalProviders = await GetExternalProviders();
 
         EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-        EnableCaptchaLogin = await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification);
 
         if (IsExternalLoginOnly)
         {
@@ -152,32 +127,23 @@ public class LoginModel : AccountPageModel
         return Page();
     }
 
-    public async virtual Task<IActionResult> OnPostPasswordLogin(string action)
+    public async virtual Task<IActionResult> OnPostAsync(string action)
     {
-        LoginType = LoginType.Password;
+        ValidateModel();
+        await IdentityOptions.SetAsync();
 
         await CheckLocalLoginAsync();
-
+        await InitCaptchaComponent();
         ExternalProviders = await GetExternalProviders();
-
         EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-        EnableCaptchaLogin = await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification);
-
-        ModelState.RemoveModelErrors(nameof(PhoneLoginInput));
-        ModelState.RemoveModelErrors(nameof(QrCodeLoginInput));
-
-        if (!TryValidateModel(PasswordLoginInput, nameof(PasswordLoginInput)))
-        {
-            return Page();
-        }
 
         if (EnableCaptchaLogin)
         {
-            var isValid = await CaptchaOptions.Value.CaptchaValidator.ValidateAsync(
+            var isValid = await CaptchaComponent.ValidateAsync(
                 new CaptchaValidatorContext(
                     LazyServiceProvider, 
-                    PasswordLoginInput.CaptchaCode!, 
-                    PasswordLoginInput.UserNameOrEmailAddress)
+                    Input.CaptchaCode!,
+                    Input.UserNameOrEmailAddress)
             );
             if (!isValid)
             {
@@ -193,9 +159,9 @@ public class LoginModel : AccountPageModel
         IsLinkLogin = await VerifyLinkTokenAsync();
 
         var result = await SignInManager.PasswordSignInAsync(
-            PasswordLoginInput.UserNameOrEmailAddress,
-            PasswordLoginInput.Password,
-            PasswordLoginInput.RememberMe,
+            Input.UserNameOrEmailAddress,
+            Input.Password,
+            Input.RememberMe,
             true
         );
 
@@ -203,7 +169,7 @@ public class LoginModel : AccountPageModel
         {
             Identity = IdentitySecurityLogIdentityConsts.Identity,
             Action = result.ToIdentitySecurityLogAction(),
-            UserName = PasswordLoginInput.UserNameOrEmailAddress
+            UserName = Input.UserNameOrEmailAddress
         });
 
         if (result.RequiresTwoFactor)
@@ -227,7 +193,7 @@ public class LoginModel : AccountPageModel
         }
 
         //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
-        var user = await GetIdentityUserAsync(PasswordLoginInput.UserNameOrEmailAddress);
+        var user = await GetIdentityUserAsync(Input.UserNameOrEmailAddress);
 
         Debug.Assert(user != null, nameof(user) + " != null");
 
@@ -240,124 +206,6 @@ public class LoginModel : AccountPageModel
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
         return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
-    }
-
-    public async virtual Task<IActionResult> OnPostPhoneNumberLogin(string action)
-    {
-        LoginType = LoginType.PhoneNumber;
-
-        await CheckLocalLoginAsync();
-
-        ExternalProviders = await GetExternalProviders();
-
-        EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
-        ModelState.RemoveModelErrors(nameof(QrCodeLoginInput));
-        ModelState.RemoveModelErrors(nameof(PasswordLoginInput));
-        if (!TryValidateModel(PhoneLoginInput, nameof(PhoneLoginInput)))
-        {
-            return Page();
-        }
-
-        var user = await UserRepository.FindByPhoneNumberAsync(PhoneLoginInput.PhoneNumber);
-        if (user == null)
-        {
-            Logger.LogInformation("the user phone number is not registed!");
-            Alerts.Danger(L["InvalidPhoneNumber"]);
-            return Page();
-        }
-
-        var result = await UserManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider, PhoneLoginInput.Code);
-        if (!result)
-        {
-            Alerts.Danger(L["InvalidVerifyCode"]);
-            return Page();
-        }
-
-        if (IsLinkLogin)
-        {
-            return await HandleLinkUserLogin(user);
-        }
-
-        await SignInManager.SignInAsync(user, PhoneLoginInput.RememberMe);
-
-        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
-        {
-            Identity = IdentitySecurityLogIdentityConsts.IdentityTwoFactor,
-            Action = IdentitySecurityLogActionConsts.LoginSucceeded,
-            UserName = user.UserName
-        });
-
-        // Clear the dynamic claims cache.
-        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
-
-        return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
-    }
-
-    public async virtual Task<IActionResult> OnPostQrCodeLogin(string action)
-    {
-        LoginType = LoginType.QrCode;
-
-        await CheckLocalLoginAsync();
-
-        ExternalProviders = await GetExternalProviders();
-
-        EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
-        ModelState.RemoveModelErrors(nameof(PhoneLoginInput));
-        ModelState.RemoveModelErrors(nameof(PasswordLoginInput));
-        if (!TryValidateModel(QrCodeLoginInput, nameof(QrCodeLoginInput)))
-        {
-            return Page();
-        }
-
-        var qrCodeInfo = await QrCodeLoginProvider.GetCodeAsync(QrCodeLoginInput.Key);
-        // 二维码扫描后用户Id不为空
-        if (qrCodeInfo == null || qrCodeInfo.Token.IsNullOrWhiteSpace() == true)
-        {
-            Alerts.Danger(L["QrCode:Invalid"]);
-            return Page();
-        }
-
-        EnsureTenantCookie(qrCodeInfo.TenantId);
-        using (CurrentTenant.Change(qrCodeInfo.TenantId))
-        {
-            var user = await UserManager.FindByIdAsync(qrCodeInfo.UserId!);
-            if (user == null)
-            {
-                // TODO: 用户验证无效?
-                Alerts.Danger(L["QrCode:Invalid"]);
-                return Page();
-            }
-
-            if (!await UserManager.VerifyUserTokenAsync(user, QrCodeLoginProviderConsts.Name, QrCodeLoginProviderConsts.Purpose, qrCodeInfo.Token))
-            {
-                Alerts.Danger(L["QrCode:Invalid"]);
-                return Page();
-            }
-
-            if (IsLinkLogin)
-            {
-                return await HandleLinkUserLogin(user);
-            }
-
-            // TODO: 记住登录
-            await SignInManager.SignInAsync(user, true);
-
-            await QrCodeLoginProvider.RemoveAsync(QrCodeLoginInput.Key);
-
-            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
-            {
-                Identity = QrCodeLoginProviderConsts.Purpose,
-                Action = IdentitySecurityLogActionConsts.LoginSucceeded,
-                UserName = user.UserName
-            });
-
-            // Clear the dynamic claims cache.
-            await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
-
-            return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
-        }
     }
 
     public virtual async Task<IActionResult> OnPostExternalLogin(string provider)
@@ -491,13 +339,12 @@ public class LoginModel : AccountPageModel
         {
             returnUrl = ReturnUrl,
             returnUrlHash = ReturnUrlHash,
-            rememberMe = PasswordLoginInput.RememberMe,
+            rememberMe = Input.RememberMe,
             linkUserId = LinkUserId,
             linkTenantId = LinkTenantId,
             linkToken = LinkToken,
         }));
     }
-
 
     protected virtual async Task<IdentityUser?> GetIdentityUserAsync(string userNameOrEmailAddress)
     {
@@ -543,24 +390,24 @@ public class LoginModel : AccountPageModel
 
     protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds()
     {
-        if (!ValidationHelper.IsValidEmailAddress(PasswordLoginInput.UserNameOrEmailAddress))
+        if (!ValidationHelper.IsValidEmailAddress(Input.UserNameOrEmailAddress))
         {
             return;
         }
 
-        var userByUsername = await UserManager.FindByNameAsync(PasswordLoginInput.UserNameOrEmailAddress);
+        var userByUsername = await UserManager.FindByNameAsync(Input.UserNameOrEmailAddress);
         if (userByUsername != null)
         {
             return;
         }
 
-        var userByEmail = await UserManager.FindByEmailAsync(PasswordLoginInput.UserNameOrEmailAddress);
+        var userByEmail = await UserManager.FindByEmailAsync(Input.UserNameOrEmailAddress);
         if (userByEmail == null)
         {
             return;
         }
 
-        PasswordLoginInput.UserNameOrEmailAddress = userByEmail.UserName;
+        Input.UserNameOrEmailAddress = userByEmail.UserName;
     }
 
     protected virtual async Task CheckLocalLoginAsync()
@@ -584,7 +431,7 @@ public class LoginModel : AccountPageModel
         {
             returnUrl = ReturnUrl,
             returnUrlHash = ReturnUrlHash,
-            rememberMe = PasswordLoginInput.RememberMe,
+            rememberMe = Input.RememberMe,
             linkUserId = LinkUserId,
             linkTenantId = LinkTenantId,
             linkToken = LinkToken,
@@ -593,8 +440,8 @@ public class LoginModel : AccountPageModel
 
     protected async virtual Task<IActionResult> HandleUserNotAllowed()
     {
-        var notAllowedUser = await GetIdentityUserAsync(PasswordLoginInput.UserNameOrEmailAddress);
-        if (notAllowedUser != null && await UserManager.CheckPasswordAsync(notAllowedUser, PasswordLoginInput.Password))
+        var notAllowedUser = await GetIdentityUserAsync(Input.UserNameOrEmailAddress);
+        if (notAllowedUser != null && await UserManager.CheckPasswordAsync(notAllowedUser, Input.Password))
         {
             // 用户必须修改密码
             if (notAllowedUser.ShouldChangePasswordOnNextLogin || await UserManager.ShouldPeriodicallyChangePasswordAsync(notAllowedUser))
@@ -605,7 +452,7 @@ public class LoginModel : AccountPageModel
                 {
                     returnUrl = ReturnUrl,
                     returnUrlHash = ReturnUrlHash,
-                    rememberMe = PasswordLoginInput.RememberMe,
+                    rememberMe = Input.RememberMe,
                 });
             }
         }
@@ -682,30 +529,8 @@ public class LoginModel : AccountPageModel
             var userAgentInfo = HttpUserAgentParserProvider.Parse(HttpContext.Request.Headers.UserAgent!);
             if (userAgentInfo.MobileDeviceType.IsNullOrWhiteSpace())
             {
-                QrCodeLoginInput.IsEnabled = true;
+                EnableQrCodeLogin = true;
             }
-        }
-    }
-
-    protected virtual void EnsureTenantCookie(Guid? tenantId = null)
-    {
-        if (tenantId.HasValue)
-        {
-            Response.Cookies.Append(
-               TenantResolverConsts.DefaultTenantKey,
-               tenantId.Value.ToString(),
-               new CookieOptions
-               {
-                   Path = "/",
-                   HttpOnly = false,
-                   IsEssential = true,
-                   Expires = DateTimeOffset.Now.AddYears(10)
-               }
-           );
-        }
-        else
-        {
-            Response.Cookies.Delete(TenantResolverConsts.DefaultTenantKey);
         }
     }
 
@@ -817,25 +642,7 @@ public class LoginModel : AccountPageModel
     #endregion
 }
 
-public abstract class LoginInputModel
-{
-}
-
-public class PhoneLoginInputModel : LoginInputModel
-{
-    [Phone]
-    [Required]
-    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
-    public string PhoneNumber { get; set; } = default!;
-
-    [Required]
-    [StringLength(6)]
-    public string Code { get; set; } = default!;
-
-    public bool RememberMe { get; set; }
-}
-
-public class PasswordLoginInputModel : LoginInputModel
+public class PasswordLoginInputModel
 {
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
@@ -852,18 +659,3 @@ public class PasswordLoginInputModel : LoginInputModel
     public bool RememberMe { get; set; }
 }
 
-public class QrCodeLoginInputModel : LoginInputModel
-{
-    [HiddenInput]
-    public string Key { get; set; } = default!;
-
-    [HiddenInput]
-    public bool IsEnabled { get; set; }
-}
-
-public enum LoginType
-{
-    Password = 0,
-    PhoneNumber = 1,
-    QrCode = 2
-}

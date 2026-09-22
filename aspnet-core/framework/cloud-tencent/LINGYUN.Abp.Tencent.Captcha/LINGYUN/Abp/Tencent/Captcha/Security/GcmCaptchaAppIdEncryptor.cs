@@ -2,11 +2,14 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace LINGYUN.Abp.Account.Web.TencentCaptcha.Security;
+namespace LINGYUN.Abp.Tencent.Captcha.Security;
 
-public class CbcCaptchaAppIdEncryptor : ICaptchaAppIdEncryptor
+public class GcmCaptchaAppIdEncryptor : ICaptchaAppIdEncryptor
 {
-    private const int IvLengthBytes = 16; // CBC 模式 IV 为 16 字节
+    private const int GcmTagLengthBits = 128; // 16 字节 = 128 bit
+    private const int GcmTagLengthBytes = GcmTagLengthBits / 8; // 16
+    private const int IvLengthBytes = 12;     // GCM 推荐 12 字节 IV
+
     public string Encrypt(string plaintext, byte[] key, byte[] iv, byte[]? aad = null)
     {
         ArgumentNullException.ThrowIfNull(plaintext);
@@ -16,30 +19,29 @@ public class CbcCaptchaAppIdEncryptor : ICaptchaAppIdEncryptor
         if (key.Length != 32)
             throw new ArgumentException("Key must be 32 bytes for AES-256.", nameof(key));
         if (iv.Length != IvLengthBytes)
-            throw new ArgumentException($"IV must be {IvLengthBytes} bytes for CBC.", nameof(iv));
+            throw new ArgumentException($"IV must be {IvLengthBytes} bytes for GCM.", nameof(iv));
 
         var plaintextBytes = Encoding.UTF8.GetBytes(plaintext);
 
-        byte[] encrypted;
+        // 输出缓冲区：密文 + tag
+        var ciphertextWithTag = new byte[plaintextBytes.Length + GcmTagLengthBytes];
+        var tag = ciphertextWithTag.AsSpan(plaintextBytes.Length, GcmTagLengthBytes);
+        var ciphertext = ciphertextWithTag.AsSpan(0, plaintextBytes.Length);
 
-        // .NET 的 Aes 默认使用 PKCS7 填充，与 Java 的 PKCS5Padding 等价
-        using (var aes = Aes.Create())
-        {
-            aes.KeySize = 256;
-            aes.BlockSize = 128;
-            aes.Mode = CipherMode.CBC;
-            aes.Padding = PaddingMode.PKCS7;
-            aes.Key = key;
-            aes.IV = iv;
+        // .NET 10 中 AesGcm 构造函数需要显式指定 tag 长度
+        using var aesGcm = new AesGcm(key, GcmTagLengthBytes);
 
-            using var encryptor = aes.CreateEncryptor();
-            encrypted = encryptor.TransformFinalBlock(plaintextBytes, 0, plaintextBytes.Length);
-        }
+        aesGcm.Encrypt(
+            nonce: iv,
+            plaintext: plaintextBytes,
+            ciphertext: ciphertext,
+            tag: tag,
+            associatedData: aad);
 
-        // 拼接 IV + 密文
-        var ivAndCiphertext = new byte[iv.Length + encrypted.Length];
+        // 拼接 IV + 密文 + tag
+        var ivAndCiphertext = new byte[iv.Length + ciphertextWithTag.Length];
         Buffer.BlockCopy(iv, 0, ivAndCiphertext, 0, iv.Length);
-        Buffer.BlockCopy(encrypted, 0, ivAndCiphertext, iv.Length, encrypted.Length);
+        Buffer.BlockCopy(ciphertextWithTag, 0, ivAndCiphertext, iv.Length, ciphertextWithTag.Length);
 
         return Convert.ToBase64String(ivAndCiphertext);
     }

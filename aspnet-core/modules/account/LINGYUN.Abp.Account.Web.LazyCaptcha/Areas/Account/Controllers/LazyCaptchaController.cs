@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.Account.Web.Areas.LazyCaptcha.Account.Controllers;
 
 [Controller]
 [Area(AccountRemoteServiceConsts.ModuleName)]
-[Route($"api/{AccountRemoteServiceConsts.ModuleName}/captcha")]
+[Route($"api/{AccountRemoteServiceConsts.ModuleName}/captcha/lazy")]
 [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
 public class LazyCaptchaController : AbpControllerBase
 {

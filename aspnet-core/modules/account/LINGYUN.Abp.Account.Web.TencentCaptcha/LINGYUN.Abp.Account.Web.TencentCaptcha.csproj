@@ -34,7 +34,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\framework\cloud-tencent\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj" />
+		<ProjectReference Include="..\..\..\framework\cloud-tencent\LINGYUN.Abp.Tencent.Captcha\LINGYUN.Abp.Tencent.Captcha.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Account.Web\LINGYUN.Abp.Account.Web.csproj" />
 	</ItemGroup>
 

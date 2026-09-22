@@ -6,13 +6,8 @@ namespace LINGYUN.Abp.Account.Web.TencentCaptcha.Pages.Account.Components.Tencen
 
 public class TencentCaptchaViewComponent : CaptchaViewComponentBase
 {
-    public override Task<IViewComponentResult> InvokeAsync(CaptchaViewComponentModel model)
+    public override Task<IViewComponentResult> InvokeAsync()
     {
-        return Task.FromResult<IViewComponentResult>(View(
-            "~/Pages/Account/Components/TencentCaptcha/Default.cshtml",
-            new TencentCaptchaViewComponentModel
-            {
-                PasswordLoginInput = model.PasswordLoginInput
-            }));
+        return Task.FromResult<IViewComponentResult>(View("~/Pages/Account/Components/TencentCaptcha/Default.cshtml"));
     }
 }

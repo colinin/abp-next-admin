@@ -55,6 +55,11 @@
                 <abp-input asp-for="Input.Password" />
             }
 
+            @if (Model.EnableLocalRegister && Model.EnableCaptchaLogin)
+            {
+                @await Component.InvokeAsync(Model.CaptchaComponent.ComponentType)
+            }
+
             <strong>
                 @L["AlreadyRegistered"]
                 <a href="@Url.Page("./Login", new {

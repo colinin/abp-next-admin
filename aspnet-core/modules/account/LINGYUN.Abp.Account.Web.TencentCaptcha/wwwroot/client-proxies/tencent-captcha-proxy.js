@@ -9,9 +9,9 @@
     (function () {
         abp.utils.createNamespace(window, 'labp.account.captcha');
 
-        labp.account.captcha.config = function (ajaxParams) {
+        labp.account.captcha.tencentConfig = function (ajaxParams) {
             return abp.ajax($.extend(true, {
-                url: abp.appPath + 'api/account/captcha/config',
+                url: abp.appPath + 'api/account/captcha/tencent/config',
                 type: 'GET'
             }, ajaxParams));
         };

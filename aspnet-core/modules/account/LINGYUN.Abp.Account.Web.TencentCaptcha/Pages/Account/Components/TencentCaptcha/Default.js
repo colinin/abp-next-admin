@@ -2,8 +2,8 @@
     let captcha = null;
     let captchaVerified = false;
 
-    const captchaCodeField = 'PasswordLoginInput.CaptchaCode';
-    const loginForm = $('#PasswordLoginForm');
+    const captchaCodeField = 'Input.CaptchaCode';
+    const loginForm = $('#InputForm');
 
     const l = abp.localization.getResource('AbpAccount');
 
@@ -38,7 +38,7 @@
     async function initTencentCaptcha() {
         try {
             if (captcha == null) {
-                const captchaConfig = await labp.account.captcha.config();
+                const captchaConfig = await labp.account.captcha.tencentConfig();
                 if (captchaConfig.aidEncrypted) {
                     captcha = new TencentCaptcha(captchaConfig.captchaAppId, captchaCallback, {
                         aidEncrypted: captchaConfig.aidEncrypted,
