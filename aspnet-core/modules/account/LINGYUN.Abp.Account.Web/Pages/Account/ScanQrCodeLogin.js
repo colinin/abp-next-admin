@@ -42,7 +42,7 @@
             switch (result.status) {
                 case 10:
                     releaseQrCodeTimer();
-                    $('#QrCodeForm').submit();
+                    $('#InputForm').submit();
                     break;
                 case 5:
                     $('#QrCodeStatus').text(il('QrCode:Scaned'));
