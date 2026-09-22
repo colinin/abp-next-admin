@@ -42,7 +42,7 @@
     {
         <abp-tabs id="LoginFormTabs">
             <abp-tab title="@L["PasswordLogin"].Value" active="true" name="PasswordLogin">
-                <form method="post" class="mt-4" asp-page-handler="PasswordLogin" id="InputForm">
+                <form method="post" class="mt-4" id="InputForm">
                     <input asp-for="ReturnUrl" />
                     <input asp-for="ReturnUrlHash" />
                     <input asp-for="LinkTenantId" />
