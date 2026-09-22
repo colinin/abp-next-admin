@@ -9,12 +9,12 @@
         const button = $(this);
         e.preventDefault();
 
-        var isValid = $('#LoginForm').validate().element('#PhoneNumberInput');
+        var isValid = $('#InputForm').validate().element('#PhoneNumberInput');
         if (!isValid) {
             return false;
         }
 
-        var input = $('#LoginForm').serializeFormToObject();
+        var input = $('#InputForm').serializeFormToObject();
 
         abp.ui.setBusy({ busy: true });
         authService.sendPhoneSigninCode({
