@@ -38,6 +38,12 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAccountWebOpenIddictModule),
     // 账户模块 OAuth集成
     typeof(AbpAccountWebOAuthModule),
+    // 使用 LazyCaptcha 验证码组件
+    typeof(AbpAccountWebLazyCaptchaModule),
+    // 使用 腾讯云验证码组件, 需配置好腾讯云相关参数
+    typeof(AbpAccountWebTencentCaptchaModule),
+    // 使用 阿里云验证码组件, 需配置好阿里云相关参数
+    typeof(AbpAccountWebAliyunCaptchaModule),
 
     // Gdpr 身份认证提供者模块
     typeof(AbpGdprDomainIdentityModule),
