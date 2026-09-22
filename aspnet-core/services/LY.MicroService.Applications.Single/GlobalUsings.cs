@@ -2,8 +2,11 @@
 global using Elsa;
 global using Elsa.Options;
 global using LINGYUN.Abp.Account;
+global using LINGYUN.Abp.Account.Web.AliyunCaptcha;
+global using LINGYUN.Abp.Account.Web.LazyCaptcha;
 global using LINGYUN.Abp.Account.Web.OAuth;
 global using LINGYUN.Abp.Account.Web.OpenIddict;
+global using LINGYUN.Abp.Account.Web.TencentCaptcha;
 global using LINGYUN.Abp.AI;
 global using LINGYUN.Abp.AI.Agent;
 global using LINGYUN.Abp.AI.Tools.Http;

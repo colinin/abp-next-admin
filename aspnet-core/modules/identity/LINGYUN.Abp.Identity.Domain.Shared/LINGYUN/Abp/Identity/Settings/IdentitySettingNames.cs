@@ -66,6 +66,8 @@ public static class IdentitySettingNames
         private const string SignInPrefix = "Abp.Identity.SignIn";
 
         public const string RequireCaptchaVerification = SignInPrefix + ".RequireCaptchaVerification";
+
+        public const string CaptchaComponent = SignInPrefix + ".CaptchaComponent";
     }
 
     public static class Link

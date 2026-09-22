@@ -10,12 +10,12 @@
         const button = $(this);
         e.preventDefault();
 
-        var isValid = $('#RegisterForm').validate().element('#EmailAddressInput');
+        var isValid = $('#InputForm').validate().element('#EmailAddressInput');
         if (!isValid) {
             return false;
         }
 
-        var formModel = $('#RegisterForm').serializeFormToObject();
+        var formModel = $('#InputForm').serializeFormToObject();
         var sendEmailVerifyCodeInternal = (Number)($('#SendEmailVerifyCodeInternal').val());
         if (!sendEmailVerifyCodeInternal) {
             sendEmailVerifyCodeInternal = 1;

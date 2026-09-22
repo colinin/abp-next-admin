@@ -2,7 +2,7 @@
 using LINGYUN.Abp.Account.Web.Pages.Account;
 using LINGYUN.Abp.Account.Web.TencentCaptcha.Bundling;
 using LINGYUN.Abp.Account.Web.TencentCaptcha.Pages.Account.Components.TencentCaptcha;
-using LINGYUN.Abp.Tencent;
+using LINGYUN.Abp.Tencent.Captcha;
 using LINGYUN.Abp.Tencent.Localization;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -13,7 +13,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.Account.Web.TencentCaptcha;
 
 [DependsOn(
-    typeof(AbpTencentCloudModule),
+    typeof(AbpTencentCaptchaModule),
     typeof(AbpAccountWebModule))]
 public class AbpAccountWebTencentCaptchaModule : AbpModule
 {
@@ -26,14 +26,22 @@ public class AbpAccountWebTencentCaptchaModule : AbpModule
 
         Configure<AbpAccountCaptchaOptions>(options =>
         {
-            options.ComponentType = typeof(TencentCaptchaViewComponent);
-            options.CaptchaValidator = new TencentCaptchaValidator();
+            options.CaptchaComponents.Add(
+                "TencentCaptcha",
+                new CaptchaComponent(
+                    typeof(TencentCaptchaViewComponent),
+                    new TencentCaptchaValidator()));
         });
 
         Configure<AbpBundlingOptions>(options =>
         {
             options.ScriptBundles
                 .Configure(typeof(LoginModel).FullName!, bundle =>
+                {
+                    bundle.AddContributors(typeof(TencentCaptchaScriptBundleContributor));
+                });
+            options.ScriptBundles
+                .Configure(typeof(RegisterModel).FullName!, bundle =>
                 {
                     bundle.AddContributors(typeof(TencentCaptchaScriptBundleContributor));
                 });

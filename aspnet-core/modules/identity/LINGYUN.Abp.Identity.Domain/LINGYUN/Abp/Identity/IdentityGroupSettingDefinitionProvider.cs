@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Identity.Localization;
+﻿using Volo.Abp;
+using Volo.Abp.Identity.Localization;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
@@ -137,7 +138,26 @@ public class IdentityGroupSettingDefinitionProvider : SettingDefinitionProvider
             .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
             .WithParent("SignIn", L("Settings:Identity.SignIn"), order: 2)
             .WithOrder(4)
-            .WithValueType(ValueType.Boolean));
+            .WithValueType(ValueType.Boolean),
+            new SettingDefinition(
+            name: Identity.Settings.IdentitySettingNames.SignIn.CaptchaComponent,
+            displayName: L("DisplayName:Abp.Identity.SignIn.CaptchaComponent"),
+            description: L("Description:Abp.Identity.SignIn.CaptchaComponent"),
+            isVisibleToClients: false)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("SignIn", L("Settings:Identity.SignIn"), order: 2)
+            .WithOrder(5)
+            .WithOptions([
+                new NameValue<string>("Default", "Default"),
+                new NameValue<string>("Lazy Captcha", "LazyCaptcha"),
+                new NameValue<string>("Aliyun Captcha", "AliyunCaptcha"),
+                new NameValue<string>("Tencent Captcha", "TencentCaptcha"),
+            ]));
     }
 
     private static void SetPasswordSettingGroup(ISettingDefinitionContext context)

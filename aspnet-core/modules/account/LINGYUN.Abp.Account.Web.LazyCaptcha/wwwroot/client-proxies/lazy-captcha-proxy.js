@@ -9,9 +9,9 @@
     (function () {
         abp.utils.createNamespace(window, 'labp.account.captcha');
 
-        labp.account.captcha.refresh = function (ajaxParams) {
+        labp.account.captcha.lazyRefresh = function (ajaxParams) {
             return abp.ajax($.extend(true, {
-                url: abp.appPath + 'api/account/captcha/refresh',
+                url: abp.appPath + 'api/account/captcha/lazy/refresh',
                 type: 'GET'
             }, ajaxParams));
         };

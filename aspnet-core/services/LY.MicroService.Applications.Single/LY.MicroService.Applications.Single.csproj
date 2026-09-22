@@ -140,8 +140,11 @@
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.AliyunCaptcha\LINGYUN.Abp.Account.Web.AliyunCaptcha.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.LazyCaptcha\LINGYUN.Abp.Account.Web.LazyCaptcha.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OAuth\LINGYUN.Abp.Account.Web.OAuth.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OpenIddict\LINGYUN.Abp.Account.Web.OpenIddict.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.TencentCaptcha\LINGYUN.Abp.Account.Web.TencentCaptcha.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AI.Tools.Http\LINGYUN.Abp.AI.Tools.Http.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AI.Tools.Mcp\LINGYUN.Abp.AI.Tools.Mcp.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AIManagement.Application\LINGYUN.Abp.AIManagement.Application.csproj" />

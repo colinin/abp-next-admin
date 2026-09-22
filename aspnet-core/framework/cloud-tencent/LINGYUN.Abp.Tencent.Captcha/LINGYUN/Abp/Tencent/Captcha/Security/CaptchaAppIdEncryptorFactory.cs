@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.DependencyInjection;
 
-namespace LINGYUN.Abp.Account.Web.TencentCaptcha.Security;
+namespace LINGYUN.Abp.Tencent.Captcha.Security;
 
 public class CaptchaAppIdEncryptorFactory : ICaptchaAppIdEncryptorFactory, ISingletonDependency
 {

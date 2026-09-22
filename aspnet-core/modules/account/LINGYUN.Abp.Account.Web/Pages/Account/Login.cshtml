@@ -1,6 +1,5 @@
 ﻿@page
 @using LINGYUN.Abp.Account.Web.Pages.Account
-@using LINGYUN.Abp.Account.Web.Pages.Account.Components.Captcha
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
 @using Volo.Abp.Account.Settings
@@ -21,14 +20,14 @@
 
 @section styles
 {
-    <abp-style-bundle name="@typeof(LoginModel).FullName">
-
-    </abp-style-bundle>
+    <abp-style-bundle name="@typeof(LoginModel).FullName" />
 }
 
 @section scripts
 {
-    <abp-script-bundle name="@typeof(LoginModel).FullName" />
+    <abp-script-bundle name="@typeof(LoginModel).FullName">
+        <abp-script src="/Pages/Account/Login.js" />
+    </abp-script-bundle>
 }
 
 <div class="account-module-form">
@@ -42,57 +41,71 @@
     @if (Model.EnableLocalLogin)
     {
         <abp-tabs id="LoginFormTabs">
-            <abp-tab title="@L["PasswordLogin"].Value" active="Model.LoginType == LoginType.Password" header-name="PasswordLogin">
-                <form method="post" class="mt-4" asp-page-handler="PasswordLogin" id="PasswordLoginForm">
+            <abp-tab title="@L["PasswordLogin"].Value" active="true" name="PasswordLogin">
+                <form method="post" class="mt-4" id="InputForm">
                     <input asp-for="ReturnUrl" />
                     <input asp-for="ReturnUrlHash" />
                     <input asp-for="LinkTenantId" />
                     <input asp-for="LinkUserId" />
                     <input asp-for="LinkToken" />
                     <div class="mb-3">
-                        <label asp-for="PasswordLoginInput.UserNameOrEmailAddress" class="form-label"></label>
-                        <input asp-for="PasswordLoginInput.UserNameOrEmailAddress" class="form-control" />
-                        <span asp-validation-for="PasswordLoginInput.UserNameOrEmailAddress" class="text-danger"></span>
+                        <label asp-for="Input.UserNameOrEmailAddress" class="form-label"></label>
+                        <input asp-for="Input.UserNameOrEmailAddress" class="form-control" />
+                        <span asp-validation-for="Input.UserNameOrEmailAddress" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="PasswordLoginInput.Password" class="form-label"></label>
+                        <label asp-for="Input.Password" class="form-label"></label>
                         <div class="input-group">
-                            <input type="password" class="form-control" autocomplete="off" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="PasswordLoginInput.Password" />
+                            <input type="password" class="form-control" autocomplete="off" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="Input.Password" />
                             <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
                         </div>
-                        <span asp-validation-for="PasswordLoginInput.Password"></span>
+                        <span asp-validation-for="Input.Password"></span>
                     </div>
 
-                    @if (Model.EnableCaptchaLogin)
+                    @if (Model.EnableCaptcha)
                     {
-                        @await Component.InvokeAsync(Model.CaptchaOptions.Value.ComponentType, new CaptchaViewComponentModel { PasswordLoginInput = @Model.PasswordLoginInput })
+                        @await Component.InvokeAsync(Model.CaptchaComponent.ComponentType)
                     }
 
                     <abp-row class="mb-3">
                         <abp-column>
                             <input type="checkbox" class="form-check-input"
-                                   name="PasswordLoginInput.RememberMe"
+                                   name="Input.RememberMe"
                                    value="true"
-                                   @(Model.PasswordLoginInput?.RememberMe == true ? "checked" : "")
-                                   id="PasswordLoginInput_RememberMe" />
-                            <label class="form-check-label" for="PasswordLoginInput_RememberMe">
+                                   @(Model.Input?.RememberMe == true ? "checked" : "")
+                                   id="Input_RememberMe" />
+                            <label class="form-check-label" for="Input_RememberMe">
                                 @L["RememberMe"]
                             </label>
                         </abp-column>
                         <abp-column class="text-end">
-                            <a href="@Url.Page("./ForgotPassword", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">@L["ForgotPassword"]</a>
+                            <a href="@Url.Page("./ForgotPassword", new
+                               {
+                                   returnUrl = Model.ReturnUrl,
+                                   returnUrlHash = Model.ReturnUrlHash,
+                                   linkUserId = Model.LinkUserId?.ToString(),
+                                   linkTenantId = Model.LinkTenantId?.ToString(),
+                                   linkToken = Model.LinkToken
+                               })">@L["ForgotPassword"]</a>
                         </abp-column>
                     </abp-row>
                     @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
                     {
                         <strong>
                             @L["AreYouANewUser"]
-                            <a href="@Url.Page("./Register", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })" class="text-decoration-none">@L["Register"]</a>
+                            <a href="@Url.Page("./Register", new
+                               {
+                                   returnUrl = Model.ReturnUrl,
+                                   returnUrlHash = Model.ReturnUrlHash,
+                                   linkUserId = Model.LinkUserId?.ToString(),
+                                   linkTenantId = Model.LinkTenantId?.ToString(),
+                                   linkToken = Model.LinkToken
+                               })" class="text-decoration-none">@L["Register"]</a>
                         </strong>
                     }
                     <div class="d-grid gap-2">
-                        <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3" id="PasswordLogin_Button">@L["Login"]</abp-button>
+                        <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3" id="SubmitButton">@L["Login"]</abp-button>
                         @if (Model.ShowCancelButton)
                         {
                             <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
@@ -100,65 +113,26 @@
                     </div>
                 </form>
             </abp-tab>
-            <abp-tab title="@L["PhoneNumberLogin"].Value" active="Model.LoginType == LoginType.PhoneNumber" header-name="PhoneNumberLogin">
-                <form method="post" class="mt-4" asp-page-handler="PhoneNumberLogin" id="PhoneNumberForm">
-                    <input asp-for="ReturnUrl" />
-                    <input asp-for="ReturnUrlHash" />
-                    <input asp-for="LinkTenantId" />
-                    <input asp-for="LinkUserId" />
-                    <input asp-for="LinkToken" />
-                    <div class="mb-3">
-                        <label asp-for="PhoneLoginInput.PhoneNumber" class="form-label"></label>
-                        <input asp-for="PhoneLoginInput.PhoneNumber" class="form-control" id="PhoneNumberInput" />
-                        <span asp-validation-for="PhoneLoginInput.PhoneNumber" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="PhoneLoginInput.Code" class="form-label"></label>
-                        <div class="input-group">
-                            <input asp-for="PhoneLoginInput.Code" class="form-control" />
-                            <button class="btn btn-secondary" type="button" id="SendVerifyCodeButton">@L["SendVerifyCode"]</button>
-                        </div>
-                        <span asp-validation-for="PhoneLoginInput.Code" class="text-danger"></span>
-                    </div>
-
-                    <abp-row class="mb-3">
-                        <abp-column>
-                            <input type="checkbox" class="form-check-input"
-                                   name="PhoneLoginInput.RememberMe"
-                                   value="true"
-                                   @(Model.PhoneLoginInput?.RememberMe == true ? "checked" : "")
-                                   id="PhoneLoginInput_RememberMe" />
-                            <label class="form-check-label" for="PhoneLoginInput_RememberMe">
-                                @L["RememberMe"]
-                            </label>
-                        </abp-column>
-                    </abp-row>
-                    <div class="d-grid gap-2">
-                        <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
-                        @if (Model.ShowCancelButton)
-                        {
-                            <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
-                        }
-                    </div>
-                </form>
-            </abp-tab>
-            @if (Model.QrCodeLoginInput.IsEnabled)
+            <abp-tab-link title="@L["PhoneNumberLogin"].Value" name="PhoneNumberLogin" href="@Url.Page("./PhoneNumberLogin", new
+                          {
+                              returnUrl = Model.ReturnUrl,
+                              returnUrlHash = Model.ReturnUrlHash,
+                              linkUserId = Model.LinkUserId?.ToString(),
+                              linkTenantId = Model.LinkTenantId?.ToString(),
+                              linkToken = Model.LinkToken
+                          })">
+            </abp-tab-link>
+            @if (Model.EnableQrCodeLogin)
             {
-                <abp-tab title="@L["ScanQrCodeLogin"].Value" active="Model.LoginType == LoginType.QrCode" header-name="QrCodeLogin">
-                    <form method="post" class="mt-4" asp-page-handler="QrCodeLogin" id="QrCodeForm">
-                        <input asp-for="ReturnUrl" />
-                        <input asp-for="ReturnUrlHash" />
-                        <input asp-for="LinkTenantId" />
-                        <input asp-for="LinkUserId" />
-                        <input asp-for="LinkToken" />
-                        <input asp-for="QrCodeLoginInput.Key" id="QrCodeKey" />
-                        <div class="gap-2" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                            <div id="QrCode"></div>
-                            <div id="QrCodeStatus"></div>
-                        </div>
-                    </form>
-                </abp-tab>
+                <abp-tab-link title="@L["ScanQrCodeLogin"].Value" name="ScanQrCodeLogin" href="@Url.Page("./ScanQrCodeLogin", new
+                              {
+                                  returnUrl = Model.ReturnUrl,
+                                  returnUrlHash = Model.ReturnUrlHash,
+                                  linkUserId = Model.LinkUserId?.ToString(),
+                                  linkTenantId = Model.LinkTenantId?.ToString(),
+                                  linkToken = Model.LinkToken
+                              })">
+                </abp-tab-link>
             }
         </abp-tabs>
     }

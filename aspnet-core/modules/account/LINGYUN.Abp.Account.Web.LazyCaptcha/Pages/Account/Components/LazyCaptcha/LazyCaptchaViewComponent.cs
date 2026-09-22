@@ -6,13 +6,13 @@ namespace LINGYUN.Abp.Account.Web.LazyCaptcha.Pages.Account.Components.LazyCaptc
 
 public class LazyCaptchaViewComponent : CaptchaViewComponentBase
 {
-    public override Task<IViewComponentResult> InvokeAsync(CaptchaViewComponentModel model)
+    public override Task<IViewComponentResult> InvokeAsync()
     {
-        return Task.FromResult<IViewComponentResult>(View(
-            "~/Pages/Account/Components/LazyCaptcha/Default.cshtml",
+        return Task.FromResult<IViewComponentResult>(
+            View("~/Pages/Account/Components/LazyCaptcha/Default.cshtml", 
             new LazyCaptchaViewComponentModel
             {
-                PasswordLoginInput = model.PasswordLoginInput,
+                Input = new LazyCaptchaInputModel(),
             }));
     }
 }

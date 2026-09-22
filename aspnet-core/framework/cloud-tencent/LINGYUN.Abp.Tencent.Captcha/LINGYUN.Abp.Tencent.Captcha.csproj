@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.Captcha.Tencent</AssemblyName>
+		<PackageId>LINGYUN.Abp.Captcha.Tencent</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+		<Description>腾讯云验证码服务Abp集成</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Remove="LINGYUN\Abp\Tencent\Captcha\Localization\**\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Tencent\Captcha\Localization\**\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj" />
+	</ItemGroup>
+
+</Project>

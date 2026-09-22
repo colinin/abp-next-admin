@@ -2,5 +2,4 @@
 
 public class CaptchaViewComponentModel
 {
-    public PasswordLoginInputModel PasswordLoginInput { get; set; } = default!;
 }

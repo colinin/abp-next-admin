@@ -14,6 +14,11 @@
     PageLayout.Content.Title = L["Register"].Value;
 }
 
+@section styles
+{
+    <abp-style-bundle name="@typeof(RegisterModel).FullName" />
+}
+
 @section scripts
 {
     <abp-script-bundle name="@typeof(RegisterModel).FullName">
@@ -24,16 +29,12 @@
 
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
-        <form method="post" class="mt-4" id="RegisterForm">
+        <form method="post" class="mt-4" id="InputForm">
             <input asp-for="ReturnUrl" />
             <input asp-for="ReturnUrlHash" />
             @if (Model.EnableLocalRegister || Model.IsExternalLogin)
             {
                 <abp-input asp-for="Input.UserName" auto-focus="true" />
-            }
-
-            @if (Model.EnableLocalRegister || Model.IsExternalLogin)
-            {
                 <abp-input asp-for="Input.EmailAddress" id="EmailAddressInput" />
 
                 @if (Model.RequireEmailVerificationToRegister)
@@ -53,6 +54,11 @@
             @if (!Model.IsExternalLogin && Model.EnableLocalRegister)
             {
                 <abp-input asp-for="Input.Password" />
+
+                @if (Model.EnableCaptcha)
+                {
+                    @await Component.InvokeAsync(Model.CaptchaComponent.ComponentType)
+                }
             }
 
             <strong>
@@ -69,7 +75,7 @@
             @if (Model.EnableLocalRegister || Model.IsExternalLogin)
             {
                 <div class="d-grid gap-2">
-                    <abp-button button-type="Primary" type="submit" class="btn-lg mt-4">@L["Register"]</abp-button>
+                    <abp-button button-type="Primary" type="submit" class="btn-lg mt-4" id="SubmitButton">@L["Register"]</abp-button>
                 </div>
             }
 

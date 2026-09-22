@@ -11,7 +11,8 @@ public class LazyCaptchaScriptBundleContributor : BundleContributor
     public async override Task ConfigureBundleAsync(BundleConfigurationContext context)
     {
         var settingProvider = context.LazyServiceProvider.GetRequiredService<ISettingProvider>();
-        if (await settingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification))
+        if (await settingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification) &&
+            await settingProvider.GetOrNullAsync(Identity.Settings.IdentitySettingNames.SignIn.CaptchaComponent) == "LazyCaptcha")
         {
             context.Files.AddIfNotContains("/client-proxies/lazy-captcha-proxy.js");
             context.Files.AddIfNotContains("/Pages/Account/Components/LazyCaptcha/Default.js");

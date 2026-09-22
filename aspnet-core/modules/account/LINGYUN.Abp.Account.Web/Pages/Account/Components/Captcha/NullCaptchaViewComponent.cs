@@ -5,8 +5,8 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account.Components.Captcha;
 
 public class NullCaptchaViewComponent : CaptchaViewComponentBase
 {
-    public override Task<IViewComponentResult> InvokeAsync(CaptchaViewComponentModel model)
+    public override Task<IViewComponentResult> InvokeAsync()
     {
-        return Task.FromResult<IViewComponentResult>(View("~/Pages/Account/Components/Captcha/Default.cshtml", model));
+        return Task.FromResult<IViewComponentResult>(View("~/Pages/Account/Components/Captcha/Default.cshtml"));
     }
 }

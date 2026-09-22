@@ -8,6 +8,7 @@
     <Project Path="framework/security/LINGYUN.Abp.Encryption.SM4/LINGYUN.Abp.Encryption.SM4.csproj" />
   </Folder>
   <Folder Name="/framework/alibaba-cloud/">
+    <Project Path="framework/cloud-aliyun/LINGYUN.Abp.Aliyun.Captcha/LINGYUN.Abp.Aliyun.Captcha.csproj" />
     <Project Path="framework/cloud-aliyun/LINGYUN.Abp.Aliyun.SettingManagement/LINGYUN.Abp.Aliyun.SettingManagement.csproj" />
     <Project Path="framework/cloud-aliyun/LINGYUN.Abp.Aliyun/LINGYUN.Abp.Aliyun.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.BlobStoring.Aliyun/LINGYUN.Abp.BlobStoring.Aliyun.csproj" />
@@ -129,6 +130,7 @@
   <Folder Name="/framework/tencent-cloud/">
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.BlobStoring.Tencent/LINGYUN.Abp.BlobStoring.Tencent.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Sms.Tencent/LINGYUN.Abp.Sms.Tencent.csproj" />
+    <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent.Captcha/LINGYUN.Abp.Tencent.Captcha.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent.QQ/LINGYUN.Abp.Tencent.QQ.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent.SettingManagement/LINGYUN.Abp.Tencent.SettingManagement.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent/LINGYUN.Abp.Tencent.csproj" />
@@ -183,9 +185,12 @@
     <Project Path="modules/account/LINGYUN.Abp.Account.HttpApi/LINGYUN.Abp.Account.HttpApi.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.OAuth/LINGYUN.Abp.Account.OAuth.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Security/LINGYUN.Abp.Account.Security.csproj" />
+    <Project Path="modules/account/LINGYUN.Abp.Account.Web.AliyunCaptcha/LINGYUN.Abp.Account.Web.AliyunCaptcha.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.IdentityServer/LINGYUN.Abp.Account.Web.IdentityServer.csproj" />
+    <Project Path="modules/account/LINGYUN.Abp.Account.Web.LazyCaptcha/LINGYUN.Abp.Account.Web.LazyCaptcha.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.OAuth/LINGYUN.Abp.Account.Web.OAuth.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.OpenIddict/LINGYUN.Abp.Account.Web.OpenIddict.csproj" />
+    <Project Path="modules/account/LINGYUN.Abp.Account.Web.TencentCaptcha/LINGYUN.Abp.Account.Web.TencentCaptcha.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web/LINGYUN.Abp.Account.Web.csproj" />
   </Folder>
   <Folder Name="/modules/ai/">
@@ -233,6 +238,10 @@
     <Project Path="modules/caching-management/LINGYUN.Abp.CachingManagement.Domain/LINGYUN.Abp.CachingManagement.Domain.csproj" />
     <Project Path="modules/caching-management/LINGYUN.Abp.CachingManagement.HttpApi/LINGYUN.Abp.CachingManagement.HttpApi.csproj" />
     <Project Path="modules/caching-management/LINGYUN.Abp.CachingManagement.StackExchangeRedis/LINGYUN.Abp.CachingManagement.StackExchangeRedis.csproj" />
+  </Folder>
+  <Folder Name="/modules/captcha/">
+    <Project Path="modules/captcha/LINGYUN.Abp.Captcha.Abstractions/LINGYUN.Abp.Captcha.Abstractions.csproj" />
+    <Project Path="modules/captcha/LINGYUN.Abp.LazyCaptcha/LINGYUN.Abp.LazyCaptcha.csproj" />
   </Folder>
   <Folder Name="/modules/data-protection/">
     <Project Path="modules/data-protection/LINGYUN.Abp.DataProtectionManagement.Application.Contracts/LINGYUN.Abp.DataProtectionManagement.Application.Contracts.csproj" />
