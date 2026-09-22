@@ -40,6 +40,11 @@ public class AbpAccountWebTencentCaptchaModule : AbpModule
                 {
                     bundle.AddContributors(typeof(TencentCaptchaScriptBundleContributor));
                 });
+            options.ScriptBundles
+                .Configure(typeof(RegisterModel).FullName!, bundle =>
+                {
+                    bundle.AddContributors(typeof(TencentCaptchaScriptBundleContributor));
+                });
         });
 
         Configure<AbpLocalizationOptions>(options =>

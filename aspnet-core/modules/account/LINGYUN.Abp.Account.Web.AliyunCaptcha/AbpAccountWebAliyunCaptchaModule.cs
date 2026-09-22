@@ -40,6 +40,11 @@ public class AbpAccountWebAliyunCaptchaModule : AbpModule
                 {
                     bundle.AddContributors(typeof(AliyunCaptchaScriptBundleContributor));
                 });
+            options.ScriptBundles
+                .Configure(typeof(RegisterModel).FullName!, bundle =>
+                {
+                    bundle.AddContributors(typeof(AliyunCaptchaScriptBundleContributor));
+                });
         });
 
         Configure<AbpLocalizationOptions>(options =>

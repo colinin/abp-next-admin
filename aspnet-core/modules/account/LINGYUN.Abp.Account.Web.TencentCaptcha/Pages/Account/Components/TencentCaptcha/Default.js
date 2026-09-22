@@ -3,12 +3,12 @@
     let captchaVerified = false;
 
     const captchaCodeField = 'Input.CaptchaCode';
-    const loginForm = $('#InputForm');
+    const inputForm = $('#InputForm');
 
     const l = abp.localization.getResource('AbpAccount');
 
-    loginForm.on('submit', async function (e) {
-        if (!loginForm.valid()) {
+    inputForm.on('submit', async function (e) {
+        if (!inputForm.valid()) {
             return;
         }
         if (captchaVerified) {
@@ -26,7 +26,7 @@
         if (res.ret === 0 && !res.errorCode) {
             captchaVerified = true;
             appendFormField(captchaCodeField, `${res.randstr};${res.ticket}`);
-            loginForm.trigger('submit');
+            inputForm.trigger('submit');
         } else {
             captchaVerified = false;
             removeFormField(captchaCodeField);
@@ -63,15 +63,15 @@
     }
 
     function appendFormField(name, value) {
-        let $input = loginForm.find(`input[name="${name}"]`);
+        let $input = inputForm.find(`input[name="${name}"]`);
         if ($input.length === 0) {
-            $input = $('<input>', { type: 'hidden', name: name }).appendTo(loginForm);
+            $input = $('<input>', { type: 'hidden', name: name }).appendTo(inputForm);
         }
         $input.val(value);
     }
 
     function removeFormField(name) {
-        loginForm.find(`input[name="${name}"]`).remove();
+        inputForm.find(`input[name="${name}"]`).remove();
     }
 
 })(jQuery);

@@ -48,9 +48,20 @@ public class AbpAccountWebLazyCaptchaModule : AbpModule
                 {
                     bundle.AddContributors(typeof(LazyCaptchaStyleBundleContributor));
                 });
+            options.StyleBundles
+                .Configure(typeof(RegisterModel).FullName!, bundle =>
+                {
+                    bundle.AddContributors(typeof(LazyCaptchaStyleBundleContributor));
+                });
 
             options.ScriptBundles
                 .Configure(typeof(LoginModel).FullName!, bundle =>
+                {
+                    bundle.AddContributors(typeof(LazyCaptchaScriptBundleContributor));
+                });
+
+            options.ScriptBundles
+                .Configure(typeof(RegisterModel).FullName!, bundle =>
                 {
                     bundle.AddContributors(typeof(LazyCaptchaScriptBundleContributor));
                 });

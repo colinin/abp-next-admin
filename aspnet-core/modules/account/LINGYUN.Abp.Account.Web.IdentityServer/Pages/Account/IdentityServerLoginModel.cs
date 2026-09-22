@@ -118,7 +118,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             ExternalProviders = await GetExternalProviders();
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
-            if (EnableCaptchaLogin)
+            if (EnableCaptcha)
             {
                 var isValid = await CaptchaComponent.ValidateAsync(
                     new CaptchaValidatorContext(

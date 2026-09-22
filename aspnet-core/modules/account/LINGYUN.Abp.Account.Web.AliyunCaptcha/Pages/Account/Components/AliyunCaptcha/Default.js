@@ -3,12 +3,12 @@
     let captchaVerified = false;
 
     const captchaCodeField = 'Input.CaptchaCode';
-    const loginForm = $('#InputForm');
+    const inputForm = $('#InputForm');
 
     const l = abp.localization.getResource('AbpAccount');
 
-    loginForm.on('submit', async function (e) {
-        if (!loginForm.valid()) {
+    inputForm.on('submit', async function (e) {
+        if (!inputForm.valid()) {
             return;
         }
         if (captchaVerified) {
@@ -30,11 +30,11 @@
                 EncryptedSceneId: captchaConfig.encryptedSceneId,
                 mode: "popup",
                 element: "#captcha-element",
-                button: '#PasswordLogin_Button',
+                button: '#SubmitButton',
                 success: function (captchaVerifyParam) {
                     captchaVerified = true;
                     appendFormField(captchaCodeField, captchaVerifyParam);
-                    loginForm.trigger('submit');
+                    inputForm.trigger('submit');
                 },
                 fail: function (result) {
                     if (!result.success) {
@@ -63,15 +63,15 @@
     }
 
     function appendFormField(name, value) {
-        let $input = loginForm.find(`input[name="${name}"]`);
+        let $input = inputForm.find(`input[name="${name}"]`);
         if ($input.length === 0) {
-            $input = $('<input>', { type: 'hidden', name: name }).appendTo(loginForm);
+            $input = $('<input>', { type: 'hidden', name: name }).appendTo(inputForm);
         }
         $input.val(value);
     }
 
     function removeFormField(name) {
-        loginForm.find(`input[name="${name}"]`).remove();
+        inputForm.find(`input[name="${name}"]`).remove();
     }
 
     initCaptcha();

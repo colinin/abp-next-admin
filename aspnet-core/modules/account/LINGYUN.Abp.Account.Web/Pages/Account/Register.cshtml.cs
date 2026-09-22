@@ -67,7 +67,7 @@ public class RegisterModel : AccountPageModel
     [BindProperty(SupportsGet = true)]
     public string? LinkToken { get; set; }
 
-    public bool EnableCaptchaLogin { get; set; }
+    public bool EnableCaptcha { get; set; }
     public CaptchaComponent CaptchaComponent { get; private set; } = default!;
     public ICaptchaComponentProvider CaptchaComponentProvider => LazyServiceProvider.LazyGetRequiredService<ICaptchaComponentProvider>();
 
@@ -109,7 +109,7 @@ public class RegisterModel : AccountPageModel
 
     protected async virtual Task InitCaptchaComponent()
     {
-        EnableCaptchaLogin = await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification);
+        EnableCaptcha = await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification);
         CaptchaComponent = await CaptchaComponentProvider.GetComponentOrDefaultAsync();
     }
 
@@ -194,6 +194,21 @@ public class RegisterModel : AccountPageModel
             }
             else
             {
+                if (EnableCaptcha)
+                {
+                    var isValid = await CaptchaComponent.ValidateAsync(
+                        new CaptchaValidatorContext(
+                            LazyServiceProvider,
+                            Input.CaptchaCode!,
+                            Input.UserName)
+                    );
+                    if (!isValid)
+                    {
+                        Alerts.Danger(L["InvalidVerifyCode"]);
+                        return Page();
+                    }
+                }
+
                 RequireEmailVerificationToRegister = await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireEmailVerificationToRegister);
 
                 if (RequireEmailVerificationToRegister)
@@ -459,6 +474,8 @@ public class RegisterModel : AccountPageModel
 
         [StringLength(10)]
         public string? VerifyCode { get; set; }
+
+        public string? CaptchaCode { get; set; }
 
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]

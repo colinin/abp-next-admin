@@ -54,7 +54,7 @@ public class LoginModel : AccountPageModel
     public bool ShowCancelButton { get; set; }
     public bool EnableLocalLogin { get; set; }
     public bool EnableQrCodeLogin { get; set; }
-    public bool EnableCaptchaLogin { get; set; }
+    public bool EnableCaptcha { get; set; }
     public CaptchaComponent CaptchaComponent { get; private set; } = default!;
     public ICaptchaComponentProvider CaptchaComponentProvider => LazyServiceProvider.LazyGetRequiredService<ICaptchaComponentProvider>();
     public bool IsExternalLoginOnly => EnableLocalLogin == false && ExternalProviders?.Count() == 1;
@@ -90,7 +90,7 @@ public class LoginModel : AccountPageModel
 
     protected async virtual Task InitCaptchaComponent()
     {
-        EnableCaptchaLogin = await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification);
+        EnableCaptcha = await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification);
         CaptchaComponent = await CaptchaComponentProvider.GetComponentOrDefaultAsync();
     }
 
@@ -137,7 +137,7 @@ public class LoginModel : AccountPageModel
         ExternalProviders = await GetExternalProviders();
         EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
-        if (EnableCaptchaLogin)
+        if (EnableCaptcha)
         {
             var isValid = await CaptchaComponent.ValidateAsync(
                 new CaptchaValidatorContext(

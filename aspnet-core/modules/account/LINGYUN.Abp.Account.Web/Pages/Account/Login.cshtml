@@ -63,7 +63,7 @@
                         <span asp-validation-for="Input.Password"></span>
                     </div>
 
-                    @if (Model.EnableCaptchaLogin)
+                    @if (Model.EnableCaptcha)
                     {
                         @await Component.InvokeAsync(Model.CaptchaComponent.ComponentType)
                     }
@@ -105,7 +105,7 @@
                         </strong>
                     }
                     <div class="d-grid gap-2">
-                        <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3" id="PasswordLogin_Button">@L["Login"]</abp-button>
+                        <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3" id="SubmitButton">@L["Login"]</abp-button>
                         @if (Model.ShowCancelButton)
                         {
                             <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
