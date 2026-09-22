@@ -17,6 +17,12 @@ public class CaptchaComponentProvider : ICaptchaComponentProvider, IScopedDepend
         Options = options.Value;
         SettingProvider = settingProvider;
     }
+
+    public async virtual Task<bool> IsCaptchaEnabledAsync()
+    {
+        return await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireCaptchaVerification);
+    }
+
     public async virtual Task<CaptchaComponent> GetComponentOrDefaultAsync()
     {
         var captchaComponetSet = await SettingProvider.GetOrNullAsync(IdentitySettingNames.SignIn.CaptchaComponent);

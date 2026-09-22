@@ -109,7 +109,7 @@ public class RegisterModel : AccountPageModel
 
     protected async virtual Task InitCaptchaComponent()
     {
-        EnableCaptcha = await SettingProvider.IsTrueAsync(Identity.Settings.IdentitySettingNames.SignIn.RequireCaptchaVerification);
+        EnableCaptcha = await CaptchaComponentProvider.IsCaptchaEnabledAsync();
         CaptchaComponent = await CaptchaComponentProvider.GetComponentOrDefaultAsync();
     }
 
